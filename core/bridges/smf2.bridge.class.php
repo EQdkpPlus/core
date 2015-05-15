@@ -98,7 +98,7 @@ class smf2_bridge extends bridge_generic {
 		if ($boolLoginResult){
 			//Single Sign On
 			if ($this->config->get('cmsbridge_disable_sso') != '1'){
-				$this->sso($arrUserdata, $strPassword, $boolAutoLogin);
+				$this->sso($arrUserdata, $strPassword, $boolSetAutoLogin);
 			}
 			
 			return true;

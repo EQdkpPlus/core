@@ -335,7 +335,7 @@ class notifications extends gen_class {
 					$blnIsAvailable = register($classname)->isAvailable();
 					if(!$blnIsAvailable && !$blnAllMethods) continue;
 					$static_name = $this->user->lang('notification_type_'.$name);
-					$types[$name] = (strlen($static_name)) ? $static_name : $name;
+					$types[$name] = (strlen($static_name)) ? $static_name : ucfirst($name);
 				}
 			}
 		}

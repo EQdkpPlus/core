@@ -80,7 +80,7 @@ if(registry::register('input')->get('out') != ''){
 		case 'icalfeed':
 			// the permissions for the single modules
 			$permissions	= array(
-				'calendar'	=> 'u_calendar_view'
+				'calendar'	=> 'po_calendarevent'
 			);
 			$modulename		= registry::register('input')->get('module', '');
 

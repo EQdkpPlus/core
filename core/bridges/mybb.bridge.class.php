@@ -100,7 +100,7 @@ class mybb_bridge extends bridge_generic {
 			}
 			//Single Sign On
 			if ($this->config->get('cmsbridge_disable_sso') != '1'){
-				$this->sso($arrUserdata, $boolAutoLogin);
+				$this->sso($arrUserdata, $boolSetAutoLogin);
 			}
 			
 			return true;

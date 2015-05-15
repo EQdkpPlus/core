@@ -655,7 +655,7 @@ class controller extends gen_class {
 				$this->core->set_vars(array(
 						'page_title'		=> $arrArticle['title'].$strAdditionalTitles,
 						'description'		=> truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrContent[$intPageID])))), 600, '...', false, true),
-						'image'				=> ($this->pdh->get('articles', 'previewimage', array($intArticleID)) != "") ? $this->pdh->geth('articles', 'previewimage', array($intArticleID)) : '',
+						'image'				=> $strPreviewImage,
 						'template_file'		=> 'article.html',
 						'portal_layout'		=> $intPortallayout,
 						'display'			=> true)
@@ -903,7 +903,10 @@ class controller extends gen_class {
 						'CATEGORY_ID'			=> $intCategoryID,
 				));
 				
-				$this->social->callSocialPlugins($arrCategory['name'], strip_tags(xhtml_entity_decode($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(truncate($arrCategory['description'], 600, '...', false, true))))), '');
+				$strPreviewImage = ($this->pdh->get('articles',  'previewimage', array($intArticleID)) != "") ? $this->pdh->geth('articles', 'previewimage', array($intArticleID)) : '';
+				if(!strlen($strPreviewImage)) $strPreviewImage = $this->social->getFirstImage($strContent);
+				
+				$this->social->callSocialPlugins($arrCategory['name'], strip_tags(xhtml_entity_decode($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(truncate($arrCategory['description'], 600, '...', false, true))))), $strPreviewImage);
 					
 				$this->tpl->add_rssfeed($arrCategory['name'], $this->controller_path.'RSS/'.$this->routing->clean($arrCategory['name']).'-c'.$intCategoryID.'/'.(($this->user->is_signedin()) ? '?key='.$this->user->data['exchange_key'] : ''));
 				$this->tpl->add_meta('<link rel="canonical" href="'.$this->pdh->get('article_categories', 'permalink', array($intCategoryID)).'" />');
@@ -914,7 +917,7 @@ class controller extends gen_class {
 				$this->core->set_vars(array(
 						'page_title'		=> $arrCategory['name'],
 						'description'		=> truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrCategory['description'])))), 600, '...', false, true),
-						'image'				=> '',
+						'image'				=> $strPreviewImage,
 						'template_file'		=> 'category.html',
 						'portal_layout'		=> $intPortallayout,
 						'display'			=> true)

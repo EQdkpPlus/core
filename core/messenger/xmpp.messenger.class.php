@@ -107,6 +107,9 @@ class xmpp_messenger extends generic_messenger {
 	}
 }
 
+
+
+if(!class_exists('jabber')){
 /**
  *
  * Jabber class from Flyspray project
@@ -957,4 +960,5 @@ class jabber
 
 		return $children;
 	}
+}
 }
