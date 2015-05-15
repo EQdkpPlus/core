@@ -30,7 +30,7 @@
 						<tr>
 							<td valign="top">
 								<!-- BEGIN status -->
-								<div class="ui-state-hover table fullwidth noMobileTransform attendee_box" style="padding: 5px; margin-top: 4px;" id="attendee_{raidstatus.classes.status.MEMBERID}">
+								<div class="ui-state-hover table fullwidth noMobileTransform attendee_box<!-- IF raidstatus.classes.status.CHARISAWAY --> attendee_awaymode<!-- ENDIF -->" style="padding: 5px; margin-top: 4px;" id="attendee_{raidstatus.classes.status.MEMBERID}">
 									<div class="tr class_{raidstatus.classes.status.CLASSID}">
 										<div class="td" style="vertical-align:middle;">
 											<!-- IF IS_OPERATOR --><input class="status_confirm" type="checkbox" name="modstat_change[]" value="{raidstatus.classes.status.MEMBERID}" /><!-- ENDIF -->

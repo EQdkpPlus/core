@@ -322,13 +322,22 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			return $count_status;
 		}
 
-	    /* -----------------------------------------------------------------------
-	    * Statistic stuff
+		public function get_attendee_awaymode($id, $eventid=0){
+			$userid				= $this->pdh->get('member', 'userid', array($id));
+			$awaymode_enabled	= $this->pdh->get('user', 'awaymode_enabled', array($userid));
+			$awaymode_startdate	= $this->pdh->get('user', 'awaymode_startdate', array($userid));
+			$awaymode_enddate	= $this->pdh->get('user', 'awaymode_enddate', array($userid));
+			$event_starttime	= $this->time->removetimefromtimestamp(($eventid > 0) ? $this->pdh->get('calendar_events', 'date', array($eventid)) : $this->time->time);
+			return ($awaymode_enabled && $event_starttime > $awaymode_startdate && $event_starttime < $awaymode_enddate) ? true : false;
+		}
+
+		/* -----------------------------------------------------------------------
+		* Statistic stuff
 		* - last raid members have attended to
 		- Amount of raids attended in the last x days.
 		- Amount of raids signed-up, but not attended.
 		- Amount of raids signed-off
-	    * -----------------------------------------------------------------------*/
+		* -----------------------------------------------------------------------*/
 
 		public function get_calstat_lastraid($memberid){
 			return (isset($this->lastraid[$memberid])) ? $this->lastraid[$memberid] : 0;
@@ -339,7 +348,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			return ($timestamp > 0) ? $this->time->user_date($timestamp) : '--';
 		}
 
-		public function get_calstat_raids_status($memberid, $status=false, $days='90'){			
+		public function get_calstat_raids_status($memberid, $status=false, $days='90'){
 			switch($days){
 				case '30':
 					$statsperdays	= $this->attendee_status[$memberid][$status]['30'];
@@ -351,7 +360,6 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 					$statsperdays	= $this->attendee_status[$memberid][$status]['30'] + $this->attendee_status[$memberid][$status]['60'] + $this->attendee_status[$memberid][$status]['90'];
 				break;
 			}
-
 			return ($status !== false) ? $statsperdays : $this->attendee_status[$memberid];
 		}
 
@@ -367,7 +375,6 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			} else {
 				$number_of_raids_att	= (int)$this->get_calstat_raids_status($memberid, 0, $days);
 			}
-			
 			$number_of_raids_all	= (int)$this->pdh->get('calendar_events', 'amount_raids', array($days));
 			$percentage				= round(($number_of_raids_att/$number_of_raids_all)*100, 1);
 			return '<span class="' . color_item($percentage, true) . '">'.$percentage.'%</span>';
@@ -388,7 +395,6 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			$number_of_raids_all	= (int)$this->pdh->get('calendar_events', 'amount_raids', array($days));
 			$percentage				= round(($number_of_raids_att/$number_of_raids_all)*100, 1);
 			return '<span class="' . color_item($percentage, true) . '">'.$percentage.'%</span>';
-			
 		}
 
 		public function get_html_calstat_raids_signedoff($memberid, $days, $withTwinks=false){
@@ -407,7 +413,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			$percentage				= round(($number_of_raids_att/$number_of_raids_all)*100, 1);
 			return '<span class="' . color_item($percentage, true) . '">'.$percentage.'%</span>';
 		}
-		
+
 		public function get_html_calstat_raids_backup($memberid, $days, $withTwinks=false){
 			if($withTwinks){
 				$arrOthers = $this->pdh->get('member', 'other_members', array($memberid));
@@ -425,8 +431,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			$percentage				= round(($number_of_raids_att/$number_of_raids_all)*100, 1);
 			return '<span class="' . color_item($percentage, true) . '">'.$percentage.'%</span>';
 		}
-		
-		
+
 		/* -----------------------------------------------------------------------
 		 * From To Attendance
 		 * -----------------------------------------------------------------------*/
@@ -446,7 +451,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			$percentage				= round(($number_of_raids_att/$number_of_raids_all)*100, 1);
 			return $percentage;
 		}
-		
+
 		public function get_html_calstat_raids_confirmed_fromto ($memberid, $from, $to, $withTwinks=false){
 			if($withTwinks){
 				$arrOthers = $this->pdh->get('member', 'other_members', array($memberid));
@@ -463,7 +468,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			$percentage				= round(($number_of_raids_att/$number_of_raids_all)*100, 1);
 			return '<span class="' . color_item($percentage, true) . '">'.$percentage.'% ('.$number_of_raids_att.'/'.$number_of_raids_all.')</span>';
 		}
-		
+
 		public function get_calstat_raids_signedin_fromto ($memberid, $from, $to, $withTwinks=false){
 			if($withTwinks){
 				$arrOthers = $this->pdh->get('member', 'other_members', array($memberid));
@@ -481,7 +486,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			$percentage				= round(($number_of_raids_att/$number_of_raids_all)*100, 1);
 			return $percentage;
 		}
-		
+
 		public function get_html_calstat_raids_signedin_fromto ($memberid, $from, $to, $withTwinks=false){
 			if($withTwinks){
 				$arrOthers = $this->pdh->get('member', 'other_members', array($memberid));
@@ -498,9 +503,8 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			$number_of_raids_all	= (int)$this->pdh->get('calendar_events', 'amount_raids_fromto', array($from, $to));
 			$percentage				= round(($number_of_raids_att/$number_of_raids_all)*100, 1);
 			return '<span class="' . color_item($percentage, true) . '">'.$percentage.'% ('.$number_of_raids_att.'/'.$number_of_raids_all.')</span>';
-				
 		}
-		
+
 		public function get_calstat_raids_signedoff_fromto ($memberid, $from, $to, $withTwinks=false){
 			if($withTwinks){
 				$arrOthers = $this->pdh->get('member', 'other_members', array($memberid));
@@ -517,7 +521,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			$percentage				= round(($number_of_raids_att/$number_of_raids_all)*100, 1);
 			return $percentage;
 		}
-		
+
 		public function get_html_calstat_raids_signedoff_fromto ($memberid, $from, $to, $withTwinks=false){
 			if($withTwinks){
 				$arrOthers = $this->pdh->get('member', 'other_members', array($memberid));
@@ -534,7 +538,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			$percentage				= round(($number_of_raids_att/$number_of_raids_all)*100, 1);
 			return '<span class="' . color_item($percentage, true) . '">'.$percentage.'% ('.$number_of_raids_att.'/'.$number_of_raids_all.')</span>';
 		}
-		
+
 		public function get_calstat_raids_backup_fromto ($memberid, $from, $to, $withTwinks=false){
 			if($withTwinks){
 				$arrOthers = $this->pdh->get('member', 'other_members', array($memberid));
@@ -551,7 +555,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			$percentage				= round(($number_of_raids_att/$number_of_raids_all)*100, 1);
 			return $percentage;
 		}
-		
+
 		public function get_html_calstat_raids_backup_fromto ($memberid, $from, $to, $withTwinks=false){
 			if($withTwinks){
 				$arrOthers = $this->pdh->get('member', 'other_members', array($memberid));
@@ -568,7 +572,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			$percentage				= round(($number_of_raids_att/$number_of_raids_all)*100, 1);
 			return '<span class="' . color_item($percentage, true) . '">'.$percentage.'% ('.$number_of_raids_att.'/'.$number_of_raids_all.')</span>';
 		}
-		
+
 		public function get_calstat_raids_total_fromto($memberid, $from, $to, $withTwinks=false){
 			if($withTwinks){
 				$arrOthers = $this->pdh->get('member', 'other_members', array($memberid));
@@ -583,10 +587,10 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			}
 			$number_of_raids_all	= (int)$this->pdh->get('calendar_events', 'amount_raids_fromto', array($from, $to));
 			$percentage				= round(($number_of_raids_att/$number_of_raids_all)*100, 1);
-			
+
 			return $percentage;
 		}
-		
+
 		public function get_html_calstat_raids_total_fromto($memberid, $from, $to, $withTwinks=false){
 			if($withTwinks){
 				$arrOthers = $this->pdh->get('member', 'other_members', array($memberid));
@@ -603,17 +607,16 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			$percentage				= round(($number_of_raids_att/$number_of_raids_all)*100, 1);
 			return '<span class="' . color_item($percentage, true) . '">'.$percentage.'% ('.$number_of_raids_att.'/'.$number_of_raids_all.')</span>';
 		}
-		
+
 		public function get_calstat_raids_status_fromto($memberid, $status, $from, $to){
 			$strTimeHash = md5($from.'.'.$to);
 			$statsperdays = 0;
 			if(!isset($this->attendees_fromto[$strTimeHash])) $this->init_fromto($from, $to);
 			if(isset($this->attendees_fromto[$strTimeHash][$memberid]) && isset($this->attendees_fromto[$strTimeHash][$memberid][$status]) )
 				$statsperdays = $this->attendees_fromto[$strTimeHash][$memberid][$status];
-			
 			return $statsperdays;
 		}
-		
+
 		public function get_calstat_raids_totalstatus_fromto($memberid, $from, $to){
 			$strTimeHash = md5($from.'.'.$to);
 			$statsperdays = 0;
@@ -627,10 +630,10 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 
 			return $statsperdays;
 		}
-		
-	    /* -----------------------------------------------------------------------
-	    * Tools
-	    * -----------------------------------------------------------------------*/
+
+		/* -----------------------------------------------------------------------
+		* Tools
+		* -----------------------------------------------------------------------*/
 
 		public function get_count($id){
 			if(is_array($this->attendees[$id])){

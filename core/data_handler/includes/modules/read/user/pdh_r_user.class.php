@@ -237,15 +237,15 @@ if (!class_exists("pdh_r_user")){
 		}
 
 		public function get_awaymode_enabled($user_id){
-			return $this->users[$user_id]['awaymode_enabled'];
+			return (int)$this->users[$user_id]['awaymode_enabled'];
 		}
 
 		public function get_awaymode_startdate($user_id){
-			return $this->users[$user_id]['awaymode_startdate'];
+			return $this->time->removetimefromtimestamp($this->users[$user_id]['awaymode_startdate']);
 		}
 
 		public function get_awaymode_enddate($user_id){
-			return $this->users[$user_id]['awaymode_enddate'];
+			return $this->time->removetimefromtimestamp($this->users[$user_id]['awaymode_enddate']);
 		}
 
 		public function get_awaymode_note($user_id){

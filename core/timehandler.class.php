@@ -406,6 +406,10 @@ if (!class_exists("timehandler")){
 			return $stamp;
 		}
 
+		public function removetimefromtimestamp($timestamp) {
+			return ($timestamp) > 0 ? $this->fromformat($this->date("Y-m-d", $timestamp), "Y-m-d") : 0;
+		}
+
 		/*
 		 * Transforms a php-date-format so it can be used for jquery
 		 *

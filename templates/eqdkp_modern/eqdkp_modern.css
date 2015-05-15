@@ -2204,6 +2204,9 @@ fieldset.settings.floatRight.raid input[type="text"]{
 	vertical-align:middle;
 	margin:0;
 }
+.attendee_awaymode{
+	border-color: red;
+}
 #bottommenu_chars{
 	height: 70px;
 	clear: both;
