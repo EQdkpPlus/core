@@ -467,10 +467,10 @@ class Manage_Users extends page_generic {
 				foreach ($a_members as $member_id => $member) {
 					$this->tpl->assign_block_vars('users_row.members_row', array(
 						'MEMBER_ID'		=> $member_id,
-						'CLASS'			=> $member['classid'],
-						'NAME'			=> $member['name'],
-						'RANK'			=> $member['rankname'],
-						'RADIO'			=> new hradio('mainchar_'.$user_id, array('options' => array($member_id=>''), 'value' => $this->pdh->get('member', 'mainid', array($member_id)), 'class' => 'cmainradio', 'nodiv' => true, 'js' => 'onchange="change_mainchar('.$user_id.', '.$member_id.')"')),
+						'CLASS'			=> $this->jquery->sanitize($member['classid']),
+						'NAME'			=> $this->jquery->sanitize($member['name']),
+						'RANK'			=> $this->jquery->sanitize($member['rankname']),
+						'RADIO'			=> $this->jquery->sanitize(new hradio('mainchar_'.$user_id, array('options' => array($member_id=>''), 'value' => $this->pdh->get('member', 'mainid', array($member_id)), 'class' => 'cmainradio', 'nodiv' => true, 'js' => 'onchange="change_mainchar('.$user_id.', '.$member_id.')"'))),
 					));
 				}
 			}

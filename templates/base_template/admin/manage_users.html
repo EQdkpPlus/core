@@ -81,16 +81,7 @@
 						event: 'unfocus'
 					}
 				});
-				});
-				
-				function change_mainchar(userid, memberid){
-					$.post('{SID}&link_hash={CSRF_MAINCHARCHANGE}', { maincharchange: memberid, user: userid },
-						function(data){
-							$('#notify_container').notify('create', 'success', {text: data,title: '',custom: true,},{expires: 3000, speed: 1000});
-						}
-					);
-				}
-				
+				});				
 				</script>
 				<a href="javascript:void(0);" id="memberTTtrigger{users_row.USER_ID}">{users_row.MEMBER_COUNT} {L_chars}</a>
 			</td>
@@ -143,5 +134,13 @@ function delete_single(id){
 	$('#user_id_'+id).attr('checked', true);
 	$('#mass_del_submit').removeAttr('disabled'); 
 	$('form:has(#mass_del_submit)').submit();
+}
+
+function change_mainchar(userid, memberid){
+	$.post('{SID}&link_hash={CSRF_MAINCHARCHANGE}', { maincharchange: memberid, user: userid },
+		function(data){
+			$('#notify_container').notify('create', 'success', {text: data,title: '',custom: true,},{expires: 3000, speed: 1000});
+		}
+	);
 }
 </script>

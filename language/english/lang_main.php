@@ -819,6 +819,7 @@ $lang = array(
 	"calendar_log_twinkchanged" => 'Twink changed',
 	"calendar_log_updatedgroup" => 'Raidgroup updated',
 	"calendar_log_updatednote" => 'Character-Note updated',
+	"calendar_log_updatedrole" => 'Character-Role updated',
 	"pv_tab_skills" => 'Skills',
 	"pv_tab_profiler" => 'Profiler',
 	"pv_tab_profession" => 'Professions',
