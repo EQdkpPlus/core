@@ -1212,7 +1212,7 @@ body .ui-tooltip {
 	top: -28000px;
 	display: none;
 
-	max-width: 280px;
+	max-width: 400px;
 	min-width: 50px;
 
 	font-size: 10.5px;
@@ -1808,7 +1808,7 @@ body .ui-tooltip {
 	}
 
 /***
-Spectrum Colorpicker v1.6.1
+Spectrum Colorpicker v1.7.0
 https://github.com/bgrins/spectrum
 Author: Brian Grinstead
 License: MIT
