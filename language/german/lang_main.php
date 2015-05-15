@@ -195,6 +195,17 @@ $lang = array(
 "user_sett_f_user_date_short" => "Datums-Format (kurz)",
 "user_sett_f_user_date_long" => "Datums-Format (lang)",
 "user_sett_date_note" => "Die Syntax entspricht der der <a href=\"http://www.php.net/date\" target=\"_blank\">date()</a>-Funktion von PHP.",
+"user_sett_tab_calendar" => "Kalender",
+
+"user_sett_fs_calendar_awaymode_settings" => 'Abwesenheitsmodus',
+"user_sett_f_awaymode_enabled" => "Abwesenheitsmodus aktivieren",
+"user_sett_f_help_awaymode_enabled" => "Wenn der Abwesenheitsmodus aktiviert ist, werden in diesem Zeitraum keine neuen Raidanmeldungen getätigt und deine Charaktere rot hervorgehoben.",
+"user_sett_f_awaymode_startdate" => "Abwesend von",
+"user_sett_f_help_awaymode_startdate" => "Das Start der Abwesenheit",
+"user_sett_f_awaymode_enddate" => "Abwesend bis",
+"user_sett_f_help_awaymode_enddate" => "Das Enddatum der Abwesenheit",
+"user_sett_f_awaymode_note" => "Bemerkung",
+"user_sett_f_help_awaymode_note" => "Eine Notiz oder Bemerkung zu deiner Abwesenheit",
 
 "adduser_send_mail" => "E-Mail senden",
 "adduser_send_mail2" => "E-Mail  an \"%s\" senden",

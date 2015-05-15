@@ -752,6 +752,32 @@ class user extends gen_class {
 			$settingsdata['notifications']['notification_settings'] = $arrNotificationUsersettings;
 		}
 
+		// calendar settings
+		$settingsdata['calendar'] = array(
+			'calendar_awaymode_settings' => array(
+				'awaymode_enabled'	=> array(
+					'type'		=> 'radio',
+					'default'	=> 0,
+				),
+				'awaymode_startdate'	=> array(
+					'type'			=> 'datepicker',
+					'allow_empty'	=> false,
+					'default'		=> register('time')->time
+				),
+				'awaymode_enddate'	=> array(
+					'type'			=> 'datepicker',
+					'allow_empty'	=> false,
+					'year_range'	=> '-0:+2',
+					'default'		=> register('time')->time
+				),
+				'awaymode_note'	=> array(
+					'type'		=> 'textarea',
+					'rows'		=> 4,
+					'cols'		=> 50
+				),
+			),
+		);
+
 		return $settingsdata;
 	}
 

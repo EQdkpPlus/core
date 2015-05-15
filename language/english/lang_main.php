@@ -200,6 +200,7 @@ $lang = array(
 	"user_sett_f_help_new_password" => 'You only have to enter a password, if you want to change it.',
 	"user_sett_f_confirm_password" => 'Confirm Password',
 	"user_sett_f_help_confirm_password" => 'You only need to confirm your password if you changed it above.',
+	"user_sett_tab_calendar" => "Calender",
 	"user_app_key" => 'Private Exchangekey',
 	"user_create_new_appkey" => 'Generate new private keys',
 	"user_create_new_appkey_success" => 'New private Keys have been created. Your old URLs are not longer valid.',
