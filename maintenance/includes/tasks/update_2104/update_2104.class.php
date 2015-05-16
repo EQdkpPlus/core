@@ -53,9 +53,9 @@ class update_2104 extends sql_update_task {
 		
 		// init SQL querys
 		$this->sqls = array(
-			1	=> "ALTER TABLE `__users` ADD COLUMN `awaymode_enabled` tinyint(1) NOT NULL DEFAULT 1;",
-			2	=> "ALTER TABLE `__users` ADD COLUMN `awaymode_startdate` BIGINT(10) NULL DEFAULT '0';",
-			3	=> "ALTER TABLE `__users` ADD COLUMN `awaymode_enddate` BIGINT(10) NULL DEFAULT '0';",
+			1	=> "ALTER TABLE `__users` ADD COLUMN `awaymode_enabled` tinyint(1) NOT NULL DEFAULT 0;",
+			2	=> "ALTER TABLE `__users` ADD COLUMN `awaymode_startdate` INT(11) NULL DEFAULT '0';",
+			3	=> "ALTER TABLE `__users` ADD COLUMN `awaymode_enddate` INT(11) NULL DEFAULT '0';",
 			4	=> "ALTER TABLE `__users` ADD COLUMN `awaymode_note` text COLLATE utf8_bin;",
 		);
 	}
