@@ -422,5 +422,10 @@ class notifications extends gen_class {
 		}
 		return false;
 	}
+	
+	public function markAsRead($strType, $intUserId, $mixDatasetID){
+		$this->pdh->put('notifications', 'mark_as_read_bytype', array($strType, $intUserId, $mixDatasetID));
+		$this->pdh->process_hook_queue();
+	}
 }
 ?>
