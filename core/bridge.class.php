@@ -155,7 +155,7 @@ class bridge extends gen_class {
 				$blnHashNeedsUpdate = $this->user->checkIfHashNeedsUpdate($strEQdkpUserPassword) || !$strEQdkpUserSalt;
 				
 				//Update Email und Password - den Rest soll die Sync-Funktion machen	
-				if ((!$this->user->checkPassword($strPassword, $arrEQdkpUserdata['user_password'])) || ($this->objBridge->blnSyncEmail && ( $arrUserdata['email'] != $arrEQdkpUserdata['user_email'])) || $blnHashNeedsUpdate){
+				if ($boolUsePassword && $strPassword && ((!$this->user->checkPassword($strPassword, $arrEQdkpUserdata['user_password'])) || ($this->objBridge->blnSyncEmail && ( $arrUserdata['email'] != $arrEQdkpUserdata['user_email'])) || $blnHashNeedsUpdate)){
 					$strSalt = $this->user->generate_salt();
 					$strPwdHash = $this->user->encrypt_password($strPassword, $strSalt);
 					$arrToSync = array('user_password' => $strPwdHash.':'.$strSalt);
@@ -163,6 +163,7 @@ class bridge extends gen_class {
 					$this->pdh->put('user', 'update_user', array($user_id, $arrToSync, false, false));
 					$this->pdh->process_hook_queue();
 				}
+				
 				//Ist EQdkp-User active?
 				if ($this->pdh->get('user', 'active', array($user_id)) == '0'){
 					return false;
