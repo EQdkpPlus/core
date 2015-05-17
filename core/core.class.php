@@ -450,7 +450,6 @@ class core extends gen_class {
 		
 		public function addCommonTemplateVars(){
 			$arrLanguages = $this->user->getAvailableLanguages(false, true);
-
 			$this->tpl->assign_vars(array(
 					'MAIN_TITLE'				=> $this->config->get('main_title'),
 					'SUB_TITLE'					=> $this->config->get('sub_title'),
@@ -474,13 +473,6 @@ class core extends gen_class {
 					'USER_LANGUAGE'				=> $this->user->lang_name,
 					'USER_LANGUAGE_NAME'		=> $arrLanguages[$this->user->lang_name],
 			));
-			$url = (preg_replace('#\&lang\=([a-zA-Z]*)#', "", $this->env->request));
-			foreach($arrLanguages as $strKey => $strLangname){
-				$this->tpl->assign_block_vars('languageswitcher_row', array(
-					'LANGNAME'	=> $strLangname,
-					'LINK'		=> sanitize($url).((strpos($url, "?") === false) ? '?' : '&').'lang='.$strKey,
-				));
-			}
 		}
 		
 		public function createLink($arrLinkData, $strCssClass = '', $blnHrefOnly=false){
@@ -839,6 +831,16 @@ class core extends gen_class {
 				'S_NORMAL_FOOTER' 			=> ($this->header_format != 'simple') ? true : false,
 				'EQDKP_PLUS_COPYRIGHT'		=> $this->Copyright())
 			);
+			
+			//Language Switcher
+			$arrLanguages = $this->user->getAvailableLanguages(false, true);
+			$url = (preg_replace('#\&lang\=([a-zA-Z]*)#', "", $this->env->request));
+			foreach($arrLanguages as $strKey => $strLangname){
+				$this->tpl->assign_block_vars('languageswitcher_row', array(
+						'LANGNAME'	=> $strLangname,
+						'LINK'		=> sanitize($url).((strpos($url, "?") === false) ? '?' : '&').'lang='.$strKey,
+				));
+			}
 			
 			//Call Social Plugins
 			$default_img_link	= $this->env->buildlink()."templates/".$this->user->style['template_path']."/images/";
