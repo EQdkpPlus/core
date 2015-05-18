@@ -684,6 +684,7 @@ $lang = array(
 "raidevent_raid_addedby" => "Hinzugefügt von",
 "raidevent_raid_transform" => "In Raid umwandeln",
 "raidevent_raid_adminnote" => "Angemeldet von einem Raidleiter",
+"raidevent_raid_autosignoffnote" => "Automatisch wegen Abwesenheit abgemeldet",
 "raidevent_raid_export" => "Raiddaten exportieren",
 "raidevent_raid_edit" => "Raid bearbeiten",
 "raidevent_raid_next" => "Nächsten Raid ansehen",

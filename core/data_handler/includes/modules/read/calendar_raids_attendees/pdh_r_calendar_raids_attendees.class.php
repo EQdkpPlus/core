@@ -322,6 +322,19 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			return $count_status;
 		}
 
+		public function get_away_attendees($eventid){
+			$arrAway		= array();
+			$arrAttendees	= $this->get_attendee_stats($eventid, array(0,1));
+			if(is_array($arrAttendees) && count($arrAttendees) > 0){
+				foreach($arrAttendees as $memberid){
+					if($this->get_attendee_awaymode($memberid)){
+						$arrAway[] = $memberid;
+					}
+				}
+			}
+			return $arrAway;
+		}
+
 		public function get_attendee_awaymode($id, $eventid=0){
 			$userid		= $this->pdh->get('member', 'userid', array($id));
 			return $this->get_user_awaymode($userid, $eventid);

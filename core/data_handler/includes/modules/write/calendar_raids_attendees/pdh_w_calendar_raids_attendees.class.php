@@ -108,6 +108,23 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 			}
 		}
 		
+		public function automatic_signoff($eventid, $memberids){
+			if(is_array($memberids) && count($memberids) > 0){
+				$objQuery = $this->db->prepare("UPDATE __calendar_raid_attendees :p WHERE calendar_events_id=? AND member_id :in")->set(array(
+						'signup_status'	=> 2,
+						'note'			=> $this->user->lang('raidevent_raid_autosignoffnote')
+						
+				))->in($memberids)->execute($eventid);
+				// add log entry
+				$log_action = array(
+					'{L_calendar_log_charadd_names}'	=> implode(', ', $this->pdh->aget('member', 'name', 0, array($memberids))),
+					'{L_calendar_log_charadd_status}'	=> '{LA_raidevent_raid_status['.$status.']}',
+				);
+				$this->log_insert('calendar_log_statuschanged', $log_action, $eventid, $this->pdh->get('calendar_events', 'name', array($eventid)), true, 'calendar');
+				$this->pdh->enqueue_hook('calendar_raid_attendees_update', array($eventid));
+			}
+		}
+		
 		public function moderate_group($eventid, $group, $memberids){
 			if(is_array($memberids) && count($memberids) > 0){
 				$objQuery = $this->db->prepare("UPDATE __calendar_raid_attendees :p WHERE calendar_events_id=? AND member_id :in")->set(array(
