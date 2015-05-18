@@ -352,7 +352,7 @@ class Manage_Users extends page_generic {
 			if(!strlen($user_key)) {
 				$this->core->message($this->user->lang('error_set_new_pw'), $this->user->lang('error'), 'red');
 			}
-			$strPasswordLink = $this->env->link . 'login.php?mode=newpassword&key=' . $user_key;
+			$strPasswordLink = $this->env->link.$this->controller_path_plain.'/Login/NewPassword/?key=' . $user_key;
 
 			$bodyvars = array(
 				'USERNAME'	=> $values['username'],

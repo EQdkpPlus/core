@@ -240,7 +240,7 @@ if (!class_exists("comments")){
 			}
 
 			// the line for the comment to be posted
-			if(($this->user->is_signedin() && $this->userPerm) || $this->showFormForGuests){
+			if(($this->user->is_signedin() && $this->userPerm) || ($this->showFormForGuests && !$this->user->is_signedin())){
 				$html .= $this->Form($this->attach_id, $this->page);
 			} else {
 				$html .= '<div id="comment_data'.$this->id.'"><input type="hidden" name="attach_id" value="'.$this->attach_id.'"/>
