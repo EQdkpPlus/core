@@ -1,12 +1,6 @@
 <script type='text/javascript'>
 //<![CDATA[
 	$(document).ready(function() {
-		
-		//var i;
-		//console.log("local storage");
-		//for (i=0; i<localStorage.length; i++) {
-		//	console.log(localStorage.key(i)+"=["+localStorage.getItem(localStorage.key(i))+"]");
-		//}
 		$('#calendar').fullCalendar({
 			firstDay: {STARTDAY},
 
@@ -157,14 +151,14 @@
 			loading: function(bool) {
 				$('#calendar_loading').toggle(bool);
 			},
-			defaultView: localStorage.getItem("calendar.viewname") || 'month',
-			defaultDate: localStorage.getItem("calendar.currentdate") || moment(),
+			defaultView: cal_getStorage("calendar.viewname") || 'month',
+			defaultDate: cal_getStorage("calendar.currentdate") || moment(),
 			viewRender: function(view){
-				localStorage.setItem("calendar.viewname", view.name);
+				cal_setStorage("calendar.viewname", view.name);
 				
 				// get the date and set it to the variable
 				var date2save	= (view.name == 'month') ? $('#calendar').fullCalendar('getDate') : view.start;
-				localStorage.setItem("calendar.currentdate", date2save.format());
+				cal_setStorage("calendar.currentdate", date2save.format());
 			},
 			events: {
 				url: '{U_CALENDAR}&json=true',
@@ -220,11 +214,11 @@
 			fxFade: true,
 			fxSpeed: 'normal',
 			beforeActivate: function(e, ui) {
-				localStorage.setItem("tabs.calendar", ui.newTab.index());
+				cal_setStorage("tabs.calendar", ui.newTab.index());
 			},
 			create: function (e, ui) {
 				var tabID		= (window.location.hash) ? $('#' +  window.location.hash.replace('#', '')).index() : 0;
-				var selectionId	= (window.location.hash && tabID > 0) ? tabID-1 : ((localStorage.getItem("tabs.calendar") != null) ? localStorage.getItem("tabs.calendar") : 0);
+				var selectionId	= (window.location.hash && tabID > 0) ? tabID-1 : ((cal_getStorage("tabs.calendar") != null) ? cal_getStorage("tabs.calendar") : 0);
 				$(this).tabs("option", "active", selectionId);
 			},
 			show: function(event, ui) {
@@ -304,6 +298,31 @@
 				});
 			}
 		});
+	}
+
+	// http://stackoverflow.com/questions/14555347/
+	function cal_setStorage(name, value){
+		if(isLocalStorageNameSupported()){
+			localStorage.setItem(name, value);
+		}
+	}
+
+	function cal_getStorage(name){
+		if(isLocalStorageNameSupported()){
+			return localStorage.getItem(name);
+		}
+		return false;
+	}
+
+	function isLocalStorageNameSupported() {
+		var testKey = 'test', storage = window.sessionStorage;
+		try {
+			storage.setItem(testKey, '1');
+			storage.removeItem(testKey);
+			return true;
+		}catch (error){
+			return false;
+		}
 	}
 
 //]]>
