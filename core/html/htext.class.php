@@ -75,9 +75,9 @@ class htext extends html {
 		if(!empty($this->pattern)) $out .= 'pattern="'.$this->pattern($this->pattern).'" ';
 		if(!empty($this->euqalto)) $out .= 'data-equalto="'.$this->equalto.'" ';
 		if($this->spinner){
-			$out .= (isset($this->min) && !empty($this->min)) ? 'data-min="'.$this->min.'"' : '';
-			$out .= (isset($this->max) && !empty($this->max)) ? 'data-max="'.$this->max.'"' : '';
-			$out .= (isset($this->step) && !empty($this->step)) ? 'data-step="'.$this->step.'"' : '';
+			$out .= (isset($this->min) && is_numeric($this->min)) ? 'data-min="'.$this->min.'"' : '';
+			$out .= (isset($this->max) && is_numeric($this->max)) ? 'data-max="'.$this->max.'"' : '';
+			$out .= (isset($this->step) && is_numeric($this->step)) ? 'data-step="'.$this->step.'"' : '';
 		}
 		if(!empty($this->placeholder)) $out .= 'placeholder="'.$this->placeholder.'" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
