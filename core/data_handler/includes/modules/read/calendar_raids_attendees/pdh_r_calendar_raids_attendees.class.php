@@ -323,7 +323,11 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 		}
 
 		public function get_attendee_awaymode($id, $eventid=0){
-			$userid				= $this->pdh->get('member', 'userid', array($id));
+			$userid		= $this->pdh->get('member', 'userid', array($id));
+			return $this->get_user_awaymode($userid, $eventid);
+		}
+
+		public function get_user_awaymode($userid, $eventid=0){
 			$awaymode_enabled	= $this->pdh->get('user', 'awaymode_enabled', array($userid));
 			$awaymode_startdate	= $this->pdh->get('user', 'awaymode_startdate', array($userid));
 			$awaymode_enddate	= $this->pdh->get('user', 'awaymode_enddate', array($userid));

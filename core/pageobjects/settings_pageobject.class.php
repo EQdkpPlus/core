@@ -210,8 +210,8 @@ class settings_pageobject extends pageobject {
 		);
 		$arrNew = array(
 			'awaymode_enabled'		=> $values['awaymode_enabled'],
-			'awaymode_startdate'	=> "{D_".$values['awaymode_startdate']."}",
-			'awaymode_enddate'		=> "{D_".$values['awaymode_enddate']."}",
+			'awaymode_startdate'	=> "{D_".$this->time->removetimefromtimestamp($values['awaymode_startdate'])."}",
+			'awaymode_enddate'		=> "{D_".$this->time->removetimefromtimestamp($values['awaymode_enddate'])."}",
 			'awaymode_note'			=> $values['awaymode_note']
 		);
 		$arrLang = array(

@@ -426,6 +426,12 @@ if(!class_exists('pdh_w_calendar_events')) {
 				$userids = $this->pdh->get('user_groups_users', 'user_list', array($usergroups));
 				if(is_array($userids)){
 					foreach($userids as $userid){
+						
+						// if the user is away in this time frame, do not sign him in.
+						if($this->pdh->get('calendar_raids_attendees', 'user_awaymode', array($userid, $raidid))){
+							continue;
+						}
+						
 						$memberid		= $this->pdh->get('member', 'mainchar', array($userid));
 						$defaultrole	= $this->pdh->get('member', 'defaultrole', array($memberid));
 						if($memberid > 0){
