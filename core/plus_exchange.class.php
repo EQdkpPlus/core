@@ -100,8 +100,8 @@ if( !class_exists( "plus_exchange" ) ) {
 				foreach($module_ids as $module_id) {
 					$path = $this->pdh->get('portal', 'path', array($module_id));
 					$obj = $path.'_portal';
-					$arrExchangeModules = $obj::get_data('exchangeMod');
 					if (class_exists($obj) && $this->portal->check_visibility($module_id)){
+						$arrExchangeModules = $obj::get_data('exchangeMod');
 						$plugin = $this->pdh->get('portal', 'plugin', array($module_id));
 						foreach ($arrExchangeModules as $module_name){
 							if ($plugin != ''){
