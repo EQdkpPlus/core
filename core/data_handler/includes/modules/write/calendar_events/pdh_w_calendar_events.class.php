@@ -433,7 +433,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 						if($memberid > 0){
 							if(($raidtype == 'role' && $defaultrole > 0) || $raidtype == 'class' || $raidtype == 'none'){
 								//Autoconfirm
-								if($status){
+								if($status && !$away_mode){
 									$signupstatus = $status;
 								}else{
 									if(is_array($arrAutoconfirmGroups) && count($arrAutoconfirmGroups) > 0 && $signupstatus == 1){

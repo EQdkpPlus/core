@@ -141,6 +141,10 @@ class editcalendarevent_pageobject extends pageobject {
 				}
 			}
 
+			// Auto confirm / confirm by raid-add-setting
+			$asi_groups	= $this->in->getArray('asi_group');
+			$asi_status	= (is_array($asi_groups) && count($asi_groups) > 0) ? $this->in->get('asi_status') : false;
+
 			$raidid = $this->pdh->put('calendar_events', 'add_cevent', array(
 				$this->in->get('calendar_id', 1),
 				'',
@@ -160,17 +164,13 @@ class editcalendarevent_pageobject extends pageobject {
 					'distribution'			=> $raid_clsdistri,
 					'attendee_count'		=> $this->in->get('raid_attendees_count', 0),
 					'created_on'			=> $this->time->time,
-					'autosignin_group'	=> $asi_groups,
-					'autosignin_status'	=> $asi_status,
+					'autosignin_group'		=> $asi_groups,
+					'autosignin_status'		=> $asi_status,
 				)
 			));
 
 			// if the raid had been added, do the rest...
 			if($raidid > 0){
-				// Auto confirm / confirm by raid-add-setting
-				$asi_groups	= $this->in->getArray('asi_group');
-				$asi_status	= (is_array($asi_groups) && count($asi_groups) > 0) ? $this->in->get('asi_status') : false;
-			
 				$this->pdh->put('calendar_events', 'auto_addchars', array($this->in->get('raidmode'), $raidid, $this->in->getArray('raidleader', 'int'), $asi_groups, $asi_status));
 				$this->notify_newraid($raidid);
 			}
