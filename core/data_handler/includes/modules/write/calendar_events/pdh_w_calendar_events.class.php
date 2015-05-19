@@ -417,8 +417,8 @@ if(!class_exists('pdh_w_calendar_events')) {
 		
 		public function auto_addchars($raidtype, $raidid, $raidleaders=array(), $group=false, $status=false){
 			//Auto confirm Groups
-			$arrAutoconfirmGroups = $this->config->get('calendar_raid_autoconfirm');
-			$signupstatus	= 1; //Angemeldet
+			$arrAutoconfirmGroups	= $this->config->get('calendar_raid_autoconfirm');
+			$signupstatus			= 1; //Angemeldet
 
 			// auto add groups
 			$usergroups = ($group && is_array($group)) ? $group : $this->config->get('calendar_raid_autocaddchars');
@@ -428,8 +428,9 @@ if(!class_exists('pdh_w_calendar_events')) {
 					foreach($userids as $userid){
 						
 						// if the user is away in this time frame, do not sign him in.
-						if($this->pdh->get('calendar_raids_attendees', 'user_awaymode', array($userid, $raidid))){
-							continue;
+						$away_mode	= $this->pdh->get('calendar_raids_attendees', 'user_awaymode', array($userid, $raidid));
+						if($away_mode){
+							$signupstatus	= 2;
 						}
 						
 						$memberid		= $this->pdh->get('member', 'mainchar', array($userid));
@@ -441,7 +442,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 									$signupstatus = $status;
 								}else{
 									if(is_array($arrAutoconfirmGroups) && count($arrAutoconfirmGroups) > 0 && $signupstatus == 1){
-										if($this->user->check_group($arrAutoconfirmGroups, false, $userid)){
+										if(!$away_mode && $this->user->check_group($arrAutoconfirmGroups, false, $userid)){
 											$signupstatus = 0;
 										}
 									}
@@ -466,12 +467,14 @@ if(!class_exists('pdh_w_calendar_events')) {
 			// auto add and confirm the raidleaders
 			if(is_array($raidleaders)){
 				foreach($raidleaders as $raidleaderid){
+					$away_mode		= $this->pdh->get('calendar_raids_attendees', 'attendee_awaymode', array($raidleaderid, $raidid));
+					$rlstatus		= ($away_mode) ? 2 : 0;
 					$defaultrole	= $this->pdh->get('member', 'defaultrole', array($raidleaderid));
 					$this->pdh->put('calendar_raids_attendees', 'update_status', array(
 						$raidid,
 						$raidleaderid,
 						(($defaultrole) ? $defaultrole : 0),
-						0,	// status
+						$rlstatus,	// status
 						0,
 						0,
 						'',
