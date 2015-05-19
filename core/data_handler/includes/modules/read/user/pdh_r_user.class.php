@@ -37,14 +37,15 @@ if (!class_exists("pdh_r_user")){
 		);
 		
 		public $presets = array(
-			'username' => array('name', array('%user_id%', '%link_url%', '%link_url_suffix%', '%use_controller%'), array()),
-			'useravatar'  => array('avatarimglink', array('%user_id%'), array()),
-			'useremail'  => array('email', array('%user_id%', true), array()),
-			'usercountry'  => array('country', array('%user_id%'), array()),
-			'userregdate'  => array('regdate', array('%user_id%'), array()),
-			'usergroups'  => array('groups', array('%user_id%', '%use_controller%'), array()),
-			'usercharnumber'  => array('charnumber', array('%user_id%'), array()),
-			'useronlinestatus' => array('is_online', array('%user_id%'), array()),
+			'username'				=> array('name', array('%user_id%', '%link_url%', '%link_url_suffix%', '%use_controller%'), array()),
+			'useravatar'			=> array('avatarimglink', array('%user_id%'), array()),
+			'useremail'				=> array('email', array('%user_id%', true), array()),
+			'usercountry'			=> array('country', array('%user_id%'), array()),
+			'userregdate'			=> array('regdate', array('%user_id%'), array()),
+			'usergroups'			=> array('groups', array('%user_id%', '%use_controller%'), array()),
+			'usercharnumber'		=> array('charnumber', array('%user_id%'), array()),
+			'useronlinestatus'	=> array('is_online', array('%user_id%'), array()),
+			'userawaystatus'		=> array('is_away', array('%user_id%'), array()),
 		);
 		
 		public function init_presets(){
@@ -238,6 +239,13 @@ if (!class_exists("pdh_r_user")){
 
 		public function get_awaymode_enabled($user_id){
 			return (int)$this->users[$user_id]['awaymode_enabled'];
+		}
+
+		public function get_html_is_away($user_id){
+			$tooltip		 = '<i class="fa fa-calendar"></i> '.$this->user->lang('').$this->time->user_date($this->get_awaymode_startdate($user_id), true);
+			$tooltip		.= '<i class="fa fa-calendar"></i> '.$this->user->lang('').$this->time->user_date($this->get_awaymode_enddate($user_id), true);
+			$tooltip		.= '<i class="fa fa-comment"></i> '.$this->user->lang('note').$this->get_awaymode_note($user_id);
+			return ($this->get_awaymode_enabled($user_id)) ? '<i class="eqdkp-icon-offline coretip" data-coretip="'.$tooltip.'"></i>' : '<i class="eqdkp-icon-online"></i>';
 		}
 
 		public function get_awaymode_startdate($user_id){
