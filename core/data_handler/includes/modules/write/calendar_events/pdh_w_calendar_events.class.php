@@ -455,7 +455,6 @@ if(!class_exists('pdh_w_calendar_events')) {
 							}
 						}
 					}
-					$this->pdh->process_hook_queue();
 				}
 			}
 
@@ -476,7 +475,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 					));
 				}
 			}
-
+			$this->pdh->process_hook_queue();
 		}
 	}
 }

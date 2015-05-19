@@ -168,6 +168,7 @@ class editcalendarevent_pageobject extends pageobject {
 					'autosignin_status'		=> (int)$asi_status,
 				)
 			));
+			$this->pdh->process_hook_queue();
 
 			// if the raid had been added, do the rest...
 			if($raidid > 0){
