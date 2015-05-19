@@ -529,6 +529,10 @@ if (!class_exists("environment")) {
 					'bot_agent' => 'YandexBot/',
 					'bot_name' => 'Yandex [Bot]',
 				),
+				array( // row #51
+					'bot_agent' => 'bingbot',
+					'bot_name' => 'Bing [Bot]',
+				),
 				
 			);
 			
