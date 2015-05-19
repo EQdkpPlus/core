@@ -118,7 +118,7 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 				// add log entry
 				$log_action = array(
 					'{L_calendar_log_charadd_names}'	=> implode(', ', $this->pdh->aget('member', 'name', 0, array($memberids))),
-					'{L_calendar_log_charadd_status}'	=> '{LA_raidevent_raid_status['.$status.']}',
+					'{L_calendar_log_charadd_status}'	=> '{LA_raidevent_raid_status[2]}',
 				);
 				$this->log_insert('calendar_log_statuschanged', $log_action, $eventid, $this->pdh->get('calendar_events', 'name', array($eventid)), true, 'calendar');
 				$this->pdh->enqueue_hook('calendar_raid_attendees_update', array($eventid));
