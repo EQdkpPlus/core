@@ -242,10 +242,10 @@ if (!class_exists("pdh_r_user")){
 		}
 
 		public function get_html_is_away($user_id){
-			$tooltip		 = '<i class="fa fa-calendar"></i> '.$this->user->lang('').$this->time->user_date($this->get_awaymode_startdate($user_id), true);
-			$tooltip		.= '<i class="fa fa-calendar"></i> '.$this->user->lang('').$this->time->user_date($this->get_awaymode_enddate($user_id), true);
+			$tooltip		 = '<i class="fa fa-calendar"></i> '.$this->user->lang('calendar_awaymode_start_tt').$this->time->user_date($this->get_awaymode_startdate($user_id), true).'</br>';
+			$tooltip		.= '<i class="fa fa-calendar"></i> '.$this->user->lang('calendar_awaymodeend_tt').$this->time->user_date($this->get_awaymode_enddate($user_id), true).'</br>';
 			$tooltip		.= '<i class="fa fa-comment"></i> '.$this->user->lang('note').$this->get_awaymode_note($user_id);
-			return ($this->get_awaymode_enabled($user_id)) ? '<i class="eqdkp-icon-offline coretip" data-coretip="'.$tooltip.'"></i>' : '<i class="eqdkp-icon-online"></i>';
+			return ($this->get_awaymode_enabled($user_id)) ? '<i class="eqdkp-icon-offline coretip" data-coretip="'.$tooltip.'" ></i>' : '<i class="eqdkp-icon-online"></i>';
 		}
 
 		public function get_awaymode_startdate($user_id){
