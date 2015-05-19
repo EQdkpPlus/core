@@ -239,7 +239,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 				
 				$log_action = $this->logs->diff(false, $arrNew, $this->arrLogLang);
 				
-				$this->log_insert('calendar_log_eventadded', $log_action, $id, (($extension['raid_eventid'] > 0) ? $this->pdh->get('event', 'name', array($extension['raid_eventid'])) : $name), true, 'calendar', ((defined("IN_CRON") && IN_CRON) ? CRONJOB : false));		
+				$this->log_insert('calendar_log_eventadded', $log_action, $id, (($extension['raid_eventid'] > 0) ? $this->pdh->get('event', 'name', array($extension['raid_eventid'])) : $name), true, 'calendar', ((defined("IN_CRON") && IN_CRON) ? CRONJOB : false));
 			}
 
 			$this->pdh->enqueue_hook('calendar_events_update', array($id));
@@ -301,11 +301,13 @@ if(!class_exists('pdh_w_calendar_events')) {
 			}
 
 			//Logging
-			$arrOld['timestamp_start'] = "{D_".$arrOld['timestamp_start']."}";
-			$arrOld['timestamp_end'] = "{D_".$arrOld['timestamp_end']."}";
-			$arrOld['extension'] = serialize($arrOld['extension']);
-			$log_action = $this->logs->diff(false, $arrOld, $this->arrLogLang);
-			$this->log_insert('calendar_log_eventdeleted', $log_action, (is_array($id) ? $id[0] : $id), (isset($arrOld['name']) && strlen($arrOld['name'])) ? $arrOld['name'] : "", true, 'calendar');
+			$arrOld['timestamp_start']	= "{D_".$arrOld['timestamp_start']."}";
+			$arrOld['timestamp_end']	= "{D_".$arrOld['timestamp_end']."}";
+			$extension					= $arrOld['extension'];
+			$arrOld['extension']		= serialize($arrOld['extension']);
+			$log_action					= $this->logs->diff(false, $arrOld, $this->arrLogLang);
+			$eventname					=  (($extension['raid_eventid'] > 0) ? $this->pdh->get('event', 'name', array($extension['raid_eventid'])) : ((isset($arrOld['name'])) ? $arrOld['name'] : ""));
+			$this->log_insert('calendar_log_eventdeleted', $log_action, (is_array($id) ? $id[0] : $id), $eventname, true, 'calendar');
 			
 			// perform the hooks
 			$this->pdh->enqueue_hook('calendar_raid_attendees_update');
