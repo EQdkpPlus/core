@@ -327,7 +327,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			$arrAttendees	= $this->get_attendee_stats($eventid, array(0,1));
 			if(is_array($arrAttendees) && count($arrAttendees) > 0){
 				foreach($arrAttendees as $memberid){
-					if($this->get_attendee_awaymode($memberid)){
+					if($this->get_attendee_awaymode($memberid, $eventid)){
 						$arrAway[] = $memberid;
 					}
 				}
@@ -345,7 +345,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			$awaymode_startdate	= $this->pdh->get('user', 'awaymode_startdate', array($userid));
 			$awaymode_enddate	= $this->pdh->get('user', 'awaymode_enddate', array($userid));
 			$event_starttime	= $this->time->removetimefromtimestamp(($eventid > 0) ? $this->pdh->get('calendar_events', 'date', array($eventid)) : $this->time->time);
-			return ($awaymode_enabled && $event_starttime > $awaymode_startdate && $event_starttime < $awaymode_enddate) ? true : false;
+			return ($awaymode_enabled && $event_starttime >= $awaymode_startdate && $event_starttime <= $awaymode_enddate) ? true : false;
 		}
 
 		/* -----------------------------------------------------------------------
