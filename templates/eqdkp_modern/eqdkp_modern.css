@@ -2787,7 +2787,9 @@ td.hiddenSmartphone, th.hiddenSmartphone {
 	border-radius: 4px 4px 4px 4px;
 	background-color: #FFFFFF;
 }
-
+.awaytt_row{
+	margin: 8px 0px;
+}
 /* Toolbar */
 .toolbar {
 	cursor: pointer;
