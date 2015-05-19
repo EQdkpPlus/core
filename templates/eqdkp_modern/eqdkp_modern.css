@@ -572,6 +572,10 @@ h3 {
 	font-size: 14px;
 }
 
+ul.mainmenu > li {
+	float: left;
+}
+
 ul.mainmenu li a.link_indexphp:before, ul.mainmenu li a.link_entry_home:before {
 	content:"\f015";
 	font-family: FontAwesome;
