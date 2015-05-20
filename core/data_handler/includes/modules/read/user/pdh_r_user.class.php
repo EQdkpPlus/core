@@ -44,8 +44,9 @@ if (!class_exists("pdh_r_user")){
 			'userregdate'			=> array('regdate', array('%user_id%'), array()),
 			'usergroups'			=> array('groups', array('%user_id%', '%use_controller%'), array()),
 			'usercharnumber'		=> array('charnumber', array('%user_id%'), array()),
-			'useronlinestatus'	=> array('is_online', array('%user_id%'), array()),
+			'useronlinestatus'		=> array('is_online', array('%user_id%'), array()),
 			'userawaystatus'		=> array('is_away', array('%user_id%'), array()),
+			'userlastvisit'			=> array('last_visit', array('%user_id%'), array()),
 		);
 		
 		public function init_presets(){

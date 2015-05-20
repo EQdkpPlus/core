@@ -418,6 +418,8 @@ if( !class_exists( "plus_datahandler")){
 			} else {
 				if( isset( $this->rm($module)->module_lang[$tag] ) ) {
 					return $this->rm($module)->module_lang[$tag];
+				} elseif(isset( $this->rm($module)->preset_lang[$tag])) {
+					return $this->rm($module)->preset_lang[$tag];
 				} else {
 					return $tag;
 				}

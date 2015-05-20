@@ -41,6 +41,7 @@ $module_lang = array(
 	'facebook'		=> 'Facebook',
 	'fullname'		=> 'Name',
 	'town'			=> 'Stadt',
+	'last_visit'	=> 'Letzter Besuch',
 );
 
 $preset_lang = array(
@@ -61,5 +62,6 @@ $preset_lang = array(
 	'userfacebook'		=> 'Facebook-Account',
 	'userfullname'		=> 'Vollständiger Name',
 	'usertown'			=> 'Stadt',
+	'userlastvisit'		=> 'Letzter Besuch',
 );
 ?>
