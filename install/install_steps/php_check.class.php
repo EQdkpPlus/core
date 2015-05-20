@@ -89,6 +89,11 @@ class php_check extends install_generic {
 				'installed'		=> (extension_loaded('json')) ? $this->lang['yes'] : $this->lang['no'],
 				'passfail'		=> (extension_loaded('json')) ? true : false
 			),
+			'gd'		=> array(
+				'required'		=> $this->lang['yes'],
+				'installed'		=> (extension_loaded('gd') && function_exists('gd_info')) ? $this->lang['yes'] : $this->lang['no'],
+				'passfail'		=> (extension_loaded('gd') && function_exists('gd_info')) ? true : false
+			),
 		);
 	}
 	

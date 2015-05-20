@@ -92,6 +92,7 @@ $lang = array(
 	'module_hash'			=> 'hash PHP-Funktion',
 	'module_memory'			=> 'PHP Speicherlimit',
 	'module_json'			=> 'JSON PHP-Modul',
+	"module_gd" 			=> 'GD Image Modul',
 	'safemode_warning'		=> '<strong>ACHTUNG</strong><br/>Da der  PHP Safe Mode aktiv ist, musst du im nächsten Schritt den FTP-Modus nutzen, ansonsten kann EQdkp Plus nicht verwendet werden!',
 	'phpcheck_success'		=> 'Die Mindestanforderungen für die Installation von EQDKP-PLUS werden erfüllt. Die Installation kann fortgesetzt werden.',
 	'phpcheck_failed'		=> 'Die Mindestanforderungen für die Installation von EQDKP-PLUS werden leider nicht erfüllt.<br />Eine Auswahl von geeigneten Hostern findest Du auf unserer <a href="'.EQDKP_PROJECT_URL.'" target="_blank">Website</a>',
