@@ -435,6 +435,9 @@ class ftp_handler{
 	
 	}
 	
+	//These methods here have been defined somewhere else. But the pfh is called so early in super registry, that they are not available when pfh needs it.
+	//Therefore they have been redeclared here.
+	
 	private function on_iis() {
 		$sSoftware = strtolower( $_SERVER["SERVER_SOFTWARE"] );
 		if ( strpos($sSoftware, "microsoft-iis") !== false )
@@ -442,10 +445,6 @@ class ftp_handler{
 		else
 			return false;
 	}
-	
-	private function get_chmod(){
-		if(defined('CHMOD')) return CHMOD;
-		return 0775;
-	}
+
 }
 ?>
