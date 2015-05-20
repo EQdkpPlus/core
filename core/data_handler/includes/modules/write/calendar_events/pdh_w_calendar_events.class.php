@@ -419,8 +419,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 		
 		public function auto_addchars($raidtype, $raidid, $raidleaders=array(), $group=false, $status=false){
 			//Auto confirm Groups
-			$arrAutoconfirmGroups = $this->config->get('calendar_raid_autoconfirm');
-			$signupstatus	= 1; //Angemeldet
+			$arrAutoconfirmGroups	= $this->config->get('calendar_raid_autoconfirm');
 
 			// auto add groups
 			$usergroups = ($group && is_array($group)) ? $group : $this->config->get('calendar_raid_autocaddchars');
@@ -428,18 +427,15 @@ if(!class_exists('pdh_w_calendar_events')) {
 				$userids = $this->pdh->get('user_groups_users', 'user_list', array($usergroups));
 				if(is_array($userids)){
 					foreach($userids as $userid){
-						
-						// if the user is away in this time frame, do not sign him in.
-						if($this->pdh->get('calendar_raids_attendees', 'user_awaymode', array($userid, $raidid))){
-							continue;
-						}
-						
+						$away_mode		= $this->pdh->get('calendar_raids_attendees', 'user_awaymode', array($userid, $raidid));
 						$memberid		= $this->pdh->get('member', 'mainchar', array($userid));
 						$defaultrole	= $this->pdh->get('member', 'defaultrole', array($memberid));
+						$signupstatus	= ($away_mode) ? 2 : 1;
+
 						if($memberid > 0){
 							if(($raidtype == 'role' && $defaultrole > 0) || $raidtype == 'class' || $raidtype == 'none'){
 								//Autoconfirm
-								if($status){
+								if(!$away_mode && is_numeric($status)){
 									$signupstatus = $status;
 								}else{
 									if(is_array($arrAutoconfirmGroups) && count($arrAutoconfirmGroups) > 0 && $signupstatus == 1){
@@ -461,26 +457,27 @@ if(!class_exists('pdh_w_calendar_events')) {
 							}
 						}
 					}
-					$this->pdh->process_hook_queue();
 				}
 			}
 
 			// auto add and confirm the raidleaders
 			if(is_array($raidleaders)){
 				foreach($raidleaders as $raidleaderid){
+					$away_mode		= $this->pdh->get('calendar_raids_attendees', 'attendee_awaymode', array($raidleaderid, $raidid));
+					$rlstatus		= ($away_mode) ? 2 : 0;
 					$defaultrole	= $this->pdh->get('member', 'defaultrole', array($raidleaderid));
 					$this->pdh->put('calendar_raids_attendees', 'update_status', array(
 						$raidid,
 						$raidleaderid,
 						(($defaultrole) ? $defaultrole : 0),
-						0,	// status
+						$rlstatus,	// status
 						0,
 						0,
 						'',
 					));
 				}
 			}
-
+			$this->pdh->process_hook_queue();
 		}
 	}
 }
