@@ -92,7 +92,7 @@ if (!class_exists("filehandler_php")) {
 
 		public function putContent($filename, $data){
 			$intBits = file_put_contents($filename, $data);
-			if(!$this->on_iis()) @chmod($filename, $this->get_chmod());
+			if(!$this->on_iis()) @chmod($filename, get_chmod());
 			return ($intBits !== false) ? true : false;
 		}
 		
@@ -196,7 +196,7 @@ if (!class_exists("filehandler_php")) {
 
 			if(!is_dir($path)){
 				$old = umask(0); 
-				$this->mkdir_r($path, $this->get_chmod(true));
+				$this->mkdir_r($path, get_chmod(true));
 				umask($old);
 			}
 			return (is_dir($path)) ? true : false;
@@ -232,7 +232,7 @@ if (!class_exists("filehandler_php")) {
 				}
 			}
 			if(is_file($path)){
-				if(!$this->on_iis()) @chmod($path, $this->get_chmod());
+				if(!$this->on_iis()) @chmod($path, get_chmod());
 				return true;
 			}
 			
@@ -303,7 +303,7 @@ if (!class_exists("filehandler_php")) {
 		public function FileMove($filename, $tofile, $tmpmove=false) {
 			$blnResult = $this->rename($filename, $tofile);
 			#unlink($filename);
-			if(!$this->on_iis()) @chmod($tofile, $this->get_chmod());
+			if(!$this->on_iis()) @chmod($tofile, get_chmod());
 			
 			return $blnResult;
 		}
@@ -363,24 +363,16 @@ if (!class_exists("filehandler_php")) {
 			}
 			
 			
-			if(!$this->on_iis()) @chmod($thumbfolder.$filename, $this->get_chmod());
+			if(!$this->on_iis()) @chmod($thumbfolder.$filename, get_chmod());
 		}
 		
 
-		//These methods here have been defined somewhere else. But the pfh is called so early in super registry, that they are not available when pfh needs it.
-		//Therefore they have been redeclared here.
-		
 		private function on_iis() {
 			$sSoftware = strtolower( $_SERVER["SERVER_SOFTWARE"] );
 			if ( strpos($sSoftware, "microsoft-iis") !== false )
 				return true;
 			else
 				return false;
-		}
-		
-		private function get_chmod(){
-			if(defined('CHMOD')) return CHMOD;
-			return 0775;
 		}
 	}
 }

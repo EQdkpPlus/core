@@ -695,7 +695,7 @@ if( !class_exists( "plus_datahandler")){
 		}
 		
 		public function get_user_presets( ) {
-			if(empty($this->user_presets) && !$this->presets_changed) {
+			if(empty($this->user_presets)) {
 				$user_presets = array( );
 				$preset_file = $this->pfh->FilePath( 'layouts/presets_user.php', 'eqdkp' );
 				if(is_file($preset_file)) {
@@ -707,7 +707,7 @@ if( !class_exists( "plus_datahandler")){
 		}
 
 		public function get_user_preset_lang( ) {
-			if(empty($this->user_presets_lang)  && !$this->presets_changed) {
+			if(empty($this->user_presets_lang)) {
 				$preset_file = $this->pfh->FilePath( 'layouts/presets_user.php', 'eqdkp' );
 				if(is_file($preset_file)) {
 					include($preset_file);
