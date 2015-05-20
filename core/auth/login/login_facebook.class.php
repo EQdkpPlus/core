@@ -25,6 +25,7 @@ if ( !defined('EQDKP_INC') ){
 
 class login_facebook extends gen_class {
 	private $fb_loaded = false;
+	private $js_loaded = false;
 	
 	public static $functions = array(
 		'login_button'		=> 'login_button',
@@ -99,27 +100,30 @@ class login_facebook extends gen_class {
 	}
 	
 	public function init_js(){
-			
-		$this->tpl->staticHTML('<div id="fb-root"></div>');
-		$this->tpl->add_js("
-
-			window.fbAsyncInit = function() {
-				FB.init({
-				  appId   : '".$this->config->get('login_fb_appid')."',
-				  status  : true, // check login status
-				  cookie  : true, // enable cookies to allow the server to access the session
-				  xfbml   : true,
-				  version : 'v2.0'
-				});
-			}
-			
-			  $(document).ready(function(){
-				var e = document.createElement('script');
-				e.src = document.location.protocol + '//connect.facebook.net/en_US/sdk.js';
-				e.async = true;
-				$('body').append(e);	  
-			  });				  
-		");
+		if(!$this->js_loaded && $this->config->get('login_fb_appid') != ""){
+			$this->tpl->staticHTML('<div id="fb-root"></div>');
+			$this->tpl->add_js("
+	
+				window.fbAsyncInit = function() {
+					FB.init({
+					  appId   : '".$this->config->get('login_fb_appid')."',
+					  status  : true, // check login status
+					  cookie  : true, // enable cookies to allow the server to access the session
+					  xfbml   : true,
+					  version : 'v2.0'
+					});
+				}
+				
+				  $(document).ready(function(){
+					var e = document.createElement('script');
+					e.src = document.location.protocol + '//connect.facebook.net/en_US/sdk.js';
+					e.async = true;
+					$('body').append(e);	  
+				  });				  
+			");
+		
+			$this->js_loaded = true;
+		}
 	}
 	
 	
