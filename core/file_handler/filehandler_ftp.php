@@ -119,7 +119,7 @@ if (!class_exists("filehandler_ftp")) {
 		}
 
 		private function mkdir_r($name, $chmod=false){
-			if($chmod === false) $chmod = get_chmod();
+			if($chmod === false) $chmod = $this->get_chmod();
 			if (!$this->init_ftp()) return false;
 			$name = $this->remove_rootpath($name);
 			$this->ftp->mkdir_r($name, $chmod);
@@ -282,7 +282,7 @@ if (!class_exists("filehandler_ftp")) {
 			}
 			if(is_file($this->root_path.$path)){
 				if (!$this->init_ftp()) return false;
-				//$this->ftp->chmod($path, get_chmod());
+				//$this->ftp->chmod($path, $this->get_chmod());
 			}
 			return is_file($this->root_path.$path);
 		}
@@ -306,7 +306,7 @@ if (!class_exists("filehandler_ftp")) {
 			$old_file = $this->remove_rootpath($old_file);
 			$new_file = $this->remove_rootpath($new_file);
 			$result = $this->ftp->rename($old_file, $new_file);
-			$this->ftp->chmod($new_file, get_chmod());
+			$this->ftp->chmod($new_file, $this->get_chmod());
 			return $result;
 		}
 
@@ -423,6 +423,14 @@ if (!class_exists("filehandler_ftp")) {
 			}
 			
 			return $string;
+		}
+		
+		//These methods here have been defined somewhere else. But the pfh is called so early in super registry, that they are not available when pfh needs it.
+		//Therefore they have been redeclared here.
+		
+		private function get_chmod(){
+			if(defined('CHMOD')) return CHMOD;
+			return 0775;
 		}
 		
 	}
