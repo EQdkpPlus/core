@@ -93,6 +93,8 @@ if(!class_exists("calevents_repeatable_crontask")){
 									'distribution'		=> $eventsdata['extension']['distribution'],
 									'attendee_count'	=> $eventsdata['extension']['attendee_count'],
 									'created_on'		=> $this->time->time,
+									'autosignin_group'	=> $eventsdata['extension']['autosignin_group'],
+									'autosignin_status'	=> $eventsdata['extension']['autosignin_status'],
 									));
 								}else{
 								array_push($a_data, false);
