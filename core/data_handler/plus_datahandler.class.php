@@ -707,7 +707,7 @@ if( !class_exists( "plus_datahandler")){
 		}
 
 		public function get_user_preset_lang( ) {
-			if(empty($this->user_presets_lang) && !$this->presets_changed) {
+			if(empty($this->user_presets_lang)  && !$this->presets_changed) {
 				$preset_file = $this->pfh->FilePath( 'layouts/presets_user.php', 'eqdkp' );
 				if(is_file($preset_file)) {
 					include($preset_file);
