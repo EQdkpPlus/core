@@ -1777,5 +1777,6 @@ $lang = array(
 		
 'core_sett_f_access_control_header' => 'Erlaubte JavaScript-Domains',
 'core_sett_f_help_access_control_header' => 'Trage hier Domains ein (eine pro Zeile, inklusive Protokoll, z.B. http://eqdkp.meineqdkp.de), von der aus auf JavaScript-Elemente wie Portalmodule oder Itemtooltips zugegriffen werden darf.',
+'portal_cors_info' => 'Bitte beachte, dass du Module nur in Seiten einbetten kannst, die du auch in den Einstellungen im Feld "Erlaubte JavaScript-Domains" eingetragen hast.',
 );
 ?>

@@ -1779,6 +1779,7 @@ $lang = array(
 		
 		'core_sett_f_access_control_header' => 'Allowed JavaScript-Domains',
 		'core_sett_f_help_access_control_header' => 'Insert here domains (one per line; including the protocol, e.g. http://eqdkp.myowndomain.com) that are allowed to embedd things like portal modules or Itemtooltips.',
+		'portal_cors_info' => 'Please note that you can only embedd the modules in sites that you have added to the setting "Allowed JavaScript-Domains".',
 		
 );
 
