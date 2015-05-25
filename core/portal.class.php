@@ -85,15 +85,21 @@ class portal extends gen_class {
 			$cssOut .= " ".file_get_contents($cssFile);
 			$cssOut .= '</style>';
 			
-			return
-			$jsOut.$cssOut.'<div id="portalbox'.$module_id.'" class="portalbox '.get_class($obj).'">'.(($this->in->get('header', 1)) ?
+			$out = $jsOut.$cssOut.'<div id="portalbox'.$module_id.'" class="portalbox '.get_class($obj).'">'.(($this->in->get('header', 1)) ?
 					'<div class="portalbox_head">
 						<span class="center" id="txt'.$module_id.'">'.$obj->get_header().'</span>
 					</div>' : ''
 					).'<div class="portalbox_content">
-						<div class="toggle_container">'.str_replace($this->server_path, $this->env->link, $moduleout).'</div>
+						<div class="toggle_container">';
+
+			$out .= preg_replace("/(\"|')(".preg_quote($this->server_path, "/").")/", "$1".$this->env->link, $moduleout); 
+			
+			$out .='</div>
 					</div>
 				</div></div>';
+			
+			
+			return $out;
 
 		} else {
 			return "You don't have the required permission to view this module.";
