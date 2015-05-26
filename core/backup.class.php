@@ -302,8 +302,8 @@ class backup extends gen_class {
 		}
 		$search				= array("\\", "'", "\x00", "\x0a", "\x0d", "\x1a");
 		$replace			= array("\\\\", "\\'", '\0', '\n', '\r', '\Z');
-		$fields				= implode(', ', $field_set);
-		$field_string		= 'INSERT INTO `' . $tablename . '` (' . $fields . ') VALUES ';
+		$fields				= implode('`, `', $field_set);
+		$field_string		= 'INSERT INTO `' . $tablename . '` (`' . $fields . '`) VALUES ';
 
 		//Get Content
 		$objQuery = $this->db->query("SELECT * FROM ".$tablename);
