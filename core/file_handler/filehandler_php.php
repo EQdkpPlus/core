@@ -322,7 +322,7 @@ if (!class_exists("filehandler_php")) {
 		/**
 		* create a thumbnail of an image to a specified folder
 		*/
-		public function thumbnail($image, $thumbfolder, $filename, $resize_value=400){
+		public function thumbnail($image, $thumbfolder, $filename, $resize_width=400, $resize_height=false){
 			// Create the new image
 			$imageInfo		= GetImageSize($image);
 			$filename		= ($filename) ? $filename : $image;
@@ -339,27 +339,91 @@ if (!class_exists("filehandler_php")) {
 			// variables...
 			$width			= $imageInfo[0];
 			$height			= $imageInfo[1];
-
-			// Resize me!
-			if($width > $resize_value){
-				$scale		= $resize_value/$width;
-				$heightA	= round($height * $scale);
-				$img		= ImageCreateTrueColor($resize_value,$heightA);
-
+			
+			//Fixed Width of Thumbnails
+			if($resize_width && !$resize_height){
+				// Resize me!
+				if($width > $resize_width){
+					$scale		= $resize_width/$width;
+					$heightA	= round($height * $scale);
+					$img		= ImageCreateTrueColor($resize_width,$heightA);
+				
+					// This is a fix for transparent 24bit png...
+					if($imageInfo[2] == 3){
+						imagefill($img, 0, 0, imagecolorallocatealpha($img, 0, 0, 0, 127));
+						imageSaveAlpha($img, true);
+					}
+				
+					ImageCopyResampled($img, $imgOld, 0,0, 0,0, $resize_width,$heightA, ImageSX($imgOld),ImageSY($imgOld));
+					switch($imageInfo[2]){
+						case 1:	ImageGIF($img,	$thumbfolder.$filename);	break;	// GIF
+						case 2:	ImageJPEG($img,	$thumbfolder.$filename, 95);	break;	// JPG
+						case 3:	ImagePNG($img,	$thumbfolder.$filename, 0);	break;	// PNG
+					}
+				} else {
+					$this->copy($image, $thumbfolder.$filename);
+				}
+				
+			}elseif(!$resize_width && $resize_height){
+			//Fixed Height of Thumbnails
+				
+				// Resize me!
+				if($height > $resize_height){
+					$scale		= $resize_height/$height;
+					$widthA		= round($width * $scale);
+					$img		= ImageCreateTrueColor($widthA, $resize_height);
+				
+					// This is a fix for transparent 24bit png...
+					if($imageInfo[2] == 3){
+						imagefill($img, 0, 0, imagecolorallocatealpha($img, 0, 0, 0, 127));
+						imageSaveAlpha($img, true);
+					}
+				
+					ImageCopyResampled($img, $imgOld, 0,0, 0,0, $widthA, $resize_height, ImageSX($imgOld),ImageSY($imgOld));
+					
+					switch($imageInfo[2]){
+						case 1:	ImageGIF($img,	$thumbfolder.$filename);	break;	// GIF
+						case 2:	ImageJPEG($img,	$thumbfolder.$filename, 95);	break;	// JPG
+						case 3:	ImagePNG($img,	$thumbfolder.$filename, 0);	break;	// PNG
+					}
+				} else {
+					$this->copy($image, $thumbfolder.$filename);
+				}
+				
+			}elseif($resize_width && $resize_height){
+			//Fixed Width and Height of Thumbnails
+			
+				$x = $y = 0;
+				$sourceWidth = $width;
+				$sourceHeight = $height;
+				
+				if($resize_width / $width < $resize_height / $height){
+					$cut = (($width * ($resize_height / $height)) - $resize_width) / ($resize_height / $height);
+					$x = ceil($cut / 2);
+					$sourceWidth = $width - $x * 2;
+				} else {
+					$cut = (($height * ($resize_width / $width)) - $resize_height) / ($resize_width / $width);
+					$y = ceil($cut / 2);
+					$sourceHeight = $height - $y * 2;
+				}
+				
+				
+				$img = ImageCreateTrueColor($resize_width, $resize_height);
+				
 				// This is a fix for transparent 24bit png...
 				if($imageInfo[2] == 3){
 					imagefill($img, 0, 0, imagecolorallocatealpha($img, 0, 0, 0, 127));
 					imageSaveAlpha($img, true);
 				}
-
-				ImageCopyResampled($img, $imgOld, 0,0, 0,0, $resize_value,$heightA, ImageSX($imgOld),ImageSY($imgOld));
+				
+				ImageCopyResampled($img, $imgOld, 0,0, $x, $y, $resize_width, $resize_height, $sourceWidth, $sourceHeight);
+					
 				switch($imageInfo[2]){
 					case 1:	ImageGIF($img,	$thumbfolder.$filename);	break;	// GIF
 					case 2:	ImageJPEG($img,	$thumbfolder.$filename, 95);	break;	// JPG
 					case 3:	ImagePNG($img,	$thumbfolder.$filename, 0);	break;	// PNG
 				}
-			} else {
-				$this->copy($image, $thumbfolder.$filename);
+				
 			}
 			
 			

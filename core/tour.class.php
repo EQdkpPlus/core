@@ -147,7 +147,7 @@ class tour extends gen_class {
 	public function execute_step($step, $show){
 		if (!$show && $this->steps[$step]['url'] != ''){
 			set_cookie('tour', base64_encode(serialize(array('step'	=> $step))), $this->cookie_time);
-			redirect($this->steps[$step]['url'].$this->SID.'&tour=show');
+			redirect($this->steps[$step]['url'].$this->SID.'&tour=show', false, false, false);
 		} else {
 
 			$custom_js = "var a = 1;";

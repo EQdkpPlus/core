@@ -158,8 +158,8 @@ if (!class_exists("file_handler")) {
 			return $this->fhandler->FileMove($filename, $tofile, $tmpmove);
 		}
 
-		public function thumbnail($image, $thumbfolder, $filename, $resize_value=400){
-			return $this->fhandler->thumbnail($image, $thumbfolder, $filename, $resize_value);
+		public function thumbnail($image, $thumbfolder, $filename, $resize_width=400, $resize_height=false){
+			return $this->fhandler->thumbnail($image, $thumbfolder, $filename, $resize_width, $resize_height);
 		}
 
 		public function putContent($filename, $data){

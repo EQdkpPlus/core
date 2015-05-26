@@ -38,7 +38,7 @@ if ( !interface_exists( "plus_filehandler" ) ){
 		public function copy($source, $dest);
 		public function rename($old_file, $new_file);
 		public function FileMove($filename, $tofile, $tmpmove=false);
-		public function thumbnail($image, $thumbfolder, $filename, $resize_value=400);
+		public function thumbnail($image, $thumbfolder, $filename, $resize_width=400, $resize_height=false);
 		public function putContent($filename, $data);
 		public function addContent($filename, $data);
 		public function is_writable($file, $testfile=false);
