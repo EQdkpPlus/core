@@ -213,6 +213,7 @@ $lang = array(
 "calendar_log_awaymode" => "Kalender Abwesenheitsmodus",
 "calendar_awaymode_start_tt"	=> "Starttag",
 "calendar_awaymodeend_tt"	=> "Endtag",
+"calendar_user_is_away"	=> "Abwesenheitsmodus aktiv",
 
 "adduser_send_mail" => "E-Mail senden",
 "adduser_send_mail2" => "E-Mail  an \"%s\" senden",
