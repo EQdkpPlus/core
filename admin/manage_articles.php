@@ -193,8 +193,7 @@ class Manage_Articles extends page_generic {
 
 		if(count($this->in->getArray('selected_ids', 'int')) > 0) {
 			foreach($this->in->getArray('selected_ids','int') as $id) {
-				
-				$pos[] = stripslashes($this->pdh->get('article', 'name', array($id)));
+				$pos[] = stripslashes($this->pdh->get('articles', 'title', array($id)));
 				$retu[$id] = $this->pdh->put('articles', 'delete', array($id));
 			}
 		}

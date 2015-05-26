@@ -282,7 +282,7 @@ class inst_settings extends install_generic {
 	
 	private function parse_sql_file($filename) {
 		$file = file_get_contents($filename);
-		$sqls = explode(";\n", $file);
+		$sqls = explode(";\n", str_replace("\n\n", "\n", str_replace("\r", "\n", $file)));
 		$sqls = preg_replace('/^#.*$/m', '', $sqls);
 		$sqls = preg_replace('/\s{2,}/', ' ', $sqls);
 		//$sqls = preg_replace('/\v/', '', $sqls);
