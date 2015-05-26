@@ -400,7 +400,7 @@ class core extends gen_class {
 				'S_REPONSIVE'				=> registry::get_const('mobile_view'),
 				'CURRENT_PAGE'				=> sanitize($this->env->request),
 				'S_STYLECHANGER'			=> (!intval($this->config->get('default_style_overwrite')) && count(register('pdh')->get('styles', 'styles', array(0, false))) > 1) ? true : false,
-				'USER_IS_AWAY'				=> ($this->user->data['user_id'] > 0) ? $this->pdh->get('user', 'awaymode_enabled', array($this->user->data['user_id'])) : false,
+				'USER_IS_AWAY'				=> ($this->user->data['user_id'] > 0) ? $this->pdh->get('calendar_raids_attendees', 'user_awaymode', array($this->user->data['user_id'])) : false,
 			));
 
 			if (isset($this->page_body) && $this->page_body == 'full'){

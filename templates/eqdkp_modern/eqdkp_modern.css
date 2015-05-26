@@ -2949,10 +2949,6 @@ ul#mychars-points-tooltip.dropdown-menu li table tbody tr td a {
 	color: #333;
 }
 
-.user_tooltip_awaymode span.nolink {
-	color: red !important;
-}
-
 .mychars-points-target img {
 	max-height: 16px;
 }

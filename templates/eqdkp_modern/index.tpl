@@ -317,7 +317,7 @@
 										<li class="{user_tooltip_addition.CLASS}">{user_tooltip_addition.TEXT}</li>
 										<!-- END user_tooltip_addition -->
 										<!-- IF USER_IS_AWAY -->
-										<li class="user_tooltip_awaymode"><span class="nolink"><i class="fa fa-suitcase fa-lg"></i> {L_calendar_user_is_away}</span></li>
+										<li class="user_tooltip_awaymode"><a href="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}#fragment-calendar"><i class="fa fa-suitcase fa-lg"></i> {L_calendar_user_is_away}</a></li>
 										<!-- ENDIF -->
 										<li><a href="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}"><i class="fa fa-cog fa-lg"></i> {L_settings}</a></li>
 										<li><a href="{U_LOGOUT}"><i class="fa fa-sign-out fa-lg"></i> {L_logout}</a></li>
