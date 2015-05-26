@@ -35,8 +35,19 @@ $(function(){
 	});
 	
 	$('.guesttooltip').each(function() {
+		var guestid = $(this).data('guestid');
 		$(this).qtip({
-			content: $(this).next('.guesttooltip-data'),
+			content: {
+				text: $(this).next('.guesttooltip-data'),
+				<!-- IF IS_OPERATOR -->title: {
+					text: '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-pencil fa-lg hand" onclick="EditGuest('+guestid+');"></i>  <i class="fa fa-trash-o fa-lg hand" onclick="DeleteGuest('+guestid+');"></i></div>',
+					button: false
+				}<!-- ENDIF -->
+			},
+			hide: {
+				fixed: true,
+				delay: 300
+			},
 			position: {
 				at: 'bottom center',
 				my: 'top center'

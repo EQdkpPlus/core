@@ -6,22 +6,9 @@
 					<td width="90%">
 						<b>{L_raidevent_raid_guests}</b> ({GUEST_COUNT}): 
 						<!-- BEGIN guests -->
-							<!-- IF IS_OPERATOR -->
-							<span class="guesttooltip guesteditpanel<!-- IF COLORED_NAMESBYCLASS2 --> class_{guests.CLASSID}<!-- ENDIF -->">
-								
-								<!-- IF guests.CLASSICON -->{guests.CLASSICON} <!-- ENDIF -->{guests.NAME} 
-								<span style="display:none;cursor:pointer;" class='guestpanel'>
-									<i class="fa fa-trash-o fa-lg hand" title="{L_raidevent_raid_guest_del}" onclick="DeleteGuest('{guests.ID}');"></i>
-									&nbsp;
-									<i class="fa fa-pencil fa-lg hand" title="{L_raidevent_raid_guest_edit}" onclick="EditGuest('{guests.ID}');"></i>
-								</span>
-							</span>
-							
-							<!-- ELSE -->
-							<span class="guesttooltip <!-- IF COLORED_NAMESBYCLASS2 --> class_{guests.CLASSID}<!-- ENDIF -->">
+							<span class="guesttooltip <!-- IF COLORED_NAMESBYCLASS2 --> class_{guests.CLASSID}<!-- ENDIF -->" data-guestid="{guests.ID}">
 								<!-- IF guests.CLASSICON -->{guests.CLASSICON} <!-- ENDIF -->{guests.NAME}
 							</span>
-							<!-- ENDIF -->
 							<span class="guesttooltip-data" style="display:none">{guests.TOOLTIP}</span>
 						<!-- END guests -->
 					</td>
