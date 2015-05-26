@@ -67,15 +67,18 @@ class calendar_pageobject extends pageobject {
 			
 				// Build the Deadline
 				$deadlinedate	= $eventdata['timestamp_start']-($eventdata['extension']['deadlinedate'] * 3600);
-				if(date('j', $deadlinedate) == date('j', $eventdata['timestamp_start'])){
-					$deadlinetime	= $this->time->user_date($deadlinedate, false, true);
-				}else{
-					$deadlinetime	= $this->time->user_date($deadlinedate, true);
-				}
-				$mystatus = $this->pdh->get('calendar_raids_attendees', 'myattendees', array($eventid, $this->user->id));
+				$mystatus		= $this->pdh->get('calendar_raids_attendees', 'myattendees', array($eventid, $this->user->id));
 				$mysignedstatus	= $this->pdh->get('calendar_raids_attendees', 'status', array($eventid, $mystatus['member_id']));
-				
-				if (((int)$eventdata['closed'] == 1) || !($deadlinedate > $this->time->time || ($this->config->get('calendar_raid_allowstatuschange') == '1' && $mystatus['member_id'] > 0 && $mysignedstatus != 4 && $eventdata['timestamp_end'] > $this->time->time))){
+
+				$deadlinepassed	= ($deadlinedate < $this->time->time) ? true : false;
+				if($deadlinepassed && $this->config->get('calendar_raid_allowstatuschange') == '1' && $mystatus['member_id'] > 0){
+					if($mysignedstatus != 4 && $eventdata['timestamp_end'] > $this->time->time){
+						if($signupstatus > $mysignedstatus || ($signupstatus == 2 && $mysignedstatus == 3)){
+							$deadlinepassed	= false;
+						}
+					}
+				}
+				if (((int)$eventdata['closed'] == 1) || $deadlinepassed){
 					continue;
 				}
 			
