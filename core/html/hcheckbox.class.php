@@ -44,7 +44,12 @@ class hcheckbox extends html {
 	protected function _toString() {
 		$out = '';
 		foreach ($this->options as $key => $opt) {
-			$selected_choice = ((string)$key == (string)$this->value) ? ' checked="checked"' : '';
+			if(is_array($this->value)){
+				$selected_choice = (in_array((string)$key, $this->value)) ? ' checked="checked"' : '';
+			} else {
+				$selected_choice = ((string)$key == (string)$this->value) ? ' checked="checked"' : '';
+			}
+			
 			$disabled = ($this->disabled) ? ' disabled="disabled"' : '';
 			$out .= '<label';
 			$dep = '';
@@ -60,7 +65,11 @@ class hcheckbox extends html {
 	}
 	
 	public function _inpval() {
-		return $this->in->get($this->name, 0);
+		if(count($this->options) > 1){
+			return $this->in->getArray($this->name, 'string');
+		} else {
+			return $this->in->get($this->name);
+		}
 	}
 }
 ?>

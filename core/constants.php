@@ -33,7 +33,7 @@ define('VERSION_EXT',		'2.1.0 Alpha 1');		// the external version number to be s
 define('VERSION_WIP',		true);					// work in progress or stable?
 define('VERSION_PHP_RQ',	'5.4.0');				// required version of PHP
 define('VERSION_PHP_REC',	'5.5.0');				// recommended version of PHP
-define('REQ_PHP_MEMORY',	'60M');					// required PHP Memory
+define('REQ_PHP_MEMORY',	'64M');					// required PHP Memory
 define('REQ_PHP_MEMORY_REC','128M');				// required PHP Memory
 
 // Plugin states

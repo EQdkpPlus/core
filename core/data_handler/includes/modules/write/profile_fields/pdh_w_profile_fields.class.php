@@ -71,7 +71,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 		public function update_field($id) {
 			$field = $this->pdh->get('profile_fields', 'fields', array($id));
 			$options = array();
-			if ($this->in->get('type') == 'dropdown' || $this->in->get('type') == 'multiselect'){
+			if ($this->in->get('type') == 'dropdown' || $this->in->get('type') == 'multiselect' || $this->in->get('type') == 'radio' || $this->in->get('type') == 'checkbox'){
 				$in_options_id = $this->in->getArray('option_id', 'string');
 				$in_options_lang = $this->in->getArray('option_lang', 'string');
 				foreach ($in_options_id as $key=>$value){
@@ -112,7 +112,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 			}
 
 			$options = array();
-			if ($this->in->get('type') == 'dropdown' || $this->in->get('type') == 'multiselect'){
+			if ($this->in->get('type') == 'dropdown' || $this->in->get('type') == 'multiselect' || $this->in->get('type') == 'radio' || $this->in->get('type') == 'checkbox'){
 				$in_options_id = $this->in->getArray('option_id', 'string');
 				$in_options_lang = $this->in->getArray('option_lang', 'string');
 

@@ -115,11 +115,13 @@ class ManageProfileFields extends page_generic {
 		if($this->in->get('edit')) $field_data = $this->pdh->get('profile_fields', 'fields', array($this->in->get('edit')));
 		else $field_data = array('lang' => '', 'options_language' => '', 'type' => '', 'category' => '', 'size' => '', 'image' => '', 'options' => array());
 		$types = array(
-			'text'		=> 'Text',
-			'int'		=> 'Integer',
-			'dropdown'	=> 'Dropdown',
-			'link'		=> 'Link',
-			'multiselect' => 'Multiselect',
+			'text'			=> 'Text',
+			'int'			=> 'Integer',
+			'dropdown'		=> 'Dropdown',
+			'link'			=> 'Link',
+			'multiselect'	=> 'Multiselect',
+			'checkbox'		=> 'Checkbox',
+			'radio'			=> 'Radio',
 		);
 
 		$categories = array(
@@ -140,10 +142,10 @@ class ManageProfileFields extends page_generic {
 			'CATEGORY_DD'				=> new hdropdown('category', array('options' => $categories, 'value' => $field_data['category'])),
 			'SIZE'						=> $field_data['size'],
 			'IMAGE'						=> $field_data['image'],
-			'S_SHOW_OPTIONS'			=> ($field_data['type'] == 'dropdown' || $field_data['type'] == 'multiselect') ? '' : 'style="display:none;"',
+			'S_SHOW_OPTIONS'			=> ($field_data['type'] == 'dropdown' || $field_data['type'] == 'multiselect' || $field_data['type'] == 'radio' || $field_data['type'] == 'checkbox') ? '' : 'style="display:none;"',
 		));
 
-		if ($field_data['type'] == 'dropdown' || $field_data['type'] == 'multiselect'){
+		if ($field_data['type'] == 'dropdown' || $field_data['type'] == 'multiselect' || $field_data['type'] == 'radio' || $field_data['type'] == 'checkbox'){
 			foreach ($field_data['options'] as $key => $value){
 				$this->tpl->assign_block_vars('options_row', array(
 					'ID'		=> $key,
@@ -156,10 +158,11 @@ class ManageProfileFields extends page_generic {
 $("#addopt_icon").click(function(){
 	var fields = $("#new_options > span:last-child").clone(true);
 	$("#addopt_icon").remove();
+	$(fields).find(\'.input\').val("");
 	$("#new_options").append(fields);
 });
 $("#type_dd").change(function(){
-	if($("#type_dd").attr("value") == "dropdown" || $("#type_dd").attr("value") == "multiselect") {
+	if($("#type_dd").attr("value") == "dropdown" || $("#type_dd").attr("value") == "multiselect" || $("#type_dd").attr("value") == "radio" || $("#type_dd").attr("value") == "checkbox") {
 		$("#options_row").show();
 	} else {
 		$("#options_row").hide();

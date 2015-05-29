@@ -281,6 +281,77 @@ if ( !class_exists( "pdh_r_member" ) ) {
 					}
 				}
 				break;
+				
+				case 'radio':
+					if (!isset($arrField['data']['options'][$strMemberValue])) return '';
+					$out = "";
+					if ($arrField['options_language'] != ""){
+						if (strpos($arrField['options_language'], 'lang:') === 0){
+							$arrSplitted = explode(':', $arrField['options_language']);
+							$arrGlang = $this->game->glang($arrSplitted[1]);
+							$arrLang = (isset($arrSplitted[2])) ? $arrGlang[$arrSplitted[2]] : $arrGlang;			
+						} else $arrLang = $this->game->get($arrField['options_language']);
+						
+						if (isset($arrLang[$strMemberValue])) $out .= ' '.$arrLang[$strMemberValue];
+						
+					} else {
+						$strVal = $arrField['data']['options'][$strMemberValue];
+						$strGlang = $this->game->glang($strVal);
+						if ($strGlang) return $strGlang;
+						$out .= $strVal;
+						
+					}
+					
+					if ($strImage && !$nameOnly){
+						return '<img src="'.$strImage.'" alt="'.$strMemberValue.'" /> '.$out;
+					} else {
+						return $out;
+					}
+
+				break;
+				
+				case 'checkbox':
+					$arrOut = array();
+					if(!is_array($strMemberValue)) $strMemberValue = array($strMemberValue);
+					foreach($strMemberValue as $strMemberVal) {
+						$out = "";
+						//Check if Value is in dropdown options
+						if (!in_array($strMemberVal, array_keys($arrField['data']['options']))) return '';
+					
+						if ($strImage && !$nameOnly){
+							$out .= '<img src="'.$strImage.'" alt="'.$out.'" title="'.$out.'" />';
+							if ($arrField['options_language'] != ""){
+								if (strpos($arrField['options_language'], 'lang:') === 0){
+									$arrSplitted = explode(':', $arrField['options_language']);
+									$arrGlang = $this->game->glang($arrSplitted[1]);
+									$arrLang = (isset($arrSplitted[2])) ? $arrGlang[$arrSplitted[2]] : $arrGlang;
+										
+								} else $arrLang = $this->game->get($arrField['options_language']);
+								if (isset($arrLang[$strMemberVal])) $out .= ' '.$arrLang[$strMemberVal];
+							}
+						} else {
+							if ($arrField['options_language'] != ""){
+								if (strpos($arrField['options_language'], 'lang:') === 0){
+									$arrSplitted = explode(':', $arrField['options_language']);
+									$arrGlang = $this->game->glang($arrSplitted[1]);
+									$arrLang = (isset($arrSplitted[2])) ? $arrGlang[$arrSplitted[2]] : $arrGlang;
+										
+								} else $arrLang = $this->game->get($arrField['options_language']);
+								if (isset($arrLang[$strMemberVal])) $out .= $arrLang[$strMemberVal];
+							}
+					
+							$strType = $this->game->get_type_for_name($profile_field);
+							if ($strType){
+								$out .= ($nameOnly) ? $this->game->get_name($strType, (int)$strMemberVal) : $this->game->decorate($strType, $strMemberVal, $this->data[$member_id]);
+							} else {
+								$out .= $arrField['data']['options'][$strMemberVal];
+							}
+						}
+						if (strlen($out)) $arrOut[] = $out;
+					}
+						
+					$out = implode(', ', $arrOut);
+				break;
 
 				case 'link':
 					$strMemberValue = str_replace(array("{CHARNAME}", "{SERVERLOC}", "{SERVERNAME}", "{CLASSID}"), array($this->get_name($member_id), $this->config->get('uc_server_loc'), $this->config->get('servername'), $this->get_classid($member_id)), $strMemberValue);
