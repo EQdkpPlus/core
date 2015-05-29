@@ -424,7 +424,7 @@
 					<!-- LISTENER logo_container -->
 					<div class="clear noheight">&nbsp;</div>
 				</div>
-				{PORTAL_BLOCK1}
+				<div class="portal_block1">{PORTAL_BLOCK1}</div>
 				<!-- LISTENER header_bottom -->
 			</div> <!-- close header-->
 		</header>
@@ -579,7 +579,7 @@
 		
 		<footer id="footer">
 				<!-- LISTENER footer_top -->
-				{PORTAL_BLOCK2}
+				<div class="portal_block1">{PORTAL_BLOCK2}</div>
 				{EQDKP_PLUS_COPYRIGHT}
 				<!-- LISTENER footer_bottom -->
 		</footer><!-- close footer -->
