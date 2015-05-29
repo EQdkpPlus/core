@@ -710,7 +710,7 @@ class calendarevent_pageobject extends pageobject {
 							'MEMBERID'			=> $memberid,
 							'MEMBERLINK'		=> $this->pdh->get('member', 'memberlink', array($memberid, $this->routing->simpleBuild('character'), '', true)),
 							'CHARISAWAY'		=> $this->pdh->get('calendar_raids_attendees', 'attendee_awaymode', array($memberid, $this->url_id)),
-							'SHOW_CHARCHANGE'	=> (count($twinkarray) > 1 || $eventdata['extension']['raidmode'] == 'role') ? true : false,
+							'SHOW_CHARCHANGE'	=> (count($twinkarray) > 0 || $eventdata['extension']['raidmode'] == 'role') ? true : false,
 							'CLASSID'			=> $this->pdh->get('member', 'classid', array($memberid)),
 							'NAME'				=> $this->pdh->get('member', 'name', array($memberid)),
 							'RANDOM'			=> $memberdata['random_value'],
