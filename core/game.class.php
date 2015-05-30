@@ -55,8 +55,7 @@ class game extends gen_class {
 			}
 			$this->init_gameclass();
 			$this->pdl->register_type('game');
-		}
-		if($installer){
+		} else {
 			$this->installer	= true;
 			$this->lang_name	= $lang_name;
 			$this->game			= $this->config->get('default_game');
