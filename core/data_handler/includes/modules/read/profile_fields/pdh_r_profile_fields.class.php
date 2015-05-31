@@ -112,6 +112,15 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 		public function get_sortid($name){
 			return $this->profile_fields[$name]['sort'];
 		}
+		
+		public function get_max_sortid(){
+			$intMax = 0;
+			foreach($this->profile_fields as $key => $field){
+				if($this->get_sortid($key) > $intMax) $intMax =  $this->get_sortid($key);
+			}
+			
+			return $intMax;
+		}
 
 	}//end class
 }//end if

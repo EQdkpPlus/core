@@ -1017,6 +1017,7 @@ class game extends gen_class {
 			}
 		}
 		$z = 0;
+
 		foreach($class_data as $class) {
 			if($class['admin']) {
 				// make it a hidden field
@@ -1028,9 +1029,9 @@ class game extends gen_class {
 						'category'		=> 'character',
 						'no_custom'		=> true,
 						'options_language'=> $class['type'],
+						'sort' 			=> $z,
 				);
 			} else {
-				$z++;
 				$field = array(
 						'name'			=> $class['name'],
 						'type'			=> 'dropdown',
@@ -1043,6 +1044,7 @@ class game extends gen_class {
 						'options_language'=> $class['type'],
 				);
 			}
+			$z++;
 			if(isset($class_deps[$class['name']])) {
 				foreach($class_deps[$class['name']] as $child => $type) {
 					$field['ajax_reload']['multiple'][] = array(array($child), '%URL%&ajax=true&child='.$child.'&parent='.$class['name']);
