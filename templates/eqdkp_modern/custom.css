@@ -1,4 +1,4 @@
-/* Game Background GodIst gross48
+/* Game Background 
 *	
 * If you want to have the game specific background image, please uncomment the following block
 */
@@ -100,5 +100,39 @@ body.embedded {
 
 .embedded #footer, .embedded .copyright, .embedded #footer a, .embedded #copyright a {
 	color: inherit;
+}
+*/
+/*============================================================================================*/
+/*
+*If u want to show Portalmodules in a row. Please uncomment the following block.
+*/
+
+/*
+#portal-middle, #portal-footer{
+display:flex;
+justify-content:space-around;
+align-items:stretch;
+
+	.portalbox{
+		flex:1 1 auto;
+		display: flex;
+		flex-direction: column;
+	}
+	.portalbox_content{
+		display:flex;
+		justify-content: space-around;
+		flex: 1 1 auto;
+	}
+	.colorswitch{	
+	background-color: none;
+	display: flex;
+	align-items: flex-end;
+	text-align: center;
+	flex-wrap: wrap;
+	justify-content: center;
+	
+		div{
+			background-color: transparent;}
+	}
 }
 */
