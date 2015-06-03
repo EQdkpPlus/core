@@ -91,16 +91,17 @@ if(!class_exists('pdh_w_calendar_events')) {
 				if(isset($editclones) && $editclones != 0){
 					$cloneid				= $this->pdh->get('calendar_events', 'cloneid', array($id));
 					$cloneid_eventid		= (($cloneid > 0) ? $cloneid : $id);
-					$timestamp_start_diff	= intval((($old['startdate'] != $startdate) ? ($startdate-$old['startdate']) : 0));
-					$timestamp_end_diff		= intval((($old['enddate'] != $enddate) ? ($enddate-$old['enddate']) : 0));
+					$timestamp_start_diff	= ($old['startdate'] != $startdate) ? $this->time->dateDiff($old['startdate'], $startdate, 'sec', true) : 0;
+					$timestamp_end_diff		= ($old['enddate'] != $enddate) ? $this->time->dateDiff($old['enddate'], $enddate, 'sec', true) : 0;
 					
+					#die($startdate.' -- '.$old['startdate'].' = '.$timestamp_start_diff);
 					if($editclones == '2'){
 						// only future raids
 						$objQuery = $this->db->prepare("UPDATE __calendar_events :p WHERE cloneid=? AND timestamp_start > ?")->set(array(
 							'calendar_id'			=> $cal_id,
 							'name'					=> $name,
-							'timestamp_start'		=> 'timestamp_start'.((substr($timestamp_start_diff, 0, 1) === '-') ? '' : '+').$timestamp_start_diff,
-							'timestamp_end'			=> 'timestamp_end'.((substr($timestamp_end_diff, 0, 1) === '-') ? '' : '+').$timestamp_end_diff,
+							'timestamp_start'		=> 'timestamp_start'.$timestamp_start_diff,
+							'timestamp_end'			=> 'timestamp_end'.$timestamp_end_diff,
 							'allday'				=> $allday,
 							'private'				=> 0,
 							'visible'				=> 1,
@@ -112,15 +113,15 @@ if(!class_exists('pdh_w_calendar_events')) {
 						$objQuery = $this->db->prepare("UPDATE __calendar_events :p WHERE cloneid=?")->set(array(
 							'calendar_id'			=> $cal_id,
 							'name'					=> $name,
-							'timestamp_start'		=> 'timestamp_start'.((substr($timestamp_start_diff, 0, 1) === '-') ? '' : '+').$timestamp_start_diff,
-							'timestamp_end'			=> 'timestamp_end'.((substr($timestamp_end_diff, 0, 1) === '-') ? '' : '+').$timestamp_end_diff,
+							'timestamp_start'		=> 'timestamp_start'.$timestamp_start_diff,
+							'timestamp_end'			=> 'timestamp_end'.$timestamp_end_diff,
 							'allday'				=> $allday,
 							'private'				=> 0,
 							'visible'				=> 1,
 							'notes'					=> $notes,
 							'repeating'				=> $repeat,
 							'extension'				=> serialize($extdata),
-						))->execute($cloneid_eventid);
+						))->execute($cloneid_eventid);#var_dump($objQuery);die();
 					}
 					
 
@@ -128,8 +129,8 @@ if(!class_exists('pdh_w_calendar_events')) {
 					$objQuery = $this->db->prepare("UPDATE __calendar_events :p WHERE id=?")->set(array(
 						'calendar_id'			=> $cal_id,
 						'name'					=> $name,
-						'timestamp_start'		=> 'timestamp_start'.((substr($timestamp_start_diff, 0, 1) === '-') ? '' : '+').$timestamp_start_diff,
-						'timestamp_end'			=> 'timestamp_end'.((substr($timestamp_end_diff, 0, 1) === '-') ? '' : '+').$timestamp_end_diff,
+						'timestamp_start'		=> 'timestamp_start'.$timestamp_start_diff,
+						'timestamp_end'			=> 'timestamp_end'.$timestamp_end_diff,
 						'allday'				=> $allday,
 						'private'				=> 0,
 						'visible'				=> 1,
