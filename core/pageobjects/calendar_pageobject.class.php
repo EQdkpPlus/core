@@ -29,6 +29,7 @@ class calendar_pageobject extends pageobject {
 			'json'				=> array('process' => 'get_json'),
 			'checkrepeatable'	=> array('process' => 'get_event_repeatable'),
 			'mass_signin'		=> array('process' => 'mass_signin','csrf'=>true),
+			'handle_invitation'	=> array('process' => 'handle_invitation'),
 			'export_tooltip'	=> array('process' => 'export_tooltip'),
 		);
 		parent::__construct(false, $handler, array());
@@ -95,6 +96,19 @@ class calendar_pageobject extends pageobject {
 			}
 		}
 		$this->pdh->process_hook_queue();
+	}
+
+	public function handle_invitation(){
+		$event_id	= $this->in->get('eventid', 0);
+		if($this->pdh->get('calendar_events', 'private_userperm', array($event_id))){
+			$status = $this->pdh->put('calendar_events', 'handle_invitation', array($this->in->get('eventid', 0), $this->user->data['user_id'], $this->in->get('status', 'decline')));
+			$this->pdh->process_hook_queue();
+			#$this->display();
+		}else{
+			echo('Nice try. No permission :)');
+			exit;
+		}
+
 	}
 
 	// Operator/Admin: Move the event in the calendar
@@ -316,6 +330,8 @@ class calendar_pageobject extends pageobject {
 							'operator'		=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission($calid)) ? true : false
 						);
 					}else{
+						// check if the event is private
+						if(!$this->pdh->get('calendar_events', 'private_userperm', array($calid))){ continue; }
 						$alldayevents	= ($this->pdh->get('calendar_events', 'allday', array($calid)) > 0) ? true : false;
 						$event_json[] = array(
 							'eventid'		=> $calid,
@@ -326,6 +342,8 @@ class calendar_pageobject extends pageobject {
 							'note'			=> $this->pdh->get('calendar_events', 'notes', array($calid)),
 							'color'			=> $eventcolor,
 							'textColor'		=> $eventcolor_txt,
+							'isowner'		=> $this->pdh->get('calendar_events', 'is_owner', array($calid)),
+							'isinvited'		=> $this->pdh->get('calendar_events', 'is_invited', array($calid)),
 							'author'		=> $this->pdh->get('calendar_events', 'creator', array($calid)),
 						);
 					}

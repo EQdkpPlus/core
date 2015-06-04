@@ -59,6 +59,7 @@ class hcheckbox extends html {
 				$dep = ' data-form-change="'.$data.'"';
 			}
 			if(!empty($this->class)) $out .= ' class="'.$this->class.'"';
+			$out .= ' id="'.$this->id.'"';
 			$out .= '><input type="'.self::$type.'" name="'.$this->name.((count($this->options) > 1) ? '[]' : '').'" value="'.$key.'"'.$selected_choice.$disabled.$dep.'/>'.$opt.'</label>&nbsp;';
 		}
 		return $out;

@@ -81,6 +81,18 @@ class editcalendarevent_pageobject extends pageobject {
 		}
 	}
 
+	private function notify_invitations($eventID){
+		$eventextension	= $this->pdh->get('calendar_events', 'extension', array($eventID));
+		$strEventTitle	= sprintf($this->pdh->get('event', 'name', array($eventextension['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->date_for_user($userid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true);
+		
+		$a_users = (isset($eventextension['invited']));
+		if(is_array($a_users) && count($a_users) > 0){
+			foreach($a_users as $userid){
+				$this->ntfy->add('calendarevent_invitation', $eventID, $this->pdh->get('calendar_events', 'notes', array($eventID)), $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($eventID)), $eventID, true, true), $userid, $strEventTitle);
+			}
+		}
+	}
+
 	// save an event template in database
 	public function process_addtemplate(){
 		if($this->in->get('raidmode') == 'role'){
@@ -155,17 +167,17 @@ class editcalendarevent_pageobject extends pageobject {
 				$this->in->get('note'),
 				0,
 				array(
-					'raid_eventid'			=> $this->in->get('raid_eventid', 0),
-					'calendarmode'			=> $this->in->get('calendarmode'),
-					'raid_value'			=> $this->in->get('raid_value', 0),
-					'deadlinedate'			=> $this->in->get('deadlinedate', 0.5),
-					'raidmode'				=> $this->in->get('raidmode'),
-					'raidleader'			=> $this->in->getArray('raidleader', 'int'),
-					'distribution'			=> $raid_clsdistri,
-					'attendee_count'		=> $this->in->get('raid_attendees_count', 0),
-					'created_on'			=> $this->time->time,
-					'autosignin_group'		=> $asi_groups,
-					'autosignin_status'		=> (int)$asi_status,
+					'raid_eventid'		=> $this->in->get('raid_eventid', 0),
+					'calendarmode'		=> $this->in->get('calendarmode'),
+					'raid_value'		=> $this->in->get('raid_value', 0),
+					'deadlinedate'		=> $this->in->get('deadlinedate', 0.5),
+					'raidmode'			=> $this->in->get('raidmode'),
+					'raidleader'		=> $this->in->getArray('raidleader', 'int'),
+					'distribution'		=> $raid_clsdistri,
+					'attendee_count'	=> $this->in->get('raid_attendees_count', 0),
+					'created_on'		=> $this->time->time,
+					'autosignin_group'	=> $asi_groups,
+					'autosignin_status'	=> (int)$asi_status,
 				)
 			));
 			$this->pdh->process_hook_queue();
@@ -176,8 +188,9 @@ class editcalendarevent_pageobject extends pageobject {
 				$this->notify_newraid($raidid);
 			}
 		}else{
-			$withtime = ($this->in->get('allday') == '1') ? 0 : 1;
-			$this->pdh->put('calendar_events', 'add_cevent', array(
+			$withtime		= ($this->in->get('allday') == '1') ? 0 : 1;
+			$invited_users	= $this->in->getArray('invited', 'int');
+			$raidid			= $this->pdh->put('calendar_events', 'add_cevent', array(
 				$this->in->get('calendar_id'),
 				$this->in->get('eventname'),
 				$this->user->data['user_id'],
@@ -186,7 +199,15 @@ class editcalendarevent_pageobject extends pageobject {
 				$this->in->get('repeating'),
 				$this->in->get('note'),
 				$this->in->get('allday'),
+				array(
+					'invited'			=> $invited_users,
+				),
+				0,
+				$this->in->get('private', 0),
 			));
+			if($raidid > 0){
+				$this->notify_invitations($raidid, $invited_users);
+			}
 		}
 		if($this->in->get('repeating', 0) > 0){
 			$this->timekeeper->run_cron('calevents_repeatable', true);
@@ -274,6 +295,9 @@ class editcalendarevent_pageobject extends pageobject {
 				$this->in->get('edit_clones', 0),
 				$this->in->get('note'),
 				$this->in->get('allday'),
+				array(
+					'invited'			=> $this->in->getArray('invited', 'int'),
+				)
 			));
 		}
 		
@@ -465,8 +489,10 @@ class editcalendarevent_pageobject extends pageobject {
 			'DR_RAIDMODE'		=> new hdropdown('raidmode', array('options' => $raidmode_array, 'value' => ((isset($eventdata['extension'])) ? $eventdata['extension']['raidmode'] : ''), 'id' => 'cal_raidmodeselect')),
 			'DR_RAIDLEADER'		=> $this->jquery->MultiSelect('raidleader', $raidleader_array, ((isset($eventdata['extension'])) ? $eventdata['extension']['raidleader'] : $this->pdh->get('member', 'mainchar', array($this->user->data['user_id']))), array('width' => 300, 'filter' => true)),
 			'DR_GROUPS'			=> new hmultiselect('asi_group', array('options' => $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list'))), 'value' => $this->config->get('calendar_raid_autocaddchars'))),
+			'DR_SHARE_USERS'	=> new hmultiselect('invited', array('options' => $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list'))), 'value' => ((isset($eventdata['extension']) && $eventdata['extension']['invited']) ? $eventdata['extension']['invited'] : array()) )),
 			'DR_STATUS'			=> new hdropdown('asi_status', array('options' => $raidstatus, 'value' => 0)),
 			'CB_ALLDAY'			=> new hcheckbox('allday', array('options' => array(1=>''), 'value' => ((isset($eventdata['allday'])) ? $eventdata['allday'] : 0), 'class' => 'allday_cb')),
+			'CB_PRIVATE'		=> new hcheckbox('private', array('options' => array(1=>''), 'value' => ((isset($eventdata['private'])) ? $eventdata['private'] : 0))),
 			'RADIO_EDITCLONES'	=> new hradio('edit_clones', array('options' => $radio_repeat_array)),
 
 			'JQ_DATE_START'		=> $this->jquery->Calendar('startdate', $this->time->user_date($defdates['start'], true, false, false), '', array('timepicker' => true, 'onselect' => $startdate_onselect)),
