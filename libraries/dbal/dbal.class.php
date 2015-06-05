@@ -873,7 +873,7 @@ abstract class DatabaseStatement {
 						$sign = substr($v, 0, 1);
 
 						if (in_array($sign, array('+', '-', '*'. '/'))){
-							$arrParams[$k] = $k.' '.$sign.' '.intval(trim(substr($v, 2)));
+							$arrParams[$k] = $k.' '.$sign.' '.intval(trim(substr($v, 1)));
 						} else {
 							$arrParams[$k] = $this->string_escape($orig_v);
 						}
