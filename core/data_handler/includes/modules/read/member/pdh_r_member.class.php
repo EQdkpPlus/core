@@ -277,7 +277,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 				case 'int':
 				case 'text': {
 					if ($strImage && !$nameOnly){
-						$out = '<img src="'.$strImage.'" alt="'.$out.'" /> '.$out;
+						$out = '<img src="'.$strImage.'" alt="'.$out.'" class="gameicon" /> '.$out;
 					}
 				}
 				break;
@@ -303,7 +303,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 					}
 					
 					if ($strImage && !$nameOnly){
-						return '<img src="'.$strImage.'" alt="'.$strMemberValue.'" /> '.$out;
+						return '<img src="'.$strImage.'" alt="'.$strMemberValue.'" class="gameicon" /> '.$out;
 					} else {
 						return $out;
 					}
@@ -357,7 +357,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 					$strMemberValue = str_replace(array("{CHARNAME}", "{SERVERLOC}", "{SERVERNAME}", "{CLASSID}"), array($this->get_name($member_id), $this->config->get('uc_server_loc'), $this->config->get('servername'), $this->get_classid($member_id)), $strMemberValue);
 					$out = '<a href="'.$strMemberValue.'">';
 					if ($strImage && !$nameOnly){
-						$out .= '<img src="'.$strImage.'" alt="'.$arrField['language'].'" title="'.$arrField['language'].'" />';
+						$out .= '<img src="'.$strImage.'" alt="'.$arrField['language'].'" title="'.$arrField['language'].'" class="gameicon"/>';
 					}else{
 						$out .= ($arrField['language']) ? $arrField['language'] : 'Link';
 					}
