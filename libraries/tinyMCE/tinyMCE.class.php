@@ -94,7 +94,7 @@ class tinyMCE extends gen_class {
 					menubar: false,
 					relative_urls : false,
 					remove_script_host : false,
-					toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright |  bullist | forecolor | blockquote image link",
+					toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright |  bullist | fontsizeselect forecolor | blockquote image link",
 					statusbar : false,
 				});
 			}
@@ -168,7 +168,7 @@ class tinyMCE extends gen_class {
 					language : "'.$this->language.'",
 					plugins: [
 					 	"advlist autolink lists link image charmap preview anchor eqdkp_item eqdkp_lightbox eqdkp_filebrowser eqdkp_easyinsert",
-						"searchreplace visualblocks code fullscreen",
+						"searchreplace visualblocks code fullscreen colorpicker",
 						"media table contextmenu paste textcolor emoticons'.$autoresize.$pageobjects.$readmore.$gallery.$raidloot.'"
 					],
 
@@ -334,8 +334,8 @@ class tinyMCE extends gen_class {
 					inline: true,
 					theme : "'.$this->theme.'",
 					skin : "'.$this->skin.'",
-					image_advtab: true,
-					toolbar: "insertfile undo redo | styleselect | fullscreen | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | forecolor emoticons | eqdkp_item eqdkp_gallery eqdkp_raidloot eqdkp_chars",
+					image_advtab: true,				
+					toolbar: "insertfile undo redo | fullscreen | styleselect fontselect fontsizeselect bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist | link image media eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | eqdkp_item eqdkp_gallery eqdkp_raidloot eqdkp_chars | custom_buttons",
 					language : "'.$this->language.'",
 					 plugins: [
 					 	"advlist autolink lists link image charmap preview anchor eqdkp_item eqdkp_lightbox eqdkp_filebrowser eqdkp_easyinsert",
