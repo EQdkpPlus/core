@@ -60,11 +60,18 @@
 						tmpttcontent += "<div class='calendartt_note'>{L_note}: "+event.note+"</div>";
 					}
 					tmpttcontent += "<div class='calendartt_note'>{L_creator}: "+event.author+"</div>";
+					var buttontext = '';
+					if(event.isowner){
+						buttontext = '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-pencil fa-lg hand" onclick="editEvent('+event.eventid+');"></i>  <i class="fa fa-trash-o fa-lg hand" onclick="deleteEvent('+event.eventid+');"></i></div>';
+					}else if(event.isinvited){
+						buttontext = '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-check fa-lg hand" onclick="acceptInvitation('+event.eventid+');"></i>  <i class="fa fa-times fa-lg hand" onclick="declineInvitation('+event.eventid+');"></i></div>';
+					}
+					
 					element.qtip({
 						content: {
 							text: tmpttcontent,
 							<!-- IF IS_OPERATOR -->title: {
-								text: '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-pencil fa-lg hand" onclick="editEvent('+event.eventid+');"></i>  <i class="fa fa-trash-o fa-lg hand" onclick="deleteEvent('+event.eventid+');"></i></div>',
+								text: buttontext,
 								button: false
 							}<!-- ENDIF -->
 						},
@@ -243,6 +250,14 @@
 						'<span id="' + id + '" class="cal-button">' + text +'</span>';
 						$("div.fc-" + where).append(my_button);
 						$("#" + id).button();
+	}
+
+	function acceptInvitation(id){
+		location.href = '{U_CALENDAR}&handle_invitation=true&status=accept&eventid='+id;
+	}
+	
+	function declineInvitation(id){
+		location.href = '{U_CALENDAR}&handle_invitation=true&status=decline&eventid='+id;
 	}
 
 	function editEvent(editid){

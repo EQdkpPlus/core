@@ -564,7 +564,7 @@ if (!class_exists("timehandler")){
 			return $timestamp + ($a_times[0]*3600) + ($a_times[1]*60) + $seconds;
 		}
 
-		public function dateDiff($ts1, $ts2, $out='sec'){
+		public function dateDiff($ts1, $ts2, $out='sec', $pos_neg=false){
 			// Build the Dates
 			if(!is_numeric($ts1)) {
 				$dt1	= new DateTimeLocale($dt1, $this->userTimeZone);
@@ -582,7 +582,12 @@ if (!class_exists("timehandler")){
 			$secs['week']	= $secs['day']*7;
 			$secs['month']	= $secs['day']*30;
 			$secs['year']	= $secs['day']*365;
-			return ($ts2 - $ts1 - ($ts2 - $ts1)%$secs[$out])/$secs[$out];
+			$result = ($ts2 - $ts1 - ($ts2 - $ts1)%$secs[$out])/$secs[$out];
+			return ($pos_neg) ? $this->pos_neg($result) : $result;
+		}
+
+		public function pos_neg($timediff){
+			return ((substr($timediff, 0, 1) === '-') ? '' : '+').$timediff;
 		}
 
 		public function age($date) {

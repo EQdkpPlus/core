@@ -195,6 +195,14 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			return ($this->events[$id]['creator']) ? $this->events[$id]['creator'] : 0;
 		}
 
+		public function get_is_owner($id){
+			$author	= ($this->events[$id]['creator']) ? $this->events[$id]['creator'] : 0;
+			if($author > 0){
+				return ($this->user->data['user_id'] == $author) ? true : false;
+			}
+			return false;
+		}
+
 		public function get_date($id) {
 			return $this->events[$id]['timestamp_start'];
 		}
@@ -243,7 +251,23 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 		}
 
 		public function get_private($id){
-			return 	$this->events[$id]['private'];
+			return $this->events[$id]['private'];
+		}
+
+		public function get_private_userperm($id, $userid=0){
+			if($this->get_private($id) > 0){
+				$userid		= ($userid > 0) ? $userid : $this->user->data['user_id'];
+				$owner		= $this->get_creatorid($id);
+				$extension	= $this->get_extension($id);
+				return ($owner ==  $userid || isset($extension['invited']) && in_array($userid, $extension['invited'])) ? true : false;
+			}
+			return true;
+		}
+
+		public function get_is_invited($id, $userid=0){
+			$extension	= $this->get_extension($id);
+			$userid		= ($userid > 0) ? $userid : $this->user->data['user_id'];
+			return (isset($extension['invited']) && in_array($userid, $extension['invited'])) ? true : false;
 		}
 
 		public function get_calendartype($id){
