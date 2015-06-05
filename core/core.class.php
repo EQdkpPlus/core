@@ -111,12 +111,13 @@ class core extends gen_class {
 		* @param		string		$title				Message title
 		* @param		string		$kind				Color Theme: red/green/default
 		*/
-		public function global_warning($message, $icon='fa-exclamation-triangle ', $class='red') {
+		public function global_warning($message, $icon='fa-exclamation-triangle ', $class='red', $dismissal=false) {
 			$this->tpl->assign_block_vars(
 				'global_warnings', array(
 					'MESSAGE'	=> $message,
 					'CLASS'		=> $class,
 					'ICON'		=> 'fa '.$icon,
+					'S_DISMISS'	=> $dismissal,
 				)
 			);
 		}

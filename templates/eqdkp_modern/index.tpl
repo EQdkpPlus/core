@@ -497,6 +497,9 @@
 							<header>
 								<div class="infobox infobox-large infobox-{global_warnings.CLASS} clearfix">
 									<i class="{global_warnings.ICON} fa-4x pull-left"></i> {global_warnings.MESSAGE}
+									<!-- IF global_warnings.S_DISMISS -->
+									<i class="fa-times fa pull-right hand" onclick="$(this).parent().hide()"></i>
+									<!-- ENDIF -->
 								</div>
 							</header>
 							<!-- END global_warnings -->	
