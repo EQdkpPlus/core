@@ -39,7 +39,12 @@ include_once('class.smtp.php');
 class MyMailer extends PHPMailer {
 	
 	private $myoptions = array();
-
+	protected $adminmail;
+	protected $mydeflang = "english";
+	protected $dkpname;
+	protected $sendmeth = 'php';
+	protected $nohtmlmssg;
+	
 	public static $shortcuts = array(
 		'crypt'		=> 'encrypt',
 	);
@@ -197,9 +202,13 @@ class MyMailer extends PHPMailer {
 	* @return traue/false
 	*/
 	private function GenerateMail($subject, $templatename, $bodyvars, $from){
-		$this->From			= $from;
+		$this->From			= $this->adminmail;
+		$this->FromName		= $from;
+		
+		$this->ClearReplyTos();
+		$this->addReplyTo($from, $from);
+		
 		$this->CharSet		= 'UTF-8';
-		$this->FromName		= $this->dkpname;
 		$this->Subject		= $this->generateSubject($subject);
 		$this->Signature	= ($this->config->get('lib_email_signature')) ? "\n".$this->config->get('lib_email_signature_value') : '';
 		$tmp_body			= $this->Template($templatename, $bodyvars);
