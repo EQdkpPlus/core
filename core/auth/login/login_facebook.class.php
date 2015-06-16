@@ -251,7 +251,7 @@ class login_facebook extends gen_class {
 	public function pre_register(){
 		$this->init_fb();
 		try {
-			$session = new FacebookSession($this->in->get('act'));
+			$session = new Facebook\FacebookSession($this->in->get('act'));
 			$me = $this->getMe($session);
 	
 			if ($me){
