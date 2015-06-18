@@ -247,6 +247,7 @@ class addcharacter_pageobject extends pageobject {
 				$fielddata['required'] = true;
 				$fielddata['default'] = $this->config->get($fieldname);
 			}
+			$fielddata['type'] = ($fielddata['type'] == 'link') ? 'text' : $fielddata['type'];
 			$tab = (!empty($fielddata['category']) && in_array($fielddata['category'], $categorynames)) ? $fielddata['category'] : 'character';
 			$fielddata['type'] = ($fielddata['type'] === 'link') ? 'text' : $fielddata['type'];
 			$this->form->add_field($fieldname, $fielddata, '', $tab);
