@@ -770,7 +770,7 @@ class calendarevent_pageobject extends pageobject {
 						$this->tpl->assign_block_vars('raidstatus.classes.status', array(
 							'MEMBERID'			=> $memberid,
 							'MEMBERLINK'		=> $this->pdh->get('member', 'memberlink', array($memberid, $this->routing->simpleBuild('character'), '', true)),
-							'SHOW_CHARCHANGE'	=> (count($twinkarray) > 1 || $eventdata['extension']['raidmode'] == 'role') ? true : false,
+							'SHOW_CHARCHANGE'	=> (count($twinkarray) > 0 || $eventdata['extension']['raidmode'] == 'role') ? true : false,
 							'CLASSID'			=> $this->pdh->get('member', 'classid', array($memberid)),
 							'NAME'				=> $this->pdh->get('member', 'name', array($memberid)),
 							'RANDOM'			=> $memberdata['random_value'],
