@@ -263,7 +263,9 @@ class admin_tasks extends gen_class {
 		
 		if($strAction == 'activate'){
 			if (count($arrIDs)){
-				$this->pdh->put('user', 'activate', array($arrIDs));
+				foreach($arrIDs as $user_id){
+					$this->pdh->put('user', 'activate', array($user_id));
+				}
 				$this->pdh->process_hook_queue();
 				$this->core->message($this->user->lang('activate_user'), $this->user->lang('success'), 'green');
 			}

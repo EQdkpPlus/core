@@ -170,7 +170,7 @@ class core extends gen_class {
 			$blnGuildrules = ($intGuildrulesArticleID && $this->pdh->get('articles', 'published', array($intGuildrulesArticleID)));
 			if ($this->user->is_signedin() && (int)$this->user->data['rules'] != 1 && $blnGuildrules){
 				if(stripos($this->env->path, 'register') === false){
-					redirect($this->controller_path_plain.'Register/');
+					redirect($this->controller_path_plain.'Register/'.$this->SID, false, false, false);
 				}
 			}
 			
