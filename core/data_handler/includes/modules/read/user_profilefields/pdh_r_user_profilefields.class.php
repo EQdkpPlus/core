@@ -317,8 +317,18 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 
 		public function get_field_by_name($strName){
 			foreach($this->user_profilefields as $intFieldID => $arrValue){
-				if (utf8_strtolower($arrValue['name']) === utf8_strtolower($strName)){
-					return $intFieldID;
+
+				if(is_serialized($arrValue['name'])){
+					$arrNames = unserialize($arrValue['name']);
+					foreach($arrNames as $lang => $val){
+						if (utf8_strtolower($val) === utf8_strtolower($strName)){
+							return $intFieldID;
+						}
+					}
+				} else {	
+					if (utf8_strtolower($arrValue['name']) === utf8_strtolower($strName)){
+						return $intFieldID;
+					}
 				}
 			}
 			return false;
