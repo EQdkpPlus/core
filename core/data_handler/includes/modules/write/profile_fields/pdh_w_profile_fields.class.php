@@ -103,7 +103,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 
 		public function insert_field($data=array()){
 			if(!isset($data['name'])) {
-				$data['name'] = utf8_strtolower((isset($data['lang'])) ? $data['lang'] : $this->in->get('language'));			
+				$data['name'] = str_replace(" ", "_", utf8_strtolower((isset($data['lang'])) ? $data['lang'] : $this->in->get('language')));			
 			}
 
 			$fields = $this->pdh->get('profile_fields', 'fields');
