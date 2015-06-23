@@ -665,6 +665,7 @@ if (!class_exists("styles")){
 					'misc_text1' => 'font-family',
 					'misc_text2' => 'font-family',
 					'misc_text3' => 'font-family',
+					'additional_less' => 'text',
 				)
 			);
 			
