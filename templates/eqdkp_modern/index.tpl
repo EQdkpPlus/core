@@ -584,7 +584,7 @@
 		
 		<footer id="footer">
 				<!-- LISTENER footer_top -->
-				<div class="portal_block1">{PORTAL_BLOCK2}</div>
+				<div class="portal_block2">{PORTAL_BLOCK2}</div>
 				{EQDKP_PLUS_COPYRIGHT}
 				<!-- LISTENER footer_bottom -->
 		</footer><!-- close footer -->
