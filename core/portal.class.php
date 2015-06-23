@@ -35,7 +35,7 @@ class portal extends gen_class {
 		$this->pdl->register_type('portal');
 		
 		// init the variables...
-		$this->isAdmin			= $this->user->check_auth('a_config_man', false);
+		$this->isAdmin			= $this->user->check_auth('a_extensions_man', false);
 		// get a list of all potentially used modules
 		$layouts = $this->pdh->get('portal_layouts', 'id_list');
 		$module_ids = array();
