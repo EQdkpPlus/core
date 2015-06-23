@@ -102,6 +102,7 @@ if (!class_exists("styles")){
 			'misc_text1',
 			'misc_text2',
 			'misc_text3',
+			'additional_less',
 		);
 
 		public $allowed_extensions = array(
@@ -664,6 +665,7 @@ if (!class_exists("styles")){
 					'misc_text1' => 'font-family',
 					'misc_text2' => 'font-family',
 					'misc_text3' => 'font-family',
+					'additional_less' => 'text',
 				)
 			);
 			
