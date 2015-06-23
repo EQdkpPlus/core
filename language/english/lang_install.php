@@ -90,6 +90,7 @@ $lang = array(
 	"module_memory" => 'PHP memory limit',
 	"module_json" => 'JSON PHP module',
 	"module_gd" => 'GD Image module',
+	'module_pathinfo' => 'PathInfo-Support',
 	"safemode_warning" => '<strong>WARNING</strong><br/>Because the PHP Safe mode is active, you have to use the FTP mode in the next Step in order to use EQdkp Plus!',
 	"phpcheck_success" => 'The minimum requirements for the installation of EQDKP-Plus are met. The installation can proceed.',
 	"phpcheck_failed" => 'The minimum requirements for the installation of EQDKP-Plus are not met.<br />A selection of suitable hosting companies can be found on our <a href="http://eqdkp-plus.eu" target="_blank">website</a>',

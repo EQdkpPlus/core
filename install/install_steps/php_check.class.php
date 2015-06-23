@@ -94,6 +94,12 @@ class php_check extends install_generic {
 				'installed'		=> (extension_loaded('gd') && function_exists('gd_info')) ? $this->lang['yes'] : $this->lang['no'],
 				'passfail'		=> (extension_loaded('gd') && function_exists('gd_info')) ? true : false
 			),
+			//Check will be performed by javascript
+			'pathinfo'	=> array(
+				'required'		=> $this->lang['yes'],
+				'installed'		=> $this->lang['yes'],
+				'passfail'		=> true
+			),
 		);
 	}
 	
@@ -191,6 +197,28 @@ class php_check extends install_generic {
 		}else{
 			$this->pdl->log('install_error', $this->lang['phpcheck_failed']);
 		}
+		
+		//JavaScript check pathinfo
+		$content .= '<script>$(document).ready(function(){
+			$.get( "index.php/pathinfotest", function( data ) {
+				if($.trim(data) != "/pathinfotest"){
+					pathinfotest_failed();
+				}
+			  
+			}).fail(function() {
+			    pathinfotest_failed();
+			});
+			
+			function pathinfotest_failed(){
+				var myFirstColumn = $(".colorswitch tr:last td:nth-child(2)");
+				var myLastColum = $(".colorswitch tr:last td:nth-child(5)");
+				myFirstColumn.html("'.$this->lang['no'].'");
+				myFirstColumn.removeClass("positive");
+				myFirstColumn.addClass("negative");
+				myLastColum.html("<i class=\"fa fa-times-circle fa-2x negative\"></i>");
+				$(".buttonbar button[name=\"next\"]").hide();
+			}
+		})</script>';
 
 		return $content;
 	}
