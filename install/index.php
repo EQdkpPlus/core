@@ -19,6 +19,14 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
+//Pathinfo check
+$path_info = !empty($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : (!empty($_SERVER['ORIG_PATH_INFO']) ? $_SERVER['ORIG_PATH_INFO'] : '');
+if($path_info != ""){
+	echo filter_var($path_info, FILTER_SANITIZE_STRING);
+	die();
+}
+
 // ---------------------------------------------------------
 // Set up environment
 // ---------------------------------------------------------
