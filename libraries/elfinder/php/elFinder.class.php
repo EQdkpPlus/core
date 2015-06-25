@@ -927,15 +927,13 @@ class elFinder {
 				$this->uploadDebug = 'Upload error: unable open tmp file';
 				break;
 			}
+			fclose($fp);
 			
-			
-			if (($file = $volume->upload($fp, $target, $name, $tmpname)) === false) {
-				$result['warning'] = $this->error(self::ERROR_UPLOAD_FILE, $name, $volume->error());
-				fclose($fp);
+			if (($file = $volume->upload($tmpname, $target, $name, $tmpname)) === false) {
+				$result['warning'] = $this->error(self::ERROR_UPLOAD_FILE, $name, $volume->error());			
 				break;
 			}
-			
-			fclose($fp);
+
 			$result['added'][] = $file;
 		}
 		
