@@ -132,7 +132,7 @@ if ( !class_exists( "apa_startpoints" ) ) {
 				$startdkp_before = ($this->config->get('cron_startdkp_before')) ? $this->config->get('cron_startdkp_before') : array();
 				$key = array_search($apa_id, $startdkp_before);
 				if ($key !== false) unset($startdkp_before[$key]);
-				$this->config->set('cron_startdkp_before', serialize($startdkp_before));
+				$this->config->set('cron_startdkp_before', $startdkp_before);
 			}
 			
 			$this->db->prepare("DELETE FROM __adjustments WHERE adjustment_reason=? AND event_id=? ")->execute($this->apa->get_data('name', $apa_id), intval($this->apa->get_data('event', $apa_id)));

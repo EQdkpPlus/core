@@ -215,6 +215,7 @@ class config extends gen_class {
 		$all_keys = array();
 		if(is_array($this->changed_keys)) $all_keys = $this->changed_keys;
 		if(is_array($this->added_keys)) $all_keys = array_merge($this->added_keys, $all_keys);
+		
 		$done = array();
 		foreach($all_keys as $changed){
 			if(strlen(trim($changed['k'])) > 0 && !in_array($changed['k'], $done)) {
@@ -225,6 +226,7 @@ class config extends gen_class {
 					'config_value'	=> (is_array($changed['v'])) ? serialize($changed['v']) : $changed['v'],
 					'config_plugin'	=> $changed['p']
 				))->execute();
+				
 			}
 		}
 		unset($this->changed_keys, $this->added_keys);
@@ -236,25 +238,7 @@ class config extends gen_class {
 				$this->db->prepare("DELETE FROM __config WHERE config_plugin = ?")->execute($deleted['p']);
 			unset($this->deleted_keys[$dk]);
 		}
-		//check if row-counts matches number of configs
-		$objQuery = $this->db->query("SELECT COUNT(config_name) as count FROM __config;");
-		if ($objQuery){
-			$arrResult =  $objQuery->fetchAssoc();
-			$row_count = (int)$arrResult['count'];	
-		} else $row_count = 0;
 
-		$array_count = 0;
-		foreach($this->config as $key => $data) {
-			if(is_array($data) && !is_numeric(key($data))) {
-				$array_count = 0;
-				foreach($data as $dat) {
-					$array_count++;
-				}
-			} else {
-				$array_count++;
-			}
-		}
-		if($row_count != $array_count) $this->save_backup($this->config);
 	}
 
 	private function save_backup($array){
