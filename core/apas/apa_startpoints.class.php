@@ -89,7 +89,7 @@ if ( !class_exists( "apa_startpoints" ) ) {
 			if($this->apa->get_data('before', $apa_id) && !in_array($apa_id, $startdkp_before)) {
 				$last_date = -1;
 				$startdkp_before[] = $apa_id;
-				$this->config->set('cron_startdkp_before', serialize($startdkp_before));
+				$this->config->set('cron_startdkp_before', $startdkp_before);
 			}
 
 			if($this->apa->get_data('creation', $apa_id)) {
