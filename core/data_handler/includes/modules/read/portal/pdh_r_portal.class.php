@@ -88,6 +88,15 @@ if ( !class_exists( "pdh_r_portal" ) ) {
 		public function get_child($id){
 			return (isset($this->portal[$id])) ? (int)$this->portal[$id]['child'] : false;
 		}
+		
+		public function get_id_by_path($path){
+			$arrOut = array();
+			foreach($this->portal as $id => $val){
+				if($this->get_path($id) === $path) $arrOut[] = $id;
+			}
+			
+			return $arrOut;
+		}
 	}//end class
 }//end if
 ?>

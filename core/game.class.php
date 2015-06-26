@@ -802,6 +802,7 @@ class game extends gen_class {
 		
 		$assoc_array = array();
 		$data = $this->get($type, $filter, $lang);
+		if(!is_array($data)) $data = array();
 
 		foreach($data as $id => $name) {
 			//echo "foreach ".$type." id ".$id."<br />";

@@ -371,10 +371,9 @@ class Manage_Extensions extends page_generic {
 							$this->portal->remove($this->code);
 						} else {
 							if ($path){
-								$idList = $this->pdh->get('portal', 'id_list', array(array('path' => $path)));
-								$id = array_keys($idList);
-								$plugin = $this->pdh->get('portal', 'plugin', array($idList[$id[0]]));
-								$name = $this->pdh->get('portal', 'name', array($idList[$id[0]]));
+								$idList = $this->pdh->get('portal', 'id_by_path', array($path));
+								$plugin = $this->pdh->get('portal', 'plugin', array($idList[0]));
+								$name = $this->pdh->get('portal', 'name', array($idList[0]));
 								
 								$this->portal->uninstall($path, $plugin);
 								$this->portal->install($path, $plugin);

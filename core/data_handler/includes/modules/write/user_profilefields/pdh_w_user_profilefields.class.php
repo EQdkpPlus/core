@@ -29,22 +29,22 @@ if(!class_exists('pdh_w_user_profilefields')) {
 		public function insert_field($arrValues, $arrOptions){
 		
 			$arrSet = array(
-					'name' 		=> $arrValues['name'],
-					'lang_var' 	=> $arrValues['lang_var'],
-					'type' 		=> $arrValues['type'],
-					'length' 	=> $arrValues['length'],
-					'minlength' => $arrValues['minlength'],
-					'validation' => $arrValues['validation'],
-					'required' => $arrValues['required'],
-					'show_on_registration' => $arrValues['show_on_registration'],
-					'enabled' => $arrValues['enabled'],
-					'is_contact' => $arrValues['is_contact'],
-					'contact_url' => $arrValues['contact_url'],
-					'icon_or_image' => $arrValues['icon_or_image'],
-					'bridge_field' => $arrValues['bridge_field'],
-					'options' => serialize(array('options' => $arrOptions)),
-					'editable' => 1,
-					'sort_order' => 9999999,
+					'name' 					=> $arrValues['name'],
+					'lang_var' 				=> $arrValues['lang_var'],
+					'type' 					=> $arrValues['type'],
+					'length' 				=> $arrValues['length'],
+					'minlength' 			=> $arrValues['minlength'],
+					'validation' 			=> $arrValues['validation'],
+					'required' 				=> $arrValues['required'],
+					'show_on_registration'	=> $arrValues['show_on_registration'],
+					'enabled' 				=> $arrValues['enabled'],
+					'is_contact' 			=> $arrValues['is_contact'],
+					'contact_url' 			=> $arrValues['contact_url'],
+					'icon_or_image' 		=> $arrValues['icon_or_image'],
+					'bridge_field' 			=> $arrValues['bridge_field'],
+					'options' 				=> serialize(array('options' => $arrOptions)),
+					'editable' 				=> 1,
+					'sort_order' 			=> 9999999,
 			);
 				
 			$objQuery = $this->db->prepare("INSERT INTO __user_profilefields :p ")->set($arrSet)->execute();
