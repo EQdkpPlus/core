@@ -424,7 +424,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 
 		public function get_display_field($intFieldID, $intUserID){
 			$strUserValue = $this->pdh->get('user', 'custom_fields', array($intUserID, 'userprofile_'.$intFieldID));
-			if ($strUserValue == "") return "";
+			if ($strUserValue == "" || is_array($strUserValue)) return "";
 			
 			$strType = $this->get_type($intFieldID);
 			if ($this->get_is_contact($intFieldID)){

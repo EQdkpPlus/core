@@ -580,10 +580,10 @@ if (!class_exists("pdh_r_user")){
 			return $arrSearchResults;
 		}
 		
-		public function get_profilefield($user_id, $intFieldID, $blnIgnorePrivacyCheck=false){
+		public function get_profilefield($user_id, $intFieldID, $blnIgnorePrivacyCheck=false, $blnPlainValue=false){
 			if (!$blnIgnorePrivacyCheck && !$this->get_check_privacy($user_id, 'userprofile_'.$intFieldID)) return '';
 			
-			return $this->pdh->get('user_profilefields', 'display_field', array($intFieldID, $user_id));
+			return ($blnPlainValue) ? $this->get_custom_fields($intUserID, 'userprofile_'.$intFieldID) : $this->pdh->get('user_profilefields', 'display_field', array($intFieldID, $user_id));
 		}
 		
 		public function get_html_profilefield($user_id, $intFieldID, $blnIgnorePrivacyCheck=false){
@@ -592,10 +592,10 @@ if (!class_exists("pdh_r_user")){
 			return $this->pdh->geth('user_profilefields', 'display_field', array($intFieldID, $user_id));
 		}
 		
-		public function get_profilefield_by_name($intUserID, $strName, $blnIgnorePrivacyCheck=false){
+		public function get_profilefield_by_name($intUserID, $strName, $blnIgnorePrivacyCheck=false, $blnPlainValue=false){
 			$intFieldID = $this->pdh->get('user_profilefields', 'field_by_name', array($strName));
 			if ($intFieldID){
-				return $this->get_profilefield($intUserID, $intFieldID, $blnIgnorePrivacyCheck);
+				return $this->get_profilefield($intUserID, $intFieldID, $blnIgnorePrivacyCheck, $blnPlainValue);
 			}
 			return false;
 		}
