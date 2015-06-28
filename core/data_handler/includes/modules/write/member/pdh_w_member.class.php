@@ -71,9 +71,10 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				}
 				//check profile fields
 				if(empty($data['profiledata'])) {
-					$old['profiledata'] = $this->pdh->get('member', 'profiledata', array($member_id));
+					$old['profiledata'] = json_encode($this->pdh->get('member', 'profiledata', array($member_id)));
 					$data['profiledata'] = $this->profilefields(array_merge($old['profiledata'], $data));
 				}
+				
 				if($changes == false && $old['profiledata'] == $data['profiledata']) {
 					return true;
 				}
@@ -93,7 +94,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				'member_status'		=> isset($data['status']) ? $data['status'] : 1,
 				'notes'				=> !empty($data['notes']) ? $data['notes'] : '',
 				'profiledata'		=> $data['profiledata'],
-				'last_update'		=> !empty($data['lastupdate']) ? $data['lastupdate'] : time(),
+				'last_update'		=> time(),
 				'picture'			=> !empty($data['picture']) ? $data['picture'] : ''
 			);
 			
