@@ -155,7 +155,11 @@ class user_pageobject extends pageobject {
 					'NAME' => $this->pdh->geth('user_profilefields', 'name', array($intFieldID)),
 					'TEXT' => $val,
 			));
-			$blnPersonal = true;
+			if($this->pdh->get('user_profilefields', 'is_contact', array($intFieldID))) {
+				$blnContact = true;
+			} else {
+				$blnPersonal = true;
+			}
 			$this->tpl->assign_var('USER_PROFILE_'.strtoupper($intFieldID), $val);
 		}
 								
@@ -166,8 +170,8 @@ class user_pageobject extends pageobject {
 		$hptt = $this->get_hptt($hptt_page_settings, $arrMemberList, $arrMemberList, array('%link_url%' => $this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%with_twink%' => false, '%use_controller%' => true), 'userprofile_'.$user_id);
 		$hptt->setPageRef($this->strPath);
 		$this->tpl->assign_vars(array(
-			'S_PROFILE_PERSONAL_ROW' => $blnPersonal,
-			'S_PROFILE_CONTACT_ROW' => $blnContact,
+			'S_PROFILE_PERSONAL_ROW'	=> $blnPersonal,
+			'S_PROFILE_CONTACT_ROW'		=> $blnContact,
 
 			'PROFILE_CHARS' 		=> $hptt->get_html_table($this->in->get('sort'), '', null, 1, sprintf($this->user->lang('listmembers_footcount'), count( $this->pdh->get('member', 'connection_id', array($user_id))))),
 			'S_PROFILE_CHARACTERS'	=> count($arrMemberList),
