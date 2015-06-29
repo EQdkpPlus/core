@@ -583,7 +583,7 @@ if (!class_exists("pdh_r_user")){
 		public function get_profilefield($user_id, $intFieldID, $blnIgnorePrivacyCheck=false, $blnPlainValue=false){
 			if (!$blnIgnorePrivacyCheck && !$this->get_check_privacy($user_id, 'userprofile_'.$intFieldID)) return '';
 			
-			return ($blnPlainValue) ? $this->get_custom_fields($intUserID, 'userprofile_'.$intFieldID) : $this->pdh->get('user_profilefields', 'display_field', array($intFieldID, $user_id));
+			return ($blnPlainValue) ? $this->get_custom_fields($user_id, 'userprofile_'.$intFieldID) : $this->pdh->get('user_profilefields', 'display_field', array($intFieldID, $user_id));
 		}
 		
 		public function get_html_profilefield($user_id, $intFieldID, $blnIgnorePrivacyCheck=false){
