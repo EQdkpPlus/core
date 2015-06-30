@@ -69,13 +69,14 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				if($data['mainid'] == 0) {
 					$data['mainid'] = $this->pdh->get('member', 'mainid', array($member_id));
 				}
+				
 				//check profile fields
 				if(empty($data['profiledata'])) {
-					$old['profiledata'] = json_encode($this->pdh->get('member', 'profiledata', array($member_id)));
+					$old['profiledata'] = $this->pdh->get('member', 'profiledata', array($member_id));
 					$data['profiledata'] = $this->profilefields(array_merge($old['profiledata'], $data));
 				}
-				
-				if($changes == false && $old['profiledata'] == $data['profiledata']) {
+
+				if($changes == false && json_encode($old['profiledata']) == $data['profiledata']) {
 					return true;
 				}
 			//add new member
