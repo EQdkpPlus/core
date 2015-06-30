@@ -39,7 +39,7 @@ class char_profilefieldsfix extends task {
 	}
 	
 	public function get_form_content() {
-		$objQuery = $this->db->query("SELECT profiledata, member_id FROM __members;");
+		$objQuery = $this->db->query("SELECT profiledata, member_id, member_name FROM __members;");
 		$profiledata = array();
 		while($objQuery && $row = $objQuery->fetchAssoc()) {
 			$profiledata			= json_decode($row['profiledata'], true);
@@ -50,7 +50,10 @@ class char_profilefieldsfix extends task {
 				}
 			}
 			
-			$this->db->prepare("UPDATE __members :p WHERE member_id = ?;")->set(array('profiledata' => json_encode($profiledata)))->execute($row['member_id']);
+			$membername = $row['member_name'];
+			if(stripos($membername, '&#') === false) $membername = filter_var($membername, FILTER_SANITIZE_STRING);
+			
+			$this->db->prepare("UPDATE __members :p WHERE member_id = ?;")->set(array('profiledata' => json_encode($profiledata), 'member_name' => $membername))->execute($row['member_id']);
 		}
 		
 		return $this->lang['char_profilefieldsfix_done'];

@@ -585,7 +585,7 @@ class update_2000 extends sql_update_task {
 		$this->config->get('start_page');
 		
 		// convert profile-fields from xml to json
-		$objQuery = $this->db->query("SELECT member_id, profiledata, member_race_id as race, member_level as level, member_class_id as class FROM __members;");
+		$objQuery = $this->db->query("SELECT member_name, member_id, profiledata, member_race_id as race, member_level as level, member_class_id as class FROM __members;");
 		$profiledata = array();
 		while($objQuery && $row = $objQuery->fetchAssoc()) {
 			$profiledata			= $this->xmltools->Database2Array($row['profiledata']);
@@ -595,7 +595,11 @@ class update_2000 extends sql_update_task {
 			$profiledata['class']	= $row['class'];
 			$profiledata['race']	= $row['race'];
 			$profiledata['level']	= $row['level'];
-			$this->db->prepare("UPDATE __members :p WHERE member_id = ?;")->set(array('profiledata' => json_encode($profiledata)))->execute($row['member_id']);
+			
+			$membername = $row['member_name'];
+			if(stripos($membername, '&#') === false) $membername = filter_var($membername, FILTER_SANITIZE_STRING);
+			
+			$this->db->prepare("UPDATE __members :p WHERE member_id = ?;")->set(array('profiledata' => json_encode($profiledata), 'member_name' => $membername))->execute($row['member_id']);
 		}
 		return true;
 	}
