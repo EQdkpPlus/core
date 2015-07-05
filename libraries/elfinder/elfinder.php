@@ -53,7 +53,9 @@ if (!$blnIsAdmin) $strType = 'image';
 			mySubmit: function (URL) {
 				
 				//Comes from an popup
-				if (field_name != ''){
+				if(field_name == '_callback') {					
+					editor.windowManager.getParams().oninsert(URL.url, {});
+				} else if (field_name != ''){
 					parentWindow.$('#'+field_name).val(URL.url);
 				} else {
 					//Insert into Editor Field

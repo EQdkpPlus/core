@@ -25,7 +25,7 @@ if ( !defined('EQDKP_INC') ){
 
 class tinyMCE extends gen_class {
 
-	protected $tinymce_version = '4.1.10';
+	protected $tinymce_version = '4.2.1';
 	protected $language	= 'en';
 	protected $trigger	= array(
 		'bbcode'	=> false,
@@ -167,7 +167,7 @@ class tinyMCE extends gen_class {
 					toolbar: "insertfile undo redo | fullscreen | styleselect fontselect fontsizeselect bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist | link image media eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | eqdkp_item eqdkp_gallery eqdkp_raidloot eqdkp_chars | custom_buttons",
 					language : "'.$this->language.'",
 					plugins: [
-					 	"advlist autolink lists link image charmap preview anchor eqdkp_item eqdkp_lightbox eqdkp_filebrowser eqdkp_easyinsert",
+					 	"advlist autolink lists link image imagetools charmap preview anchor eqdkp_item eqdkp_lightbox eqdkp_filebrowser eqdkp_easyinsert",
 						"searchreplace visualblocks code fullscreen colorpicker",
 						"media table contextmenu paste textcolor emoticons'.$autoresize.$pageobjects.$readmore.$gallery.$raidloot.'"
 					],
@@ -179,19 +179,23 @@ class tinyMCE extends gen_class {
 						'.$strHooks.'
 					},
 					'.$link_list.'
-					file_browser_callback : function(field_name, url, type, win){
+					file_picker_callback: function(callback, value, meta) {
 						var elfinder_url = "'.$this->env->link.'libraries/elfinder/elfinder.php'.$this->SID.'";    // use an absolute path!
 						var cmsURL = elfinder_url;    // script URL - use an absolute path!
+						var type = meta.filetype;
+					
 						if (cmsURL.indexOf("?") < 0) {
 							//add the type as the only query parameter
-							cmsURL = cmsURL + "?editor=tiny&type=" + type + "&field=" + field_name;
+							cmsURL = cmsURL + "?editor=tiny&type=" + type + "&field=_callback";
 						}
 						else {
 							//add the type as an additional query parameter
 							// (PHP session ID is now included if there is one at all)
-							cmsURL = cmsURL + "&editor=tiny&type=" + type + "&field=" + field_name;
+							cmsURL = cmsURL + "&editor=tiny&type=" + type + "&field=_callback";
 						}
 
+						var mycallback = callback;
+					
 						tinyMCE.activeEditor.windowManager.open({
 							file : cmsURL,
 							title : "File Browser",
@@ -202,8 +206,11 @@ class tinyMCE extends gen_class {
 							popup_css : false, // Disable TinyMCEs default popup CSS
 							close_previous : "no"
 						}, {
-							window : win,
-							input : field_name
+							oninsert: function (url, objVals) {
+						        callback(url, objVals);
+						    },
+							param_meta: meta,
+							param_value: value,
 						});
 						return false;
 					},
@@ -351,12 +358,12 @@ class tinyMCE extends gen_class {
 						var cmsURL = elfinder_url;    // script URL - use an absolute path!
 						if (cmsURL.indexOf("?") < 0) {
 							//add the type as the only query parameter
-							cmsURL = cmsURL + "?editor=tiny&type=" + type + "&field=" + field_name;
+							cmsURL = cmsURL + "?editor=tiny&type=" + type + "&field=_callback";
 						}
 						else {
 							//add the type as an additional query parameter
 							// (PHP session ID is now included if there is one at all)
-							cmsURL = cmsURL + "&editor=tiny&type=" + type + "&field=" + field_name;
+							cmsURL = cmsURL + "&editor=tiny&type=" + type + "&field=_callback";
 						}
 	
 						tinyMCE.activeEditor.windowManager.open({
@@ -369,8 +376,11 @@ class tinyMCE extends gen_class {
 							popup_css : false, // Disable TinyMCEs default popup CSS
 							close_previous : "no"
 						}, {
-							window : win,
-							input : field_name
+							oninsert: function (url, objVals) {
+						        callback(url, objVals);
+						    },
+							param_meta: meta,
+							param_value: value,
 						});
 						return false;
 					},
