@@ -831,7 +831,9 @@ class game extends gen_class {
 				if(in_array($type, $todisplay)) {
 					$assoc_array[$id.'_'] = $child_ids[$type][$id];
 				} else {
-					$assoc_array = array_unique(array_merge($assoc_array, $child_ids[$type][$id]));
+					if(is_array($child_ids[$type][$id])){
+						$assoc_array = array_unique(array_merge($assoc_array, $child_ids[$type][$id]));
+					}
 				}
 			} else {
 				//echo "not level ".$type." id ".$id." end ".end($todisplay)."<br />";
