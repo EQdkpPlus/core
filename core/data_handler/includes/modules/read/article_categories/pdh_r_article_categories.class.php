@@ -156,13 +156,14 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			return false;
 		}
 
-		public function get_name($intCategoryID){
+		public function get_name($intCategoryID, $blnPlain=false){
 			if (isset($this->categories[$intCategoryID])){
-				return $this->categories[$intCategoryID]['name'];
+				$strSerializedName = $this->categories[$intCategoryID]['name'];
+				return ($blnPlain) ? $this->categories[$intCategoryID]['name'] : $this->user->multilangValue($strSerializedName);
 			}
 			return false;
 		}
-		
+				
 		public function get_alias($intCategoryID){
 			if (isset($this->categories[$intCategoryID])){
 				return $this->categories[$intCategoryID]['alias'];

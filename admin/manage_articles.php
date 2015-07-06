@@ -127,7 +127,7 @@ class Manage_Articles extends page_generic {
 		$cid = $this->in->get('c', 0);
 		$id = $this->in->get('a', 0);
 		
-		$strTitle = $this->in->get('title');
+		$arrTitle = $this->in->getArray('title', 'string');
 		$strText = $this->in->get('text', '', 'raw');
 		$strTags = $this->in->get('tags');
 		$strPreviewimage = $this->in->get('previewimage');
@@ -152,12 +152,15 @@ class Manage_Articles extends page_generic {
 		if($this->in->exists('show_from') AND strlen($this->in->get('show_from')) AND $this->in->get('show_from') != $this->user->lang('never')) $strShowFrom = $this->time->fromformat($this->in->get('show_from'), 1);
 		if($this->in->exists('show_to') AND strlen($this->in->get('show_to')) AND $this->in->get('show_to') != $this->user->lang('never')) $strShowTo = $this->time->fromformat($this->in->get('show_to'), 1);
 		
-		
-		if ($strTitle == "" ) {
+		//Check Name
+		$strDefaultLanguage = $this->config->get('default_lang');
+		if(!isset($arrTitle[$strDefaultLanguage]) || $arrTitle[$strDefaultLanguage] == ""){
 			$this->core->message($this->user->lang('headline'), $this->user->lang('adduser_send_mail_error_fields'), 'red');
 			$this->edit();
 			return;
 		}
+		
+		$strTitle = serialize($arrTitle);
 		
 		if ($id){
 			$blnResult = $this->pdh->put('articles', 'update', array($id, $strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader));
@@ -240,6 +243,7 @@ class Manage_Articles extends page_generic {
 				'TEXT'	=> $this->pdh->get('articles', 'text', array($id)),
 				'ALIAS'	=> $this->pdh->get('articles', 'alias', array($id)),
 				'TAGS'	=> implode(', ', $this->pdh->get('articles', 'tags', array($id))),
+				'ML_TITLE' => new htextmultilang('title', array('value' => $this->pdh->get('articles', 'title', array($id, true)), 'required' => true, 'size' => 50)),
 				'DD_CATEGORY' => new hdropdown('category', array('options' => $arrCategories, 'value' => $this->pdh->get('articles', 'category', array($id)))),
 				'PUBLISHED_RADIO' => new hradio('published', array('value' => ($this->pdh->get('articles', 'published', array($id))))),
 				'FEATURED_RADIO' => new hradio('featured', array('value' => ($this->pdh->get('articles', 'featured', array($id))))),
@@ -262,6 +266,7 @@ class Manage_Articles extends page_generic {
 			
 			$this->tpl->assign_vars(array(
 				'DD_CATEGORY' => new hdropdown('category', array('options' => $arrCategories, 'value' => $cid)),
+				'ML_TITLE' => new htextmultilang('title', array('value' => '', 'required' => true, 'size' => 50)),	
 				'PUBLISHED_CHECKED'=> 'checked="checked"',
 				'COMMENTS_CHECKED' => 'checked="checked"',
 				'PUBLISHED_RADIO' => new hradio('published', array('value' => 1)),

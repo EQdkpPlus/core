@@ -509,7 +509,7 @@ CREATE TABLE `__portal_layouts` (
 DROP TABLE IF EXISTS __articles;
 CREATE TABLE `__articles` (
 	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-	`title` VARCHAR(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+	`title` TEXT NOT NULL COLLATE 'utf8_bin',
 	`text` MEDIUMTEXT COLLATE 'utf8_bin' NOT NULL,
 	`category` INT(10) UNSIGNED NOT NULL DEFAULT '0',
 	`featured` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
@@ -540,7 +540,7 @@ CREATE TABLE `__articles` (
 DROP TABLE IF EXISTS __article_categories;
 CREATE TABLE `__article_categories` (
 	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-	`name` VARCHAR(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+	`name` TEXT NOT NULL COLLATE 'utf8_bin',
 	`alias` VARCHAR(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`portal_layout` INT(10) UNSIGNED NOT NULL DEFAULT '0',
 	`description` TEXT COLLATE utf8_bin NOT NULL,

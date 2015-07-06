@@ -169,9 +169,9 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			return false;
 		}
 		
-		public function get_title($intArticleID){
+		public function get_title($intArticleID, $blnPlain=false){
 			if (isset($this->articles[$intArticleID])){
-				return $this->articles[$intArticleID]['title'];
+				return ($blnPlain) ? $this->articles[$intArticleID]['title'] : $this->user->multilangValue($this->articles[$intArticleID]['title']);
 			}
 			return false;
 		}

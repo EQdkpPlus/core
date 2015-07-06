@@ -82,7 +82,9 @@ if(!class_exists('pdh_w_article_categories')) {
 		
 		public function add($strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles,$intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS){
 			if ($strAlias == ""){
-				$strAlias = $this->create_alias($strName);
+				$arrName = unserialize($strName);
+				$strDefaultLanguage = $this->config->get('default_lang');
+				$strAlias = $this->create_alias($arrName[$strDefaultLanguage]);
 			} else {
 				$strAlias = $this->create_alias($strAlias);
 			}
@@ -145,9 +147,11 @@ if(!class_exists('pdh_w_article_categories')) {
 			return false;
 		}
 		
-		public function update($id, $strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles,$intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS){
+		public function update($id, $strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles,$intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS){			
 			if ($strAlias == ""){
-				$strAlias = $this->create_alias($strName);
+				$arrName = unserialize($strName);
+				$strDefaultLanguage = $this->config->get('default_lang');
+				$strAlias = $this->create_alias($arrName[$strDefaultLanguage]);
 			} elseif($strAlias != $this->pdh->get('article_categories', 'alias', array($id))) {
 				$strAlias = $this->create_alias($strAlias);
 			}

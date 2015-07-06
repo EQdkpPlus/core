@@ -77,7 +77,7 @@ class Manage_Article_Categories extends page_generic {
 		$this->user->check_auth('a_article_categories_man');
 		
 		$id = $this->in->get('c', 0);
-		$strName = $this->in->get('name');
+		$arrName = $this->in->getArray('name', 'string');
 		$strDescription = $this->in->get('description', '', 'raw');
 		$strAlias = $this->in->get('alias');
 		$intPublished = $this->in->get('published', 0);
@@ -97,11 +97,15 @@ class Manage_Article_Categories extends page_generic {
 		$intFeaturedOntop = $this->in->get('featured_ontop', 0);
 		$intHideOnRSS = $this->in->get('hide_on_rss', 0);
 		
-		if ($strName == "" ) {
+		//Check Name
+		$strDefaultLanguage = $this->config->get('default_lang');
+		if(!isset($arrName[$strDefaultLanguage]) || $arrName[$strDefaultLanguage] == ""){
 			$this->core->message($this->user->lang('name'), $this->user->lang('missing_values'), 'red');
 			$this->edit();
 			return;
 		}
+		
+		$strName = serialize($arrName);
 		
 		if ($id){
 			$blnResult = $this->pdh->put('article_categories', 'update', array($id, $strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles, $intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS));
@@ -208,6 +212,7 @@ class Manage_Article_Categories extends page_generic {
 			$this->tpl->assign_vars(array(
 				'DESCRIPTION' =>  $this->pdh->get('article_categories', 'description', array($id)),
 				'NAME' 		=> $this->pdh->get('article_categories', 'name', array($id)),
+				'ML_NAME'	=> new htextmultilang('name', array( 'required' => true, 'size' => 50, 'value' => $this->pdh->get('article_categories', 'name', array($id, true)))),
 				'ALIAS'		=> $this->pdh->get('article_categories', 'alias', array($id)),
 				'PER_PAGE'	=> $this->pdh->get('article_categories', 'per_page', array($id)),
 				'DD_PORTAL_LAYOUT' => new hdropdown('portal_layout', array('options' => $arrPortalLayouts, 'value' => $this->pdh->get('article_categories', 'portal_layout', array($id)))),
@@ -232,6 +237,7 @@ class Manage_Article_Categories extends page_generic {
 			
 			$this->tpl->assign_vars(array(
 				'PER_PAGE' => 25,
+				'ML_NAME'	=> new htextmultilang('name', array('value' => '', 'required' => true, 'size' => 50)),
 				'DD_PORTAL_LAYOUT' => new hdropdown('portal_layout', array('options' => $arrPortalLayouts, 'value' => 1)),
 				'R_PUBLISHED'	=> new hradio('published', array('value' => 1)),
 				'R_SHOW_CHILDS' => new hradio('show_childs', array('value' => 1)),

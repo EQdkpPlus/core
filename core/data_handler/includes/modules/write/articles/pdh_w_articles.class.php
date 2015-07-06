@@ -133,7 +133,9 @@ if(!class_exists('pdh_w_articles')) {
 		
 		public function add($strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader){
 			if ($strAlias == ""){
-				$strAlias = $this->create_alias($strTitle);
+				$arrName = unserialize($strTitle);
+				$strDefaultLanguage = $this->config->get('default_lang');
+				$strAlias = $this->create_alias($arrName[$strDefaultLanguage]);
 			} else {
 				$strAlias = $this->create_alias($strAlias);
 			}
@@ -330,7 +332,9 @@ if(!class_exists('pdh_w_articles')) {
 		
 		public function update($id, $strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader){
 			if ($strAlias == ""){
-				$strAlias = $this->create_alias($strTitle);
+				$arrName = unserialize($strTitle);
+				$strDefaultLanguage = $this->config->get('default_lang');
+				$strAlias = $this->create_alias($arrName[$strDefaultLanguage]);
 			} elseif($strAlias != $this->pdh->get('articles', 'alias', array($id))) {
 				$strAlias = $this->create_alias($strAlias);
 			}
