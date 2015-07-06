@@ -676,6 +676,7 @@ input[type=radio], input[type=checkbox]{
 	margin-top: -4px;
 	padding: 4px 8px 0px 8px !important;
 	display: none;
+	z-index: 20;
 }
 
 .input-multilang.textarea .multilang-dropdown {
@@ -1266,14 +1267,14 @@ input.ui-spinner-input, input.ui-spinner-input:focus, input.ui-spinner-input:hov
 .up_arrow_green:before, .up_arrow:before{
 	content:"\f0d8";
 	font-family: FontAwesome;
-	color: lighten(@eqdkpTableThFontColor, 20);
+	color: lighten(@eqdkpTableThFontColor, 40);
 	font-size: 18px;
 	margin-right: 2px;
 }
 .down_arrow_green:before, .down_arrow:before {
 	content:"\f0d7";
 	font-family: FontAwesome;
-	color: lighten(@eqdkpTableThFontColor, 20);
+	color: lighten(@eqdkpTableThFontColor, 40);
 	font-size: 18px;
 	margin-right: 2px;
 }

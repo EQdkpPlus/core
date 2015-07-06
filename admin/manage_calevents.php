@@ -35,7 +35,7 @@ class Manage_Calevents extends page_generic {
 	public function delete(){
 		$this->pdh->put('calendar_events', 'delete_cevent', array($this->in->getArray('selected_ids', 'int')));
 		$this->pdh->process_hook_queue();
-		$this->core->message($this->user->lang('del_suc'), $this->user->lang('success'), '');
+		$this->core->message($this->user->lang('del_suc'), $this->user->lang('success'), 'green');
 		$this->display();
 	}
 
