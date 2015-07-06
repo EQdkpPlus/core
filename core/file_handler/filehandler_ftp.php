@@ -88,7 +88,7 @@ if (!class_exists("filehandler_ftp")) {
 					
 					$chmod = (defined('CHMOD') ? CHMOD : 0775);
 					$this->ftp->chmod($this->remove_rootpath($this->tmp_Folder), $chmod);
-					$this->ftp->setTempDir($this->tmp_Folder);
+					$this->ftp->setTempDir($this->tmp_Folder, $this->remove_rootpath($this->tmp_Folder));
 					if (!$blnResult){
 						echo 'FTP-Error: Could not create tmp-folder';
 						$this->ftp = false;
@@ -137,7 +137,7 @@ if (!class_exists("filehandler_ftp")) {
 			}
 		}
 
-		public function putContent($filename, $data){
+		public function putContent($filename, $data){		
 			if (!$this->init_ftp()) return false;
 			$filename = $this->remove_rootpath($filename);
 			return $this->ftp->put_string($filename, $data);

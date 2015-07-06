@@ -24,6 +24,7 @@ class ftp_handler{
 	private $is_login		= '';		// The ftp login handle
 	private $root_dir		= '';		// FTP root directory
 	private $tmp_dir		= '';		// Temporary files directory
+	private $tmp_dir_plain	= '';		// Temporary files directory without root path
 	private $error			= '';		// Error Messages
 	private $host, $port, $user, $pass, $dir, $rootdir = '';
 
@@ -52,8 +53,9 @@ class ftp_handler{
 		}
 	}
 
-	public function setTempDir($dir){
-		$this->tmp_dir	= $dir;
+	public function setTempDir($dir, $dir_plain){
+		$this->tmp_dir			= $dir;
+		$this->tmp_dir_plain	= $dir_plain;
 	}
 
 	public function setRootDir($dir){
@@ -257,8 +259,12 @@ class ftp_handler{
 	}
 	
 	public function add_string($remote_file, $data, $mode=FTP_BINARY, $startpos=0){
-		$tmplfilename = $this->tmp_dir.md5($this->generateRandomBytes());
-		$this->ftp_copy($remote_file, $tmplfilename);
+		$strFilename = md5($this->generateRandomBytes());
+		
+		$tmplfilename 		= $this->tmp_dir.$strFilename;
+		$tmplfilename_plain = $this->tmp_dir_plain.$strFilename;
+		
+		$a = $this->ftp_copy($remote_file, $tmplfilename_plain);
 		
 		$tmpHandle = fopen($tmplfilename, 'a');
 		if ($tmpHandle){
