@@ -70,7 +70,7 @@ class urlfetcher  extends gen_class {
 	
 	public function post($url, $data, $content_type = "text/html; charset=utf-8", $header='', $conn_timeout = false, $timeout = false){
 		if(is_array($data)){
-			$data = http_build_query($data);
+			$data = http_build_query($data, '', '&');
 		}
 		
 		$this->method = ($this->method) ? $this->method : 'fopen';
