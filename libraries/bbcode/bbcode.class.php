@@ -368,18 +368,27 @@ if (!class_exists("bbcode")) {
 										$arrCache[$strTag] = $this->pdh->get('member', 'memberlink_decorated', array($member_id, $this->routing->simpleBuild('character'), '', true));
 									}
 						break;
+						
+					case 'itemid': infotooltip_js();
+									$item = "";
+									$game_id = strip_tags($elements[1]);
+									$str =  infotooltip($item, $game_id);
+									$arrCache[$strTag] = $str;
+						break;
+						
+					case 'item':	infotooltip_js();
+									$item = strip_tags($elements[1]);
+									if(strpos('id:', $item) === 0){
+										$game_id = substr($item, 3);
+										$str =  infotooltip("", $game_id);
+										$arrCache[$strTag] = $str;
+									} else {
+										$game_id = (is_numeric($item)) ? intval($item) : 0;
+										$str =  infotooltip($item, $game_id);
+										$arrCache[$strTag] = $str;
+									}
+						break;
 
-				}
-				//Infotooltips
-				if (strpos('item', strtolower($elements[0])) === 0){
-					infotooltip_js();
-					$item = strip_tags($elements[1]);
-
-					$game_id = (is_numeric($item)) ? intval($item) : 0;
-
-					$str =  infotooltip($item, $game_id);
-
-					$arrCache[$strTag] = $str;
 				}
 
 				$strBuffer .= $arrCache[$strTag];
@@ -430,6 +439,7 @@ if (!class_exists("bbcode")) {
 		public function remove_shorttags($text, $blnDisplayItemnames = false){
 			if ($blnDisplayItemnames){
 				$text = preg_replace('/{{item::([^}]+)}}/', '$1', $text);
+				$text = preg_replace('/{{itemid::([^}]+)}}/', '$1', $text);
 				$text = preg_replace('/{{char::([^}]+)}}/', '$1', $text);
 			}
 			$text = preg_replace('/{{([^}]+)}}/', '', $text);
