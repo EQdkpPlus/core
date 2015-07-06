@@ -58,7 +58,11 @@ class hhidden extends html {
 		if($this->readonly) $out .= 'readonly="readonly" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
 		$imgup = '';
-		
+		if(is_array($this->attrdata) && count($this->attrdata) > 0){
+			foreach($this->attrdata as $attrdata_name=>$attrdata_value){
+				$out .= 'data-'.$attrdata_name.'="'.$attrdata_value.'" ';
+			}
+		}
 		if($this->imageuploader) {
 			$imgopts = array();
 			foreach($this->imgoptions as $opt) $imgopts[$opt] = $this->$opt;

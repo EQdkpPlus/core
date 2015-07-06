@@ -74,6 +74,11 @@ class htext extends html {
 		if($this->readonly) $out .= 'readonly="readonly" ';
 		if($this->required) $out .= 'required="required" ';
 		if($this->disabled) $out .= 'disabled="disabled" ';
+		if(is_array($this->attrdata) && count($this->attrdata) > 0){
+			foreach($this->attrdata as $attrdata_name=>$attrdata_value){
+				$out .= 'data-'.$attrdata_name.'="'.$attrdata_value.'" ';
+			}
+		}
 		if(!empty($this->pattern)) $out .= 'pattern="'.$this->pattern($this->pattern).'" ';
 		if(!empty($this->euqalto)) $out .= 'data-equalto="'.$this->equalto.'" ';
 		if($this->spinner){
