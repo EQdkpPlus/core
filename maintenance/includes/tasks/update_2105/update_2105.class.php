@@ -49,8 +49,8 @@ class update_2105 extends sql_update_task {
 		
 		// init SQL querys
 		$this->sqls = array(
-			1	=> "ALTER TABLE `__article_categories` CHANGE COLUMN `name` `name` TEXT NOT NULL DEFAULT '' COLLATE 'utf8_bin';",
-			2	=> "ALTER TABLE `__articles` CHANGE COLUMN `title` `title` TEXT NOT NULL DEFAULT '' COLLATE 'utf8_bin'",
+			1	=> "ALTER TABLE `__article_categories` CHANGE COLUMN `name` `name` TEXT NOT NULL COLLATE 'utf8_bin';",
+			2	=> "ALTER TABLE `__articles` CHANGE COLUMN `title` `title` TEXT NOT NULL COLLATE 'utf8_bin'",
 		);
 	}
 }
