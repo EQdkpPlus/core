@@ -322,6 +322,8 @@ class controller extends gen_class {
 				$strText = xhtml_entity_decode($arrArticle['text']);
 				$arrPagebreaks = array();
 				preg_match_all('#<hr(.*)class="system-pagebreak"(.*)\/>#iU', $strText, $arrPagebreaks, PREG_PATTERN_ORDER);
+				
+				$arrArticle['title'] = $this->user->multilangValue($arrArticle['title']);
 			
 				if (count($arrPagebreaks[0])){
 					$arrTitles[1] = $arrArticle['title'];

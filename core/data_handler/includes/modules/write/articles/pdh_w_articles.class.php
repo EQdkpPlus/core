@@ -240,6 +240,14 @@ if(!class_exists('pdh_w_articles')) {
 		public function update_headline($id, $strTitle){
 			$arrOldData = $this->pdh->get('articles', 'data', array($id));
 			
+			$currentLanguage = $this->user->lang_name;
+			$defaultLanguage = $this->config->get('default_lang');
+			$arrOldTitles = (is_serialized($arrOldData["title"])) ? unserialize($arrOldData["title"]) : array($defaultLanguage => $arrOldData["title"]);
+			$arrOldTitles[$currentLanguage] = $strTitle;
+			if(!isset($arrOldTitles[$defaultLanguage])) $arrOldTitles[$defaultLanguage] = $strTitle;
+			
+			$strTitle = serialize($arrOldTitles);
+			
 			$objQuery = $this->db->prepare("UPDATE __articles :p WHERE id=?")->set(array(
 					'title' 			=> $strTitle,
 			))->execute($id);
