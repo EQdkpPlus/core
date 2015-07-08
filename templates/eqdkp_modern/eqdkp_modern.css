@@ -3712,7 +3712,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		margin-right: 0;
 	}
 	
-	.responsive .comment_avatar_container{ 
+	.responsive .comment_avatar_container, .responsive .comment_write_container::after, .responsive .comment_write_container::before, .comment_container::after, .comment_container::before{ 
 		display: none;
 	}
 	.responsive .comment_container, .responsive #comment_button, .responsive .reply-trigger, .responsive .reply_button, .responsive .comment_write_container {
@@ -3768,6 +3768,11 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	
 	.responsive #personalAreaUser .user-avatar-smallest>img {
 		margin-top: 4px;
+	}
+	
+	.responsive .first.column, .responsive .third.column, {
+		min-width: 1% !important;
+		max-width: 100% !important;
 	}
 }
 
