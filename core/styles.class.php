@@ -359,6 +359,7 @@ if (!class_exists("styles")){
 				$archive->delete($template_path.'/settings.xml');
 				$archive->add($this->pfh->FolderPath('templates/'.$template_path, 'eqdkp'), $this->pfh->FolderPath('templates', 'eqdkp'));
 				$archive->add($storage_folder.'package.xml', $storage_folder);
+				$archive->add($storage_folder.'settings.xml', $storage_folder);
 
 				$result = $archive->create();
 
