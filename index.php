@@ -708,6 +708,23 @@ class controller extends gen_class {
 					//2 = Headlines only
 					//3 = only first 600 characters
 					$strText = $this->pdh->get('articles',  'text', array($intArticleID));
+					
+					//Page divisions
+					$strText = xhtml_entity_decode($strText);
+					$arrPagebreaks = array();
+					preg_match_all('#<hr(.*)class="system-pagebreak"(.*)\/>#iU', $strText, $arrPagebreaks, PREG_PATTERN_ORDER);
+					
+					if (count($arrPagebreaks[0])){
+						$arrContent = preg_split('#<hr(.*)class="system-pagebreak"(.*)\/>#iU', $strText);
+						array_unshift($arrContent, "");
+							
+					} else {
+						$arrContent[0]	= "";
+						$arrContent[1]	= $strText;
+					}
+					
+					$strText = $arrContent[1];
+					
 					$arrContent = preg_split('#<hr(.*)id="system-readmore"(.*)\/>#iU', xhtml_entity_decode($strText));
 			
 					$strText = $this->bbcode->parse_shorttags($arrContent[0]);
