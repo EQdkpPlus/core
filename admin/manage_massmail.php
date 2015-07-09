@@ -188,6 +188,7 @@ class Manage_Massmail extends page_generic {
 	public function submit(){
 		if ($this->in->get('body', '', 'raw') != ""){
 			$arrRecipients = array();
+			//Usergroups
 			if (count($this->in->getArray('usergroups', 'int')) > 0){
 				foreach ($this->in->getArray('usergroups', 'int') as $key => $groupid){
 					$arrGroupMembers = $this->pdh->get('user_groups_users', 'user_list', array($groupid));
@@ -197,17 +198,29 @@ class Manage_Massmail extends page_generic {
 				}
 			}
 
+			//Normal User IDs
 			if (count($this->in->getArray('user', 'int')) > 0){
 				foreach ($this->in->getArray('user', 'int') as $key => $userid){
 					$arrRecipients[] = (int)$userid;
 				}
 			}
 
+			//Status for Calenderevent ID
 			if (count($this->in->getArray('status', 'int')) > 0 && $this->in->get('event_id', 0) > 0){
 				$eventid = $this->in->get('event_id', 0);
 				foreach ($this->in->getArray('status', 'int') as $key => $statusid){
-
-					$arrMembers = $this->pdh->get('calendar_raids_attendees', 'attendee_stats', array($eventid, $statusid));
+					//Have Raidgroups been selected?
+					$arrRaidgroups = $this->in->getArray('raidgroups', 'int');
+					if (count($arrRaidgroups) > 0){
+						$arrMembers = array();
+						foreach($arrRaidgroups as $intRaidgroupID){
+							$arrMembers = array_merge($arrMembers, $this->pdh->get('calendar_raids_attendees', 'attendee_stats', array($eventid, $statusid, $intRaidgroupID)));
+						}
+						
+					} else {
+						$arrMembers = $this->pdh->get('calendar_raids_attendees', 'attendee_stats', array($eventid, $statusid));
+					}
+					
 					if (is_array($arrMembers)){
 						foreach ($arrMembers as $memberid){
 							$userID = (int)$this->pdh->get('member', 'userid', array($memberid));
@@ -215,8 +228,27 @@ class Manage_Massmail extends page_generic {
 						}
 					}
 				}
+			} elseif (count($this->in->getArray('raidgroups', 'int')) > 0 && $this->in->get('event_id', 0) > 0){
+				//Calenderevent Raidgroups for EventID
+				
+				$eventid = $this->in->get('event_id', 0);
+				$arrStatus = $this->user->lang('raidevent_raid_status');
+				foreach ($this->in->getArray('raidgroups', 'int') as $key => $intRaidgroupID){
+					$arrMembers = array();
+					foreach($arrStatus as $statusid => $statusname){
+						$arrMembers = array_merge($arrMembers, $this->pdh->get('calendar_raids_attendees', 'attendee_stats', array($eventid, $statusid, $intRaidgroupID)));
+					}
 
+					if (is_array($arrMembers)){
+						foreach ($arrMembers as $memberid){
+							$userID = (int)$this->pdh->get('member', 'userid', array($memberid));
+							if ($userID != 0) $arrRecipients[] = (int)$this->pdh->get('member', 'userid', array($memberid));
+						}
+					}
+				}
 			}
+			
+			
 
 			$arrRecipients = array_unique($arrRecipients);
 
@@ -271,8 +303,17 @@ class Manage_Massmail extends page_generic {
 		if ($bnlEventId){
 			$body .= '<p>&nbsp;</p><p><a href="'.$this->env->link.$this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($eventid)), $eventid, false, true).'">'.$this->pdh->get('calendar_events', 'html_date', array($eventid)).' '.$this->pdh->get('calendar_events', 'html_time_start', array($eventid)).': '.$this->pdh->get('calendar_events', 'name', array($eventid)).'</a></p>';
 			$this->tpl->assign_vars(array(
-				'DD_STATUS'	=> $this->jquery->MultiSelect('status', $this->user->lang('raidevent_raid_status'), $this->in->getArray('status', 'int'), array('width' => 400)),
+				'DD_STATUS'		=> $this->jquery->MultiSelect('status', $this->user->lang('raidevent_raid_status'), $this->in->getArray('status', 'int'), array('width' => 400)),
 			));
+			
+			$arrRaidgroups = $this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list')));
+			if(count($arrRaidgroups) > 1){
+				$this->tpl->assign_vars(array(
+					'S_RAIDGROUPS'	=> true,
+					'DD_RAIDGROUPS'	=> $this->jquery->MultiSelect('raidgroups', $arrRaidgroups, $this->in->getArray('raidgroups', 'int'), array('width' => 400)),
+				));
+				
+			}
 		}
 		if ($this->in->get('template') != ""){
 			$file = preg_replace('/[^a-zA-Z0-9 -]/', '', $this->in->get('template'));
