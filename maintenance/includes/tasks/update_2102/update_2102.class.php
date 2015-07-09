@@ -200,8 +200,8 @@ class update_2102 extends sql_update_task {
 				'input_font_color_active' => 'rgb(85, 85, 85)',
 				'content_contrast_color' => 'rgb(0, 0, 0)',
 				'content_contrast_border_color' => 'rgb(204, 204, 204)',
-				'misc_color1' => '',
-				'misc_color2' => '',
+				'misc_color1' => 'rgb(78, 127, 168)',
+				'misc_color2' => 'rgb(255, 255, 255)',
 				'misc_color3' => '',
 				'content_contrast_background_color' => 'rgb(252, 253, 254)',
 				'content_positive_color' => 'rgb(51, 204, 51)',
@@ -210,7 +210,21 @@ class update_2102 extends sql_update_task {
 				'misc_text1' => '',
 				'misc_text2' => '',
 				'misc_text3' => '',
-				'additional_less' => '',
+				'additional_less' => '@styleCommentContainerBackgroundColor: #fff;
+@styleCommentContainerBorderColor: #ccc;
+@styleCommentAuthorColor: #9f9f9f;
+@stylePaginationBorderColor: #ddd;
+@stylePaginationBackgroundColor: #fff;
+@stylePaginationActiveBackgroundColor: #F7F7F9;
+@stylePaginationActiveColor: #999;
+@stylePaginationActiveHoverBackgroundColor: #F7F7F9;
+@stylePaginationActiveHoverColor: #000;
+@styleArticleSitemapBorderColor: #ddd;
+@styleArticleSitemapBackgroundColor: #fff;
+@styleArticleSitemapActiveBackgroundColor: #F7F7F9;
+@styleArticleSitemapActiveColor: #999999;
+@styleArticleSitemapHoverColor: #000;
+				',
 				'content_highlight_color' => 'rgb(78, 127, 168)',
 		);
 				
