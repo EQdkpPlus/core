@@ -509,7 +509,7 @@ if (!class_exists("styles")){
 			$files = array();
 			if (!$orig_templatepath) $orig_templatepath = $templatepath;
 			
-			if ( $dir = @opendir($templatepath) ){
+			if ( is_dir($templatepath) && $dir = @opendir($templatepath) ){
 				while ($file = @readdir($dir)){
 					if (is_dir($templatepath.'/'.$file) && valid_folder($templatepath.'/'.$file)){
 						$files_rec = $this->scan_templates($templatepath.'/'.$file, $templatepath, $remove_templatepath);
