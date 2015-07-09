@@ -981,6 +981,7 @@ $lang = array(
 "notification_newcomment_response_grouped" => "{PRIMARY} haben auf deinen Kommentar auf der Seite \"{ADDITIONAL}\" geantwortet",
 "notification_newmention" => "{PRIMARY} hat dich in seinem Kommentar auf der Seite \"{ADDITIONAL}\" erwähnt",
 "notification_calendarevent_new" => "Es wurde ein neues Kalenderevent angelegt: {ADDITIONAL}, {PRIMARY}",
+"notification_calendarevent_invitation" => "{PRIMARY} hat dich zu einem privaten Termin eingeladen",
 "article_publish_success" => "Artikel wurde veröffentlicht",
 "article_publish" => "Artikel veröffentlichen",
 "article_unpublished_note" => "Hinweis: Dieser Artikel ist noch nicht veröffentlicht.",		
