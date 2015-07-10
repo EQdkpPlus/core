@@ -80,12 +80,12 @@ if(!class_exists('pdh_w_notifications')) {
 		
 		public function mark_as_read_bytype($strType, $intUserId, $mixDatasetID){
 			if(is_array($mixDatasetID)){
+				if(count($mixDatasetID) === 0) return true;
 				$objQuery = $this->db->prepare("UPDATE __notifications :p WHERE type=? AND user_id=? AND dataset_id :in;")->set(array(
 						'`read`'	=> 1
 				))->in($mixDatasetID)->execute($strType, $intUserId);
 				
 			} else {
-			
 				$objQuery = $this->db->prepare("UPDATE __notifications :p WHERE type=? AND user_id=? AND dataset_id=?;")->set(array(
 						'`read`'	=> 1
 				))->execute($strType, $intUserId, $mixDatasetID);

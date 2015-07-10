@@ -108,6 +108,7 @@ class addcharacter_pageobject extends pageobject {
 		// Read the Data
 		if(empty($member_data)) {
 			$member_data = $this->pdh->get('member', 'array', array($this->url_id));
+			if(!is_array($member_data)) $member_data = array();
 			if($this->url_id > 0) $member_data['editid'] = $this->url_id;
 			// get class data which is selected by admin /such as faction/
 			$member_data = array_merge($member_data, $this->game->get_admin_classdata());
@@ -241,17 +242,34 @@ class addcharacter_pageobject extends pageobject {
 		
 		// Dynamic Fields
 		$profilefields = $this->pdh->get('profile_fields', 'fields');
-
 		foreach($profilefields as $fieldname => $fielddata) {
+			//Set Required for Unique Options
 			if (in_array($fieldname, $arrGameUniqueIDs)) {
 				$fielddata['required'] = true;
 				$fielddata['default'] = $this->config->get($fieldname);
 			}
+			
+			//Make Dropdowns etc. translatable
+			if(count($fielddata['options']) > 0 && $fielddata['options_language'] != ""){
+				if (strpos($fielddata['options_language'], 'lang:') === 0){
+					$arrSplitted = explode(':', $fielddata['options_language']);
+					$arrGlang = $this->game->glang($arrSplitted[1]);
+					$arrLang = (isset($arrSplitted[2])) ? $arrGlang[$arrSplitted[2]] : $arrGlang;
+				} else $arrLang = $this->game->get($fielddata['options_language']);
+				
+				foreach($fielddata['options'] as $key => $val){
+					if(isset($arrLang[$key])){
+						$fielddata['options'][$key] = $arrLang[$key];
+					}
+				}
+			}
+			
 			$fielddata['type'] = ($fielddata['type'] == 'link') ? 'text' : $fielddata['type'];
 			$tab = (!empty($fielddata['category']) && in_array($fielddata['category'], $categorynames)) ? $fielddata['category'] : 'character';
 			$fielddata['type'] = ($fielddata['type'] === 'link') ? 'text' : $fielddata['type'];
 			$this->form->add_field($fieldname, $fielddata, '', $tab);
 		}
+
 	}
 }
 

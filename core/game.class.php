@@ -1031,7 +1031,7 @@ class game extends gen_class {
 						'undeletable'	=> 1,
 						'category'		=> 'character',
 						'no_custom'		=> true,
-						'options_language'=> $class['type'],
+						'options_lang'	=> $class['type'],
 						'sort' 			=> $z,
 				);
 			} else {
@@ -1044,7 +1044,7 @@ class game extends gen_class {
 						'options'		=> array('-----'),
 						'sort' 			=> $z,
 						'no_custom'		=> true,
-						'options_language'=> $class['type'],
+						'options_lang'	=> $class['type'],
 				);
 			}
 			$z++;
@@ -1098,7 +1098,7 @@ class game extends gen_class {
 					'undeletable'	=> 1,
 					'category'		=> 'character',
 					'no_custom'		=> true,
-					'options_language'=> $class['type'],
+					'options_lang'	=> $class['type'],
 				);
 			} else {
 				$z++;
@@ -1111,7 +1111,7 @@ class game extends gen_class {
 					'options'		=> array('-----'),
 					'sort' 			=> $z,
 					'no_custom'		=> true,
-					'options_language'=> $class['type'],
+					'options_lang'	=> $class['type'],
 				);
 			}
 			if(isset($class_deps[$class['name']])) {
