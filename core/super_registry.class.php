@@ -150,7 +150,7 @@ abstract class super_registry {
 			if (!defined('MAINTENANCE_MODE')){
 				//Maintenance mode redirect for non admins
 				if(registry::register('config')->get('pk_maintenance_mode') && !registry::fetch('user')->check_auth('a_', false) && !defined('NO_MMODE_REDIRECT')){
-					redirect('maintenance/maintenance.php'.self::get_const('SID'));
+					redirect('maintenance/maintenance.php'.self::get_const('SID'), false, false, false);
 				}
 
 				//Maintenance Modus for admins
@@ -163,7 +163,7 @@ abstract class super_registry {
 					if(registry::register('mmtaskmanager')->status['necessary_tasks']) {
 						registry::register('config')->set('pk_maintenance_mode', true);
 						if (!defined('NO_MMODE_REDIRECT')){
-							redirect('maintenance/index.php'.self::get_const('SID'));
+							redirect('maintenance/index.php'.self::get_const('SID'), false, false, false);
 						}
 					}
 				}
@@ -172,7 +172,7 @@ abstract class super_registry {
 				if(count(registry::register('file_handler')->get_errors()) > 0) {
 					registry::register('config')->set('pk_maintenance_mode', true);
 					if (!defined('NO_MMODE_REDIRECT')){
-						redirect('maintenance/index.php'.self::get_const('SID'));
+						redirect('maintenance/index.php'.self::get_const('SID'), false, false, false);
 					}
 				}
 				
