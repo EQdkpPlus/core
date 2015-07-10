@@ -63,7 +63,7 @@ class hmultiselect extends html {
 	public $text_after = "";
 	public $text_before = "";
 	
-	private $jq_options = array('id', 'height', 'width', 'preview_num', 'multiple', 'no_animation', 'header', 'filter');
+	private $jq_options = array('height', 'width', 'preview_num', 'multiple', 'no_animation', 'header', 'filter');
 	private $out = '';
 	
 	public function _construct() {
@@ -87,8 +87,9 @@ class hmultiselect extends html {
 			$dropdown .= "<option value=''></option>";
 		}
 		$dropdown .= "</select>";
-		$options = array();
+		$options = array('id' => $this->id);
 		foreach($this->jq_options as $opt) $options[$opt] = $this->$opt;
+		
 		$this->jquery->MultiSelect('', array(), array(), $options);
 		if(strlen($this->text_after)) $dropdown .= $this->text_after;
 		$this->out = $dropdown;
