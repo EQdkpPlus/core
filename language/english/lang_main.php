@@ -974,6 +974,7 @@ $lang = array(
 	"user_sett_fs_notifications" => 'Notifications',
 	"user_sett_fs_info_notifications" => 'Please note that you get some notifications dependet of your permissions, even you enabled the notifications.',
 	"user_sett_f_ntfy_calendarevent_char_statuschange" => 'Statuschange of a Character at a Raid',
+	"user_sett_f_ntfy_calendarevent_invitation" => "Invitation to a private calendar event",
 	"user_sett_f_ntfy_comment_new_article" => 'New comment at an article',
 	"user_sett_f_ntfy_comment_new_userwall" => 'New entry at your userwall',
 	"user_sett_f_ntfy_comment_new_userwall_response" => 'New answer at your userwall',

@@ -938,6 +938,7 @@ $lang = array(
 "user_sett_fs_notifications" => "Benachrichtigungen",
 "user_sett_fs_info_notifications" => "Bitte beachte, dass du einige Benachrichtungen nur abhängig von deinen Berechtigungen bekommst, auch wenn du sie aboniert hast.",	
 "user_sett_f_ntfy_calendarevent_char_statuschange" => "Statuswechsel eines Charakters im Kalenderevent",
+"user_sett_f_ntfy_calendarevent_invitation" => "Einladung zu einem privaten Kalenderevent",
 "user_sett_f_ntfy_comment_new_article" => "Neuer Kommentar in einem Artikel",
 "user_sett_f_ntfy_comment_new_userwall" => "Neuer Eintrag auf deiner Pinnwand",
 "user_sett_f_ntfy_comment_new_userwall_response" => "Neue Antwort auf deiner Pinnwand",
