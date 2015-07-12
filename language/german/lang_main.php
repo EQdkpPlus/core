@@ -214,6 +214,7 @@ $lang = array(
 "calendar_awaymode_start_tt"	=> "Starttag",
 "calendar_awaymodeend_tt"	=> "Endtag",
 "calendar_user_is_away"	=> "Abwesenheitsmodus aktiv",
+"calendar_eventparticipants" => "Teilnehmer: ",
 
 "adduser_send_mail" => "E-Mail senden",
 "adduser_send_mail2" => "E-Mail  an \"%s\" senden",

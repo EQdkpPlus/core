@@ -110,6 +110,10 @@ if (!class_exists("pdh_r_user")){
 			}
 		}
 		
+		public function get_names($user_ids){
+			return array_values($this->pdh->aget('user', 'name', 0, array($user_ids)));
+		}
+		
 		public function get_html_name($user_id, $link_url = '', $link_url_suffix = '', $blnUseController=false){
 			if ($blnUseController) return '<a href="'.$this->routing->build('User', $this->get_name($user_id), 'u'.$user_id).'" data-user-id="'.$user_id.'">'.$this->get_name($user_id).'</a>';
 			return '<a href="'.$link_url.$this->SID.'&u='.$user_id.'" data-user-id="'.$user_id.'">'.$this->get_name($user_id).'</a>';

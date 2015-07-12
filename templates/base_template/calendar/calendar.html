@@ -64,7 +64,12 @@
 					if(event.isowner){
 						buttontext = '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-pencil fa-lg hand" onclick="editEvent('+event.eventid+');"></i>  <i class="fa fa-trash-o fa-lg hand" onclick="deleteEvent('+event.eventid+');"></i></div>';
 					}else if(event.isinvited){
-						buttontext = '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-check fa-lg hand" onclick="acceptInvitation('+event.eventid+');"></i>  <i class="fa fa-times fa-lg hand" onclick="declineInvitation('+event.eventid+');"></i></div>';
+						if(event.joinedevent){
+							buttontext = '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-times fa-lg hand" onclick="declineInvitation('+event.eventid+');"></i></div>';
+						}else{
+							buttontext = '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-check fa-lg hand" onclick="acceptInvitation('+event.eventid+');"></i>  <i class="fa fa-times fa-lg hand" onclick="declineInvitation('+event.eventid+');"></i></div>';
+						}
+						tmpttcontent += "{L_calendar_eventparticipants}" + event.attendees;
 					}
 					
 					element.qtip({

@@ -344,7 +344,9 @@ class calendar_pageobject extends pageobject {
 							'textColor'		=> $eventcolor_txt,
 							'isowner'		=> $this->pdh->get('calendar_events', 'is_owner', array($calid)),
 							'isinvited'		=> $this->pdh->get('calendar_events', 'is_invited', array($calid)),
+							'joinedevent'	=> $this->pdh->get('calendar_events', 'joined_invitation', array($calid)),
 							'author'		=> $this->pdh->get('calendar_events', 'creator', array($calid)),
+							'attendees'		=> $this->pdh->get('calendar_events', 'sharedevent_attendees', array($calid)),
 						);
 					}
 				}

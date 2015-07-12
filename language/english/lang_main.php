@@ -218,6 +218,7 @@ $lang = array(
 	"calendar_awaymode_start_tt"	=> "Start day",
 	"calendar_awaymodeend_tt"	=> "End day",
 	"calendar_user_is_away"	=> "Away-mode active",
+	"calendar_eventparticipants" => "Attendee: ",
 	"user_app_key" => 'Private Exchangekey',
 	"user_create_new_appkey" => 'Generate new private keys',
 	"user_create_new_appkey_success" => 'New private Keys have been created. Your old URLs are not longer valid.',
