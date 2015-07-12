@@ -69,6 +69,9 @@
 						}else{
 							buttontext = '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-check fa-lg hand" onclick="acceptInvitation('+event.eventid+');"></i>  <i class="fa fa-times fa-lg hand" onclick="declineInvitation('+event.eventid+');"></i></div>';
 						}
+					}
+					
+					if(event.attendees != ''){
 						tmpttcontent += "{L_calendar_eventparticipants}" + event.attendees;
 					}
 					

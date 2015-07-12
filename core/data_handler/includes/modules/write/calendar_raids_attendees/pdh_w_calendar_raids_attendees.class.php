@@ -62,13 +62,14 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 					'member_id'				=> $memberid,
 					'calendar_events_id'	=> $eventid,
 					'timestamp_signup'		=> $this->time->time,
-					'raidgroup'				=> $raidgroup,
+					'raidgroup'				=> ((int)$raidgroup > 0) ? $raidgroup : array_shift($this->pdh->get('raid_groups_members', 'memberships', array($memberid))),
 					'random_value'			=> $rand_value,
 					'member_role'			=> $memberrole,
 					'signup_status'			=> $signupstatus,
 					'signedbyadmin'			=> $signedbyadmin
 				))->execute();
 
+				// old & new array for comparison
 				$arrNew = array(
 					'note'	=> $note,
 					'member'=> $this->pdh->get('member', 'name', array($memberid)),
