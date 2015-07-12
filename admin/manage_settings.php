@@ -676,7 +676,7 @@ class mmocms_settings extends page_generic {
 				'article'		=> array(
 					'enable_embedly'	=> array(
 						'type'	=> 'radio',
-						'dependency' => array(0=>array('embedly_key')),
+						//'dependency' => array(1 => array('embedly_key')),
 					),
 					'embedly_key' => array(
 						'type'		=> 'text',

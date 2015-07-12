@@ -28,7 +28,7 @@ class embedly extends gen_class {
 	
 	//Parse one single Link
 	public function parseLink($link){
-		if (strlen($link) == 0 || (!$this->config->get('enable_embedly'))) return '';
+		if (strlen($link) == 0) return '';
 		$oembed = $this->getLinkDetails($link);
 		
 		
@@ -41,7 +41,7 @@ class embedly extends gen_class {
 	
 	//Get all embed.ly Information for an single Link, like Thumbnail, Size, ...
 	public function getLinkDetails($link){
-		if (strlen($link) == 0 || (!$this->config->get('enable_embedly'))) return false;
+		if (strlen($link) == 0) return false;
 
 		$oembed = $this->embedly->oembed(array('url' => $link, 'wmode' => 'transparent'));
 		if ($oembed->type == "error"){
@@ -52,9 +52,7 @@ class embedly extends gen_class {
 	
 	//Parse an String for Hyperlinks and replace Videos and Images
 	public function parseString($string, $maxwidth=false, $blnEncodeMediaTags=false){
-		if (strlen($string) == 0) return '';
-		if(!$this->config->get('enable_embedly')) return $string;
-		
+		if (strlen($string) == 0) return '';		
 
 		$embedlyUrls = array();
 		//First, get the links

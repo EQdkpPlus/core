@@ -27,7 +27,7 @@ if(!class_exists('pdh_w_comment')) {
 	class pdh_w_comment extends pdh_w_generic {
 
 		public function insert($attach_id, $user_id, $comment, $page, $reply_to) {
-			$strComment = $this->embedly->parseString($comment, 400, false);
+			if($this->config->get('enable_embedly')) $strComment = $this->embedly->parseString($comment, 400, false);
 
 			$objQuery = $this->db->prepare("INSERT INTO __comments :p")->set(array(
 					'attach_id'		=> $attach_id,
@@ -47,7 +47,7 @@ if(!class_exists('pdh_w_comment')) {
 		}
 		
 		public function update($intCommentId, $strComment){
-			$strComment = $this->embedly->parseString($strComment, 400, false);
+			if($this->config->get('enable_embedly')) $strComment = $this->embedly->parseString($strComment, 400, false);
 			
 			$objQuery = $this->db->prepare("UPDATE __comments :p WHERE id=?")->set(array(
 					'text'			=> str_replace("\n", "[br]", $strComment),

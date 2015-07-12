@@ -94,7 +94,7 @@ if(!class_exists('pdh_w_article_categories')) {
 			if (!$blnAliasResult) return false;
 			
 			$strDescription = $this->bbcode->replace_shorttags($strDescription);
-			$strDescription = $this->embedly->parseString($strDescription);
+			if ($this->config->get('enable_embedly')) $strDescription = $this->embedly->parseString($strDescription);
 			
 			if(!$this->user->check_auth('u_articles_script', false)){
 				include_once($this->root_path."libraries/inputfilter/input.class.php");
@@ -161,7 +161,7 @@ if(!class_exists('pdh_w_article_categories')) {
 			if (!$blnAliasResult) return false;
 			
 			$strDescription = $this->bbcode->replace_shorttags($strDescription);
-			$strDescription = $this->embedly->parseString($strDescription);
+			if($this->config->get('enable_embedly')) $strDescription = $this->embedly->parseString($strDescription);
 			
 			if(!$this->user->check_auth('u_articles_script', false)){
 				include_once($this->root_path."libraries/inputfilter/input.class.php");
