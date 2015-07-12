@@ -971,8 +971,12 @@ $lang = array(
 "core_sett_f_help_calendar_show_birthday" => "Zeigt die Geburtstage der Benutzer sofern im Profil angegeben im Kalender an. Zur Anzeige werden die Rechte zur Ansicht von Benutzern benötigt.",
 "core_sett_f_calendar_raid_autoconfirm" => "Automatisches Bestätigen bestimmter Benutzergruppen",
 "core_sett_f_help_calendar_raid_autoconfirm" => "Wähle die Benutzergruppen die automatisch bestätigt werden sollen. Meldet sich ein Benutzer mit einem Charakter an, wird dieser direkt bestätigt.",
-"core_sett_f_calendar_raid_autocaddchars" => "Automatisches Anmelden bestimmter Benutzergruppen beim Raiderstellen",
+"core_sett_f_calendar_raid_autocaddchars" => "Automatisches Anmelden bestimmter Benutzergruppen beim Erstellen von Raids",
 "core_sett_f_help_calendar_raid_autocaddchars" => "Wähle die Benutzergruppen deren Mainchar beim Erstellen eines Raids automatisch angemeldet werden sollen. Hat der User keinen Mainchar, wird er nicht angemeldet!",
+
+"core_sett_f_calendar_raidleader_autoinvite" => 'Automatisches Anmelden von Raidleitern beim Erstellen von Raids',
+"core_sett_f_help_calendar_raidleader_autoinvite" => 'Legt fest, on Raidleiter automatisch beim Erstellen eines Raides angemeldet und bestätigt werden sollen. Da Raidleiter einen Raid nur leiten können, wenn sie daran teilnehmen und einen festen Platz benötigen, sollte diese Funktion aktiviert sein.',
+
 "calendar_acl_raidnotes" => "Zeige Anmeldenotizen",
 "core_sett_f_calendar_raid_notsigned_classsort" => "Sortiere unangemeldete Charaktere nach den Klassennamen",
 "core_sett_f_help_calendar_raid_notsigned_classsort" => "Sortiere die unangemeldeten Charaktere nach dem Namen ihrer Klassen anstatt alphabetisch.",

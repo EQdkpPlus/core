@@ -37,11 +37,11 @@ class update_2107 extends sql_update_task {
 		$this->langs = array(
 			'english' => array(
 				'update_2107'		=> 'EQdkp Plus 2.1.0 Update 8',
-				'update_function'	=> 'Update for notifications',
+				'update_function'	=> 'Update for notifications & enable new setting for raidleader auoinvite',
 			),
 			'german' => array(
 				'update_2107'		=> 'EQdkp Plus 2.1.0 Update 8',
-				'update_function'	=> 'Update for notifications',
+				'update_function'	=> 'Aktualisisierung für Benachrichtigungen & Einstellungen für Auto-anmeldung von Raidleitern aktiviert',
 			),
 		);
 		
@@ -51,7 +51,7 @@ class update_2107 extends sql_update_task {
 		
 	public function update_function(){
 		$this->ntfy->addNotificationType('calendarevent_invitation','notification_calendarevent_invitation', 'calendarevent', 0, 1, 0, '', 0, 'fa-envelope');
-
+		$this->config->set('calendar_raidleader_autoinvite', 1);
 		return true;
 	}
 }

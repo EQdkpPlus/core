@@ -605,6 +605,9 @@ class mmocms_settings extends page_generic {
 						'options'	=> $a_groups,
 						'datatype'	=> 'int',
 					),
+					'calendar_raidleader_autoinvite'	=> array(
+						'type'			=> 'radio',
+					),
 					'calendar_raid_notsigned_classsort'	=> array(
 						'type'		=> 'radio',
 					),

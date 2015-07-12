@@ -488,7 +488,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 			}
 
 			// auto add and confirm the raidleaders
-			if(is_array($raidleaders)){
+			if(is_array($raidleaders) && $this->config->get('calendar_raidleader_autoinvite') == 1){
 				foreach($raidleaders as $raidleaderid){
 					$away_mode		= $this->pdh->get('calendar_raids_attendees', 'attendee_awaymode', array($raidleaderid, $raidid));
 					$rlstatus		= ($away_mode) ? 2 : 0;
