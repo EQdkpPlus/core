@@ -30,7 +30,7 @@ if ( !class_exists( "backup_crontask" ) ) {
 			$this->defaults['repeat_type']	= 'daily';
 			$this->defaults['editable']		= true;
 			$this->defaults['delay']		= false;
-			$this->defaults['ajax']			= false;
+			$this->defaults['ajax']			= true;
 			$this->defaults['description']	= 'MySQL Backup';
 		}
 
