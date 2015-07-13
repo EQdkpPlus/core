@@ -105,23 +105,24 @@ class backup extends gen_class {
 			$data = "";
 			$tablename			= $table;
 			$table_sql_string	= $this->_create_table_sql_string($tablename);
-			$data_sql_string	= $this->_create_data_sql_string($tablename);
-		
+			
 			// NOTE: Error checking for table or data sql strings here?
 			if ( $blnCreateTableCmd ){
 				$data .= "\n" . "-- \n";
 				$data .= "-- Table structure for table `{$tablename}`" . ";\n\n";
 				$data .= $table_sql_string . "\n";
 			}
-		
-			if ( $table != '__sessions' ) {
+
+			if(strpos($tablename, '_sessions') !== false){
 				$data .= "\n" . "-- \n";
 				$data .= "-- Dumping data for table `{$tablename}`" . ";\n\n";
-				$data .= (($data_sql_string) ? $data_sql_string : "-- No data available;\n");
 			}
 			
 			$this->pfh->addContent($strSQLFile, $data);
+			
+			$this->_create_data_sql_string($tablename, $strSQLFile);
 		}
+		
 		unset($tablename, $table_sql_string, $data_sql_string, $data);
 		
 		if($blnForStorage) $this->saveBackupMetadata($strFilename, $strTime, $blnUncomplete, $arrTablesToBackup);
@@ -288,7 +289,7 @@ class backup extends gen_class {
 	}
 
 	//This sql data construction method is thanks to phpBB3.
-	private function _create_data_sql_string($tablename){
+	private function _create_data_sql_string($tablename, $strOutputFile){
 		// Initialise the sql string
 		$sql_string		= "";
 
@@ -304,10 +305,12 @@ class backup extends gen_class {
 		$replace			= array("\\\\", "\\'", '\0', '\n', '\r', '\Z');
 		$fields				= implode('`, `', $field_set);
 		$field_string		= 'INSERT INTO `' . $tablename . '` (`' . $fields . '`) VALUES ';
+		$sql_string			= "";
 
 		//Get Content
 		$objQuery = $this->db->query("SELECT * FROM ".$tablename);
 		if ($objQuery){
+			$i = 0;
 			while($row = $objQuery->fetchAssoc()){
 				$values		= array();
 				$query		= $field_string . '(';
@@ -327,9 +330,16 @@ class backup extends gen_class {
 	
 				$query			 .= implode(', ', $values) . ')';
 				$sql_string		 .= $query . ";\n";
+				
+				//Write them away in chunks
+				if($i === 20){
+					$this->pfh->addContent($strOutputFile, $sql_string);
+					$sql_string = "";
+					$i = -1;
+				}
+				$i++;
 			}
 		}
-		return $sql_string;
 	}
 	
 	// modified from PHP.net

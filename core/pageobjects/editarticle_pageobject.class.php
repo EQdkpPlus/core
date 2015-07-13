@@ -137,7 +137,7 @@ class editarticle_pageobject extends pageobject {
 		$cid = $this->in->get('cid', 0);
 		$id = $this->in->get('aid', 0);
 
-		$strTitle = $this->in->get('title');
+		$arrTitle = $this->in->getArray('title', 'string');
 		$strText = $this->in->get('text', '', 'raw');
 		$strTags = $this->in->get('tags');
 		$strPreviewimage = $this->in->get('previewimage');
@@ -168,11 +168,15 @@ class editarticle_pageobject extends pageobject {
 		if($this->in->exists('show_to') AND strlen($this->in->get('show_to')) AND $this->in->get('show_to') != $this->user->lang('never')) $strShowTo = $this->time->fromformat($this->in->get('show_to'), 1);
 		
 		
-		if ($strTitle == "" ) {
-			$this->core->message('', '', 'red');
+		//Check Name
+		$strDefaultLanguage = $this->config->get('default_lang');
+		if(!isset($arrTitle[$strDefaultLanguage]) || $arrTitle[$strDefaultLanguage] == ""){
+			$this->core->message($this->user->lang('headline'), $this->user->lang('adduser_send_mail_error_fields'), 'red');
 			$this->edit();
 			return;
 		}
+		
+		$strTitle = serialize($arrTitle);
 		
 		if ($id){
 			//Update
@@ -229,7 +233,8 @@ class editarticle_pageobject extends pageobject {
 				'COMMENTS_RADIO' => new hradio('comments', array('value' => ($this->pdh->get('articles', 'comments', array($id))))),
 				'VOTES_RADIO' => new hradio('votes', array('value' => ($this->pdh->get('articles', 'votes', array($id))))),
 				'HIDE_HEADER_RADIO' => new hradio('hide_header', array('value' => ($this->pdh->get('articles', 'hide_header', array($id))))),
-				
+				'ML_TITLE' => new htextmultilang('title', array('value' => $this->pdh->get('articles', 'title', array($id, true)), 'required' => true, 'size' => 50)),
+					
 				
 				'DATE_PICKER'		=> $this->jquery->Calendar('date', $this->time->user_date($this->pdh->get('articles', 'date', array($id)), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 				'DATE_TO_PICKER'	=> $this->jquery->Calendar('show_to', $this->time->user_date(((strlen($this->pdh->get('articles', 'show_to', array($id)))) ? $this->pdh->get('articles', 'show_to', array($id)) : 0), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
@@ -254,10 +259,11 @@ class editarticle_pageobject extends pageobject {
 				'DATE_PICKER'		=> $this->jquery->Calendar('date', $this->time->user_date($this->time->time, true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 				'DATE_TO_PICKER'	=> $this->jquery->Calendar('show_to', $this->time->user_date(0, true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 				'DATE_FROM_PICKER'	=> $this->jquery->Calendar('show_from', $this->time->user_date(0, true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
+				'ML_TITLE' => new htextmultilang('title', array('value' => '', 'required' => true, 'size' => 50)),	
 				'PREVIEW_IMAGE'		=> new himageuploader('previewimage', array(
-						'imgpath'	=> $this->pfh->FolderPath('logo','eqdkp'),
-						'noimgfile'	=> "images/global/default-image.svg"
-					)),
+					'imgpath'	=> $this->pfh->FolderPath('logo','eqdkp'),
+					'noimgfile'	=> "images/global/default-image.svg"
+				)),
 			));
 		}
 		
