@@ -548,6 +548,10 @@ class mmocms_settings extends page_generic {
 					)
 				),
 				'raids'		=> array(
+					/*'calendar_raid_enabled'	=> array(
+						'type'	=> 'radio',
+						'dependency'	=> array(1 => array('calendar_raid_guests', 'calendar_raid_random', 'calendar_raid_classbreak', 'calendar_raid_status', 'calendar_raid_nsfilter', 'calendar_addraid_deadline', 'calendar_addraid_duration', 'calendar_addraid_use_def_start', 'calendar_repeat_crondays', 'calendar_raid_autoconfirm', 'calendar_raid_autocaddchars', 'calendar_raidleader_autoinvite', 'calendar_raid_notsigned_classsort', 'calendar_raid_coloredclassnames', 'calendar_raid_shownotsigned', 'calendar_raid_allowstatuschange', 'calendar_raid_statuschange_status')),
+					),*/
 					'calendar_raid_guests'	=> array(
 						'type'	=> 'radio',
 					),

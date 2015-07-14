@@ -941,6 +941,10 @@ $lang = array(
 "core_sett_f_embedly_key" => "Embedly API-Key",				
 "core_sett_f_calendar_raid_guests" => "Gästeverwaltung für Raids aktivieren",
 "core_sett_f_help_calendar_raid_guests" => "Admins/Raidleiter können einmalig teilnehmende Gäste ohne Punktevergaben hinzufügen.",
+
+"core_sett_f_calendar_raid_enabled" => 'Raidereignisse im Kalender erstellbar',
+"core_sett_f_help_calendar_raid_enabled" => 'Soll es möglich sein, im Kalender Raidereignisse zu erstellen?',
+
 "core_sett_f_calendar_raid_random" => "Zufallswerte anzeigen",
 "core_sett_f_help_calendar_raid_random" => "Zeigt den bei der Raidanmeldung generierten Zufallswert an.",
 "core_sett_f_date_startday" => "Erster Tag der Woche",
