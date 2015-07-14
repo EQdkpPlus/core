@@ -27,7 +27,7 @@ include_once(registry::get_const('root_path').'maintenance/includes/sql_update_t
 
 class update_2100 extends sql_update_task {
 	public $author			= 'GodMod';
-	public $version			= '2.1.0.8'; //new plus-version
+	public $version			= '2.1.0.7'; //new plus-version
 	public $ext_version		= '2.1.0'; //new plus-version
 	public $name			= '2.1.0 Update';
 	
