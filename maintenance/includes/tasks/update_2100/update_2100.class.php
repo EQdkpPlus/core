@@ -302,24 +302,7 @@ class update_2100 extends sql_update_task {
 		//Reset Template Cache
 		$objStyles = register('styles');
 		$objStyles->deleteStyleCache('eqdkp_modern');
-		
-		// 2.1.0 Update 7
-		$this->db->prepare("UPDATE __styles SET misc_color1='rgb(78, 127, 168)', misc_color2='rgb(255, 255, 255)', additional_less='@styleCommentContainerBackgroundColor: #fff;
-		@styleCommentContainerBorderColor: #ccc;
-		@styleCommentAuthorColor: #9f9f9f;
-		@stylePaginationBorderColor: #ddd;
-		@stylePaginationBackgroundColor: #fff;
-		@stylePaginationActiveBackgroundColor: #F7F7F9;
-		@stylePaginationActiveColor: #999;
-		@stylePaginationActiveHoverBackgroundColor: #F7F7F9;
-		@stylePaginationActiveHoverColor: #000;
-		@styleArticleSitemapBorderColor: #ddd;
-		@styleArticleSitemapBackgroundColor: #fff;
-		@styleArticleSitemapActiveBackgroundColor: #F7F7F9;
-		@styleArticleSitemapActiveColor: #999999;
-		@styleArticleSitemapHoverColor: #000;
-						' WHERE template_path='eqdkp_modern';");
-		
+				
 		// 2.1.0 Update 8
 		$this->ntfy->addNotificationType('calendarevent_invitation','notification_calendarevent_invitation', 'calendarevent', 0, 1, 0, '', 0, 'fa-envelope');
 		$this->config->set('calendar_raidleader_autoinvite', 1);
