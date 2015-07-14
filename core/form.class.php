@@ -461,6 +461,10 @@ class form extends gen_class {
 				if(value){
 					if(selected){
 						$('#".$this->form_id."').find('#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"]').removeAttr('disabled');
+						var elem = $('#".$this->form_id."').find('#'+value);
+						if(elem && elem.prop('tagName') == 'SELECT' && typeof elem.attr('multiple') !== typeof undefined && elem.attr('multiple') !== false){
+							$('#'+value).multiselect('enable');
+						}		
 						$('#".$this->form_id."').find('dl:has(#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"])').show();
 					}else{
 						$('#".$this->form_id."').find('#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"]').attr('disabled', 'disabled');
@@ -482,6 +486,10 @@ class form extends gen_class {
 				if(value){
 					if(checked){
 						$('#".$this->form_id."').find('#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"]').removeAttr('disabled');
+						var elem = $('#".$this->form_id."').find('#'+value);
+						if(elem && elem.prop('tagName') == 'SELECT' && typeof elem.attr('multiple') !== typeof undefined && elem.attr('multiple') !== false){
+							$('#'+value).multiselect('enable');
+						}	
 						$('#".$this->form_id."').find('dl:has(#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"])').show();
 					}else{
 						$('#".$this->form_id."').find('#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"]').attr('disabled', 'disabled');
