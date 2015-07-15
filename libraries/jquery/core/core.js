@@ -36626,19 +36626,15 @@ function log() {
       checkAllText: 'Check all',
       uncheckAllText: 'Uncheck all',
       noneSelectedText: 'Select options',
-      allSelectedText: 'All selected',
       selectedText: '# selected',
       selectedList: 0,
-      closeIcon: 'ui-icon-circle-close',
+      closeIcon: 'ui-icon ui-icon-circle-close',
       show: null,
       hide: null,
       autoOpen: false,
       multiple: true,
-      selectOnSpace: false,
-      bShowAllSelectedText: false,
       position: {},
-      appendTo: "body",
-      menuWidth: null
+      appendTo: "body"
     },
 
     _create: function() {
@@ -36683,7 +36679,7 @@ function log() {
               return '';
             }
           })
-          .append('<li class="ui-multiselect-close"><a href="#" class="ui-multiselect-close"><span class="ui-icon '+o.closeIcon+'"></span></a></li>')
+          .append('<li class="ui-multiselect-close"><a href="#" class="ui-multiselect-close"><span class="'+o.closeIcon+'"></span></a></li>')
           .appendTo(header),
 
         checkboxContainer = (this.checkboxContainer = $('<ul />'))
@@ -36811,14 +36807,11 @@ function log() {
       var o = this.options;
       var $inputs = this.inputs;
       var $checked = $inputs.filter(':checked');
-      var numTotal = $inputs.length;
       var numChecked = $checked.length;
       var value;
 
       if(numChecked === 0) {
         value = o.noneSelectedText;
-      } else if ( numChecked === numTotal && o.bShowAllSelectedText ) {
-          value = o.allSelectedText;
       } else {
         if($.isFunction(o.selectedText)) {
           value = o.selectedText.call(this, numChecked, $inputs.length, $checked.get());
@@ -36952,17 +36945,7 @@ function log() {
           case 13: // enter
             $(this).find('input')[0].click();
           break;
-          case 32: // space
-            if ( self.options.selectOnSpace == true ) {
-                $( this ).find( 'input' )[0].click();
-            }
-          break;
         }
-      })
-      .delegate('label', 'keyup.multiselect', function(e) {
-          if ( self.options.selectOnSpace == true ) {
-              e.preventDefault();
-          }
       })
       .delegate('input[type="checkbox"], input[type="radio"]', 'click.multiselect', function(e) {
         var $this = $(this);
@@ -37027,7 +37010,7 @@ function log() {
       // restored to their defaultValue prop on form reset, and the reset
       // handler fires before the form is actually reset.  delaying it a bit
       // gives the form inputs time to clear.
-      $(this.element[0].form).bind('reset.multiselect', function() {
+      $(this.element[0].form).bind('reset.' + this._namespaceID, function() {
         setTimeout($.proxy(self.refresh, self), 10);
       });
     },
@@ -37037,13 +37020,7 @@ function log() {
       var width = this.element.outerWidth();
       var o = this.options;
 
-
-      if (o.minWidth === "auto")
-        width = o.minWidth;
-      else if ( /\d(%|em)/.test( o.minWidth ) ) {
-        width = o.minWidth;
-      }
-      else if (/\d/.test(o.minWidth) && width < o.minWidth) {
+      if(/\d/.test(o.minWidth) && width < o.minWidth) {
         width = o.minWidth;
       }
 
@@ -37242,13 +37219,11 @@ function log() {
     },
 
     checkAll: function(e) {
-      this._trigger('beforeCheckAll');
       this._toggleChecked(true);
       this._trigger('checkAll');
     },
 
     uncheckAll: function() {
-      this._trigger('beforeUncheckAll');
       this._toggleChecked(false);
       this._trigger('uncheckAll');
     },
@@ -37263,6 +37238,7 @@ function log() {
 
       // unbind events
       $doc.unbind(this._namespaceID);
+      $(this.element[0].form).unbind(this._namespaceID);
 
       this.button.remove();
       this.menu.remove();
@@ -37286,7 +37262,7 @@ function log() {
     position: function() {
       var o = this.options;
 
-      // use the position utility if it exists and options are specified
+      // use the position utility if it exists and options are specifified
       if($.ui.position && !$.isEmptyObject(o.position)) {
         o.position.of = o.position.of || this.button;
 
@@ -37298,10 +37274,9 @@ function log() {
         // otherwise fallback to custom positioning
       } else {
         var pos = this.button.offset();
-        var bottom = pos.top +  (o.height === 'auto' ? this.menu.height() : o.height) + this.button.outerHeight();
-        //popup on top of the button if menu will be cut off by the bottom of the window.
+
         this.menu.css({
-          top: ( bottom < $(window).height() ) ? pos.top + this.button.outerHeight() : pos.top - this.menu.outerHeight(),
+          top: pos.top + this.button.outerHeight(),
           left: pos.left
         });
       }
@@ -37325,18 +37300,13 @@ function log() {
           menu.find('ul').last().height(parseInt(value, 10));
           break;
         case 'minWidth':
-          this.options[key] = value;
+          this.options[key] = parseInt(value, 10);
           this._setButtonWidth();
-          this._setMenuWidth();
-          break;
-        case 'menuWidth':
-          this.options[key] = value;
           this._setMenuWidth();
           break;
         case 'selectedText':
         case 'selectedList':
         case 'noneSelectedText':
-        case 'allSelectedText':
           this.options[key] = value; // these all needs to update immediately for the update() call
           this.update();
           break;
@@ -37348,10 +37318,6 @@ function log() {
           this.options.multiple = value;
           this.element[0].multiple = value;
           this.refresh();
-          break;
-        case 'selectOnSpace':
-        case 'bShowAllSelectedText':
-          this.options[key] = !!value;
           break;
         case 'position':
           this.position();
