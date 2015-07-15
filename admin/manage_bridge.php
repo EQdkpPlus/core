@@ -172,12 +172,12 @@ class Manage_Bridge extends page_generic {
 	}
 
 	public function edit(){
-		if (is_array($this->in->getArray('usergroups', 'int')) && count($this->in->getArray('usergroups', 'int')) > 0){
-			$groups = implode(',', $this->in->getArray('usergroups', 'int'));
+		if (is_array($this->in->getArray('usergroups', 'string')) && count($this->in->getArray('usergroups', 'string')) > 0){
+			$groups = implode(',', $this->in->getArray('usergroups', 'string'));
 			$this->config->set('cmsbridge_groups', $groups);
 			
 			//Sync Usergroups
-			$groups = implode(',', $this->in->getArray('sync_usergroups', 'int'));
+			$groups = implode(',', $this->in->getArray('sync_usergroups', 'string'));
 			$this->config->set('cmsbridge_sync_groups', $groups);
 
 			//Forum Integration
