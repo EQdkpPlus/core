@@ -509,6 +509,7 @@ h3 {
 	font-family: 'Trebuchet MS',Arial,sans-serif;
 	padding: 5px 2px 5px 2px;
 	font-size: 14px;
+	font-weight: bold;
 }
 
 .portalbox_content {
@@ -3727,7 +3728,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		margin-left: 30px;
 	}
 	
-	.responsive .article_content img:not(.itt-icon):not(.classicon):not(.raceicon):not(.rankicon):not(.talenticon):not(.eventicon):not(.roleicon):not(.gameicon) {
+	.responsive .article_content img:not(.itt-icon):not(.classicon):not(.raceicon):not(.rankicon):not(.talenticon):not(.eventicon):not(.roleicon):not(.gameicon):not(.smilies):not(.eqdkpicon) {
 		width: 100% !important;
 	}
 	
