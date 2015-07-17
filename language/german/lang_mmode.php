@@ -101,7 +101,6 @@ $lang = array(
 	'splash_new'		=> 'Dir ist EQdkp Plus neu? Du hast noch nie DKP-Punkte vergeben oder Raids eingetragen?',
 	'start_tour'		=> 'Tour starten',
 	'jump_tour'			=> 'Tour überspringen',
-	'06_import'			=> 'EQdkp+ 0.6 Daten importieren',
 	'guild_import'		=> 'Gilde von externer Datenbank importieren',
 	'guild_import_info'	=> '* sofern vom Spiel unterstützt',
 );
