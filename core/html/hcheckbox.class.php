@@ -60,6 +60,8 @@ class hcheckbox extends html {
 			}
 			if(!empty($this->class)) $out .= ' class="'.$this->class.'"';
 			$out .= ' id="'.$this->id.'"';
+			if($this->tolang) $opt = ($this->user->lang($opt, false, false)) ? $this->user->lang($opt) : (($this->game->glang($opt)) ? $this->game->glang($opt) : $opt);
+			
 			$out .= '><input type="'.self::$type.'" name="'.$this->name.((count($this->options) > 1) ? '[]' : '').'" value="'.$key.'"'.$selected_choice.$disabled.$dep.'/>'.$opt.'</label>&nbsp;';
 		}
 		return $out;
