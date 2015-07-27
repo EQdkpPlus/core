@@ -344,7 +344,10 @@ if ( !class_exists( "pdh_r_member" ) ) {
 							if ($strType){
 								$out .= ($nameOnly) ? $this->game->get_name($strType, (int)$strMemberVal) : $this->game->decorate($strType, $strMemberVal, $this->data[$member_id]);
 							} else {
-								$out .= $arrField['data']['options'][$strMemberVal];
+								$strVal = $arrField['data']['options'][$strMemberVal];
+								$strGlang = $this->game->glang($strVal);
+								
+								$out .= ($strGlang) ? $strGlang : $arrField['data']['options'][$strMemberVal];
 							}
 						}
 						if (strlen($out)) $arrOut[] = $out;
@@ -441,7 +444,10 @@ if ( !class_exists( "pdh_r_member" ) ) {
 							if ($strType){
 								$out .= ($nameOnly) ? $this->game->get_name($strType, (int)$strMemberVal) : $this->game->decorate($strType, $strMemberVal, $this->data[$member_id]);
 							} else {
-								$out .= $arrField['data']['options'][$strMemberVal];
+								$strVal = $arrField['data']['options'][$strMemberVal];
+								$strGlang = $this->game->glang($strVal);
+								
+								$out .= ($strGlang) ? $strGlang : $arrField['data']['options'][$strMemberVal];
 							}
 						}
 						if (strlen($out)) $arrOut[] = $out;
