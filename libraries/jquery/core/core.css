@@ -1120,46 +1120,52 @@ body .ui-tooltip {
 }
 #cboxPrevious{
 	float: left;
-	background-color: #FFFFFF;
+	background:none;
 	bottom: 55%;
 	color: #0092EF;
-	font-size: 25px;
+	font-size: 35px;
 	left: 2px;
 	overflow: hidden;
 	position: relative;
-	width: 27px;
+	width: 35px;
+	padding: 8px;
 }
 #cboxPrevious:before{
-	content: "\f0a8";
+	content: "\f053";
 	font-family: FontAwesome;
-	color: #000;
+	color: #fff;
 	margin-right: 3px;
+	text-shadow: 0px 0px 7px rgba(150, 150, 150, 1);
 }
+
 #cboxPrevious:hover{
 	background-position:-75px -25px;
 }
-#cboxNext{
-	background-color: #FFFFFF;
+
+#cboxNext {
+	background: none;
 	bottom: 55%;
-	color: #0092EF;
-	font-size: 25px;
+	font-size: 35px;
 	right: 2px;
 	overflow: hidden;
 	position: relative;
-	width: 27px;
+	width: 35px;
 	float: right;
-	text-indent: -51px;
-	margin-right: 2px;
+	text-indent: -70px;
+	padding: 8px;
 }
 #cboxNext:after {
-	content: "\f0a9";
+	content: "\f054";
 	font-family: FontAwesome;
-	color: #000;
+	color: #fff;
 	margin-left: 13px;
+	text-shadow: 0px 0px 7px rgba(150, 150, 150, 1);
 }
+
 #cboxNext:hover{
 	background-position:-50px -25px;
 }
+
 #cboxClose{
 	display:none;
 }
