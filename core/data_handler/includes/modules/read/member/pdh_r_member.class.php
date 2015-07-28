@@ -688,7 +688,8 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 		
 		public function get_html_defaultrole($member_id){
-			return $this->pdh->get("roles", "name", array($member_id));
+			$intDefaultRole = $this->get_defaultrole($member_id);
+			return $this->pdh->get("roles", "name", array($intDefaultRole));
 		}
 
 		public function get_gender($member_id){

@@ -99,6 +99,7 @@ function runden($value){
 
 	if (registry::register('config')->get('round_activate') == "1"){
 		$ret_val = round($value,$precision)	;
+		$ret_val = number_format($ret_val, $precision, '.', '');
 	} else {
 		$ret_val = round($value, 5);
 	}
