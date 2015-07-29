@@ -640,7 +640,10 @@ if( !class_exists( "plus_datahandler")){
 			$this->presets_loaded = true;
 		}
 
-		public function get_preset_description( $preset_name ) {
+		public function get_preset_description( $preset_name , $blnResolveAlias=false) {
+			if($blnResolveAlias) {
+				$preset_name = ( array_key_exists( $preset_name, $this->system_settings['aliases'] ) ) ? $this->system_settings['aliases'][$preset_name] : $preset_name;
+			}
 			return (isset($this->preset_lang[$preset_name])) ? $this->preset_lang[$preset_name] : $preset_name;
 		}
 

@@ -562,7 +562,7 @@ class ManagePageLayouts extends page_generic {
 					$potential_presets = array_keys($this->pdh->get_preset_list($options['table_main_sub'], $options['table_subs'], array_keys($layout_def['subs'])));
 					$pps = array();
 					foreach($potential_presets as $id => $pset){
-						$pps[$pset] = ($this->pdh->get_preset_description($pset)) ? $this->pdh->get_preset_description($pset) : $pset;
+						$pps[$pset] = ($this->pdh->get_preset_description($pset)) ? $this->pdh->get_preset_description($pset, true) : $pset;
 					}
 		
 					foreach($options['table_presets'] as $column_id => $column_options){
@@ -599,7 +599,7 @@ class ManagePageLayouts extends page_generic {
 					foreach($options['table_presets'] as $column_id => $column_options){
 						$preset = $column_options['name'];
 						$this->tpl->assign_block_vars('page_row.page_object_row.preset_row', array(
-							'NAME'			=> ($this->pdh->get_preset_description($preset)) ? $this->pdh->get_preset_description($preset) : $preset,
+							'NAME'			=> ($this->pdh->get_preset_description($preset)) ? $this->pdh->get_preset_description($preset, true) : $preset,
 							'SORTABLE'		=> new hradio($page.'['.$page_object.'][sortable]['.$preset.']', array('value' => $column_options['sort'], 'class' => 'sortable')),
 							'CODE'			=> $preset,
 							'DEFAULT_SORT'	=> (isset($options['table_sort_col']) && $options['table_sort_col'] == $column_id) ? 'checked="checked"' : '',
