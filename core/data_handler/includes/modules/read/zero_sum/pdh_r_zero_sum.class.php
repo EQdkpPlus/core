@@ -25,7 +25,7 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "pdh_r_zero_sum" ) ) {
 	class pdh_r_zero_sum extends pdh_r_generic{
-
+		public static $shortcuts = array('apa' => 'auto_point_adjustments');
 		public $default_lang = 'english';
 		public $points;
 		public $raid_vals;
