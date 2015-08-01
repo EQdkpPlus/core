@@ -112,12 +112,26 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 
 		}
 
-		public function get_id_list($raids_only=false, $start_date = 0, $end_date = 9999999999, $calfilter=false){
+		public function get_id_list($raids_only=false, $start_date = 0, $end_date = 9999999999, $idfilter=false, $filter=false){
 			$ids = array();
 			if(($start_date != 0) || ($end_date != 9999999999)){
 				$sqlstring	 = "SELECT id FROM __calendar_events WHERE";
-				$sqlstring	.= (is_array($calfilter)) ? ' (calendar_id IN ('.implode(",", $calfilter).')) AND' : '';
+				$sqlstring	.= (is_array($idfilter)) ? ' (calendar_id IN ('.implode(",", $idfilter).')) AND' : '';
 				$sqlstring	.= " ((timestamp_start BETWEEN ".$this->db->escapeString($start_date)." AND ".$this->db->escapeString($end_date).") OR (timestamp_end BETWEEN ".$this->db->escapeString($start_date)." AND ".$this->db->escapeString($end_date)."))";
+
+				// apply the filtering
+				switch($filter){
+					case 'mine':
+						$sqlstring	.= " AND creator=".$this->user->data['user_id'];
+					break;
+					case 'past':
+						$sqlstring	.= " AND timestamp_end<".$this->time->time;
+					break;
+					case 'future':
+						$sqlstring	.= " AND timestamp_end>".$this->time->time;
+					break;
+					default: $sqlstring	.= "";
+				}
 
 				$query = $this->db->query($sqlstring);
 				if ($query){
@@ -125,11 +139,25 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 						$what2filter	= (($raids_only === 'appointments') ? '2' : '1');
 						while ( $row = $query->fetchAssoc() ){
 							if($this->get_calendartype($row['id']) == $what2filter){
+								if($filter == 'attendance'){
+									$mystatus = $this->pdh->get('calendar_raids_attendees', 'html_status', array($row['id'], $this->user->data['user_id'], false));
+									// 0 and 1 (confirmed and signed in), rest is not attending
+									if($mystatus == '' || $mystatus > 1){
+										continue;
+									}
+								}
 								$ids[] = $row['id'];
 							}
 						}
 					}else{
 						while ( $row = $query->fetchAssoc() ){
+							if($filter == 'attendance'){
+								$mystatus = $this->pdh->get('calendar_raids_attendees', 'html_status', array($row['id'], $this->user->data['user_id'], false));
+								// 0 and 1 (confirmed and signed in), rest is not attending
+								if($mystatus == '' || $mystatus > 1){
+									continue;
+								}
+							}
 							$ids[] = $row['id'];
 						}
 					}
@@ -141,7 +169,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 						if($this->get_calendartype($id) != '1' || $this->events[$id]['timestamp_end'] < $this->time->time) unset($ids[$key]);
 
 						// us the claendarfilter
-						if(is_array($calfilter) && !in_array($this->get_calendar_id($id), $calfilter)) unset($ids[$key]);
+						if(is_array($idfilter) && !in_array($this->get_calendar_id($id), $idfilter)) unset($ids[$key]);
 					}
 				}
 			}

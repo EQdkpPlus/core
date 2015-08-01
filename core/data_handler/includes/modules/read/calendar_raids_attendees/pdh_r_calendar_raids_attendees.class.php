@@ -288,12 +288,12 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			return '<i class="fa fa-flag '.$flagcolor.' fa-lg"></i>';
 		}
 
-		public function get_html_status($eventid, $userid){
+		public function get_html_status($eventid, $userid, $flag=true){
 			$memberdata = $this->pdh->get('calendar_raids_attendees', 'myattendees', array($eventid, $userid));
 			if($memberdata['member_id'] > 0){
 				$memberstatus = $this->pdh->get('calendar_raids_attendees', 'status', array($eventid, $memberdata['member_id']));
 				if($memberstatus == 0 || $memberstatus == 1 || $memberstatus == 2 || $memberstatus == 3){
-					return $this->get_status_flag($memberstatus);
+					return ($flag) ? $this->get_status_flag($memberstatus) : $memberstatus;
 				}
 			}
 		}

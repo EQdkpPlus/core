@@ -210,9 +210,9 @@ class calendar_pageobject extends pageobject {
 	public function get_json(){
 		$event_json		= array();
 		$filters		= ($this->in->exists('filters', 'int')) ? $this->in->getArray('filters', 'int') : false;
-		#$range_start	= $this->time->fromformat($this->in->get('start', ''), DATE_ATOM);
 		$range_start	= $this->time->fromformat($this->in->get('start', ''), 'Y-m-d');
 		$range_end		= $this->time->fromformat($this->in->get('end', ''), 'Y-m-d');
+		$filterby		= $this->in->get('filterby', 'all');
 
 		// parse the feeds
 		$feeds = $this->pdh->get('calendars', 'idlist', array('feed', $filters));
@@ -260,7 +260,7 @@ class calendar_pageobject extends pageobject {
 
 		// add the calendar events to the json feed
 		$calendars	= $this->pdh->get('calendars', 'idlist', array('nofeed', $filters));
-		$caleventids	= $this->pdh->get('calendar_events', 'id_list', array(false, $range_start, $range_end));
+		$caleventids	= $this->pdh->get('calendar_events', 'id_list', array(false, $range_start, $range_end, false, $filterby));
 		if(is_array($caleventids) && count($caleventids) > 0){
 			foreach($caleventids as $calid){
 				$eventextension	= $this->pdh->get('calendar_events', 'extension', array($calid));
