@@ -283,7 +283,6 @@ class ManageRaids extends page_generic {
 			'NEW_MEM_SEL'		=> $this->jquery->MultiSelect('raid_attendees', $members, (($this->in->get('dataimport', '') == 'true') ? $this->in->getArray('attendees', 'int') : $raid['attendees']), array('width' => 400, 'filter' => true)),
 			'RAID_DROPDOWN'		=> new hdropdown('draft', array('options' => $raids, 'value' => $this->in->get('draft', 0), 'js' => 'onchange="window.location=\'manage_raids.php'.$this->SID.'&amp;upd=true&amp;draft=\'+this.value"')),
 			
-			
 			'ADJ_KEY'			=> $intAdjKey+1,
 			'MEMBER_DROPDOWN'	=> $this->jquery->MultiSelect('adjs[KEY][members]', $members, array(), array('width' => 250, 'id'=>'adjs_KEY_members', 'filter' => true)),
 			'MEMBER_ITEM_DROPDOWN'	=> $this->jquery->MultiSelect('items[KEY][members]', $members, array(), array('width' => 250, 'id'=>'items_KEY_members', 'filter' => true)),	
@@ -297,7 +296,7 @@ class ManageRaids extends page_generic {
 			'L_RAID_SAVE'		=> ($raid['id'] AND $raid['id'] != 'new' && !$copy) ? $this->user->lang('update_raid') : $this->user->lang('add_raid'),
 			//other needed vars
 			'S_RAID_UPD'		=> ($raid['id'] AND $raid['id'] != 'new' && !$copy) ? true : false,
-			'S_EVENTVAL_ONLOAD' => ($raid['id'] == 'new' && !$force_refresh) ? true : false,
+			'S_EVENTVAL_ONLOAD' => ($raid['id'] == 'new' && !$force_refresh && $this->in->get('dataimport', '') != 'true') ? true : false,
 			'ADDITIONAL_INFOS_EDITOR' => new hbbcodeeditor('additional_data', array('rows' => 10, 'value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->get('additional_data') : $raid['additional_data']))),
 			'ADDITIONAL_INFOS'	=> ((isset($raid['additional_data']) AND strlen($raid['additional_data'])) || (($this->in->get('dataimport', '') == 'true') && strlen($this->in->get('additional_data')))) ? 'true' : 'false',
 		));

@@ -91,7 +91,6 @@ $lang = array(
 	"splash_new" => 'You are new to EQdkp Plus? You have never awarded DKP points or added raids?',
 	"start_tour" => 'Start tour',
 	"jump_tour" => 'Skip tour',
-	"06_import" => 'Import EQdkp+ 0.6 data',
 	"guild_import" => 'Import a guild from external Database',
 	"guild_import_info" => '* if supported by your game',
 	

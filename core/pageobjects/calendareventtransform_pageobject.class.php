@@ -74,7 +74,7 @@ class calendareventtransform_pageobject extends pageobject {
 			<input name="date" value="'.$this->time->user_date($this->pdh->get('calendar_events', 'time_start', array($this->url_id)), true, false, false, function_exists('date_create_from_format')).'" type="hidden">
 			<input name="rnote" value="'.$this->pdh->get('calendar_events', 'notes', array($this->url_id)).'" type="hidden">
 			<input name="'.$this->user->csrfPostToken().'" value="'.$this->user->csrfPostToken().'" type="hidden" />
-			<textarea name="additional_data">'.$additional_data.'</textarea>
+			<textarea name="additional_data" style="display:none;">'.$additional_data.'</textarea>
 					';
 		foreach($attendees as $mattids){
 			$htmlcode	.= '<input name="attendees[]" value="'.$mattids.'" type="hidden">';

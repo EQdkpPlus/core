@@ -95,7 +95,6 @@
 				<input type="button" value="{L_TOUR_START}" class="mainoption" onclick="window.location='index.php{SID}&start_tour=true'" />
 				<input type="button" value="{L_JUMP_TOUR}" class="mainoption" onclick="window.location='index.php{SID}&no_tour=true'" />
 				<br /><br />
-				<input type="button" value="{L_06_IMPORT}" class="mainoption" onclick="window.location='{SID}&type=import'" />
 				<input type="button" value="{L_GUILD_IMPORT} *" class="mainoption" onclick="window.location='index.php{SID}&guild_import=true'" /> <br />{L_GUILD_IMPORT_INFO}
 			</div>
 			<!-- ENDIF -->

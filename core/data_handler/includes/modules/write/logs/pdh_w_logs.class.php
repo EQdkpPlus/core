@@ -74,7 +74,7 @@ if(!class_exists('pdh_w_logs')) {
 				'username'			=> $this->pdh->get('user', 'name', array($userid)),
 				'log_plugin'		=> $plugin,
 				'log_flag'			=> ($admin_action) ? 1 : 0,
-				'log_record'		=> $record,
+				'log_record'		=> (!$record || $record === NULL) ? '' : $record,
 				'log_record_id'		=> $recordid,
 			))->execute();
 			

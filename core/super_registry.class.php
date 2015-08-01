@@ -298,7 +298,7 @@ abstract class super_registry {
 	
 	private static function fix_server_path() {
 		registry::register('config')->set('server_path', registry::register('environment')->server_path);
-		redirect(registry::register('environment')->phpself);
+		redirect(registry::register('environment')->phpself, false, false, false);
 	}
 	
 	private static function set_timezone() {

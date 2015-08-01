@@ -143,7 +143,6 @@ class core extends gen_class {
 				'L_SPLASH_NEW' => $this->user->lang('splash_new'),
 				'L_TOUR_START' => $this->user->lang('start_tour'),
 				'L_JUMP_TOUR' => $this->user->lang('jump_tour'),
-				'L_06_IMPORT' => $this->user->lang('06_import'),
 				'L_GUILD_IMPORT' => $this->user->lang('guild_import'),
 				'L_GUILD_IMPORT_INFO' => $this->user->lang('guild_import_info'),
 			));
