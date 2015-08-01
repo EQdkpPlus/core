@@ -322,6 +322,14 @@ td.middle{
 	top: -3px;
 }
 
+.calendar-filtertoolbar {
+	margin-bottom: 10px;
+}
+
+.fc-button-group .fc-middle-button {
+	border-radius: 0;
+}
+
 /* Progress Bar with text */
 .ui-progressbar {
 	position:relative;

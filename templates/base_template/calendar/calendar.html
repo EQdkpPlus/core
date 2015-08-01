@@ -1,6 +1,10 @@
 <script type='text/javascript'>
 //<![CDATA[
 	$(document).ready(function() {
+		
+		$("#calendarfilter").val(JSON.parse(cal_getStorage("calendar.filter")) || 0);
+		$("#calendarfilter").multiselect('refresh');
+		
 		$('#calendar').fullCalendar({
 			firstDay: {STARTDAY},
 
@@ -251,6 +255,13 @@
 				}
 			}
 		});
+		
+		$('#calendarfilter').change(function(){
+			var array_of_checked_values = $("#calendarfilter").multiselect("getChecked").map(function(){
+				return this.value;
+			}).get();
+			cal_setStorage('calendar.filter', JSON.stringify(array_of_checked_values));
+		})
 	});
 
 	function addCalButton(where, text, id) {
@@ -383,6 +394,25 @@ td.fc-day:hover:after {
 	</ul>
 
 	<div id="fragment-calendar">
+		<div class="fc calendar-filtertoolbar">
+			<div class="fc-button-group" id="calendar_filter">
+				{MS_CALENDAR_SELECT}
+			</div>
+			
+			<div class="fc-button-group" id="calendar_filter">
+				<button type="button" class="ui-button ui-state-default ui-corner-left"><i class="fa fa-list"></i> Alle</button>
+				<button type="button" class="ui-button ui-state-default fc-middle-button"><i class="fa fa-clock-o"></i> Zukünftige</button>
+				<!-- IF S_LOGGED_IN -->
+				<button type="button" class="ui-button ui-state-default fc-middle-button"><i class="fa fa-clock-o"></i> Vergangene</button>
+				<button type="button" class="ui-button ui-state-default fc-middle-button"><i class="fa fa-flag"></i> Teilname</button>
+				<button type="button" class="ui-button ui-state-default ui-corner-right"><i class="fa fa-user"></i> Meine</button>
+				<!-- ELSE -->
+				<button type="button" class="ui-button ui-state-default ui-corner-right"><i class="fa fa-clock-o"></i> Vergangene</button>
+				<!-- ENDIF -->
+			</div>
+		</div>
+		
+		
 		<div id="calDialog"></div>
 		<div id='calendar_loading'><i class="fa fa-spinner fa-spin fa-lg"></i> {L_lib_loading}</div>
 		<div id='calendar'></div>
