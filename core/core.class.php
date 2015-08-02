@@ -614,7 +614,8 @@ class core extends gen_class {
 									$arrHashArray[$hash]['depth'] = 2;
 									$arrOut[$key]['childs'][$key2]['childs'][$key3] = $arrHashArray[$hash];
 									$arrOutOneLevel[] = $arrHashArray[$hash];
-								}	
+								}
+								$show = true;
 							}
 						}
 						$show = $secondlevel_show;
