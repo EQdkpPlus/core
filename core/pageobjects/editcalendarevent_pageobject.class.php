@@ -71,7 +71,9 @@ class editcalendarevent_pageobject extends pageobject {
 	// send the email of the created raid to all users
 	private function notify_newraid($eventID){
 		$eventextension	= $this->pdh->get('calendar_events', 'extension', array($eventID));
-		$strEventTitle	= sprintf($this->pdh->get('event', 'name', array($eventextension['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->date_for_user($userid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true);
+		$strEventName = $this->pdh->get('event', 'name', array($eventextension['raid_eventid']));
+		if($strEventName && $strEventName != "") $strEventName .= ', ';
+		$strEventTitle	= $strEventName.$this->time->date_for_user($userid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true);
 		
 		$a_users = $this->pdh->get('user', 'active_users');
 		if(is_array($a_users) && count($a_users) > 0){
@@ -83,7 +85,9 @@ class editcalendarevent_pageobject extends pageobject {
 
 	private function notify_invitations($eventID, $invited_users=false){
 		$eventextension	= $this->pdh->get('calendar_events', 'extension', array($eventID));
-		$strEventTitle	= sprintf($this->pdh->get('event', 'name', array($eventextension['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->date_for_user($userid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true);
+		$strEventName = $this->pdh->get('event', 'name', array($eventextension['raid_eventid']));
+		if($strEventName && $strEventName != "") $strEventName .= ', ';
+		$strEventTitle	= $strEventName.$this->time->date_for_user($userid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true);
 		
 		$a_users = (isset($invited_users) && is_array($invited_users)) ? $invited_users : ((isset($eventextension['invited'])) ? $eventextension['invited'] : false);
 		if(is_array($a_users) && count($a_users) > 0){
