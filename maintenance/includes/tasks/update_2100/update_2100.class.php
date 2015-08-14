@@ -299,6 +299,9 @@ class update_2100 extends sql_update_task {
 				
 		$this->db->prepare("UPDATE __styles :p WHERE template_path='eqdkp_modern' ")->set($arrSet)->execute();
 		
+		$this->pdh->enqueue_hook('styles_update');
+		$this->pdh->process_hook_queue();
+		
 		//Reset Template Cache
 		$objStyles = register('styles');
 		$objStyles->deleteStyleCache('eqdkp_modern');
