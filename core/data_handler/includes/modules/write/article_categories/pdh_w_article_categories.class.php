@@ -67,13 +67,13 @@ if(!class_exists('pdh_w_article_categories')) {
 					$this->db->prepare("DELETE FROM __articles WHERE category=?")->execute($intChildID);
 					
 					$log_action = $this->logs->diff(false, $arrOldData, $this->arrLogLang);
-					$this->log_insert("action_articlecategory_deleted", $log_action, $intChildID, $arrOldData['title']);
+					$this->log_insert("action_articlecategory_deleted", $log_action, $intChildID, $this->user->multilangValue($arrOldData['name']));
 				}
 			}
 			$arrOldData = $this->pdh->get('article_categories', 'data', array($intCategoryID));
 			$this->db->prepare("DELETE FROM __article_categories WHERE id =?")->execute($intCategoryID);
 			$log_action = $this->logs->diff(false, $arrOldData, $this->arrLogLang);
-			$this->log_insert("action_articlecategory_deleted", $log_action, $intCategoryID, $arrOldData["name"]);
+			$this->log_insert("action_articlecategory_deleted", $log_action, $intCategoryID, $this->user->multilangValue($arrOldData["name"]));
 			
 			return true;
 		}
@@ -138,7 +138,7 @@ if(!class_exists('pdh_w_article_categories')) {
 				))->execute($id);
 				
 				$log_action = $this->logs->diff(false, $arrQuery, $this->arrLogLang);
-				$this->log_insert("action_articlecategory_added", $log_action, $id, $arrQuery["name"], 1, 'article');
+				$this->log_insert("action_articlecategory_added", $log_action, $id,$this->user->multilangValue($arrQuery["name"]), 1, 'article');
 				
 				$this->pdh->enqueue_hook('article_categories_update');
 				return $id;
@@ -199,7 +199,7 @@ if(!class_exists('pdh_w_article_categories')) {
 				$this->pdh->enqueue_hook('article_categories_update');
 				
 				$log_action = $this->logs->diff($arrOldData, $arrQuery, $this->arrLogLang, array('description' => 1), true);
-				$this->log_insert("action_articlecategory_updated", $log_action, $id, $arrOldData["name"], 1, 'article');
+				$this->log_insert("action_articlecategory_updated", $log_action, $id, $this->user->multilangValue($arrOldData["name"]), 1, 'article');
 				
 				return $id;
 			}
@@ -222,7 +222,7 @@ if(!class_exists('pdh_w_article_categories')) {
 					'published' => $intPublished,	
 				);
 				$log_action = $this->logs->diff($arrOldData, $arrNewData, $this->arrLogLang, array());
-				if ($log_action) $this->log_insert("action_articlecategory_updated", $log_action, $id, $this->pdh->get('article_categories', 'name', array($id)), 1, 'article');
+				if ($log_action) $this->log_insert("action_articlecategory_updated", $log_action, $id, $this->user->multilangValue($this->pdh->get('article_categories', 'name', array($id)), 1, 'article'));
 				
 				$this->pdh->enqueue_hook('article_categories_update');
 				return $id;
