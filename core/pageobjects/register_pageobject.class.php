@@ -150,7 +150,7 @@ class register_pageobject extends pageobject {
 			$this->core->message(str_replace("{0}", $this->in->get('user_email'), $this->user->lang('fv_email_alreadyuse')), $this->user->lang('error'), 'red');
 			$this->display_form();
 			return;
-		} elseif (!preg_match("/^([a-zA-Z0-9])+([\.a-zA-Z0-9_-])*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+/",$this->in->get('user_email'))){
+		} elseif (!preg_match("/^([a-zA-Z0-9])+([\.a-zA-Z0-9_\-\+])*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+/",$this->in->get('user_email'))){
 			$this->core->message($this->user->lang('fv_invalid_email'), $this->user->lang('error'), 'red');
 			$this->display_form();
 			return;

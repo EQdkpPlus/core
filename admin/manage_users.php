@@ -132,7 +132,7 @@ class Manage_Users extends page_generic {
 				$this->core->message(str_replace('{0}', $values['user_email'], $this->user->lang('fv_email_alreadyuse')), $this->user->lang('error'), 'red');
 				$this->edit();
 				return;
-			} elseif ( !preg_match("/^([a-zA-Z0-9])+([\.a-zA-Z0-9_-])*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+/", $values['user_email']) ){
+			} elseif ( !preg_match("/^([a-zA-Z0-9])+([\.a-zA-Z0-9_\-\+])*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+/", $values['user_email']) ){
 				$this->core->message($this->user->lang('fv_invalid_email'), $this->user->lang('error'), 'red');
 				$this->edit();
 				return;

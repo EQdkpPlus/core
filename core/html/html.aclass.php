@@ -96,10 +96,11 @@ abstract class html {
 	 */
 	protected function pattern($pattern) {
 		$w = '[\w_-]';
+		$w2 = '[\.\w_\-\+]';
 		switch( $pattern ){
 			case 'email':
 				if(empty($this->placeholder)) $this->placeholder = 'email@example.com';
-				return $w.'+(\.'.$w.'+)*@'.$w.'+(\.'.$w.'+)+';
+				return $w.'+('.$w2.'+)*@'.$w.'+(\.'.$w.'+)+';
 				
 			case 'url':
 				if(empty($this->placeholder)) $this->placeholder = 'http(s)://example.com';
