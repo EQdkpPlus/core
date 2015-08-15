@@ -38,7 +38,7 @@ class twitterdm_messenger extends generic_messenger {
 		
 		$strMessage = strip_tags($strMessage);
 		
-		$strMessage = substr($strMessage, 0, 160);
+		//$strMessage = substr($strMessage, 0, 160);
 		
 		$params = array(
 			'screen_name' => $twitterAccount,
