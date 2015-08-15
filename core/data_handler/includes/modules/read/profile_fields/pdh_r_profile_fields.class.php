@@ -38,6 +38,7 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 		public function reset(){
 			$this->pdc->del('pdh_profile_fields_table');
 			$this->pdc->del('pdh_profile_categories_table');
+			$this->pdc->del('pdh_profile_field_mapping');
 			$this->profile_fields = NULL;
 			$this->profile_categories = NULL;
 		}
@@ -47,7 +48,7 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 			$this->profile_categories		= $this->pdc->get('pdh_profile_categories_table');
 			$this->profile_field_mapping	= $this->pdc->get('pdh_profile_field_mapping');
 			
-			if($this->profile_fields !== NULL && $this->profile_categories !== NULL){
+			if($this->profile_fields !== NULL && $this->profile_categories !== NULL && $this->profile_field_mapping !== NULL){
 				return true;
 			}
 			$this->profile_fields = array();
@@ -62,7 +63,7 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 					}
 					
 					$this->profile_field_mapping[$drow['name']] = intval($drow['id']);
-	
+
 					$this->profile_fields[intval($drow['id'])] = array(
 						'id'			=> intval($drow['id']),
 						'name'			=> $drow['name'],
@@ -119,7 +120,7 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 		}
 
 		public function get_fieldlist(){
-			return array_keys($this->pdh_profile_field_mapping);
+			return array_keys($this->profile_field_mapping);
 		}
 
 		public function get_lang($name) {
