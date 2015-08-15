@@ -310,6 +310,7 @@ class mmocms_settings extends page_generic {
 							'type'			=> 'textarea',
 							'cols'			=> 80,
 							'rows'			=> 5,
+							'codeinput'		=> true,
 					),
 				),
 			),
