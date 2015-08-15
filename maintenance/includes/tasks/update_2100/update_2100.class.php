@@ -54,7 +54,7 @@ class update_2100 extends sql_update_task {
 				),
 			'german' => array(
 				'update_2100'	=> 'EQdkp Plus 2.1.0 Update',
-				'update_function'=> 'Führe einige Updates wichtige updates durch',
+				'update_function'=> 'Führe einige wichtige Updates durch',
 					1			=> 'Füge die Zeitzone zur Kalender-Events-Tabelle hinzu',
 					2			=> 'Bennene den Inhalt des Wiederholungsfeldes von "none" in 0',
 					3			=> 'Bennene den Inhalt des Wiederholungsfeldes von "day" in 1',
