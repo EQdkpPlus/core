@@ -53,19 +53,19 @@ class admin_functions extends gen_class {
 	function resolve_browser($string){
 		$string = sanitize($string);
 		if( preg_match("/opera/i",$string)){
-			return "<div class=\"coretip-left browser-icon opera\" data-coretip=\"".$string."\">".inline_svg($this->root_path."images/browser/opera.svg")."</div>";
+			return "<div class=\"coretip-left browser-icon opera\" data-coretip=\"".$string."\"><i class=\"fa fa-lg fa-opera\"></i></div>";
 		}else if( preg_match("/msie/i",$string)){
-			return "<div class=\"coretip-left browser-icon ie\" data-coretip=\"".$string."\">".inline_svg($this->root_path."images/browser/ie.svg")."</div>";	
+			return "<div class=\"coretip-left browser-icon ie\" data-coretip=\"".$string."\"><i class=\"fa fa-lg fa-internet-explorer\"></i></div>";	
 		}else if( preg_match("/chrome/i", $string)){
-			return "<div class=\"coretip-left browser-icon chrome\" data-coretip=\"".$string."\">".inline_svg($this->root_path."images/browser/chrome.svg")."</div>";
+			return "<div class=\"coretip-left browser-icon chrome\" data-coretip=\"".$string."\"><i class=\"fa fa-lg fa-chrome\"></i></div>";
 		}else if( preg_match("/konqueror/i",$string)){
-			return "<div class=\"coretip-left browser-icon konqueror\" data-coretip=\"".$string."\">".inline_svg($this->root_path."images/browser/konqueror.svg")."</div>";
+			return "<div class=\"coretip-left\" data-coretip=\"".$string."\">Konqueror</div>";
 		}else if( preg_match("/safari/i",$string) ){
-			return "<div class=\"coretip-left browser-icon safari\" data-coretip=\"".$string."\">".inline_svg($this->root_path."images/browser/safari.svg")."</div>";
+			return "<div class=\"coretip-left browser-icon safari\" data-coretip=\"".$string."\"><i class=\"fa fa-lg fa-safari\"></i></div>";
 		}else if( preg_match("/lynx/i",$string) ){
 			return "<span class=\"coretip-left\" data-coretip=\"".$string."\">Lynx</span>";
 		}else if( preg_match("/mozilla/i",$string) ){
-			return "<div class=\"coretip-left browser-icon firefox\" data-coretip=\"".$string."\">".inline_svg($this->root_path."images/browser/firefox.svg")."</div>";
+			return "<div class=\"coretip-left browser-icon firefox\" data-coretip=\"".$string."\"><i class=\"fa fa-lg fa-firefox\"></i></div>";
 		}else if( preg_match("/w3m/i",$string) ){
 			return "<span class=\"coretip-left\" data-coretip=\"".$string."\">w3m</span>";
 		}else{
