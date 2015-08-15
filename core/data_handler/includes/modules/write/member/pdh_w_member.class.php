@@ -36,7 +36,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 			'picture'		=> "Avatar",
 		);
 
-		public function addorupdate_member($member_id=0, $data=array(), $takechar=false) {
+		public function addorupdate_member($member_id=0, $data=array(), $takechar=false, $blnCreateLogentry=true) {
 			$orig_member_id = $member_id;
 			
 			if($member_id > 0){
@@ -124,7 +124,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 					
 					$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
 
-					$this->log_insert('action_member_updated', $log_action, $member_id, $old['name']);
+					if($blnCreateLogentry) $this->log_insert('action_member_updated', $log_action, $member_id, $old['name']);
 					$this->pdh->enqueue_hook('member_update', array($member_id));
 					
 					//Überprüfe Ringabhängigkeit von Mainchars
@@ -163,7 +163,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 							'picture'		=> $querystr['picture'],
 					);
 					$log_action = $this->logs->diff(false, $arrNew, $this->arrLogLang);
-					$this->log_insert('action_member_added', $log_action, $member_id, $data['name']);
+					if($blnCreateLogentry) $this->log_insert('action_member_added', $log_action, $member_id, $data['name']);
 					$this->pdh->enqueue_hook('member_update', array($member_id));
 
 					// Set main ID
