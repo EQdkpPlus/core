@@ -698,6 +698,8 @@ class controller extends gen_class {
 				$arrLimitedIDs = $this->pdh->limit($arrSortedArticleIDs, $intStart, $arrCategory['per_page']);
 				$strPath = $this->pdh->get('article_categories', 'path', array($intCategoryID));
 				registry::add_const('page_path', $this->user->removeSIDfromString($strPath));
+				
+				$arrCategory['name'] = $this->user->multilangValue($arrCategory['name']);
 					
 				//Articles to template
 				foreach($arrLimitedIDs as $intArticleID){
