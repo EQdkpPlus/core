@@ -1,47 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 15.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<?xml version="1.0" encoding="iso-8859-1"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="16px" height="16px" viewBox="0 0 16 16" style="enable-background:new 0 0 16 16;" xml:space="preserve">
-<title>Winking</title>
-<desc>Winking Smiley</desc>
-<g id="SmileyBody">
-	<g id="YellowBody">
-		<path style="fill:#FFFFFF;" d="M0,8.6c0-4.1,3.4-7.4,7.5-7.4S15,4.5,15,8.6c0,4.1-3.4,7.4-7.5,7.4S0,12.7,0,8.6z"/>
-		<g>
-			<path id="Frame" style="fill:#CC9933;" d="M0,7.5C0,3.4,3.4,0,7.5,0C11.6,0,15,3.4,15,7.5c0,4.1-3.4,7.5-7.5,7.5
-				C3.4,15,0,11.6,0,7.5z"/>
-			
-				<radialGradient id="Inner_1_" cx="2.0742" cy="6.668" r="6.964" gradientTransform="matrix(1.0052 0 0 -1.0052 5.3786 12.4148)" gradientUnits="userSpaceOnUse">
-				<stop  offset="0" style="stop-color:#FFFFFF"/>
-				<stop  offset="0.4724" style="stop-color:#FFF57A"/>
-				<stop  offset="0.6077" style="stop-color:#FFF477"/>
-				<stop  offset="0.7136" style="stop-color:#FFF06D"/>
-				<stop  offset="0.8096" style="stop-color:#FEEB5C"/>
-				<stop  offset="0.8998" style="stop-color:#FDE345"/>
-				<stop  offset="0.985" style="stop-color:#FCD827"/>
-				<stop  offset="1" style="stop-color:#FCD621"/>
-			</radialGradient>
-			<path id="Inner" style="fill:url(#Inner_1_);" d="M0.5,7.5c0-3.9,3.1-7,7-7c3.9,0,7,3.1,7,7c0,3.9-3.1,7-7,7
-				C3.6,14.5,0.5,11.4,0.5,7.5z"/>
-		</g>
-	</g>
-</g>
-<g id="SmileyFace">
-	<g id="WinkingSmiley">
-		<g id="Mouth1">
-			<path style="fill:#666633;" d="M8.1,10.5c-2.5,0-3.8-1.3-3.8-1.3C3.9,8.8,3.7,8.9,3.8,9.5c0,0,0.7,2.5,4.2,2.5
-				c3.5,0,4.2-2.5,4.2-2.5c0.2-0.5,0-0.6-0.4-0.3C11.9,9.2,10.5,10.5,8.1,10.5z"/>
-		</g>
-		<g id="Mouth2">
-			<path style="fill:#666633;" d="M3.4,9c-0.6,0.6-1,0.8-1,0.8c-0.3,0.1-0.3,0.3,0,0.4c0,0,0.6,0.3,1.5-0.5c0.9-0.9,0.5-1.5,0.5-1.5
-				C4.3,7.9,4.1,8,4,8.2C4,8.2,4,8.4,3.4,9z"/>
-		</g>
-		<g id="RightEye">
-			<path style="fill:#666633;" d="M11,6c0,0.5-0.5,1-1,1l0,0C9.5,7,9,6.5,9,6V5c0-0.5,0.5-1,1-1l0,0c0.5,0,1,0.5,1,1V6z"/>
-		</g>
-		<path id="LeftEye" style="fill:#666633;" d="M7,6.1c0-0.3,0.1-0.6-0.5-0.6C6.1,5.5,6,5.8,5,5.8c-1,0-1.2-0.2-1.5-0.2
-			C2.9,5.5,3,5.8,3,6.1S4,7,5,7C6,7,7,6.4,7,6.1z"/>
-	</g>
-</g>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="17" width="17" xml:space="preserve">
+	
+	<!-- Copyright 2011–2015 KittMedia Productions -->
+	<!-- Licensed under GNU Lesser General Public License, version 2.1 (LGPL-2.1) -->
+	
+	<radialGradient id="SVGID_1_" cx="6.3327" cy="6.756" r="9.105" gradientUnits="userSpaceOnUse">
+		<stop offset="0" style="stop-color:#FFFF98"/>
+		<stop offset="1" style="stop-color:#FFD314"/>
+	</radialGradient>
+	
+	<path style="fill:url(#SVGID_1_);" d="M8.5,16.5c-4.411,0-8-3.589-8-8s3.589-8,8-8s8,3.589,8,8S12.911,16.5,8.5,16.5z"/>
+	<path style="fill:#CDA70C;" d="M8.5,1C12.636,1,16,4.364,16,8.5S12.636,16,8.5,16S1,12.636,1,8.5S4.364,1,8.5,1 M8.5,0C3.806,0,0,3.806,0,8.5C0,13.194,3.806,17,8.5,17S17,13.194,17,8.5C17,3.806,13.194,0,8.5,0L8.5,0z"/>
+	<path style="fill:none;stroke:#655919;stroke-width:0.75;stroke-miterlimit:10;" d="M4.5,5c0,0.829,0.782,1.5,1.75,1.5"/>
+	<path style="fill:none;stroke:#655919;stroke-width:0.75;stroke-miterlimit:10;" d="M8,5c0,0.829-0.783,1.5-1.75,1.5"/>
+	<path style="fill:none;stroke:#655919;stroke-miterlimit:10;" d="M4.5,10.5c0,1.382,1.789,2.5,4,2.5"/>
+	<path style="fill:none;stroke:#655919;stroke-miterlimit:10;" d="M12.5,10.5c0,1.382-1.789,2.5-4,2.5"/>
+	<rect x="9.75" y="5" style="fill:#655B20;" width="2" height="2"/>
 </svg>
