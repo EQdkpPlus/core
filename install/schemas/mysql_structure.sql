@@ -222,6 +222,7 @@ CREATE TABLE `__member_ranks` (
 
 DROP TABLE IF EXISTS __member_profilefields;
 CREATE TABLE `__member_profilefields` (
+	`id` INT(11) unsigned NOT NULL AUTO_INCREMENT,
 	`name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`type` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`category` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
@@ -234,7 +235,7 @@ CREATE TABLE `__member_profilefields` (
 	`custom` tinyint(1) NOT NULL DEFAULT 0,
 	`data` text COLLATE utf8_bin,
 	`options_language` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-	PRIMARY KEY (`name`)
+	PRIMARY KEY (`id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 DROP TABLE IF EXISTS __roles;

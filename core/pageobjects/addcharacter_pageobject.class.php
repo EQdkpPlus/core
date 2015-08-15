@@ -242,7 +242,8 @@ class addcharacter_pageobject extends pageobject {
 		
 		// Dynamic Fields
 		$profilefields = $this->pdh->get('profile_fields', 'fields');
-		foreach($profilefields as $fieldname => $fielddata) {
+		foreach($profilefields as $fieldid => $fielddata) {
+			$fieldname = $fielddata['name'];
 			//Set Required for Unique Options
 			if (in_array($fieldname, $arrGameUniqueIDs)) {
 				$fielddata['required'] = true;

@@ -29,9 +29,9 @@ if(!class_exists('pdh_w_profile_fields')) {
 		private $fields = array('name', 'type', 'category', 'lang', 'options_language', 'size', 'data', 'sort', 'image', 'undeletable', 'enabled', 'custom');
 
 		public function enable_field($field_id){
-			$objQuery = $this->db->prepare('UPDATE __member_profilefields :p WHERE name=?')->set(array(
+			$objQuery = $this->db->prepare('UPDATE __member_profilefields :p WHERE id=?')->set(array(
 				'enabled' => 1	
-			))->execute($field_id);
+			))->execute((int)$field_id);
 			
 			if ($objQuery) {
 				$this->pdh->enqueue_hook('game_update');
@@ -43,9 +43,9 @@ if(!class_exists('pdh_w_profile_fields')) {
 		}
 
 		public function disable_field($field_id) {
-			$objQuery = $this->db->prepare('UPDATE __member_profilefields :p WHERE name=?')->set(array(
+			$objQuery = $this->db->prepare('UPDATE __member_profilefields :p WHERE id=?')->set(array(
 					'enabled' => 0
-			))->execute($field_id);
+			))->execute((int)$field_id);
 			
 			if ($objQuery) {
 				$this->pdh->enqueue_hook('game_update');
@@ -57,6 +57,18 @@ if(!class_exists('pdh_w_profile_fields')) {
 		}
 
 		public function delete_fields($fields) {
+			if (is_array($fields)) {
+				foreach($fields as $value) {
+					$objQuery = $this->db->prepare('DELETE FROM __member_profilefields WHERE id=?')->execute((int)$value);
+				}
+				$this->pdh->enqueue_hook('game_update');
+				$this->pdh->enqueue_hook('member_update');
+				return true;
+			}
+			return false;
+		}
+		
+		public function delete_fields_by_name($fields) {
 			if (is_array($fields)) {
 				foreach($fields as $value) {
 					$objQuery = $this->db->prepare('DELETE FROM __member_profilefields WHERE name=?')->execute($value);
@@ -82,14 +94,15 @@ if(!class_exists('pdh_w_profile_fields')) {
 			}
 			$field['data']['options'] = $options;
 			
-			$objQuery = $this->db->prepare('UPDATE __member_profilefields :p WHERE name=?')->set(array(
+			$objQuery = $this->db->prepare('UPDATE __member_profilefields :p WHERE id=?')->set(array(
+				'name'			=> $this->in->get('id'),
 				'type'			=> $this->in->get('type'),
 				'category'		=> $this->in->get('category'),
 				'lang'			=> $this->in->get('language'),
 				'options_language' => $this->in->get('options_language'),
 				'size'			=> $this->in->get('size'),
 				'image'			=> $this->in->get('image'),
-				//'sort'			=> $this->in->get('sort', 1),
+				//'sort'		=> $this->in->get('sort', 1),
 				'data'			=> serialize($field['data']),
 			))->execute($id);
 				
@@ -103,7 +116,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 
 		public function insert_field($data=array()){
 			if(!isset($data['name'])) {
-				$data['name'] = str_replace(" ", "_", utf8_strtolower((isset($data['lang'])) ? $data['lang'] : $this->in->get('language')));			
+				$data['name'] = str_replace(" ", "_", utf8_strtolower(($this->in->get('name') != "") ? $this->in->get('name') : $data['lang']));			
 			}
 
 			$fields = $this->pdh->get('profile_fields', 'fields');
@@ -128,7 +141,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 				}
 			}
 			$data = array(
-				'name'			=> (isset($data['name'])) ? $data['name'] : $name,
+				'name'			=> $data['name'],
 				'type'			=> (isset($data['type'])) ? $data['type'] : $this->in->get('type'),
 				'category'		=> (isset($data['category'])) ? $data['category'] : $this->in->get('category'),
 				'lang'			=> (isset($data['lang'])) ? $data['lang'] : $this->in->get('language'),
@@ -157,7 +170,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 				$arrSet = array(
 					'sort'	=> $intSortID,
 				);
-				$objQuery = $this->db->prepare("UPDATE __member_profilefields :p WHERE name=?")->set($arrSet)->execute($strFieldID);
+				$objQuery = $this->db->prepare("UPDATE __member_profilefields :p WHERE id=?")->set($arrSet)->execute($strFieldID);
 		
 				if(!$objQuery) {
 					return false;

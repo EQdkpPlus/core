@@ -29,7 +29,8 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 		public $default_lang = 'english';
 		public $profile_fields;
 		public $profile_categories;
-
+		public $profile_field_mapping;
+		
 		public $hooks = array(
 			'game_update'
 		);
@@ -44,6 +45,8 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 		public function init(){
 			$this->profile_fields			= $this->pdc->get('pdh_profile_fields_table');
 			$this->profile_categories		= $this->pdc->get('pdh_profile_categories_table');
+			$this->profile_field_mapping	= $this->pdc->get('pdh_profile_field_mapping');
+			
 			if($this->profile_fields !== NULL && $this->profile_categories !== NULL){
 				return true;
 			}
@@ -57,8 +60,12 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 							$this->profile_categories[] = $drow['category'];
 						}
 					}
+					
+					$this->profile_field_mapping[$drow['name']] = intval($drow['id']);
 	
-					$this->profile_fields[$drow['name']] = array(
+					$this->profile_fields[intval($drow['id'])] = array(
+						'id'			=> intval($drow['id']),
+						'name'			=> $drow['name'],
 						'type'			=> $drow['type'],
 						'category'		=> $drow['category'],
 						'size'			=> $drow['size'],
@@ -71,8 +78,8 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 						'undeletable'	=> $drow['undeletable'],
 						'custom'		=> $drow['custom'],
 					);
-					foreach($this->profile_fields[$drow['name']]['data'] as $key => $dat) {
-						$this->profile_fields[$drow['name']][$key] = $dat;
+					foreach($this->profile_fields[intval($drow['id'])]['data'] as $key => $dat) {
+						$this->profile_fields[intval($drow['id'])][$key] = $dat;
 					}
 				}
 				
@@ -86,6 +93,7 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 				$this->profile_categories = array_unique($this->profile_categories);
 				$this->pdc->put('pdh_profile_fields_table', $this->profile_fields, null);
 				$this->pdc->put('pdh_profile_categories_table', $this->profile_categories, null);
+				$this->pdc->put('pdh_profile_field_mapping', $this->profile_field_mapping, null);
 			}
 		}
 
@@ -94,29 +102,49 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 		}
 
 		public function get_fields($name=''){
-			return ($name) ? (isset($this->profile_fields[$name]) ? $this->profile_fields[$name] : null) : $this->profile_fields;
+			if($name !== ''){
+				$id = $this->profile_field_mapping[$name];
+				return ($id) ? $this->profile_fields[$id] : false;
+			}
+			
+			return $this->profile_fields;
 		}
-
-		public function get_fieldlist(){
+		
+		public function get_field_by_id($id){
+			return $this->profile_fields[$id];
+		}
+		
+		public function get_id_list(){
 			return array_keys($this->profile_fields);
 		}
 
+		public function get_fieldlist(){
+			return array_keys($this->pdh_profile_field_mapping);
+		}
+
 		public function get_lang($name) {
-			return $this->profile_fields[$name]['lang'];
+			$id = $this->profile_field_mapping[$name];
+			return ($id && isset($this->profile_fields[$id])) ? $this->profile_fields[$id]['lang'] : false;
+		}
+		
+		public function get_lang_by_id($id) {
+			return ($id && isset($this->profile_fields[$id])) ? $this->profile_fields[$id]['lang'] : false;
 		}
 		
 		public function get_options_language($name) {
-			return $this->profile_fields[$name]['options_language'];
+			$id = $this->profile_field_mapping[$name];
+			return ($id && isset($this->profile_fields[$id])) ? $this->profile_fields[$id]['options_language'] : false;
 		}
 		
 		public function get_sortid($name){
-			return $this->profile_fields[$name]['sort'];
+			$id = $this->profile_field_mapping[$name];
+			return ($id && isset($this->profile_fields[$id])) ? $this->profile_fields[$id]['sort'] : false;
 		}
 		
 		public function get_max_sortid(){
 			$intMax = 0;
 			foreach($this->profile_fields as $key => $field){
-				if($this->get_sortid($key) > $intMax) $intMax =  $this->get_sortid($key);
+				if($this->get_sortid($field['name']) > $intMax) $intMax =  $this->get_sortid($field['name']);
 			}
 			
 			return $intMax;

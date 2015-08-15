@@ -22,8 +22,8 @@
 			<th class="nowrap">&nbsp;</th>
 			<th class="nowrap"><input type="checkbox" name="all_nr" id="selall_pfields" /></th>
 			<th colspan="2">{L_action}</th>
-			<th>{L_name}</th>
 			<th>{L_ID}</th>
+			<th>{L_name}</th>
 			<th class="hiddenSmartphone">{L_type}</th>
 			<th class="hiddenSmartphone">{L_category}</th>
 		</tr>
@@ -36,8 +36,8 @@
 			<td width="15" class="nowrap" align="center"><!-- IF not profile_row.S_UNDELETABLE --><input name="del_ids[]" type="checkbox" value="{profile_row.ID}" /><!-- ENDIF --></td>
 			<td width="10" align="center" class="nowrap"><!-- IF not profile_row.S_UNDELETABLE --><a href="{profile_row.U_ENABLE}" title="{profile_row.L_ENABLE}"><i class="fa {profile_row.ENABLE}"></i></a><!-- ENDIF --></td>
 			<td width="10" align="center" class="nowrap"><a href="{profile_row.U_EDIT}"><i class="fa fa-pencil fa-lg" title="{L_edit}"></i></a></td>
-			<td><a href="{profile_row.U_EDIT}">{profile_row.NAME}</a></td>
-			<td>{profile_row.ID}</td>
+			<td><a href="{profile_row.U_EDIT}">{profile_row.NAME_ID}</a></td>
+			<td>{profile_row.NAME}</td>
 			<td class="hiddenSmartphone">{profile_row.TYPE}</td>
 			<td class="hiddenSmartphone">{profile_row.CATEGORY}</td>
 		</tr>

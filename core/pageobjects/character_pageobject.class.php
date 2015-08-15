@@ -160,7 +160,8 @@ class character_pageobject extends pageobject {
 			$category	= array();
 			$this->jquery->Tab_header('profile_field_data', true);
 			if(is_array($pfields) && count($pfields) > 0){
-				foreach($pfields as $pfname=>$pfoption){
+				foreach($pfields as $pfid=>$pfoption){
+					$pfname = $pfoption['name'];
 					// only relevant data!
 					$category[$pfoption['category']][$pfname]	= $pfoption;
 				}
@@ -186,7 +187,8 @@ class character_pageobject extends pageobject {
 		}else{
 			$pfields	= $this->pdh->get('profile_fields', 'fields');
 			$custfields	= false;
-			foreach($pfields as $pfname=>$pfoption){
+			foreach($pfields as $pfid=>$pfoption){
+				$pfname = $pfoption['name'];
 				// only relevant data!
 				if($pfoption['custom'] == '1' && $pfoption['enabled'] == '1' && $pfoption['sort'] != 0){
 					$custfields = true;

@@ -17,8 +17,12 @@
 	<fieldset class="settings">
 		<legend>{L_manage_profilefields}</legend>
 		<dl>
+			<dt><label>{L_id}:</label></dt>
+			<dd><input name="name" type="text" class="input" value="{NAME_ID}" size="100" required /></dd>
+		</dl>
+		<dl>
 			<dt><label>{L_name}:</label></dt>
-			<dd><input type="hidden" name="id" value="{ID}" /><input name="language" type="text" class="input" value="{LANGUAGE}" size="100" /></dd>
+			<dd><input name="language" type="text" class="input" value="{LANGUAGE}" size="100" required /></dd>
 		</dl>
 		<dl>
 			<dt><label>{L_type}:</label></dt>

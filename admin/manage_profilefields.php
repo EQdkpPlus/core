@@ -35,20 +35,22 @@ class ManageProfileFields extends page_generic {
 			'reset'		=> array('process' => 'process_reset','csrf'=>true),
 			'savesort'	=> array('process' => 'save_sort', 'csrf'=>true),
 		);
-		parent::__construct(false, $handler, array('profile_fields', 'lang'), null, 'del_ids[]');
+		parent::__construct(false, $handler, array('profile_fields', 'lang_by_id'), null, 'del_ids[]');
 		$this->process();
 	}
 
 	public function enable(){
-		if ($this->in->get('enable') != ""){
-			$result = $this->pdh->put('profile_fields', 'enable_field', array($this->in->get('enable')));
+		if ($this->in->get('enable', 0)){
+			$result = $this->pdh->put('profile_fields', 'enable_field', array($this->in->get('enable', 0)));
 		}
+		
+		$arrField = $this->pdh->get('profile_fields', 'field_by_id', array($this->in->get('enable', 0)));
 		
 		//Handle Result
 		if ($result){
-			$message = array('title' => $this->user->lang('success'), 'text' => sprintf($this->user->lang('pf_enable_suc'), $this->in->get('enable')), 'color' => 'green');
+			$message = array('title' => $this->user->lang('success'), 'text' => sprintf($this->user->lang('pf_enable_suc'), $arrField['lang']), 'color' => 'green');
 		} else {
-			$message = array('title' => $this->user->lang('error'), 'text' => sprintf($this->user->lang('pf_enable_nosuc'), $this->in->get('enable')), 'color' => 'red');
+			$message = array('title' => $this->user->lang('error'), 'text' => sprintf($this->user->lang('pf_enable_nosuc'), $arrField['lang']), 'color' => 'red');
 		}
 		$this->display($message);
 		
@@ -56,20 +58,22 @@ class ManageProfileFields extends page_generic {
 
 	public function disable(){
 		if ($this->in->get('disable') != ""){
-			$result = $this->pdh->put('profile_fields', 'disable_field', array($this->in->get('disable')));
+			$result = $this->pdh->put('profile_fields', 'disable_field', array($this->in->get('disable', 0)));
 		}
+		
+		$arrField = $this->pdh->get('profile_fields', 'field_by_id', array($this->in->get('disable', 0)));
 
 		//Handle Result
 		if ($result){
-			$message = array('title' => $this->user->lang('success'), 'text' => sprintf($this->user->lang('pf_disable_suc'), $this->in->get('disable')), 'color' => 'green');
+			$message = array('title' => $this->user->lang('success'), 'text' => sprintf($this->user->lang('pf_disable_suc'), $arrField['lang']), 'color' => 'green');
 		} else {
-			$message = array('title' => $this->user->lang('error'), 'text' => sprintf($this->user->lang('pf_disable_nosuc'), $this->in->get('disable')), 'color' => 'red');
+			$message = array('title' => $this->user->lang('error'), 'text' => sprintf($this->user->lang('pf_disable_nosuc'), $arrField['lang']), 'color' => 'red');
 		}
 		$this->display($message);
 	}
 
 	public function delete(){
-		$del_ids = $this->in->getArray('del_ids', 'string');
+		$del_ids = $this->in->getArray('del_ids', 'int');
 		if ($del_ids) {
 			$result = $this->pdh->put('profile_fields', 'delete_fields', array($del_ids));
 			$message = array('title' => $this->user->lang('success'), 'text' => $this->user->lang('pf_delete_suc'), 'color' => 'green');
@@ -80,7 +84,7 @@ class ManageProfileFields extends page_generic {
 	}
 	
 	public function save_sort(){
-		$arrSortOrder = $this->in->getArray('sort', 'string');
+		$arrSortOrder = $this->in->getArray('sort', 'int');
 		foreach($arrSortOrder as $intSortID => $intFieldID){
 			$this->pdh->put('profile_fields', 'set_sortation', array($intFieldID, $intSortID));
 		}
@@ -95,9 +99,9 @@ class ManageProfileFields extends page_generic {
 	}
 	
 	public function add(){
-		if ($this->in->get('id') != ""){
+		if ($this->in->get('id', 0)){
 		//Update
-			$result = $this->pdh->put('profile_fields', 'update_field', array($this->in->get('id')));
+			$result = $this->pdh->put('profile_fields', 'update_field', array($this->in->get('id', 0)));
 		} else {
 		//Insert
 			$result = $this->pdh->put('profile_fields', 'insert_field', array());
@@ -112,8 +116,10 @@ class ManageProfileFields extends page_generic {
 	}
 
 	public function edit(){
-		if($this->in->get('edit')) $field_data = $this->pdh->get('profile_fields', 'fields', array($this->in->get('edit')));
-		else $field_data = array('lang' => '', 'options_language' => '', 'type' => '', 'category' => '', 'size' => '', 'image' => '', 'options' => array());
+		$intProfilefieldID = $this->in->get('edit', 0);
+		
+		if($intProfilefieldID) $field_data = $this->pdh->get('profile_fields', 'field_by_id', array($intProfilefieldID));
+		else $field_data = array('name' => '', 'lang' => '', 'options_language' => '', 'type' => '', 'category' => '', 'size' => '', 'image' => '', 'options' => array());
 		$types = array(
 			'text'			=> 'Text',
 			'int'			=> 'Integer',
@@ -123,18 +129,20 @@ class ManageProfileFields extends page_generic {
 			'checkbox'		=> 'Checkbox',
 			'radio'			=> 'Radio',
 		);
-
+		
 		$categories = array(
-			'profiler'	=> ($this->game->glang('uc_cat_profiler')) ? $this->game->glang('uc_cat_profiler') : $this->user->lang('uc_cat_profiler'),
-			'skills'	=> ($this->game->glang('uc_cat_skills')) ? $this->game->glang('uc_cat_skills') : $this->user->lang('uc_cat_skills'),
 			'character'	=> ($this->game->glang('uc_cat_character')) ? $this->game->glang('uc_cat_character') : $this->user->lang('uc_cat_character'),
-			'profession'=> ($this->game->glang('uc_cat_profession')) ? $this->game->glang('uc_cat_profession') : $this->user->lang('uc_cat_profession'),
 		);
+		$arrCategories = $this->pdh->get('profile_fields', 'categories', array());
+		foreach($arrCategories as $name){
+			$categories[$name] = ($this->game->glang('uc_cat_'.$name)) ? $this->game->glang('uc_cat_'.$name) : (($this->user->lang('uc_cat_'.$name) ? $this->user->lang('uc_cat_'.$name) : $name));
+		}
 
 		$this->tpl->assign_vars(array (
 			'L_IMAGE_NOTE'				=> sprintf($this->user->lang('profilefield_image_note'), $this->game->get_game()),
 			'F_PAGE_MANAGER'			=> 'manage_profilefields.php'.$this->SID,
 			'ID'						=> $this->in->get('edit'),
+			'NAME_ID'					=> $field_data['name'],
 			'LANGUAGE'					=> $field_data['lang'],
 			'OPTIONS_LANGUAGE'			=> $field_data['options_language'],
 			'TYPE_DD'					=> new hdropdown('type', array('options' => $types, 'value' => $field_data['type'], 'id' => 'type_dd')),
@@ -191,6 +199,7 @@ $("#type_dd").change(function(){
 			foreach ($fields as $key=>$value){
 				$this->tpl->assign_block_vars('profile_row', array (
 					'ID'			=> $key,
+					'NAME_ID'		=> $value['name'],
 					'TYPE'			=> $value['type'],
 					'CATEGORY'		=> ($this->game->glang('uc_cat_'.$value['category'])) ?  $this->game->glang('uc_cat_'.$value['category']) : $this->user->lang('uc_cat_'.$value['category']),
 					'SIZE'			=> $value['size'],

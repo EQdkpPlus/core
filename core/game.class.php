@@ -1058,7 +1058,7 @@ class game extends gen_class {
 					$field['options'] = $this->get($iclass['type']);
 			}
 			
-			$this->pdh->put('profile_fields', 'delete_fields', array(array($field['name'])));
+			$this->pdh->put('profile_fields', 'delete_fields_by_name', array(array($field['name'])));
 			$this->pdh->process_hook_queue();
 			$this->pdh->put('profile_fields', 'insert_field', array($field));
 			$this->pdh->process_hook_queue();
