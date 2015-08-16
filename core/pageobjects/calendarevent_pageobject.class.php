@@ -679,8 +679,8 @@ class calendarevent_pageobject extends pageobject {
 						}
 						
 						//Hook for Tooltip:
-						if ($this->hooks->isRegistered('calendarevent_chartooltip', array('member_id' => $memberid))){
-							$arrPluginsHooks = $this->hooks->process('calendarevent_chartooltip');
+						if ($this->hooks->isRegistered('calendarevent_chartooltip')){
+							$arrPluginsHooks = $this->hooks->process('calendarevent_chartooltip', array('member_id' => $memberid));
 							if (is_array($arrPluginsHooks)){
 								foreach ($arrPluginsHooks as $plugin => $value){
 									if (is_array($value)){
@@ -772,7 +772,7 @@ class calendarevent_pageobject extends pageobject {
 					'PREV_RAID_EVENTID' => $prevraidevent,
 					'PREV_RAID_EVENTNAME' => $this->pdh->get('event', 'name', array($prevevent['extension']['raid_eventid'])).', '.$this->time->user_date($prevevent['timestamp_start']).' '.$this->time->user_date($prevevent['timestamp_start'], false, true)
 			));
-		}
+		}		
 		
 		$optionsmenu = array(
 			1 => array(
@@ -789,9 +789,9 @@ class calendarevent_pageobject extends pageobject {
 			),
 			3 => array(
 				'name'	=> $this->user->lang('raidevent_raid_transform'),
-				'link'	=> ($this->pm->check('raidlogimport', PLUGIN_INSTALLED)) ? $this->server_path.'plugins/raidlogimport/admin/dkp.php'.$this->SID.'&checkraid=submit&parser=eqdkp_raid&log='.$this->url_id : "javascript:TransformRaid('".$this->url_id."')",
+				'link'	=> "javascript:TransformRaid('".$this->url_id."')",
 				'icon'	=> 'fa-exchange',
-				'perm'	=> (($this->pm->check('raidlogimport', PLUGIN_INSTALLED)) ? $this->user->check_auth('a_raidlogimport_dkp', false) : $this->user->check_auth('a_raid_add', false)),
+				'perm'	=> $this->user->check_auth('a_raid_add', false),
 			),
 			4 => array(
 				'name'	=> $this->user->lang('raideventlist_export_ical'),
@@ -824,6 +824,17 @@ class calendarevent_pageobject extends pageobject {
 				'perm'	=> $this->user->check_auth('a_logs_view', false),
 			),
 		);
+		
+		if ($this->hooks->isRegistered('calendarevent_raid_menu')){
+			$arrPluginsHooks = $this->hooks->process('calendarevent_raid_menu', array('id' => $this->url_id));
+			if (is_array($arrPluginsHooks)){
+				foreach ($arrPluginsHooks as $plugin => $value){
+					if (is_array($value)){
+						$optionsmenu = array_merge($optionsmenu, $value);
+					}
+				}
+			}
+		}
 
 		// preselect the memberid if not signed in
 		$presel_charid = ($this->mystatus['member_id'] > 0) ? $this->mystatus['member_id'] : $this->pdh->get('user', 'mainchar', array($this->user->data['user_id']));
