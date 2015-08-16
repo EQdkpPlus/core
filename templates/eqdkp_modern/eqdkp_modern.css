@@ -512,6 +512,14 @@ h3 {
 	font-weight: bold;
 }
 
+.portalbox_head .portal_fe_edit {
+	display: none;
+}
+
+.portalbox:hover .portal_fe_edit {
+	display: inline;
+}
+
 .portalbox_content {
 	padding: 5px;
 	background-color: @eqdkpContentBackgroundColor;
