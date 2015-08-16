@@ -620,6 +620,7 @@ class controller extends gen_class {
 						'ARTICLE_PUBLISHED' => ($intPublished) ? true : false,
 						'ARTICLE_TIME'		=> $this->time->user_date($arrArticle['date'], false, true),
 						'ARTICLE_REAL_CATEGORY' => $this->pdh->get('articles',  'category', array($intArticleID)),
+						'ARTICLE_REAL_CATEGORY_NAME' => $this->pdh->get('article_categories', 'name', array($this->pdh->get('articles',  'category', array($intArticleID)))),						
 						'S_PAGINATION'		=> ($pageCount > 1) ? true : false,
 						'ARTICLE_SOCIAL_BUTTONS'  => ($arrCategory['social_share_buttons']) ? $this->social->createSocialButtons($this->env->link.$this->controller_path_plain.$strPath, strip_tags($arrArticle['title'])) : '',
 						'PERMALINK'			=> $this->pdh->get('articles', 'permalink', array($intArticleID)),
