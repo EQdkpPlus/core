@@ -3842,6 +3842,10 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	.responsive #personalAreaUser ul li {
 		margin-right: 10px;
 	}
+	
+	.list-type1 .ribbons, .list-type2 .ribbons, .list-type3 .ribbons  {
+		display: none;
+	}
 }
 
 
@@ -4099,6 +4103,59 @@ button.thirdpartylogin.openid {
 	border-bottom: none;
 }
 
-.list-type2 .fa-calendar-o, .list-type2 .fa-comments {
+.list-type2 .fa-calendar-o, .list-type2 .fa-comments, .list-type2 .fa-folder-o {
 	margin-left: 10px;
+}
+
+/* Ribbons */
+
+.article_content {
+  position: relative;
+}
+
+@ribbon: @eqdkpContentHighlightColor;
+.ribbon {
+  position: absolute;
+  right: -5px; top: -5px;
+  z-index: 1;
+  overflow: hidden;
+  width: 75px; height: 75px;
+  text-align: right;
+	& span {
+	  font-size: 10px;
+	  font-weight: bold;
+	  color: @eqdkpContentBackgroundColor;
+	  text-transform: uppercase;
+	  text-align: center;
+	  line-height: 20px;
+	  transform: rotate(45deg);
+	  width: 100px;
+	  display: block;
+	  background: @ribbon;
+	  background: linear-gradient(lighten(@ribbon,20%) 0%, @ribbon 100%);
+	  box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+	  position: absolute;
+	  top: 19px; right: -21px;
+		&::before {
+			content: "";
+		  position: absolute; left: 0px; top: 100%;
+		  z-index: -1;
+		  border-left: 3px solid @ribbon;
+		  border-right: 3px solid transparent;
+		  border-bottom: 3px solid transparent;
+		border-top: 3px solid @ribbon;	}
+		&::after {
+		  content: "";
+		  position: absolute; right: 0px; top: 100%;
+		  z-index: -1;
+		  border-left: 3px solid transparent;
+		  border-right: 3px solid @ribbon;
+		  border-bottom: 3px solid transparent;
+		  border-top: 3px solid @ribbon;	}
+	}
+}
+@featuredColor: gold;
+.featured .ribbon > span {
+	background: linear-gradient(lighten(@featuredColor,20%) 0%, @featuredColor 100%);
+	color: black;
 }

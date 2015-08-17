@@ -66,6 +66,14 @@ body {
 }
 */
 
+/* Make the Ribbons to the same color */
+/*
+.article-container[data-article-category-id="2"] .ribbon > span {
+	background: linear-gradient(lighten(#efefef,20%) 0%, #efefef 100%);
+	color: #000;
+}
+*/
+
 /*============================================================================================*/
 
 /* If you want to embedd EQdkp Plus, give the body the class "embedded" and remove the reponsive Block from the body class. */
