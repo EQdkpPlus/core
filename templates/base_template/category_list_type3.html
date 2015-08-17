@@ -1,0 +1,103 @@
+<!-- BEGIN article_row -->
+		<article class="article-container list-type3 <!-- IF article_row.S_FEATURED -->featured<!-- ENDIF -->" data-article-id="{article_row.ARTICLE_ID}" data-article-category-id="{article_row.ARTICLE_REAL_CATEGORY}">
+			<!-- IF not article_row.S_HIDE_HEADER -->
+			<div class="table fullwidth">
+					<div class="tr">
+						<div class="td bigDateTd">
+							<div class="bigDateContainer hiddenSmartphone">
+								<span class="bigDateNumber">{article_row.ARTILE_DATE_DAY}</span>
+								<span class="articleMonth">{article_row.ARTILE_DATE_MONTH}</span>
+							</div>
+						</div>
+						<div class="td">
+							<header>
+								<h2>
+								<!-- IF not article_row.ARTICLE_PUBLISHED -->
+								<i class="fa fa-eye-slash fa-lg "></i>
+								<!-- ENDIF -->
+								<a href="{article_row.ARTICLE_PATH}">{article_row.ARTICLE_TITLE}</a>
+								<!-- IF article_row.S_TOOLBAR --> 
+									<div class="floatRight">
+										<div class="toolbar-button">
+											<span class="{article_row.ARTICLE_TOOLBAR} toolbar"><i class="fa fa-cog"></i></span>
+										</div>
+									</div>
+								<!-- ENDIF -->
+									<div class="floatRight">
+										<a href="{article_row.PERMALINK}" title="{L_permalink}" class="permalink"><i class="fa fa-link"></i></a>
+									</div>
+								</h2>
+								
+								<div class="news_author">
+									<div class="floatLeft">
+										<i class="fa fa-calendar-o"></i>  {article_row.ARTICLE_TIMETAG} &bull; <i class="fa fa-user"></i> {article_row.ARTICLE_AUTHOR} <!-- IF article_row.S_COMMENTS --> &bull; <a href="{article_row.ARTICLE_PATH}#comments"><i class="fa fa-comments"></i>{article_row.COMMENTS_COUNTER}</a><!-- ENDIF -->
+									</div>
+									<div class="news_social floatRight">
+										{article_row.ARTICLE_SOCIAL_BUTTONS}
+									</div>
+									<div class="clear"></div>
+								</div>
+							</header>
+
+							<div class="article_content">
+								<!-- IF not article_row.ARTICLE_PUBLISHED -->
+								<div class="infobox infobox-large infobox-red clearfix">
+									<i class="fa fa-eye-slash fa-lg"></i> {L_article_unpublished_note}
+								</div>
+								<!-- ENDIF -->
+								{article_row.ARTICLE_CUTTED_CONTENT}
+							</div>
+							<footer>
+								<!-- IF article_row.S_ARTICLE_CUTTED -->
+								<div>
+									<a href="{article_row.ARTICLE_PATH}#system-readmore" class="button"><i class="fa fa-chevron-down"></i>{L_news_readmore}</a>
+								</div>
+								<!-- ENDIF -->
+								<div class="tags-container">
+									<!-- IF article_row.S_TAGS -->
+									 <ul class="tags small">
+										<!-- BEGIN tag_row -->
+										<li><a href="{article_row.tag_row.U_TAG}">{article_row.tag_row.TAG}</a></li>
+										<!-- END tag_row -->
+									</ul>
+									<!-- ENDIF -->
+									<div class="floatRight"><a href="#top"><i class="fa fa-chevron-up"></i></a></div>
+								</div>
+								<div class="clear"></div>
+							</footer>
+						</div>
+					</div>
+			</div>
+			
+			<!-- ELSE -->
+
+			<div class="article_content">
+				<!-- IF not article_row.ARTICLE_PUBLISHED -->
+				<div class="infobox infobox-large infobox-red clearfix">
+					<i class="fa fa-eye-slash fa-lg"></i> {L_article_unpublished_note}
+				</div>
+				<!-- ENDIF -->
+				{article_row.ARTICLE_CUTTED_CONTENT}
+			</div>
+			<footer>
+				<!-- IF article_row.S_ARTICLE_CUTTED -->
+				<div>
+					<a href="{article_row.ARTICLE_PATH}#system-readmore" class="button"><i class="fa fa-chevron-down"></i>{L_news_readmore}</a>
+				</div>
+				<!-- ENDIF -->
+				<div class="tags-container">
+					<!-- IF article_row.S_TAGS -->
+					 <ul class="tags small">
+						<!-- BEGIN tag_row -->
+						<li><a href="{article_row.tag_row.U_TAG}">{article_row.tag_row.TAG}</a></li>
+						<!-- END tag_row -->
+					</ul>
+					<!-- ENDIF -->
+					<div class="floatRight"><a href="#top"><i class="fa fa-chevron-up"></i></a></div>
+				</div>
+				<div class="clear"></div>
+			</footer>
+			<div class="clear"></div>
+			<!-- ENDIF -->
+		</article>
+		<!-- END article_row -->

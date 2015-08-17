@@ -4081,16 +4081,24 @@ button.thirdpartylogin.openid {
 
 .bigDateContainer {
 	text-align: center;
-	float: left;
 	width: 100px;
 	border-right: 1px solid @eqdkpContentBorderColor;
 	margin-right: 12px;
+	display: block;
+}
+
+.list-type1 .td.bigDateTd, .list-type3 .td.bigDateTd {
+	width: 100px;
+}
+
+.list-type1 .td, .list-type2 .td, .list-type3 .td {
+	vertical-align: top;
 }
 
 .list-type2 h2 {
 	border-bottom: none;
 }
 
-.list-type2 .fa-calendar-o, .fa-comments {
+.list-type2 .fa-calendar-o, .list-type2 .fa-comments {
 	margin-left: 10px;
 }

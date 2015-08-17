@@ -386,6 +386,7 @@ class core extends gen_class {
 				'MAIN_MENU'					=> $this->build_menu_ul(),
 				'MAIN_MENU_MOBILE'			=> $this->build_menu_ul('mainmenu-mobile'),
 				'PAGE_CLASS'				=> 'page-'.$this->clean_url($this->env->get_current_page(false)),
+				'TEMPLATE_CLASS'			=> str_replace(array('.html', '/'), array('', '_'), $this->template_path.$this->template_file),
 				'BROWSER_CLASS'				=> (!registry::get_const('mobile_view')) ? str_replace(" mobile", "", $this->env->agent->class) : $this->env->agent->class,
 				'S_SHOW_PWRESET_LINK'		=> ($this->config->get('cmsbridge_active') == 1 && !strlen($this->config->get('cmsbridge_pwreset_url'))) ? false : true,
 				'U_PWRESET_LINK'			=> ($this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_pwreset_url'))) ? $this->createLink($arrPWresetLink) : '<a href="'.$this->controller_path."Login/LostPassword/".$this->SID."\">".$this->user->lang('lost_password').'</a>',	
