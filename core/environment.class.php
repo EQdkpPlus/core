@@ -533,6 +533,14 @@ if (!class_exists("environment")) {
 					'bot_agent' => 'bingbot',
 					'bot_name' => 'Bing [Bot]',
 				),
+				array( // row #52
+					'bot_agent' => 'AhrefsBot',
+					'bot_name' => 'Ahrefs [Bot]',
+				),
+				array( // row #53
+					'bot_agent' => 'mail.ru_bot/',
+					'bot_name' => 'Mail.Ru [Bot]',
+				),
 				
 			);
 			
