@@ -313,14 +313,15 @@ class calendar_pageobject extends pageobject {
 
 						// Build the JSON
 						$event_json[] = array(
+							'type'			=> 'raid',
 							'title'			=> $this->in->decode_entity($this->pdh->get('calendar_events', 'name', array($calid))),
+							'url'			=> $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid),
 							'start'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_start', array($calid))),
 							'end'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_end', array($calid))),
 							'closed'		=> ($this->pdh->get('calendar_events', 'raidstatus', array($calid)) == 1) ? true : false,
 							'editable'		=> true,
 							'eventid'		=> $calid,
 							'flag'			=> $deadlineflag.$this->pdh->get('calendar_raids_attendees', 'html_status', array($calid, $this->user->data['user_id'])),
-							'url'			=> $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid),
 							'icon'			=> ($eventextension['raid_eventid']) ? $this->pdh->get('event', 'icon', array($eventextension['raid_eventid'], true)) : '',
 							'note'			=> $this->pdh->get('calendar_events', 'notes', array($calid)),
 							'raidleader'	=> ($eventextension['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'name', 0, array($eventextension['raidleader']))) : '',
@@ -334,7 +335,9 @@ class calendar_pageobject extends pageobject {
 						if(!$this->pdh->get('calendar_events', 'private_userperm', array($calid))){ continue; }
 						$alldayevents	= ($this->pdh->get('calendar_events', 'allday', array($calid)) > 0) ? true : false;
 						$event_json[] = array(
+							'type'			=> 'event',
 							'eventid'		=> $calid,
+							'url'			=> $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid).'eventdetails',
 							'title'			=> $this->pdh->get('calendar_events', 'name', array($calid)),
 							'start'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_start', array($calid))),
 							'end'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_end', array($calid, $alldayevents))),
@@ -362,6 +365,7 @@ class calendar_pageobject extends pageobject {
 					$birthday_month	= $this->time->date('m', $birthday_ts);
 					if($birthday_month >= $this->time->date('m', $range_start) && $birthday_month <= $this->time->date('m', $range_end)){
 						$event_json[] = array(
+							'type'					=> 'birthday',
 							'className'				=> 'cal_birthday',
 							'title'					=> $this->pdh->get('user', 'name', array($birthday_uid)),
 							'start'					=> $birthday_y.'-'.$this->time->date('m-d', $birthday_ts),

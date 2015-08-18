@@ -44,6 +44,7 @@ class calendarevent_pageobject extends pageobject {
 			'change_group'		=> array('process' => 'change_group',			'csrf'=>true),
 			'guestid'			=> array('process' => 'delete_guest',			'csrf'=>true),
 			'logs'				=> array('process' => 'display_logs'),
+			'eventdetails'		=> array('process' => 'display_eventdetails'),
 		);
 
 		parent::__construct(false, $handler, array(), null, '', 'eventid');
@@ -974,7 +975,7 @@ class calendarevent_pageobject extends pageobject {
 			'CSRF_CHANGEGRP_TOKEN'	=> $this->CSRFGetToken('change_group'),
 				
 			'U_CALENDAREVENT'		=> $this->strPath.$this->SID,
-			'MY_SOCIAL_BUTTONS'  => ($arrCategory['social_share_buttons']) ? $this->social->createSocialButtons($this->env->link.$this->strPathPlain, $strPageTitle) : '',
+			'MY_SOCIAL_BUTTONS'		=> ($arrCategory['social_share_buttons']) ? $this->social->createSocialButtons($this->env->link.$this->strPathPlain, $strPageTitle) : '',
 		));
 		
 		
@@ -984,6 +985,67 @@ class calendarevent_pageobject extends pageobject {
 		$this->set_vars(array(
 			'page_title'		=> $strPageTitle,
 			'template_file'		=> 'calendar/viewcalraid.html',
+			'header_format'		=> $this->simple_head,
+			'display'			=> true
+		));
+	}
+	
+	public function display_eventdetails(){
+		// Show an error Message if no ID is set
+		if(!$this->url_id){
+			redirect($this->routing->build('calendar',false,false,true,true));
+		}
+
+		// Show an error message if the event is not an event
+		if($this->pdh->get('calendar_events', 'calendartype', array($this->url_id)) != '2'){
+			message_die($this->user->lang('calendar_page_noevent'));
+		}
+
+		$eventdata	= $this->pdh->get('calendar_events', 'data', array($this->url_id));
+		d($eventdata);
+		$strPageTitle = sprintf($this->pdh->get('calendar_events', 'name', array($this->url_id)), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->user_date($eventdata['timestamp_start']).' '.$this->time->user_date($eventdata['timestamp_start'], false, true);
+
+		// attendees
+		if($eventdata['private'] == 1){
+			$event_invited		= (isset($eventdata['extension']['invited']) && count($eventdata['extension']['invited']) > 0) ? $eventdata['extension']['invited'] : array();
+			if(count($event_invited) > 0){
+				foreach($event_invited as $inviteddata){
+					$this->tpl->assign_block_vars('invited', array(
+						'NAME'		=> $this->pdh->get('user', 'name', array($inviteddata)),
+						'ICON'		=> $this->pdh->get('user', 'avatarimglink', array($inviteddata)),
+						'JOINED'	=> $this->pdh->get('calendar_events', 'joined_invitation', array($this->url_id, $inviteddata))
+					));
+				}
+			}
+		}else{
+			$event_attendees		= (isset($eventdata['extension']['invited']) && count($eventdata['extension']['invited']) > 0) ? $eventdata['extension']['invited'] : array();
+			if(count($event_attendees) > 0){
+				foreach($event_attendees as $attendeedata=>$status){
+					$this->tpl->assign_block_vars('attendees', array(
+						'NAME'		=> $this->pdh->get('user', 'name', array($attendeedata)),
+						'ICON'		=> $this->pdh->get('user', 'avatarimglink', array($attendeedata)),
+						'STATUS'	=> ($status) ? $status : 0,
+						'USERLINK'	=> '',
+					));
+				}
+			}
+		}
+
+		$this->tpl->assign_vars(array(
+			'PRIVATE_EVENT'		=> ($eventdata['private'] == 1) ? true : false,
+			'NAME'				=> $this->pdh->get('calendar_events', 'name', array($this->url_id)),
+			'START'				=> $this->time->user_date($eventdata['timestamp_start'], true, false),
+			'END'				=> $this->time->user_date($eventdata['timestamp_end'], true, false),
+			'ALLDAY'			=> ($eventdata['allday'] == 1) ? true : false,
+			'PLACE'				=> (isset($eventdata['extension']['place'])) ? $eventdata['extension']['place'] : false,
+			'CREATOR'			=> $this->pdh->get('user', 'name', array($eventdata['creator'])),
+			'NOTE'				=> ($eventdata['notes']) ? $this->bbcode->toHTML(nl2br($eventdata['notes'])) : '',
+			'CALENDAR'			=> $this->pdh->get('calendars', 'name', array($eventdata['calendar_id'])),
+		));
+		
+		$this->set_vars(array(
+			'page_title'		=> $strPageTitle,
+			'template_file'		=> 'calendar/eventdetails.html',
 			'header_format'		=> $this->simple_head,
 			'display'			=> true
 		));

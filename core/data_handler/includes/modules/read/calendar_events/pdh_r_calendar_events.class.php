@@ -307,11 +307,17 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			}
 			return false;
 		}
-		
+
 		public function get_sharedevent_attendees($id){
 			$extension		= $this->get_extension($id);
 			$inviteduser	= array_keys($extension['invited_attendees']);
 			return (isset($extension['invited_attendees']) && count($extension['invited_attendees']) > 0) ? implode(', ', $this->pdh->get('user', 'names', array($inviteduser))) : '';
+		}
+
+		public function get_event_attendees($id){
+			$extension		= $this->get_extension($id);
+			$inviteduser	= array_keys($extension['event_attendees']);
+			return (isset($extension['event_attendees']) && count($extension['event_attendees']) > 0) ? implode(', ', $this->pdh->get('user', 'names', array($inviteduser))) : '';
 		}
 
 		public function get_calendartype($id){

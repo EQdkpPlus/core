@@ -1,0 +1,47 @@
+<form method="post" action="{ACTION}" name="post">
+
+	<fieldset class="settings smallsettings raidevent_infos">
+		<dl class="raidevent_date">
+			<dt><label>{L_date}</label></dt>
+			<dd>{START}, {L_raidevent_raid_time_from} {END}
+				<!-- IF RAIDDATE_ADDED --><i>({L_raidevent_raid_added_on} {RAIDDATE_ADDED})</i><!-- ENDIF -->
+			</dd>
+		</dl>
+		<!-- IF PLACE -->
+		<dl class="raidevent_deadline">
+			<dt><label>{L_calendar_place}</label></dt>
+			<dd>{PLACE}</dd>
+		</dl>
+		<!-- ENDIF -->
+		<dl class="raidevent_calendar">
+			<dt><label>{L_calendar}</label></dt>
+			<dd>{CALENDAR}</dd>
+		</dl>
+		<dl class="raidevent_creator">
+			<dt><label>{L_raidevent_raid_addedby}</label></dt>
+			<dd>{CREATOR}</dd>
+		</dl>
+		<dl class="raidevent_note">
+			<dt><label>{L_note}</label></dt>
+			<dd><!-- IF RAIDNOTE -->{RAIDNOTE}<!-- ELSE -->{L_raidevent_raid_noraidnote}<!-- ENDIF --></dd>
+		</dl>
+	</fieldset>
+	<!-- IF PRIVATE -->
+		<!-- BEGIN invite -->
+		<div class="raidevent_invited_users">
+			<div class="comment_avatar_container">
+				<div class="comment_avatar"><a href="{USERLINK}"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $myrootpath.'images/global/avatar-default.svg').'" alt="Avatar" class="user-avatar"/></a></div>
+			</div>
+		</div>
+		<!-- END invite -->
+	<!-- ELSE -->
+	
+	<!-- ENDIF -->
+
+
+{CSRF_TOKEN}
+</form>
+
+<div class="social">
+	{MY_SOCIAL_BUTTONS}
+</div>

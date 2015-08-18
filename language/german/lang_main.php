@@ -780,6 +780,7 @@ $lang = array(
 "calendar_rss_itemdesc" => "Freie Plätze: %1\$s, Anmeldeschluss %2\$s",
 "calendar_page_noid" => "Es wurde keine Raidevent ID angegeben. Es kann nichts angezeigt werden!",
 "calendar_page_noraid" => "Es wurde keine gültige Raidevent ID angegeben. Eventuell Versuchst du einen Termin anzuschauen.",
+"calendar_page_noevent" => 'Es wurde keine gültige Termin ID angegeben. Eventuell Versuchst du einen Raid anzuschauen.',
 "raidevent_mail_closed" => "abgesagt",
 "raidevent_mail_opened" => "wieder geöffnet",
 "raidevent_mail_subject_open" => "Raid von %s wurde wieder geöffnet.",

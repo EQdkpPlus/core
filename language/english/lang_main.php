@@ -822,6 +822,7 @@ $lang = array(
 	"calendar_rss_itemdesc" => 'Raid target: %1$s, free places: %2$s, signup deadline %3$s',
 	"calendar_page_noid" => 'There\'s no raid ID, we cannot show any raid events....',
 	"calendar_page_noraid" => 'The raid event ID you entered is not valid. Maybe you\'re trying to visit an event ID.',
+	"calendar_page_noevent" => 'The event ID you entered is not valid. Maybe you\'re trying to visit an raid ID.',
 	"raidevent_mail_closed" => 'closed',
 	"raidevent_mail_opened" => 'reopened',
 	"raidevent_mail_subject_open" => 'Raid of %s reopened.',
