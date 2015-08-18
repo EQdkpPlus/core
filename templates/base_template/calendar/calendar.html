@@ -11,12 +11,17 @@
 			// The rest
 			theme: true,
 			lang: '{CALENDAR_LANG}',
+			eventLimit: true,
+			customButtons: {
+				icalexport: {
+					text: '{L_raideventlist_export_ical_button}'
+				}
+			},
 			header: {
-				left: 'prev,next today',
+				left: 'prev,next today, icalexport',
 				center: 'title',
 				right: 'month,agendaWeek,agendaDay'
 			},
-			eventLimit: true,
 			<!-- IF IS_OPERATOR -->
 			dayClick: function(date, allDay, jsEvent, view) {
 				if (allDay) {
@@ -47,9 +52,9 @@
 					element.find(".fc-title").addClass("linethrough");
 				}
 				// onclick Event Tooltip
-				if(event.className == 'cal_birthday'){
+				if(event.type == 'birthday'){
 					element.find(".fc-title").before($("<span class=\"fc-icons\"></span>").html("<i class='fa fa-gift fa-fw fa-lg'></i> "));
-				}else if(!event.url){
+				}else if(event.type == 'event'){
 					if(event.allDay){
 						tmpttcontent = "<div class='calendartt_start'>{L_calendar_startdate}: "+moment(event.start).format('{JS_DATEFORMAT}')+"</div>";
 						if((moment(event.end).format('dd') != moment(event.start).format('dd')) || (moment(event.end).format('MM') != moment(event.start).format('MM'))){
@@ -187,10 +192,7 @@
 			}
 		});
 
-		// add a new button to the calendar for the export
-		addCalButton("left", "{L_raideventlist_export_ical_button}", "export_calendar");
-
-		$("#export_calendar,#export_callist").qtip({
+		$(".fc-icalexport-button,#export_callist").qtip({
 			content: {
 				text: function(event, api) {
 					$.ajax({
@@ -263,13 +265,6 @@
 			cal_setStorage('calendar.filter', JSON.stringify(array_of_checked_values));
 		})
 	});
-
-	function addCalButton(where, text, id) {
-		var my_button = '<span class="fc-header-space"></span>' +
-						'<span id="' + id + '" class="cal-button">' + text +'</span>';
-						$("div.fc-" + where).append(my_button);
-						$("#" + id).button();
-	}
 
 	function acceptInvitation(id){
 		location.href = '{U_CALENDAR}&handle_invitation=true&status=accept&eventid='+id;
