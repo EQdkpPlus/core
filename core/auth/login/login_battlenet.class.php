@@ -147,9 +147,15 @@ class login_battlenet extends gen_class {
 			
 			$params = array('code' => $code, 'redirect_uri' => $redir_url, 'scope' => 'wow.profile');
 			$response = $client->getAccessToken($this->TOKEN_ENDPOINT, 'authorization_code', $params);
-			if ($response && $response['result']){
-				if (isset($response['result']['accountId'])){
-					return $response['result']['accountId'];	
+			
+			if ($response && $response['result'] && $response['result']['access_token']){
+			
+				$accountResponse = register('urlfetcher')->fetch("https://eu.api.battle.net/account/user?access_token=".$response['result']['access_token']);
+				if($accountResponse){
+					$arrAccountResult = json_decode($accountResponse, true);
+					if(isset($arrAccountResult['id'])){
+						return $arrAccountResult['id'];
+					}
 				}
 			}
 		}
