@@ -94,8 +94,17 @@ if(!class_exists('pdh_w_profile_fields')) {
 			}
 			$field['data']['options'] = $options;
 			
+			if(!isset($data['name'])) {
+				$data['name'] = str_replace(" ", "_", utf8_strtolower(($this->in->get('name') != "") ? $this->in->get('name') : $data['lang']));
+			}
+			
+			$fields = $this->pdh->get('profile_fields', 'fields');
+			if (isset($fields[$data['name']]) && $fields[$data['name']]['id'] != $id){
+				$data['name'] = $data['name'].'_'.unique_id();
+			}
+			
 			$objQuery = $this->db->prepare('UPDATE __member_profilefields :p WHERE id=?')->set(array(
-				'name'			=> $this->in->get('id'),
+				'name'			=> $data['name'],
 				'type'			=> $this->in->get('type'),
 				'category'		=> $this->in->get('category'),
 				'lang'			=> $this->in->get('language'),
