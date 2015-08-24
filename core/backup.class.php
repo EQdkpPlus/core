@@ -113,14 +113,14 @@ class backup extends gen_class {
 				$data .= $table_sql_string . "\n";
 			}
 
-			if(strpos($tablename, '_sessions') !== false){
+			if(strpos($tablename, '_sessions') === false){
 				$data .= "\n" . "-- \n";
 				$data .= "-- Dumping data for table `{$tablename}`" . ";\n\n";
 			}
 			
 			$this->pfh->addContent($strSQLFile, $data);
 			
-			$this->_create_data_sql_string($tablename, $strSQLFile);
+			if(strpos($tablename, '_sessions') === false) $this->_create_data_sql_string($tablename, $strSQLFile);
 		}
 		
 		unset($tablename, $table_sql_string, $data_sql_string, $data);
@@ -338,6 +338,11 @@ class backup extends gen_class {
 					$i = -1;
 				}
 				$i++;
+			}
+			
+			//Write the last portion
+			if($i > 0){
+				$this->pfh->addContent($strOutputFile, $sql_string);
 			}
 		}
 	}
