@@ -3004,7 +3004,7 @@ ul#mychars-points-tooltip.dropdown-menu li table tbody tr td a {
 }
 .user-tooltip-avatar img {
 	height: 40px;
-	max-widht: 60px;
+	max-width: 60px;
 	border: 1px solid #CCCCCC;
 	border-radius: 4px 4px 4px 4px;
 	background-color: #FFFFFF;
@@ -3516,7 +3516,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		float: none;
 		width: 100%;
 		height: 30px;
-		line-heigt: 22px;
+		line-height: 22px;
 		font-size: 15px;
 	}
 	
@@ -3817,7 +3817,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		float: none;
 		width: 100%;
 		height: 30px;
-		line-heigt: 22px;
+		line-height: 22px;
 		font-size: 15px;
 	}
 	

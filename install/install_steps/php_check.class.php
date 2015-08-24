@@ -40,8 +40,8 @@ class php_check extends install_generic {
 			),
 			'mysql'		=> array(
 				'required'		=> $this->lang['yes'],
-				'installed'		=> (extension_loaded('mysql')) ? $this->lang['yes'] : $this->lang['no'],
-				'passfail'		=> (extension_loaded('mysql')) ? true : false
+				'installed'		=> (extension_loaded('mysqli') || extension_loaded('pdo_mysql')) ? $this->lang['yes'] : $this->lang['no'],
+				'passfail'		=> (extension_loaded('mysqli') || extension_loaded('pdo_mysql')) ? true : false
 			),
 			'zLib'		=> array(
 				'required'		=> $this->lang['yes'],
