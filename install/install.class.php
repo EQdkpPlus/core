@@ -133,19 +133,23 @@ class install extends gen_class {
 				if(method_exists($_step, 'ajax_out')) $_step->ajax_out();
 			}
 		}
-		uksort($this->order, array($this, 'sort_steps'));
+		
+		$this->order = $this->sort_steps();
 	}
 	
-	private function sort_steps($a, $b) {
-		if($a == 'start') return -1;
-		if($b == 'start') return 1;
-		while($c = $this->order[$b]) {
-			if($c == $a) return 1;
-			if(!isset($this->order[$c])) return -1;
-			$b = $c;
+	private function sort_steps(){
+		$arrOut = array();
+		
+		$current = 'start';
+		for($i=0; $i < count($this->order); $i++){
+			$arrOut[$current] = $this->order[$current];
+			$current = $this->order[$current];
 		}
-		return 0;
+		
+		return $arrOut;
+		
 	}
+
 	
 	private function parse_step() {
 		//remove all steps following this from the done array
