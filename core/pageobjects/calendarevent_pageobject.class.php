@@ -1002,45 +1002,77 @@ class calendarevent_pageobject extends pageobject {
 		}
 
 		$eventdata	= $this->pdh->get('calendar_events', 'data', array($this->url_id));
-		d($eventdata);
+		#d($eventdata);
 		$strPageTitle = sprintf($this->pdh->get('calendar_events', 'name', array($this->url_id)), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->user_date($eventdata['timestamp_start']).' '.$this->time->user_date($eventdata['timestamp_start'], false, true);
+
+		// set the userstatus to zero
+		$userstatus = array();
 
 		// attendees
 		if($eventdata['private'] == 1){
+			// invited
 			$event_invited		= (isset($eventdata['extension']['invited']) && count($eventdata['extension']['invited']) > 0) ? $eventdata['extension']['invited'] : array();
 			if(count($event_invited) > 0){
 				foreach($event_invited as $inviteddata){
-					$this->tpl->assign_block_vars('invited', array(
-						'NAME'		=> $this->pdh->get('user', 'name', array($inviteddata)),
-						'ICON'		=> $this->pdh->get('user', 'avatarimglink', array($inviteddata)),
-						'JOINED'	=> $this->pdh->get('calendar_events', 'joined_invitation', array($this->url_id, $inviteddata))
-					));
-				}
-			}
-		}else{
-			$event_attendees		= (isset($eventdata['extension']['invited']) && count($eventdata['extension']['invited']) > 0) ? $eventdata['extension']['invited'] : array();
-			if(count($event_attendees) > 0){
-				foreach($event_attendees as $attendeedata=>$status){
-					$this->tpl->assign_block_vars('attendees', array(
-						'NAME'		=> $this->pdh->get('user', 'name', array($attendeedata)),
-						'ICON'		=> $this->pdh->get('user', 'avatarimglink', array($attendeedata)),
-						'STATUS'	=> ($status) ? $status : 0,
-						'USERLINK'	=> '',
-					));
+					$userstatus['invited'][] = array(
+						'name'		=> $this->pdh->get('user', 'name', array($inviteddata)),
+						'icon'		=> $this->pdh->get('user', 'avatar_withtooltip', array($inviteddata)),
+						'joined'	=> $this->pdh->get('calendar_events', 'joined_invitation', array($this->url_id, $inviteddata)),
+					);
 				}
 			}
 		}
 
+		// attending users
+		$event_attendees		= (isset($eventdata['extension']['invited']) && count($eventdata['extension']['invited']) > 0) ? $eventdata['extension']['invited'] : array();
+		if(count($event_attendees) > 0){
+			foreach($event_attendees as $attendeedata=>$status){
+				
+				$userstatus['attendance'][] = array(
+					'name'		=> $this->pdh->get('user', 'name', array($attendeedata)),
+					'icon'		=> $this->pdh->get('user', 'avatar_withtooltip', array($inviteddata)),
+					'joined'	=> $this->pdh->get('user', 'avatarimglink', array($attendeedata)),
+				);
+			}
+		}
+
+		foreach($userstatus as $blockid=>$blockdata){
+			foreach($blockdata as $attendeedata){
+				$this->tpl->assign_block_vars($blockid, array(
+					'NAME'		=> $attendeedata['name'],
+					'ICON'		=> $attendeedata['icon'],
+					'JOINED'	=> $attendeedata['joined'],
+					'LINK'		=> $attendeedata['link'],
+				));
+			}
+			
+		}
+		
+
+		if($this->time->date('d', $eventdata['timestamp_start']) == $this->time->date('d', $eventdata['timestamp_end'])){
+			//Samstag, 31.12.2015, 15 - 17 Uhr
+			$full_date = $this->time->user_date($eventdata['timestamp_start']).', '.$this->time->user_date($eventdata['timestamp_start'], false, true);
+		}else{
+			$full_date = $this->time->user_date($eventdata['timestamp_start'], true, false).' - '.$this->time->user_date($eventdata['timestamp_end'], true, false);
+		}
+		$this->jquery->Tab_header('tab_attendance');
+
 		$this->tpl->assign_vars(array(
 			'PRIVATE_EVENT'		=> ($eventdata['private'] == 1) ? true : false,
 			'NAME'				=> $this->pdh->get('calendar_events', 'name', array($this->url_id)),
-			'START'				=> $this->time->user_date($eventdata['timestamp_start'], true, false),
-			'END'				=> $this->time->user_date($eventdata['timestamp_end'], true, false),
+			'DATE_DAY'			=> $this->time->date('d', $eventdata['timestamp_start']),
+			'DATE_MONTH'		=> $this->time->date('F', $eventdata['timestamp_start']),
+			'DATE_YEAR'			=> $this->time->date('Y', $eventdata['timestamp_start']),
+			'DATE_FULL'			=> $full_date,
 			'ALLDAY'			=> ($eventdata['allday'] == 1) ? true : false,
 			'PLACE'				=> (isset($eventdata['extension']['place'])) ? $eventdata['extension']['place'] : false,
 			'CREATOR'			=> $this->pdh->get('user', 'name', array($eventdata['creator'])),
 			'NOTE'				=> ($eventdata['notes']) ? $this->bbcode->toHTML(nl2br($eventdata['notes'])) : '',
 			'CALENDAR'			=> $this->pdh->get('calendars', 'name', array($eventdata['calendar_id'])),
+			'NUMBER_INVITES'	=> (isset($userstatus['invited'])) ? count($userstatus['invited']) : 0,
+			'NUMBER_MAYBES'		=> (isset($userstatus['maybe'])) ? count($userstatus['maybe']) : 0,
+			'NUMBER_ATTENDEES'	=> (isset($userstatus['attendee'])) ? count($userstatus['attendee']) : 0,
+			'NUMBER_DECLINES'	=> (isset($userstatus['decline'])) ? count($userstatus['decline']) : 0,
 		));
 		
 		$this->set_vars(array(

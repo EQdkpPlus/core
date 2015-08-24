@@ -215,6 +215,12 @@ $lang = array(
 "calendar_awaymodeend_tt"	=> "Endtag",
 "calendar_user_is_away"	=> "Abwesenheitsmodus aktiv",
 "calendar_eventparticipants" => "Teilnehmer: ",
+"calendar_event_open" => "Öffentlich",
+"calendar_event_private" => "Privat",
+"calendar_event_detail_invitedby" => "Eingeladen von",
+"calendar_event_button_attend" => "Teilnehmen",
+"calendar_event_button_maybe" => "Vielleicht",
+"calendar_event_button_decline" => "Absagen",
 
 "adduser_send_mail" => "E-Mail senden",
 "adduser_send_mail2" => "E-Mail  an \"%s\" senden",

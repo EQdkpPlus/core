@@ -2375,7 +2375,9 @@ span.group_selector {
 	top: -8px;
 	left: -14px;
 }
-
+.tooltiprow{
+	min-height: 24px;
+}
 #memberScroller{
 	height: 300px;
 	overflow:auto;

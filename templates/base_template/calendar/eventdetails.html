@@ -1,42 +1,80 @@
 <form method="post" action="{ACTION}" name="post">
-
-	<fieldset class="settings smallsettings raidevent_infos">
-		<dl class="raidevent_date">
-			<dt><label>{L_date}</label></dt>
-			<dd>{START}, {L_raidevent_raid_time_from} {END}
-				<!-- IF RAIDDATE_ADDED --><i>({L_raidevent_raid_added_on} {RAIDDATE_ADDED})</i><!-- ENDIF -->
-			</dd>
-		</dl>
-		<!-- IF PLACE -->
-		<dl class="raidevent_deadline">
-			<dt><label>{L_calendar_place}</label></dt>
-			<dd>{PLACE}</dd>
-		</dl>
-		<!-- ENDIF -->
-		<dl class="raidevent_calendar">
-			<dt><label>{L_calendar}</label></dt>
-			<dd>{CALENDAR}</dd>
-		</dl>
-		<dl class="raidevent_creator">
-			<dt><label>{L_raidevent_raid_addedby}</label></dt>
-			<dd>{CREATOR}</dd>
-		</dl>
-		<dl class="raidevent_note">
-			<dt><label>{L_note}</label></dt>
-			<dd><!-- IF RAIDNOTE -->{RAIDNOTE}<!-- ELSE -->{L_raidevent_raid_noraidnote}<!-- ENDIF --></dd>
-		</dl>
-	</fieldset>
-	<!-- IF PRIVATE -->
-		<!-- BEGIN invite -->
-		<div class="raidevent_invited_users">
-			<div class="comment_avatar_container">
-				<div class="comment_avatar"><a href="{USERLINK}"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $myrootpath.'images/global/avatar-default.svg').'" alt="Avatar" class="user-avatar"/></a></div>
+<div class="table fullwidth">
+	<div class="tr">
+		<div class="td bigDateTd" style="width: 100px;">
+			<div class="bigDateContainer hiddenSmartphone">
+				<span class="bigDateNumber">{DATE_DAY}</span>
+				<span class="articleMonth">{DATE_MONTH}</span>
 			</div>
 		</div>
-		<!-- END invite -->
-	<!-- ELSE -->
+		<div class="td" style="vertical-align: top;">
+			<h2>{NAME}</h2>
+			<div class="eventdata-header">
+				<i class="fa fa-lg fa-globe"></i> <!-- IF PRIVATE_EVENT -->{L_calendar_event_private}<!-- ELSE -->{L_calendar_event_open}<!-- ENDIF --> | {L_calendar_event_detail_invitedby}: {CREATOR}
+				
+				<div class="eventdata-details">
+					<br /><i class="fa fa-lg fa-calendar-o"></i> {DATE_FULL}<br />
+					<!-- IF PLACE --><br /><i class="fa fa-lg fa-map-marker"></i> {PLACE}<!-- ENDIF -->
+					<br/><i class="fa fa-calendar fa-lg"></i> {CALENDAR}
+				</div>
+				<br />
+				<div class="eventdata-buttonrow">
+					<button class="green">{L_calendar_event_button_attend}</button>
+					<!-- IF not PRIVATE_EVENT --><button class="orange">{L_calendar_event_button_maybe}</button><!-- ENDIF -->
+					<button class="red">{L_calendar_event_button_decline}</button>
+				</div>
+			</div>
+			<br />
+			<div id="tab_attendance">
+				<ul>
+					<li>{L_calendar_eventparticipants}</li>
+					<!-- IF PRIVATE_EVENT --><li><a href="#tabs-invites"><span class="bubble-green">{NUMBER_INVITES}</span> Einladungen</a></li><!-- ENDIF -->
+					<li><a href="#tabs-attendees"><span class="bubble-green">{NUMBER_ATTENDEES}</span> Zusagen</a></li>
+					<!-- IF not PRIVATE_EVENT --><li><a href="#tabs-maybes"><span class="bubble-green">{NUMBER_MAYBES}</span> Vielleicht</a></li><!-- ENDIF -->
+					<li><a href="#tabs-declines"><span class="bubble-green">{NUMBER_DECLINES}</span> Absagen</a></li>
+				</ul>
+
+				<!-- IF PRIVATE_EVENT -->
+				<div id="tabs-invites">
+					<!-- BEGIN invited -->
+					{invited.ICON}
+					<div class="clear"></div>
+					<!-- END invited -->
+				</div>
+				<!-- ENDIF -->
+
+				<div id="tabs-attendees">
+					<!-- BEGIN attendance -->
+					{attendance.ICON}
+					<div class="clear"></div>
+					<!-- END attendance -->
+				</div>
+
+				<!-- IF not PRIVATE_EVENT -->
+				<div id="tabs-maybes">
+					<!-- BEGIN maybe -->
+					{maybe.ICON}
+					<div class="clear"></div>
+					<!-- END maybe -->
+				</div>
+				<!-- ENDIF -->
+
+				<div id="tabs-declines">
+					<!-- BEGIN decline -->
+					{decline.ICON}
+					<div class="clear"></div>
+					<!-- END decline -->
+				</div>
+
+			</div>
+			<br />
+			<div class="event_raidnote">
+				<!-- IF RAIDNOTE -->{RAIDNOTE}<!-- ELSE -->{L_raidevent_raid_noraidnote}<!-- ENDIF -->
+			</div>
+		</div>
+	</div>
+</div>
 	
-	<!-- ENDIF -->
 
 
 {CSRF_TOKEN}
