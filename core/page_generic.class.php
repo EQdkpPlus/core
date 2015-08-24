@@ -128,7 +128,7 @@ if(!class_exists('page_generic')){
 						if (!$blnResult) break;
 					}
 
-					if(method_exists($this, $process['process'])) $this->$process['process']();
+					if(method_exists($this, $process['process'])) $this->{$process['process']}();
 					break;
 				} elseif($this->in->get($key) AND is_array(current($process))) {
 					foreach($process as $subprocess) {
@@ -140,7 +140,7 @@ if(!class_exists('page_generic')){
 								if (!$blnResult) break;
 							}
 							
-							$this->$subprocess['process']();
+							$this->{$subprocess['process']}();
 							break 2;
 						}
 					}
