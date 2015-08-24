@@ -317,9 +317,18 @@ if ( !class_exists( "pdh_r_member" ) ) {
 						$out = "";
 						//Check if Value is in dropdown options
 						if (!in_array($strMemberVal, array_keys($arrField['data']['options']))) return '';
+						
+						//Image, because there are multiple checkboxes
+						$strImage = false;
+						if($arrField['image'] != "" && $strMemberVal){
+							$strPlainImage = str_replace(array("{VALUE}", "{CHARNAME}", "{SERVERLOC}", "{SERVERNAME}", "{CLASSID}"), array($strMemberVal, $this->get_name($member_id), $this->config->get('uc_server_loc'), $this->config->get('servername'), $this->get_classid($member_id)), $arrField['image']);
+							if (is_file($this->root_path.$strPlainImage)){
+								$strImage =  $this->server_path.$strPlainImage;
+							}
+						}
 					
 						if ($strImage && !$nameOnly){
-							$out .= '<img src="'.$strImage.'" alt="'.$out.'" title="'.$out.'" />';
+							$out .= '<img src="'.$strImage.'" alt="'.$strMemberVal.'" title="'.$out.'" />';
 							if ($arrField['options_language'] != ""){
 								if (strpos($arrField['options_language'], 'lang:') === 0){
 									$arrSplitted = explode(':', $arrField['options_language']);
@@ -417,9 +426,18 @@ if ( !class_exists( "pdh_r_member" ) ) {
 						$out = "";
 						//Check if Value is in dropdown options
 						if (!in_array($strMemberVal, array_keys($arrField['data']['options']))) return '';
+						
+						//Image, because there are multiple checkboxes
+						$strImage = false;
+						if($arrField['image'] != "" && $strMemberVal){
+							$strPlainImage = str_replace(array("{VALUE}", "{CHARNAME}", "{SERVERLOC}", "{SERVERNAME}", "{CLASSID}"), array($strMemberVal, $this->get_name($member_id), $this->config->get('uc_server_loc'), $this->config->get('servername'), $this->get_classid($member_id)), $arrField['image']);
+							if (is_file($this->root_path.$strPlainImage)){
+								$strImage =  $this->server_path.$strPlainImage;
+							}
+						}
 
 						if ($strImage && !$nameOnly){
-							$out .= '<img src="'.$strImage.'" alt="'.$out.'" title="'.$out.'" />';
+							$out .= '<img src="'.$strImage.'" alt="'.$strMemberVal.'" title="'.$out.'" />';
 							if ($arrField['options_language'] != ""){
 								if (strpos($arrField['options_language'], 'lang:') === 0){
 									$arrSplitted = explode(':', $arrField['options_language']);
