@@ -67,7 +67,7 @@ class hradio extends html {
 			$data = (!empty($this->dependency[$key])) ? implode(',', $this->dependency[$key]) : '';
 			$dep = (!empty($this->dependency)) ? ' data-form-change="'.$data.'"' : '';
 			$js = (!empty($this->js)) ? ' '.$this->js.' ' : '';
-			if($this->tolang) $opt = $this->user->lang($opt);
+			if($this->tolang) $opt = ($this->user->lang($opt, false, false)) ? $this->user->lang($opt) : (($this->game->glang($opt)) ? $this->game->glang($opt) : $opt);
 			$radiobox .= '><input type="'.self::$type.'" name="'.$this->name.'" value="'.$key.'"'.$selected_choice.$disabled.$dep.$js.'/> '.$opt.'</label>&nbsp;';
 		}
 
