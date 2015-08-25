@@ -762,7 +762,8 @@ class user extends gen_class {
 				'awaymode_startdate'	=> array(
 					'type'			=> 'datepicker',
 					'allow_empty'	=> false,
-					'default'		=> register('time')->time
+					'default'		=> register('time')->time,
+					'onclose' 		=> ' $( "#awaymode_enddate" ).datepicker( "option", "minDate", selectedDate );'
 				),
 				'awaymode_enddate'	=> array(
 					'type'			=> 'datepicker',
