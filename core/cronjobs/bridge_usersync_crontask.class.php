@@ -45,6 +45,8 @@ if ( !class_exists( "bridge_usersync_crontask" ) ) {
 			$crons		= $this->timekeeper->list_crons();
 			$params		= $crons['bridge_usersync']['params'];
 			
+			//Bridge not active, exit cronjob
+			if(intval($this->config->get('cmsbridge_active')) === 0) return false;
 			
 			$a = $this->bridge->get_users();
 			$arrUser = array();
