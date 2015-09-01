@@ -28,13 +28,21 @@ var EQdkpPortal = new function(){
 	var wide = 0;
 	var position = "left";
 	var header = 1;
+	var random_value = false;
 	
 	
-	this.init = function(intModuleID){
-		target = "eqdkp_portal_"+intModuleID;
+	this.init = function(intModuleID, strRandomValue, eqdkp_url){
+		resetValues();
+		
 		moduleID = intModuleID;
 		
-		getURL();
+		random_value = strRandomValue || "";
+		if (random_value != "") random_value = random_value + "_";
+		target = "eqdkp_portal_"+random_value + intModuleID;
+		
+		url = eqdkp_url || url;
+		if(!url) getURL();
+		
 		addResources();	
 	}
 	
@@ -47,6 +55,9 @@ var EQdkpPortal = new function(){
 		}
 		if (varname == "position"){
 			position = value;
+		}
+		if(varname == "url"){
+			url = value;
 		}
 	}
 	
@@ -141,5 +152,13 @@ var EQdkpPortal = new function(){
 			document.getElementById(target).innerHTML = html[1].innerHTML;
 			jQuery('head').append(html[0].innerHTML);
 		}
+	}
+	
+	function resetValues(){
+		position = "left";
+		header = 1;
+		width = 0;
+		url = false;
+		random_value = false;
 	}
 }
