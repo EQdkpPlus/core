@@ -73,11 +73,11 @@ class editcalendarevent_pageobject extends pageobject {
 		$eventextension	= $this->pdh->get('calendar_events', 'extension', array($eventID));
 		$strEventName = $this->pdh->get('event', 'name', array($eventextension['raid_eventid']));
 		if($strEventName && $strEventName != "") $strEventName .= ', ';
-		$strEventTitle	= $strEventName.$this->time->date_for_user($userid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true);
 		
 		$a_users = $this->pdh->get('user', 'active_users');
 		if(is_array($a_users) && count($a_users) > 0){
 			foreach($a_users as $userid){
+				$strEventTitle	= $strEventName.$this->time->date_for_user($userid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true);
 				$this->ntfy->add('calendarevent_new', $eventID, $this->pdh->get('calendar_events', 'notes', array($eventID)), $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($eventID)), $eventID, true, true), $userid, $strEventTitle);
 			}
 		}
@@ -87,11 +87,11 @@ class editcalendarevent_pageobject extends pageobject {
 		$eventextension	= $this->pdh->get('calendar_events', 'extension', array($eventID));
 		$strEventName = $this->pdh->get('event', 'name', array($eventextension['raid_eventid']));
 		if($strEventName && $strEventName != "") $strEventName .= ', ';
-		$strEventTitle	= $strEventName.$this->time->date_for_user($userid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true);
-		
+
 		$a_users = (isset($invited_users) && is_array($invited_users)) ? $invited_users : ((isset($eventextension['invited'])) ? $eventextension['invited'] : false);
 		if(is_array($a_users) && count($a_users) > 0){
 			foreach($a_users as $userid){
+				$strEventTitle	= $strEventName.$this->time->date_for_user($userid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true);
 				$this->ntfy->add('calendarevent_invitation', $eventID, $this->pdh->get('calendar_events', 'creator', array($eventID)), $this->routing->build('Calendar', false, false, true, true), $userid, $strEventTitle);
 			}
 		}
