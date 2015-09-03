@@ -4091,6 +4091,7 @@ button.thirdpartylogin.openid {
 	border-right: 1px solid @eqdkpContentBorderColor;
 	margin-right: 12px;
 	display: block;
+	position: relative;
 }
 
 .list-type1 .td.bigDateTd, .list-type3 .td.bigDateTd {
@@ -4130,6 +4131,7 @@ button.thirdpartylogin.openid {
 	  text-transform: uppercase;
 	  text-align: center;
 	  line-height: 20px;
+	  height: 20px;
 	  transform: rotate(45deg);
 	  width: 100px;
 	  display: block;

@@ -117,11 +117,7 @@ class wrapper_pageobject extends pageobject {
 			}
 			$output = '<div id="wrapper">';
 			$this->CreateDynamicIframeJS();
-			$output .='<!--[IF IE]>
-							<iframe id="boardframe" src="'.$this->data['url'].'" data-base-url="'.$this->data['base_url'].'" allowtransparency="true" width="100%" height="'.$this->data['height'].'" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" vspace="0" hspace="0"></iframe>
-						<![if ! IE]><!-->
-							<iframe id="boardframe" src="'.$this->data['url'].'" data-base-url="'.$this->data['base_url'].'" width="100%" scrolling="no" marginwidth="0" marginheight="0" height="'.$this->data['height'].'" frameborder="0" vspace="0" hspace="0"></iframe>
-						<!--><![ENDIF]><![ENDIF]-->';
+			$output .='<iframe id="boardframe" src="'.$this->data['url'].'" data-base-url="'.$this->data['base_url'].'" width="100%" scrolling="no" marginwidth="0" marginheight="0" height="'.$this->data['height'].'" frameborder="0" vspace="0" hspace="0"></iframe>';
 	
 
 			$output .= '</div>';
@@ -198,6 +194,7 @@ class wrapper_pageobject extends pageobject {
 			var wrapper_url = "'.$this->data['url'].'";
 			var wrapper_base_url = "'.$this->data['base_url'].'";
 			var wrapper_eqdkp_url = "'.$this->env->buildlink().'";
+			var wrapper_default_height = '.intval($this->data['height']).';
 
 			function onloadIframeAdjustments(){
 				resizeIframe();
@@ -251,7 +248,7 @@ class wrapper_pageobject extends pageobject {
 					} catch (e) {
 						sendMessagesToIframe();
 						
-						if($("#"+iframeid).data("message") == "false") currentfr.height = 4000;
+						if($("#"+iframeid).data("message") == "false") currentfr.height = wrapper_default_height;
 					}	
 				}
 			}

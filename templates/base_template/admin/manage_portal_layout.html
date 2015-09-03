@@ -313,5 +313,5 @@ function createEmbeddLink(){
 			</dl>
 			<textarea style="width: 90%" rows="5" readonly="readonly" name="data" onclick="$(this).select()" id="embedd_html"></textarea>
 		</fieldset>
-		<textarea style="display:none;" id="embedd_base"><script src="{EMBEDD_URL}portal/widget.js" type="text/javascript"></script><div id="eqdkp_portal_ID" ></div><script type="text/javascript">ADDITIONEQdkpPortal.init(ID);</script></textarea>
+		<textarea style="display:none;" id="embedd_base"><script src="{EMBEDD_URL}portal/widget.js" type="text/javascript"></script><div id="eqdkp_portal_{EMBEDD_RANDOM}_ID" ></div><script type="text/javascript">ADDITIONEQdkpPortal.init(ID, '{EMBEDD_RANDOM}', '{EMBEDD_URL}');</script></textarea>
 </div>
