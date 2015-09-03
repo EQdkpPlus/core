@@ -314,13 +314,13 @@ class calendar_pageobject extends pageobject {
 						// Build the JSON
 						$event_json[] = array(
 							'type'			=> 'raid',
+							'eventid'		=> $calid,
+							'editable'		=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission($calid)) ? true : false,
 							'title'			=> $this->in->decode_entity($this->pdh->get('calendar_events', 'name', array($calid))),
 							'url'			=> $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid),
 							'start'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_start', array($calid))),
 							'end'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_end', array($calid))),
 							'closed'		=> ($this->pdh->get('calendar_events', 'raidstatus', array($calid)) == 1) ? true : false,
-							'editable'		=> true,
-							'eventid'		=> $calid,
 							'flag'			=> $deadlineflag.$this->pdh->get('calendar_raids_attendees', 'html_status', array($calid, $this->user->data['user_id'])),
 							'icon'			=> ($eventextension['raid_eventid']) ? $this->pdh->get('event', 'icon', array($eventextension['raid_eventid'], true)) : '',
 							'note'			=> $this->pdh->get('calendar_events', 'notes', array($calid)),
@@ -328,7 +328,7 @@ class calendar_pageobject extends pageobject {
 							'rstatusdata'	=> $rstatusdata,
 							'color'			=> $eventcolor.' !important',
 							'textColor'		=> $eventcolor_txt.' !important',
-							'operator'		=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission($calid)) ? true : false
+							#'operator'		=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission($calid)) ? true : false
 						);
 					}else{
 						// check if the event is private
@@ -337,6 +337,7 @@ class calendar_pageobject extends pageobject {
 						$event_json[] = array(
 							'type'			=> 'event',
 							'eventid'		=> $calid,
+							'editable'		=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission($calid)) ? true : false,
 							'url'			=> $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid).'eventdetails',
 							'title'			=> $this->pdh->get('calendar_events', 'name', array($calid)),
 							'start'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_start', array($calid))),

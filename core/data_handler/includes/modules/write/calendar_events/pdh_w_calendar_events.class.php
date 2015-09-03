@@ -401,9 +401,8 @@ if(!class_exists('pdh_w_calendar_events')) {
 				);
 				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
 				$this->log_insert('calendar_log_eventupdated', $log_action, $eventid, $this->pdh->get('calendar_events', 'name', array($eventid)), true, 'calendar');
-				
-				return $result;
 			}
+			return (isset($objQuery) && $objQuery) ? $eventid : false;
 		}
 		
 		public function resize_event($eventid, $daydelta, $minutedelta){
@@ -423,8 +422,8 @@ if(!class_exists('pdh_w_calendar_events')) {
 				$this->log_insert('calendar_log_eventupdated', $log_action, $eventid, $this->pdh->get('calendar_events', 'name', array($eventid)), true, 'calendar');
 				
 				$this->pdh->enqueue_hook('calendar_events_update', array($eventid));
-				return $result;
 			}
+			return (isset($objQuery) && $objQuery) ? $eventid : false;
 		}
 		
 		public function handle_invitation($eventid, $userid, $status='decline'){
