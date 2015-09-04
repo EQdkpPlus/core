@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*	Project:	EQdkp-Plus
  *	Package:	Language File
  *	Link:		http://eqdkp-plus.eu
@@ -18,7 +18,7 @@
  *	You should have received a copy of the GNU Affero General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 if (!defined('EQDKP_INC')) {
 	die('You cannot access this file directly.');
 }
@@ -564,7 +564,7 @@ $lang = array(
 "save_nosuc" => "Speichern nicht erfolgreich",
 "save_suc" => "Speichern erfolgreich",
 "maintenance_mode_warn" => "Dein System befindet sich momentan im Wartungsmodus und verweigert normalen Benutzern den Zugriff. Bitte überprüfe das <a href=\"".registry::get_const('server_path')."maintenance/index.php\">Wartungstool</a> und deaktiviere den Modus wenn alle Wartungen durchgeführt wurden.<ul><li><a href=\"".registry::get_const('server_path')."maintenance/index.php\">Zum Wartungsbereich</a></li><li><a href=\"".registry::get_const('server_path')."maintenance/index.php?disable=true\">Wartungsmodus beenden</a></li></ul>",
-"maintenance_mode_noauth_warn" => "Dein Wartungsmodus ist öffentlich erreichbar. Entferne bitte das Flag 'EQDKP_UPDATE' aus deiner config.php, sobald du mit deinen Wartungsarbeiten fertig bist.",	
+"maintenance_mode_noauth_warn" => "Dein Wartungsmodus ist öffentlich erreichbar. Entferne bitte das Flag 'EQDKP_UPDATE' aus deiner config.php, sobald du mit deinen Wartungsarbeiten fertig bist.",
 "home_of_eqdkpplus" => "home of the EQDKP Plus Projekt",
 "manage_bridge" => "Bridge verwalten",
 "templates_error" => "Template-Fehler",
@@ -658,6 +658,7 @@ $lang = array(
 "calendar_event_editall_future" => "Alle zukünftigen Ereignisse",
 "calendar_event_name" => "Name des Ereignisses",
 "calendar_raidgroup"	=> "Raidgruppe",
+"calendar_location"		=> "Ort",
 "raideventlist_masssignin" => "Für ausgewählte Raids anmelden",
 "raideventlist_masssignbttn" => "Status ändern",
 "raideventlist_export_ical" => "Kalender exportieren",
@@ -813,7 +814,7 @@ $lang = array(
 "calendar_log_twinkchanged" => "Twink gewechselt",
 "calendar_log_updatedgroup"	=> "Raidgruppe aktualisiert",
 "calendar_log_updatednote"	=> "Charakter-Notiz aktualisiert",
-"calendar_log_updatedrole"	=> "Charakter-Rolle aktualisiert",		
+"calendar_log_updatedrole"	=> "Charakter-Rolle aktualisiert",
 "pv_tab_skills" => "Skillung",
 "pv_tab_profiler" => "Profiler",
 "pv_tab_profession" => "Berufe",
@@ -923,7 +924,7 @@ $lang = array(
 "error_saving_char" => "Beim Speichern des Charakters ist ein Fehler aufgetreten. Wahrscheinlich ist dieser Charakter schon im System vorhanden.",
 //User Profilefields
 "userpf_location" => "Wohnort",
-"userpf_website" => "Webseite",		
+"userpf_website" => "Webseite",
 "userpf_interests" => "Interessen",
 "userpf_occupation" => "Tätigkeit",
 "userpf_facebook" => "Facebook",
@@ -936,15 +937,15 @@ $lang = array(
 "userpf_country" => "Land",
 "userpf_name" => "Vorname",
 "userpf_lastname" => "Nachname",
-"fv_php_minlength_error" => 'Die Eingabe für das Feld \'%s\' war zu kurz!',	
-"fv_php_maxlength_error" => 'Die Eingabe für das Feld \'%s\' war zu lang!',	
+"fv_php_minlength_error" => 'Die Eingabe für das Feld \'%s\' war zu kurz!',
+"fv_php_maxlength_error" => 'Die Eingabe für das Feld \'%s\' war zu lang!',
 "user_sett_f_priv_userprofile_age" => "Alter",
 "user_sett_f_priv_userprofile_country" => "Land",
 
 //Notifications
 "user_sett_tab_notifications" => "Benachrichtigungen",
 "user_sett_fs_notifications" => "Benachrichtigungen",
-"user_sett_fs_info_notifications" => "Bitte beachte, dass du einige Benachrichtungen nur abhängig von deinen Berechtigungen bekommst, auch wenn du sie aboniert hast.",	
+"user_sett_fs_info_notifications" => "Bitte beachte, dass du einige Benachrichtungen nur abhängig von deinen Berechtigungen bekommst, auch wenn du sie aboniert hast.",
 "user_sett_f_ntfy_calendarevent_char_statuschange" => "Statuswechsel eines Charakters im Kalenderevent",
 "user_sett_f_ntfy_calendarevent_invitation" => "Einladung zu einem privaten Kalenderevent",
 "user_sett_f_ntfy_comment_new_article" => "Neuer Kommentar in einem Artikel",
@@ -957,7 +958,7 @@ $lang = array(
 "user_sett_f_ntfy_calendarevent_mod_groupchange" => "Gruppenänderung durch Moderator im Kalenderevent",
 "user_sett_f_ntfy_calendarevent_mod_statuschange" => "Statusänderung durch Moderator im Kalenderevent",
 "user_sett_f_ntfy_calenderevent_closed" => "Kalenderevent wurde abgesagt",
-"user_sett_f_ntfy_calenderevent_opened" => "Kalenderevent wurde wieder geöffnet",	
+"user_sett_f_ntfy_calenderevent_opened" => "Kalenderevent wurde wieder geöffnet",
 "user_sett_f_ntfy_comment_new_response" => "Antwort auf meinen Kommentar",
 "user_sett_f_ntfy_comment_new_mentioned" => "Erwähnungen in Kommentaren",
 "user_sett_f_ntfy_calendarevent_new" => "Neues Kalenderevent",
@@ -969,9 +970,9 @@ $lang = array(
 "notification_type_none" => "Keine",
 "notification_type_eqdkp" => "EQdkp Plus",
 "new_notification" => "Neue Benachrichtigung",
-		
-"notifications_persistent" => "Dauerhafte Benachrichtigungen", 
-"notification_and_more" => " und %s weitere ",		
+
+"notifications_persistent" => "Dauerhafte Benachrichtigungen",
+"notification_and_more" => " und %s weitere ",
 "notification_newcomment_userwall_grouped" => "{PRIMARY} haben an deine Pinnwand geschrieben",
 "notification_newcomment_userwall" => "{PRIMARY} hat an deine Pinnwand geschrieben",
 "notification_newcomment_userwall_response" => "{PRIMARY} hat auf einen Betrag an deiner Pinnwand geantwortet",
@@ -993,9 +994,9 @@ $lang = array(
 "notification_calendarevent_invitation" => "{PRIMARY} hat dich zu einem privaten Termin eingeladen",
 "article_publish_success" => "Artikel wurde veröffentlicht",
 "article_publish" => "Artikel veröffentlichen",
-"article_unpublished_note" => "Hinweis: Dieser Artikel ist noch nicht veröffentlicht.",		
+"article_unpublished_note" => "Hinweis: Dieser Artikel ist noch nicht veröffentlicht.",
 "copy" => "Eintrag duplizieren",
-"copy_info" => "Du arbeitest mit einer Kopie der Daten des alten Eintrages. Ein neuer Eintrag mit diesen Daten wird erst nach dem Speichern erstellt.",				
+"copy_info" => "Du arbeitest mit einer Kopie der Daten des alten Eintrages. Ein neuer Eintrag mit diesen Daten wird erst nach dem Speichern erstellt.",
 "sp_btn_twitter_share" => "Tweet",
 "sp_btn_facebook_share" => "Teilen",
 "pagination_goto" => "Gehe zu Seite",
@@ -1014,6 +1015,6 @@ $lang = array(
 "user_sett_f_ntfy_xmpp_user" => "Jabber Account",
 "user_sett_f_help_ntfy_xmpp_user" => "Trage hier den Jabber Account ein, der Benachrichtigungen erhalten soll, z.B. user@jabber.org",
 "user_sett_f_ntfy_twitter_user" => "Twitter-Account",
-"user_sett_f_help_ntfy_twitter_user" => "Trage hier den Twitter-Account ein, der Benachrichtigungen erhalten soll. Er muss \"{TWITTER}\" auf Twitter folgen, um Nachrichten erhalten zu können."		
+"user_sett_f_help_ntfy_twitter_user" => "Trage hier den Twitter-Account ein, der Benachrichtigungen erhalten soll. Er muss \"{TWITTER}\" auf Twitter folgen, um Nachrichten erhalten zu können."
 );
 ?>

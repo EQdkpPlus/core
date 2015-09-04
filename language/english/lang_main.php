@@ -19,18 +19,18 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- 
+
 if (!defined('EQDKP_INC')) {
 	die('You cannot access this file directly.');
 }
 
-//Language: English	
+//Language: English
 //Created by EQdkp Plus Translation Tool on  2014-12-17 23:17
 //File: language/english/lang_main.php
 //Source-Language: german
 
-$lang = array( 
-	
+$lang = array(
+
 'LANG_VERSION' => '2.0.0.7',
 "LANG_VERSION" => '2.0.0.7',
 	"XML_LANG" => 'en',
@@ -225,7 +225,7 @@ $lang = array(
 	"calendar_event_button_attend" => "Attend",
 	"calendar_event_button_maybe" => "Maybe",
 	"calendar_event_button_decline" => "Decline",
-	
+
 	"user_app_key" => 'Private Exchangekey',
 	"user_create_new_appkey" => 'Generate new private keys',
 	"user_create_new_appkey_success" => 'New private Keys have been created. Your old URLs are not longer valid.',
@@ -701,6 +701,7 @@ $lang = array(
 	"calendar_event_editall_future" => 'All future Events',
 	"calendar_event_name" => 'Name of the event',
 	"calendar_raidgroup" => 'Raidgroup',
+	"calendar_location"		=> "Location",
 	"raideventlist_masssignin" => 'Signup to selected raids',
 	"raideventlist_masssignbttn" => 'Sign up',
 	"raideventlist_export_ical" => 'Export calendar',
@@ -1026,7 +1027,7 @@ $lang = array(
 	"notification_type_xmpp" => "Jabber (XMPP)",
 	"notification_type_none" => "None",
 	"notification_type_eqdkp" => "EQdkp Plus",
-	"new_notification" => "New Notificatin",	
+	"new_notification" => "New Notificatin",
 	"article_publish_success" => 'Article has been published',
 	"article_publish" => 'Article published',
 	"article_unpublished_note" => 'Note: this article is not published yet.',
@@ -1051,7 +1052,7 @@ $lang = array(
 	"user_sett_f_help_ntfy_xmpp_user" => "Insert here the Jabber Account that will get the Notifications, e.g. user@jabber.org",
 	"user_sett_f_ntfy_twitter_user" => "Twitter-Account",
 	"user_sett_f_help_ntfy_twitter_user" => "Insert here the Twitter-Account that will get the Notifications. He must follow \"{TWITTER}\" at Twitter to receive the Notifications."
-		
+
 );
 
 ?>
