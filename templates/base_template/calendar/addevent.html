@@ -3,7 +3,7 @@
 function openAddTemplate(){
 	$( "#dialog-add-template" ).dialog( "open" );
 }
-	
+
 $(document).ready(function() {
 	$( "#dialog-add-template" ).dialog({
 		height: 200,
@@ -11,7 +11,7 @@ $(document).ready(function() {
 		modal: true,
 		autoOpen: false,
 	});
-	
+
 	$("#repeat_dd").change(function(){
 		var ddvalue = $(this).val();
 		if(ddvalue == 'custom'){
@@ -21,9 +21,9 @@ $(document).ready(function() {
 			$('#repeating').val(ddvalue);
 			$('#custom_repeat_div').hide()
 		}
-		
+
 	}).trigger('change');
-	
+
 	$("input[type='checkbox'][name='private']").change(function() {
 		console.log($(this).prop('checked'));
 		if($(this).prop('checked') == true){
@@ -41,7 +41,7 @@ $(document).ready(function() {
 			$('#addtemplate-submitbtn').click();
 		}
 	})
-	
+
 	$('#selectmode').change(function() {
 		if($(this).val() == 'raid'){
 			changeCalendars('1');
@@ -109,7 +109,7 @@ $(document).ready(function() {
 				$.each(data, function(i,item){
 					//if(item.field == 'dw_raidleader'){
 						//$("#dw_raidleader").attr("value","3")
-						
+
 						//}else{
 						$("#"+item.field).val(item.value);
 						//}
@@ -165,7 +165,7 @@ $(document).ready(function() {
 function changeCalendars(cal_mode){
 	calendars		= {DR_CALENDAR_JSON};
 	selected_calid	= {DR_CALENDAR_CID};
-	
+
 	var cal_options = '';
 	$.each(calendars, function() {
 		if(this.type == cal_mode){
@@ -214,7 +214,7 @@ function attendeeCount(){
 		<legend>{DR_CALENDARMODE}</legend>
 		<dl class="raid">
 			<dt><label>{L_raidevent_template}</label></dt>
-			<dd>{DR_TEMPLATE} 
+			<dd>{DR_TEMPLATE}
 				<button type="button" name="delete_template" id="template_delbutton"><i class="fa fa-trash-o"></i></button>
 			</dd>
 		</dl>
@@ -234,7 +234,7 @@ function attendeeCount(){
 		<dl class="raid">
 			<dt><label>{L_raidevent_raidevent}:</label></dt>
 			<dd>
-				<span id="raidevent_dropdown">{DR_EVENT}</span> 
+				<span id="raidevent_dropdown">{DR_EVENT}</span>
 				<button type="button" name="add_event" onclick="AddEventDialog()"><i class="fa fa-plus"></i></button>
 			</dd>
 		</dl>
@@ -255,6 +255,10 @@ function attendeeCount(){
 		<dl class="raid">
 			<dt><label>{L_calendar_deadline}:</label></dt>
 			<dd><input type="text" name="deadlinedate" id="deadlinedate" class="core-spinner" data-min="0" size="5" maxlength="255" value="{DATE_DEADLINE}" /> {L_calendar_deadline_entity}</dd>
+		</dl>
+		<dl class="event">
+			<dt><label>{L_calendar_location}:</label></dt>
+			<dd><input type="text" name="location" id="location"maxlength="255" value="{LOCATION}" /></dd>
 		</dl>
 		<dl class="event">
 			<dt><label>{L_calendar_allday_event}:</label></dt>
@@ -335,7 +339,7 @@ function attendeeCount(){
 		<button type="submit" name="addtemplate" class="liteoption displayNone" id="addtemplate-submitbtn"></button>
 		<button type="reset"  name="reset" class="liteoption"><i class="fa fa-trash-o"></i>{L_reset}</button>
 	<!-- ENDIF -->
-	
+
 	<input type="hidden" name="templatename" value="{TEMPLATE_NAME}" class="input resettemplate_input" id="templatename" />
 {CSRF_TOKEN}
 </form>

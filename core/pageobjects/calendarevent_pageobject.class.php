@@ -22,7 +22,7 @@
 class calendarevent_pageobject extends pageobject {
 
 	public static $shortcuts = array('email'=>'MyMailer', 'social' => 'socialplugins');
-	
+
 	public function __construct() {
 		$handler = array(
 			'closedstatus'	=> array(
@@ -61,14 +61,14 @@ class calendarevent_pageobject extends pageobject {
 		if (!is_array($raidleaders_users)) $raidleaders_users = array();
 		return (($creator == $userid) || in_array($userid, $raidleaders_users))  ? true : false;
 	}
-	
+
 	public function display_logs(){
 		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission() || 	$this->user->check_auth('a_logs_view', false)){
 		} else $this->user->check_auth('a_something');
-		
+
 		//Show Logs
 		$view_list = $this->pdh->get('logs', 'filtered_id_list', array('calendar', false, false, false, false, false,false,false,false, $this->url_id));
-		
+
 		$hptt_psettings		= array(
 				'name'				=> 'hptt_managelogs_actions',
 				'table_main_sub'	=> '%log_id%',
@@ -96,15 +96,22 @@ class calendarevent_pageobject extends pageobject {
 				'LOGS_LIST'				=> $logs_list,
 				'LOGS_PAGINATION'		=> generate_pagination('manage_logs.php'.$sort_suffix.$strFilterSuffix, $actionlog_count, 100, $this->in->get('start', 0)),
 				'HPTT_LOGS_COUNT'		=> $hptt->get_column_count(),
-				'S_COMMENTS'				=> false,		
+				'S_COMMENTS'				=> false,
 		));
-		
+
 		$this->core->set_vars(array(
 				'page_title'		=> sprintf($this->pdh->get('event', 'name', array($eventdata['extension']['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->user_date($eventdata['timestamp_start']).' '.$this->time->user_date($eventdata['timestamp_start'], false, true),
 				'template_file'		=> 'calendar/viewlogs.html',
 				'header_format'		=> $this->simple_head,
 				'display'			=> true
 		));
+	}
+
+	public function change_attendancestatus($eventid, $status){
+		if($eventid > 0){
+			$this->pdh->put('calendar_events', 'handle_attendance', array($eventid, $this->user->data['user_id'], $status));
+		}
+		$this->pdh->process_hook_queue();
 	}
 
 	// the role dropdown, attached to the character selection
@@ -118,7 +125,7 @@ class calendarevent_pageobject extends pageobject {
 
 	// user changes his status for that raid
 	public function update_status(){
-		
+
 		// check if the user is already in the database for that event and skip if already existing (avoid reload-cheating)
 		if($this->pdh->get('calendar_raids_attendees', 'in_db', array($this->url_id, $this->in->get('member_id', 0)))){
 
@@ -166,12 +173,12 @@ class calendarevent_pageobject extends pageobject {
 		if ($eventdata['extension']['raidmode'] == 'role' && (int)$myrole == 0){
 			return false;
 		}
-		
+
 		// Build the Deadline
 		$deadlinedate	= $eventdata['timestamp_start']-($eventdata['extension']['deadlinedate'] * 3600);
 		$mystatus		= $this->pdh->get('calendar_raids_attendees', 'myattendees', array($this->url_id, $this->user->id));
 		$mysignedstatus	= $this->pdh->get('calendar_raids_attendees', 'status', array($this->url_id, $mystatus['member_id']));
-		
+
 		// check the deadline
 		$deadlinepassed	= ($deadlinedate < $this->time->time) ? true : false;
 		if($deadlinepassed && $this->config->get('calendar_raid_allowstatuschange') == '1' && $mystatus['member_id'] > 0){
@@ -194,8 +201,8 @@ class calendarevent_pageobject extends pageobject {
 			$this->in->get('subscribed_member_id', 0),
 			$this->in->get('signupnote'),
 		));
-		
-		//Send Notification to Raidlead, Creator and Admins		
+
+		//Send Notification to Raidlead, Creator and Admins
 		$raidleaders_chars	= ($eventdata['extension']['raidleader'] > 0) ? $eventdata['extension']['raidleader'] : array();
 		$arrSendTo			= $this->pdh->get('member', 'userid', array($raidleaders_chars));
 		$arrSendTo[] 		= $this->pdh->get('calendar_events', 'creatorid', array($this->url_id));
@@ -204,7 +211,7 @@ class calendarevent_pageobject extends pageobject {
 		$arrSendTo			= array_unique($arrSendTo);
 		$strEventTitle		= sprintf($this->pdh->get('event', 'name', array($eventdata['extension']['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->user_date($eventdata['timestamp_start']).' '.$this->time->user_date($eventdata['timestamp_start'], false, true);
 		if (!in_array($this->user->id, $arrSendTo)) $this->ntfy->add('calendarevent_char_statuschange', $this->url_id.'_'.$this->in->get('member_id', 0), $this->pdh->get('member', 'name', array($this->in->get('member_id', 0))), $this->controller_path_plain.$this->page_path.$this->SID, $arrSendTo, $strEventTitle);
-		
+
 		$this->pdh->process_hook_queue();
 	}
 
@@ -219,7 +226,7 @@ class calendarevent_pageobject extends pageobject {
 
 			// notify attendees
 			$this->notify_statuschange($this->url_id, $this->in->getArray('modstat_change', 'int'), $this->in->get('moderation_raidstatus'));
-			
+
 			$this->pdh->process_hook_queue();
 		}
 	}
@@ -232,10 +239,10 @@ class calendarevent_pageobject extends pageobject {
 				$this->in->get('moderation_raidgroup'),
 				$this->in->getArray('modstat_change', 'int')
 			));
-			
+
 			// notify attendees
 			$this->notify_groupchange($this->url_id, $this->in->getArray('modstat_change', 'int'), $this->in->get('moderation_raidgroup'));
-			
+
 			$this->pdh->process_hook_queue();
 		}
 	}
@@ -261,7 +268,7 @@ class calendarevent_pageobject extends pageobject {
 			));
 			$this->pdh->process_hook_queue();
 
-			// notify attendees			
+			// notify attendees
 			$this->notify_statuschange($this->url_id, $this->in->getArray('memberid', 'int'), $this->in->get('notsigned_raidstatus'));
 		}
 	}
@@ -326,13 +333,13 @@ class calendarevent_pageobject extends pageobject {
 		//Notify
 		$this->notify_openclose('open');
 	}
-		
+
 	private function notify_openclose($status='closed'){
 		$strStatus = ($status == 'open') ? $this->user->lang('raidevent_mail_opened') : $this->user->lang('raidevent_mail_closed');
 		$eventID = $this->url_id;
-		
+
 		$eventextension	= $this->pdh->get('calendar_events', 'extension', array($eventID));
-		
+
 		$attendees = $this->pdh->get('calendar_raids_attendees', 'attendee_users', array($this->url_id));
 		$attendees = array_unique($attendees);
 		foreach($attendees as $attuserid){
@@ -344,7 +351,7 @@ class calendarevent_pageobject extends pageobject {
 			}
 		}
 	}
-	
+
 	private function notify_statuschange($eventID, $a_attendees, $status=0){
 		if(is_array($a_attendees) && count($a_attendees) > 0){
 			$strStatus = $this->user->lang(array('raidevent_raid_status', $status));
@@ -352,18 +359,18 @@ class calendarevent_pageobject extends pageobject {
 
 			foreach($a_attendees as $attendeeid){
 				$attuserid		= $this->pdh->get('member', 'userid', array($attendeeid));
-				$strEventTitle	= sprintf($this->pdh->get('event', 'name', array($eventextension['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->date_for_user($attuserid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true);		
+				$strEventTitle	= sprintf($this->pdh->get('event', 'name', array($eventextension['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->date_for_user($attuserid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true);
 				$this->ntfy->add('calendarevent_mod_statuschange', $eventID.'_'.$attendeeid, $strStatus, $this->controller_path_plain.$this->page_path.$this->SID, $attuserid, $strEventTitle);
 			}
 		}
 	}
-	
+
 	private function notify_groupchange($eventID, $a_attendees, $group=0){
 		if(is_array($a_attendees) && count($a_attendees) > 0){
-				
+
 			$eventextension	= $this->pdh->get('calendar_events', 'extension', array($eventID));
 			$strStatus = $this->pdh->get('raid_groups', 'name', array($group));
-			
+
 			foreach($a_attendees as $attendeeid){
 				$attuserid		= $this->pdh->get('member', 'userid', array($attendeeid));
 				$strEventTitle	= sprintf($this->pdh->get('event', 'name', array($eventextension['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->date_for_user($attuserid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true);
@@ -386,7 +393,7 @@ class calendarevent_pageobject extends pageobject {
 
 			// notify attendees
 			$this->notify_statuschange($this->url_id, $a_attendees);
-			
+
 			// set the new status for the attendees
 			$this->pdh->put('calendar_raids_attendees', 'confirm_all', array($this->url_id));
 			$this->pdh->process_hook_queue();
@@ -524,7 +531,7 @@ class calendarevent_pageobject extends pageobject {
 		// build the roles array
 		if(is_array($this->attendees_raw)){
 			foreach($this->attendees_raw as $rolecharsid=>$rolecharsdata){
-				
+
 				// generate the twink array
 				$this->twinks[$rolecharsid] = $this->pdh->get('member', 'connection_id', array($this->pdh->get('member', 'userid', array($rolecharsid))));
 
@@ -597,7 +604,7 @@ class calendarevent_pageobject extends pageobject {
 			if($statuskey == 0 && isset($this->guests) && is_array($this->guests) && count($this->guests) > 0){
 				$statuscount = $statuscount+count($this->guests);
 			}
-			
+
 			$this->tpl->assign_block_vars('raidstatus', array(
 				'FIRSTROW'	=> ($status_first) ? true : false,
 				'ID'		=> $statuskey,
@@ -639,7 +646,7 @@ class calendarevent_pageobject extends pageobject {
 						$membertooltip		= array();
 						$memberrank			= $this->pdh->get('member', 'rankname', array($memberid));
 
-						
+
 						$membertooltip[]	= $this->pdh->get('member', 'name', array($memberid)).' ['.$this->user->lang('level').': '.$this->pdh->get('member', 'level', array($memberid)).']';
 						if($eventdata['extension']['raidmode'] == 'role'){
 							$real_classid = $this->pdh->get('member', 'classid', array($memberid));
@@ -678,7 +685,7 @@ class calendarevent_pageobject extends pageobject {
 								$membertooltip[]	= $this->user->lang('twinks').': '.implode(', ', $twinknames);
 							}
 						}
-						
+
 						//Hook for Tooltip:
 						if ($this->hooks->isRegistered('calendarevent_chartooltip')){
 							$arrPluginsHooks = $this->hooks->process('calendarevent_chartooltip', array('member_id' => $memberid));
@@ -755,7 +762,7 @@ class calendarevent_pageobject extends pageobject {
 		$nextraidevent	= $this->pdh->get('calendar_events', 'next_raid', array($this->url_id));
 		if($nextraidevent){
 			$nextevent = $this->pdh->get('calendar_events', 'data', array($nextraidevent));
-			
+
 			$this->tpl->assign_vars(array(
 				'S_NEXT_RAID_EVENT' => true,
 				'U_NEXT_RAID_EVENT' => $this->routing->build("calendarevent", $this->pdh->get('event', 'name', array($nextevent['extension']['raid_eventid'])), $nextraidevent),
@@ -766,15 +773,15 @@ class calendarevent_pageobject extends pageobject {
 		$prevraidevent = $this->pdh->get('calendar_events', 'prev_raid', array($this->url_id));
 		if($prevraidevent){
 			$prevevent = $this->pdh->get('calendar_events', 'data', array($prevraidevent));
-				
+
 			$this->tpl->assign_vars(array(
 					'S_PREV_RAID_EVENT' => true,
 					'U_PREV_RAID_EVENT' => $this->routing->build("calendarevent", $this->pdh->get('event', 'name', array($prevevent['extension']['raid_eventid'])), $prevraidevent),
 					'PREV_RAID_EVENTID' => $prevraidevent,
 					'PREV_RAID_EVENTNAME' => $this->pdh->get('event', 'name', array($prevevent['extension']['raid_eventid'])).', '.$this->time->user_date($prevevent['timestamp_start']).' '.$this->time->user_date($prevevent['timestamp_start'], false, true)
 			));
-		}		
-		
+		}
+
 		$optionsmenu = array(
 			1 => array(
 				'name'	=> $this->user->lang('raidevent_raid_edit'),
@@ -825,7 +832,7 @@ class calendarevent_pageobject extends pageobject {
 				'perm'	=> $this->user->check_auth('a_logs_view', false),
 			),
 		);
-		
+
 		if ($this->hooks->isRegistered('calendarevent_raid_menu')){
 			$arrPluginsHooks = $this->hooks->process('calendarevent_raid_menu', array('id' => $this->url_id));
 			if (is_array($arrPluginsHooks)){
@@ -854,7 +861,7 @@ class calendarevent_pageobject extends pageobject {
 		$this->jquery->Dialog('AddGuest', $this->user->lang('raidevent_raid_addguest_win'), array('url'=>$this->routing->build('calendareventguests')."&eventid='+eventid+'&simple_head=true", 'width'=>'490', 'height'=>'280', 'onclose' => $this->strPath.$this->SID, 'withid' => 'eventid'));
 		$this->jquery->Dialog('DeleteGuest', $this->user->lang('raidevent_raid_guest_del'), array('custom_js'=>"document.guestp.submit();", 'message'=>$this->user->lang('raidevent_raid_guest_delmsg'), 'withid'=>'id', 'onlickjs'=>'$("#guestid_field").val(id);', 'buttontxt'=>$this->user->lang('delete')), 'confirm');
 		$this->jquery->Dialog('ViewLogs', $this->user->lang('view_logs'), array('url'=>$this->routing->build('calendarevent')."&logs&eventid='+eventid+'&simple_head=true", 'width'=>'900', 'height'=>'600', 'withid' => 'eventid'));
-		
+
 		// already signed in message
 		if($presel_charid > 0){
 			$sstat_mname = $this->pdh->get('member', 'name', array($presel_charid));
@@ -873,18 +880,18 @@ class calendarevent_pageobject extends pageobject {
 		}else{
 			$deadlinetime	= $this->time->user_date($deadlinedate, true);
 		}
-		
+
 		$this->jquery->Collapse('#toogleRaidcalInfos');
 		$this->jquery->Collapse('#toogleRaidcalModeration');
 		$this->jquery->Collapse('#toogleRaidcalSignin');
-		
+
 		$mysignedstatus		= $this->pdh->get('calendar_raids_attendees', 'status', array($this->url_id, $this->mystatus['member_id']));
 		// the status drodown
 		$status_dropdown = $this->raidstatus;
 		if(isset($status_dropdown[0]) && $mysignedstatus != 0){
 			unset($status_dropdown[0]);
 		}
-		
+
 		//Notify attendees, raidlead and admins on new comments
 		$arrUserToNotify		= $this->pdh->get('calendar_raids_attendees', 'attendee_users', array($this->url_id));
 		$arrRaidleaderChars		= ($eventdata['extension']['raidleader'] > 0) ? $eventdata['extension']['raidleader'] : array();
@@ -894,22 +901,22 @@ class calendarevent_pageobject extends pageobject {
 		$arrAdmins 				= $this->pdh->get('user', 'users_with_permission', array('a_cal_revent_conf'));
 		if($arrAdmins && is_array($arrAdmins)) $arrUserToNotify = array_merge($arrUserToNotify, $arrAdmins);
 		$arrUserToNotify = array_unique($arrUserToNotify);
-		
+
 		$this->comments->SetVars(array(
 			'ntfy_user'		=> $arrUserToNotify,
 		));
-		
+
 		//RSS-Feed for next Raids
 		$this->tpl->add_rssfeed($this->config->get('guildtag').' - Calendar Raids', 'calendar_raids.xml', array('po_calendarevent'));
 
-		
+
 		$arrRaidgroups = array(0=>$this->user->lang('raidevent_raid_all_raidgroups')) + $this->raidgroup_dd;
-		
+
 		$intCategoryID = registry::get_const('categoryid');
 		$arrCategory = $this->pdh->get('article_categories', 'data', array($intCategoryID));
 
 		$strPageTitle = sprintf($this->pdh->get('event', 'name', array($eventdata['extension']['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->user_date($eventdata['timestamp_start']).' '.$this->time->user_date($eventdata['timestamp_start'], false, true);
-		
+
 		$this->tpl->assign_vars(array(
 			// error messages
 			'RAID_CLOSED'			=> ($eventdata['closed'] == '1') ? true : false,
@@ -969,16 +976,16 @@ class calendarevent_pageobject extends pageobject {
 			// Language files
 			'L_NOTSIGNEDIN'			=> $this->user->lang(array('raidevent_raid_status', 4)),
 			'L_SIGNEDIN_MSG'		=> $alreadysignedinmsg,
-			
+
 			'CSRF_CHANGECHAR_TOKEN'	=> $this->CSRFGetToken('change_char'),
 			'CSRF_CHANGENOTE_TOKEN'	=> $this->CSRFGetToken('change_note'),
 			'CSRF_CHANGEGRP_TOKEN'	=> $this->CSRFGetToken('change_group'),
-				
+
 			'U_CALENDAREVENT'		=> $this->strPath.$this->SID,
 			'MY_SOCIAL_BUTTONS'		=> ($arrCategory['social_share_buttons']) ? $this->social->createSocialButtons($this->env->link.$this->strPathPlain, $strPageTitle) : '',
 		));
-		
-		
+
+
 		$strPreviewImage = $this->pdh->get('event', 'icon', array($eventdata['extension']['raid_eventid'], true));
 		$this->social->callSocialPlugins($strPageTitle, $strPageTitle, $this->env->buildlink(false).$strPreviewImage);
 
@@ -989,11 +996,16 @@ class calendarevent_pageobject extends pageobject {
 			'display'			=> true
 		));
 	}
-	
+
 	public function display_eventdetails(){
 		// Show an error Message if no ID is set
 		if(!$this->url_id){
 			redirect($this->routing->build('calendar',false,false,true,true));
+		}
+
+		// change the attendance status
+		if($this->in->exists('attendancetype') && $this->in->exists('change_attendance')){
+			$this->change_attendancestatus($this->url_id, $this->in->get('attendancetype', 'decline'));
 		}
 
 		// Show an error message if the event is not an event
@@ -1021,20 +1033,36 @@ class calendarevent_pageobject extends pageobject {
 					);
 				}
 			}
-		}
 
-		// attending users
-		$event_attendees		= (isset($eventdata['extension']['invited']) && count($eventdata['extension']['invited']) > 0) ? $eventdata['extension']['invited'] : array();
-		if(count($event_attendees) > 0){
-			foreach($event_attendees as $attendeedata=>$status){
-				
-				$userstatus['attendance'][] = array(
-					'name'		=> $this->pdh->get('user', 'name', array($attendeedata)),
-					'icon'		=> $this->pdh->get('user', 'avatar_withtooltip', array($inviteddata)),
-					'joined'	=> $this->pdh->get('user', 'avatarimglink', array($attendeedata)),
+			// attending users
+			$event_attendees		= (isset($eventdata['extension']['invited']) && count($eventdata['extension']['invited']) > 0) ? $eventdata['extension']['invited'] : array();
+			if(count($event_attendees) > 0){
+				foreach($event_attendees as $attendeedata=>$status){
+
+					$userstatus['attendance'][] = array(
+						'name'		=> $this->pdh->get('user', 'name', array($attendeedata)),
+						'icon'		=> $this->pdh->get('user', 'avatar_withtooltip', array($inviteddata)),
+						'joined'	=> false,
+					);
+				}
+			}
+		}else{
+			$event_attendees		= (isset($eventdata['extension']['attendance']) && count($eventdata['extension']['attendance']) > 0) ? $eventdata['extension']['attendance'] : array();
+			foreach($event_attendees as $attuserid=>$attstatus){
+				switch($attstatus){
+					case 1:		$attendancestatus = 'attendance'; break;
+					case 2:		$attendancestatus = 'maybe'; break;
+					case 3:		$attendancestatus = 'decline'; break;
+				}
+				$userstatus[$attendancestatus][] = array(
+					'name'		=> $this->pdh->get('user', 'name', array($attuserid)),
+					'icon'		=> $this->pdh->get('user', 'avatar_withtooltip', array($attuserid)),
+					'joined'	=> false,
 				);
 			}
 		}
+
+
 
 		foreach($userstatus as $blockid=>$blockdata){
 			foreach($blockdata as $attendeedata){
@@ -1045,9 +1073,7 @@ class calendarevent_pageobject extends pageobject {
 					'LINK'		=> $attendeedata['link'],
 				));
 			}
-			
 		}
-		
 
 		if($this->time->date('d', $eventdata['timestamp_start']) == $this->time->date('d', $eventdata['timestamp_end'])){
 			//Samstag, 31.12.2015, 15 - 17 Uhr
@@ -1058,6 +1084,7 @@ class calendarevent_pageobject extends pageobject {
 		$this->jquery->Tab_header('tab_attendance');
 
 		$this->tpl->assign_vars(array(
+			'EVENT_ID'			=> $this->url_id,
 			'PRIVATE_EVENT'		=> ($eventdata['private'] == 1) ? true : false,
 			'NAME'				=> $this->pdh->get('calendar_events', 'name', array($this->url_id)),
 			'DATE_DAY'			=> $this->time->date('d', $eventdata['timestamp_start']),
@@ -1065,16 +1092,16 @@ class calendarevent_pageobject extends pageobject {
 			'DATE_YEAR'			=> $this->time->date('Y', $eventdata['timestamp_start']),
 			'DATE_FULL'			=> $full_date,
 			'ALLDAY'			=> ($eventdata['allday'] == 1) ? true : false,
-			'PLACE'				=> (isset($eventdata['extension']['place'])) ? $eventdata['extension']['place'] : false,
+			'LOCATION'			=> (isset($eventdata['extension']['location'])) ? $eventdata['extension']['location'] : false,
 			'CREATOR'			=> $this->pdh->get('user', 'name', array($eventdata['creator'])),
 			'NOTE'				=> ($eventdata['notes']) ? $this->bbcode->toHTML(nl2br($eventdata['notes'])) : '',
 			'CALENDAR'			=> $this->pdh->get('calendars', 'name', array($eventdata['calendar_id'])),
 			'NUMBER_INVITES'	=> (isset($userstatus['invited'])) ? count($userstatus['invited']) : 0,
 			'NUMBER_MAYBES'		=> (isset($userstatus['maybe'])) ? count($userstatus['maybe']) : 0,
-			'NUMBER_ATTENDEES'	=> (isset($userstatus['attendee'])) ? count($userstatus['attendee']) : 0,
+			'NUMBER_ATTENDEES'	=> (isset($userstatus['attendance'])) ? count($userstatus['attendance']) : 0,
 			'NUMBER_DECLINES'	=> (isset($userstatus['decline'])) ? count($userstatus['decline']) : 0,
 		));
-		
+
 		$this->set_vars(array(
 			'page_title'		=> $strPageTitle,
 			'template_file'		=> 'calendar/eventdetails.html',

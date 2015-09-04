@@ -1,83 +1,82 @@
-<form method="post" action="{ACTION}" name="post">
-<div class="table fullwidth">
-	<div class="tr">
-		<div class="td bigDateTd" style="width: 100px;">
-			<div class="bigDateContainer hiddenSmartphone">
-				<span class="bigDateNumber">{DATE_DAY}</span>
-				<span class="articleMonth">{DATE_MONTH}</span>
+<form method="post" action="{ACTION}&eventdetails" name="post">
+	<input type="hidden" name="change_attendance" value="true" />
+	<input type="hidden" name="event_id" value="{EVENT_ID}" />
+	<div class="table fullwidth">
+		<div class="tr">
+			<div class="td bigDateTd" style="width: 100px;">
+				<div class="bigDateContainer hiddenSmartphone">
+					<span class="bigDateNumber">{DATE_DAY}</span>
+					<span class="articleMonth">{DATE_MONTH}</span>
+				</div>
 			</div>
-		</div>
-		<div class="td" style="vertical-align: top;">
-			<h2>{NAME}</h2>
-			<div class="eventdata-header">
-				<i class="fa fa-lg fa-globe"></i> <!-- IF PRIVATE_EVENT -->{L_calendar_event_private}<!-- ELSE -->{L_calendar_event_open}<!-- ENDIF --> | {L_calendar_event_detail_invitedby}: {CREATOR}
-				
-				<div class="eventdata-details">
-					<br /><i class="fa fa-lg fa-calendar-o"></i> {DATE_FULL}<br />
-					<!-- IF PLACE --><br /><i class="fa fa-lg fa-map-marker"></i> {PLACE}<!-- ENDIF -->
-					<br/><i class="fa fa-calendar fa-lg"></i> {CALENDAR}
+			<div class="td" style="vertical-align: top;">
+				<h2>{NAME}</h2>
+				<div class="eventdata-header">
+					<i class="fa fa-lg fa-globe"></i> <!-- IF PRIVATE_EVENT -->{L_calendar_event_private}<!-- ELSE -->{L_calendar_event_open}<!-- ENDIF --> | {L_calendar_event_detail_invitedby}: {CREATOR}
+
+					<div class="eventdata-details">
+						<div class="eventdata-details-date"><i class="fa fa-lg fa-calendar-o"></i> {DATE_FULL}</div>
+						<!-- IF LOCATION --><div class="eventdata-details-location"><i class="fa fa-lg fa-map-marker"></i> {LOCATION}</div><!-- ENDIF -->
+						<div class="eventdata-details-calendar"><i class="fa fa-calendar fa-lg"></i> {CALENDAR}</div>
+					</div>
+					<br />
+					<div class="eventdata-buttonrow">
+						<button class="green button_changeattendance" name="attendancetype" value="attend">{L_calendar_event_button_attend}</button>
+						<!-- IF not PRIVATE_EVENT --><button class="orange button_changeattendance" name="attendancetype" value="maybe">{L_calendar_event_button_maybe}</button><!-- ENDIF -->
+						<button class="red button_changeattendance" name="attendancetype" value="decline">{L_calendar_event_button_decline}</button>
+					</div>
 				</div>
 				<br />
-				<div class="eventdata-buttonrow">
-					<button class="green">{L_calendar_event_button_attend}</button>
-					<!-- IF not PRIVATE_EVENT --><button class="orange">{L_calendar_event_button_maybe}</button><!-- ENDIF -->
-					<button class="red">{L_calendar_event_button_decline}</button>
-				</div>
-			</div>
-			<br />
-			<div id="tab_attendance">
-				<ul>
-					<li>{L_calendar_eventparticipants}</li>
-					<!-- IF PRIVATE_EVENT --><li><a href="#tabs-invites"><span class="bubble-green">{NUMBER_INVITES}</span> Einladungen</a></li><!-- ENDIF -->
-					<li><a href="#tabs-attendees"><span class="bubble-green">{NUMBER_ATTENDEES}</span> Zusagen</a></li>
-					<!-- IF not PRIVATE_EVENT --><li><a href="#tabs-maybes"><span class="bubble-green">{NUMBER_MAYBES}</span> Vielleicht</a></li><!-- ENDIF -->
-					<li><a href="#tabs-declines"><span class="bubble-green">{NUMBER_DECLINES}</span> Absagen</a></li>
-				</ul>
+				<div id="tab_attendance">
+					<ul>
+						<li>{L_calendar_eventparticipants}</li>
+						<!-- IF PRIVATE_EVENT --><li><a href="#tabs-invites"><span class="bubble-green">{NUMBER_INVITES}</span> Einladungen</a></li><!-- ENDIF -->
+						<li><a href="#tabs-attendees"><span class="bubble-green">{NUMBER_ATTENDEES}</span> Zusagen</a></li>
+						<!-- IF not PRIVATE_EVENT --><li><a href="#tabs-maybes"><span class="bubble-green">{NUMBER_MAYBES}</span> Vielleicht</a></li><!-- ENDIF -->
+						<li><a href="#tabs-declines"><span class="bubble-green">{NUMBER_DECLINES}</span> Absagen</a></li>
+					</ul>
 
-				<!-- IF PRIVATE_EVENT -->
-				<div id="tabs-invites">
-					<!-- BEGIN invited -->
-					{invited.ICON}
-					<div class="clear"></div>
-					<!-- END invited -->
-				</div>
-				<!-- ENDIF -->
+					<!-- IF PRIVATE_EVENT -->
+					<div id="tabs-invites">
+						<!-- BEGIN invited -->
+						{invited.ICON}
+						<div class="clear"></div>
+						<!-- END invited -->
+					</div>
+					<!-- ENDIF -->
 
-				<div id="tabs-attendees">
-					<!-- BEGIN attendance -->
-					{attendance.ICON}
-					<div class="clear"></div>
-					<!-- END attendance -->
-				</div>
+					<div id="tabs-attendees">
+						<!-- BEGIN attendance -->
+						{attendance.ICON}
+						<div class="clear"></div>
+						<!-- END attendance -->
+					</div>
 
-				<!-- IF not PRIVATE_EVENT -->
-				<div id="tabs-maybes">
-					<!-- BEGIN maybe -->
-					{maybe.ICON}
-					<div class="clear"></div>
-					<!-- END maybe -->
-				</div>
-				<!-- ENDIF -->
+					<!-- IF not PRIVATE_EVENT -->
+					<div id="tabs-maybes">
+						<!-- BEGIN maybe -->
+						{maybe.ICON}
+						<div class="clear"></div>
+						<!-- END maybe -->
+					</div>
+					<!-- ENDIF -->
 
-				<div id="tabs-declines">
-					<!-- BEGIN decline -->
-					{decline.ICON}
-					<div class="clear"></div>
-					<!-- END decline -->
-				</div>
+					<div id="tabs-declines">
+						<!-- BEGIN decline -->
+						{decline.ICON}
+						<div class="clear"></div>
+						<!-- END decline -->
+					</div>
 
-			</div>
-			<br />
-			<div class="event_raidnote">
-				<!-- IF RAIDNOTE -->{RAIDNOTE}<!-- ELSE -->{L_raidevent_raid_noraidnote}<!-- ENDIF -->
+				</div>
+				<br />
+				<div class="event_raidnote">
+					<!-- IF RAIDNOTE -->{RAIDNOTE}<!-- ELSE -->{L_raidevent_raid_noraidnote}<!-- ENDIF -->
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
-	
-
-
-{CSRF_TOKEN}
+	{CSRF_TOKEN}
 </form>
 
 <div class="social">

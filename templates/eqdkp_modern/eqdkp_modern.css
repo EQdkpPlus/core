@@ -28,8 +28,8 @@ b, u, i, center,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
 	margin: 0;
@@ -40,7 +40,7 @@ time, mark, audio, video {
 	vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
+article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
@@ -315,7 +315,7 @@ h3 {
 }
 
 .fixed_width.frontend table.scrollable-x {
-	table-layout: fixed;	
+	table-layout: fixed;
 }
 
 .fixed_width.frontend table.scrollable-x tbody {
@@ -332,7 +332,7 @@ h3 {
 #header {
 	text-align:center;
 	min-height:140px;
-	
+
 }
 
 #logoContainer {
@@ -396,8 +396,8 @@ h3 {
 	border-radius: 4px 4px 4px 4px;
 	margin-left: 40px;
 	margin-right: 40px;
-	box-shadow: 2px 2px 3px 0px darken(@eqdkpContainerBorderColor, 10); 
-	-moz-box-shadow: 2px 2px 3px 0px darken(@eqdkpContainerBorderColor, 10); 
+	box-shadow: 2px 2px 3px 0px darken(@eqdkpContainerBorderColor, 10);
+	-moz-box-shadow: 2px 2px 3px 0px darken(@eqdkpContainerBorderColor, 10);
 	-webkit-box-shadow: 2px 2px 3px 0px darken(@eqdkpContainerBorderColor, 10);
 }
 
@@ -473,8 +473,8 @@ h3 {
 }
 #contentFooter .dropdown-menu, #contentFooter .dropdown-menu a {
 	color: #000;
-}	
-		
+}
+
 .debug {
 	margin: 5px;
 }
@@ -678,7 +678,7 @@ input[type=radio], input[type=checkbox]{
 }
 
 .multilang-dropdown {
-	position: absolute;	
+	position: absolute;
 	background-color: @eqdkpContentAccentColor;
 	border: 1px solid @eqdkpInputBorderColor;
 	border-radius: 4px 0px 4px 4px;
@@ -789,7 +789,7 @@ select[readonly], textarea[readonly], input[type="text"][readonly], input[type="
 	cursor: not-allowed;
 }
 
-/* color styles 
+/* color styles
 ---------------------------------------------- */
 
 /* black */
@@ -1040,7 +1040,7 @@ a.blue, a.blue:hover, a.button, a.button:hover {
 	width: 100%;
 }
 .tr { display: table-row;}
-.td { 
+.td {
 	display: table-cell;
 	padding: 2px;
 }
@@ -1127,7 +1127,7 @@ a.blue, a.blue:hover, a.button, a.button:hover {
 	position:relative;
 	margin:0;
 	padding:1px;
-}			
+}
 .markImageResized{
 	width:32px;
 	height:32px;
@@ -1992,7 +1992,7 @@ ul.breamcrumb .current::before{
 }
 
 /* ACP: manage menues */
-.manage_menues_block { 
+.manage_menues_block {
 	list-style-type: none; padding: 3px; margin:6px; border:1px dashed darken(@eqdkpContentBorderColor,40); min-width:180px;
 }
 .manage_menues_block2 {
@@ -2101,13 +2101,13 @@ ul.portal_block {
 	min-height: 20px;
 }
 
-.portal_block li { 
+.portal_block li {
 	list-style-type: none;
 	padding: 10px;
 	margin:10px;
 	cursor:pointer;
 }
-.portal_block_light { 
+.portal_block_light {
 	list-style-type: none;
 	padding: 5px;
 	margin:10px;
@@ -2124,7 +2124,7 @@ ul.portal_block {
 /***************************************************
  * CALENDAR
  **************************************************/
- 
+
  /* calendar: global */
 #calendar_loading{
 	border-radius: 10px;
@@ -2318,7 +2318,7 @@ fieldset.raidcal_infos dt, fieldset.moderation_panel dt {
 	font-weight: bold;
 }
 
-table.guesttable { 
+table.guesttable {
 	padding: 5px;
 	border: 1px solid #ccc;
 	background: #E8E8E8;
@@ -2412,6 +2412,9 @@ span.group_selector {
 .charchange_menucontainer{
 	background-color:#466988;
 	overflow: hidden;
+}
+.eventdata-details div{
+	margin: 8px 0px;
 }
 
 /* general: game specific */
@@ -3148,7 +3151,7 @@ table.leaderboard tbody tr td table.borderless tbody tr td {
 	list-style:none;
 	margin-top:20px;
 }
-	
+
 .tags li, .tags a{
 	float:left;
 	height:24px;
@@ -3156,7 +3159,7 @@ table.leaderboard tbody tr td table.borderless tbody tr td {
 	position:relative;
 	font-size:11px;
 	}
-	
+
 .tags.small li, .tags.small a {
 	height:20px;
 	line-height:20px;
@@ -3169,7 +3172,7 @@ table.leaderboard tbody tr td table.borderless tbody tr td {
 	color: @eqdkpMiscColor2;
 	text-decoration:none;
 	-moz-border-radius-bottomright:4px;
-	-webkit-border-bottom-right-radius:4px;	
+	-webkit-border-bottom-right-radius:4px;
 	border-bottom-right-radius:4px;
 	-moz-border-radius-topright:4px;
 	-webkit-border-top-right-radius:4px;
@@ -3404,15 +3407,15 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 }
 
 .reponsiveTestClass {text-align:right;}
-	
+
 @media all and (max-width: 899px) {
 	body.responsive, html , .responsive #personalArea{
 		font-size: 13px;
 		line-height: 14px;
 	}
-	
+
 	.reponsiveTestClass {text-align:center;}
-	
+
 	.responsive #personalArea {
 		line-height: 22px;
 		font-size: 16px;
@@ -3421,27 +3424,27 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		line-height: 30px;
 		font-size: 24px;
 	}
-	
+
 	.responsive .notification-tooltip-container, .responsive .langswitch-tooltip-container {
 		position: static;
 	}
-	
+
 	.responsive #header {
 		min-height: 10px;
 	}
-	
+
 	.responsive #logoContainer {
 		overflow: visible;
 	}
-	
+
 	.responsive .hiddenSmartphone, .responsive .debug, .responsive .stacktable, .responsive .stackcolumns {
 		display:none;
 	}
-	
+
 	.responsive .hiddenDesktop {
 		display:block;
 	}
-	
+
 	.responsive .mainmenu i {
 		color: #fff;
 		font-size: 23px;
@@ -3449,69 +3452,69 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		line-height: 23px;
 		vertical-align: middle;
 	}
-	
+
 	.responsive #personalArea, .responsive #header, .responsive #footer {
 		padding-right: 10px;
 		padding-left: 10px;
 	}
-	
+
 	.responsive #contentContainer {
 		margin-right: 0px;
 		margin-left: 0px;
 		margin-top: 5px;
 	}
-	
+
 	.responsive #personalAreaUser, .responsive #titles, .responsive #titles h1, .responsive #titles h2, .responsive:not(.simple-header) fieldset.settings dd, .responsive:not(.simple-header) fieldset.settings dt, .responsive.simple-header.mobile fieldset.settings dd, .responsive.simple-header.mobile fieldset.settings dt{
 		display:block;
 		float:none;
 		margin:0px;
 		padding:0px;
 	}
-	
+
 	.responsive #titles h1 {
 		font-size: 30px;
 		line-height: 30px;
 	}
-	
+
 	.responsive #titles h2 {
 		font-size: 20px;
 		line-height: 18px;
 	}
-	
+
 	.responsive .column {
 		display: block;
 	}
-	
+
 	.responsive .portal .second, .portal .first {
 		padding: 0px;
 	}
-	
+
 	.responsive:not(.simple-header) fieldset.settings dd {
 		border-left: none;
 		margin: 0px;
 		float:none;
 	}
-	
+
 	.responsive:not(.simple-header) fieldset.settings dt {
 		width: 100%;
 		border-right: none;
 		float: none;
 	}
-	
+
 	.responsive:not(.simple-header) fieldset.settings dl:hover dt, .responsive:not(.simple-header) fieldset.settings dl:hover dd, .responsive.simple-header.mobile fieldset.settings dl:hover dt, .responsive.simple-header.mobile fieldset.settings dl:hover dd{
 		border-right: none;
 		border-left: none;
 	}
-	
+
 	.responsive .ui-dialog {
 		max-width: 98%;
 		height: auto !important;
 	}
-		
-	.responsive .mce-toolbar[role="menubar"] { 
+
+	.responsive .mce-toolbar[role="menubar"] {
 		display: none;
 	}
-	
+
 	.responsive:not(.simple-header) .ui-tabs-nav li, .responsive.simple-header.mobile .ui-tabs-nav li {
 		float: none;
 		width: 100%;
@@ -3519,43 +3522,43 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		line-height: 22px;
 		font-size: 15px;
 	}
-	
+
 	.responsive:not(.simple-header) .ui-tabs-anchor, .responsive.simple-header.mobile .ui-tabs-anchor {
 		display: block;
 	}
-	
+
 	.responsive:not(.simple-header) .settings input[type='text'], .responsive:not(.simple-header) .settings input[type='password'], .responsive:not(.simple-header) .settings select,
 	.responsive.simple-header.mobile .settings input[type='text'], .responsive.simple-header.mobile .settings input[type='password'], .responsive.simple-header.mobile .settings select {
 		width: 90% !important;
 	}
-	
+
 	.responsive:not(.simple-header) .ui-tabs .ui-tabs-nav .ui-tabs-anchor, .responsive.simple-header.mobile .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
 		float: none;
 	}
-	
+
 	.responsive .breamcrumb li, .responsive .breamcrumb li a:after, .responsive .breamcrumb li a:before {
 		display: none;
 	}
-	
+
 	.responsive .breamcrumb li:first-child, .responsive .breamcrumb li:nth-last-of-type(2) {
 		display: inline;
 	}
-	
+
 	.responsive .breamcrumb li:first-child a {
 		border-right: 1px solid #ccc;
 		padding-right: 8px;
 		line-height: 27px;
 		padding-left: 8px !important;
 	}
-	
+
 	.responsive .breamcrumb li {
 		font-size: 14px;
 	}
-	
+
 	.responsive .breamcrumb li:nth-last-of-type(2) a {
 		padding-left: 22px;
 	}
-	
+
 	.responsive .breamcrumb li:nth-last-of-type(2) a:before {
 		content:"\f060";
 		display:inline;
@@ -3568,20 +3571,20 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		top: 11px;
 		font-family: "FontAwesome";
 	}
-	
+
 	.responsive .breamcrumb li:first-child a:before {
 		display: none;
 	}
-	
+
 	.responsive .medium, .responsive .button, .responsive input[type="submit"], .responsive input[type="button"],.responsive input[type="reset"], .responsive button, .responsive ui-dialog button {
 		font-size: 14px;
 		padding: .3em 1em .32em;
 	}
-	
+
 	.responsive .contentWidth60, .responsive .contentWidth30 {
 		width: auto;
 	}
-	
+
 	.responsive .contentSideRight {
 		float: none;
 		clear: both;
@@ -3590,24 +3593,24 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		padding: 0;
 		margin-bottom: 10px;
 	}
-	
+
 	.responsive div.table:not(.noMobileTransform) {
 		display: inline;
 	}
-	
+
 	.responsive button.ui-multiselect {
 		width: auto !important;
 	}
-	
+
 	.responsive.simple-header.mobile .floatRight  {
 		float: none;
 	}
-	
+
 	.responsive div.leaderboard > div.floatLeft {
 		float: none;
 		width: 100% !important;
 	}
-	
+
 	/* Mobile Navigation */
 	.nav-mobile {
 		background: @eqdkpMenuBackgroundColor; /* Old browsers */
@@ -3621,7 +3624,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		width: 100%;
 		min-height: 3em;
 	}
-	
+
 	.nav-mobile > i {
 		float: right;
 		background-color: #fff;
@@ -3631,7 +3634,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		margin: 4px;
 		font-size: 22px;
 	}
-	
+
 	.nav-mobile-overlay {
 		width: 75%;
 		height: 100%;
@@ -3646,7 +3649,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		border-right: 1px solid #bbb;
 		z-index: 999;
 	}
-	
+
 	.nav-mobile-closebtn {
 		background-color: #4E7FA8;
 		color: #fff;
@@ -3658,72 +3661,72 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		padding: 4px 6px 6px 6px;
 		font-size: 20px;
 	}
-	
+
 	.mainmenu-mobile > li,  .nav-mobile-overlay .admin-headline, .adminmenu-mobile > li {
 		margin-bottom: 24px;
 		font-size: 18px;
 		color: #4E7FA8;
 		font-weight: bold;
 	}
-	
+
 	.mainmenu-mobile > li > ul, .adminmenu-mobile > li > ul {
 		margin-left: 15px;
 		font-weight: normal;
 		font-size: 14px;
 		margin-top: 6px;
 	}
-	
+
 	.mainmenu-mobile > li > ul > li, .mainmenu-mobile > li > ul > li > ul > li, .adminmenu-mobile > li > ul > li, .adminmenu-mobile > li > ul > li > ul > li {
 		margin-bottom: 5px;
 	}
-	
+
 	.mainmenu-mobile > li > ul > li > ul, .adminmenu-mobile > li > ul > li > ul{
 		margin-left: 30px;
 		font-weight: normal;
 		font-size: 15px;
 		margin-top: 6px;
 	}
-	
+
 	.responsive table.scrollable-x {
-		table-layout: fixed;	
+		table-layout: fixed;
 	}
 
 	.responsive table.scrollable-x tbody {
 		display: block;
 		overflow-x: auto;
 	}
-	
+
 	.responsive fieldset.settings {
 		max-width: 100%;
 	}
-	
+
 	.responsive .permissions {
 		float: none;
 		width: 100%;
 	}
-	
+
 	.responsive .ui-notify-close {
 		font-size: 20px;
 	}
-	
+
 	.responsive #mainlogo {
 		max-height: 50px;
 	}
-	
+
 	.responsive #titles {
 		float: left;
 		margin-left: 6px;
 	}
-	
+
 	.responsive .nowrap.desktopOnly{
 		white-space: normal;
 	}
-	
+
 	.responsive #personalAreaUser ul li:last-child{
 		margin-right: 0;
 	}
-	
-	.responsive .comment_avatar_container, .responsive .comment_write_container::after, .responsive .comment_write_container::before, .comment_container::after, .comment_container::before{ 
+
+	.responsive .comment_avatar_container, .responsive .comment_write_container::after, .responsive .comment_write_container::before, .comment_container::after, .comment_container::before{
 		display: none;
 	}
 	.responsive .comment_container, .responsive #comment_button, .responsive .reply-trigger, .responsive .reply_button, .responsive .comment_write_container {
@@ -3733,15 +3736,15 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	.responsive .user-profile > .user-avatar img {
 		height: 48px;
 	}
-	
+
 	.responsive .comment-reply {
 		margin-left: 30px;
 	}
-	
+
 	.responsive .article_content img:not(.itt-icon):not(.classicon):not(.raceicon):not(.rankicon):not(.talenticon):not(.eventicon):not(.roleicon):not(.gameicon):not(.smilies):not(.eqdkpicon) {
 		width: 100% !important;
 	}
-	
+
 	.responsive .embed-content div iframe {
 	    position: absolute;
 	    top: 0;
@@ -3749,7 +3752,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	    width: 100%;
 	    height: 100%;
 	}
-	
+
 	.responsive .embed-content {
 	  position: relative;
 	  padding-bottom: 67.5%;
@@ -3757,30 +3760,30 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	  margin: 10px 0;
 	  overflow: hidden;
 	}
-	
+
 	.responsive .ui-notify {
 		max-width: 95%;
 	}
-	
+
 	.responsive .langswitch-tooltip-trigger > span {
 		display: none;
 	}
-	
+
 	.responsive .contentSidebar, .responsive .contentSidebarRight, .responsive .contentSidebarLeft {
 		display: block;
 		border: none;
 		background: none;
 	}
-	
+
 	.responsive .contentSidebarRight, .responsive .contentSidebarLeft {
 		width: auto !important;
 		border-top: 1px solid @eqdkpSidebarBorderColor;
 	}
-	
+
 	.responsive #personalAreaUser .user-avatar-smallest>img {
 		margin-top: 4px;
 	}
-	
+
 	.responsive .first.column, .responsive .third.column, {
 		min-width: 1% !important;
 		max-width: 100% !important;
@@ -3801,18 +3804,18 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		margin: 0px;
 		float:none;
 	}
-	
+
 	.responsive fieldset.settings dt {
 		width: 100%;
 		border-right: none;
 		float: none;
 	}
-	
+
 	.responsive fieldset.settings dl:hover dt, .responsive fieldset.settings dl:hover dd{
 		border-right: none;
 		border-left: none;
 	}
-	
+
 	.responsive .ui-tabs-nav li {
 		float: none;
 		width: 100%;
@@ -3820,15 +3823,15 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		line-height: 22px;
 		font-size: 15px;
 	}
-	
+
 	.responsive .ui-tabs-anchor {
 		display: block;
 	}
-	
+
 	.responsive .settings input[type='text'], .responsive .settings input[type='password'], .responsive .settings select {
 		width: 90% !important;
 	}
-	
+
 	.responsive .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
 		float: none;
 	}
@@ -3836,7 +3839,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	.responsive .share-text {
 		display: none;
 	}
-	
+
 	.responsive .social-bookmarks li a.social-bookmarks-count {
 		width: 50px;
 	}
@@ -3844,7 +3847,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	.responsive #personalAreaUser ul li {
 		margin-right: 10px;
 	}
-	
+
 	.list-type1 .ribbons, .list-type2 .ribbons, .list-type3 .ribbons  {
 		display: none;
 	}
@@ -3885,7 +3888,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	background-position: 10px center;
 	margin: 10px 0px;
 	display:block;
-	min-height: 32px;	
+	min-height: 32px;
 }
 .errorbox div span, .greenbox div span, .bluebox div span{
 	padding: 0px 0px 0px 0px;

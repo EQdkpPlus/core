@@ -22,7 +22,7 @@
 class editcalendarevent_pageobject extends pageobject {
 
 	public static $shortcuts = array('email'=>'MyMailer');
-	
+
 	public function __construct() {
 		$handler = array(
 			'deletetemplate'=> array('process' => 'process_deletetemplate', 'csrf'=>true),
@@ -73,7 +73,7 @@ class editcalendarevent_pageobject extends pageobject {
 		$eventextension	= $this->pdh->get('calendar_events', 'extension', array($eventID));
 		$strEventName = $this->pdh->get('event', 'name', array($eventextension['raid_eventid']));
 		if($strEventName && $strEventName != "") $strEventName .= ', ';
-		
+
 		$a_users = $this->pdh->get('user', 'active_users');
 		if(is_array($a_users) && count($a_users) > 0){
 			foreach($a_users as $userid){
@@ -120,7 +120,7 @@ class editcalendarevent_pageobject extends pageobject {
 				'dw_raidleader'		=> $this->in->getArray('raidleader', 'int'),
 				'deadlinedate'		=> $this->in->get('deadlinedate', 0),
 				'distribution'		=> $raid_clsdistri,
-				'calendar_id'		=> $this->in->get('calendar_id'), 
+				'calendar_id'		=> $this->in->get('calendar_id'),
 			)
 		));
 		$this->pdh->process_hook_queue();
@@ -205,6 +205,7 @@ class editcalendarevent_pageobject extends pageobject {
 				$this->in->get('allday'),
 				array(
 					'invited'			=> $invited_users,
+					'location'			=> $this->in->get('location')
 				),
 				0,
 				$this->in->get('private', 0),
@@ -229,12 +230,12 @@ class editcalendarevent_pageobject extends pageobject {
 	// check if there are attendees and if they have a role set
 	private function check_roleraid_attendees($eventid){
 		$attendees	= $this->pdh->get('calendar_raids_attendees', 'attendees', array($this->url_id));
-		
+
 		// check if there are attendees in this raid
 		if(is_array($attendees) && count($attendees) > 0){
 			foreach($attendees as $attendeeid=>$attendeedata){
 				$member_role_id	= (int)$attendeedata['member_role'];
-				
+
 				// check if the role is empty or null
 				if(!$member_role_id || $member_role_id == 0){
 					// update the role for that event
@@ -244,7 +245,7 @@ class editcalendarevent_pageobject extends pageobject {
 					}else{
 						// remove that attendee
 					}
-					
+
 				}
 			}
 		}
@@ -301,19 +302,20 @@ class editcalendarevent_pageobject extends pageobject {
 				$this->in->get('allday'),
 				array(
 					'invited'			=> $this->in->getArray('invited', 'int'),
+					'location'			=> $this->in->get('location')
 				)
 			));
 		}
-		
+
 		//Flush Cache so the Cronjob can access the new data
 		$this->pdh->process_hook_queue();
-		
+
 		if($this->in->get('repeating') > 0){
 			//Process Queue, so the Cronjob has reliable data
 			$this->pdh->process_hook_queue();
 			$this->timekeeper->run_cron('calevents_repeatable', true, true);
 		}
-		
+
 		$this->pdh->process_hook_queue();
 
 		// close the dialog
@@ -359,7 +361,7 @@ class editcalendarevent_pageobject extends pageobject {
 			'event'		=> $this->user->lang('calendar_mode_event'),
 			'raid'		=> $this->user->lang('calendar_mode_raid')
 		);
-		
+
 		// Repeat array
 		$radio_repeat_array	= array(
 			'0'			=>$this->user->lang('calendar_event_editone'),
@@ -417,7 +419,7 @@ class editcalendarevent_pageobject extends pageobject {
 			);
 		}else{
 			$default_raidduration	= ((($this->config->get('calendar_addraid_duration')) ? $this->config->get('calendar_addraid_duration') : 120)*60);
-			
+
 			// if the default time should be used, set it...
 			if($this->config->get('calendar_addraid_use_def_start') && preg_match('#[:]#', $this->config->get('calendar_addraid_def_starttime'))){
 				$starttimestamp			= ($this->in->get('timestamp', 0) > 0) ? $this->time->newtime($this->in->get('timestamp', 0), $this->config->get('calendar_addraid_def_starttime')) : $this->time->fromformat($this->config->get('calendar_addraid_def_starttime'), $this->user->style['time']);
@@ -468,7 +470,7 @@ class editcalendarevent_pageobject extends pageobject {
 				}
 			}
 		}
-		
+
 		// the hack for the custom repeating period
 		$dr_repeat_custom = 1;
 		if(isset($eventdata['repeating']) && $eventdata['repeating'] > 0 && !in_array((int)$eventdata['repeating'], array(1,7,14))){
@@ -505,6 +507,7 @@ class editcalendarevent_pageobject extends pageobject {
 
 			// data
 			'EVENT_ID'			=> $this->url_id,
+			'LOCATION'			=> (isset($eventdata['extension']) && isset($eventdata['extension']['location'])) ? $eventdata['extension']['location'] : '',
 			'NOTE'				=> (isset($eventdata['notes'])) ? $eventdata['notes'] : '',
 			'EVENTNAME'			=> (isset($eventdata['name'])) ? $eventdata['name'] : '',
 			'RAID_VALUE'		=> (isset($eventdata['extension'])) ? $eventdata['extension']['raid_value'] : '',
