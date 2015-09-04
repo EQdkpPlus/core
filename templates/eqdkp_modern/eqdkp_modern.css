@@ -4007,6 +4007,20 @@ li.prio_2 {
 	border: 1px solid #B94A48 !important;
 }
 
+.bubble {
+  background-color: @eqdkpContentHighlightColor;
+  border-radius: 9px;
+  color: @eqdkpContentBackgroundColor;
+  display: inline-block;
+  font-size: .85rem;
+  padding: 1px 6px 1px;
+  position: relative;
+  text-shadow: none !important;
+  vertical-align: middle;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+
 .notification_list li{
 	padding-bottom: 6px;
 	padding-top: 6px;
