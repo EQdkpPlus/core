@@ -21,19 +21,19 @@
 					</div>
 					<br />
 					<div class="eventdata-buttonrow">
-						<button class="green button_changeattendance" name="attendancetype" value="attend">{L_calendar_event_button_attend}</button>
-						<!-- IF not PRIVATE_EVENT --><button class="orange button_changeattendance" name="attendancetype" value="maybe">{L_calendar_event_button_maybe}</button><!-- ENDIF -->
-						<button class="red button_changeattendance" name="attendancetype" value="decline">{L_calendar_event_button_decline}</button>
+						<button class="<!-- IF MYSTATUS == "1" -->green<!-- ELSE -->gray<!-- ENDIF --> button_changeattendance" name="attendancetype" value="attend">{L_calendar_event_button_attend}</button>
+						<!-- IF not PRIVATE_EVENT --><button class="<!-- IF MYSTATUS == "2" -->orange<!-- ELSE -->gray<!-- ENDIF --> button_changeattendance" name="attendancetype" value="maybe">{L_calendar_event_button_maybe}</button><!-- ENDIF -->
+						<button class="<!-- IF MYSTATUS == "3" -->red<!-- ELSE -->gray<!-- ENDIF --> button_changeattendance" name="attendancetype" value="decline">{L_calendar_event_button_decline}</button>
 					</div>
 				</div>
 				<br />
 				<div id="tab_attendance">
 					<ul>
 						<li>{L_calendar_eventparticipants}</li>
-						<!-- IF PRIVATE_EVENT --><li><a href="#tabs-invites"><span class="bubble-green">{NUMBER_INVITES}</span> Einladungen</a></li><!-- ENDIF -->
-						<li><a href="#tabs-attendees"><span class="bubble-green">{NUMBER_ATTENDEES}</span> Zusagen</a></li>
-						<!-- IF not PRIVATE_EVENT --><li><a href="#tabs-maybes"><span class="bubble-green">{NUMBER_MAYBES}</span> Vielleicht</a></li><!-- ENDIF -->
-						<li><a href="#tabs-declines"><span class="bubble-green">{NUMBER_DECLINES}</span> Absagen</a></li>
+						<!-- IF PRIVATE_EVENT --><li><a href="#tabs-invites"><span class="bubble">{NUMBER_INVITES}</span> Einladungen</a></li><!-- ENDIF -->
+						<li><a href="#tabs-attendees"><span class="bubble">{NUMBER_ATTENDEES}</span> Zusagen</a></li>
+						<!-- IF not PRIVATE_EVENT --><li><a href="#tabs-maybes"><span class="bubble">{NUMBER_MAYBES}</span> Vielleicht</a></li><!-- ENDIF -->
+						<li><a href="#tabs-declines"><span class="bubble">{NUMBER_DECLINES}</span> Absagen</a></li>
 					</ul>
 
 					<!-- IF PRIVATE_EVENT -->

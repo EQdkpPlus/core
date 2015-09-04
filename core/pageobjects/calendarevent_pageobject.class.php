@@ -1018,7 +1018,8 @@ class calendarevent_pageobject extends pageobject {
 		$strPageTitle = sprintf($this->pdh->get('calendar_events', 'name', array($this->url_id)), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->user_date($eventdata['timestamp_start']).' '.$this->time->user_date($eventdata['timestamp_start'], false, true);
 
 		// set the userstatus to zero
-		$userstatus = array();
+		$userstatus		= array();
+		$statusofuser	= array();
 
 		// attendees
 		if($eventdata['private'] == 1){
@@ -1038,7 +1039,7 @@ class calendarevent_pageobject extends pageobject {
 			$event_attendees		= (isset($eventdata['extension']['invited']) && count($eventdata['extension']['invited']) > 0) ? $eventdata['extension']['invited'] : array();
 			if(count($event_attendees) > 0){
 				foreach($event_attendees as $attendeedata=>$status){
-
+					$statusofuser[$attendeedata] = $status;
 					$userstatus['attendance'][] = array(
 						'name'		=> $this->pdh->get('user', 'name', array($attendeedata)),
 						'icon'		=> $this->pdh->get('user', 'avatar_withtooltip', array($inviteddata)),
@@ -1054,6 +1055,7 @@ class calendarevent_pageobject extends pageobject {
 					case 2:		$attendancestatus = 'maybe'; break;
 					case 3:		$attendancestatus = 'decline'; break;
 				}
+				$statusofuser[$attuserid] = $attstatus;
 				$userstatus[$attendancestatus][] = array(
 					'name'		=> $this->pdh->get('user', 'name', array($attuserid)),
 					'icon'		=> $this->pdh->get('user', 'avatar_withtooltip', array($attuserid)),
@@ -1061,8 +1063,6 @@ class calendarevent_pageobject extends pageobject {
 				);
 			}
 		}
-
-
 
 		foreach($userstatus as $blockid=>$blockdata){
 			foreach($blockdata as $attendeedata){
@@ -1091,6 +1091,7 @@ class calendarevent_pageobject extends pageobject {
 			'DATE_MONTH'		=> $this->time->date('F', $eventdata['timestamp_start']),
 			'DATE_YEAR'			=> $this->time->date('Y', $eventdata['timestamp_start']),
 			'DATE_FULL'			=> $full_date,
+			'MYSTATUS'			=> (isset($statusofuser[$this->user->data['user_id']]) && $statusofuser[$this->user->data['user_id']] > 0) ? $statusofuser[$this->user->data['user_id']] : 0,
 			'ALLDAY'			=> ($eventdata['allday'] == 1) ? true : false,
 			'LOCATION'			=> (isset($eventdata['extension']['location'])) ? $eventdata['extension']['location'] : false,
 			'CREATOR'			=> $this->pdh->get('user', 'name', array($eventdata['creator'])),
