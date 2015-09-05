@@ -1,10 +1,10 @@
 <script type='text/javascript'>
 //<![CDATA[
 	$(document).ready(function() {
-		
+
 		$("#calendarfilter").val(JSON.parse(cal_getStorage("calendar.filter")) || 0);
 		$("#calendarfilter").multiselect('refresh');
-		
+
 		$('#calendar').fullCalendar({
 			firstDay: {STARTDAY},
 
@@ -29,7 +29,7 @@
 						url: '{U_EDIT_CALENDAREVENT}&simple_head=true&timestamp='+(moment.utc(date).unix()),
 						title: "{L_calendar_win_add}",
 						width: 940,
-						height:700,
+						height:730,
 						modal: false,
 						buttons: false,
 						close: function(event, ui) { $('#calendar').fullCalendar('refetchEvents'); }
@@ -79,11 +79,11 @@
 							buttontext = '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-check fa-lg hand" onclick="acceptInvitation('+event.eventid+');"></i>  <i class="fa fa-times fa-lg hand" onclick="declineInvitation('+event.eventid+');"></i></div>';
 						}
 					}
-					
+
 					if(event.attendees != ''){
 						tmpttcontent += "{L_calendar_eventparticipants}" + event.attendees;
 					}
-					
+
 					element.qtip({
 						content: {
 							text: tmpttcontent,
@@ -179,7 +179,7 @@
 			defaultDate: cal_getStorage("calendar.currentdate") || moment(),
 			viewRender: function(view){
 				cal_setStorage("calendar.viewname", view.name);
-				
+
 				// get the date and set it to the variable
 				var date2save	= (view.name == 'month') ? $('#calendar').fullCalendar('getDate') : view.start;
 				cal_setStorage("calendar.currentdate", date2save.format());
@@ -246,7 +246,7 @@
 				$('#calendar').fullCalendar('render');
 			}
 		});
-		
+
 
 		$('[name="selected_ids[]"], #pdh_selectall1').change( function() {
 			if($(this).prop('checked') == true && $('#raid_masssignin_panel').is(':hidden')){
@@ -257,7 +257,7 @@
 				}
 			}
 		});
-		
+
 		$('#calendarfilter').change(function(){
 			var array_of_checked_values = $("#calendarfilter").multiselect("getChecked").map(function(){
 				return this.value;
@@ -269,7 +269,7 @@
 	function acceptInvitation(id){
 		location.href = '{U_CALENDAR}&handle_invitation=true&status=accept&eventid='+id;
 	}
-	
+
 	function declineInvitation(id){
 		location.href = '{U_CALENDAR}&handle_invitation=true&status=decline&eventid='+id;
 	}
@@ -279,7 +279,7 @@
 			url: '{U_EDIT_CALENDAREVENT}&simple_head=true&eventid='+editid,
 			title: "{L_calendar_win_edit}",
 			width: 940,
-			height:650,
+			height:730,
 			modal: false,
 			buttons: false,
 			close: function(event, ui) { $('#calendar').fullCalendar('refetchEvents'); }
@@ -393,7 +393,7 @@ td.fc-day:hover:after {
 			<div class="fc-button-group" id="calendar_filter">
 				{MS_CALENDAR_SELECT}
 			</div>
-			
+
 			<div class="fc-button-group" id="calendar_filter">
 				<button type="button" class="ui-button ui-state-default ui-corner-left"><i class="fa fa-list"></i> Alle</button>
 				<button type="button" class="ui-button ui-state-default fc-middle-button"><i class="fa fa-clock-o"></i> Zukünftige</button>
@@ -406,8 +406,8 @@ td.fc-day:hover:after {
 				<!-- ENDIF -->
 			</div>
 		</div>
-		
-		
+
+
 		<div id="calDialog"></div>
 		<div id='calendar_loading'><i class="fa fa-spinner fa-spin fa-lg"></i> {L_lib_loading}</div>
 		<div id='calendar'></div>
@@ -438,10 +438,10 @@ td.fc-day:hover:after {
 		{CSRF_TOKEN}
 		</form>
 	</div>
-	
+
 	<div id="fragment-raidstats">
 		<form name="raidstats" method="post" action="{ACTION}">
-		
+
 		<fieldset class="settings mediumsettings">
 		<legend>{L_viewraid_create_summ}</legend>
 		<div>
