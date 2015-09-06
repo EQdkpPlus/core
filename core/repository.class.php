@@ -315,7 +315,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 		//Download the Intermediate Cert from our server
 		private function loadIntermediateCert(){
 
-			$response = $this->puf->fetch($this->RepoEndpoint.'interm_cert', "", 1);
+			$response = $this->puf->fetch($this->RepoEndpoint.'interm_cert', "", 5);
 			$arrJson = json_decode($response);
 
 			if ($arrJson && (int)$arrJson->status == 1 && strlen((string)$arrJson->cert)){
@@ -332,7 +332,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 		//Download Revoke List from our server
 		private function loadRevokeList(){
 
-			$response = $this->puf->fetch(EQDKP_CRL_URL, "", 1);
+			$response = $this->puf->fetch(EQDKP_CRL_URL, "", 5);
 
 			if ($response){
 				$this->pfh->Delete('crl.txt', 'eqdkp/certs');
