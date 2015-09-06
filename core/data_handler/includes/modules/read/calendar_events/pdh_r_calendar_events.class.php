@@ -71,7 +71,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			if($this->events !== NULL && $this->repeatable_events !== NULL && $this->event_timestamps !== NULL){
 				return true;
 			}
-			
+
 			$objQuery = $this->db->query("SELECT * FROM __calendar_events");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
@@ -93,17 +93,17 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 					);
 					$this->events[$row['id']]['extension']	= unserialize($row['extension']);
 					$this->event_timestamps[$row['id']]		= (int)$row['timestamp_start'];
-	
+
 					// set the repeatable array
 					if((int)$row['repeating'] > 0){
 						$parentid	= ((int)$row['cloneid'] > 0) ? (int)$row['cloneid'] : (int)$row['id'];
 						$this->repeatable_events[$parentid][] = (int)$row['id'];
 					}
 				}
-				
+
 				// sort the timestamps
 				if(is_array($this->event_timestamps)) asort($this->event_timestamps);
-	
+
 				// set the cache
 				$this->pdc->put('pdh_calendar_events_table.events', $this->events, null);
 				$this->pdc->put('pdh_calendar_events_table.repeatable', $this->repeatable_events, null);
@@ -188,7 +188,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 		public function get_data($id=''){
 			return 	($id) ? $this->events[$id] : $this->events;
 		}
-		
+
 		public function get_timezone($id=''){
 			return (isset($this->events[$id]['timezone'])) ? $this->events[$id]['timezone'] : 'UTC';
 		}
@@ -332,8 +332,8 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			return 	$this->events[$id]['extension'];
 		}
 
-		public function get_notes($id){
-			return 	$this->events[$id]['notes'];
+		public function get_notes($id, $bbcode2html=false){
+			return 	($bbcode2html) ?  $this->bbcode->toHTML($this->events[$id]['notes']) : $this->bbcode->remove_bbcode($this->events[$id]['notes']);
 		}
 
 		public function get_repeating($id){
@@ -362,16 +362,16 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			reset($this->event_timestamps);
 			return ($next_eventid > 0 && $next_eventid != $id) ? $next_eventid : false;
 		}
-		
+
 		public function get_next_raid($id){
 			$this->helper_set_pointer($this->event_timestamps, $id);
 			$blnRaidFound = false;
 			$next_raid = 0;
-			
+
 			while(!$blnRaidFound){
 				$nextResult = next($this->event_timestamps);
 				if (!$nextResult) break;
-				
+
 				$next_eventid	= key($this->event_timestamps);
 				if ($this->get_calendartype($next_eventid) == '1'){
 					$next_raid = $next_eventid;
@@ -382,7 +382,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			reset($this->event_timestamps);
 			return ($next_raid > 0 && $next_raid != $id) ? $next_raid : false;
 		}
-		
+
 		public function get_prev_event($id){
 			$this->helper_set_pointer($this->event_timestamps, $id);
 			prev($this->event_timestamps);
@@ -390,16 +390,16 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			reset($this->event_timestamps);
 			return ($prev_eventid > 0 && $prev_eventid != $id) ? $prev_eventid : false;
 		}
-		
+
 		public function get_prev_raid($id){
 			$this->helper_set_pointer($this->event_timestamps, $id);
 			$blnRaidFound = false;
 			$prev_raid = 0;
-				
+
 			while(!$blnRaidFound){
 				$prevResult = prev($this->event_timestamps);
 				if (!$prevResult) break;
-		
+
 				$prev_eventid	= key($this->event_timestamps);
 				if ($this->get_calendartype($prev_eventid) == '1'){
 					$prev_raid = $prev_eventid;
@@ -410,7 +410,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			reset($this->event_timestamps);
 			return ($prev_raid > 0 && $prev_raid != $id) ? $prev_raid : false;
 		}
-		
+
 		private function helper_set_pointer(&$array,$key){
 			reset ($array);
 			while (key($array) !== $key) {
@@ -440,10 +440,10 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 	    * -----------------------------------------------------------------------*/
 		public function get_export_data($id, $json=false){
 			$exportdata = $this->get_data($id);
-			
+
 			// unset the extension sub array
 			unset($exportdata['extension']);
-			
+
 			//now, add the extension array on the same level
 			$exportdata =array_merge($exportdata, $this->get_extension($id));
 
@@ -453,7 +453,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			$exportdata['attendees']['signedoff']	= $this->pdh->get('calendar_raids_attendees', 'attendee_stats', array($id, '2'));
 			$exportdata['attendees']['backup']		= $this->pdh->get('calendar_raids_attendees', 'attendee_stats', array($id, '3'));
 			$exportdata['attendees']['guests']		= $this->pdh->get('calendar_raids_guests', 'members', array($id));
-			
+
 			return ($json) ? json_encode($exportdata) : $exportdata;
 		}
 
@@ -464,11 +464,11 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 
 		public function get_amount_raids($days, $retcount=true){
 			$raids = array_filter($this->events, function ($element) use (&$days) {
-				return ($element['timestamp_start'] > (time()-($days*86400))); 
+				return ($element['timestamp_start'] > (time()-($days*86400)));
 			});
 			return ($retcount) ? count($raids) : $raids;
 		}
-		
+
 		public function get_amount_raids_fromto($from, $to, $retcount=true){
 			$raids = array_filter($this->events, function ($element) use (&$from, &$to) {
 				return ($element['timestamp_start'] > ($from) && ($element['timestamp_end'] < $to));

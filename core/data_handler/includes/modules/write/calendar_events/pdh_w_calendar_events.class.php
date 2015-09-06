@@ -56,7 +56,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 			$old['startdate']		= $this->pdh->get('calendar_events', 'time_start', array($id));
 			$old['enddate']			= $this->pdh->get('calendar_events', 'time_end', array($id));
 			$old['repeat']			= $this->pdh->get('calendar_events', 'repeating', array($id));
-			$old['notes']			= $this->pdh->get('calendar_events', 'notes', array($id));
+			$old['notes']			= $this->pdh->get('calendar_events', 'notes', array($id, true));
 			$old['allday']			= $this->pdh->get('calendar_events', 'allday', array($id));
 			$changes				= false;
 
