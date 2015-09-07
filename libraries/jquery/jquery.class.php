@@ -42,13 +42,13 @@ if (!class_exists("jquery")) {
 			'multilang'			=> false,
 			'placepicker'		=> false,
 		);
-		
+
 		/**
 		* Construct of the jquery class
 		*/
 		public function __construct(){
 			$this->path			= $this->server_path."libraries/jquery/";
-			
+
 			// Load the core css & js files
 			$minified_or_not	= (DEBUG) ? '' : '.min';
 			$this->tpl->css_file($this->path.'core/core'.$minified_or_not.'.css');
@@ -127,7 +127,7 @@ if (!class_exists("jquery")) {
 					$this->tpl->css_file($this->root_path.'templates/base_template/fullcalendar.css');
 				}
 				$this->tpl->css_file($this->root_path.'templates/fullcalendar.print.css', 'print');
-			
+
 				// now load the fullcalendar language file
 				$this->tpl->js_file($this->path."js/fullcalendar/lang-all.js");
 				$this->inits['fullcalendar']	= true;
@@ -155,7 +155,7 @@ if (!class_exists("jquery")) {
 				$this->inits['jqplot']	= true;
 			}
 		}
-		
+
 		public function init_multilang(){
 			if(!$this->inits['multilang']){
 				$this->tpl->add_js("
@@ -175,7 +175,7 @@ if (!class_exists("jquery")) {
 					$(this).parent().parent().hide();
 				})
 				", "docready");
-				
+
 				$this->inits['multilang']	= true;
 			}
 		}
@@ -184,8 +184,8 @@ if (!class_exists("jquery")) {
 		public function init_placepicker(){
 			// include the jqplot files
 			if(!$this->inits['placepicker']){
-				$this->tpl->js_file($this->path."js/placepicker/jquery.placepicker.min.js");
 				$this->tpl->js_file("http://maps.googleapis.com/maps/api/js?sensor=true&libraries=places");
+				$this->tpl->js_file($this->path."js/placepicker/jquery.placepicker.min.js");
 				$this->inits['placepicker']	= true;
 			}
 		}
@@ -244,7 +244,7 @@ if (!class_exists("jquery")) {
 				case 'html_js':
 					$js_file	= '["parsexml.js", "parsecss.js", "tokenizejavascript.js", "parsejavascript.js", "parsehtmlmixed.js"]';
 					$css_file	= '["'.$path_to_syntax.'css/xmlcolors.css", "'.$path_to_syntax.'css/jscolors.css", "'.$path_to_syntax.'css/csscolors.css"]';
-				break;	
+				break;
 			}
 
 			// init the editor
@@ -291,7 +291,7 @@ if (!class_exists("jquery")) {
 				break;
 
 				// Confirm Windows..
-				case 'confirm':	
+				case 'confirm':
 					$jscode			= (isset($options['custom_js'])) ? $options['custom_js'] : "window.location ='".$options['url']."'";
 					$cancel			= (isset($options['cancel_js'])) ? $options['cancel_js'] : '';
 					$addit_jscode	= '';
@@ -307,7 +307,7 @@ if (!class_exists("jquery")) {
 							$addit_jscode .= "$('".$cnfname.":checked').each(function(){
 								selected.push($(this).val());
 							});";
-						}	
+						}
 						$addit_jscode .= "
 							$.ajax({
 								url: '".$options['confirm_url']."',
@@ -319,12 +319,12 @@ if (!class_exists("jquery")) {
 							})
 							";
 					}
-									
+
 					// confirm JS Code
 					$this->tpl->add_js("
 						function ".$name."(".((isset($options['withid'])) ? $options['withid'] : '')."){
 							".((isset($options['onlickjs'])) ? $options['onlickjs'] : '')."
-							var ".$name."_confirm = 
+							var ".$name."_confirm =
 								$('<div><\/div>')
 								.html('<div class=\"confirmdialog\"><i class=\"fa fa-exclamation-triangle fa-2x\" style=\"float:left; margin:0 7px 24px 0;\"></i>".$this->sanitize($options['message'], false, true)."<\/div>')
 								.dialog({
@@ -369,7 +369,7 @@ if (!class_exists("jquery")) {
 
 				// Alert Message (direct)
 				case 'alert':
-					$jscod = "var ".$name."_alert = 
+					$jscod = "var ".$name."_alert =
 								$('<div></div>')
 								.html('<p class=\"confirmdialog\"><i class=\"fa fa-exclamation-triangle fa-2x\" style=\"float:left; margin:0 7px 24px 0;\"></i>".$this->sanitize($options['message'])."</p>')
 								.dialog({
@@ -462,7 +462,7 @@ if (!class_exists("jquery")) {
 				$this->tpl->add_js('$("#'.$id.'").click(function(){
 					var checked_status = this.checked;
 					$("input[name=\''.$name.'\']").each(function(){
-						if($(this).val() != \''.$exid.'\'){				
+						if($(this).val() != \''.$exid.'\'){
 							$(this).prop(\'checked\', checked_status).trigger(\'change\');
 						}
 					});
@@ -476,7 +476,7 @@ if (!class_exists("jquery")) {
 				});', 'docready');
 			}
 		}
-		
+
 		/**
 		* Autocomplete
 		*
@@ -489,7 +489,7 @@ if (!class_exists("jquery")) {
 			if(is_array($myarray) && count($myarray) > 0){
 				$myarray = str_replace('"', '', $myarray);	// clean the array, remove hyphens
 				$js_array = $this->implode_wrapped('"','"', ",", $myarray);
-				if (is_array($id)){					
+				if (is_array($id)){
 					$ids = implode(',#', $id);
 					$id = array_shift($id);
 				} else {
@@ -506,7 +506,7 @@ if (!class_exists("jquery")) {
 			}
 			return '[]';
 		}
-		
+
 		public function AutocompleteMultiple($id, $myarray, $js_function){
 			if(is_array($myarray) && count($myarray) > 0){
 				if (is_array($id)){
@@ -527,7 +527,7 @@ if (!class_exists("jquery")) {
 				', 'docready');
 			}
 		}
-		
+
 		public function init_spinner(){
 			if(!$this->inits['spinner']){
 				$this->tpl->add_js("$('.core-spinner').each(function() {
@@ -544,7 +544,7 @@ if (!class_exists("jquery")) {
 				$this->inits['spinner'] = true;
 			}
 		}
-		
+
 		/**
 		* DropDown Menu
 		*
@@ -570,7 +570,7 @@ if (!class_exists("jquery")) {
 			$this->tpl->add_js("$('#".$id."').superfish(); ", 'docready');
 			return $dmmenu;
 		}
-		
+
 		/**
 		* DropDown Menu
 		*
@@ -588,7 +588,7 @@ if (!class_exists("jquery")) {
 					$('".$listener_id."').on('change', function() {
 						var count = 0;
 						if ($('".$listener_id."').prop(\"multiple\")){
-							$('".$listener_id." :selected').each(function(i, selected){ 
+							$('".$listener_id." :selected').each(function(i, selected){
 								count += 1;
 							});
 						} else {
@@ -607,21 +607,21 @@ if (!class_exists("jquery")) {
 					", 'docready');
 				}
 			}
-		
+
 			$dmmenu  = '<ul id="'.$id.'" class="sf-menu sf-btn-ddm">
 							<li>'.(($buttonIcon != '') ? '<img src="'.$this->root_path.$buttonIcon.'" alt="" style="float:left; margin-right:2px;"/> ' : '').'<a href="javascript:void(0);" class="sf-btn-name">'.$button.'</a>
 						<ul><div class="clear"></div>';
 			foreach($menuitems as $key=>$value){
 				if($value['perm']){
-					
+
 					$dmimg = ($value['icon']) ? $this->core->icon_font($value['icon'], 'fa-lg', $this->root_path.$imagepath.'/') : '';
 					switch($value['type']){
 						case 'button': $dmmenu .= '<li><a href="javascript:void(0);" onclick="$(\''.$value['link'].'\').trigger(\'click\');">'.$dmimg.'&nbsp;&nbsp;'.$value['name'].'</a>'.((isset($value['append'])) ? $value['append'] : '').'</li>';
 						break;
-						
+
 						default: $dmmenu .= '<li><a href="'.$value['link'].'">'.$dmimg.'&nbsp;&nbsp;'.$value['name'].'</a>'.((isset($value['append'])) ? $value['append'] : '').'</li>';
 					}
-					
+
 				}
 			}
 			$dmmenu .= '</ul>
@@ -642,9 +642,9 @@ if (!class_exists("jquery")) {
 					            /*to allow people to choose to quit the menu*/
 					            focused_".$id." = null;
 					        });
-					       
+
 						})
-					}, 
+					},
 					onHide: function(){
 						var ul = $(this);
 						if(focused_".$id." != null){
@@ -656,9 +656,9 @@ if (!class_exists("jquery")) {
 			}); ", 'docready');
 			return $dmmenu;
 		}
-		
-		
-		
+
+
+
 		/**
 		* SuckerFish horizontal Menu
 		*
@@ -704,7 +704,7 @@ if (!class_exists("jquery")) {
 							if ( ($k2 == 'name' || $k2 == 'icon') &&  !$admnsubmenu){
 								continue;
 							}
-							
+
 							// the extension submenues
 							if($admnsubmenu) {
 								// build the icons
@@ -738,7 +738,7 @@ if (!class_exists("jquery")) {
 							}
 						}
 					}
-					
+
 					if(strlen($sub_rows)) $hhm .= $header_row.$sub_rows.'</ul></li>';
 				}
 			}
@@ -805,7 +805,7 @@ if (!class_exists("jquery")) {
 			$JSclick[]		= "text: '".$this->sanitize($msg, true)."'";
 			if(is_array($options)){
 				if(isset($options['header']) && !empty($options['header'])){	$JSclick[]		= "title: '".$options['header']."'";}
-				
+
 				// events (http://www.erichynds.com/blog/a-jquery-ui-growl-ubuntu-notification-widget)
 				if(isset($options['beforeopen'])){	$JSoptions[]	= "beforeopen: function(e,instance){ ".$options['beforeopen']."}";}
 				if(isset($options['open'])){		$JSoptions[]	= "open: function(e,instance){ ".$options['open']."}";}
@@ -838,7 +838,7 @@ if (!class_exists("jquery")) {
 			$jsoptions[] = 'rel:"'.$id.'"';
 			$jsoptions[] = 'maxWidth:"90%"';
 			$jsoptions[] = 'maxHeight:"90%"';
-			
+
 			$this->tpl->add_js('$(".lightbox_'.$id.'").colorbox('.$this->gen_options($jsoptions).');', 'docready');
 		}
 
@@ -857,7 +857,7 @@ if (!class_exists("jquery")) {
 			$myreadonly = (isset($options['readonly']) && $options['readonly']) ? ' readonly="readonly"' : '';
 			$html		= '<input type="text" id="'.$itemid.'" name="'.$name.'" value="'.$value.'" size="15" '.$jscode.$mclass.$myreadonly.' />';
 			$MySettings	= ''; $dpSettings = array();
-			
+
 			// Load default settings if no custom ones are defined..
 			$options['format']		= (isset($options['format'])) ? $options['format'] : $this->time->translateformat2js($this->user->style['date_notime_short']);
 			$options['cal_icons']	= (isset($options['cal_icons'])) ? $options['cal_icons'] : true;
@@ -895,7 +895,7 @@ if (!class_exists("jquery")) {
 			if(isset($options['onselect'])){
 				$dpSettings[] = "onSelect: function(dateText, inst) { ".$options['onselect']." }";
 			}
-			
+
 			if(isset($options['onclose'])){
 				$dpSettings[] = "onClose: function( selectedDate ) { ".$options['onclose']." }";
 			}
@@ -923,14 +923,14 @@ if (!class_exists("jquery")) {
 			}
 			/*if(!isset($options['return_function'])) {
 				$this->tpl->add_js("
-					$(\"img[class='ui-datepicker-trigger']\").each(function(){ 
+					$(\"img[class='ui-datepicker-trigger']\").each(function(){
 					  $(this).after('<i class=\"fa fa-calendar ui-datepicker-trigger\"></i>');
 					 // $(this).remove();
 					 });
-					
+
 					", 'docready');
 			}*/
-			
+
 			$this->setLanguage('datepicker', "$.datepicker.setDefaults($.datepicker.regional['{!language!}']);");
 			$this->setLanguage('timepicker', "$.timepicker.setDefaults($.timepicker.regional['{!language!}']);");
 			return (isset($options['return_function'])) ? $functioncall : $html;
@@ -946,7 +946,7 @@ if (!class_exists("jquery")) {
 		*/
 		public function Tab_header($name, $cookie=false, $taboptions=false){
 			$jsoptions = array();
-			
+
 			if($cookie){
 				$jsoptions[] = "beforeActivate: function(e, ui) { localStorage.setItem('tabs.".$name."', ui.newTab.index()); },
 									create: function (e, ui) {
@@ -1006,7 +1006,7 @@ if (!class_exists("jquery")) {
 				} else {
 					$this->tpl->add_js('$(".colorpicker_'.$id.'").spectrum('.$this->gen_options($jsoptions).');', 'docready');
 				}
-				
+
 				return '<input type="text" class="colorpicker_group_'.$options['group'].' colorpicker_'.$id.'" id="'.$id.'_input" name="'.(($name) ? $name : $id).'" value="'.$value.'" size="'.$size.'" '.$jscode.' />';
 			}
 		}
@@ -1193,7 +1193,7 @@ if (!class_exists("jquery")) {
 			$tmpopt[] = 'lang_errorpage: "'.$this->sanitize($this->user->lang('lib_rss_error')).'"';
 			$this->tpl->add_js('$("#'.$name.'").rssReader('.$this->gen_options($tmpopt).');', 'docready');
 		}
-		
+
 		/**
 		* Load the RSS Feed
 		*
@@ -1214,7 +1214,7 @@ if (!class_exists("jquery")) {
 		* @param $hour			starttime: hours
 		* @param $min			starttime: minutes
 		* @param $sec			starttime: seconds
-		* @param $enablesecs	use seconds			
+		* @param $enablesecs	use seconds
 		* @param $hourf			Format of the time: 24 or 12
 		* @return TimePicker	JS Code
 		*/
@@ -1226,7 +1226,7 @@ if (!class_exists("jquery")) {
 			$tmpopt[] = 'second: "'.($value%3600)%60 .'"';
 			$tmpopt[] = 'showSecond: '.(($enablesecs) ? 'true' : 'false');
 			$tmpopt[] = 'ampm: '.(($hourf == 12) ? 'true' : 'false');
-			
+
 			$this->tpl->add_js("$('#".$id."').timepicker(".$this->gen_options($tmpopt).");", 'docready');
 			$this->setLanguage('timepicker', "$.timepicker.setDefaults($.timepicker.regional['{!language!}']);");
 			return '<input name="'.$name.'" id="'.$id.'" value="'.$value.'" type="text" />';
@@ -1262,11 +1262,11 @@ if (!class_exists("jquery")) {
 			$js_array		= $this->Array2jsArray($data);
 
 			$tmpopt		= array();
-			$tmpopt[]	= "grid: {background: '".((isset($options['background'])) ? $options['background'] : '#f5f5f5')."', 
-				borderColor: '".((isset($options['bordercolor'])) ? $options['bordercolor'] : '#999999')."', 
-				borderWidth: ".((isset($options['border'])) ? $options['border'] : '2.0').", 
+			$tmpopt[]	= "grid: {background: '".((isset($options['background'])) ? $options['background'] : '#f5f5f5')."',
+				borderColor: '".((isset($options['bordercolor'])) ? $options['bordercolor'] : '#999999')."',
+				borderWidth: ".((isset($options['border'])) ? $options['border'] : '2.0').",
 				shadow: ".((isset($options['shadow'])) ? 'true' : 'false'). "}";
-			$tmpopt[]	= "seriesDefaults:{renderer:$.jqplot.PieRenderer, rendererOptions:{ 
+			$tmpopt[]	= "seriesDefaults:{renderer:$.jqplot.PieRenderer, rendererOptions:{
 				sliceMargin: ".((isset($options['piemargin']) && $options['piemargin'] > 0) ? $options['piemargin'] : 6).
 				((isset($options['datalabels'])) ? ", showDataLabels: true, dataLabelNudge: 80, dataLabels: 'label'" : '')."}}";
 			$tmpopt[]	= "legend:{show:".((isset($options['legend'])) ? 'true' : 'false').", escapeHtml:true}";
@@ -1279,7 +1279,7 @@ if (!class_exists("jquery")) {
 			$this->tpl->add_js("
 				jqplotdata_".$id." = ".$js_array.";
 				plot_".$id." = $.jqplot('".$id."', [jqplotdata_".$id."], ".$this->gen_options($tmpopt).");", 'docready');
-			
+
 			return '<div id="'.$id.'"></div>';
 		}
 
@@ -1309,20 +1309,20 @@ if (!class_exists("jquery")) {
 			}
 			$tmpopt[]		= "axes:{xaxis:{".(($options['autoscale_x']) ? 'autoscale:true' : $renderer)."},yaxis:{".(($options['autoscale_y']) ? 'autoscale:true' : '')."}}";
 			$tmpopt[]		= "series:[{lineWidth:".((isset($options['lineWidth'])) ? $options['lineWidth'] : 4).", markerOptions:{style:'".((isset($options['markerStyle'])) ? $options['markerStyle'] : 'square')."'}}]";
-			$this->tpl->add_js(" 
+			$this->tpl->add_js("
 					plot_".$id." = $.jqplot('".$id."', [".$js_array."], ".$this->gen_options($tmpopt).");", 'docready');
 
 			return '<div id="'.$id.'" style="'.(($options['height']) ? 'height:'.$options['height'].'px;' : '').' '.(($options['width']) ? 'width:'.$options['width'].'px;' : '').'"></div>';
 		}
-		
+
 		/**
 		 * jqPlot: MultiLineChart
 		 *
 		 * @param $id					ID of the css class (must be unique)
 		 * @param $data					Array with data
 		 * $data = array('series1' => array('name' => 'Name of Series1', 'lineWidth' => 4, 'markerStyle' => 'square', 'data' => array(array(0,1), array(1, 10), array(2, 15))), 'series2' => ..... );
-		 * 
-		 * 
+		 *
+		 *
 		 * @param $options				The options array
 		 * @return HTML Code
 		 */
@@ -1332,7 +1332,7 @@ if (!class_exists("jquery")) {
 				case 'date':	$renderer = 'renderer:$.jqplot.DateAxisRenderer';break;
 				default:		$renderer = 'renderer:$.jqplot.CategoryAxisRenderer';
 			}
-		
+
 			$tmpopt		= array();
 			if(isset($options['highlighter']) && $options['highlighter']){
 				$tmpopt[]	= 'highlighter: { show: true }';
@@ -1340,7 +1340,7 @@ if (!class_exists("jquery")) {
 			if(isset($options['legend']) && $options['legend']){
 				$tmpopt[]	= 'legend: { show: true, location:\''.((isset($options['legendPosition'])) ? $options['legendPosition'] : 'ne').'\' }';
 			}
-			
+
 			if(isset($options['title']) && $options['title']){
 				$tmpopt[]	= "title: '".$options['title']."'";
 			}
@@ -1353,19 +1353,19 @@ if (!class_exists("jquery")) {
 			}
 			$strSeriesOut .= implode(', ', $arrTmpSeries)."]";
 			$tmpopt[] = $strSeriesOut;
-			
+
 			$tmpopt[]		= "axes:{xaxis:{".(($options['autoscale_x']) ? 'autoscale:true' : $renderer)."},yaxis:{".(($options['autoscale_y']) ? 'autoscale:true' : '')."}}";
-			
+
 			$this->tpl->add_js("
 					plot_".$id." = $.jqplot('".$id."', ".json_encode($arrData).", ".$this->gen_options($tmpopt).");", 'docready');
-		
+
 			return '<div id="'.$id.'" style="'.(($options['height']) ? 'height:'.$options['height'].'px;' : '').' '.(($options['width']) ? 'width:'.$options['width'].'px;' : '').'"></div>';
 		}
-		
+
 
 		/**
 		* ToolTip
-		* 
+		*
 		* @param $help		Text to show
 		* @param $name		class/id name
 		* @return Tooltip
@@ -1405,7 +1405,7 @@ if (!class_exists("jquery")) {
 
 		/**
 		* Collapsable div
-		* 
+		*
 		* @param $help		Text to show
 		* @param $hide		Hide the collapsable div on load?
 		* @param $persist	Save open/closed status?
@@ -1417,7 +1417,7 @@ if (!class_exists("jquery")) {
 
 		/**
 		* Binding DropDowns: Select in first, changes the input of second DD
-		* 
+		*
 		* @param $id1			The ID of the first (parent) dropdown
 		* @param $id2			The ID of the second (child) dropdown
 		* @param $array1		The array for the first (parent) dropdown
@@ -1437,7 +1437,7 @@ if (!class_exists("jquery")) {
 						});
 					}
 				}
-			}); 
+			});
 			$('.{$id1}{$this->dyndd_counter}').trigger('change');
 			", 'docready');
 
@@ -1445,11 +1445,11 @@ if (!class_exists("jquery")) {
 				new hdropdown($id1, array('options' => $array1, 'value' => $selected1, 'id' => $id1.$this->dyndd_counter, 'class' => $id1.$this->dyndd_counter)),
 				new hdropdown($id2, array('options' => $array2, 'id' => $id2.$this->dyndd_counter, 'class' => $id2.$this->dyndd_counter))
 			);
-			
+
 			$this->dyndd_counter++;
 			return $output;
 		}
-		
+
 		/**
 		 * Binding DropDowns: Select in parent, changes the input of child DD
 		 * Sets the necessary js-code, does not provide html-code!
@@ -1478,7 +1478,7 @@ if (!class_exists("jquery")) {
 
 		/**
 		* Binding DropDowns: Select in first, changes the input of second DD
-		* 
+		*
 		* @param $id1			The ID of the first (parent) dropdown
 		* @param $id2			The ID of the second (child) dropdown
 		* @param $array1		The array for the first (parent) dropdown
@@ -1527,7 +1527,7 @@ if (!class_exists("jquery")) {
 				$jscode2	.= "$.post('".$url."', { requestid: $('#".$id1.$this->dyndd_counter."').val()".$add_posts." } , function(data){ ".$jscode2_p." });";
 			}else{
 				$output[] = new hdropdown($id2, array('options' => $array2, 'id' => $id2.$this->dyndd_counter));
-				
+
 				$jscode2 = "$('#".$id2.$this->dyndd_counter."').find('option').remove();
 						$.post('".$url."', { requestid: $('#".$id1.$this->dyndd_counter."').val()".$add_posts." } , function(data){ $('#".$id2.$this->dyndd_counter."').append(data) });";
 			}
@@ -1539,7 +1539,7 @@ if (!class_exists("jquery")) {
 
 		/**
 		* Build the ajax Recall for the DropDown Selectables
-		* 
+		*
 		* @param $cstlst		Array of the binding dropbox
 		* @return dropdown options
 		*/
@@ -1558,7 +1558,7 @@ if (!class_exists("jquery")) {
 
 		/**
 		* Image uploader
-		* 
+		*
 		* @param $type				The type of the filebrowser
 		* @param $inputid			The ID of the input
 		* @param $imgname			The image name
@@ -1569,21 +1569,21 @@ if (!class_exists("jquery")) {
 		*/
 		public function imageUploader($type, $inputid, $imgname, $imgpath, $options='', $storageFolder=false){
 			$this->fileBrowser($type, 'image', $storageFolder);
-			
+
 			$default_img_svg	= str_replace('.png', '.svg', $options['noimgfile']);
 			$imgpreview			= (isset($imgname) && is_file($imgpath.$imgname)) ? $imgpath.$imgname : $this->root_path.((isset($options['noimgfile'])) ? ((file_exists($this->root_path.$default_img_svg)) ? $default_img_svg : $options['noimgfile']) : 'images/global/default-image.svg');
 			list($previmgwidth, $previmgheight, $previmgtype, $previmgattr) = getimagesize($imgpreview);
-			
+
 			$imgprevheight	= (isset($options['prevheight'])) ? $options['prevheight'] : '120';
 			$imgpreview = str_replace($this->root_path, $this->server_path, $imgpreview);
-			
+
 			// the output
 			$out	= '<div id="image_'.$inputid.'" class="imageuploader_image">';
 			if ($previmgheight > $imgprevheight){
 				$out .= '<a href="'.$imgpreview.'" class="lightbox previewurl"><img class="previewimage" src="'.$imgpreview.'" alt="'.$this->user->lang('imageuploader_preview').'" style="max-height:'.$imgprevheight.'px"/></a>';
 			} else {
 				$out .= '<img src="'.$imgpreview.'" class="previewimage" alt="'.$this->user->lang('imageuploader_preview').'" style="max-height:'.$imgprevheight.'px"/>';
-			}	
+			}
 			$out .=	'</div><button class="mainoption" type="button" id="iubutton_'.$inputid.'_edit" onclick="elfinder_'.$type.'(\''.$inputid.'\');"><i class="fa fa-pencil-square-o"></i>'.$this->user->lang('imageuploader_editbutton').'</button>';
 			if(isset($options['deletelink']) && (isset($imgname) && is_file($imgpath.$imgname))){
 				$out .= '<button class="mainoption" value="" type="button" id="iubutton_'.$inputid.'_delete"><i class="fa fa-trash-o"></i> '.$this->user->lang('delete').'</button>';
@@ -1591,23 +1591,23 @@ if (!class_exists("jquery")) {
 			}
 			return $out;
 		}
-		
+
 		/**
 		* FileBrowser
-		* 
+		*
 		* @param $type		user / all
 		* @param $filter	none / image
 		* @return void
 		*/
 		public function fileBrowser($type = 'user', $filter = 'none', $storageFolder = false, $options=array()){
 			$type = ($type == 'user') ? 'user' : 'all';
-			
+
 			if (!isset($this->file_browser[$type])){
 				$strStorageFolder = ($storageFolder) ? '&sf='.urlencode($this->encrypt->encrypt($storageFolder)) : '';
-				
+
 				$myclose = (isset($options['onclose'])) ? ", close: function(event, ui) { window.location.href = '".$options['onclose']."'; }" : '';
 				$myclose = (isset($options['onclosejs'])) ? ", close: function(event, ui) { ".$options['onclosejs']." }" : $myclose;
-				
+
 				$this->tpl->add_js("function elfinder_".$type."(fieldid){
 					jQuery.FrameDialog.create({
 						url: '".$this->server_path."libraries/elfinder/elfinder".(($type == 'user') ? '.useravatars' : '').".php".$this->SID."&type=".$filter.$strStorageFolder."&field='+fieldid,
@@ -1620,14 +1620,14 @@ if (!class_exists("jquery")) {
 						buttons: false".$myclose."
 					})
 				}");
-				
+
 				$this->file_browser[$type] = true;
 			}
 		}
 
 		/**
 		* Toolbar
-		* 
+		*
 		* @param $id			The ID of the toolbar
 		* @param $arrItems		The item elements
 		* @param $options		The options array
@@ -1637,10 +1637,10 @@ if (!class_exists("jquery")) {
 			$position = (!isset($options['position'])) ? 'top' : $options['position'];
 			$hideOnClick = (!isset($options['hideOnClick'])) ? true : $options['hideOnClick'];
 			$toolbar_id = $id.'-toolbar';
-			
+
 			$this->tpl->add_js(
 				"$('.".$toolbar_id."').toolbar({
-					content: '#".$toolbar_id."-options', 
+					content: '#".$toolbar_id."-options',
 					position: '".$position."',
 					hideOnClick: ".(($hideOnClick) ? 'true' :  'false')."
 				});
@@ -1650,7 +1650,7 @@ if (!class_exists("jquery")) {
 					}
 				);",
 			'docready');
-			
+
 			$strItems = '';
 			$intItems = 0;
 			foreach($arrItems as $key => $value){
@@ -1660,26 +1660,27 @@ if (!class_exists("jquery")) {
 				$strItems .= '<a href="'.((isset($value['href'])) ? $value['href'] : '#').'" '.((isset($value['js'])) ? $value['js'] : '').' title="'.((isset($value['title'])) ? $value['title'] : '').'"><i class="fa '.$value['icon'].'"></i></a>';
 				$intItems++;
 			}
-			
+
 			$this->tpl->staticHTML(
 				'<div id="'.$toolbar_id.'-options"  style="display: none;">'.$strItems.'
 				</div>
 				'
 			);
-			
+
 			return array('id' => $toolbar_id, 'items' => $intItems);
 		}
 
 		public function placepicker($id, $withmap=false){
+			$this->init_placepicker();
 			$this->tpl->add_js(
 				"$('#".$id."').placepicker();"
-			);
+			, "docready");
 			return true;
 		}
 
 		/**
 		* Convert a PHP Array to JS Array
-		* 
+		*
 		* @param $formid		Id of the Form to validate
 		* @return Tooltip
 		*/
@@ -1710,7 +1711,7 @@ if (!class_exists("jquery")) {
 			}
 			return $js_array;
 		}
-		
+
 		private function gen_options($array){
 			$set_comma = false;
 			$output  = "{";

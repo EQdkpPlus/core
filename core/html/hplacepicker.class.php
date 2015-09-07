@@ -30,11 +30,11 @@ include_once(registry::get_const('root_path').'core/html/htext.class.php');
  */
 // this class acts as an alias for easier usability
 class hplacepicker extends htext {
-	
+
 	public $placepicker	= true;
 	public $default		= 0;
-	public $size			= 40;
-	
+	public $size		= 80;
+
 	public function _inpval() {
 		return $this->in->get($this->name, 0);
 	}

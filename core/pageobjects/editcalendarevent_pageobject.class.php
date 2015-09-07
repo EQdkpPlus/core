@@ -501,6 +501,7 @@ class editcalendarevent_pageobject extends pageobject {
 			'CB_PRIVATE'		=> new hcheckbox('private', array('options' => array(1=>''), 'value' => ((isset($eventdata['private'])) ? $eventdata['private'] : 0))),
 			'RADIO_EDITCLONES'	=> new hradio('edit_clones', array('options' => $radio_repeat_array)),
 			'BBCODE_NOTE'		=> new hbbcodeeditor('note', array('rows' => 3, 'value' => ((isset($eventdata['notes'])) ? $eventdata['notes'] : ''), 'id' => 'input_note')),
+			'LP_LOCATION'		=> new hplacepicker('location', array('value' => ((isset($eventdata['extension']) && isset($eventdata['extension']['location'])) ? $eventdata['extension']['location'] : ''))),
 
 			'JQ_DATE_START'		=> $this->jquery->Calendar('startdate', $this->time->user_date($defdates['start'], true, false, false), '', array('timepicker' => true, 'onselect' => $startdate_onselect)),
 			'JQ_DATE_END'		=> $this->jquery->Calendar('enddate',$this->time->user_date($defdates['end'], true, false, false), '', array('timepicker' => true)),

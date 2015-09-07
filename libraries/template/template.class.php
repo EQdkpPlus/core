@@ -29,7 +29,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class template extends gen_class {
-	
+
 	private $handle					= '';
 	protected $_data				= array();
 	protected $caching				= false;
@@ -65,7 +65,7 @@ class template extends gen_class {
 									);
 	protected $tpl_output			= array();
 	protected $template_listener	= array();
-	
+
 	// Save array for states
 	private $states = array();
 
@@ -74,7 +74,7 @@ class template extends gen_class {
 		require_once($this->root_path . 'libraries/_statics/CSS/CSS.php');
 		require_once($this->root_path . 'libraries/_statics/JS/JShrink.php');
 	}
-	
+
 	/*
 	 *  State-handling functions
 	 *    save and load output states of template for i.e. showing different output in case of errors
@@ -83,7 +83,7 @@ class template extends gen_class {
 		$this->states[$name]['tpl_output'] = $this->tpl_output;
 		$this->states[$name]['data'] = $this->_data;
 	}
-	
+
 	public function load_state($name) {
 		if(!isset($this->states[$name])) return false;
 		$this->_data = $this->states[$name]['data'];
@@ -170,7 +170,7 @@ class template extends gen_class {
 	public function staticHTML($varval){
 		$this->tpl_output['statichtml'][] = $varval;
 	}
-	
+
 	public function add_meta($strMetatag){
 		$this->tpl_output['meta'][] = $strMetatag;
 	}
@@ -191,10 +191,10 @@ class template extends gen_class {
 			$this->tpl_output['css_code_direct'][] = $varval;
 		} else $this->tpl_output['css_code'][] = $varval;
 	}
-	
+
 	/**
 	 * Adds HTML Code for a template listener
-	 * 
+	 *
 	 * @param string $strListenerName
 	 * @param string $strHTML
 	 * @param boolean $blnPrepare
@@ -204,11 +204,11 @@ class template extends gen_class {
 		if(!isset($this->template_listener[$strListenerName])) $this->template_listener[$strListenerName] = array();
 		$this->template_listener[$strListenerName][] = array('html' => $strHTML, 'preparse' => $blnPrepare);
 	}
-	
+
 	public function combine_css(){
 		$strInlineCSS = "";
 		$arrHash = $data = $arrFiles = $arrOrigFiles = array();
-		
+
 		if (is_array($this->tpl_output['css_code'])){
 			foreach($this->tpl_output['css_code'] as $key => $strInlineCode){
 				$arrHash[] = md5($strInlineCode);
@@ -216,9 +216,9 @@ class template extends gen_class {
 				unset($this->tpl_output['css_code'][$key]);
 			}
 		}
-			
+
 		$storage_folder = $this->pfh->FolderPath('templates', 'eqdkp');
-		
+
 		if (is_array($this->tpl_output['css_file'])){
 			foreach($this->tpl_output['css_file'] as $key => $val){
 				$val['file'] = $this->env->server_to_rootpath($val['file']);
@@ -227,24 +227,24 @@ class template extends gen_class {
 				$val['orig_file'] = $val['file'];
 				$val['file'] = $this->resolve_css_file($val['file']);
 				if(!$val['file']) continue;
-				
+
 				if ($val['media'] == 'screen' && is_file($val['file'])){
 					if (strpos('combined_', $val['file']) !== false) continue;
 					$arrHash[] = md5_file($val['file']);
 					$arrFiles[] = $val['file'];
 					$arrOrigFiles[] = $val['orig_file'];
-					unset($this->tpl_output['css_file'][$key]);		
+					unset($this->tpl_output['css_file'][$key]);
 				}
 			}
 		}
-		
+
 		//Check if there is an file for this hash
 		asort($arrHash);
 		$strHash = md5(implode(";", $arrHash));
 		$combinedFile = $storage_folder.$this->style_code.'/combined_'.$strHash.'.css';
 
 		if (!is_array($this->tpl_output['css_file'])) $this->tpl_output['css_file'] = array();
-		
+
 		if (is_file($combinedFile)){
 			array_unshift($this->tpl_output['css_file'], array('file' => $combinedFile, 'media' => 'screen', 'type' => 'text/css'));
 			return $combinedFile;
@@ -256,7 +256,7 @@ class template extends gen_class {
 				$strOrigFile = $arrOrigFiles[$key];
 				$strContent = file_get_contents($strFile);
 				$strPathDir = pathinfo($strOrigFile, PATHINFO_DIRNAME).'/';
-				
+
 				if (strpos($strPathDir, "./") === 0){
 					$strPathDir = str_replace($this->root_path, "", $strPathDir);
 				}
@@ -274,12 +274,12 @@ class template extends gen_class {
 				if(!defined('DISABLE_LESS')){
 					$strCSS = $this->parseLess($strCSS);
 				}
-				
+
 				if(!defined('DISABLE_CSS_MINIFY')){
 					$minify = new Minify_CSS();
 					$strCSS = $minify->minify($strCSS);
 				}
-				
+
 				$this->pfh->putContent($combinedFile, $strCSS);
 				$this->timekeeper->put('tpl_cache_'.$this->style_code, 'combined.css');
 				if (!is_array($this->tpl_output['css_file'])) $this->tpl_output['css_file'] = array();
@@ -288,13 +288,13 @@ class template extends gen_class {
 		}
 		return $combinedFile;
 	}
-	
+
 	public function debug_css_files(){
 		$strInlineCSS = "";
 		$arrHash = $data = $arrFiles = array();
-				
+
 		$storage_folder = $this->pfh->FolderPath('templates', 'eqdkp');
-	
+
 		if (is_array($this->tpl_output['css_file'])){
 			foreach($this->tpl_output['css_file'] as $key => $val){
 				$val['file'] = $this->env->server_to_rootpath($val['file']);
@@ -303,13 +303,13 @@ class template extends gen_class {
 				$origFile = $val['file'];
 				$val['file'] = $this->resolve_css_file($val['file']);
 				if(!$val['file']) continue;
-				
+
 				if ($val['media'] == 'screen' && is_file($val['file'])){
 					if (strpos('combined_', $val['file']) !== false) continue;
-					
+
 					$strFile = $val['file'];
 					$strContent = file_get_contents($strFile);
-					
+
 					$strPathDir = pathinfo($origFile, PATHINFO_DIRNAME).'/';
 					$strFilename = pathinfo($origFile, PATHINFO_FILENAME);
 					if (strpos($strPathDir, "./") === 0){
@@ -317,9 +317,9 @@ class template extends gen_class {
 					}
 
 					$strContent = $this->replace_paths_css($strContent, false, false, $strPathDir);
-					
+
 					$strContent = $this->parseLess($strContent, 'dev_'.$strFilename);
-					
+
 					$combinedFile = $storage_folder.$this->style_code.'/dev_'.$strFilename.'.css';
 					$this->pfh->putContent($combinedFile, "/* ".$strFile."*/ \r\n\n\n".$strContent);
 					$this->tpl_output['css_file'][$key]['file'] = $combinedFile;
@@ -327,10 +327,10 @@ class template extends gen_class {
 			}
 		}
 	}
-	
+
 	public function resolve_css_file($cssfile, $stylecode =false){
 		if(!$stylecode) $stylecode = $this->style_code;
-		
+
 		//Check data dir for exact match
 		$strWithoutRoot = str_replace($this->root_path, '', $cssfile);
 		$strCleaned = str_replace('templates/base_template/', '', $strWithoutRoot);
@@ -351,22 +351,22 @@ class template extends gen_class {
 		//if it contains base_template, check first specific template folder, then use base_template
 		return file_exists($cssfile) ? $cssfile : false;
 	}
-	
+
 	//Combining JS Files
 	public function combine_js(){
 		$arrHash = $data = $arrFiles = array();
 		$storage_folder = $this->pfh->FolderPath('templates', 'eqdkp');
-		
+
 		if (!is_array($this->tpl_output['js_file'])) $this->tpl_output['js_file'] = array();
 
 		foreach($this->tpl_output['js_file'] as $key => $val){
 			$val['file'] = $this->env->server_to_rootpath($val['file']);
-			
+
 			//Put the jquery lang file at the end of all other JS files
 			if (pathinfo($val['file'], PATHINFO_FILENAME) == 'lang_jquery'){
 				$nkey = 99999999;
 			} else $nkey = $key;
-			
+
 			if (is_file($val['file'])){
 				if (strpos($val['file'], $storage_folder) === 0 || strpos('combined_', $val['file']) !== false) continue;
 				$arrHash[] = md5_file($val['file']);
@@ -374,17 +374,17 @@ class template extends gen_class {
 				$arrFiles[$nkey] = $val['file'];
 			}
 		}
-		
+
 		ksort($arrFiles);
-		
+
 		//Check if there is an file for this hash
 		asort($arrHash);
 		$strHash = md5(implode(";", $arrHash));
 		$combinedFile = $storage_folder.$this->style_code.'/combined_'.$strHash.'.js';
-		
+
 		if (is_file($combinedFile)){
 			array_unshift($this->tpl_output['js_file'], array('file' => $combinedFile));
-			
+
 			return file_get_contents($combinedFile);
 		} else {
 			//Generate it
@@ -399,11 +399,11 @@ class template extends gen_class {
 				$strContent = str_replace(array('(./', '("./', "('./"), array('('.$strPathDir, '("'.$strPathDir, "('".$strPathDir),$strContent);
 				$data[] = array('content' => "\r\n/* ".$strFile."*/ \r\n".$strContent, 'path' => $strPathDir);
 			}
-			
+
 			foreach($data as $val){
 				$strJS .= ' '.$val['content'];
 			}
-			
+
 			$this->pfh->putContent($combinedFile, $strJS);
 			$this->timekeeper->put('tpl_cache_'.$this->style_code, 'combined.js');
 			array_unshift($this->tpl_output['js_file'], array('file' => $combinedFile));
@@ -411,12 +411,12 @@ class template extends gen_class {
 		}
 		return "";
 	}
-	
+
 	public function cleanup_combined(){
 		$intCleanUpTime = 24*3600; //24 hours
 		$intCSS = $this->timekeeper->get('tpl_cache_'.$this->style_code, 'combined.css');
 		$intJS = $this->timekeeper->get('tpl_cache_'.$this->style_code, 'combined.js');
-		
+
 		if (($intCSS+$intCleanUpTime) < time() || (($intJS+$intCleanUpTime) < time())) {
 			$arrDir = sdir($storage_folder = $this->pfh->FolderPath('templates', 'eqdkp').$this->style_code, 'combined_*');
 			foreach($arrDir as $file){
@@ -424,7 +424,7 @@ class template extends gen_class {
 			}
 		}
 	}
-	
+
 
 	/**
 	* Assign RSS-Feeds to the Header
@@ -491,16 +491,16 @@ class template extends gen_class {
 		}
 		return $myfile;
 	}
-	
+
 	public function resolve_templatefile($filename, $stylecode=false){
 		if(!$stylecode) $stylecode = $this->style_code;
-		
+
 		$data_root = $this->pfh->FolderPath('templates/'.$stylecode, 'eqdkp');
 		$data_file = $data_root.$filename;
 		$tmp_root_file = $this->root_path.'templates/'.$stylecode.'/'.$filename;
 		$base_template = $this->root_path.'templates/base_template';
 		$myfile = false;
-		
+
 		if (file_exists($data_file)){
 			$myfile = $data_file;
 		} elseif(file_exists($tmp_root_file)){
@@ -542,11 +542,11 @@ class template extends gen_class {
 	private function security(){
 		return true;
 	}
-	
+
 	public function get_combined_css(){
 		return $this->combine_css();
 	}
-	
+
 	public function get_header_js(){
 		$imploded_jscode = "";
 		if(is_array($this->get_templatedata('js_code'))){
@@ -593,9 +593,9 @@ class template extends gen_class {
 
 		//Combine CSS Files and Inline CSS
 		if ($debug) {
-			$this->debug_css_files(); 
+			$this->debug_css_files();
 		} else $this->combine_css();
-		
+
 		// Load the CSS Files..
 		if(!$this->get_templateout('css_file')){
 			if(is_array($this->get_templatedata('css_file'))){
@@ -603,7 +603,7 @@ class template extends gen_class {
 				$this->set_templateout('css_file', true);
 			}
 		}
-		
+
 		// Pass CSS Code to template..
 		if(!$this->get_templateout('css_code') || !$this->get_templateout('css_code_direct')){
 			$imploded_css = "";
@@ -641,7 +641,7 @@ class template extends gen_class {
 				$imploded_feeds = implode("\n", $feeds);
 				$this->assign_var('RSS_FEEDS', $imploded_feeds);
 				$this->set_templateout('rss_feeds', true);
-				
+
 				$this->assign_var('S_GLOBAL_RSSFEEDS', true);
 				foreach($this->get_templatedata('rss_feeds') as $feed){
 					$this->tpl->assign_block_vars('global_rss_row', array(
@@ -659,7 +659,7 @@ class template extends gen_class {
 			}
 			$this->set_templateout('statichtml', true);
 		}
-		
+
 		// Metatags
 		if(!$this->get_templateout('meta')){
 			if(is_array($this->get_templatedata('meta'))){
@@ -680,7 +680,8 @@ class template extends gen_class {
 			$type		= (is_array($item) && isset($item['type'])) ? "' type='".$item['type']."'" : '';
 			$media		= (is_array($item) && isset($item['media'])) ? " media='".$item['media']."'" : '';
 			$file 		= ((is_array($item)) ? $item['file'] : $item);
-			$output .= $before . str_replace($this->root_path, $this->server_path, $file) . "?timestamp=".$filetime.$type.$media.$after.$glue;
+			$limiter 	= (strpos($file, '?') !== false) ? '&' : '?';
+			$output .= $before . str_replace($this->root_path, $this->server_path, $file) . $limiter . "timestamp=".$filetime.$type.$media.$after.$glue;
 		}
 		return substr($output, 0, -strlen($glue));
 	}
@@ -851,7 +852,7 @@ class template extends gen_class {
 		}
 		return true;
 	}
-	
+
 	public function compileString($strString, $arrVars=array()){
 		$this->core->addCommonTemplateVars();
 		$this->assign_vars($arrVars);
@@ -927,13 +928,13 @@ class template extends gen_class {
 			$trim_check_block		= ( isset($compile_blocks[$i]) ) ? trim($compile_blocks[$i]) : '';
 			$template_php			.= ((!empty($trim_check_text)) ? 'echo \'' . $text_blocks[$i] . '\';' : '') . ((!empty($compile_blocks[$i])) ? $compile_blocks[$i] : '') ;
 		}
-		
+
 		if($do_not_echo){
 			$template_php = '$' . $retvar . ' = "";'."\n".$template_php;
 			$template_php = str_replace("echo '", '$' . $retvar . ' .= \'', $template_php);
 			return $template_php;
 		}
-		
+
 		return $template_php;
 	}
 
@@ -955,8 +956,8 @@ class template extends gen_class {
 		// This will handle the remaining root-level varrefs
 		//Check modifier on language Vars
 		$text_blocks = preg_replace("/\{(L|GL)_([a-z0-9\-_]*?)\|([a-z0-9\-_]+?)\}/is", "'.\$this->handleModifier('{"."$1_$2"."}', '$3').'", $text_blocks);
-		
-		
+
+
 		//normal language
 		$text_blocks	= preg_replace('#\{L_([a-z0-9\-_]*?)\}#is', "' . ((isset(\$this->_data['.'][0]['L_\\1'])) ? \$this->_data['.'][0]['L_\\1'] : ((\$this->lang('\\1')) ? \$this->lang('\\1') : '{ ' . ucfirst(strtolower(str_replace('_', ' ', '\\1'))) . '         }')) . '", $text_blocks);
 		//game language
@@ -964,18 +965,18 @@ class template extends gen_class {
 		$text_blocks	= preg_replace('#\{([a-z0-9\:\@\-_]*?)\}#is', "' . ((isset(\$this->_data['.'][0]['\\1'])) ? \$this->_data['.'][0]['\\1'] : '') . '", $text_blocks);
 		return;
 	}
-	
+
 	public function handleModifier($strLangString, $strModifier){
 		switch($strModifier){
 			case 'jsencode':
 					return "'".str_replace("'", "\'", $strLangString)."'";
 				break;
-			
+
 			default: return $strLangString;
 		}
 	}
-	
-	
+
+
 	private function pre_compile($tag_args){
 		$var = $this->_data['.'][0][$tag_args];
 		if ($var) return $this->compile($var);
@@ -985,7 +986,7 @@ class template extends gen_class {
 	private function compile_tag_block($tag_args){
 		$tag_template_php = '';
 		array_push($this->block_names, $tag_args);
-		
+
 		// Allow for control of looping (indexes start from zero):
 		// foo(2)    : Will start the loop on the 3rd entry
 		// foo(-2)   : Will start the loop two entries from the end
@@ -1178,10 +1179,10 @@ class template extends gen_class {
 		}
 		return "\$this->assign_from_include('$tag_args');\n";
 	}
-	
+
 	private function assign_from_listener($strListenername){
 		$strListener = "";
-		
+
 		if(isset($this->template_listener[$strListenername])){
 			foreach($this->template_listener[$strListenername] as $listener){
 				$strListener .= ($listener['preparse']) ? $this->compileString($listener['html']) : $listener['html'];
@@ -1330,20 +1331,20 @@ class template extends gen_class {
 		}
 
 	}
-	
-	
+
+
 	public function add_common_cssfiles(){
 		//Global CSS
 		$global_css		= $this->root_path.'templates/eqdkpplus.css';
 		$this->tpl->css_file($global_css, 'screen');
-		
+
 		//Font Awesome
 		$this->tpl->css_file($this->root_path.'libraries/FontAwesome/font-awesome.min.css', 'screen');
-		
+
 		//Template CSS
 		$css_theme		= $this->root_path.'templates/'.$this->style_code.'/'.$this->style_code.'.css';
 		$this->tpl->css_file($css_theme, 'screen');
-		
+
 		//Now the class colors
 		$gameclasses = $this->game->get_primary_classes();
 		$data = "";
@@ -1361,8 +1362,8 @@ class template extends gen_class {
 			$this->add_css($data);
 		}
 	}
-	
-	
+
+
 	private function replace_paths_css($strCSS, $stylepath = false, $data = false, $path=false){
 		$style = ($data) ? $data : $this->user->style;
 		$stylepath = ($stylepath) ? $stylepath : $this->style_code;
@@ -1374,7 +1375,7 @@ class template extends gen_class {
 			//Game
 			case 1: $template_background_file = $root_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg' ;
 			break;
-				
+
 			//Own
 			case 2:
 				if ($style['background_img'] != ''){
@@ -1385,7 +1386,7 @@ class template extends gen_class {
 					}
 				}
 				break;
-		
+
 			//Style
 			default:
 				if(is_file($this->root_path . 'templates/' . $style['template_path'] . '/images/template_background.png')){
@@ -1398,7 +1399,7 @@ class template extends gen_class {
 			//Cannot find a background file, let's take the game specific
 			$template_background_file = $root_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg' ;
 		}
-		
+
 		$in = array(
 				"T_PORTAL_WIDTH_WITHOUT_BOTH_COLUMNS",
 				"T_PORTAL_WIDTH_WITHOUT_LEFT_COLUMN",
@@ -1406,13 +1407,13 @@ class template extends gen_class {
 				"T_COLUMN_LEFT_WIDTH",
 				"T_COLUMN_RIGHT_WIDTH",
 				"T_BACKGROUND_POSITION",
-		
+
 				"EQDKP_ROOT_PATH",
 				"EQDKP_IMAGE_PATH",
 				"TEMPLATE_IMAGE_PATH",
 				"TEMPLATE_BACKGROUND",
 		);
-		
+
 		$out = array(
 				(intval($style['portal_width']) - intval($style['column_left_width']) - intval($style['column_right_width'])).((strpos($style['portal_width'], '%') !== false) ? '%' : 'px'),
 				(intval($style['portal_width']) - intval($style['column_left_width'])).((strpos($style['portal_width'], '%') !== false) ? '%' : 'px'),
@@ -1420,13 +1421,13 @@ class template extends gen_class {
 				$style['column_left_width'],
 				$style['column_right_width'],
 				(($style['background_pos'] == 'normal') ? 'scroll' : 'fixed'),
-		
+
 				$root_path,
 				$root_path.'images/',
 				$root_path.'templates/'.$stylepath.'/images',
 				$template_background_file,
 		);
-		
+
 
 		$arrOptions = register('styles')->styleOptions();
 		foreach($arrOptions as $key => $val){
@@ -1436,35 +1437,35 @@ class template extends gen_class {
 				$out[]	= $style[$name];
 			}
 		}
-		
+
 		$data = str_replace($in, $out, $strCSS);
-		
+
 		/**
 		 * Contao Open Source CMS
 		 * Copyright (c) 2005-2014 Leo Feyer
 		 * @link    https://contao.org
 		 * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
 		 */
-		
+
 		$content = $data;
 		$strDirname = $path;
 		$strGlue = ($strDirname != '.') ? $strDirname  : '';
-		
+
 		$strBuffer = '';
 		$chunks = preg_split('/url\(["\']??(.+)["\']??\)/U', $content, -1, PREG_SPLIT_DELIM_CAPTURE);
-		
+
 		// Check the URLs
 		for ($i=0, $c=count($chunks); $i<$c; $i=$i+2)
 		{
 			$strBuffer .= $chunks[$i];
-		
+
 			if (!isset($chunks[$i+1]))
 			{
 				break;
 			}
-		
+
 			$strData = $chunks[$i+1];
-		
+
 			// Skip absolute links and embedded images (see #5082)
 			if (strncmp($strData, 'data:', 5) !== 0 && strncmp($strData, 'http://', 7) !== 0 && strncmp($strData, 'https://', 8) !== 0 && strncmp($strData, '/', 1) !== 0 && strncmp($strData, '@', 1) !== 0)
 			{
@@ -1476,21 +1477,21 @@ class template extends gen_class {
 				else
 				{
 					$dir = $strDirname;
-		
+
 					// Remove relative paths
 					while (strncmp($strData, '../', 3) === 0)
 					{
 						$dir = dirname($dir);
 						$strData = substr($strData, 3);
 					}
-		
+
 					$glue = ($dir != '.') ? $dir . '/' : '';
 					$strData = $root_path . $glue . $strData;
 				}
-				
+
 				$strData = str_replace("//", "/", $strData);
 			}
-			
+
 			$strBuffer .= 'url("' . $strData . '")';
 		}
 		$data = $strBuffer;
@@ -1499,15 +1500,15 @@ class template extends gen_class {
 
 	public function generate_error($content, $handle = false, $sprintf = '', $function = ''){
 		if ($handle === false) $handle = $this->handle;
-		
+
 		$this->intErrorCount++;
 		if($this->intErrorCount > 3){
 			throw new Exception("Infinite Template Error. Generating Error aborted.");
 		}
-		
-		if(!$this->error_message){		
+
+		if(!$this->error_message){
 			// fix for upgrade from 1.0 to 2.0 with deleted old template folder. This fix redirects directly to the maintenance mode
-			if($this->files[$handle] && strpos($this->files[$handle], '/templates/base_template/index.tpl') !== false && $function == 'loadfile()' && ($this->config->get('plus_version') === false || version_compare('2.0', $this->config->get('plus_version')) > 0)){			
+			if($this->files[$handle] && strpos($this->files[$handle], '/templates/base_template/index.tpl') !== false && $function == 'loadfile()' && ($this->config->get('plus_version') === false || version_compare('2.0', $this->config->get('plus_version')) > 0)){
 				redirect('maintenance/index.php', false, false, false);
 			}
 
@@ -1531,9 +1532,9 @@ class template extends gen_class {
 			$this->display_error($title, $message);
 			$this->error_message	= true;
 		}
-		
+
 	}
-	
+
 	public function get_error_details(){
 		$handle = $this->handle;
 		$message = "";
@@ -1568,19 +1569,19 @@ class template extends gen_class {
 	private function strip_tags_php(&$code){
 		$code = preg_replace(array("#<([\?%])=?.*?\1>#s", "#<\?php(?:\r\n?|[ \n\t]).*?\?>#s"), '', $code);
 	}
-	
+
 	public function parseLess($strCSS, $strMapFile=false){
 		$style = ($data) ? $data : $this->user->style;
 		$stylepath = ($stylepath) ? $stylepath : $this->style_code;
 		$root_path = '../../../../../';
-		
+
 		//Background Image
 		$template_background_file = "";
 		switch($style['background_type']){
 			//Game
 			case 1: $template_background_file = $root_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg' ;
 			break;
-		
+
 			//Own
 			case 2:
 				if ($style['background_img'] != ''){
@@ -1591,7 +1592,7 @@ class template extends gen_class {
 					}
 				}
 				break;
-		
+
 				//Style
 			default:
 				if(is_file($this->root_path . 'templates/' . $style['template_path'] . '/images/template_background.png')){
@@ -1604,8 +1605,8 @@ class template extends gen_class {
 			//Cannot find a background file, let's take the game specific
 			$template_background_file = $root_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg' ;
 		}
-		
-		
+
+
 		$options = array();
 		$lessVars = array(
 			'eqdkpURL'							=> '"'.$this->env->link.'"',
@@ -1623,7 +1624,7 @@ class template extends gen_class {
 			'eqdkpPortalWidthWithoutBothColumns' => (intval($style['portal_width']) - intval($style['column_left_width']) - intval($style['column_right_width'])).((strpos($style['portal_width'], '%') !== false) ? '%' : 'px'),
 			'eqdkpPortalWidthWithoutLeftColumn'	=> (intval($style['portal_width']) - intval($style['column_left_width'])).((strpos($style['portal_width'], '%') !== false) ? '%' : 'px'),
 		);
-		
+
 		$arrOptions = register('styles')->styleOptions();
 		foreach($arrOptions as $key => $val){
 			foreach($val as $name => $type)
@@ -1635,20 +1636,20 @@ class template extends gen_class {
 				$lessVars[register('styles')->convertNameToLessVar($name)] = (isset($style[$name]) && strlen($style[$name])) ? $style[$name] : ((stripos($name, 'color')) ? '#000' : '""');
 			}
 		}
-		
+
 		$gameclasses = $this->game->get_primary_classes();
 		if(isset($gameclasses) && is_array($gameclasses)){
 			foreach($gameclasses as $class_id => $class_name) {
 				$lessVars['eqdkpClasscolor'.$class_id] = ($this->game->get_class_color($class_id) != "") ? $this->game->get_class_color($class_id) : '""';
 			}
 		}
-		
+
 		//Add Additional LESS
 		$strCSS .= $style['additional_less'];
 
 		try {
 			require_once $this->root_path.'libraries/less/Less.php';
-			$parser = new Less_Parser();	
+			$parser = new Less_Parser();
 			$parser->ModifyVars($lessVars);
 			$parser->parse($strCSS);
 			$strCSS = $parser->getCss();
@@ -1656,7 +1657,7 @@ class template extends gen_class {
 		} catch (Exception $e) {
 			echo "Fatal error parsing less: " . nl2br($e->getMessage());
 		}
-		
+
 		return $strCSS;
 	}
 
