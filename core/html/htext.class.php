@@ -47,6 +47,8 @@ class htext extends html {
 	public $readonly = false;
 	public $spinner = false;
 	public $colorpicker = false;
+	public $placepicker = false;
+	public $placepicker_withmap = false;
 	public $required = false;
 	public $autocomplete = array();
 	public $class = 'input';
@@ -64,6 +66,8 @@ class htext extends html {
 		} elseif($this->colorpicker) {
 			$this->jquery->colorpicker(0,0);
 			$this->class = (empty($this->class)) ? 'colorpicker' : $this->class.' colorpicker';
+		}elseif($this->placepicker){
+			$this->jquery->placepicker($this->id, $this->placepicker_withmap);
 		}
 		if(isset($this->value)) $out .= 'value="'.$this->value.'" ';
 		if(!empty($this->pattern) && !empty($this->successmsg)) $this->class .= ' fv_success';

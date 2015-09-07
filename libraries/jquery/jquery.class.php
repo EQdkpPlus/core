@@ -37,9 +37,10 @@ if (!class_exists("jquery")) {
 			'starrating'		=> false,
 			'formvalidation'	=> false,
 			'fullcalendar'		=> false,
-			'jqplot'			=> false,
+			'jqplot'				=> false,
 			'spinner'			=> false,
 			'multilang'			=> false,
+			'placepicker'		=> false,
 		);
 		
 		/**
@@ -176,6 +177,16 @@ if (!class_exists("jquery")) {
 				", "docready");
 				
 				$this->inits['multilang']	= true;
+			}
+		}
+
+		// http://benignware.github.io/jquery-placepicker/
+		public function init_placepicker(){
+			// include the jqplot files
+			if(!$this->inits['placepicker']){
+				$this->tpl->js_file($this->path."js/placepicker/jquery.placepicker.min.js");
+				$this->tpl->js_file("http://maps.googleapis.com/maps/api/js?sensor=true&libraries=places");
+				$this->inits['placepicker']	= true;
 			}
 		}
 
@@ -1657,6 +1668,13 @@ if (!class_exists("jquery")) {
 			);
 			
 			return array('id' => $toolbar_id, 'items' => $intItems);
+		}
+
+		public function placepicker($id, $withmap=false){
+			$this->tpl->add_js(
+				"$('#".$id."').placepicker();"
+			);
+			return true;
 		}
 
 		/**
