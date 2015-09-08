@@ -41,6 +41,7 @@ if (!class_exists("jquery")) {
 			'spinner'			=> false,
 			'multilang'			=> false,
 			'placepicker'		=> false,
+			'googlemaps'		=> false,
 		);
 
 		/**
@@ -182,11 +183,19 @@ if (!class_exists("jquery")) {
 
 		// http://benignware.github.io/jquery-placepicker/
 		public function init_placepicker(){
-			// include the jqplot files
 			if(!$this->inits['placepicker']){
 				$this->tpl->js_file("http://maps.googleapis.com/maps/api/js?sensor=true&libraries=places");
 				$this->tpl->js_file($this->path."js/placepicker/jquery.placepicker.min.js");
 				$this->inits['placepicker']	= true;
+			}
+		}
+
+		// https://github.com/hpneo/gmaps
+		public function init_gmaps(){
+			if(!$this->inits['googlemaps']){
+				$this->tpl->js_file("http://maps.googleapis.com/maps/api/js?sensor=true");
+				$this->tpl->js_file($this->path."js/gmaps/gmaps.js");
+				$this->inits['googlemaps']	= true;
 			}
 		}
 
@@ -1676,6 +1685,30 @@ if (!class_exists("jquery")) {
 				"$('#".$id."').placepicker();"
 			, "docready");
 			return true;
+		}
+
+		public function googlemaps($id){
+			$this->init_gmaps();
+			$this->tpl->add_js("
+				map = new GMaps({
+					el: '#".$id."',
+					lat: -12.043333,
+					lng: -77.028333
+				});
+				GMaps.geocode({
+					address: $('#address').val(),
+					callback: function(results, status) {
+						if (status == 'OK') {
+							var latlng = results[0].geometry.location;
+							map.setCenter(latlng.lat(), latlng.lng());
+							map.addMarker({
+								lat: latlng.lat(),
+								lng: latlng.lng()
+							});
+						}
+					}
+				});" ,
+			"docready");
 		}
 
 		/**
