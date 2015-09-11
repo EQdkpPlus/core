@@ -1497,6 +1497,10 @@ div.pagination {
 	color: @styleArticleSitemapHoverColor;
 }
 
+.noheader .categoryChildSitemap {
+	float: none;
+}
+
 hr#system-readmore {
 	display:none;
 }

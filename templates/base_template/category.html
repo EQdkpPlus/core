@@ -28,12 +28,23 @@
 		<div class="categoryChildSitemap">
 			<ul>
 				<!-- BEGIN child_row -->
-				<li><a href="{child_row.U_PATH}" title="{child_row.DESC} ">{child_row.NAME} ({child_row.COUNT})</a></li>
+				<li><a href="{child_row.U_PATH}" title="{child_row.DESC} "><i class="fa fa-folder fa-lg"></i> {child_row.NAME} ({child_row.COUNT})</a></li>
 				<!-- END child_row -->
 			</ul>
 		</div>
 		<!-- ENDIF -->
 		{CATEGORY_DESCRIPTION}
+		<div class="clear"></div>
+	</header>
+	<!-- ELSE -->
+	<header class="noheader">
+		<div class="categoryChildSitemap">
+			<ul>
+				<!-- BEGIN child_row -->
+				<li><a href="{child_row.U_PATH}" title="{child_row.DESC} "><i class="fa fa-folder fa-lg"></i> {child_row.NAME} ({child_row.COUNT})</a></li>
+				<!-- END child_row -->
+			</ul>
+		</div>
 		<div class="clear"></div>
 	</header>
 	<!-- ENDIF -->
