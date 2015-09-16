@@ -115,7 +115,7 @@ class login_pageobject extends pageobject {
 					}
 					
 				} else {
-					$redirect_url = $this->controller_path_plain;
+					$redirect_url = $this->controller_path_plain.$this->SID;
 				}
 				
 				redirect($redirect_url);

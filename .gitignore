@@ -87,3 +87,4 @@ games/wildstar
 games/wot
 supporttool/
 core/messenger/whatsapp.messenger.class.php
+core/notifications/whatsapp.notification.class.php

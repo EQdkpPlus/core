@@ -27,7 +27,7 @@ class plugin_manager extends gen_class {
 	public $plugins 		= array();		// Store Plugin-Objects
 	public $status			= array();		// Store Plugin-Status
 	
-	protected $apiLevel		= 20;	//API Level of Plugin Class
+	protected $apiLevel		= 23;	//API Level of Plugin Class
 	
 	public static $valid_data_types = array(
 		'id',

@@ -47,10 +47,18 @@ class hbutton extends html {
 	public $class = 'input';
 	public $buttontype = 'button';
 	public $tolang = false;
+	public $callback = false;
+	public $inp_callback = false;
 	
 	private $out = '';
 	
 	public function _construct() {
+		$return = false;
+		if($this->callback !== false) $return = call_user_func($this->callback, $this);
+		if($return !== false && $return !== NULL) {
+			$this->out = $return; return;
+		}
+		
 		$out = '<button type="'.$this->buttontype.'" name="'.$this->name.'" ';
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		$out .= 'id="'.$this->id.'" ';
@@ -69,7 +77,10 @@ class hbutton extends html {
 	}
 	
 	public function _inpval() {
-		return $this->in->get($this->name, '', $this->inptype);
+		$return = false;
+		if($this->inp_callback !== false && $return !== NULL) $return = call_user_func($this->inp_callback, $this);
+		
+		return ($return !== false) ? $return : $this->in->get($this->name, '', $this->inptype);
 	}
 }
 ?>

@@ -22,7 +22,7 @@
 
 //Pathinfo check
 $path_info = !empty($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : (!empty($_SERVER['ORIG_PATH_INFO']) ? $_SERVER['ORIG_PATH_INFO'] : '');
-if($path_info != ""){
+if($path_info != "" && strpos($path_info, '/pathinfotest') !== false){
 	echo filter_var($path_info, FILTER_SANITIZE_STRING);
 	die();
 }
