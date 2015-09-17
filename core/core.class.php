@@ -552,6 +552,7 @@ class core extends gen_class {
 				$toHash = $this->user->removeSIDfromString($arrLinkData['link']);
 				$toHash = str_replace(array("index.php/", ".html", ".php"), "", $toHash);
 				if (substr($toHash, -1) == "/") $toHash = substr($toHash, 0, -1);
+				if (substr($toHash, -1) == "?") $toHash = substr($toHash, 0, -1);
 				return md5($toHash);
 				
 			}
