@@ -70,6 +70,8 @@ class MyMailer extends PHPMailer {
 
 		// Language Vars
 		$this->nohtmlmssg	= $this->user->lang('error_nohtml');
+		
+		if(!$this->pdl->type_known('mail')) $this->pdl->register_type('mail', null, null, array(2,3,4), array(3,4));
 	}
 
 	/**
@@ -251,7 +253,18 @@ class MyMailer extends PHPMailer {
 		}else{
 			$this->Mailer	= 'mail';
 		}
-		$sendput			= $this->Send();
+		
+		$sendput = $this->Send();
+		
+		//Debugging
+		$this->pdl->log("mail", "\nFrom: ".$this->From."
+To: ".print_r($this->all_recipients, true)."
+Subject: ".$this->Subject."
+Body: ".$this->Body."
+Method: ".$this->Mailer."
+Result: ".print_r($sendput, true)."
+Error: ".$this->ErrorInfo);
+		
 		$this->ClearAddresses();
 		return $sendput;
 	}
