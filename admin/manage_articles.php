@@ -230,7 +230,7 @@ class Manage_Articles extends page_generic {
 			'autoresize'	=> true,
 		));
 		
-		$arrCategoryIDs = $this->pdh->sort($this->pdh->get('article_categories', 'id_list', array()), 'articles', 'sort_id', 'asc');
+		$arrCategoryIDs = $this->pdh->sort($this->pdh->get('article_categories', 'id_list', array()), 'article_categories', 'sort_id', 'asc');
 		$arrCategories = array();
 		foreach($arrCategoryIDs as $caid){
 			$arrCategories[$caid] = $this->pdh->get('article_categories', 'name_prefix', array($caid)).$this->pdh->get('article_categories', 'name', array($caid));
