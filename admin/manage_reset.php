@@ -62,6 +62,7 @@ class reset_eqdkp extends page_generic {
 			$log_action['{L_'.$value.'}'] = '';
 		}
 		$this->pdh->process_hook_queue();
+		$this->pdc->flush();
 		$this->core->message($this->user->lang('reset_success'), $this->user->lang('success'), 'green');
 		$this->logs->add('action_reset', $log_action);
 		$this->display();
