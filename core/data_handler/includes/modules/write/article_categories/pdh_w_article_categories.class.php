@@ -91,7 +91,6 @@ if(!class_exists('pdh_w_article_categories')) {
 			
 			//Check Alias
 			$blnAliasResult = $this->check_alias(0, $strAlias);
-			if (!$blnAliasResult) return false;
 			
 			$strDescription = $this->bbcode->replace_shorttags($strDescription);
 			if ($this->config->get('enable_embedly')) $strDescription = $this->embedly->parseString($strDescription);
@@ -104,7 +103,7 @@ if(!class_exists('pdh_w_article_categories')) {
 			
 			$arrQuery  = array(
 				'name' 			=> $strName,
-				'alias' 		=> $strAlias,
+				'alias' 		=> ($blnAliasResult) ? $strAlias : '',
 				'portal_layout' => $intPortalLayout,
 				'description'	=> $strDescription,
 				'per_page'		=> $intArticlePerPage,
@@ -132,10 +131,13 @@ if(!class_exists('pdh_w_article_categories')) {
 			if ($objQuery){
 				$id = $objQuery->insertId;
 				$arrAggregation[] = $id;
+								
+				$arrData = array(
+						'aggregation' => serialize($arrAggregation),
+				);
+				if(!$blnAliasResult) $arrData['alias'] = $strAlias.'-'.$id;
 				
-				$objQuery = $this->db->prepare("UPDATE __article_categories :p WHERE id=?")->set(array(
-					'aggregation' => serialize($arrAggregation),
-				))->execute($id);
+				$objQuery = $this->db->prepare("UPDATE __article_categories :p WHERE id=?")->set($arrData)->execute($id);
 				
 				$log_action = $this->logs->diff(false, $arrQuery, $this->arrLogLang);
 				$this->log_insert("action_articlecategory_added", $log_action, $id, $arrQuery["name"], 1, 'article');
