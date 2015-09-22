@@ -300,7 +300,6 @@ class update_2100 extends sql_update_task {
 		$this->db->prepare("UPDATE __styles :p WHERE template_path='eqdkp_modern' ")->set($arrSet)->execute();
 		
 		$this->pdh->enqueue_hook('styles_update');
-		$this->pdh->process_hook_queue();
 		
 		//Reset Template Cache
 		$objStyles = register('styles');
@@ -310,6 +309,10 @@ class update_2100 extends sql_update_task {
 		$this->ntfy->addNotificationType('calendarevent_invitation','notification_calendarevent_invitation', 'calendarevent', 0, 1, 0, '', 0, 'fa-envelope');
 		$this->config->set('calendar_raidleader_autoinvite', 1);
 		
+		//Reset Repository
+		$this->pdh->put('repository', 'reset', array());
+		
+		$this->pdh->process_hook_queue();
 		return true;
 	}
 }
