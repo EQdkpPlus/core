@@ -197,7 +197,7 @@ class Manage_Styles extends page_generic{
 		foreach($arrOptions as $key => $val){
 			foreach($val as $name => $type)
 			{
-				$data[$name] = $this->in->get($name);
+				$data[$name] = $this->in->get($name, '', 'raw');
 			}
 		}
 
