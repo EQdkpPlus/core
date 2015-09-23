@@ -415,7 +415,7 @@
 				<div id="logoContainer" class="{T_LOGO_POSITION}">
 					<div id="logoArea">
 						<!-- IF HEADER_LOGO -->
-						<img src="{HEADER_LOGO}" alt="{MAIN_TITLE}" id="mainlogo" />
+						<a href="{EQDKP_CONTROLLER_PATH}"><img src="{HEADER_LOGO}" alt="{MAIN_TITLE}" id="mainlogo" /></a>
 						<!-- ENDIF -->
 					</div><!-- close logoArea -->
 					
