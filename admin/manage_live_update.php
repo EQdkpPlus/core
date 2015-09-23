@@ -95,7 +95,7 @@ class Manage_Live_Update extends page_generic {
 					$.get('manage_live_update.php".$this->SID."&step=".$id."&link_hash=".$this->CSRFGetToken('step')."', function(data) {
 					  if ($.trim(data) == 'true'){
 						//alert('Step".$id.' '.$value['label']." beendet');
-						".(($id == $last_step) ? "set_progress_bar_value(".$last_step.", '".$this->jquery->sanitize($this->user->lang('liveupdate_step_end'))."'); window.location='manage_live_update.php".$this->SID."';" : ((isset($this->steps[$id+1]['show']) && $this->steps[$id+1]['show'] == true) ? 'window.location.href="manage_live_update.php'.$this->SID.'&show='.($id+1).'"' : 'lu_step'.($id+1).'();'))."
+						".(($id == $last_step) ? "set_progress_bar_value(".$last_step.", '".$this->jquery->sanitize($this->user->lang('liveupdate_step_end'))."'); window.location='manage_live_update.php".$this->SID."'&finished=true;" : ((isset($this->steps[$id+1]['show']) && $this->steps[$id+1]['show'] == true) ? 'window.location.href="manage_live_update.php'.$this->SID.'&show='.($id+1).'"' : 'lu_step'.($id+1).'();'))."
 					  }else {
 						update_error(data);
 					  }
@@ -513,6 +513,13 @@ class Manage_Live_Update extends page_generic {
 
 	public function display(){
 		$updates = NULL;
+		
+		if($this->in->get('finished') == 'true'){
+			if(registry::register('config')->get('pk_maintenance_mode')){
+				redirect('maintenance/index.php'.$this->SID, false, false, false);
+			}
+		}
+		
 		if ($this->getNewVersion()){
 			$updates = $this->getNewVersion(true);
 			$this->tpl->assign_vars(array(
@@ -526,7 +533,7 @@ class Manage_Live_Update extends page_generic {
 		$this->tpl->assign_vars(array(
 			'S_START'			=> true,
 			'S_RELEASE_CHANNEL' => ($this->repo->getChannel() != 'stable') ? true : false,
-			'S_UPDATE_BUTTON'	=> ($this->repo->getChannel() != 'stable' || DEBUG > 1),
+			//'S_UPDATE_BUTTON'	=> ($this->repo->getChannel() != 'stable' || DEBUG > 1),
 			'RECENT_VERSION' 	=> VERSION_EXT,
 			'RELEASE_CHANNEL' 	=> ucfirst($this->repo->getChannel()),
 			'S_REQUIREMENTS'	=> (class_exists("ZipArchive") && (($updates != NULL && $updates['dep_php'] != '') ? version_compare(PHP_VERSION, $updates['dep_php'], '>=') : true)),
