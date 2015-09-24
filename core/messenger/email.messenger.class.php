@@ -31,6 +31,11 @@ class email_messenger extends generic_messenger {
 		$strEmailAdress = $this->pdh->get('user', 'email', array($toUserID, true));
 		if (preg_match("/^([a-zA-Z0-9])+([\.a-zA-Z0-9_-])*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+/",$strEmailAdress)){
 			$this->email->Set_Language($this->pdh->get('user', 'lang', array($toUserID)));
+			$options = array(
+					'template_type'		=> 'input',
+			);
+			//Set E-Mail-Options
+			$this->email->SetOptions($options);
 			$blnResult = $this->email->SendMailFromAdmin($strEmailAdress, $strSubject, $strMessage);
 			
 		}
