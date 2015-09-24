@@ -64,8 +64,20 @@ if ( !class_exists( "pdh_r_portal" ) ) {
 			return ($id) ? $this->portal[$id] : $this->portal;
 		}
 
-		public function get_id_list() {
-			$ids = (!empty($this->portal)) ? array_keys($this->portal) : array();
+		public function get_id_list($arrFilter=false) {
+			$ids = array();
+			if($arrFilter){
+				foreach($this->portal as $key => $val){
+					$intFilterMatch = 0;
+					foreach($arrFilter as $fkey => $fval){					
+						if(isset($val[$fkey]) && $val[$fkey] == $fval) $intFilterMatch++;
+					}
+					
+					if($intFilterMatch == count($arrFilter)) $ids[] = $key;
+				}
+			} else {
+				$ids = (!empty($this->portal)) ? array_keys($this->portal) : array();
+			}
 			return $ids;
 		}
 
