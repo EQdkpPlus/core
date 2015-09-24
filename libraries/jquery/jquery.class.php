@@ -53,7 +53,7 @@ if (!class_exists("jquery")) {
 			// Load the core css & js files
 			$minified_or_not	= (DEBUG) ? '' : '.min';
 			$this->tpl->css_file($this->path.'core/core'.$minified_or_not.'.css');
-			$this->tpl->js_file($this->path.'core/core'.$minified_or_not.'.js', -100, 'direct');
+			$this->tpl->js_file($this->path.'core/core'.$minified_or_not.'.js', 'direct', -100);
 
 			// add a few variables to javascript (head tag)
 			$this->tpl->add_js("var mmocms_root_path = '".$this->server_path."';", 'head_top');

@@ -174,7 +174,7 @@ class template extends gen_class {
 	/**
 	* Assign custom JS File to the Header
 	*/
-	public function js_file($varval, $key=false, $type='combined'){
+	public function js_file($varval, $type='combined', $key=false){
 		if($key !== false){
 			$this->tpl_output['js_file'][$key] = array('file' => $varval, 'direct' => ($type == 'direct') ? true : false);
 		} else $this->tpl_output['js_file'][] = array('file' => $varval, 'direct' => ($type == 'direct') ? true : false);
