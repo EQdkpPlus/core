@@ -579,14 +579,20 @@ class template extends gen_class {
 
 	public function get_header_js(){
 		$imploded_jscode = "";
-		if(is_array($this->get_templatedata('js_code'))){
-			$imploded_jscode = implode("\n", $this->get_templatedata('js_code'));
-			if(is_array($this->get_templatedata('js_code_docready'))){
-				$imploded_jscode .= "jQuery(document).ready(function(){";
-				$imploded_jscode .= implode("\n", $this->get_templatedata('js_code_docready'));
-				$imploded_jscode .= "});";
-			}
-		}
+
+		$imploded_jscode = implode("\n", $this->get_templatedata('js_code_head_top'));
+		$imploded_jscode = implode("\n", $this->get_templatedata('js_code_head'));
+		
+		$imploded_jscode = implode("\n", $this->get_templatedata('js_code'));
+		$imploded_jscode = implode("\n", $this->get_templatedata('js_code_static'));
+		
+		$imploded_jscode .= "jQuery(document).ready(function(){";
+		
+		$imploded_jscode .= implode("\n", $this->get_templatedata('js_code_static_docready'));
+		$imploded_jscode .= implode("\n", $this->get_templatedata('js_code_docready'));
+				
+		$imploded_jscode .= "});";
+
 		return $imploded_jscode;
 	}
 
