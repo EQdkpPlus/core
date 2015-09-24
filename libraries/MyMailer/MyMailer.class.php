@@ -134,56 +134,55 @@ class MyMailer extends PHPMailer {
 	* @return traue/false
 	*/
 	private function Template($templatename, $inputs){
-		// Check if the template is from a file or not
-		if($this->myoptions['template_type'] == 'input'){
-			$body	= $templatename.nl2br($this->Signature);
-		}else{
-			//Specific Email Template
-			if (strpos($templatename, $this->root_path) === 0){
-				$content	= $this->getFile($templatename);
-			} else {
-				$content	= $this->getFile($this->root_path.'language/'.$this->mydeflang.'/email/'.$templatename);
-			}
-			
-			//General Body Email Template
-			$intDefaultTemplate	= register('config')->get('default_style');
-			$strTemplatePath	= register('pdh')->get('styles', 'templatepath', array($intDefaultTemplate));
-				
-			if(is_file($this->root_path.'templates/'.$strTemplatePath.'/email.tpl')){
-				// get the logo
-				if(is_file(register('file_handler')->FolderPath('','files').register('config')->get('custom_logo'))){
-					$headerlogo	= register('file_handler')->FolderPath('','files').register('config')->get('custom_logo');
-				}else{
-					$headerlogo	= register('environment')->buildlink().'templates/eqdkp_modern/images/logo.svg';
-				}
-				$this->AddEmbeddedImage($headerlogo, 'headerlogo');
-				
-				// load the images out of the template/images/email folder. If the image is a svg, also include png woth same name if available
-				$images	= glob($this->root_path."templates/eqdkp_modern/images/emails/*.{jpg,png,svg}", GLOB_BRACE);
-				$arrEmbedd	= array();
-				foreach($images as $image){
-					$imageinfo	= pathinfo($image);
-					$arrEmbedd[str_replace('-','', $imageinfo["filename"])][] = array('filename' => $imageinfo["basename"], 'extension' => $imageinfo["extension"]);
-				}
-				foreach($arrEmbedd as $fileid=>$filedata){
-					foreach($filedata as $image){
-						$this->AddEmbeddedImage($this->root_path.'templates/eqdkp_modern/images/emails/'.$image['filename'], $fileid.'_'.$image['extension']);
-					}
-				}
-				#d($arrEmbedd);die();
-				#$this->AddEmbeddedImage($this->root_path.'templates/eqdkp_modern/images/background-head.svg', 'backgroundimage');
-				#$this->AddEmbeddedImage($this->root_path.'templates/eqdkp_modern/images/background-head.png', 'backgroundimage_fallback');
 
-				// replace the stuff
-				$body	= $this->getFile($this->root_path.'templates/'.$strTemplatePath.'/email.tpl');
-				$body	= str_replace('{CONTENT}', $content, $body);
-				$body	= str_replace('{LOGO}', $headerlogo, $body);
-				$body	= str_replace('{PLUSVERSION}', VERSION_EXT, $body);
-				$body	= str_replace('{SUBJECT}', $this->Subject, $body);
-				$body	= str_replace('{PLUSLINK}', register('environment')->buildlink(), $body);
-				$body	= str_replace('{SIGNATURE}', nl2br($this->Signature), $body);
-			} else $body = $content.nl2br($this->Signature);
+		//Specific Email Template
+		if($this->myoptions['template_type'] == 'input'){
+			$content	= $templatename;
+		} elseif (strpos($templatename, $this->root_path) === 0){
+			$content	= $this->getFile($templatename);
+		} else {
+			$content	= $this->getFile($this->root_path.'language/'.$this->mydeflang.'/email/'.$templatename);
 		}
+		
+		//General Body Email Template
+		$intDefaultTemplate	= register('config')->get('default_style');
+		$strTemplatePath	= register('pdh')->get('styles', 'templatepath', array($intDefaultTemplate));
+			
+		if(is_file($this->root_path.'templates/'.$strTemplatePath.'/email.tpl')){
+			// get the logo
+			if(is_file(register('file_handler')->FolderPath('','files').register('config')->get('custom_logo'))){
+				$headerlogo	= register('file_handler')->FolderPath('','files').register('config')->get('custom_logo');
+			}else{
+				$headerlogo	= register('environment')->buildlink().'templates/eqdkp_modern/images/logo.svg';
+			}
+			$this->AddEmbeddedImage($headerlogo, 'headerlogo');
+			
+			// load the images out of the template/images/email folder. If the image is a svg, also include png woth same name if available
+			$images	= glob($this->root_path."templates/eqdkp_modern/images/emails/*.{jpg,png,svg}", GLOB_BRACE);
+			$arrEmbedd	= array();
+			foreach($images as $image){
+				$imageinfo	= pathinfo($image);
+				$arrEmbedd[str_replace('-','', $imageinfo["filename"])][] = array('filename' => $imageinfo["basename"], 'extension' => $imageinfo["extension"]);
+			}
+			foreach($arrEmbedd as $fileid=>$filedata){
+				foreach($filedata as $image){
+					$this->AddEmbeddedImage($this->root_path.'templates/eqdkp_modern/images/emails/'.$image['filename'], $fileid.'_'.$image['extension']);
+				}
+			}
+			#d($arrEmbedd);die();
+			#$this->AddEmbeddedImage($this->root_path.'templates/eqdkp_modern/images/background-head.svg', 'backgroundimage');
+			#$this->AddEmbeddedImage($this->root_path.'templates/eqdkp_modern/images/background-head.png', 'backgroundimage_fallback');
+
+			// replace the stuff
+			$body	= $this->getFile($this->root_path.'templates/'.$strTemplatePath.'/email.tpl');
+			$body	= str_replace('{CONTENT}', $content, $body);
+			$body	= str_replace('{LOGO}', $headerlogo, $body);
+			$body	= str_replace('{PLUSVERSION}', VERSION_EXT, $body);
+			$body	= str_replace('{SUBJECT}', $this->Subject, $body);
+			$body	= str_replace('{PLUSLINK}', register('environment')->buildlink(), $body);
+			$body	= str_replace('{SIGNATURE}', nl2br($this->Signature), $body);
+		} else $body = $content.nl2br($this->Signature);
+	
 		$body	= str_replace("[\]",'',$body );
 		if(is_array($inputs)){
 			foreach($inputs as $name => $value){

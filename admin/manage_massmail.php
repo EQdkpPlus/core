@@ -163,6 +163,7 @@ class Manage_Massmail extends page_generic {
 		$arrSearch = array('{DKP_NAME}', '{EQDKP_LINK}', '{DATE}', '{USERNAME}');
 		$arrReplace = array($this->config->get('dkp_name'), $this->env->link, $this->time->user_date($this->time->time), $this->pdh->get('user', 'name', array($userid)));
 		$body = str_replace($arrSearch, $arrReplace, $body);
+
 		$subject = str_replace($arrSearch, $arrReplace, $subject);
 
 		if ($this->in->get('event_id', 0) > 0){
