@@ -68,7 +68,7 @@ if (!class_exists("jquery")) {
 			$this->tpl->add_js("var mmocms_user_timeformat = '".$this->time->translateformat2momentjs($this->user->style['time'])."';", 'head_top');
 			$this->tpl->add_js("var mmocms_user_timestamp = '".$this->time->date("m/d/Y H:i:s")."';", 'head_top');
 			$this->tpl->add_js("var mmocms_user_timestamp_atom = '".$this->time->date(DATE_ATOM)."';", 'head_top');
-			
+
 			// jquery language file
 			$langfile = '';
 			$this->langfile('lang_jquery.js');
@@ -192,7 +192,7 @@ if (!class_exists("jquery")) {
 		// http://benignware.github.io/jquery-placepicker/
 		public function init_placepicker(){
 			if(!$this->inits['placepicker']){
-				$this->tpl->js_file("http://maps.googleapis.com/maps/api/js?sensor=true&libraries=places");
+				$this->tpl->js_file("http://maps.googleapis.com/maps/api/js?sensor=true&libraries=places", 'direct');
 				$this->tpl->js_file($this->path."js/placepicker/jquery.placepicker.min.js");
 				$this->inits['placepicker']	= true;
 			}
@@ -201,7 +201,7 @@ if (!class_exists("jquery")) {
 		// https://github.com/hpneo/gmaps
 		public function init_gmaps(){
 			if(!$this->inits['googlemaps']){
-				$this->tpl->js_file("http://maps.googleapis.com/maps/api/js?sensor=true");
+				$this->tpl->js_file("http://maps.googleapis.com/maps/api/js?sensor=true", 'direct');
 				$this->tpl->js_file($this->path."js/gmaps/gmaps.js");
 				$this->inits['googlemaps']	= true;
 			}
