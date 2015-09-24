@@ -53,18 +53,22 @@ if (!class_exists("jquery")) {
 			// Load the core css & js files
 			$minified_or_not	= (DEBUG) ? '' : '.min';
 			$this->tpl->css_file($this->path.'core/core'.$minified_or_not.'.css');
-			$this->tpl->js_file($this->path.'core/core'.$minified_or_not.'.js', -100);
+			$this->tpl->js_file($this->path.'core/core'.$minified_or_not.'.js', -100, 'direct');
 
-			// add the root_path to javascript
-			$this->tpl->add_js("var mmocms_root_path = '".$this->server_path."';");
-			$this->tpl->add_js("var mmocms_page = '".$this->env->current_page."';");
-			$this->tpl->add_js("var mmocms_sid = '".$this->SID."';");
-			$this->tpl->add_js("var mmocms_userid = ".$this->user->id.";");
-			$this->tpl->add_js("var mmocms_user_timezone = '".$this->time->date("P")."';");
-			$this->tpl->add_js("var mmocms_user_dateformat_long = '".$this->time->translateformat2momentjs($this->user->style['date_notime_long'])."';");
-			$this->tpl->add_js("var mmocms_user_dateformat_short = '".$this->time->translateformat2momentjs($this->user->style['date_notime_short'])."';");
-			$this->tpl->add_js("var mmocms_user_timeformat = '".$this->time->translateformat2momentjs($this->user->style['time'])."';");
-
+			// add a few variables to javascript (head tag)
+			$this->tpl->add_js("var mmocms_root_path = '".$this->server_path."';", 'head_top');
+			$this->tpl->add_js("var mmocms_page = '".$this->env->current_page."';", 'head_top');
+			$this->tpl->add_js("var mmocms_controller_path = '".$this->controller_path."';", 'head_top');
+			$this->tpl->add_js("var mmocms_seo_extension = '".$this->routing->getSeoExtension()."';", 'head_top');
+			$this->tpl->add_js("var mmocms_sid = '".$this->SID."';", 'head_top');
+			$this->tpl->add_js("var mmocms_userid = ".$this->user->id.";", 'head_top');
+			$this->tpl->add_js("var mmocms_user_timezone = '".$this->time->date("P")."';", 'head_top');
+			$this->tpl->add_js("var mmocms_user_dateformat_long = '".$this->time->translateformat2momentjs($this->user->style['date_notime_long'])."';", 'head_top');
+			$this->tpl->add_js("var mmocms_user_dateformat_short = '".$this->time->translateformat2momentjs($this->user->style['date_notime_short'])."';", 'head_top');
+			$this->tpl->add_js("var mmocms_user_timeformat = '".$this->time->translateformat2momentjs($this->user->style['time'])."';", 'head_top');
+			$this->tpl->add_js("var mmocms_user_timestamp = '".$this->time->date("m/d/Y H:i:s")."';", 'head_top');
+			$this->tpl->add_js("var mmocms_user_timestamp_atom = '".$this->time->date(DATE_ATOM)."';", 'head_top');
+			
 			// jquery language file
 			$langfile = '';
 			$this->langfile('lang_jquery.js');

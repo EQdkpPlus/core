@@ -221,12 +221,18 @@ class core extends gen_class {
 				$template_background_file = $this->server_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg' ;
 			}
 
+			// add the template specific JS file
+			$templatejs		= $this->root_path.'templates/'.$this->user->style['template_path'].'/'.$this->user->style['template_path'].'.js';
+			if(is_file($templatejs)){
+				$this->tpl->js_file($templatejs);
+			}
 			
 			// add the custom JS file
 			$customjs		= $this->root_path.'templates/'.$this->user->style['template_path'].'/custom.js';
 			if(is_file($customjs)){
 				$this->tpl->js_file($customjs);
 			}
+			
 			if(strlen($this->config->get('global_js'))){
 				$global_js = $this->config->get('global_js');
 				$this->tpl->assign_var('FOOTER_CODE', $global_js);
@@ -268,8 +274,9 @@ class core extends gen_class {
 								$(this).val(original_val);
 							}
 						});
-					});
-					
+					});", 'static_docready');
+			
+			$this->tpl->add_js("
 					$('.paginationPageSelector').on('click', function(){
 						var base_url = $(this).parent().parent().data('base-url');
 						var pages = $(this).parent().parent().data('pages');
@@ -322,7 +329,7 @@ class core extends gen_class {
 				var zoomIcon = '<div class=\"image_resized\" onmouseover=\"$(\'#imgresize_'+randomId+'\').show()\" onmouseout=\"$(\'#imgresize_' +randomId+'\').hide()\" style=\"display:inline-block;\"><div id=\"imgresize_'+randomId+'\" class=\"markImageResized\"><a title=\"'+imagetitle+'\" href=\"'+fullimage+'\" class=\"lightbox\"><span class=\"fa-stack fa-lg\"><i class=\"fa fa-square fa-stack-2x image_zoom\"></i><i class=\"fa fa-search-plus fa-stack-1x fa-inverse\"></i></span><\/a><\/div>'+image_string+'<\/div>';
 				$(this).html(zoomIcon);
 			});
-			", 'docready');
+			", 'static_docready');
 
 			// global qtip
 			$this->jquery->qtip(".coretip", "return $(this).attr('data-coretip');", array('contfunc'=>true, 'width'=>200));
@@ -392,12 +399,6 @@ class core extends gen_class {
 				'U_PWRESET_LINK'			=> ($this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_pwreset_url'))) ? $this->createLink($arrPWresetLink) : '<a href="'.$this->controller_path."Login/LostPassword/".$this->SID."\">".$this->user->lang('lost_password').'</a>',	
 				'S_BRIDGE_INFO'				=> ($this->config->get('cmsbridge_active') ==1) ? true : false,
 				'U_USER_PROFILE'			=> $this->routing->build('user', (isset($this->user->data['username']) ? sanitize($this->user->data['username']) : $this->user->lang('anonymous')), 'u'.$this->user->id),
-				'USER_TIMESTAMP'			=> $this->time->date("m/d/Y H:i:s"),
-				'USER_TIMESTAMP_ATOM'		=> $this->time->date(DATE_ATOM),
-				'USER_TIMEZONE'				=> $this->time->date("P"),
-				'USER_DATEFORMAT_LONG'		=> $this->time->translateformat2momentjs($this->user->style['date_notime_long']),
-				'USER_DATEFORMAT_SHORT'		=> $this->time->translateformat2momentjs($this->user->style['date_notime_short']),
-				'USER_TIMEFORMAT'			=> $this->time->translateformat2momentjs($this->user->style['time']),
 				'HONEYPOT_VALUE'			=> $this->user->csrfGetToken("honeypot"),
 				'S_REPONSIVE'				=> registry::get_const('mobile_view'),
 				'CURRENT_PAGE'				=> sanitize($this->env->request),

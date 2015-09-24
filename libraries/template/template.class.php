@@ -148,12 +148,25 @@ class template extends gen_class {
 	/**
 	* Assign custom JS Code to the Header
 	*/
-	public function add_js($varval, $eop=false){
-		switch($eop){
-			case 'eop':			$identifier = 'js_code_eop';		break;
-			case 'eop2':		$identifier = 'js_code_eop2';		break;
-			case 'docready':	$identifier = 'js_code_docready';	break;
-			default:			$identifier = 'js_code';
+	public function add_js($varval, $type='docready'){
+		switch($type){
+			//Bottom
+			case 'docready':		$identifier = 'js_code_docready';	break;
+			case 'eop':
+			case 'eop2':			$identifier = 'js_code_eop';		break;
+			
+			//Head
+			case 'head_top':		$identifier = 'js_code_head_top'; break;
+			case 'head':			$identifier = 'js_code'; break;
+			case 'head_docready':	$identifier = 'js_code_head_docready'; break;
+			
+			//To file
+			case 'static':
+			case 'file': 			$identifier = 'js_code_file'; break;
+			case 'static_docready':
+			case 'file_docready':	$identifier = 'js_code_file_docready'; break;
+			
+			default: 
 		}
 		$this->tpl_output[$identifier][] = $varval;
 	}
@@ -161,10 +174,10 @@ class template extends gen_class {
 	/**
 	* Assign custom JS File to the Header
 	*/
-	public function js_file($varval, $key=false){
+	public function js_file($varval, $key=false, $type='combined'){
 		if($key !== false){
-			$this->tpl_output['js_file'][$key] = array('file' => $varval);
-		} else $this->tpl_output['js_file'][] = array('file' => $varval);
+			$this->tpl_output['js_file'][$key] = array('file' => $varval, 'direct' => ($type == 'direct') ? true : false);
+		} else $this->tpl_output['js_file'][] = array('file' => $varval, 'direct' => ($type == 'direct') ? true : false);
 	}
 
 	public function staticHTML($varval){
@@ -358,8 +371,11 @@ class template extends gen_class {
 		$storage_folder = $this->pfh->FolderPath('templates', 'eqdkp');
 
 		if (!is_array($this->tpl_output['js_file'])) $this->tpl_output['js_file'] = array();
-
+		
 		foreach($this->tpl_output['js_file'] as $key => $val){
+			if($val['direct']) {
+				continue;
+			}
 			$val['file'] = $this->env->server_to_rootpath($val['file']);
 
 			//Put the jquery lang file at the end of all other JS files
@@ -376,14 +392,26 @@ class template extends gen_class {
 		}
 
 		ksort($arrFiles);
+		
+		//Static JS that can be combined
+		$imploded_jscodeeop = "";
+		if(is_array($this->get_templatedata('js_code_file')) || is_array($this->get_templatedata('js_code_file_docready'))){
+			$imploded_jscodeeop = implode("\n", $this->get_templatedata('js_code_file'));
+			if(is_array($this->get_templatedata('js_code_file_docready'))){
+				$imploded_jscodeeop .= "$(document).ready(function(){";
+				$imploded_jscodeeop .= implode("\n", $this->get_templatedata('js_code_file_docready'));
+				$imploded_jscodeeop .= "});";
+			}
+		}
+		
 
 		//Check if there is an file for this hash
 		asort($arrHash);
-		$strHash = md5(implode(";", $arrHash));
+		$strHash = md5(implode(";", $arrHash).';'.md5($imploded_jscodeeop));
 		$combinedFile = $storage_folder.$this->style_code.'/combined_'.$strHash.'.js';
 
 		if (is_file($combinedFile)){
-			array_unshift($this->tpl_output['js_file'], array('file' => $combinedFile));
+			$this->tpl_output['js_file'][-10] = array('file' => $combinedFile);
 
 			return file_get_contents($combinedFile);
 		} else {
@@ -403,10 +431,12 @@ class template extends gen_class {
 			foreach($data as $val){
 				$strJS .= ' '.$val['content'];
 			}
+			
+			$strJS .= "\n /* static code*/ \n".$imploded_jscodeeop;
 
 			$this->pfh->putContent($combinedFile, $strJS);
 			$this->timekeeper->put('tpl_cache_'.$this->style_code, 'combined.js');
-			array_unshift($this->tpl_output['js_file'], array('file' => $combinedFile));
+			$this->tpl_output['js_file'][-10] = array('file' => $combinedFile);
 			return $strJS;
 		}
 		return "";
@@ -566,11 +596,11 @@ class template extends gen_class {
 		$this->cleanup_combined();
 		if(!$this->get_templateout('js_code')){
 			// JS in header...
-			if(is_array($this->get_templatedata('js_code'))){
+			if(is_array($this->get_templatedata('js_code')) || is_array($this->get_templatedata('js_code_head_docready'))){
 				$imploded_jscode = implode("\n", $this->get_templatedata('js_code'));
-				if(is_array($this->get_templatedata('js_code_docready'))){
+				if(is_array($this->get_templatedata('js_code_head_docready'))){
 					$imploded_jscode .= "$(document).ready(function(){";
-					$imploded_jscode .= implode("\n", $this->get_templatedata('js_code_docready'));
+					$imploded_jscode .= implode("\n", $this->get_templatedata('js_code_head_docready'));
 					$imploded_jscode .= "});";
 				}
 				$this->assign_var('JS_CODE', $imploded_jscode);
@@ -578,15 +608,15 @@ class template extends gen_class {
 			}
 
 			// JS on end of page
-			if(is_array($this->get_templatedata('js_code_eop'))){
+			if(is_array($this->get_templatedata('js_code_eop')) || is_array($this->get_templatedata('js_code_docready'))){
 				$imploded_jscodeeop = implode("\n", $this->get_templatedata('js_code_eop'));
+				if(is_array($this->get_templatedata('js_code_docready'))){
+					$imploded_jscodeeop .= "$(document).ready(function(){";
+					$imploded_jscodeeop .= implode("\n", $this->get_templatedata('js_code_docready'));
+					$imploded_jscodeeop .= "});";
+				}
+				
 				$this->assign_var('JS_CODE_EOP', $imploded_jscodeeop);
-				$this->set_templateout('js_code', true);
-			}
-			// JS on end of page
-			if(is_array($this->get_templatedata('js_code_eop2'))){
-				$imploded_jscodeeop2 = implode("\n", $this->get_templatedata('js_code_eop2'));
-				$this->assign_var('JS_CODE_EOP2', $imploded_jscodeeop2);
 				$this->set_templateout('js_code', true);
 			}
 		}
@@ -622,9 +652,19 @@ class template extends gen_class {
 
 		// Load the JS Files..
 		if(!$debug) $this->combine_js();
+
+		
 		if(!$this->get_templateout('js_file')){
 			if(is_array($this->get_templatedata('js_file'))){
-				$this->assign_var('JS_FILES', $this->implode_cssjsfiles("<script type='text/javascript' src='", "'></script>", "\n", $this->get_templatedata('js_file')));
+				ksort($this->get_templatedata('js_file'));
+				$js_files = "";
+				if(is_array($this->get_templatedata('js_code_head_top')) && count($this->get_templatedata('js_code_head_top'))) {
+					$js_files .= "<script type='text/javascript'>";
+					$js_files .= implode("\n", $this->get_templatedata('js_code_head_top'));
+					$js_files .= "</script>\n";
+				}
+				$js_files .= $this->implode_cssjsfiles("<script type='text/javascript' src='", "'></script>", "\n", $this->get_templatedata('js_file'));
+				$this->assign_var('JS_FILES', $js_files);
 			}
 			$this->set_templateout('js_file', true);
 		}
