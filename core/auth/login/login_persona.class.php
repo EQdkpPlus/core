@@ -43,7 +43,7 @@ class login_persona extends gen_class {
 	
 	public function init_js(){
 		if (!$this->js_loaded){
-			$this->tpl->js_file("https://browserid.org/include.js");
+			$this->tpl->js_file("https://browserid.org/include.js", "direct");
 			
 			$this->tpl->add_js("
 var initLogin = function () {
