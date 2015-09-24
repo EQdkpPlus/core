@@ -60,6 +60,10 @@ if (!class_exists("jquery")) {
 			$this->tpl->add_js("var mmocms_page = '".$this->env->current_page."';");
 			$this->tpl->add_js("var mmocms_sid = '".$this->SID."';");
 			$this->tpl->add_js("var mmocms_userid = ".$this->user->id.";");
+			$this->tpl->add_js("var mmocms_user_timezone = '".$this->time->date("P")."';");
+			$this->tpl->add_js("var mmocms_user_dateformat_long = '".$this->time->translateformat2momentjs($this->user->style['date_notime_long'])."';");
+			$this->tpl->add_js("var mmocms_user_dateformat_short = '".$this->time->translateformat2momentjs($this->user->style['date_notime_short'])."';");
+			$this->tpl->add_js("var mmocms_user_timeformat = '".$this->time->translateformat2momentjs($this->user->style['time'])."';");
 
 			// jquery language file
 			$langfile = '';
