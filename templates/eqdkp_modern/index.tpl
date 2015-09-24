@@ -419,9 +419,7 @@
 	
 	<div class="reponsiveTestClass" style="display:none;"><!-- This div is for testing the responsiveness --></div>
 	<script type="text/javascript">
-		//<![CDATA[
-			{JS_CODE}
-			
+		//<![CDATA[			
 			<!-- IF not S_LOGGED_IN -->
 			$(document).ready(function() {
 				/* Login Dialog */

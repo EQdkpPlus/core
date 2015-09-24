@@ -151,9 +151,10 @@ class template extends gen_class {
 	public function add_js($varval, $type='docready'){
 		switch($type){
 			//Bottom
-			case 'docready':		$identifier = 'js_code_docready';	break;
 			case 'eop':
-			case 'eop2':			$identifier = 'js_code_eop';		break;
+			case 'eop2':
+			case 'docready':		$identifier = 'js_code_eop';		break;
+			case 'eop_docready':	$identifier = 'js_code_eop_docready';	break;	
 			
 			//Head
 			case 'head_top':		$identifier = 'js_code_head_top'; break;
@@ -614,11 +615,11 @@ class template extends gen_class {
 			}
 
 			// JS on end of page
-			if(is_array($this->get_templatedata('js_code_eop')) || is_array($this->get_templatedata('js_code_docready'))){
+			if(is_array($this->get_templatedata('js_code_eop')) || is_array($this->get_templatedata('js_code_eop_docready'))){
 				$imploded_jscodeeop = implode("\n", $this->get_templatedata('js_code_eop'));
-				if(is_array($this->get_templatedata('js_code_docready'))){
+				if(is_array($this->get_templatedata('js_code_eop_docready'))){
 					$imploded_jscodeeop .= "$(document).ready(function(){";
-					$imploded_jscodeeop .= implode("\n", $this->get_templatedata('js_code_docready'));
+					$imploded_jscodeeop .= implode("\n", $this->get_templatedata('js_code_eop_docready'));
 					$imploded_jscodeeop .= "});";
 				}
 				
