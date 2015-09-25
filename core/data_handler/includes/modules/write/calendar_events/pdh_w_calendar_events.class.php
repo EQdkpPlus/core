@@ -95,8 +95,8 @@ if(!class_exists('pdh_w_calendar_events')) {
 				if(isset($editclones) && $editclones != 0){
 					$cloneid				= $this->pdh->get('calendar_events', 'cloneid', array($id));
 					$cloneid_eventid		= (($cloneid > 0) ? $cloneid : $id);
-					$timestamp_start_diff	= ($old['startdate'] != $startdate) ? $this->time->dateDiff($old['startdate'], $startdate, 'sec', true) : 0;
-					$timestamp_end_diff		= ($old['enddate'] != $enddate) ? $this->time->dateDiff($old['enddate'], $enddate, 'sec', true) : 0;
+					$timestamp_start_diff	= ($old['startdate'] != $startdate) ? $this->time->dateDiff($old['startdate'], $startdate, 'sec', true) : "+0";
+					$timestamp_end_diff		= ($old['enddate'] != $enddate) ? $this->time->dateDiff($old['enddate'], $enddate, 'sec', true) : "+0";
 					
 					#die($startdate.' -- '.$old['startdate'].' = '.$timestamp_start_diff);
 					if($editclones == '2'){
