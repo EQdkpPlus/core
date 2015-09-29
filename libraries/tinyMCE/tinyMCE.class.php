@@ -25,7 +25,7 @@ if ( !defined('EQDKP_INC') ){
 
 class tinyMCE extends gen_class {
 
-	protected $tinymce_version = '4.2.3';
+	protected $tinymce_version = '4.2.6';
 	protected $language	= 'en';
 	protected $trigger	= array(
 		'bbcode'	=> false,
@@ -164,7 +164,7 @@ class tinyMCE extends gen_class {
 					theme : "'.$this->theme.'",
 					skin : "'.$this->skin.'",
 					image_advtab: true,
-					toolbar: "insertfile undo redo | fullscreen | styleselect fontselect fontsizeselect bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist | link image media eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | eqdkp_item eqdkp_gallery eqdkp_raidloot eqdkp_chars | custom_buttons",
+					toolbar: "insertfile undo redo | fullscreen | styleselect fontselect fontsizeselect bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist | link image media emoticons eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | eqdkp_item eqdkp_gallery eqdkp_raidloot eqdkp_chars | custom_buttons",
 					language : "'.$this->language.'",
 					plugins: [
 					 	"advlist autolink lists link image imagetools charmap preview anchor eqdkp_item eqdkp_lightbox eqdkp_filebrowser eqdkp_easyinsert",
@@ -342,7 +342,7 @@ class tinyMCE extends gen_class {
 					theme : "'.$this->theme.'",
 					skin : "'.$this->skin.'",
 					image_advtab: true,				
-					toolbar: "insertfile undo redo | fullscreen | styleselect fontselect fontsizeselect bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist | link image media eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | eqdkp_item eqdkp_gallery eqdkp_raidloot eqdkp_chars | custom_buttons",
+					toolbar: "insertfile undo redo | fullscreen | styleselect fontselect fontsizeselect bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist | link image media emoticons eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | eqdkp_item eqdkp_gallery eqdkp_raidloot eqdkp_chars | custom_buttons",
 					language : "'.$this->language.'",
 					 plugins: [
 					 	"advlist autolink lists link image charmap preview anchor eqdkp_item eqdkp_lightbox eqdkp_filebrowser eqdkp_easyinsert",
