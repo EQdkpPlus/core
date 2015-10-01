@@ -191,7 +191,7 @@ if (!class_exists("timehandler")){
 		* Output proper Time
 		*
 		* @param $format		Format of the Output
-		* @param $tstamp		Timestamp
+		* @param $dtime			Timestamp in UTC
 		* @return Formatted		time string
 		*/
 		public function date($format="Y-m-d H:i:s", $dtime=''){			
@@ -203,10 +203,13 @@ if (!class_exists("timehandler")){
 		/**
 		 * Output Date in user-format
 		 *
-		 * @int 	$time			Timestamp
+		 * @int 	$time			Timestamp, in UTC
 		 * @bool 	$withtime		also display time?
 		 * @bool 	$long			Date in Long-format?
 		 * @bool	$timeonly		only display time?
+		 * @param	boolean $long
+		 * @param	boolean $fromformat
+		 * @param	boolean $withday
 		 * @return 	formatted String
 		 */
 		public function user_date($time=false, $withtime=false, $timeonly=false, $long=false, $fromformat=true, $withday=false) {
@@ -223,13 +226,13 @@ if (!class_exists("timehandler")){
 		/**
 		 * Output Date in format for a specific User
 		 * 
-		 * @param unknown $intUserID
-		 * @param unknown $time
-		 * @param string $withtime
-		 * @param string $timeonly
-		 * @param string $long
-		 * @param string $fromformat
-		 * @param string $withday
+		 * @param integer $intUserID
+		 * @param integer $time Timestamp, in UTC
+		 * @param boolean $withtime
+		 * @param boolean $timeonly
+		 * @param boolean $long
+		 * @param boolean $fromformat
+		 * @param boolean $withday
 		 */
 		public function date_for_user($intUserID, $time, $withtime=false, $timeonly=false, $long=false, $fromformat=true, $withday=false){
 			$strTimezone = $this->pdh->get('user', 'timezone', array($intUserID));
@@ -242,11 +245,56 @@ if (!class_exists("timehandler")){
 			if($withtime) $format .= ' '.$this->pdh->get('user', 'date_time', array($intUserID));
 			if($timeonly) $format = $this->pdh->get('user', 'date_time', array($intUserID));
 			if(!$fromformat) $format = 'Y-m-d'.(($withtime) ? ' H:i' : '');
-			
 			$dateTime = new DateTimeLocale($this->helper_dtime($time), $this->utcTimeZone, $strUserlang);
-			$dateTime->setTimezone($strTimezone);
+			$dateTime->setTimezone(new DateTimeZone($strTimezone));
 			return $dateTime->format($format);
 		}
+		
+		/**
+		 * Converts a String in Usertime to a User Timestamp, usable for the other time methods
+		 * 
+		 * @param unknown $strTime
+		 */
+		public function convert_usertimestring_to_utc($strTime){
+			$objDate = new DateTime($strTime, $this->userTimeZone);
+			return $objDate->format("U");
+		}
+		
+		
+
+		/**
+		 * Adds an offset to a timestamp
+		 * 
+		 * @param integer $intTimestamp
+		 * @param integer $intOffset in Seconds, e.g. 3600
+		 * @return integer
+		 */
+		public function timestamp_offset($intTimestamp, $intOffset){
+			return $intTimestamp + $intOffset;
+		}
+		
+		/**
+		 * Converts a timestamp in another Timezone into an UTC Timestamp
+		 * 
+		 * @param integer $intSourceTimestamp
+		 * @param string $strSourceTimezone
+		 * @return integer
+		 */
+		public function convert_timestamp_to_utc($intSourceTimestamp, $strSourceTimezone){
+			$second = date('s', $intSourceTimestamp);
+			$minute = date('i', $intSourceTimestamp);
+			$hour   = date('H', $intSourceTimestamp);
+			$day    = date('d', $intSourceTimestamp);
+			$month  = date('m', $intSourceTimestamp);
+			$year   = date('Y', $intSourceTimestamp);
+			
+			$string = $year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second;
+
+			$objDate = new DateTime($string, new DateTimeZone($strSourceTimezone));
+
+			return $objDate->format("U");
+		}
+		
 		
 		/**
 		 * Output Date in nice-format, like 7 days ago
@@ -406,6 +454,12 @@ if (!class_exists("timehandler")){
 			return $stamp;
 		}
 
+		/**
+		 * Removes H:i from Y-m-d H:i
+		 * 
+		 * @param string $timestamp
+		 * @return integer
+		 */
 		public function removetimefromtimestamp($timestamp) {
 			return ($timestamp) > 0 ? $this->fromformat($this->date("Y-m-d", $timestamp), "Y-m-d") : 0;
 		}
@@ -451,6 +505,14 @@ if (!class_exists("timehandler")){
 			return str_replace(array_keys($types), array_values($types), $format);
 		}
 		
+		/**
+		 * Produces Time-Tag for moment.js
+		 * 
+		 * @param integer $date
+		 * @param string $strText
+		 * @param string $strCSSClass
+		 * @return string
+		 */
 		public function createTimeTag($date, $strText, $strCSSClass=""){
 			return '<time class="datetime '.$strCSSClass.'" data-timestamp="'.$date.'" datetime="'.$this->date(DATE_ATOM, $date).'" title="'.$strText.'">
 			'.$strText.'</time>';
@@ -590,6 +652,12 @@ if (!class_exists("timehandler")){
 			return ((substr($timediff, 0, 1) === '-') ? '' : '+').$timediff;
 		}
 
+		/**
+		 * Returns the age of an date
+		 * 
+		 * @param integer $date
+		 * @return integer
+		 */
 		public function age($date) {
 			if(!$date) return 0;
 			$bday		= $this->getdate($date);
