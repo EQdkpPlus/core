@@ -35,7 +35,7 @@ abstract class super_registry {
 		'tpl'		=> 'template',
 		'jquery'	=> 'jquery',
 		'game'		=> 'game',
-		'time'		=> 'timehandler',
+		'time'		=> 'time',
 		'pm'		=> 'plugin_manager',
 		'pdc'		=> 'datacache',
 		'env'		=> 'environment',
@@ -82,7 +82,7 @@ abstract class super_registry {
 		'routing'				=> 'core/',
 		'socialplugins'			=> 'core/',
 		'styles'				=> 'core/',
-		'timehandler'			=> 'core/',
+		'time'					=> 'core/',
 		'timekeeper'			=> 'core/',
 		'tour'					=> 'core/',
 		'uploader'				=> 'core/',
@@ -303,12 +303,12 @@ abstract class super_registry {
 	
 	private static function set_timezone() {
 		if(!empty(registry::fetch('user')->data['user_id']) && registry::fetch('user')->data['user_timezone']) {
-			registry::register('timehandler')->setTimezone(registry::fetch('user')->data['user_timezone']);
+			registry::register('time')->setTimezone(registry::fetch('user')->data['user_timezone']);
 		} elseif(registry::register('config')->get('timezone')) {
-			registry::register('timehandler')->setTimezone(registry::register('config')->get('timezone'));
+			registry::register('time')->setTimezone(registry::register('config')->get('timezone'));
 		} else {
-			$default_timezone = registry::register('timehandler')->get_serverTimezone();
-			registry::register('timehandler')->setTimezone($default_timezone);
+			$default_timezone = registry::register('time')->get_serverTimezone();
+			registry::register('time')->setTimezone($default_timezone);
 			if($default_timezone == 'GMT'){
 				registry::register('config')->message(registry::fetch('user')->lang('timezone_set_gmt'));
 			}

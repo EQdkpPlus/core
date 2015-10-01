@@ -111,7 +111,7 @@ if(registry::register('input')->get('out') != ''){
 								$eventsfilter = 'appointments';
 							break;
 						}
-						$caleventids	= registry::register('plus_datahandler')->get('calendar_events', 'id_list', array($eventsfilter, registry::register('timehandler')->createRepeatableEvents(registry::register('timehandler')->time, -30)));
+						$caleventids	= registry::register('plus_datahandler')->get('calendar_events', 'id_list', array($eventsfilter, registry::register('time')->createRepeatableEvents(registry::register('timehandler')->time, -30)));
 
 						if(is_array($caleventids) && count($caleventids) > 0){
 							foreach($caleventids as $calid){

@@ -155,7 +155,7 @@ class inst_settings extends install_generic {
 		}
 		$startdays = array('sunday' => $this->lang['sunday'], 'monday' => $this->lang['monday']);
 		
-		registry::load('timehandler');
+		registry::load('time');
 		$content = '<table class="no-borders" style="border-collapse: collapse;" width="100%">
 						<tr>
 							<th class="" colspan="2">'.$this->lang['lang_config'].'</th>
@@ -191,7 +191,7 @@ class inst_settings extends install_generic {
 						</tr>
 						<tr>
 							<td align="right"><strong>'.$this->lang['timezone'].':</strong></td>
-							<td>'.new hdropdown('timezone', array('options' => timehandler::fetch_timezones(), 'value' => $this->def_timezone)).'</td>
+							<td>'.new hdropdown('timezone', array('options' => time::fetch_timezones(), 'value' => $this->def_timezone)).'</td>
 						</tr>
 						<tr>
 							<td align="right"><strong>'.$this->lang['startday'].':</strong></td>
