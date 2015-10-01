@@ -591,6 +591,9 @@ class controller extends gen_class {
 						$strContent = str_replace($arrRaidlootObjects[0][$key], $strRaidlootContent, $strContent);
 					}
 				}
+				
+				//Replace Smilies
+				$strContent = $this->bbcode->MyEmoticons($strContent);
 			
 				if ($arrPermissions['create'] || $arrPermissions['update']) {
 					$this->jquery->dialog('editArticle', $this->user->lang('edit_article'), array('url' => $this->controller_path."EditArticle/".$this->SID."&aid='+id+'&cid=".$intCategoryID, 'withid' => 'id', 'width' => 920, 'height' => 740, 'onclose'=> $this->env->link.$this->controller_path_plain.$this->page_path.$this->SID));
@@ -767,6 +770,10 @@ class controller extends gen_class {
 							$strText = str_replace($arrRaidlootObjects[0][$key], $strRaidlootContent, $strText);
 						}
 					}
+					
+
+					//Replace Smilies
+					$strText = $this->bbcode->MyEmoticons($strText);
 			
 					$arrToolbarItems = array();
 					if ($arrPermissions['create']) {
