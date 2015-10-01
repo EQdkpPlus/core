@@ -95,16 +95,16 @@ try {
 		if(is_file($cssfile)) echo '<title>Itemtooltip Update</title><link rel="stylesheet" href="'.$cssfile.'" type="text/css" /></head><body>';
 	}
 	if($direct) {
-		$item['html']		= str_replace('{ITEM_ICON_LINK}', $iconpath.$item['icon'].$iconext, $item['html']);
+		$item['html']		= str_replace('{ITEM_ICON_LINK}', ((stripos($item['icon'], 'http')) ? $item['icon'] : $iconpath.$item['icon'].$iconext), $item['html']);
 		$item['html']		= str_replace('{ITEM_ICON_PATH}', $iconpath, $item['html']);
 		$item['html']		= str_replace('{ITEM_ICON_EXT}', $iconpath, $item['html']);
 		echo $item['html'];
 	} else {
 		if(isset($item['icon']) && !$data['noicon']) {
 			if($data['onlyicon'] > 0) {
-				$visible = '<img src="'.$iconpath.$item['icon'].$iconext.'" width="'.$data['onlyicon'].'" height="'.$data['onlyicon'].'" style="margin-top: 1px;" alt="icon" class="itt-icon"/>';
+				$visible = '<img src="'.((stripos($item['icon'], 'http') === 0) ? $item['icon'] : $iconpath.$item['icon'].$iconext).'" width="'.$data['onlyicon'].'" height="'.$data['onlyicon'].'" style="margin-top: 1px;" alt="icon" class="itt-icon"/>';
 			} else {
-				$visible = '<img src="'.$iconpath.$item['icon'].$iconext.'" width="16" height="16" style="margin-top: 1px;" alt="icon" class="itt-icon"/> '.$display_name;
+				$visible = '<img src="'.((stripos($item['icon'], 'http') === 0) ? $item['icon'] : $iconpath.$item['icon'].$iconext).'" width="16" height="16" style="margin-top: 1px;" alt="icon" class="itt-icon"/> '.$display_name;
 			}
 		} else {
 			$visible = $display_name;

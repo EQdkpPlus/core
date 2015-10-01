@@ -428,9 +428,9 @@ if(!class_exists('infotooltip')) {
 					
 					if(isset($item['icon']) && !$noicon) {
 						if($onlyicon > 0) {
-							$visible = '<img src="'.$iconpath.$item['icon'].$iconext.'" width="'.$onlyicon.'" height="'.$onlyicon.'" style="margin-top: 1px;" alt="icon" class="itt-icon"/>';
+							$visible = '<img src="'.((stripos($item['icon'], 'http') === 0) ? $item['icon'] : $iconpath.$item['icon'].$iconext).'" width="'.$onlyicon.'" height="'.$onlyicon.'" style="margin-top: 1px;" alt="icon" class="itt-icon"/>';
 						} else {
-							$visible = '<img src="'.$iconpath.$item['icon'].$iconext.'" width="16" height="16" style="margin-top: 1px;" alt="icon" class="itt-icon"/> '.$display_name;
+							$visible = '<img src="'.((stripos($item['icon'], 'http') === 0) ? $item['icon'] : $iconpath.$item['icon'].$iconext).'" width="16" height="16" style="margin-top: 1px;" alt="icon" class="itt-icon"/> '.$display_name;
 						}
 					} else {
 						$visible = $display_name;
