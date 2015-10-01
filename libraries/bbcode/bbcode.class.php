@@ -35,6 +35,7 @@ if (!class_exists("bbcode")) {
 		public function __construct(){
 			$this->strImageCacheFolder = $this->pfh->FolderPath('images', 'eqdkp');
 			$this->strImageThumbFolder = $this->pfh->FolderPath('images/thumb', 'eqdkp');
+			$this->smiliepath = $this->server_path.'images/smilies/';
 		}
 
 
@@ -77,7 +78,7 @@ if (!class_exists("bbcode")) {
 				'<img alt=";)" src="'.$this->smiliepath.'/wink.svg" class="smilies" />',
 				'<img alt=";)" src="'.$this->smiliepath.'/wink.svg" class="smilies" />'
 			);
-
+			
 			$text = preg_replace('/\<img(.*?)alt=\"(\W.*?)\"(.*?)\>/si' , '$2' , $text);
 			$text = str_replace($in, $out, $text);
 			return $text;
