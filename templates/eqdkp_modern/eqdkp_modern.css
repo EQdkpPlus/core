@@ -3793,6 +3793,10 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		min-width: 1% !important;
 		max-width: 100% !important;
 	}
+	
+	.responsive .bigDateTd {
+		display: none;
+	}
 }
 
 @media all and (max-width: 590px) {
