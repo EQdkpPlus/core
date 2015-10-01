@@ -23,8 +23,8 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-if (!class_exists("timehandler")){
-	class timehandler extends gen_class {
+if (!class_exists("time")){
+	class time extends gen_class {
 
 		private static $ArrTimezones = array();
 		
