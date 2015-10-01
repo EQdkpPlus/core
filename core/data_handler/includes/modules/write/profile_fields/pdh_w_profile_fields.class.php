@@ -99,7 +99,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 			}
 			
 			$fields = $this->pdh->get('profile_fields', 'fields');
-			if (isset($fields[$data['name']]) && $fields[$data['name']]['id'] != $id){
+			if (isset($fields[$data['name']]) && $fields[$data['name']]['field_id'] != $id){
 				$data['name'] = $data['name'].'_'.unique_id();
 			}
 			

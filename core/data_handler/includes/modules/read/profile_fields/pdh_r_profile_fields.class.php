@@ -65,7 +65,7 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 					$this->profile_field_mapping[$drow['name']] = intval($drow['id']);
 
 					$this->profile_fields[intval($drow['id'])] = array(
-						'id'			=> intval($drow['id']),
+						'field_id'		=> intval($drow['id']),
 						'name'			=> $drow['name'],
 						'type'			=> $drow['type'],
 						'category'		=> $drow['category'],
