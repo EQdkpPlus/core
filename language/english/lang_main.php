@@ -734,7 +734,7 @@ $lang = array(
 	"raidevent_raidevent_add" => 'Add new raid event',
 	"raidevent_raidevent_view" => 'Raid view',
 	"raidevent_raid_closed" => 'This raid was canceled by a raidleader.',
-	"raidevent_raid_nochar" => 'Your user ID has not been assigned any characters. In the Character Manager you can create and assign new characters or assign existing characters. <br/> <a href="'.registry::get_const('server_path').'Mycharacters/'.registry::get_const('SID').'">Character Manager</a>',
+	"raidevent_raid_nochar" => 'Your user ID has not been assigned any characters. In the Character Manager you can create and assign new characters or assign existing characters. <br/> <a href="'.register('routing')->build('mycharacters').'">Character Manager</a>',
 	"raidevent_raid_note" => 'Raid note',
 	"raidevent_raid_statuschange_warning" => 'WARNING: if you change your character, your signup status will be resetted to "signed up".',
 	"raidevent_raid_addedby" => 'added by',
