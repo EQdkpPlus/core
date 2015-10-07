@@ -208,24 +208,25 @@ if (!class_exists("zip")) {
 						if (!in_array($entry, $arrFiles)) continue;
 					}
 
-						//Directory
-						if ( substr( $entry, -1 ) == '/' ) {
-							$this->pfh->CheckCreateFolder($strTargetFolder.$entry);
-						} else {
-							//File
-							$contents = '';
-							$fp = $this->objZip->getStream($entry);
-							if(!$fp) return false;
+					//Directory
+					if ( substr( $entry, -1 ) == '/' ) {
+						$this->pfh->CheckCreateFolder($strTargetFolder.$entry);
+					} else {
+						//File
+						$contents = '';
+						$fp = $this->objZip->getStream($entry);
+						if(!$fp) return false;
 
-							while (!feof($fp)) {
-								$contents .= fread($fp, 2);
-							}
-
-							fclose($fp);
-							$this->pfh->CheckCreateFolder(pathinfo($strTargetFolder.$entry, PATHINFO_DIRNAME));
-							$this->pfh->CheckCreateFile($strTargetFolder.$entry);
-							$this->pfh->putContent($strTargetFolder.$entry, $contents);
+						while (!feof($fp)) {
+							$contents .= fread($fp, 2);
 						}
+
+						fclose($fp);
+						$this->pfh->CheckCreateFolder(pathinfo($strTargetFolder.$entry, PATHINFO_DIRNAME));
+						$this->pfh->CheckCreateFile($strTargetFolder.$entry);
+						$blnWriteResult = $this->pfh->putContent($strTargetFolder.$entry, $contents);
+						if(!$blnWriteResult) return false;
+					}
 						
 				}
 				return true;
@@ -233,6 +234,9 @@ if (!class_exists("zip")) {
 			return false;
 		}
 	
+		public function getFileNumber(){
+			return $this->objZip->numFiles;
+		}
 	}
 }
 ?>
