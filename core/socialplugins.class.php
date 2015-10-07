@@ -143,8 +143,7 @@ if (!class_exists("socialplugins")) {
 		}
 		
 		private function twitter_share($urlToShare, $text, $height){
-			$intCount = ($this->getCache($urlToShare, 'twitter') !== false) ? $this->getCache($urlToShare, 'twitter') : 0;
-			$html = '<a class="social-bookmarks-count twitter" href="https://twitter.com/share?text='.rawurlencode($text).'&amp;url='.rawurlencode($urlToShare).'" onclick="window.open(this.href, \'\', \'width=570,height=370,modal=yes,left=100,top=50,location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no\'); return false;" title="'.$this->user->lang('sp_twitter_share').'"><i class="fa fa-twitter"></i> <span class="share-text">'.$this->user->lang('sp_btn_twitter_share').'</span><span class="share-count">'.$intCount.'</span></a>';
+			$html = '<a class="social-bookmarks-nocount twitter" href="https://twitter.com/share?text='.rawurlencode($text).'&amp;url='.rawurlencode($urlToShare).'" onclick="window.open(this.href, \'\', \'width=570,height=370,modal=yes,left=100,top=50,location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no\'); return false;" title="'.$this->user->lang('sp_twitter_share').'"><i class="fa fa-twitter"></i> <span class="share-text">'.$this->user->lang('sp_btn_twitter_share').'</span></a>';
 			return $html;
 		}
 				
@@ -216,29 +215,7 @@ if (!class_exists("socialplugins")) {
 			}
 			return array('gplus' => $intShareCount);
 		}
-		
-		private function count_twitter_share($urlToShare){
-			$intShareCount = 0;
 			
-			$intCache = $this->getCache($urlToShare, 'twitter');
-
-			if ($intCache !== false){
-				$intShareCount = $intCache;
-			} else {
-				$url =  'https://cdn.api.twitter.com/1/urls/count.json?url=' . urlencode($urlToShare);
-				
-				$objResult = $this->puf->fetch($url);
-				if ($objResult){
-					$arrResult = json_decode($objResult);
-					if (isset($arrResult->count)){
-						$intShareCount = intval($arrResult->count);
-					}
-				}
-				$this->addToCache($urlToShare, 'twitter', $intShareCount);
-			}
-			return array('twitter' => $intShareCount);
-		}
-		
 		private function getCache($url, $service){
 			$this->loadCache();
 			if (!isset($this->cache[md5($url)]) && !isset($this->cache[md5($url)][$service])) return false;
