@@ -240,7 +240,7 @@ class user extends gen_class {
 			$intUserID = $this->data['session_perm_id'];
 		}
 
-		if(strpos($strAuthValue, 'po_')){
+		if(strpos($strAuthValue, 'po_') === 0){
 			$boolAuthResult = $this->check_pageobject(substr($strAuthValue, 3), $intUserID, false);
 		} else {
 			$boolAuthResult = $this->acl->check_auth($strAuthValue, $intUserID, $boolGroups);
