@@ -423,6 +423,9 @@ class mmocms_settings extends page_generic {
 					),
 				),
 				'recaptcha'		=> array(
+					'enable_captcha'	=> array(
+						'type'		=> 'radio',
+					),
 					'lib_recaptcha_okey'	=> array(
 						'type'		=> 'text',
 						'size'		=> 30
@@ -491,9 +494,6 @@ class mmocms_settings extends page_generic {
 						'default'	=> 5,
 					),
 					'enable_registration'	=> array(
-						'type'		=> 'radio',
-					),
-					'enable_captcha'	=> array(
 						'type'		=> 'radio',
 					),
 					'enable_username_change'	=> array(
@@ -975,6 +975,10 @@ class mmocms_settings extends page_generic {
 			$this->core->message($this->user->lang('pk_succ_saved'), $this->user->lang('pk_save_title'), 'green');
 		}
 
+		//Hint for ReCaptcha
+		if($this->config->get('enable_captcha') == 1 && !strlen($this->config->get('lib_recaptcha_pkey') ))
+			$this->core->message($this->user->lang('recaptcha_nokeys_hint'), "ReCaptcha", 'red');
+		
 		// Output the form, pass values in
 		$this->form->output($this->config->get_config());
 

@@ -1080,8 +1080,8 @@ $lang = array(
 	"core_sett_fs_social_sharing" => 'Social Plugins',
 	"core_sett_fs_user" => 'User settings',
 	"core_sett_f_help_default_style_overwrite" => 'The usersettings are overwritten with the settings from here.',
-	"core_sett_f_enable_captcha" => 'Use an activationcode for registration',
-	"core_sett_f_help_enable_captcha" => 'Use CAPTCHA for registration',
+	"core_sett_f_enable_captcha" => 'Enable reCaptcha',
+	"core_sett_f_help_enable_captcha" => 'ReCaptcha is a spam protection method. Enabling this method reduces spam and increases the security of your EQdkp Plus.',
 	"core_sett_f_enable_registration" => 'Enable user registration',
 	"core_sett_f_help_enable_registration" => 'User can register at this system',
 	"core_sett_f_account_activation" => 'Activate account activation',
@@ -1253,9 +1253,9 @@ $lang = array(
 	"core_sett_f_lib_email_smtp_connmethod" => 'SMTP connection-method',
 	"core_sett_f_help_lib_email_smtp_connmethod" => 'Select the secure connection method your SMTP-Server is using',
 	"core_sett_f_lib_recaptcha_okey" => 'Public key of reCaptcha',
-	"core_sett_f_help_lib_recaptcha_okey" => 'Insert the public key of your account at reCaptcha.net here.',
+	"core_sett_f_help_lib_recaptcha_okey" => 'Insert here the public key of reCaptcha. You can create new keys at https://www.google.com/recaptcha/admin/create.',
 	"core_sett_f_lib_recaptcha_pkey" => 'Private key of reCaptcha',
-	"core_sett_f_help_lib_recaptcha_pkey" => 'Insert the private key of your account at reCaptcha.net here.',
+	"core_sett_f_help_lib_recaptcha_pkey" => 'Insert here the private key of reCaptcha. You can create new keys at https://www.google.com/recaptcha/admin/create.',
 	"bridge_disabled_message" => 'The CMS-Bridge has beed disabled because connection to CMS-Database failed.',
 	"bridge_common" => 'Global settings',
 	"bridge_activate" => 'Enable bridge',
@@ -1780,11 +1780,10 @@ $lang = array(
 		'stylesettings_misc_text3' => 'Miscellaneous text 3',
 		'stylesettings_additional_less' => 'Additional LESS',
 		'stylesettings_content_highlight_color' => 'Highlight color',
-		
 		'core_sett_f_access_control_header' => 'Allowed JavaScript-Domains',
 		'core_sett_f_help_access_control_header' => 'Insert here domains (one per line; including the protocol, e.g. http://eqdkp.myowndomain.com) that are allowed to embedd things like portal modules or Itemtooltips.',
 		'portal_cors_info' => 'Please note that you can only embedd the modules in sites that you have added to the setting "Allowed JavaScript-Domains".',
-		
+		'recaptcha_nokeys_hint' => "To use reCaptcha you must get an API key from <a href='https://www.google.com/recaptcha/admin/create'>https://www.google.com/recaptcha/admin/create</a>. After hat, insert the Keys into the fields at Settings > System > ReCaptcha.",
 );
 
 ?>

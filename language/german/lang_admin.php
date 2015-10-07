@@ -1081,8 +1081,8 @@ $lang = array(
 "core_sett_fs_social_sharing" => "Soziale Plugins",
 "core_sett_fs_user" => "Benutzer-Einstellungen",
 "core_sett_f_help_default_style_overwrite" => "Die Benutzereinstellungen werden dann mit den hier eingestellten Werten überschrieben",
-"core_sett_f_enable_captcha" => "Bestätigungscode für Registrierung aktivieren",
-"core_sett_f_help_enable_captcha" => "Benutze einen CAPTCHA Code für die Registrierung.",
+"core_sett_f_enable_captcha" => "ReCaptcha aktivieren",
+"core_sett_f_help_enable_captcha" => "ReCaptcha ist ein Verfahren, um Aktionen von Bots zu unterbinden, z.B. um Spam oder Registrierungen.",
 "core_sett_f_enable_registration" => "Benutzer-Registrierung aktvieren",
 "core_sett_f_help_enable_registration" => "Es können sich Benutzer am System registrieren.",
 "core_sett_f_account_activation" => "Accountaktivierung einschalten",
@@ -1255,9 +1255,9 @@ $lang = array(
 "core_sett_f_lib_email_smtp_connmethod" => "SMTP-Verbindungssicherheit",
 "core_sett_f_help_lib_email_smtp_connmethod" => "Wähle die Verbindungssicherheit aus, die der SMTP-Server verwendet.",
 "core_sett_f_lib_recaptcha_okey" => "Öffentlicher Key von reCATPCHA",
-"core_sett_f_help_lib_recaptcha_okey" => "Trage hier den öffentlichen Key deiner Seite ein. Neue Keys kannst du auf https://www.google.com/recaptcha/ anlegen.",
+"core_sett_f_help_lib_recaptcha_okey" => "Trage hier den öffentlichen Key deiner Seite ein. Neue Keys kannst du unter https://www.google.com/recaptcha/admin/create anlegen.",
 "core_sett_f_lib_recaptcha_pkey" => "Privater Key von reCATPCHA",
-"core_sett_f_help_lib_recaptcha_pkey" => "Trage hier den privaten Key deiner Seite ein. Neue Keys kannst du auf https://www.google.com/recaptcha/ anlegen.",
+"core_sett_f_help_lib_recaptcha_pkey" => "Trage hier den privaten Key deiner Seite ein. Neue Keys kannst du unter https://www.google.com/recaptcha/admin/create anlegen.",
 "bridge_disabled_message" => "Da keine Verbindung mit der CMS-Datenbank hergestellt werden konnte, wurde die CMS-Bridge deaktiviert.",
 "bridge_common" => "Grundeinstellungen",
 "bridge_activate" => "Bridge aktivieren",
@@ -1786,5 +1786,7 @@ $lang = array(
 'core_sett_f_access_control_header' => 'Erlaubte JavaScript-Domains',
 'core_sett_f_help_access_control_header' => 'Trage hier Domains ein (eine pro Zeile, inklusive Protokoll, z.B. http://eqdkp.meineqdkp.de), von der aus auf JavaScript-Elemente wie Portalmodule oder Itemtooltips zugegriffen werden darf.',
 'portal_cors_info' => 'Bitte beachte, dass du Module nur in Seiten einbetten kannst, die du auch in den Einstellungen im Feld "Erlaubte JavaScript-Domains" eingetragen hast.',
+'recaptcha_nokeys_hint' => "Um reCaptcha nutzen zu können, benötigst du eigene API-Schlüssel, die du unter <a href='https://www.google.com/recaptcha/admin/create'>https://www.google.com/recaptcha/admin/create</a> anlegen kannst. Danach trage die Schlüssel unter Einstellungen > System > ReCaptcha ein.",
+		
 );
 ?>

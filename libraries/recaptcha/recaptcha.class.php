@@ -34,7 +34,7 @@ if (!class_exists("recaptcha")) {
 		function check_answer ($privkey, $remoteip, $response)
 		{
 			if ($privkey == null || $privkey == '') {
-				register('core')->message("To use reCAPTCHA you must get an API key from <a href='https://www.google.com/recaptcha/admin/create'>https://www.google.com/recaptcha/admin/create</a>", "Error", 'red');
+				return false;
 			}
 			$recaptcha_response = new ReCaptchaResponse();
 			if($remoteip == "" || $response == ""){
