@@ -70,6 +70,8 @@ class login_twofactor extends gen_class {
 	}
 	
 	public function after_login($arrOptions){
+		if((int)$this->config->get('pk_maintenance_mode') == 1) return false;
+		
 		if ($arrOptions[0] && $arrOptions[0]['user_id'] != ANONYMOUS && !$this->in->exists('lmethod')){
 			//Get Auth Account
 			$arrAuthAccounts = $this->pdh->get('user', 'auth_account', array($arrOptions[0]['user_id']));
@@ -110,7 +112,7 @@ class login_twofactor extends gen_class {
 								'S_DISPLAY_CATPCHA'		=> true,
 						));
 					}
-
+					
 					$this->core->set_vars(array(
 							'page_title'		=> $this->user->lang("login_twofactor"),
 							'template_file'		=> 'twofactor_login.html',
