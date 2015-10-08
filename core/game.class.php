@@ -1500,6 +1500,7 @@ if(!class_exists('game_generic')) {
 		 */
 		public function load_object($classname, $params=NULL){
 			$path = $this->path.'objects/'.$classname.'.class.php';
+			if($params === NULL) $params = array();
 			if(file_exists($path)) {
 				include_once($path);
 				if(!in_array($classname, $this->no_reg_obj)) {
