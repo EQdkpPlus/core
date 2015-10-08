@@ -1,3 +1,4 @@
 tinymce\skins\lightgray\content.min.css: add EQdkp Plus CSS
 tinymce\skins\lightgray\inline.min.css: add EQdkp Plus CSS
 tinymce\plugins\bbcode\plugin.min.js: add BBCodes
+tinymce\plugins\emoticons\plugin.min.js: add class for smilies

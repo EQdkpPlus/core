@@ -1122,7 +1122,7 @@ $lang = array(
 	"core_sett_f_default_jsdate_time" => 'Javascript time format',
 	"core_sett_f_default_jsdate_nrml" => 'Javascript date format (normal)',
 	"core_sett_f_default_jsdate_short" => 'Javascript date format (short)',
-	"core_sett_f_timezone" => 'Defaullt core_sett_f_timezone of EQDKP-Plus',
+	"core_sett_f_timezone" => 'Default timezone of EQDKP-Plus',
 	"core_sett_f_help_timezone" => 'Select the default core_sett_f_timezone you want to have set for new registered users and guests.',
 	"core_sett_f_help_default_date_time" => 'The syntax is the same as used by the <a href="http://www.php.net/date" target="_blank">date()</a> function of PHP.',
 	"core_sett_f_help_default_date_short" => 'The syntax is the same as used by the <a href="http://www.php.net/date" target="_blank">date()</a> function of PHP.',
