@@ -119,6 +119,7 @@ class tinyMCE extends gen_class {
 			$raidloot		= (isset($settings['raidloot']) && $settings['raidloot']) ? ' eqdkp_raidloot eqdkp_chars' : '';
 			$relative_url	= (isset($settings['relative_urls']) && $settings['relative_urls'] == false) ? 'relative_urls : false,' : '';
 			$removeHost		= (isset($settings['remove_host']) && $settings['remove_host'] == false) ? 'remove_script_host : false,' : 'remove_script_host : true, convert_urls : true,';
+			$image_upload	= (isset($settings['image_upload']) && $settings['image_upload'] == true) ? 'paste_data_images: true, images_upload_credentials: true, images_upload_url: "'.$this->server_path.'libraries/tinyMCE/imageUploader.php'.$this->SID.'",' : '';
 			
 			$link_list = '';
 			if (isset($settings['link_list'])){
@@ -171,7 +172,8 @@ class tinyMCE extends gen_class {
 						"searchreplace visualblocks code fullscreen colorpicker",
 						"media table contextmenu paste textcolor emoticons'.$autoresize.$pageobjects.$readmore.$gallery.$raidloot.'"
 					],
-
+					images_upload_credentials: true,
+					images_upload_url: "'.$this->server_path.'libraries/tinyMCE/imageUploader.php'.$this->SID.'",
 					entity_encoding : "raw",
 					rel_list: [{value:"", text: "" }, {value:"lightbox", text: "Lightbox" }, {value:"nofollow", text: "nofollow" }],
 					extended_valid_elements: "p[class|id|style|data-sort|data-folder|data-id|title],script[type|lang|src]",
@@ -215,7 +217,7 @@ class tinyMCE extends gen_class {
 						return false;
 					},
 					
-					'.$resizing.$relative_url.$removeHost.'
+					'.$resizing.$relative_url.$removeHost.$image_upload.'
 
 				});
 						
@@ -289,7 +291,8 @@ class tinyMCE extends gen_class {
 			$raidloot		= (isset($settings['raidloot']) && $settings['raidloot']) ? ' eqdkp_raidloot eqdkp_chars' : '';
 			$relative_url	= (isset($settings['relative_urls']) && $settings['relative_urls'] == false) ? 'relative_urls : false,' : '';
 			$removeHost		= (isset($settings['remove_host']) && $settings['remove_host'] == false) ? 'remove_script_host : false,' : 'remove_script_host : true, convert_urls : true,';
-			
+			$image_upload	= (isset($settings['image_upload']) && $settings['image_upload'] == true) ? 'paste_data_images: true, images_upload_credentials: true, images_upload_url: "'.$this->server_path.'libraries/tinyMCE/imageUploader.php'.$this->SID.'",' : '';
+				
 			$strSetup = (isset($settings['setup'])) ? $settings['setup'] : '';
 			$strAutofocus = (isset($settings['autofocus']) && $settings['autofocus']) ? 'true' : 'false';
 			$blnStart = (isset($settings['start_onload'])) ? $settings['start_onload'] : true;
@@ -345,7 +348,7 @@ class tinyMCE extends gen_class {
 					toolbar: "insertfile undo redo | fullscreen | styleselect fontselect fontsizeselect bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist | link image media emoticons eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | eqdkp_item eqdkp_gallery eqdkp_raidloot eqdkp_chars | custom_buttons",
 					language : "'.$this->language.'",
 					 plugins: [
-					 	"advlist autolink lists link image charmap preview anchor eqdkp_item eqdkp_lightbox eqdkp_filebrowser eqdkp_easyinsert",
+					 	"advlist autolink lists link image imagetools charmap preview anchor eqdkp_item eqdkp_lightbox eqdkp_filebrowser eqdkp_easyinsert",
 						"searchreplace visualblocks code fullscreen",
 						"save media table contextmenu paste textcolor emoticons'.$autoresize.$pageobjects.$readmore.$gallery.$raidloot.'"
 					],
@@ -391,7 +394,7 @@ class tinyMCE extends gen_class {
 					},
 					auto_focus: '.$strAutofocus.',
 			
-					'.$resizing.$relative_url.$removeHost.'
+					'.$resizing.$relative_url.$removeHost.$image_upload.'
 	
 				});
 			}

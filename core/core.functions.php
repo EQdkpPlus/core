@@ -1133,6 +1133,7 @@ function isFilelinkInFolder($strFilelink, $strFolder, $blnStrict=false){
 	if (substr($strFolder, -1) == "/"){
 		$strFolder = substr($strFolder, 0, -1);
 	}
+	$strFolder = str_replace(registry::get_const('root_path'), '', $strFolder);
 
 	if($blnStrict){
 		if ($strAbsolutePath === $strFolder) return true;

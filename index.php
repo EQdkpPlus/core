@@ -467,6 +467,7 @@ class controller extends gen_class {
 							'link_list'		=> true,
 							'gallery'		=> true,
 							'raidloot'		=> true,
+							'image_upload'	=> true,
 							'setup'			=> 'editor.on("blur", function(e) {
 							save_inline_editor(".article-inlineedit", e);
 			        	});

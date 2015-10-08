@@ -27,15 +27,15 @@ class uploader extends gen_class {
 
 	private $added_js = false;
 	
-	public function upload_mime($strFieldname, $strFolder, $arrMimetypes, $arrExtensions){
+	public function upload_mime($strFieldname, $strFolder, $arrMimetypes, $arrExtensions, $strDestFilename=false, $strBaseFolder=false){
 		$tempname		= $_FILES[$strFieldname]['tmp_name'];
-		$filename		= $_FILES[$strFieldname]['name'];
+		$fileEnding		= pathinfo($_FILES[$strFieldname]['name'], PATHINFO_EXTENSION);
+		$filename		= ($strDestFilename) ? $strDestFilename.'.'.$fileEnding : $_FILES[$strFieldname]['name'];
 		$filetype		= $_FILES[$strFieldname]['type'];
 		if ($tempname == '') return false;
 		$filename = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $filename);
 		
-		// get the mine....
-		$fileEnding		= pathinfo($filename, PATHINFO_EXTENSION);
+		// get the mime....
 		$mime = false;
 		if(function_exists('finfo_open') && function_exists('finfo_file') && function_exists('finfo_close')){
 			$finfo			= finfo_open(FILEINFO_MIME);
@@ -51,13 +51,16 @@ class uploader extends gen_class {
 			}
 		}
 		
-		$mime = array_shift(preg_split('/[; ]/', $mime));
+		$arrSplitted = preg_split('/[; ]/', $mime);
+		$mime = array_shift($arrSplitted);
+		
+		$strBaseFolder = ($strBaseFolder === false) ? $this->pfh->FolderPath('files', 'eqdkp') : $strBaseFolder;
 
 		if (in_array($mime, $arrMimetypes)){
 			//Do no overwrite existing files
 			$offset = 0;
 			$files = array();
-			$file = scandir($this->pfh->FolderPath('files/'.$strFolder, 'eqdkp'));
+			$file = scandir($strBaseFolder.$strFolder);
 			foreach($file as $this_file) {
 				if( valid_folder($this_file) && !is_dir($this_file)) {
 					$files[] = $this_file;
@@ -79,14 +82,13 @@ class uploader extends gen_class {
 
 			$filename = str_replace($name, $name . '_' . ++$offset, $filename);
 			$strFolder = ($strFolder == '/') ? '' : $strFolder;
-				
-			if (isFilelinkInFolder($this->pfh->FolderPath('files/'.$strFolder, 'eqdkp', true), $this->pfh->FolderPath('files','eqdkp', true))) {
-				$this->pfh->FileMove($tempname, $this->pfh->FolderPath('files/'.$strFolder, 'eqdkp').$filename, true);
+			
+			if (isFilelinkInFolder($strBaseFolder.$strFolder.'/'.$filename, $strBaseFolder, false)) {
+				$this->pfh->FileMove($tempname, $strBaseFolder.$strFolder.'/'.$filename, true);
+				return $filename;
 			} else {
 				unlink($tempname);
 			}
-
-			return $filename;
 		}
 		
 		return false;

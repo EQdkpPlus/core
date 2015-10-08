@@ -209,6 +209,7 @@ class editarticle_pageobject extends pageobject {
 			'link_list'		=> true,
 			'gallery'		=> true,
 			'raidloot'		=> true,
+			'image_upload'	=> true,
 		));
 		
 		$arrSubcategories = $this->pdh->get('article_categories', 'all_childs', array($cid));
