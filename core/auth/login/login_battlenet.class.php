@@ -201,22 +201,29 @@ class login_battlenet extends gen_class {
 			$params = array('code' => $code, 'redirect_uri' => $redir_url, 'scope' => 'wow.profile');
 			$response = $client->getAccessToken($this->TOKEN_ENDPOINT, 'authorization_code', $params);
 			if ($response && $response['result']){
-				if (isset($response['result']['accountId'])){
-					$userid = $this->pdh->get('user', 'userid_for_authaccount', array($response['result']['accountId'], 'battlenet'));
-					if ($userid){
-						$userdata = $this->pdh->get('user', 'data', array($userid));
-						if ($userdata){
-							list($strPwdHash, $strSalt) = explode(':', $userdata['user_password']);
-							return array(
-									'status'		=> 1,
-									'user_id'		=> $userdata['user_id'],
-									'password_hash'	=> $strPwdHash,
-									'autologin'		=> true,
-									'user_login_key' => $userdata['user_login_key'],
-							);
+				
+				$accountResponse = register('urlfetcher')->fetch("https://eu.api.battle.net/account/user?access_token=".$response['result']['access_token']);
+				if($accountResponse){
+					$arrAccountResult = json_decode($accountResponse, true);
+					if(isset($arrAccountResult['id'])){
+						$userid = $this->pdh->get('user', 'userid_for_authaccount', array($arrAccountResult['id'], 'battlenet'));
+						if ($userid){
+							$userdata = $this->pdh->get('user', 'data', array($userid));
+							if ($userdata){
+								list($strPwdHash, $strSalt) = explode(':', $userdata['user_password']);
+								return array(
+										'status'		=> 1,
+										'user_id'		=> $userdata['user_id'],
+										'password_hash'	=> $strPwdHash,
+										'autologin'		=> true,
+										'user_login_key' => $userdata['user_login_key'],
+								);
+							}
 						}
-					}	
+				
+					}
 				}
+				
 			}
 		}
 		
