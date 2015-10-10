@@ -525,7 +525,7 @@ $system_def = array(
 				'table_sort_dir' => 'desc',
 				'table_sort_col' => 1,
 				'table_presets' => array(
-					array('name' => 'itemsedit', 'sort' => false, 'th_add' => '', 'td_add' => ''),
+					array('name' => 'itemsedit', 'sort' => false, 'th_add' => '', 'td_add' => 'nowrap="nowrap"'),
 					array('name' => 'idate', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 					array('name' => 'ilink_itt', 'sort' => true, 'th_add' => '', 'td_add' => 'style="height:21px;"'),
 					array('name' => 'ibuyers', 'sort' => true, 'th_add' => 'class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),

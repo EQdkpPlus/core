@@ -45,11 +45,18 @@ class items_pageobject extends pageobject {
 		$sort			= $this->in->get('sort');
 	
 		$item_ids = array();
-		if ($game_id > 1){
-			$item_ids = $this->pdh->get('item', 'ids_by_ingameid', array($game_id));
-		}else{
-			$item_ids = $this->pdh->get('item', 'ids_by_name', array($item_name));
+		
+		
+		if ($game_id != ""){
+			$arrSameItemIDs = $this->pdh->get('item', 'ids_by_ingameid', array($game_id));
+			if(is_array($arrSameItemIDs)) $item_ids = array_merge($item_ids, $arrSameItemIDs);
 		}
+		if($item_name != ""){
+			$arrSameItemNames = $this->pdh->get('item', 'ids_by_name', array($item_name));
+			if(is_array($arrSameItemNames)) $item_ids = array_merge($item_ids, $arrSameItemNames);
+		}
+		$item_ids = array_unique($item_ids);
+		
 		$counter = count($item_ids);
 	
 		//default now col
@@ -85,8 +92,7 @@ class items_pageobject extends pageobject {
 				
 				if (!isset($arrPoolItems[$itempool])) $arrPoolItems[$itempool] = 0; 
 				$arrPoolItems[$itempool]++;
-			}
-			
+			}	
 			
 			//Droprate by Itempool
 			$arrItempools = $this->pdh->get('itempool', 'id_list');
@@ -94,7 +100,7 @@ class items_pageobject extends pageobject {
 				$intDrops = (isset($arrPoolItems[$itempoolid])) ? intval($arrPoolItems[$itempoolid]) : 0;
 				$intTotalItems = count($this->pdh->get('item', 'item_ids_of_itempool', array($itempoolid)));
 				
-				$intDroprate = round(($intDrops / $intTotalItems) * 100);
+				$intDroprate = ($intTotalItems > 0) ? round(($intDrops / $intTotalItems) * 100) : 0;
 				$arrData = array();
 				$arrData[] = array('value' => $intDroprate, 'name' => $item_name.' '.$intDroprate.'%');
 				$arrData[] = array('value' => 100-$intDroprate, 'name' => $this->user->lang('other_items').' '.(100-$intDroprate).'%');
@@ -115,7 +121,7 @@ class items_pageobject extends pageobject {
 		
 		$this->tpl->assign_vars(array(
 				'ITEM_STATS'				=> $this->pdh->get('item', 'itt_itemname', array($this->url_id, 0, 1)),
-				'ITEM_CHART'				=> ($this->config->get('itemhistory_dia')  && !$this->config->get('disable_points') && count($a_items) > 1) ? $this->jquery->charts('multiline', 'item_chart', $a_items, array('xrenderer' => 'date', 'autoscale_x' => false, 'autoscale_y' => true, 'height' => 200, 'width' => 500, 'legend' => true, 'legendPosition' => 'nw', 'highlighter' => true)) : '',
+				'ITEM_CHART'				=> ($this->config->get('itemhistory_dia')  && !$this->config->get('disable_points') && count($a_items) > 0) ? $this->jquery->charts('multiline', 'item_chart', $a_items, array('xrenderer' => 'date', 'autoscale_x' => false, 'autoscale_y' => true, 'height' => 200, 'width' => 500, 'legend' => true, 'legendPosition' => 'nw', 'highlighter' => true)) : '',
 				'SHOW_ITEMSTATS'			=> ($this->config->get('infotooltip_use')) ? true : false,
 				'SHOW_ITEMHISTORYA'			=> ($this->config->get('itemhistory_dia')  && !$this->config->get('disable_points') == 1 ) ? true : false,
 				'SHOW_COLSPAN'				=> $colspan,
