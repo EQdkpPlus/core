@@ -2380,6 +2380,14 @@ span.group_selector {
 	top: -8px;
 	left: -14px;
 }
+.unsigened_away:before{
+	content: "\f0f2";
+	font-family: FontAwesome;
+	margin-right: 5px;
+}
+.unsigened_away{
+	color: gray !important;
+}
 .tooltiprow{
 	min-height: 24px;
 }
@@ -3793,7 +3801,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		min-width: 1% !important;
 		max-width: 100% !important;
 	}
-	
+
 	.responsive .bigDateTd {
 		display: none;
 	}

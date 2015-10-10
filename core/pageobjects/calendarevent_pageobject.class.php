@@ -581,6 +581,7 @@ class calendarevent_pageobject extends pageobject {
 					$array_json[]	= array(
 						'id'			=> $us_classdata['memberid'],
 						'name'			=> $us_classdata['name'],
+						'away'			=> $this->pdh->get('calendar_raids_attendees', 'attendee_awaymode', array($us_classdata['memberid'], $this->url_id)),
 						'active'		=> (int) $this->pdh->get('member', 'active', array($us_classdata['memberid'])),
 						'level'			=> $this->pdh->get('member', 'level', array($us_classdata['memberid'])),
 						'class_id'		=> $us_classdata['classid'],

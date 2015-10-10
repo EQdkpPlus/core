@@ -20,11 +20,11 @@ $(function(){
 			}
 		}
 	}).trigger('change');
-	
+
 	$(document).on("click", "div.attendee_box", function (event) {
 		var target = $(event.target);
 		if(target.is('.buttonblock, .char_adminmenu')) return;
-		
+
 		if (target.is('input:checkbox')) {
 			return;
 		}
@@ -33,7 +33,7 @@ $(function(){
 		checkbox.prop("checked", !checkbox.is(':checked'));
 		$('[name="modstat_change[]"]').trigger('change');
 	});
-	
+
 	$('.guesttooltip').each(function() {
 		var guestid = $(this).data('guestid');
 		$(this).qtip({
@@ -61,14 +61,14 @@ $(function(){
 			}
 		});
 	});
-	
+
 	$(".guesteditpanel").click( function(){
 		$(".guestpanel", this).show();
 	});
 	$(".guesteditpanel").mouseleave( function(){
 		$(".guestpanel", this).hide();
 	});
-	
+
 	$('#addguest').click( function(){
 		AddGuest('{EVENT_ID}');
 	});
@@ -81,7 +81,7 @@ $(function(){
 	$('.char_adminmenu').click(function (){
 		var charid		= $(this).attr('data-character-id');
 		var $this		= $(this);
-		
+
 		if($('#bottommenu_admin').is(":visible")){
 			$('#bottommenu_admin').removeClass("bottommenu_roundedcorner");
 			$('#bottommenu_chars').css("bottom", "42px");
@@ -89,7 +89,7 @@ $(function(){
 			$('#bottommenu_chars').css("bottom", "0px");
 		}
 		$('#bottommenu_chars_html').html($('#' + charid + '').html());
-		
+
 		if($('#bottommenu_chars').is(":visible")){
 			console.log($('#bottommenu_chars').data('charid'));
 			if($('#bottommenu_chars').data('charid') === charid){
@@ -102,8 +102,8 @@ $(function(){
 			$('#bottommenu_chars').fadeIn( "slow");
 			$('#bottommenu_chars').data('charid', charid);
 		}
-		
-		
+
+
 		$('[name="submit_charchange"]').click(function(){
 			$.post("{U_CALENDAREVENT}", {
 				change_char: true,
@@ -133,7 +133,7 @@ $(function(){
 		});
 
 		$('[name="submit_notechange"]').click(function(){
-			$.post("{U_CALENDAREVENT}", { 
+			$.post("{U_CALENDAREVENT}", {
 				change_note: true,
 				notechange_note: $(this).parent().find('[name="notechange_note"]').val(),
 				subscribed_member_id: $(this).parent().find('[name="notechange_attendee"]').val(),
@@ -144,10 +144,7 @@ $(function(){
 				window.location = '{U_CALENDAREVENT}';
 			});
 		});
-		
 	});
-	
-	
 });
 
 <!-- IF S_NOTSIGNED_VISIBLE -->
@@ -160,7 +157,7 @@ $(function(){
 		$(".notsigned_button i").toggleClass("fa fa-minus-circle");
 		return false;
 	});
-	
+
 	$(".notsignedpanel_close").click(function(){
 		$(".notsignedpanel").hide("fast");
 		$(".notsigned_button i").toggleClass("fa fa-minus-circle");
@@ -216,7 +213,7 @@ $(function(){
 	// Build the unsigned list
 	populate_unsigned(unsigned_attendees, '');
 
-	// handle the 
+	// handle the
 	$(document).on("click", '.notsigned_check', function(){
 		check_unsigned(this, unsigned_attendees_f, a_checkboxes);
 	});
@@ -276,8 +273,9 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 			if(item.class_icon != ''){
 				attoutput += item.class_icon;
 			}
-			attoutput += ' <span class="class_'+item.class_id+'" id="memberid_'+item.id+'">'+item.name+'</span>';
-			
+			away_marking = (item.away) ? ' unsigened_away' : 'class_'+item.class_id;
+			attoutput += ' <span class="class_'+away_marking+'" id="memberid_'+item.id+'">'+item.name+'</span>';
+
 			if(item.roles != ''){
 				console.log(item.roles);
 				attoutput += '<select size="1" name="memrole['+item.id+']" id="memroles'+item.id+'" class="input">';
@@ -311,7 +309,7 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 	<form name="unsingnn" method="post" action="{ACTION}">
 		<input type="hidden" name="eventid" value="{EVENT_ID}" />
 		<div id='pnlHeader'>{L_raidevent_raid_unsigned_head}</div><br/>
-		
+
 		<fieldset class="settings">
 			<dl>
 				<dt><label>{L_raidevent_raid_unsigned_search}</label></dt>
@@ -327,7 +325,7 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 				<dd><input type="text" name="notsignedlevel" id="notsignedlevel" value="0" size="5" /></dd>
 			</dl>
 		</fieldset>
-		
+
 		<div id="memberScroller">
 		</div>
 		<!-- IF IS_OPERATOR -->
@@ -347,7 +345,7 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 		<a href="{U_PREV_RAID_EVENT}"><i class="fa fa-chevron-left"></i> {PREV_RAID_EVENTNAME}</a>
 	</div>
 	<!-- ENDIF -->
-	
+
 	<!-- IF S_NEXT_RAID_EVENT -->
 	<div class="floatRight">
 		<a href="{U_NEXT_RAID_EVENT}">{NEXT_RAID_EVENTNAME} <i class="fa fa-chevron-right"></i></a>
@@ -400,7 +398,7 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 		</dl>
 	</fieldset>
 	</div>
-		
+
 	<!-- IF not RAID_CLOSED and not RAID_DEADLINE and not NO_CHAR_ASSIGNED -->
 	<div id="toogleRaidcalSignin" <!-- IF IS_SIGNEDIN -->style="display:none"<!-- ENDIF -->>
 		<h2>{L_raidevent_raid_signin}<span class="toggle_button">&nbsp;</span></h2>
@@ -458,8 +456,8 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 		<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> {L_raidevent_raid_roleswoclass}
 	</div>
 	<!-- ENDIF -->
-	
-	
+
+
 	<div class="table raidcal_buttonrow">
 		<div class="tr">
 			<!-- IF SHOW_RAIDGROUPS -->
@@ -480,12 +478,12 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 			<!-- ENDIF -->
 		</div>
 	</div>
-	
+
 	<div class="row1">
 		<div id="bottommenu_chars" data-charid="" class="bottommenu_roundedcorner">
 			<span id="bottommenu_chars_html"></span>
 		</div>
-		
+
 		<!-- IF IS_OPERATOR -->
 		<div id="bottommenu_admin" class="absmiddle">
 			<div class="table bottommenu_admin_table">
