@@ -868,7 +868,8 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_editbutton($id){
-			return '<span onclick="EditChar('.$id.')" class="hand"><i class="fa fa-pencil fa-lg" title="'.$this->user->lang('edit').'"></i></span>';
+			return '<span onclick="EditChar('.$id.')" class="hand"><i class="fa fa-pencil fa-lg" title="'.$this->user->lang('edit').'"></i></span>
+					<a href="'.$this->root_path.'admin/manage_members.php'.$this->SID.'&member='.$id.'"><i class="fa fa-lg fa-list-alt"></i></a>';
 		}
 
 		public function get_delete_requested(){

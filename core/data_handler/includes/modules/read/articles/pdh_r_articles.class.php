@@ -73,7 +73,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			$this->pageobjects = $this->pdc->get('pdh_articles_pageobjects');
 			$this->tags = $this->pdc->get('pdh_articles_tags');
 			
-			if($this->articles !== NULL){
+			if($this->articles !== NULL && $this->categories !== NULL && $this->alias !== NULL && $this->pageobjects !== NULL && $this->tags !== NULL){
 				return true;
 			}
 			
