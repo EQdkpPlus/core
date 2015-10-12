@@ -48,6 +48,7 @@ if ( !class_exists( "pdh_r_notification_types" ) ) {
 		'notification_types_group' => array('group', array('%intNotificationTypeID%'), array()),
 		'notification_types_group_name' => array('group_name', array('%intNotificationTypeID%'), array()),
 		'notification_types_group_at' => array('group_at', array('%intNotificationTypeID%'), array()),
+		'notification_types_edit' => array('editicon', array('%intNotificationTypeID%', '%link_url%', '%link_url_suffix%'), array()),
 	);
 				
 	public function reset(){
@@ -76,6 +77,7 @@ if ( !class_exists( "pdh_r_notification_types" ) ) {
 						'group_name'		=> $drow['group_name'],
 						'group_at'			=> (int)$drow['group_at'],
 						'icon'				=> $drow['icon'],
+						'default_method'	=> $drow['default_method'],
 					);
 				}
 				
@@ -150,6 +152,12 @@ if ( !class_exists( "pdh_r_notification_types" ) ) {
 			}
 			return false;
 		}
+		
+		public function get_html_prio($strNotificationTypeID){
+			$intPrio = $this->get_prio($strNotificationTypeID);
+			if($intPrio === false) return "";
+			return $this->user->lang('notification_prio_'.$intPrio);
+		}
 
 		/**
 		 * Returns default for $strNotificationTypeID				
@@ -210,6 +218,17 @@ if ( !class_exists( "pdh_r_notification_types" ) ) {
 			}
 			return false;
 		}
+		
+
+		
+		public function get_editicon($strNotificationTypeID, $base_url, $url_suffix = ''){
+			$out = '<a href="'.$base_url.$this->SID . '&amp;id='.$strNotificationTypeID.$url_suffix.'">
+				<i class="fa fa-pencil fa-lg" title="'.$this->user->lang('edit').'"></i>
+			</a>';
+				
+			return $out;
+		}
+
 		
 		/**
 		 * Checks wheater a notification type exists or not

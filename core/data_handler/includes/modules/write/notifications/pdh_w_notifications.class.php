@@ -146,26 +146,6 @@ if(!class_exists('pdh_w_notifications')) {
 			return false;
 		}
 		
-		public function add_type($strType, $strName, $strCategory, $intPrio=0, $blnDefault=0, $blnGroup=0, $strGroupName='', $intGroupAt=3, $strIcon=""){
-			
-			$objQuery = $this->db->prepare("INSERT INTO __notification_types :p")->set(array(
-					'id'			=> $strType,
-					'name'			=> $strName,
-					'category'		=> $strCategory,
-					'prio'			=> $intPrio,
-					'`default`'		=> ($blnDefault) ? 1 : 0,
-					'`group`'		=> ($blnGroup) ? 1 : 0,
-					'group_name'	=> $strGroupName,
-					'group_at'		=> $intGroupAt,
-					'icon'			=> $strIcon,
-			))->execute();
-		
-			if($objQuery) {
-				$this->pdh->enqueue_hook('notification_types_update', array());
-				return true;
-			}
-			return false;
-		}
 		
 		public function del_type($strType){
 			$objQuery = $this->db->prepare("DELETE FROM __notification_types WHERE id=?")->execute($strType);

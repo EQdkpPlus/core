@@ -1,0 +1,21 @@
+<div class="breadcrumb-container">
+	<ul class="breamcrumb">
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
+		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
+		<li class="current"><a>{L_manage_notifications}</a></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+<form action='' method='post'>
+<div class="contentHeader">
+	<h1 class="contentTitle">{L_manage_notifications}</h1>
+</div>
+<div class="clear"></div>
+<table class="table fullwidth colorswitch">
+	{NOTIFICATION_LIST}
+</table>
+<div class="center pagination_wrapper">
+	{PAGINATION}
+</div>
+{CSRF_TOKEN}
+</form>
