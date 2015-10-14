@@ -86,7 +86,7 @@ if ( !class_exists( "apa_cap_current" ) ) {
 		}
 		
 		public function update_point_cap($apa_id) {
-			$next_run = $this->config->get('apa_cap_next_run');
+			$next_run = $this->config->get('apa_cap_next_run_'.$apa_id);
 			if(!$next_run) {
 				list($h,$i) = explode(':',$this->apa->get_data('exectime', $apa_id));
 				$next_run = $this->apa->get_data('start_date', $apa_id) + $h*3600 + $i*60;
@@ -97,8 +97,10 @@ if ( !class_exists( "apa_cap_current" ) ) {
 			$this->pdh->process_hook_queue();
 			$char_ids = $this->pdh->get('member', 'id_list', array(true, false, true, $this->apa->get_data('twinks', $apa_id)));
 			$pools = $this->apa->get_data('pools', $apa_id);
+
 			foreach($pools as $pool) {
 				$points = $this->pdh->aget('points', 'current_history', 0, array($char_ids, $pool, 0, $next_run-1, 0, 0, !$this->apa->get_data('twinks', $apa_id)));
+
 				foreach($char_ids as $char_id) {
 					if($points[$char_id] > $this->apa->get_data('upper_cap', $apa_id)) {
 						$value = $this->apa->get_data('upper_cap', $apa_id) - $points[$char_id];
@@ -107,12 +109,13 @@ if ( !class_exists( "apa_cap_current" ) ) {
 						$value = $this->apa->get_data('lower_cap', $apa_id) - $points[$char_id];
 						$this->pdh->put('adjustment', 'add_adjustment', array($value, $this->apa->get_data('name', $apa_id), $char_id, $this->apa->get_data('event', $apa_id), NULL, $next_run+1));
 					}
+					$this->pdh->process_hook_queue();
 				}
 			}
 			
 			// calculate next check date
 			$next_run = $next_run + $this->apa->get_data('interval', $apa_id)*86400;
-			$this->config->set('apa_cap_next_run', $next_run);
+			$this->config->set('apa_cap_next_run_'.$apa_id, $next_run);
 			// run again if we have a backlog
 			if($next_run < $this->time->time) $this->update_point_cap($apa_id);
 		}
