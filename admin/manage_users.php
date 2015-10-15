@@ -26,14 +26,14 @@ include_once($eqdkp_root_path . 'common.php');
 
 class Manage_Users extends page_generic {
 	public static $shortcuts = array('email' => 'MyMailer', 'crypt' => 'encrypt', 'form' => array('form', array('user_edit_settings')));
-	
+
 	public function __construct(){
 		$this->user->check_auth('a_users_man');
 		$handler = array(
 			'maincharchange' => array('process' => 'maincharchange', 'csrf' => true),
 			'mode' => array(
 				array('process' => 'delete_authaccount', 'value' => 'delauthacc', 'csrf' => true),
-				array('process' => 'activate', 'value' => 'activate', 'csrf' => true),	
+				array('process' => 'activate', 'value' => 'activate', 'csrf' => true),
 				array('process' => 'deactivate', 'value' => 'deactivate', 'csrf' => true),
 				array('process' => 'overtake_permissions', 'value' => 'ovperms', 'csrf' => true),
 			),
@@ -92,11 +92,11 @@ class Manage_Users extends page_generic {
 			redirect('index.php'.$this->SID);
 		}
 	}
-	
+
 	public function maincharchange(){
 		$memberid = $this->in->get('maincharchange', 0);
 		$userid = $this->in->get('user', 0);
-		
+
 		$this->pdh->put('member', 'change_mainid', array($this->pdh->get('member', 'connection_id', array($userid)), $memberid));
 		$this->pdh->process_hook_queue();
 		echo($this->user->lang('uc_savedmsg_main'));
@@ -111,7 +111,7 @@ class Manage_Users extends page_generic {
 		$user_id = current($user_id);
 		$new_user = ($user_id) ? false : true;
 		$password = false;
-		
+
 		$this->create_form($user_id);
 		$values = $this->form->return_values();
 		// Error-check the form
@@ -138,7 +138,7 @@ class Manage_Users extends page_generic {
 				return;
 			}
 		}
-		
+
 		//Check matching new passwords
 		if($change_password) {
 			if($values['new_password'] != $values['confirm_password']) {
@@ -152,7 +152,7 @@ class Manage_Users extends page_generic {
 			$this->edit();
 			return;
 		}
-		
+
 		//The Group-Memberships of the admin who has submitted this form
 		$adm_memberships   = $this->acl->get_user_group_memberships($this->user->id);
 
@@ -171,19 +171,19 @@ class Manage_Users extends page_generic {
 			}
 
 			$query_ary['user_email']	= $this->encrypt->encrypt($values['user_email']);
-			
+
 			$plugin_settings = array();
 			if (is_array($this->pm->get_menus('settings'))){
 				foreach ($this->pm->get_menus('settings') as $plugin => $pvalues){
 					unset($pvalues['name'], $pvalues['icon']);
 					foreach($pvalues as $key => $settings){
 						foreach($settings as $setkey => $setval){
-							$plugin_settings[] = $setkey; 
+							$plugin_settings[] = $setkey;
 						}
 					}
 				}
 			}
-			
+
 			//copy all other values to appropriate array
 			$ignore = array('username', 'user_email', 'current_password', 'new_password', 'confirm_password');
 			$values['ntfy_comment_new_article_categories'] = $this->in->getArray('ntfy_comment_new_article_categories', 'int');
@@ -191,11 +191,11 @@ class Manage_Users extends page_generic {
 			$customArray = array();
 			$pluginArray = array();
 			$notificationArray = array();
-			
+
 			foreach($values as $name => $value) {
 				if(in_array($name, $ignore)) continue;
 				if (strpos($name, "auth_account_") === 0) continue;
-					
+
 				if(strpos($name, "priv_") === 0){
 					$privArray[$name] = $value;
 				}elseif(strpos($name, "ntfy_") === 0){
@@ -208,55 +208,55 @@ class Manage_Users extends page_generic {
 					$query_ary[$name] = $value;
 				}
 			}
-			
+
 			//Create Thumbnail for User Avatar
 			if ($customArray['user_avatar'] != "" && $this->pdh->get('user', 'avatar', array($user_id)) != $customArray['user_avatar']){
 				$image = $this->pfh->FolderPath('users/'.$user_id,'files').$customArray['user_avatar'];
 				$this->pfh->thumbnail($image, $this->pfh->FolderPath('users/thumbs','files'), 'useravatar_'.$user_id.'_68.'.pathinfo($image, PATHINFO_EXTENSION), 68);
 			}
-			
+
 			$query_ary['privacy_settings']		= serialize($privArray);
 			$query_ary['custom_fields']			= serialize($customArray);
 			$query_ary['plugin_settings']		= serialize($pluginArray);
 			$query_ary['notifications']			= serialize($notificationArray);
 			unset($query_ary['send_new_pw']);
-			
+
 			$this->pdh->put('user', 'update_user', array($user_id, $query_ary));
 			$this->pdh->put('user', 'activate', array($user_id, $this->in->get('user_active', 0)));
 		} else {
 			$password = ($values['new_password'] == "") ? random_string() : $values['new_password'];
 			$new_salt = $this->user->generate_salt();
 			$new_password = $this->user->encrypt_password($password, $new_salt).':'.$new_salt;
-			
+
 			$query_ar = array(
 				'username'				=> $this->in->get('username'),
 				'user_password'			=> $new_password,
 				'user_email'			=> $this->crypt->encrypt($values['user_email'])
 			);
-			
+
 			$plugin_settings = array();
-	
+
 			if (is_array($this->pm->get_menus('settings'))){
 				foreach ($this->pm->get_menus('settings') as $plugin => $pvalues){
 					unset($pvalues['name'], $pvalues['icon']);
 					foreach($pvalues as $key => $settings){
 						foreach($settings as $setkey => $setval){
-							$plugin_settings[] = $setkey; 
+							$plugin_settings[] = $setkey;
 						}
 					}
 				}
 			}
-			
+
 			$ignore = array('username', 'user_email', 'current_password', 'new_password', 'confirm_password');
 			$privArray = array();
 			$customArray = array();
 			$pluginArray = array();
 			$notificationArray = array();
-	
+
 			foreach($values as $name => $value) {
 				if(in_array($name, $ignore)) continue;
 				if (strpos($name, "auth_account_") === 0) continue;
-				
+
 				if(strpos($name, "priv_") === 0){
 					$privArray[$name] = $value;
 				}elseif(strpos($name, "ntfy_") === 0){
@@ -269,13 +269,13 @@ class Manage_Users extends page_generic {
 					$query_ar[$name] = $value;
 				}
 			}
-			
+
 			//Create Thumbnail for User Avatar
 			if ($customArray['user_avatar'] != "" && $this->pdh->get('user', 'avatar', array($user_id)) != $customArray['user_avatar']){
 				$image = $this->pfh->FolderPath('users/'.$user_id,'files').$customArray['user_avatar'];
 				$this->pfh->thumbnail($image, $this->pfh->FolderPath('users/thumbs','files'), 'useravatar_'.$user_id.'_68.'.pathinfo($image, PATHINFO_EXTENSION), 68);
 			}
-			
+
 
 			$query_ar['privacy_settings']	= serialize($privArray);
 			$query_ar['custom_fields']		= serialize($customArray);
@@ -286,21 +286,21 @@ class Manage_Users extends page_generic {
 				$this->core->message($this->user->lang('save_nosuc'), $this->user->lang('error'), 'red');
 				return;
 			}
-			
+
 		}
 
 		// Permissions
 		if($this->user->check_auth('a_usergroups_man', false) || $this->user->check_auth('a_users_perms', false) || (isset($adm_memberships[2]) && $adm_memberships[2])){
 			$auth_defaults = $this->acl->get_auth_defaults();
-	
+
 			$auths_to_update = $arrChanged = array();
 			foreach ( $auth_defaults as $auth_value => $auth_setting ){
 				$r_auth_id    = $this->acl->get_auth_id($auth_value);
 				$r_auth_value = $auth_value;
-	
+
 				$chk_auth_value = ( !$new_user AND $this->user->check_auth($r_auth_value, false, $user_id, false) ) ? 'Y' : 'N';
 				$db_auth_value  = ( $this->in->exists($r_auth_value) ) ? 'Y' : 'N';
-	
+
 				if ( $chk_auth_value != $db_auth_value ){
 					$auths_to_update[$r_auth_id] = $db_auth_value;
 					$arrChanged[$r_auth_value] = array('old' => $chk_auth_value, 'new' => $db_auth_value);
@@ -311,7 +311,7 @@ class Manage_Users extends page_generic {
 				$this->logs->add('action_user_changed_permissions', $arrChanged, $user_id, $this->pdh->get('user', 'name', array($user_id)));
 			}
 		}
-		
+
 		// Update Chars
 		$this->pdh->put('member', 'update_connection', array($this->in->getArray('member_id', 'int'), $user_id));
 
@@ -328,10 +328,10 @@ class Manage_Users extends page_generic {
 		foreach($arrNewGroupsRaw as $intGroupID){
 			if(in_array($intGroupID, $group_list)) $arrNewGroups[] = $intGroupID;
 		}
-		
+
 		$arrayRemoved = array_diff($arrOldMemberships, $arrNewGroups);
 		$arrayNew = array_diff($arrNewGroups, $arrOldMemberships);
-		
+
 		if (count($arrayRemoved)) {
 			$this->pdh->put('user_groups_users', 'delete_user_from_groups', array($user_id, $arrayRemoved));
 			$this->logs->add("action_user_removed_group", array("{L_GROUPS}" => implode(", ", $this->pdh->aget('user_groups', 'name', 0, array($arrayRemoved)))), $user_id, $this->pdh->get('user', 'name', array($user_id)));
@@ -417,7 +417,7 @@ class Manage_Users extends page_generic {
 		$start = $this->in->get('start', 0);
 
 		$online_users = array();
-		
+
 		$objQuery = $this->db->query("SELECT session_user_id FROM __sessions;");
 		if ($objQuery){
 			while ( $row = $objQuery->fetchAssoc() ) {
@@ -444,7 +444,7 @@ class Manage_Users extends page_generic {
 			$user_memberships = $this->pdh->get('user_groups_users', 'memberships', array($user_id));
 			$a_members = $this->pdh->get('member', 'connection_id', array($user_id));
 			$a_members = (is_array($a_members)) ? $this->pdh->maget('member', array('classid', 'name', 'rankname'), 0, array($a_members), null, false, true) : array();
-			
+
 			$this->tpl->assign_block_vars('users_row', array(
 				'U_MANAGE_USER'		=> 'manage_users.php'.$this->SID.'&amp;' . 'u' . '='.$user_id,
 				'U_OVERTAKE_PERMS'	=> 'manage_users.php'.$this->SID.'&amp;mode=ovperms&amp;' . 'u' . '='.$user_id.'&amp;link_hash='.$this->CSRFGetToken('mode'),
@@ -455,15 +455,15 @@ class Manage_Users extends page_generic {
 				'USERNAME'			=> $this->pdh->get('user', 'name', array($user_id)),
 				'EMAIL'				=> $this->pdh->get('user', 'email', array($user_id)),
 				'LAST_VISIT'		=> ($this->pdh->get('user', 'last_visit', array($user_id))) ? $this->time->user_date($this->pdh->get('user', 'last_visit', array($user_id)), true) : '',
-				'REG_DATE'		=> ($this->pdh->get('user', 'regdate', array($user_id))) ? $this->time->user_date($this->pdh->get('user', 'regdate', array($user_id)), true) : '',
+				'REG_DATE'			=> ($this->pdh->get('user', 'regdate', array($user_id))) ? $this->time->user_date($this->pdh->get('user', 'regdate', array($user_id)), true) : '',
 				'PROTECT_SUPERADMIN'=> ((is_array($user_memberships) && in_array(2, $user_memberships) && !isset($adm_memberships[2])) || ($user_id == $this->user->data['user_id'])) ? true : false,
 				'ACTIVE'			=> $user_active,
 				'ACTIVATE_ICON'		=> $activate_icon,
 				'ONLINE'			=> $user_online,
 				'MEMBER_COUNT'		=> count($a_members),
-				)
-			);
-			
+				'AWAY'				=> $this->pdh->get('user', 'html_is_away', array($user_id)),
+			));
+
 			if (is_array($a_members)){
 				foreach ($a_members as $member_id => $member) {
 					$this->tpl->assign_block_vars('users_row.members_row', array(
@@ -509,14 +509,14 @@ class Manage_Users extends page_generic {
 			'display'			=> true)
 		);
 	}
-	
+
 	public function delete_authaccount() {
 		$strMethod = $this->in->get('lmethod');
 		$this->pdh->put('user', 'delete_authaccount', array($this->in->get('u'), $strMethod));
 		$this->pdh->process_hook_queue();
 		$this->edit();
 	}
-	
+
 	// ---------------------------------------------------------
 	// Process Display User
 	// ---------------------------------------------------------
@@ -542,11 +542,11 @@ class Manage_Users extends page_generic {
 		$adm_memberships = $this->acl->get_user_group_memberships($this->user->data['user_id']);
 
 		foreach ( $user_permissions as $group => $checks ){
-		
+
 			$this->tpl->assign_block_vars('permissions_row', array(
 				'GROUP' => $group,
 			));
-			
+
 			$icon = (isset($checks['icon'])) ? $this->core->icon_font($checks['icon']) : '';
 
 			$a_set = $u_set = false;
@@ -632,7 +632,7 @@ class Manage_Users extends page_generic {
 					$todisable[$key] = $key;
 					$usergroups[$key] = $elem;
 				}
-				
+
 				$this->tpl->assign_block_vars('group_permissions', array(
 					'KEY' => $key)
 				);
@@ -644,7 +644,7 @@ class Manage_Users extends page_generic {
 				}
 			}
 		}
-		
+
 		// user field settings
 		$this->create_form($user_id);
 		// user field values
@@ -699,15 +699,15 @@ class Manage_Users extends page_generic {
 			'display'			=> true)
 		);
 	}
-	
+
 	private function create_form($user_id) {
 		// initialize form class
 		$this->form->lang_prefix = 'user_sett_';
 		$this->form->use_tabs = true;
 		$this->form->use_fieldsets = true;
-		
+
 		$settingsdata = user::get_settingsdata($user_id);
-		
+
 		// get rid of current_password field
 		unset($settingsdata['registration_info']['registration_info']['current_password']);
 		// vary help messages for user creation
@@ -717,17 +717,17 @@ class Manage_Users extends page_generic {
 		}
 		// add deletelink for user-avatar
 		$settingsdata['profile']['user_avatar']['user_avatar']['deletelink'] = 'manage_users.php'.$this->SID.'&u='.$user_id.'&mode=deleteavatar';
-		
+
 		$this->form->add_tabs($settingsdata);
 		// add send-new-password-button (if editing user)
 		if($user_id > 0) {
 			$this->form->add_field('send_new_pw', array('type' => 'button', 'buttontype' => 'submit', 'class' => 'mainoption bi_mail', 'buttonvalue' => 'user_sett_f_send_new_pw', 'tolang' => true), 'registration_info', 'registration_info');
 		}
-		
+
 		// add various auth-accounts
 		$auth_options = $this->user->get_loginmethod_options();
 		$auth_array = array();
-		
+
 		$user_data = array();
 		if($user_id > 0) {
 			$user_data = $this->pdh->get('user', 'data', array($user_id));
@@ -745,13 +745,13 @@ class Manage_Users extends page_generic {
 							'text'		=> '<a href="manage_users.php'.$this->SID.'&amp;u='.$user_id.'&amp;mode=delauthacc&amp;lmethod='.$method.'&amp;link_hash='.$this->CSRFGetToken('mode').'"><i class="fa fa-trash-o fa-lg" title="'.$this->user->lang('delete').'"></i></a>',
 							'help'		=> 'auth_accounts_help',
 					);
-					
+
 					$this->form->add_field('auth_account_'.$method, $field_opts, 'auth_accounts', 'registration_info');
 				}
 			}
 		}
-		
-		
+
+
 		//Plugin Settings
 		if (is_array($this->pm->get_menus('settings'))){
 			$arrPluginSettings = array();
@@ -760,7 +760,7 @@ class Manage_Users extends page_generic {
 				foreach($values as $key => $setting){
 					$arrPluginSettings[$plugin][$key] = $setting;
 				}
-		
+
 			}
 			$this->form->add_tabs($arrPluginSettings);
 		}

@@ -39,6 +39,7 @@
 				<a href="{U_MANAGE_USERS}o={O_ACTIVE}">{L_active}</a>
 			</th>
 			<th align="left" width="60" class="hiddenSmartphone">{L_online}</th>
+			<th align="left" width="40" class="hiddenSmartphone"><i class="fa fa-suitcase"></i></th>
 		</tr>
 		<!-- BEGIN users_row -->
 		<tr>
@@ -51,7 +52,7 @@
 			</td>
 			<td width="5">{users_row.ADMIN_ICON}</td>
 			<td><a href="{users_row.U_MANAGE_USER}" style="{users_row.NAME_STYLE}">{users_row.USERNAME}</a></td>
-			
+
 			<td width="35%" class="hiddenSmartphone">
 				<script type="text/javascript">
 				$(document).ready(function() {
@@ -82,7 +83,7 @@
 					}
 				});
 				});
-				
+
 				</script>
 				<!-- IF users_row.MEMBER_COUNT > 0 -->
 				<a href="javascript:void(0);" id="memberTTtrigger{users_row.USER_ID}">{users_row.MEMBER_COUNT} {L_chars}</a>
@@ -95,6 +96,7 @@
 			<td width="150" class="hiddenSmartphone">{users_row.LAST_VISIT}</td>
 			<td width="60" align="center" class="hiddenSmartphone">{users_row.ACTIVE}</td>
 			<td width="60" align="center" class="hiddenSmartphone">{users_row.ONLINE}</td>
+			<td width="60" align="center" class="hiddenSmartphone">{users_row.AWAY}</td>
 		</tr>
 		<!-- END users_row -->
 		<tr>
@@ -137,7 +139,7 @@ function delete_single(id){
 		$('#del_assocmem').val('0');
 	}
 	$('#user_id_'+id).attr('checked', true);
-	$('#mass_del_submit').removeAttr('disabled'); 
+	$('#mass_del_submit').removeAttr('disabled');
 	$('form:has(#mass_del_submit)').submit();
 }
 
