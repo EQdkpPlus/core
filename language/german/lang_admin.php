@@ -1788,5 +1788,16 @@ $lang = array(
 'portal_cors_info' => 'Bitte beachte, dass du Module nur in Seiten einbetten kannst, die du auch in den Einstellungen im Feld "Erlaubte JavaScript-Domains" eingetragen hast.',
 'recaptcha_nokeys_hint' => "Um reCaptcha nutzen zu können, benötigst du eigene API-Schlüssel, die du unter <a href='https://www.google.com/recaptcha/admin/create'>https://www.google.com/recaptcha/admin/create</a> anlegen kannst. Danach trage die Schlüssel unter Einstellungen > System > ReCaptcha ein.",
 		
+'manage_notifications' => 'Benachrichtigungen verwalten',
+'edit_notification' => 'Benachrichtigung bearbeiten',
+'notification_overwrite_legend' => 'Benutzereinstellungen überschreiben',
+'notification_overwrite' => 'Überschreibe die Benachrichtigungsmethode der Benutzer',
+'notification_group_at' => 'Gruppiere Benachrichtungen ab x Nachrichten',
+'notification_group' => 'Gruppiere Benachrichtigungen',
+'notification_default' => 'Standard-Benachrichtigungsmethode',
+'notification_priority' => 'Priorität',
+'notification_prio_0' => 'Grün',
+'notification_prio_1' => 'Orange',
+'notification_prio_2' => 'Rot',
 );
 ?>

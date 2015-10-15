@@ -300,7 +300,7 @@ class notifications extends gen_class {
 	
 	public function addNotificationType($strID, $strLanguageVar, $strCategory, $intPrio=0, $blnDefault=0, $blnGroup=false, $strGroupLangVar="", $intGroupAt=3, $strIcon=""){
 		if (!$this->pdh->get('notification_types', 'check_existing_type', array($strID))){
-			$blnResult = $this->pdh->put('notifications', 'add_type', array($strID, $strLanguageVar, $strCategory, $intPrio, $blnDefault, $blnGroup, $strGroupLangVar, $intGroupAt, $strIcon));
+			$blnResult = $this->pdh->put('notification_types', 'add', array($strID, $strLanguageVar, $strCategory, $intPrio, $blnDefault, $blnGroup, $strGroupLangVar, $intGroupAt, $strIcon));
 			$this->pdh->process_hook_queue();
 			return $blnResult;
 		}

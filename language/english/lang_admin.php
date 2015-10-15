@@ -1784,6 +1784,17 @@ $lang = array(
 		'core_sett_f_help_access_control_header' => 'Insert here domains (one per line; including the protocol, e.g. http://eqdkp.myowndomain.com) that are allowed to embedd things like portal modules or Itemtooltips.',
 		'portal_cors_info' => 'Please note that you can only embedd the modules in sites that you have added to the setting "Allowed JavaScript-Domains".',
 		'recaptcha_nokeys_hint' => "To use reCaptcha you must get an API key from <a href='https://www.google.com/recaptcha/admin/create'>https://www.google.com/recaptcha/admin/create</a>. After hat, insert the Keys into the fields at Settings > System > ReCaptcha.",
+		'manage_notifications' => 'Notification Management',
+		'edit_notification' => 'Edit notification',
+		'notification_overwrite_legend' => 'Overwrite Usersettings',
+		'notification_overwrite' => 'Overwrite users\' notification method',
+		'notification_group_at' => 'Group notifications at x messages',
+		'notification_group' => 'Group notifications',
+		'notification_default' => 'Default notification method',
+		'notification_priority' => 'Priority',
+		'notification_prio_0' => 'Green',
+		'notification_prio_1' => 'Orange',
+		'notification_prio_2' => 'Red',
 );
 
 ?>

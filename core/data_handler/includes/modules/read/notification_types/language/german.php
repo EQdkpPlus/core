@@ -23,27 +23,15 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-if ( !class_exists( "pointcap_crontask" ) ) {
-	class pointcap_crontask extends crontask {
-		public static $shortcuts = array('apa' => 'auto_point_adjustments');
+$module_lang = array(
+	"editicon" => '',
+	"id" => 'ID',
+	"name" => 'Name',
+	"category" => 'Kategorie',
+	"prio" => 'Priorität',
+);
 
-		public function __construct(){
-			$this->defaults['repeat']		= true;
-			$this->defaults['repeat_type']	= 'daily';
-			$this->defaults['repeat_interval']	= 1;
-			$this->defaults['editable']		= false;
-			$this->defaults['description']	= 'Cap points of characters';
-		}
+$preset_lang = array(
+);
 
-		public function run() {
-			$cron = $this->timekeeper->list_crons('pointcap');
-			$apa_ids = $this->apa->get_apa_idsbytype('cap_current');
-
-			foreach($apa_ids as $apa_id) {
-				$this->apa->get_apa_type('cap_current')->update_point_cap($apa_id);
-				$this->pdh->process_hook_queue();
-			}
-		}
-	}
-}
 ?>

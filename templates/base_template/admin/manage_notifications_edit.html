@@ -1,0 +1,51 @@
+<!-- IF S_NORMAL_HEADER -->
+<div class="breadcrumb-container">
+	<ul class="breamcrumb">
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
+		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
+		<li><a href="{EQDKP_ROOT_PATH}admin/manage_notifications.php{SID}">{L_manage_notifications}</a>
+		<li class="current"><a>{NOTIFICATION_ID}</a></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+<!-- ENDIF -->
+<div class="contentHeader">
+	<h1 class="contentTitle">{L_edit_notification}: {NOTIFICATION_ID}</h1>
+</div>
+<form action='{ACTION}&id={NOTIFICATION_ID}' method='post' name='post'>
+	<fieldset class="settings smallsettings">
+		<dl>
+			<dt><label>{L_notification_priority}:</label></dt>
+			<dd>{DD_PRIORITY}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_notification_default}:</label></dt>
+			<dd>{DD_DEFAULT}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_notification_group}:</label></dt>
+			<dd>{GROUP_RADIO}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_notification_group_at}:</label></dt>
+			<dd>{GROUP_AT_SPINNER}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_icon}:</label></dt>
+			<dd><input type="text" name="icon" value="{ICON}" class="input" id="icon"/></dd>
+		</dl>
+	</fieldset>
+	<fieldset class="settings smallsettings">
+		<legend>{L_notification_overwrite_legend}</legend>
+		<dl>
+			<dt><label>{L_notification_overwrite}:</label></dt>
+			<dd>{OVERWRITE_RADIO}</dd>
+		</dl>
+	</fieldset>
+	<div class="contentFooter">
+		<button class="mainoption" type="submit" name="save"><i class="fa fa-check"></i>{L_save}</button>
+		<button class="mainoption" type="button" name="" onclick="window.location.href='manage_notifications.php{SID}'"><i class="fa fa-chevron-left"></i>{L_cancel}</button>
+		<input type="hidden" name="selected_ids" value="{NOTIFICATION_ID}" />
+	</div>
+{CSRF_TOKEN}
+</form>

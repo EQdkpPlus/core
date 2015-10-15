@@ -524,6 +524,7 @@ class game extends gen_class {
 						$this->pdh->put('class_colors', 'add_classcolor', array($style_id, $key, $arrGameColors[$key]));
 					}
 				}
+				$this->pdh->process_hook_queue();
 			}
 						
 			if(!is_array($this->class_colors[$style_id])) {

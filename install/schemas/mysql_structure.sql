@@ -675,8 +675,8 @@ CREATE TABLE `__groups_raid_members` (
 DROP TABLE IF EXISTS __user_profilefields;
 CREATE TABLE `__user_profilefields` (
 	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-	`name` VARCHAR(255) NOT NULL,
-	`lang_var` VARCHAR(255) NOT NULL,
+	`name` VARCHAR(255) NOT NULL COLLATE 'utf8_bin',
+	`lang_var` VARCHAR(255) NOT NULL COLLATE 'utf8_bin',
 	`type` VARCHAR(30) NOT NULL,
 	`length` INT(10) UNSIGNED NOT NULL DEFAULT '30',
 	`minlength` INT(10) UNSIGNED NOT NULL DEFAULT '1',
@@ -696,15 +696,16 @@ CREATE TABLE `__user_profilefields` (
 
 DROP TABLE IF EXISTS __notification_types;
 CREATE TABLE `__notification_types` (
-	`id` VARCHAR(50) NOT NULL,
-	`name` VARCHAR(50) NOT NULL,
+	`id` VARCHAR(50) NOT NULL COLLATE 'utf8_bin',
+	`name` VARCHAR(50) NOT NULL COLLATE 'utf8_bin',
 	`category` VARCHAR(50) NULL DEFAULT NULL,
 	`prio` INT(11) NOT NULL DEFAULT '0',
-	`default` TINYINT(4) NOT NULL DEFAULT '0',
+	`default` VARCHAR(50) NOT NULL DEFAULT '0',
 	`group` TINYINT(4) NOT NULL DEFAULT '0',
 	`group_name` VARCHAR(80) NULL DEFAULT NULL,
 	`group_at` INT(5) NOT NULL DEFAULT '0',
 	`icon` VARCHAR(50) NULL DEFAULT NULL,
+	`default_method` VARCHAR(50) NULL DEFAULT '0' COLLATE 'utf8_bin',
 	PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -716,7 +717,7 @@ CREATE TABLE `__notifications` (
 	`time` INT(11) NOT NULL,
 	`read` TINYINT(4) NOT NULL DEFAULT '0',
 	`username` TEXT NULL,
-	`dataset_id` VARCHAR(255) NULL DEFAULT NULL,
+	`dataset_id` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_bin',
 	`link` TEXT NULL,
 	`additional_data` TEXT NULL,
 	PRIMARY KEY (`id`)

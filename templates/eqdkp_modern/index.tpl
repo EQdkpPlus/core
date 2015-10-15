@@ -124,7 +124,7 @@
 							
 							<li>
 								<div class="notification-tooltip-container">
-									<a class="notification-tooltip-trigger"><i class="fa fa-bolt fa-lg"></i> <span class="hiddenSmartphone">{L_notifications}</span></a>
+									<a class="notification-tooltip-trigger"><i class="fa fa-bell fa-lg"></i> <span class="hiddenSmartphone">{L_notifications}</span></a>
 									<span class="notification-tooltip-trigger bubble-red notification-bubble-red hand" <!-- IF NOTIFICATION_COUNT_RED == 0 -->style="display:none;"<!-- ENDIF --> >{NOTIFICATION_COUNT_RED}</span>
 									<span class="notification-tooltip-trigger bubble-yellow notification-bubble-yellow hand" <!-- IF NOTIFICATION_COUNT_YELLOW == 0 -->style="display:none;"<!-- ENDIF -->>{NOTIFICATION_COUNT_YELLOW}</span>
 									<span class="notification-tooltip-trigger bubble-green notification-bubble-green hand" <!-- IF NOTIFICATION_COUNT_GREEN == 0 -->style="display:none;"<!-- ENDIF -->>{NOTIFICATION_COUNT_GREEN}</span>

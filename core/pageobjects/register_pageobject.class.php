@@ -358,7 +358,7 @@ class register_pageobject extends pageobject {
 							$success_message = $this->user->lang('account_activated_admin');
 						} else {
 							$success_message = sprintf($this->user->lang('account_activated_user'), '<a href="'.$this->controller_path.'Login/' . $this->SID . '">', '</a>');
-							$this->tpl->add_meta('<meta http-equiv="refresh" content="3;'.$this->controller_path_plain.'Login/' . $this->SID . '">');
+							$this->tpl->add_meta('<meta http-equiv="refresh" content="3;'.$this->controller_path.'Login/' . $this->SID . '">');
 						}				
 					} else {
 						message_die($this->user->lang('email_subject_send_error'), $this->user->lang('success'), 'error');
