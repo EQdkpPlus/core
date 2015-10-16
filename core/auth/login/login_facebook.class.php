@@ -251,7 +251,13 @@ class login_facebook extends gen_class {
 	public function pre_register(){
 		$this->init_fb();
 		try {
-			$session = new Facebook\FacebookSession($this->in->get('act'));
+			$token = $this->get_longterm_token($this->in->get('act'));
+			if(!$token) {
+				$token = $this->in->get('act');
+			} else {
+				$this->user->setSessionVar('fb_token', $token);
+			}
+			$session = new Facebook\FacebookSession($token);
 			$me = $this->getMe($session);
 	
 			if ($me){
@@ -292,8 +298,14 @@ class login_facebook extends gen_class {
 		
 		$out = false;
 		try {
-			$helper = new Facebook\FacebookJavaScriptLoginHelper();
-			$session = $helper->getSession();
+			if($this->user->data['session_vars']['fb_token']){
+				$token = $this->user->data['session_vars']['fb_token'];
+				$session = new Facebook\FacebookSession($token);
+			} else {
+				$helper = new Facebook\FacebookJavaScriptLoginHelper();
+				$session = $helper->getSession();
+			}
+
 			if ($session){
 				$me = $this->getMe($session);
 				if ($me){
@@ -311,9 +323,9 @@ class login_facebook extends gen_class {
 					}
 					
 					//First Name
-					if($me['data']->getProperty('first_name')  != null)  $out['first_name'] = $me['data']->getProperty('first_name');
+					//if($me['data']->getProperty('first_name')  != null)  $out['name'] = $me['data']->getProperty('first_name');
 					//Last Name
-					if($me['data']->getProperty('last_name')  != null)  $out['last_name'] = $me['data']->getProperty('last_name');
+					//if($me['data']->getProperty('last_name')  != null)  $out['last_name'] = $me['data']->getProperty('last_name');
 					
 					//Country
 					if ($me['data']->getProperty('locale')){
@@ -425,6 +437,33 @@ class login_facebook extends gen_class {
 			
 		} catch(Exception $e){
 			$this->core->message($e->getMessage(), "Facebook Exception autologin()", 'red');
+		}
+		
+		return false;
+	}
+	
+	private function get_longterm_token($strAccessToken){
+		$params = array(
+				'client_id' 		=> $this->config->get('login_fb_appid'),
+				'client_secret'		=> $this->config->get('login_fb_appsecret'),
+				'grant_type'		=> 'fb_exchange_token',
+				'fb_exchange_token' => $strAccessToken
+		);
+
+		$url = 'https://graph.facebook.com/oauth/access_token?'.http_build_query($params);
+
+		$mixResult = register('urlfetcher')->fetch($url);
+		if($mixResult){
+			$keyArray = array();
+			$arrValues = explode("&", $mixResult);
+			foreach($arrValues as $val){
+				$arrKeys = explode("=", $val);
+				$keyArray[$arrKeys[0]] = $arrKeys[1]; 
+			}
+			
+			if(isset($keyArray['access_token'])){
+				return $keyArray['access_token'];
+			}
 		}
 		
 		return false;

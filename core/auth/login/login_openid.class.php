@@ -114,7 +114,6 @@ class login_openid extends gen_class {
 						'username'			=> isset($me['namePerson/friendly']) ? $me['namePerson/friendly'] : '',
 						'user_email'		=> isset($me['contact/email']) ? $me['contact/email'] : '',
 						'user_email2'		=> isset($me['contact/email']) ? $me['contact/email'] : '',
-						'first_name'		=> isset($me['namePerson']) ? $me['namePerson'] : '',
 						'gender'			=> $gender,
 						'country'			=> isset($me['contact/country/home']) ? $me['contact/country/home'] : '',
 						'auth_account'		=> $this->oid->identity,

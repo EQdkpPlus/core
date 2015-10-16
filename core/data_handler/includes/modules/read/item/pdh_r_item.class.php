@@ -273,6 +273,11 @@ if(!class_exists('pdh_r_item')){
 			return $items4member;
 		}
 		
+		public function get_itemcount4memberid($member_id){
+			$arrItems = $this->get_itemids4memberid($member_id);
+			return is_array($arrItems) ? count($arrItems) : 0;
+		}
+		
 		public function get_itemids4memberids($arrMemberIDs){
 			$items4member = array();
 			foreach($arrMemberIDs as $member_id){
