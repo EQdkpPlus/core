@@ -72,23 +72,6 @@ class register_pageobject extends pageobject {
 				redirect($this->config->get('cmsbridge_reg_url'),false,true);
 			}
 		}
-		// Data to be put into the form
-		$strMethod = $this->in->get('lmethod');
-		if ($strMethod != ""){
-			$pre_register_data = $this->user->handle_login_functions('pre_register', $strMethod);
-			if ($pre_register_data) $this->data = $pre_register_data;
-		} else {
-			// If it's not in POST, we get it from config defaults
-			$this->data = array(
-				'username'			=> $this->in->get('username'),
-				'user_email'		=> $this->in->get('user_email'),
-				'user_email2'		=> $this->in->get('user_email2'),
-				'user_lang'			=> $this->in->get('user_lang', $this->config->get('default_lang')),
-				'user_timezone'		=> $this->in->get('user_timezone', $this->config->get('timezone')),
-				'user_password1'	=> $this->in->get('new_user_password1'),
-				'user_password2'	=> $this->in->get('new_user_password2'),
-			);
-		}
 
 		// Build the server URL
 		// ---------------------------------------------------------
@@ -103,6 +86,17 @@ class register_pageobject extends pageobject {
 		if((int)$this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))) {
 			redirect($this->config->get('cmsbridge_reg_url'),false,true);
 		}
+		
+		//Static input vars
+		$this->data = array(
+			'username'			=> $this->in->get('username'),
+			'user_email'		=> $this->in->get('user_email'),
+			'user_email2'		=> $this->in->get('user_email2'),
+			'user_lang'			=> $this->in->get('user_lang', $this->config->get('default_lang')),
+			'user_timezone'		=> $this->in->get('user_timezone', $this->config->get('timezone')),
+			'user_password1'	=> $this->in->get('new_user_password1'),
+			'user_password2'	=> $this->in->get('new_user_password2'),
+		);
 
 		//Check Honeypot
 		if (strlen($this->in->get($this->user->csrfGetToken("honeypot")))){
@@ -171,11 +165,7 @@ class register_pageobject extends pageobject {
 
 		// If the config requires account activation, generate a random key for validation
 		if ( ((int)$this->config->get('account_activation') == 1) || ((int)$this->config->get('account_activation') == 2) ) {
-			$user_key = random_string(true);
-			$key_len = 54 - (strlen($this->server_url));
-			$key_len = ($key_len > 6) ? $key_len : 6;
-
-			$user_key = substr($user_key, 0, $key_len);
+			$user_key = random_string(true, 32);
 			$user_active = '0';
 
 			if ($this->user->is_signedin()) {
@@ -188,7 +178,8 @@ class register_pageobject extends pageobject {
 
 		//Insert the user into the DB
 		$user_id = $this->pdh->put('user', 'register_user', array($this->data, $user_active, $user_key, true, $this->in->get('lmethod'), $this->userProfileData));
-
+		if(!$user_id) message_die('Error while saving the user.', $this->user->lang('error'));
+		
 		//Add auth-account
 		if ($this->in->exists('auth_account')){
 			$auth_account = $this->crypt->decrypt($this->in->get('auth_account'));
@@ -431,6 +422,24 @@ class register_pageobject extends pageobject {
 	public function display_form() {
 		if((int)$this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))) {
 			redirect($this->config->get('cmsbridge_reg_url'),false,true);
+		}
+		
+		//Pre fill the form
+		$strMethod = $this->in->get('lmethod');
+		if ($strMethod != ""){
+			$pre_register_data = $this->user->handle_login_functions('pre_register', $strMethod);
+			if ($pre_register_data) $this->data = $pre_register_data;
+		} else {
+			// If it's not in POST, we get it from config defaults
+			$this->data = array(
+					'username'			=> $this->in->get('username'),
+					'user_email'		=> $this->in->get('user_email'),
+					'user_email2'		=> $this->in->get('user_email2'),
+					'user_lang'			=> $this->in->get('user_lang', $this->config->get('default_lang')),
+					'user_timezone'		=> $this->in->get('user_timezone', $this->config->get('timezone')),
+					'user_password1'	=> $this->in->get('new_user_password1'),
+					'user_password2'	=> $this->in->get('new_user_password2'),
+			);
 		}
 
 		//Captcha

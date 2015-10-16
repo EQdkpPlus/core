@@ -87,7 +87,8 @@ if(!class_exists('pdh_w_user')) {
 				'custom_fields'			=> serialize($arrUserProfileFields),
 			);
 			if ($strLoginMethod && $this->user->handle_login_functions('after_register', $strLoginMethod )){
-				$arrSave = array_merge($arrSave, $this->user->handle_login_functions('after_register', $strLoginMethod ));
+				$arrAfterRegister = $this->user->handle_login_functions('after_register', $strLoginMethod );
+				if(is_array($arrAfterRegister)) $arrSave = array_merge($arrSave, $arrAfterRegister);
 			}
 
 			$user_id = $this->insert_user($arrSave);

@@ -120,7 +120,6 @@ class login_google extends gen_class {
 							'username'			=> isset($arrGoogleUser['displayName']) ? $arrGoogleUser['displayName'] : '',
 							'user_email'		=> isset($arrGoogleUser['emails'][0]) ? $arrGoogleUser['emails'][0]['value'] : '',
 							'user_email2'		=> isset($arrGoogleUser['emails'][0]) ? $arrGoogleUser['emails'][0]['value'] : '',
-							'first_name'		=> isset($arrGoogleUser['name']['givenName']) ? $arrGoogleUser['name']['givenName'] : '',
 							'gender'			=> $gender,
 							//'country'			=> isset($me['contact/country/home']) ? $me['contact/country/home'] : '',
 							'auth_account'		=> $myGoogleID,
