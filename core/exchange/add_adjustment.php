@@ -42,6 +42,8 @@ if (!class_exists('exchange_add_adjustment')){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 			
 			if ($this->user->check_auth('a_indivadj_add', false) || $isAPITokenRequest){
+				$blnTest = (isset($params['get']['test']) && $params['get']['test']) ? true : false;
+				
 				$xml = simplexml_load_string($body);
 				if ($xml){
 					//Check required values
@@ -74,6 +76,8 @@ if (!class_exists('exchange_add_adjustment')){
 					//Adjustment Raid ID
 					$arrRaidIDList = $this->pdh->get('raid', 'id_list');
 					$intAdjRaidID = (isset($xml->adjustment_raid_id) && in_array(intval($xml->adjustment_raid_id), $arrRaidIDList)) ? intval($xml->adjustment_raid_id) : 0;
+					
+					if($blnTest) return array('test' => 'success');
 					
 					//Insert Adjustment
 					$mixAdjID = $this->pdh->put('adjustment', 'add_adjustment', array($fltAdjValue, $strAdjReason, $arrAdjMembers, $intAdjEventID, $intAdjRaidID, $intAdjDate));

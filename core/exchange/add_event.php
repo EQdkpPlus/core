@@ -38,6 +38,8 @@ if (!class_exists('exchange_add_event')){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 			
 			if ($this->user->check_auth('a_event_add', false) || $isAPITokenRequest){
+				$blnTest = (isset($params['get']['test']) && $params['get']['test']) ? true : false;
+				
 				$xml = simplexml_load_string($body);
 				if ($xml){
 					//Check required values
@@ -49,7 +51,9 @@ if (!class_exists('exchange_add_event')){
 					
 					//Item Name
 					$strEventName = filter_var((string)$xml->event_name, FILTER_SANITIZE_STRING);	
-								
+					
+					if($blnTest) return array('test' => 'success');
+					
 					$mixEventID = $this->pdh->put('event', 'add_event', array($strEventName, $fltEventValue, ''));
 					if (!$mixEventID) return $this->pex->error('an error occured');
 					$this->pdh->process_hook_queue();

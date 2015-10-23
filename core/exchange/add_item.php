@@ -43,6 +43,8 @@ if (!class_exists('exchange_add_item')){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 			
 			if ($this->user->check_auth('a_item_add', false) || $isAPITokenRequest){
+				$blnTest = (isset($params['get']['test']) && $params['get']['test']) ? true : false;
+				
 				$xml = simplexml_load_string($body);
 				if ($xml){
 					//Check required values
@@ -82,6 +84,8 @@ if (!class_exists('exchange_add_item')){
 					
 					//Item Ingame ID
 					$intIngameID = (isset($xml->item_game_id)) ? filter_var((string)$xml->item_game_id, FILTER_SANITIZE_STRING) : '';	
+					
+					if($blnTest) return array('test' => 'success');
 					
 					$mixItemID = $this->pdh->put('item', 'add_item', array($strItemName, $arrItemBuyers, $intRaidID, $intIngameID, $fltItemValue, $intItempoolID, $intItemDate));
 					if (!$mixItemID) return $this->pex->error('an error occured');

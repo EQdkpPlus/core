@@ -40,6 +40,8 @@ if (!class_exists('exchange_add_raid')){
 		public function post_add_raid($params, $body){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 			if ($this->user->check_auth('a_raid_add', false) || $isAPITokenRequest){
+				$blnTest = (isset($params['get']['test']) && $params['get']['test']) ? true : false;
+				
 				$xml = simplexml_load_string($body);
 				if ($xml){
 					//Check required values
@@ -64,6 +66,8 @@ if (!class_exists('exchange_add_raid')){
 					
 					$strRaidNote = filter_var((string)$xml->raid_note, FILTER_SANITIZE_STRING);				
 				
+					if($blnTest) return array('test' => 'success');
+					
 					$raid_upd = $this->pdh->put('raid', 'add_raid', array($intRaidDate, $arrRaidAttendees, $intRaidEventID, $strRaidNote, $fltRaidValue));
 					if (!$raid_upd) return $this->pex->error('an error occured');
 					$this->pdh->process_hook_queue();
