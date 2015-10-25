@@ -2429,6 +2429,19 @@ span.group_selector {
 .eventdata-details div{
 	margin: 8px 0px;
 }
+#eventdetailsmap_map{
+	height: 300px;
+}
+#mapframe_eventdetailsmap{
+
+}
+.map_frame{
+	background:#fff;
+	padding:15px;
+	margin-bottom: 12px;
+	box-shadow: 0 0 20px #999;
+	border-radius:2px;
+}
 
 /* general: game specific */
 .resists {

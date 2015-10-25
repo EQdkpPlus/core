@@ -202,7 +202,7 @@ if (!class_exists("jquery")) {
 		public function init_gmaps(){
 			if(!$this->inits['googlemaps']){
 				$this->tpl->js_file("http://maps.googleapis.com/maps/api/js?sensor=true", 'direct');
-				$this->tpl->js_file($this->path."js/gmaps/gmaps.js");
+				$this->tpl->js_file($this->path."js/gmaps/gmaps.min.js");
 				$this->inits['googlemaps']	= true;
 			}
 		}
@@ -1699,24 +1699,28 @@ if (!class_exists("jquery")) {
 			$this->init_gmaps();
 			$this->tpl->add_js("
 				map = new GMaps({
-					el: '#".$id."',
+					el: '#".$id."_map',
 					lat: -12.043333,
 					lng: -77.028333
 				});
 				GMaps.geocode({
-					address: $('#address').val(),
+					address: $('#".$id."_address').text(),
 					callback: function(results, status) {
 						if (status == 'OK') {
+							$('#mapframe_".$id."').show();
 							var latlng = results[0].geometry.location;
 							map.setCenter(latlng.lat(), latlng.lng());
 							map.addMarker({
 								lat: latlng.lat(),
 								lng: latlng.lng()
 							});
+						}else{
+							$('#mapframe_".$id."').hide();
 						}
 					}
 				});" ,
 			"docready");
+			return '<div class="map_frame" id="mapframe_'.$id.'"><div id="'.$id.'_map"></div></div>';
 		}
 
 		/**

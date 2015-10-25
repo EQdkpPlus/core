@@ -16,10 +16,11 @@
 
 					<div class="eventdata-details">
 						<div class="eventdata-details-date"><i class="fa fa-lg fa-calendar-o"></i> {DATE_FULL}</div>
-						<!-- IF LOCATION --><div class="eventdata-details-location"><i class="fa fa-lg fa-map-marker"></i> {LOCATION}</div><!-- ENDIF -->
+						<!-- IF LOCATION --><div class="eventdata-details-location"><i class="fa fa-lg fa-map-marker"></i> <span id='eventdetailsmap_address'>{LOCATION}</span></div><!-- ENDIF -->
 						<div class="eventdata-details-calendar"><i class="fa fa-calendar fa-lg"></i> {CALENDAR}</div>
 					</div>
 					<br />
+					{MAPFRAME}
 					<div class="eventdata-buttonrow">
 						<button class="<!-- IF MYSTATUS == "1" -->green<!-- ELSE -->gray<!-- ENDIF --> button_changeattendance" name="attendancetype" value="attend">{L_calendar_event_button_attend}</button>
 						<!-- IF not PRIVATE_EVENT --><button class="<!-- IF MYSTATUS == "2" -->orange<!-- ELSE -->gray<!-- ENDIF --> button_changeattendance" name="attendancetype" value="maybe">{L_calendar_event_button_maybe}</button><!-- ENDIF -->
