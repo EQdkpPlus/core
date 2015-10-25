@@ -1075,7 +1075,9 @@ class calendarevent_pageobject extends pageobject {
 			}
 		}
 
-		if($this->time->date('d', $eventdata['timestamp_start']) == $this->time->date('d', $eventdata['timestamp_end'])){
+		if($eventdata['allday'] == 1){
+			$full_date = $this->time->user_date($eventdata['timestamp_start']).', '.$this->user->lang('calendar_allday');
+		}elseif($this->time->date('d', $eventdata['timestamp_start']) == $this->time->date('d', $eventdata['timestamp_end'])){
 			//Samstag, 31.12.2015, 15 - 17 Uhr
 			$full_date = $this->time->user_date($eventdata['timestamp_start']).', '.$this->time->user_date($eventdata['timestamp_start'], false, true);
 		}else{
