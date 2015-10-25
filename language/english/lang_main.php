@@ -222,6 +222,7 @@ $lang = array(
 	"calendar_event_open" => "Public",
 	"calendar_event_private" => "Private",
 	"calendar_event_detail_invitedby" => "Invited by",
+	"calendar_event_detail_createdby" => "Created by",
 	"calendar_event_button_attend" => "Attend",
 	"calendar_event_button_maybe" => "Maybe",
 	"calendar_event_button_decline" => "Decline",
