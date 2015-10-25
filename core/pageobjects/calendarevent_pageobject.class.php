@@ -1083,6 +1083,30 @@ class calendarevent_pageobject extends pageobject {
 		}
 		$this->jquery->Tab_header('tab_attendance');
 
+		// edit menu
+		$arrToolbarItems = array(
+			array(
+				'icon'	=> 'fa-plus',
+				'js'	=> 'onclick="addEvent()"',
+				'title'	=> $this->user->lang('add_new_article'),
+			),
+			array(
+				'icon'	=> 'fa-pencil-square-o',
+				'js'	=> 'onclick="editEvent()"',
+				'title'	=> $this->user->lang('edit'),
+			),
+			/*array(
+				'icon'	=> 'fa-lock',
+				'js'	=> 'onclick="lockEvent()"',
+				'title'	=> $this->user->lang('lockEvent'),
+			),*/
+		);
+		$jqToolbar = $this->jquery->toolbar('calevent_event', $arrToolbarItems, array('position' => 'bottom'));
+
+		// the Windows
+		$this->jquery->Dialog('addEvent', $this->user->lang('calendar_win_add'), array('url'=> $this->routing->build('editcalendarevent')."&simple_head=true", 'width'=>'920', 'height'=>'730', 'onclose' => $this->strPath.$this->SID.'&eventdetails'));
+		$this->jquery->Dialog('editEvent', $this->user->lang('calendar_win_edit'), array('url'=> $this->routing->build('editcalendarevent')."&eventid=".$this->url_id."&simple_head=true", 'width'=>'920', 'height'=>'730', 'onclose' => $this->strPath.$this->SID.'&eventdetails'));
+
 		$this->tpl->assign_vars(array(
 			'EVENT_ID'			=> $this->url_id,
 			'PRIVATE_EVENT'		=> ($eventdata['private'] == 1) ? true : false,
@@ -1102,6 +1126,7 @@ class calendarevent_pageobject extends pageobject {
 			'NUMBER_MAYBES'		=> (isset($userstatus['maybe'])) ? count($userstatus['maybe']) : 0,
 			'NUMBER_ATTENDEES'	=> (isset($userstatus['attendance'])) ? count($userstatus['attendance']) : 0,
 			'NUMBER_DECLINES'	=> (isset($userstatus['decline'])) ? count($userstatus['decline']) : 0,
+			'TOOLBAR'			=> $jqToolbar['id'],
 		));
 
 		$this->set_vars(array(
