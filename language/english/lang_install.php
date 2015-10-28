@@ -19,17 +19,17 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- 
+
 if (!defined('EQDKP_INC')) {
 	die('You cannot access this file directly.');
 }
 
-//Language: English	
+//Language: English
 //Created by EQdkp Plus Translation Tool on  2014-12-17 23:17
 //File: language/english/lang_install.php
 //Source-Language: german
 
-$lang = array( 
+$lang = array(
 	"page_title" => 'EQDKP-PLUS %s Installation',
 	"back" => 'Save and back',
 	"continue" => 'Proceed',
@@ -166,7 +166,7 @@ $lang = array(
 	"date_short_format" => 'd.m.y',
 	"style_jsdate_nrml" => 'DD/MM/YYYY',
 	"style_jsdate_short" => 'D.M',
-	"style_jstime" => 'h:mm tt',
+	"style_jstime" => 'hh:mm tt',
 	"welcome_news_title" => 'Welcome to EQDKP-Plus',
 	"welcome_news" => '<p>The installation of your EQdkp Plus was completed successfully - you can now set it up according to your wishes.</p>
 <p>You can find assistance to administration and general use in our <a href="http://eqdkp-plus.eu/wiki/" target="_blank">Wiki</a>.</p>
@@ -207,7 +207,7 @@ $lang = array(
 	"user_required" => 'Username, email and password are required fields',
 	"no_pw_match" => 'The passwords do not match.',
 	"install_end_text" => 'The installation can now be completed successfully.',
-	
+
 );
 
 ?>

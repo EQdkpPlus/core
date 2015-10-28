@@ -37,7 +37,7 @@ $lang = array(
 	'retry'					=> 'Erneut versuchen',
 	'skip'					=> 'Überspringen',
 	'step_order_error'		=> 'Step-Order Fehler: Step nicht gefunden. Bitte überprüfe, ob alle Dateien richtig hochgeladen wurden. Für weitere Hilfe besuche bitte unser Forum unter <a href="'.EQDKP_BOARD_URL.'">'.EQDKP_BOARD_URL.'</a>.',
-	
+
 	//Step-Names
 	'licence'				=> 'Lizenzbedingungen',
 	'php_check'				=> 'Voraussetzungen',
@@ -48,12 +48,12 @@ $lang = array(
 	'inst_settings'			=> 'Einstellungen',
 	'admin_user'			=> 'Administrator Zugang',
 	'end'					=> 'Abschließen der Installation',
-	
+
 	//Step: licence
 	"welcome"				=> "Willkommen zur Installation von EQdkp Plus. Um dieses Gamer CMS & DKP-System zu installieren, lies dir bitte die Lizenzbedingungen durch und klicke anschließend auf 'Akzeptieren & Installation starten'",
 	'accept'				=> 'Akzeptieren & Installation starten',
 	'license_text'			=> '<b>EQdkp Plus ist unter der AGPL v3.0 Lizenz veröffentlicht.</b><br /><br /> Der vollständige Lizenztext kann unter <a href="http://opensource.org/licenses/AGPL-3.0" target="_blank">http://opensource.org/licenses/AGPL-3.0</a> abgerufen werden.<br /><br />
-	
+
 		Nachfolgend eine Zusammenfassung der wichtigsten Punkte der AGPL v3.0. Es besteht kein Anspruch auf Vollständigkeit, Korrektheit und richtige Übersetzung.<br /><br />
 	<h3><strong>Du darfst:</strong></h3>
 <ul>
@@ -73,8 +73,8 @@ $lang = array(
 <li>den Autor/die Autoren von EQdkp Plus&nbsp;verantwortlich für Schäden etc. machen. Die Software wird ohne Garantie ausgeliefert.</li>
 <li>deine Software, die EQdkp Plus verwendet, unter eine andere Lizenz als die AGPL stellen</li>
 </ul>
-		
-		
+
+
 		',
 	//Step: php_check
 	'table_pcheck_name'		=> 'Name',
@@ -98,7 +98,7 @@ $lang = array(
 	'phpcheck_success'		=> 'Die Mindestanforderungen für die Installation von EQDKP-PLUS werden erfüllt. Die Installation kann fortgesetzt werden.',
 	'phpcheck_failed'		=> 'Die Mindestanforderungen für die Installation von EQDKP-PLUS werden leider nicht erfüllt.<br />Eine Auswahl von geeigneten Hostern findest Du auf unserer <a href="'.EQDKP_PROJECT_URL.'" target="_blank">Website</a>',
 	'do_match_opt_failed'	=> 'Es werden nicht alle Empfehlungen erfüllt. EQDKP-PLUS wird zwar auf diesem System funktionieren, jedoch eventuell mit Einschränkungen.',
-	
+
 	//Step: ftp access
 	'ftphost'				=> 'FTP-Host',
 	'ftpport'				=> 'FTP-Port',
@@ -119,9 +119,9 @@ $lang = array(
 	'ftp_info'				=> 'Anstatt bestimmten EQdkp Plus Dateiordnern Schreibrechte zu geben, kannst du einen FTP-Benutzer deines Servers benutzen, was die Sicherheit als auch die Funktionalität deines EQdkp Plus erhöht.',
 	'ftp_tmpinstallwriteerror' => 'Der Ordner <b>./data/97384261b8bbf966df16e5ad509922db/tmp/</b> ist nicht beschreibbar.<br />Damit die Konfigurations-Datei geschrieben werden kann, ist CHMOD 777 notwendig. Dieser Ordner wird nach der Installation entfernt.',
 	'ftp_tmpwriteerror' 	=> 'Der Ordner <b>./%stmp/</b> ist nicht beschreibbar.<br />Damit der FTP-Modus verwendet werden kann, ist CHMOD 777 für diesen Ordner notwendig. Dies ist der einzige Ordner, für den Schreibrechte benötigt werden.',
-	
-	
-		
+
+
+
 	//Step: db_access
 	'dbtype'				=> 'Datenbanktyp',
 	'dbhost'				=> 'Datenbankhost',
@@ -139,7 +139,7 @@ $lang = array(
 	'INST_ERR_PREFIX_INVALID'	=> 'Der angegebene Datenbank-Prefix ist für diesen Datenbanktyp nicht gültig. Bitte versuche einen anderen, entferne alle Zeichen wie Bindestriche, Apostrophe, Slashes oder Backslashes.',
 	'INST_ERR_PREFIX_TOO_LONG'	=> 'Der eingegebene Datenbankprefix ist zu lang. Die maximale Länge beträgt %d Zeichen.',
 	'dbcheck_success'		=> 'Die Datenbank wurde überprüft. Es wurden keine Fehler oder Konflikte gefunden. Die Installation kann bedenkenlos fortgesetzt werden.',
-	
+
 	//Step: encryptionkey
 	'encryptkey_info'		=> 'Der Verschlüsselungs-Key wird benötigt, um sensible Daten wie z.B. Email-Adressen verschlüsselt in der Datenbank abzulegen. Bitte bewahre eine Kopie des Schlüssels an einem sicheren Ort auf.',
 	'encryptkey'			=> 'Verschlüsselungs-Key',
@@ -147,7 +147,7 @@ $lang = array(
 	'encryptkey_repeat'		=> 'Bestätige Verschlüsselungs-Key',
 	'encryptkey_no_match'	=> 'Die Verschlüsselungs-Keys stimmen nicht überein.',
 	'encryptkey_too_short'	=> 'Der Verschlüsselungs-Key ist zu kurz. Die Mindestlänge beträgt 6 Zeichen.',
-	
+
 	//Step: inst_settings
 	'inst_db'				=> 'Datenbank installieren',
 	'lang_config'			=> 'Sprach-Einstellungen',
@@ -155,7 +155,7 @@ $lang = array(
 	'default_locale'		=> 'Standard Lokalisierung',
 	'game_config'			=> 'Spiel-Einstellungen',
 	'default_game'			=> 'Standard Spiel',
-	'server_config'			=> 'Server-Einstellungen',	
+	'server_config'			=> 'Server-Einstellungen',
 	'server_path'			=> 'Scriptpfad',
 	//Groups
 	'grp_guest'				=> "Gäste",
@@ -181,7 +181,7 @@ $lang = array(
 	'date_short_format'		=> 'd.m.y',
 	"style_jsdate_nrml"		=> "DD.MM.YYYY",
 	"style_jsdate_short"	=> "D.M",
-	"style_jstime"			=> "H:mm",
+	"style_jstime"			=> "HH:mm",
 	//Welcome-News
 	'welcome_news_title'	=> 'Willkommen bei EQdkp-Plus',
 	'welcome_news'			=> '<p>Die Installation deines EQdkp-Plus wurde erfolgreich abgeschlossen - du kannst es nun nach deinen Wünschen einrichten.</p>
@@ -200,7 +200,7 @@ $lang = array(
 &lt;h3&gt;Portalverwaltung&lt;/h3&gt;
 &lt;p&gt;Früher gab es nur ein ein Portallayout, d.h. auf allen Seiten waren die Portalmodule gleich. Das hat sich nun geändert. So kann man Artikelkategorien andere Portallayouts zuweisen.&lt;/p&gt;
 &lt;p&gt;Desweiteren besteht die Möglichkeit, eigene Portalblöcke anzulegen, so dass man diese im Template einbindet, um z.B. Links im Footer einfacher verwalten zu können.&lt;/p&gt;',
-	
+
 	//Categories
 	'category1'	=> 'System',
 	'category2'	=> 'News',
@@ -211,7 +211,7 @@ $lang = array(
 	'category7'	=> 'Roster',
 	'category8'	=> 'Punktestand',
 	'category9'	=> 'Charakter',
-		
+
 	//Articles
 	'article5' => 'Charakter',
 	'article6' => 'Roster',
@@ -224,13 +224,13 @@ $lang = array(
 	'article14' => 'Gildenregeln',
 	'article15' => 'Datenschutz',
 	'article16' => 'Impressum',
-		
+
 	//Fallback role-names
 	'role_healer' 			=> 'Heiler',
 	'role_tank' 			=> 'Tank',
 	'role_range' 			=> 'Fernkämpfer',
 	'role_melee' 			=> 'Nahkämpfer',
-	
+
 	//Step: admin_user
 	'create_user'			=> 'Zugang anlegen',
 	'username'				=> 'Administrator Benutzername',
@@ -240,10 +240,10 @@ $lang = array(
 	'auto_login'			=> 'Angemeldet bleiben',
 	'user_required'			=> 'Benutzername, E-mail und Passwort müssen ausgefüllt werden!',
 	'no_pw_match'			=> 'Die Passwörter stimmen nicht überein.',
-	
+
 	//Step: end
 	'install_end_text'		=> 'Die Installation kann nun erfolgreich abgeschlossen werden.',
-	
-	
+
+
 );
 ?>
