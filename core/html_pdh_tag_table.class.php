@@ -109,7 +109,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 		public function get_column_count(){
 			return $this->column_count;
 		}
-		
+
 		public function setPageRef($strPageRef){
 			$this->settings['page_ref'] = $strPageRef;
 		}
@@ -231,7 +231,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 
 			$prefix = '';
 			$hptt_checkboxname	= (isset($this->settings['selectbox_name'])) ? $this->settings['selectbox_name'] : 'selected_ids';
-			if($this->settings['show_select_boxes']){
+			if(($this->settings['show_select_boxes'] != 'signedin' && $this->settings['show_select_boxes'] == true) || ($this->settings['show_select_boxes'] == 'signedin' && $this->user->id > 0)){
 				if(isset($this->settings['selectboxes_checkall']) && $this->settings['selectboxes_checkall']){
 					$selAllCheckboxName = "pdh_selectall".$this->counter."_".substr(md5($hptt_checkboxname), 0, 7);
 					$this->jquery->selectall_checkbox($selAllCheckboxName, $hptt_checkboxname.'[]');
@@ -249,8 +249,8 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 		public function get_html_row($view_id,$arrCheckboxCheck=false){
 			$prefix = '';
 			$hptt_checkboxname	= (isset($this->settings['selectbox_name'])) ? $this->settings['selectbox_name'] : 'selected_ids';
-			if($this->settings['show_select_boxes']){
-				$blnShowCheckbox = true;				
+			if(($this->settings['show_select_boxes'] != 'signedin' && $this->settings['show_select_boxes'] == true) || ($this->settings['show_select_boxes'] == 'signedin' && $this->user->id > 0)){
+				$blnShowCheckbox = true;
 				if ($arrCheckboxCheck !== false) {
 					$blnShowCheckbox = $this->pdh->get($arrCheckboxCheck[0],$arrCheckboxCheck[1],array($view_id));
 				}
@@ -329,7 +329,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 			}
 			return $data;
 		}
-		
+
 		public function detail_twink($view_id_key, $wt_key, $cid, $module, $tag, $params) {
 			$dt_tags = $this->pdh->get_dt_tags($module);
 			if (!$dt_tags) $dt_tags = array();
@@ -385,7 +385,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 			$footer .= "</th>\n</tr>\n";
 			return $footer;
 		}
-		
+
 		public function get_view_list(){
 			return $this->view_list;
 		}

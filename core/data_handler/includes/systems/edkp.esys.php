@@ -25,7 +25,7 @@ if (!defined('EQDKP_INC')) {
 
 $system_def = array(
 	'base_layout' => 'edkp',
-	
+
 	'data' => array(
 		'description' => registry::fetch('user')->lang('lm_layout_edkp'),
 		'point_direction' => 'asc',
@@ -238,7 +238,7 @@ $system_def = array(
 				),
 			),
 		),
-	
+
 		'listevents' => array(
 			'hptt_listevents_eventlist' => array(
 				'name' => 'hptt_listevents_eventlist',
@@ -258,8 +258,8 @@ $system_def = array(
 				),
 			),
 		),//end listevents
-		
-		
+
+
 		'viewevent' => array(
 			'hptt_viewevent_raidlist' => array(
 				'name' => 'hptt_viewevent_raidlist',
@@ -298,7 +298,7 @@ $system_def = array(
 				),
 			),
 		),//end viewevent
-		
+
 		'listusers' => array(
 			'hptt_listusers_userlist' => array(
 				'name' => 'hptt_listraids_raidlist',
@@ -318,11 +318,11 @@ $system_def = array(
 					array('name' => 'usercountry', 'sort' => true, 'th_add' => 'class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
 					array('name' => 'usergroups', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 					array('name' => 'userregdate', 'sort' => true, 'th_add' => 'class="hiddenSmartphone"', 'td_add' =>  'class="hiddenSmartphone"'),
-					array('name' => 'usercharnumber', 'sort' => true, 'th_add' => 'class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),				
+					array('name' => 'usercharnumber', 'sort' => true, 'th_add' => 'class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
 				),
 			),
 		),
-			
+
 		'userprofile' => array(
 				'hptt_userprofile_memberlist_overview' => array(
 						'name' => 'hptt_userprofile_memberlist_overview',
@@ -344,9 +344,9 @@ $system_def = array(
 							array('name' => 'attendance_30_all', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 							array('name' => 'attendance_lt_all', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 					),
-				),			
+				),
 		),
-			
+
 			'teamlist' => array(
 					'hptt_team_list' => array(
 							'name' => 'hptt_team_list',
@@ -368,7 +368,7 @@ $system_def = array(
 							),
 					),
 			),
-	
+
 		'listmembers' => array(
 			'listmembers_leaderboard' => array(
 				'maxpercolumn' => 5,
@@ -426,12 +426,12 @@ $system_def = array(
 
 		'calendar' => array(
 			'hptt_calendar_raidlist'	=> array(
-				'name'					=> 'hptt_calendar_raidlist', 
+				'name'					=> 'hptt_calendar_raidlist',
 				'table_main_sub'		=> '%calevent_id%',
 				'table_subs'			=> array('%calevent_id%','%member_id%'),
 				'page_ref'				=> 'calendar/index.php',
 				'show_numbers'			=> false,
-				'show_select_boxes'		=> true,
+				'show_select_boxes'		=> 'signedin',
 				'selectboxes_checkall'	=> true,
 				'show_detail_twink'		=> false,
 				'table_sort_col' => 1,
@@ -448,7 +448,7 @@ $system_def = array(
 				),
 			),
 		),
-		
+
 		'manage_characters' => array(
 			'hptt_manage_characters' => array(
 				'name'				=> 'hptt_manage_characters',
@@ -470,7 +470,7 @@ $system_def = array(
 				),
 			),
 		),//end manage characters
-		
+
 		'roster' => array(
 			'hptt_roster' => array(
 				'name'				=> 'roster',
@@ -676,7 +676,7 @@ $system_def = array(
 				),
 			),
 		), //end admin_index
-		
+
 		'admin_manage_roles' => array(
 			'hptt_manageroles_actions' => array(
 				'name'				=> 'hptt_manageroles_actions',
@@ -696,7 +696,7 @@ $system_def = array(
 				),
 			),
 		),//end manage roles
-		
+
 		'admin_manage_calevents' => array(
 			'hptt_managecalevents_actions' => array(
 				'name'				=> 'hptt_managecaleventss_actions',
@@ -719,7 +719,7 @@ $system_def = array(
 				),
 			),
 		),//end manage calendar events
-		
+
 		'admin_manage_article_categories' => array(
 			'hptt_admin_manage_article_categories_categorylist' => array(
 				'name'				=> 'hptt_admin_manage_article_categories_categorylist',
@@ -736,13 +736,13 @@ $system_def = array(
 					array('name' => 'category_sortable',	'sort' => true, 'th_add' => 'width="20" class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
 					array('name' => 'category_editicon',	'sort' => false, 'th_add' => 'width="20"', 'td_add' => ''),
 					array('name' => 'category_published',	'sort' => true, 'th_add' => 'width="20"', 'td_add' => ''),
-					array('name' => 'category_article_count','sort' => true, 'th_add' => 'width="20" class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),				
+					array('name' => 'category_article_count','sort' => true, 'th_add' => 'width="20" class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
 					array('name' => 'category_name',		'sort' => true, 'th_add' => '', 'td_add' => ''),
 					array('name' => 'category_alias',		'sort' => true, 'th_add' => 'class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
 					array('name' => 'category_portallayout','sort' => true, 'th_add' => 'class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
 				),
 			),
-			
+
 		),
 
 		'admin_manage_articles' => array(
@@ -770,7 +770,7 @@ $system_def = array(
 					array('name' => 'article_last_edited',		'sort' => true, 'th_add' => 'class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
 				),
 			),
-			
+
 		),
 
 	),//pages end
