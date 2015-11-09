@@ -30,7 +30,7 @@ if(!class_exists('page_generic')){
 		private $cd_params = array('%id%');
 		private $cb_name = '';
 		
-		private $pre_check = '';
+		
 		private $params = array();
 		
 		protected $handler = array(
@@ -43,7 +43,8 @@ if(!class_exists('page_generic')){
 		protected $url_id = false;
 		protected $simple_head = '';
 		protected $action = '';
-	
+		protected $pre_check = '';
+		
 		public function __construct($pre_check, $handler=false, $pdh_call=array(), $params=null, $cb_name='', $url_id='') {
 			$this->pre_check = $pre_check;
 			$this->simple_head = ($this->in->exists('simple_head')) ? 'simple' : 'full';
@@ -128,7 +129,7 @@ if(!class_exists('page_generic')){
 						if (!$blnResult) break;
 					}
 
-					if(method_exists($this, $process['process'])) $this->$process['process']();
+					if(method_exists($this, $process['process'])) $this->{$process['process']}();
 					break;
 				} elseif($this->in->get($key) AND is_array(current($process))) {
 					foreach($process as $subprocess) {
@@ -140,13 +141,15 @@ if(!class_exists('page_generic')){
 								if (!$blnResult) break;
 							}
 							
-							$this->$subprocess['process']();
+							$this->{$subprocess['process']}();
 							break 2;
 						}
 					}
 				}
 			}
-			if($this->pre_check) $this->user->check_auth($this->pre_check);
+			if($this->pre_check) {
+				$this->user->check_auth($this->pre_check);
+			}
 			$this->display();
 		}
 		
