@@ -60,7 +60,8 @@ if ( !class_exists( "pdh_r_effective_dkp" ) ) {
 
 		public function init_effective_dkp($period, $with_twink = true){
 			//cached data not outdated?
-			$this->edkp[$period] = $this->pdc->get('pdh_edkp_'.$period);
+			$withTwinkSuffix = ($with_twink) ? '_withtwinks' : '';
+			$this->edkp[$period] = $this->pdc->get('pdh_edkp_'.$period.$withTwinkSuffix);
 			if($this->edkp[$period] != null){
 				return true;
 			}
@@ -74,7 +75,7 @@ if ( !class_exists( "pdh_r_effective_dkp" ) ) {
 
 			//cache it and let it expire at midnight
 			$stm = 86400-((time()-mktime(0,0,0,1,1,1970))%86400);
-			$this->pdc->put('pdh_edkp_'.$period, $this->edkp[$period], $stm);
+			$this->pdc->put('pdh_edkp_'.$period.$withTwinkSuffix, $this->edkp[$period], $stm);
 		}
 
 		public function calculate_effective_dkp($member_id, $multidkp_id, $time_period, $with_twink = true){
@@ -93,7 +94,7 @@ if ( !class_exists( "pdh_r_effective_dkp" ) ) {
 		}
 
 		public function get_html_effective_dkp($member_id, $multidkp_id, $time_period, $with_twink = true){
-			return '<span class="'.color_item($this->get_effective_dkp($member_id, $multidkp_id, $time_period)).'">'.$this->get_effective_dkp($member_id, $multidkp_id, $time_period).'</span>';
+			return '<span class="'.color_item($this->get_effective_dkp($member_id, $multidkp_id, $time_period, $with_twink)).'">'.$this->get_effective_dkp($member_id, $multidkp_id, $time_period, $with_twink).'</span>';
 		}
 
 		public function get_caption_effective_dkp($mdkp_id, $time_period){
