@@ -117,7 +117,7 @@ class wrapper_pageobject extends pageobject {
 			}
 			$output = '<div id="wrapper">';
 			$this->CreateDynamicIframeJS();
-			$output .='<iframe id="boardframe" src="'.$this->data['url'].'" data-base-url="'.$this->data['base_url'].'" width="100%" scrolling="no" marginwidth="0" marginheight="0" height="'.$this->data['height'].'" frameborder="0" vspace="0" hspace="0"></iframe>';
+			$output .='<iframe id="boardframe" src="'.$this->data['url'].'" data-base-url="'.$this->data['base_url'].'" width="100%" scrolling="auto" marginwidth="0" marginheight="0" height="'.$this->data['height'].'" frameborder="0" vspace="0" hspace="0"></iframe>';
 	
 
 			$output .= '</div>';
@@ -195,6 +195,7 @@ class wrapper_pageobject extends pageobject {
 			var wrapper_base_url = "'.$this->data['base_url'].'";
 			var wrapper_eqdkp_url = "'.$this->env->buildlink().'";
 			var wrapper_default_height = '.intval($this->data['height']).';
+			var wrapper_height_offset = 0;
 
 			function onloadIframeAdjustments(){
 				resizeIframe();
@@ -216,15 +217,16 @@ class wrapper_pageobject extends pageobject {
 	
 				if (currentfr){
 					try {
+						currentfr.style.overflow = "hidden";
 						currentfr.style.display = "block";
 						if(height == undefined){
 							if (currentfr.contentDocument && currentfr.contentDocument.body && currentfr.contentDocument.body.offsetHeight){ //ns6 syntax
-								currentfr.height = currentfr.contentDocument.body.offsetHeight;
+								currentfr.height = currentfr.contentDocument.body.offsetHeight + wrapper_height_offset;
 							} else if (currentfr.Document && currentfr.Document.body && currentfr.Document.body.scrollHeight) {//ie5+ syntax
-								currentfr.height = currentfr.Document.body.scrollHeight;
+								currentfr.height = currentfr.Document.body.scrollHeight + wrapper_height_offset;
 							}
 						} else {
-							currentfr.height = height;
+							currentfr.height = height+wrapper_height_offset;
 						}
 					
 						//Set correct width
