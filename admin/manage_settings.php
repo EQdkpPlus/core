@@ -522,7 +522,8 @@ class mmocms_settings extends page_generic {
 						'options'		=> $members,
 					),
 					'show_twinks'	=> array(
-						'type'		=> 'radio'
+						'type'		=> 'radio',
+						'dependency'=> array(0 => array('detail_twink')),
 					),
 					'detail_twink'	=> array(
 						'type'		=> 'radio'
