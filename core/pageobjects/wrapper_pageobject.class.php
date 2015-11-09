@@ -117,7 +117,7 @@ class wrapper_pageobject extends pageobject {
 			}
 			$output = '<div id="wrapper">';
 			$this->CreateDynamicIframeJS();
-			$output .='<iframe id="boardframe" src="'.$this->data['url'].'" data-base-url="'.$this->data['base_url'].'" width="100%" scrolling="no" marginwidth="0" marginheight="0" height="'.$this->data['height'].'" frameborder="0" vspace="0" hspace="0"></iframe>';
+			$output .='<iframe id="boardframe" src="'.$this->data['url'].'" data-base-url="'.$this->data['base_url'].'" width="100%" scrolling="auto" marginwidth="0" marginheight="0" height="'.$this->data['height'].'" frameborder="0" vspace="0" hspace="0"></iframe>';
 	
 
 			$output .= '</div>';
@@ -217,6 +217,7 @@ class wrapper_pageobject extends pageobject {
 	
 				if (currentfr){
 					try {
+						currentfr.style.overflow = "hidden";
 						currentfr.style.display = "block";
 						if(height == undefined){
 							if (currentfr.contentDocument && currentfr.contentDocument.body && currentfr.contentDocument.body.offsetHeight){ //ns6 syntax
