@@ -29,6 +29,7 @@ $module_lang = array(
 	"name" => 'Name',
 	"category" => 'Kategorie',
 	"prio" => 'Priorität',
+	"default" => 'Standard-Methode',
 );
 
 $preset_lang = array(

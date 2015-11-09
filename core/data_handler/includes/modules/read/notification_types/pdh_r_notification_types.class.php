@@ -170,6 +170,15 @@ if ( !class_exists( "pdh_r_notification_types" ) ) {
 			}
 			return false;
 		}
+		
+		public function get_html_default($strNotificationTypeID){
+			$strDefault = $this->get_default($strNotificationTypeID);
+			if($strDefault === false) return "";
+			
+			$arrMethods = register('ntfy')->getAvailableNotificationMethods(true);
+			array_unshift($arrMethods, register('user')->lang('notification_type_none'), register('user')->lang('notification_type_eqdkp'));
+			return (isset($arrMethods[$strDefault])) ? $arrMethods[$strDefault] : '';
+		}
 
 		/**
 		 * Returns group for $strNotificationTypeID				

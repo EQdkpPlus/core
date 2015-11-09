@@ -34,6 +34,7 @@ $module_lang = array(
 	"name" => 'Name',
 	"category" => 'Category',
 	"prio" => 'Priority',
+	"default" => 'Default Method',
 );
 
 $preset_lang = array(
