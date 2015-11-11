@@ -351,6 +351,7 @@ class calendarevent_pageobject extends pageobject {
 
 			foreach($a_attendees as $attendeeid){
 				$attuserid		= $this->pdh->get('member', 'userid', array($attendeeid));
+				if($attuserid == false) continue;
 				$strEventTitle	= sprintf($this->pdh->get('event', 'name', array($eventextension['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->date_for_user($attuserid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true);		
 				$this->ntfy->add('calendarevent_mod_statuschange', $eventID.'_'.$attendeeid, $strStatus, $this->controller_path_plain.$this->page_path.$this->SID, $attuserid, $strEventTitle);
 			}
@@ -365,6 +366,7 @@ class calendarevent_pageobject extends pageobject {
 			
 			foreach($a_attendees as $attendeeid){
 				$attuserid		= $this->pdh->get('member', 'userid', array($attendeeid));
+				if($attuserid == false) continue;
 				$strEventTitle	= sprintf($this->pdh->get('event', 'name', array($eventextension['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->date_for_user($attuserid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true);
 				$this->ntfy->add('calendarevent_mod_groupchange', $eventID.'_'.$attendeeid, $strStatus, $this->controller_path_plain.$this->page_path.$this->SID, $attuserid, $strEventTitle);
 			}
