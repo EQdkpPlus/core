@@ -698,7 +698,7 @@ if (!class_exists("time")){
 			if($intSecondsToAdd > 0){
 				$objTime->add(new DateInterval("PT".$intSecondsToAdd."S"));
 			} else {
-				$objTime->sub(new DateInterval("PT".$intSecondsToAdd."S"));
+				$objTime->sub(new DateInterval("PT".abs($intSecondsToAdd)."S"));
 			}
 			return $objTime->format("U");
 		}
