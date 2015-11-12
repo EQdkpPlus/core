@@ -172,13 +172,13 @@ if (!class_exists("bbcode")) {
 		
 		function sanatizeFontcolor($arrMatches){
 			if (preg_match('/#[a-zA-Z0-9]{3,6}/', $arrMatches[1])){
-				return '<div style="color: '.$arrMatches[1].';">'.$arrMatches[2].'</div>';
+				return '<div style="color: '.$arrMatches[1].';display:inline;">'.$arrMatches[2].'</div>';
 			}
 			return '';
 		}
 		
 		function sanatizeFontsize($arrMatches){
-			return '<div style="font-size: '.intval($arrMatches[1]).'px">'.$arrMatches[2].'</div>';
+			return '<div style="font-size: '.intval($arrMatches[1]).'px;display:inline;">'.$arrMatches[2].'</div>';
 		}
 		
 		function sanatizeOrderedList($arrMatches){
