@@ -75,7 +75,7 @@ if ( !class_exists( "pdh_r_user_groups_users" ) ){
 			if (isset($this->user_memberships[$user_id]) && is_array($this->user_memberships[$user_id])){
 				return array_keys($this->user_memberships[$user_id]);
 			} elseif ($user_id == ANONYMOUS) {
-				return array(0 => 0);
+				return array(0 => 1);
 			} else {
 				return array();
 			}
