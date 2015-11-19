@@ -95,12 +95,17 @@ if ( !class_exists( "apa_cap_current" ) ) {
 			
 			// check for points over cap for each character
 			$this->pdh->process_hook_queue();
-			$char_ids = $this->pdh->get('member', 'id_list', array(true, false, true, $this->apa->get_data('twinks', $apa_id)));
+			$char_ids = $this->pdh->get('member', 'id_list', array(true, false, true, !(int)$this->apa->get_data('twinks', $apa_id)));
 			$pools = $this->apa->get_data('pools', $apa_id);
 
 			foreach($pools as $pool) {
 				$points = $this->pdh->aget('points', 'current_history', 0, array($char_ids, $pool, 0, $next_run-1, 0, 0, !$this->apa->get_data('twinks', $apa_id)));
 
+				//Check if Event is in Same MDKP Pool
+				$eventID = $this->apa->get_data('event', $apa_id);
+				$arrEventPools = $this->pdh->get('event', 'multidkppools', array($eventID));
+				if(!$eventID || !in_array($pool, $arrEventPools)) continue;
+				
 				foreach($char_ids as $char_id) {
 					if($points[$char_id] > $this->apa->get_data('upper_cap', $apa_id)) {
 						$value = $this->apa->get_data('upper_cap', $apa_id) - $points[$char_id];
