@@ -67,7 +67,7 @@ class ManagePageLayouts extends page_generic {
 		if (is_array($layout_def['substitutions']) && !empty($layout_def['substitutions'])){
 			foreach ($layout_def['substitutions'] as $key=>$value){
 				$name = 'subs_'.$key;
-				$layout_def['options'][$key]['value'] = form::value($name, $value);
+				$layout_def['substitutions'][$key]['value'] = form::value($name, $value);
 			}
 		}
 	

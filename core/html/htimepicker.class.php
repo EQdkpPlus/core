@@ -62,8 +62,15 @@ class htimepicker extends html {
 		return $this->out;
 	}
 	
+	/**
+	 * Returns Time in Format H:i, in GMT
+	 * 
+	 * @return string
+	 */
 	public function _inpval() {
-		return $this->in->get($this->name, '');
+		$strTimeInUserTime = $this->in->get($this->name, '');		
+		$intTimestamp = $this->time->convert_usertimestring_to_utc($strTimeInUserTime);
+		return date("H:i", $intTimestamp);
 	}
 }
 ?>

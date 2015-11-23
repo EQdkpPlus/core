@@ -84,11 +84,12 @@ class ManageNotifications extends page_generic {
 		
 		$arrMethods = register('ntfy')->getAvailableNotificationMethods(true);
 		array_unshift($arrMethods, register('user')->lang('notification_type_none'), register('user')->lang('notification_type_eqdkp'));
+		
 		$this->tpl->assign_vars(array(
 			'NOTIFICATION_ID' 	=> $strNotificationID,
 			'DD_PRIORITY'		=> new hdropdown('priority', array('value' => $this->pdh->get('notification_types', 'prio', array($strNotificationID)), 'options' => array(0 => $this->user->lang('notification_prio_0'), 1 => $this->user->lang('notification_prio_1'), 2 => $this->user->lang('notification_prio_2')))),
 			'ICON'				=> $this->pdh->get('notification_types', 'icon', array($strNotificationID)),
-			'DD_DEFAULT'		=> new hdropdown('default', array('value' => $this->pdh->get('notification_types', 'default', array($strNotificationID)), 'options' => $arrMethods)),
+			'DD_DEFAULT'		=> new hdropdown('default', array('value' => (string)$this->pdh->get('notification_types', 'default', array($strNotificationID)), 'options' => $arrMethods)),
 			'GROUP_RADIO'		=> new hradio('group', array('value' => $this->pdh->get('notification_types', 'group', array($strNotificationID)))),
 			'GROUP_AT_SPINNER'	=> new hspinner('group_at', array('value' => $this->pdh->get('notification_types', 'group_at', array($strNotificationID)), 'min' => 0)),
 			'OVERWRITE_RADIO'	=> new hradio('overwrite', array('value' => 0)),
@@ -122,7 +123,7 @@ class ManageNotifications extends page_generic {
 				'table_presets' => array(
 						array('name' => 'notification_types_edit', 'sort' => false, 'th_add' => '', 'td_add' => ''),
 						array('name' => 'notification_types_id', 'sort' => true, 'th_add' => '', 'td_add' => ''),
-						array('name' => 'notification_types_name', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+						array('name' => 'notification_types_default', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 						array('name' => 'notification_types_category', 'sort' => true, 'th_add' => 'class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
 						array('name' => 'notification_types_prio', 'sort' => true, 'th_add' => 'class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
 				),

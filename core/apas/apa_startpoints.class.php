@@ -82,7 +82,7 @@ if ( !class_exists( "apa_startpoints" ) ) {
 		}
 		
 		public function update_startdkp($apa_id, $last_date) {
-			$members = $this->pdh->get('member', 'id_list', array(true, false, true, !$this->apa->get_data('twinks', $apa_id)));
+			$members = $this->pdh->get('member', 'id_list', array(true, false, true, !(int)$this->apa->get_data('twinks', $apa_id)));
 			if(!$last_date) $last_date = $this->apa->get_data('start_date', $apa_id);
 			$startdkp_before = ($this->config->get('cron_startdkp_before')) ? $this->config->get('cron_startdkp_before') : array();
 
@@ -98,7 +98,7 @@ if ( !class_exists( "apa_startpoints" ) ) {
 				$dates = array();
 				$mdkpids = $this->apa->get_data('pools', $apa_id);
 				foreach($mdkpids as $mdkpid) {
-					$cur_dates = $this->pdh->aget('member_dates', 'first_raid', 0, array($members, $mdkpid, !$this->apa->get_data('twinks', $apa_id)));
+					$cur_dates = $this->pdh->aget('member_dates', 'first_raid', 0, array($members, $mdkpid, !(int)$this->apa->get_data('twinks', $apa_id)));
 					foreach($cur_dates as $member_id => $date) {
 						if ($date === 0) $date = 1;
 						if(empty($dates[$member_id]) || $dates[$member_id] > $date) $dates[$member_id] = $date;

@@ -113,7 +113,7 @@ class Manage_Export extends page_generic {
 		return trim($string);
 	}
 	
-	private function returnLua($arrData, $arrRequestArgs){
+	private function returnLua($arrData){
 		if (!isset($arrData['status']) || $arrData['status'] != 0){
 			$arrData['status'] = 1;
 		}

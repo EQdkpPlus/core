@@ -230,7 +230,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 
 		// download package
 		public function downloadPackage($src, $dest, $filename){
-			$file = $this->puf->fetch($src, "", 1, 200);
+			$file = $this->puf->fetch($src, "", 5, 200);
 			if ($file) {
 				$this->pfh->Delete($dest.$filename);
 				$this->pfh->CheckCreateFolder($dest);
