@@ -57,15 +57,15 @@ class calendar_pageobject extends pageobject {
 					$signupstatus = 0;
 				}
 			}
-			$myrole = ($this->in->get('member_role', 0) > 0) ? $this->in->get('member_role', 0) : $this->pdh->get('member', 'defaultrole', array($this->in->get('member_id', 0)));	
+			$myrole = ($this->in->get('member_role', 0) > 0) ? $this->in->get('member_role', 0) : $this->pdh->get('member', 'defaultrole', array($this->in->get('member_id', 0)));
 
 			foreach($eventids as $eventid){
 				$eventdata = $this->pdh->get('calendar_events', 'data', array($eventid));
-				
+
 				if ($eventdata['extension']['raidmode'] == 'role' && (int)$myrole == 0){
 					continue;
 				}
-			
+
 				// Build the Deadline
 				$deadlinedate	= $eventdata['timestamp_start']-($eventdata['extension']['deadlinedate'] * 3600);
 				$mystatus		= $this->pdh->get('calendar_raids_attendees', 'myattendees', array($eventid, $this->user->id));
@@ -82,7 +82,7 @@ class calendar_pageobject extends pageobject {
 				if (((int)$eventdata['closed'] == 1) || $deadlinepassed){
 					continue;
 				}
-			
+
 				$oldmemberdata = $this->pdh->get('calendar_raids_attendees', 'myattendees', array($eventid, $this->user->data['user_id']));
 				$this->pdh->put('calendar_raids_attendees', 'update_status', array(
 					$eventid,
@@ -227,7 +227,7 @@ class calendar_pageobject extends pageobject {
 						while($comp = $vcalendar->getComponent('vevent')){
 							$startdate		= $comp->getProperty('dtstart', 1);
 							$enddate		= $comp->getProperty('dtend', 1);
-							
+
 							// set the date for the events
 							$allday			= (isset($enddate['hour']) && isset($startdate['hour'])) ? false : true;
 							if($allday){
@@ -317,7 +317,7 @@ class calendar_pageobject extends pageobject {
 							'eventid'		=> $calid,
 							'editable'		=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission($calid)) ? true : false,
 							'title'			=> $this->in->decode_entity($this->pdh->get('calendar_events', 'name', array($calid))),
-							'url'			=> $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid),
+							'url'			=> utf8_encode($this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid)),
 							'start'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_start', array($calid))),
 							'end'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_end', array($calid))),
 							'closed'		=> ($this->pdh->get('calendar_events', 'raidstatus', array($calid)) == 1) ? true : false,
@@ -338,7 +338,7 @@ class calendar_pageobject extends pageobject {
 							'type'			=> 'event',
 							'eventid'		=> $calid,
 							'editable'		=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission($calid)) ? true : false,
-							'url'			=> $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid).'eventdetails',
+							'url'			=> utf8_encode($this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid).'eventdetails'),
 							'title'			=> $this->pdh->get('calendar_events', 'name', array($calid)),
 							'start'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_start', array($calid))),
 							'end'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_end', array($calid, $alldayevents))),
@@ -450,7 +450,7 @@ class calendar_pageobject extends pageobject {
 			'U_CALENDAREVENT'	=> $this->routing->build('CalendarEvent'),
 			'U_EDIT_CALENDAREVENT' => $this->routing->build('EditCalendarEvent'),
 		));
-		
+
 		//Calenderevent Statistics
 		if ($this->in->get('from') && $this->in->get('to')){
 			if(!$this->in->exists('timestamps')) {
@@ -464,7 +464,7 @@ class calendar_pageobject extends pageobject {
 			$date_suffix	= '&amp;timestamps=1&amp;from='.$date1.'&amp;to='.$date2;
 			$view_list		= $this->pdh->get('raid', 'raididsindateinterval', array($date1, $date2));
 			$date2			-= 86400; // Shows THAT day
-				
+
 			//Create a Summary
 			$arrRaidstatsSettings = array(
 					'name' => 'hptt_viewmember_itemlist',
@@ -482,40 +482,40 @@ class calendar_pageobject extends pageobject {
 							array('name' => 'mtwink', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 					),
 				);
-			
+
 				if(in_array(0, $raidcal_status)) $arrRaidstatsSettings['table_presets'][] = array('name' => 'raidcalstats_raids_confirmed_fromto', 'sort' => true, 'th_add' => '', 'td_add' => '');
 				if(in_array(1, $raidcal_status)) $arrRaidstatsSettings['table_presets'][] = array('name' => 'raidcalstats_raids_signedin_fromto', 'sort' => true, 'th_add' => '', 'td_add' => '');
 				if(in_array(2, $raidcal_status)) $arrRaidstatsSettings['table_presets'][] = array('name' => 'raidcalstats_raids_signedoff_fromto', 'sort' => true, 'th_add' => '', 'td_add' => '');
 				if(in_array(3, $raidcal_status)) $arrRaidstatsSettings['table_presets'][] = array('name' => 'raidcalstats_raids_backup_fromto', 'sort' => true, 'th_add' => '', 'td_add' => '');
 				$arrRaidstatsSettings['table_presets'][] = array('name' => 'raidcalstats_raids_total_fromto', 'sort' => true, 'th_add' => '', 'td_add' => '');
-												
+
 				$show_twinks = false;
 				$statsuffix = $date_suffix;
 				if($this->in->exists('show_twinks')){
 					$show_twinks = true;
 					$statsuffix .= '&amp;show_twinks=1';
 				}
-	
+
 				$arrMemberlist	= $this->pdh->get('member', 'id_list', array(true, true, true, !($show_twinks)));
-	
+
 				$hptt= $this->get_hptt($arrRaidstatsSettings, $arrMemberlist, $arrMemberlist, array('%link_url%' => $this->routing->simpleBuild('raids'), '%link_url_suffix%' => '', '%use_controller%' => true, '%from%'=> $date1, '%to%' => $date2, '%with_twink%' => !$show_twinks), md5($date1.'.'.$date2), 'statsort');
 				$hptt->setPageRef($this->strPath);
-					
+
 				//footer
 				$footer_text	= sprintf($this->user->lang('listmembers_footcount'), count($arrMemberlist));
 				$sort = $this->in->get('statsort');
 				//$suffix = (strlen($sort))? '&amp;statsort='.$sort : '';
-					
+
 				$this->tpl->assign_vars(array (
 					'RAIDSTATS_OUT' 		=> $hptt->get_html_table($sort, $statsuffix, null, null, $footer_text),
 					'S_RAIDSTATS'			=> true,
-				));			
+				));
 		} else {
 			$date1 = $this->time->time-(30*86400);
 			$date2 = $this->time->time;
 			$show_twinks = $this->config->get('show_twinks');
 		}
-		
+
 		$this->tpl->assign_vars(array (
 			// Date Picker
 			'DATEPICK_DATE_FROM'	=> $this->jquery->Calendar('from', $this->time->user_date($date1, false, false, false, function_exists('date_create_from_format'))),
