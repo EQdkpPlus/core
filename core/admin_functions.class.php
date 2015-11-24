@@ -56,6 +56,8 @@ class admin_functions extends gen_class {
 			return "<div class=\"coretip-left browser-icon opera\" data-coretip=\"".$string."\"><i class=\"fa fa-lg fa-opera\"></i></div>";
 		}else if( preg_match("/msie/i",$string)){
 			return "<div class=\"coretip-left browser-icon ie\" data-coretip=\"".$string."\"><i class=\"fa fa-lg fa-internet-explorer\"></i></div>";	
+		}else if( preg_match("/edge/i",$string)){
+			return "<div class=\"coretip-left browser-icon edge\" data-coretip=\"".$string."\"><i class=\"fa fa-lg fa-edge\"></i></div>";
 		}else if( preg_match("/chrome/i", $string)){
 			return "<div class=\"coretip-left browser-icon chrome\" data-coretip=\"".$string."\"><i class=\"fa fa-lg fa-chrome\"></i></div>";
 		}else if( preg_match("/konqueror/i",$string)){
