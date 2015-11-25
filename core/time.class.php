@@ -27,7 +27,7 @@ if (!class_exists("time")){
 	class time extends gen_class {
 
 		private static $ArrTimezones = array();
-		
+
 		private $formtrans = array(
 			//php		//js
 			'd'		=> 'dd',
@@ -86,7 +86,7 @@ if (!class_exists("time")){
 			'r'		=> '#D, j M Y H:i:s O',
 			'U'		=> 'return',
 		);
-		
+
 		private $timestamp = 0;
 		private $userTimeZone = 0;
 		private $utcTimeZone = 0;
@@ -96,7 +96,7 @@ if (!class_exists("time")){
 			$this->timestamp		= time();
 			$this->userTimeZone		= new DateTimeZone('UTC');
 			$this->utcTimeZone		= new DateTimeZone('UTC');
-			
+
 			$this->pdl->register_type('time_error', null, null, array(2,3,4));
 		}
 
@@ -105,7 +105,7 @@ if (!class_exists("time")){
 		 * @param string $value Timezone
 		 */
 		public function setTimezone($value){
-			$this->userTimeZone	= new DateTimeZone($value);	
+			$this->userTimeZone	= new DateTimeZone($value);
 		}
 
 		/**
@@ -155,7 +155,7 @@ if (!class_exists("time")){
 				return 'UTC';
 			}
 		}
-		
+
 		/**
 		* Generate time() in UTC
 		*
@@ -186,7 +186,7 @@ if (!class_exists("time")){
 			$year = ($year>0) ? (int) $year : 0;
 			return  $this->gen_time($year.'-'.$month.'-'.$day.' '.$hour.':'.$min.':'.$sec);
 		}
-		
+
 		/**
 		* Output proper Time
 		*
@@ -194,7 +194,7 @@ if (!class_exists("time")){
 		* @param $dtime			Timestamp in UTC
 		* @return Formatted		time string
 		*/
-		public function date($format="Y-m-d H:i:s", $dtime=''){			
+		public function date($format="Y-m-d H:i:s", $dtime=''){
 			$dateTime = new DateTimeLocale($this->helper_dtime($dtime), $this->utcTimeZone);
 			$dateTime->setTimezone($this->userTimeZone);
 			return $dateTime->format($format);
@@ -222,10 +222,10 @@ if (!class_exists("time")){
 			if(!$fromformat) $format = 'Y-m-d'.(($withtime) ? ' H:i' : '');
 			return $this->date($format, $time);
 		}
-		
+
 		/**
 		 * Output Date in format for a specific User
-		 * 
+		 *
 		 * @param integer $intUserID
 		 * @param integer $time Timestamp, in UTC
 		 * @param boolean $withtime
@@ -237,10 +237,10 @@ if (!class_exists("time")){
 		public function date_for_user($intUserID, $time, $withtime=false, $timeonly=false, $long=false, $fromformat=true, $withday=false){
 			$strTimezone = $this->pdh->get('user', 'timezone', array($intUserID));
 			$strUserlang = $this->pdh->get('user', 'lang', array($intUserID));
-			
+
 			if($time === 0 || $time === '0') return $this->user->lang('never', false, false, $strUserlang);
 			if(!$time) return '';
-			
+
 			$format = (($withday) ? (($withday === '2') ? 'D, ' : 'l, ') : '').(($long) ? $this->pdh->get('user', 'date_long', array($intUserID)) : $this->pdh->get('user', 'date_short', array($intUserID)));
 			if($withtime) $format .= ' '.$this->pdh->get('user', 'date_time', array($intUserID));
 			if($timeonly) $format = $this->pdh->get('user', 'date_time', array($intUserID));
@@ -249,22 +249,30 @@ if (!class_exists("time")){
 			$dateTime->setTimezone(new DateTimeZone($strTimezone));
 			return $dateTime->format($format);
 		}
-		
+
 		/**
 		 * Converts a String in Usertime to a User Timestamp, usable for the other time methods
-		 * 
+		 *
 		 * @param unknown $strTime
 		 */
 		public function convert_usertimestring_to_utc($strTime){
 			$objDate = new DateTime($strTime, $this->userTimeZone);
 			return $objDate->format("U");
 		}
-		
-		
+
+		/**
+		 * Get the timezone offset in hours or seconds
+		 *
+		 * @param unknown $inhours
+		 */
+		public function get_timediff_to_utc($inhours=false){
+			$objDate = new DateTime('now', $this->userTimeZone);
+			return ($inhours) ? $objDate->format("O") : $objDate->format("Z");
+		}
 
 		/**
 		 * Adds an offset to a timestamp
-		 * 
+		 *
 		 * @param integer $intTimestamp
 		 * @param integer $intOffset in Seconds, e.g. 3600
 		 * @return integer
@@ -272,10 +280,10 @@ if (!class_exists("time")){
 		public function timestamp_offset($intTimestamp, $intOffset){
 			return $intTimestamp + $intOffset;
 		}
-		
+
 		/**
 		 * Converts a timestamp in another Timezone into an UTC Timestamp
-		 * 
+		 *
 		 * @param integer $intSourceTimestamp
 		 * @param string $strSourceTimezone
 		 * @return integer
@@ -287,15 +295,15 @@ if (!class_exists("time")){
 			$day    = date('d', $intSourceTimestamp);
 			$month  = date('m', $intSourceTimestamp);
 			$year   = date('Y', $intSourceTimestamp);
-			
+
 			$string = $year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second;
 
 			$objDate = new DateTime($string, new DateTimeZone($strSourceTimezone));
 
 			return $objDate->format("U");
 		}
-		
-		
+
+
 		/**
 		 * Output Date in nice-format, like 7 days ago
 		 *
@@ -307,13 +315,13 @@ if (!class_exists("time")){
 		 * @return 	formatted String
 		 */
 		public function nice_date($time=false, $differenceForDeactivating=false, $withtime=false, $timeonly=false, $long=false, $fromformat=true, $withday=false) {
-			
+
 			if($time === 0 || $time === '0') return $this->user->lang('never');
 			if(!$time) return '';
 
 			$lengths	= array("60","60","24","7","4.35");
 			$now		= $this->time;
-			
+
 			if (!is_numeric($time)){
 				$unix_date	= strtotime($time);
 			} else {
@@ -334,7 +342,7 @@ if (!class_exists("time")){
 				$difference		= $unix_date - $now;
 				$tense			= $langTense[0];
 			}
-			
+
 			if ($differenceForDeactivating && $difference > $differenceForDeactivating) return $this->user_date($time, $withtime, $timeonly, $long, $fromformat, $withday);
 
 			for($j = 0; $difference >= $lengths[$j] && $j < count($lengths)-1; $j++) {
@@ -352,7 +360,7 @@ if (!class_exists("time")){
 			return sprintf($this->user->lang('nicetime_format'), "$difference $period", $tense);
 
 		}
-		
+
 		/**
 		 * Checks if $string is given in format $format
 		 * @string 	$string		a formatted timestring
@@ -420,7 +428,7 @@ if (!class_exists("time")){
 			}
 			return true;
 		}
-		
+
 		/*
 		 * Create Timestamp from formatted string
 		 *
@@ -456,7 +464,7 @@ if (!class_exists("time")){
 
 		/**
 		 * Removes H:i from Y-m-d H:i
-		 * 
+		 *
 		 * @param string $timestamp
 		 * @return integer
 		 */
@@ -469,14 +477,14 @@ if (!class_exists("time")){
 		 *
 		 * @string	$format		PHP-Date-Format
 		 * @return 	string		JS-Date-Format
-		 */		
+		 */
 		public function translateformat2js($format) {
 			return str_replace(array_keys($this->formtrans), array_values($this->formtrans), $format);
 		}
 
 		/**
 		 * Transforms php date format into moment.js format
-		 * 
+		 *
 		 * @param string $format PHP-Date-Format
 		 * @return string	moment.js Format
 		 */
@@ -500,14 +508,14 @@ if (!class_exists("time")){
 				'g'		=> 'h',
 				'G'		=> 'H',
 				'i'		=> 'mm',
-				's'		=> 'ss'	
+				's'		=> 'ss'
 			);
 			return str_replace(array_keys($types), array_values($types), $format);
 		}
-		
+
 		/**
 		 * Produces Time-Tag for moment.js
-		 * 
+		 *
 		 * @param integer $date
 		 * @param string $strText
 		 * @param string $strCSSClass
@@ -517,7 +525,7 @@ if (!class_exists("time")){
 			return '<time class="datetime '.$strCSSClass.'" data-timestamp="'.$date.'" datetime="'.$this->date(DATE_ATOM, $date).'" title="'.$strText.'">
 			'.$strText.'</time>';
 		}
-		
+
 		/**
 		 * Converts timezone offset to human-readable form
 		 * Part of timezone fix
@@ -537,7 +545,7 @@ if (!class_exists("time")){
 			}
 			return $sign . str_pad($hour, 2, '0', STR_PAD_LEFT) .':'. str_pad($minutes,2, '0');
 		}
-		
+
 		/**
 		* Fetch the timezones from server
 		*
@@ -547,7 +555,7 @@ if (!class_exists("time")){
 			if(!is_array(self::$ArrTimezones) || empty(self::$ArrTimezones)) {
 				$timezone_data = DateTimeZone::listIdentifiers(1022);
 				$timezone_ab = DateTimeZone::listAbbreviations();
-				
+
 				$london = new DateTimeZone('Europe/London');
 				$london_dt = new DateTime('31-12-2014', $london);
 				foreach($timezone_ab as $key => $more_data) {
@@ -557,7 +565,7 @@ if (!class_exists("time")){
 						$slash = strpos($value, '/');
 						$continent = substr($value, 0, $slash);
 						$region = substr($value, $slash+1);
-						
+
 						try {
 							$current_tz = new DateTimeZone($value);
 							$offset = $current_tz->getOffset($london_dt);
@@ -589,7 +597,7 @@ if (!class_exists("time")){
 			$date	= new DateTimeLocale($this->helper_dtime($dtime), $this->userTimeZone);
 			return $date->format(DATE_RFC2822);
 		}
-		
+
 		/**
 		 * Return Date in RFC 3339 Compatible Output
 		 *
@@ -600,7 +608,7 @@ if (!class_exists("time")){
 			$date	= new DateTimeLocale($this->helper_dtime($dtime), $this->userTimeZone);
 			return $date->format(DATE_RFC3339);
 		}
-		
+
 		public function getdate($dtime='') {
 			$dtime	= $this->gen_time($dtime);
 			$data	= array($dtime);
@@ -619,11 +627,12 @@ if (!class_exists("time")){
 		}
 
 		public function newtime($timestamp, $newtime='now'){
+			$utcoffset	= ($newtime != 'now') ? $this->get_timediff_to_utc() : 0;
 			$newtime	= ($newtime=='now') ? $this->date('H').':'.$this->date('i') : $newtime;
 			$a_times	= explode(':', $newtime);
 			$timestamp -= ($this->date('H', $timestamp)*3600 + $this->date('i', $timestamp)*60);
 			$seconds	= (isset($a_times[2]) && $a_times[2] > 0) ? ($a_times[0]*60) : 0;
-			return $timestamp + ($a_times[0]*3600) + ($a_times[1]*60) + $seconds;
+			return $timestamp + ($a_times[0]*3600) + ($a_times[1]*60) + $seconds + $utcoffset;
 		}
 
 		public function dateDiff($ts1, $ts2, $out='sec', $pos_neg=false){
@@ -654,7 +663,7 @@ if (!class_exists("time")){
 
 		/**
 		 * Returns the age of an date
-		 * 
+		 *
 		 * @param integer $date
 		 * @return integer
 		 */
@@ -679,12 +688,12 @@ if (!class_exists("time")){
 				return false;
 			}
 		}
-		
+
 		/**
-		 * Adds Seconds to a given UTC Timestamp. 
+		 * Adds Seconds to a given UTC Timestamp.
 		 * Respects Winter/Summertime, because of given Timezone of Event
 		 * Returns UTC Timestamp
-		 * 
+		 *
 		 * @param integer $intUtcTimestamp
 		 * @param integer $intSecondsToAdd
 		 * @param string $strEventTimezone
@@ -712,7 +721,7 @@ if (!class_exists("time")){
 		private function helper_dtime($dtime){
 			return ($dtime && !is_object($dtime)) ? (is_numeric($dtime) ? "@$dtime" : $dtime) : "now";
 		}
-		
+
 		private function helper_countbetweendates($timez){
 			return $timez < $this->cbd_enddate && $timez > $this->cbd_startdate;
 		}
@@ -730,7 +739,7 @@ class DateTimeLocale extends DateTime {
 	private static $english_days_short	= array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');
 	private static $english_months		= array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
 	private static $language = false;
-	
+
 	public function __construct($time='now', $timezone=null, $language=false) {
 		try {
 			parent::__construct($time, $timezone);
@@ -741,7 +750,7 @@ class DateTimeLocale extends DateTime {
 		}
 		self::$language = $language;
 	}
-	
+
 	public function __call($name, $arguments) {
 		switch($name) {
 			case 'getTimestamp':
@@ -754,7 +763,7 @@ class DateTimeLocale extends DateTime {
 	public function format($format) {
 		if(is_array(registry::fetch('language')->get(self::$language, 'time_daynames')) && count(registry::fetch('user')->lang('time_daynames', false, false, self::$language)) > 1){
 			$arrSearch = array_merge(self::$english_days, self::$english_days_short, self::$english_months);
-			$arrReplace = array_merge(registry::fetch('user')->lang('time_daynames', false, false, self::$language), registry::fetch('user')->lang('time_daynames_short', false, false, self::$language), registry::fetch('user')->lang('time_monthnames', false, false, self::$language));			
+			$arrReplace = array_merge(registry::fetch('user')->lang('time_daynames', false, false, self::$language), registry::fetch('user')->lang('time_daynames_short', false, false, self::$language), registry::fetch('user')->lang('time_monthnames', false, false, self::$language));
 			$out =  parent::format($format);
 			foreach($arrSearch as $key => $val){
 				$out = preg_replace('/\b'.$val.'\b/u', $arrReplace[$key], $out);
@@ -766,7 +775,7 @@ class DateTimeLocale extends DateTime {
 			return parent::format($format);
 		}
 	}
-	
+
 	public static function createFromFormat($format, $string, $timezone=null) {
 		if(is_array(registry::fetch('user')->lang('time_daynames', false, false, self::$language)) && count(registry::fetch('user')->lang('time_daynames', false, false, self::$language)) > 1){
 			$arrReplace = array_merge(self::$english_days, self::$english_days_short, self::$english_months);
