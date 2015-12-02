@@ -3818,6 +3818,10 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	.responsive .bigDateTd {
 		display: none;
 	}
+
+	#bottommenu_admin, #bottommenu_chars{
+		width: 90% !important;
+	}
 }
 
 @media all and (max-width: 590px) {
@@ -3880,6 +3884,11 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 
 	.list-type1 .ribbons, .list-type2 .ribbons, .list-type3 .ribbons  {
 		display: none;
+	}
+
+	#bottommenu_admin, #bottommenu_chars{
+		width: 98% !important;
+		height: 64px !important;
 	}
 }
 

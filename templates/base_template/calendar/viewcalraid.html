@@ -492,14 +492,14 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 						<i class="fa fa-user fa-lg"></i>
 					</div>
 					<div class="td absmiddle bottommenu_admin_status">
-						<span id="bottommenu_count"></span> - {DD_MODSIGNUPSTATUS} <input type="submit" name="moderate_status" value="{L_raidevent_raid_modstatus}" class="mainoption bi_ok" id="moderate_status_btn"/>
+						<span id="bottommenu_count"></span> - {DD_MODSIGNUPSTATUS} <button type = "submit" name="moderate_status" value="" id="moderate_status_btn"><i class="fa fa-check fa-lg"></i></button>
 					</div>
 					<div class="td absmiddle bottommenu_admin_icons">
 						<i class="fa fa-users fa-lg"></i>
 					</div>
 					<div class="td absmiddle bottommenu_admin_status">
 						<!-- IF SHOW_RAIDGROUPS -->
-						{DD_MODRAIDGROUPS} <input type="submit" name="moderate_group" value="{L_raidevent_raid_modgroup}" class="mainoption bi_ok" />
+						{DD_MODRAIDGROUPS} <button type = "submit" name="moderate_group" value=""><i class="fa fa-check fa-lg"></i></button>
 						<!-- ELSE -->
 						{L_raidevent_no_groups_avail}
 						<!-- ENDIF -->
