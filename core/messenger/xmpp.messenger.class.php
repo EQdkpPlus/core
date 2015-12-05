@@ -141,7 +141,7 @@ class jabber
 
 	/**
 	 */
-	function jabber($server, $port, $username, $password, $use_ssl = false)
+	function __construct($server, $port, $username, $password, $use_ssl = false)
 	{
 		$this->connect_server		= ($server) ? $server : 'localhost';
 		$this->port					= ($port) ? $port : 5222;
