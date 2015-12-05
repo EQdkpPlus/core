@@ -25,7 +25,7 @@ if ( !defined('EQDKP_INC') ){
 
 class user extends gen_class {
 	public static $dependencies = array('pfh');
-	
+
 	/**
 	 *	Field Definitions
 	 */
@@ -53,16 +53,16 @@ class user extends gen_class {
 				return (int)$data['user_id'];
 			}
 		}
-		
+
 		return ANONYMOUS;
 	}
-	
+
 	public function deriveKeyFromExchangekey($userID, $strDerivedType){
 		$strExchangeKey = $this->pdh->get('user', 'exchange_key', array($userID));
 		$strDerivedKey = hash("sha256", md5($strExchangeKey).md5($strDerivedType));
 		return $strDerivedKey;
 	}
-	
+
 	public function getUserIDfromDerivedExchangekey($strDerivedKey, $strDerivedType){
 		$arrUserList = $this->pdh->get('user', 'id_list');
 		foreach($arrUserList as $intUserID){
@@ -70,7 +70,7 @@ class user extends gen_class {
 			$strUserDerivedKey = hash("sha256", md5($strExchangeKey).md5($strDerivedType));
 			if($strUserDerivedKey === $strDerivedKey) return $intUserID;
 		}
-		
+
 		return ANONYMOUS;
 	}
 
@@ -86,8 +86,9 @@ class user extends gen_class {
 	* @param $intStyleID Style ID to set
 	*/
 	public function setup($strLanguage = '', $intStyleID = 0){
+		if(!isset($this->data['session_vars'])) { $this->data['session_vars'] = '';}
 		$this->data['session_vars'] = (strlen($this->data['session_vars']) && is_serialized($this->data['session_vars'])) ? unserialize($this->data['session_vars']) : array();
-		
+
 		//Set Session Vars
 		if($strLanguage != ""){
 			$this->setSessionVar("lang", substr($strLanguage, 0, 20));
@@ -95,11 +96,11 @@ class user extends gen_class {
 		if($intStyleID > 0 && $this->data['user_id'] == ANONYMOUS){
 			$this->setSessionVar("style", $intStyleID);
 		}
-		
+
 		//START Language
 		//-----------------------------
 		if ($this->data['user_id'] == ANONYMOUS) {
-			$strLanguage = (isset($this->data['session_vars']['lang']) && strlen($this->data['session_vars']['lang'])) ? $this->data['session_vars']['lang'] : ''; 
+			$strLanguage = (isset($this->data['session_vars']['lang']) && strlen($this->data['session_vars']['lang'])) ? $this->data['session_vars']['lang'] : '';
 			$this->lang_name = ( $strLanguage != '' && file_exists($this->root_path . 'language/' . $strLanguage) ) ? $strLanguage : $this->config->get('default_lang');
 			$this->data['user_lang'] = $this->lang_name;
 		} else {
@@ -107,9 +108,9 @@ class user extends gen_class {
 			$this->lang_name = ( $strLanguage != '' && file_exists($this->root_path . 'language/' . $strLanguage) ) ? $strLanguage : $this->lang_name;
 			$this->data['user_lang'] = $this->lang_name;
 		}
-		
+
 		$this->objLanguage = register('language', array($this->lang_name));
-		
+
 		if ($this->lang_name == "german") {
 			setlocale(LC_ALL, 'de_DE@euro', 'de_DE', 'deu_deu');
 		}
@@ -128,7 +129,7 @@ class user extends gen_class {
 		} else {
 			$intUserStyleID = (isset($this->data['user_style']) && !$this->config->get('default_style_overwrite')) ? $this->data['user_style'] : $this->config->get('default_style');
 		}
-		
+
 		$intStyleID = intval($intUserStyleID);
 
 		//Mobile Device?
@@ -137,7 +138,7 @@ class user extends gen_class {
 		//Get Style-Information
 		$objQuery = $this->db->prepare("SELECT * FROM __styles WHERE style_id=?")->execute($intStyleID);
 		if ($objQuery && $objQuery->numRows){
-			$this->style = $objQuery->fetchAssoc();	
+			$this->style = $objQuery->fetchAssoc();
 		}
 
 		//No Style-Information -> Fallback to the default style
@@ -147,7 +148,7 @@ class user extends gen_class {
 				$this->style = $objQuery->fetchAssoc();
 			}
 		}
-		
+
 		//No infos about default style? Take the first one
 		//Fallback to first available style
 		if ( !$this->style) {
@@ -157,7 +158,7 @@ class user extends gen_class {
 				$intStyleID = $this->style['style_id'];
 			}
 		}
-		
+
 		//Now set the Style-Settings
 		if(empty($this->data['user_timezone']) || $this->data['user_timezone'] == '') $this->data['user_timezone'] = $this->config->get('timezone');
 
@@ -187,7 +188,7 @@ class user extends gen_class {
 			$this->data['custom_fields'] 		= ($this->data['custom_fields'] && unserialize($this->data['custom_fields'])) ? unserialize($this->data['custom_fields']) : array();
 			$this->data['plugin_settings'] 		= ($this->data['plugin_settings'] && unserialize($this->data['plugin_settings'])) ? unserialize($this->data['plugin_settings']) : array();
 			$this->data['notification_settings'] = ($this->data['notifications'] && unserialize($this->data['notifications'])) ? unserialize($this->data['notifications']) : array();
-				
+
 			list($this->data['user_password_clean'], $this->data['user_salt']) = explode(':', $this->data['user_password']);
 			$this->data['user_email']			= register('encrypt')->decrypt($this->data['user_email']);
 			$this->data['auth_account'] 		= @unserialize(register('encrypt')->decrypt($this->data['auth_account']));
@@ -221,7 +222,7 @@ class user extends gen_class {
 
 		return $this->objLanguage->get($this->lang_name, $key, $return_key, $error, $lang, $error_key);
 	}
-	
+
 	/**
 	* Checks if a user has permission to do ($auth_value)
 	*
@@ -323,16 +324,16 @@ class user extends gen_class {
 			return ($boolDie) ? message_die($this->lang('noauth'), $this->lang('noauth_default_title'), 'access_denied', true) : false;
 		}
 	}
-	
+
 	public function check_pageobject($strPageObject, $boolDie = true, $intUserID = 0){
 		if($intUserID == 0) $intUserID = $this->data['user_id'];
-		
+
 		$blnResult = $this->pdh->get('articles', 'check_pageobject_permission', array($strPageObject, $intUserID));
 		if($blnResult) return true;
-		
+
 		return ($boolDie) ? message_die($this->lang('noauth'), $this->lang('noauth_default_title'), 'access_denied', true) : false;
 	}
-	
+
 	public function check_pageobjects($arrPageObjects, $mode = 'AND', $boolDie = true, $intUserID = 0){
 		if (is_array($arrPageObjects) && count($arrPageObjects) > 0){
 			if (strtolower($mode) == 'and'){
@@ -352,14 +353,14 @@ class user extends gen_class {
 						return true;
 					}
 				}
-	
+
 				if ($boolDie){
 					return message_die($this->lang('noauth'), $this->lang('noauth_default_title'), 'access_denied', true);
 				}
 			}
-	
+
 		}
-	
+
 		return false;
 	}
 
@@ -368,7 +369,7 @@ class user extends gen_class {
 		$objQuery = $this->db->prepare('UPDATE __users :p WHERE user_id=?')->set(array(
 				'user_login_key' => $strAutologinKey,
 			))->execute((int)$intUserID);
-		
+
 		return $objQuery;
 	}
 
@@ -399,20 +400,20 @@ class user extends gen_class {
 	public function generate_salt(){
 		return substr(md5(generateRandomBytes(55)), 0, 23);
 	}
-	
-	
+
+
 	/**
 	 *	Generate User-Settings
-	 */	
+	 */
 	public static function get_settingsdata($user_id=-1) {
 		$settingsdata = array();
-		
+
 		$priv_wall_posts_read_array = array(
 			'0'=>'user_priv_all',
 			'1'=>'user_priv_user',
 			'2'=>'user_priv_onlyme'
 		);
-		
+
 		$priv_wall_posts_write_array = array(
 			'1'=>'user_priv_user',
 			'2'=>'user_priv_onlyme'
@@ -451,12 +452,12 @@ class user extends gen_class {
 		foreach(register('pdh')->get('styles', 'styles', array(0, false)) as $styleid=>$row){
 			$style_array[$styleid] = $row['style_name'];
 		}
-		
+
 		// hack the birthday format, to be sure there is a 4 digit year in it
 		$birthday_format = register('user')->style['date_notime_short'];
 		if(stripos($birthday_format, 'y') === false) $birthday_format .= 'Y';
 		$birthday_format = str_replace('y', 'Y', $birthday_format);
-		
+
 		$settingsdata = array(
 			'registration_info'	=> array(
 				'registration_info'	=> array(
@@ -569,7 +570,7 @@ class user extends gen_class {
 							'tolang'	=> true,
 							'default'	=> 1,
 						),
-						
+
 				),
 				'user_wall' => array(
 					'priv_wall_posts_read'	=> array(
@@ -584,7 +585,7 @@ class user extends gen_class {
 					),
 				),
 			),
-			
+
 			'view_options'		=> array(
 				'view_options'	=> array(
 					'user_lang'	=> array(
@@ -687,17 +688,17 @@ class user extends gen_class {
 				),
 			),
 		);
-		
+
 		//Contact Fields
 		$arrContactFields = register('pdh')->get('user_profilefields', 'contact_fields');
 		if (count($arrContactFields)) $settingsdata['profile']['user_contact'] = $arrContactFields;
-		
+
 		//Normal Profile Fields
 		$arrProfileFields = register('pdh')->get('user_profilefields', 'usersettings_fields');
 		foreach($arrProfileFields as $key => $val){
 			$settingsdata['profile']['profile'][$key] = $val;
 		}
-		
+
 		//Privacy Options
 		foreach($arrContactFields as $key => $val){
 			$settingsdata['privacy_options']['user_priv_contact']['priv_'.$key] = array(
@@ -717,13 +718,13 @@ class user extends gen_class {
 					'default'	=> 1,
 			);
 		}
-		
+
 		//Notifications
 		$arrNotificationTypes = register('pdh')->get('notification_types', 'id_list');
 		$arrNotificationMethods = register('ntfy')->getAvailableNotificationMethods();
 		array_unshift($arrNotificationMethods, register('user')->lang('notification_type_none'), register('user')->lang('notification_type_eqdkp'));
 		$arrNotificationSettings = register('pdh')->get('user', 'notification_settings', array($user_id));
-		
+
 		foreach($arrNotificationTypes as $strNotificationType){
 			if ($strNotificationType === 'comment_new_article'){
 				$arrCategoryIDs = register('pdh')->sort(register('pdh')->get('article_categories', 'id_list', array()), 'articles', 'sort_id', 'asc');
@@ -731,7 +732,7 @@ class user extends gen_class {
 				foreach($arrCategoryIDs as $caid){
 					$arrCategories[$caid] = register('pdh')->get('article_categories', 'name_prefix', array($caid)).register('pdh')->get('article_categories', 'name', array($caid));
 				}
-				
+
 				$settingsdata['notifications']['notifications']['ntfy_'.$strNotificationType] = array(
 						'type'		=> 'dropdown',
 						'options'	=> $arrNotificationMethods,
@@ -797,17 +798,17 @@ class user extends gen_class {
 							$icon = '<img src="'.registry::get_const('server_path').'images/flags/'.$pre.'.svg" class="icon icon-language absmiddle" title="'.(($lang['ISO_LANG_NAME']) ? $lang['ISO_LANG_NAME'] : ucfirst($file)).'"/> <span>';
 						}
 					}
-					
+
 					$lang_name_tp = (($lang['ISO_LANG_NAME']) ? $lang['ISO_LANG_NAME'].(($blnWithIsoShort) ? ' ('.$lang['ISO_LANG_SHORT'].')' : '') : ucfirst($file));
 					$key = ($blnIsoAsKey) ? $lang['ISO_LANG_SHORT'] : $file;
-					
+
 					$language_array[$key] = (($blnWithIcon) ? $icon : '').$lang_name_tp.(($blnWithIcon) ? '</span>' : '');
 				}
 			}
 		}
 		return $language_array;
 	}
-	
+
 	//Should be used for resolve multilang serialized array to display the value for the user in the right language
 	public function multilangValue($strRawContent){
 		$arrValues = @unserialize($strRawContent);
