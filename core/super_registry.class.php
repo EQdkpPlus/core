@@ -269,7 +269,7 @@ abstract class super_registry {
 			die();
 		}
 		//copy config-data into our array
-		$configs = array('ftphost', 'ftpport', 'ftpuser', 'ftppass', 'ftproot', 'use_ftp', 'encryptionKey', 'dbtype', 'dbhost', 'dbname', 'dbuser', 'dbpass', 'table_prefix', 'debug');
+		$configs = array('ftphost', 'ftpport', 'ftpuser', 'ftppass', 'ftproot', 'use_ftp', 'encryptionKey', 'dbtype', 'dbhost', 'dbname', 'dbuser', 'dbpass', 'dbport', 'dbpers', 'table_prefix', 'debug');
 		foreach($configs as $config) {
 			if(isset($$config)) self::$const[$config] = $$config;
 		}
