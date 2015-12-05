@@ -208,6 +208,11 @@ class install extends gen_class {
 		//Set chmod644 for config.php
 		@chmod($this->root_path."config.php", 0644);
 		
+		//Reset Opcache, for PHP7
+		if(function_exists('opcache_reset')){
+			opcache_reset();
+		}
+		
 		return $this->lang['install_end_text'];
 	}
 	

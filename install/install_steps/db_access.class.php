@@ -161,6 +161,11 @@ class db_access extends install_generic {
 		$content .= '$table_prefix = \''.$this->table_prefix.'\';'."\n\n";
 		$content .= '?>';
 		$this->pfh->putContent($this->root_path.'config.php', $content);
+		
+		//Reset Opcache, for PHP7
+		if(function_exists('opcache_reset')){
+			opcache_reset();
+		}
 	}
 }
 ?>

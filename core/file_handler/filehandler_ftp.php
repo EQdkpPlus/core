@@ -145,14 +145,32 @@ if (!class_exists("filehandler_ftp")) {
 
 		public function putContent($filename, $data){		
 			if (!$this->init_ftp()) return false;
-			$filename = $this->remove_rootpath($filename);
-			return $this->ftp->put_string($filename, $data);
+			$strCleanedFilename = $this->remove_rootpath($filename);
+			
+			$blnResult = $this->ftp->put_string($strCleanedFilename, $data);
+			
+			//Invalidate Opcache in PHP7
+			$strExtension = pathinfo($filename, PATHINFO_EXTENSION);
+			if($blnResult && utf8_strtolower($strExtension) === 'php' && function_exists('opcache_invalidate')){
+				opcache_invalidate(realpath($filename));
+			}
+			
+			return $blnResult;
 		}
 		
 		public function addContent($filename, $data){
 			if (!$this->init_ftp()) return false;
-			$filename = $this->remove_rootpath($filename);
-			return $this->ftp->add_string($filename, $data);
+			$strCleanedFilename = $this->remove_rootpath($filename);
+			
+			$blnResult = $this->ftp->add_string($strCleanedFilename, $data);
+			
+			//Invalidate Opcache in PHP7
+			$strExtension = pathinfo($filename, PATHINFO_EXTENSION);
+			if($blnResult && utf8_strtolower($strExtension) === 'php' && function_exists('opcache_invalidate')){
+				opcache_invalidate(realpath($filename));
+			}
+			
+			return $blnResult;
 		}
 
 		/**
@@ -294,9 +312,19 @@ if (!class_exists("filehandler_ftp")) {
 		public function copy($source, $dest){
 			if (!$this->init_ftp()) return false;
 			$this->CheckCreateSubfolder($dest);
-			$source = $this->remove_rootpath($source);
-			$dest = $this->remove_rootpath($dest);
-			return $this->ftp->ftp_copy($source, $dest);
+			
+			$strCleanedSource = $this->remove_rootpath($source);
+			$strCleanedDest = $this->remove_rootpath($dest);
+			
+			$blnResult = $this->ftp->ftp_copy($strCleanedSource, $strCleanedDest);
+			
+			//Invalidate Opcache in PHP7
+			$strExtension = pathinfo($source, PATHINFO_EXTENSION);
+			if($blnResult && utf8_strtolower($strExtension) === 'php' && function_exists('opcache_invalidate')){
+				opcache_invalidate(realpath($dest));
+			}
+			
+			return $blnResult;
 		}
 
 		/**

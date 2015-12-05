@@ -93,6 +93,13 @@ if (!class_exists("filehandler_php")) {
 		public function putContent($filename, $data){
 			$intBits = file_put_contents($filename, $data);
 			if(!$this->on_iis()) @chmod($filename, $this->get_chmod());
+			
+			//Invalidate Opcache in PHP7
+			$strExtension = pathinfo($filename, PATHINFO_EXTENSION);
+			if(utf8_strtolower($strExtension) === 'php' && function_exists('opcache_invalidate')){
+				opcache_invalidate(realpath($filename));
+			}
+			
 			return ($intBits !== false) ? true : false;
 		}
 		
@@ -101,6 +108,13 @@ if (!class_exists("filehandler_php")) {
 			if ($tmpHandle){
 				$intBits = fwrite($tmpHandle, $data);
 				fclose($tmpHandle);
+				
+				//Invalidate Opcache in PHP7
+				$strExtension = pathinfo($filename, PATHINFO_EXTENSION);
+				if(utf8_strtolower($strExtension) === 'php' && function_exists('opcache_invalidate')){
+					opcache_invalidate(realpath($filename));
+				}
+				
 				return ($intBits !== false) ? true : false;
 			}
 			return false;
@@ -244,7 +258,16 @@ if (!class_exists("filehandler_php")) {
 		*/
 		public function copy($source, $dest){
 			$this->CheckCreateSubfolder($dest, $this->root_path);
-			return copy($source, $dest);
+			
+			$blnResult = copy($source, $dest);
+			
+			//Invalidate Opcache in PHP7
+			$strExtension = pathinfo($source, PATHINFO_EXTENSION);
+			if($blnResult && utf8_strtolower($strExtension) === 'php' && function_exists('opcache_invalidate')){
+				opcache_invalidate(realpath($dest));
+			}
+			
+			return $blnResult;
 		}
 		
 		/**

@@ -79,6 +79,11 @@ class encryptionkey extends install_generic {
 		$content .= "\n\n".'$encryptionKey = \''.md5(md5(md5($this->key))).'\';'."\n";
 		$content .= '?>';
 		$this->pfh->putContent($this->root_path.'config.php', $content);
+		
+		//Reset Opcache, for PHP7
+		if(function_exists('opcache_reset')){
+			opcache_reset();
+		}
 	}
 }
 ?>

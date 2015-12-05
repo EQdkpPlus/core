@@ -212,6 +212,11 @@ class ftp_access extends install_generic {
 		$content .= '$use_ftp = '.$this->use_ftp.';'."\n";
 		$content .= "\n".'?>';
 		$this->pfh->putContent($this->root_path.'config.php', $content);
+		
+		//Reset Opcache, for PHP7
+		if(function_exists('opcache_reset')){
+			opcache_reset();
+		}
 	}
 }
 ?>

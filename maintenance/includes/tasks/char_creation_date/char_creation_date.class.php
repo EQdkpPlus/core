@@ -52,7 +52,7 @@ class char_creation_date extends task {
 		$adjs_date = $this->pdh->aget('adjustment', 'date', 0, array($this->pdh->get('adjustment', 'id_list')));
 		$first_adjs = array();
 		foreach($adjs4mem as $member_id => $adjs) {
-			$first_adj = 99999999999;
+			$first_adj = PHP_INT_MAX;
 			foreach($adjs as $id) {
 				if($adjs_date[$id] < $first_adj) $first_adj = $adjs_date[$id];
 			}
