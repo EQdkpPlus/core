@@ -2078,7 +2078,7 @@ ul.breamcrumb .current::before{
 .article-container.featured h2:before, .article_detail_container.featured h1.contentTitle:before {
 	content: "\f005";
 	font-family: FontAwesome;
-	color: gold;
+	color: @featuredColor;
 	font-size: 16px;
 }
 
@@ -4167,55 +4167,44 @@ button.thirdpartylogin.openid {
 }
 
 /* Ribbons */
-
-.article_content {
-  position: relative;
-}
-
+/* Ribbons */
 @ribbon: @eqdkpContentHighlightColor;
-.ribbon {
-  position: absolute;
-  right: -5px; top: -5px;
-  z-index: 1;
-  overflow: hidden;
-  width: 75px; height: 75px;
-  text-align: right;
-	& span {
-	  font-size: 10px;
-	  font-weight: bold;
-	  color: @eqdkpContentBackgroundColor;
-	  text-transform: uppercase;
-	  text-align: center;
-	  line-height: 20px;
-	  height: 20px;
-	  transform: rotate(45deg);
-	  width: 100px;
-	  display: block;
-	  background: @ribbon;
-	  background: linear-gradient(lighten(@ribbon,20%) 0%, @ribbon 100%);
-	  box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
-	  position: absolute;
-	  top: 19px; right: -21px;
-		&::before {
-			content: "";
-		  position: absolute; left: 0px; top: 100%;
-		  z-index: -1;
-		  border-left: 3px solid @ribbon;
-		  border-right: 3px solid transparent;
-		  border-bottom: 3px solid transparent;
-		border-top: 3px solid @ribbon;	}
-		&::after {
-		  content: "";
-		  position: absolute; right: 0px; top: 100%;
-		  z-index: -1;
-		  border-left: 3px solid transparent;
-		  border-right: 3px solid @ribbon;
-		  border-bottom: 3px solid transparent;
-		  border-top: 3px solid @ribbon;	}
-	}
-}
 @featuredColor: gold;
+
+.ribbon {
+	margin: 3px;
+    margin-top: 8px;
+}
+
+.ribbon span {
+  position: relative;
+  background: @ribbon;
+  background: linear-gradient(lighten(@ribbon,20%) 0%, @ribbon 100%);
+  padding: 5px 10px;
+  color: @eqdkpContentBackgroundColor;
+  text-align: center;
+  display: block;
+}
+
+.ribbon span:before {
+  content: '';
+  position: absolute;
+  height: 0;
+  width: 0;
+}
+
+.ribbon span:before {
+  bottom: 100%;
+  right: 0px;
+  border-bottom: 10px solid @ribbon;
+  border-right: 10px solid transparent;
+}
+
 .featured .ribbon > span {
 	background: linear-gradient(lighten(@featuredColor,20%) 0%, @featuredColor 100%);
 	color: black;
+}
+
+.featured .ribbon > span:before {
+	border-bottom-color: @featuredColor;
 }
