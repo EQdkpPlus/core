@@ -171,6 +171,8 @@ class config extends gen_class {
 				}
 			}
 			$this->blnRealConfigLoaded = true;
+		} else {
+			$this->fallback_oldtable2newtable();
 		}
 
 		return $this->config;
@@ -285,6 +287,15 @@ class config extends gen_class {
 	
 	public function flush(){
 		$this->config_save();
+	}
+	
+	// this fallback is for users with an empty localhost and the old table __backup_cnf (1.x to 2.x). Its just for
+	// reducing the amount of support tickets ;) Could be removed in 3.0
+	private function fallback_oldtable2newtable(){
+		if(!$this->db->checkQuery("SELECT * FROM __config;")){
+			$this->db->query("RENAME TABLE `__backup_cnf` TO `__config`;");
+			$this->db->query("ALTER TABLE `__config` CHANGE COLUMN `config_plugin` `config_plugin` VARCHAR(40) NOT NULL DEFAULT 'core' COLLATE 'utf8_bin';");
+		}
 	}
 }
 ?>
