@@ -90,7 +90,7 @@ class Manage_Live_Update extends page_generic {
 			if ($id < $showFrom) continue;
 			$this->tpl->add_js(
 				"function lu_step".$id."(){
-					set_progress_bar_value(".((($id-1) < 0) ? 0 : $id-1).", '".$value['label']."...');
+					set_progress_bar_value(".((($id-1) < 0) ? 0 : $id-1).", '".$this->jquery->sanitize($value['label'])."...');
 
 					$.get('manage_live_update.php".$this->SID."&step=".$id."&link_hash=".$this->CSRFGetToken('step')."', function(data) {
 					  if ($.trim(data) == 'true'){
