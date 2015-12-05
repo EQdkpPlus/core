@@ -243,7 +243,7 @@ class calendar_pageobject extends pageobject {
 							$eventcolor_txt	= (get_brightness($eventcolor) > 130) ? 'black' : 'white';
 
 							$event_json[] = array(
-								'eventid'		=> $calid,
+								'eventid'		=> 0,
 								'title'			=> $comp->getProperty( 'summary', 1),
 								'start'			=> $startdate_out,
 								'end'			=> $enddate_out,
@@ -264,7 +264,7 @@ class calendar_pageobject extends pageobject {
 		if(is_array($caleventids) && count($caleventids) > 0){
 			foreach($caleventids as $calid){
 				$eventextension	= $this->pdh->get('calendar_events', 'extension', array($calid));
-				$raidmode		= $eventextension['calendarmode'];
+				$raidmode		= (isset($eventextension['calendarmode'])) ? $eventextension['calendarmode'] : false;
 				$eventcolor		= $this->pdh->get('calendars', 'color', $this->pdh->get('calendar_events', 'calendar_id', array($calid)));
 				$eventcolor_txt	= (get_brightness($eventcolor) > 130) ? 'black' : 'white';
 
