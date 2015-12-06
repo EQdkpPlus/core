@@ -52,54 +52,43 @@ if(!class_exists('pdh_r_adjustment')){
 		);
 
 		private $decayed = array();
+		
+		//Trunks
+		private $index = array();
+		private $objPagination = null;
 
 		public function reset($affected_ids=array()) {
 			//tell apas which ids to delete
-			if(empty($affected_ids) && !empty($this->adjustments)) $affected_ids = array_keys($this->adjustments);
+			if(empty($affected_ids) && !empty($this->index)) $affected_ids = array_keys($this->index);
 			$this->apa->enqueue_update('adjustment', $affected_ids);
-			$this->pdc->del('pdh_adjustment_table');
-			$this->adjustments = NULL;
+			
+			$this->objPagination = register("cachePagination", array("adjustments", "adjustment_id", "__adjustments", array(), 100));
+			return $this->objPagination->reset($affected_ids);
 		}
 
 		public function init(){
-			//get cached data
-			$this->adjustments = $this->pdc->get('pdh_adjustment_table');
-			if($this->adjustments !== NULL){
-				return true;
-			}
-			
-			$objQuery = $this->db->query("SELECT * FROM __adjustments ORDER BY adjustment_date DESC;");
-			if($objQuery){
-				while($row = $objQuery->fetchAssoc()){
-					$this->adjustments[$row['adjustment_id']]['value'] = $row['adjustment_value'];
-					$this->adjustments[$row['adjustment_id']]['date'] = $row['adjustment_date'];
-					$this->adjustments[$row['adjustment_id']]['member'] = $row['member_id'];
-					$this->adjustments[$row['adjustment_id']]['reason'] = $row['adjustment_reason'];
-					$this->adjustments[$row['adjustment_id']]['event'] = $row['event_id'];
-					$this->adjustments[$row['adjustment_id']]['added_by'] = $row['adjustment_added_by'];
-					$this->adjustments[$row['adjustment_id']]['updated_by'] = $row['adjustment_updated_by'];
-					$this->adjustments[$row['adjustment_id']]['group_key'] = $row['adjustment_group_key'];
-					$this->adjustments[$row['adjustment_id']]['raid_id'] = $row['raid_id'];
-				}
-				
-				$this->pdc->put('pdh_adjustment_table', $this->adjustments, null);
-			}
-	
+			$this->objPagination = register("cachePagination", array("adjustments", "adjustment_id", "__adjustments", array(), 100));
+			$this->objPagination->initIndex();
+			$this->index = $this->objPagination->getIndex();
 		}
 
 		public function get_id_list(){
-			return (is_array($this->adjustments)) ? array_keys($this->adjustments) : array();
+		if(is_array($this->index)){
+				return $this->index;
+			}else{
+				return array();
+			}
 		}
 
 		public function get_value($adj_id, $dkp_id=0, $date=0) {
 			if($dkp_id) {
 				if(!isset($this->decayed[$dkp_id])) $this->decayed[$dkp_id] = $this->apa->is_decay('adjustment', $dkp_id);
 				if($this->decayed[$dkp_id]) {
-					$data = array('id' => $adj_id, 'value' => $this->adjustments[$adj_id]['value'], 'date' => $this->adjustments[$adj_id]['date']);
+					$data = array('id' => $adj_id, 'value' =>  $this->objPagination->get($adj_id, 'adjustment_value'), 'date' => $this->get_date($id));
 					$val = $this->apa->get_decay_val('adjustment', $dkp_id, $date, $data);
 				}
 			}
-			return (isset($val)) ? $val : $this->adjustments[$adj_id]['value'];
+			return (isset($val)) ? $val : $this->objPagination->get($adj_id, 'adjustment_value');
 		}
 
 		public function get_html_value($adj_id, $dkp_id=0) {
@@ -113,7 +102,7 @@ if(!class_exists('pdh_r_adjustment')){
 		}
 
 		public function get_date($adj_id){
-			return $this->adjustments[$adj_id]['date'];
+			return $this->objPagination->get($adj_id, "adjustment_date");
 		}
 
 		public function get_html_date($adj_id) {
@@ -121,7 +110,7 @@ if(!class_exists('pdh_r_adjustment')){
 		}
 
 		public function get_member($adj_id){
-			return $this->adjustments[$adj_id]['member'];
+			return $this->objPagination->get($adj_id, "member_id");
 		}
 
 		public function get_member_name($adj_id) {
@@ -133,36 +122,28 @@ if(!class_exists('pdh_r_adjustment')){
 		}
 
 		public function get_event($adj_id) {
-			return $this->adjustments[$adj_id]['event'];
+			return $this->objPagination->get($adj_id, "event_id");
 		}
 
 		public function get_event_name($adj_id) {
-			return $this->pdh->get('event', 'name', array($this->adjustments[$adj_id]['event']));
+			return $this->pdh->get('event', 'name', array($this->get_event($adj_id)));
 		}
 
 		public function get_reason($adj_id){
-			return isset($this->adjustments[$adj_id]) ? $this->adjustments[$adj_id]['reason'] : '';
+			$strReason = $this->objPagination->get($adj_id, "adjustment_reason");
+			return strlen($strReason) ? $strReason : '';
 		}
 
 		public function get_raid_id($adj_id){
-			return $this->adjustments[$adj_id]['raid_id'];
+			return $this->objPagination->get($adj_id, "raid_id");
 		}
 		
 		public function get_html_raid_id($adj_id, $base_url, $url_suffix = ''){
 			return '<a href="'.$this->pdh->get('raid', 'raidlink', array($this->get_raid_id($adj_id), $base_url, $url_suffix)).'">'.$this->pdh->get('raid', 'event_name', array($this->get_raid_id($adj_id))).'</a>';
 		}
-		
 
 		public function get_adjsofmember($member_id){
-			$adjustment_ids = array();
-			if (is_array($this->adjustments)){
-				foreach($this->adjustments as $id => $details){
-					if($details['member'] == $member_id){
-						$adjustment_ids[] = $id;
-					}
-				}
-			}
-			return $adjustment_ids;
+			return $this->objPagination->search("member_id", $member_id);
 		}
 		
 		public function get_adjsofmembers($arrMemberIDs){
@@ -174,25 +155,28 @@ if(!class_exists('pdh_r_adjustment')){
 			return array_unique($adj4member);
 		}
 
-		
 		public function get_adjsofuser($user_id){
 			$arrMemberList = $this->pdh->get('member', 'connection_id', array($user_id));
 			$adjustment_ids = array();
-			if (is_array($this->adjustments)){
-				foreach($this->adjustments as $id => $details){
-					if(in_array($details['member'],$arrMemberList)){
+			
+			if (is_array($this->index)){
+				foreach($this->index as $adj_id){
+					$intMember = $this->get_member($adj_id);
+					if(in_array($intMember, $arrMemberList)){
 						$adjustment_ids[] = $id;
 					}
 				}
 			}
+			
 			return $adjustment_ids;
 		}
-
+		
 		public function get_adjsofraid($raid_id, $blnGroupedByAdjKey=false){
 			$adjustment_ids = $adjGrouped = array();
-			if(is_array($this->adjustments)){
-				foreach($this->adjustments as $id => $adj){
-					if($raid_id == $adj['raid_id']){
+			if(is_array($this->index)){
+				foreach($this->index as $adj_id){
+					$intRaidID = $this->get_raid_id($adj_id);
+					if($raid_id == $intRaidID){
 						$adjustment_ids[] = $id;
 						$adjGrouped[$this->get_group_key($id)] = $id;
 					}
@@ -200,29 +184,16 @@ if(!class_exists('pdh_r_adjustment')){
 			}
 			return ($blnGroupedByAdjKey) ? $adjGrouped : $adjustment_ids;
 		}
-
 		public function get_adjsofeventid($event_id) {
-			$adjs_ids = array();
-			if(is_array($this->adjustments)) {
-				foreach($this->adjustments as $id => $adj) {
-					if($event_id == $adj['event']) $adjs_ids[] = $id;
-				}
-			}
-			return $adjs_ids;
+			return $this->objPagination->search("event_id", $event_id);
 		}
 
 		public function get_group_key($adj_id){
-			return $this->adjustments[$adj_id]['group_key'];
+			return $this->objPagination->get($adj_id, "adjustment_group_key");
 		}
 
 		public function get_ids_of_group_key($group_key){
-			$ids = array();
-			foreach($this->adjustments as $id => $det){
-				if($det['group_key'] == $group_key){
-					$ids[] = $id;
-				}
-			}
-			return $ids;
+			return $this->objPagination->search("adjustment_group_key", $group_key);
 		}
 
 		public function get_link($adj_id, $baseurl, $url_suffix=''){

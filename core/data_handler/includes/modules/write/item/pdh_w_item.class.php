@@ -122,7 +122,6 @@ if ( !class_exists( "pdh_w_item" ) ) {
 				
 				if(!$objQuery) {
 					$retu[] = false;
-					break;
 				}
 				$hook_id = $item_id;
 			} else {
