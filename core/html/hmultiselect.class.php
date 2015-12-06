@@ -38,7 +38,7 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
  * tolang		(boolean)	apply language function on values of option-array
  * text_after	(string)	Text added after the Multiselect
  * text_before	(string)	Text added before the Multiselect
- * 
+ *
  * additional options for jquery->multiselect
  * height 		(int)		height of the dropdown in px
  * width 		(int)		width of the dropdown in px
@@ -50,10 +50,10 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 class hmultiselect extends html {
 
 	protected static $type = 'dropdown';
-	
+
 	public $name = '';
 	public $disabled = false;
-	
+
 	public $multiple = true;
 	public $width = 200;
 	public $height = 200;
@@ -62,10 +62,10 @@ class hmultiselect extends html {
 	public $tolang = false;
 	public $text_after = "";
 	public $text_before = "";
-	
-	private $jq_options = array('height', 'width', 'preview_num', 'multiple', 'no_animation', 'header', 'filter');
+
+	private $jq_options = array('height', 'width', 'preview_num', 'multiple', 'no_animation', 'header', 'filter', 'clickfunc');
 	private $out = '';
-	
+
 	public function _construct() {
 		$dropdown = "";
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
@@ -80,7 +80,7 @@ class hmultiselect extends html {
 			foreach ($this->options as $key => $value) {
 				if($this->tolang) $value = ($this->user->lang($value, false, false)) ? $this->user->lang($value) : (($this->game->glang($value)) ? $this->game->glang($value) : $value);
 				$disabled = (($key === 0 && in_array($key, $this->todisable, true)) || ($key !== 0 && in_array($key, $this->todisable))) ? ' disabled="disabled"' : '';
-				$selected_choice = (!empty($this->value) && in_array($key, $this->value)) ? 'selected="selected"' : '';
+				$selected_choice = (!empty($this->value) && ($this->value == 'all' || in_array($key, $this->value))) ? 'selected="selected"' : '';
 				$dropdown .= "<option value='".$key."' ".$selected_choice.$disabled.">".$value."</option>";
 			}
 		} else {
@@ -89,16 +89,16 @@ class hmultiselect extends html {
 		$dropdown .= "</select>";
 		$options = array('id' => $this->id);
 		foreach($this->jq_options as $opt) $options[$opt] = $this->$opt;
-		
+
 		$this->jquery->MultiSelect('', array(), array(), $options);
 		if(strlen($this->text_after)) $dropdown .= $this->text_after;
 		$this->out = $dropdown;
 	}
-	
+
 	public function _toString() {
 		return $this->out;
 	}
-	
+
 	public function _inpval() {
 		return $this->in->getArray($this->name, $this->datatype);
 	}

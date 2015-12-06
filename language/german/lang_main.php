@@ -660,6 +660,7 @@ $lang = array(
 "calendar_event_name" => "Name des Ereignisses",
 "calendar_raidgroup"	=> "Raidgruppe",
 "calendar_location"		=> "Ort",
+"calendar_others"	=> 'Sonstiges',
 "raideventlist_masssignin" => "Für ausgewählte Raids anmelden",
 "raideventlist_masssignbttn" => "Status ändern",
 "raideventlist_export_ical" => "Kalender exportieren",

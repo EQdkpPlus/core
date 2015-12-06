@@ -703,6 +703,7 @@ $lang = array(
 	"calendar_event_name" => 'Name of the event',
 	"calendar_raidgroup" => 'Raidgroup',
 	"calendar_location"		=> "Location",
+	"calendar_others"	=> 'Others',
 	"raideventlist_masssignin" => 'Signup to selected raids',
 	"raideventlist_masssignbttn" => 'Sign up',
 	"raideventlist_export_ical" => 'Export calendar',

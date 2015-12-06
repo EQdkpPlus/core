@@ -206,190 +206,192 @@ class calendar_pageobject extends pageobject {
 		exit;
 	}
 
-	// fetch the data for the calendar and output as JSON
-	public function get_json(){
+	public function get_json_helper($calender_id){
 		$event_json		= array();
 		$filters		= ($this->in->exists('filters', 'int')) ? $this->in->getArray('filters', 'int') : false;
 		$range_start	= $this->time->fromformat($this->in->get('start', ''), 'Y-m-d');
 		$range_end		= $this->time->fromformat($this->in->get('end', ''), 'Y-m-d');
 		$filterby		= $this->in->get('filterby', 'all');
 
-		// parse the feeds
-		$feeds = $this->pdh->get('calendars', 'idlist', array('feed', $filters));
-		if(is_array($feeds) && count($feeds) > 0){
-			foreach($feeds as $feed){
-				$feedurl = $this->pdh->get('calendars', 'feed', array($feed));
-				if(isValidURL($feedurl)){
-					require_once($this->root_path.'libraries/icalcreator/iCalcreator.class.php');
-					$vcalendar = new vcalendar(array( 'url' => $feedurl ));
-					if( TRUE === $vcalendar->parse()){
-						$vcalendar->sort();
-						while($comp = $vcalendar->getComponent('vevent')){
-							$startdate		= $comp->getProperty('dtstart', 1);
-							$enddate		= $comp->getProperty('dtend', 1);
+		if($calender_id > 0){
+			$feedurl		= $this->pdh->get('calendars', 'feed', array($calender_id));
 
-							// set the date for the events
-							$allday			= (isset($enddate['hour']) && isset($startdate['hour'])) ? false : true;
-							if($allday){
-								$startdate_out	= sprintf("%04d", $startdate['year']).'-'.sprintf("%02d", $startdate['month']).'-'.sprintf("%02d", $startdate['day']).' 00:00';
-								$enddate_out	= sprintf("%04d", $enddate['year']).'-'.sprintf("%02d", $enddate['month']).'-'.sprintf("%02d", $enddate['day']-1).' 00:00';
-							}else{
-								$startdate_out	= sprintf("%04d", $startdate['year']).'-'.sprintf("%02d", $startdate['month']).'-'.sprintf("%02d", $startdate['day']).' '.((isset($startdate['hour'])) ? sprintf("%02d", $startdate['hour']).':'.sprintf("%02d", $startdate['min']) : '00:00');
-								$enddate_out	= sprintf("%04d", $enddate['year']).'-'.$enddate['month'].'-'.$enddate['day'].' '.((isset($enddate['hour'])) ? $enddate['hour'].':'.$enddate['min'] : '00:00');
+			// the event is a feed URL
+			if(isValidURL($feedurl)){
+				require_once($this->root_path.'libraries/icalcreator/iCalcreator.class.php');
+				$vcalendar = new vcalendar(array( 'url' => $feedurl ));
+				if( TRUE === $vcalendar->parse()){
+					$vcalendar->sort();
+					while($comp = $vcalendar->getComponent('vevent')){
+						$startdate		= $comp->getProperty('dtstart', 1);
+						$enddate		= $comp->getProperty('dtend', 1);
+
+						// set the date for the events
+						$allday			= (isset($enddate['hour']) && isset($startdate['hour'])) ? false : true;
+						if($allday){
+							$startdate_out	= sprintf("%04d", $startdate['year']).'-'.sprintf("%02d", $startdate['month']).'-'.sprintf("%02d", $startdate['day']).' 00:00';
+							$enddate_out	= sprintf("%04d", $enddate['year']).'-'.sprintf("%02d", $enddate['month']).'-'.sprintf("%02d", $enddate['day']-1).' 00:00';
+						}else{
+							$startdate_out	= sprintf("%04d", $startdate['year']).'-'.sprintf("%02d", $startdate['month']).'-'.sprintf("%02d", $startdate['day']).' '.((isset($startdate['hour'])) ? sprintf("%02d", $startdate['hour']).':'.sprintf("%02d", $startdate['min']) : '00:00');
+							$enddate_out	= sprintf("%04d", $enddate['year']).'-'.$enddate['month'].'-'.$enddate['day'].' '.((isset($enddate['hour'])) ? $enddate['hour'].':'.$enddate['min'] : '00:00');
+						}
+
+						// build the event colours
+						$eventcolor		= $this->pdh->get('calendars', 'color', $feed);
+						$eventcolor_txt	= (get_brightness($eventcolor) > 130) ? 'black' : 'white';
+
+						$event_json[] = array(
+							'eventid'		=> 0,
+							'title'			=> $comp->getProperty( 'summary', 1),
+							'start'			=> $startdate_out,
+							'end'			=> $enddate_out,
+							'allDay'		=> $allday,
+							'note'			=> $comp->getProperty('description', 1),
+							'color'			=> $eventcolor.' !important',
+							'textColor'		=> $eventcolor_txt.' !important'
+						);
+					}
+				}
+			}else{
+				// it is not a feed, do the math!
+				$caleventids	= $this->pdh->get('calendar_events', 'id_list', array(false, $range_start, $range_end, array($calender_id), $filterby));
+				if(is_array($caleventids) && count($caleventids) > 0){
+					foreach($caleventids as $calid){
+						$eventextension	= $this->pdh->get('calendar_events', 'extension', array($calid));
+						$raidmode		= (isset($eventextension['calendarmode'])) ? $eventextension['calendarmode'] : false;
+						$eventcolor		= $this->pdh->get('calendars', 'color', $this->pdh->get('calendar_events', 'calendar_id', array($calid)));
+						$eventcolor_txt	= (get_brightness($eventcolor) > 130) ? 'black' : 'white';
+
+						if($raidmode == 'raid'){
+
+							// fetch the attendees
+							$attendees_raw = $this->pdh->get('calendar_raids_attendees', 'attendees', array($calid));
+							$attendees = array();
+							if(is_array($attendees_raw)){
+								foreach($attendees_raw as $attendeeid=>$attendeerow){
+									$attendees[$attendeerow['signup_status']][$attendeeid] = $attendeerow;
+								}
 							}
 
-							// build the event colours
-							$eventcolor		= $this->pdh->get('calendars', 'color', $feed);
-							$eventcolor_txt	= (get_brightness($eventcolor) > 130) ? 'black' : 'white';
+							// Build the guest array
+							$guests	= array();
+							if(registry::register('config')->get('calendar_raid_guests') == 1){
+								$guestarray = registry::register('plus_datahandler')->get('calendar_raids_guests', 'members', array($calid));
+								if(is_array($guestarray)){
+									foreach($guestarray as $guest_row){
+										$guests[] = $guest_row['name'];
+									}
+								}
+							}
 
+							// fetch per raid data
+							$raidcal_status = $this->config->get('calendar_raid_status');
+							$rstatusdata = '';
+							if(is_array($raidcal_status)){
+								foreach($raidcal_status as $raidcalstat_id){
+									if($raidcalstat_id != 4){
+										$actcount  = ((isset($attendees[$raidcalstat_id])) ? count($attendees[$raidcalstat_id]) : 0);
+										if($raidcalstat_id == 0){
+											$actcount += (is_array($guests) ? count($guests) : 0);
+										}
+										$rstatusdata .= '<div class="raid_status'.$raidcalstat_id.'">'.$this->user->lang(array('raidevent_raid_status', $raidcalstat_id)).': '.$actcount.'</div>';
+									}
+								}
+							}
+							$rstatusdata .= '<div class="raid_status_total">'.$this->user->lang('raidevent_raid_required').': '.((isset($eventextension)) ? $eventextension['attendee_count'] : 0).'</div>';
+
+							$deadlinedate	= $this->pdh->get('calendar_events', 'time_start', array($calid)) - ($eventextension['deadlinedate'] * 3600);
+							$deadline = ($deadlinedate > $this->time->time || ($this->config->get('calendar_raid_allowstatuschange') == '1' && $this->pdh->get('calendar_raids_attendees', 'status', array($calid, $this->user->id)) > 0 && $this->pdh->get('calendar_raids_attendees', 'status', array($calid, $this->user->id)) != 4 && $this->pdh->get('calendar_events', 'time_end', array($calid)) > $this->time->time)) ? false : true;
+							$deadlineflag = ($deadline) ? '<i class="fa fa-lock fa-lg" title="'.$this->user->lang('raidevent_raid_deadl_reach').'"></i>' : '';
+
+							// Build the JSON
 							$event_json[] = array(
-								'eventid'		=> 0,
-								'title'			=> $comp->getProperty( 'summary', 1),
-								'start'			=> $startdate_out,
-								'end'			=> $enddate_out,
-								'allDay'		=> $allday,
-								'note'			=> $comp->getProperty('description', 1),
+								'type'			=> 'raid',
+								'eventid'		=> $calid,
+								'editable'		=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission($calid)) ? true : false,
+								'title'			=> $this->in->decode_entity($this->pdh->get('calendar_events', 'name', array($calid))),
+								'url'			=> utf8_encode($this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid)),
+								'start'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_start', array($calid))),
+								'end'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_end', array($calid))),
+								'closed'		=> ($this->pdh->get('calendar_events', 'raidstatus', array($calid)) == 1) ? true : false,
+								'flag'			=> $deadlineflag.$this->pdh->get('calendar_raids_attendees', 'html_status', array($calid, $this->user->data['user_id'])),
+								'icon'			=> ($eventextension['raid_eventid']) ? $this->pdh->get('event', 'icon', array($eventextension['raid_eventid'], true)) : '',
+								'note'			=> $this->pdh->get('calendar_events', 'notes', array($calid)),
+								'raidleader'	=> ($eventextension['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'name', 0, array($eventextension['raidleader']))) : '',
+								'rstatusdata'	=> $rstatusdata,
 								'color'			=> $eventcolor.' !important',
-								'textColor'		=> $eventcolor_txt.' !important'
+								'textColor'		=> $eventcolor_txt.' !important',
+								#'operator'		=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission($calid)) ? true : false
+							);
+						}else{
+							// check if the event is private
+							if(!$this->pdh->get('calendar_events', 'private_userperm', array($calid))){ continue; }
+							$alldayevents	= ($this->pdh->get('calendar_events', 'allday', array($calid)) > 0) ? true : false;
+							$event_json[] = array(
+								'type'			=> 'event',
+								'eventid'		=> $calid,
+								'editable'		=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission($calid)) ? true : false,
+								'url'			=> utf8_encode($this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid).'eventdetails'),
+								'title'			=> $this->pdh->get('calendar_events', 'name', array($calid)),
+								'start'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_start', array($calid))),
+								'end'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_end', array($calid, $alldayevents))),
+								'allDay'		=> $alldayevents,
+								'note'			=> $this->pdh->get('calendar_events', 'notes', array($calid)),
+								'color'			=> $eventcolor,
+								'textColor'		=> $eventcolor_txt,
+								'isowner'		=> $this->pdh->get('calendar_events', 'is_owner', array($calid)),
+								'isinvited'		=> $this->pdh->get('calendar_events', 'is_invited', array($calid)),
+								'joinedevent'	=> $this->pdh->get('calendar_events', 'joined_invitation', array($calid)),
+								'author'		=> $this->pdh->get('calendar_events', 'creator', array($calid)),
+								'attendees'		=> $this->pdh->get('calendar_events', 'sharedevent_attendees', array($calid)),
 							);
 						}
 					}
 				}
 			}
-		}
-
-		// add the calendar events to the json feed
-		$calendars	= $this->pdh->get('calendars', 'idlist', array('nofeed', $filters));
-		$caleventids	= $this->pdh->get('calendar_events', 'id_list', array(false, $range_start, $range_end, false, $filterby));
-		if(is_array($caleventids) && count($caleventids) > 0){
-			foreach($caleventids as $calid){
-				$eventextension	= $this->pdh->get('calendar_events', 'extension', array($calid));
-				$raidmode		= (isset($eventextension['calendarmode'])) ? $eventextension['calendarmode'] : false;
-				$eventcolor		= $this->pdh->get('calendars', 'color', $this->pdh->get('calendar_events', 'calendar_id', array($calid)));
-				$eventcolor_txt	= (get_brightness($eventcolor) > 130) ? 'black' : 'white';
-
-				if(in_array($this->pdh->get('calendar_events', 'calendar_id', array($calid)), $calendars)){
-					if($raidmode == 'raid'){
-
-						// fetch the attendees
-						$attendees_raw = $this->pdh->get('calendar_raids_attendees', 'attendees', array($calid));
-						$attendees = array();
-						if(is_array($attendees_raw)){
-							foreach($attendees_raw as $attendeeid=>$attendeerow){
-								$attendees[$attendeerow['signup_status']][$attendeeid] = $attendeerow;
-							}
+		}else{
+			if($calender_id === -2 && $this->config->get('calendar_show_birthday') && $this->user->check_auth('u_userlist', false)){
+				$birthday_y	= $this->time->date('Y', $range_end);
+				$birthdays	= $this->pdh->get('user', 'birthday_list');
+				if(is_array($birthdays)){
+					foreach($birthdays as $birthday_uid=>$birthday_ts){
+						$birthday_month	= $this->time->date('m', $birthday_ts);
+						if($birthday_month >= $this->time->date('m', $range_start) && $birthday_month <= $this->time->date('m', $range_end)){
+							$event_json[] = array(
+								'type'					=> 'birthday',
+								'className'				=> 'cal_birthday',
+								'title'					=> $this->pdh->get('user', 'name', array($birthday_uid)),
+								'start'					=> $birthday_y.'-'.$this->time->date('m-d', $birthday_ts),
+								'end'					=> $birthday_y.'-'.$this->time->date('m-d', $birthday_ts),
+								'allDay'				=> true,
+								'textColor'				=> '#000000',
+								'backgroundColor'		=> '#E8E8E8',
+								'borderColor'			=> '#7F7F7F'
+							);
 						}
-
-						// Build the guest array
-						$guests	= array();
-						if(registry::register('config')->get('calendar_raid_guests') == 1){
-							$guestarray = registry::register('plus_datahandler')->get('calendar_raids_guests', 'members', array($calid));
-							if(is_array($guestarray)){
-								foreach($guestarray as $guest_row){
-									$guests[] = $guest_row['name'];
-								}
-							}
-						}
-
-						// fetch per raid data
-						$raidcal_status = $this->config->get('calendar_raid_status');
-						$rstatusdata = '';
-						if(is_array($raidcal_status)){
-							foreach($raidcal_status as $raidcalstat_id){
-								if($raidcalstat_id != 4){
-									$actcount  = ((isset($attendees[$raidcalstat_id])) ? count($attendees[$raidcalstat_id]) : 0);
-									if($raidcalstat_id == 0){
-										$actcount += (is_array($guests) ? count($guests) : 0);
-									}
-									$rstatusdata .= '<div class="raid_status'.$raidcalstat_id.'">'.$this->user->lang(array('raidevent_raid_status', $raidcalstat_id)).': '.$actcount.'</div>';
-								}
-							}
-						}
-						$rstatusdata .= '<div class="raid_status_total">'.$this->user->lang('raidevent_raid_required').': '.((isset($eventextension)) ? $eventextension['attendee_count'] : 0).'</div>';
-
-						$deadlinedate	= $this->pdh->get('calendar_events', 'time_start', array($calid)) - ($eventextension['deadlinedate'] * 3600);
-						$deadline = ($deadlinedate > $this->time->time || ($this->config->get('calendar_raid_allowstatuschange') == '1' && $this->pdh->get('calendar_raids_attendees', 'status', array($calid, $this->user->id)) > 0 && $this->pdh->get('calendar_raids_attendees', 'status', array($calid, $this->user->id)) != 4 && $this->pdh->get('calendar_events', 'time_end', array($calid)) > $this->time->time)) ? false : true;
-						$deadlineflag = ($deadline) ? '<i class="fa fa-lock fa-lg" title="'.$this->user->lang('raidevent_raid_deadl_reach').'"></i>' : '';
-
-						// Build the JSON
-						$event_json[] = array(
-							'type'			=> 'raid',
-							'eventid'		=> $calid,
-							'editable'		=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission($calid)) ? true : false,
-							'title'			=> $this->in->decode_entity($this->pdh->get('calendar_events', 'name', array($calid))),
-							'url'			=> utf8_encode($this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid)),
-							'start'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_start', array($calid))),
-							'end'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_end', array($calid))),
-							'closed'		=> ($this->pdh->get('calendar_events', 'raidstatus', array($calid)) == 1) ? true : false,
-							'flag'			=> $deadlineflag.$this->pdh->get('calendar_raids_attendees', 'html_status', array($calid, $this->user->data['user_id'])),
-							'icon'			=> ($eventextension['raid_eventid']) ? $this->pdh->get('event', 'icon', array($eventextension['raid_eventid'], true)) : '',
-							'note'			=> $this->pdh->get('calendar_events', 'notes', array($calid)),
-							'raidleader'	=> ($eventextension['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'name', 0, array($eventextension['raidleader']))) : '',
-							'rstatusdata'	=> $rstatusdata,
-							'color'			=> $eventcolor.' !important',
-							'textColor'		=> $eventcolor_txt.' !important',
-							#'operator'		=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission($calid)) ? true : false
-						);
-					}else{
-						// check if the event is private
-						if(!$this->pdh->get('calendar_events', 'private_userperm', array($calid))){ continue; }
-						$alldayevents	= ($this->pdh->get('calendar_events', 'allday', array($calid)) > 0) ? true : false;
-						$event_json[] = array(
-							'type'			=> 'event',
-							'eventid'		=> $calid,
-							'editable'		=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission($calid)) ? true : false,
-							'url'			=> utf8_encode($this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid).'eventdetails'),
-							'title'			=> $this->pdh->get('calendar_events', 'name', array($calid)),
-							'start'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_start', array($calid))),
-							'end'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_end', array($calid, $alldayevents))),
-							'allDay'		=> $alldayevents,
-							'note'			=> $this->pdh->get('calendar_events', 'notes', array($calid)),
-							'color'			=> $eventcolor,
-							'textColor'		=> $eventcolor_txt,
-							'isowner'		=> $this->pdh->get('calendar_events', 'is_owner', array($calid)),
-							'isinvited'		=> $this->pdh->get('calendar_events', 'is_invited', array($calid)),
-							'joinedevent'	=> $this->pdh->get('calendar_events', 'joined_invitation', array($calid)),
-							'author'		=> $this->pdh->get('calendar_events', 'creator', array($calid)),
-							'attendees'		=> $this->pdh->get('calendar_events', 'sharedevent_attendees', array($calid)),
-						);
+					}
+				}
+			}elseif($calender_id === -3){
+				if ($this->hooks->isRegistered('calendar')){
+					$arrHooksData = $this->hooks->process('calendar',array('start' => $range_start, 'end' => $range_end), false);
+					if (count($arrHooksData) > 0){
+						$event_json = array_merge($arrHooksData, $event_json);
 					}
 				}
 			}
 		}
+		return $event_json;
+	}
 
-		// birthday calendar
-		if($this->config->get('calendar_show_birthday') && $this->user->check_auth('u_userlist', false)){
-			$birthday_y	= $this->time->date('Y', $range_end);
-			$birthdays	= $this->pdh->get('user', 'birthday_list');
-			if(is_array($birthdays)){
-				foreach($birthdays as $birthday_uid=>$birthday_ts){
-					$birthday_month	= $this->time->date('m', $birthday_ts);
-					if($birthday_month >= $this->time->date('m', $range_start) && $birthday_month <= $this->time->date('m', $range_end)){
-						$event_json[] = array(
-							'type'					=> 'birthday',
-							'className'				=> 'cal_birthday',
-							'title'					=> $this->pdh->get('user', 'name', array($birthday_uid)),
-							'start'					=> $birthday_y.'-'.$this->time->date('m-d', $birthday_ts),
-							'end'					=> $birthday_y.'-'.$this->time->date('m-d', $birthday_ts),
-							'allDay'				=> true,
-							'textColor'				=> '#000000',
-							'backgroundColor'		=> '#E8E8E8',
-							'borderColor'			=> '#7F7F7F'
-						);
-					}
-				}
-			}
+	public function get_json(){
+		$tmp_calids		= $this->in->get('calids', '');
+		$tmp_calids		= explode('|', $tmp_calids);
+		$calendar_ids	= (is_array($tmp_calids) && count($tmp_calids) > 0) ? array_merge(array(1,2), $tmp_calids) : array(1,2);
+		$event_json		= array();
+
+		foreach($calendar_ids as $id){
+			$event_json = array_merge($event_json, $this->get_json_helper($id));
 		}
-
-		// hooks
-		if ($this->hooks->isRegistered('calendar')){
-			$arrHooksData = $this->hooks->process('calendar',array('start' => $range_start, 'end' => $range_end), false);
-			if (count($arrHooksData) > 0){
-				$event_json = array_merge($arrHooksData, $event_json);
-			}
-		}
-
-		// Output the array as JSON
 		echo json_encode($event_json);exit;
 	}
 
@@ -430,25 +432,25 @@ class calendar_pageobject extends pageobject {
 		);
 
 		$this->tpl->assign_vars(array(
-			'CALENDAR_LANG'	=> ($this->user->lang('XML_LANG') != '') ? $this->user->lang('XML_LANG') : 'en',
-			'STARTDAY'			=> ($this->config->get('date_startday') == 'monday') ? '1' : '0',		//Sunday=0, Monday=1
-			'JS_TIMEFORMAT'	=> ($this->config->get('default_jsdate_time') != '') ? $this->config->get('default_jsdate_time') : $this->user->lang('style_jstime'),
-			'JS_DATEFORMAT'	=> ($this->config->get('default_jsdate_nrml') != '') ? $this->config->get('default_jsdate_nrml') : $this->user->lang('style_jsdate_nrml'),
-			'JS_DATEFORMAT2'	=> ($this->config->get('default_jsdate_short') != '') ? $this->config->get('default_jsdate_short') : $this->user->lang('style_jsdate_short'),
-			'RAID_LIST'			=> $hptt->get_html_table($this->in->get('sort'), '', 0, 100),
-			'DD_CHARS'			=> $memberrole[0],
-			'DD_ROLES'			=> $memberrole[1],
-			'DD_STATUS'			=> new hdropdown('member_signupstatus', array('options' => $raidstatus)),
-			'DD_MULTIDEL'		=> new hdropdown('deleteall_selection', array('options' => $deleteall_drpdown)),
-			'TXT_NOTE'			=> new htext('member_note', array('size' => '20')),
-			'IS_OPERATOR'		=> $this->user->check_auth('u_cal_event_add', false),
+			'CALENDAR_LANG'			=> ($this->user->lang('XML_LANG') != '') ? $this->user->lang('XML_LANG') : 'en',
+			'STARTDAY'				=> ($this->config->get('date_startday') == 'monday') ? '1' : '0',		//Sunday=0, Monday=1
+			'JS_TIMEFORMAT'			=> ($this->config->get('default_jsdate_time') != '') ? $this->config->get('default_jsdate_time') : $this->user->lang('style_jstime'),
+			'JS_DATEFORMAT'			=> ($this->config->get('default_jsdate_nrml') != '') ? $this->config->get('default_jsdate_nrml') : $this->user->lang('style_jsdate_nrml'),
+			'JS_DATEFORMAT2'		=> ($this->config->get('default_jsdate_short') != '') ? $this->config->get('default_jsdate_short') : $this->user->lang('style_jsdate_short'),
+			'RAID_LIST'				=> $hptt->get_html_table($this->in->get('sort'), '', 0, 100),
+			'DD_CHARS'				=> $memberrole[0],
+			'DD_ROLES'				=> $memberrole[1],
+			'DD_STATUS'				=> new hdropdown('member_signupstatus', array('options' => $raidstatus)),
+			'DD_MULTIDEL'			=> new hdropdown('deleteall_selection', array('options' => $deleteall_drpdown)),
+			'TXT_NOTE'				=> new htext('member_note', array('size' => '20')),
+			'IS_OPERATOR'			=> $this->user->check_auth('u_cal_event_add', false),
 
-			'CSRF_MOVE_TOKEN'	=> $this->CSRFGetToken('move'),
-			'CSRF_RESIZE_TOKEN' => $this->CSRFGetToken('resize'),
-			'CSRF_DELETEID_TOKEN' => $this->CSRFGetToken('deleteid'),
-			'U_CALENDAR'		=> $this->strPath.$this->SID,
-			'U_CALENDAREVENT'	=> $this->routing->build('CalendarEvent'),
-			'U_EDIT_CALENDAREVENT' => $this->routing->build('EditCalendarEvent'),
+			'CSRF_MOVE_TOKEN'		=> $this->CSRFGetToken('move'),
+			'CSRF_RESIZE_TOKEN' 	=> $this->CSRFGetToken('resize'),
+			'CSRF_DELETEID_TOKEN'	=> $this->CSRFGetToken('deleteid'),
+			'U_CALENDAR'			=> $this->strPath.$this->SID,
+			'U_CALENDAREVENT'		=> $this->routing->build('CalendarEvent'),
+			'U_EDIT_CALENDAREVENT'	=> $this->routing->build('EditCalendarEvent'),
 		));
 
 		//Calenderevent Statistics
@@ -511,17 +513,23 @@ class calendar_pageobject extends pageobject {
 					'S_RAIDSTATS'			=> true,
 				));
 		} else {
-			$date1 = $this->time->time-(30*86400);
-			$date2 = $this->time->time;
-			$show_twinks = $this->config->get('show_twinks');
+			$date1			= $this->time->time-(30*86400);
+			$date2			= $this->time->time;
+			$show_twinks	= $this->config->get('show_twinks');
 		}
+
+		// build the dropdown for calendars
+		$calendar_idlist		= $this->pdh->aget('calendars', 'name', 0, array($this->pdh->get('calendars', 'idlist')));
+		$calendar_idlist[-2]	= $this->user->lang('user_sett_f_birthday');
+		$calendar_idlist[-3]	= $this->user->lang('calendar_others');
+		$todisable				= array(1,2);
 
 		$this->tpl->assign_vars(array (
 			// Date Picker
 			'DATEPICK_DATE_FROM'	=> $this->jquery->Calendar('from', $this->time->user_date($date1, false, false, false, function_exists('date_create_from_format'))),
 			'DATEPICK_DATE_TO'		=> $this->jquery->Calendar('to', $this->time->user_date($date2, false, false, false, function_exists('date_create_from_format'))),
 			'SHOW_TWINKS_CHECKED'	=> ($show_twinks)?'checked="checked"':'',
-			'MS_CALENDAR_SELECT'	=> new hmultiselect('calendarfilter', array('options' => $this->pdh->aget('calendars', 'name', 0, array($this->pdh->get('calendars', 'idlist'))))),
+			'MS_CALENDAR_SELECT'	=> new hmultiselect('calendarfilter', array('options' => $calendar_idlist, 'todisable' => $todisable, 'value' => array(1,2))),
 		));
 
 		// template things

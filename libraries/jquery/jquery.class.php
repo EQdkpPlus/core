@@ -1166,6 +1166,7 @@ if (!class_exists("jquery")) {
 			$tmpopt[] = 'selectedList: '.((isset($options['preview_num']) && $options['preview_num'] > 0) ? $options['preview_num'] : '5');
 			$tmpopt[] = 'multiple: '.((isset($options['multiple']) && !$options['multiple']) ? 'false' : 'true');
 			if(isset($options['no_animation'])){	$tmpopt[] = 'show: "blind",hide: "blind"';}
+			if(isset($options['clickfunc'])){	$tmpopt[] = 'click: function(e){ '.$options['clickfunc'].' }';}
 			if(isset($options['header'])){			$tmpopt[] = 'header: "'.$options['header'].'"';}
 			$todisable = (isset($options['todisable'])) ? ((is_array($options['todisable'])) ? $options['todisable'] : array($options['todisable'])) : array();
 			$filterme = '';

@@ -2,8 +2,20 @@
 //<![CDATA[
 	$(document).ready(function() {
 
-		$("#calendarfilter").val(JSON.parse(cal_getStorage("calendar.filter")) || 0);
+		if(!cal_getStorage("calendar.calendar_filter")) {
+			var options = $('#calendarfilter option');
+
+			var values = $.map(options ,function(option) {
+				return option.value;
+			});
+			cal_setStorage("calendar.calendar_filter", JSON.stringify(values))
+		}
+		$("#calendarfilter").val(JSON.parse(cal_getStorage("calendar.calendar_filter")) || [1, 2, -2]);
 		$("#calendarfilter").multiselect('refresh');
+
+		var curSource = buildCalURL($("#calendarfilter").val());
+		console.log(curSource)
+		var newSource = '';
 
 		$('#calendar').fullCalendar({
 			firstDay: {STARTDAY},
@@ -184,12 +196,7 @@
 				var date2save	= (view.name == 'month') ? $('#calendar').fullCalendar('getDate') : view.start;
 				cal_setStorage("calendar.currentdate", date2save.format());
 			},
-			events: {
-				url: '{U_CALENDAR}&json=true',
-				//error: function() {
-			//		$('#script-warning').show();
-			//	}
-			}
+			eventSources: [curSource]
 		});
 
 		$(".fc-icalexport-button,#export_callist").qtip({
@@ -262,9 +269,23 @@
 			var array_of_checked_values = $("#calendarfilter").multiselect("getChecked").map(function(){
 				return this.value;
 			}).get();
-			cal_setStorage('calendar.filter', JSON.stringify(array_of_checked_values));
+			cal_setStorage('calendar.calendar_filter', JSON.stringify(array_of_checked_values));
 		})
+
+		$("#calendarfilter").change(function() {
+			newSource = buildCalURL($("#calendarfilter").val());
+			$('#calendar').fullCalendar('removeEvents');
+			$('#calendar').fullCalendar('removeEventSource', curSource);
+			$('#calendar').fullCalendar('addEventSource', newSource)
+			$('#calendar').fullCalendar('refetchEvents');
+			curSource = newSource;
+		});
 	});
+
+	function buildCalURL(calids){
+		tmpids = calids.join('|');
+		return '{U_CALENDAR}&json=true&calids=' + tmpids;
+	}
 
 	function acceptInvitation(id){
 		location.href = '{U_CALENDAR}&handle_invitation=true&status=accept&eventid='+id;
@@ -395,14 +416,12 @@ td.fc-day:hover:after {
 			</div>
 
 			<div class="fc-button-group" id="calendar_filter">
-				<button type="button" class="ui-button ui-state-default ui-corner-left"><i class="fa fa-list"></i> Alle</button>
-				<button type="button" class="ui-button ui-state-default fc-middle-button"><i class="fa fa-clock-o"></i> Zukünftige</button>
+				<button type="button" class="ui-button ui-state-default ui-corner-left" id="calfilter_all"><i class="fa fa-list"></i> Alle</button>
+				<button type="button" class="ui-button ui-state-default fc-middle-button" id="calfilter_future"><i class="fa fa-clock-o"></i> Zukünftige</button>
+				<button type="button" class="ui-button ui-state-default fc-middle-button" id="calfilter_past"><i class="fa fa-clock-o"></i> Vergangene</button>
 				<!-- IF S_LOGGED_IN -->
-				<button type="button" class="ui-button ui-state-default fc-middle-button"><i class="fa fa-clock-o"></i> Vergangene</button>
-				<button type="button" class="ui-button ui-state-default fc-middle-button"><i class="fa fa-flag"></i> Teilname</button>
-				<button type="button" class="ui-button ui-state-default ui-corner-right"><i class="fa fa-user"></i> Meine</button>
-				<!-- ELSE -->
-				<button type="button" class="ui-button ui-state-default ui-corner-right"><i class="fa fa-clock-o"></i> Vergangene</button>
+				<button type="button" class="ui-button ui-state-default fc-middle-button" id="calfilter_attendance"><i class="fa fa-flag"></i> Teilname</button>
+				<button type="button" class="ui-button ui-state-default ui-corner-right" id="calfilter_mine"><i class="fa fa-user"></i> Meine</button>
 				<!-- ENDIF -->
 			</div>
 		</div>
