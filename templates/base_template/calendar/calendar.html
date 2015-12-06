@@ -13,8 +13,9 @@
 		$("#calendarfilter").val(JSON.parse(cal_getStorage("calendar.calendar_filter")) || [1, 2, -2]);
 		$("#calendarfilter").multiselect('refresh');
 
+		$("#"+(cal_getStorage('calendar.event_filter') || 'calfilter_all')).addClass("ui-state-active");
+
 		var curSource = buildCalURL($("#calendarfilter").val());
-		console.log(curSource)
 		var newSource = '';
 
 		$('#calendar').fullCalendar({
@@ -280,6 +281,14 @@
 			$('#calendar').fullCalendar('refetchEvents');
 			curSource = newSource;
 		});
+
+		$(".caleventfilter").click(function(){
+			var currid = $(this).attr('id');
+			console.log(currid)
+			$(".caleventfilter").removeClass("ui-state-active");
+			$('#'+currid).addClass("ui-state-active");
+			cal_setStorage('calendar.event_filter', currid);
+		});
 	});
 
 	function buildCalURL(calids){
@@ -415,13 +424,13 @@ td.fc-day:hover:after {
 				{MS_CALENDAR_SELECT}
 			</div>
 
-			<div class="fc-button-group" id="calendar_filter">
-				<button type="button" class="ui-button ui-state-default ui-corner-left" id="calfilter_all"><i class="fa fa-list"></i> Alle</button>
-				<button type="button" class="ui-button ui-state-default fc-middle-button" id="calfilter_future"><i class="fa fa-clock-o"></i> Zukünftige</button>
-				<button type="button" class="ui-button ui-state-default fc-middle-button" id="calfilter_past"><i class="fa fa-clock-o"></i> Vergangene</button>
+			<div class="fc-button-group" id="calendar_eventfilter">
+				<button type="button" class="ui-button ui-state-default ui-corner-left caleventfilter" id="calfilter_all"><i class="fa fa-list"></i> Alle</button>
+				<button type="button" class="ui-button ui-state-default fc-middle-button caleventfilter" id="calfilter_future"><i class="fa fa-clock-o"></i> Zukünftige</button>
+				<button type="button" class="ui-button ui-state-default caleventfilter <!-- IF S_LOGGED_IN -->fc-middle-button<!-- ELSE -->ui-corner-right<!-- ENDIF -->" id="calfilter_past"><i class="fa fa-clock-o"></i> Vergangene</button>
 				<!-- IF S_LOGGED_IN -->
-				<button type="button" class="ui-button ui-state-default fc-middle-button" id="calfilter_attendance"><i class="fa fa-flag"></i> Teilname</button>
-				<button type="button" class="ui-button ui-state-default ui-corner-right" id="calfilter_mine"><i class="fa fa-user"></i> Meine</button>
+				<button type="button" class="ui-button ui-state-default fc-middle-button caleventfilter" id="calfilter_attendance"><i class="fa fa-flag"></i> Teilname</button>
+				<button type="button" class="ui-button ui-state-default ui-corner-right caleventfilter" id="calfilter_mine"><i class="fa fa-user"></i> Meine</button>
 				<!-- ENDIF -->
 			</div>
 		</div>
