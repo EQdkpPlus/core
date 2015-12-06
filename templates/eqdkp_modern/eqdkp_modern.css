@@ -4167,7 +4167,6 @@ button.thirdpartylogin.openid {
 }
 
 /* Ribbons */
-/* Ribbons */
 @ribbon: @eqdkpContentHighlightColor;
 @featuredColor: gold;
 
@@ -4184,6 +4183,8 @@ button.thirdpartylogin.openid {
   color: @eqdkpContentBackgroundColor;
   text-align: center;
   display: block;
+  box-shadow: inset 0 .062em 0 rgba(255,255,255,.6), 0 .125em .25em rgba(0,0,0,.2);
+  border-radius: .2em 0 0 .2em;
 }
 
 .ribbon span:before {
