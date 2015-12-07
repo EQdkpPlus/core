@@ -373,6 +373,11 @@ class Manage_Live_Update extends page_generic {
 			$this->pfh->copy($tmp_folder.$file['name'],$this->root_path.$file['name']);
 		}
 		
+		//Reset Opcache, for PHP7
+		if(function_exists('opcache_reset')){
+			opcache_reset();
+		}
+		
 		if ($strLog != "") register('logs')->add('liveupdate_copied_files', $strLog);
 
 		echo "true";
@@ -482,6 +487,12 @@ class Manage_Live_Update extends page_generic {
 		$folder = $this->pfh->FolderPath('update_to_'.$new_version.'/','live_update');
 		$this->pfh->Delete('update_to_'.$new_version, 'live_update');
 		$this->config->del('live_update');
+		
+		//Reset Opcache, for PHP7
+		if(function_exists('opcache_reset')){
+			opcache_reset();
+		}
+		
 		echo "true";
 		exit;
 	}

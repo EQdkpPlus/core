@@ -323,6 +323,12 @@ class Manage_Extensions extends page_generic {
 		//clean up
 		$this->pfh->Delete('', 'repository');
 		$this->config->del('repository');
+		
+		//Reset Opcache, for PHP7
+		if(function_exists('opcache_reset')){
+			opcache_reset();
+		}
+		
 		exit;
 	}
 
