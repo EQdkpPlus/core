@@ -2052,7 +2052,7 @@ ul.breamcrumb .current::before{
 .featured:before {
 	content: "\f005";
 	font-family: FontAwesome;
-	color: gold;
+	color: @featuredColor;
 	font-size: 16px;
 }
 .not-featured {
