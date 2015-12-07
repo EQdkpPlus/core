@@ -541,7 +541,10 @@ if (!class_exists("environment")) {
 						'bot_agent' => 'mail.ru_bot/',
 						'bot_name' => 'Mail.Ru [Bot]',
 				),
-				
+				array( // row #54
+						'bot_agent' => 'baidu.com/',
+						'bot_name' => 'Baidu.com [Bot]',
+				),
 			);
 			
 			foreach ($arrBots as $row){
@@ -549,6 +552,11 @@ if (!class_exists("environment")) {
 					return $row['bot_name'];
 				}
 			}
+			
+			if(stripos($strUseragent, 'bot') || stripos($strUseragent, 'spider') || stripos($strUseragent, 'crawler')){
+				return '[Bot/Spider/Crawler]';
+			}
+			
 			return false;
 		}
 		
