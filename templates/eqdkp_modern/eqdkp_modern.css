@@ -4165,26 +4165,36 @@ button.thirdpartylogin.openid {
 .list-type2 .fa-calendar-o, .list-type2 .fa-comments, .list-type2 .fa-folder-o {
 	margin-left: 10px;
 }
-
 /* Ribbons */
 @ribbon: @eqdkpContentHighlightColor;
 @featuredColor: gold;
 
 .ribbon {
 	margin: 3px;
-    margin-top: 8px;
+    margin-left: -18px;
+	width:98%;
+	margin-top: 6px;
+	margin-bottom: 6px;
 }
-
 .ribbon span {
-  position: relative;
-  background: @ribbon;
-  background: linear-gradient(lighten(@ribbon,20%) 0%, @ribbon 100%);
-  padding: 5px 10px;
-  color: @eqdkpContentBackgroundColor;
-  text-align: center;
-  display: block;
-  box-shadow: inset 0 .062em 0 rgba(255,255,255,.6), 0 .125em .25em rgba(0,0,0,.2);
-  border-radius: .2em 0 0 .2em;
+  	position: relative;
+	display: block;	
+	text-align: center;
+	bottom: 0em;
+	left: 0;
+	margin-right: 0.2em;
+	padding: .75em 1.25em .75em .75em;
+	margin-left:-0.5em;
+	background-color: @ribbon;
+	background-image: linear-gradient(-90deg, lighten(@ribbon,20%) 0%, @ribbon 100%);
+	box-shadow: inset 0 .062em 0 rgba(255,255,255,.6), 0 .125em .25em rgba(0,0,0,.2);
+	color: @eqdkpContentBackgroundColor;
+	text-shadow: 0 -.062em 0 rgba(0,0,0,.2);
+	width: 90%;
+	text-align: center;
+	display: block;
+	border-radius: 0 0 0 .5em;
+	word-wrap: break-word;
 }
 
 .ribbon span:before {
@@ -4195,17 +4205,38 @@ button.thirdpartylogin.openid {
 }
 
 .ribbon span:before {
-  bottom: 100%;
-  right: 0px;
-  border-bottom: 10px solid @ribbon;
-  border-right: 10px solid transparent;
+	top: -1em;
+	left: 0em;
+	width: .5em;
+	height: 3em;
+	border-radius: 0.5em 0 0 .5em;
+	background-image: linear-gradient(to right, darken(@ribbon,1%) 0%, @ribbon 100%);
+}
+.ribbon span:after {
+  content: '';
+  position: absolute;
+  height: 0;
+  width: 0;
 }
 
+.ribbon span:after {
+	top: -1em;
+	left: 0em;
+	width: .5em;
+	height: 1em;
+	border-radius: .5em 0 0 .5em;
+	background-image: linear-gradient(to right, lighten(@ribbon,1%) 0%, darken(@ribbon,1%) 100%);
+	box-shadow: 0 .062em 0 rgba(255,255,255,.6);
+}
 .featured .ribbon > span {
-	background: linear-gradient(lighten(@featuredColor,20%) 0%, @featuredColor 100%);
+	background: linear-gradient(-90deg, lighten(@featuredColor,20%) 0%, @featuredColor 100%);
 	color: black;
 }
 
 .featured .ribbon > span:before {
 	border-bottom-color: @featuredColor;
+	background-image: linear-gradient(to right, darken(@featuredColor,1%) 0%, @featuredColor 100%);
+}
+.featured .ribbon > span:after {
+	background-image: linear-gradient(to right, lighten(@featuredColor,1%) 0%, darken(@featuredColor,1%) 100%);
 }
