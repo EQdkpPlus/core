@@ -821,7 +821,7 @@ if (!class_exists("jquery")) {
 
 			$JSclick[]		= "text: '".$this->sanitize($msg, true)."'";
 			if(is_array($options)){
-				if(isset($options['header']) && !empty($options['header'])){	$JSclick[]		= "title: '".$options['header']."'";}
+				if(isset($options['header']) && !empty($options['header'])){	$JSclick[]		= "title: '".$this->sanitize($options['header'])."'";}
 
 				// events (http://www.erichynds.com/blog/a-jquery-ui-growl-ubuntu-notification-widget)
 				if(isset($options['beforeopen'])){	$JSoptions[]	= "beforeopen: function(e,instance){ ".$options['beforeopen']."}";}
