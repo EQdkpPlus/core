@@ -87,7 +87,7 @@ if(registry::register('input')->get('out') != ''){
 			// check for permission
 			$userid = registry::fetch('user')->getUserIDfromExchangeKey(registry::register('input')->get('key', ''));
 			if (isset($permissions[$modulename]) && registry::fetch('user')->check_auth($permissions[$modulename], false, $userid)){
-				require($eqdkp_root_path.'libraries/icalcreator/iCalcreator.class.php');
+				require($eqdkp_root_path.'libraries/icalcreator/iCalcreator.php');
 				$v = new vcalendar;
 				$v->setConfig('unique_id',		registry::register('config')->get('server_name'));
 				$v->setProperty('x-wr-calname',	sprintf(registry::fetch('user')->lang('icalfeed_name'), registry::register('config')->get('guildtag')));
@@ -223,7 +223,7 @@ if(registry::register('input')->get('out') != ''){
 						$current = " <i class='fa fa-check-circle fa-lg'></i>";
 					} else $current = "";
 					$url = filter_var($_SERVER['HTTP_REFERER'], FILTER_SANITIZE_STRING);
-					$link = sanitize(preg_replace('#style\=([0-9]*)#', "", $url)).((strpos($url, "?") === false) ? '?' : '&').'style='.$styleid;
+					$link = sanitize(preg_replace('#style\=([0-9]*)#', "", preg_replace('#&style\=([0-9]*)#', "", $url))).((strpos($url, "?") === false) ? '?' : '&').'style='.$styleid;
 					
 					$out .= '<tr><td width="10"><a href="'.$link.'">'.$screenshot.'</a></td><td><a href="'.$link.'">'.$row['style_name'].$current.'</a></td></tr>';
 			}

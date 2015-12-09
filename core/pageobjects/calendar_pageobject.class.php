@@ -216,7 +216,7 @@ class calendar_pageobject extends pageobject {
 
 			// the event is a feed URL
 			if(isValidURL($feedurl)){
-				require_once($this->root_path.'libraries/icalcreator/iCalcreator.class.php');
+				require_once($this->root_path.'libraries/icalcreator/iCalcreator.php');
 				$vcalendar = new vcalendar(array( 'url' => $feedurl ));
 				if( TRUE === $vcalendar->parse()){
 					$vcalendar->sort();

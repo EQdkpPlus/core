@@ -405,7 +405,7 @@ class calendarevent_pageobject extends pageobject {
 	// generate an ical file for that raid
 	public function generate_ical(){
 		$eventdata	= $this->pdh->get('calendar_events', 'data', array($this->url_id));
-		require($this->root_path.'libraries/icalcreator/iCalcreator.class.php');
+		require($this->root_path.'libraries/icalcreator/iCalcreator.php');
 		$v = new vcalendar;
 		$v->setConfig('unique_id', $this->config->get('server_name'));
 		$v->setProperty('x-wr-calname',	sprintf(registry::fetch('user')->lang('icalfeed_name'), registry::register('config')->get('guildtag')));
