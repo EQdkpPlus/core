@@ -206,12 +206,10 @@ class calendar_pageobject extends pageobject {
 		exit;
 	}
 
-	public function get_json_helper($calender_id){
+	public function get_json_helper($calender_id, $filterby = 'all'){
 		$event_json		= array();
-		$filters		= ($this->in->exists('filters', 'int')) ? $this->in->getArray('filters', 'int') : false;
 		$range_start	= $this->time->fromformat($this->in->get('start', ''), 'Y-m-d');
 		$range_end		= $this->time->fromformat($this->in->get('end', ''), 'Y-m-d');
-		$filterby		= $this->in->get('filterby', 'all');
 
 		if($calender_id > 0){
 			$feedurl		= $this->pdh->get('calendars', 'feed', array($calender_id));
@@ -384,13 +382,13 @@ class calendar_pageobject extends pageobject {
 	}
 
 	public function get_json(){
-		$tmp_calids		= $this->in->get('calids', '');
-		$tmp_calids		= explode('|', $tmp_calids);
+		$tmp_calids		= explode('|', $this->in->get('calids', ''));
 		$calendar_ids	= (is_array($tmp_calids) && count($tmp_calids) > 0) ? array_merge(array(1,2), $tmp_calids) : array(1,2);
-		$event_json		= array();
+		$filter			= ($this->in->exists('eventfilter', 'int')) ? $this->in->get('eventfilter', '') : 'all';
 
+		$event_json		= array();
 		foreach($calendar_ids as $id){
-			$event_json = array_merge($event_json, $this->get_json_helper($id));
+			$event_json = array_merge($event_json, $this->get_json_helper($id, $filter));
 		}
 		echo json_encode($event_json);exit;
 	}
