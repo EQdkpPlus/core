@@ -71,8 +71,6 @@ class template extends gen_class {
 
 	public function __construct($install=false) {
 		$this->is_install = $install;
-		require_once($this->root_path . 'libraries/_statics/CSS/CSS.php');
-		require_once($this->root_path . 'libraries/_statics/JS/JShrink.php');
 	}
 
 	/*
@@ -287,11 +285,6 @@ class template extends gen_class {
 				//Parse LESS
 				if(!defined('DISABLE_LESS')){
 					$strCSS = $this->parseLess($strCSS);
-				}
-
-				if(!defined('DISABLE_CSS_MINIFY')){
-					$minify = new Minify_CSS();
-					$strCSS = $minify->minify($strCSS);
 				}
 
 				$this->pfh->putContent($combinedFile, $strCSS);
@@ -651,7 +644,10 @@ class template extends gen_class {
 				$imploded_css .= implode("\n", $this->get_templatedata('css_code_direct'));
 			}
 			if($imploded_css != ""){
-				$this->assign_var('CSS_CODE', (($debug || defined('DISABLE_JS_MINIFY')) ? $imploded_css : Minify_CSS::minify($imploded_css)));
+				//TODO: Add new inline minifier
+				
+				//$this->assign_var('CSS_CODE', (($debug || defined('DISABLE_JS_MINIFY')) ? $imploded_css : Minify_CSS::minify($imploded_css)));
+				$this->assign_var('CSS_CODE', $imploded_css);
 			}
 			$this->set_templateout('css_code', true);
 			$this->set_templateout('css_code_direct', true);
@@ -1696,7 +1692,14 @@ class template extends gen_class {
 
 		try {
 			require_once $this->root_path.'libraries/less/Less.php';
-			$parser = new Less_Parser();
+			
+			$options = array();
+			
+			if(!defined('DISABLE_CSS_MINIFY')){
+				$options = array( 'compress' => true );
+			}
+			
+			$parser = new Less_Parser($options);
 			$parser->ModifyVars($lessVars);
 			$parser->parse($strCSS);
 			$strCSS = $parser->getCss();
