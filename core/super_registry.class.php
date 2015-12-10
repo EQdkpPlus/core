@@ -108,11 +108,14 @@ abstract class super_registry {
 			self::$const['root_path'] = $root_path;
 			self::$const['lite_mode'] = $lite;
 			self::load_config();
+			
+			// Autoloader
+			spl_autoload_register('self::autoload_libraries');
 
 			// switch to userdefined error handler class
 			set_error_handler(array(registry::register('plus_debug_logger'),'myErrorHandler'), intval(ini_get("error_reporting")));
 			register_shutdown_function(array(registry::register('plus_debug_logger'), "catch_fatals"));
-
+			
 			// User Levels
 			define('ANONYMOUS',	-1);
 			define('USER',		0);
@@ -313,6 +316,39 @@ abstract class super_registry {
 				registry::register('config')->message(registry::fetch('user')->lang('timezone_set_gmt'));
 			}
 		}
+	}
+	
+	/**
+	 * Libraries. Key is foldername in libraries-Folder, Value is First Namespace Key.s
+	 * 
+	 * @var array
+	 */
+	protected static $libraries = array(
+		'facebook'	=> 'Facebook',
+		'oauth'		=> 'OAuth2',
+		'phpseclib'	=> 'phpseclib',
+	);
+	
+	public static function autoload_libraries($strClassname){
+		$arrParts = explode('\\', $strClassname);
+		
+		$arrKeyMapping = array_flip(self::$libraries);
+		
+		if( isset($arrKeyMapping[$arrParts[0]])){
+			$strKey = $arrKeyMapping[$arrParts[0]];
+			$arrParts[0] = $strKey;
+			if($strKey){
+				$className = implode(DIRECTORY_SEPARATOR, $arrParts).'.php';	
+				
+				$strFolder = self::get_const('root_path').'libraries'.DIRECTORY_SEPARATOR.$className;
+				if(file_exists($strFolder)){
+					include($strFolder);
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 	
 }

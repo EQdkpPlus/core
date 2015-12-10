@@ -200,7 +200,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 
 		// generate download link for extension
 		public function getExtensionDownloadLink($intExtensionID, $intCategory, $strExtensionName){
-			$response = $this->puf->fetch($this->RepoEndpoint.'downloadid_link&id='.$intExtensionID.'&core='.$this->plusversion.'&category='.intval($intCategory).'&name='.$strExtensionName, "", 5);
+			$response = $this->puf->fetch($this->RepoEndpoint.'downloadid_link&id='.$intExtensionID.'&core='.$this->plusversion.'&category='.intval($intCategory).'&name='.$strExtensionName, "", 30);
 			$arrJson = json_decode($response);
 			if(!$response || !$arrJson) return array('status' => 0, 'error' => 500);
 			
@@ -251,18 +251,16 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 					if ($this->verifyIntermediateCert($cert, $type)) $arrVerified[] = $cert;
 				}
 				$strFileHash = sha1_file($src);
-				
-				include_once($this->root_path.'libraries/phpseclib/X509.php');
-				include_once($this->root_path.'libraries/phpseclib/RSA.php');
-				$x509 = new File_X509();
+
+				$x509 = new phpseclib\File\X509();
 		
 				foreach ($arrVerified as $intermCert){
 					//Check, if $hash is valid
 					$cert = $x509->loadX509($intermCert);
 					$pkey = $x509->getPublicKey()->getPublicKey();
-					$rsa = new Crypt_RSA();
+					$rsa = new \phpseclib\Crypt\RSA();
 					
-					$rsa->setSignatureMode(CRYPT_RSA_SIGNATURE_PKCS1);
+					$rsa->setSignatureMode(2);
 					$rsa->loadKey($pkey);
 					$blnVerified = $rsa->verify($hash, base64_decode($signature));
 					
@@ -394,13 +392,11 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 			if ($this->checkIfRevoked($intermCert)) { return false; }
 			
 			$rootCert = ($type == 'core') ? $this->coreRootCert : $this->packagesRootCert;
-			
-			include_once($this->root_path.'libraries/phpseclib/X509.php');
 
-			$x509 = new File_X509();
+			$x509 = new phpseclib\File\X509();
 			$x509->loadCA($rootCert); // see signer.crt
 			$cert = $x509->loadX509($intermCert); // see google.crt
-			if (!$x509->validateSignature(FILE_X509_VALIDATE_SIGNATURE_BY_CA)) return false;
+			if (!$x509->validateSignature()) return false;
 
 			if (!$x509->validateDate()) return false;			
 			
