@@ -644,10 +644,13 @@ class template extends gen_class {
 				$imploded_css .= implode("\n", $this->get_templatedata('css_code_direct'));
 			}
 			if($imploded_css != ""){
-				//TODO: Add new inline minifier
-				
-				//$this->assign_var('CSS_CODE', (($debug || defined('DISABLE_JS_MINIFY')) ? $imploded_css : Minify_CSS::minify($imploded_css)));
-				$this->assign_var('CSS_CODE', $imploded_css);
+				if($debug || defined('DISABLE_CSS_MINIFY'){
+					$this->assign_var('CSS_CODE', $imploded_css);
+				}else{
+					$compressor = new yuicompressorPHP\CSSmin();
+					$compressor->set_max_execution_time(120);
+					$compressor->run($imploded_css)
+				}
 			}
 			$this->set_templateout('css_code', true);
 			$this->set_templateout('css_code_direct', true);
