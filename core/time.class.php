@@ -627,19 +627,10 @@ if (!class_exists("time")){
 		}
 
 		public function newtime($timestamp, $newtime='now'){
-			$utcoffset	= ($newtime != 'now') ? $this->get_timediff_to_utc() : 0;
-			$newtime	= ($newtime=='now') ? $this->date('H').':'.$this->date('i') : $newtime;
-			$a_times	= explode(':', $newtime);
-			$timestamp -= ($this->date('H', $timestamp)*3600 + $this->date('i', $timestamp)*60);
-			$seconds	= (isset($a_times[2]) && $a_times[2] > 0) ? ($a_times[0]*60) : 0;
-			return $timestamp + ($a_times[0]*3600) + ($a_times[1]*60) + $seconds + $utcoffset;
-		}
-
-		public function newtime2($timestamp, $newtime='now'){
 			$newtime	= ($newtime=='now') ? $this->date('H').':'.$this->date('i') : $newtime;
 			$a_times	= explode(':', $newtime);
 			$objDate	= (new DateTime())->setTimestamp($timestamp)->setTimezone($this->userTimeZone)->setTime($a_times[0], $a_times[1]);
-			return $dateTime->format("U");
+			return $objDate->format("U");
 		}
 
 		public function dateDiff($ts1, $ts2, $out='sec', $pos_neg=false){
