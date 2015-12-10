@@ -274,12 +274,7 @@
 		})
 
 		$("#calendarfilter").change(function() {
-			newSource = buildCalURL($("#calendarfilter").val());
-			$('#calendar').fullCalendar('removeEvents');
-			$('#calendar').fullCalendar('removeEventSource', curSource);
-			$('#calendar').fullCalendar('addEventSource', newSource)
-			$('#calendar').fullCalendar('refetchEvents');
-			curSource = newSource;
+			curSource = doFiltering(curSource);
 		});
 
 		$(".caleventfilter").click(function(){
@@ -288,12 +283,26 @@
 			$(".caleventfilter").removeClass("ui-state-active");
 			$('#'+currid).addClass("ui-state-active");
 			cal_setStorage('calendar.event_filter', currid);
+
+			//now, perform the filtering...
+			curSource = doFiltering(curSource);
 		});
 	});
 
+	function doFiltering(curSource){
+		newSource = buildCalURL($("#calendarfilter").val());
+		$('#calendar').fullCalendar('removeEvents');
+		$('#calendar').fullCalendar('removeEventSource', curSource);
+		$('#calendar').fullCalendar('addEventSource', newSource)
+		$('#calendar').fullCalendar('refetchEvents');
+		return newSource;
+	}
+
 	function buildCalURL(calids){
-		tmpids = calids.join('|');
-		return '{U_CALENDAR}&json=true&calids=' + tmpids;
+		tmpids		= calids.join('|');
+		tmpfilter	= cal_getStorage('calendar.event_filter');
+		filter		= (tmpfilter != null) ? tmpfilter.replace('calfilter_', '') : 'all';
+		return '{U_CALENDAR}&json=true&eventfilter='+filter+'&calids=' + tmpids;
 	}
 
 	function acceptInvitation(id){

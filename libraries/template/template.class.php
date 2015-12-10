@@ -152,20 +152,20 @@ class template extends gen_class {
 			case 'eop':
 			case 'eop2':
 			case 'docready':		$identifier = 'js_code_eop';		break;
-			case 'eop_docready':	$identifier = 'js_code_eop_docready';	break;	
-			
+			case 'eop_docready':	$identifier = 'js_code_eop_docready';	break;
+
 			//Head
 			case 'head_top':		$identifier = 'js_code_head_top'; break;
 			case 'head':			$identifier = 'js_code'; break;
 			case 'head_docready':	$identifier = 'js_code_head_docready'; break;
-			
+
 			//To file
 			case 'static':
 			case 'file': 			$identifier = 'js_code_file'; break;
 			case 'static_docready':
 			case 'file_docready':	$identifier = 'js_code_file_docready'; break;
-			
-			default: 
+
+			default:
 		}
 		$this->tpl_output[$identifier][] = $varval;
 	}
@@ -365,7 +365,7 @@ class template extends gen_class {
 		$storage_folder = $this->pfh->FolderPath('templates', 'eqdkp');
 
 		if (!is_array($this->tpl_output['js_file'])) $this->tpl_output['js_file'] = array();
-		
+
 		foreach($this->tpl_output['js_file'] as $key => $val){
 			if($val['direct']) {
 				continue;
@@ -386,7 +386,7 @@ class template extends gen_class {
 		}
 
 		ksort($arrFiles);
-		
+
 		//Static JS that can be combined
 		$imploded_jscodeeop = "";
 		if(is_array($this->get_templatedata('js_code_file')) || is_array($this->get_templatedata('js_code_file_docready'))){
@@ -397,7 +397,7 @@ class template extends gen_class {
 				$imploded_jscodeeop .= "});";
 			}
 		}
-		
+
 
 		//Check if there is an file for this hash
 		asort($arrHash);
@@ -425,7 +425,7 @@ class template extends gen_class {
 			foreach($data as $val){
 				$strJS .= ' '.$val['content'];
 			}
-			
+
 			$strJS .= "\n /* static code*/ \n".$imploded_jscodeeop;
 
 			$this->pfh->putContent($combinedFile, $strJS);
@@ -576,15 +576,15 @@ class template extends gen_class {
 
 		$imploded_jscode = implode("\n", $this->get_templatedata('js_code_head_top'));
 		$imploded_jscode = implode("\n", $this->get_templatedata('js_code_head'));
-		
+
 		$imploded_jscode = implode("\n", $this->get_templatedata('js_code'));
 		$imploded_jscode = implode("\n", $this->get_templatedata('js_code_static'));
-		
+
 		$imploded_jscode .= "jQuery(document).ready(function(){";
-		
+
 		$imploded_jscode .= implode("\n", $this->get_templatedata('js_code_static_docready'));
 		$imploded_jscode .= implode("\n", $this->get_templatedata('js_code_docready'));
-				
+
 		$imploded_jscode .= "});";
 
 		return $imploded_jscode;
@@ -615,7 +615,7 @@ class template extends gen_class {
 					$imploded_jscodeeop .= implode("\n", $this->get_templatedata('js_code_eop_docready'));
 					$imploded_jscodeeop .= "});";
 				}
-				
+
 				$this->assign_var('JS_CODE_EOP', $imploded_jscodeeop);
 				$this->set_templateout('js_code', true);
 			}
@@ -656,7 +656,7 @@ class template extends gen_class {
 		// Load the JS Files..
 		if(!$debug) $this->combine_js();
 
-		
+
 		if(!$this->get_templateout('js_file')){
 			if(is_array($this->get_templatedata('js_file'))){
 				ksort($this->get_templatedata('js_file'));
@@ -1705,7 +1705,7 @@ class template extends gen_class {
 			$strCSS = $parser->getCss();
 
 		} catch (Exception $e) {
-			echo "Fatal error parsing less: " . nl2br($e->getMessage());
+			#echo "Fatal error parsing less: " . nl2br($e->getMessage());
 		}
 
 		return $strCSS;
