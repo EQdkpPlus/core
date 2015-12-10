@@ -635,6 +635,13 @@ if (!class_exists("time")){
 			return $timestamp + ($a_times[0]*3600) + ($a_times[1]*60) + $seconds + $utcoffset;
 		}
 
+		public function newtime2($timestamp, $newtime='now'){
+			$newtime	= ($newtime=='now') ? $this->date('H').':'.$this->date('i') : $newtime;
+			$a_times	= explode(':', $newtime);
+			$objDate	= (new DateTime())->setTimestamp($timestamp)->setTimezone($this->userTimeZone)->setTime($a_times[0], $a_times[1]);
+			return $dateTime->format("U");
+		}
+
 		public function dateDiff($ts1, $ts2, $out='sec', $pos_neg=false){
 			// Build the Dates
 			if(!is_numeric($ts1)) {
