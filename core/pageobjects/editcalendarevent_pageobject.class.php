@@ -422,7 +422,7 @@ class editcalendarevent_pageobject extends pageobject {
 
 			// if the default time should be used, set it...
 			$use_default_starttime = $this->config->get('calendar_addraid_use_def_start') && preg_match('#[:]#', $this->config->get('calendar_addraid_def_starttime'));
-			if($this->in->get('timestamp', 0) > 0){d($this->in->get('calview', 'month'));
+			if($this->in->get('timestamp', 0) > 0){
 				$default_datetime	= ($this->in->get('calview', 'month') == 'month') ? $this->time->newtime($this->in->get('timestamp', 0)) : $this->time->convert_timestamp_from_utc($this->in->get('timestamp', 0));
 				$starttimestamp		= ($use_default_starttime) ? $this->time->newtime($this->in->get('timestamp', 0), $this->config->get('calendar_addraid_def_starttime')) : $default_datetime;
 			}else{
