@@ -421,10 +421,12 @@ class editcalendarevent_pageobject extends pageobject {
 			$default_raidduration	= ((($this->config->get('calendar_addraid_duration')) ? $this->config->get('calendar_addraid_duration') : 120)*60);
 
 			// if the default time should be used, set it...
-			if($this->config->get('calendar_addraid_use_def_start') && preg_match('#[:]#', $this->config->get('calendar_addraid_def_starttime'))){
-				$starttimestamp			= ($this->in->get('timestamp', 0) > 0) ? $this->time->newtime($this->in->get('timestamp', 0), $this->config->get('calendar_addraid_def_starttime')) : $this->time->fromformat($this->config->get('calendar_addraid_def_starttime'), $this->user->style['time']);
+			$use_default_starttime = $this->config->get('calendar_addraid_use_def_start') && preg_match('#[:]#', $this->config->get('calendar_addraid_def_starttime'));
+			if($this->in->get('timestamp', 0) > 0){d($this->in->get('calview', 'month'));
+				$default_datetime	= ($this->in->get('calview', 'month') == 'month') ? $this->time->newtime($this->in->get('timestamp', 0)) : $this->time->convert_timestamp_from_utc($this->in->get('timestamp', 0));
+				$starttimestamp		= ($use_default_starttime) ? $this->time->newtime($this->in->get('timestamp', 0), $this->config->get('calendar_addraid_def_starttime')) : $default_datetime;
 			}else{
-				$starttimestamp			= ($this->in->get('timestamp', 0) > 0) ? $this->time->newtime($this->in->get('timestamp', 0)) : $this->time->time;
+				$starttimestamp		= ($use_default_starttime) ? $this->time->fromformat($this->config->get('calendar_addraid_def_starttime'), $this->user->style['time']) : $this->time->time;
 			}
 
 			$defdates = array(

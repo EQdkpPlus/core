@@ -303,6 +303,18 @@ if (!class_exists("time")){
 			return $objDate->format("U");
 		}
 
+		public function convert_timestamp_from_utc($intSourceTimestamp){
+			$second = date('s', $intSourceTimestamp);
+			$minute = date('i', $intSourceTimestamp);
+			$hour   = date('H', $intSourceTimestamp);
+			$day    = date('d', $intSourceTimestamp);
+			$month  = date('m', $intSourceTimestamp);
+			$year   = date('Y', $intSourceTimestamp);
+
+			$string = $year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second;
+
+			return (new DateTime($string, $this->userTimeZone))->format("U");
+		}
 
 		/**
 		 * Output Date in nice-format, like 7 days ago
@@ -627,9 +639,9 @@ if (!class_exists("time")){
 		}
 
 		public function newtime($timestamp, $newtime='now'){
-			$newtime	= ($newtime=='now') ? $this->date('H').':'.$this->date('i') : $newtime;
+			$newtime	= ($newtime=='now') ? (new DateTime())->format('H:i') : $newtime;
 			$a_times	= explode(':', $newtime);
-			$objDate	= (new DateTime())->setTimestamp($timestamp)->setTimezone($this->userTimeZone)->setTime($a_times[0], $a_times[1]);
+			$objDate	= (new DateTime())->setTimestamp($timestamp)->setTimezone(new DateTimeZone('UTC'))->setTime($a_times[0], $a_times[1])->setTimezone($this->userTimeZone);
 			return $objDate->format("U");
 		}
 

@@ -36,19 +36,17 @@
 				right: 'month,agendaWeek,agendaDay'
 			},
 			<!-- IF IS_OPERATOR -->
-			dayClick: function(date, allDay, jsEvent, view) {
-				if (allDay) {
-					jQuery.FrameDialog.create({
-						url: '{U_EDIT_CALENDAREVENT}&simple_head=true&timestamp='+(moment.utc(date).unix()),
-						title: "{L_calendar_win_add}",
-						width: 940,
-						height:730,
-						modal: false,
-						buttons: false,
-						close: function(event, ui) { $('#calendar').fullCalendar('refetchEvents'); }
-					});
-					return false;
-				}
+			dayClick: function(date, jsEvent, view) {
+				jQuery.FrameDialog.create({
+					url: '{U_EDIT_CALENDAREVENT}&simple_head=true&calview='+view.name+'&timestamp='+(moment.utc(date).unix()),
+					title: "{L_calendar_win_add}",
+					width: 940,
+					height:730,
+					modal: false,
+					buttons: false,
+					close: function(event, ui) { $('#calendar').fullCalendar('refetchEvents'); }
+				});
+				return false;
 			},
 			<!-- ENDIF -->
 			eventRender: function(event, element) {
