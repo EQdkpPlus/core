@@ -83,7 +83,8 @@ class embedly extends gen_class {
 			$out = $this->formatEmbedded($oembed);
 			if (strlen($out)){
 				$out = ($blnEncodeMediaTags) ? htmlspecialchars($out) : $out;
-				$string = str_replace($arrDecodedLinks[$key], $out, $string);
+				
+				$string = preg_replace("#([^\"':])".preg_quote($arrDecodedLinks[$key], '#')."#i", "$1".$out, $string);
 			}
 		}
 
