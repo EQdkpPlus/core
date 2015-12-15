@@ -287,6 +287,13 @@ class template extends gen_class {
 				if(!defined('DISABLE_LESS')){
 					$strCSS = $this->parseLess($strCSS);
 				}
+				
+				//Minify CSS
+				if(!defined('DISABLE_CSS_MINIFY')){
+					$compressor = new CSSmin();
+					$compressor->set_max_execution_time(120);
+					$strCSS = $compressor->run($strCSS);
+				}
 
 				$this->pfh->putContent($combinedFile, $strCSS);
 				$this->timekeeper->put('tpl_cache_'.$this->style_code, 'combined.css');
@@ -1697,18 +1704,13 @@ class template extends gen_class {
 			require_once $this->root_path.'libraries/less/Less.php';
 
 			$options = array();
-
-			if(!defined('DISABLE_CSS_MINIFY')){
-				$options = array( 'compress' => true );
-			}
-
 			$parser = new Less_Parser($options);
 			$parser->ModifyVars($lessVars);
 			$parser->parse($strCSS);
 			$strCSS = $parser->getCss();
 
 		} catch (Exception $e) {
-			#echo "Fatal error parsing less: " . nl2br($e->getMessage());
+			echo "Fatal error parsing less: " . nl2br($e->getMessage());
 		}
 
 		return $strCSS;
