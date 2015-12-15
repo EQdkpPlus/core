@@ -38,27 +38,33 @@ class editcalendarevent_pageobject extends pageobject {
 
 	// fetch an event template as JSON data
 	public function process_loadtemplate(){
-		$jsondata = $this->pdh->get('calendar_raids_templates', 'templates', array($this->in->get('loadtemplate', 0)));
-		$tmparray = array();
-		$distribution = '';
-		foreach($jsondata as $tplkey=>$tplvalue){
-			if($tplkey == 'cal_raidmodeselect'){
-				$distribution = $tplvalue;
+		$tmp_id		= $this->in->get('loadtemplate', '');
+		$tmp_id		= explode('_', $tmp_id);
+		if(isset($tmp_id[1])){
+			$load_id	= $tmp_id[1];
+			$load_type	= $tmp_id[0];
+			$jsondata = ($load_type == 't') ? $this->pdh->get('calendar_raids_templates', 'templates', array($load_id)) : $this->pdh->get('calendar_events', 'template', array($load_id));
+			$tmparray = array();
+			$distribution = '';
+			foreach($jsondata as $tplkey=>$tplvalue){
+				if($tplkey == 'cal_raidmodeselect'){
+					$distribution = $tplvalue;
+				}
+				if($tplkey == 'distribution'){
+					foreach($tplvalue as $clssid=>$clssval)
+					$tmparray[] = array(
+						'field'	=> 'inp_'.$distribution.'_'.$clssid,
+						'value'	=> $clssval
+					);
+				}else{
+					$tmparray[] = array(
+						'field'	=> $tplkey,
+						'value'	=> $tplvalue
+					);
+				}
 			}
-			if($tplkey == 'distribution'){
-				foreach($tplvalue as $clssid=>$clssval)
-				$tmparray[] = array(
-					'field'	=> 'inp_'.$distribution.'_'.$clssid,
-					'value'	=> $clssval
-				);
-			}else{
-				$tmparray[] = array(
-					'field'	=> $tplkey,
-					'value'	=> $tplvalue
-				);
-			}
+			echo json_encode($tmparray);exit;
 		}
-		echo json_encode($tmparray);exit;
 	}
 
 	// this function generates a dropdown with the events

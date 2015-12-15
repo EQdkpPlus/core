@@ -33972,7 +33972,7 @@ var tooltip = $.widget( "ui.tooltip", {
 			var self = this;
 			
 			if(typeof index === 'string'){
-				index = self.$select.find('option[value='+index+']').index() - 1;
+				index = self.$select.find('option[value='+index+']').index();
 			};
 			
 			var	option = self.options[index],

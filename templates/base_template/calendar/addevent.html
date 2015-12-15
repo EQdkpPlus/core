@@ -104,15 +104,14 @@ $(document).ready(function() {
 	// Load the raid template if selected
 	$("#cal_raidtemplate").bind("change", function(e){
 		$(".resettemplate_input").val('');
-		if($(this).val() > 0){
+		if($(this).val() != ''){
 			$.getJSON("{EQDKP_CONTROLLER_PATH}editcalendarevent{SEO_EXTENSION}{SID}&loadtemplate="+$(this).val(), function(data){
 				$.each(data, function(i,item){
-					//if(item.field == 'dw_raidleader'){
-						//$("#dw_raidleader").attr("value","3")
-
-						//}else{
-						$("#"+item.field).val(item.value);
-						//}
+					$("#"+item.field).val(item.value);
+					if(item.field == 'selectmode'){
+						$('#selectmode').easyDropDown('select', 'event')
+						$('#selectmode').trigger('change');
+					}
 				});
 				$("#dw_raidleader").multiselect("refresh");
 				$('#cal_raidmodeselect').trigger('change');
@@ -212,7 +211,7 @@ function attendeeCount(){
 
 	<fieldset class="settings mediumsettings floatLeft" id="eventsettings" style="width: 540px;">
 		<legend>{DR_CALENDARMODE}</legend>
-		<dl class="raid">
+		<dl>
 			<dt><label>{L_raidevent_template}</label></dt>
 			<dd>{DR_TEMPLATE}
 				<button type="button" name="delete_template" id="template_delbutton"><i class="fa fa-trash-o"></i></button>

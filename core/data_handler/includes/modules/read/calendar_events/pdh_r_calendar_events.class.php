@@ -56,9 +56,11 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 
 		public function reset(){
 			$this->pdc->del('pdh_calendar_events_table.events');
+			$this->pdc->del('pdh_calendar_events_table.events_unique');
 			$this->pdc->del('pdh_calendar_events_table.repeatable');
 			$this->pdc->del('pdh_calendar_events_table.timestamps');
 			$this->events				= NULL;
+			$this->events_unique		= NULL;
 			$this->repeatable_events	= NULL;
 			$this->event_timestamps		= NULL;
 		}
@@ -66,13 +68,14 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 		public function init(){
 			//cached data not outdated?
 			$this->events				= $this->pdc->get('pdh_calendar_events_table.events');
+			$this->events_unique		= $this->pdc->get('pdh_calendar_events_table.events_unique');
 			$this->repeatable_events	= $this->pdc->get('pdh_calendar_events_table.repeatable');
 			$this->event_timestamps		= $this->pdc->get('pdh_calendar_events_table.timestamps');
-			if($this->events !== NULL && $this->repeatable_events !== NULL && $this->event_timestamps !== NULL){
+			if($this->events !== NULL && $this->events_unique !== NULL && $this->repeatable_events !== NULL && $this->event_timestamps !== NULL){
 				return true;
 			}
 
-			$objQuery = $this->db->query("SELECT * FROM __calendar_events");
+			$objQuery = $this->db->query("SELECT * FROM __calendar_events ORDER BY id ASC");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					$this->events[$row['id']] = array(
@@ -94,6 +97,17 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 					$this->events[$row['id']]['extension']	= unserialize($row['extension']);
 					$this->event_timestamps[$row['id']]		= (int)$row['timestamp_start'];
 
+					// unique event array
+					$raidventID	= (isset($this->events[$row['id']]['extension']['raid_eventid']) && $this->events[$row['id']]['extension']['raid_eventid'] > 0) ? $this->events[$row['id']]['extension']['raid_eventid'] : 0;
+					$uniqueID 	= ($raidventID > 0) ? $raidventID : $row['name'];
+					if($uniqueID != ''){
+						$this->events_unique[$uniqueID] = array(
+							'ts'	=> (int)$row['timestamp_start'],
+							'id'	=> $row['id'],
+							'name'	=> $uniqueID
+						);
+					}
+
 					// set the repeatable array
 					if((int)$row['repeating'] > 0){
 						$parentid	= ((int)$row['cloneid'] > 0) ? (int)$row['cloneid'] : (int)$row['id'];
@@ -106,6 +120,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 
 				// set the cache
 				$this->pdc->put('pdh_calendar_events_table.events', $this->events, null);
+				$this->pdc->put('pdh_calendar_events_table.events_unique', $this->events_unique, null);
 				$this->pdc->put('pdh_calendar_events_table.repeatable', $this->repeatable_events, null);
 				$this->pdc->put('pdh_calendar_events_table.timestamps', $this->event_timestamps, null);
 			}
@@ -177,6 +192,15 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			return $ids;
 		}
 
+		public function get_lastuniqueevents($amount=10){
+			$items 	= $this->events_unique;
+			usort($items, function ($a1, $a2) {
+				if ($a1['ts'] == $a2['ts']) return 0;
+				return ($a1['ts'] > $a2['ts']) ? -1 : 1;
+			});
+			return array_slice($items, -$amount);
+		}
+
 		public function get_repeatable_events($cloneid=0){
 			return ($cloneid > 0) ? $this->repeatable_events[$cloneid] : $this->repeatable_events;
 		}
@@ -187,6 +211,33 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 
 		public function get_data($id=''){
 			return 	($id) ? $this->events[$id] : $this->events;
+		}
+
+		public function get_template($id=0){
+			if($id > 0){
+				$extension = $this->get_extension($id);
+				if(isset($extension['calendarmode']) && $extension['calendarmode'] == 'raid'){
+					// it is a raid event
+					return 	array(
+						'input_eventid'			=> $extension['raid_eventid'],
+						'input_dkpvalue'		=> $extension['raid_value'],
+						'input_note'			=> $this->get_notes($id),
+						'selectmode'			=> $extension['calendarmode'],
+						'cal_raidmodeselect'	=> $extension['raidmode'],
+						'dw_raidleader'			=> $extension['raidleader'],
+						'distribution'			=> $extension['distribution'],
+						'deadlinedate'			=> $extension['deadlinedate'],
+					);
+				}else{
+					// it is a normal event
+					return 	array(
+						'input_eventid'			=> $this->get_name($id),
+						'input_note'			=> $this->get_notes($id),
+						'selectmode'			=> 'event',
+					);
+				}
+			}
+			return array();
 		}
 
 		public function get_timezone($id=''){

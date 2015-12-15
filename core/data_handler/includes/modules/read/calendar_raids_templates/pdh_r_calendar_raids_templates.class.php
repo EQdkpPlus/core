@@ -60,7 +60,7 @@ if (!class_exists('pdh_r_calendar_raids_templates')){
 
 			// empty array as default
 			$this->rctemplates	= array();
-			
+
 			$objQuery = $this->db->query('SELECT * FROM __calendar_raid_templates;');
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
@@ -74,7 +74,7 @@ if (!class_exists('pdh_r_calendar_raids_templates')){
 				}
 				$this->pdc->put('pdh_calendar_raids_table.templates', $this->rctemplates, NULL);
 			}
-	
+
 			return true;
 		}
 
@@ -86,9 +86,22 @@ if (!class_exists('pdh_r_calendar_raids_templates')){
 			$out = array(''=>'----');
 			if(is_array($this->rctemplates)){
 				foreach($this->rctemplates as $tplid=>$data){
-					$out[$tplid]	= $data['name'];
+					$out['templates']['t_'.$tplid]	= $data['name'];
 				}
 			}
+
+			// now, let us add the last 10 unique raids
+			$lastevents = $this->pdh->get('calendar_events', 'lastuniqueevents', array(10));
+			if(is_array($lastevents)){
+				foreach($lastevents as $lasteventdata){
+					$lasteventid 	= $lasteventdata['id'];
+					$name			= (is_numeric($lasteventdata['name'])) ? $this->pdh->get('event', 'name', array($lasteventdata['name'])) : $lasteventdata['name'];
+					if($name){
+						$out['lastraids']['l_'.$lasteventid]	= $name;
+					}
+				}
+			}
+
 			return $out;
 		}
 
