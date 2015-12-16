@@ -9210,9 +9210,8 @@ return jQuery;
 }));
 
 /*!
- * jQuery Migrate - v1.2.1 - 2013-05-08
- * https://github.com/jquery/jquery-migrate
- * Copyright 2005, 2013 jQuery Foundation, Inc. and other contributors; Licensed MIT
+ * jQuery Migrate - v1.2.2-pre - 2015-08-10
+ * Copyright jQuery Foundation and other contributors
  */
 (function( jQuery, window, undefined ) {
 // See http://bugs.jquery.com/ticket/13335
@@ -9401,22 +9400,24 @@ jQuery.attrHooks.value = {
 var matched, browser,
 	oldInit = jQuery.fn.init,
 	oldParseJSON = jQuery.parseJSON,
+	rspaceAngle = /^\s*</,
 	// Note: XSS check is done below after string is trimmed
 	rquickExpr = /^([^<]*)(<[\w\W]+>)([^>]*)$/;
 
 // $(html) "looks like html" rule change
 jQuery.fn.init = function( selector, context, rootjQuery ) {
-	var match;
+	var match, ret;
 
 	if ( selector && typeof selector === "string" && !jQuery.isPlainObject( context ) &&
 			(match = rquickExpr.exec( jQuery.trim( selector ) )) && match[ 0 ] ) {
 		// This is an HTML string according to the "old" rules; is it still?
-		if ( selector.charAt( 0 ) !== "<" ) {
+		if ( !rspaceAngle.test( selector ) ) {
 			migrateWarn("$(html) HTML strings must start with '<' character");
 		}
 		if ( match[ 3 ] ) {
 			migrateWarn("$(html) HTML text after last tag is ignored");
 		}
+
 		// Consistently reject any HTML-like string starting with a hash (#9521)
 		// Note that this may break jQuery 1.6.x code that otherwise would work.
 		if ( match[ 0 ].charAt( 0 ) === "#" ) {
@@ -9429,17 +9430,40 @@ jQuery.fn.init = function( selector, context, rootjQuery ) {
 			context = context.context;
 		}
 		if ( jQuery.parseHTML ) {
-			return oldInit.call( this, jQuery.parseHTML( match[ 2 ], context, true ),
+			return oldInit.call( this,
+					jQuery.parseHTML( match[ 2 ], context && context.ownerDocument || context, true ),
 					context, rootjQuery );
 		}
 	}
-	return oldInit.apply( this, arguments );
+
+	// jQuery( "#" ) is a bogus ID selector, but it returned an empty set before jQuery 3.0
+	if ( selector === "#" ) {
+		migrateWarn( "jQuery( '#' ) is not a valid selector" );
+		selector = [];
+	}
+
+	ret = oldInit.apply( this, arguments );
+
+	// Fill in selector and context properties so .live() works
+	if ( selector && selector.selector !== undefined ) {
+		// A jQuery object, copy its properties
+		ret.selector = selector.selector;
+		ret.context = selector.context;
+
+	} else {
+		ret.selector = typeof selector === "string" ? selector : "";
+		if ( selector ) {
+			ret.context = selector.nodeType? selector : context || document;
+		}
+	}
+
+	return ret;
 };
 jQuery.fn.init.prototype = jQuery.fn;
 
 // Let $.parseJSON(falsy_value) return null
 jQuery.parseJSON = function( json ) {
-	if ( !json && json !== null ) {
+	if ( !json ) {
 		migrateWarn("jQuery.parseJSON requires a valid JSON string");
 		return null;
 	}
@@ -9485,6 +9509,11 @@ if ( !jQuery.browser ) {
 // Warn if the code tries to get jQuery.browser
 migrateWarnProp( jQuery, "browser", jQuery.browser, "jQuery.browser is deprecated" );
 
+// jQuery.boxModel deprecated in 1.3, jQuery.support.boxModel deprecated in 1.7
+jQuery.boxModel = jQuery.support.boxModel = (document.compatMode === "CSS1Compat");
+migrateWarnProp( jQuery, "boxModel", jQuery.boxModel, "jQuery.boxModel is deprecated" );
+migrateWarnProp( jQuery.support, "boxModel", jQuery.support.boxModel, "jQuery.support.boxModel is deprecated" );
+
 jQuery.sub = function() {
 	function jQuerySub( selector, context ) {
 		return new jQuerySub.fn.init( selector, context );
@@ -9495,16 +9524,66 @@ jQuery.sub = function() {
 	jQuerySub.fn.constructor = jQuerySub;
 	jQuerySub.sub = this.sub;
 	jQuerySub.fn.init = function init( selector, context ) {
-		if ( context && context instanceof jQuery && !(context instanceof jQuerySub) ) {
-			context = jQuerySub( context );
-		}
-
-		return jQuery.fn.init.call( this, selector, context, rootjQuerySub );
+		var instance = jQuery.fn.init.call( this, selector, context, rootjQuerySub );
+		return instance instanceof jQuerySub ?
+			instance :
+			jQuerySub( instance );
 	};
 	jQuerySub.fn.init.prototype = jQuerySub.fn;
 	var rootjQuerySub = jQuerySub(document);
 	migrateWarn( "jQuery.sub() is deprecated" );
 	return jQuerySub;
+};
+
+// The number of elements contained in the matched element set
+jQuery.fn.size = function() {
+	migrateWarn( "jQuery.fn.size() is deprecated; use the .length property" );
+	return this.length;
+};
+
+
+var internalSwapCall = false;
+
+// If this version of jQuery has .swap(), don't false-alarm on internal uses
+if ( jQuery.swap ) {
+	jQuery.each( [ "height", "width", "reliableMarginRight" ], function( _, name ) {
+		var oldHook = jQuery.cssHooks[ name ] && jQuery.cssHooks[ name ].get;
+
+		if ( oldHook ) {
+			jQuery.cssHooks[ name ].get = function() {
+				var ret;
+
+				internalSwapCall = true;
+				ret = oldHook.apply( this, arguments );
+				internalSwapCall = false;
+				return ret;
+			};
+		}
+	});
+}
+
+jQuery.swap = function( elem, options, callback, args ) {
+	var ret, name,
+		old = {};
+
+	if ( !internalSwapCall ) {
+		migrateWarn( "jQuery.swap() is undocumented and deprecated" );
+	}
+
+	// Remember the old values, and insert the new ones
+	for ( name in options ) {
+		old[ name ] = elem.style[ name ];
+		elem.style[ name ] = options[ name ];
+	}
+
+	ret = callback.apply( elem, args || [] );
+
+	// Revert the old values
+	for ( name in options ) {
+		elem.style[ name ] = old[ name ];
+	}
+
+	return ret;
 };
 
 
@@ -9535,13 +9614,7 @@ jQuery.fn.data = function( name ) {
 };
 
 
-var rscriptType = /\/(java|ecma)script/i,
-	oldSelf = jQuery.fn.andSelf || jQuery.fn.addBack;
-
-jQuery.fn.andSelf = function() {
-	migrateWarn("jQuery.fn.andSelf() replaced by jQuery.fn.addBack()");
-	return oldSelf.apply( this, arguments );
-};
+var rscriptType = /\/(java|ecma)script/i;
 
 // Since jQuery.clean is used internally on older versions, we only shim if it's missing
 if ( !jQuery.clean ) {
@@ -9728,11 +9801,94 @@ jQuery.each( ajaxEvents.split("|"),
 	}
 );
 
+var oldSelf = jQuery.fn.andSelf || jQuery.fn.addBack,
+	oldFind = jQuery.fn.find;
+
+jQuery.fn.andSelf = function() {
+	migrateWarn("jQuery.fn.andSelf() replaced by jQuery.fn.addBack()");
+	return oldSelf.apply( this, arguments );
+};
+
+jQuery.fn.find = function( selector ) {
+	var ret = oldFind.apply( this, arguments );
+	ret.context = this.context;
+	ret.selector = this.selector ? this.selector + " " + selector : selector;
+	return ret;
+};
+
+
+// jQuery 1.6 did not support Callbacks, do not warn there
+if ( jQuery.Callbacks ) {
+
+	var oldDeferred = jQuery.Deferred,
+		tuples = [
+			// action, add listener, callbacks, .then handlers, final state
+			[ "resolve", "done", jQuery.Callbacks("once memory"),
+				jQuery.Callbacks("once memory"), "resolved" ],
+			[ "reject", "fail", jQuery.Callbacks("once memory"),
+				jQuery.Callbacks("once memory"), "rejected" ],
+			[ "notify", "progress", jQuery.Callbacks("memory"),
+				jQuery.Callbacks("memory") ]
+		];
+
+	jQuery.Deferred = function( func ) {
+		var deferred = oldDeferred(),
+			promise = deferred.promise();
+
+		deferred.pipe = promise.pipe = function( /* fnDone, fnFail, fnProgress */ ) {
+			var fns = arguments;
+
+			migrateWarn( "deferred.pipe() is deprecated" );
+
+			return jQuery.Deferred(function( newDefer ) {
+				jQuery.each( tuples, function( i, tuple ) {
+					var fn = jQuery.isFunction( fns[ i ] ) && fns[ i ];
+					// deferred.done(function() { bind to newDefer or newDefer.resolve })
+					// deferred.fail(function() { bind to newDefer or newDefer.reject })
+					// deferred.progress(function() { bind to newDefer or newDefer.notify })
+					deferred[ tuple[1] ](function() {
+						var returned = fn && fn.apply( this, arguments );
+						if ( returned && jQuery.isFunction( returned.promise ) ) {
+							returned.promise()
+								.done( newDefer.resolve )
+								.fail( newDefer.reject )
+								.progress( newDefer.notify );
+						} else {
+							newDefer[ tuple[ 0 ] + "With" ](
+								this === promise ? newDefer.promise() : this,
+								fn ? [ returned ] : arguments
+							);
+						}
+					});
+				});
+				fns = null;
+			}).promise();
+
+		};
+
+		deferred.isResolved = function() {
+			migrateWarn( "deferred.isResolved is deprecated" );
+			return deferred.state() === "resolved";
+		};
+
+		deferred.isRejected = function() {
+			migrateWarn( "deferred.isRejected is deprecated" );
+			return deferred.state() === "rejected";
+		};
+
+		if ( func ) {
+			func.call( deferred, deferred );
+		}
+
+		return deferred;
+	};
+
+}
 
 })( jQuery, window );
 
 //! moment.js
-//! version : 2.10.3
+//! version : 2.10.6
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
 //! license : MIT
 //! momentjs.com
@@ -9827,6 +9983,7 @@ jQuery.each( ajaxEvents.split("|"),
                 flags.overflow < 0 &&
                 !flags.empty &&
                 !flags.invalidMonth &&
+                !flags.invalidWeekday &&
                 !flags.nullInput &&
                 !flags.invalidFormat &&
                 !flags.userInvalidated;
@@ -9907,7 +10064,7 @@ jQuery.each( ajaxEvents.split("|"),
     // Moment prototype object
     function Moment(config) {
         copyConfig(this, config);
-        this._d = new Date(+config._d);
+        this._d = new Date(config._d != null ? config._d.getTime() : NaN);
         // Prevent infinite loop in case updateOffset creates new moment
         // objects.
         if (updateInProgress === false) {
@@ -9921,16 +10078,20 @@ jQuery.each( ajaxEvents.split("|"),
         return obj instanceof Moment || (obj != null && obj._isAMomentObject != null);
     }
 
+    function absFloor (number) {
+        if (number < 0) {
+            return Math.ceil(number);
+        } else {
+            return Math.floor(number);
+        }
+    }
+
     function toInt(argumentForCoercion) {
         var coercedNumber = +argumentForCoercion,
             value = 0;
 
         if (coercedNumber !== 0 && isFinite(coercedNumber)) {
-            if (coercedNumber >= 0) {
-                value = Math.floor(coercedNumber);
-            } else {
-                value = Math.ceil(coercedNumber);
-            }
+            value = absFloor(coercedNumber);
         }
 
         return value;
@@ -10028,9 +10189,7 @@ jQuery.each( ajaxEvents.split("|"),
     function defineLocale (name, values) {
         if (values !== null) {
             values.abbr = name;
-            if (!locales[name]) {
-                locales[name] = new Locale();
-            }
+            locales[name] = locales[name] || new Locale();
             locales[name].set(values);
 
             // backwards compat for now: also set the locale
@@ -10134,16 +10293,14 @@ jQuery.each( ajaxEvents.split("|"),
     }
 
     function zeroFill(number, targetLength, forceSign) {
-        var output = '' + Math.abs(number),
+        var absNumber = '' + Math.abs(number),
+            zerosToFill = targetLength - absNumber.length,
             sign = number >= 0;
-
-        while (output.length < targetLength) {
-            output = '0' + output;
-        }
-        return (sign ? (forceSign ? '+' : '') : '-') + output;
+        return (sign ? (forceSign ? '+' : '') : '-') +
+            Math.pow(10, Math.max(0, zerosToFill)).toString().substr(1) + absNumber;
     }
 
-    var formattingTokens = /(\[[^\[]*\])|(\\)?(Mo|MM?M?M?|Do|DDDo|DD?D?D?|ddd?d?|do?|w[o|w]?|W[o|W]?|Q|YYYYYY|YYYYY|YYYY|YY|gg(ggg?)?|GG(GGG?)?|e|E|a|A|hh?|HH?|mm?|ss?|S{1,4}|x|X|zz?|ZZ?|.)/g;
+    var formattingTokens = /(\[[^\[]*\])|(\\)?(Mo|MM?M?M?|Do|DDDo|DD?D?D?|ddd?d?|do?|w[o|w]?|W[o|W]?|Q|YYYYYY|YYYYY|YYYY|YY|gg(ggg?)?|GG(GGG?)?|e|E|a|A|hh?|HH?|mm?|ss?|S{1,9}|x|X|zz?|ZZ?|.)/g;
 
     var localFormattingTokens = /(\[[^\[]*\])|(\\)?(LTS|LT|LL?L?L?|l{1,4})/g;
 
@@ -10211,10 +10368,7 @@ jQuery.each( ajaxEvents.split("|"),
         }
 
         format = expandFormat(format, m.localeData());
-
-        if (!formatFunctions[format]) {
-            formatFunctions[format] = makeFormatFunction(format);
-        }
+        formatFunctions[format] = formatFunctions[format] || makeFormatFunction(format);
 
         return formatFunctions[format](m);
     }
@@ -10258,8 +10412,15 @@ jQuery.each( ajaxEvents.split("|"),
 
     var regexes = {};
 
+    function isFunction (sth) {
+        // https://github.com/moment/moment/issues/2325
+        return typeof sth === 'function' &&
+            Object.prototype.toString.call(sth) === '[object Function]';
+    }
+
+
     function addRegexToken (token, regex, strictRegex) {
-        regexes[token] = typeof regex === 'function' ? regex : function (isStrict) {
+        regexes[token] = isFunction(regex) ? regex : function (isStrict) {
             return (isStrict && strictRegex) ? strictRegex : regex;
         };
     }
@@ -10467,12 +10628,11 @@ jQuery.each( ajaxEvents.split("|"),
     }
 
     function deprecate(msg, fn) {
-        var firstTime = true,
-            msgWithStack = msg + '\n' + (new Error()).stack;
+        var firstTime = true;
 
         return extend(function () {
             if (firstTime) {
-                warn(msgWithStack);
+                warn(msg + '\n' + (new Error()).stack);
                 firstTime = false;
             }
             return fn.apply(this, arguments);
@@ -10520,14 +10680,14 @@ jQuery.each( ajaxEvents.split("|"),
             getParsingFlags(config).iso = true;
             for (i = 0, l = isoDates.length; i < l; i++) {
                 if (isoDates[i][1].exec(string)) {
-                    // match[5] should be 'T' or undefined
-                    config._f = isoDates[i][0] + (match[6] || ' ');
+                    config._f = isoDates[i][0];
                     break;
                 }
             }
             for (i = 0, l = isoTimes.length; i < l; i++) {
                 if (isoTimes[i][1].exec(string)) {
-                    config._f += isoTimes[i][0];
+                    // match[6] should be 'T' or space
+                    config._f += (match[6] || ' ') + isoTimes[i][0];
                     break;
                 }
             }
@@ -10606,7 +10766,10 @@ jQuery.each( ajaxEvents.split("|"),
     addRegexToken('YYYYY',  match1to6, match6);
     addRegexToken('YYYYYY', match1to6, match6);
 
-    addParseToken(['YYYY', 'YYYYY', 'YYYYYY'], YEAR);
+    addParseToken(['YYYYY', 'YYYYYY'], YEAR);
+    addParseToken('YYYY', function (input, array) {
+        array[YEAR] = input.length === 2 ? utils_hooks__hooks.parseTwoDigitYear(input) : toInt(input);
+    });
     addParseToken('YY', function (input, array) {
         array[YEAR] = utils_hooks__hooks.parseTwoDigitYear(input);
     });
@@ -10733,18 +10896,18 @@ jQuery.each( ajaxEvents.split("|"),
 
     //http://en.wikipedia.org/wiki/ISO_week_date#Calculating_a_date_given_the_year.2C_week_number_and_weekday
     function dayOfYearFromWeeks(year, week, weekday, firstDayOfWeekOfYear, firstDayOfWeek) {
-        var d = createUTCDate(year, 0, 1).getUTCDay();
-        var daysToAdd;
-        var dayOfYear;
+        var week1Jan = 6 + firstDayOfWeek - firstDayOfWeekOfYear, janX = createUTCDate(year, 0, 1 + week1Jan), d = janX.getUTCDay(), dayOfYear;
+        if (d < firstDayOfWeek) {
+            d += 7;
+        }
 
-        d = d === 0 ? 7 : d;
-        weekday = weekday != null ? weekday : firstDayOfWeek;
-        daysToAdd = firstDayOfWeek - d + (d > firstDayOfWeekOfYear ? 7 : 0) - (d < firstDayOfWeek ? 7 : 0);
-        dayOfYear = 7 * (week - 1) + (weekday - firstDayOfWeek) + daysToAdd + 1;
+        weekday = weekday != null ? 1 * weekday : firstDayOfWeek;
+
+        dayOfYear = 1 + week1Jan + 7 * (week - 1) - d + weekday;
 
         return {
-            year      : dayOfYear > 0 ? year      : year - 1,
-            dayOfYear : dayOfYear > 0 ? dayOfYear : daysInYear(year - 1) + dayOfYear
+            year: dayOfYear > 0 ? year : year - 1,
+            dayOfYear: dayOfYear > 0 ?  dayOfYear : daysInYear(year - 1) + dayOfYear
         };
     }
 
@@ -11030,9 +11193,19 @@ jQuery.each( ajaxEvents.split("|"),
     }
 
     function createFromConfig (config) {
+        var res = new Moment(checkOverflow(prepareConfig(config)));
+        if (res._nextDay) {
+            // Adding is smart enough around DST
+            res.add(1, 'd');
+            res._nextDay = undefined;
+        }
+
+        return res;
+    }
+
+    function prepareConfig (config) {
         var input = config._i,
-            format = config._f,
-            res;
+            format = config._f;
 
         config._locale = config._locale || locale_locales__getLocale(config._l);
 
@@ -11056,14 +11229,7 @@ jQuery.each( ajaxEvents.split("|"),
             configFromInput(config);
         }
 
-        res = new Moment(checkOverflow(config));
-        if (res._nextDay) {
-            // Adding is smart enough around DST
-            res.add(1, 'd');
-            res._nextDay = undefined;
-        }
-
-        return res;
+        return config;
     }
 
     function configFromInput(config) {
@@ -11143,7 +11309,7 @@ jQuery.each( ajaxEvents.split("|"),
         }
         res = moments[0];
         for (i = 1; i < moments.length; ++i) {
-            if (moments[i][fn](res)) {
+            if (!moments[i].isValid() || moments[i][fn](res)) {
                 res = moments[i];
             }
         }
@@ -11255,7 +11421,6 @@ jQuery.each( ajaxEvents.split("|"),
         } else {
             return local__createLocal(input).local();
         }
-        return model._isUTC ? local__createLocal(input).zone(model._offset || 0) : local__createLocal(input).local();
     }
 
     function getDateOffset (m) {
@@ -11355,12 +11520,7 @@ jQuery.each( ajaxEvents.split("|"),
     }
 
     function hasAlignedHourOffset (input) {
-        if (!input) {
-            input = 0;
-        }
-        else {
-            input = local__createLocal(input).utcOffset();
-        }
+        input = input ? local__createLocal(input).utcOffset() : 0;
 
         return (this.utcOffset() - input) % 60 === 0;
     }
@@ -11373,12 +11533,24 @@ jQuery.each( ajaxEvents.split("|"),
     }
 
     function isDaylightSavingTimeShifted () {
-        if (this._a) {
-            var other = this._isUTC ? create_utc__createUTC(this._a) : local__createLocal(this._a);
-            return this.isValid() && compareArrays(this._a, other.toArray()) > 0;
+        if (typeof this._isDSTShifted !== 'undefined') {
+            return this._isDSTShifted;
         }
 
-        return false;
+        var c = {};
+
+        copyConfig(c, this);
+        c = prepareConfig(c);
+
+        if (c._a) {
+            var other = c._isUTC ? create_utc__createUTC(c._a) : local__createLocal(c._a);
+            this._isDSTShifted = this.isValid() &&
+                compareArrays(c._a, other.toArray()) > 0;
+        } else {
+            this._isDSTShifted = false;
+        }
+
+        return this._isDSTShifted;
     }
 
     function isLocal () {
@@ -11538,7 +11710,7 @@ jQuery.each( ajaxEvents.split("|"),
     var add_subtract__add      = createAdder(1, 'add');
     var add_subtract__subtract = createAdder(-1, 'subtract');
 
-    function moment_calendar__calendar (time) {
+    function moment_calendar__calendar (time, formats) {
         // We want to compare the start of today, vs this.
         // Getting start-of-today depends on whether we're local/utc/offset or not.
         var now = time || local__createLocal(),
@@ -11550,7 +11722,7 @@ jQuery.each( ajaxEvents.split("|"),
                 diff < 1 ? 'sameDay' :
                 diff < 2 ? 'nextDay' :
                 diff < 7 ? 'nextWeek' : 'sameElse';
-        return this.format(this.localeData().calendar(format, this, local__createLocal(now)));
+        return this.format(formats && formats[format] || this.localeData().calendar(format, this, local__createLocal(now)));
     }
 
     function clone () {
@@ -11594,14 +11766,6 @@ jQuery.each( ajaxEvents.split("|"),
         } else {
             inputMs = +local__createLocal(input);
             return +(this.clone().startOf(units)) <= inputMs && inputMs <= +(this.clone().endOf(units));
-        }
-    }
-
-    function absFloor (number) {
-        if (number < 0) {
-            return Math.ceil(number);
-        } else {
-            return Math.floor(number);
         }
     }
 
@@ -11795,6 +11959,19 @@ jQuery.each( ajaxEvents.split("|"),
         return [m.year(), m.month(), m.date(), m.hour(), m.minute(), m.second(), m.millisecond()];
     }
 
+    function toObject () {
+        var m = this;
+        return {
+            years: m.year(),
+            months: m.month(),
+            date: m.date(),
+            hours: m.hours(),
+            minutes: m.minutes(),
+            seconds: m.seconds(),
+            milliseconds: m.milliseconds()
+        };
+    }
+
     function moment_valid__isValid () {
         return valid__isValid(this);
     }
@@ -11966,18 +12143,20 @@ jQuery.each( ajaxEvents.split("|"),
     // HELPERS
 
     function parseWeekday(input, locale) {
-        if (typeof input === 'string') {
-            if (!isNaN(input)) {
-                input = parseInt(input, 10);
-            }
-            else {
-                input = locale.weekdaysParse(input);
-                if (typeof input !== 'number') {
-                    return null;
-                }
-            }
+        if (typeof input !== 'string') {
+            return input;
         }
-        return input;
+
+        if (!isNaN(input)) {
+            return parseInt(input, 10);
+        }
+
+        input = locale.weekdaysParse(input);
+        if (typeof input === 'number') {
+            return input;
+        }
+
+        return null;
     }
 
     // LOCALES
@@ -12000,9 +12179,7 @@ jQuery.each( ajaxEvents.split("|"),
     function localeWeekdaysParse (weekdayName) {
         var i, mom, regex;
 
-        if (!this._weekdaysParse) {
-            this._weekdaysParse = [];
-        }
+        this._weekdaysParse = this._weekdaysParse || [];
 
         for (i = 0; i < 7; i++) {
             // make the regex if we don't have it already
@@ -12149,12 +12326,26 @@ jQuery.each( ajaxEvents.split("|"),
         return ~~(this.millisecond() / 10);
     });
 
-    function millisecond__milliseconds (token) {
-        addFormatToken(0, [token, 3], 0, 'millisecond');
-    }
+    addFormatToken(0, ['SSS', 3], 0, 'millisecond');
+    addFormatToken(0, ['SSSS', 4], 0, function () {
+        return this.millisecond() * 10;
+    });
+    addFormatToken(0, ['SSSSS', 5], 0, function () {
+        return this.millisecond() * 100;
+    });
+    addFormatToken(0, ['SSSSSS', 6], 0, function () {
+        return this.millisecond() * 1000;
+    });
+    addFormatToken(0, ['SSSSSSS', 7], 0, function () {
+        return this.millisecond() * 10000;
+    });
+    addFormatToken(0, ['SSSSSSSS', 8], 0, function () {
+        return this.millisecond() * 100000;
+    });
+    addFormatToken(0, ['SSSSSSSSS', 9], 0, function () {
+        return this.millisecond() * 1000000;
+    });
 
-    millisecond__milliseconds('SSS');
-    millisecond__milliseconds('SSSS');
 
     // ALIASES
 
@@ -12165,11 +12356,19 @@ jQuery.each( ajaxEvents.split("|"),
     addRegexToken('S',    match1to3, match1);
     addRegexToken('SS',   match1to3, match2);
     addRegexToken('SSS',  match1to3, match3);
-    addRegexToken('SSSS', matchUnsigned);
-    addParseToken(['S', 'SS', 'SSS', 'SSSS'], function (input, array) {
-        array[MILLISECOND] = toInt(('0.' + input) * 1000);
-    });
 
+    var token;
+    for (token = 'SSSS'; token.length <= 9; token += 'S') {
+        addRegexToken(token, matchUnsigned);
+    }
+
+    function parseMs(input, array) {
+        array[MILLISECOND] = toInt(('0.' + input) * 1000);
+    }
+
+    for (token = 'S'; token.length <= 9; token += 'S') {
+        addParseToken(token, parseMs);
+    }
     // MOMENTS
 
     var getSetMillisecond = makeGetSet('Milliseconds', false);
@@ -12216,6 +12415,7 @@ jQuery.each( ajaxEvents.split("|"),
     momentPrototype__proto.startOf      = startOf;
     momentPrototype__proto.subtract     = add_subtract__subtract;
     momentPrototype__proto.toArray      = toArray;
+    momentPrototype__proto.toObject     = toObject;
     momentPrototype__proto.toDate       = toDate;
     momentPrototype__proto.toISOString  = moment_format__toISOString;
     momentPrototype__proto.toJSON       = moment_format__toISOString;
@@ -12315,19 +12515,23 @@ jQuery.each( ajaxEvents.split("|"),
         LT   : 'h:mm A',
         L    : 'MM/DD/YYYY',
         LL   : 'MMMM D, YYYY',
-        LLL  : 'MMMM D, YYYY LT',
-        LLLL : 'dddd, MMMM D, YYYY LT'
+        LLL  : 'MMMM D, YYYY h:mm A',
+        LLLL : 'dddd, MMMM D, YYYY h:mm A'
     };
 
     function longDateFormat (key) {
-        var output = this._longDateFormat[key];
-        if (!output && this._longDateFormat[key.toUpperCase()]) {
-            output = this._longDateFormat[key.toUpperCase()].replace(/MMMM|MM|DD|dddd/g, function (val) {
-                return val.slice(1);
-            });
-            this._longDateFormat[key] = output;
+        var format = this._longDateFormat[key],
+            formatUpper = this._longDateFormat[key.toUpperCase()];
+
+        if (format || !formatUpper) {
+            return format;
         }
-        return output;
+
+        this._longDateFormat[key] = formatUpper.replace(/MMMM|MM|DD|dddd/g, function (val) {
+            return val.slice(1);
+        });
+
+        return this._longDateFormat[key];
     }
 
     var defaultInvalidDate = 'Invalid date';
@@ -12536,12 +12740,29 @@ jQuery.each( ajaxEvents.split("|"),
         return duration_add_subtract__addSubtract(this, input, value, -1);
     }
 
+    function absCeil (number) {
+        if (number < 0) {
+            return Math.floor(number);
+        } else {
+            return Math.ceil(number);
+        }
+    }
+
     function bubble () {
         var milliseconds = this._milliseconds;
         var days         = this._days;
         var months       = this._months;
         var data         = this._data;
-        var seconds, minutes, hours, years = 0;
+        var seconds, minutes, hours, years, monthsFromDays;
+
+        // if we have a mix of positive and negative values, bubble down first
+        // check: https://github.com/moment/moment/issues/2166
+        if (!((milliseconds >= 0 && days >= 0 && months >= 0) ||
+                (milliseconds <= 0 && days <= 0 && months <= 0))) {
+            milliseconds += absCeil(monthsToDays(months) + days) * 864e5;
+            days = 0;
+            months = 0;
+        }
 
         // The following code bubbles up values, see the tests for
         // examples of what that means.
@@ -12558,17 +12779,13 @@ jQuery.each( ajaxEvents.split("|"),
 
         days += absFloor(hours / 24);
 
-        // Accurately convert days to years, assume start from year 0.
-        years = absFloor(daysToYears(days));
-        days -= absFloor(yearsToDays(years));
-
-        // 30 days to a month
-        // TODO (iskren): Use anchor date (like 1st Jan) to compute this.
-        months += absFloor(days / 30);
-        days   %= 30;
+        // convert days to months
+        monthsFromDays = absFloor(daysToMonths(days));
+        months += monthsFromDays;
+        days -= absCeil(monthsToDays(monthsFromDays));
 
         // 12 months -> 1 year
-        years  += absFloor(months / 12);
+        years = absFloor(months / 12);
         months %= 12;
 
         data.days   = days;
@@ -12578,15 +12795,15 @@ jQuery.each( ajaxEvents.split("|"),
         return this;
     }
 
-    function daysToYears (days) {
+    function daysToMonths (days) {
         // 400 years have 146097 days (taking into account leap year rules)
-        return days * 400 / 146097;
+        // 400 years have 12 months === 4800
+        return days * 4800 / 146097;
     }
 
-    function yearsToDays (years) {
-        // years * 365 + absFloor(years / 4) -
-        //     absFloor(years / 100) + absFloor(years / 400);
-        return years * 146097 / 400;
+    function monthsToDays (months) {
+        // the reverse of daysToMonths
+        return months * 146097 / 4800;
     }
 
     function as (units) {
@@ -12598,11 +12815,11 @@ jQuery.each( ajaxEvents.split("|"),
 
         if (units === 'month' || units === 'year') {
             days   = this._days   + milliseconds / 864e5;
-            months = this._months + daysToYears(days) * 12;
+            months = this._months + daysToMonths(days);
             return units === 'month' ? months : months / 12;
         } else {
             // handle milliseconds separately because of floating point math errors (issue #1867)
-            days = this._days + Math.round(yearsToDays(this._months / 12));
+            days = this._days + Math.round(monthsToDays(this._months));
             switch (units) {
                 case 'week'   : return days / 7     + milliseconds / 6048e5;
                 case 'day'    : return days         + milliseconds / 864e5;
@@ -12652,7 +12869,7 @@ jQuery.each( ajaxEvents.split("|"),
         };
     }
 
-    var duration_get__milliseconds = makeGetter('milliseconds');
+    var milliseconds = makeGetter('milliseconds');
     var seconds      = makeGetter('seconds');
     var minutes      = makeGetter('minutes');
     var hours        = makeGetter('hours');
@@ -12730,13 +12947,36 @@ jQuery.each( ajaxEvents.split("|"),
     var iso_string__abs = Math.abs;
 
     function iso_string__toISOString() {
+        // for ISO strings we do not use the normal bubbling rules:
+        //  * milliseconds bubble up until they become hours
+        //  * days do not bubble at all
+        //  * months bubble up until they become years
+        // This is because there is no context-free conversion between hours and days
+        // (think of clock changes)
+        // and also not between days and months (28-31 days per month)
+        var seconds = iso_string__abs(this._milliseconds) / 1000;
+        var days         = iso_string__abs(this._days);
+        var months       = iso_string__abs(this._months);
+        var minutes, hours, years;
+
+        // 3600 seconds -> 60 minutes -> 1 hour
+        minutes           = absFloor(seconds / 60);
+        hours             = absFloor(minutes / 60);
+        seconds %= 60;
+        minutes %= 60;
+
+        // 12 months -> 1 year
+        years  = absFloor(months / 12);
+        months %= 12;
+
+
         // inspired by https://github.com/dordille/moment-isoduration/blob/master/moment.isoduration.js
-        var Y = iso_string__abs(this.years());
-        var M = iso_string__abs(this.months());
-        var D = iso_string__abs(this.days());
-        var h = iso_string__abs(this.hours());
-        var m = iso_string__abs(this.minutes());
-        var s = iso_string__abs(this.seconds() + this.milliseconds() / 1000);
+        var Y = years;
+        var M = months;
+        var D = days;
+        var h = hours;
+        var m = minutes;
+        var s = seconds;
         var total = this.asSeconds();
 
         if (!total) {
@@ -12773,7 +13013,7 @@ jQuery.each( ajaxEvents.split("|"),
     duration_prototype__proto.valueOf        = duration_as__valueOf;
     duration_prototype__proto._bubble        = bubble;
     duration_prototype__proto.get            = duration_get__get;
-    duration_prototype__proto.milliseconds   = duration_get__milliseconds;
+    duration_prototype__proto.milliseconds   = milliseconds;
     duration_prototype__proto.seconds        = seconds;
     duration_prototype__proto.minutes        = minutes;
     duration_prototype__proto.hours          = hours;
@@ -12811,7 +13051,7 @@ jQuery.each( ajaxEvents.split("|"),
     // Side effect imports
 
 
-    utils_hooks__hooks.version = '2.10.3';
+    utils_hooks__hooks.version = '2.10.6';
 
     setHookCallback(local__createLocal);
 
@@ -30300,12 +30540,12 @@ var tooltip = $.widget( "ui.tooltip", {
 })();
 
 
-/*! jQuery Timepicker Addon - v1.5.3 - 2015-04-19
+/*! jQuery Timepicker Addon - v1.6.1 - 2015-11-14
 * http://trentrichardson.com/examples/timepicker
 * Copyright (c) 2015 Trent Richardson; Licensed MIT */
 (function (factory) {
 	if (typeof define === 'function' && define.amd) {
-		define(['jquery', 'jquery.ui'], factory);
+		define(['jquery', 'jquery-ui'], factory);
 	} else {
 		factory(jQuery);
 	}
@@ -30324,7 +30564,7 @@ var tooltip = $.widget( "ui.tooltip", {
 	*/
 	$.extend($.ui, {
 		timepicker: {
-			version: "1.5.3"
+			version: "1.6.1"
 		}
 	});
 
@@ -30511,7 +30751,7 @@ var tooltip = $.widget( "ui.tooltip", {
 			};
 			for (i in overrides) {
 				if (overrides.hasOwnProperty(i)) {
-					fns[i] = opts[i] || null;
+					fns[i] = opts[i] || this._defaults[i] || null;
 				}
 			}
 
@@ -30688,8 +30928,8 @@ var tooltip = $.widget( "ui.tooltip", {
 			// Prevent displaying twice
 			if ($dp.find("div.ui-timepicker-div").length === 0 && o.showTimepicker) {
 				var noDisplay = ' ui_tpicker_unit_hide',
-					html = '<div class="ui-timepicker-div' + (o.isRTL ? ' ui-timepicker-rtl' : '') + (o.oneLine && o.controlType === 'select' ? ' ui-timepicker-oneLine' : '') + '"><dl>' + '<dt class="ui_tpicker_time_label"' + ((o.showTime) ? '' : noDisplay) + '>' + o.timeText + '</dt>' +
-								'<dd class="ui_tpicker_time '+ ((o.showTime) ? '' : noDisplay) + '"></dd>';
+					html = '<div class="ui-timepicker-div' + (o.isRTL ? ' ui-timepicker-rtl' : '') + (o.oneLine && o.controlType === 'select' ? ' ui-timepicker-oneLine' : '') + '"><dl>' + '<dt class="ui_tpicker_time_label' + ((o.showTime) ? '' : noDisplay) + '">' + o.timeText + '</dt>' +
+								'<dd class="ui_tpicker_time '+ ((o.showTime) ? '' : noDisplay) + '"><input class="ui_tpicker_time_input" ' + (o.timeInput ? '' : 'disabled') + '/></dd>';
 
 				// Create the markup
 				for (i = 0, l = this.units.length; i < l; i++) {
@@ -30826,7 +31066,21 @@ var tooltip = $.widget( "ui.tooltip", {
 					$dp.append($tp);
 				}
 
-				this.$timeObj = $tp.find('.ui_tpicker_time');
+				this.$timeObj = $tp.find('.ui_tpicker_time_input');
+				this.$timeObj.change(function () {
+					var timeFormat = tp_inst.inst.settings.timeFormat;
+					var parsedTime = $.datepicker.parseTime(timeFormat, this.value);
+					var update = new Date();
+					if (parsedTime) {
+						update.setHours(parsedTime.hour);
+						update.setMinutes(parsedTime.minute);
+						update.setSeconds(parsedTime.second);
+						$.datepicker._setTime(tp_inst.inst, update);
+					} else {
+						this.value = tp_inst.formattedTime;
+						this.blur();
+					}
+				});
 
 				if (this.inst !== null) {
 					var timeDefined = this.timeDefined;
@@ -31164,12 +31418,15 @@ var tooltip = $.widget( "ui.tooltip", {
 			// Updates the time within the timepicker
 			this.formattedTime = $.datepicker.formatTime(o.timeFormat, this, o);
 			if (this.$timeObj) {
+				var sPos = this.$timeObj[0].selectionStart;
+				var ePos = this.$timeObj[0].selectionEnd;
 				if (pickerTimeFormat === o.timeFormat) {
-					this.$timeObj.text(this.formattedTime + pickerTimeSuffix);
+					this.$timeObj.val(this.formattedTime + pickerTimeSuffix);
 				}
 				else {
-					this.$timeObj.text($.datepicker.formatTime(pickerTimeFormat, this, o) + pickerTimeSuffix);
+					this.$timeObj.val($.datepicker.formatTime(pickerTimeFormat, this, o) + pickerTimeSuffix);
 				}
+				this.$timeObj[0].setSelectionRange(sPos, ePos);
 			}
 
 			this.timeDefined = true;
@@ -31844,18 +32101,19 @@ var tooltip = $.widget( "ui.tooltip", {
 	};
 
 	/*
-	* override "Today" button to also grab the time.
+	* override "Today" button to also grab the time and set it to input field.
 	*/
 	$.datepicker._base_gotoToday = $.datepicker._gotoToday;
 	$.datepicker._gotoToday = function (id) {
-		var inst = this._getInst($(id)[0]),
-			$dp = inst.dpDiv;
+		var inst = this._getInst($(id)[0]);
+		this._base_gotoToday(id);
 		var tp_inst = this._get(inst, 'timepicker');
-		selectLocalTimezone(tp_inst);
+		var tzoffset = $.timepicker.timezoneOffsetNumber(tp_inst.timezone);
 		var now = new Date();
+		now.setMinutes(now.getMinutes() + now.getTimezoneOffset() + tzoffset);
 		this._setTime(inst, now);
 		this._setDate(inst, now);
-		this._base_gotoToday(id);
+		tp_inst._onSelectHandler();
 	};
 
 	/*
@@ -32542,12 +32800,12 @@ var tooltip = $.widget( "ui.tooltip", {
 	/*
 	* Keep up with the version
 	*/
-	$.timepicker.version = "1.5.3";
+	$.timepicker.version = "1.6.1";
 
 }));
 
 /*!
-	Colorbox 1.6.0
+	Colorbox 1.6.3
 	license: MIT
 	http://www.jacklmoore.com/colorbox
 */
@@ -32663,7 +32921,7 @@ var tooltip = $.widget( "ui.tooltip", {
 				iframe.allowTransparency = "true";
 			}
 			iframe.name = (new Date()).getTime(); // give the iframe a unique name to prevent caching
-			iframe.allowFullScreen = true;
+			iframe.allowFullscreen = true;
 
 			return iframe;
 		}
@@ -32961,8 +33219,8 @@ var tooltip = $.widget( "ui.tooltip", {
 				var maxWidth = settings.get('maxWidth');
 				var maxHeight = settings.get('maxHeight');
 
-				settings.w = (maxWidth !== false ? Math.min(initialWidth, setSize(maxWidth, 'x')) : initialWidth) - loadedWidth - interfaceWidth;
-				settings.h = (maxHeight !== false ? Math.min(initialHeight, setSize(maxHeight, 'y')) : initialHeight) - loadedHeight - interfaceHeight;
+				settings.w = Math.max((maxWidth !== false ? Math.min(initialWidth, setSize(maxWidth, 'x')) : initialWidth) - loadedWidth - interfaceWidth, 0);
+				settings.h = Math.max((maxHeight !== false ? Math.min(initialHeight, setSize(maxHeight, 'y')) : initialHeight) - loadedHeight - interfaceHeight, 0);
 
 				$loaded.css({width:'', height:settings.h});
 				publicMethod.position();
@@ -33522,7 +33780,7 @@ var tooltip = $.widget( "ui.tooltip", {
 
 			$(photo)
 			.addClass(prefix + 'Photo')
-			.bind('error',function () {
+			.bind('error.'+prefix,function () {
 				prep($tag(div, 'Error').html(settings.get('imgError')));
 			})
 			.one('load', function () {
@@ -33561,9 +33819,10 @@ var tooltip = $.widget( "ui.tooltip", {
 
 					if ($related[1] && (settings.get('loop') || $related[index + 1])) {
 						photo.style.cursor = 'pointer';
-						photo.onclick = function () {
+
+						$(photo).bind('click.'+prefix, function () {
 							publicMethod.next();
-						};
+						});
 					}
 
 					photo.style.width = photo.width + 'px';
@@ -33734,7 +33993,7 @@ var tooltip = $.widget( "ui.tooltip", {
 			
 			self.$container = self.$select.wrap('<div class="'+self.wrapperClass+touchClass+disabledClass+'"><span class="old"/></div>').parent().parent();
 			self.$active = $('<span class="selected">'+self.selected.title+'</span>').appendTo(self.$container);
-			self.$carat = $('<span class="carat"/>').appendTo(self.$container);
+			self.$carat = $('<span class="carat"/>').prependTo(self.$container);
 			self.$scrollWrapper = $('<div><ul/></div>').appendTo(self.$container);
 			self.$dropDown = self.$scrollWrapper.find('ul');
 			self.$form = self.$container.closest('form');
@@ -33829,7 +34088,10 @@ var tooltip = $.widget( "ui.tooltip", {
 				'click.easyDropDown': function(){
 					var index = $(this).index();
 					self.select(index);
-					self.$select.focus();
+					if(!self.isTouch || self.nativeTouch === true){
+						self.$select.focus();  
+					}
+
 				},
 				'mouseover.easyDropDown': function(){
 					if(!self.keyboardMode){
@@ -33943,7 +34205,9 @@ var tooltip = $.widget( "ui.tooltip", {
 
 			self.closeAll();
 			self.getMaxHeight();
-			self.$select.focus();
+			if(!self.isTouch || self.nativeTouch === true){
+				self.$select.focus();
+			}
 			window.scrollTo(scrollLeft, scrollTop+scrollOffset);
 			self.$container.addClass('open');
 			self.$scrollWrapper.css('height',self.maxHeight+'px');
@@ -41739,7 +42003,6 @@ $.extend(TRUE, QTIP.defaults, {
 							var b = $(this).find('pubDate').text();
 							var mymo = moment(new Date(b)).utcOffset(mmocms_user_timezone);
 							b = mymo.format(df);
-							
 							var c = $(this).find('link').text();
 							var d = $(this).find('description').text();
 							$('<a class="targetblank" href="' + c + '">' + a + '</a>').html(a).appendTo(container);
@@ -44125,12 +44388,10 @@ $.extend(TRUE, QTIP.defaults, {
 				menuArrowClass: 'sf-arrows'
 			},
 			ios = (function () {
-				var ios = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+				var ios = /^(?![\w\W]*Windows Phone)[\w\W]*(iPhone|iPad|iPod)/i.test(navigator.userAgent);
 				if (ios) {
-					// iOS clicks only bubble as far as body children
-					$(w).load(function () {
-						$('body').children().on('click', $.noop);
-					});
+					// tap anywhere on iOS to unfocus a submenu
+					$('html').css('cursor', 'pointer').on('click', $.noop);
 				}
 				return ios;
 			})(),
@@ -44195,7 +44456,12 @@ $.extend(TRUE, QTIP.defaults, {
 			},
 			touchHandler = function (e) {
 				var $this = $(this),
+					o = getOptions($this),
 					$ul = $this.siblings(e.data.popUpSelector);
+
+				if (o.onHandleTouch.call($ul) === false) {
+					return this;
+				}
 
 				if ($ul.length > 0 && $ul.is(':hidden')) {
 					$this.one('click.superfish', false);
@@ -44259,7 +44525,11 @@ $.extend(TRUE, QTIP.defaults, {
 						speed = 0;
 					}
 					o.retainPath = false;
-					o.onBeforeHide.call($ul);
+
+					if (o.onBeforeHide.call($ul) === false) {
+						return this;
+					}
+
 					$ul.stop(true, true).animate(o.animationOut, speed, function () {
 						var $this = $(this);
 						o.onHide.call($this);
@@ -44275,7 +44545,10 @@ $.extend(TRUE, QTIP.defaults, {
 				var $this = this.addClass(o.hoverClass),
 					$ul = $this.children(o.popUpSelector);
 
-				o.onBeforeShow.call($ul);
+				if (o.onBeforeShow.call($ul) === false) {
+					return this;
+				}
+
 				$ul.stop(true, true).animate(o.animation, o.speed, function () {
 					o.onShow.call($ul);
 				});
@@ -44362,7 +44635,8 @@ $.extend(TRUE, QTIP.defaults, {
 		onBeforeHide: $.noop,
 		onHide: $.noop,
 		onIdle: $.noop,
-		onDestroy: $.noop
+		onDestroy: $.noop,
+		onHandleTouch: $.noop
 	};
 
 })(jQuery, window);

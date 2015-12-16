@@ -1130,6 +1130,9 @@ body .ui-tooltip {
 	width: 35px;
 	padding: 8px;
 }
+#cboxPrevious:hover{
+	background-position:-75px -25px;
+}
 #cboxPrevious:before{
 	content: "\f053";
 	font-family: FontAwesome;
@@ -1137,12 +1140,10 @@ body .ui-tooltip {
 	margin-right: 3px;
 	text-shadow: 0px 0px 7px rgba(150, 150, 150, 1);
 }
-
 #cboxPrevious:hover{
 	background-position:-75px -25px;
 }
-
-#cboxNext {
+#cboxNext{
 	background: none;
 	bottom: 55%;
 	font-size: 35px;
@@ -1154,6 +1155,9 @@ body .ui-tooltip {
 	text-indent: -70px;
 	padding: 8px;
 }
+#cboxNext:hover{
+	background-position:-50px -25px;
+}
 #cboxNext:after {
 	content: "\f054";
 	font-family: FontAwesome;
@@ -1161,11 +1165,9 @@ body .ui-tooltip {
 	margin-left: 13px;
 	text-shadow: 0px 0px 7px rgba(150, 150, 150, 1);
 }
-
 #cboxNext:hover{
 	background-position:-50px -25px;
 }
-
 #cboxClose{
 	display:none;
 }
