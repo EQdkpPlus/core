@@ -43,7 +43,7 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 class hdropdown extends html {
 
 	protected static $type = 'dropdown';
-	
+
 	public $name = '';
 	public $disabled = false;
 	public $tolang = false;
@@ -54,11 +54,11 @@ class hdropdown extends html {
 	public $opt_extra = array();
 	public $text_after = "";
 	public $text_before = "";
-	
+
 	public function _construct() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 	}
-	
+
 	public function _toString() {
 		$dropdown = "";
 		if(strlen($this->text_before)) $dropdown = $this->text_before;
@@ -79,7 +79,8 @@ class hdropdown extends html {
 		if(is_array($this->options) && count($this->options) > 0){
 			foreach ($this->options as $key => $value) {
 				if(is_array($value)){
-					$dropdown .= "<optgroup label='".$key."'>";
+					$optgrp_language 	= $this->user->lang('optgroup_'.$key);
+					$dropdown .= "<optgroup label='".(($optgrp_language) ? $optgrp_language : $key)."'>";
 					foreach ($value as $key2 => $value2) {
 						if($this->no_key) $key2 = $value2;
 						$dep = $this->gen_form_change($this->dependency[$key2]);
@@ -109,7 +110,7 @@ class hdropdown extends html {
 		if(strlen($this->text_after)) $dropdown .= $this->text_after;
 		return $dropdown;
 	}
-	
+
 	public function _inpval() {
 		return $this->in->get($this->name, '');
 	}
