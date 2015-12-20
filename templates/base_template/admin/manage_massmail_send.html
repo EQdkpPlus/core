@@ -1,0 +1,96 @@
+<!-- IF S_NORMAL_HEADER -->
+<div class="breadcrumb-container">
+	<ul class="breamcrumb">
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
+		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
+		<li class="current"><a>{L_massmail}</a></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+<!-- ENDIF -->
+
+<style type="text/css">
+	.ui-progressbar { position:relative; }
+	.nl_progressbar_label { position: absolute; width: 90%; text-align: center; line-height: 1.9em; left:5%; right:5%;}
+</style>
+<script type="text/javascript">
+//total mails
+var totalMails = {RECIPIENTS_COUNT};
+
+//Sets the value of the progressbar
+function set_progress_bar_value(recentNumber){
+	percent = Math.round((recentNumber / totalMails) * 100);
+	$("#nl_progressbar").progressbar('destroy');
+
+	$("#nl_progressbar").progressbar({
+		value: percent
+	});
+}
+
+$(document).ready(function(){
+	$("#nl_progressbar").progressbar({
+		value: 100
+	});
+	
+	set_progress_bar_value(0);
+	send_mail(0);
+});
+
+ function send_mail(recentNumber){
+	var recipients = [{RECIPIENTS}];
+	$.post("manage_massmail.php{SID}&send=true&link_hash={CSRF_SEND_TOKEN}", { userid: recipients[recentNumber], subject: "{ENCR_SUBJECT}", message: "{ENCR_MESSAGE}", event_id: "{EVENT_ID}", method: "{METHOD}"})
+	.success(function(data) {
+		if(data && data.status != undefined){
+			if(data.status == "ok"){
+				$( "<tr><td class=\"positive\"><i class=\"fa fa-check fa-lg\"></i></td><td>"+data.name+"</td></tr>" ).appendTo( "#massmail_status_table" );
+			} else if(data.status == "error") {
+				$( "<tr><td class=\"negative\"><i class=\"fa fa-times fa-lg\"></i></td><td>"+data.name+"</td></tr>" ).appendTo( "#massmail_status_table" );
+			}
+			
+			if (recentNumber < totalMails){
+				set_progress_bar_value(recentNumber+1);
+				send_mail(recentNumber+1);
+			} else {
+				set_progress_bar_value(totalMails);
+				success();
+			}
+		} else {
+			console.log(data);
+			console.log(data.status);
+			error();
+		}
+	})
+	.error(function(data) { error(); });
+}
+
+function error(){
+	$('#massmail_dontclose').hide();
+	$('#massmail_error').show();
+	$('.nl_progressbar_label').hide();
+}
+
+function success(){
+	$('#massmail_dontclose').hide();
+	$('#massmail_success').show();
+	$('.nl_progressbar_label').hide();
+}
+</script>
+
+<div class="infobox infobox-large infobox-blue clearfix" id="massmail_dontclose">
+	<i class="fa fa-info-circle fa-4x pull-left"></i> <strong>{L_massmail_dontclose}</strong>
+</div>
+
+<div class="infobox infobox-large infobox-blue clearfix" style="display: none;" id="massmail_error">
+	<i class="fa fa-info-circle fa-4x pull-left"></i> {L_massmail_error}
+</div>
+
+<div class="infobox infobox-large infobox-green clearfix" style="display: none;" id="massmail_success">
+	<i class="fa fa-check fa-4x pull-left"></i> {L_MASSMAIL_SUCCESS}
+</div>
+<br /><br />
+<div id="nl_progressbar">
+	<span class="nl_progressbar_label"><i class="fa-spin fa-spinner fa fa-lg"></i> {L_massmail_sending}</span></div>
+</div>
+
+<table class="fullwidth table colorswitch" id="massmail_status_table">
+</table>

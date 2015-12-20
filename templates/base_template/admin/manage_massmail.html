@@ -8,65 +8,132 @@
 	<div class="clear"></div>
 </div>
 <!-- ENDIF -->
-<!-- IF S_DATA -->
-<form method="post" name="massmail_content">
 
-<div id='massmail_content_tabs'>
-	<ul>
-		<!-- BEGIN type_row -->
-		<li><a href='#{type_row.KEY}'><span id="title_{type_row.KEY}">{type_row.NAME}</span></a></li>
-		<!-- END type_row -->
-	</ul>
-	
-	<!-- BEGIN type_row -->
-	<div id="{type_row.KEY}">
-		<div class="tableHeader">
-			<h2>{type_row.NAME}</h2>
-		</div>
-		<table  class="table fullwidth colorswitch">
-			<tr>
-			  <th><input type="checkbox" id="selall_{type_row.KEY}" name="all_nr" value="all_nr" /></th>
-			  <th>{L_date}</th>
-			  <th>{L_headline}</th>
-			</tr>
-			<!-- BEGIN content_row -->
-		  <tr>
-			<td width="5"><input type="checkbox" name="cb_{type_row.KEY}[]" value="cb_{type_row.content_row.ID}"/><div style="display:none;" id="content_cb_{type_row.content_row.ID}">{type_row.content_row.CONTENT}</div></td>
-			<td width="100" nowrap="nowrap" class="nowrap">{type_row.content_row.DATE}</td>
-			<td>{type_row.content_row.HEADLINE}</td>
-		  </tr>
-		  <!-- END content_row -->
-		</table>
-		<div class="contentFooter">
-			<button class="mainoption" type="button" onclick="insert('{type_row.KEY}');"><i class="fa fa-check"></i>{L_massmail_add_content}</button>
-		</div>
-	</div>
-	<!-- END type_row -->
-</div>				  
-</form>
 <script type="text/javascript">
-function insert(key){
-	var output = '<br /><br /><b>'+$('#title_'+key).html()+':</b><br />';
-	
-	$(":checkbox[name='cb_"+key+"[]']:checked").each(
-      function(i, l) {
-		var id = $(l).val();
-		output = output + '<br />' + $('#content_'+id).html();
-      }
-    );
-	
-	window.parent.insert(output);
-}
-</script>
-<!-- ELSEIF not S_SEND -->
-<script type="text/javascript">
+var recent_template = "{MM_TEMPLATE_NAME}";
+var mode = "add";
 function insert(text){
 	$('#mm_body').tinymce().execCommand('mceInsertContent',false,text);
 }
+
+function open_add_template(){
+	$('#mytemplatename').val("");
+	mode = "add";
+	$( "#dialog-add-template" ).dialog( "open" );
+}
+
+function open_save_template(){
+	$('#mytemplatename').val(recent_template);
+	mode = "save";
+	$( "#dialog-add-template" ).dialog( "open" );
+}
+
+function save_template(){
+	$( "#dialog-add-template" ).dialog( "open" );
+}
+
+function add_template(){
+	var templatename = $('#mytemplatename').val();
+	
+	if (templatename != ""){
+		$('.template_loading_indicator').show();
+		$( "#dialog-add-template" ).dialog("close");
+		
+		var subject = $('#subject').val();
+		var message = $('#mm_body').tinymce().getContent();
+		$.post("manage_massmail.php{SID}&add_template=true&link_hash={CSRF_ADDTEMPLATE_TOKEN}", { templatename: templatename, subject: subject, message: message, eventid:{NUM_EVENT_ID}})
+		.success(function(data) {
+			$('.template_loading_indicator').hide();
+			var mydata = $.trim(data);
+			if(mydata.substring(0, 2) == 'ok'){
+				//Check if it was saved as a new template
+				
+				
+				if(mode == "save"){
+					if(templatename != recent_template){
+						mode = "add";
+					}
+				}
+				
+				if(mode == "add"){	
+					var arrSplitted = mydata.split("||");
+					recent_template = arrSplitted[1];
+					var new_dropdown = arrSplitted[2];
+					
+					$('#dropdown_templates_container').html(new_dropdown);
+					
+					$('#add_template_button').hide();
+					$('#save_template_button').show();
+					$('#delete_template_button').show();
+				}
+				console.log(mode);
+				$('#notify_container').notify('create', 'success', {text: {L_massmail_save_success|jsencode},title: '',custom: true,},{expires: 3000, speed: 1000});
+			} else {
+				$('#notify_container').notify('create', 'error', {text: {L_massmail_save_nosuccess|jsencode},title: '',custom: true,},{expires: 30000, speed: 1000});
+			}
+		})
+		.error(function(data) { 
+			$('#notify_container').notify('create', 'error', {text: {L_massmail_save_nosuccess|jsencode},title: '',custom: true,},{expires: 30000, speed: 1000});	
+		});
+		
+	}
+}
+
+function load_template(){
+	var templatename = $( "#template" ).val();
+	if(templatename == ""){
+		$('#subject').val("");
+		$('#mm_body').tinymce().setContent('');
+		mode = "add";
+		
+		$('#add_template_button').show();
+		$('#save_template_button').hide();
+		$('#delete_template_button').hide();
+		return;
+	}
+	
+	$('.template_loading_indicator').show();
+	
+	$.post("manage_massmail.php{SID}&load_template=true", { template: templatename})
+	.success(function(data) {
+		$('.template_loading_indicator').hide();
+		var mydata = $.trim(data);
+		if(mydata.substring(0, 2) == 'ok'){
+			var arrSplitted = mydata.split("|;|;|;");
+			var subject = arrSplitted[1];
+			var body = arrSplitted[2];
+			
+			$('#subject').val(subject);
+			
+			$('#mm_body').tinymce().setContent('');
+			$('#mm_body').tinymce().execCommand('mceInsertContent',false,body);
+			
+			//Display some buttons
+			$('#add_template_button').hide();
+			$('#save_template_button').show();
+			$('#delete_template_button').show();
+			
+			//Set recent template
+			recent_template = templatename;
+		}
+	})
+	.error(function(data) { 
+	});
+}
+
+$(document).ready(function() {
+	$( "#dialog-add-template" ).dialog({
+		height: 200,
+		width: 400,
+		modal: true,
+		autoOpen: false,
+	});
+	
+	$('#addtemplate-button').click(function(){
+		add_template();
+	});
+});
 </script>
-<div class="infobox infobox-large infobox-blue clearfix">
-	<i class="fa fa-info-circle fa-4x pull-left"></i> {L_massmail_template_info}
-</div>
 	
 <form method="post" action="{ACTION}{EVENT_ID}" name="massmail">
 	<fieldset class="settings smallsettings">
@@ -97,7 +164,7 @@ function insert(text){
 		<!-- ENDIF -->
 		<dl>
 			<dt><label>{L_massmail_select_template}</label></dt>
-			<dd>{DD_TEMPLATE}</dd>
+			<dd id="dropdown_templates_container">{DD_TEMPLATE}<span class="template_loading_indicator" style="display:none;"><i class="fa fa-lg fa-spin fa-spinner"></i></span></dd>
 		</dl>
 		<dl>
 			<dt><label>{L_adduser_send_mail_subject}</label></dt>
@@ -123,94 +190,23 @@ function insert(text){
 	</fieldset>
 	<div class="contentFooter">
 		<button class="mainoption" type="submit" name="submit"><i class="fa fa-check"></i>{L_maintenanceuser_send}</button>
-		<button class="mainoption" type="reset" name="reset"><i class="fa fa-trash-o"></i>{L_reset}</button>
+		
+		<button type="button" id="save_template_button" name="save_template" onclick="open_save_template()" <!-- IF not S_IS_TEMPLATE -->style="display:none;"<!-- ENDIF -->><i class="fa fa-floppy-o"></i> {L_massmail_save_template}</button>
+		<button type="button" id="add_template_button" name="add_template" onclick="open_add_template()" <!-- IF S_IS_TEMPLATE -->style="display:none;"<!-- ENDIF -->><i class="fa fa-plus"></i> {L_massmail_add_template}</button>
+		<button type="submit" id="delete_template_button" name="delete_template" <!-- IF not S_IS_TEMPLATE -->style="display:none;"<!-- ENDIF -->><i class="fa fa-trash"></i> {L_massmail_delete_template}</button>
+		<button type="reset" name="reset"><i class="fa fa-trash-o"></i>{L_reset}</button>
 	</div>
 {CSRF_TOKEN}
 </form>
-<!-- ELSE -->
-<style type="text/css">
-	.ui-progressbar { position:relative; }
-	.nl_progressbar_label { position: absolute; width: 90%; text-align: center; line-height: 1.9em; left:5%; right:5%;}
-</style>
-<script type="text/javascript">
-//total mails
-var totalMails = {RECIPIENTS_COUNT};
 
-//Sets the value of the progressbar
-function set_progress_bar_value(recentNumber){
-	percent = Math.round((recentNumber / totalMails) * 100);
-	$("#nl_progressbar").progressbar('destroy');
-
-	$("#nl_progressbar").progressbar({
-		value: percent
-	});
-}
-
-$(document).ready(function(){
-	$("#nl_progressbar").progressbar({
-		value: 100
-	});
-	
-	set_progress_bar_value(0);
-	send_mail(0);
-});
-
- function send_mail(recentNumber){
-	var recipients = [{RECIPIENTS}];
-	$.post("manage_massmail.php{SID}&send=true&link_hash={CSRF_SEND_TOKEN}", { userid: recipients[recentNumber], subject: "{ENCR_SUBJECT}", message: "{ENCR_MESSAGE}", event_id: "{EVENT_ID}", method: "{METHOD}"})
-	.success(function(data) {
-		if(data && data.status != undefined){
-			if(data.status == "ok"){
-				$( "<tr><td class=\"positive\"><i class=\"fa fa-check fa-lg\"></i></td><td>"+data.name+"</td></tr>" ).appendTo( "#massmail_status_table" );
-			} else if(data.status == "error") {
-				$( "<tr><td class=\"negative\"><i class=\"fa fa-times fa-lg\"></i></td><td>"+data.name+"</td></tr>" ).appendTo( "#massmail_status_table" );
-			}
-			
-			if (recentNumber < totalMails){
-				set_progress_bar_value(recentNumber+1);
-				send_mail(recentNumber+1);
-			} else {
-				set_progress_bar_value(totalMails);
-				success();
-			}
-		} else {
-			console.log(data);
-			console.log(data.status);
-			error();
-		}
-	})
-	.error(function(data) { error(); });
-}
-
-function error(){
-	$('#massmail_dontclose').hide();
-	$('#massmail_error').show();
-	$('.nl_progressbar_label').hide();
-}
-
-function success(){
-	$('#massmail_dontclose').hide();
-	$('#massmail_success').show();
-	$('.nl_progressbar_label').hide();
-}
-</script>
-
-<div class="infobox infobox-large infobox-blue clearfix" id="massmail_dontclose">
-	<i class="fa fa-info-circle fa-4x pull-left"></i> <strong>{L_massmail_dontclose}</strong>
+<div id="dialog-add-template" title="{L_massmail_add_template}" style="display:none;">
+		<fieldset class="settings mediumsettings">
+			<dl>
+				<dt><label>{L_name}:</label></dt>
+				<dd>
+					<input type="text" id="mytemplatename" style="width: 90%" />
+				</dd>
+			</dl>
+		</fieldset>
+	<button type="button" id="addtemplate-button"><i class="fa fa-check"></i> {L_submit}</button>
 </div>
-
-<div class="infobox infobox-large infobox-blue clearfix" style="display: none;" id="massmail_error">
-	<i class="fa fa-info-circle fa-4x pull-left"></i> {L_massmail_error}
-</div>
-
-<div class="infobox infobox-large infobox-green clearfix" style="display: none;" id="massmail_success">
-	<i class="fa fa-check fa-4x pull-left"></i> {L_MASSMAIL_SUCCESS}
-</div>
-<br /><br />
-<div id="nl_progressbar">
-	<span class="nl_progressbar_label"><i class="fa-spin fa-spinner fa fa-lg"></i> {L_massmail_sending}</span></div>
-</div>
-
-<table class="fullwidth table colorswitch" id="massmail_status_table">
-</table>
-<!-- ENDIF -->

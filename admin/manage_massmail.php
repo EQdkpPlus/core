@@ -31,12 +31,118 @@ class Manage_Massmail extends page_generic {
 		$this->user->check_auth('a_users_massmail');
 		$handler = array(
 			'data'	=> array('process' => 'process_data'),
+			'load_template'	=> array('process' => 'process_load_template'),
 			'send'	=> array('process' => 'process_send', 'csrf' => true),
 			'submit' => array('process' => 'submit', 'csrf' => true),
+			'add_template' => array('process' => 'add_template', 'csrf' => true),
+			'save_template' => array('process' => 'save_template', 'csrf' => true),
+			'delete_template' => array('process' => 'delete_template', 'csrf' => true),
 			);
 		parent::__construct(false, $handler, array('user', 'name'), null, 'user_id[]');
 
 		$this->process();
+	}
+	
+	public function process_load_template(){
+		$strTemplatename = $this->in->get('template');
+		$strTemplatename = preg_replace("/[^a-zA-Z0-9_-]/", "", $strTemplatename);
+		
+		$strLanguageFile = $this->root_path.'language/'.$this->user->data['user_lang'].'/email/massmail_'.$strTemplatename.'.html';
+		$strDataFile =  $this->pfh->FolderPath('massmails', 'eqdkp').'massmail_'.$strTemplatename.'.html';
+		if(is_file($strDataFile)){
+			$strContent = file_get_contents($strDataFile);
+		}elseif(is_file($strLanguageFile)){
+			$strContent = file_get_contents($strLanguageFile);
+		} else {
+			$strContent = "";
+		}
+		
+		$body = is_utf8($strContent) ? $strContent : utf8_encode($strContent);
+		if (preg_match('#{SUBJECT}(.*?){/SUBJECT}#', $body, $matches)){
+			$subject = $matches[1];
+			$body = str_replace($matches[0], '', $body);
+		}
+		
+		header('Content-type: text/html; charset=utf-8');
+		echo 'ok|;|;|;'.$subject.'|;|;|;'.$body;
+		
+		exit;
+	}
+	
+	public function delete_template(){
+		$strTemplatename = $this->in->get('template');
+		$strTemplatename = preg_replace("/[^a-zA-Z0-9_-]/", "", $strTemplatename);
+		
+		$strDataFile =  $this->pfh->FolderPath('massmails', 'eqdkp').'massmail_'.$strTemplatename.'.html';
+		if(is_file($strDataFile)){
+			$this->pfh->Delete($strDataFile);
+		}
+		$strLanguageFile = $this->root_path.'language/'.$this->user->data['user_lang'].'/email/massmail_'.$strTemplatename.'.html';
+		if(is_file($strLanguageFile)){
+			$this->pfh->Delete($strLanguageFile);
+		}
+
+		$this->display(true);
+	}
+	
+	public function add_template(){
+		$strTemplatename = $this->in->get('templatename');
+		$strTemplatename = preg_replace("/[^a-zA-Z0-9_-]/", "", $strTemplatename);
+		$strSubject = $this->in->get('subject');
+		$strBody = $this->in->get('message', '', 'raw');
+		$strOut = $strBody;
+		if($strSubject != ""){
+			$strOut = "{SUBJECT}".$strSubject."{/SUBJECT}".$strOut;
+		}
+		
+		$strFilename = $this->pfh->FolderPath('massmails', 'eqdkp').'massmail_'.$strTemplatename.'.html';
+		$this->pfh->putContent($strFilename, $strOut);
+		
+		//Get all Templates, create new Dropdown, select Template
+		$arrTemplates = sdir($this->root_path.'language/'.$this->user->data['user_lang'].'/email', 'massmail_*.html');
+		$arrTempl = array('' => $this->user->lang('massmail_select_template').'...');
+		if (is_array($arrTemplates) && count($arrTemplates) > 0){
+			foreach($arrTemplates as $file){
+				$file = preg_replace('/[^a-zA-Z0-9 -]/', '', $file);
+				$file = str_replace(array('massmail', 'html'), array('', ''), $file);
+				$arrTempl[$file] = $file;
+			}
+		}
+		
+		$arrTemplates = sdir($this->pfh->FolderPath('massmails', 'eqdkp'), 'massmail_*.html');
+		if (is_array($arrTemplates) && count($arrTemplates) > 0){
+			foreach($arrTemplates as $file){
+				$file = preg_replace('/[^a-zA-Z0-9 -]/', '', $file);
+				$file = str_replace(array('massmail', 'html'), array('', ''), $file);
+				$arrTempl[$file] = $file;
+			}
+		}
+		
+		$dd = new hdropdown('template', array('options' => $arrTempl, 'value' => $strTemplatename, 'js' => 'onchange="load_template()"'));
+		
+		header('Content-type: text/html; charset=utf-8');
+		echo 'ok||'.$strTemplatename.'||'.$dd;
+		
+		exit;
+	}
+	
+	public function save_template(){
+		$strTemplatename = $this->in->get('templatename');
+		$strTemplatename = preg_replace("/[^a-zA-Z0-9_]/", "", $strTemplatename);
+		$strSubject = $this->in->get('subject');
+		$strBody = $this->in->get('message', '', 'raw');
+		$strOut = $strBody;
+		if($strSubject != ""){
+			$strOut = "{SUBJECT}".$strSubject."{/SUBJECT}".$strOut;
+		}
+	
+		$strFilename = $this->pfh->FolderPath('massmails', 'eqdkp').'massmail_'.$strTemplatename.'.html';
+		$this->pfh->putContent($strFilename, $strOut);
+	
+		header('Content-type: text/html; charset=utf-8');
+		echo "ok";
+	
+		exit;
 	}
 
 	public function process_data(){
@@ -141,10 +247,12 @@ class Manage_Massmail extends page_generic {
 		}
 
 		$this->jquery->tab_header('massmail_content_tabs');
-
-		$this->tpl->assign_vars(array(
-			'S_DATA' => true,
-		));
+		
+		$this->core->set_vars(array(
+			'page_title'		=> $this->user->lang('massmail_send'),
+			'template_file'		=> 'admin/manage_massmail_data.html',
+			'display'			=> true)
+		);
 	}
 
 	public function process_send(){
@@ -255,7 +363,7 @@ class Manage_Massmail extends page_generic {
 
 			if (count($arrRecipients) > 0) {
 				$this->tpl->assign_vars(array(
-					'S_SEND'	=> true,
+					'S_SEND'			=> true,
 					'ENCR_MESSAGE'		=> $this->crypt->encrypt($this->in->get('body', '', 'raw')),
 					'ENCR_SUBJECT'		=> $this->crypt->encrypt($this->in->get('subject', '')),
 					'METHOD'			=> $this->in->get('method', 'email'),
@@ -291,10 +399,16 @@ class Manage_Massmail extends page_generic {
 			$this->display();
 		}
 
+		$this->core->set_vars(array(
+			'page_title'		=> $this->user->lang('massmail_send'),
+			'template_file'		=> 'admin/manage_massmail_send.html',
+			'display'			=> true)
+		);
+		
 		return true;
 	}
 
-	public function display(){
+	public function display($blnIgnoreTemplate=false){
 		$editor = registry::register('tinyMCE');
 		$editor->editor_normal(array('autoresize' => true, 'relative_urls'	=> false, 'remove_host' => false));
 
@@ -316,16 +430,30 @@ class Manage_Massmail extends page_generic {
 				
 			}
 		}
-		if ($this->in->get('template') != ""){
-			$file = preg_replace('/[^a-zA-Z0-9 -]/', '', $this->in->get('template'));
-			$strTemplate = file_get_contents($this->root_path.'language/'.$this->user->data['user_lang'].'/email/massmail_'.$file.'.html');
-			$body = is_utf8($strTemplate) ? $strTemplate : utf8_encode($strTemplate);
+		
+		//Only load the template file, if submit button is not pressed
+		if (!$blnIgnoreTemplate && $this->in->get('template') != "" && !$this->in->exists('submit') && !$this->in->exists('delete_template')){
+			$file = preg_replace('/[^a-zA-Z0-9_-]/', '', $this->in->get('template'));
+			$strLanguageFile = $this->root_path.'language/'.$this->user->data['user_lang'].'/email/massmail_'.$file.'.html';
+			$strDataFile =  $this->pfh->FolderPath('massmails', 'eqdkp').'massmail_'.$file.'.html';
+			if(is_file($strDataFile)){
+				$strContent = file_get_contents($strDataFile);
+			}elseif(is_file($strLanguageFile)){
+				$strContent = file_get_contents($strLanguageFile);
+			} else {
+				$strContent = "";
+			}
+
+			$body = is_utf8($strContent) ? $strContent : utf8_encode($strContent);
 			if (preg_match('#{SUBJECT}(.*?){/SUBJECT}#', $body, $matches)){
 				$subject = $matches[1];
 				$body = str_replace($matches[0], '', $body);
 			}
 
 		}
+		
+		$strTemplate = ($blnIgnoreTemplate) ? "" : $this->in->get('template');
+		$blnHaveTemplate = ($strTemplate != "") ? true : false;
 
 		$this->jquery->dialog('massmailContentDialog', $this->user->lang('massmail_add_content'), array('url' => 'manage_massmail.php'.$this->SID.'&data=true&simple_head=true', 'height' => 600, 'width' => 700));
 
@@ -343,6 +471,14 @@ class Manage_Massmail extends page_generic {
 				$arrTempl[$file] = $file;
 			}
 		}
+		$arrTemplates = sdir($this->pfh->FolderPath('massmails', 'eqdkp'), 'massmail_*.html');
+		if (is_array($arrTemplates) && count($arrTemplates) > 0){
+			foreach($arrTemplates as $file){
+				$file = preg_replace('/[^a-zA-Z0-9 -]/', '', $file);
+				$file = str_replace(array('massmail', 'html'), array('', ''), $file);
+				$arrTempl[$file] = $file;
+			}
+		}
 
 		$this->tpl->assign_vars(array(
 			'DD_METHOD' => new hdropdown('method', array('options' => $this->messenger->getAvailableMessenger(), 'value' => $this->in->get('method', 'email'))),
@@ -352,7 +488,12 @@ class Manage_Massmail extends page_generic {
 			'BODY'		=> ($this->in->exists('body')) ? $this->in->get('body', '', 'raw') : $body,
 			'EVENT_ID'	=> ($bnlEventId) ? '&amp;event_id='.$eventid : '',
 			'S_EVENT_ID'=> $bnlEventId,
-			'DD_TEMPLATE' => new hdropdown('templates', array('options' => $arrTempl, 'value' => $this->in->get('template', ''), 'js' => 'onchange="window.location=\'manage_massmail.php'.$this->SID.'&event_id='.$eventid.'&template=\'+this.value"')),
+			'MM_TEMPLATE_NAME' => $strTemplate,
+			'NUM_EVENT_ID' => intval($eventid),
+			'S_IS_TEMPLATE' => $blnHaveTemplate,
+			'CSRF_ADDTEMPLATE_TOKEN'	=> $this->CSRFGetToken('add_template'),
+			'CSRF_SAVETEMPLATE_TOKEN'	=> $this->CSRFGetToken('save_template'),
+			'DD_TEMPLATE' => new hdropdown('template', array('options' => $arrTempl, 'value' => $strTemplate, 'js' => 'onchange="load_template()"')),
 		));
 
 		$this->core->set_vars(array(

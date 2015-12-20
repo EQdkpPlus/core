@@ -1,0 +1,60 @@
+<!-- IF S_NORMAL_HEADER -->
+<div class="breadcrumb-container">
+	<ul class="breamcrumb">
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
+		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
+		<li class="current"><a>{L_massmail}</a></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+<!-- ENDIF -->
+
+<form method="post" name="massmail_content">
+
+<div id='massmail_content_tabs'>
+	<ul>
+		<!-- BEGIN type_row -->
+		<li><a href='#{type_row.KEY}'><span id="title_{type_row.KEY}">{type_row.NAME}</span></a></li>
+		<!-- END type_row -->
+	</ul>
+	
+	<!-- BEGIN type_row -->
+	<div id="{type_row.KEY}">
+		<div class="tableHeader">
+			<h2>{type_row.NAME}</h2>
+		</div>
+		<table  class="table fullwidth colorswitch">
+			<tr>
+			  <th><input type="checkbox" id="selall_{type_row.KEY}" name="all_nr" value="all_nr" /></th>
+			  <th>{L_date}</th>
+			  <th>{L_headline}</th>
+			</tr>
+			<!-- BEGIN content_row -->
+		  <tr>
+			<td width="5"><input type="checkbox" name="cb_{type_row.KEY}[]" value="cb_{type_row.content_row.ID}"/><div style="display:none;" id="content_cb_{type_row.content_row.ID}">{type_row.content_row.CONTENT}</div></td>
+			<td width="100" nowrap="nowrap" class="nowrap">{type_row.content_row.DATE}</td>
+			<td>{type_row.content_row.HEADLINE}</td>
+		  </tr>
+		  <!-- END content_row -->
+		</table>
+		<div class="contentFooter">
+			<button class="mainoption" type="button" onclick="insert('{type_row.KEY}');"><i class="fa fa-check"></i>{L_massmail_add_content}</button>
+		</div>
+	</div>
+	<!-- END type_row -->
+</div>				  
+</form>
+<script type="text/javascript">
+function insert(key){
+	var output = '<br /><br /><b>'+$('#title_'+key).html()+':</b><br />';
+	
+	$(":checkbox[name='cb_"+key+"[]']:checked").each(
+      function(i, l) {
+		var id = $(l).val();
+		output = output + '<br />' + $('#content_'+id).html();
+      }
+    );
+	
+	window.parent.insert(output);
+}
+</script>
