@@ -42,6 +42,7 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 		*/
 		public function reset(){
 			$this->pdc->del('pdh_calendar_raids_table.guests');
+			$this->pdc->del('pdh_calendar_raids_table.guestsEvents');
 			$this->pdc->del_prefix('plugin.guests');
 			$this->guests = NULL;
 		}
@@ -54,17 +55,18 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 		public function init(){
 			// try to get from cache first
 			$this->guests		= $this->pdc->get('pdh_calendar_raids_table.guests');
-			if($this->guests !== NULL){
+			$this->guestsEvent	= $this->pdc->get('pdh_calendar_raids_table.guestsEvents');
+			if($this->guests !== NULL && $this->guestsEvent !== NULL){
 				return true;
 			}
 
 			// empty array as default
 			$this->guests	= array();
-			
+
 			$objQuery = $this->db->query('SELECT * FROM __calendar_raid_guests;');
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
-					$this->guests[$row['calendar_events_id']][$row['id']] = array(
+					$this->guests[$row['id']] = array(
 						'name'				=> $row['name'],
 						'email'				=> $row['email'],
 						'note'				=> $row['note'],
@@ -75,40 +77,34 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 						'approved'			=> $row['approved'],
 						'eventid'			=> $row['calendar_events_id'],
 					);
+					$this->guestsEvent[$row['calendar_events_id']][$row['id']] = $this->guests[$row['id']];
 				}
 				$this->pdc->put('pdh_calendar_raids_table.guests', $this->guests, NULL);
+				$this->pdc->put('pdh_calendar_raids_table.guestsEvents', $this->guestsEvent, NULL);
 			}
-	
+
 			return true;
 		}
 
 		public function get_guests4approval(){
 			$output = array();
 			if(isset($this->guests) && count($this->guests) > 0){
-				foreach($this->guests as $guestEvents){
-					if(isset($guestEvents) && count($guestEvents) > 0){
-						foreach($guestEvents as $guestID => $guestData){
-							if($guestData['approved'] == 0){
-								$output[] = $guestID;
-							}
-						}
+				foreach($this->guests as $guestID => $guestData){
+					if($guestData['approved'] == 0){
+						$output[] = $guestID;
 					}
 				}
 			}
 			return $output;
 		}
 
-		public function get_members($id=''){
-			$output = ($id) ? ((isset($this->guests[$id])) ? $this->guests[$id] : '') : $this->guests;
+		public function get_members($eventid=''){
+			$output = ($eventid) ? ((isset($this->guestsEvent[$eventid])) ? $this->guestsEvent[$eventid] : '') : $this->guests;
 			return (is_array($output)) ? $output : array();
 		}
 
 		public function get_guest($id){
-			foreach($this->guests as $gdata){
-				if(is_array($gdata[$id])){
-						return $gdata[$id];
-				}
-			}
+			return $this->guests[$id];
 		}
 
 		public function get_class($id){
@@ -120,7 +116,12 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 		}
 
 		public function get_eventlink($id){
-			
+
+		}
+
+		public function get_event($id, $raw=false){
+			return ($raw) ? $this->guests[$id]['eventid'] : $this->pdh->get('calendar_events', 'name', array($this->guests[$id]['eventid']));
+
 		}
 
 		public function get_email($id){
@@ -135,8 +136,8 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 			return $this->guests[$id]['name'];
 		}
 
-		public function get_date($id){
-			return $this->guests[$id]['timestamp_signup'];
+		public function get_date($id, $raw=false){
+			return ($raw) ? $this->guests[$id]['timestamp_signup'] : $this->time->user_date($this->guests[$id]['timestamp_signup'], true);
 		}
 
 		public function get_group($id){

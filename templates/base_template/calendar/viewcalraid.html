@@ -152,33 +152,6 @@ $(function(){
 			});
 		});
 	});
-
-	<!-- IF not IS_SIGNEDIN -->
-	$("#button_guestattend22").qtip({
-		content: {
-			text: $(this).next('.guesttooltip-data'),
-			title: {
-				text: '<div style="text-align:left;margin-left:10px;"><i class="fa fa-pencil fa-lg hand"></i> Appy as guest',
-				button: false
-			}
-		},
-		hide: {
-			fixed: true,
-			delay: 300
-		},
-		position: {
-			at: 'bottom center',
-			my: 'top center'
-		},
-		style: {
-			tip: {
-				corner: true
-			},
-			width: 300,
-			widget: true
-		}
-	});
-	<!-- ENDIF -->
 });
 
 <!-- IF S_NOTSIGNED_VISIBLE -->

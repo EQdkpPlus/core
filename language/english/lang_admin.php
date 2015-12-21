@@ -19,17 +19,17 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- 
+
 if (!defined('EQDKP_INC')) {
 	die('You cannot access this file directly.');
 }
 
-//Language: English	
+//Language: English
 //Created by EQdkp Plus Translation Tool on  2014-12-17 23:17
 //File: language/english/lang_admin.php
 //Source-Language: german
 
-$lang = array( 
+$lang = array(
 	"php_warning" => 'The version of PHP on this server will no longer be supported by future versions of EQdkp Plus. You should update your PHP-Version as soon as possible at least to Version '.VERSION_PHP_RQ.'. For any questions about updating your php version, please contact your hoster.',
 	"manitempool_title" => 'Itempool Management',
 	"addevent_title" => 'Add an event',
@@ -339,7 +339,7 @@ $lang = array(
 	"template" => 'Template',
 	"template_files" => 'template-files:',
 	"element" => 'Element',
-	
+
 	"attendees_columns" => 'Attendees Columns',
 	"attendees_columns_note" => 'Number of columns to use for attendees when viewing a raid',
 	"pk_set_portal_head" => 'Portal settings',
@@ -959,6 +959,9 @@ $lang = array(
 	"core_sett_f_help_calendar_raid_statuschange_status" => 'The status will be changed to the selected value if character was changed',
 	"core_sett_f_calendar_raid_nsfilter" => 'Which characters to show, except mains, at the \'not signed-in window\'.',
 	"core_sett_f_help_calendar_raid_nsfilter" => 'You can select, which characters should be visible in the list of unsigned characters.',
+	"raidevent_guestapplication" => "Application of guests for raid events",
+	"raidevent_confirm_guest" => 'Confirm guest applications',
+	"raidevent_delete_guest" => 'Delete guest applications',
 	"raidevent_raid_nsf_twink" => 'Twinks',
 	"raidevent_raid_nsf_special" => 'Special characters',
 	"raidevent_raid_nsf_hiddn" => 'Hidden characters',
@@ -1006,7 +1009,7 @@ $lang = array(
 	"core_sett_f_sp_opengraph_tags" => 'OpenGraph Metatags',
 	"core_sett_f_help_sp_opengraph_tags" => 'Social Network can identify information more easier, e.g. when sharing News',
 	"core_sett_f_sp_whatsapp_share" => "Share in WhatsApp",
-	"core_sett_f_help_sp_whatsapp_share" => "The WhatsApp Share-Button will be visible on mobile devices only",	
+	"core_sett_f_help_sp_whatsapp_share" => "The WhatsApp Share-Button will be visible on mobile devices only",
 	"reset_header" => 'Delete data from EQdkp',
 	"reset_infotext" => 'WARNING! Deletion can\'t be revoked. All inserted data will be lost forever! <br /> Before performing this deletion, make a backup!',
 	"reset_type" => 'Type of data',
@@ -1665,7 +1668,7 @@ $lang = array(
 	"extension_install_locked" => "There is already one Extension being updated or installed. You can install or update only one at the same time.",
 	"fatal_error_id" => "Error-ID",
 	"core_sett_f_enable_leaderboard" => "Show Leaderboard",
-		
+
 	"pi_manualupload" => "Manual upload",
 	"pi_manualupload_info" => "Here you can upload extensions like styles, plugins or portal modules that you downloaded formerly. To install the extensions, go to the corresponding management page.<br/><b>Further extensions may be downloaded from our project website: <a href=\"".EQDKP_PROJECT_URL."\" target=\"_blank\">".EQDKP_PROJECT_URL."</a>.</b>",
 	"pi_choose_file" => "Choose file to upload",
@@ -1677,13 +1680,13 @@ $lang = array(
 	"plugin_package_error2" => "The uploaded package contains a broken control file. The category could not be determined successfully!",
 	"plugin_package_error3" => "The files could not be copied, probably due to missing write permissions.",
 	"update_all_extensions" => "Update all Extensions",
-		
+
 	"core_sett_fs_js" => "Global JavaScript & CSS",
 	"core_sett_f_global_js" => "Global Footer-Code",
 	"core_sett_f_help_global_js" => "The inserted code will be placed into the footer of each page.",
 	"core_sett_f_global_css" => "Global CSS",
 	"core_sett_f_help_global_css" => "The inserted CSS-Definitions will be added to each page.",
-	
+
 	"core_sett_fs_ittownscripts" => "Own Tooltips",
 	"core_sett_f_infotooltip_own_enabled" => "Use own tooltips",
 	"core_sett_f_infotooltip_own_script" => "Code for the own tooltips",
@@ -1714,7 +1717,7 @@ $lang = array(
 	"core_sett_f_twitter_access_token" => "Twitter App Access Token",
 	"core_sett_f_help_twitter_access_token" => "You can create the Access Token at the Settings of your created App.",
 	"core_sett_f_twitter_access_token_secret" => "Twitter App Access Token Secret",
-		
+
 		'stylesettings_heading_body' => 'Page',
 		'stylesettings_body_background_color' => 'Backgroundcolor',
 		'stylesettings_body_font_color' => 'Fontcolor',

@@ -893,6 +893,7 @@ $lang = array(
 	"notification_char_confirm_required" => '%s Chars have to be confirmed',
 	"notification_char_delete_requested" => '%s Chars have to be deleted',
 	"notification_user_enable" => '%s Users have to be activated',
+	"notification_calendar_guestapplication" => "%s applications of guests to attend raid events",
 	"notification_none" => 'No notifications',
 	"notifications" => 'Notifications',
 	"home" => 'Home',

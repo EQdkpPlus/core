@@ -851,6 +851,7 @@ $lang = array(
 "notification_char_confirm_required" => "%s Charaktere zu bestätigen",
 "notification_char_delete_requested" => "%s Charaktere zu löschen",
 "notification_user_enable" => "%s Benutzer zu aktivieren",
+"notification_calendar_guestapplication" => "%s Bewerbungen von Gästen für Raidereignisse",
 "notification_none" => "Keine Benachrichtigungen vorhanden",
 "notifications" => "Benachrichtigungen",
 "home"	=> "Home",

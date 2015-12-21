@@ -40,13 +40,18 @@ class update_2203 extends sql_update_task {
 					1			=> 'Alter raid guests table and add creator column',
 					2			=> 'Alter raid guests table and add colum for approval status',
 					3			=> 'Alter raid guests table and add colum for email address',
-					4			=> 'Set '
+					4			=> 'Set guests approved status to 1',
+					5			=> 'Set guests creator to 1',
+					6			=> 'Add new notifictaion for guests',
 				),
 			'german' => array(
 				'update_2203'	=> 'EQdkp Plus 2.2.0 Update 3',
 					1			=> 'Ändere die Raidgäste-Tabelle und füge Spalte für Ersteller hinzu',
 					2			=> 'Ändere die Raidgäste-Tabelle und füge Spalte für Freigabestatus hinzu',
 					3			=> 'Ändere die Raidgäste-Tabelle und füge Spalte für E-Mails hinzu',
+					4			=> 'Setze den Bestätigt-STatus für bisherige Gäste auf 1',
+					5			=> 'Setze den Ersteller für bisherige Gäste auf 1',
+					6			=> 'Füge neue Benachrichtigung für Gäste hinzu',
 			),
 		);
 
@@ -57,6 +62,7 @@ class update_2203 extends sql_update_task {
 			3	=> "ALTER TABLE `__calendar_raid_guests` ADD COLUMN `email` VARCHAR(255) COLLATE utf8_bin DEFAULT NULL",
 			4	=> "UPDATE `__calendar_raid_guests` SET `approved` = '1'",
 			5	=> "UPDATE `__calendar_raid_guests` SET `creator` = '1'",
+			6	=> "INSERT INTO `__notification_types` (`id`, `name`, `category`, `prio`, `default`, `group`, `group_name`, `group_at`, `icon`) VALUES ('eqdkp_calendar_guest_application', 'notification_calendar_guestapplication', 'calendarevent', 1, 1, 0, NULL, 0, 'fa-user-plus');",
 		);
 	}
 
