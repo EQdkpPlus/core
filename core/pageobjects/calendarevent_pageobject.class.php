@@ -752,12 +752,13 @@ class calendarevent_pageobject extends pageobject {
 									$guest_clssicon.'&nbsp;'.$this->game->get_name('primary', $guestsdata['class']).'<br/><i class="fa fa-comment fa-lg"></i> '.
 									((isset($guestsdata['note']) && $guestsdata['note'] !='') ? $guestsdata['note'] : $this->user->lang('raidevent_no_guest_note'));
 				$this->tpl->assign_block_vars('guests', array(
-					'NAME'		=> $guestsdata['name'],
+					'NAME'			=> $guestsdata['name'],
 					'ID'			=> $guestid,
-					'CLASSID'	=> $guestsdata['class'],
-					'CLASSICON'	=> $guest_clssicon,
-					'TOOLTIP'	=> $guest_tooltip,
-					'EMAIL'		=> (isset($guestsdata['email']) && $guestsdata['email'] != '') ? $guestsdata['email'] : false,
+					'CLASSID'		=> $guestsdata['class'],
+					'CLASSICON'		=> $guest_clssicon,
+					'TOOLTIP'		=> $guest_tooltip,
+					'TOBEAPPROVED'	=> ($guestsdata['approved'] == 0 && $guestsdata['email'] != '') ? true : false,
+					'EMAIL'			=> (isset($guestsdata['email']) && $guestsdata['email'] != '') ? $guestsdata['email'] : false,
 				));
 			}
 		}

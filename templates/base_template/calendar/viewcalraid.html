@@ -35,12 +35,19 @@ $(function(){
 	});
 
 	$('.guesttooltip').each(function() {
-		var guestid = $(this).data('guestid');
+		var guestid		= $(this).data('guestid');
+		var approval	= $(this).data('approval');
+		var titletext	= NULL;
+		if(approval){
+			var titletext = '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-thumbs-up fa-lg hand" onclick="ApproveGuest('+guestid+');"></i></div>';
+		}else{
+			var titletext = '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-pencil fa-lg hand" onclick="EditGuest('+guestid+');"></i>  <i class="fa fa-trash-o fa-lg hand" onclick="DeleteGuest('+guestid+');"></i></div>';
+		}
 		$(this).qtip({
 			content: {
 				text: $(this).next('.guesttooltip-data'),
 				<!-- IF IS_OPERATOR -->title: {
-					text: '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-pencil fa-lg hand" onclick="EditGuest('+guestid+');"></i>  <i class="fa fa-trash-o fa-lg hand" onclick="DeleteGuest('+guestid+');"></i></div>',
+					text: titletext,
 					button: false
 				}<!-- ENDIF -->
 			},
