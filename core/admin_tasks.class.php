@@ -332,7 +332,7 @@ class admin_tasks extends gen_class {
 		if($strAction == 'confirm'){
 			if (count($arrIDs)){
 				foreach($arrIDs as $guest_id){
-					$this->pdh->put('calendar_raids_guests', 'confirm_guest', array((int)$guest_id));
+					$this->pdh->put('calendar_raids_guests', 'approve_guest', array((int)$guest_id));
 				}
 				$this->pdh->process_hook_queue();
 				$this->core->message($this->user->lang('raidevent_confirm_guest'), $this->user->lang('success'), 'green');

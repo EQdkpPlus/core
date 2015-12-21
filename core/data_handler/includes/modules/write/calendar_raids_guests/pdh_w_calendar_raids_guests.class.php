@@ -25,7 +25,7 @@ if(!defined('EQDKP_INC')){
 
 if(!class_exists('pdh_w_calendar_raids_guests')){
 	class pdh_w_calendar_raids_guests extends pdh_w_generic{
-	
+
 		public function reset() {
 			$this->db->query("TRUNCATE TABLE __calendar_raid_guests;");
 			$this->pdh->enqueue_hook('guests_update');
@@ -34,7 +34,7 @@ if(!class_exists('pdh_w_calendar_raids_guests')){
 		public function insert_guest($eventid, $name='', $classid='', $group='', $note='', $email=''){
 			$userid		= $this->user->data['user_id'];
 			$creator 	= ($userid && $userid > 0) ? $userid : 0;
-			$objQuery = $this->db->prepare("INSERT INTO __calendar_raid_guests :p")->set(array(	
+			$objQuery = $this->db->prepare("INSERT INTO __calendar_raid_guests :p")->set(array(
 				'calendar_events_id'	=> $eventid,
 				'name'					=> $name,
 				'email'					=> $email,
@@ -51,8 +51,8 @@ if(!class_exists('pdh_w_calendar_raids_guests')){
 		}
 
 		public function approve_guest($guestid){
-			$objQuery = $this->db->prepare("INSERT INTO __calendar_raid_guests :p WHERE id=?")->set(array(	
-				'approved'				=> 1,
+			$objQuery = $this->db->prepare("UPDATE __calendar_raid_guests :p WHERE id=?")->set(array(
+				'approved'				=> '1',
 			))->execute($guestid);
 			$this->pdh->enqueue_hook('guests_update', array($guestid));
 		}
@@ -71,7 +71,7 @@ if(!class_exists('pdh_w_calendar_raids_guests')){
 
 		public function delete_guest($guestid){
 			$objQuery = $this->db->prepare("DELETE FROM __calendar_raid_guests WHERE id=?;")->execute($guestid);
-			
+
 			if($objQuery){
 				$this->pdh->enqueue_hook('guests_update', array($guestid));
 				return true;
