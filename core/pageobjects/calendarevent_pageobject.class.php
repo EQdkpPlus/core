@@ -1122,6 +1122,7 @@ class calendarevent_pageobject extends pageobject {
 			'DATE_MONTH'		=> $this->time->date('F', $eventdata['timestamp_start']),
 			'DATE_YEAR'			=> $this->time->date('Y', $eventdata['timestamp_start']),
 			'DATE_FULL'			=> $full_date,
+			'DATE_TIME'			=> ($eventdata['allday'] == 1) ? '' : $this->time->user_date($eventdata['timestamp_start'], false, true),
 			'MYSTATUS'			=> (isset($statusofuser[$this->user->data['user_id']]) && $statusofuser[$this->user->data['user_id']] > 0) ? $statusofuser[$this->user->data['user_id']] : 0,
 			'ALLDAY'			=> ($eventdata['allday'] == 1) ? true : false,
 			'LOCATION'			=> (isset($eventdata['extension']['location'])) ? $eventdata['extension']['location'] : false,
