@@ -6,8 +6,8 @@
 					<td width="90%">
 						<b>{L_raidevent_raid_guests}</b> ({GUEST_COUNT}):
 						<!-- BEGIN guests -->
-							<span class="guesttooltip <!-- IF COLORED_NAMESBYCLASS2 --> class_{guests.CLASSID}<!-- ENDIF -->" data-guestid="{guests.ID}" data-approval="{guests.TOBEAPPROVED}">
-								<!-- IF guests.CLASSICON -->{guests.CLASSICON} <!-- ENDIF -->{guests.NAME}<!-- IF guests.EMAIL -->  <i class="fa fa-envelope fa-lg"></i><!-- ENDIF -->
+							<span class="guesttooltip <!-- IF COLORED_NAMESBYCLASS --> class_{guests.CLASSID}<!-- ENDIF -->" data-guestid="{guests.ID}" data-approval="{guests.TOBEAPPROVED}">
+								<!-- IF guests.CLASSICON -->{guests.CLASSICON} <!-- ENDIF -->{guests.NAME}<!-- IF guests.EXTERNALAPPL -->  <i class="fa fa-external-link-square fa-lg <!-- IF guests.TOBEAPPROVED -->calendar_redicon<!-- ELSE -->calendar_blackicon<!-- ENDIF -->"></i><!-- ENDIF -->
 							</span>
 							<span class="guesttooltip-data" style="display:none">{guests.TOOLTIP}</span>
 						<!-- END guests -->

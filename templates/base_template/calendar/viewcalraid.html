@@ -37,7 +37,7 @@ $(function(){
 	$('.guesttooltip').each(function() {
 		var guestid		= $(this).data('guestid');
 		var approval	= $(this).data('approval');
-		var titletext	= NULL;
+		var titletext	= '';
 		if(approval){
 			var titletext = '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-thumbs-up fa-lg hand" onclick="ApproveGuest('+guestid+');"></i></div>';
 		}else{
@@ -393,8 +393,8 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 <form method="post" action="{ACTION}" name="post">
 	<input type="hidden" name="event_id" value="{EVENT_ID}" />
 	<input type="hidden" name="subscribed_member_id" value="{SUBSCRIBED_MEMBER_ID}" />
-	
-	
+
+
 		<div class="table fullwidth eventdata-raid eventid-{EVENT_ID}">
 		<div class="tr">
 			<div class="td bigDateTd" style="width: 100px;">
@@ -407,7 +407,7 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 			</div>
 			<div class="td" style="vertical-align: top;">
 				<div class="floatRight">{MENU_OPTIONS}</div>
-					
+
 				<h2>{RAIDNAME}</h2>
 				<div class="eventdata-header">
 					<div class="eventdata-details">

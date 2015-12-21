@@ -2203,7 +2203,12 @@ fieldset.settings.floatRight.raid input[type="text"]{
 	border-bottom: 1px solid #CCCCCC;
 	margin-top: 5px;
 }
-
+.calendar_blackicon{
+	color: black;
+}
+.calendar_redicon{
+	color: red;
+}
 .raidcal_name .toggle_button {
 	font-size: 13px;
 	font-weight: normal;
@@ -4198,7 +4203,7 @@ button.thirdpartylogin.openid {
 }
 .ribbon span {
   	position: relative;
-	display: block;	
+	display: block;
 	text-align: center;
 	bottom: 0em;
 	left: 0;
@@ -4299,4 +4304,3 @@ button.thirdpartylogin.openid {
 .articleCalendarEventBox .red, .articleCalendarEventBox .red:hover {
 	color: red !important;;
 }
-

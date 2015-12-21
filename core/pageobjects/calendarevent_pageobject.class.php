@@ -444,7 +444,7 @@ class calendarevent_pageobject extends pageobject {
 			redirect($this->routing->build('calendar',false,false,true,true));
 			//message_die($this->user->lang('calendar_page_noid'));
 		}
-		
+
 		//Show Event Details if it's not an raid
 		if($this->pdh->get('calendar_events', 'calendartype', array($this->url_id)) == '2'){
 			$this->display_eventdetails();
@@ -750,7 +750,8 @@ class calendarevent_pageobject extends pageobject {
 				$guest_clssicon	= $this->game->decorate('primary', $guestsdata['class']);
 				$guest_tooltip 	= '<i class="fa fa-clock-o fa-lg"></i> '.$this->user->lang('raidevent_raid_signedin').": ".$this->time->user_date($guestsdata['timestamp_signup'], true, false, true).'<br/><i class="fa fa-user fa-lg"></i> '.
 									$guest_clssicon.'&nbsp;'.$this->game->get_name('primary', $guestsdata['class']).'<br/><i class="fa fa-comment fa-lg"></i> '.
-									((isset($guestsdata['note']) && $guestsdata['note'] !='') ? $guestsdata['note'] : $this->user->lang('raidevent_no_guest_note'));
+									((isset($guestsdata['note']) && $guestsdata['note'] !='') ? $guestsdata['note'] : $this->user->lang('raidevent_no_guest_note')).
+									((isset($guestsdata['email']) && $guestsdata['email'] !='' && ($this->check_permission() || $this->user->check_auth('a_cal_revent_conf', false))) ? '<br/><i class="fa fa-envelope fa-lg"></i> '.$guestsdata['email'] : '');
 				$this->tpl->assign_block_vars('guests', array(
 					'NAME'			=> $guestsdata['name'],
 					'ID'			=> $guestid,
@@ -758,6 +759,7 @@ class calendarevent_pageobject extends pageobject {
 					'CLASSICON'		=> $guest_clssicon,
 					'TOOLTIP'		=> $guest_tooltip,
 					'TOBEAPPROVED'	=> ($guestsdata['approved'] == 0 && $guestsdata['email'] != '') ? true : false,
+					'EXTERNALAPPL'	=> ($guestsdata['creator'] == 0 && $guestsdata['email'] != '') ? true : false,
 					'EMAIL'			=> (isset($guestsdata['email']) && $guestsdata['email'] != '') ? $guestsdata['email'] : false,
 				));
 			}
@@ -863,7 +865,7 @@ class calendarevent_pageobject extends pageobject {
 		$this->jquery->Dialog('ExportDialog', $this->user->lang('raidevent_raid_export_win'), array('url'=> $this->routing->build('calendareventexport')."&eventid=".$this->url_id, 'width'=>'640', 'height'=>'540'));
 		$this->jquery->Dialog('EditGuest', $this->user->lang('raidevent_raid_editguest_win'), array('url'=> $this->routing->build('calendareventguests')."&simple_head=true&guestid='+id+'", 'width'=>'490', 'height'=>'280', 'onclose' => $this->strPath.$this->SID, 'withid' => 'id'));
 		$this->jquery->Dialog('TransformRaid', $this->user->lang('raidevent_raid_transform'), array('url'=> $this->routing->build('calendareventtransform')."&simple_head=true&eventid='+eventid+'", 'width'=>'440', 'height'=>'350', 'onclose' => $this->strPath.$this->SID, 'withid' => 'eventid'));
-		$this->jquery->Dialog('AddGuest', $this->user->lang('raidevent_raid_addguest_win'), array('url'=>$this->routing->build('calendareventguests')."&eventid='+eventid+'&simple_head=true", 'width'=>'490', 'height'=>'280', 'onclose' => $this->strPath.$this->SID, 'withid' => 'eventid'));
+		$this->jquery->Dialog('AddGuest', $this->user->lang('raidevent_raid_addguest_win'), array('url'=>$this->routing->build('calendareventguests')."&eventid='+eventid+'&simple_head=true", 'width'=>'490', 'height'=>'340', 'onclose' => $this->strPath.$this->SID, 'withid' => 'eventid'));
 		$this->jquery->Dialog('DeleteGuest', $this->user->lang('raidevent_raid_guest_del'), array('custom_js'=>"document.guestp.submit();", 'message'=>$this->user->lang('raidevent_raid_guest_delmsg'), 'withid'=>'id', 'onlickjs'=>'$("#guestid_field").val(id);', 'buttontxt'=>$this->user->lang('delete')), 'confirm');
 		$this->jquery->Dialog('ViewLogs', $this->user->lang('view_logs'), array('url'=>$this->routing->build('calendarevent')."&logs&eventid='+eventid+'&simple_head=true", 'width'=>'900', 'height'=>'600', 'withid' => 'eventid'));
 
