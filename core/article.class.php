@@ -257,7 +257,7 @@ if(!class_exists('article')){
 				}
 					
 				if($signinstatus && $signinstatus != ""){
-					$out .= ' &bull; <i class="fa fa-lg fa-user"></i> '.$signinstatus;
+					$out .= ' &bull; <i class="fa fa-lg fa-user coretip" data-coretip="'.$this->user->data['username'].'"></i> '.$signinstatus;
 				}
 		
 				$out .='</div>';
@@ -318,9 +318,9 @@ if(!class_exists('article')){
 					$userstatus[$attendancestatus]++;
 				}
 		
-				$out .='<div><i class="fa fa-lg fa-users green"></i> '.$userstatus['attendance'].((isset($statusofuser[$this->user->id]) && $statusofuser[$this->user->id] == 1) ? ' <i class="fa fa-lg fa-flag"></i>' : '').'
-					&bull; <i class="fa fa-lg fa-users orange"></i> '.$userstatus['maybe'].((isset($statusofuser[$this->user->id]) && $statusofuser[$this->user->id] == 2) ? '<i class="fa fa-lg fa-flag"></i>' : '').'
-					&bull; <i class="fa fa-lg fa-users red"></i> '.$userstatus['decline'].((isset($statusofuser[$this->user->id]) && $statusofuser[$this->user->id] == 3) ? '<i class="fa fa-lg fa-flag"></i>' : '').
+				$out .='<div><i class="fa fa-lg fa-users green coretip" data-coretip="'.$this->user->lang('calendar_eventdetails_confirmations').'"></i> '.$userstatus['attendance'].((isset($statusofuser[$this->user->id]) && $statusofuser[$this->user->id] == 1) ? ' <i class="fa fa-lg fa-user coretip" data-coretip="'.$this->user->data['username'].'"></i>' : '').'
+					&bull; <i class="fa fa-lg fa-users orange coretip" data-coretip="'.$this->user->lang('calendar_eventdetails_maybes').'"></i> '.$userstatus['maybe'].((isset($statusofuser[$this->user->id]) && $statusofuser[$this->user->id] == 2) ? '<i class="fa fa-lg fa-user coretip" data-coretip="'.$this->user->data['username'].'"></i>' : '').'
+					&bull; <i class="fa fa-lg fa-users red coretip" data-coretip="'.$this->user->lang('calendar_eventdetails_declines').'"></i> '.$userstatus['decline'].((isset($statusofuser[$this->user->id]) && $statusofuser[$this->user->id] == 3) ? '<i class="fa fa-lg fa-user coretip" data-coretip="'.$this->user->data['username'].'"></i>' : '').
 							'</div>';
 					
 				$out .='</div>';
