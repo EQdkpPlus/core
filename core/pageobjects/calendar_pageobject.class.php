@@ -329,7 +329,7 @@ class calendar_pageobject extends pageobject {
 								'type'			=> 'event',
 								'eventid'		=> $calid,
 								'editable'		=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission($calid)) ? true : false,
-								'url'			=> utf8_encode($this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid).'eventdetails'),
+								'url'			=> utf8_encode($this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid)),
 								'title'			=> $this->pdh->get('calendar_events', 'name', array($calid)),
 								'start'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_start', array($calid))),
 								'end'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_end', array($calid, $alldayevents))),
