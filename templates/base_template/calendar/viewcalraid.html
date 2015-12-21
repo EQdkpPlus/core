@@ -386,44 +386,43 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 <form method="post" action="{ACTION}" name="post">
 	<input type="hidden" name="event_id" value="{EVENT_ID}" />
 	<input type="hidden" name="subscribed_member_id" value="{SUBSCRIBED_MEMBER_ID}" />
-	<div id="toogleRaidcalInfos">
-	<div>
-		<div class="raidcal_name floatLeft">{RAIDICON} {RAIDNAME} <span class="toggle_button">&nbsp;</span></div>
-		<div class="floatRight">{MENU_OPTIONS}</div>
-	</div>
-	<div class="clear"></div>
-	<fieldset class="settings smallsettings raidcal_infos toggle_container">
-		<dl class="raidcal_date">
-			<dt><label>{L_date}</label></dt>
-			<dd>{RAIDDATE}, {L_raidevent_raid_time_from} {RAIDTIME_START} {L_raidevent_raid_time_till} {RAIDTIME_END}
-				<!-- IF RAIDDATE_ADDED --><i>({L_raidevent_raid_added_on} {RAIDDATE_ADDED})</i><!-- ENDIF -->
-			</dd>
-		</dl>
-		<dl class="raidcal_deadline">
-			<dt><label>{L_calendar_deadline}</label></dt>
-			<dd>{RAIDTIME_DEADLINE}</dd>
-		</dl>
-		<dl class="raidcal_calendar">
-			<dt><label>{L_calendar}</label></dt>
-			<dd>{CALENDAR}</dd>
-		</dl>
-		<dl class="raidcal_creator">
-			<dt><label><!-- IF RAIDLEADER -->
-						{L_raidevent_raidleader}
-						<!-- ELSE -->
-						{L_raidevent_raid_addedby}
-						<!-- ENDIF --></label></dt>
-			<dd><!-- IF RAIDLEADER -->
-						{RAIDLEADER}
-						<!-- ELSE -->
-						{RAID_ADDEDBY}
-						<!-- ENDIF --></dd>
-		</dl>
-		<dl class="raidcal_note">
-			<dt><label>{L_raidevent_raid_note}</label></dt>
-			<dd><!-- IF RAIDNOTE -->{RAIDNOTE}<!-- ELSE -->{L_raidevent_raid_noraidnote}<!-- ENDIF --></dd>
-		</dl>
-	</fieldset>
+	
+	
+		<div class="table fullwidth eventdata-raid eventid-{EVENT_ID}">
+		<div class="tr">
+			<div class="td bigDateTd" style="width: 100px;">
+				<div class="bigDateContainer hiddenSmartphone">
+					{RAIDICON}
+					<span class="middleDateNumber">{DATE_DAY}</span>
+					<span class="articleMonth">{DATE_MONTH}</span>
+					<span class="middleDateTime">{RAIDTIME_START}</span>
+				</div>
+			</div>
+			<div class="td" style="vertical-align: top;">
+				<div class="floatRight">{MENU_OPTIONS}</div>
+					
+				<h2>{RAIDNAME}</h2>
+				<div class="eventdata-header">
+					<div class="eventdata-details">
+						<div class="eventdata-details-date"><i class="fa fa-lg fa-calendar-o"></i> {RAIDDATE}, {L_raidevent_raid_time_from} {RAIDTIME_START} {L_raidevent_raid_time_till} {RAIDTIME_END}</div>
+						<div class="eventdata-details-deadline"><i class="fa fa-calendar-times-o fa-lg"></i> {L_calendar_deadline} {RAIDTIME_DEADLINE} </div>
+						<div class="eventdata-details-calendar"><i class="fa fa-calendar fa-lg"></i> {CALENDAR}</div>
+						<!-- IF RAIDDATE_ADDED -->
+						<div class="eventdata-details-added"><i class="fa fa-lg fa-plus"></i> {L_raidevent_raid_added_on} {RAIDDATE_ADDED}, {L_raidevent_raid_addedby} {RAID_ADDEDBY}</div>
+						<!-- ENDIF -->
+						<!-- IF RAIDLEADER -->
+						<div class="eventdata-details-raidleader"><i class="fa fa-users fa-lg" title="{L_raidevent_raidleader}"></i> {RAIDLEADER} </div>
+						<!-- ENDIF -->
+					</div>
+				</div>
+				<!-- IF RAIDNOTE -->
+				<br />
+				<div class="event_raidnote">
+					{RAIDNOTE}
+				</div>
+				<!-- ENDIF -->
+			</div>
+		</div>
 	</div>
 
 	<!-- IF not RAID_CLOSED and not RAID_DEADLINE and not NO_CHAR_ASSIGNED -->
