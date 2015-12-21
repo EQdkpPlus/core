@@ -44,7 +44,6 @@ class calendarevent_pageobject extends pageobject {
 			'change_group'		=> array('process' => 'change_group',			'csrf'=>true),
 			'guestid'			=> array('process' => 'delete_guest',			'csrf'=>true),
 			'logs'				=> array('process' => 'display_logs'),
-			'eventdetails'		=> array('process' => 'display_eventdetails'),
 		);
 
 		parent::__construct(false, $handler, array(), null, '', 'eventid');
@@ -445,10 +444,11 @@ class calendarevent_pageobject extends pageobject {
 			redirect($this->routing->build('calendar',false,false,true,true));
 			//message_die($this->user->lang('calendar_page_noid'));
 		}
-
-		// Show an error message if the event is not a raid
-		if($this->pdh->get('calendar_events', 'calendartype', array($this->url_id)) != '1'){
-			message_die($this->user->lang('calendar_page_noraid'));
+		
+		//Show Event Details if it's not an raid
+		if($this->pdh->get('calendar_events', 'calendartype', array($this->url_id)) == '2'){
+			$this->display_eventdetails();
+			return;
 		}
 
 		$eventdata	= $this->pdh->get('calendar_events', 'data', array($this->url_id));
@@ -960,7 +960,7 @@ class calendarevent_pageobject extends pageobject {
 			'SUBSCRIBED_MEMBER_ID'	=> $this->mystatus['member_id'],
 			'ATTENDEES_COLSPAN'		=> count($this->raidcategories),
 			'RAIDNAME'				=> $this->pdh->get('event', 'name', array($eventdata['extension']['raid_eventid'])),
-			'RAIDICON'				=> $this->pdh->get('event', 'html_icon', array($eventdata['extension']['raid_eventid'], 40)),
+			'RAIDICON'				=> $this->pdh->get('event', 'html_icon', array($eventdata['extension']['raid_eventid'], 62)),
 			'RAIDLEADER'			=> ($eventdata['extension']['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'html_memberlink', 0, array($eventdata['extension']['raidleader'], $this->routing->simpleBuild('character'), '', false, false, true, true))) : '',
 			'RAIDVALUE'				=> ($eventdata['extension']['raid_value'] > 0) ? $eventdata['extension']['raid_value'] : '0',
 			'RAIDNOTE'				=> ($eventdata['notes']) ? $this->bbcode->toHTML(nl2br($eventdata['notes'])) : '',
@@ -973,7 +973,9 @@ class calendarevent_pageobject extends pageobject {
 			'RAIDDATE_ADDED'		=> (isset($eventdata['extension']['created_on']) && $eventdata['extension']['created_on'] > 0) ? $this->time->user_date($eventdata['extension']['created_on'], true, false, true) : false,
 			'PLAYER_NOTE'			=> $this->mystatus['note'],
 			'COLUMN_WIDTH'			=> (isset($user_brakclm) && count($this->raidcategories) > $this->classbreakval) ? str_replace(',','.',100/$this->classbreakval) : str_replace(',','.',100/count($this->raidcategories)),
-
+			'DATE_DAY'				=> $this->time->date('d', $eventdata['timestamp_start']),
+			'DATE_MONTH'			=> $this->time->date('F', $eventdata['timestamp_start']),
+			'DATE_YEAR'				=> $this->time->date('Y', $eventdata['timestamp_start']),
 			// guests
 			'GUEST_COUNT'			=> count($this->guests),
 
@@ -1110,8 +1112,8 @@ class calendarevent_pageobject extends pageobject {
 		$jqToolbar = $this->jquery->toolbar('calevent_event', $arrToolbarItems, array('position' => 'bottom'));
 
 		// the Windows
-		$this->jquery->Dialog('addEvent', $this->user->lang('calendar_win_add'), array('url'=> $this->routing->build('editcalendarevent')."&simple_head=true", 'width'=>'920', 'height'=>'730', 'onclose' => $this->strPath.$this->SID.'&eventdetails'));
-		$this->jquery->Dialog('editEvent', $this->user->lang('calendar_win_edit'), array('url'=> $this->routing->build('editcalendarevent')."&eventid=".$this->url_id."&simple_head=true", 'width'=>'920', 'height'=>'730', 'onclose' => $this->strPath.$this->SID.'&eventdetails'));
+		$this->jquery->Dialog('addEvent', $this->user->lang('calendar_win_add'), array('url'=> $this->routing->build('editcalendarevent')."&simple_head=true", 'width'=>'920', 'height'=>'730', 'onclose' => $this->strPath.$this->SID));
+		$this->jquery->Dialog('editEvent', $this->user->lang('calendar_win_edit'), array('url'=> $this->routing->build('editcalendarevent')."&eventid=".$this->url_id."&simple_head=true", 'width'=>'920', 'height'=>'730', 'onclose' => $this->strPath.$this->SID));
 
 		$this->tpl->assign_vars(array(
 			'EVENT_ID'			=> $this->url_id,

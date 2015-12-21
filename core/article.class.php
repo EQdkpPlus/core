@@ -187,20 +187,21 @@ if(!class_exists('article')){
 						'RAIDTIME_END'			=> $this->time->user_date($eventdata['timestamp_end'], false, true),
 						'RAIDTIME_DEADLINE'		=> $deadlinetime,
 						'CALENDAR'				=> $this->pdh->get('calendars', 'name', array($eventdata['calendar_id'])),
-						'RAIDICON'				=> $this->pdh->get('event', 'html_icon', array($eventdata['extension']['raid_eventid'], 24)),
+						'RAIDICON'				=> $this->pdh->get('event', 'html_icon', array($eventdata['extension']['raid_eventid'], 32)),
 						'RAIDNOTE'				=> ($eventdata['notes']) ? $this->bbcode->toHTML(nl2br($eventdata['notes'])) : '',
 						'LINK'					=> $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($intEventID)), $intEventID),
 				);
 					
 				$out .= '<div class="raid '.(($raidclosed) ? 'closed' : 'open').'"><div class="bigDateContainer td">';
-				$out .= '<div class="bigDateNumber">'.$data['DATE_DAY'].'</div>';
+				$out .= $data['RAIDICON'];
+				$out .= '<div class="middleDateTime">'.$data['DATE_DAY'].'</div>';
 				$out .= '<div class="articleMonth">'.$data['DATE_MONTH'].'</div>';
 				$out .= '<div class="middleDateTime">'.$data['RAIDTIME_START'].'</div>';
 				$out .= '</div>';
 					
 				$out .= '<div class="articleCalendarEventBoxContent td">';
 				$closedIcon = ($raidclosed) ? '<i class="fa fa-lg fa-lock"></i> ' : '';
-				$out .= '<h2>'.$closedIcon.'<a href="'.$data['LINK'].'">'.$data['RAIDICON'].' '.$data['NAME'].'</a></h2>';
+				$out .= '<h2>'.$closedIcon.'<a href="'.$data['LINK'].'">'.$data['NAME'].'</a></h2>';
 				$out .= '<div class="eventdata-details">
 			<div class="eventdata-details-date"><i class="fa fa-lg fa-calendar-o"></i> '.$data['DATE_FULL'].'</div>';
 				$out .= '<div class="eventdata-details-deadline"><i class="fa fa-calendar-times-o fa-lg" title="{L_raidevent_raidleader}"></i> '.$this->user->lang('calendar_deadline').' '.$data['RAIDTIME_DEADLINE'].' </div>';
@@ -256,7 +257,7 @@ if(!class_exists('article')){
 				}
 					
 				if($signinstatus && $signinstatus != ""){
-					$out .= ' &bull; <i class="fa fa-lg fa-user"></i> '.$signinstatus;
+					$out .= ' &bull; <i class="fa fa-lg fa-user coretip" data-coretip="'.$this->user->data['username'].'"></i> '.$signinstatus;
 				}
 		
 				$out .='</div>';
@@ -317,9 +318,9 @@ if(!class_exists('article')){
 					$userstatus[$attendancestatus]++;
 				}
 		
-				$out .='<div><i class="fa fa-lg fa-users green"></i> '.$userstatus['attendance'].((isset($statusofuser[$this->user->id]) && $statusofuser[$this->user->id] == 1) ? ' <i class="fa fa-lg fa-flag"></i>' : '').'
-					&bull; <i class="fa fa-lg fa-users orange"></i> '.$userstatus['maybe'].((isset($statusofuser[$this->user->id]) && $statusofuser[$this->user->id] == 2) ? '<i class="fa fa-lg fa-flag"></i>' : '').'
-					&bull; <i class="fa fa-lg fa-users red"></i> '.$userstatus['decline'].((isset($statusofuser[$this->user->id]) && $statusofuser[$this->user->id] == 3) ? '<i class="fa fa-lg fa-flag"></i>' : '').
+				$out .='<div><i class="fa fa-lg fa-users green coretip" data-coretip="'.$this->user->lang('calendar_eventdetails_confirmations').'"></i> '.$userstatus['attendance'].((isset($statusofuser[$this->user->id]) && $statusofuser[$this->user->id] == 1) ? ' <i class="fa fa-lg fa-user coretip" data-coretip="'.$this->user->data['username'].'"></i>' : '').'
+					&bull; <i class="fa fa-lg fa-users orange coretip" data-coretip="'.$this->user->lang('calendar_eventdetails_maybes').'"></i> '.$userstatus['maybe'].((isset($statusofuser[$this->user->id]) && $statusofuser[$this->user->id] == 2) ? '<i class="fa fa-lg fa-user coretip" data-coretip="'.$this->user->data['username'].'"></i>' : '').'
+					&bull; <i class="fa fa-lg fa-users red coretip" data-coretip="'.$this->user->lang('calendar_eventdetails_declines').'"></i> '.$userstatus['decline'].((isset($statusofuser[$this->user->id]) && $statusofuser[$this->user->id] == 3) ? '<i class="fa fa-lg fa-user coretip" data-coretip="'.$this->user->data['username'].'"></i>' : '').
 							'</div>';
 					
 				$out .='</div>';

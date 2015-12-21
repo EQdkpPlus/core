@@ -26,7 +26,7 @@ if (!defined('EQDKP_INC'))
 
 
 /*+----------------------------------------------------------------------------
-  | shoutbox_search_hook
+  | calendarevents_article_parse_hook
   +--------------------------------------------------------------------------*/
 if (!class_exists('calendarevents_article_parse_hook'))
 {
