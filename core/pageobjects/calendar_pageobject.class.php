@@ -527,7 +527,7 @@ class calendar_pageobject extends pageobject {
 			'DATEPICK_DATE_FROM'	=> $this->jquery->Calendar('from', $this->time->user_date($date1, false, false, false, function_exists('date_create_from_format'))),
 			'DATEPICK_DATE_TO'		=> $this->jquery->Calendar('to', $this->time->user_date($date2, false, false, false, function_exists('date_create_from_format'))),
 			'SHOW_TWINKS_CHECKED'	=> ($show_twinks)?'checked="checked"':'',
-			'MS_CALENDAR_SELECT'	=> new hmultiselect('calendarfilter', array('options' => $calendar_idlist, 'todisable' => $todisable, 'value' => array(1,2))),
+			'MS_CALENDAR_SELECT'	=> new hmultiselect('calendarfilter', array('options' => $calendar_idlist, 'preview_num' => 3,'todisable' => $todisable, 'value' => array(1,2))),
 		));
 
 		// template things
