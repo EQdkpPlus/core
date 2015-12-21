@@ -31,18 +31,30 @@ if(!class_exists('pdh_w_calendar_raids_guests')){
 			$this->pdh->enqueue_hook('guests_update');
 		}
 
-		public function insert_guest($eventid, $name='', $classid='', $group='', $note=''){
+		public function insert_guest($eventid, $name='', $classid='', $group='', $note='', $email=''){
+			$userid		= $this->user->data['user_id'];
+			$creator 	= ($userid && $userid > 0) ? $userid : 0;
 			$objQuery = $this->db->prepare("INSERT INTO __calendar_raid_guests :p")->set(array(	
 				'calendar_events_id'	=> $eventid,
 				'name'					=> $name,
+				'email'					=> $email,
 				'note'					=> $note,
-				'timestamp_signup'		=> $this->time->time,
+				'timestamp_signup'	=> $this->time->time,
 				'class'					=> $classid,
-				'raidgroup'				=> $group
+				'raidgroup'				=> $group,
+				'creator'				=> $creator,
+				'approved'				=> ($creator > 0) ? 1 : 0,
 			))->execute();
 			$this->pdh->enqueue_hook('guests_update', array($objQuery->insertId));
 			if ($objQuery) return $objQuery->insertId;
 			return false;
+		}
+
+		public function approve_guest($guestid){
+			$objQuery = $this->db->prepare("INSERT INTO __calendar_raid_guests :p WHERE id=?")->set(array(	
+				'approved'				=> 1,
+			))->execute($guestid);
+			$this->pdh->enqueue_hook('guests_update', array($guestid));
 		}
 
 		public function update_guest($guestid, $classid='', $group='', $note=''){

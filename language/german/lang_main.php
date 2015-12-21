@@ -676,6 +676,12 @@ $lang = array(
 	"Termine",
 	"Raids und Termine"
 ),
+"calendar_eventdetails_invitations" => 'Einladungen',
+"calendar_eventdetails_confirmations" => 'Zusagen',
+"calendar_eventdetails_maybes" => 'Vielleicht',
+"calendar_eventdetails_declines" => 'Absagen',
+"raidevent_guest_attendraid" => 'Als Gast teilnehmen',
+"raidevent_raid_apply" => 'Als Gastteilnehmer bewerben',
 "raidevent_raidleader" => "Raidleiter",
 "raidevent_export_seperator" => "CSV Seperator",
 "raidevent_export_raidgroup" => "Raidgruppe",

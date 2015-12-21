@@ -7,7 +7,7 @@
 						<b>{L_raidevent_raid_guests}</b> ({GUEST_COUNT}): 
 						<!-- BEGIN guests -->
 							<span class="guesttooltip <!-- IF COLORED_NAMESBYCLASS2 --> class_{guests.CLASSID}<!-- ENDIF -->" data-guestid="{guests.ID}">
-								<!-- IF guests.CLASSICON -->{guests.CLASSICON} <!-- ENDIF -->{guests.NAME}
+								<!-- IF IS_OPERATOR --><span id="guest_approve" onclick="ApproveGuest('{guests.ID}');"><i class="fa fa-thumbs-up"></i></span>   <!-- ENDIF --><!-- IF guests.CLASSICON -->{guests.CLASSICON} <!-- ENDIF -->{guests.NAME}<!-- IF guests.EMAIL -->  <i class="fa fa-envelope fa-lg"></i><!-- ENDIF -->
 							</span>
 							<span class="guesttooltip-data" style="display:none">{guests.TOOLTIP}</span>
 						<!-- END guests -->

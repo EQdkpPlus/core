@@ -753,10 +753,11 @@ class calendarevent_pageobject extends pageobject {
 									((isset($guestsdata['note']) && $guestsdata['note'] !='') ? $guestsdata['note'] : $this->user->lang('raidevent_no_guest_note'));
 				$this->tpl->assign_block_vars('guests', array(
 					'NAME'		=> $guestsdata['name'],
-					'ID'		=> $guestid,
+					'ID'			=> $guestid,
 					'CLASSID'	=> $guestsdata['class'],
 					'CLASSICON'	=> $guest_clssicon,
-					'TOOLTIP'	=> $guest_tooltip
+					'TOOLTIP'	=> $guest_tooltip,
+					'EMAIL'		=> (isset($guestsdata['email']) && $guestsdata['email'] != '') ? $guestsdata['email'] : false,
 				));
 			}
 		}

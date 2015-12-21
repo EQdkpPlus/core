@@ -69,7 +69,7 @@ $(function(){
 		$(".guestpanel", this).hide();
 	});
 
-	$('#addguest').click( function(){
+	$('#addguest, #button_guestattend').click( function(){
 		AddGuest('{EVENT_ID}');
 	});
 
@@ -145,6 +145,33 @@ $(function(){
 			});
 		});
 	});
+
+	<!-- IF not IS_SIGNEDIN -->
+	$("#button_guestattend22").qtip({
+		content: {
+			text: $(this).next('.guesttooltip-data'),
+			title: {
+				text: '<div style="text-align:left;margin-left:10px;"><i class="fa fa-pencil fa-lg hand"></i> Appy as guest',
+				button: false
+			}
+		},
+		hide: {
+			fixed: true,
+			delay: 300
+		},
+		position: {
+			at: 'bottom center',
+			my: 'top center'
+		},
+		style: {
+			tip: {
+				corner: true
+			},
+			width: 300,
+			widget: true
+		}
+	});
+	<!-- ENDIF -->
 });
 
 <!-- IF S_NOTSIGNED_VISIBLE -->
@@ -468,8 +495,13 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 			<!-- IF IS_OPERATOR and SHOW_CONFIRMBUTTON -->
 			<div class="td raidcal_buttonrow_middle">
 				<button type="submit" name="confirmall" id="button_confirmall">{L_raidevent_raid_confirmall}</button>
-
 			</div>
+			<!-- ELSE -->
+				<!-- IF not IS_SIGNEDIN -->
+				<div class="td raidcal_buttonrow_middle">
+					<button type="button" name="guestattend" id="button_guestattend"><i class="fa fa-user-plus fa-lg"></i> {L_raidevent_guest_attendraid}</button>
+				</div>
+				<!-- ENDIF -->
 			<!-- ENDIF -->
 			<!-- IF S_NOTSIGNED_VISIBLE -->
 			<div class="td raidcal_buttonrow_right">

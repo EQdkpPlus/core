@@ -47,9 +47,14 @@ class calendareventguests_pageobject extends pageobject {
 					));
 				}
 			}
-			$this->pdh->process_hook_queue();
-			$this->tpl->add_js('jQuery.FrameDialog.closeDialog();');
+			
+		}else{
+			$blub = $this->pdh->put('calendar_raids_guests', 'insert_guest', array(
+				$this->in->get('eventid', 0), $this->in->get('membername'), $this->in->get('class'), 0, $this->in->get('note'), $this->in->get('email')
+			));
 		}
+		$this->pdh->process_hook_queue();
+		$this->tpl->add_js('jQuery.FrameDialog.closeDialog();');
 	}
 
 	public function display(){
@@ -59,7 +64,7 @@ class calendareventguests_pageobject extends pageobject {
 			'EVENT_ID'		=> $this->in->get('eventid', 0),
 			'GUEST_ID'		=> $this->in->get('guestid', 0),
 			'CLASS_DD'		=> new hdropdown('class', array('options' => $this->game->get_primary_classes(array('id_0')), 'value' => ((isset($guestdata['class'])) ? $guestdata['class'] : ''))),
-	
+
 			// the edit input
 			'MEMBER_NAME'	=> (isset($guestdata['name'])) ? sanitize($guestdata['name']) : '',
 			'NOTE'			=> (isset($guestdata['note'])) ? sanitize($guestdata['note']) : '',

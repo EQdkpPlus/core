@@ -633,10 +633,13 @@ CREATE TABLE `__calendar_raid_guests` (
 	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 	`calendar_events_id` int(10) unsigned NOT NULL DEFAULT '0',
 	`name` VARCHAR(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+	`email` VARCHAR(255) COLLATE utf8_bin DEFAULT NULL,
 	`note` VARCHAR(255) COLLATE utf8_bin DEFAULT NULL,
 	`timestamp_signup` int(10) UNSIGNED NOT NULL DEFAULT '0',
 	`raidgroup` VARCHAR(255) COLLATE utf8_bin DEFAULT NULL,
 	`class` int(10) UNSIGNED NOT NULL DEFAULT '0',
+	`creator` int(10) UNSIGNED NOT NULL DEFAULT '0',
+	`approved` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
 	PRIMARY KEY (`id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
