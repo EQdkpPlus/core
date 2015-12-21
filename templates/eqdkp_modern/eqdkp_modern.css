@@ -4150,6 +4150,26 @@ button.thirdpartylogin.openid {
 	position: relative;
 }
 
+.middleDateNumber {
+	font-size: 30px;
+    line-height: 30px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    font-weight: 100;
+	width: 100%;
+    display: block;
+}
+
+.middleDateTime {
+	font-size: 25px;
+    line-height: 25px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    font-weight: 100;
+	width: 100%;
+    display: block;
+}
+
 .list-type1 .td.bigDateTd, .list-type3 .td.bigDateTd {
 	width: 100px;
 }
@@ -4240,3 +4260,43 @@ button.thirdpartylogin.openid {
 .featured .ribbon > span:after {
 	background-image: linear-gradient(to right, lighten(@featuredColor,1%) 0%, darken(@featuredColor,1%) 100%);
 }
+
+/* Article Boxes for Calendarentries */
+.articleCalendarEventBox {
+  display: inline-block;
+  max-width: 500px;
+  padding: 11px 14px;
+  white-space: nowrap;
+  background-color: @eqdkpContentContrastBackgroundColor;
+  border: 1px solid @eqdkpContentContrastBorderColor;
+  border-radius: 5px;
+  color: @eqdkpContentContrastColor;
+  margin: 5px;
+}
+
+.articleCalendarEventBox .bigDateContainer {
+	float: left;
+	border-right-color: @eqdkpContentContrastBorderColor;
+}
+
+.articleCalendarEventBox .bigDateNumber {
+	font-size: 35px;
+	line-height: 35px;
+	margin-bottom: 5px;
+}
+.articleCalendarEventBox .green, .articleCalendarEventBox .orange, .articleCalendarEventBox .red, .articleCalendarEventBox .green:hover, .articleCalendarEventBox .orange:hover, .articleCalendarEventBox .red:hover {
+	background: none !important;
+	border: none !important;
+}
+.articleCalendarEventBox .green, .articleCalendarEventBox .green:hover {
+	color: green !important;;
+}
+
+.articleCalendarEventBox .orange, .articleCalendarEventBox .orange:hover {
+	color: orange !important;;
+}
+
+.articleCalendarEventBox .red, .articleCalendarEventBox .red:hover {
+	color: red !important;;
+}
+

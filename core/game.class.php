@@ -218,10 +218,10 @@ class game extends gen_class {
 	private function decorate_events($event_id, $profile=array(), $size=20, $pathonly=false){			
 		if(is_file($this->pfh->FolderPath("event_icons", "files").$this->pdh->get('event', 'icon', array($event_id)))){			
 			$icon_path = $this->pfh->FolderPath("event_icons", "files", "serverpath").$this->pdh->get('event', 'icon', array($event_id));
-			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' height='".$size."' alt='eventicon".$event_id."' class=\"".$this->game."_eventicon eventicon\"/>";
+			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' style='max-height: ".$size."px;' alt='eventicon".$event_id."' class=\"".$this->game."_eventicon eventicon\"/>";
 		}elseif(is_file($this->root_path.'games/'.$this->game.'/icons/events/'.$this->pdh->get('event', 'icon', array($event_id)))){
 			$icon_path = $this->server_path.'games/'.$this->game.'/icons/events/'.$this->pdh->get('event', 'icon', array($event_id));
-			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' height='".$size."' alt='eventicon".$event_id."' class=\"".$this->game."_eventicon eventicon\"/>";
+			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' style='max-height: ".$size."px;' alt='eventicon".$event_id."' class=\"".$this->game."_eventicon eventicon\"/>";
 		}
 	}
 	

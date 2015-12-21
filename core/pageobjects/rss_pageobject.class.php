@@ -79,7 +79,6 @@ class rss_pageobject extends pageobject {
 				$arrGalleryObjects = array();
 				preg_match_all('#<p(.*)class="system-gallery"(.*) data-sort="(.*)" data-folder="(.*)">(.*)</p>#iU', $strText, $arrGalleryObjects, PREG_PATTERN_ORDER);
 				if (count($arrGalleryObjects[0])){
-					include_once($this->root_path.'core/gallery.class.php');
 					foreach($arrGalleryObjects[4] as $key=>$val){
 						$strText = str_replace($arrGalleryObjects[0][$key], "", $strText);
 					}
@@ -89,7 +88,6 @@ class rss_pageobject extends pageobject {
 				$arrRaidlootObjects = array();
 				preg_match_all('#<p(.*)class="system-raidloot"(.*) data-id="(.*)"(.*) data-chars="(.*)">(.*)</p>#iU', $strText, $arrRaidlootObjects, PREG_PATTERN_ORDER);
 				if (count($arrRaidlootObjects[0])){
-					include_once($this->root_path.'core/gallery.class.php');
 					foreach($arrRaidlootObjects[3] as $key=>$val){
 						$strText = str_replace($arrRaidlootObjects[0][$key], "", $strText);
 					}

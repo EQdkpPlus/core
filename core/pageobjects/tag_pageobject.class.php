@@ -58,10 +58,10 @@ class tag_pageobject extends pageobject {
 			$arrGalleryObjects = array();
 			preg_match_all('#<p(.*)class="system-gallery"(.*) data-sort="(.*)" data-folder="(.*)">(.*)</p>#iU', $strText, $arrGalleryObjects, PREG_PATTERN_ORDER);
 			if (count($arrGalleryObjects[0])){
-				include_once($this->root_path.'core/gallery.class.php');
+				include_once($this->root_path.'core/article.class.php');
 				foreach($arrGalleryObjects[4] as $key=>$val){
-					$objGallery = registry::register('gallery');
-					$strGalleryContent = $objGallery->create($val, (int)$arrGalleryObjects[3][$key], $this->server_path.$strPath, 1);
+					$objArticleHelper = registry::register('article');
+					$strGalleryContent = $objArticleHelper->gallery($val, (int)$arrGalleryObjects[3][$key], $this->server_path.$strPath, 1);
 					$strText = str_replace($arrGalleryObjects[0][$key], $strGalleryContent, $strText);
 				}
 			}
@@ -70,11 +70,11 @@ class tag_pageobject extends pageobject {
 			$arrRaidlootObjects = array();
 			preg_match_all('#<p(.*)class="system-raidloot"(.*) data-id="(.*)"(.*) data-chars="(.*)">(.*)</p>#iU', $strText, $arrRaidlootObjects, PREG_PATTERN_ORDER);
 			if (count($arrRaidlootObjects[0])){
-				include_once($this->root_path.'core/gallery.class.php');
+				include_once($this->root_path.'core/article.class.php');
 				foreach($arrRaidlootObjects[3] as $key=>$val){
-					$objGallery = registry::register('gallery');
+					$objArticleHelper = registry::register('article');
 					$withChars = ($arrRaidlootObjects[5][$key] == "true") ? true : false;
-					$strRaidlootContent = $objGallery->raidloot((int)$val, $withChars);
+					$strRaidlootContent = $objArticleHelper->raidloot((int)$val, $withChars);
 					$strText = str_replace($arrRaidlootObjects[0][$key], $strRaidlootContent, $strText);
 				}
 			}

@@ -389,6 +389,13 @@ if (!class_exists("bbcode")) {
 										$arrCache[$strTag] = $str;
 									}
 						break;
+									
+					case 'event':	$intEventID = intval($elements[1]);
+									include_once($this->root_path.'core/article.class.php');
+									$objArticleHelper = registry::register('article');
+									$str = $objArticleHelper->buildCalendarevent($intEventID);
+									$arrCache[$strTag] = $str;
+						break;
 
 				}
 
