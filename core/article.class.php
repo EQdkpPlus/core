@@ -187,20 +187,21 @@ if(!class_exists('article')){
 						'RAIDTIME_END'			=> $this->time->user_date($eventdata['timestamp_end'], false, true),
 						'RAIDTIME_DEADLINE'		=> $deadlinetime,
 						'CALENDAR'				=> $this->pdh->get('calendars', 'name', array($eventdata['calendar_id'])),
-						'RAIDICON'				=> $this->pdh->get('event', 'html_icon', array($eventdata['extension']['raid_eventid'], 24)),
+						'RAIDICON'				=> $this->pdh->get('event', 'html_icon', array($eventdata['extension']['raid_eventid'], 32)),
 						'RAIDNOTE'				=> ($eventdata['notes']) ? $this->bbcode->toHTML(nl2br($eventdata['notes'])) : '',
 						'LINK'					=> $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($intEventID)), $intEventID),
 				);
 					
 				$out .= '<div class="raid '.(($raidclosed) ? 'closed' : 'open').'"><div class="bigDateContainer td">';
-				$out .= '<div class="bigDateNumber">'.$data['DATE_DAY'].'</div>';
+				$out .= $data['RAIDICON'];
+				$out .= '<div class="middleDateTime">'.$data['DATE_DAY'].'</div>';
 				$out .= '<div class="articleMonth">'.$data['DATE_MONTH'].'</div>';
 				$out .= '<div class="middleDateTime">'.$data['RAIDTIME_START'].'</div>';
 				$out .= '</div>';
 					
 				$out .= '<div class="articleCalendarEventBoxContent td">';
 				$closedIcon = ($raidclosed) ? '<i class="fa fa-lg fa-lock"></i> ' : '';
-				$out .= '<h2>'.$closedIcon.'<a href="'.$data['LINK'].'">'.$data['RAIDICON'].' '.$data['NAME'].'</a></h2>';
+				$out .= '<h2>'.$closedIcon.'<a href="'.$data['LINK'].'">'.$data['NAME'].'</a></h2>';
 				$out .= '<div class="eventdata-details">
 			<div class="eventdata-details-date"><i class="fa fa-lg fa-calendar-o"></i> '.$data['DATE_FULL'].'</div>';
 				$out .= '<div class="eventdata-details-deadline"><i class="fa fa-calendar-times-o fa-lg" title="{L_raidevent_raidleader}"></i> '.$this->user->lang('calendar_deadline').' '.$data['RAIDTIME_DEADLINE'].' </div>';
