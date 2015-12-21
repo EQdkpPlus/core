@@ -305,7 +305,9 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			return false;
 		}
 		
-		public function get_html_previewimage($intArticleID, $intSize=120){
+		public function get_html_previewimage($intArticleID, $intSize=false){
+			$intSize = ($intSize === false) ? (($this->config->get('articleimage_size')) ? $this->config->get('articleimage_size') : 120) : $intSize; 
+			
 			$strPreviewImage = $this->get_previewimage($intArticleID);
 			if ($strPreviewImage == "") return "";
 			

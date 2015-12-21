@@ -691,12 +691,19 @@ class mmocms_settings extends page_generic {
 						'type'		=> 'text',
 						'size'		=> 35
 					),
+					'articleimage_size' => array(
+						'type'		=> 'spinner',
+						'size'		=> 3,
+						'default'	=> 120,
+						'step'		=> 1,
+						'min'		=> 32,
+					),
 					'thumbnail_defaultsize' => array(
 						'type'		=> 'spinner',
 						'size'		=> 3,
 						'default'	=> 500,
 						'step'		=> 25,
-						'min'			=> 25
+						'min'		=> 25
 					),
 				),
 				'seo'	=> array(

@@ -1511,6 +1511,8 @@ $lang = array(
 
 "core_sett_f_thumbnail_defaultsize"	=> 'Standardbreite von Vorschaubildern der Lightbox',
 "core_sett_f_help_thumbnail_defaultsize" => 'Trage hier die Breite (in Pixeln) der Vorschaubilder für große Bilder ein',
+"core_sett_f_articleimage_size" => 'Standardbreite von Artikel-Vorschaubildern',
+"core_sett_f_help_articleimage_size" => 'Trage hier die Breite (in Pixeln) der Vorschaubilder für Artikel ein',
 "manage_media" => "Medien verwalten",
 
 /* Artikel categories */
