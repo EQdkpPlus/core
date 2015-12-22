@@ -39,7 +39,7 @@ $(function(){
 		var approval	= $(this).data('approval');
 		var titletext	= '';
 		if(approval){
-			var titletext = '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-thumbs-up fa-lg hand" onclick="ApproveGuest('+guestid+');"></i></div>';
+			var titletext = '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-thumbs-up fa-lg hand" onclick="ApproveGuest('+guestid+');"></i>   <i class="fa fa-trash-o fa-lg hand" onclick="DeleteGuest('+guestid+');"></i></div>';
 		}else{
 			var titletext = '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-pencil fa-lg hand" onclick="EditGuest('+guestid+');"></i>  <i class="fa fa-trash-o fa-lg hand" onclick="DeleteGuest('+guestid+');"></i></div>';
 		}
