@@ -87,17 +87,20 @@ if ( !class_exists( "apa_cap_current" ) ) {
 		
 		public function update_point_cap($apa_id) {
 			$next_run = $this->config->get('apa_cap_next_run_'.$apa_id);
+			echo "<br/>Start function. Next run ".date("d.m.Y", $next_run).' '.$next_run."<br/>";
 			if(!$next_run) {
 				list($h,$i) = explode(':',$this->apa->get_data('exectime', $apa_id));
 				$next_run = $this->apa->get_data('start_date', $apa_id) + $h*3600 + $i*60;
 			}
-			if($next_run > $this->time->time) return;
+			if($next_run > $this->time->time) {
+				echo "Next run > time. No point update. <br/>";
+				return;
+			}
 			
 			// check for points over cap for each character
 			$this->pdh->process_hook_queue();
 			$char_ids = $this->pdh->get('member', 'id_list', array(true, false, true, !(int)$this->apa->get_data('twinks', $apa_id)));
 			$pools = $this->apa->get_data('pools', $apa_id);
-
 			foreach($pools as $pool) {
 				$points = $this->pdh->aget('points', 'current_history', 0, array($char_ids, $pool, 0, $next_run-1, 0, 0, !$this->apa->get_data('twinks', $apa_id)));
 
@@ -105,7 +108,7 @@ if ( !class_exists( "apa_cap_current" ) ) {
 				$eventID = $this->apa->get_data('event', $apa_id);
 				$arrEventPools = $this->pdh->get('event', 'multidkppools', array($eventID));
 				if(!$eventID || !in_array($pool, $arrEventPools)) continue;
-				
+				echo "Pool ".$pool."<br/>";
 				foreach($char_ids as $char_id) {
 					if($points[$char_id] > $this->apa->get_data('upper_cap', $apa_id)) {
 						$value = $this->apa->get_data('upper_cap', $apa_id) - $points[$char_id];
@@ -122,6 +125,7 @@ if ( !class_exists( "apa_cap_current" ) ) {
 			$next_run = $next_run + $this->apa->get_data('interval', $apa_id)*86400;
 			$this->config->set('apa_cap_next_run_'.$apa_id, $next_run);
 			// run again if we have a backlog
+			echo "Next run inserted ".date("d.m.Y", $next_run).' '.$next_run."<br/>";
 			if($next_run < $this->time->time) $this->update_point_cap($apa_id);
 		}
 		
@@ -131,7 +135,7 @@ if ( !class_exists( "apa_cap_current" ) ) {
 		
 		public function recalculate($apa_id){
 			$this->db->prepare("DELETE FROM __adjustments WHERE adjustment_reason=? AND event_id=? ")->execute($this->apa->get_data('name', $apa_id), intval($this->apa->get_data('event', $apa_id)));
-			$this->config->del('apa_cap_next_run');
+			$this->config->del('apa_cap_next_run_'.$apa_id);
 			$this->pdh->enqueue_hook('adjustment_update');
 			$this->timekeeper->run_cron('pointcap', true);
 		}
