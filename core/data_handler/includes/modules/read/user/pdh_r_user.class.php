@@ -47,6 +47,7 @@ if (!class_exists("pdh_r_user")){
 			'useronlinestatus'		=> array('is_online', array('%user_id%'), array()),
 			'userawaystatus'		=> array('is_away', array('%user_id%'), array()),
 			'userlastvisit'			=> array('last_visit', array('%user_id%'), array()),
+			'usermainchar'			=> array('mainchar', array('%user_id%'), array()),
 		);
 		
 		public function init_presets(){
@@ -563,6 +564,14 @@ if (!class_exists("pdh_r_user")){
 				if ($this->user->check_auth($strPermission, false, $intUserID)) $arrOut[] = $intUserID;
 			}
 			return $arrOut;
+		}
+		
+		public function get_html_mainchar($user_id){
+			$intMainID = $this->get_mainchar($user_id);
+			if($intMainID){
+				return $this->pdh->geth('member', 'memberlink_decorated', array($intMainID, $this->routing->simpleBuild('character'), '', true));
+			}
+			return "";
 		}
 
 		public function get_mainchar($user_id){
