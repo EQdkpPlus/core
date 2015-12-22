@@ -97,24 +97,26 @@ class config extends gen_class {
 				$this->set($d_name, $d_value, $plugin);
 			}
 		}else{
-			if($plugin){
+			if($plugin != ""){
+				$strKey = md5($config_name.'___'.$plugin);
 				if(!isset($this->config[$plugin][$config_name])){
 					$this->config[$plugin][$config_name]	= $config_value;
-					$this->added_keys[] = array('k' => $config_name, 'v' => $config_value, 'p' => $plugin);
+					$this->added_keys[$strKey] = array('k' => $config_name, 'v' => $config_value, 'p' => $plugin);
 					$this->config_modified = true;
 				}else if($this->config[$plugin][$config_name] !== $config_value){
 					$this->config[$plugin][$config_name]	= $config_value;
-					$this->changed_keys[] = array('k' => $config_name, 'v' => $config_value, 'p' => $plugin);
+					$this->changed_keys[$strKey] = array('k' => $config_name, 'v' => $config_value, 'p' => $plugin);
 					$this->config_modified = true;
 				}
 			}else{
+				$strKey = md5($config_name.'___core');
 				if(!isset($this->config[$config_name])){
 					$this->config[$config_name]	= $config_value;
-					$this->added_keys[] = array('k' => $config_name, 'v' => $config_value, 'p' => 'core');
+					$this->added_keys[$strKey] = array('k' => $config_name, 'v' => $config_value, 'p' => 'core');
 					$this->config_modified = true;
-				}else if($this->config[$config_name] !== $config_value){
+				}else if($this->config[$config_name] !== $config_value){					
 					$this->config[$config_name]	= $config_value;
-					$this->changed_keys[] = array('k' => $config_name, 'v' => $config_value, 'p' => 'core');
+					$this->changed_keys[$strKey] = array('k' => $config_name, 'v' => $config_value, 'p' => 'core');
 					$this->config_modified = true;
 				}
 			}
