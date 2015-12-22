@@ -42,6 +42,7 @@ $module_lang = array(
 	'fullname'		=> 'Name',
 	'town'			=> 'Stadt',
 	'last_visit'	=> 'Letzter Besuch',
+	'mainchar'		=> 'Hauptcharakter',
 );
 
 $preset_lang = array(
@@ -52,16 +53,17 @@ $preset_lang = array(
 	'userregdate'		=> 'Registrierungsdatum',
 	'usergroups'		=> 'Gruppenmitgliedschaften',
 	'usercharnumber'	=> 'Anzahl Charaktere',
-	'useronlinestatus' => 'Online Status',
+	'useronlinestatus'	=> 'Online Status',
 	'userawaystatus'	=> 'Abwesenheit',
 	'usericq'			=> 'ICQ',
 	'userskype'			=> 'Skype',
-	'usercellphone'	=> 'Handynummer',
+	'usercellphone'		=> 'Handynummer',
 	'userphone'			=> 'Telefonnummer',
 	'usertwitter'		=> 'Twitter-Account',
 	'userfacebook'		=> 'Facebook-Account',
 	'userfullname'		=> 'Vollständiger Name',
 	'usertown'			=> 'Stadt',
 	'userlastvisit'		=> 'Letzter Besuch',
+	'usermainchar'		=> 'Hauptcharakter',
 );
 ?>
