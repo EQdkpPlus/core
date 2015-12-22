@@ -48,11 +48,13 @@ $(document).ready(function() {
 			$('.raid').show();
 			$('.event').hide();
 			$('#eventsettings').addClass('floatLeft');
+			$('#eventsettings').width("540px");
 		}else{
 			$('.raid').hide();
 			changeCalendars('2');
 			$('.event').show();
 			$('#eventsettings').removeClass('floatLeft');
+			$('#eventsettings').width("98%");
 		}
 	});
 
@@ -251,6 +253,10 @@ function attendeeCount(){
 			<dt><label>{L_calendar_date}:</label></dt>
 			<dd>{JQ_DATE_START} - {JQ_DATE_END}</dd>
 		</dl>
+		<dl class="event">
+			<dt><label>{L_calendar_allday_event}:</label></dt>
+			<dd>{CB_ALLDAY}</dd>
+		</dl>
 		<dl class="raid">
 			<dt><label>{L_calendar_deadline}:</label></dt>
 			<dd><input type="text" name="deadlinedate" id="deadlinedate" class="core-spinner" data-min="0" size="5" maxlength="255" value="{DATE_DEADLINE}" /> {L_calendar_deadline_entity}</dd>
@@ -258,10 +264,6 @@ function attendeeCount(){
 		<dl class="event">
 			<dt><label>{L_calendar_location}:</label></dt>
 			<dd><input type="text" name="location" id="location"maxlength="255" value="{LOCATION}" /></dd>
-		</dl>
-		<dl class="event">
-			<dt><label>{L_calendar_allday_event}:</label></dt>
-			<dd>{CB_ALLDAY}</dd>
 		</dl>
 		<dl>
 			<dt><label>{L_calendar_repeat}:</label></dt>
