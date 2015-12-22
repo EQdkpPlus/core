@@ -207,7 +207,11 @@ class timekeeper extends gen_class {
 
 		if ($this->crontab[$task_name]['ajax'] === true && !$force_non_ajax){		
 			if ($force_run){
-				$this->tpl->add_js('$.get("'.$this->server_path.'cronjob.php'.$this->SID.'&task='.$task_name.'&force=true");');
+				$this->tpl->add_js('$.get("'.$this->server_path.'cronjob.php'.$this->SID.'&task='.$task_name.'&force=true", function( data ) {
+					if (typeof cronjob_admin_callback !== \'undefined\' && $.isFunction(cronjob_admin_callback)){
+						cronjob_admin_callback(data, "'.$task_name.'");
+					}
+				});');
 			} else {
 				$this->tpl->add_js('$.get("'.$this->server_path.'cronjob.php'.$this->SID.'&task='.$task_name.'");');
 			}
@@ -237,12 +241,34 @@ class timekeeper extends gen_class {
 			if (!$params){
 				$params = array();
 			}
-			call_user_func_array(array($cron_task, 'run'), $params);
+			
+			//Create Lock File
+			$strLockFile = $this->pfh->FolderPath('timekeeper', 'eqdkp').'cron_lock_'.md5($task_name).'.txt';
+			if(is_file($strLockFile)){
+				$strLockContent = file_get_contents($strLockFile);
+				if($strLockContent){
+					//Lock file was created more than 1 hour ago
+					if((intval($strLockContent)+3600) < time()){
+						$this->pfh->Delete($strLockFile);
+					}
+				}
+				//Return false because of lock file
+				return false;
+			} else {
+				$this->pfh->putContent($strLockFile, time());
+			}
+			try {
+				call_user_func_array(array($cron_task, 'run'), $params);
+			}catch (Exception $e){
+				//Remove Lock File
+				$this->pfh->Delete($strLockFile);
+			}
 			$this->crontab[$task_name]['last_run'] = $this->time->time;
 			if (!$force_run){
 				$this->crontab[$task_name]['next_run'] = $this->calculate_next_run($this->crontab[$task_name]['repeat_interval'], $this->crontab[$task_name]['repeat_type'], $this->crontab[$task_name]['multiple'], $this->crontab[$task_name]['next_run'], $this->crontab[$task_name]['start_time']);
 			}
 			$this->save_crontab($this->crontab);
+			$this->pfh->Delete($strLockFile);
 		}
 	}
 
