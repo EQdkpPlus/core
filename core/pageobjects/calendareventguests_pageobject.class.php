@@ -61,7 +61,7 @@ class calendareventguests_pageobject extends pageobject {
 		$guestdata = ($this->in->get('guestid', 0) > 0) ? $this->pdh->get('calendar_raids_guests', 'guest', array($this->in->get('guestid', 0))) : array();
 		$this->tpl->assign_vars(array(
 			'PERM_ADD'				=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->is_raidleader()) ? true : false,
-			'PERM_GUESTAPPLICATION'	=> ($this->config->get('calendar_addevent_mode') == 2) ? true : false,
+			'PERM_GUESTAPPLICATION'	=> ($this->config->get('calendar_raid_guests') == 2) ? true : false,
 			'EVENT_ID'				=> $this->in->get('eventid', 0),
 			'GUEST_ID'				=> $this->in->get('guestid', 0),
 			'CLASS_DD'				=> new hdropdown('class', array('options' => $this->game->get_primary_classes(array('id_0')), 'value' => ((isset($guestdata['class'])) ? $guestdata['class'] : ''))),
