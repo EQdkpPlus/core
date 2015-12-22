@@ -303,11 +303,13 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 }
 function ApproveGuest(guestid){
 	$.post("{U_CALENDAREVENT}", {
-		confirmguest: guestid,
-		link_hash: '{CSRF_CHANGECHAR_TOKEN}'
+		confirm_guest: true,
+		confirm_id: guestid,
+		eventid: '{EVENT_ID}',
+		link_hash: '{CSRF_GUESTAPPRV_TOKEN}'
 	},
 	function(data){
-		//window.location = '{U_CALENDAREVENT}';
+		window.location = '{U_CALENDAREVENT}';
 	});
 }
 
