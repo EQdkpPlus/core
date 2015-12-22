@@ -7,7 +7,7 @@
 						<b>{L_raidevent_raid_guests}</b> ({GUEST_COUNT}):
 						<!-- BEGIN guests -->
 							<span class="guesttooltip <!-- IF COLORED_NAMESBYCLASS --> class_{guests.CLASSID}<!-- ENDIF -->" data-guestid="{guests.ID}" data-approval="{guests.TOBEAPPROVED}">
-								<!-- IF guests.CLASSICON -->{guests.CLASSICON} <!-- ENDIF -->{guests.NAME}<!-- IF guests.EXTERNALAPPL --> <!-- IF guests.TOBEAPPROVED --> <i class="fa fa-external-link-square icon-color-red"><!-- ELSE --> <i class="check-square-o icon-color-green"><!-- ENDIF --></i><!-- ENDIF -->
+								<!-- IF guests.CLASSICON -->{guests.CLASSICON} <!-- ENDIF -->{guests.NAME}<!-- IF guests.EXTERNALAPPL --> <!-- IF guests.TOBEAPPROVED --> <i class="fa fa-external-link-square icon-color-red"><!-- ELSE --> <i class="fa fa-check-square icon-color-green"><!-- ENDIF --></i><!-- ENDIF -->
 							</span>
 							<span class="guesttooltip-data" style="display:none">{guests.TOOLTIP}</span>
 						<!-- END guests -->
