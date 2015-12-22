@@ -24,26 +24,26 @@ if(!defined('EQDKP_INC')){
 }
 
 if(!class_exists('article')){
-	class article extends gen_class {	
-		
+	class article extends gen_class {
+
 		private $_cache = array();
-		
-		public function gallery($strFolder, $intSortation, $strPath, $intPageNumber  = 0){		
+
+		public function gallery($strFolder, $intSortation, $strPath, $intPageNumber  = 0){
 			$strFolder = str_replace("*+*+*", "/", $strFolder);
 			$strOrigFolder = $strFolder;
 			//Subfolder navigation
 			if ($this->in->get('gf') != "" && $this->in->get('gsf') != ""){
 				if (base64_decode($this->in->get('gf')) == $strOrigFolder) $strFolder = base64_decode($this->in->get('gsf'));
 			}
-			
-			
+
+
 			$contentFolder = $this->pfh->FolderPath($strFolder, 'files');
 			$contentFolderSP = $this->pfh->FolderPath($strFolder, 'files', 'serverpath');
 
 			$dataFolder = $this->pfh->FolderPath('system', 'files', 'plain');
 			$blnIsSafe = isFilelinkInFolder($contentFolder, $dataFolder);
 			if (!$blnIsSafe) return "";
-			
+
 			$arrFiles = sdir($contentFolder);
 			$arrDirs = $arrImages = $arrImagesDate = array();
 			foreach($arrFiles as $key => $val){
@@ -62,20 +62,20 @@ if(!class_exists('article')){
 			switch($intSortation){
 				case 1: natcasesort($arrImages);
 						$arrImages = array_reverse($arrImages);
-				
+
 				break;
 				case 2: asort($arrImagesDate); $arrImages = $arrImagesDate;
 				break;
-				
+
 				case 3: arsort($arrImagesDate); $arrImages = $arrImagesDate;
 				break;
-				
+
 				default: natcasesort($arrImages);
 			}
-			
+
 			$strOut = '<ul class="image-gallery">';
 			$strLink = $strPath.(($intPageNumber > 1) ? '&page='.$intPageNumber : '');
-			
+
 			if($this->in->exists('gsf') && $this->in->get('gsf') != ''){
 				$arrPath = array_filter(explode('/', $strFolder));
 				array_pop($arrPath);
@@ -87,15 +87,15 @@ if(!class_exists('article')){
 				}
 				$strOut .='<li class="folderup"><a href="'.$strLink.'&gf='.base64_encode($strOrigFolder).'&gsf='.$strFolderUp.'"><i class="fa fa-level-up fa-flip-horizontal"></i><br/>'.$this->user->lang('back').'</a></li>';
 			}
-			
+
 			natcasesort($arrDirs);
 			foreach($arrDirs as $foldername){
 				$strOut .= '<li class="folder"><a href="'.$strLink.'&gf='.base64_encode($strOrigFolder).'&gsf='.base64_encode($strFolder.'/'.$foldername).'"><i class="fa fa-folder"></i><br/>'.sanitize($foldername).'</a></li>';
 			}
-			
+
 			$strThumbFolder = $this->pfh->FolderPath('system/thumbs', 'files');
 			$strThumbFolderSP = $this->pfh->FolderPath('system/thumbs', 'files', 'serverpath');
-			
+
 			foreach($arrImages as $key => $val){
 				//Check for thumbnail
 				$strThumbname = "thumb_".pathinfo($key, PATHINFO_FILENAME)."-150x150.".pathinfo($key, PATHINFO_EXTENSION);
@@ -109,20 +109,20 @@ if(!class_exists('article')){
 						$strThumbnail = $strThumbFolderSP.$strThumbname;
 					}
 				}
-								
+
 				if($strThumbnail != ""){
 					$strOut .= '<li class="image"><a href="'.$contentFolderSP.$key.'" class="lightbox_'.md5($strFolder).'" rel="'.md5($strFolder).'" title="'.sanitize($key).'; '.$arrImageDimensions[$key][0].'x'.$arrImageDimensions[$key][1].' px"><img src="'.$strThumbnail.'" alt="Image" /></a></li>';
 				}
-				
+
 			}
 
 			$strOut .= "</ul><div class=\"clear\"></div>";
-			
+
 			$this->jquery->lightbox(md5($strFolder), array('slideshow' => true, 'transition' => "elastic", 'slideshowSpeed' => 4500, 'slideshowAuto' => false));
-						
+
 			return $strOut;
 		}
-		
+
 		public function raidloot($intRaidID, $blnWithChars=false){
 			//Get Raid-Infos:
 			$intEventID = $this->pdh->get('raid', 'event', array($intRaidID));
@@ -131,11 +131,11 @@ if(!class_exists('article')){
 				$strRaidNote = $this->pdh->get('raid', 'html_note', array($intRaidID));
 				if ($strRaidNote != "") $strOut .= ' ('.$strRaidNote.')';
 				$strOut .= ', '.$this->pdh->get('raid', 'html_date', array($intRaidID)).'</h3>';
-				
+
 				//Get Items from the Raid
 				$arrItemlist = $this->pdh->get('item', 'itemsofraid', array($intRaidID));
 				infotooltip_js();
-				
+
 				if (count($arrItemlist)){
 					foreach($arrItemlist as $item){
 						$buyer = $this->pdh->get('item', 'buyer', array($item));
@@ -143,32 +143,32 @@ if(!class_exists('article')){
 						', '.round($this->pdh->get('item', 'value', array($item))).' '.$this->config->get('dkp_name').'<br />';
 					}
 				}
-				
+
 				if ($blnWithChars){
 					$attendees_ids = $this->pdh->get('raid', 'raid_attendees', array($intRaidID));
 					if (count($attendees_ids)){
 						$strOut .= '<br /><h3>'.$this->user->lang('attendees').'</h3>';
-						
+
 						foreach($attendees_ids as $intAttendee){
 							$strOut.= $this->pdh->get('member', 'memberlink_decorated', array($intAttendee, $this->routing->simpleBuild('character'), '', true)).'<br/>';
 						}
 					}
 				}
-				
+
 				return $strOut.'</div>';
 			}
 			return '';
 		}
-		
+
 		public function buildCalendarevent($intEventID){
 			$out = '<div class="articleCalendarEventBox tr">';
-		
+
 			$eventextension	= $this->pdh->get('calendar_events', 'extension', array($intEventID));
 			$raidclosed		= ($this->pdh->get('calendar_events', 'raidstatus', array($intEventID)) == '1') ? true : false;
-		
+
 			if($eventextension['calendarmode'] == 'raid') {
 				$eventdata	= $this->pdh->get('calendar_events', 'data', array($intEventID));
-		
+
 				// Build the Deadline
 				$deadlinedate	= $eventdata['timestamp_start']-($eventdata['extension']['deadlinedate'] * 3600);
 				if(date('j', $deadlinedate) == date('j', $eventdata['timestamp_start'])){
@@ -176,7 +176,7 @@ if(!class_exists('article')){
 				}else{
 					$deadlinetime	= $this->time->user_date($deadlinedate, true);
 				}
-					
+
 				$data = array(
 						'NAME'				=> $this->pdh->get('event', 'name', array($eventdata['extension']['raid_eventid'])),
 						'DATE_DAY'				=> $this->time->date('d', $eventdata['timestamp_start']),
@@ -191,14 +191,14 @@ if(!class_exists('article')){
 						'RAIDNOTE'				=> ($eventdata['notes']) ? $this->bbcode->toHTML(nl2br($eventdata['notes'])) : '',
 						'LINK'					=> $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($intEventID)), $intEventID),
 				);
-					
+
 				$out .= '<div class="raid '.(($raidclosed) ? 'closed' : 'open').'"><div class="bigDateContainer td">';
 				$out .= $data['RAIDICON'];
 				$out .= '<div class="middleDateTime">'.$data['DATE_DAY'].'</div>';
 				$out .= '<div class="articleMonth">'.$data['DATE_MONTH'].'</div>';
 				$out .= '<div class="middleDateTime">'.$data['RAIDTIME_START'].'</div>';
 				$out .= '</div>';
-					
+
 				$out .= '<div class="articleCalendarEventBoxContent td">';
 				$closedIcon = ($raidclosed) ? '<i class="fa fa-lg fa-lock"></i> ' : '';
 				$out .= '<h2>'.$closedIcon.'<a href="'.$data['LINK'].'">'.$data['NAME'].'</a></h2>';
@@ -206,7 +206,7 @@ if(!class_exists('article')){
 			<div class="eventdata-details-date"><i class="fa fa-lg fa-calendar-o"></i> '.$data['DATE_FULL'].'</div>';
 				$out .= '<div class="eventdata-details-deadline"><i class="fa fa-calendar-times-o fa-lg" title="{L_raidevent_raidleader}"></i> '.$this->user->lang('calendar_deadline').' '.$data['RAIDTIME_DEADLINE'].' </div>';
 				$out .='<div class="eventdata-details-calendar"><i class="fa fa-calendar fa-lg"></i> '.$data['CALENDAR'].'</div>';
-					
+
 				//Attendees
 				// Build the Attendee Array
 				$attendees = array();
@@ -218,10 +218,10 @@ if(!class_exists('article')){
 						}
 					}
 				}
-					
+
 				// Build the guest array
 				$guests = '';
-				if($this->config->get('calendar_raid_guests') == 1){
+				if($this->config->get('calendar_raid_guests') > 0){
 					$guestarray = $this->pdh->get('calendar_raids_guests', 'members', array($intEventID));
 					if(is_array($guestarray)){
 						foreach($guestarray as $guest_row){
@@ -239,7 +239,7 @@ if(!class_exists('article')){
 						}
 					}
 				}
-					
+
 				$counts = '';
 				foreach($raidstatus as $statusid=>$statusname){
 					$counts[$statusid]  = ((isset($attendees[$statusid])) ? count($attendees[$statusid]) : 0);
@@ -249,25 +249,25 @@ if(!class_exists('article')){
 					$counts[0]		= $counts[0] + $guest_count;
 				}
 				$signinstatus = $this->pdh->get('calendar_raids_attendees', 'html_status', array($intEventID, $this->user->data['user_id']));
-					
+
 				if (is_array($counts)){
 					foreach($counts as $countid=>$countdata){#
 						$out .= '<span class="status'.$countid.' nextevent_statusrow coretip" data-coretip="'.$raidstatus[$countid].'">'.$this->pdh->get('calendar_raids_attendees', 'status_flag', array($countid)).' '.$countdata.'</span>';
 					}
 				}
-					
+
 				if($signinstatus && $signinstatus != ""){
 					$out .= ' &bull; <i class="fa fa-lg fa-user coretip" data-coretip="'.$this->user->data['username'].'"></i> '.$signinstatus;
 				}
-		
+
 				$out .='</div>';
 				$out .= '</div></div>';
 			} else {
 				$eventdata	= $this->pdh->get('calendar_events', 'data', array($intEventID));
-					
+
 				$blnIsPrivate = ($eventdata['private'] == 1) ? true : false;
 				if($blnIsPrivate) return false;
-					
+
 				if($eventdata['allday'] == 1){
 					$full_date = $this->time->user_date($eventdata['timestamp_start']).', '.$this->user->lang('calendar_allday');
 				}elseif($this->time->date('d', $eventdata['timestamp_start']) == $this->time->date('d', $eventdata['timestamp_end'])){
@@ -276,7 +276,7 @@ if(!class_exists('article')){
 				}else{
 					$full_date = $this->time->user_date($eventdata['timestamp_start'], true, false).' - '.$this->time->user_date($eventdata['timestamp_end'], true, false);
 				}
-					
+
 				$data = array(
 						'NAME'				=> $this->pdh->get('calendar_events', 'name', array($intEventID)),
 						'DATE_DAY'			=> $this->time->date('d', $eventdata['timestamp_start']),
@@ -288,13 +288,13 @@ if(!class_exists('article')){
 						'CALENDAR'			=> $this->pdh->get('calendars', 'name', array($eventdata['calendar_id'])),
 						'LINK'				=> $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($intEventID)), $intEventID),
 				);
-					
+
 				$out .= '<div class="event"><div class="bigDateContainer td">';
 				$out .= '<div class="bigDateNumber">'.$data['DATE_DAY'].'</div>';
 				$out .= '<div class="articleMonth">'.$data['DATE_MONTH'].'</div>';
 				$out .= '<div class="middleDateTime">'.$data['DATE_TIME'].'</div>';
 				$out .= '</div>';
-					
+
 				$out .= '<div class="articleCalendarEventBoxContent td">';
 				$out .= '<h2><a href="'.$data['LINK'].'">'.$data['NAME'].'</a></h2>';
 				$out .= '<div class="eventdata-details">
@@ -317,20 +317,20 @@ if(!class_exists('article')){
 					if(!isset($userstatus[$attendancestatus])) $userstatus[$attendancestatus] = 0;
 					$userstatus[$attendancestatus]++;
 				}
-		
+
 				$out .='<div><i class="fa fa-lg fa-users green coretip" data-coretip="'.$this->user->lang('calendar_eventdetails_confirmations').'"></i> '.$userstatus['attendance'].((isset($statusofuser[$this->user->id]) && $statusofuser[$this->user->id] == 1) ? ' <i class="fa fa-lg fa-user coretip" data-coretip="'.$this->user->data['username'].'"></i>' : '').'
 					&bull; <i class="fa fa-lg fa-users orange coretip" data-coretip="'.$this->user->lang('calendar_eventdetails_maybes').'"></i> '.$userstatus['maybe'].((isset($statusofuser[$this->user->id]) && $statusofuser[$this->user->id] == 2) ? '<i class="fa fa-lg fa-user coretip" data-coretip="'.$this->user->data['username'].'"></i>' : '').'
 					&bull; <i class="fa fa-lg fa-users red coretip" data-coretip="'.$this->user->lang('calendar_eventdetails_declines').'"></i> '.$userstatus['decline'].((isset($statusofuser[$this->user->id]) && $statusofuser[$this->user->id] == 3) ? '<i class="fa fa-lg fa-user coretip" data-coretip="'.$this->user->data['username'].'"></i>' : '').
 							'</div>';
-					
+
 				$out .='</div>';
 				$out .= '</div></div>';
-					
+
 			}
-		
-		
+
+
 			$out .= '</div>';
-		
+
 			return $out;
 		}
 

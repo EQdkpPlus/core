@@ -1,4 +1,4 @@
-<!-- IF S_ADD -->
+<!-- IF PERM_ADD -->
 <form method="post" action="{ACTION}" name="addWC">
 <input type="hidden" name="eventid" value="{EVENT_ID}">
 <input type="hidden" name="guestid" value="{GUEST_ID}">
@@ -27,7 +27,7 @@
 <input type="submit" name="add" value="{L_raidevent_raid_gbutton}" class="mainoption bi_ok" />
 {CSRF_TOKEN}
 </form>
-<!-- ELSE -->
+<!-- ELSEIF PERM_GUESTAPPLICATION -->
 <form method="post" action="{ACTION}" name="raidattend_request">
 <input type="hidden" name="eventid" value="{EVENT_ID}">
 
@@ -52,4 +52,11 @@
 <input type="submit" name="add" value="{L_raidevent_raid_apply}" class="mainoption bi_ok" />
 {CSRF_TOKEN}
 </form>
+<!-- ELSE -->
+<fieldset class="settings smallsettings">
+	<dl>
+		<dt></dt>
+		<dd>No Permission or guest application disabled</dd>
+	</dl>
+</fieldset>
 <!-- ENDIF -->

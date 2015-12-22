@@ -30,9 +30,9 @@ if (!class_exists('exchange_calevents_list')){
 
 		public function get_calevents_list($params, $body){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
-			
+
 			if ($this->user->check_auth('po_calendarevent', false) || $isAPITokenRequest){
-	
+
 				//Input-Vars:
 				// - raids_only 0/1(default: 1)
 				// - number (default: 10)
@@ -50,7 +50,7 @@ if (!class_exists('exchange_calevents_list')){
 						$eventextension	= $this->pdh->get('calendar_events', 'extension', array($intRaidID));
 						$raidmode		= ((int)$this->pdh->get('calendar_events', 'calendartype', array($intRaidID)) == 1) ? true : false;
 						$eventcolor		= $this->pdh->get('calendars', 'color', $this->pdh->get('calendar_events', 'calendar_id', array($intRaidID)));
-						
+
 						// fetch the attendees
 						$attendees_raw = $this->pdh->get('calendar_raids_attendees', 'attendees', array($intRaidID));
 						$attendees = array();
@@ -62,7 +62,7 @@ if (!class_exists('exchange_calevents_list')){
 
 						// Build the guest array
 						$guests	= array();
-						if(registry::register('config')->get('calendar_raid_guests') == 1){
+						if(registry::register('config')->get('calendar_raid_guests') > 0){
 							$guestarray = registry::register('plus_datahandler')->get('calendar_raids_guests', 'members', array($intRaidID));
 							if(is_array($guestarray)){
 								foreach($guestarray as $guest_row){
@@ -90,14 +90,14 @@ if (!class_exists('exchange_calevents_list')){
 							}
 						}
 						$rstatusdata['required'] = ((isset($eventextension['attendee_count'])) ? $eventextension['attendee_count'] : 0);
-						
+
 						$memberdata = $this->pdh->get('calendar_raids_attendees', 'myattendees', array($intRaidID, $this->user->id));
 						if($memberdata['member_id'] > 0){
 							$memberstatus = $this->pdh->get('calendar_raids_attendees', 'status', array($intRaidID, $memberdata['member_id']));
 						} else {
 							$memberstatus = -1;
 						}
-					
+
 						$arrRaids['event:'.$intRaidID] = array(
 							'type'			=> ($raidmode) ? 'raid' : 'event',
 							'title' 		=> unsanitize($this->pdh->get('calendar_events', 'name', array($intRaidID))),
@@ -107,7 +107,7 @@ if (!class_exists('exchange_calevents_list')){
 							'end_timestamp'	=> $this->pdh->get('calendar_events', 'time_end', array($intRaidID)),
 							'allDay'		=> ($this->pdh->get('calendar_events', 'allday', array($intRaidID)) > 0) ? 1 : 0,
 							'closed'		=> ($this->pdh->get('calendar_events', 'raidstatus', array($intRaidID)) == 1) ? 1 : 0,
-							'eventid'		=> $intRaidID,						
+							'eventid'		=> $intRaidID,
 							'url'			=> ($raidmode) ? register('routing')->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($intRaidID)), $intRaidID, false) : '',
 							'icon'			=> ($eventextension['raid_eventid']) ? $this->env->link.$this->pdh->get('event', 'icon', array($eventextension['raid_eventid'], true)) : '',
 							'note'			=> $this->bbcode->remove_bbcode($this->pdh->get('calendar_events', 'notes', array($intRaidID))),

@@ -939,15 +939,16 @@ class calendarevent_pageobject extends pageobject {
 			// settings endabled?
 			'S_NOTSIGNED_VISIBLE'	=> (in_array(4, $raidcal_status) && ($this->user->check_auth('a_cal_revent_conf', false) || $this->config->get('calendar_raid_shownotsigned') || $this->check_permission())) ? true : false,
 			'IS_OPERATOR'			=> ($this->check_permission() || $this->user->check_auth('a_cal_revent_conf', false)),
-			'SHOW_GUESTS'			=> ($this->config->get('calendar_raid_guests') && ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission() || count($this->guests) > 0)) ? true : false,
+			'SHOW_GUESTS'			=> ($this->config->get('calendar_raid_guests') > 0 && ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission() || count($this->guests) > 0)) ? true : false,
 			'SHOW_RANDOMVALUE'		=> ($this->config->get('calendar_raid_random') == 1) ? true : false,
+			'SHOW_GUESTAPPLICATION'	=> ($this->config->get('calendar_raid_guests') == 2) ? true : false,
 			'IS_SIGNEDIN'			=> ($this->mystatus['member_id'] > 0 && $mysignedstatus != 4) ? true : false,
 			'NO_CHAR_ASSIGNED'		=> (count($drpdwn_members) > 0) ? false : true,
 			'COLORED_NAMESBYCLASS'	=> ($this->config->get('calendar_raid_coloredclassnames')) ? true : false,
 			'SHOW_RAIDGROUPS'		=> $this->pdh->get('raid_groups', 'groups_enabled'),
 			'IS_STATUSCHANGE_WARN'	=> ($this->config->get('calendar_raid_statuschange_status', 0) == 1) ? true : false,
 			'IS_STATUS_CONFIRMED'	=> ($this->mystatus['signup_status'] == 0) ? true : false,
-			'SHOW_CONFIRMBUTTON'		=> (in_array(0, $raidcal_status)) ? true : false,
+			'SHOW_CONFIRMBUTTON'	=> (in_array(0, $raidcal_status)) ? true : false,
 
 			//Data
 			'MENU_OPTIONS'			=> $this->jquery->DropDownMenu('colortab', $optionsmenu, '<i class="fa fa-cog fa-lg"></i> '.$this->user->lang('raidevent_raid_settbutton')),

@@ -273,7 +273,7 @@ class calendar_pageobject extends pageobject {
 
 							// Build the guest array
 							$guests	= array();
-							if(registry::register('config')->get('calendar_raid_guests') == 1){
+							if(registry::register('config')->get('calendar_raid_guests') > 0){
 								$guestarray = registry::register('plus_datahandler')->get('calendar_raids_guests', 'members', array($calid));
 								if(is_array($guestarray)){
 									foreach($guestarray as $guest_row){

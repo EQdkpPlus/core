@@ -43,7 +43,7 @@ class mmocms_settings extends page_generic {
 		parent::__construct(false, $handler, array(), null, '');
 		$this->process();
 	}
-	
+
 	public function delete_logo(){
 		$this->pfh->Delete( $this->pfh->FolderPath('','files').$this->config->get('custom_logo'));
 		$this->config->set("custom_logo", "");
@@ -79,43 +79,43 @@ class mmocms_settings extends page_generic {
 		);
 
 		$a_calraid_status = array(
-			0	=> $this->user->lang(array('raidevent_raid_status', 0)),
-			1	=> $this->user->lang(array('raidevent_raid_status', 1)),
-			2	=> $this->user->lang(array('raidevent_raid_status', 2)),
-			3	=> $this->user->lang(array('raidevent_raid_status', 3)),
-			4	=> $this->user->lang(array('raidevent_raid_status', 4))
+			0					=> $this->user->lang(array('raidevent_raid_status', 0)),
+			1					=> $this->user->lang(array('raidevent_raid_status', 1)),
+			2					=> $this->user->lang(array('raidevent_raid_status', 2)),
+			3					=> $this->user->lang(array('raidevent_raid_status', 3)),
+			4					=> $this->user->lang(array('raidevent_raid_status', 4))
 		);
 
 		$a_calraid_status2 = array(
-			0	=> $this->user->lang(array('raidevent_raid_status', 0)),
-			1	=> $this->user->lang(array('raidevent_raid_status', 1)),
+			0					=> $this->user->lang(array('raidevent_raid_status', 0)),
+			1					=> $this->user->lang(array('raidevent_raid_status', 1)),
 		);
 
 		$a_calraid_nsfilter = array(
 			'twinks'	=> 'raidevent_raid_nsf_twink',
-			'inactive'	=> 'raidevent_raid_nsf_inctv',
+			'inactive'=> 'raidevent_raid_nsf_inctv',
 			'hidden'	=> 'raidevent_raid_nsf_hiddn',
 			'special'	=> 'raidevent_raid_nsf_special',
 		);
 
 		$a_debug_mode = array(
-			'0'			=> 'core_sett_f_debug_type0',
-			'1'			=> 'core_sett_f_debug_type1',
-			'2'			=> 'core_sett_f_debug_type2',
-			'3'			=> 'core_sett_f_debug_type3',
+			'0'				=> 'core_sett_f_debug_type0',
+			'1'				=> 'core_sett_f_debug_type1',
+			'2'				=> 'core_sett_f_debug_type2',
+			'3'				=> 'core_sett_f_debug_type3',
 			//'4'			=> 'pk_set_debug_type4',
 		);
 
 		$a_modelviewer = array(
-			'0'			=> 'WoWHead',
-			'1'			=> 'Thottbot',
-			'2'			=> 'SpeedyDragon'
+			'0'				=> 'WoWHead',
+			'1'				=> 'Thottbot',
+			'2'				=> 'SpeedyDragon'
 		);
 
 		$accact_array = array(
-			'0'			=> 'none',
-			'1'			=> 'user',
-			'2'			=> 'admin',
+			'0'				=> 'none',
+			'1'				=> 'user',
+			'2'				=> 'admin',
 		);
 
 		$portal_positions = array(
@@ -126,26 +126,32 @@ class mmocms_settings extends page_generic {
 
 		$mail_array = array(
 			'mail'		=> 'lib_email_mail',
-			'sendmail'	=> 'lib_email_sendmail',
+			'sendmail'=> 'lib_email_sendmail',
 			'smtp'		=> 'lib_email_smtp',
 		);
 
 		$smtp_connection_methods = array(
-			''	=> 'none',
-			'ssl'	=> 'SSL/TLS',
-			'tls'	=> 'STARTTLS'
+			''				=> 'none',
+			'ssl'			=> 'SSL/TLS',
+			'tls'			=> 'STARTTLS'
 		);
 
 		$a_calendar_addevmode = array(
 			'event'		=> 'calendar_mode_event',
 			'raid'		=> 'calendar_mode_raid'
 		);
-		
+
+		$a_calendar_guestmodes = array(
+			0					=> 'raidevent_guests_enable_none',
+			1					=> 'raidevent_guests_enable_ops',
+			2					=> 'raidevent_guests_enable_both',
+		);
+
 		$mobile_template_array = array("" => $this->user->lang('default_setting'));
 		foreach($this->pdh->get('styles', 'styles', array(0, false)) as $styleid=>$row){
 			$mobile_template_array[$styleid] = $row['style_name'];
 		}
-		
+
 		$mobile_portallayout_array = array("" => $this->user->lang('default_setting'));
 		foreach($this->pdh->get('portal_layouts', 'id_list') as $layoutid){
 			$mobile_portallayout_array[$layoutid] = $this->pdh->get('portal_layouts', 'name', array($layoutid));
@@ -234,12 +240,12 @@ class mmocms_settings extends page_generic {
 		// Output to the page
 		// ---------------------------------------------------------
 		$this->jquery->Dialog('template_preview', $this->user->lang('template_preview'), array('url'=>$this->root_path."viewnews.php".$this->SID."&amp;style='+ $(\"select[name='user_style'] option:selected\").val()+'", 'width'=>'750', 'height'=>'520', 'modal'=>true));
-		
+
 		// initialize form class
 		$this->form->lang_prefix = 'core_sett_';
 		$this->form->use_tabs = true;
 		$this->form->use_fieldsets = true;
-		
+
 		// define standard data for settings
 		$settingsdata = array(
 			'global' => array(
@@ -257,9 +263,9 @@ class mmocms_settings extends page_generic {
 					),
 					'dkp_name'		=> array(
 						'type'		=> 'text',
-						'size'		=> 5,				
+						'size'		=> 5,
 					),
-					
+
 					'round_activate'	=> array(
 						'type'		=> 'radio',
 						'default'	=> 0,
@@ -334,7 +340,7 @@ class mmocms_settings extends page_generic {
 						'type'		=> 'dropdown',
 						'options'	=> $this->user->get_available_authmethods(),
 						'default'	=> 'db',
-						
+
 					),
 				),
 				'login'			=> array(
@@ -367,7 +373,7 @@ class mmocms_settings extends page_generic {
 						'tolang'		=> true,
 						'options'		=> $mail_array,
 						'dependency'	=> array(
-							'sendmail' => array('lib_email_sendmail_path'), 
+							'sendmail' => array('lib_email_sendmail_path'),
 							'smtp' => array('lib_email_smtp_host', 'lib_email_smtp_port', 'lib_email_smtp_connmethod', 'lib_email_smtp_auth', 'lib_email_smtp_user', 'lib_email_smtp_pw')
 						)
 					),
@@ -541,12 +547,12 @@ class mmocms_settings extends page_generic {
 			'calendar'	=> array(
 				'calendar'	=> array(
 					'calendar_addevent_mode'	=> array(
-						'type'		=> 'dropdown',
-						'options'	=> $a_calendar_addevmode,
-						'tolang'	=> true
+						'type'			=> 'dropdown',
+						'options'		=> $a_calendar_addevmode,
+						'tolang'		=> true
 					),
 					'calendar_show_birthday'	=> array(
-						'type'		=> 'radio',
+						'type'			=> 'radio',
 					)
 				),
 				'raids'		=> array(
@@ -555,80 +561,82 @@ class mmocms_settings extends page_generic {
 						'dependency'	=> array(1 => array('calendar_raid_guests', 'calendar_raid_random', 'calendar_raid_classbreak', 'calendar_raid_status', 'calendar_raid_nsfilter', 'calendar_addraid_deadline', 'calendar_addraid_duration', 'calendar_addraid_use_def_start', 'calendar_repeat_crondays', 'calendar_raid_autoconfirm', 'calendar_raid_autocaddchars', 'calendar_raidleader_autoinvite', 'calendar_raid_notsigned_classsort', 'calendar_raid_coloredclassnames', 'calendar_raid_shownotsigned', 'calendar_raid_allowstatuschange', 'calendar_raid_statuschange_status')),
 					),*/
 					'calendar_raid_guests'	=> array(
-						'type'	=> 'radio',
+						'type'			=> 'dropdown',
+						'options'		=> $a_calendar_guestmodes,
+						'tolang'		=> true
 					),
 					'calendar_raid_random'	=> array(
-						'type'	=> 'radio',
+						'type'			=> 'radio',
 					),
 					'calendar_raid_classbreak'	=> array(
-						'type'	=> 'spinner',
-						'size'	=> 4,
+						'type'			=> 'spinner',
+						'size'			=> 4,
 					),
 					'calendar_raid_status'	=> array(
-						'type'		=> 'multiselect',
-						'options'	=> $a_calraid_status,
+						'type'			=> 'multiselect',
+						'options'		=> $a_calraid_status,
 						'datatype'	=> 'int'
 					),
 					'calendar_raid_nsfilter'	=> array(
-						'type'		=> 'multiselect',
-						'options'	=> $a_calraid_nsfilter,
-						'tolang'	=> true
+						'type'			=> 'multiselect',
+						'options'		=> $a_calraid_nsfilter,
+						'tolang'		=> true
 					),
 					'calendar_addraid_deadline'	=> array(
-						'type'		=> 'spinner',
-						'size'		=> 5,
-						'default'	=> 1
+						'type'			=> 'spinner',
+						'size'			=> 5,
+						'default'		=> 1
 					),
 					'calendar_addraid_duration'	=> array(
-						'type'		=> 'spinner',
-						'size'		=> 5,
-						'min'			=> 10,
-						'step'		=> 10,
-						'default'	=> 120
+						'type'			=> 'spinner',
+						'size'			=> 5,
+						'min'				=> 10,
+						'step'			=> 10,
+						'default'		=> 120
 					),
 					'calendar_addraid_use_def_start'	=> array(
 						'type'			=> 'radio',
-						'dependency'	=> array(1 => array('calendar_addraid_def_starttime')),
+						'dependency'=> array(1 => array('calendar_addraid_def_starttime')),
 					),
 					'calendar_addraid_def_starttime'	=> array(
-						'type'		=> 'timepicker',
-						'default'	=> '20:00'
+						'type'			=> 'timepicker',
+						'default'		=> '20:00'
 					),
 					'calendar_repeat_crondays'	=> array(
-						'type'		=> 'spinner',
-						'size'		=> 5,
-						'min'			=> 5,
-						'step'		=> 5,
-						'default'	=> 40
+						'type'			=> 'spinner',
+						'size'			=> 5,
+						'min'				=> 5,
+						'step'			=> 5,
+						'default'		=> 40
 					),
 					'calendar_raid_autoconfirm'	=> array(
-						'type'		=> 'multiselect',
-						'options'	=> $a_groups,
+						'type'			=> 'multiselect',
+						'options'		=> $a_groups,
 						'datatype'	=> 'int',
 					),
 					'calendar_raid_autocaddchars'	=> array(
-						'type'		=> 'multiselect',
-						'options'	=> $a_groups,
+						'type'			=> 'multiselect',
+						'options'		=> $a_groups,
 						'datatype'	=> 'int',
 					),
 					'calendar_raidleader_autoinvite'	=> array(
 						'type'			=> 'radio',
 					),
 					'calendar_raid_notsigned_classsort'	=> array(
-						'type'		=> 'radio',
+						'type'			=> 'radio',
 					),
 					'calendar_raid_coloredclassnames'	=> array(
-						'type'		=> 'radio',
+						'type'			=> 'radio',
 					),
 					'calendar_raid_shownotsigned'	=> array(
-						'type'		=> 'radio',
+						'type'			=> 'radio',
 					),
 					'calendar_raid_allowstatuschange'	=> array(
-						'type'		=> 'radio',
+						'type'			=> 'radio',
 					),
 					'calendar_raid_statuschange_status'	=> array(
-						'type'		=> 'dropdown',
-						'options'	=> $a_calraid_status2,
+						'type'			=> 'dropdown',
+						'options'		=> $a_calraid_status2,
 						'datatype'	=> 'int'
 					),
 				),
@@ -769,7 +777,7 @@ class mmocms_settings extends page_generic {
 				),
 		);
 		$this->form->add_fields($fields, 'itemtooltip' ,'itemtooltip');
-		
+
 		if(count($this->itt->get_parserlist())){
 			$fields = array(
 				'itt_debug'	=> array(
@@ -781,7 +789,7 @@ class mmocms_settings extends page_generic {
 				),
 			);
 			$this->form->add_fields($fields, 'itemtooltip' ,'itemtooltip');
-			
+
 			$itt_parserlist	= $this->itt->get_parserlist();
 
 			$fields	= array(
@@ -818,7 +826,7 @@ class mmocms_settings extends page_generic {
 				);
 			}
 			$this->form->add_fields($fields, 'ittlanguages', 'itemtooltip');
-			
+
 			//check if user wanted to reset itt-cache
 			if($this->in->get('itt_reset', false)) {
 				$this->itt->reset_cache();
@@ -832,7 +840,7 @@ class mmocms_settings extends page_generic {
 			}
 		}
 		//Own Tooltips
-		
+
 		$fields = array(
 			'infotooltip_own_enabled'	=> array(
 				'type'		=> 'radio',
@@ -852,7 +860,7 @@ class mmocms_settings extends page_generic {
 			),
 		);
 		$this->form->add_fields($fields, 'ittownscripts', 'itemtooltip');
-			
+
 		// Importer API Key Wizzard
 		$apikey_config		= $this->game->get_importers('apikey');
 		$setting_apikey		= $this->config->get('game_importer_apikey');
@@ -932,7 +940,7 @@ class mmocms_settings extends page_generic {
 		if ($arrLoginmethodSettings = $this->user->get_loginmethod_settings()){
 			$this->form->add_fields($arrLoginmethodSettings, 'login', 'system');
 		}
-		
+
 		//Notifications
 		$this->form->add_fields($this->ntfy->getNotificationMethodsAdminSettings(), 'notifications', 'user');
 
@@ -957,7 +965,7 @@ class mmocms_settings extends page_generic {
 			if($this->config->get('itt_prio1') != $this->in->get('itt_prio1', '')) {
 				$save_array = array_merge($save_array, $this->itt->changed_prio1($this->in->get('default_game'), $this->in->get('itt_prio1')));
 			}
-			
+
 			//check for changed disable points
 			if((int)$this->config->get('enable_points') != $this->in->get('enable_points', 1)){
 				if ($this->in->get('enable_points', 1) == 0) {$this->config->set('eqdkp_layout', "nopoints");} else $this->config->set('eqdkp_layout', "normal");
@@ -986,7 +994,7 @@ class mmocms_settings extends page_generic {
 		//Hint for ReCaptcha
 		if($this->config->get('enable_captcha') == 1 && !strlen($this->config->get('lib_recaptcha_pkey') ))
 			$this->core->message($this->user->lang('recaptcha_nokeys_hint'), "ReCaptcha", 'red');
-		
+
 		// Output the form, pass values in
 		$this->form->output($this->config->get_config());
 

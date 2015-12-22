@@ -38,9 +38,9 @@ if (registry::register('config')->get('pk_maintenance_mode')){
 }
 
 if(registry::register('input')->get('out') != ''){
-	
+
 	switch (registry::register('input')->get('out')){
-	
+
 		case 'comments':
 			if(registry::register('input')->get('deleteid', 0)){
 				registry::register('comments')->Delete(registry::register('input')->get('page'), registry::register('input')->get('replies', 0));
@@ -54,9 +54,9 @@ if(registry::register('input')->get('out') != ''){
 
 		case 'xsd': $myOut = $eqdkp_root_path.'core/xsd/data_export.xsd';
 			break;
-				
+
 		case 'xml':
-				
+
 				if (registry::register('input')->get('data', '') != ''){
 					$encrypt = registry::register('encrypt');
 					$data = unserialize($encrypt->decrypt(rawurldecode(registry::register('input')->get('data'))));
@@ -71,9 +71,9 @@ if(registry::register('input')->get('out') != ''){
 						}
 						$myOut = registry::register('file_handler')->FileLink('rss/'.$data['url'], 'eqdkp', 'relative');
 					}
-					
+
 				}
-				
+
 		break;
 
 		// generate an ical feed
@@ -137,7 +137,7 @@ if(registry::register('input')->get('out') != ''){
 								}
 
 								// Build the guest array
-								if(registry::register('config')->get('calendar_raid_guests') == 1){
+								if(registry::register('config')->get('calendar_raid_guests') > 0){
 									$guestarray = registry::register('plus_datahandler')->get('calendar_raids_guests', 'members', array($calid));
 									if(is_array($guestarray)){
 										foreach($guestarray as $guest_row){
@@ -194,20 +194,20 @@ if(registry::register('input')->get('out') != ''){
 			echo registry::register('game')->chartooltip(registry::register('input')->get('charid', 0));
 			exit;
 		break;
-		
+
 		case 'portal':
 			header('content-type: text/html; charset=UTF-8');
 			registry::register('core')->cors_headers();
 			echo registry::register('portal')->get_module_external(registry::register('input')->get('id', 0));
 			exit;
 		break;
-		
+
 		case 'socialcounts':
 			header('Content-type: application/json; charset=utf-8');
 			echo registry::register('socialplugins')->getSocialButtonCount(rawurldecode(registry::register('input')->get('url')), registry::register('input')->get('target'));
 			exit;
 		break;
-		
+
 		case 'styles':
 			header('content-type: text/html; charset=UTF-8');
 			$out = '<table class="table fullwidth colorswitch hoverrows">';
@@ -224,7 +224,7 @@ if(registry::register('input')->get('out') != ''){
 					} else $current = "";
 					$url = filter_var($_SERVER['HTTP_REFERER'], FILTER_SANITIZE_STRING);
 					$link = sanitize(preg_replace('#style\=([0-9]*)#', "", preg_replace('#&style\=([0-9]*)#', "", $url))).((strpos($url, "?") === false) ? '?' : '&').'style='.$styleid;
-					
+
 					$out .= '<tr><td width="10"><a href="'.$link.'">'.$screenshot.'</a></td><td><a href="'.$link.'">'.$row['style_name'].$current.'</a></td></tr>';
 			}
 			$out .= '</table>';
@@ -232,7 +232,7 @@ if(registry::register('input')->get('out') != ''){
 			exit;
 		break;
 	}
-	
+
 
 
 	if(is_file($myOut)){

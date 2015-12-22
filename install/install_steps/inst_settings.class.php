@@ -25,14 +25,14 @@ if(!defined('EQDKP_INC')) {
 class inst_settings extends install_generic {
 	public static $before 		= 'encryptionkey';
 	public static $ajax			= 'ajax';
-	
+
 	public $next_button		= 'inst_db';
 	public $head_js			= "
 		$('#game').change(function() {
 			$('#game_lang').find('option').remove();
 			$.post('index.php', { requestid: $(this).val(), ajax: 'games' } , function(data){ $('#game_lang').append(data) });
 		});";
-	
+
 	//default settings
 	private $def_game			= 'dummy';
 	private $def_game_lang		= '';
@@ -86,10 +86,10 @@ class inst_settings extends install_generic {
 		'enable_points'					=> 1,
 		'enable_embedly'				=> 1,
 		'enable_leaderboard'			=> 1,
-			
+
 		// Calendar settings
 		'calendar_addevent_mode'		=> 'raid',
-		'calendar_raid_guests'			=> '1',
+		'calendar_raid_guests'			=> '2',
 		'calendar_raid_classbreak'		=> '5',
 		'calendar_raid_status'			=> array(0,1,2,3,4),
 		'calendar_raid_nsfilter' 		=> array (0 => 'twinks',1 => 'inactive',2 => 'hidden'),
@@ -100,12 +100,12 @@ class inst_settings extends install_generic {
 	);
 	private $auth_ids			= array();
 	private $sql_error			= false;
-	
+
 	public function __construct() {
 		parent::__construct();
 		$this->config_data['plus_version'] = VERSION_INT;
 	}
-	
+
 	public static function before() {
 		return self::$before;
 	}
@@ -113,7 +113,7 @@ class inst_settings extends install_generic {
 	public static function ajax() {
 		return self::$ajax;
 	}
-	
+
 	public function ajax_out($ajax=true, $sgame='') {
 		$content = '';
 		if(($this->in->exists('ajax') && $this->in->get('ajax') == 'games') || !$ajax){
@@ -154,7 +154,7 @@ class inst_settings extends install_generic {
 			if($slang == $this->def_lang && !$this->def_locale) $this->def_locale = $lang['ISO_LANG_SHORT'];
 		}
 		$startdays = array('sunday' => $this->lang['sunday'], 'monday' => $this->lang['monday']);
-		
+
 		registry::load('time');
 		$content = '<table class="no-borders" style="border-collapse: collapse;" width="100%">
 						<tr>
@@ -200,7 +200,7 @@ class inst_settings extends install_generic {
 					</table>';
 		return $content;
 	}
-	
+
 	public function get_filled_output() {
 		$this->def_lang = $this->core->config('default_lang');
 		$this->def_locale = $this->core->config('default_locale');
@@ -211,7 +211,7 @@ class inst_settings extends install_generic {
 		$this->def_startday = $this->core->config('date_startday');
 		return $this->get_output();
 	}
-	
+
 	public function parse_input() {
 		$this->def_lang = $this->in->get('default_lang', $this->in->get('inst_lang'));
 		$this->def_locale = $this->in->get('default_locale');
@@ -242,19 +242,19 @@ class inst_settings extends install_generic {
 		$this->set_config();
 		$this->game->installGame($this->def_game, $this->def_game_lang);
 		$this->handleArticles();
-		
+
 		if(!$this->install_permissions()) return false;
 		return true;
 	}
-	
+
 	public function undo() {
 		//remove installed tables from database
 		$this->data['installed_tables'] = array_unique($this->data['installed_tables']);
 		foreach($this->data['installed_tables'] as $key => $table) {
 			if($this->db->query("DROP TABLE IF EXISTS ".$table.";")) unset($this->data['installed_tables'][$key]);
-		}		
+		}
 	}
-	
+
 	private function set_config() {
 		$this->config_data['server_path']		= $this->def_server_path;
 		$this->config_data['default_lang']		= $this->def_lang;
@@ -276,10 +276,10 @@ class inst_settings extends install_generic {
 		);
 		//config-data complete
 		$this->config->install_set($this->config_data);
-		
+
 		$this->pfh->copy($this->root_path.'templates/maintenance/images/logo.svg',  $this->pfh->FolderPath('','files').'logo.svg');
 	}
-	
+
 	private function parse_sql_file($filename) {
 		$file = file_get_contents($filename);
 		$sqls = explode(";\n", str_replace("\n\n", "\n", str_replace("\r", "\n", $file)));
@@ -288,11 +288,11 @@ class inst_settings extends install_generic {
 		//$sqls = preg_replace('/\v/', '', $sqls);
 		return $sqls;
 	}
-	
+
 	private function do_sql($sql) {
 		if($sql && !$this->sql_error) {
 			$objQuery = $this->db->query($sql.';');
-			if (!$objQuery){		
+			if (!$objQuery){
 				$this->pdl->log('install_error', 'SQL-Error:<br />Query: '.$sql.';<br />Code: '.$this->db->errno.'<br />Message: '.$this->db->error);
 				$this->undo();
 				$this->sql_error = true;
@@ -301,7 +301,7 @@ class inst_settings extends install_generic {
 		}
 		return true;
 	}
-	
+
 	private function install_permissions() {
 		$b[] = $this->do_sql("INSERT INTO __groups_user (`groups_user_id`, `groups_user_name`, `groups_user_desc`, `groups_user_deletable`, `groups_user_default`, `groups_user_hide`) VALUES
 			(1,".$this->db->escapeString($this->lang['grp_guest']).",".$this->db->escapeString($this->lang['grp_guest_desc']).",'0','0','1'),
@@ -319,7 +319,7 @@ class inst_settings extends install_generic {
 		if(in_array(false, $b, true)) return false;
 		return true;
 	}
-	
+
 	private function handleArticles(){
 		//Language for Categories
 		$this->do_sql("UPDATE __article_categories SET name=".$this->db->escapeString($this->lang['category1'])." WHERE id=1;");
@@ -331,8 +331,8 @@ class inst_settings extends install_generic {
 		$this->do_sql("UPDATE __article_categories SET name=".$this->db->escapeString($this->lang['category7'])." WHERE id=7;");
 		$this->do_sql("UPDATE __article_categories SET name=".$this->db->escapeString($this->lang['category8'])." WHERE id=8;");
 		$this->do_sql("UPDATE __article_categories SET name=".$this->db->escapeString($this->lang['category9'])." WHERE id=9;");
-		
-		
+
+
 		//Language for Default Pagetitles
 		$this->do_sql("UPDATE __articles SET title=".$this->db->escapeString($this->lang['article5'])." WHERE id=5;");
 		$this->do_sql("UPDATE __articles SET title=".$this->db->escapeString($this->lang['article6'])." WHERE id=6;");
@@ -345,8 +345,8 @@ class inst_settings extends install_generic {
 		$this->do_sql("UPDATE __articles SET title=".$this->db->escapeString($this->lang['article14'])." WHERE id=14;");
 		$this->do_sql("UPDATE __articles SET title=".$this->db->escapeString($this->lang['article15'])." WHERE id=15;");
 		$this->do_sql("UPDATE __articles SET title=".$this->db->escapeString($this->lang['article16'])." WHERE id=16;");
-		
-		
+
+
 		//Disclaimer & Privacy Policy
 		if (is_file($this->root_path.'language/'.$this->langcode.'/disclaimer.php')){
 			include_once($this->root_path.'language/'.$this->langcode.'/disclaimer.php');
@@ -355,19 +355,19 @@ class inst_settings extends install_generic {
 		} else {
 			$this->do_sql("DELETE FROM __articles WHERE id=15;");
 			$this->do_sql("DELETE FROM __articles WHERE id=16;");
-		}	
-		
+		}
+
 		//Startnews
-		$this->do_sql("INSERT INTO `__articles` (`id`, `title`, `text`, `category`, `featured`, `comments`, `votes`, `published`, `show_from`, `show_to`, `user_id`, `date`, `previewimage`, `alias`, `hits`, `sort_id`, `tags`, `votes_count`, `votes_sum`, `votes_users`, `last_edited`, `last_edited_user`) VALUES 
+		$this->do_sql("INSERT INTO `__articles` (`id`, `title`, `text`, `category`, `featured`, `comments`, `votes`, `published`, `show_from`, `show_to`, `user_id`, `date`, `previewimage`, `alias`, `hits`, `sort_id`, `tags`, `votes_count`, `votes_sum`, `votes_users`, `last_edited`, `last_edited_user`) VALUES
 		(1, ".$this->db->escapeString($this->lang['feature_news_title']).", ".$this->db->escapeString($this->lang['feature_news']).", 2, 1, 1, 0, 1, '', '', 1, ".(time()-5).", '', 'new-features', 0, 0, 'a:1:{i:0;s:0:\"\";}', 0, 0, '', ".(time()-5).", 1);");
-		
-		$this->do_sql("INSERT INTO `__articles` (`id`, `title`, `text`, `category`, `featured`, `comments`, `votes`, `published`, `show_from`, `show_to`, `user_id`, `date`, `previewimage`, `alias`, `hits`, `sort_id`, `tags`, `votes_count`, `votes_sum`, `votes_users`, `last_edited`, `last_edited_user`) VALUES 
+
+		$this->do_sql("INSERT INTO `__articles` (`id`, `title`, `text`, `category`, `featured`, `comments`, `votes`, `published`, `show_from`, `show_to`, `user_id`, `date`, `previewimage`, `alias`, `hits`, `sort_id`, `tags`, `votes_count`, `votes_sum`, `votes_users`, `last_edited`, `last_edited_user`) VALUES
 		(11, ".$this->db->escapeString($this->lang['welcome_news_title']).", ".$this->db->escapeString($this->lang['welcome_news']).", 2, 1, 1, 0, 1, '', '', 1, ".time().", '', 'welcome', 0, 0, 'a:1:{i:0;s:0:\"\";}', 0, 0, '', ".time().", 1);");
-		
+
 		//Update Article Date
 		$this->do_sql("UPDATE __articles SET date=".time().", last_edited=".time().";");
 	}
-	
+
 	private function InsertGroupPermissions($grp_id, $perms=false, $noperms=false) {
 		$this->init_auth_ids();
 		$sqls = array();
@@ -385,7 +385,7 @@ class inst_settings extends install_generic {
 		}
 		if(count($sqls) > 1) return $this->do_sql("INSERT __auth_groups (group_id, auth_id, auth_setting) VALUES ".implode(', ', $sqls).";");
 	}
-	
+
 	private function init_auth_ids() {
 		if(!empty($this->auth_ids)) return true;
 		$result = $this->db->query("SELECT auth_id, auth_value FROM __auth_options;");
@@ -395,7 +395,7 @@ class inst_settings extends install_generic {
 			}
 		}
 	}
-	
+
 	private function check_data_folder() {
 		// Try to locate & delete the localconf file
 		$lconffile = $this->pfh->FolderPath('config', 'eqdkp')."localconf.php";
