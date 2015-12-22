@@ -603,9 +603,9 @@ class Manage_Extensions extends page_generic {
 			
 			$screenshot = '';
 			if (file_exists($this->root_path.'templates/'.$plugin_code.'/screenshot.png' )){
-				$screenshot = '<img src="'.$this->root_path.'templates/'.$plugin_code.'/screenshot.png" style="max-width:300px;" alt="" />';
+				$screenshot = '<img src="'.$this->root_path.'templates/'.$plugin_code.'/screenshot.png" style="max-width:200px;" alt="" />';
 			} elseif(file_exists($this->root_path.'templates/'.$plugin_code.'/screenshot.jpg' )){
-				$screenshot = '<img src="'.$this->root_path.'templates/'.$plugin_code.'/screenshot.jpg" style="max-width:300px;" alt="" />';
+				$screenshot = '<img src="'.$this->root_path.'templates/'.$plugin_code.'/screenshot.jpg" style="max-width:200px;" alt="" />';
 			}
 
 			$this->tpl->assign_block_vars('styles_row_'.$row, array(
@@ -622,9 +622,9 @@ class Manage_Extensions extends page_generic {
 		foreach($arrTemplates as $row){
 			$screenshot = '';
 			if (file_exists($this->root_path.'templates/'.$row['template_path'].'/screenshot.png' )){
-				$screenshot = '<img src="'.$this->root_path.'templates/'.$row['template_path'].'/screenshot.png" style="max-width:300px;" alt="" />';
+				$screenshot = '<img src="'.$this->root_path.'templates/'.$row['template_path'].'/screenshot.png" style="max-width:200px;" alt="" />';
 			} elseif(file_exists($this->root_path.'templates/'.$row['template_path'].'/screenshot.jpg' )){
-				$screenshot = '<img src="'.$this->root_path.'templates/'.$row['template_path'].'/screenshot.jpg" style="max-width:300px;" alt="" />';
+				$screenshot = '<img src="'.$this->root_path.'templates/'.$row['template_path'].'/screenshot.jpg" style="max-width:200px;" alt="" />';
 			}
 
 			$plugin_code = $row['template_path'];
@@ -690,7 +690,7 @@ class Manage_Extensions extends page_generic {
 					'DESCRIPTION'		=> sanitize($extension['description']),
 					'ACTION_LINK'		=> $link,
 					'BUGTRACKER_URL'	=> sanitize($extension['bugtracker_url']),
-					'TT_CONTENT'		=> '<img src="http://cdn1.eqdkp-plus.eu/repository/screenshot.php?extid='.$extension['plugin_id'].'" style="max-width:300px;" alt="No Preview available" />',
+					'TT_CONTENT'		=> '<img src="http://cdn1.eqdkp-plus.eu/repository/screenshot.php?extid='.$extension['plugin_id'].'" style="max-width:200px;" alt="No Preview available" />',
 				));
 
 			}

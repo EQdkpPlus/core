@@ -507,13 +507,13 @@ $(document).ready(function(){
 			</td>
 			
 			<td width="25" align="center"><!-- IF not styles_row_red_local.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_red_local.STANDARD} value="{styles_row_red_local.ID}" /><!-- ENDIF --></td>
-			<!-- name --><td><!-- IF styles_row_red_local.S_DEFAULT --><b><!-- ENDIF --><span class="coretip" data-coretip='{styles_row_red_local.TT_CONTENT}'>{styles_row_red_local.TT_NAME}</span> <!-- IF styles_row_red_local.S_DEFAULT --> * </b><!-- ENDIF --></td>
+			<!-- name --><td><!-- IF styles_row_red_local.S_DEFAULT --><b><!-- ENDIF --><span>{styles_row_red_local.TT_NAME}</span> <!-- IF styles_row_red_local.S_DEFAULT --> * </b><!-- ENDIF --></td>
 
 			<td class="hiddenSmartphone">{styles_row_red_local.TEMPLATE}</td>
 			<td class="hiddenSmartphone">{styles_row_red_local.USERS}</td>
 			<td>{styles_row_red_local.VERSION}</td>
 			<td class="hiddenSmartphone">{styles_row_red_local.AUTHOR}</td>
-			<td class="hiddenSmartphone"><a href="javascript:style_preview({styles_row_red_local.ID});">{L_preview}</a></td>
+			<td class="hiddenSmartphone"><a href="javascript:style_preview({styles_row_red_local.ID});"><!-- IF styles_row_red_local.TT_CONTENT != "" -->{styles_row_red_local.TT_CONTENT}<!-- ELSE -->{L_preview}<!-- ENDIF --></a></td>
 			<td class="hiddenSmartphone">
 				<!-- IF styles_row_red_local.BUGTRACKER_URL != "" -->
 				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{styles_row_red_local.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
@@ -535,13 +535,13 @@ $(document).ready(function(){
 			</td>
 			
 			<td width="25" align="center"><!-- IF not styles_row_red.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_red.STANDARD} value="{styles_row_red.ID}" /><!-- ENDIF --></td>
-			<!-- name --><td><!-- IF styles_row_red.S_DEFAULT --><b><!-- ENDIF --><a href="{styles_row_red.U_EDIT_STYLE}"><span class="coretip" data-coretip='{styles_row_red.TT_CONTENT}'>{styles_row_red.TT_NAME}</span></a> <!-- IF styles_row_red.S_DEFAULT --> * </b><!-- ENDIF --></td>
+			<!-- name --><td><!-- IF styles_row_red.S_DEFAULT --><b><!-- ENDIF --><a href="{styles_row_red.U_EDIT_STYLE}"><span>{styles_row_red.TT_NAME}</span></a> <!-- IF styles_row_red.S_DEFAULT --> * </b><!-- ENDIF --></td>
 
 			<td class="hiddenSmartphone">{styles_row_red.TEMPLATE}</td>
 			<td class="hiddenSmartphone">{styles_row_red.USERS}</td>
 			<td>{styles_row_red.VERSION}</td>
 			<td class="hiddenSmartphone">{styles_row_red.AUTHOR}</td>
-			<td class="hiddenSmartphone"><a href="javascript:style_preview({styles_row_red.ID});">{L_preview}</a></td>
+			<td class="hiddenSmartphone"><a href="javascript:style_preview({styles_row_red.ID});"><!-- IF styles_row_red.TT_CONTENT != "" -->{styles_row_red.TT_CONTENT}<!-- ELSE -->{L_preview}<!-- ENDIF --></a></td>
 			<td class="hiddenSmartphone">
 				<!-- IF styles_row_red.BUGTRACKER_URL != "" -->
 				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{styles_row_red.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
@@ -563,13 +563,13 @@ $(document).ready(function(){
 			</td>
 			
 			<td width="25" align="center"><!-- IF not styles_row_yellow.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_yellow.STANDARD} value="{styles_row_yellow.ID}" /><!-- ENDIF --></td>
-			<!-- name --><td><!-- IF styles_row_yellow.S_DEFAULT --><b><!-- ENDIF --><a href="{styles_row_yellow.U_EDIT_STYLE}"><span class="coretip" data-coretip='{styles_row_yellow.TT_CONTENT}'>{styles_row_yellow.TT_NAME}</span></a> <!-- IF styles_row_yellow.S_DEFAULT --> * </b><!-- ENDIF --></td>
+			<!-- name --><td><!-- IF styles_row_yellow.S_DEFAULT --><b><!-- ENDIF --><a href="{styles_row_yellow.U_EDIT_STYLE}"><span>{styles_row_yellow.TT_NAME}</span></a> <!-- IF styles_row_yellow.S_DEFAULT --> * </b><!-- ENDIF --></td>
 
 			<td class="hiddenSmartphone">{styles_row_yellow.TEMPLATE}</td>
 			<td class="hiddenSmartphone">{styles_row_yellow.USERS}</td>
 			<td>{styles_row_yellow.VERSION}</td>
 			<td class="hiddenSmartphone">{styles_row_yellow.AUTHOR}</td>
-			<td class="hiddenSmartphone"><a href="javascript:style_preview({styles_row_yellow.ID});">{L_preview}</a></td>
+			<td class="hiddenSmartphone"><a href="javascript:style_preview({styles_row_yellow.ID});"><!-- IF styles_row_yellow.TT_CONTENT != "" -->{styles_row_yellow.TT_CONTENT}<!-- ELSE -->{L_preview}<!-- ENDIF --></a></td>
 			<td class="hiddenSmartphone">
 				<!-- IF styles_row_yellow.BUGTRACKER_URL != "" -->
 				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{styles_row_yellow.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
@@ -591,13 +591,13 @@ $(document).ready(function(){
 			</td>
 			
 			<td width="25" align="center"><!-- IF not styles_row_green.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_green.STANDARD} value="{styles_row_green.ID}" /><!-- ENDIF --></td>
-			<!-- name --><td><!-- IF styles_row_green.S_DEFAULT --><b><!-- ENDIF --><span class="coretip" data-coretip='{styles_row_green.TT_CONTENT}'>{styles_row_green.TT_NAME}</span> <!-- IF styles_row_green.S_DEFAULT --> * </b><!-- ENDIF --></td>
+			<!-- name --><td><!-- IF styles_row_green.S_DEFAULT --><b><!-- ENDIF --><span>{styles_row_green.TT_NAME}</span> <!-- IF styles_row_green.S_DEFAULT --> * </b><!-- ENDIF --></td>
 
 			<td class="hiddenSmartphone">{styles_row_green.TEMPLATE}</td>
 			<td class="hiddenSmartphone">{styles_row_green.USERS}</td>
 			<td>{styles_row_green.VERSION}</td>
 			<td class="hiddenSmartphone">{styles_row_green.AUTHOR}</td>
-			<td class="hiddenSmartphone"><a href="javascript:style_preview({styles_row_green.ID});">{L_preview}</a></td>
+			<td class="hiddenSmartphone"><a href="javascript:style_preview({styles_row_green.ID});"><!-- IF styles_row_green.TT_CONTENT != "" -->{styles_row_green.TT_CONTENT}<!-- ELSE -->{L_preview}<!-- ENDIF --></a></td>
 			<td class="hiddenSmartphone">
 				<!-- IF styles_row_green.BUGTRACKER_URL != "" -->
 				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{styles_row_green.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
@@ -614,12 +614,12 @@ $(document).ready(function(){
 			<td width="10"></td>
 			<td width="10"></td>			
 			<td width="25" align="center"></td>
-			<td><span class="coretip" data-coretip='{styles_row_grey.TT_CONTENT}'>{styles_row_grey.TT_NAME}</span></td>
+			<td><span>{styles_row_grey.TT_NAME}</span></td>
 			<td class="hiddenSmartphone">{styles_row_grey.TEMPLATE}</td>
 			<td class="hiddenSmartphone">0</td>
 			<td>{styles_row_grey.VERSION}</td>
 			<td class="hiddenSmartphone">{styles_row_grey.AUTHOR}</td>
-			<td class="hiddenSmartphone"></td>
+			<td class="hiddenSmartphone"><!-- IF styles_row_grey.TT_CONTENT != "" -->{styles_row_grey.TT_CONTENT}<!-- ENDIF --></td>
 			<td class="hiddenSmartphone">
 				<!-- IF styles_row_grey.BUGTRACKER_URL != "" -->
 				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{styles_row_grey.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
