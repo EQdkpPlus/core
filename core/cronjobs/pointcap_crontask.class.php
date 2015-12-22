@@ -28,11 +28,11 @@ if ( !class_exists( "pointcap_crontask" ) ) {
 		public static $shortcuts = array('apa' => 'auto_point_adjustments');
 
 		public function __construct(){
-			$this->defaults['repeat']		= true;
-			$this->defaults['repeat_type']	= 'daily';
-			$this->defaults['repeat_interval']	= 1;
-			$this->defaults['editable']		= false;
-			$this->defaults['description']	= 'Cap points of characters';
+			$this->defaults['repeat']			= true;
+			$this->defaults['repeat_type']		= 'hourly';
+			$this->defaults['repeat_interval']	= 3;
+			$this->defaults['editable']			= false;
+			$this->defaults['description']		= 'Cap points of characters';
 		}
 
 		public function run() {
