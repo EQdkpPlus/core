@@ -4280,7 +4280,6 @@ button.thirdpartylogin.openid {
 }
 
 .articleCalendarEventBox .bigDateContainer {
-	float: left;
 	border-right-color: @eqdkpContentContrastBorderColor;
 }
 

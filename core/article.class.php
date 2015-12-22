@@ -161,7 +161,7 @@ if(!class_exists('article')){
 		}
 
 		public function buildCalendarevent($intEventID){
-			$out = '<div class="articleCalendarEventBox tr">';
+			$out = '<div class="articleCalendarEventBox table">';
 
 			$eventextension	= $this->pdh->get('calendar_events', 'extension', array($intEventID));
 			$raidclosed		= ($this->pdh->get('calendar_events', 'raidstatus', array($intEventID)) == '1') ? true : false;
@@ -192,7 +192,7 @@ if(!class_exists('article')){
 						'LINK'					=> $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($intEventID)), $intEventID),
 				);
 
-				$out .= '<div class="raid '.(($raidclosed) ? 'closed' : 'open').'"><div class="bigDateContainer td">';
+				$out .= '<div class="tr raid '.(($raidclosed) ? 'closed' : 'open').'"><div class="bigDateContainer td">';
 				$out .= $data['RAIDICON'];
 				$out .= '<div class="middleDateTime">'.$data['DATE_DAY'].'</div>';
 				$out .= '<div class="articleMonth">'.$data['DATE_MONTH'].'</div>';
@@ -289,7 +289,7 @@ if(!class_exists('article')){
 						'LINK'				=> $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($intEventID)), $intEventID),
 				);
 
-				$out .= '<div class="event"><div class="bigDateContainer td">';
+				$out .= '<div class="tr event"><div class="bigDateContainer td">';
 				$out .= '<div class="bigDateNumber">'.$data['DATE_DAY'].'</div>';
 				$out .= '<div class="articleMonth">'.$data['DATE_MONTH'].'</div>';
 				$out .= '<div class="middleDateTime">'.$data['DATE_TIME'].'</div>';
