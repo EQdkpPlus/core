@@ -799,6 +799,7 @@ $lang = array(
 "calendar_page_noid" => "Es wurde keine Raidevent ID angegeben. Es kann nichts angezeigt werden!",
 "calendar_page_noraid" => "Es wurde keine gültige Raidevent ID angegeben. Eventuell Versuchst du einen Termin anzuschauen.",
 "calendar_page_noevent" => 'Es wurde keine gültige Termin ID angegeben. Eventuell Versuchst du einen Raid anzuschauen.',
+"calendar_page_private" => 'Dieser Termin ist privat. Da du nicht eingeladen wurdest, kannst du die Details nicht sehen.',
 "raidevent_mail_closed" => "abgesagt",
 "raidevent_mail_opened" => "wieder geöffnet",
 "raidevent_mail_subject_open" => "Raid von %s wurde wieder geöffnet.",

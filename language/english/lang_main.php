@@ -842,6 +842,7 @@ $lang = array(
 	"calendar_page_noid" => 'There\'s no raid ID, we cannot show any raid events....',
 	"calendar_page_noraid" => 'The raid event ID you entered is not valid. Maybe you\'re trying to visit an event ID.',
 	"calendar_page_noevent" => 'The event ID you entered is not valid. Maybe you\'re trying to visit an raid ID.',
+	"calendar_page_private" => 'The event you try to access is private. You are not invited, so you cannot see it.',
 	"raidevent_mail_closed" => 'closed',
 	"raidevent_mail_opened" => 'reopened',
 	"raidevent_mail_subject_open" => 'Raid of %s reopened.',

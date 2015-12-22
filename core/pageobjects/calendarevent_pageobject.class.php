@@ -1022,6 +1022,11 @@ class calendarevent_pageobject extends pageobject {
 			redirect($this->routing->build('calendar',false,false,true,true));
 		}
 
+		// check if the event is private
+		if(!$this->pdh->get('calendar_events', 'private_userperm', array($this->url_id))){
+			message_die($this->user->lang('calendar_page_private'));
+		}
+
 		// change the attendance status
 		if($this->in->exists('attendancetype') && $this->in->exists('change_attendance')){
 			$this->change_attendancestatus($this->url_id, $this->in->get('attendancetype', 'decline'));
