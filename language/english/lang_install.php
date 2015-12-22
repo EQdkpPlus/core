@@ -207,7 +207,7 @@ $lang = array(
 	"user_required" => 'Username, email and password are required fields',
 	"no_pw_match" => 'The passwords do not match.',
 	"install_end_text" => 'The installation can now be completed successfully.',
-
+	'windows_apache_hint'	=> 'It seems like you are using Apache under Windows as Webserver. EQdkp Plus will only work if you increase the ThreadStackSize to 8388608 at the Apache configuration file.',
 );
 
 ?>

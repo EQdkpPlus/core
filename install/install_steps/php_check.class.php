@@ -138,6 +138,15 @@ class php_check extends install_generic {
 		$content = '';
 		$phpcheckdata	= $this->getCheckParams();
 		
+		//Check for Apache on Windows System, because of ThreadStackSize
+		//https://eqdkp-plus.eu/wiki/Versionsaktualisierung#EQdkp_Plus_2.1_l.C3.A4uft_nicht_mehr_auf_Windows-Servern
+		$output_array = array();
+		if(preg_match("/Apache\/(.*)\(Win(.*)\)/", $_SERVER['SERVER_SOFTWARE'], $output_array)){
+			$content .='<div class="infobox infobox-large infobox-red clearfix">
+			<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> <strong>'.$this->lang['windows_apache_hint'].'</strong>
+		</div>';
+		}
+		
 		if(!$this->do_match_req()){
 			$content .='<div class="infobox infobox-large infobox-red clearfix">
 			<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> <strong>'.$this->lang['phpcheck_failed'].'</strong>

@@ -98,7 +98,8 @@ $lang = array(
 	'phpcheck_success'		=> 'Die Mindestanforderungen für die Installation von EQDKP-PLUS werden erfüllt. Die Installation kann fortgesetzt werden.',
 	'phpcheck_failed'		=> 'Die Mindestanforderungen für die Installation von EQDKP-PLUS werden leider nicht erfüllt.<br />Eine Auswahl von geeigneten Hostern findest Du auf unserer <a href="'.EQDKP_PROJECT_URL.'" target="_blank">Website</a>',
 	'do_match_opt_failed'	=> 'Es werden nicht alle Empfehlungen erfüllt. EQDKP-PLUS wird zwar auf diesem System funktionieren, jedoch eventuell mit Einschränkungen.',
-
+	'windows_apache_hint'	=> 'Du scheinst als Webserver Apache unter Windows zu verwenden. EQdkp Plus wird in diesem Fall nur funktionieren, wenn du die ThreadStackSize auf 8388608 in der Apache-Konfiguration erhöhst.',
+		
 	//Step: ftp access
 	'ftphost'				=> 'FTP-Host',
 	'ftpport'				=> 'FTP-Port',
