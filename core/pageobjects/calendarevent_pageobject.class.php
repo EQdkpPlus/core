@@ -43,6 +43,7 @@ class calendarevent_pageobject extends pageobject {
 			'change_note'		=> array('process' => 'change_note',			'csrf'=>true),
 			'change_group'		=> array('process' => 'change_group',			'csrf'=>true),
 			'guestid'			=> array('process' => 'delete_guest',			'csrf'=>true),
+			'confirmguest'		=> array('process' => 'confirm_guest',			'csrf'=>true),
 			'logs'				=> array('process' => 'display_logs'),
 		);
 
@@ -254,6 +255,14 @@ class calendarevent_pageobject extends pageobject {
 			}
 			$this->pdh->process_hook_queue();
 		}
+	}
+
+	public function confirm_guest(){
+		if($this->in->get('confirmguest', 0) > 0){
+			$this->pdh->put('calendar_raids_guests', 'approve_guest', array($this->in->get('confirmguest', 0)));
+		}
+		$this->pdh->process_hook_queue();
+		die('success');
 	}
 
 	// moderator/operator add an unsigned char to the raid

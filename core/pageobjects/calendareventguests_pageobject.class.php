@@ -49,6 +49,33 @@ class calendareventguests_pageobject extends pageobject {
 			}
 
 		}else{
+			if ($this->config->get('enable_captcha') == 1 && $this->config->get('lib_recaptcha_pkey') && strlen($this->config->get('lib_recaptcha_pkey'))){
+				require($this->root_path.'libraries/recaptcha/recaptcha.class.php');
+				$captcha = new recaptcha;
+				$response = $captcha->check_answer ($this->config->get('lib_recaptcha_pkey'), $this->env->ip, $this->in->get('g-recaptcha-response'));
+				if (!$response->is_valid) {
+					$this->core->message($this->user->lang('lib_captcha_wrong'), $this->user->lang('error'), 'red');
+					return;
+				}
+			}
+
+			// check if the email is validate
+			if(!preg_match("/^([a-zA-Z0-9])+([\.a-zA-Z0-9_\-\+])*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+/", $this->in->get('email'))){
+				$this->display( $this->user->lang('fv_invalid_email') );
+				return;
+			}
+
+			// check if name is empty
+			if($this->in->get('membername') == ''){
+				$this->display( $this->user->lang('fv_invalid_name') );
+				return;
+			}
+
+			// check if email already joined
+			if($this->pdh->get('calendar_raids_guests', 'check_email', array($this->in->get('eventid', 0), $this->in->get('email'))) == 'true'){
+				$this->display( str_replace("{0}", $this->in->get('email'), $this->user->lang('fv_email_alreadyuse')) );
+				return;
+			}
 			$blub = $this->pdh->put('calendar_raids_guests', 'insert_guest', array(
 				$this->in->get('eventid', 0), $this->in->get('membername'), $this->in->get('class'), 0, $this->in->get('note'), $this->in->get('email')
 			));
@@ -57,14 +84,28 @@ class calendareventguests_pageobject extends pageobject {
 		$this->tpl->add_js('jQuery.FrameDialog.closeDialog();');
 	}
 
-	public function display(){
+	public function display($error=false){
+		if($error) {
+			$this->core->message($error, $this->user->lang('error'), 'red');
+		}
 		$guestdata = ($this->in->get('guestid', 0) > 0) ? $this->pdh->get('calendar_raids_guests', 'guest', array($this->in->get('guestid', 0))) : array();
+
+		$display_captcha = false;
+		if ($this->config->get('enable_captcha') == 1){
+			require($this->root_path.'libraries/recaptcha/recaptcha.class.php');
+			$captcha = new recaptcha;
+			$display_captcha = $captcha->get_html($this->config->get('lib_recaptcha_okey'));
+		}
+
 		$this->tpl->assign_vars(array(
 			'PERM_ADD'				=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->is_raidleader()) ? true : false,
 			'PERM_GUESTAPPLICATION'	=> ($this->config->get('calendar_raid_guests') == 2) ? true : false,
 			'EVENT_ID'				=> $this->in->get('eventid', 0),
 			'GUEST_ID'				=> $this->in->get('guestid', 0),
 			'CLASS_DD'				=> new hdropdown('class', array('options' => $this->game->get_primary_classes(array('id_0')), 'value' => ((isset($guestdata['class'])) ? $guestdata['class'] : ''))),
+
+			// captcha
+			'CAPTCHA'				=> $display_captcha,
 
 			// the edit input
 			'MEMBER_NAME'			=> (isset($guestdata['name'])) ? sanitize($guestdata['name']) : '',

@@ -301,6 +301,16 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 	}
 	$("#memberScroller").html(attoutput);
 }
+function ApproveGuest(guestid){
+	$.post("{U_CALENDAREVENT}", {
+		confirmguest: guestid,
+		link_hash: '{CSRF_CHANGECHAR_TOKEN}'
+	},
+	function(data){
+		//window.location = '{U_CALENDAREVENT}';
+	});
+}
+
 <!-- ENDIF -->
 //]]>
 </script>

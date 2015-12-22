@@ -23,6 +23,12 @@
 		<dt><label>{L_note}:</label></dt>
 		<dd><input type="text" name="note" size="50" maxlength="255" value="{NOTE}" class="input" /></dd>
 	</dl>
+	<!-- IF CAPTCHA -->
+	<dl>
+		<dt><label>{L_captcha}:</label></dt>
+		<dd>{CAPTCHA}</dd>
+	</dl>
+	<!-- ENDIF -->
 </fieldset>
 <input type="submit" name="add" value="{L_raidevent_raid_gbutton}" class="mainoption bi_ok" />
 {CSRF_TOKEN}

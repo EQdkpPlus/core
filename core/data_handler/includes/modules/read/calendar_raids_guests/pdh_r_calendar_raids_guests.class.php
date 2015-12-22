@@ -103,6 +103,18 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 			return (is_array($output)) ? $output : array();
 		}
 
+		public function get_check_email($eventid, $email){
+			$guests = (isset($this->guestsEvent[$eventid])) ? $this->guestsEvent[$eventid] : array();
+			if(count($guests) > 0){
+				foreach($guests as $guestdata){
+					if($guestdata['email'] == $email){
+						return 'true';
+					}
+				}
+			}
+			return false;
+		}
+
 		public function get_guest($id){
 			return $this->guests[$id];
 		}
