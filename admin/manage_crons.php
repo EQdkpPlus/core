@@ -97,6 +97,20 @@ class ManageCrons extends page_generic {
 		if ($this->in->exists('mode')){
 			$this->crons = $this->timekeeper->list_crons();
 		}
+		
+		$this->tpl->add_js('
+		$( "#dialog-cronresult" ).dialog({
+			height: 200,
+			width: 400,
+			modal: true,
+			autoOpen: false,
+		});
+				
+		var cronjob_admin_callback = function(data, cronname){
+			$( "#dialog-cronresult-content" ).html( data );
+			$( "#dialog-cronresult" ).dialog(\'option\', \'title\', cronname);
+			$( "#dialog-cronresult" ).dialog( "open" );
+		};');
 	
 		if (is_array($this->crons)){
 			foreach ($this->crons as $key=>$value){

@@ -30,6 +30,7 @@ include_once($eqdkp_root_path . 'common.php');
 if(registry::register('input')->get('task') != ""){
 	$force_run = (registry::register('input')->get('force') == 'true' && register('user')->check_auth('a_config_man', false)) ? true : false;
 	registry::register('timekeeper')->execute_cron(registry::register('input')->get('task'), $force_run);
+	echo "Cronjob executed.";
 }else{
 	//all cronjobs with flag external
 	registry::register('timekeeper')->handle_crons(true);
