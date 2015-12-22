@@ -31,7 +31,7 @@ class calendareventguests_pageobject extends pageobject {
 		$ev_ext				= $this->pdh->get('calendar_events', 'extension', array($this->in->get('eventid', 0)));
 		$raidleaders_chars	= ($ev_ext['raidleader'] > 0) ? $ev_ext['raidleader'] : array();
 		$raidleaders_users	= $this->pdh->get('member', 'userid', array($raidleaders_chars));
-		return (in_array($this->user->data['user_id'], $raidleaders_users)) ? true : false;
+		return (is_array($raidleaders_users) && in_array($this->user->data['user_id'], $raidleaders_users)) ? true : false;
 	}
 
 	public function add(){
@@ -49,7 +49,7 @@ class calendareventguests_pageobject extends pageobject {
 			}
 
 		}else{
-			if ($this->config->get('enable_captcha') == 1 && $this->config->get('lib_recaptcha_pkey') && strlen($this->config->get('lib_recaptcha_pkey'))){
+			if (!$this->user->is_signedin() && $this->config->get('enable_captcha') == 1 && $this->config->get('lib_recaptcha_pkey') && strlen($this->config->get('lib_recaptcha_pkey'))){
 				require($this->root_path.'libraries/recaptcha/recaptcha.class.php');
 				$captcha = new recaptcha;
 				$response = $captcha->check_answer ($this->config->get('lib_recaptcha_pkey'), $this->env->ip, $this->in->get('g-recaptcha-response'));
@@ -91,7 +91,7 @@ class calendareventguests_pageobject extends pageobject {
 		$guestdata = ($this->in->get('guestid', 0) > 0) ? $this->pdh->get('calendar_raids_guests', 'guest', array($this->in->get('guestid', 0))) : array();
 
 		$display_captcha = false;
-		if ($this->config->get('enable_captcha') == 1){
+		if (!$this->user->is_signedin() && $this->config->get('enable_captcha') == 1){
 			require($this->root_path.'libraries/recaptcha/recaptcha.class.php');
 			$captcha = new recaptcha;
 			$display_captcha = $captcha->get_html($this->config->get('lib_recaptcha_okey'));
@@ -105,7 +105,8 @@ class calendareventguests_pageobject extends pageobject {
 			'CLASS_DD'				=> new hdropdown('class', array('options' => $this->game->get_primary_classes(array('id_0')), 'value' => ((isset($guestdata['class'])) ? $guestdata['class'] : ''))),
 
 			// captcha
-			'CAPTCHA'				=> $display_captcha,
+			'CEG_CAPTCHA'			=> $display_captcha,
+			'S_CEG_DISPLAY_CATPCHA' => (($this->user->is_signedin()) ? false : true),
 
 			// the edit input
 			'MEMBER_NAME'			=> (isset($guestdata['name'])) ? sanitize($guestdata['name']) : '',
