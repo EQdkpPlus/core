@@ -687,6 +687,7 @@ $lang = array(
 "raidevent_export_raidgroup" => "Raidgruppe",
 "raidevent_export_sorting" => "Sortierung:",
 "raidevent_no_guest_note" => 'Keine Notiz hinterlegt',
+"raidevent_guest_emailsubject" => 'Deine Anfrage auf Raidteilnahme wurde bestätigt',
 "raidevent_autogroups" => "Autom. hinzufügen (Gruppe)",
 "calendar_sharing_receipients" => 'Benutzer einladen',
 "calendar_event_private" => 'Privater Termin',

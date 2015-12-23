@@ -55,6 +55,19 @@ if(!class_exists('pdh_w_calendar_raids_guests')){
 				'approved'				=> '1',
 			))->execute($guestid);
 			$this->pdh->enqueue_hook('guests_update', array($guestid));
+			$this->send_email($guestid);
+		}
+
+		public function send_email($guestid){
+			$subject		= $this->user->lang('raidevent_guest_emailsubject', false, false, $this->config->get('default_locale'));
+			$email			= $this->pdh->get('calendar_raids_guests', 'email', array($guestid));
+			#$aprovalstatus	= $this->pdh->get('calendar_raids_guests', 'approvalstatus', array($guestid));
+			$arrBodyvars = array(
+				'NAME' 		=> $this->pdh->get('calendar_raids_guests', 'name', array($guestid)),
+				'LINK'		=> $this->pdh->get('calendar_raids_guests', 'eventlink', array($guestid)),
+			);
+			$this->email->Set_Language($this->config->get('default_locale'));
+			$this->email->SendMailFromAdmin($email, $subject, 'calendarguests_application.html', $arrBodyvars, $this->config->get('lib_email_method'));
 		}
 
 		public function update_guest($guestid, $classid='', $group='', $note=''){

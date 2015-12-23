@@ -730,6 +730,7 @@ $lang = array(
 	"raidevent_export_raidgroup" => "Raid group",
 	"raidevent_export_sorting" => "Sort by:",
 	"raidevent_no_guest_note" => 'No note available',
+	"raidevent_guest_emailsubject" => 'Your raid participation request has been approved',
 	"raidevent_autogroups" => 'Automatic adding (Groups)',
 	"calendar_sharing_receipients" => 'Invite user',
 	"calendar_event_private" => 'Private event',
