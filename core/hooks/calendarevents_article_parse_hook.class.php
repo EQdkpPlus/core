@@ -51,8 +51,11 @@ if (!class_exists('calendarevents_article_parse_hook'))
 		
 		if ($intLinks){
 			foreach ($arrLinks[0] as $key => $fullMatch){
-				$link = $arrLinks[3][$key];				
-				$link = str_replace(array('.php', '.html'), '', strip_tags($link));
+				$link = $arrLinks[3][$key];
+				$arrParts = parse_url($link);
+				$link = $arrParts['path'];
+				
+				$link = str_replace(array('.php', '.html', '/'), '', strip_tags($link));
 				$arrPath = array_filter(explode('-', $link));
 				$arrPath = array_reverse($arrPath);
 				$strMyPath = $arrPath[0];

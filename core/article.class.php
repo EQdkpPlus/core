@@ -164,6 +164,8 @@ if(!class_exists('article')){
 			$out = '<div class="articleCalendarEventBox table">';
 
 			$eventextension	= $this->pdh->get('calendar_events', 'extension', array($intEventID));
+			if(!$eventextension) return false;
+			
 			$raidclosed		= ($this->pdh->get('calendar_events', 'raidstatus', array($intEventID)) == '1') ? true : false;
 
 			if($eventextension['calendarmode'] == 'raid') {

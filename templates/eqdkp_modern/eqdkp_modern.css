@@ -4303,3 +4303,7 @@ button.thirdpartylogin.openid {
 .articleCalendarEventBox .red, .articleCalendarEventBox .red:hover {
 	color: red !important;;
 }
+
+.qtip-content.ui-widget-content {
+	border-radius: 3px;
+}
