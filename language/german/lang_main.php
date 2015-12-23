@@ -968,6 +968,7 @@ $lang = array(
 "user_sett_f_ntfy_eqdkp_article_unpublished" => "Unveröffentlichter Artikel",
 "user_sett_f_ntfy_eqdkp_char_confirm_required" => "Charakter erfordert Freischaltung",
 "user_sett_f_ntfy_eqdkp_char_delete_requested" => "Charakter erfordert Löschung",
+"user_sett_f_ntfy_eqdkp_calendar_guest_application" => 'Raidgäste warten auf Freigabe',
 "user_sett_f_ntfy_eqdkp_user_enable_requested" => "Benutzer erwartet Freischaltung",
 "user_sett_f_ntfy_calendarevent_mod_groupchange" => "Gruppenänderung durch Moderator im Kalenderevent",
 "user_sett_f_ntfy_calendarevent_mod_statuschange" => "Statusänderung durch Moderator im Kalenderevent",

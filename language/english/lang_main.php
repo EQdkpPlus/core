@@ -1006,6 +1006,7 @@ $lang = array(
 	"user_sett_f_ntfy_eqdkp_char_confirm_required" => 'Character requires activation',
 	"user_sett_f_ntfy_eqdkp_char_delete_requested" => 'Character required deletion',
 	"user_sett_f_ntfy_eqdkp_user_enable_requested" => 'User required activation',
+	"user_sett_f_ntfy_eqdkp_calendar_guest_application" => 'Raid guests avaiting approval',
 	"user_sett_f_ntfy_calendarevent_mod_groupchange" => 'Groupchange by moderator at a Raid',
 	"user_sett_f_ntfy_calendarevent_mod_statuschange" => 'Statuschange by moderator at a Raid',
 	"user_sett_f_ntfy_calenderevent_closed" => 'Raid was canceled',
