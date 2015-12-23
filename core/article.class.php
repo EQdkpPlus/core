@@ -127,6 +127,10 @@ if(!class_exists('article')){
 			//Get Raid-Infos:
 			$intEventID = $this->pdh->get('raid', 'event', array($intRaidID));
 			if ($intEventID){
+				if(isset($this->_cache['raidloot']) && isset($this->_cache['raidloot'][$intRaidID])){
+					return $this->_cache['raidloot'][$intRaidID];
+				}
+				
 				$strOut = '<div class="raidloot"><h3>'.$this->user->lang('loot').' '.$this->pdh->get('event', 'html_icon', array($intEventID)).$this->pdh->get('raid', 'html_raidlink', array($intRaidID, register('routing')->simpleBuild('raids'), '', true));
 				$strRaidNote = $this->pdh->get('raid', 'html_note', array($intRaidID));
 				if ($strRaidNote != "") $strOut .= ' ('.$strRaidNote.')';
@@ -155,12 +159,21 @@ if(!class_exists('article')){
 					}
 				}
 
-				return $strOut.'</div>';
+				$strOut = $strOut.'</div>';
+				
+				if(!isset($this->_cache['raidloot'])) $this->_cache['raidloot'] = array();
+				$this->_cache['raidloot'][$intRaidID] = $strOut;
+				
+				return $strOut;
 			}
 			return '';
 		}
 
 		public function buildCalendarevent($intEventID){
+			if(isset($this->_cache['calendarevent']) && isset($this->_cache['calendarevent'][$intEventID])){
+				return $this->_cache['calendarevent'][$intEventID];
+			}
+			
 			$out = '<div class="articleCalendarEventBox table">';
 
 			$eventextension	= $this->pdh->get('calendar_events', 'extension', array($intEventID));
@@ -332,6 +345,10 @@ if(!class_exists('article')){
 
 
 			$out .= '</div>';
+
+			if(!isset($this->_cache['calendarevent'])) $this->_cache['calendarevent'] = array();
+				
+			$this->_cache['calendarevent'][$intEventID] = $out;
 
 			return $out;
 		}
