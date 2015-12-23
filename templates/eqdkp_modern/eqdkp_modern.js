@@ -106,9 +106,6 @@ $(document).ready(function(){
 })
 
 /* User clock */
-var user_clock_format = "dddd, "+mmocms_user_dateformat_long+" "+ mmocms_user_timeformat;
-					
-var mymoment = moment(mmocms_user_timestamp_atom).utcOffset(mmocms_user_timezone);
 function user_clock(){	
 	var mydate = mymoment.format(user_clock_format);
 	$('.user_time').html(mydate);

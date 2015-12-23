@@ -478,6 +478,10 @@
 				);
 			}
 			
+			/* User clock */
+			var user_clock_format = "dddd, "+mmocms_user_dateformat_long+" "+ mmocms_user_timeformat;
+			var mymoment = moment(mmocms_user_timestamp_atom).utcOffset(mmocms_user_timezone);
+			
 			$(document).ready(function() {
 				$('.notification-mark-all-read').on('click', function() {
 				    $('.notification-content ul').html({L_notification_none|jsencode});
