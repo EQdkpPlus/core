@@ -25,6 +25,7 @@ if(!defined('EQDKP_INC')){
 
 if(!class_exists('pdh_w_calendar_raids_guests')){
 	class pdh_w_calendar_raids_guests extends pdh_w_generic{
+		public static $shortcuts = array('email' => 'MyMailer');
 
 		public function reset() {
 			$this->db->query("TRUNCATE TABLE __calendar_raid_guests;");
@@ -39,7 +40,7 @@ if(!class_exists('pdh_w_calendar_raids_guests')){
 				'name'					=> $name,
 				'email'					=> $email,
 				'note'					=> $note,
-				'timestamp_signup'	=> $this->time->time,
+				'timestamp_signup'		=> $this->time->time,
 				'class'					=> $classid,
 				'raidgroup'				=> $group,
 				'creator'				=> $creator,
@@ -62,11 +63,11 @@ if(!class_exists('pdh_w_calendar_raids_guests')){
 			$subject		= $this->user->lang('raidevent_guest_emailsubject', false, false, $this->config->get('default_locale'));
 			$email			= $this->pdh->get('calendar_raids_guests', 'email', array($guestid));
 			#$aprovalstatus	= $this->pdh->get('calendar_raids_guests', 'approvalstatus', array($guestid));
+			$this->email->Set_Language($this->config->get('default_lang'));
 			$arrBodyvars = array(
 				'NAME' 		=> $this->pdh->get('calendar_raids_guests', 'name', array($guestid)),
 				'LINK'		=> $this->pdh->get('calendar_raids_guests', 'eventlink', array($guestid)),
 			);
-			$this->email->Set_Language($this->config->get('default_locale'));
 			$this->email->SendMailFromAdmin($email, $subject, 'calendarguests_application.html', $arrBodyvars, $this->config->get('lib_email_method'));
 		}
 
