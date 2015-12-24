@@ -431,6 +431,7 @@ class core extends gen_class {
 					$this->message($message);
 				}
 			}
+			$this->tpl->add_js("var mmocms_header_type = '".$this->header_format."';", 'head_top');
 			
 			//EU Cookie Usage Hint			
 			if ((int)$this->config->get('cookie_euhint_show') && $this->user->blnFirstVisit){
@@ -949,7 +950,7 @@ class core extends gen_class {
 		 */
 		private function pagetitle($title = ''){
 			$pt_prefix		= (defined('IN_ADMIN')) ? $this->user->lang('admin_title_prefix') : $this->user->lang('title_prefix');
-			$dkp_name 		= (!$this->config->get('enable_points')) ? '' : $this->config->get('dkp_name');
+			$dkp_name 		= '';
 			$main_title		= sprintf($pt_prefix, $this->config->get('guildtag'), $dkp_name);
 			return sanitize((( $title != '' ) ? $title.' - ' : '').$main_title);
 		}
