@@ -378,7 +378,7 @@ class Manage_Live_Update extends page_generic {
 			opcache_reset();
 		}
 		
-		if ($strLog != "") register('logs')->add('liveupdate_copied_files', $strLog);
+		if ($strLog != "") register('logs')->add('liveupdate_copied_files', array('Copied Files' => $strLog));
 
 		echo "true";
 

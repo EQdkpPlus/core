@@ -151,7 +151,7 @@ if (!class_exists("filehandler_ftp")) {
 			
 			//Invalidate Opcache in PHP7
 			$strExtension = pathinfo($filename, PATHINFO_EXTENSION);
-			if($blnResult && utf8_strtolower($strExtension) === 'php' && function_exists('opcache_invalidate')){
+			if($blnResult && strtolower($strExtension) === 'php' && function_exists('opcache_invalidate')){
 				opcache_invalidate(realpath($filename));
 			}
 			
@@ -166,7 +166,7 @@ if (!class_exists("filehandler_ftp")) {
 			
 			//Invalidate Opcache in PHP7
 			$strExtension = pathinfo($filename, PATHINFO_EXTENSION);
-			if($blnResult && utf8_strtolower($strExtension) === 'php' && function_exists('opcache_invalidate')){
+			if($blnResult && strtolower($strExtension) === 'php' && function_exists('opcache_invalidate')){
 				opcache_invalidate(realpath($filename));
 			}
 			
@@ -320,7 +320,7 @@ if (!class_exists("filehandler_ftp")) {
 			
 			//Invalidate Opcache in PHP7
 			$strExtension = pathinfo($source, PATHINFO_EXTENSION);
-			if($blnResult && utf8_strtolower($strExtension) === 'php' && function_exists('opcache_invalidate')){
+			if($blnResult && strtolower($strExtension) === 'php' && function_exists('opcache_invalidate')){
 				opcache_invalidate(realpath($dest));
 			}
 			
