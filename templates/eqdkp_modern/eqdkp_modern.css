@@ -2126,6 +2126,112 @@ ul.portal_block {
 	float: left;
 }
 
+/* ACP: styles management */
+.style {
+	width: 300px;
+	height: 200px;
+	margin: 5px;
+	float: left;
+	position: relative;
+	overflow: hidden;
+	background: #CCC;
+	border: 1px solid #AAA;
+}
+.style-preview {
+	width: 300px;
+	height: 200px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	filter: brightness(.5);
+	transition: .5s ease-in-out;
+	z-index: 0;
+}
+.style:hover .style-preview {
+	filter: brightness(1);
+}
+
+.style input[type="radio"] {
+	opacity: 0;
+}
+.style input[type="radio"] + label {
+	display: block;
+	width: 16px;
+	height: 16px;
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	border: 1px solid #999;
+	border-radius: 3px;
+	background: #050505;
+	cursor: pointer;
+	z-index: 1;
+}
+.style input[type="radio"] + label:hover:before {
+	content: '';
+	width: 10px;
+	height: 10px;
+	position: absolute;
+	top: 3px;
+	left: 3px;
+	border-radius: 1px;
+	background: #ccc;
+}
+.style input[type="radio"]:checked + label:before {
+	content: '';
+	width: 10px;
+	height: 10px;
+	position: absolute;
+	top: 3px;
+	left: 3px;
+	border-radius: 1px;
+	background: #15b0ed;
+}
+
+.style-action {
+	display: none;
+	opacity: 0;
+	width: 120px;
+	padding: 1px 7px;
+	position: absolute;
+	top: 0;
+	right: -15px;
+	background-color: rgba(255, 255, 255, 0.7);
+	border-bottom-left-radius: 10px;
+	transition: opacity .1s ease-in-out;
+	z-index: 1;
+}
+.style:hover .style-action {
+	display: inline-block;
+	opacity: 1;
+}
+.styles-container .style-action a {
+	color: #000 !important;
+}
+
+.style-info {
+	width: 300px;
+	position: absolute;
+	bottom: -43px;
+	background-color: rgba(255, 255, 255, 0.7);
+	transition: bottom .3s ease-in;
+	z-index: 1;
+}
+.style-info:hover {
+	bottom: 0;
+}
+.style-info h2 {
+	margin: 0 15px;
+}
+.style-info table {
+	margin: 5px 10px;
+}
+.style-info td {
+	padding-right: 15px;
+}
+
 /***************************************************
  * CALENDAR
  **************************************************/

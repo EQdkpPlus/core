@@ -478,156 +478,152 @@ $(document).ready(function(){
 			document.post.submit();
 		}
 		</script>
+		
 		<form method="post" action="{ACTION}&amp;cat=2&amp;mode=default_style" name="post">
 		<input type="hidden" name="override" value="0" />
-		<table class="table fullwidth colorswitch hoverrows">
-		  <tr>
-			<th width="20">&nbsp;</th>
-			<th colspan="5" align="left">{L_action}</th>
-			<th width="16" align="left">&nbsp;</th>
-			<th align="left">{L_name}</th>
-			<th align="left" class="hiddenSmartphone">{L_template_files}</th>
-			<th align="left" class="hiddenSmartphone">{L_users}</th>
-			<th align="left">{L_version}</th>
-			<th align="left" class="hiddenSmartphone">{L_portalplugin_author}</th>
-			<th align="left" class="hiddenSmartphone">{L_preview}</th>
-			<th align="left" class="hiddenSmartphone">{L_infos}</th>
-			</tr>
-		  <!-- BEGIN styles_row_red_local -->
-		  <tr>
-		   <td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
-			<td width="10" class="nowrap desktopOnly">{styles_row_red_local.ACTION_LINK}</td>
-			<td width="10"><!-- IF not styles_row_red_local.S_DEFAULT -->
-			  <a href="{styles_row_red_local.U_ENABLE}" title="{styles_row_red_local.L_ENABLE}"><i class="{styles_row_red_local.ENABLE} fa-lg"></i></a>
-			  <!-- ENDIF --></td>
-			<td width="10"><a href="{styles_row_red_local.U_EDIT_STYLE}" title="{L_edit_style}"><i class="fa fa-pencil fa-lg" title="{L_edit_style}"></i></a></td>
-			<td width="10"><a href="{styles_row_red_local.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg" title="{L_download_style}"></i></a></td>
-			<td width="10">
-				<a href="javascript:style_reset_warning({styles_row_red_local.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>
-			</td>
-			
-			<td width="25" align="center"><!-- IF not styles_row_red_local.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_red_local.STANDARD} value="{styles_row_red_local.ID}" /><!-- ENDIF --></td>
-			<!-- name --><td><!-- IF styles_row_red_local.S_DEFAULT --><b><!-- ENDIF --><span>{styles_row_red_local.TT_NAME}</span> <!-- IF styles_row_red_local.S_DEFAULT --> * </b><!-- ENDIF --></td>
-
-			<td class="hiddenSmartphone">{styles_row_red_local.TEMPLATE}</td>
-			<td class="hiddenSmartphone">{styles_row_red_local.USERS}</td>
-			<td>{styles_row_red_local.VERSION}</td>
-			<td class="hiddenSmartphone">{styles_row_red_local.AUTHOR}</td>
-			<td class="hiddenSmartphone"><a href="javascript:style_preview({styles_row_red_local.ID});"><!-- IF styles_row_red_local.TT_CONTENT != "" -->{styles_row_red_local.TT_CONTENT}<!-- ELSE -->{L_preview}<!-- ENDIF --></a></td>
-			<td class="hiddenSmartphone">
-				<!-- IF styles_row_red_local.BUGTRACKER_URL != "" -->
-				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{styles_row_red_local.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
+		<ul class="styles-container">
+			<!-- BEGIN styles_row_red_local -->
+			<li class="style">
+				<!-- IF not styles_row_red_local.S_DEACTIVATED -->
+				<input id="style-radio{styles_row_red_local.ID}" type="radio" name="standard_style" {styles_row_red_local.STANDARD} value="{styles_row_red_local.ID}" />
+				<label for="style-radio{styles_row_red_local.ID}"></label>
 				<!-- ENDIF -->
-			</td>		
-			</tr>
-		   <!-- END styles_row_red_local -->
-		  <!-- BEGIN styles_row_red -->
-		  <tr>
-		  <td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
-			<td width="10" class="nowrap desktopOnly">{styles_row_red.ACTION_LINK}</td>
-			<td width="10"><!-- IF not styles_row_red.S_DEFAULT -->
-			<a href="{styles_row_red.U_ENABLE}" title="{styles_row_red.L_ENABLE}"><i class="{styles_row_red.ENABLE} fa-lg"></i></a>
-			  <!-- ENDIF --></td>
-			<td width="10"><a href="{styles_row_red.U_EDIT_STYLE}" title="{L_edit_style}"><i class="fa fa-pencil fa-lg" title="{L_edit_style}"></i></a></td>
-			<td width="10"><a href="{styles_row_red.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg" title="{L_download_style}"></i></a></td>
-			<td width="10">
-				<a href="javascript:style_reset_warning({styles_row_red.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>
-			</td>
-			
-			<td width="25" align="center"><!-- IF not styles_row_red.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_red.STANDARD} value="{styles_row_red.ID}" /><!-- ENDIF --></td>
-			<!-- name --><td><!-- IF styles_row_red.S_DEFAULT --><b><!-- ENDIF --><a href="{styles_row_red.U_EDIT_STYLE}"><span>{styles_row_red.TT_NAME}</span></a> <!-- IF styles_row_red.S_DEFAULT --> * </b><!-- ENDIF --></td>
-
-			<td class="hiddenSmartphone">{styles_row_red.TEMPLATE}</td>
-			<td class="hiddenSmartphone">{styles_row_red.USERS}</td>
-			<td>{styles_row_red.VERSION}</td>
-			<td class="hiddenSmartphone">{styles_row_red.AUTHOR}</td>
-			<td class="hiddenSmartphone"><a href="javascript:style_preview({styles_row_red.ID});"><!-- IF styles_row_red.TT_CONTENT != "" -->{styles_row_red.TT_CONTENT}<!-- ELSE -->{L_preview}<!-- ENDIF --></a></td>
-			<td class="hiddenSmartphone">
-				<!-- IF styles_row_red.BUGTRACKER_URL != "" -->
-				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{styles_row_red.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
+				<div class="style-action">
+					{styles_row_red_local.ACTION_LINK}
+					<!-- IF not styles_row_red_local.S_DEFAULT -->
+					<a href="{styles_row_red_local.U_ENABLE}" title="{styles_row_red_local.L_ENABLE}"><i class="{styles_row_red_local.ENABLE} fa-lg"></i></a>  
+					<!-- ENDIF -->
+					<a href="{styles_row_red_local.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg"></i></a>
+					<a href="javascript:style_reset_warning({styles_row_red_local.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>	
+					<a href="javascript:style_preview({styles_row_red_local.ID});" title="{L_preview}"><i class="fa fa-search"></i></a>
+				</div>
+				<div class="style-info">
+					<h2>{styles_row_red_local.TT_NAME}</h2>
+					<table>
+					<tr>
+						<td><i class="fa fa-folder-open"></i> {styles_row_red_local.TEMPLATE}</td>
+						<td><i class="fa fa-tags"></i> {styles_row_red_local.VERSION}</td>
+					</tr><tr>
+						<td><i class="fa fa-pencil"></i> {styles_row_red_local.AUTHOR}</td>
+						<td><i class="fa fa-group"></i> {styles_row_red_local.USERS}</td>
+					</tr>
+					</table>
+				</div>
+				<a class="style-preview" href="{styles_row_red_local.U_EDIT_STYLE}" <!-- IF styles_row_red_local.TT_CONTENT != "" -->style="background: url({styles_row_red_local.TT_CONTENT}) no-repeat top left / auto 100%;"<!-- ENDIF -->></a>
+			</li>
+			<!-- END styles_row_red_local -->
+			<!-- BEGIN styles_row_red -->
+			<li class="style">
+				<!-- IF not styles_row_red.S_DEACTIVATED -->
+				<input id="style-radio{styles_row_red.ID}" type="radio" name="standard_style" {styles_row_red.STANDARD} value="{styles_row_red.ID}" />
+				<label for="style-radio{styles_row_red.ID}"></label>
 				<!-- ENDIF -->
-			</td>
-			</tr>
-		   <!-- END styles_row_red -->
+				<div class="style-action">
+					{styles_row_red.ACTION_LINK}
+					<!-- IF not styles_row_red.S_DEFAULT -->
+					<a href="{styles_row_red.U_ENABLE}" title="{styles_row_red.L_ENABLE}"><i class="{styles_row_red.ENABLE} fa-lg"></i></a>  
+					<!-- ENDIF -->
+					<a href="{styles_row_red.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg"></i></a>
+					<a href="javascript:style_reset_warning({styles_row_red.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>	
+					<a href="javascript:style_preview({styles_row_red.ID});" title="{L_preview}"><i class="fa fa-search"></i></a>
+				</div>
+				<div class="style-info">
+					<h2>{styles_row_red.TT_NAME}</h2>
+					<table>
+					<tr>
+						<td><i class="fa fa-folder-open"></i> {styles_row_red.TEMPLATE}</td>
+						<td><i class="fa fa-tags"></i> {styles_row_red.VERSION}</td>
+					</tr><tr>
+						<td><i class="fa fa-pencil"></i> {styles_row_red.AUTHOR}</td>
+						<td><i class="fa fa-group"></i> {styles_row_red.USERS}</td>
+					</tr>
+					</table>
+				</div>
+				<a class="style-preview" href="{styles_row_red.U_EDIT_STYLE}" <!-- IF styles_row_red.TT_CONTENT != "" -->style="background: url({styles_row_red.TT_CONTENT}) no-repeat top left / auto 100%;"<!-- ENDIF -->></a>
+			</li>
+			<!-- END styles_row_red -->
 			<!-- BEGIN styles_row_yellow -->
-		  <tr>
-		   <td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
-			<td width="10" class="nowrap desktopOnly">{styles_row_yellow.ACTION_LINK}</td>
-			<td width="10"><!-- IF not styles_row_yellow.S_DEFAULT -->
-			<a href="{styles_row_yellow.U_ENABLE}" title="{styles_row_yellow.L_ENABLE}"><i class="{styles_row_yellow.ENABLE} fa-lg"></i></a>
-			<!-- ENDIF --></td>
-			<td width="10"><a href="{styles_row_yellow.U_EDIT_STYLE}" title="{L_edit_style}"><i class="fa fa-pencil fa-lg" title="{L_edit_style}"></i></a></td>
-			<td width="10"><a href="{styles_row_yellow.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg" title="{L_download_style}"></i></a></td>
-			<td width="10">
-				<a href="javascript:style_reset_warning({styles_row_yellow.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>
-			</td>
-			
-			<td width="25" align="center"><!-- IF not styles_row_yellow.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_yellow.STANDARD} value="{styles_row_yellow.ID}" /><!-- ENDIF --></td>
-			<!-- name --><td><!-- IF styles_row_yellow.S_DEFAULT --><b><!-- ENDIF --><a href="{styles_row_yellow.U_EDIT_STYLE}"><span>{styles_row_yellow.TT_NAME}</span></a> <!-- IF styles_row_yellow.S_DEFAULT --> * </b><!-- ENDIF --></td>
-
-			<td class="hiddenSmartphone">{styles_row_yellow.TEMPLATE}</td>
-			<td class="hiddenSmartphone">{styles_row_yellow.USERS}</td>
-			<td>{styles_row_yellow.VERSION}</td>
-			<td class="hiddenSmartphone">{styles_row_yellow.AUTHOR}</td>
-			<td class="hiddenSmartphone"><a href="javascript:style_preview({styles_row_yellow.ID});"><!-- IF styles_row_yellow.TT_CONTENT != "" -->{styles_row_yellow.TT_CONTENT}<!-- ELSE -->{L_preview}<!-- ENDIF --></a></td>
-			<td class="hiddenSmartphone">
-				<!-- IF styles_row_yellow.BUGTRACKER_URL != "" -->
-				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{styles_row_yellow.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
+			<li class="style">
+				<!-- IF not styles_row_yellow.S_DEACTIVATED -->
+				<input id="style-radio{styles_row_yellow.ID}" type="radio" name="standard_style" {styles_row_yellow.STANDARD} value="{styles_row_yellow.ID}" />
+				<label for="style-radio{styles_row_yellow.ID}"></label>
 				<!-- ENDIF -->
-			</td>
-			</tr>
-		   <!-- END styles_row_yellow -->
-		<!-- BEGIN styles_row_green -->
-		  <tr>
-		   <td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
-			<td width="10" class="nowrap desktopOnly">{styles_row_green.ACTION_LINK}</td>
-			<td width="10"><!-- IF not styles_row_green.S_DEFAULT -->
-			  <a href="{styles_row_green.U_ENABLE}" title="{styles_row_green.L_ENABLE}"><i class="{styles_row_green.ENABLE} fa-lg"></i></a>  
-			  <!-- ENDIF --></td>
-			<td width="10"><a href="{styles_row_green.U_EDIT_STYLE}" title="{L_edit_style}"><i class="fa fa-pencil fa-lg"></i></a></td>
-			<td width="10"><a href="{styles_row_green.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg"></i></a></td>
-			<td width="10">
-				<a href="javascript:style_reset_warning({styles_row_green.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>
-			</td>
-			
-			<td width="25" align="center"><!-- IF not styles_row_green.S_DEACTIVATED --><input type="radio" name="standard_style" {styles_row_green.STANDARD} value="{styles_row_green.ID}" /><!-- ENDIF --></td>
-			<!-- name --><td><!-- IF styles_row_green.S_DEFAULT --><b><!-- ENDIF --><span>{styles_row_green.TT_NAME}</span> <!-- IF styles_row_green.S_DEFAULT --> * </b><!-- ENDIF --></td>
-
-			<td class="hiddenSmartphone">{styles_row_green.TEMPLATE}</td>
-			<td class="hiddenSmartphone">{styles_row_green.USERS}</td>
-			<td>{styles_row_green.VERSION}</td>
-			<td class="hiddenSmartphone">{styles_row_green.AUTHOR}</td>
-			<td class="hiddenSmartphone"><a href="javascript:style_preview({styles_row_green.ID});"><!-- IF styles_row_green.TT_CONTENT != "" -->{styles_row_green.TT_CONTENT}<!-- ELSE -->{L_preview}<!-- ENDIF --></a></td>
-			<td class="hiddenSmartphone">
-				<!-- IF styles_row_green.BUGTRACKER_URL != "" -->
-				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{styles_row_green.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
+				<div class="style-action">
+					{styles_row_yellow.ACTION_LINK}
+					<!-- IF not styles_row_yellow.S_DEFAULT -->
+					<a href="{styles_row_yellow.U_ENABLE}" title="{styles_row_yellow.L_ENABLE}"><i class="{styles_row_yellow.ENABLE} fa-lg"></i></a>  
+					<!-- ENDIF -->
+					<a href="{styles_row_yellow.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg"></i></a>
+					<a href="javascript:style_reset_warning({styles_row_yellow.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>	
+					<a href="javascript:style_preview({styles_row_yellow.ID});" title="{L_preview}"><i class="fa fa-search"></i></a>
+				</div>
+				<div class="style-info">
+					<h2>{styles_row_yellow.TT_NAME}</h2>
+					<table>
+					<tr>
+						<td><i class="fa fa-folder-open"></i> {styles_row_yellow.TEMPLATE}</td>
+						<td><i class="fa fa-tags"></i> {styles_row_yellow.VERSION}</td>
+					</tr><tr>
+						<td><i class="fa fa-pencil"></i> {styles_row_yellow.AUTHOR}</td>
+						<td><i class="fa fa-group"></i> {styles_row_yellow.USERS}</td>
+					</tr>
+					</table>
+				</div>
+				<a class="style-preview" href="{styles_row_yellow.U_EDIT_STYLE}" <!-- IF styles_row_yellow.TT_CONTENT != "" -->style="background: url({styles_row_yellow.TT_CONTENT}) no-repeat top left / auto 100%;"<!-- ENDIF -->></a>
+			</li>
+			<!-- END styles_row_yellow -->
+			<!-- BEGIN styles_row_green -->
+			<li class="style">
+				<!-- IF not styles_row_green.S_DEACTIVATED -->
+				<input id="style-radio{styles_row_green.ID}" type="radio" name="standard_style" {styles_row_green.STANDARD} value="{styles_row_green.ID}" />
+				<label for="style-radio{styles_row_green.ID}"></label>
 				<!-- ENDIF -->
-			</td>
-			</tr>
-		   <!-- END styles_row_green -->
-		<!-- BEGIN styles_row_grey -->
-		  <tr>
-			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
-			<td width="10" class="nowrap desktopOnly">{styles_row_grey.ACTION_LINK}</td>
-			<td width="10"></td>
-			<td width="10"></td>
-			<td width="10"></td>
-			<td width="10"></td>			
-			<td width="25" align="center"></td>
-			<td><span>{styles_row_grey.TT_NAME}</span></td>
-			<td class="hiddenSmartphone">{styles_row_grey.TEMPLATE}</td>
-			<td class="hiddenSmartphone">0</td>
-			<td>{styles_row_grey.VERSION}</td>
-			<td class="hiddenSmartphone">{styles_row_grey.AUTHOR}</td>
-			<td class="hiddenSmartphone"><!-- IF styles_row_grey.TT_CONTENT != "" -->{styles_row_grey.TT_CONTENT}<!-- ENDIF --></td>
-			<td class="hiddenSmartphone">
-				<!-- IF styles_row_grey.BUGTRACKER_URL != "" -->
-				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{styles_row_grey.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
-				<!-- ENDIF -->
-			</td>
-			</tr>
-		   <!-- END styles_row_grey -->
-		</table>
+				<div class="style-action">
+					{styles_row_green.ACTION_LINK}
+					<!-- IF not styles_row_green.S_DEFAULT -->
+					<a href="{styles_row_green.U_ENABLE}" title="{styles_row_green.L_ENABLE}"><i class="{styles_row_green.ENABLE} fa-lg"></i></a>  
+					<!-- ENDIF -->
+					<a href="{styles_row_green.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg"></i></a>
+					<a href="javascript:style_reset_warning({styles_row_green.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>	
+					<a href="javascript:style_preview({styles_row_green.ID});" title="{L_preview}"><i class="fa fa-search"></i></a>
+				</div>
+				<div class="style-info">
+					<h2>{styles_row_green.TT_NAME}</h2>
+					<table>
+					<tr>
+						<td><i class="fa fa-folder-open"></i> {styles_row_green.TEMPLATE}</td>
+						<td><i class="fa fa-tags"></i> {styles_row_green.VERSION}</td>
+					</tr><tr>
+						<td><i class="fa fa-pencil"></i> {styles_row_green.AUTHOR}</td>
+						<td><i class="fa fa-group"></i> {styles_row_green.USERS}</td>
+					</tr>
+					</table>
+				</div>
+				<a class="style-preview" href="{styles_row_green.U_EDIT_STYLE}" <!-- IF styles_row_green.TT_CONTENT != "" -->style="background: url({styles_row_green.TT_CONTENT}) no-repeat top left / auto 100%;"<!-- ENDIF -->></a>
+			</li>
+			<!-- END styles_row_green -->
+			<!-- BEGIN styles_row_grey -->
+			<li class="style">
+				<div class="style-action">
+					{styles_row_grey.ACTION_LINK}
+				</div>
+				<div class="style-info">
+					<h2>{styles_row_grey.TT_NAME}</h2>
+					<table>
+					<tr>
+						<td><i class="fa fa-folder-open"></i> {styles_row_grey.TEMPLATE}</td>
+						<td><i class="fa fa-tags"></i> {styles_row_grey.VERSION}</td>
+					</tr><tr>
+						<td><i class="fa fa-pencil"></i> {styles_row_grey.AUTHOR}</td>
+						<td><i class="fa fa-group"></i> 0</td>
+					</tr>
+					</table>
+				</div>
+				<div class="style-preview" <!-- IF styles_row_grey.TT_CONTENT != "" -->style="background: url({styles_row_grey.TT_CONTENT}) no-repeat;"<!-- ENDIF -->></div>
+			</li>
+			<!-- END styles_row_grey -->
+		</ul>
+		
 		<div class="contentFooter">
 			<button name="standard" type="button" id="standard" class="mainoption" onclick="style_default_info();"><i class="fa fa-check"></i>{L_make_default_style}</button>
 			<button name="cache_reset" type="button" class="liteoption" onclick="window.location='manage_extensions.php{SID}&amp;cat=2&amp;mode=delete_cache&amp;link_hash={CSRF_MODE_TOKEN}'"><i class="fa fa-trash-o"></i>{L_delete_template_cache}</button>
