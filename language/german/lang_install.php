@@ -190,7 +190,7 @@ $lang = array(
 <p>Für weitere Hilfe steht dir unser <a href="'.EQDKP_BOARD_URL.'" target="_blank">Forum</a> zur Verfügung.</p>
 <p>Viel Spaß mit dem EQdkp-Plus wünscht das gesamte EQdkp-Plus-Team!</p>',
 	'feature_news_title'	=> 'Neue Funktionen von EQdkp Plus',
-	'feature_news'			=> '&lt;p&gt;Das EQdkp Plus 2.0 stellt wesentliche neue Funktionen zur Verfügung. Dieser Artikel dient dazu, diese Funktionen etwas näher kennenzulernen.&lt;/p&gt;
+	'feature_news'			=> '&lt;p&gt;Das EQdkp Plus 2.2 stellt wesentliche neue Funktionen zur Verfügung. Dieser Artikel dient dazu, diese Funktionen etwas näher kennenzulernen.&lt;/p&gt;
 &lt;h3&gt;Artikelsystem&lt;/h3&gt;
 &lt;p&gt;Anstatt der früheren News und Infoseiten basiert nun alles auf einem Artikelsystem. Jede News und jede Seite ist dabei ein Artikel. Über Artikelkategorien können diese leicht gruppiert werden. Auch kann man dadurch Blogs ermöglichen.&lt;/p&gt;
 &lt;p&gt;Die einzelnen Artikel können über einen Weiterlesen-Bereich und Seitenumbrüchen aufgeteilt werden. Auch besteht die Möglichkeit, über den Editor Bildergalerien, Items oder Raidloot in einen Artikel einzufügen.&lt;/p&gt;
