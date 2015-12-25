@@ -592,7 +592,7 @@ class Manage_Extensions extends page_generic {
 			$plugin_code = $key;
 			if(isset($allUpdates[$plugin_code])){
 				$row = 'yellow';
-				$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].',2, \''.$plugin_code.'\');" class="needs_update" data-id="'.$allUpdates[$plugin_code]['plugin_id'].'" data-category="2" data-code="'.$plugin_code.'" title="'.$this->user->lang('uc_bttn_update').'"><i class="fa fa-lg fa-refresh"></i></a>';
+				$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].',2, \''.$plugin_code.'\');" class="needs_update" data-id="'.$allUpdates[$plugin_code]['plugin_id'].'" data-category="2" data-code="'.$plugin_code.'" title="'.$this->user->lang('uc_bttn_update').'"><i class="fa fa-lg fa-refresh icon-color-yellow"></i></a>';
 				$link .= '&nbsp;&nbsp;&nbsp;<a href="manage_extensions.php' . $this->SID . '&amp;cat=2&amp;mode=remove&amp;code=' . $plugin_code. '&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('delete').'"><i class="fa fa-lg fa-trash-o"></i></a>';
 				$arrUpdateCount[2]['yellow'] ++;
 			} else {
@@ -610,6 +610,7 @@ class Manage_Extensions extends page_generic {
 
 			$this->tpl->assign_block_vars('styles_row_'.$row, array(
 				'TT_CONTENT'	=> $screenshot,
+				'ROWNAME'		=> 'style_'.$row,
 				'TT_NAME'		=> ($install_xml->name) ? $install_xml->name : stripslashes($key),
 				'VERSION'		=> $install_xml->version,
 				'AUTHOR'		=> ($install_xml->authorEmail != "") ? '<a href="mailto:'.$install_xml->authorEmail.'">'.$install_xml->author.'</a>': $install_xml->author,
@@ -631,15 +632,15 @@ class Manage_Extensions extends page_generic {
 			if (isset($urgendUpdates[$plugin_code])){
 				if (isset($arrLocalStyleUpdates[$plugin_code])){
 					$rowname = 'red_local';
-					$link = '<a href="manage_extensions.php' . $this->SID . '&amp;cat=2&amp;mode=update&amp;code=' . $row['style_id']. '&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('uc_bttn_update').'"><i class="fa fa-lg fa-refresh"></i></a>';
+					$link = '<a href="manage_extensions.php' . $this->SID . '&amp;cat=2&amp;mode=update&amp;code=' . $row['style_id']. '&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('uc_bttn_update').'"><i class="fa fa-lg fa-refresh icon-color-red"></i></a>';
 				} else {
 					$rowname = 'red';
-					$link = '<a href="javascript:repo_update('.$urgendUpdates[$plugin_code]['plugin_id'].', 2, \''.$plugin_code.'\');" class="needs_update" data-id="'.$urgendUpdates[$plugin_code]['plugin_id'].'" data-category="2" data-code="'.$plugin_code.'" title="'.$this->user->lang('uc_bttn_update').'"><i class="fa fa-lg fa-refresh"></i></a>';
+					$link = '<a href="javascript:repo_update('.$urgendUpdates[$plugin_code]['plugin_id'].', 2, \''.$plugin_code.'\');" class="needs_update" data-id="'.$urgendUpdates[$plugin_code]['plugin_id'].'" data-category="2" data-code="'.$plugin_code.'" title="'.$this->user->lang('uc_bttn_update').'"><i class="fa fa-lg fa-refresh icon-color-red"></i></a>';
 				}
 				$arrUpdateCount[2]['red'] ++;
 			} elseif(isset($allUpdates[$plugin_code])) {
 				$rowname = 'yellow';
-				$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].', 2, \''.$plugin_code.'\');" class="needs_update" data-id="'.$allUpdates[$plugin_code]['plugin_id'].'" data-category="2" data-code="'.$plugin_code.'" title="'.$this->user->lang('uc_bttn_update').'"><i class="fa fa-lg fa-refresh"></i></a>';
+				$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].', 2, \''.$plugin_code.'\');" class="needs_update" data-id="'.$allUpdates[$plugin_code]['plugin_id'].'" data-category="2" data-code="'.$plugin_code.'" title="'.$this->user->lang('uc_bttn_update').'"><i class="fa fa-lg fa-refresh icon-color-yellow"></i></a>';
 				$arrUpdateCount[2]['yellow'] ++;
 			} else {
 				$rowname = 'green';
@@ -650,6 +651,7 @@ class Manage_Extensions extends page_generic {
 
 			$this->tpl->assign_block_vars('styles_row_'.$rowname, array(
 				'ID'				=> $row['style_id'],
+				'ROWNAME'			=> 'style_'.$rowname,
 				'U_EDIT_STYLE'		=> 'manage_styles.php' . $this->SID . '&amp;edit=true&amp;styleid=' . $row['style_id'],
 				'U_DOWNLOAD_STYLE'	=> 'manage_extensions.php' . $this->SID . '&amp;cat=2&amp;mode=export&amp;code=' . $row['style_id'].'&amp;link_hash='.$this->CSRFGetToken('mode'),
 				#'ENABLE_ICON'		=> ($row['enabled'] == '1') ? 'green' : 'red',
@@ -689,6 +691,7 @@ class Manage_Extensions extends page_generic {
 					'TEMPLATE'			=> sanitize($extension['plugin']),
 					'DESCRIPTION'		=> sanitize($extension['description']),
 					'ACTION_LINK'		=> $link,
+					'ROWNAME'			=> 'style_'.$row,
 					'BUGTRACKER_URL'	=> sanitize($extension['bugtracker_url']),
 					'TT_CONTENT'		=> '<img src="http://cdn1.eqdkp-plus.eu/repository/screenshot.php?extid='.$extension['plugin_id'].'" style="max-width:200px;" alt="No Preview available" />',
 				));

@@ -483,146 +483,160 @@ $(document).ready(function(){
 		<input type="hidden" name="override" value="0" />
 		<ul class="styles-container">
 			<!-- BEGIN styles_row_red_local -->
-			<li class="style">
-				<!-- IF not styles_row_red_local.S_DEACTIVATED -->
-				<input id="style-radio{styles_row_red_local.ID}" type="radio" name="standard_style" {styles_row_red_local.STANDARD} value="{styles_row_red_local.ID}" />
-				<label for="style-radio{styles_row_red_local.ID}"></label>
-				<!-- ENDIF -->
+			<li class="style {styles_row_red_local.ROWNAME}">
 				<div class="style-action">
+					<div class="style-checkbox">
+						<!-- IF not styles_row_red_local.S_DEACTIVATED -->
+						<input id="style-radio{styles_row_red_local.ID}" type="radio" name="standard_style" {styles_row_red_local.STANDARD} value="{styles_row_red_local.ID}" />
+						<label for="style-radio{styles_row_red_local.ID}"></label>
+						<!-- ENDIF -->
+					</div>
 					{styles_row_red_local.ACTION_LINK}
 					<!-- IF not styles_row_red_local.S_DEFAULT -->
 					<a href="{styles_row_red_local.U_ENABLE}" title="{styles_row_red_local.L_ENABLE}"><i class="{styles_row_red_local.ENABLE} fa-lg"></i></a>  
 					<!-- ENDIF -->
 					<a href="{styles_row_red_local.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg"></i></a>
 					<a href="javascript:style_reset_warning({styles_row_red_local.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>	
-					<a href="javascript:style_preview({styles_row_red_local.ID});" title="{L_preview}"><i class="fa fa-search"></i></a>
+					<a href="javascript:style_preview({styles_row_red_local.ID});" title="{L_preview}"><i class="fa fa-eye fa-lg"></i></a>
 				</div>
+				<a class="style-preview" href="{styles_row_red_local.U_EDIT_STYLE}" <!-- IF styles_row_red_local.TT_CONTENT != "" -->style="background: url({styles_row_red_local.TT_CONTENT}) no-repeat; background-size: cover; background-position: center;"<!-- ENDIF -->></a>
 				<div class="style-info">
-					<h2>{styles_row_red_local.TT_NAME}</h2>
+					<h2>{styles_row_red_local.TT_NAME} <span class="style-version"><i class="fa fa-tags" title="{L_version}"></i> {styles_row_red_local.VERSION}</span></h2>
 					<table>
 					<tr>
-						<td><i class="fa fa-folder-open"></i> {styles_row_red_local.TEMPLATE}</td>
-						<td><i class="fa fa-tags"></i> {styles_row_red_local.VERSION}</td>
+						<td><i class="fa fa-folder-open" title="{L_template_files}"></i> {styles_row_red_local.TEMPLATE}</td>
+						<td><i class="fa fa-pencil" title="{L_portalplugin_author}"></i> {styles_row_red_local.AUTHOR}</td>
 					</tr><tr>
-						<td><i class="fa fa-pencil"></i> {styles_row_red_local.AUTHOR}</td>
-						<td><i class="fa fa-group"></i> {styles_row_red_local.USERS}</td>
+						<td><i class="fa fa-group" title="{L_users}"></i> {styles_row_red_local.USERS}</td>
+						<td></td>
 					</tr>
 					</table>
 				</div>
-				<a class="style-preview" href="{styles_row_red_local.U_EDIT_STYLE}" <!-- IF styles_row_red_local.TT_CONTENT != "" -->style="background: url({styles_row_red_local.TT_CONTENT}) no-repeat top left / auto 100%;"<!-- ENDIF -->></a>
 			</li>
 			<!-- END styles_row_red_local -->
 			<!-- BEGIN styles_row_red -->
-			<li class="style">
-				<!-- IF not styles_row_red.S_DEACTIVATED -->
-				<input id="style-radio{styles_row_red.ID}" type="radio" name="standard_style" {styles_row_red.STANDARD} value="{styles_row_red.ID}" />
-				<label for="style-radio{styles_row_red.ID}"></label>
-				<!-- ENDIF -->
+			<li class="style {styles_row_red.ROWNAME}">
 				<div class="style-action">
+					<div class="style-checkbox">
+						<!-- IF not styles_row_red.S_DEACTIVATED -->
+						<input id="style-radio{styles_row_red.ID}" type="radio" name="standard_style" {styles_row_red.STANDARD} value="{styles_row_red.ID}" />
+						<label for="style-radio{styles_row_red.ID}"></label>
+						<!-- ENDIF -->
+					</div>
+				
 					{styles_row_red.ACTION_LINK}
 					<!-- IF not styles_row_red.S_DEFAULT -->
 					<a href="{styles_row_red.U_ENABLE}" title="{styles_row_red.L_ENABLE}"><i class="{styles_row_red.ENABLE} fa-lg"></i></a>  
 					<!-- ENDIF -->
 					<a href="{styles_row_red.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg"></i></a>
 					<a href="javascript:style_reset_warning({styles_row_red.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>	
-					<a href="javascript:style_preview({styles_row_red.ID});" title="{L_preview}"><i class="fa fa-search"></i></a>
+					<a href="javascript:style_preview({styles_row_red.ID});" title="{L_preview}"><i class="fa fa-eye fa-lg"></i></a>
 				</div>
+				<a class="style-preview" href="{styles_row_red.U_EDIT_STYLE}" <!-- IF styles_row_red.TT_CONTENT != "" -->style="background: url({styles_row_red.TT_CONTENT}) no-repeat; background-size: cover; background-position: center;"<!-- ENDIF -->></a>
 				<div class="style-info">
-					<h2>{styles_row_red.TT_NAME}</h2>
+					<h2>{styles_row_red.TT_NAME} <span class="style-version"><i class="fa fa-tags" title="{L_version}"></i> {styles_row_red.VERSION}</span></h2>
 					<table>
 					<tr>
-						<td><i class="fa fa-folder-open"></i> {styles_row_red.TEMPLATE}</td>
-						<td><i class="fa fa-tags"></i> {styles_row_red.VERSION}</td>
+						<td><i class="fa fa-folder-open" title="{L_template_files}"></i> {styles_row_red.TEMPLATE}</td>
+						<td><i class="fa fa-pencil" title="{L_portalplugin_author}"></i> {styles_row_red.AUTHOR}</td>
 					</tr><tr>
-						<td><i class="fa fa-pencil"></i> {styles_row_red.AUTHOR}</td>
-						<td><i class="fa fa-group"></i> {styles_row_red.USERS}</td>
+						<td><i class="fa fa-group" title="{L_users}"></i> {styles_row_red.USERS}</td>
+						<td></td>
 					</tr>
 					</table>
 				</div>
-				<a class="style-preview" href="{styles_row_red.U_EDIT_STYLE}" <!-- IF styles_row_red.TT_CONTENT != "" -->style="background: url({styles_row_red.TT_CONTENT}) no-repeat top left / auto 100%;"<!-- ENDIF -->></a>
 			</li>
 			<!-- END styles_row_red -->
 			<!-- BEGIN styles_row_yellow -->
-			<li class="style">
-				<!-- IF not styles_row_yellow.S_DEACTIVATED -->
-				<input id="style-radio{styles_row_yellow.ID}" type="radio" name="standard_style" {styles_row_yellow.STANDARD} value="{styles_row_yellow.ID}" />
-				<label for="style-radio{styles_row_yellow.ID}"></label>
-				<!-- ENDIF -->
+			<li class="style {styles_row_yellow.ROWNAME}">
 				<div class="style-action">
+					<div class="style-checkbox">
+						<!-- IF not styles_row_yellow.S_DEACTIVATED -->
+						<input id="style-radio{styles_row_yellow.ID}" type="radio" name="standard_style" {styles_row_yellow.STANDARD} value="{styles_row_yellow.ID}" />
+						<label for="style-radio{styles_row_yellow.ID}"></label>
+						<!-- ENDIF -->
+					</div>
+				
 					{styles_row_yellow.ACTION_LINK}
 					<!-- IF not styles_row_yellow.S_DEFAULT -->
 					<a href="{styles_row_yellow.U_ENABLE}" title="{styles_row_yellow.L_ENABLE}"><i class="{styles_row_yellow.ENABLE} fa-lg"></i></a>  
 					<!-- ENDIF -->
 					<a href="{styles_row_yellow.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg"></i></a>
 					<a href="javascript:style_reset_warning({styles_row_yellow.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>	
-					<a href="javascript:style_preview({styles_row_yellow.ID});" title="{L_preview}"><i class="fa fa-search"></i></a>
+					<a href="javascript:style_preview({styles_row_yellow.ID});" title="{L_preview}"><i class="fa fa-eye fa-lg"></i></a>
 				</div>
+				<a class="style-preview" href="{styles_row_yellow.U_EDIT_STYLE}" <!-- IF styles_row_yellow.TT_CONTENT != "" -->style="background: url({styles_row_yellow.TT_CONTENT}) no-repeat; background-size: cover; background-position: center;"<!-- ENDIF -->></a>
+			
 				<div class="style-info">
-					<h2>{styles_row_yellow.TT_NAME}</h2>
+					<h2>{styles_row_yellow.TT_NAME}<span class="style-version"><i class="fa fa-tags" title="{L_version}"></i> {styles_row_yellow.VERSION}</span></h2>
 					<table>
 					<tr>
-						<td><i class="fa fa-folder-open"></i> {styles_row_yellow.TEMPLATE}</td>
-						<td><i class="fa fa-tags"></i> {styles_row_yellow.VERSION}</td>
+						<td><i class="fa fa-folder-open" title="{L_template_files}"></i> {styles_row_yellow.TEMPLATE}</td>
+						<td><i class="fa fa-pencil" title="{L_portalplugin_author}"></i> {styles_row_yellow.AUTHOR}</td>
 					</tr><tr>
-						<td><i class="fa fa-pencil"></i> {styles_row_yellow.AUTHOR}</td>
-						<td><i class="fa fa-group"></i> {styles_row_yellow.USERS}</td>
+						<td><i class="fa fa-group" title="{L_users}"></i> {styles_row_yellow.USERS}</td>
+						<td></td>
 					</tr>
 					</table>
 				</div>
-				<a class="style-preview" href="{styles_row_yellow.U_EDIT_STYLE}" <!-- IF styles_row_yellow.TT_CONTENT != "" -->style="background: url({styles_row_yellow.TT_CONTENT}) no-repeat top left / auto 100%;"<!-- ENDIF -->></a>
 			</li>
 			<!-- END styles_row_yellow -->
 			<!-- BEGIN styles_row_green -->
-			<li class="style">
-				<!-- IF not styles_row_green.S_DEACTIVATED -->
-				<input id="style-radio{styles_row_green.ID}" type="radio" name="standard_style" {styles_row_green.STANDARD} value="{styles_row_green.ID}" />
-				<label for="style-radio{styles_row_green.ID}"></label>
-				<!-- ENDIF -->
+			<li class="style {styles_row_green.ROWNAME}">
 				<div class="style-action">
+					<div class="style-checkbox">
+						<!-- IF not styles_row_green.S_DEACTIVATED -->
+						<input id="style-radio{styles_row_green.ID}" type="radio" name="standard_style" {styles_row_green.STANDARD} value="{styles_row_green.ID}" />
+						<label for="style-radio{styles_row_green.ID}"></label>
+						<!-- ENDIF -->
+					</div>
+				
 					{styles_row_green.ACTION_LINK}
 					<!-- IF not styles_row_green.S_DEFAULT -->
 					<a href="{styles_row_green.U_ENABLE}" title="{styles_row_green.L_ENABLE}"><i class="{styles_row_green.ENABLE} fa-lg"></i></a>  
 					<!-- ENDIF -->
 					<a href="{styles_row_green.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg"></i></a>
 					<a href="javascript:style_reset_warning({styles_row_green.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>	
-					<a href="javascript:style_preview({styles_row_green.ID});" title="{L_preview}"><i class="fa fa-search"></i></a>
+					<a href="javascript:style_preview({styles_row_green.ID});" title="{L_preview}"><i class="fa fa-eye fa-lg"></i></a>
 				</div>
+				<a class="style-preview" href="{styles_row_green.U_EDIT_STYLE}" <!-- IF styles_row_green.TT_CONTENT != "" -->style="background: url({styles_row_green.TT_CONTENT}) no-repeat; background-size: cover; background-position: center;"<!-- ENDIF -->></a>
+			
 				<div class="style-info">
-					<h2>{styles_row_green.TT_NAME}</h2>
+					<h2>{styles_row_green.TT_NAME}<span class="style-version"><i class="fa fa-tags" title="{L_version}"></i> {styles_row_green.VERSION}</span></h2>
 					<table>
 					<tr>
-						<td><i class="fa fa-folder-open"></i> {styles_row_green.TEMPLATE}</td>
-						<td><i class="fa fa-tags"></i> {styles_row_green.VERSION}</td>
+						<td><i class="fa fa-folder-open" title="{L_template_files}"></i> {styles_row_green.TEMPLATE}</td>
+						<td><i class="fa fa-pencil" title="{L_portalplugin_author}"></i> {styles_row_green.AUTHOR}</td>
 					</tr><tr>
-						<td><i class="fa fa-pencil"></i> {styles_row_green.AUTHOR}</td>
-						<td><i class="fa fa-group"></i> {styles_row_green.USERS}</td>
+						<td><i class="fa fa-group" title="{L_users}"></i> {styles_row_green.USERS}</td>
+						<td></td>
 					</tr>
 					</table>
 				</div>
-				<a class="style-preview" href="{styles_row_green.U_EDIT_STYLE}" <!-- IF styles_row_green.TT_CONTENT != "" -->style="background: url({styles_row_green.TT_CONTENT}) no-repeat top left / auto 100%;"<!-- ENDIF -->></a>
 			</li>
 			<!-- END styles_row_green -->
 			<!-- BEGIN styles_row_grey -->
-			<li class="style">
+			<li class="style {styles_row_grey.ROWNAME}">
 				<div class="style-action">
 					{styles_row_grey.ACTION_LINK}
 				</div>
+				<div class="style-preview" <!-- IF styles_row_grey.TT_CONTENT != "" -->style="background: url({styles_row_grey.TT_CONTENT}) no-repeat; background-size: cover; background-position: center;"<!-- ENDIF -->></div>
 				<div class="style-info">
-					<h2>{styles_row_grey.TT_NAME}</h2>
+					<h2>{styles_row_grey.TT_NAME}<span class="style-version"><i class="fa fa-tags" title="{L_version}"></i> {styles_row_grey.VERSION}</span></h2>
 					<table>
 					<tr>
-						<td><i class="fa fa-folder-open"></i> {styles_row_grey.TEMPLATE}</td>
-						<td><i class="fa fa-tags"></i> {styles_row_grey.VERSION}</td>
+						<td><i class="fa fa-folder-open" title="{L_template_files}"></i> {styles_row_grey.TEMPLATE}</td>
+						<td><i class="fa fa-pencil" title="{L_portalplugin_author}"></i> {styles_row_grey.AUTHOR}</td>
 					</tr><tr>
-						<td><i class="fa fa-pencil"></i> {styles_row_grey.AUTHOR}</td>
-						<td><i class="fa fa-group"></i> 0</td>
+						<td><i class="fa fa-group" title="{L_users}"></i> 0</td>
+						<td></td>
 					</tr>
 					</table>
 				</div>
-				<div class="style-preview" <!-- IF styles_row_grey.TT_CONTENT != "" -->style="background: url({styles_row_grey.TT_CONTENT}) no-repeat;"<!-- ENDIF -->></div>
 			</li>
 			<!-- END styles_row_grey -->
 		</ul>
+		<div class="clear"></div>
 		
 		<div class="contentFooter">
 			<button name="standard" type="button" id="standard" class="mainoption" onclick="style_default_info();"><i class="fa fa-check"></i>{L_make_default_style}</button>
