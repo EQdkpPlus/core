@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<settings styleversion="0.2.0">	
+<settings styleversion="0.2.2">	
 	<template_path>eqdkp_modern</template_path>
 	<attendees_columns>6</attendees_columns>
 	<logo_position>left</logo_position>

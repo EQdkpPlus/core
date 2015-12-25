@@ -4,10 +4,10 @@
 	<author>GodMod</author>
 	<authorEmail></authorEmail>
 	<authorUrl>http://eqdkp-plus.eu</authorUrl>
-	<creationDate>2015-04-26T09:10:38+00:00</creationDate>
+	<creationDate>2015-12-25T09:10:38+00:00</creationDate>
 	<copyright>GodMod</copyright>
 	<license>AGPL v3</license>
-	<version>0.2.0</version>
+	<version>0.2.2</version>
 	<description></description>
 	<folder>eqdkp_modern</folder>
 </install>
