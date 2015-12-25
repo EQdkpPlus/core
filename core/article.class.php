@@ -174,7 +174,7 @@ if(!class_exists('article')){
 				return $this->_cache['calendarevent'][$intEventID];
 			}
 			
-			$out = '<div class="articleCalendarEventBox table">';
+			$out = '<div class="articleCalendarEventBox table noMobileTransform">';
 
 			$eventextension	= $this->pdh->get('calendar_events', 'extension', array($intEventID));
 			if(!$eventextension) return false;
