@@ -267,12 +267,15 @@ class Manage_Logs extends page_generic {
 					'PAGINATION'	=> generate_pagination('manage_logs.php'.$this->SID.'&amp;error='.sanitize($this->in->get('error')).'&amp;type='.sanitize($this->in->get('type')), $arrErrors['count'], 50, $start),
 					'FOOTCOUNT'		=> sprintf($this->user->lang('viewlogs_footcount'), $arrErrors['count'], 50),
 			));
-			
+						
 			foreach($arrErrors['entries'] as $key => $entry) {
 				if(($key % 2) === 1){
+					$strMessage = nl2br($arrErrors['entries'][$key-1]);
+					if($logfile == 'mail.log') $strMessage = '<iframe src="data:text/html;charset=utf-8,'.htmlentities($strMessage).'" style="border:0; width: 90%; heigth:200px;"></iframe>';
+					
 					$this->tpl->assign_block_vars('errorlogs.error_row', array(
 						'DATE'			=> $this->time->user_date($entry, true),
-						'MESSAGE'		=> nl2br($arrErrors['entries'][$key-1]),
+						'MESSAGE'		=> $strMessage,
 					));
 				}
 			}
