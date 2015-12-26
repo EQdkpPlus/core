@@ -693,7 +693,7 @@ class Manage_Extensions extends page_generic {
 					'ACTION_LINK'		=> $link,
 					'ROWNAME'			=> 'style_'.$row,
 					'BUGTRACKER_URL'	=> sanitize($extension['bugtracker_url']),
-					'TT_CONTENT'		=> '<img src="http://cdn1.eqdkp-plus.eu/repository/screenshot.php?extid='.$extension['plugin_id'].'" style="max-width:200px;" alt="No Preview available" />',
+					'TT_CONTENT'		=> 'http://cdn1.eqdkp-plus.eu/repository/screenshot.php?extid='.$extension['plugin_id'],
 				));
 
 			}
