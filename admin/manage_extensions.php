@@ -616,6 +616,7 @@ class Manage_Extensions extends page_generic {
 				'AUTHOR'		=> ($install_xml->authorEmail != "") ? '<a href="mailto:'.$install_xml->authorEmail.'">'.$install_xml->author.'</a>': $install_xml->author,
 				'ACTION_LINK'	=> $link,
 				'TEMPLATE'		=> $key,
+				'USERS'			=> 0,
 			));
 			$arrStyles[] = (($install_xml->folder) ? $install_xml->folder : stripslashes($key));
 		}
