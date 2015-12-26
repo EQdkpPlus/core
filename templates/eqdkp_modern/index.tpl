@@ -18,6 +18,7 @@
 		{JS_FILES}
 		<link rel="shortcut icon" href="{TEMPLATE_PATH}/images/favicon.png" type="image/png" />
 		<link rel="icon" href="{TEMPLATE_PATH}/images/favicon.png" type="image/png" />
+		<link rel="apple-touch-icon" href="{TEMPLATE_PATH}/images/apple-touch-icon.png" />
 		{RSS_FEEDS}
 		<!-- LISTENER head -->
 		<style type="text/css">
