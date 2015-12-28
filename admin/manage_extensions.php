@@ -397,10 +397,10 @@ class Manage_Extensions extends page_generic {
 
 		}
 		$this->pdh->process_hook_queue();
-		
-		$url = 'admin/manage_extensions.php'.$this->SID.'&mes='.rawurlencode(base64_encode(serialize($arrMessage)));
+		$url_suffix = (($this->in->get('simple_head') != "") ? '&simple_head='.$this->in->get('simple_head') : '').(($this->in->get('show_only') != "") ? '&show_only='.$this->in->get('show_only') : '');
+		$url = 'admin/manage_extensions.php'.$this->SID.'&mes='.rawurlencode(base64_encode(serialize($arrMessage))).$url_suffix;
 		if($this->in->get('autoupd', 0)){
-			$url .= '&autoupd=1&current='.$this->in->get('current', 0).'&try='.$this->in->get('try', 0);
+			$url .= '&autoupd=1&current='.$this->in->get('current', 0).'&try='.$this->in->get('try', 0).$url_suffix;
 		}
 		redirect($url);
 	}
@@ -413,6 +413,8 @@ class Manage_Extensions extends page_generic {
 				$this->core->message($arrMessage[0],$arrMessage[1],$arrMessage[2]);
 			}
 		}
+		
+		$intShowOnly = ($this->in->get('show_only', '') != "") ? $this->in->get('show_only', '') : false;
 		
 		
 		//Get Extensions
@@ -967,16 +969,20 @@ class Manage_Extensions extends page_generic {
 		foreach ($this->repo->DisplayCategories() as $key=>$category){
 			$this->tpl->assign_vars(array(
 				'L_CATEGORY_'.$key	=> $category,
+				'S_SHOW_CAT_'.$key => (!$intShowOnly || $intShowOnly == $key) ? true : false,
 			));
 		}
 		
 		$this->tpl->assign_vars(array(
-			'S_HIDE_UPDATEWARNING'	=> (int)$this->config->get('repo_hideupdatewarning'),
-			'CSRF_MODE_TOKEN' => $this->CSRFGetToken('mode'),
-			'CSRF_UPDATEWARNING_TOKEN' => $this->CSRFGetToken('hide_update_warning'),
-			'AUTOUPD_ON' => $this->in->get('autoupd', 0) ? true : false,
-			'AUTOUPD_CURRENT' => $this->in->get('current', 0),
-			'AUTOUPD_TRY'	=> $this->in->get('try', 0),
+			'S_HIDE_UPDATEWARNING'		=> (int)$this->config->get('repo_hideupdatewarning'),
+			'CSRF_MODE_TOKEN' 			=> $this->CSRFGetToken('mode'),
+			'CSRF_UPDATEWARNING_TOKEN'	=> $this->CSRFGetToken('hide_update_warning'),
+			'AUTOUPD_ON' 				=> $this->in->get('autoupd', 0) ? true : false,
+			'AUTOUPD_CURRENT' 			=> $this->in->get('current', 0),
+			'AUTOUPD_TRY'				=> $this->in->get('try', 0),
+			'S_SHOW_CAT_UPLOAD'			=> ((!$intShowOnly || $intShowOnly == 'update') ? true : false),
+			'S_SHOW_TABS'				=> (!$intShowOnly),
+			'ME_URL_SUFFIX'				=> (($this->in->get('simple_head') != "") ? '&simple_head='.$this->in->get('simple_head') : '').(($this->in->get('show_only') != "") ? '&show_only='.$this->in->get('show_only') : '')
 		));
 
 		$this->tpl->add_css('

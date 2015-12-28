@@ -547,6 +547,7 @@ $('.js_reload').change(reload_settings);", 'docready');
 		));
 		
 		$this->jquery->Dialog('portalsettings', $this->user->lang('portalplugin_winname'), array('url'=>$this->root_path."admin/manage_portal.php".$this->SID."&simple_head=true&reload=1&id='+moduleid+'", 'width'=>'660', 'height'=>'400', 'withid'=>'moduleid', 'onclosejs' => '$("#save").click();'));
+		$this->jquery->Dialog('add_portalmodule', $this->user->lang('add_portal_module'), array('url'=>$this->root_path."admin/manage_extensions.php".$this->SID."&simple_head=true&show_only=3", 'width'=>'750', 'height'=>'600', 'onclosejs' => '$("#save").click();'));
 		$this->tpl->add_css(".portal_disabled { float:left; margin-left: 4px; width:230px; min-height: 16px;}");
 		$this->tpl->add_js('$(".equalHeights").equalHeights();', 'docready');
 		$this->core->set_vars(array(

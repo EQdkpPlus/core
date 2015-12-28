@@ -125,9 +125,9 @@ function repo_step4(extid, cat, extensioncode, mode){
 }
 
 function repo_step5(extid, cat, extensioncode, mode){
-	var url = 'manage_extensions.php{SID}&mode='+mode+'&cat='+cat+'&code='+extensioncode+'&extid='+extid+'&link_hash={CSRF_MODE_TOKEN}';
+	var url = 'manage_extensions.php{SID}&mode='+mode+'&cat='+cat+'&code='+extensioncode+'&extid='+extid+'&link_hash={CSRF_MODE_TOKEN}{ME_URL_SUFFIX}';
 	if(auto_update){
-		url = url + "&autoupd=1&current="+auto_current+"&try="+auto_try;
+		url = url + "&autoupd=1&current="+auto_current+"&{ME_URL_SUFFIX}try="+auto_try;
 	}
 	window.location=url;
 	return;	
@@ -258,7 +258,7 @@ $(document).ready(function(){
 });
 //]]>
 </script>
-
+<!-- IF S_NORMAL_HEADER -->
 <div class="breadcrumb-container">
 	<ul class="breamcrumb">
 		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
@@ -267,7 +267,7 @@ $(document).ready(function(){
 	</ul>
 	<div class="clear"></div>
 </div>
-
+<!-- ENDIF -->
 <div class="infobox infobox-large infobox-red clearfix" id="lu_error" style="display:none;">
 	<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> <span id="lu_error_label"></span>
 </div>
@@ -275,13 +275,14 @@ $(document).ready(function(){
 <div id="nl_progressbar" style="display:none; margin-bottom: 20px; height: 30px;">
 	<span class="nl_progressbar_label"><i class="fa fa-spinner fa-spin fa-lg" id="lu_loading_img"></i> &nbsp;<span id="nl_progressbar_label">{L_liveupdate}...</span></span>
 </div>
-
+<!-- IF S_NORMAL_HEADER -->
 <div class="floatRight">
 	<button type="button" class="update-all-btn mainoption" onclick="start_auto_update();" ><i class="fa fa-refresh"></i> {L_update_all_extensions}</button>
 </div>
 <div class="clear"></div>
+<!-- ENDIF -->
 <div id='plus_plugins_tab'>
-
+	<!-- IF S_SHOW_TABS -->
 	<ul>
 		<li><a href='#fragment-1'><span><i class="fa fa-cogs"></i> {L_CATEGORY_1}</span>{BADGE_1}</a></li>
 		<li><a href='#fragment-2'><span><i class="fa fa-paint-brush"></i> {L_CATEGORY_2}</span>{BADGE_2}</a></li>
@@ -290,7 +291,8 @@ $(document).ready(function(){
 		<li><a href='#fragment-11'><span><i class="fa fa-globe"></i> {L_CATEGORY_11}</span>{BADGE_11}</a></li>
 		<li><a href='#fragment-upload'><span><i class="fa fa-upload"></i> {L_pi_manualupload}</span></a></li>
 	</ul>
-
+	<!-- ENDIF -->
+	<!-- IF S_SHOW_CAT_1 -->
 	<div id="fragment-1">
 		<div class="contentHeader">
 			<h1 class="contentTitle">{L_CATEGORY_1}</h1>
@@ -461,7 +463,9 @@ $(document).ready(function(){
 		<!-- END plugins_row_broken -->
 		</table>
 	</div>
+	<!-- ENDIF -->
 
+	<!-- IF S_SHOW_CAT_2 -->
 	<div id="fragment-2">
 		<div class="contentHeader">
 			<h1 class="contentTitle">{L_CATEGORY_2}</h1>
@@ -645,11 +649,15 @@ $(document).ready(function(){
 		{CSRF_TOKEN}
 		</form>
 	</div>
+	<!-- ENDIF -->
 
+	<!-- IF S_SHOW_CAT_3 -->
 	<div id="fragment-3">
+		<!-- IF S_NORMAL_HEADER -->
 		<div class="tableHeader floatRight">
 			<button class="mainoption" type="button" name="addadj" onclick="window.location='manage_portal.php{SID}'"><i class="fa fa-columns"></i> {L_portalplugin_management}</button>
 		</div>
+		<!-- ENDIF -->
 		<div class="contentHeader">
 			<h1 class="contentTitle">{L_CATEGORY_3}</h1>
 		</div>
@@ -738,7 +746,9 @@ $(document).ready(function(){
 		  <!-- END pm_row_grey -->
 		</table>
 	</div>
+	<!-- ENDIF -->
 
+	<!-- IF S_SHOW_CAT_7 -->
 	<div id="fragment-7">
 		<div class="tableHeader floatRight">
 			<button class="mainoption" type="button" name="addadj" onclick="window.location='manage_settings.php{SID}#fragment-game'"><i class="fa fa-wrench"></i> {L_core_sett_fs_game}</button>
@@ -827,8 +837,9 @@ $(document).ready(function(){
 		  <!-- END games_row_grey -->
 		  </table>
 	</div>
-
+	<!-- ENDIF -->
 	
+	<!-- IF S_SHOW_CAT_11 -->
 	<div id="fragment-11">
 		<div class="contentHeader">
 			<h1 class="contentTitle">{L_CATEGORY_11}</h1>
@@ -895,7 +906,9 @@ $(document).ready(function(){
 		  <!-- END language_row_grey -->
 		  </table>
 	</div>
+	<!-- ENDIF -->
 	
+	<!-- IF S_SHOW_CAT_UPLOAD -->
 	<div id="fragment-upload">
 		<div class="infobox infobox-large infobox-blue clearfix">
 			<i class="fa fa-info-circle fa-4x pull-left"></i> {L_pi_manualupload_info}
@@ -913,4 +926,5 @@ $(document).ready(function(){
 			{CSRF_TOKEN}
 		  </form>
 	</div>
+	<!-- ENDIF -->
 </div>
