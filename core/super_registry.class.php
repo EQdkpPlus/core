@@ -183,6 +183,9 @@ abstract class super_registry {
 				if(!defined('NO_MMODE_REDIRECT') && !registry::register('config')->get('pk_maintenance_mode')){
 					if(version_compare(registry::register('config')->get('plus_version'), VERSION_INT, '<')) {
 						registry::register('config')->set('plus_version', VERSION_INT);
+						//Reset Repo
+						$this->pdh->put('repository', 'reset', array());
+						$this->pdh->process_hook_queue();
 					}
 				}
 			}

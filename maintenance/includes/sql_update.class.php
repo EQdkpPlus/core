@@ -147,6 +147,9 @@ class sql_update extends task {
 			$this->db->prepare("UPDATE __plugins SET version = ? WHERE code = ?;")->execute($version, $this->plugin_path);
 		} else {
 			$this->config->set('plus_version', $version);
+			//Reset Repo
+			$this->pdh->put('repository', 'reset', array());
+			$this->pdh->process_hook_queue();
 		}
 	}
 

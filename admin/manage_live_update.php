@@ -493,6 +493,10 @@ class Manage_Live_Update extends page_generic {
 			opcache_reset();
 		}
 		
+		//Reset Repository
+		$this->pdh->put('repository', 'reset', array());
+		$this->pdh->process_hook_queue();
+		
 		echo "true";
 		exit;
 	}
