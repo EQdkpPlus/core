@@ -183,6 +183,10 @@ ul.sf-ddm li li li.sfHover ul {
 	cursor: pointer;
 	text-decoration: none;
 }
+.cursor-move {
+	cursor: move;
+	text-decoration:none;
+}
 .clearfix:after {
 	content:".";
 	display:block;

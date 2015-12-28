@@ -2110,7 +2110,7 @@ ul.portal_block {
 	list-style-type: none;
 	padding: 10px;
 	margin:10px;
-	cursor:pointer;
+	cursor:move;
 }
 .portal_block_light {
 	list-style-type: none;

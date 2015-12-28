@@ -1,4 +1,4 @@
-<form method="post" action="{ACTION}&eventdetails" name="post">
+<form method="post" action="{ACTION}" name="post">
 	<input type="hidden" name="change_attendance" value="true" />
 	<input type="hidden" name="event_id" value="{EVENT_ID}" />
 	<div class="table fullwidth">
@@ -48,32 +48,32 @@
 					<div id="tabs-invites">
 						<!-- BEGIN invited -->
 						{invited.ICON}
-						<div class="clear"></div>
 						<!-- END invited -->
+						<div class="clear"></div>
 					</div>
 					<!-- ENDIF -->
 
 					<div id="tabs-attendees">
 						<!-- BEGIN attendance -->
 						{attendance.ICON}
-						<div class="clear"></div>
 						<!-- END attendance -->
+						<div class="clear"></div>
 					</div>
 
 					<!-- IF not PRIVATE_EVENT -->
 					<div id="tabs-maybes">
 						<!-- BEGIN maybe -->
 						{maybe.ICON}
-						<div class="clear"></div>
 						<!-- END maybe -->
+						<div class="clear"></div>
 					</div>
 					<!-- ENDIF -->
 
 					<div id="tabs-declines">
 						<!-- BEGIN decline -->
 						{decline.ICON}
-						<div class="clear"></div>
 						<!-- END decline -->
+						<div class="clear"></div>
 					</div>
 
 				</div>
