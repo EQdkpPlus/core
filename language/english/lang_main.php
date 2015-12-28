@@ -226,6 +226,12 @@ $lang = array(
 	"calendar_event_button_attend" => "Attend",
 	"calendar_event_button_maybe" => "Maybe",
 	"calendar_event_button_decline" => "Decline",
+	"calendar_sortbutton_all" => "All",
+	"calendar_sortbutton_future" => "Future",
+	"calendar_sortbutton_past" => "Past",
+	"calendar_sortbutton_mine" => "Mine",
+	"calendar_sortbutton_attendance" => "Attendance",
+
 
 	"user_app_key" => 'Private Exchangekey',
 	"user_create_new_appkey" => 'Generate new private keys',

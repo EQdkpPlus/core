@@ -222,6 +222,11 @@ $lang = array(
 "calendar_event_button_attend" => "Teilnehmen",
 "calendar_event_button_maybe" => "Vielleicht",
 "calendar_event_button_decline" => "Absagen",
+"calendar_sortbutton_all" => "Alle",
+"calendar_sortbutton_future" => "Zukünftige",
+"calendar_sortbutton_past" => "Vergangene",
+"calendar_sortbutton_mine" => "Meine",
+"calendar_sortbutton_attendance" => "Teilnahme",
 
 "adduser_send_mail" => "E-Mail senden",
 "adduser_send_mail2" => "E-Mail  an \"%s\" senden",
