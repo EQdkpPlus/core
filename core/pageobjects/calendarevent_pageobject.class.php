@@ -1028,7 +1028,7 @@ class calendarevent_pageobject extends pageobject {
 		}
 
 		// change the attendance status
-		if($this->in->exists('attendancetype') && $this->in->exists('change_attendance')){
+		if($this->in->exists('attendancetype') && $this->in->exists('change_attendance') && $this->user->is_signedin()){
 			$this->change_attendancestatus($this->url_id, $this->in->get('attendancetype', 'decline'));
 		}
 

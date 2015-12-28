@@ -28,11 +28,13 @@
 					</div>
 					<br />
 					{MAPFRAME}
+					<!-- IF S_LOGGED_IN -->
 					<div class="eventdata-buttonrow">
 						<button class="<!-- IF MYSTATUS == "1" -->green<!-- ELSE -->gray<!-- ENDIF --> button_changeattendance" name="attendancetype" value="attend">{L_calendar_event_button_attend}</button>
 						<!-- IF not PRIVATE_EVENT --><button class="<!-- IF MYSTATUS == "2" -->orange<!-- ELSE -->gray<!-- ENDIF --> button_changeattendance" name="attendancetype" value="maybe">{L_calendar_event_button_maybe}</button><!-- ENDIF -->
 						<button class="<!-- IF MYSTATUS == "3" -->red<!-- ELSE -->gray<!-- ENDIF --> button_changeattendance" name="attendancetype" value="decline">{L_calendar_event_button_decline}</button>
 					</div>
+					<!-- ENDIF -->
 				</div>
 				<br />
 				<div id="tab_attendance">
