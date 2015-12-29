@@ -68,6 +68,7 @@ class Manage_Extensions extends page_generic {
 			'VERSION'			=> sanitize($extension['version']),
 			'LEVEL'				=> sanitize($extension['level']),
 			'CHANGELOG'			=> nl2br(sanitize($extension['changelog'])),
+			'BUGTRACKER_URL'	=> sanitize($extension['bugtracker_url']),
 			'RATING'			=> $this->jquery->starrating('extension_'.md5($extension['plugin']), $this->env->phpself, array('score' => $extension['rating'], 'readonly' => true)),
 		));
 		

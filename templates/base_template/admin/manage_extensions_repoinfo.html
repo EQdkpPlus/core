@@ -32,6 +32,16 @@
 			{AUTHOR}
 		</dd>
 	</dl>
+	<!-- IF BUGTRACKER_URL != "" -->
+	<dl>
+		<dt>
+			<label>{L_bugtracker}</label></span>
+		</dt>
+		<dd>
+			<a href="{BUGTRACKER_URL}" rel="nofollow">{BUGTRACKER_URL}</a>
+		</dd>
+	</dl>
+	<!-- ENDIF -->
 	<dl>
 		<dt>
 			<label>{L_pi_rating}</label></span>
@@ -48,6 +58,7 @@
 			{DESCRIPTION}
 		</dd>
 	</dl>
+	<!-- IF CHANGELOG != "" -->
 	<dl>
 		<dt>
 			<label>{L_liveupdate_changelog}</label></span>
@@ -56,6 +67,7 @@
 			{CHANGELOG}
 		</dd>
 	</dl>
+	<!-- ENDIF -->
 	<dl>
 		<dt>
 			<label>{L_preview}</label></span>
