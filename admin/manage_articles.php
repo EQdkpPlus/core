@@ -317,8 +317,8 @@ class Manage_Articles extends page_generic {
 		$hptt_page_settings = $this->pdh->get_page_settings('admin_manage_articles', 'hptt_admin_manage_articles_list');
 
 		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => 'manage_raids.php', '%link_url_suffix%' => '&amp;upd=true'), $cid);
-		$page_suffix = '&amp;start='.$this->in->get('start', 0);
-		$sort_suffix = '?sort='.$this->in->get('sort');
+		$page_suffix = '&amp;start='.$this->in->get('start', 0).'&c='.$cid;
+		$sort_suffix = '?sort='.$this->in->get('sort').'&c='.$cid;
 
 		//footer
 		$raid_count = count($view_list);
