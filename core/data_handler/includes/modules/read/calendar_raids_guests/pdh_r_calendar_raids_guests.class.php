@@ -74,7 +74,7 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 						'raidgroup'			=> $row['raidgroup'],
 						'class'				=> $row['class'],
 						'creator'			=> $row['creator'],
-						'approved'			=> $row['approved'],
+						'status'			=> $row['status'],
 						'eventid'			=> $row['calendar_events_id'],
 					);
 					$this->guestsEvent[$row['calendar_events_id']][$row['id']] = $this->guests[$row['id']];
@@ -90,7 +90,7 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 			$output = array();
 			if(isset($this->guests) && count($this->guests) > 0){
 				foreach($this->guests as $guestID => $guestData){
-					if($guestData['approved'] == 0){
+					if($guestData['status'] == 1){
 						$output[] = $guestID;
 					}
 				}
@@ -123,8 +123,8 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 			return $this->guests[$id]['class'];
 		}
 
-		public function get_approvalstatus($id){
-			return $this->guests[$id]['approved'];
+		public function get_status($id){
+			return $this->guests[$id]['status'];
 		}
 
 		public function get_eventlink($id){
@@ -157,16 +157,17 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 			return $this->guests[$id]['group'];
 		}
 
-		// not working. must have a look another day
-		public function get_count($raidid){
-			if(isset($this->guests[$id]) && is_array($this->guests[$id])){
-				/*foreach($this->guests[$id]){
-
-				}*/
-				return count($this->guests[$id]);
-			}else{
-				return 0;
+		public function get_count($raidid, $status=0){
+			$tmpcount	= 0;
+			$tmpguests	= $this->guestsEvent[$raidid];
+			if(isset($tmpguests) && is_array($tmpguests) && count($tmpguests) > 0){
+				foreach($tmpguests as $guestdata){
+					if($guestdata['status'] == 0){
+						$tmpcount++;
+					}
+				}
 			}
+			return $tmpcount;
 		}
 
 	} //end class

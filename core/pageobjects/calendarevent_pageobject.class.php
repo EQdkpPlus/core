@@ -613,8 +613,9 @@ class calendarevent_pageobject extends pageobject {
 			$statuscount	= (isset($this->attendees_count[$statuskey])) ? count($this->attendees_count[$statuskey]) : 0;
 
 			// add the guest to the confirmed count
-			if($statuskey == 0 && isset($this->guests) && is_array($this->guests) && count($this->guests) > 0){
-				$statuscount = $statuscount+count($this->guests);
+			if($statuskey == 0){
+				$confirmed_guestcount = $this->pdh->get('calendar_raids_guests', 'count', array($this->url_id, 0));d($confirmed_guestcount);
+				$statuscount = $statuscount+$confirmed_guestcount;
 			}
 
 			$this->tpl->assign_block_vars('raidstatus', array(
@@ -764,10 +765,11 @@ class calendarevent_pageobject extends pageobject {
 				$this->tpl->assign_block_vars('guests', array(
 					'NAME'			=> $guestsdata['name'],
 					'ID'			=> $guestid,
+					'STATUS'		=> $guestsdata['status'],
 					'CLASSID'		=> $guestsdata['class'],
 					'CLASSICON'		=> $guest_clssicon,
 					'TOOLTIP'		=> $guest_tooltip,
-					'TOBEAPPROVED'	=> ($guestsdata['approved'] == 0 && $guestsdata['email'] != '') ? true : false,
+					'TOBEAPPROVED'	=> ($guestsdata['status'] == 1 && $guestsdata['email'] != '') ? true : false,
 					'EXTERNALAPPL'	=> ($guestsdata['creator'] == 0 && $guestsdata['email'] != '') ? true : false,
 					'EMAIL'			=> (isset($guestsdata['email']) && $guestsdata['email'] != '') ? $guestsdata['email'] : false,
 				));
