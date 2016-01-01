@@ -72,6 +72,8 @@ class template extends gen_class {
 	public function __construct($install=false) {
 		$this->is_install = $install;
 		require_once($this->root_path . 'libraries/yuicompressorPHP/CSSmin.php');
+		
+		$this->caching = (defined('DEBUG') && DEBUG > 2) ? false : true;
 	}
 
 	/*
@@ -1343,7 +1345,7 @@ class template extends gen_class {
 	private function compile_load(&$_str, &$handle, $do_echo){
 		$filename	= ($handle == 'main') ? $this->body_filename : $this->files[$handle];
 		$file = $this->cachedir . $filename . '.php';
-
+ 
 		// Recompile page if the original template is newer, otherwise load the compiled version
 		if($this->caching && file_exists($file) && $this->timekeeper->get('tpl_cache_'.$this->template, $filename) >= @filemtime($this->files['body'])){
 			$_str	= '';
