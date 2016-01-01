@@ -133,12 +133,7 @@ $lang = array(
 	'test_db'				=> 'Datenbank testen',
 	'prefix_error'			=> 'Kein oder ungültiges Datenbank Präfix angegeben! Bitte gib ein gültiges Präfix an.',
 	'INST_ERR_PREFIX'		=> 'Eine EQdkp Installation mit diesem Präfix existiert bereits. Lösche alle Tabellen mit diesem Präfix und wiederhole diesen Schritt. Alternativ kannst du ein anderes Präfix wählen, wenn du z.B. mehrere EQDKP Plus-Installation in einer Datenbank nutzen willst.',
-	'INST_ERR_DB_CONNECT'	=> 'Konnte keine Verbindung mit der Datenbank herstellen, siehe untenstehende Fehlermeldung.',
-	'INST_ERR_DB_NO_ERROR'	=> 'Keine Fehlermeldung angegeben.',
-	'INST_ERR_DB_NO_MYSQLI'	=> 'Die auf dieser Maschine installierte Version von MySQL ist nicht kompatibel mit der ausgewählten MySQL with MySQLi Extension Option. Bitte versuche stattdessen MySQL.',
-	'INST_ERR_DB_NO_NAME'	=> 'Kein Datenbankname angegeben.',
 	'INST_ERR_PREFIX_INVALID'	=> 'Der angegebene Datenbank-Prefix ist für diesen Datenbanktyp nicht gültig. Bitte versuche einen anderen, entferne alle Zeichen wie Bindestriche, Apostrophe, Slashes oder Backslashes.',
-	'INST_ERR_PREFIX_TOO_LONG'	=> 'Der eingegebene Datenbankprefix ist zu lang. Die maximale Länge beträgt %d Zeichen.',
 	'dbcheck_success'		=> 'Die Datenbank wurde überprüft. Es wurden keine Fehler oder Konflikte gefunden. Die Installation kann bedenkenlos fortgesetzt werden.',
 
 	//Step: encryptionkey
