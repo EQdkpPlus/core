@@ -1631,6 +1631,13 @@ if(!class_exists('game_generic')) {
 			return false;
 		}
 		
+		/**
+		 * Change the way a charname is exported in point export (data_export.class.php)
+		 * 
+		 * @param string $strCharname
+		 * @param string $intCharID
+		 * @return string
+		 */
 		public function handle_export_charnames($strCharname, $intCharID){
 			return $strCharname;
 		}
