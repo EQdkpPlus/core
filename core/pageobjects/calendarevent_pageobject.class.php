@@ -259,7 +259,7 @@ class calendarevent_pageobject extends pageobject {
 
 	public function confirm_guest(){
 		if($this->in->get('confirm_id', 0) > 0){
-			$this->pdh->put('calendar_raids_guests', 'approve_guest', array($this->in->get('confirm_id', 0)));
+			$this->pdh->put('calendar_raids_guests', 'approve_guest', array($this->in->get('confirm_id', 0), $this->in->get('gueststatus', 0)));
 		}
 		$this->pdh->process_hook_queue();
 		return 'true';
@@ -608,13 +608,14 @@ class calendarevent_pageobject extends pageobject {
 		}
 
 		$status_first	= true;
+		$this->jquery->Collapse('#viewraidcal_colapse_guests');
 		foreach($this->raidstatus as $statuskey=>$statusname){
 			$this->jquery->Collapse('#viewraidcal_colapse_'.$statuskey);
 			$statuscount	= (isset($this->attendees_count[$statuskey])) ? count($this->attendees_count[$statuskey]) : 0;
 
 			// add the guest to the confirmed count
 			if($statuskey == 0){
-				$confirmed_guestcount = $this->pdh->get('calendar_raids_guests', 'count', array($this->url_id, 0));d($confirmed_guestcount);
+				$confirmed_guestcount = $this->pdh->get('calendar_raids_guests', 'count', array($this->url_id, 0));
 				$statuscount = $statuscount+$confirmed_guestcount;
 			}
 
@@ -623,7 +624,9 @@ class calendarevent_pageobject extends pageobject {
 				'ID'		=> $statuskey,
 				'NAME'		=> $statusname,
 				'COUNT'		=> $statuscount,
-				'MAXCOUNT'	=> $eventdata['extension']['attendee_count']
+				'MAXCOUNT'	=> $eventdata['extension']['attendee_count'],
+				'GUESTCOUNT'=> $this->pdh->get('calendar_raids_guests', 'count', array($this->url_id, $statuskey)),
+				'GUESTBREAK'=> ($statuskey % 2 != 0) ? true : false,
 			));
 
 			// the class categories
@@ -750,31 +753,33 @@ class calendarevent_pageobject extends pageobject {
 				}
 			}
 			$status_first = false;
+
+			// raid guests
+			if(is_array($this->guests) && count($this->guests) > 0){
+				foreach($this->guests as $guestid=>$guestsdata){
+					if($guestsdata['status'] == $statuskey){
+						$guest_clssicon	= $this->game->decorate('primary', $guestsdata['class']);
+						$guest_tooltip 	= '<i class="fa fa-clock-o fa-lg"></i> '.$this->user->lang('raidevent_raid_signedin').": ".$this->time->user_date($guestsdata['timestamp_signup'], true, false, true).'<br/><i class="fa fa-user fa-lg"></i> '.
+											$guest_clssicon.'&nbsp;'.$this->game->get_name('primary', $guestsdata['class']).'<br/><i class="fa fa-comment fa-lg"></i> '.
+											((isset($guestsdata['note']) && $guestsdata['note'] !='') ? $guestsdata['note'] : $this->user->lang('raidevent_no_guest_note')).
+											((isset($guestsdata['email']) && $guestsdata['email'] !='' && ($this->check_permission() || $this->user->check_auth('a_cal_revent_conf', false))) ? '<br/><i class="fa fa-envelope fa-lg"></i> '.$guestsdata['email'] : '');
+						$this->tpl->assign_block_vars('raidstatus.guests', array(
+							'NAME'			=> $guestsdata['name'],
+							'ID'			=> $guestid,
+							'STATUS'		=> $guestsdata['status'],
+							'CLASSID'		=> $guestsdata['class'],
+							'CLASSICON'		=> $guest_clssicon,
+							'TOOLTIP'		=> $guest_tooltip,
+							'TOBEAPPROVED'	=> ($guestsdata['status'] == 1 && $guestsdata['email'] != '') ? true : false,
+							'EXTERNALAPPL'	=> ($guestsdata['creator'] == 0 && $guestsdata['email'] != '') ? true : false,
+							'EMAIL'			=> (isset($guestsdata['email']) && $guestsdata['email'] != '') ? $guestsdata['email'] : false,
+						));
+					}
+				}
+			}
 		}
 
 		$this->tpl->add_js("var roles_json = ".json_encode($drpdwn_roles));
-
-		// raid guests
-		if(is_array($this->guests) && count($this->guests) > 0){
-			foreach($this->guests as $guestid=>$guestsdata){
-				$guest_clssicon	= $this->game->decorate('primary', $guestsdata['class']);
-				$guest_tooltip 	= '<i class="fa fa-clock-o fa-lg"></i> '.$this->user->lang('raidevent_raid_signedin').": ".$this->time->user_date($guestsdata['timestamp_signup'], true, false, true).'<br/><i class="fa fa-user fa-lg"></i> '.
-									$guest_clssicon.'&nbsp;'.$this->game->get_name('primary', $guestsdata['class']).'<br/><i class="fa fa-comment fa-lg"></i> '.
-									((isset($guestsdata['note']) && $guestsdata['note'] !='') ? $guestsdata['note'] : $this->user->lang('raidevent_no_guest_note')).
-									((isset($guestsdata['email']) && $guestsdata['email'] !='' && ($this->check_permission() || $this->user->check_auth('a_cal_revent_conf', false))) ? '<br/><i class="fa fa-envelope fa-lg"></i> '.$guestsdata['email'] : '');
-				$this->tpl->assign_block_vars('guests', array(
-					'NAME'			=> $guestsdata['name'],
-					'ID'			=> $guestid,
-					'STATUS'		=> $guestsdata['status'],
-					'CLASSID'		=> $guestsdata['class'],
-					'CLASSICON'		=> $guest_clssicon,
-					'TOOLTIP'		=> $guest_tooltip,
-					'TOBEAPPROVED'	=> ($guestsdata['status'] == 1 && $guestsdata['email'] != '') ? true : false,
-					'EXTERNALAPPL'	=> ($guestsdata['creator'] == 0 && $guestsdata['email'] != '') ? true : false,
-					'EMAIL'			=> (isset($guestsdata['email']) && $guestsdata['email'] != '') ? $guestsdata['email'] : false,
-				));
-			}
-		}
 
 		// Dropdown Menu Array
 		$nextraidevent	= $this->pdh->get('calendar_events', 'next_raid', array($this->url_id));

@@ -51,7 +51,7 @@ if(!class_exists('pdh_w_calendar_raids_guests')){
 			return false;
 		}
 
-		public function approve_guest($guestid, $status=0){
+		public function approve_guest($guestid, $status=1){
 			$objQuery = $this->db->prepare("UPDATE __calendar_raid_guests :p WHERE id=?")->set(array(
 				'status'				=> $status,
 			))->execute($guestid);
@@ -62,11 +62,12 @@ if(!class_exists('pdh_w_calendar_raids_guests')){
 		public function send_email($guestid){
 			$subject		= $this->user->lang('raidevent_guest_emailsubject', false, false, $this->config->get('default_locale'));
 			$email			= $this->pdh->get('calendar_raids_guests', 'email', array($guestid));
-			#$aprovalstatus	= $this->pdh->get('calendar_raids_guests', 'status', array($guestid));
+			$aprovalstatus	= $this->pdh->get('calendar_raids_guests', 'status', array($guestid));
 			$this->email->Set_Language($this->config->get('default_lang'));
 			$arrBodyvars = array(
 				'NAME' 		=> $this->pdh->get('calendar_raids_guests', 'name', array($guestid)),
 				'LINK'		=> $this->pdh->get('calendar_raids_guests', 'eventlink', array($guestid)),
+				'STATUS'	=> $this->user->lang(array('raidevent_raid_status', $aprovalstatus))
 			);
 			$this->email->SendMailFromAdmin($email, $subject, 'calendarguests_application.html', $arrBodyvars, $this->config->get('lib_email_method'));
 		}
