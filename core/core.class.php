@@ -472,6 +472,7 @@ class core extends gen_class {
 					'S_ADMIN'					=> $this->user->check_auth('a_', false),
 					'SID'						=> ((isset($this->SID)) ? $this->SID : '?' . 's='),
 					'GAME'						=> $this->config->get('default_game'),
+					'GAME_LANGUAGE'				=> $this->config->get('game_language'),
 					'S_LOGGED_IN'				=> ($this->user->is_signedin()) ? true : false,
 					'CSRF_TOKEN'				=> '<input type="hidden" name="'.$this->user->csrfPostToken().'" value="'.$this->user->csrfPostToken().'"/>',
 					'SEO_EXTENSION'				=> $this->routing->getSeoExtension(),

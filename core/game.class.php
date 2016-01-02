@@ -44,6 +44,7 @@ class game extends gen_class {
 							);
 	public $obj				= array();
 	private	$blnClassUpdateChecked = false;
+	public $overwriteMode = 1;
 
 	//fill data with gameinfos (classes, races, factions, filters, etc.)
 	public function __construct($installer=false, $lang_name=''){
@@ -1174,12 +1175,21 @@ class game extends gen_class {
 		}
 	}
 
-	public function installGame($newgame, $lang){
+	/**
+	 * Installs a game
+	 * 
+	 * @param string $strGamename
+	 * @param string $strGamelang
+	 * @param number $intOverwriteData {0:write no data; 1: overwrite all data; 2: append data}
+	 */
+	public function installGame($strGamename, $strGamelang, $intOverwriteData=1){
 		//Uninstall old game
 		$this->uninstallGame();
 		
-		$this->game = $newgame;
-		if ((int)$this->config->get('update_first_game_inst') !== 1){
+		$this->game = $strGamename;
+		
+		//If Overwrite, reset some
+		if ($intOverwriteData === 1){
 			//Reset some data
 			$this->resetEvents();
 			$this->resetItempools();
@@ -1187,76 +1197,87 @@ class game extends gen_class {
 			
 			//Add Default Pools - There is always an itempool with ID 1
 			$this->addMultiDKPPool("Default", "Default MultiDKPPool", array(), array(1));
+		}		
+		
+		//If write any data
+		if($intOverwriteData !== 0){
+			//Reset Ranks
+			$this->resetRanks();
+			//Reset Raidgroups
+			$this->resetRaidgroups();
+			
+			
+			//Install new game
+			$this->init_gameclass();
+			
+			if(!in_array($strGamelang, $this->gameinfo()->langs)) {
+				$strGamelang = $this->gameinfo()->langs[0];
+			}
+			
+			$this->gameinfo()->lang = $strGamelang;
+			$this->gameinfo()->overwriteMode = $intOverwriteData;
+			$this->overwriteMode = $intOverwriteData;
+			$install = (defined('EQDKP_INSTALLED') && EQDKP_INSTALLED) ? false : true;
+			
+			$info = $this->gameinfo()->install($install);
+			
 		}
-		
-		//Reset Ranks
-		$this->resetRanks();
-		//Reset Raidgroups
-		$this->resetRaidgroups();
-
-		//Install new game
-		$this->init_gameclass();
-		
-		if(!in_array($lang, $this->gameinfo()->langs)) {
-			$lang = $this->gameinfo()->langs[0];
-		}
-		
-		$this->gameinfo()->lang = $lang;
-		$install = (defined('EQDKP_INSTALLED') && EQDKP_INSTALLED) ? false : true;
-		
-		$info = $this->gameinfo()->install($install);
 		
 		$game_config = array(
-				'default_game'		=> $newgame,
-				'game_language'		=> $lang,
+				'default_game'		=> $strGamename,
+				'game_language'		=> $strGamelang,
 				'game_version'		=> $this->gameinfo()->version
 		);
 		
-		//infotooltip-config changes
-		$itt_config = array(
-				'infotooltip_use' => 0
-		);
-		
-		$parserlist = $this->itt->get_parserlist($newgame);
-		if(count($parserlist)) {
-			$itt_config['infotooltip_use'] = 1;
-			ksort($parserlist);
-			reset($parserlist);
-			$itt_config['itt_prio1'] = current($parserlist);
-			$itt_config['itt_prio2'] = next($parserlist);
-			unset($parserlist);
-			$langlist = $this->itt->get_supported_languages($newgame);
-			$itt_config['itt_langprio1'] = (in_array('en', $langlist)) ? 'en' : ((in_array('de', $langlist)) ? 'de' : ((in_array('fr', $langlist)) ? 'fr' : current($langlist)));
-			$itt_config['itt_langprio2'] = (in_array('de', $langlist)) ? 'de' : ((in_array('fr', $langlist)) ? 'fr' : ((next($langlist)) ? current($langlist) : prev($langlist)));
-			$itt_config['itt_langprio3'] = (in_array('fr', $langlist)) ? 'fr' : ((next($langlist)) ? current($langlist) : prev($langlist));
-			unset($langlist);
-		}
-		$this->config->set(array_merge($game_config, ((is_array($info['config'])) ? $info['config'] : array()), $itt_config, $this->itt->changed_prio1($newgame, $itt_config['itt_prio1'])));
-		
-		$queries = $info['queries'];
-		
-		//classcolors
-		if(is_array($this->gameinfo()->get_class_colors()) && $this->pdh->put('class_colors', 'truncate_classcolor', array())) {
-			$style_ids = array();
-			$style_ids = $this->pdh->get('styles', 'id_list');
-			foreach ($this->gameinfo()->get_class_colors() as $class_id => $color) {
-				foreach($style_ids as $id) {
-					$this->pdh->put('class_colors', 'add_classcolor', array($id, $class_id, $color));
+		//If write any data
+		if($intOverwriteData !== 0){
+			//infotooltip-config changes
+			$itt_config = array(
+					'infotooltip_use' => 0
+			);
+			
+			$parserlist = $this->itt->get_parserlist($strGamename);
+			if(count($parserlist)) {
+				$itt_config['infotooltip_use'] = 1;
+				ksort($parserlist);
+				reset($parserlist);
+				$itt_config['itt_prio1'] = current($parserlist);
+				$itt_config['itt_prio2'] = next($parserlist);
+				unset($parserlist);
+				$langlist = $this->itt->get_supported_languages($strGamename);
+				$itt_config['itt_langprio1'] = (in_array('en', $langlist)) ? 'en' : ((in_array('de', $langlist)) ? 'de' : ((in_array('fr', $langlist)) ? 'fr' : current($langlist)));
+				$itt_config['itt_langprio2'] = (in_array('de', $langlist)) ? 'de' : ((in_array('fr', $langlist)) ? 'fr' : ((next($langlist)) ? current($langlist) : prev($langlist)));
+				$itt_config['itt_langprio3'] = (in_array('fr', $langlist)) ? 'fr' : ((next($langlist)) ? current($langlist) : prev($langlist));
+				unset($langlist);
+			}
+
+			$queries = $info['queries'];
+			
+			//classcolors
+			if(is_array($this->gameinfo()->get_class_colors()) && $this->pdh->put('class_colors', 'truncate_classcolor', array())) {
+				$style_ids = array();
+				$style_ids = $this->pdh->get('styles', 'id_list');
+				foreach ($this->gameinfo()->get_class_colors() as $class_id => $color) {
+					foreach($style_ids as $id) {
+						$this->pdh->put('class_colors', 'add_classcolor', array($id, $class_id, $color));
+					}
 				}
 			}
-		}
-		if(is_array($queries)) {
-			foreach($queries as $sql) {
-				$this->db->query($sql);
+			
+			//Custom Queries
+			if(is_array($queries)) {
+				foreach($queries as $sql) {
+					$this->db->query($sql);
+				}
 			}
+			//Add Profilefields
+			$this->AddProfileFields();
+			
+			//roles
+			$this->load_default_roles();
 		}
-		//Add Profilefields
-		$this->AddProfileFields();
 		
-		//roles
-		$this->load_default_roles();
-		
-		$this->config->del('update_first_game_inst');
+		$this->config->set(array_merge($game_config, ((is_array($info['config'])) ? $info['config'] : array()), $itt_config, $this->itt->changed_prio1($newgame, $itt_config['itt_prio1'])));
 		
 		//Reset PDH Cache
 		$this->pdh->process_hook_queue();
@@ -1271,67 +1292,142 @@ class game extends gen_class {
 		}
 	}
 	
-	//Delets all events
+	/**
+	 * Delets all events
+	 */
 	public function resetEvents(){
 		$this->pdh->put("event", "reset", array());
 		$this->pdh->process_hook_queue();
 	}
 		
+	/**
+	 * Adds an Event
+	 * 
+	 * @param unknown $strName
+	 * @param unknown $intValue
+	 * @param unknown $strIcon
+	 * @return boolean|mixed
+	 */
 	public function addEvent($strName, $intValue, $strIcon){
-		return $this->pdh->put("event", "add_event", array($strName, $intValue, $strIcon));
+		return ($this->overwriteMode === 0) ? true : $this->pdh->put("event", "add_event", array($strName, $intValue, $strIcon));
 	}
 	
-	//Deletes all itempools execept the one with ID 1
+	/**
+	 * Deletes all itempools execept the one with ID 1
+	 */
 	public function resetItempools(){
 		$this->pdh->put("itempool", "reset", array());
 		$this->pdh->process_hook_queue();
 	}
 	
+	/**
+	 * Adds an Itempool
+	 * 
+	 * @param unknown $strName
+	 * @param unknown $strDescription
+	 * @return boolean|mixed
+	 */
 	public function addItempool($strName, $strDescription){
-		return $this->pdh->put("itempool", "add_itempool", array($strName, $strDescription));
+		return ($this->overwriteMode === 0) ? true : $this->pdh->put("itempool", "add_itempool", array($strName, $strDescription));
 	}
 	
+	/**
+	 * Adds a link
+	 * 
+	 * @param unknown $strName
+	 * @param unknown $strURL
+	 * @return boolean|mixed
+	 */
 	public function addLink($strName, $strURL){
-		return $this->pdh->put("links", "add", array($strName, $strURL));
+		return ($this->overwriteMode === 0) ? true : $this->pdh->put("links", "add", array($strName, $strURL));
 	}
 	
+	/**
+	 * Removes a Link by given name
+	 * 
+	 * @param unknown $strName
+	 */
 	public function removeLink($strName){
 		$this->pdh->put("links", "deleteByName", array($strName));
 		$this->pdh->process_hook_queue();
 	}
 	
-	//Deletes all MultiDKP Pools. Default one will be created on game install.
+	/**
+	 * Deletes all MultiDKP Pools. Default one will be created on game install.
+	 */
 	public function resetMultiDKPPools(){
 		$this->pdh->put("multidkp", "reset", array());
 		$this->pdh->process_hook_queue();
 	}
 	
+	/**
+	 * Adds a MultiDKP Pool
+	 * 
+	 * @param unknown $strName
+	 * @param unknown $strDescription
+	 * @param unknown $arrEventIDs
+	 * @param unknown $arrItempoolIDs
+	 * @return boolean|mixed
+	 */
 	public function addMultiDKPPool($strName, $strDescription, $arrEventIDs, $arrItempoolIDs){
-		return $this->pdh->put("multidkp", "add_multidkp", array($strName, $strDescription, $arrEventIDs, $arrItempoolIDs));
+		return ($this->overwriteMode === 0) ? true : $this->pdh->put("multidkp", "add_multidkp", array($strName, $strDescription, $arrEventIDs, $arrItempoolIDs));
 	}
-	//Updates the Default MultiDKP Pools
+
+	/**
+	 * Updates the default MultiDKP Pool
+	 * 
+	 * @param unknown $strName
+	 * @param unknown $strDescription
+	 * @param unknown $arrEventIDs
+	 * @return boolean|mixed
+	 */
 	public function updateDefaultMultiDKPPool($strName, $strDescription, $arrEventIDs){
-		return $this->pdh->put("multidkp", "update_multidkp", array(1, $strName, $strDescription, $arrEventIDs, array(1), array()));
+		return ($this->overwriteMode === 0) ? true : $this->pdh->put("multidkp", "update_multidkp", array(1, $strName, $strDescription, $arrEventIDs, array(1), array()));
 	}
 	
-	//Deletes all ranks
+
+	/**
+	 * Truncates all Ranks
+	 */
 	public function resetRanks(){
 		$this->pdh->put("rank", "truncate", array());
 		$this->pdh->process_hook_queue();
 	}
 	
+	/**
+	 * Adds a Rank
+	 * 
+	 * @param unknown $intID
+	 * @param unknown $strName
+	 * @param string $blnDefault
+	 * @param string $strIcon
+	 * @return boolean|mixed
+	 */
 	public function addRank($intID, $strName, $blnDefault=false, $strIcon=''){
-		return $this->pdh->put("rank", "add_rank", array($intID, $strName, false, '', '', $intID+1, $blnDefault, $strIcon));
+		return ($this->overwriteMode === 0) ? true : $this->pdh->put("rank", "add_rank", array($intID, $strName, false, '', '', $intID+1, $blnDefault, $strIcon));
 	}
 	
-	//Delete all Raidgroups except the Default Raidgroup with ID 1
+	/**
+	 * Delete all Raidgroups except the Default Raidgroup with ID 1
+	 */
 	public function resetRaidgroups(){
 		$this->pdh->put('raid_groups', 'reset', array());
 		$this->pdh->process_hook_queue();
 	}
 	
+	/**
+	 * Adds a Raidgroup
+	 * 
+	 * @param unknown $name
+	 * @param unknown $color
+	 * @param string $desc
+	 * @param number $standard
+	 * @param number $sortid
+	 * @param number $system
+	 * @return boolean|mixed
+	 */
 	public function addRaidgroup($name, $color, $desc='', $standard=0, $sortid=0, $system=0){
-		$this->pdh->put('raid_groups', 'add', array($name, $color, $desc, $standard, $sortid, $system));
+		return ($this->overwriteMode === 0) ? true : $this->pdh->put('raid_groups', 'add', array($name, $color, $desc, $standard, $sortid, $system));
 	}
 	
 	
@@ -1385,6 +1481,8 @@ if(!class_exists('game_generic')) {
 		public $character_unique_ids = false;
 		public $author = "";
 		public $version = "";
+		public $lang = "";
+		public $overwriteMode;
 
 		public function __construct(){
 			$this->path = $this->root_path.'games/'.$this->this_game.'/';

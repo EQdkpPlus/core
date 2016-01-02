@@ -1807,6 +1807,13 @@ $lang = array(
 		'notification_prio_0' => 'Green',
 		'notification_prio_1' => 'Orange',
 		'notification_prio_2' => 'Red',
+		
+		"overwrite_gamedata" => "Overwrite Gamedata",
+		"overwrite_gamedata_info" => "Should your gamedata like Events or MultiDKP-Pools be overwritten on game- or gamelanguage-change by the default gamedata?",
+		"overwrite_gamedata_yes" => "Yes (own Events and MultiDKP-Pools will be deleted, standings might be change)",
+		"overwrite_gamedata_no" => "No",
+		"overwrite_gamedata_nobut" => "No, but add the gamedata to my data",
+		
 );
 
 ?>
