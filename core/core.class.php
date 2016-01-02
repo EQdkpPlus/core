@@ -3,7 +3,7 @@
  *	Package:	EQdkp-plus
  *	Link:		http://eqdkp-plus.eu
  *
- *	Copyright (C) 2006-2015 EQdkp-Plus Developer Team
+ *	Copyright (C) 2006-2016 EQdkp-Plus Developer Team
  *
  *	This program is free software: you can redistribute it and/or modify
  *	it under the terms of the GNU Affero General Public License as published
@@ -472,6 +472,7 @@ class core extends gen_class {
 					'S_ADMIN'					=> $this->user->check_auth('a_', false),
 					'SID'						=> ((isset($this->SID)) ? $this->SID : '?' . 's='),
 					'GAME'						=> $this->config->get('default_game'),
+					'GAME_LANGUAGE'				=> $this->config->get('game_language'),
 					'S_LOGGED_IN'				=> ($this->user->is_signedin()) ? true : false,
 					'CSRF_TOKEN'				=> '<input type="hidden" name="'.$this->user->csrfPostToken().'" value="'.$this->user->csrfPostToken().'"/>',
 					'SEO_EXTENSION'				=> $this->routing->getSeoExtension(),

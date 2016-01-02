@@ -39,4 +39,59 @@
 		</div>
 	</div>
 {CSRF_TOKEN}
+<input type="hidden" id="overwrite-game" name="overwrite-game" value="0"/>
 </form>
+
+<div id="dialog-change-game" title="{L_overwrite_gamedata}" style="display:none;">
+	{L_overwrite_gamedata_info}<br /><br />
+	<label><input type="radio" name="game_overwrite" value="1" checked="checked"> {L_overwrite_gamedata_yes}</label>
+	<br /><label><input type="radio" name="game_overwrite" value="2"> {L_overwrite_gamedata_nobut}</label>
+	<br /><label><input type="radio" name="game_overwrite" value="0"> {L_overwrite_gamedata_no}</label>
+	<br /><br /><button type="button" id="game-overwrite-button"><i class="fa fa-check"></i> {L_submit}</button>
+</div>
+
+<script>
+var game_changed = false;
+var gamelang_changed = false;
+var origin_game = false;
+var origin_lang = false;
+$(document).ready(function(){
+	origin_game = $('#default_game').val();
+	origin_lang = "{SET_GAME_LANG}";
+	
+	$( "#dialog-change-game" ).dialog({
+		height: 250,
+		width: 400,
+		modal: true,
+		autoOpen: false,
+	});
+	
+	$('#default_game').on('change', function(){
+		var new_game = $('#default_game').val();
+		if(new_game != origin_game) {
+			game_changed = true;
+			$("input[name='game_overwrite'][value='1']").attr("checked","checked");
+			$( "#dialog-change-game" ).dialog('open');
+		} else {
+			game_changed = false;
+		}
+	})
+	
+	$('#game_language').on('change', function(){
+		var new_lang = $('#game_language').val();
+		if(new_lang != origin_lang && !game_changed) {
+			gamelang_changed = true;
+			$("input[name='game_overwrite'][value='0']").attr("checked","checked");
+			$( "#dialog-change-game" ).dialog('open');
+		} else {
+			gamelang_changed = false;
+		}
+	})
+	
+	$('#game-overwrite-button').on('click', function(){
+		var selected = $("input[name='game_overwrite']:checked").val();
+		$('#overwrite-game').val(selected);
+		$( "#dialog-change-game" ).dialog('close');
+	})
+})
+</script>

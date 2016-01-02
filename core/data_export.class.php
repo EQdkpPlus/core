@@ -3,7 +3,7 @@
  *	Package:	EQdkp-plus
  *	Link:		http://eqdkp-plus.eu
  *
- *	Copyright (C) 2006-2015 EQdkp-Plus Developer Team
+ *	Copyright (C) 2006-2016 EQdkp-Plus Developer Team
  *
  *	This program is free software: you can redistribute it and/or modify
  *	it under the terms of the GNU Affero General Public License as published
@@ -134,36 +134,37 @@ class content_export extends gen_class {
 					}
 				}
 				
+				$adjustments = array();
+				if ($withMemberAdjustments){
+					$adj_list = $this->pdh->get('adjustment', 'adjsofmember', array($member));
+					$i = 0;
+					foreach($adj_list as $adj_id){
+						$adjustments['adjustment:'.$adj_id] = array(
+								'reason'	=> $this->pdh->get('adjustment', 'reason', array($adj_id)),
+								'value'		=> $this->pdh->get('adjustment', 'value', array($adj_id)),
+								'timestamp' => $this->pdh->get('adjustment', 'date', array($adj_id)),
+								'event_id'	=> $this->pdh->get('adjustment', 'event', array($adj_id)),
+						);
+						$i++;
+					}
+				}
+				
 				$out['players']['player:'.$member] = array(
 					'id'			=> $member,
 					'name'			=> $this->game->handle_export_charnames(unsanitize($this->pdh->get('member', 'name', array($member))), $member),
 					'active'		=> $this->pdh->get('member', 'active', array($member)),
 					'hidden'		=> $this->pdh->get('member', 'is_hidden', array($member)),
 					'main_id'		=> $this->pdh->get('member', 'mainid', array($member)),
-					'main_name'		=> unsanitize($this->pdh->get('member', 'mainname', array($member))),
+					'main_name'		=> $this->game->handle_export_charnames(unsanitize($this->pdh->get('member', 'mainname', array($member))), $this->pdh->get('member', 'mainid', array($member))),
 
 					'class_id'		=> $this->pdh->get('member', 'classid', array($member)),
 					'class_name'	=> $this->pdh->get('member', 'classname', array($member)),
 
 					'points'		=> $points,
 					'items'			=> $items,
+					'adjustments'	=> $adjustments,
 				);
 				
-				if ($withMemberAdjustments){
-					$adjustments = array();
-					$adj_list = $this->pdh->get('adjustment', 'adjsofmember', array($member));
-					$i = 0;
-					foreach($adj_list as $adj_id){
-						$adjustments['adjustment:'.$adj_id] = array(
-							'reason'	=> $this->pdh->get('adjustment', 'reason', array($adj_id)),
-							'value'		=> $this->pdh->get('adjustment', 'value', array($adj_id)),
-							'timestamp' => $this->pdh->get('adjustment', 'date', array($adj_id)),
-							'event_id'	=> $this->pdh->get('adjustment', 'event', array($adj_id)),
-						);
-						$i++;
-					}
-					$out['players']['player:'.$member]['adjustments'] = $adjustments;
-				}
 			}
 		} else {
 			$out['players'] = '';

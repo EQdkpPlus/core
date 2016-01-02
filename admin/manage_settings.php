@@ -3,7 +3,7 @@
  *	Package:	EQdkp-plus
  *	Link:		http://eqdkp-plus.eu
  *
- *	Copyright (C) 2006-2015 EQdkp-Plus Developer Team
+ *	Copyright (C) 2006-2016 EQdkp-Plus Developer Team
  *
  *	This program is free software: you can redistribute it and/or modify
  *	it under the terms of the GNU Affero General Public License as published
@@ -976,12 +976,12 @@ class mmocms_settings extends page_generic {
 
 			// Since ChangeGame alters Config it has to be executed after config-save
 			if($game_changed) {
-				$this->game->installGame($this->in->get('default_game'), $this->in->get('game_language'));
+				$this->game->installGame($this->in->get('default_game'), $this->in->get('game_language'), $this->in->get('overwrite-game', 0));
 				$this->pdc->flush();
 				$this->form->reset_fields();
 				$this->settings_saved = true;
 				$this->display();
-				#redirect('admin/manage_settings.php'.$this->SID);		// we need to reload cause of the per-game settings
+				redirect('admin/manage_settings.php'.$this->SID);		// we need to reload cause of the per-game settings
 			}
 
 			//clear cache now
@@ -998,6 +998,10 @@ class mmocms_settings extends page_generic {
 		// Output the form, pass values in
 		$this->form->output($this->config->get_config());
 
+		$this->tpl->assign_vars(array(
+			'SET_GAME_LANG'	=> $this->config->get('game_language'),
+		));
+		
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('config_title'),
 			'template_file'		=> 'admin/manage_settings.html',

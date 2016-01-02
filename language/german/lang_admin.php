@@ -3,7 +3,7 @@
  *	Package:	Language File
  *	Link:		http://eqdkp-plus.eu
  *
- *	Copyright (C) 2006-2015 EQdkp-Plus Developer Team
+ *	Copyright (C) 2006-2016 EQdkp-Plus Developer Team
  *
  *	This program is free software: you can redistribute it and/or modify
  *	it under the terms of the GNU Affero General Public License as published
@@ -1677,7 +1677,12 @@ $lang = array(
 "fatal_error_id" => "Fehler-ID",
 "core_sett_f_enable_leaderboard" => "Leaderboard anzeigen",
 "add_portal_module" => "Portalmodul hinzufügen",
-
+"overwrite_gamedata" => "Spieldaten überschreiben",
+"overwrite_gamedata_info" => "Sollen deine Spieldaten wie Events oder MultiDKP-Pool beim Spiel- bzw. Sprachwechsel überschrieben werden?",
+"overwrite_gamedata_yes" => "Ja (Eigene Events und MultiDKP-Pools gehen dabei verloren, so dass die Punktestände sich verändern können)",
+"overwrite_gamedata_no" => "Nein",
+"overwrite_gamedata_nobut" => "Nein, aber füge die Standarddaten zu meinen Daten hinzu",
+		
 "pi_manualupload" => "Manueller Upload",
 "pi_manualupload_info" => "Hier kannst du heruntergeladene Erweiterungen wie z.B. Styles, Plugins oder Portalmodule hochladen. Um die Erweiterungen abschließend zu installieren, gehe auf die entsprechende Verwaltungsseite.<br /><b>Weitere Erweitungen kannst du von unserer Projektseite herunterladen: <a href=\"".EQDKP_REPO_URL."\" target=\"_blank\">".EQDKP_REPO_URL."</a>.</b>",
 "pi_choose_file" => "Erweiterung zum Hochladen auswählen",
