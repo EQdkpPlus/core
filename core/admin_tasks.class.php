@@ -35,8 +35,8 @@ class admin_tasks extends gen_class {
 						'content_func'	=> array($this, 'contentConfirmChars'),
 						'action_func'	=> array($this, 'actionHandleChars'),
 						'actions'		=> array(
-								'confirm' => array('icon' => 'fa fa-check', 'title' => 'uc_confirm_char', 'permissions' => array('a_members_man')),
-								'delete'  => array('icon' => 'fa-trash-o', 'title' => 'delete_member', 'permissions' => array('a_members_man')),
+								'confirm'	=> array('icon' => 'fa fa-check', 'title' => 'uc_confirm_char', 'permissions' => array('a_members_man')),
+								'delete'	=> array('icon' => 'fa-trash-o', 'title' => 'delete_member', 'permissions' => array('a_members_man')),
 						),
 				),
 
@@ -49,8 +49,8 @@ class admin_tasks extends gen_class {
 						'content_func'	=> array($this, 'contentDeleteChars'),
 						'action_func'	=> array($this, 'actionHandleChars'),
 						'actions'		=> array(
-								'restore' => array('icon' => 'fa fa-refresh', 'title' => 'uc_rewoke_char', 'permissions' => array('a_members_man')),
-								'delete'  => array('icon' => 'fa-trash-o', 'title' => 'delete_member', 'permissions' => array('a_members_man')),
+								'restore'	=> array('icon' => 'fa fa-refresh', 'title' => 'uc_rewoke_char', 'permissions' => array('a_members_man')),
+								'delete'	=> array('icon' => 'fa-trash-o', 'title' => 'delete_member', 'permissions' => array('a_members_man')),
 						),
 				),
 
@@ -62,8 +62,8 @@ class admin_tasks extends gen_class {
 						'content_func'	=> array($this, 'contentInactiveUsers'),
 						'action_func'	=> array($this, 'actionInactiveUsers'),
 						'actions'		=> array(
-								'activate' => array('icon' => 'fa fa-check', 'title' => 'activate_user', 'permissions' => array('a_users_man')),
-								'delete'  => array('icon' => 'fa-trash-o', 'title' => 'delete_user', 'permissions' => array('a_users_man')),
+								'activate'	=> array('icon' => 'fa fa-check', 'title' => 'activate_user', 'permissions' => array('a_users_man')),
+								'delete'	=> array('icon' => 'fa-trash-o', 'title' => 'delete_user', 'permissions' => array('a_users_man')),
 						),
 				),
 
@@ -75,8 +75,10 @@ class admin_tasks extends gen_class {
 						'content_func'	=> array($this, 'contentGuestApplication'),
 						'action_func'	=> array($this, 'actionGuestApplication'),
 						'actions'		=> array(
-								'confirm' => array('icon' => 'fa fa-check', 'title' => 'raidevent_confirm_guest', 'permissions' => array('a_users_man')),
-								'delete'  => array('icon' => 'fa-trash-o', 'title' => 'raidevent_delete_guest', 'permissions' => array('a_users_man')),
+								'confirm'	=> array('icon' => 'fa-thumbs-up', 'title' => 'raidevent_confirm_guest', 'permissions' => array('a_users_man')),
+								'decline'	=> array('icon' => 'fa-thumbs-down', 'title' => 'raidevent_decline_guest', 'permissions' => array('a_users_man')),
+								'backup'	=> array('icon' => 'fa-question-circle', 'title' => 'raidevent_backup_guest', 'permissions' => array('a_users_man')),
+								'delete'	=> array('icon' => 'fa-trash-o', 'title' => 'raidevent_delete_guest', 'permissions' => array('a_users_man')),
 						),
 				),
 		);
@@ -329,10 +331,16 @@ class admin_tasks extends gen_class {
 			}
 		}
 
-		if($strAction == 'confirm'){
+		if($strAction == 'confirm' || $strAction == 'decline' || $strAction == 'backup'){
+			switch($strAction){
+				case 'confirm' : $newstatus = 0; break;
+				case 'decline' : $newstatus = 2; break;
+				case 'backup' : $newstatus = 3; break;
+				default: $newstatus = 1;
+			}
 			if (count($arrIDs)){
 				foreach($arrIDs as $guest_id){
-					$this->pdh->put('calendar_raids_guests', 'approve_guest', array((int)$guest_id));
+					$this->pdh->put('calendar_raids_guests', 'approve_guest', array((int)$guest_id, $newstatus));
 				}
 				$this->pdh->process_hook_queue();
 				$this->core->message($this->user->lang('raidevent_confirm_guest'), $this->user->lang('success'), 'green');

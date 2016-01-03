@@ -32,7 +32,7 @@ if(!class_exists('pdh_w_calendar_raids_guests')){
 			$this->pdh->enqueue_hook('guests_update');
 		}
 
-		public function insert_guest($eventid, $name='', $classid='', $group='', $note='', $email=''){
+		public function insert_guest($eventid, $name='', $classid=0, $group=0, $note='', $email=''){
 			$userid		= $this->user->data['user_id'];
 			$creator 	= ($userid && $userid > 0) ? $userid : 0;
 			$objQuery = $this->db->prepare("INSERT INTO __calendar_raid_guests :p")->set(array(
@@ -41,19 +41,19 @@ if(!class_exists('pdh_w_calendar_raids_guests')){
 				'email'					=> $email,
 				'note'					=> $note,
 				'timestamp_signup'		=> $this->time->time,
-				'class'					=> $classid,
-				'raidgroup'				=> $group,
+				'class'					=> ((int)$classid > 0) ? $classid : 0,
+				'raidgroup'				=> ((int) $group > 0) ? $group : 0,
 				'creator'				=> $creator,
-				'approved'				=> ($creator > 0) ? 1 : 0,
+				'status'				=> ($creator > 0) ? 0 : 1,
 			))->execute();
 			$this->pdh->enqueue_hook('guests_update', array($objQuery->insertId));
 			if ($objQuery) return $objQuery->insertId;
 			return false;
 		}
 
-		public function approve_guest($guestid){
+		public function approve_guest($guestid, $status=1){
 			$objQuery = $this->db->prepare("UPDATE __calendar_raid_guests :p WHERE id=?")->set(array(
-				'approved'				=> '1',
+				'status'				=> $status,
 			))->execute($guestid);
 			$this->pdh->enqueue_hook('guests_update', array($guestid));
 			$this->send_email($guestid);
@@ -62,18 +62,19 @@ if(!class_exists('pdh_w_calendar_raids_guests')){
 		public function send_email($guestid){
 			$subject		= $this->user->lang('raidevent_guest_emailsubject', false, false, $this->config->get('default_locale'));
 			$email			= $this->pdh->get('calendar_raids_guests', 'email', array($guestid));
-			#$aprovalstatus	= $this->pdh->get('calendar_raids_guests', 'approvalstatus', array($guestid));
+			$aprovalstatus	= $this->pdh->get('calendar_raids_guests', 'status', array($guestid));
 			$this->email->Set_Language($this->config->get('default_lang'));
 			$arrBodyvars = array(
 				'NAME' 		=> $this->pdh->get('calendar_raids_guests', 'name', array($guestid)),
 				'LINK'		=> $this->pdh->get('calendar_raids_guests', 'eventlink', array($guestid)),
+				'STATUS'	=> $this->user->lang(array('raidevent_raid_status', $aprovalstatus))
 			);
 			$this->email->SendMailFromAdmin($email, $subject, 'calendarguests_application.html', $arrBodyvars, $this->config->get('lib_email_method'));
 		}
 
-		public function update_guest($guestid, $classid='', $group='', $note=''){
-			$classname	= ($classname)	? $classname: $this->pdh->get('guests', 'class', array($guestid));
-			$group		= ($group)		? $group	: $this->pdh->get('guests', 'group', array($guestid));
+		public function update_guest($guestid, $classid=0, $group=0, $note=''){
+			$classid	= ((int)$classid > 0)	? $classid: $this->pdh->get('guests', 'class', array($guestid));
+			$group		= ((int)$group > 0)		? $group	: $this->pdh->get('guests', 'group', array($guestid));
 			$note		= ($note)		? $note 	: $this->pdh->get('guests', 'note', array($guestid));
 			$objQuery = $this->db->prepare("UPDATE __calendar_raid_guests :p WHERE id=?")->set(array(
 				'class'			=> $classid,

@@ -64,9 +64,9 @@ class update_2203 extends sql_update_task {
 			1	=> "ALTER TABLE `__member_profilefields` ADD COLUMN `id` INT NOT NULL AUTO_INCREMENT FIRST, DROP PRIMARY KEY, ADD PRIMARY KEY (`id`);",
 			2	=> "ALTER TABLE `__notification_types` CHANGE COLUMN `default` `default` VARCHAR(50) NOT NULL DEFAULT '0'",
 			3	=> "ALTER TABLE `__calendar_raid_guests` ADD COLUMN `creator` int(10) UNSIGNED NOT NULL DEFAULT '0'",
-			4	=> "ALTER TABLE `__calendar_raid_guests` ADD COLUMN `approved` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0'",
+			4	=> "ALTER TABLE `__calendar_raid_guests` ADD COLUMN `status` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1'",
 			5	=> "ALTER TABLE `__calendar_raid_guests` ADD COLUMN `email` VARCHAR(255) COLLATE utf8_bin DEFAULT NULL",
-			6	=> "UPDATE `__calendar_raid_guests` SET `approved` = '1'",
+			6	=> "UPDATE `__calendar_raid_guests` SET `status` = '0'",
 			7	=> "UPDATE `__calendar_raid_guests` SET `creator` = '1'",
 			8	=> "INSERT INTO `__notification_types` (`id`, `name`, `category`, `prio`, `default`, `group`, `group_name`, `group_at`, `icon`) VALUES ('eqdkp_calendar_guest_application', 'notification_calendar_guestapplication', 'calendarevent', 1, 1, 0, NULL, 0, 'fa-user-plus');",
 		);

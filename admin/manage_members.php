@@ -39,25 +39,25 @@ class Manage_Members extends page_generic {
 		parent::__construct(false, $handler, array('member', 'name'), null, 'selected_ids[]');
 		$this->process();
 	}
-	
+
 	public function ajax_defaultrole(){
 		$this->pdh->put('member', 'change_defaultrole', array($this->in->get('defrolechange_memberid', 0), $this->in->get('defrolechange', 0)));
 		$this->pdh->process_hook_queue();
 		echo($this->user->lang('uc_savedmsg_roles'));
 		exit;
 	}
-	
+
 	public function delete_history_items(){
 		$arrItems = $this->in->getArray('item_ids', 'int');
 		$arrRaids = $this->in->getArray('raid_ids', 'int');
 		$arrAdjustments = $this->in->getArray('adj_ids', 'int');
-		
+
 		$intDelCount = 0;
-		
+
 		//Raids
 		if(count($arrRaids) > 0 && $this->user->check_auth('a_raid_del', false)) {
 			foreach($arrRaids as $raidid) {
-				
+
 				//delete everything connected to the raid
 				//adjustments first
 				$adj_ids = $this->pdh->get('adjustment', 'adjsofraid', array($raidid));
@@ -72,7 +72,7 @@ class Manage_Members extends page_generic {
 				}
 			}
 		}
-		
+
 		//Items
 		if(count($arrItems) > 0 && $this->user->check_auth('a_item_del', false)) {
 			foreach($arrItems as $itemid) {
@@ -80,7 +80,7 @@ class Manage_Members extends page_generic {
 				if($item_del) $intDelCount++;
 			}
 		}
-		
+
 		//Adjustments
 		if(count($arrAdjustments) > 0 && $this->user->check_auth('a_indivadj_del', false)) {
 			foreach($arrAdjustments as $adjid) {
@@ -88,7 +88,7 @@ class Manage_Members extends page_generic {
 				if($item_del) $intDelCount++;
 			}
 		}
-		
+
 		$this->pdh->process_hook_queue();
 		if($intDelCount > 0) $this->core->message($this->user->lang('deleted').': '.$intDelCount, $this->user->lang('del_suc'), 'green');
 		$this->display_member_history();
@@ -165,13 +165,13 @@ class Manage_Members extends page_generic {
 		}
 		$this->display($messages);
 	}
-	
+
 	public function display_member_history(){
 		$intMemberID = $this->in->get('member', 0);
 		$strMembername = $this->pdh->get('member', 'name', array($intMemberID));
-		
+
 		$withTwinksDKP = false;
-		
+
 		// Raids
 		$view_list			= $this->pdh->get('raid', 'raidids4memberid', array($intMemberID));
 		$hptt_page_settings	= $this->pdh->get_page_settings('admin_manage_raids', 'hptt_admin_manage_raids_raidlist');
@@ -182,7 +182,7 @@ class Manage_Members extends page_generic {
 				'RAID_OUT'			=> $hptt->get_html_table($this->in->get('rsort', ''), $this->vc_build_url('rsort'), $this->in->get('rstart', 0), $this->user->data['user_rlimit']),
 				'RAID_PAGINATION'	=> generate_pagination($this->vc_build_url('rstart', true), count($view_list), $this->user->data['user_rlimit'], $this->in->get('rstart', 0), 'rstart')
 		));
-		
+
 		// Item History
 		infotooltip_js();
 		$view_list			= $this->pdh->get('item', 'itemids4memberid', array($intMemberID));
@@ -194,7 +194,7 @@ class Manage_Members extends page_generic {
 				'ITEM_OUT'			=> $hptt->get_html_table($this->in->get('isort', ''), $this->vc_build_url('isort'), $this->in->get('istart', 0), $this->user->data['user_ilimit']),
 				'ITEM_PAGINATION'	=> generate_pagination($this->vc_build_url('istart', true), count($view_list), $this->user->data['user_ilimit'], $this->in->get('istart', 0), 'istart')
 		));
-		
+
 		// Individual Adjustment History
 		$view_list = $this->pdh->get('adjustment', 'adjsofmember', array($intMemberID));
 		$hptt_page_settings = $this->pdh->get_page_settings('admin_manage_adjustments', 'hptt_admin_manage_adjustments_adjlist');
@@ -205,14 +205,14 @@ class Manage_Members extends page_generic {
 				'ADJUSTMENT_OUT' 		=> $hptt->get_html_table($this->in->get('asort', ''), $this->vc_build_url('asort'), $this->in->get('astart', 0), $this->user->data['user_alimit']),
 				'ADJUSTMENT_PAGINATION'	=> generate_pagination($this->vc_build_url('astart', true), count($view_list), $this->user->data['user_alimit'], $this->in->get('astart', 0), 'astart')
 		));
-		
+
 		$this->jquery->Tab_header('profile_information', true);
-		
+
 		$this->tpl->assign_vars(array(
 				'MEMBER_NAME' => $strMembername,
 				'MEMBER_ID'		=> $intMemberID,
 		));
-		
+
 		$this->core->set_vars(array(
 				'page_title'		=> $this->user->lang('manage_members_title').': '.$strMembername,
 				'template_file'		=> 'admin/manage_members_history.html',
@@ -220,7 +220,7 @@ class Manage_Members extends page_generic {
 				'display'			=> true
 		));
 	}
-	
+
 	//Url building
 	private function vc_build_url($exclude='', $with_base=false) {
 		$base_url = $this->root_path.'admin/manage_members.php'.$this->SID;
@@ -244,7 +244,7 @@ class Manage_Members extends page_generic {
 			$this->pdh->process_hook_queue();
 			$this->core->messages($messages);
 		}
-		
+
 		$view_list		= $this->pdh->get('member', 'id_list', array(false, false, false));
 		$hptt_page_settings = $this->pdh->get_page_settings('admin_manage_members', 'hptt_admin_manage_members_memberlist');
 		$hptt			= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => 'manage_members.php', '%link_url_suffix%' => '&mupd=true'));
@@ -270,7 +270,7 @@ class Manage_Members extends page_generic {
 					});
 			});
 		", 'docready');
-		
+
 		$arrMenuItems = array(
 			0 => array(
 				'name'	=> $this->user->lang('delete'),
@@ -294,15 +294,15 @@ class Manage_Members extends page_generic {
 				'link'	=> '#member_rankchange',
 				'append' => new hdropdown('rank', array('options' => $ranks)),
 			),
-		
+
 		);
-		
+
 		$this->tpl->assign_vars(array(
 			'SID'				=> $this->SID,
 			'MEMBER_LIST'		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_climit'], $footer_text),
 			'PAGINATION'		=> generate_pagination('manage_members.php'.$sort_suffix, $character_count, $this->user->data['user_climit'], $this->in->get('start', 0)),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
-			'BUTTON_MENU'		=> $this->jquery->ButtonDropDownMenu('manage_members_menu', $arrMenuItems, array("input[name=\"selected_ids[]\"]"), '', $this->user->lang('selected_chars').'...', ''),
+			'BUTTON_MENU'		=> $this->jquery->ButtonDropDownMenu('manage_members_menu', $arrMenuItems, array("input[name=\"selected_ids[]\"]"), $this->user->lang('selected_chars').'...'),
 		));
 
 		$this->core->set_vars(array(

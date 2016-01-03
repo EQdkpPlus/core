@@ -1,26 +1,62 @@
 <!-- IF SHOW_GUESTS -->
-	<tr>
-		<td width="100%" valign="top" class="row2" colspan="{ATTENDEES_COLSPAN}"><br/>
-			<table class="table fullwidth guesttable">
-				<tr>
-					<td width="90%">
-						<b>{L_raidevent_raid_guests}</b> ({GUEST_COUNT}):
-						<!-- BEGIN guests -->
-							<span class="guesttooltip <!-- IF COLORED_NAMESBYCLASS --> class_{guests.CLASSID}<!-- ENDIF -->" data-guestid="{guests.ID}" data-approval="{guests.TOBEAPPROVED}">
-								<!-- IF guests.CLASSICON -->{guests.CLASSICON} <!-- ENDIF -->{guests.NAME}<!-- IF guests.EXTERNALAPPL --> <!-- IF guests.TOBEAPPROVED --> <i class="fa fa-external-link-square icon-color-red"><!-- ELSE --> <i class="fa fa-check-square icon-color-green"><!-- ENDIF --></i><!-- ENDIF -->
-							</span>
-							<span class="guesttooltip-data" style="display:none">{guests.TOOLTIP}</span>
-						<!-- END guests -->
-					</td>
-					<!-- IF IS_OPERATOR -->
-					<td width="10%" align="right">
-						<button id="addguest" type="button">
-							<i class="fa fa-user-plus fa-2x"></i>
-						</button>
-					</td>
-					<!-- ENDIF -->
-				</tr>
-			</table>
-		</td>
-	</tr>
+<div id="viewraidcal_colapse_guests" class="guests" align="center" >
+	<table class="table fullwidth">
+		<tr>
+			<td align="left" width="100%">
+				<table class="table fullwidth borderless">
+					<tr valign="middle">
+						<th align="left" width="14px">
+							<span class="toggle_button">&nbsp;</span>
+						</th>
+						<th align="center" colspan="{ATTENDEES_COLSPAN}" class="raidstatushead">
+							{L_raidevent_raid_guests} ({GUEST_COUNT})
+						</th>
+						<!-- IF IS_OPERATOR -->
+						<th width="10%" align="right">
+							<button id="addguest" type="button"><i class="fa fa-user-plus fa-lg"></i></button>
+						</th>
+						<!-- ENDIF -->
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+
+	<div class="toggle_container">
+		<table class="table fullwidth scrollable-x" width="90%">
+			<tr>
+				<td>
+					<table class="table fullwidth borderless guesttable">
+						<!-- BEGIN raidstatus -->
+						<!-- IF not raidstatus.GUESTBREAK -->
+						<tr>
+						<!-- ENDIF -->
+							<td width="50%">
+								<table class="table fullwidth borderless guesttable_status">
+									<tr>
+										<td width="25%">
+											{raidstatus.NAME} ({raidstatus.GUESTCOUNT})
+										</td>
+										<td width="75%">
+											<!-- BEGIN guests -->
+												<span class="guesttooltip <!-- IF COLORED_NAMESBYCLASS --> class_{raidstatus.guests.CLASSID}<!-- ENDIF -->" data-guestid="{raidstatus.guests.ID}" data-approval="{raidstatus.guests.TOBEAPPROVED}">
+													<!-- IF raidstatus.guests.CLASSICON -->{raidstatus.guests.CLASSICON} <!-- ENDIF -->{raidstatus.guests.NAME}<!-- IF raidstatus.guests.EXTERNALAPPL --> <!-- IF raidstatus.guests.TOBEAPPROVED --> <i class="fa fa-external-link-square icon-color-red"><!-- ELSE --> <i class="fa fa-check-square icon-color-green"><!-- ENDIF --></i><!-- ENDIF -->
+												</span>
+												<span class="guesttooltip-data" style="display:none">{raidstatus.guests.TOOLTIP}</span>
+											<!-- END guests -->
+										</td>
+									</tr>
+								</table>
+							</td>
+						<!-- IF raidstatus.GUESTBREAK -->
+						</tr>
+						<!-- ENDIF -->
+						<!-- END raidstatus -->
+					</table>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
 <!-- ENDIF -->

@@ -636,10 +636,10 @@ CREATE TABLE `__calendar_raid_guests` (
 	`email` VARCHAR(255) COLLATE utf8_bin DEFAULT NULL,
 	`note` VARCHAR(255) COLLATE utf8_bin DEFAULT NULL,
 	`timestamp_signup` int(10) UNSIGNED NOT NULL DEFAULT '0',
-	`raidgroup` VARCHAR(255) COLLATE utf8_bin DEFAULT NULL,
+	`raidgroup` int(10) unsigned NOT NULL DEFAULT '0',
 	`class` int(10) UNSIGNED NOT NULL DEFAULT '0',
 	`creator` int(10) UNSIGNED NOT NULL DEFAULT '0',
-	`approved` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
+	`status` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1',
 	PRIMARY KEY (`id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 

@@ -39,7 +39,7 @@ $(function(){
 		var approval	= $(this).data('approval');
 		var titletext	= '';
 		if(approval){
-			var titletext = '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-thumbs-up fa-lg hand" onclick="ApproveGuest('+guestid+');"></i>   <i class="fa fa-trash-o fa-lg hand" onclick="DeleteGuest('+guestid+');"></i></div>';
+			var titletext = '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-thumbs-up fa-lg hand" onclick="ChangeGuestStatus('+guestid+', 0);"></i>   <i class="fa fa-thumbs-down fa-lg hand" onclick="ChangeGuestStatus('+guestid+', 2);"></i>   <i class="fa fa-question-circle fa-lg hand" onclick="ChangeGuestStatus('+guestid+', 3);"></i>   <i class="fa fa-trash-o fa-lg hand" onclick="DeleteGuest('+guestid+');"></i></div>';
 		}else{
 			var titletext = '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-pencil fa-lg hand" onclick="EditGuest('+guestid+');"></i>  <i class="fa fa-trash-o fa-lg hand" onclick="DeleteGuest('+guestid+');"></i></div>';
 		}
@@ -301,10 +301,11 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 	}
 	$("#memberScroller").html(attoutput);
 }
-function ApproveGuest(guestid){
+function ChangeGuestStatus(guestid, status){
 	$.post("{U_CALENDAREVENT}", {
 		confirm_guest: true,
 		confirm_id: guestid,
+		gueststatus: status,
 		eventid: '{EVENT_ID}',
 		link_hash: '{CSRF_GUESTAPPRV_TOKEN}'
 	},
@@ -531,6 +532,7 @@ function ApproveGuest(guestid){
 			</div>
 		</div>
 		<!-- ENDIF -->
+		<!-- INCLUDE calendar/viewcalraid_guests.html -->
 	<!-- INCLUDE {MEMBERDATA_FILE} -->
 	</div>
 {CSRF_TOKEN}
