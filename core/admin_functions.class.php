@@ -192,8 +192,7 @@ class admin_functions extends gen_class {
 								break;
 							case 'register': $strOut = registry::fetch('user')->lang('register_title');
 								break;
-							//TODO Add Title
-							case 'addcharacter': $strOut = '';
+							case 'addcharacter': $strOut = registry::fetch('user')->lang('uc_edit_char');
 								break;
 							case 'editarticle': $strOut = $this->user->lang('manage_articles');
 								if (isset($arrQuery['aid']) && $arrQuery['aid']) $strOut .= ': <a href="'.$this->controller_path.$this->pdh->get('articles', 'path', array($arrQuery['aid'])).'">'.$this->pdh->get('articles', 'title', array($arrQuery['aid'])).'</a>';
