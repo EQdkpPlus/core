@@ -72,9 +72,9 @@ if(!class_exists('pdh_w_calendar_raids_guests')){
 			$this->email->SendMailFromAdmin($email, $subject, 'calendarguests_application.html', $arrBodyvars, $this->config->get('lib_email_method'));
 		}
 
-		public function update_guest($guestid, $classid='', $group='', $note=''){
-			$classname	= ($classname)	? $classname: $this->pdh->get('guests', 'class', array($guestid));
-			$group		= ($group)		? $group	: $this->pdh->get('guests', 'group', array($guestid));
+		public function update_guest($guestid, $classid=0, $group=0, $note=''){
+			$classid	= ((int)$classid > 0)	? $classid: $this->pdh->get('guests', 'class', array($guestid));
+			$group		= ((int)$group > 0)		? $group	: $this->pdh->get('guests', 'group', array($guestid));
 			$note		= ($note)		? $note 	: $this->pdh->get('guests', 'note', array($guestid));
 			$objQuery = $this->db->prepare("UPDATE __calendar_raid_guests :p WHERE id=?")->set(array(
 				'class'			=> $classid,
