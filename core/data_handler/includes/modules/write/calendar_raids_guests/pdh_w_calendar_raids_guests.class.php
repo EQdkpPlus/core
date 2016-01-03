@@ -32,7 +32,7 @@ if(!class_exists('pdh_w_calendar_raids_guests')){
 			$this->pdh->enqueue_hook('guests_update');
 		}
 
-		public function insert_guest($eventid, $name='', $classid='', $group='', $note='', $email=''){
+		public function insert_guest($eventid, $name='', $classid=0, $group=0, $note='', $email=''){
 			$userid		= $this->user->data['user_id'];
 			$creator 	= ($userid && $userid > 0) ? $userid : 0;
 			$objQuery = $this->db->prepare("INSERT INTO __calendar_raid_guests :p")->set(array(
@@ -41,8 +41,8 @@ if(!class_exists('pdh_w_calendar_raids_guests')){
 				'email'					=> $email,
 				'note'					=> $note,
 				'timestamp_signup'		=> $this->time->time,
-				'class'					=> $classid,
-				'raidgroup'				=> $group,
+				'class'					=> ((int)$classid > 0) ? $classid : 0,
+				'raidgroup'				=> ((int) $group > 0) ? $group : 0,
 				'creator'				=> $creator,
 				'status'				=> ($creator > 0) ? 0 : 1,
 			))->execute();
