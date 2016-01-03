@@ -960,6 +960,8 @@ $lang = array(
 "raidevent_guestapplication" => "Bewerbungen von Gästen für Raidevents",
 "raidevent_confirm_guest" => 'Bestätige Bewerbungen',
 "raidevent_delete_guest" => 'Lösche Bewerbungen',
+"raidevent_decline_guest" => 'Bewerbungen ablehnen',
+"raidevent_backup_guest" => 'Bewerber auf Ersatzbank setzen',
 "raidevent_raid_nsf_twink" => "Twinks",
 "raidevent_raid_nsf_special" => "Spezialcharaktere",
 "raidevent_raid_nsf_hiddn" => "Versteckte Charaktere",
@@ -1682,7 +1684,7 @@ $lang = array(
 "overwrite_gamedata_yes" => "Ja (Eigene Events und MultiDKP-Pools gehen dabei verloren, so dass die Punktestände sich verändern können)",
 "overwrite_gamedata_no" => "Nein",
 "overwrite_gamedata_nobut" => "Nein, aber füge die Standarddaten zu meinen Daten hinzu",
-		
+
 "pi_manualupload" => "Manueller Upload",
 "pi_manualupload_info" => "Hier kannst du heruntergeladene Erweiterungen wie z.B. Styles, Plugins oder Portalmodule hochladen. Um die Erweiterungen abschließend zu installieren, gehe auf die entsprechende Verwaltungsseite.<br /><b>Weitere Erweitungen kannst du von unserer Projektseite herunterladen: <a href=\"".EQDKP_REPO_URL."\" target=\"_blank\">".EQDKP_REPO_URL."</a>.</b>",
 "pi_choose_file" => "Erweiterung zum Hochladen auswählen",
