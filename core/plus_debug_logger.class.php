@@ -159,8 +159,6 @@ if ( !defined('EQDKP_INC') ){
 			}
 		}
 
-		// TODO: this does not work with data folder chmod 655! use pfh!
-		// should work now, log-file folder now data/{hash}/tmp
 		public function add_logfile_entry($type, $text){
 			$msg = date('d.m.Y H:i:s') . "\t" . $text ."\n";
 			clearstatcache();
