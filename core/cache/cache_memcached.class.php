@@ -27,40 +27,44 @@ if ( !interface_exists( "plus_datacache" ) ) {
 	require_once($eqdkp_root_path . 'core/cache/cache.iface.php');
 }
 
-if ( !class_exists( "cache_memcache" ) ) {
-	class cache_memcache extends gen_class implements plus_datacache{
+if ( !class_exists( "cache_memcached" ) ) {
+	class cache_memcached extends gen_class implements plus_datacache{
 
 		public $server = 'localhost';
-		public $memcache;
+		public $memcached;
 
 		public function __construct(){
-			if(!class_exists('Memcache')){
-				throw new Exception('No Memcache available');
+			if (!class_exists('Memcached')) {
+				throw new Exception('No Memcached available');
+			}
+			$this->memcached = new \Memcached;
+			
+			$this->memcached->setOption(\Memcached::OPT_LIBKETAMA_COMPATIBLE, true);
+			if(!(defined('DEBUG') && DEBUG > 1)){
+				$this->memcached->setOption(\Memcached::OPT_BINARY_PROTOCOL, true);
 			}
 			
-			$this->memcache = new Memcache;
-			$blnConnectionResult = $this->memcache->connect($this->config->get('server', 'pdc'), $this->config->get('port', 'pdc'));
-			if(!$blnConnectionResult){
-				throw new Exception('No connection to memcache server');
+			$this->memcached->addServer($this->config->get('server', 'pdc'), $this->config->get('port', 'pdc'));
+			
+			if (!$this->memcached->set('connection_testing', true)) {
+				throw new Exception('Unable to obtain any valid memcached connection');
 			}
 		}
 
 		public function put( $key, $data, $ttl, $global_prefix, $compress = false ) {
 			$key = $global_prefix.$key;
-			$flags = ($compress) ? MEMCACHE_COMPRESSED : false ;
-			return $this->memcache->set($key, $data, $flags, $ttl);
+			return $this->memcached->set($key, $data, $ttl);
 		}
 
 		public function get( $key, $global_prefix, $uncompress = false ) {
 			$key = $global_prefix.$key;
-			$flags = ($uncompress) ? MEMCACHE_COMPRESSED : 0 ;
-			$retval = $this->memcache->get($key, $flags);
+			$retval = $this->memcached->get($key);
 			return ($retval == false) ? null : $retval;
 		}
 
 		public function del( $key, $global_prefix ) {
 			$key = $global_prefix.$key;	
-			$this->memcache->delete($key);
+			$this->memcached->delete($key);
 			return true;
 		}
 	}//end class

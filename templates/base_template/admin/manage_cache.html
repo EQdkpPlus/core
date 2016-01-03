@@ -99,6 +99,28 @@
 			<dd><label><input type='text' name='cache_memcache[port]' size='32' value="{V_CACHE_MEMCACHE_PORT}" class='input' /></label></dd>
 		</dl>
 	</div>
+	<div id="div_cache_memcached" style="display:{DIV_CACHE_MEMCACHED_VISIBLE}">
+		<div class="infobox infobox-large infobox-blue clearfix">
+			<i class="fa fa-info-circle fa-4x pull-left"></i> {L_pdc_cache_info_memcache}
+		</div>
+		<br />
+		<dl>
+			<dt><label>{L_pdc_dttl_text}</label><br /><span>{L_pdc_dttl_help}</span></dt>
+			<dd><label><input type='text' name='cache_memcached[dttl]' size='32' value="{V_CACHE_MEMCACHED_DTTL}" class='input' /></label></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_pdc_globalprefix}</label><br /><span>{L_pdc_globalprefix_help}</span></dt>
+			<dd><label><input type='text' name='cache_memcached[prefix]' size='32' value="{V_CACHE_MEMCACHED_PREFIX}" class='input' /></label></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_pdc_memcache_server_text}</label><br /><span>{L_pdc_memcache_server_help}</span></dt>
+			<dd><label><input type='text' name='cache_memcached[server]' size='32' value="{V_CACHE_MEMCACHED_SERVER}" class='input' /></label></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_pdc_memcache_port_text}</label><br /><span>{pdc_memcache_port_help}</span></dt>
+			<dd><label><input type='text' name='cache_memcached[port]' size='32' value="{V_CACHE_MEMCACHED_PORT}" class='input' /></label></dd>
+		</dl>
+	</div>
 	</div>
 	<br />
 	<div>

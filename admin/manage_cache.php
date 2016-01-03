@@ -28,9 +28,8 @@ include_once ($eqdkp_root_path . 'common.php');
 
 class manage_cache extends page_generic {
 
-	//private $pdc_cache_types =		array('none', 'file', 'xcache', 'memcache', 'apc');
-	private $pdc_cache_types =		array('none', 'file', 'xcache', 'apc'); // removed memcache for now, as it does not work
-	private $usable_cache_types = 	array('none', 'file', 'memcache');
+	private $pdc_cache_types =		array('none', 'file', 'xcache', 'memcache', 'memcached', 'apc');
+	private $usable_cache_types = 	array('none', 'file');
 	
 	public function __construct() {
 		$this->user->check_auth('a_config_man'); 
@@ -42,6 +41,8 @@ class manage_cache extends page_generic {
 		parent::__construct(false, $handler);
 		if(function_exists('apc_store') && function_exists('apc_fetch') && function_exists('apc_delete')) $this->usable_cache_types[] = 'apc';
 		if(function_exists('xcache_set') && function_exists('xcache_get') && function_exists('xcache_unset')) $this->usable_cache_types[] = 'xcache';
+		if(class_exists('Memcache')) $this->usable_cache_types[] = 'memcache';
+		if(class_exists('Memcached')) $this->usable_cache_types[] = 'memcached';
 		$this->process();
 	}
 	
@@ -114,8 +115,6 @@ class manage_cache extends page_generic {
 				}
 			}
 		}
-		//TODO: Remove when memcache works
-		$this->tpl->assign_var('DIV_CACHE_MEMCACHE_VISIBLE', 'none');
 		
 		$this->tpl->add_js("
 			$('#cache_select').change(function(){

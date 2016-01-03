@@ -54,8 +54,18 @@ if( !class_exists( "datacache" ) ) {
 			if(!$cache_type) $cache_type = ($this->config->get('mode', 'pdc')) ? 'cache_'.$this->config->get('mode', 'pdc') : 'cache_none';
 			require_once( $this->root_path.'core/cache/cache.iface.php' );
 			require_once( $this->root_path.'core/cache/'.$cache_type.'.class.php' );
-			$this->cache = registry::register($cache_type);
-
+			try {
+				$this->cache = registry::register($cache_type);
+			} catch (Exception $e){
+				//Fallback: load file cache
+				$cache_type = 'file';
+				require_once( $this->root_path.'core/cache/cache.iface.php' );
+				require_once( $this->root_path.'core/cache/'.$cache_type.'.class.php' );
+				$this->cache = registry::register($cache_type);
+				//Set config to file Cache
+				$this->config->set('mode', 'file', 'pdc');
+			}
+				
 			//pdl fun
 			if( !$this->pdl->type_known( "pdc_query" ) )
 				$this->pdl->register_type( "pdc_query", null, array( $this, 'pdl_html_format_pdc_query' ), array( 2, 3, 4 ) );
