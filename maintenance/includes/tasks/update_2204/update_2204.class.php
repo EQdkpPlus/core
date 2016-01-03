@@ -39,11 +39,15 @@ class update_2204 extends sql_update_task {
 				'update_2204'	=> 'EQdkp Plus 2.2.0 Update RC2',
 					1			=> 'Change approved field to status for calendar guests table',
 					2			=> 'Change status number',
+					3			=> 'Set empty raidgroup ids to 0 for guest table',
+					4			=> 'Change raidgroup column to int for guest table'
 				),
 			'german' => array(
 				'update_2204'	=> 'EQdkp Plus 2.2.0 Update RC2',
 					1			=> 'Ändere den Namen des approved Feldes zu status',
 					2			=> 'Setze die Status-Felder neu',
+					3			=> 'Setze leere Raidgruppen auf 0 bei der Gästetabelle',
+					4			=> 'Ändere die Raidrguppe in der Gästetabelle zu integer',
 			),
 		);
 
@@ -51,6 +55,8 @@ class update_2204 extends sql_update_task {
 		$this->sqls = array(
 			1	=> "ALTER TABLE `__calendar_raid_guests` CHANGE `approved` `status` TINYINT(1)  UNSIGNED  NOT NULL  DEFAULT '1';",
 			2	=> "UPDATE `__calendar_raid_guests` SET `status` = '0' WHERE status='1'",
+			3	=> "UPDATE `__calendar_raid_guests` SET `raidgroup` = '0' WHERE `raidgroup` = '';",
+			4	=> "ALTER TABLE `__calendar_raid_guests` CHANGE `raidgroup` `raidgroup` INT(10) UNSIGNED NOT NULL DEFAULT '0'",
 		);
 	}
 
