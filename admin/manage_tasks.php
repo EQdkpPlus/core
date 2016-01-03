@@ -30,19 +30,19 @@ class ManageTasks extends page_generic {
 		$handler = array(
 			'mode' 					=> array('process' => 'handleAction', 'csrf'=>true),
 		);
-		
+
 		$this->user->check_auth('a_');
 		parent::__construct(false, $handler);
 		$this->process();
 	}
-	
+
 	public function handleAction(){
 		$strAction = $this->in->get('mode');
-		
+
 		$strArrayName = $this->in->get('cbname');
 		$arrIDs = $this->in->getArray($strArrayName, 'string');
 		$strTask = $this->in->get('task');
-		
+
 		$arrTasks = $this->admin_tasks->getTasks();
 
 		if (isset($arrTasks[$strTask])) {
@@ -54,32 +54,32 @@ class ManageTasks extends page_generic {
 					if ($this->user->check_auths($action['permissions'], 'OR', false)){
 						call_user_func($arrTask['action_func'], $strAction, $arrIDs, $strTask);
 					}
-						
+
 				}
 			}
 		}
-		
+
 		//flush PDH Queue
 		$this->pdh->process_hook_queue();
 	}
 
-	
+
 	public function display(){
-		
+
 		$arrTasks = $this->admin_tasks->getTasks();
 
 		foreach($arrTasks as $taskID => $arrTask){
 			if (isset($arrTask['content_func'])){
 				$arrContent= call_user_func($arrTask['content_func']);
 				if (is_array($arrContent) && count($arrContent)){
-					
+
 					//Actions
 					$blnPermission = false;
 					$arrMenuItems = array();
 					foreach($arrTask['actions'] as $actionID => $arrActions){
 						if (count($arrActions['permissions'])){
 							if (!$blnPermission && $this->user->check_auths($arrActions['permissions'], 'OR', false)) $blnPermission = true;
-							
+
 							if ($this->user->check_auths($arrActions['permissions'], 'OR', false)){
 								$arrMenuItems[] = array(
 										'name'	=> $this->user->lang($arrActions['title']),
@@ -90,59 +90,59 @@ class ManageTasks extends page_generic {
 										'__action' => $actionID,
 								);
 							}
-							
-							
+
+
 						}
 					}
-					
+
 					if ($blnPermission){
-					
+
 						$this->tpl->assign_block_vars('task_row', array(
 							'HEADLINE'	=> $this->user->lang($arrTask['name']),
 							'ID'		=> 't_'.md5($taskID),
 							'NAME'		=> $taskID,
-							'MENU'		=> $this->jquery->ButtonDropDownMenu('menu_t_'.md5($taskID), $arrMenuItems, array("input[name=\"cb_t_".md5($taskID)."[]\"]"), '', $this->user->lang('selected_elements').'...', ''),
+							'MENU'		=> $this->jquery->ButtonDropDownMenu('menu_t_'.md5($taskID), $arrMenuItems, array("input[name=\"cb_t_".md5($taskID)."[]\"]"), $this->user->lang('selected_elements').'...'),
 						));
-						
+
 						foreach($arrMenuItems as $val){
 							$this->tpl->assign_block_vars('task_row.button_row', array(
 								'ID' 	=> substr($val['link'],1),
 								'VALUE' => $val['__action'],
 							));
 						}
-						
+
 						$this->jquery->selectall_checkbox('t_'.md5($taskID), 'cb_t_'.md5($taskID).'[]');
-						
+
 						//Output
 						//TH
 						foreach($arrContent[0] as $key => $val){
 							if ($key == 'id') continue;
-							
+
 							$this->tpl->assign_block_vars('task_row.th_row', array(
 								'CONTENT' => $this->user->lang($key),
 							));
 						}
-						
+
 						foreach($arrContent as $val){
 							$this->tpl->assign_block_vars('task_row.content_row', array(
 								'ID'	=> $val['id'],
 							));
-							
+
 							foreach($val as $key => $val2){
 								if ($key == 'id') continue;
-								
+
 								$this->tpl->assign_block_vars('task_row.content_row.td_row', array(
 									'CONTENT' => $val2,
 								));
 							}
 						}
-					
+
 					}
 				}
 			}
 		}
-			
-		
+
+
 		$this->core->set_vars(array(
 			'page_title'	=> $this->user->lang('uc_delete_manager'),
 			'template_file'	=> 'admin/manage_tasks.html',

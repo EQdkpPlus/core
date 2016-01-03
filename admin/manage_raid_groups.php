@@ -28,7 +28,7 @@ class Manage_Raid_Groups extends page_generic {
 
 	public function __construct(){
 		$this->user->check_auths(array('a_raidgroups_man', 'a_raidgroups_grpleader'), 'or');
-		
+
 		$handler = array(
 			'save'				=> array('process' => 'raid_group_save',			'csrf'=>true),
 			'del_group_members'	=> array('process' => 'raid_group_members_del',		'csrf'=>true),
@@ -40,15 +40,15 @@ class Manage_Raid_Groups extends page_generic {
 		parent::__construct(false, $handler, array('raid_groups', 'name'), null, 'raid_group_ids[]');
 		$this->process();
 	}
-	
+
 	//Delete User of a Group
 	public function raid_group_members_del(){
 		$intGroupID = $this->in->get('g', 0);
-		
+
 		if (!$this->user->check_auth('a_raidgroups_man', false) && !$this->pdh->get('raid_groups_members', 'user_is_grpleader', array($this->user->id, $intGroupID))){
 			$this->user->check_auth('a_raidgroups_man');
 		}
-	
+
 		$members = $this->in->getArray('group_raid', 'int');
 		if (count($members) > 0){
 			$this->pdh->put('raid_groups_members', 'delete_members_from_group', array($members, $intGroupID));
@@ -59,33 +59,33 @@ class Manage_Raid_Groups extends page_generic {
 		$message = array('title' => $this->user->lang('del_suc'), 'text' => $this->user->lang('del_user_from_group_success'), 'color' => 'green');
 		$this->edit($message);
 	}
-	
+
 	//Add User to a Group
 	public function raid_group_members_save(){
 		$intGroupID = $this->in->get('g', 0);
-		
+
 		if (!$this->user->check_auth('a_raidgroups_man', false) && !$this->pdh->get('raid_groups_members', 'user_is_grpleader', array($this->user->id, $intGroupID))){
 			$this->user->check_auth('a_raidgroups_man');
 		}
-		
+
 		$members = $this->in->getArray('add_user', 'int');
 		if ($members[0] == 0){unset($members[0]);};
-		
+
 		if (count($members) > 0){
 			$this->pdh->put('raid_groups_members', 'add_members_to_group', array($members, $intGroupID));
-			
+
 			$arrMemberNames = $this->pdh->aget('member', 'name', 0, array($members));
 			$arrChanged["{L_MEMBER}"] = implode(', ', $arrMemberNames);
 			$this->logs->add('action_raidgroups_added_char', $arrChanged, $intGroupID, $this->pdh->get('raid_groups', 'name', array($intGroupID)));
 		}
 		$message = array('title' => $this->user->lang('save_suc'), 'text' => $this->user->lang('add_user_to_group_success'), 'color' => 'green');
 		$this->edit($message);
-		
+
 	}
-	
+
 	public function process_add_grpleader (){
 		$this->user->check_auth('a_raidgroups_man');
-		
+
 		$members = $this->in->getArray('group_raid', 'int');
 
 		if (count($members) > 0){
@@ -94,10 +94,10 @@ class Manage_Raid_Groups extends page_generic {
 		$message = array('title' => $this->user->lang('success'), 'text' => $this->user->lang('add_grpleader_success'), 'color' => 'green');
 		$this->edit($message);
 	}
-	
+
 	public function process_remove_grpleader (){
 		$this->user->check_auth('a_raidgroups_man');
-		
+
 		$members = $this->in->getArray('group_raid', 'int');
 		if (count($members) > 0){
 			$this->pdh->put('raid_groups_members', 'remove_grpleader', array($members, $this->in->get('g')));
@@ -105,7 +105,7 @@ class Manage_Raid_Groups extends page_generic {
 		$message = array('title' => $this->user->lang('success'), 'text' => $this->user->lang('add_grpleader_success'), 'color' => 'green');
 		$this->edit($message);
 	}
-	
+
 	//Save the raid-Groups
 	public function raid_group_save() {
 		$this->user->check_auth('a_raidgroups_man');
@@ -131,18 +131,18 @@ class Manage_Raid_Groups extends page_generic {
 					$message = array('title' => $this->user->lang('save_suc'), 'text' => $this->user->lang('save_raidgroup_success'), 'color' => 'green');
 				}
 			}
-			
+
 		} else {
 			$message = array('title' => '', 'text' => $this->user->lang('no_ranks_selected'), 'color' => 'grey');
 		}
 
 		$this->display($message);
 	}
-	
+
 	//Delete user-groups
 	public function delete() {
 		$this->user->check_auth('a_raidgroups_man');
-		
+
 		$grpids = array();
 		if(count($this->in->getArray('raid_group_ids', 'int')) > 0) {
 			$grpids = $this->in->getArray('raid_group_ids', 'int');
@@ -152,7 +152,7 @@ class Manage_Raid_Groups extends page_generic {
 
 		if(is_array($grpids)) {
 			foreach($grpids as $id) {
-				
+
 				$names[] = $this->pdh->get('raid_groups', 'name', ($id));
 				$retu[] = $this->pdh->put('raid_groups', 'delete_grp', array($id));
 			}
@@ -165,26 +165,26 @@ class Manage_Raid_Groups extends page_generic {
 		}
 		$this->display($message);
 	}
-	
+
 	//Display the Usergroup-list
 	public function display($messages=false){
 		if($messages) {
 			$this->pdh->process_hook_queue();
 			$this->core->messages($messages);
 		}
-		
+
 		$grps = $this->pdh->aget('raid_groups', 'name', 0, array($this->pdh->get('raid_groups', 'id_list')));
 
 		$key = 0;
 		$new_id = 1;
-		
+
 		$this->tpl->add_js("
 			$(\"#raid_groups_table tbody\").sortable({
 				cancel: '.not-sortable, input, th',
 				cursor: 'pointer',
 			});
 		", "docready");
-		
+
 		foreach($grps as $id => $name){
 			$this->tpl->assign_block_vars('raid_groups', array(
 				'KEY'				=> $key,
@@ -200,7 +200,7 @@ class Manage_Raid_Groups extends page_generic {
 			$key++;
 			$new_id = ($id >= $new_id) ? $id+1 : $new_id;
 		}
-		
+
 		$this->confirm_delete($this->user->lang('confirm_delete_groups'));
 		$this->confirm_delete($this->user->lang('confirm_delete_groups'), '', true, array('function' => 'delete_single_warning', 'force_ajax' => true));
 		$this->jquery->selectall_checkbox('selall_groups', 'raid_group_ids[]');
@@ -222,12 +222,12 @@ class Manage_Raid_Groups extends page_generic {
 	// ---------------------------------------------------------
 	public function edit($messages=false, $group = false){
 		$groupID  = ($group) ? $group : $this->in->get('g', 0);
-		
+
 		//Check Permissions
 		if (!$this->user->check_auth('a_raidgroups_man', false) && !$this->pdh->get('raid_groups_members', 'user_is_grpleader', array($this->user->id, $groupID))){
 			$this->user->check_auth('a_raidgroups_man');
 		}
-	
+
 		if($messages) {
 			$this->pdh->process_hook_queue();
 			$this->core->messages($messages);
@@ -235,17 +235,17 @@ class Manage_Raid_Groups extends page_generic {
 
 		$order = $this->in->get('o','0.0');
 		$red = 'RED'.str_replace('.', '', $order);
-		
+
 		//Get Users in Group
 		$members = $this->pdh->get('raid_groups_members', 'member_list', array($groupID));
-		
+
 		//Get Group-name
-		$group_name = $this->pdh->get('raid_groups', 'name', array($groupID));	
-		
+		$group_name = $this->pdh->get('raid_groups', 'name', array($groupID));
+
 		//Get all chars
 		$member_data = $this->pdh->get('member', 'id_list');
 		$not_in = array();
-		
+
 		//Bring all members from Group to template
 		foreach($member_data as $memberid) {
 			if (in_array($memberid, $members)){
@@ -285,9 +285,9 @@ class Manage_Raid_Groups extends page_generic {
 				'perm'	=> $this->user->check_auth('a_raidgroups_man', false),
 				'link'	=> '#remove_grpleader',
 			),
-		
+
 		);
-		
+
 		$this->tpl->assign_vars(array(
 			'GROUP_NAME'			=> sanitize($group_name),
 			$red 					=> '_red',
@@ -295,7 +295,7 @@ class Manage_Raid_Groups extends page_generic {
 			'KEY'					=> $key,
 			'ADD_USER_DROPDOWN'		=> $this->jquery->MultiSelect('add_user', $not_in, '', array('width' => 350, 'filter' => true)),
 			'GRP_ID'				=> $groupID,
-			'BUTTON_MENU'			=> $this->jquery->ButtonDropDownMenu('raid_groups_user_menu', $arrMenuItems, array(".usercheckbox"), '', $this->user->lang('selected_chars').'...', ''),
+			'BUTTON_MENU'			=> $this->jquery->ButtonDropDownMenu('raid_groups_user_menu', $arrMenuItems, array(".usercheckbox"), $this->user->lang('selected_chars').'...'),
 			'S_USERGROUP_ADMIN' 	=> $this->user->check_auth('a_raidgroups_man', false),
 		));
 
@@ -325,11 +325,11 @@ class Manage_Raid_Groups extends page_generic {
 		}
 		return false;
 	}
-	
+
 	private function get_selected() {
 		$grps = array();
 		$selected = $this->in->getArray('raid_group_ids', 'int');
-		if(is_array($this->in->getArray('raid_groups', 'string'))) {			
+		if(is_array($this->in->getArray('raid_groups', 'string'))) {
 			foreach($this->in->getArray('raid_groups', 'string') as $key => $grp) {
 				if(isset($grp['id']) AND in_array($grp['id'], $selected)) {
 					$grps[] = array(

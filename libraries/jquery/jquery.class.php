@@ -597,8 +597,7 @@ if (!class_exists("jquery")) {
 		* @param $button		Show a button with name?
 		* @return CHAR
 		*/
-		// TODO: use icon instead of image
-		public function ButtonDropDownMenu($id, $menuitems, $checkbox_listener=array(), $imagepath='', $button='', $buttonIcon=''){
+		public function ButtonDropDownMenu($id, $menuitems, $checkbox_listener=array(), $button='', $buttonIcon=''){
 			if (count($checkbox_listener)){
 				foreach($checkbox_listener as $listener_id) {
 					$this->tpl->add_js("
@@ -626,12 +625,12 @@ if (!class_exists("jquery")) {
 			}
 
 			$dmmenu  = '<ul id="'.$id.'" class="sf-menu sf-btn-ddm">
-							<li>'.(($buttonIcon != '') ? '<img src="'.$this->root_path.$buttonIcon.'" alt="" style="float:left; margin-right:2px;"/> ' : '').'<a href="javascript:void(0);" class="sf-btn-name">'.$button.'</a>
+							<li>'.(($buttonIcon != '') ? '<i class="fa '.$buttonIcon.' fa-lg" style="float:left; margin-right:2px;"></i> ' : '').'<a href="javascript:void(0);" class="sf-btn-name">'.$button.'</a>
 						<ul><div class="clear"></div>';
 			foreach($menuitems as $key=>$value){
 				if($value['perm']){
 
-					$dmimg = ($value['icon']) ? $this->core->icon_font($value['icon'], 'fa-lg', $this->root_path.$imagepath.'/') : '';
+					$dmimg = ($value['icon']) ? $this->core->icon_font($value['icon'], 'fa-lg') : '';
 					switch($value['type']){
 						case 'button': $dmmenu .= '<li><a href="javascript:void(0);" onclick="$(\''.$value['link'].'\').trigger(\'click\');">'.$dmimg.'&nbsp;&nbsp;'.$value['name'].'</a>'.((isset($value['append'])) ? $value['append'] : '').'</li>';
 						break;

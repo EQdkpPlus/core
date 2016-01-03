@@ -43,7 +43,7 @@ class Manage_Articles extends page_generic {
 		parent::__construct(false, $handler, array('articles', 'title'), null, 'selected_ids[]');
 		$this->process();
 	}
-	
+
 	public function delete_previewimage(){
 		$id = $this->in->get('a', 0);
 		if ($id) {
@@ -51,36 +51,36 @@ class Manage_Articles extends page_generic {
 			$this->pdh->process_hook_queue();
 		}
 	}
-	
+
 	public function set_unpublished(){
 		if(count($this->in->getArray('selected_ids', 'int')) > 0) {
 			$this->pdh->put('articles', 'set_unpublished', array($this->in->getArray('selected_ids', 'int')));
 			$this->pdh->process_hook_queue();
 			$this->core->message($this->user->lang('pk_succ_saved'), $this->user->lang('success'), 'green');
 		}
-		
+
 	}
-	
+
 	public function set_published(){
 		if(count($this->in->getArray('selected_ids', 'int')) > 0) {
 			$this->pdh->put('articles', 'set_published', array($this->in->getArray('selected_ids', 'int')));
 			$this->pdh->process_hook_queue();
 			$this->core->message($this->user->lang('pk_succ_saved'), $this->user->lang('success'), 'green');
 		}
-		
+
 	}
-	
+
 	public function change_category(){
 		if(count($this->in->getArray('selected_ids', 'int')) > 0) {
 			$intCategory = $this->in->get('new_category',0);
 			if($intCategory === 0) return false;
-			
+
 			$this->pdh->put('articles', 'change_category', array($this->in->getArray('selected_ids', 'int'), $intCategory));
 			$this->pdh->process_hook_queue();
 			$this->core->message($this->user->lang('pk_succ_saved'), $this->user->lang('success'), 'green');
 		}
 	}
-	
+
 	public function delete_votes(){
 		$id = $this->in->get('a', 0);
 		if ($id) {
@@ -92,7 +92,7 @@ class Manage_Articles extends page_generic {
 		}
 		$this->edit();
 	}
-	
+
 	public function delete_comments(){
 		$id = $this->in->get('a', 0);
 		if ($id) {
@@ -103,17 +103,17 @@ class Manage_Articles extends page_generic {
 		}
 		$this->edit();
 	}
-	
-	
-	
+
+
+
 	public function ajax_checkalias(){
 		$strAlias = $this->in->get('alias');
 		$intAID = $this->in->get('a', 0);
-		
+
 		$blnResult = $this->pdh->get('articles', 'check_alias', array($strAlias, true));
 		if (!$blnResult && $this->pdh->get('articles', 'alias', array($intAID)) === $strAlias) $blnResult = true;
 		if (is_numeric($strAlias)) $blnResult = false;
-		
+
 		header('content-type: text/html; charset=UTF-8');
 		if ($blnResult){
 			echo 'true';
@@ -122,11 +122,11 @@ class Manage_Articles extends page_generic {
 		}
 		exit;
 	}
-		
+
 	public function update(){
 		$cid = $this->in->get('c', 0);
 		$id = $this->in->get('a', 0);
-		
+
 		$arrTitle = $this->in->getArray('title', 'string');
 		$strText = $this->in->get('text', '', 'raw');
 		$strTags = $this->in->get('tags');
@@ -140,18 +140,18 @@ class Manage_Articles extends page_generic {
 		$intComments = $this->in->get('comments', 0);
 		$intVotes = $this->in->get('votes', 0);
 		$intHideHeader = $this->in->get('hide_header', 0);
-		
+
 		$schluesselwoerter = preg_split("/[\s,]+/", $strTags);
 		$arrTags = array();
 		foreach($schluesselwoerter as $val){
 			$arrTags[] = utf8_strtolower(str_replace("-", "", $val));
 		}
-		
+
 		$intDate = $this->time->fromformat($this->in->get('date'), 1);
 		$strShowFrom = $strShowTo = "";
 		if($this->in->exists('show_from') AND strlen($this->in->get('show_from')) AND $this->in->get('show_from') != $this->user->lang('never')) $strShowFrom = $this->time->fromformat($this->in->get('show_from'), 1);
 		if($this->in->exists('show_to') AND strlen($this->in->get('show_to')) AND $this->in->get('show_to') != $this->user->lang('never')) $strShowTo = $this->time->fromformat($this->in->get('show_to'), 1);
-		
+
 		//Check Name
 		$strDefaultLanguage = $this->config->get('default_lang');
 		if(!isset($arrTitle[$strDefaultLanguage]) || $arrTitle[$strDefaultLanguage] == ""){
@@ -159,15 +159,15 @@ class Manage_Articles extends page_generic {
 			$this->edit();
 			return;
 		}
-		
+
 		$strTitle = serialize($arrTitle);
-		
+
 		if ($id){
 			$blnResult = $this->pdh->put('articles', 'update', array($id, $strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader));
 		} else {
 			$blnResult = $this->pdh->put('articles', 'add', array($strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader));
 		}
-		
+
 		if ($blnResult){
 			$this->pdh->process_hook_queue();
 			$this->core->message($this->user->lang('success_create_article'), $this->user->lang('success'), 'green');
@@ -176,9 +176,9 @@ class Manage_Articles extends page_generic {
 			$this->core->message($this->user->lang('error_create_article'), $this->user->lang('error'), 'red');
 			$this->display();
 		}
-		
+
 	}
-	
+
 	public function save(){
 		$cid = $this->in->get('c', 0);
 		$arrPublished = $this->in->getArray('published', 'int');
@@ -190,7 +190,7 @@ class Manage_Articles extends page_generic {
 		$this->core->message($this->user->lang('pk_succ_saved'), $this->user->lang('success'), 'green');
 		$this->pdh->process_hook_queue();
 	}
-	
+
 	public function delete(){
 		$retu = array();
 
@@ -210,14 +210,14 @@ class Manage_Articles extends page_generic {
 
 			$this->core->messages($messages);
 		}
-		
+
 		$this->pdh->process_hook_queue();
 	}
-	
+
 	public function edit($aid=false){
 		$id = ($aid === false) ? $this->in->get('a', 0) : $aid;
 		$cid = $this->in->get('c', 0);
-		
+
 		$this->jquery->Tab_header('article_category-tabs');
 
 		$editor = register('tinyMCE');
@@ -229,14 +229,14 @@ class Manage_Articles extends page_generic {
 			'raidloot'		=> true,
 			'autoresize'	=> true,
 		));
-		
+
 		$arrCategoryIDs = $this->pdh->sort($this->pdh->get('article_categories', 'id_list', array()), 'article_categories', 'sort_id', 'asc');
 		$arrCategories = array();
 		foreach($arrCategoryIDs as $caid){
 			$arrCategories[$caid] = $this->pdh->get('article_categories', 'name_prefix', array($caid)).$this->pdh->get('article_categories', 'name', array($caid));
 		}
-		
-		
+
+
 		if ($id){
 			$this->tpl->assign_vars(array(
 				'TITLE'	=> $this->pdh->get('articles', 'title', array($id)),
@@ -261,12 +261,12 @@ class Manage_Articles extends page_generic {
 						'deletelink'=> 'manage_articles.php'.$this->SID.'&a='.$id.'&c='.$cid.'&delpreviewimage=true&link_hash='.$this->CSRFGetToken('delpreviewimage'),
 					)),
 			));
-			
+
 		} else {
-			
+
 			$this->tpl->assign_vars(array(
 				'DD_CATEGORY' => new hdropdown('category', array('options' => $arrCategories, 'value' => $cid)),
-				'ML_TITLE' => new htextmultilang('title', array('value' => '', 'required' => true, 'size' => 50)),	
+				'ML_TITLE' => new htextmultilang('title', array('value' => '', 'required' => true, 'size' => 50)),
 				'PUBLISHED_CHECKED'=> 'checked="checked"',
 				'COMMENTS_CHECKED' => 'checked="checked"',
 				'PUBLISHED_RADIO' => new hradio('published', array('value' => 1)),
@@ -284,10 +284,10 @@ class Manage_Articles extends page_generic {
 					)),
 			));
 		}
-		
+
 		$routing = register('routing');
 		$arrPageObjects = $routing->getPageObjects();
-		
+
 		$this->tpl->add_js(
 			'var pageobjects = '.json_encode($arrPageObjects).';'
 		);
@@ -311,7 +311,7 @@ class Manage_Articles extends page_generic {
 	public function display() {
 		$cid = $this->in->get('c', 0);
 		if(!$cid) redirect('admin/manage_article_categories.php'.$this->SID);
-		
+
 		$view_list = $this->pdh->get('articles', 'id_list', array($cid));
 
 		$hptt_page_settings = $this->pdh->get_page_settings('admin_manage_articles', 'hptt_admin_manage_articles_list');
@@ -323,14 +323,14 @@ class Manage_Articles extends page_generic {
 		//footer
 		$raid_count = count($view_list);
 		$footer_text = sprintf($this->user->lang('article_footcount'), $raid_count ,$this->user->data['user_nlimit']);
-		
+
 		$arrCategoryIDs = $this->pdh->sort($this->pdh->get('article_categories', 'id_list', array()), 'article_categories', 'sort_id', 'asc');
 		$arrCategories = array();
 		foreach($arrCategoryIDs as $cid2){
 			if ($cid == $cid2) continue;
 			$arrCategories[$cid2] = $this->pdh->get('article_categories', 'name_prefix', array($cid2)).$this->pdh->get('article_categories', 'name', array($cid2));
 		}
-		
+
 		$arrMenuItems = array(
 			0 => array(
 				'name'	=> $this->user->lang('delete'),
@@ -339,7 +339,7 @@ class Manage_Articles extends page_generic {
 				'perm'	=> true,
 				'link'	=> '#del_articles',
 			),
-			
+
 			1 => array(
 				'name'	=> $this->user->lang('mass_stat_change').': '.$this->user->lang('published'),
 				'type'	=> 'button', //link, button, javascript
@@ -362,9 +362,9 @@ class Manage_Articles extends page_generic {
 				'link'	=> '#change_category',
 				'append' => new hdropdown('new_category', array('options' => $arrCategories)),
 			),
-		
+
 		);
-				
+
 		$this->confirm_delete($this->user->lang('confirm_delete_articles'));
 
 		$this->tpl->assign_vars(array(
@@ -373,7 +373,7 @@ class Manage_Articles extends page_generic {
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
 			'CATEGORY_NAME' 	=> $this->pdh->get('article_categories', 'name', array($cid)),
 			'CID'				=> $cid,
-			'BUTTON_MENU'		=> $this->jquery->ButtonDropDownMenu('manage_members_menu', $arrMenuItems, array("input[name=\"selected_ids[]\"]"), '', $this->user->lang('selected_articles').'...', ''),		
+			'BUTTON_MENU'		=> $this->jquery->ButtonDropDownMenu('manage_members_menu', $arrMenuItems, array("input[name=\"selected_ids[]\"]"), $this->user->lang('selected_articles').'...'),		
 		));
 
 		$this->core->set_vars(array(
@@ -382,7 +382,7 @@ class Manage_Articles extends page_generic {
 			'display'			=> true)
 		);
 	}
-	
+
 }
 registry::register('Manage_Articles');
 ?>
