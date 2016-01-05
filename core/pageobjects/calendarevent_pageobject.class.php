@@ -351,6 +351,7 @@ class calendarevent_pageobject extends pageobject {
 		$attendees = $this->pdh->get('calendar_raids_attendees', 'attendee_users', array($this->url_id));
 		$attendees = array_unique($attendees);
 		foreach($attendees as $attuserid){
+			if($attuserid == false) continue;
 			$strEventTitle	= sprintf($this->pdh->get('event', 'name', array($eventextension['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->date_for_user($attuserid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true);
 			if ($status == 'open') {
 				$this->ntfy->add('calenderevent_opened', $eventID, $strStatus, $this->controller_path_plain.$this->page_path.$this->SID, $attuserid, $strEventTitle);
