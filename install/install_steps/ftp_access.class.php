@@ -33,6 +33,7 @@ class ftp_access extends install_generic {
 	private $ftppass	= '';
 	private $ftproot	= '';
 	private $use_ftp	= 0;
+	private $chmod		= false;
 	
 	public static function before() {
 		return self::$before;
@@ -123,6 +124,15 @@ class ftp_access extends install_generic {
 				$phpwriteerror = true;
 			}
 			
+			//Check if file can be open in browser
+			$this->pfh->putContent($this->root_path.'data/'.md5('installer').'/tmp/test_file.php', 'test');
+			$objUrlfetcher = registry::register('urlfetcher');
+			$blnResult = $objUrlfetcher->fetch($this->get_my_url().'data/'.md5('installer').'/tmp/test_file.php');
+			if(!$blnResult || $blnResult != "test" || true){
+				$this->chmod = "0755";
+			}
+			$this->pfh->Delete($this->root_path.'data/'.md5('installer').'/tmp/test_file.php', 'test');
+			
 			
 
 			// if one of this is not writeable, die, baby, die!
@@ -184,6 +194,14 @@ class ftp_access extends install_generic {
 				$this->pdl->log('install_error', $this->lang['ftp_tmpinstallwriteerror']);
 				return false;
 			}
+			
+			//Check if file can be open in browser
+			$objUrlfetcher = registry::register('urlfetcher');
+			$blnResult = $objUrlfetcher->fetch($this->get_my_url().'data/'.md5('installer').'/tmp/test_file.php');
+			if(!$blnResult || $blnResult != "test"){
+				$this->chmod = "0755";
+			}
+			
 			@ftp_delete($connect, md5('installer').'/tmp/test_file.php');
 
 			//Everything fine, reinitialise pfh, to use ftp
@@ -210,6 +228,9 @@ class ftp_access extends install_generic {
 		$content .= '$ftppass = \''.$this->ftppass.'\';'."\n";
 		$content .= '$ftproot = \''.$this->ftproot.'\';'."\n";
 		$content .= '$use_ftp = '.$this->use_ftp.';'."\n";
+		if($this->chmod !== false){
+			$content .= 'define("CHMOD", '.$this->chmod.');'."\n";
+		}
 		$content .= "\n".'?>';
 		$this->pfh->putContent($this->root_path.'config.php', $content);
 		
@@ -217,6 +238,15 @@ class ftp_access extends install_generic {
 		if(function_exists('opcache_reset')){
 			opcache_reset();
 		}
+	}
+	
+	private function get_my_url(){
+		$strServerName = (!empty($_SERVER['HTTP_HOST'])) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
+		$strServerName = preg_replace('/[^A-Za-z0-9\.:-]/', '', $strServerName);
+		$strServerName .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
+		
+		$blnIsSSL = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443 || isset($_SERVER['SSL_SESSION_ID']) || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' )) ? true : false;
+		return (($blnIsSSL) ? 'https://' : 'http://'). str_replace('install/', '', $strServerName);
 	}
 }
 ?>
