@@ -175,10 +175,7 @@ class EQDKPBackup extends page_generic{
 				);
 				$this->logs->add("action_backup_created", $log_action, $this->config->get('plus_version'), true);
 				$this->core->message($this->user->lang('backup_store_success'),$this->user->lang('backup'),'green');
-			
-				//Move File to the correct folder
-				$strFilename = $this->backup->moveBackupToBackupFolder($strFilename);
-			
+						
 			} else {
 				$this->core->message($this->user->lang('error'),$this->user->lang('backup'),'red');
 				$this->logs->add("action_backup_created", $log_action, $this->config->get('plus_version'), false);
