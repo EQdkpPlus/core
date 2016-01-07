@@ -93,7 +93,8 @@ $lang = array(
 	"jump_tour" => 'Skip tour',
 	"guild_import" => 'Import a guild from external Database',
 	"guild_import_info" => '* if supported by your game',
-	
+	'backup'			=> 'Database-Backup',
+	'backup_note'		=> 'A database-backup was created at %s.',
 );
 
 ?>
