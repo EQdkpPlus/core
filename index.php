@@ -275,7 +275,9 @@ class controller extends gen_class {
 			//Display Artikel
 			if ($intArticleID){
 				$arrArticle = $this->pdh->get('articles', 'data', array($intArticleID));
-					
+				
+				infotooltip_js();
+				
 				//Perform Vote
 				if ($this->in->exists('article_vote')){
 					$arrVotedUsers = $this->pdh->get('articles', 'votes_users', array($intArticleID));
@@ -708,6 +710,8 @@ class controller extends gen_class {
 				registry::add_const('page_path', $this->user->removeSIDfromString($strPath));
 				
 				$arrCategory['name'] = $this->user->multilangValue($arrCategory['name']);
+				
+				infotooltip_js();
 					
 				//Articles to template
 				foreach($arrLimitedIDs as $intArticleID){
