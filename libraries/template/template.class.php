@@ -959,8 +959,7 @@ class template extends gen_class {
 						$compile_blocks[] = '// INCLUDE ' . $blocks[2][$curr_tb] . "\n" . $this->compile_tag_include($blocks[2][$curr_tb]);
 						break;
 					case 'PRE':
-						$precompiled = $this->pre_compile($blocks[2][$curr_tb]);
-						$compile_blocks[] = $precompiled;
+						$compile_blocks[] = "echo \$this->pre_compile('".$blocks[2][$curr_tb]."');\n";
 						break;
 					case 'LISTENER':
 						$strListenername = strtolower($blocks[2][$curr_tb]);
@@ -1034,7 +1033,7 @@ class template extends gen_class {
 
 	private function pre_compile($tag_args){
 		$var = $this->_data['.'][0][$tag_args];
-		if ($var) return $this->compile($var);
+		if ($var) return eval($this->compile($var));
 		return '';
 	}
 
