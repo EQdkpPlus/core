@@ -134,9 +134,13 @@ class backup extends gen_class {
 			$archive->create();
 			
 			$this->pfh->Delete($strSQLFile);
+			//Move ZIP File to the correct folder
+			$strZipFile = $this->moveBackupToBackupFolder($strZipFile);
 			return $strZipFile;
 		}
 		
+		//Move SQL File to the correct folder
+		$strSQLFile = $this->moveBackupToBackupFolder($strSQLFile);
 		return $strSQLFile;
 	}
 	

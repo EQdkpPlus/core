@@ -103,5 +103,9 @@ $lang = array(
 	'jump_tour'			=> 'Tour überspringen',
 	'guild_import'		=> 'Gilde von externer Datenbank importieren',
 	'guild_import_info'	=> '* sofern vom Spiel unterstützt',
+		
+	//Backup
+	'backup'			=> 'Datenbank-Backup',
+	'backup_note'		=> 'Ein Datenbank-Backup wurde erfolgreich unter %s erstellt.',
 );
 ?>

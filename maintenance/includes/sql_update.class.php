@@ -39,6 +39,7 @@ class sql_update extends task {
 	private $needed_updates = array();
 	private $calling_update = array();
 	private $row_class = 2;
+	private $blnBackupDone = false;
 
 	public function __construct($calling_task, $all=false) {
 		$this->version = $this->config->get('plus_version');
@@ -75,13 +76,28 @@ class sql_update extends task {
 			}
 			$output .= "</ul><input type='submit' name='start_sql_update' value='".$this->user->lang('start_update')."' class=\"mainoption\"/><br /><br />";
 		}
-		$output .= '<b>'.$this->user->lang('only_this_update')."</b></br><ul><li>".(($this->calling_update['ext_version']) ? $this->calling_update['ext_version'] : $this->calling_update['version'])." - ".$this->calling_update['desc']."</li></ul><input type='submit' name='single_update' value='".$this->calling_update['name']."' class=\"mainoption\"/><input type='hidden' name='single_update_code' value='".$this->calling_update['code']."' />";
+		$output .= '<h3>'.$this->user->lang('only_this_update')."</h3></br><ul><li>".(($this->calling_update['ext_version']) ? $this->calling_update['ext_version'] : $this->calling_update['version'])." - ".$this->calling_update['desc']."</li></ul><button type='submit' name='single_update' class=\"mainoption\" value='".$this->calling_update['name']."'><i class=\"fa fa-chevron-right\"></i> ".$this->calling_update['name']."</button><input type='hidden' name='single_update_code' value='".$this->calling_update['code']."' />";
 		$output .= ($this->in->get('update_all', 0)) ? "<input type='hidden' name='update_all' value='1' />" : "";
 
 		return $output;
 	}
 
 	public function parse_first_step() {
+		//Create Database Backup, without Logs Table
+		if(!$this->blnBackupDone){
+			$arrTables = $this->db->listTables();
+			foreach($arrTables as $name){
+				if (!$this->db->isEQdkpTable($name) || $name == $this->table_prefix.'logs') continue;
+				$tables[$name] = $name;
+			}
+			
+			$strBackupFile = $this->backup->createDatabaseBackup('zip', true, $tables, true);
+			if($strBackupFile !== false){
+				$this->form .= '<h2>'.$this->user->lang('backup').'</h2><i class="fa fa-lg fa-floppy-o icon-green"></i> '.sprintf($this->user->lang('backup_note'), $strBackupFile).'<br /><br />';
+			}
+			$this->blnBackupDone = true;
+		}
+		
 		if($this->in->get('single_update', '')) {
 			$this->step_order = array('first', $this->in->get('single_update_code'));
 		} elseif(!$this->in->get('start_sql_update', '')) {
@@ -129,7 +145,8 @@ class sql_update extends task {
 	}
 
 	public function step_end() {
-		return $this->form."<br /><a href='".$this->root_path."maintenance/".$this->SID."'><button type=\"button\"><i class=\"fa fa-chevron-right\"></i>".$this->user->lang('task_manager')."</button></a>";
+		//ToDo: Steps are done. Cleanup backup
+		return $this->form."<br /><a href='".$this->root_path."maintenance/".$this->SID."'><button type=\"button\"><i class=\"fa fa-chevron-right\"></i> ".$this->user->lang('task_manager')."</button></a>";
 	}
 
 	protected function do_sql($sqls, $version, $lang, $task_name) {
