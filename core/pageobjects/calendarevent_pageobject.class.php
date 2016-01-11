@@ -614,19 +614,28 @@ class calendarevent_pageobject extends pageobject {
 			$statuscount	= (isset($this->attendees_count[$statuskey])) ? count($this->attendees_count[$statuskey]) : 0;
 
 			// add the guest to the confirmed count
-			if($statuskey == 0){
-				$confirmed_guestcount = $this->pdh->get('calendar_raids_guests', 'count', array($this->url_id, 0));
-				$statuscount = $statuscount+$confirmed_guestcount;
+			if($statuskey != 4){
+				$statuscount_w_guests = $this->pdh->get('calendar_raids_guests', 'count', array($this->url_id, $statuskey));
+				$statuscount = $statuscount+$statuscount_w_guests;
+			}
+
+			// guest count text
+			$guestcount = $this->pdh->get('calendar_raids_guests', 'count', array($this->url_id, $statuskey));
+			if($guestcount > 0){
+				$lang_guestcount	= ($guestcount > 1) ? sprintf($this->user->lang(array('raidevent_raid_guest_summ_txt', 2)), $guestcount) : $this->user->lang(array('raidevent_raid_guest_summ_txt', 1));
+			}else{
+				$lang_guestcount	= $this->user->lang(array('raidevent_raid_guest_summ_txt', 0));
 			}
 
 			$this->tpl->assign_block_vars('raidstatus', array(
-				'FIRSTROW'	=> ($status_first) ? true : false,
-				'ID'		=> $statuskey,
-				'NAME'		=> $statusname,
-				'COUNT'		=> $statuscount,
-				'MAXCOUNT'	=> $eventdata['extension']['attendee_count'],
-				'GUESTCOUNT'=> $this->pdh->get('calendar_raids_guests', 'count', array($this->url_id, $statuskey)),
-				'GUESTBREAK'=> ($statuskey % 2 != 0) ? true : false,
+				'FIRSTROW'		=> ($status_first) ? true : false,
+				'ID'			=> $statuskey,
+				'NAME'			=> $statusname,
+				'COUNT'			=> $statuscount,
+				'COUNT_GUESTS'	=> ($this->config->get('calendar_raid_guests') > 0) ? $lang_guestcount : false,
+				'MAXCOUNT'		=> $eventdata['extension']['attendee_count'],
+				'GUESTCOUNT'	=> $guestcount,
+				'GUESTBREAK'	=> ($statuskey % 2 != 0) ? true : false,
 			));
 
 			// the class categories

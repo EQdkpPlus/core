@@ -767,6 +767,11 @@ $lang = array(
 	"raidevent_raid_close" => 'Close raid',
 	"raidevent_raid_statusbttn" => 'Change status',
 	"raidevent_raid_guests" => 'Guests',
+	"raidevent_raid_guest_summ_txt" => array(
+		0	=> "contains no guests",
+		1	=> "contains 1 guest",
+		2	=> "contains %s guests",
+	),
 	"raidevent_raid_addguest_win" => 'Add guest',
 	"raidevent_no_groups_avail" => 'No groups available',
 	"raidevent_raid_gbutton" => 'Add guest',

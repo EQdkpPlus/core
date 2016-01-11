@@ -723,6 +723,11 @@ $lang = array(
 "raidevent_raid_close" => "Raid absagen",
 "raidevent_raid_statusbttn" => "Status ändern",
 "raidevent_raid_guests" => "Gäste",
+"raidevent_raid_guest_summ_txt" => array(
+	0	=> "enthält keine Gäste",
+	1	=> "enthält 1 Gast",
+	2	=> "enthält %s Gäste",
+),
 "raidevent_raid_addguest_win" => "Gast hinzufügen",
 "raidevent_raid_gbutton" => "Gast hinzufügen",
 "raidevent_raid_editguest_win" => "Gast bearbeiten",

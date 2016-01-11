@@ -10,7 +10,7 @@
 						</th>
 						<th align="center" colspan="{ATTENDEES_COLSPAN}" class="raidstatushead">
 							<font class="status{raidstatus.ID}"> {raidstatus.NAME}</font>
-							({raidstatus.COUNT}/{raidstatus.MAXCOUNT})
+							({raidstatus.COUNT}/{raidstatus.MAXCOUNT}) <!-- IF raidstatus.COUNT_GUESTS -->[{raidstatus.COUNT_GUESTS}]<!-- ENDIF -->
 						</th>
 					</tr>
 				</table>
