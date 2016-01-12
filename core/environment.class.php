@@ -25,7 +25,7 @@ if ( !defined('EQDKP_INC') ){
 if (!class_exists("environment")) {
 	class environment extends gen_class {
 
-		public $ip, $useragent, $request, $request_page, $request_query, $ssl, $current_page, $server_name, $server_path, $httpHost, $phpself, $link, $agent, $path, $is_ajax, $referer;
+		public $protocol, $ip, $useragent, $request, $request_page, $request_query, $ssl, $current_page, $server_name, $server_path, $httpHost, $phpself, $link, $agent, $path, $is_ajax, $referer;
 
 		public function __construct() {
 			$this->ip 				= $this->get_ipaddress();
@@ -45,6 +45,7 @@ if (!class_exists("environment")) {
 			$this->agent			= $this->agent();
 			$this->is_ajax			= $this->is_ajax();
 			$this->referer			= $this->get_referer();
+			$this->protocol			= $this->get_protocol(); 
 		}
 		
 		/**
@@ -582,6 +583,10 @@ if (!class_exists("environment")) {
 			}
 			
 			return $strPath;
+		}
+		
+		public function get_protocol(){
+			return filter_var($_SERVER["SERVER_PROTOCOL"], FILTER_SANITIZE_STRING);
 		}
 	}
 }
