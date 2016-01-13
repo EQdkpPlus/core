@@ -127,9 +127,9 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 			return $this->guests[$id]['status'];
 		}
 
-		public function get_eventlink($id){
+		public function get_eventlink($id, $external=false){
 			$eventID	= $this->get_event($id, true);
-			return $this->routing->build("calendarevent", $this->pdh->get('event', 'name', array($eventID)), $eventID);
+			return (($external) ? $this->server_url : '').$this->routing->build("calendarevent", $this->pdh->get('event', 'name', array($eventID)), $eventID);
 		}
 
 		public function get_event($id, $raw=false){

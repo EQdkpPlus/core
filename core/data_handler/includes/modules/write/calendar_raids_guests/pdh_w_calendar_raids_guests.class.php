@@ -66,7 +66,7 @@ if(!class_exists('pdh_w_calendar_raids_guests')){
 			$this->email->Set_Language($this->config->get('default_lang'));
 			$arrBodyvars = array(
 				'NAME' 		=> $this->pdh->get('calendar_raids_guests', 'name', array($guestid)),
-				'LINK'		=> $this->pdh->get('calendar_raids_guests', 'eventlink', array($guestid)),
+				'LINK'		=> $this->pdh->get('calendar_raids_guests', 'eventlink', array($guestid, true)),
 				'STATUS'	=> $this->user->lang(array('raidevent_raid_status', $aprovalstatus))
 			);
 			$this->email->SendMailFromAdmin($email, $subject, 'calendarguests_application.html', $arrBodyvars, $this->config->get('lib_email_method'));
