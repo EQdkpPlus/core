@@ -27,8 +27,8 @@
 <div id='admininfos_tabs'>
   <ul>
     <li><a href='#fragment-1'><span>{L_adminc_news}</span></a></li>
-    <li><a href='#fragment-2'><span>{L_adminc_statistics}</span></a></li>
-    <li><a href='#fragment-3'><span>{L_adminc_server}</span></a></li>
+    <li><a href='#fragment-2'><span>{L_adminc_system}</span></a></li>
+    <li><a href='#fragment-3'><span>{L_adminc_statistics}</span></a></li>
     <li><a href='#fragment-4'><span>{L_adminc_support}</span></a></li>
   </ul>
 
@@ -52,82 +52,172 @@
 
   </div>
 
-  <div id="fragment-2">
-	<div class="tableHeader">
-		<h2>{L_statistics}</h2>
-	</div>
-    <table class="table fullwidth scrollable-x">
-      <tr>
-        <td class="row2" width="25%">{L_liveupdate_installed_version}:</td>
-        <td class="row1" width="25%">{EQDKP_VERSION}</td>
-        <td class="row2" width="25%">{L_number_of_members}:</td>
-        <td class="row1" width="25%">{NUMBER_OF_MEMBERS}</td>
-      </tr>
-      <tr>
-        <td class="row2" width="25%">{L_backup_system_data}:</td>
-        <td class="row1" width="25%">{DATA_FOLDER}</td>
-        <td class="row2" width="25%">{L_number_of_raids}:</td>
-        <td class="row1" width="25%">{NUMBER_OF_RAIDS}</td>
-      </tr>
-      <tr>
-        <td class="row2" width="25%">{L_db_name}:</td>
-        <td class="row1" width="25%">{DATABASE_NAME}</td>
-        <td class="row2" width="25%">{L_raids_per_day}:</td>
-        <td class="row1" width="25%">{RAIDS_PER_DAY}</td>
-      </tr>
-      <tr>
-        <td class="row2" width="25%">{L_table_prefix}:</td>
-        <td class="row1" width="25%">{TABLE_PREFIX}</td>
-        <td class="row2" width="25%">{L_number_of_items}:</td>
-        <td class="row1" width="25%">{NUMBER_OF_ITEMS}</td>
-      </tr>
-	  <tr>
-        <td class="row2" width="25%">{L_database_size}:</td>
-        <td class="row1" width="25%">{DATABASE_SIZE}</td>
-        <td class="row2" width="25%">{L_items_per_day}:</td>
-        <td class="row1" width="25%">{ITEMS_PER_DAY}</td>
-      </tr>
-	  <tr>
-        <td class="row2" width="25%">{L_eqdkp_started}:</td>
-        <td class="row1" width="25%">{EQDKP_STARTED}</td>
-        <td class="row2" width="25%">{L_number_of_logs}:</td>
-        <td class="row1" width="25%">{NUMBER_OF_LOGS}</td>
-      </tr>
-    </table>
+  <div id="fragment-2">	
+	<fieldset class="settings smallsettings">
+		<legend>EQdkp-Plus</legend>
+		
+		<dl>
+			<dt><label>{L_liveupdate_installed_version}</label></dt>
+			<dd>{EQDKP_VERSION}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_backup_system_data}</label></dt>
+			<dd>{DATA_FOLDER}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_db_name}</label></dt>
+			<dd>{DATABASE_NAME}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_table_prefix}</label></dt>
+			<dd>{TABLE_PREFIX}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_eqdkp_started}</label></dt>
+			<dd>{EQDKP_STARTED}</dd>
+		</dl>
+	</fieldset>
+	
+	<fieldset class="settings smallsettings">
+		<legend>{L_adminc_server}</legend>
+		<dl>
+			<dt><label>PHP Version</label></dt>
+			<dd>{SERVERINFO_PHP} <a href="info_php.php{SID}"><i class="fa fa-lg fa-question-circle"></i> {L_adminc_php_info}</a></dd>
+		</dl>
+		<dl>
+			<dt><label>PHP Safe Mode</label></dt>
+			<dd>{SERVERINFO_SAFEMODE}</dd>
+		</dl>
+		<dl>
+			<dt><label>Register Globals</label></dt>
+			<dd>{SERVERINFO_REGGLOBAL}</dd>
+		</dl>
+		<dl>
+			<dt><label>CURL</label></dt>
+			<dd>{SERVERINFO_CURL}</dd>
+		</dl>
+		<dl>
+			<dt><label>Fopen</label></dt>
+			<dd>{SERVERINFO_FOPEN}</dd>
+		</dl>
+		<dl>
+			<dt><label>MySQL Version</label></dt>
+			<dd>{SERVERINFO_MYSQL}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_database_size}</label></dt>
+			<dd>{DATABASE_SIZE}</dd>
+		</dl>
+	</fieldset>
+		
+  </div>
+  
+  <div id="fragment-3">
+  	<div class="grid" style="overflow:hidden;">
+  		<div class="col2">
+  			<h3>{L_users}</h3>
+  			<div class="circle" id="circles-1"></div>
+  			<script>
+  			var myCircle = Circles.create({
+  			  id:                  'circles-1',
+  			  radius:              60,
+  			  value:               {CIRCLE_USER_VALUE},
+  			  maxValue:            100,
+  			  textClass:    	   'circles-text',
+  			  width:               10,
+  			  text:                function(value){return '{TOTAL_USERS}';},
+  			  colors:              ['#DFF0D8', '#468847'],
+  			  duration:            400,
+  			  styleWrapper:        true,
+  			  styleText:           true
+  			});
+  			</script>
+  		
+  		</div>
+  		<div class="col2">
+  			<h3>{L_chars}</h3>
+  			<div class="circle" id="circles-2"></div>
+  			<script>
+  			var myCircle = Circles.create({
+  			  id:                  'circles-2',
+  			  radius:              60,
+  			  value:               {CIRCLE_MEMBER_VALUE},
+  			  maxValue:            100,
+  			  textClass:    	   'circles-text',
+  			  width:               10,
+  			  text:                function(value){return '{NUMBER_OF_MEMBERS}';},
+  			  colors:              ['#BEE3F7', '#45AEEA'],
+  			  duration:            400,
+  			  styleWrapper:        true,
+  			  styleText:           true
+  			});
+  			</script>
+  		
+  		</div>
+  		<div class="col2">
+  			<h3>{L_items}</h3>
+  			<div class="circle" id="circles-3"></div>
+  			<script>
+  			var myCircle = Circles.create({
+  			  id:                  'circles-3',
+  			  radius:              60,
+  			  value:               {CIRCLE_ITEMS},
+  			  maxValue:            100,
+  			  textClass:    	   'circles-text',
+  			  width:               10,
+  			  text:                function(value){return '{NUMBER_OF_ITEMS}';},
+  			  colors:              ['#FCE6A4', '#EFB917'],
+  			  duration:            400,
+  			  styleWrapper:        true,
+  			  styleText:           true
+  			});
+  			</script>
+  			<div>{L_items_per_day}: {ITEMS_PER_DAY}</div>
+  		</div>
+  		<div class="col2">
+  			<h3>{L_raids}</h3>
+  			<div class="circle" id="circles-4"></div>
+  			<script>
+  			var myCircle = Circles.create({
+  			  id:                  'circles-4',
+  			  radius:              60,
+  			  value:               {CIRCLE_RAIDS},
+  			  maxValue:            100,
+  			  textClass:    	   'circles-text',
+  			  width:               10,
+  			  text:                function(value){return '{NUMBER_OF_RAIDS}';},
+  			  colors:              ['#F8F9B6', '#D2D558'],
+  			  duration:            400,
+  			  styleWrapper:        true,
+  			  styleText:           true
+  			});
+  			</script>
+  			<div>{L_raids_per_day}: {RAIDS_PER_DAY}</div>
+  		</div>
+  		<div class="col2 last">
+  			<h3>{L_adjustments}</h3>
+  			<div class="circle" id="circles-5"></div>
+  			<script>
+  			var myCircle = Circles.create({
+  			  id:                  'circles-5',
+  			  radius:              60,
+  			  value:               {CIRCLE_ADJUSTMENTS},
+  			  maxValue:            100,
+  			  textClass:    	   'circles-text',
+  			  width:               10,
+  			  text:                function(value){return '{NUMBER_OF_ADJUSTMENTS}';},
+  			  colors:              ['#F4BCBF', '#D43A43'],
+  			  duration:            400,
+  			  styleWrapper:        true,
+  			  styleText:           true
+  			});
+  			</script>
+  			<div>{L_adjustments_per_day}: {ADJUSTMENTS_PER_DAY}</div>
+  		</div>
+  	</div>
+  	<div class="clear"></div>
   </div>
 
-  <div id="fragment-3">
-    <table class="table fullwidth scrollable-x colorswitch">
-     <tr>
-          <th>{L_adminc_phpname}</th>
-          <th>{L_adminc_phpvalue}</th>
-        </tr>
-        <tr>
-          <td>PHP Safe Mode</td>
-          <td>{SERVERINFO_SAFEMODE}</td>
-        </tr>
-        <tr>
-          <td>Register Globals</td>
-          <td>{SERVERINFO_REGGLOBAL}</td>
-        </tr>
-         <tr>
-          <td>CURL</td>
-          <td>{SERVERINFO_CURL}</td>
-        </tr>
-         <tr>
-          <td>Fopen</td>
-          <td>{SERVERINFO_FOPEN}</td>
-        </tr>
-         <tr>
-          <td>PHP Version</td>
-          <td>{SERVERINFO_PHP} <em>(<a href="info_php.php{SID}">{L_adminc_server}</a>)</em></td>
-        </tr>
-        <tr>
-          <td>Mysql Version</td>
-          <td>{SERVERINFO_MYSQL}</td>
-        </tr>
-		</table>
-  </div>
 
   <div id="fragment-4">
     {L_adminc_support_intro}<br/><br/>
