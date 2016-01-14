@@ -514,7 +514,8 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 	    * -----------------------------------------------------------------------*/
 
 		public function get_amount_raids($days, $retcount=true){
-			$raids = array_filter($this->events, function ($element) use (&$days) {
+			$events = (is_array($this->events)) ? $this->events : array();
+			$raids = array_filter($events, function ($element) use (&$days) {
 				return ($element['timestamp_start'] > (time()-($days*86400)));
 			});
 			return ($retcount) ? count($raids) : $raids;
