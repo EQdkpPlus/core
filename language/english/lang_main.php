@@ -587,6 +587,7 @@ $lang = array(
 	"email_subject_activation_admin_act" => 'Account activation request',
 	"email_subject_send_error" => 'An error occured when sending the email.',
 	"email_receiver" => 'Recipient',
+	"email_subject_password_changed" => "Password was changed",
 	"uc_add_char" => 'Add character',
 	"uc_add_char_plain" => 'Create new',
 	"uc_add_char_armory" => 'Import',
