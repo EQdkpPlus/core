@@ -150,7 +150,7 @@ class login_pageobject extends pageobject {
 				message_die($this->user->lang('error_invalid_key'));
 			}
 			
-			$objQuery = $this->db->prepare("SELECT user_id, user_active
+			$objQuery = $this->db->prepare("SELECT user_id, user_active, username, user_email
 				FROM __users
 				WHERE user_key =?")->limit(1)->execute($this->in->get('key', ''));
 			
@@ -173,6 +173,10 @@ class login_pageobject extends pageobject {
 				$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set($arrSet)->execute($row['user_id']);
 				if ($objQuery){
 					$this->core->message($this->user->lang('password_reset_success'), $this->user->lang('success'), 'green');
+					//Send Mail to the user
+					$bodyvars = array('USERNAME' => $row['username']);
+					$this->email->SendMailFromAdmin($this->crypt->decrypt($row['user_email']), $this->user->lang('email_subject_password_changed'), 'user_password_changed.html', $bodyvars);
+					
 					$this->display();
 				} else {
 					$this->core->message($this->user->lang('error'),'', 'red');

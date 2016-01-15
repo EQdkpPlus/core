@@ -158,6 +158,10 @@ class settings_pageobject extends pageobject {
 			$new_salt = $this->user->generate_salt();
 			$query_ary['user_password'] = $this->user->encrypt_password($values['new_password'], $new_salt).':'.$new_salt;
 			$query_ary['user_login_key'] = '';
+			
+			//Send Mail to the recent user's email address
+			$bodyvars = array('USERNAME' => $this->pdh->get('user', 'name', array($this->user->id)));
+			$this->email->SendMailFromAdmin($this->pdh->get('user', 'email', array($this->user->id)), $this->user->lang('email_subject_password_changed'), 'user_password_changed.html', $bodyvars);
 		}
 
 		$query_ary['user_email']	= $this->encrypt->encrypt($values['user_email']);

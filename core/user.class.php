@@ -811,7 +811,9 @@ class user extends gen_class {
 
 	//Should be used for resolve multilang serialized array to display the value for the user in the right language
 	public function multilangValue($strRawContent){
-		$arrValues = @unserialize($strRawContent);
+		if(is_serialized($strRawContent)){
+			$arrValues = @unserialize($strRawContent);
+		} else $arrValues = false;
 		if(!$arrValues) return $strRawContent;
 		$strDefLang = $this->config->get('default_lang');
 		if(isset($arrValues[$this->lang_name]) && strlen($arrValues[$this->lang_name])){

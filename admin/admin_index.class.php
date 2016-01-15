@@ -188,7 +188,6 @@ class admin_index extends gen_class {
 		$total_members_			= count($this->pdh->get('member', 'id_list'));
 		$total_members_active	= count($this->pdh->get('member', 'id_list', array(true)));
 		$total_members_inactive	= $total_members_ - $total_members_active;
-		$total_members			= $total_members_active . ' / ' . $total_members_inactive;
 		
 		$objTotalRaids			= $this->db->query('SELECT count(*) as count FROM __raids', true);
 		$total_raids			= $objTotalRaids['count'];
@@ -301,6 +300,16 @@ class admin_index extends gen_class {
 		$this->jquery->Tab_header('admininfos_tabs');
 		$this->jquery->rssFeeder('notifications',	"index.php".$this->SID."&rssajax=notification", '3', '999');
 		$this->jquery->rssFeeder('twitterfeed',	"index.php".$this->SID."&rssajax=twitter");
+		
+		$this->tpl->js_file($this->root_path.'libraries/jquery/js/circles/circles.min.js');
+		
+		//Users
+		$intTotalUsers = count($this->pdh->get('user', 'id_list', array()));
+		$intInactiveUsers = count($this->pdh->get('user', 'inactive', array()));
+		//Adjustments
+		$total_adjustments  = count($this->pdh->get('adjustments', 'id_list', array()));
+		$total_dkp_items = $total_adjustments + $total_raids + $total_items;
+		$adjs_per_day	= sprintf("%.2f", ($total_adjustments / $days));
 
 		$this->tpl->assign_vars(array(
 			//Logs
@@ -315,13 +324,15 @@ class admin_index extends gen_class {
 			'SERVERINFO_MYSQL'		=> 'Client ('.$this->db->client_version.')<br/>Server ('.$this->db->server_version.')',
 			'SERVERINFO_PHP'		=> (((phpversion() >= VERSION_PHP_RQ) ? '<span class="positive">' : '<span class="negative">').phpversion().'</span>'),
 
-			'NUMBER_OF_MEMBERS'		=> $total_members,
+			'NUMBER_OF_MEMBERS'		=> $total_members_,
 			'NUMBER_OF_RAIDS'		=> $total_raids,
 			'NUMBER_OF_ITEMS'		=> $total_items,
+			'NUMBER_OF_ADJUSTMENTS' => $total_adjustments,
 			'DATABASE_SIZE'			=> $dbsize,
 			'NUMBER_OF_LOGS'		=> $total_logs,
 			'RAIDS_PER_DAY'			=> $raids_per_day,
 			'ITEMS_PER_DAY'			=> $items_per_day,
+			'ADJUSTMENTS_PER_DAY'	=> $adjs_per_day,
 			'EQDKP_STARTED'			=> $this->time->user_date($this->config->get('eqdkp_start'), true),
 			'SHOW_BETA_WARNING'		=> VERSION_WIP,
 			'SHOW_PHP_WARNING'		=> (version_compare(PHP_VERSION, VERSION_PHP_RQ, '<=') && !defined('EQDKP_DISABLE_PHP_CHECK')) ? true : false,
@@ -331,6 +342,12 @@ class admin_index extends gen_class {
 			'TABLE_PREFIX'			=> $this->table_prefix,
 			'DATA_FOLDER'			=> md5($this->table_prefix.$this->dbname),
 			'EQDKP_VERSION'			=> 'FILE: '.VERSION_INT.', DB: '.$this->config->get('plus_version'),
+			'CIRCLE_USER_VALUE'		=> (($intTotalUsers - $intInactiveUsers) / $intTotalUsers) * 100,
+			'CIRCLE_MEMBER_VALUE'	=> (($total_members_ - $total_members_inactive) / $total_members_) * 100,
+			'TOTAL_USERS'			=> $intTotalUsers,
+			'CIRCLE_ITEMS'			=> ($total_items / $total_dkp_items)*100,
+			'CIRCLE_RAIDS'			=> ($total_raids / $total_dkp_items)*100,
+			'CIRCLE_ADJUSTMENTS'	=> ($total_adjustments / $total_dkp_items)*100,
 			
 			'S_WHO_IS_ONLINE'		=> $this->user->check_group(2, false),
 		));
