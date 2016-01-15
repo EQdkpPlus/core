@@ -38,12 +38,12 @@ class admin_index extends gen_class {
 			if($this->in->get('rssajax') == 'twitter') $this->ajax_twitterfeed();
 			if($this->in->get('rssajax') == 'notification') $this->ajax_notification();
 		}
-		
+
 		include_once($this->root_path.'core/admin_functions.class.php');
 		$this->admin_functions = register('admin_functions');
-		
+
 		if ($this->in->exists('ip_resolve')) $this->resolve_ip();
-		
+
 		$this->updatecheck();
 		$this->adminmenu_output();
 	}
@@ -57,14 +57,14 @@ class admin_index extends gen_class {
 				$out = ($return['city'] != "") ? $return['city'].'<br />' : '';
 				$out .= ($return['regionName'] != "") ? $return['regionName'].'<br />' : '';
 				$out .= ($return['countryName'] != "") ? $return['countryName'] : '';
-					
-				if (!strlen($out)) $out = "Could not resolve IP"; 
+
+				if (!strlen($out)) $out = "Could not resolve IP";
 			}
 		}
 		echo $out;
 		exit;
-	}	
-	
+	}
+
 	private function updatecheck(){
 		// Check for required Plugin Database Updates
 		$this->core_updates			= $this->UpdateCheck->UpdateBadge('uc_coreupdate_available', true);
@@ -74,10 +74,10 @@ class admin_index extends gen_class {
 		$this->pm->plugin_update_check();
 
 	}
-	
+
 	public function adminmenu_output(){
 		$this->admin_menu = $this->admin_functions->adminmenu(true, $this->core_updates, $this->extension_updates);
-		
+
 		// menu output
 		$this->tpl->assign_vars(array(
 			'L_ADMINISTRATION'	=> $this->user->lang('administration'),
@@ -104,23 +104,23 @@ class admin_index extends gen_class {
 				'screen_name' => EQDKP_TWITTER_SCREENNAME,
 			);
 			$objJSON = $cb->statuses_userTimeline($params);
-			
+
 			if ($objJSON) {
-								
+
 				require_once($this->root_path.'core/feed.class.php');
 				$feed				= registry::register('feed');
 				$feed->title		= "EQdkp Plus Twitter";
 				$feed->description	= "EQdkp Plus Twitter";
 				$feed->published	= time();
 				$feed->language		= 'EN-EN';
-				
+
 				if ($objJSON){
-				
+
 					foreach($objJSON as $key=>$objEntry){
 						if ($objEntry->in_reply_to_user_id_str != "") continue;
 						if (strpos($objEntry->text, '@') === 0) continue;
 						//print_r($objEntry->text);
-						
+
 						$truncated = $objEntry->text;
 						if (strlen($objEntry->text) > 40){
 							$truncated = substr($objEntry->text,0,strpos($objEntry->text,' ',40));
@@ -128,7 +128,7 @@ class admin_index extends gen_class {
 								$truncated = $truncated.'...';
 							}
 						}
-						
+
 						$rssitem = registry::register('feeditems', array($key));
 						$rssitem->title			= $truncated;
 						$rssitem->description	= $objEntry->text;
@@ -136,17 +136,17 @@ class admin_index extends gen_class {
 						$rssitem->author		= 'EQdkp Plus';
 						$rssitem->link			= "https://twitter.com/EQdkpPlus/status/".$objEntry->id_str;
 						$feed->addItem($rssitem);
-						
+
 					}
 
 				}
-				
+
 				$rsstwitter_out = $feed->show();
 				$this->pdc->put('core.twitterfeed_data', $this->xmltools->prepareSave($rsstwitter_out), $this->rsscachetime*3600);
-				
+
 			} else {
-				$expiredData = $this->pdc->get('core.twitterfeed_data', false, false, true);		
-				
+				$expiredData = $this->pdc->get('core.twitterfeed_data', false, false, true);
+
 				$this->pdc->put('core.twitterfeed_data', ($expiredData != null) ? $expiredData : "", 6*3600);
 				$rsstwitter_out = ($expiredData != null) ? $this->xmltools->prepareLoad($expiredData) : "";
 			}
@@ -160,7 +160,7 @@ class admin_index extends gen_class {
 		$data = $this->pdc->get('core.notifications_data');
 		if ($data != null){
 		//there is cached data
-			$rss_out = $this->xmltools->prepareLoad($data);		
+			$rss_out = $this->xmltools->prepareLoad($data);
 		} else {
 		//expired or not available, update from Server
 			$fetchedData = $this->puf->fetch(EQDKP_NOTIFICATIONS_URL);
@@ -168,8 +168,8 @@ class admin_index extends gen_class {
 				$this->pdc->put('core.notifications_data', $this->xmltools->prepareSave($fetchedData), $this->rsscachetime*3600);
 				$rss_out = $fetchedData;
 			} else {
-				$expiredData = $this->pdc->get('core.notifications_data', false, false, true);		
-				
+				$expiredData = $this->pdc->get('core.notifications_data', false, false, true);
+
 				$this->pdc->put('core.notifications_data', ($expiredData != null) ? $expiredData : "", 6*3600);
 				$rss_out = ($expiredData != null) ? $this->xmltools->prepareLoad($expiredData) : "";
 			}
@@ -188,7 +188,7 @@ class admin_index extends gen_class {
 		$total_members_			= count($this->pdh->get('member', 'id_list'));
 		$total_members_active	= count($this->pdh->get('member', 'id_list', array(true)));
 		$total_members_inactive	= $total_members_ - $total_members_active;
-		
+
 		$objTotalRaids			= $this->db->query('SELECT count(*) as count FROM __raids', true);
 		$total_raids			= $objTotalRaids['count'];
 		$raids_per_day			= sprintf("%.2f", ($total_raids / $days));
@@ -207,14 +207,14 @@ class admin_index extends gen_class {
 
 		$arrTables = $this->db->listTables();
 		$dbsize = 0;
-		foreach ($arrTables as $key => $strTablename){			
+		foreach ($arrTables as $key => $strTablename){
 			$dbsize += $this->db->getSizeOf($strTablename);;
 		}
 
 		if(is_int($dbsize)){
 			$dbsize = ( $dbsize >= 1048576 ) ? sprintf('%.2f MB', ($dbsize / 1048576)) : (($dbsize >= 1024) ? sprintf('%.2f KB', ($dbsize / 1024)) : sprintf('%.2f Bytes', $dbsize));
 		}
-	
+
 		$this->tpl->add_js('
 			$(".ip_resolver").each(function() {
 				$(this).qtip({
@@ -246,7 +246,7 @@ class admin_index extends gen_class {
 					}
 				});
 			});', 'docready');
-		
+
 		// Who's Online
 		$sql = 'SELECT s.*, u.username
 							FROM ( __sessions s
@@ -263,11 +263,11 @@ class admin_index extends gen_class {
 				if(!$isBot || ($isBot && !in_array($this->env->is_bot($row['session_browser']), $arrBots))){
 					$arrOnlineUsers[] = $row;
 					if($isBot) $arrBots[] = $this->env->is_bot($row['session_browser']);
-				}				
+				}
 			}
 			$online_count = count($arrOnlineUsers);
 		} else $online_count = 0;
-		
+
 		if($online_count){
 			foreach($arrOnlineUsers as $row){
 				$username = ( !empty($row['username']) ) ? $row['username'] : (($this->env->is_bot($row['session_browser'])) ? $this->env->is_bot($row['session_browser']) : $this->user->lang('anonymous'));
@@ -300,9 +300,9 @@ class admin_index extends gen_class {
 		$this->jquery->Tab_header('admininfos_tabs');
 		$this->jquery->rssFeeder('notifications',	"index.php".$this->SID."&rssajax=notification", '3', '999');
 		$this->jquery->rssFeeder('twitterfeed',	"index.php".$this->SID."&rssajax=twitter");
-		
+
 		$this->tpl->js_file($this->root_path.'libraries/jquery/js/circles/circles.min.js');
-		
+
 		//Users
 		$intTotalUsers = count($this->pdh->get('user', 'id_list', array()));
 		$intInactiveUsers = count($this->pdh->get('user', 'inactive', array()));
@@ -342,13 +342,13 @@ class admin_index extends gen_class {
 			'TABLE_PREFIX'			=> $this->table_prefix,
 			'DATA_FOLDER'			=> md5($this->table_prefix.$this->dbname),
 			'EQDKP_VERSION'			=> 'FILE: '.VERSION_INT.', DB: '.$this->config->get('plus_version'),
-			'CIRCLE_USER_VALUE'		=> sprintf("%.2f", (($intTotalUsers - $intInactiveUsers) / $intTotalUsers) * 100),
-			'CIRCLE_MEMBER_VALUE'	=> sprintf("%.2f", (($total_members_ - $total_members_inactive) / $total_members_) * 100),
+			'CIRCLE_USER_VALUE'		=> sprintf("%.2F", (($intTotalUsers - $intInactiveUsers) / $intTotalUsers) * 100),
+			'CIRCLE_MEMBER_VALUE'	=> sprintf("%.2F", (($total_members_ - $total_members_inactive) / $total_members_) * 100),
 			'TOTAL_USERS'			=> $intTotalUsers,
-			'CIRCLE_ITEMS'			=> sprintf("%.2f", ($total_items / $total_dkp_items)*100),
-			'CIRCLE_RAIDS'			=> sprintf("%.2f", ($total_raids / $total_dkp_items)*100),
-			'CIRCLE_ADJUSTMENTS'	=> sprintf("%.2f", ($total_adjustments / $total_dkp_items)*100),
-			
+			'CIRCLE_ITEMS'			=> sprintf("%.2F", ($total_items / $total_dkp_items)*100),
+			'CIRCLE_RAIDS'			=> sprintf("%.2F", ($total_raids / $total_dkp_items)*100),
+			'CIRCLE_ADJUSTMENTS'	=> sprintf("%.2F", ($total_adjustments / $total_dkp_items)*100),
+
 			'S_WHO_IS_ONLINE'		=> $this->user->check_group(2, false),
 		));
 
