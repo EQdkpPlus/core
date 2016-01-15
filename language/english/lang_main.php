@@ -479,6 +479,7 @@ $lang = array(
 	"account_activated_user" => 'Your account has been activated and you can now %1$slog in%2$s.',
 	"password_sent" => 'Your new account password has been e-mailed to you.',
 	"password_reset_success" => 'Your password was changed successfully .',
+	"password_resend_success" => "If there is an account with the entered data, you will get an email with information about the password change.",
 	"register_activation_self" => 'Your account has been created, but before you can use it you need to activate it.<br /><br />An e-mail has been sent to %1$s with information on how to activate your account.',
 	"register_activation_admin" => 'Your account has been created, but before you can use it an administrator needs to activate it.<br /><br />An e-mail has been sent to %1$s with more information.',
 	"register_activation_none" => 'Your account has been created and you can now %1$slog in%2$s.<br /><br />An e-mail has been sent to %3$s with more information.',

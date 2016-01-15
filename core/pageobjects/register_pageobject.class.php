@@ -305,20 +305,14 @@ class register_pageobject extends pageobject {
 					'U_ACTIVATE' 	=> $this->server_url . 'Activate/?key=' . $user_key,
 				);
 
-				if($this->email->SendMailFromAdmin($row['user_email'], $this->user->lang('email_subject_activation_self'), 'register_activation_self.html', $bodyvars)) {
-					message_die(sprintf($this->user->lang('register_activation_self'), $this->in->get('user_email')), $this->user->lang('get_new_password'));
-				} else {
+				if(!$this->email->SendMailFromAdmin($row['user_email'], $this->user->lang('email_subject_activation_self'), 'register_activation_self.html', $bodyvars)) {
 					message_die($this->user->lang('error_email_send'), $this->user->lang('get_new_password'));
 				}
-			} else {
-				message_die($this->user->lang('error_invalid_user_or_mail'), $this->user->lang('get_new_activation_mail'), '', '', '', array('value' => $this->user->lang('back'), 'onclick' => 'javascript:history.back()'));
-			
 			}
 			
-		} else {
-			message_die('Could not obtain user information', '', 'error', false,__FILE__, __LINE__, $sql);
 		}
-
+		
+		message_die($this->user->lang('password_resend_success'), $this->user->lang('get_new_password'));
 	}
 
 
