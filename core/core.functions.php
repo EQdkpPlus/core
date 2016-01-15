@@ -714,12 +714,12 @@ if(!function_exists('fnmatch')) {
 	}
 }
 
-function set_cookie($name, $cookie_data, $cookie_time){
+function set_cookie($name, $cookie_data, $cookie_time, $blnHttpOnly=true){
 	//dont set cookies if we dont have a cookie-name or cookie-path
 	$cname = register('config')->get('cookie_name');
 	$cpath = register('config')->get('cookie_path');
 	if(empty($cname) || empty($cpath)) return;
-	setcookie( $cname . '_' . $name, $cookie_data, $cookie_time, $cpath, register('config')->get('cookie_domain'), register('env')->ssl);
+	setcookie( $cname . '_' . $name, $cookie_data, $cookie_time, $cpath, register('config')->get('cookie_domain'), register('env')->ssl, $blnHttpOnly);
 }
 
 //A workaround because strtolower() does not support UTF8
