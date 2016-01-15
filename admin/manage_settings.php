@@ -24,7 +24,7 @@ define('IN_ADMIN', true);
 $eqdkp_root_path = './../';
 include_once($eqdkp_root_path . 'common.php');
 
-class mmocms_settings extends page_generic {
+class admin_settings extends page_generic {
 	public static $shortcuts = array(
 			'itt' => 'infotooltip',
 			'social' => 'socialplugins',
@@ -1009,5 +1009,5 @@ class mmocms_settings extends page_generic {
 		);
 	}
 }
-registry::register('mmocms_settings');
+registry::register('admin_settings');
 ?>
