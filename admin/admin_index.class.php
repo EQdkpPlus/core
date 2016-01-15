@@ -342,12 +342,12 @@ class admin_index extends gen_class {
 			'TABLE_PREFIX'			=> $this->table_prefix,
 			'DATA_FOLDER'			=> md5($this->table_prefix.$this->dbname),
 			'EQDKP_VERSION'			=> 'FILE: '.VERSION_INT.', DB: '.$this->config->get('plus_version'),
-			'CIRCLE_USER_VALUE'		=> (($intTotalUsers - $intInactiveUsers) / $intTotalUsers) * 100,
-			'CIRCLE_MEMBER_VALUE'	=> (($total_members_ - $total_members_inactive) / $total_members_) * 100,
+			'CIRCLE_USER_VALUE'		=> sprintf("%.2f", (($intTotalUsers - $intInactiveUsers) / $intTotalUsers) * 100),
+			'CIRCLE_MEMBER_VALUE'	=> sprintf("%.2f", (($total_members_ - $total_members_inactive) / $total_members_) * 100),
 			'TOTAL_USERS'			=> $intTotalUsers,
-			'CIRCLE_ITEMS'			=> ($total_items / $total_dkp_items)*100,
-			'CIRCLE_RAIDS'			=> ($total_raids / $total_dkp_items)*100,
-			'CIRCLE_ADJUSTMENTS'	=> ($total_adjustments / $total_dkp_items)*100,
+			'CIRCLE_ITEMS'			=> sprintf("%.2f", ($total_items / $total_dkp_items)*100),
+			'CIRCLE_RAIDS'			=> sprintf("%.2f", ($total_raids / $total_dkp_items)*100),
+			'CIRCLE_ADJUSTMENTS'	=> sprintf("%.2f", ($total_adjustments / $total_dkp_items)*100),
 			
 			'S_WHO_IS_ONLINE'		=> $this->user->check_group(2, false),
 		));
