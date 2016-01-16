@@ -789,7 +789,7 @@ class calendarevent_pageobject extends pageobject {
 			}
 		}
 
-		$this->tpl->add_js("var roles_json = ".json_encode($drpdwn_roles));
+		$this->tpl->add_js("var roles_json = ".json_encode($drpdwn_roles).";", 'head');
 
 		// Dropdown Menu Array
 		$nextraidevent	= $this->pdh->get('calendar_events', 'next_raid', array($this->url_id));
