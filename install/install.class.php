@@ -213,7 +213,19 @@ class install extends gen_class {
 			opcache_reset();
 		}
 		
-		return $this->lang['install_end_text'];
+		$donateText = '
+						<br /><br />
+						<div><i class="fa fa-heart fa-5x" style="color:red;vertical-align:middle;"></i>
+						<span class="fa-stack fa-lg" style="margin-left: -30px; margin-bottom: -10px; margin-right: 10px;">
+						<i class="fa fa-circle fa-stack-2x"></i>
+  						<i class="fa fa-usd fa-stack-1x fa-inverse"></i>
+						</span><h1 style="display:inline-block;">'.$this->lang['install_support_h1'].'</h1><br />
+						'.$this->lang['install_support_text'].'
+						</div>
+				
+				';
+		
+		return $this->lang['install_end_text'].$donateText;
 	}
 	
 	private function parse_end() {

@@ -1818,7 +1818,15 @@ $lang = array(
 		"overwrite_gamedata_yes" => "Yes (own Events and MultiDKP-Pools will be deleted, standings might be change)",
 		"overwrite_gamedata_no" => "No",
 		"overwrite_gamedata_nobut" => "No, but add the gamedata to my data",
-
+		'support_eqdkplus'	=> 'A project like EQdkp Plus can only exist, if we can get back some of the effort, time and love we invest in EQdkp Plus. You can give something back on the following ways:
+						<ul>
+							<li><i class="fa fa-puzzle-piece"></i> <a href="http://eqdkp-plus.eu/repository/">Publish a plugin or template, so every EQdkp Plus user can use it</a></li>
+							<li><i class="fa fa-comments"></i> <a href="http://eqdkp-plus.eu/forum/">Support us at our board</a></li>
+							<li><i class="fa fa-cogs"></i> <a href="http://eqdkp-plus.eu/de/entwicklung.html">Take part actively in the development of EQdkp Plus</a></li>
+							<li><i class="fa fa-usd"></i> <a href="http://eqdkp-plus.eu/de/spenden.html">Support us financially so we can continue offering you our services</a></li>
+						</ul>
+						So if you love EQdkp Plus as much as we do, think about supporting us!'
+		
 );
 
 ?>
