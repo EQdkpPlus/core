@@ -96,12 +96,12 @@
 	<table id="user_groups_table" class="table fullwidth colorswitch">
 		<thead>
 		<tr class="not-sortable">
-			<th width="10px"></th>
-			<th width="20"><input type="checkbox" name="selectall" id="selall_groups" />&nbsp;</th>
-			<th colspan="2" width="20" class="nowrap">{L_action}</th>
+			<th style="width:10px"></th>
+			<th style="width:20px"><input type="checkbox" name="selectall" id="selall_groups" />&nbsp;</th>
+			<th colspan="2" style="width:20px" class="nowrap">{L_action}</th>
 			<th>{L_name}</th>
 			<th>{L_description}</th>
-			<th width="50" class="hiddenSmartphone">{L_group_members}</th>
+			<th style="width:50px" class="hiddenSmartphone">{L_group_members}</th>
 			<th>{L_default_group}</th>
 			<th>{L_hide}</th>
 			<th>{L_show_teamlist}</th>
@@ -111,9 +111,9 @@
 		<!-- BEGIN user_groups -->
 		<tr>
 			<td><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"></span></td>
-			<td align="center"><!-- IF user_groups.S_DELETABLE --><input type="checkbox" name="user_group_ids[]" value="{user_groups.ID}" /><!-- ENDIF --><input type="hidden" name="user_groups[{user_groups.KEY}][id]" value="{user_groups.ID}" /></td>
-			<td align="center"><a href="manage_user_groups.php{SID}&amp;g={user_groups.ID}&amp;edit=true" title="{L_manage_user_group}"><i class="fa fa-pencil fa-lg"></i></a></td>
-			<td align="center">
+			<td class="center"><!-- IF user_groups.S_DELETABLE --><input type="checkbox" name="user_group_ids[]" value="{user_groups.ID}" /><!-- ENDIF --><input type="hidden" name="user_groups[{user_groups.KEY}][id]" value="{user_groups.ID}" /></td>
+			<td class="center"><a href="manage_user_groups.php{SID}&amp;g={user_groups.ID}&amp;edit=true" title="{L_manage_user_group}"><i class="fa fa-pencil fa-lg"></i></a></td>
+			<td class="center">
 				<!-- IF user_groups.S_DELETABLE -->
 				<a href="javascript:delete_single_warning({user_groups.ID});" title="{L_delete}"><i class="fa fa-trash-o fa-lg" title="{L_delete}"></i></a>
 				<!-- ENDIF -->
@@ -121,7 +121,7 @@
 			<td><input type="text" name="user_groups[{user_groups.KEY}][name]" size="40" maxlength="50" value="{user_groups.NAME}" class="maininput" style="width:95%" /></td>    
 			<td><input type="text" name="user_groups[{user_groups.KEY}][desc]" size="50" maxlength="75" value="{user_groups.DESC}" class="maininput" style="width:95%" /></td>
 			<td class="hiddenSmartphone">{user_groups.USER_COUNT}</td>
-			<td width="50" class="nowrap"><!-- IF not user_groups.S_NO_STANDARD --><input type="radio" value="{user_groups.ID}" name="user_groups_standard" {user_groups.STANDARD} /><!-- ENDIF --></td>
+			<td style="width:50px" class="nowrap"><!-- IF not user_groups.S_NO_STANDARD --><input type="radio" value="{user_groups.ID}" name="user_groups_standard" {user_groups.STANDARD} /><!-- ENDIF --></td>
 			<td><input type="checkbox" value="1" name="user_groups[{user_groups.KEY}][hide]" {user_groups.HIDE} />&nbsp;</td>
 			<td><input type="checkbox" value="1" name="user_groups[{user_groups.KEY}][team]" {user_groups.TEAM} />&nbsp;</td>
 		</tr>
@@ -139,13 +139,13 @@
 	<table id="usergroup_template" style="visibility:hidden;">
 		<tr>
 			<td><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"></span></td>
-			<td align="center"></td>
-			<td align="center"></td>
-			<td align="center"></td>
+			<td class="center"></td>
+			<td class="center"></td>
+			<td class="center"></td>
 			<td><input type="hidden" name="user_groups[KEY][id]" value="ID" /><input type="text" name="user_groups[KEY][name]" size="40" maxlength="50" value="NAME" class="maininput" style="width:95%" /></td>    
 			<td><input type="text" name="user_groups[KEY][desc]" size="50" maxlength="75" value="DESC" class="maininput" style="width:95%" /></td>
 			<td></td>
-			<td width="50" class="nowrap"></td>
+			<td style="width:50px" class="nowrap"></td>
 			<td><input type="checkbox" value="1" name="user_groups[KEY][hide]" /></td>
 			<td><input type="checkbox" value="1" name="user_groups[KEY][team]" /></td>
 		</tr>
@@ -165,19 +165,19 @@
 </div>
 <table id="user_groups_table" class="table fullwidth colorswitch">
 		<tr>
-			<th width="20" class="nowrap">{L_action}</th>
+			<th style="width:20px" class="nowrap">{L_action}</th>
 			<th>
 				<a href="{ACTION}&amp;order=0.1"><span class="down_arrow{RED01}"></span></a>
 				<a href="{ACTION}&amp;order=0.0"><span class="up_arrow{RED00}"></span></a>
 				{L_name}
 			</th>
 			<th>{L_description}</th>
-			<th width="50" class="nowrap">{L_group_members}</th>
+			<th style="width:50px" class="nowrap">{L_group_members}</th>
 		</tr>
 		<!-- BEGIN user_groups -->
 		<!-- IF user_groups.S_IS_GRPLEADER -->
 		<tr>
-			<td align="center"><a href="manage_user_groups.php{SID}&amp;g={user_groups.ID}&amp;edit=true" title="{L_manage_user_group}"><i class="fa fa-user fa-lg"></i></a></td>
+			<td class="center"><a href="manage_user_groups.php{SID}&amp;g={user_groups.ID}&amp;edit=true" title="{L_manage_user_group}"><i class="fa fa-user fa-lg"></i></a></td>
 			<td>{user_groups.NAME}</td>    
 			<td>{user_groups.DESC}</td>
 			<td>{user_groups.USER_COUNT}</td>

@@ -18,7 +18,7 @@
 	<table class="table fullwidth colorswitch" id="profilefield_table">
 		<thead>
 		<tr class="not-sortable">
-			<th width="10px"></th>
+			<th style="width:10px"></th>
 			<th class="nowrap">&nbsp;</th>
 			<th class="nowrap"><input type="checkbox" name="all_nr" id="selall_pfields" /></th>
 			<th colspan="2">{L_action}</th>
@@ -32,10 +32,10 @@
 		<!-- BEGIN profile_row -->
 		<tr>
 			<td><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"><input type="hidden" name="sort[]" value="{profile_row.ID}"></span></td>
-			<td width="20" class="nowrap" align="center"><i class="{profile_row.ENABLED_ICON}"> </i></td>
-			<td width="15" class="nowrap" align="center"><!-- IF not profile_row.S_UNDELETABLE --><input name="del_ids[]" type="checkbox" value="{profile_row.ID}" /><!-- ENDIF --></td>
-			<td width="10" align="center" class="nowrap"><!-- IF not profile_row.S_UNDELETABLE --><a href="{profile_row.U_ENABLE}" title="{profile_row.L_ENABLE}"><i class="fa {profile_row.ENABLE}"></i></a><!-- ENDIF --></td>
-			<td width="10" align="center" class="nowrap"><a href="{profile_row.U_EDIT}"><i class="fa fa-pencil fa-lg" title="{L_edit}"></i></a></td>
+			<td style="width:20px" class="nowrap center"><i class="{profile_row.ENABLED_ICON}"> </i></td>
+			<td style="width:15px" class="nowrap center"><!-- IF not profile_row.S_UNDELETABLE --><input name="del_ids[]" type="checkbox" value="{profile_row.ID}" /><!-- ENDIF --></td>
+			<td style="width:10px" class="nowrap center"><!-- IF not profile_row.S_UNDELETABLE --><a href="{profile_row.U_ENABLE}" title="{profile_row.L_ENABLE}"><i class="fa {profile_row.ENABLE}"></i></a><!-- ENDIF --></td>
+			<td style="width:10px" class="nowrap center"><a href="{profile_row.U_EDIT}"><i class="fa fa-pencil fa-lg" title="{L_edit}"></i></a></td>
 			<td><a href="{profile_row.U_EDIT}">{profile_row.NAME_ID}</a></td>
 			<td>{profile_row.NAME}</td>
 			<td class="hiddenSmartphone">{profile_row.TYPE}</td>

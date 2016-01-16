@@ -40,15 +40,15 @@ $(document).ready(function() {
 				<th colspan="4">{L_lm_default_layouts}</th>
 			</tr>
 			<tr>
-				<th width="1%">&nbsp;</th>
-				<th width="1%">{L_action}</th>
-				<th width="15%">{L_name}</th>
+				<th style="width:25px">&nbsp;</th>
+				<th style="width:25px">{L_action}</th>
+				<th style="width:15%">{L_name}</th>
 				<th>{L_description}</th>
 			</tr>
 			<!-- BEGIN layouts_row -->
 			<tr>
 				<td><input type="radio" name="current_layout" value="{layouts_row.NAME}" {layouts_row.IS_CURRENT} /></td>
-				<td width="20" class="nowrap">
+				<td style="width:20px" class="nowrap">
 					<a href="manage_pagelayouts.php{SID}&amp;edit=true&amp;layout={layouts_row.NAME}" title="{L_edit}"><i class="fa fa-pencil fa-lg" title="{L_edit}"></i></a>
 				</td>
 				<td>{layouts_row.NAME}</td>
@@ -62,12 +62,12 @@ $(document).ready(function() {
 			<!-- BEGIN user_layouts_row -->
 			<tr>
 				<td><input type="radio" name="current_layout" value="{user_layouts_row.NAME}" {user_layouts_row.IS_CURRENT} /></td>
-				<td width="20" class="nowrap">
+				<td style="width:20px" class="nowrap">
 					<a href="manage_pagelayouts.php{SID}&amp;edit=true&amp;layout={user_layouts_row.NAME}" title="{L_edit}"><i class="fa fa-pencil fa-lg" title="{L_edit}"></i></a> &nbsp;
 					<a href="manage_pagelayouts.php{SID}&amp;del=true&amp;layout={user_layouts_row.NAME}&amp;link_hash={CSRF_DEL_TOKEN}" title="{L_delete}"> <i class="fa fa-trash-o fa-lg" title="{L_delete}"></i></a>
 				</td>
 				<td><a href="manage_pagelayouts.php{SID}&amp;edit=true&amp;layout={user_layouts_row.NAME}">{user_layouts_row.NAME}</a></td>
-				<td width="84%">{user_layouts_row.DESC}</td>
+				<td style="width:84%">{user_layouts_row.DESC}</td>
 			</tr>
 			<!-- END user_layouts_row -->
 		</table>
@@ -95,7 +95,7 @@ $(document).ready(function() {
 			</tr>
 			<!-- BEGIN preset_row -->
 			<tr>
-				<td width="20" align="center"><a href="manage_pagelayouts.php{SID}&amp;del_pre={preset_row.NAME}&amp;link_hash={CSRF_DELPRESET_TOKEN}" title="{L_delete}"><i class="fa fa-trash-o fa-lg" title="{L_delete}"></i></a></td>
+				<td style="width:20px" class="center"><a href="manage_pagelayouts.php{SID}&amp;del_pre={preset_row.NAME}&amp;link_hash={CSRF_DELPRESET_TOKEN}" title="{L_delete}"><i class="fa fa-trash-o fa-lg" title="{L_delete}"></i></a></td>
 				<td>{preset_row.NAME}</td>
 				<td>{preset_row.MODULE}</td>
 				<td>{preset_row.TAG}</td>

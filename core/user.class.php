@@ -795,7 +795,8 @@ class user extends gen_class {
 					if(isset($lang['ISO_LANG_SHORT'])){
 						list($pre, $post) = explode('_', $lang['ISO_LANG_SHORT']);
 						if($pre != "" && is_file($root_path.'images/flags/'.$pre.'.svg')){
-							$icon = '<img src="'.registry::get_const('server_path').'images/flags/'.$pre.'.svg" class="icon icon-language absmiddle" title="'.(($lang['ISO_LANG_NAME']) ? $lang['ISO_LANG_NAME'] : ucfirst($file)).'"/> <span>';
+							$name = (($lang['ISO_LANG_NAME']) ? $lang['ISO_LANG_NAME'] : ucfirst($file));
+							$icon = '<img src="'.registry::get_const('server_path').'images/flags/'.$pre.'.svg" class="icon icon-language absmiddle" alt="'.$name.'" title="'.$name.'"/> <span>';
 						}
 					}
 

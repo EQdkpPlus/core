@@ -230,15 +230,28 @@ td.top, tr.top{
 td.w100p, tr.w100p, th.w100p{
 	width:100% !important;
 }
+td.w80p, tr.w80p, th.w80p{
+	width:80% !important;
+}
 td.w75p, tr.w75p, th.w75p{
 	width:75% !important;
 }
 td.w50p, tr.w50p, th.w50p{
 	width:50% !important;
 }
+td.w35p, tr.w35p, th.w35p{
+	width:35% !important;
+}
 td.w25p, tr.w25p, th.w25p{
 	width:25% !important;
 }
+td.w20p, tr.w20p, th.w20p{
+	width:20% !important;
+}
+td.w10p, tr.w10p, th.w10p{
+	width:10% !important;
+}
+
 .linethrough{
 	text-decoration:line-through;
 }

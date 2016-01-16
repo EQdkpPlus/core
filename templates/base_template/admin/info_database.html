@@ -36,12 +36,12 @@
 </div>
 <table class="table fullwidth colorswitch hoverrows">
   <tr>
-    <th align="left">{L_table_name} ({NUM_TABLES})</th>
-    <th align="left" class="nowrap">{L_rows}</th>
-    <th width="75" align="left" class="nowrap">{L_db_engine}</th>
-    <th width="75" align="left" class="nowrap">{L_db_collation}</th>
-    <th align="left" class="nowrap">{L_table_size}</th>
-    <th align="left" class="nowrap">{L_index_size}</th>
+    <th class="left">{L_table_name} ({NUM_TABLES})</th>
+    <th class="nowrap">{L_rows}</th>
+    <th style="width:75px" class="nowrap left">{L_db_engine}</th>
+    <th style="width:75px" class="nowrap left">{L_db_collation}</th>
+    <th class="nowrap left">{L_table_size}</th>
+    <th class="nowrap left">{L_index_size}</th>
   </tr>
   <!-- BEGIN table_row -->
   <tr>
@@ -54,9 +54,9 @@
   </tr>
   <!-- END table_row -->
   <tr>
-    <th align="left" colspan="4"><b>{L_totals}:</b> {TOTAL_SIZE}</th>
-    <th align="left" width="75">{TOTAL_TABLE_SIZE}</th>
-    <th align="left" width="100">{TOTAL_INDEX_SIZE}</th>
+    <th colspan="4" class="left"><b>{L_totals}:</b> {TOTAL_SIZE}</th>
+    <th style="width:75px" class="left">{TOTAL_TABLE_SIZE}</th>
+    <th style="width:100px" class="left">{TOTAL_INDEX_SIZE}</th>
   </tr>
 </table>
 </form>

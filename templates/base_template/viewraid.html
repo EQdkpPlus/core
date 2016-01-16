@@ -48,16 +48,16 @@
 <table class="table fullwidth">
   <!-- BEGIN attendees_row -->
   <tr>
-    <!-- IF S_COLUMN0 --><td class="row2 nowrap" width="{COLUMN_WIDTH}%">{attendees_row.COLUMN0_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN1 --><td class="row1 nowrap" width="{COLUMN_WIDTH}%">{attendees_row.COLUMN1_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN2 --><td class="row2 nowrap" width="{COLUMN_WIDTH}%">{attendees_row.COLUMN2_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN3 --><td class="row1 nowrap" width="{COLUMN_WIDTH}%">{attendees_row.COLUMN3_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN4 --><td class="row2 nowrap" width="{COLUMN_WIDTH}%">{attendees_row.COLUMN4_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN5 --><td class="row1 nowrap" width="{COLUMN_WIDTH}%">{attendees_row.COLUMN5_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN6 --><td class="row2 nowrap" width="{COLUMN_WIDTH}%">{attendees_row.COLUMN6_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN7 --><td class="row1 nowrap" width="{COLUMN_WIDTH}%">{attendees_row.COLUMN7_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN8 --><td class="row2 nowrap" width="{COLUMN_WIDTH}%">{attendees_row.COLUMN8_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN9 --><td class="row1 nowrap" width="{COLUMN_WIDTH}%">{attendees_row.COLUMN9_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN0 --><td class="row2 nowrap" style="width: {COLUMN_WIDTH}%">{attendees_row.COLUMN0_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN1 --><td class="row1 nowrap" style="width: {COLUMN_WIDTH}%">{attendees_row.COLUMN1_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN2 --><td class="row2 nowrap" style="width: {COLUMN_WIDTH}%">{attendees_row.COLUMN2_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN3 --><td class="row1 nowrap" style="width: {COLUMN_WIDTH}%">{attendees_row.COLUMN3_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN4 --><td class="row2 nowrap" style="width: {COLUMN_WIDTH}%">{attendees_row.COLUMN4_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN5 --><td class="row1 nowrap" style="width: {COLUMN_WIDTH}%">{attendees_row.COLUMN5_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN6 --><td class="row2 nowrap" style="width: {COLUMN_WIDTH}%">{attendees_row.COLUMN6_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN7 --><td class="row1 nowrap" style="width: {COLUMN_WIDTH}%">{attendees_row.COLUMN7_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN8 --><td class="row2 nowrap" style="width: {COLUMN_WIDTH}%">{attendees_row.COLUMN8_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN9 --><td class="row1 nowrap" style="width: {COLUMN_WIDTH}%">{attendees_row.COLUMN9_NAME}</td><!-- ENDIF -->
   </tr>
   <!-- END attendees_row -->
   <tr>
@@ -77,14 +77,14 @@
 
 <table class="table fullwidth">
   <tr>
-    <th align="center">{L_class_distribution}</th>
-    <th align="center">{L_loot_distribution}</th>
+    <th class="center">{L_class_distribution}</th>
+    <th class="center">{L_loot_distribution}</th>
   </tr>
  <tr>
- <td class="row2" align="center">
+ <td class="row2" class="center">
   {CLASS_PERCENT_CHART}
  </td>
- <td class="row2" align="center">
+ <td class="row2" class="center">
   {LOOT_PERCENT_CHART}
  </td>
  </tr>
@@ -95,15 +95,15 @@
 </div>
 <table class="table fullwidth">
   <tr>
-    <th align="left" width="100">{L_class}</th>
-    <th align="left" width="50%">{L_percent}</th>
-    <th align="left" width="50%">{L_attendees}</th>
+    <th class="left" style="width:100px">{L_class}</th>
+    <th class="w49p left">{L_percent}</th>
+    <th class="w50p left">{L_attendees}</th>
   </tr>
   <!-- BEGIN class_row -->
   <tr>
-    <td width="100" class="row2 nowrap">{class_row.CLASS}</td>
-    <td width="50%" class="row1">{class_row.BAR}</td>
-    <td width="50%" class="row2"><span class="small">{class_row.ATTENDEES}</span></td>
+    <td class="row2 nowrap">{class_row.CLASS}</td>
+    <td class="row1">{class_row.BAR}</td>
+    <td class="row2"><span class="small">{class_row.ATTENDEES}</span></td>
   </tr>
   <!-- END class_row -->
 </table>

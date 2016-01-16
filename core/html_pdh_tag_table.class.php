@@ -235,9 +235,9 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 				if(isset($this->settings['selectboxes_checkall']) && $this->settings['selectboxes_checkall']){
 					$selAllCheckboxName = "pdh_selectall".$this->counter."_".substr(md5($hptt_checkboxname), 0, 7);
 					$this->jquery->selectall_checkbox($selAllCheckboxName, $hptt_checkboxname.'[]');
-					$prefix .= "\t<th width='13'><input type='checkbox' id='".$selAllCheckboxName."' name='pdh_selectall' value='pdh_selectall' /></th>\n";
+					$prefix .= "\t<th style='width:13px'><input type='checkbox' id='".$selAllCheckboxName."' name='pdh_selectall' value='pdh_selectall' /></th>\n";
 				}else{
-					$prefix .= "\t<th width='13'>&nbsp;</th>\n";
+					$prefix .= "\t<th style='width:13px'>&nbsp;</th>\n";
 				}
 			}
 			if(isset($this->settings['show_numbers']) && $this->settings['show_numbers']){
