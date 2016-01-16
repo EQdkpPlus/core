@@ -307,7 +307,7 @@ class admin_index extends gen_class {
 		$intTotalUsers = count($this->pdh->get('user', 'id_list', array()));
 		$intInactiveUsers = count($this->pdh->get('user', 'inactive', array()));
 		//Adjustments
-		$total_adjustments  = count($this->pdh->get('adjustments', 'id_list', array()));
+		$total_adjustments  = count($this->pdh->get('adjustment', 'id_list', array()));
 		$total_dkp_items = $total_adjustments + $total_raids + $total_items;
 		$adjs_per_day	= sprintf("%.2f", ($total_adjustments / $days));
 

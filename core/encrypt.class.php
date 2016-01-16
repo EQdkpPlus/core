@@ -56,5 +56,5 @@ class encrypt extends gen_class {
 
 	}
 
-} //END mmocms_encrypt-class
+} //END encrypt-class
 ?>
