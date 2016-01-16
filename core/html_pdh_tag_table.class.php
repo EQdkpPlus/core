@@ -210,18 +210,18 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 				if($column['sort'] == true){
 					if($this->sort_cid == $cid){
 						if($this->sort_direction == 'asc'){
-							$sort_asc = '<a href="'.$this->settings['page_ref'].$this->SID.'&amp;'.$this->sort_suffix.'='.$cid.'|asc'.$url_suffix.'" class="down_arrow_red"></a>';
-							$sort_desc = '<a href="'.$this->settings['page_ref'].$this->SID.'&amp;'.$this->sort_suffix.'='.$cid.'|desc'.$url_suffix.'" class="up_arrow_green"></a>';
-							$sort_toggle = '<a href="'.$this->settings['page_ref'].$this->SID.'&amp;'.$this->sort_suffix.'='.$cid.'|desc'.$url_suffix.'" >'.$caption.'</a>';
+							$sort_asc = '<a href="'.$this->settings['page_ref'].$this->SID.'&amp;'.$this->sort_suffix.'='.$cid.'%7casc'.$url_suffix.'" class="down_arrow_red"></a>';
+							$sort_desc = '<a href="'.$this->settings['page_ref'].$this->SID.'&amp;'.$this->sort_suffix.'='.$cid.'%7cdesc'.$url_suffix.'" class="up_arrow_green"></a>';
+							$sort_toggle = '<a href="'.$this->settings['page_ref'].$this->SID.'&amp;'.$this->sort_suffix.'='.$cid.'%7cdesc'.$url_suffix.'" >'.$caption.'</a>';
 						}else{
-							$sort_asc = '<a href="'.$this->settings['page_ref'].$this->SID.'&amp;'.$this->sort_suffix.'='.$cid.'|asc'.$url_suffix.'" class="down_arrow_green"></a>';
-							$sort_desc = '<a href="'.$this->settings['page_ref'].$this->SID.'&amp;'.$this->sort_suffix.'='.$cid.'|desc'.$url_suffix.'" class="up_arrow_red"></a>';
-							$sort_toggle = '<a href="'.$this->settings['page_ref'].$this->SID.'&amp;'.$this->sort_suffix.'='.$cid.'|asc'.$url_suffix.'" >'.$caption.'</a>';
+							$sort_asc = '<a href="'.$this->settings['page_ref'].$this->SID.'&amp;'.$this->sort_suffix.'='.$cid.'%7casc'.$url_suffix.'" class="down_arrow_green"></a>';
+							$sort_desc = '<a href="'.$this->settings['page_ref'].$this->SID.'&amp;'.$this->sort_suffix.'='.$cid.'%7cdesc'.$url_suffix.'" class="up_arrow_red"></a>';
+							$sort_toggle = '<a href="'.$this->settings['page_ref'].$this->SID.'&amp;'.$this->sort_suffix.'='.$cid.'%7casc'.$url_suffix.'" >'.$caption.'</a>';
 						}
 					}else{
-						$sort_asc = '<a href="'.$this->settings['page_ref'].$this->SID.'&amp;'.$this->sort_suffix.'='.$cid.'|asc'.$url_suffix.'" class="down_arrow_green"></a>';
-						$sort_desc = '<a href="'.$this->settings['page_ref'].$this->SID.'&amp;'.$this->sort_suffix.'='.$cid.'|desc'.$url_suffix.'" class="up_arrow_green"></a>';
-						$sort_toggle = '<a href="'.$this->settings['page_ref'].$this->SID.'&amp;'.$this->sort_suffix.'='.$cid.'|asc'.$url_suffix.'" >'.$caption.'</a>';
+						$sort_asc = '<a href="'.$this->settings['page_ref'].$this->SID.'&amp;'.$this->sort_suffix.'='.$cid.'%7casc'.$url_suffix.'" class="down_arrow_green"></a>';
+						$sort_desc = '<a href="'.$this->settings['page_ref'].$this->SID.'&amp;'.$this->sort_suffix.'='.$cid.'%7cdesc'.$url_suffix.'" class="up_arrow_green"></a>';
+						$sort_toggle = '<a href="'.$this->settings['page_ref'].$this->SID.'&amp;'.$this->sort_suffix.'='.$cid.'%7casc'.$url_suffix.'" >'.$caption.'</a>';
 					}
 					$header .= "\t<th ".$th_add.'>'.$sort_asc.$sort_desc.' '.$sort_toggle."</th>\n";
 				}else{
@@ -274,8 +274,12 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 					$params = $column[2];
 					$td_add = $column['td_add'];
 					$this->sub_array[$this->id_tag] = $view_id;
+					
+					if(strpos($td_add, 'class') !== false){
+						$td_add = preg_replace("/class=\"(.*)\"/U", "class=\"$1 twinktd\"", $td_add);
+					}
 
-					$view_row .= "\t".'<td '.$td_add.' class="twinktd">';
+					$view_row .= "\t".'<td '.$td_add.'>';
 					if($this->config->get('detail_twink') AND $this->settings['show_detail_twink']) {
 						$view_row .= $this->detail_twink(array_search('%member_id%', $params, true), array_search('%with_twink%', $params, true), $cid, $module, $tag, $params);
 					} elseif(isset($this->settings['perm_detail_twink']) && $this->settings['perm_detail_twink']) {
@@ -375,7 +379,11 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 		}
 
 		public function get_html_footer_row($footer_text){
-			$footer  = "<tr>\n\t<th colspan=\"".(count($this->columns)+2)."\" class=\"footer\">";
+			$rowCount = count($this->columns);
+			if($this->settings['show_select_boxes']) $rowCount++;
+			if($this->settings['show_numbers']) $rowCount++;
+			
+			$footer  = "<tr>\n\t<th colspan=\"".$rowCount."\" class=\"footer\">";
 			if($footer_text == null){
 				$count = count($this->view_list);
 				$footer .= ($this->total_count > $count) ? sprintf($this->user->lang('hptt_default_part_footcount'), $count, $this->total_count) : sprintf($this->user->lang('hptt_default_footcount'), $count);
