@@ -1,14 +1,14 @@
 <!-- BEGIN raidstatus -->
-<div id="viewraidcal_colapse_{raidstatus.ID}" align="center"  class="classdistribution" >
+<div id="viewraidcal_colapse_{raidstatus.ID}" class="classdistribution center" >
 	<table class="table fullwidth">
 		<tr>
-			<td align="left" width="100%">
+			<td class="left w100p">
 				<table class="table fullwidth borderless">
-					<tr valign="middle">
-						<th align="left" width="14px">
+					<tr class="middle">
+						<th class="left" style="width:14px;">
 							<span class="toggle_button">&nbsp;</span>
 						</th>
-						<th align="center" colspan="{ATTENDEES_COLSPAN}" class="raidstatushead">
+						<th colspan="{ATTENDEES_COLSPAN}" class="raidstatushead center">
 							<font class="status{raidstatus.ID}"> {raidstatus.NAME}</font>
 							({raidstatus.COUNT}/{raidstatus.MAXCOUNT}) <!-- IF raidstatus.COUNT_GUESTS -->[{raidstatus.COUNT_GUESTS}]<!-- ENDIF -->
 						</th>
@@ -22,13 +22,13 @@
 		<table class="table fullwidth scrollable-x">
 			<tr>
 				<!-- BEGIN classes -->
-				<td valign="top" width="{COLUMN_WIDTH}%">
+				<td class="middle" style="width: {COLUMN_WIDTH}%;">
 					<table class="table fullwidth borderless">
 						<tr>
-							<th width="100%" class="class_{raidstatus.classes.ID}"> {raidstatus.classes.CLASS_ICON} {raidstatus.classes.NAME} ({raidstatus.classes.COUNT}{raidstatus.classes.MAX})</th>
+							<th class="class_{raidstatus.classes.ID} w100p"> {raidstatus.classes.CLASS_ICON} {raidstatus.classes.NAME} ({raidstatus.classes.COUNT}{raidstatus.classes.MAX})</th>
 						</tr>
 						<tr>
-							<td valign="top">
+							<td class="top">
 								<!-- BEGIN status -->
 								<div class="ui-state-hover table fullwidth noMobileTransform attendee_box<!-- IF raidstatus.classes.status.CHARISAWAY --> attendee_awaymode<!-- ENDIF -->" style="padding: 5px; margin-top: 4px;">
 									<div class="tr class_{raidstatus.classes.status.CLASSID}">

@@ -159,7 +159,7 @@ ul.sf-ddm li li li.sfHover ul {
 
 /* Admin - Icon */
 .adminicon:before {
-	content: "\f132"; 
+	content: "\f132";
 	font-family: FontAwesome;
 	color: gold;
 	font-size: 16px;
@@ -221,8 +221,23 @@ tr.cm_confirm{
 	text-decoration:line-through;
 	font-style:italic;
 }
-td.middle{
+td.middle, tr.middle{
 	vertical-align: middle !important;
+}
+td.top, tr.top{
+	vertical-align: top !important;
+}
+td.w100p, tr.w100p, th.w100p{
+	width:100% !important;
+}
+td.w75p, tr.w75p, th.w75p{
+	width:75% !important;
+}
+td.w50p, tr.w50p, th.w50p{
+	width:50% !important;
+}
+td.w25p, tr.w25p, th.w25p{
+	width:25% !important;
 }
 .linethrough{
 	text-decoration:line-through;
@@ -235,7 +250,7 @@ td.middle{
 	vertical-align: middle;
 	margin-bottom: .25em;
 }
-.noshade{ 
+.noshade{
 	height:2px;
 	border-width:0;
 	color:gray;
@@ -248,7 +263,7 @@ td.middle{
 	font-weight: bold;
 }
 .errorbox a:hover, .infobox a:hover{
-	text-decoration: underline;	
+	text-decoration: underline;
 }
 
 /* Everything button image below this line has been ported to 1.1 */
@@ -301,13 +316,13 @@ td.middle{
 	z-index:9999;
 }
 
-.ui-infotooltip { 
-	box-shadow: none !important; 
-	max-width: 450px !important; 
-	padding: 0px; 
+.ui-infotooltip {
+	box-shadow: none !important;
+	max-width: 450px !important;
+	padding: 0px;
 	position: absolute;
 	z-index: 9999;
-	border-radius: 0px !important; 
+	border-radius: 0px !important;
 	background:none !important;
 	border: 0px !important;
 }
@@ -504,7 +519,7 @@ i.eqdkp-icon-online {
 	border-radius: 50%;
 	box-shadow: inset -0.1em -0.1em 0.2em rgba(0,0,0,.5);
 	background-image: -webkit-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
-	background-image: -moz-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);  
+	background-image: -moz-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
 	background-image: -o-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
 	background-image: -ms-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
 }
@@ -518,7 +533,7 @@ i.eqdkp-icon-offline {
 	border-radius: 50%;
 	box-shadow: inset -0.1em -0.1em 0.2em rgba(0,0,0,.5);
 	background-image: -webkit-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
-	background-image: -moz-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);  
+	background-image: -moz-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
 	background-image: -o-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
 	background-image: -ms-linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
 }
