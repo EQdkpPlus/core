@@ -185,8 +185,8 @@ abstract class super_registry {
 					if(version_compare(registry::register('config')->get('plus_version'), VERSION_INT, '<')) {
 						registry::register('config')->set('plus_version', VERSION_INT);
 						//Reset Repo
-						$this->pdh->put('repository', 'reset', array());
-						$this->pdh->process_hook_queue();
+						register('pdh')->put('repository', 'reset', array());
+						register('pdh')->process_hook_queue();
 					}
 				}
 			}
