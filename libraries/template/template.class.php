@@ -1730,7 +1730,7 @@ class template extends gen_class {
 			$strCSS = $parser->getCss();
 
 		} catch (Exception $e) {
-			echo "Fatal error parsing less: " . nl2br($e->getMessage());
+			echo "Fatal error parsing less: ".(($strMapFile) ? $strMapFile : '')." . nl2br($e->getMessage());
 		}
 
 		return $strCSS;
