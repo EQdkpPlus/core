@@ -109,6 +109,8 @@ class login_facebook extends gen_class {
 	public function getMe($access_token){
 		if (!$access_token) return false;
 		
+		if(!is_object($this->objFacebook)) return false;
+		
 		// Request for user data
 		try {
 			$response = $this->objFacebook->get('/me?fields=id,name,birthday,email,first_name,gender,last_name,locale', $access_token);
@@ -167,9 +169,12 @@ class login_facebook extends gen_class {
 	
 	public function account_button(){
 		$this->init_fb();
+				
 		try {
-			$helper = $this->objFacebook->getJavaScriptHelper();
-			$token = $helper->getAccessToken();
+			if(is_object($this->objFacebook)){
+				$helper = $this->objFacebook->getJavaScriptHelper();
+				$token = $helper->getAccessToken();
+			} else $token = false;
 
 			if ($token){
 				$me = $this->getMe($token);
@@ -201,6 +206,8 @@ class login_facebook extends gen_class {
 	public function get_account(){
 		$this->init_fb();
 		
+		if(!is_object($this->objFacebook)) return false;
+		
 		try {
 			$helper = $this->objFacebook->getJavaScriptHelper();
 			
@@ -227,6 +234,7 @@ class login_facebook extends gen_class {
 	
 	public function pre_register(){
 		$this->init_fb();
+		if(!is_object($this->objFacebook)) return false;
 		try {
 			$token = $this->get_longterm_token($this->in->get('act'));
 			if(!$token) {
@@ -278,8 +286,10 @@ class login_facebook extends gen_class {
 			if($this->user->data['session_vars']['fb_token']){
 				$token = $this->user->data['session_vars']['fb_token'];
 			} else {
-				$helper = $this->objFacebook->getJavaScriptHelper();
-				$token = $helper->getAccessToken();
+				if(is_object($this->objFacebook)){
+					$helper = $this->objFacebook->getJavaScriptHelper();
+					$token = $helper->getAccessToken();
+				}
 			}
 
 			if ($token){
@@ -367,6 +377,9 @@ class login_facebook extends gen_class {
 	*/
 	public function logout(){
 		$this->init_fb();
+		
+		if(!is_object($this->objFacebook)) return true;
+		
 		try {
 			$helper = $this->objFacebook->getRedirectLoginHelper();
 
@@ -393,6 +406,8 @@ class login_facebook extends gen_class {
 	*/
 	public function autologin($arrCookieData){
 		$this->init_fb();
+		if(!is_object($this->objFacebook)) return false;
+		
 		try {
 			$helper = $this->objFacebook->getJavaScriptHelper();
 			
@@ -411,7 +426,7 @@ class login_facebook extends gen_class {
 			}
 			
 		} catch(Exception $e){
-			$this->core->message($e->getMessage(), "Facebook Exception autologin()", 'red');
+			//$this->core->message($e->getMessage(), "Facebook Exception autologin()", 'red');
 		}
 		
 		return false;
