@@ -239,6 +239,14 @@
         <td><span class="fa-stack fa-3x"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-users fa-stack-1x fa-inverse"></i></span></td>
         <td>{L_adminc_support_forums}</td>
       </tr>
+      <tr>
+        <td id="support"><i class="fa fa-heart fa-5x" style="color:red;vertical-align:middle;"></i>
+						<span class="fa-stack fa-lg" style="margin-left: -30px; margin-bottom: -10px; margin-right: 10px;">
+						<i class="fa fa-circle fa-stack-2x"></i>
+  						<i class="fa fa-usd fa-stack-1x fa-inverse"></i>
+						</span></td>
+        <td>{L_support_eqdkplus}</td>
+      </tr>
     </table>
   </div>
 </div>
@@ -247,21 +255,21 @@
 <h2>{L_who_online}</h2>
 <table  class="table fullwidth colorswitch">
     <tr>
-      <th align="left" width="20%" class="nowrap">{L_username}</th>
-      <th align="left" width="20%" class="hiddenSmartphone">{L_logged_in}</th>
-      <th align="left" width="20%">{L_last_update}</th>
-      <th align="left" width="20%">{L_location}</th>
-      <th align="left" width="20%" class="hiddenSmartphone">{L_ip_address}</th>
-      <th align="left" width="20%" class="hiddenSmartphone">{L_browser}</th>
+      <th class="w20p left nowrap">{L_username}</th>
+      <th class="w20p lefthiddenSmartphone">{L_logged_in}</th>
+      <th class="w20p left">{L_last_update}</th>
+      <th class="w20p left">{L_location}</th>
+      <th class="w20p hiddenSmartphone left">{L_ip_address}</th>
+      <th class="hiddenSmartphone left">{L_browser}</th>
     </tr>
     <!-- BEGIN online_row -->
     <tr>
-      <td width="20%" class="nowrap">{online_row.USERNAME}</td>
-      <td width="20%" class="hiddenSmartphone">{online_row.LOGIN}</td>
-      <td width="20%">{online_row.LAST_UPDATE}</td>
-      <td width="20%">{online_row.LOCATION}</td>
-      <td width="20%" class="hiddenSmartphone"><span class="ip_resolver" title="{online_row.IP_ADDRESS}">{online_row.IP_ADDRESS}</span></td>
-      <td width="20%" align="center" class="hiddenSmartphone">{online_row.BROWSER}</td>
+      <td class="nowrap">{online_row.USERNAME}</td>
+      <td class="hiddenSmartphone">{online_row.LOGIN}</td>
+      <td>{online_row.LAST_UPDATE}</td>
+      <td>{online_row.LOCATION}</td>
+      <td class="hiddenSmartphone"><span class="ip_resolver" title="{online_row.IP_ADDRESS}">{online_row.IP_ADDRESS}</span></td>
+      <td class="hiddenSmartphone center">{online_row.BROWSER}</td>
     </tr>
     <!-- END online_row -->
     <tr>
