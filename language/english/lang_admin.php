@@ -1494,7 +1494,7 @@ $lang = array(
 	"liveupdate_diff_added" => 'Added',
 	"liveupdate_diff_removed" => 'Removed',
 	"liveupdate_diff_line" => 'Line',
-	"liveupdate_update_requirements_failed" => 'The Live-Update cannot be used, because some requirements are not fulfilled. Please download the Update from our <a href="http://eqdkp-plus.eu/repository/">Repository</a>.',
+	"liveupdate_update_requirements_failed" => 'The Live-Update cannot be used, because some requirements are not fulfilled. Please check the requirements, and if you think you have fulfilled thmen, download the Update from our <a href="http://eqdkp-plus.eu/repository/">Repository</a>.',
 	"liveupdate_update_nopackages_failed" => 'There are no Live-Update packages for this EQdkp Plus Version. Please download the Update from our <a href="http://eqdkp-plus.eu/repository/">Repository</a>.',
 	"pi_rating" => 'Rating',
 	"pi_category_1" => 'Plugins',
