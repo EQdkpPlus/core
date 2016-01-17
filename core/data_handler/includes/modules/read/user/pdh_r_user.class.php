@@ -248,8 +248,8 @@ if (!class_exists("pdh_r_user")){
 		}
 
 		public function get_html_is_away($user_id){
-			$tooltip		 = '<div class="awaytt_row"><i class="fa fa-calendar"></i> '.$this->user->lang('calendar_awaymode_start_tt').': '.$this->time->user_date($this->get_awaymode_startdate($user_id), true).'</div>';
-			$tooltip		.= '<div class="awaytt_row"><i class="fa fa-calendar"></i> '.$this->user->lang('calendar_awaymodeend_tt').': '.$this->time->user_date($this->get_awaymode_enddate($user_id), true).'</div>';
+			$tooltip		 = '<div class="awaytt_row"><i class="fa fa-calendar"></i> '.$this->user->lang('calendar_awaymode_start_tt').': '.$this->time->user_date($this->get_awaymode_startdate($user_id), false).'</div>';
+			$tooltip		.= '<div class="awaytt_row"><i class="fa fa-calendar"></i> '.$this->user->lang('calendar_awaymodeend_tt').': '.$this->time->user_date($this->get_awaymode_enddate($user_id), false).'</div>';
 			$tooltip		.= '<div class="awaytt_row"><i class="fa fa-comment"></i> '.$this->user->lang('note').': '.$this->get_awaymode_note($user_id).'</div>';
 			return ($this->get_awaymode_enabled($user_id, true) && $this->get_awaymode_enddate($user_id) > $this->time->time) ? '<i class="fa fa-suitcase coretip" data-coretip="'.htmlspecialchars($tooltip).'"></i>' : '';
 		}
@@ -264,6 +264,18 @@ if (!class_exists("pdh_r_user")){
 
 		public function get_awaymode_note($user_id){
 			return $this->users[$user_id]['awaymode_note'];
+		}
+		
+		public function comp_awaymode($params1, $params2){
+			$isAway1 = ($this->get_awaymode_enabled($params1[0], true) && $this->get_awaymode_enddate($params1[0]) > $this->time->time) ? $this->get_awaymode_startdate($params1[0]) : false;
+			$isAway2 = ($this->get_awaymode_enabled($params2[0], true) && $this->get_awaymode_enddate($params2[0]) > $this->time->time) ? $this->get_awaymode_startdate($params2[0]) : false;
+			if($isAway1 !== false && $isAway2 !== false){
+				return ($isAway1 < $isAway2) ? -1 : 1;
+			} elseif($isAway1 !== false) {
+				return -1;
+			} else {
+				return 1;
+			}
 		}
 
 		public function get_failed_logins($user_id) {

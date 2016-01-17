@@ -410,6 +410,7 @@ class Manage_Users extends page_generic {
 			2 => array('last_visit', array('desc', 'asc')),
 			3 => array('active', array('desc', 'asc')),
 			4 => array('regdate', array('desc', 'asc')),
+			5 => array('awaymode', array('desc', 'asc')),
 		);
 
 		$user_ids = $this->pdh->sort($this->pdh->get('user', 'id_list'), 'user', $sort[$order[0]][0], $sort[$order[0]][1][$order[1]]);
@@ -491,6 +492,7 @@ class Manage_Users extends page_generic {
 			'O_LASTVISIT'			=> ($this->in->get('o') == '2.0') ? '2.1' : '2.0',
 			'O_ACTIVE'				=> ($this->in->get('o') == '3.0') ? '3.1' : '3.0',
 			'O_REG_DATE'			=> ($this->in->get('o') == '4.0') ? '4.1' : '4.0',
+			'O_AWAY'				=> ($this->in->get('o') == '5.0') ? '5.1' : '5.0',
 			'UPARROW'				=> $this->root_path.'images/arrows/up_arrow',
 			'DOWNARROW'				=> $this->root_path.'images/arrows/down_arrow',
 			'RED'.$order[0].$order[1] => '_red',
