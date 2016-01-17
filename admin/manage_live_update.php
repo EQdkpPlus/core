@@ -105,10 +105,8 @@ class Manage_Live_Update extends page_generic {
 
 		$this->tpl->add_js('
 			var totalSteps = '.$last_step.';
-			$(function() {
-				$("#nl_progressbar").progressbar({
-					value: 0
-				});
+			$("#nl_progressbar").progressbar({
+				value: 0
 			});
 
 			function set_progress_bar_value(recentNumber, labeltext){
