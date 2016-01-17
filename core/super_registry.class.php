@@ -60,6 +60,7 @@ abstract class super_registry {
 		'comments'				=> 'core/',
 		'config'				=> 'core/',
 		'core'					=> 'core/',
+		'cronjobs'				=> 'core/',
 		'embedly'				=> 'core/',
 		'environment'			=> 'core/',
 		'encrypt'				=> 'core/',
@@ -222,7 +223,7 @@ abstract class super_registry {
 
 				registry::register('portal');
 			
-				registry::register('timekeeper')->handle_crons();
+				registry::register('cronjobs')->handle_crons();
 			
 				//EQdkp Tour
 				if (registry::fetch('user')->check_auth('a_', false)){

@@ -19,20 +19,31 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-define('EQDKP_INC', true);
-$eqdkp_root_path = './';
-$lite = true;
-include_once($eqdkp_root_path . 'common.php');
-
-@set_time_limit(0);
-@ignore_user_abort(true);
-//single task
-if(registry::register('input')->get('task') != ""){
-	$force_run = (registry::register('input')->get('force') == 'true' && register('user')->check_auth('a_config_man', false)) ? true : false;
-	registry::register('cronjobs')->execute_cron(registry::register('input')->get('task'), $force_run);
-	echo "Cronjob executed.";
-}else{
-	//all cronjobs with flag external
-	registry::register('cronjobs')->handle_crons(true);
+if ( !defined('EQDKP_INC') ){
+	header('HTTP/1.0 404 Not Found');exit;
 }
-?>
+
+abstract class crontask extends gen_class {
+	public $defaults = array(
+		'start_time'		=> null,
+		'extern'			=> false,
+		'ajax'				=> true,
+		'delay'				=> true,
+		'repeat'			=> false,
+		'repeat_type'		=> 'hourly',
+		'repeat_interval'	=> 1,
+		'multiple'			=> false,
+		'active'			=> false,
+		'path'				=> 'core/cronjobs/',
+		'params'			=> array(),
+		'editable'			=> false,
+		'description'		=> null
+	);
+
+	//overwritten in real implementations
+	abstract public function run();
+	
+	public function options() {
+		if(isset($this->options)) return $this->options;
+	}
+}

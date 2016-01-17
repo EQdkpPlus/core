@@ -41,12 +41,12 @@ class ManageCrons extends page_generic {
 		parent::__construct(false, $handler);
 		
 		// Variables
-		$this->crons = $this->timekeeper->list_crons();
+		$this->crons = $this->cronjobs->list_crons();
 		$this->process();
 	}
 
 	public function run() {
-		$this->timekeeper->run_cron($this->in->get('cron'), true);
+		$this->cronjobs->run_cron($this->in->get('cron'), true);
 		$this->crons[$this->in->get('cron')]['last_run'] = time();
 		
 		$this->core->message(sprintf($this->user->lang('cron_run_success'), sanitize($this->in->get('cron'))), $this->user->lang('success'), 'green');
@@ -55,14 +55,14 @@ class ManageCrons extends page_generic {
 
 	public function enable(){
 		if ($this->crons[$this->in->get('cron')]['editable']){
-			$this->timekeeper->add_cron($this->in->get('cron'), array('active' => true), true);
+			$this->cronjobs->add_cron($this->in->get('cron'), array('active' => true), true);
 		}
 		$this->display();
 	}
 	
 	public function disable(){
 		if ($this->crons[$this->in->get('cron')]['editable']){
-			$this->timekeeper->add_cron($this->in->get('cron'), array('active' => false), true);
+			$this->cronjobs->add_cron($this->in->get('cron'), array('active' => false), true);
 		}			
 		$this->display();
 	}
@@ -85,7 +85,7 @@ class ManageCrons extends page_generic {
 			
 			$options['start_time'] = $this->time->time;
 			if($this->in->exists('start_date')) $options['start_time'] = $this->time->fromformat($this->in->get('start_date', '0.0.0'), 1);
-			$this->timekeeper->add_cron($this->in->get('cron'), $options, true);
+			$this->cronjobs->add_cron($this->in->get('cron'), $options, true);
 		}		
 		$this->display();
 	}
@@ -95,7 +95,7 @@ class ManageCrons extends page_generic {
 	// ---------------------------------------------------------
 	public function display(){	
 		if ($this->in->exists('mode')){
-			$this->crons = $this->timekeeper->list_crons();
+			$this->crons = $this->cronjobs->list_crons();
 		}
 		
 		$this->tpl->add_js('
