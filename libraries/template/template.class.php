@@ -1341,8 +1341,13 @@ class template extends gen_class {
 		return $varref;
 	}
 
-	private function compile_load(&$_str, &$handle, $do_echo){
-		$filename	= ($handle == 'main') ? $this->body_filename : $this->files[$handle];
+	private function compile_load(&$_str, &$handle, $do_echo){		
+		if($handle == 'main'){
+			$filename = substr(sha1($this->files['body']), 0, 9).'_'.$this->body_filename;
+		} else {
+			$filename = $this->files[$handle];
+		}
+		
 		$file = $this->cachedir . $filename . '.php';
  
 		// Recompile page if the original template is newer, otherwise load the compiled version
@@ -1360,6 +1365,12 @@ class template extends gen_class {
 
 	private function compile_write(&$handle, $data){
 		$handle_filename	= ($handle == 'main') ? $this->body_filename : $this->files[$handle];
+		if($handle == 'main'){
+			$handle_filename = substr(sha1($this->files['body']), 0, 9).'_'.$this->body_filename;
+		} else {
+			$handle_filename	= $this->files[$handle];
+		}
+		
 		if($m = preg_match("/^\.{1,2}\/(\.{1,2}\/)*/", $handle_filename)){
 			$handle_filename_array	= explode("/", $handle_filename);
 			$handle_filename		= $handle_filename_array[ count($handle_filename_array) - 1 ];
