@@ -49,7 +49,7 @@ class hdatepicker extends html {
 	private $out = '';
 	private $php_format = false;
 	private $php_timeformat = false;
-	private $all_options = array('id', 'format', 'change_fields', 'cal_icons', 'show_buttons', 'number_months', 'year_range', 'other_months', 'timeformat', 'enablesecs', 'onselect', 'timepicker', 'return_function');
+	private $all_options = array('id', 'format', 'change_fields', 'cal_icons', 'show_buttons', 'number_months', 'year_range', 'other_months', 'timeformat', 'enablesecs', 'onselect', 'onclose','timepicker', 'return_function');
 	
 	protected function _construct() {
 		if(!($this->allow_empty && (empty($this->value) || $this->value == '0')) && is_numeric($this->value)) {
