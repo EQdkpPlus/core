@@ -163,7 +163,7 @@ if(!class_exists('pdh_r_adjustment')){
 				foreach($this->index as $adj_id){
 					$intMember = $this->get_member($adj_id);
 					if(in_array($intMember, $arrMemberList)){
-						$adjustment_ids[] = $id;
+						$adjustment_ids[] = $adj_id;
 					}
 				}
 			}
@@ -177,8 +177,8 @@ if(!class_exists('pdh_r_adjustment')){
 				foreach($this->index as $adj_id){
 					$intRaidID = $this->get_raid_id($adj_id);
 					if($raid_id == $intRaidID){
-						$adjustment_ids[] = $id;
-						$adjGrouped[$this->get_group_key($id)] = $id;
+						$adjustment_ids[] = $adj_id;
+						$adjGrouped[$this->get_group_key($adj_id)] = $adj_id;
 					}
 				}
 			}
