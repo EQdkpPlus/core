@@ -300,18 +300,18 @@ $(document).ready(function(){
 	
 		<table class="table fullwidth colorswitch">
 		<tr>
-			<th align="left" width="20">&nbsp;</th>
-			<th align="left" width="16">{L_action}</th>
-			<th align="left">{L_name}</th>
-			<th align="left" colspan="{DEP_COUNT}" class="hiddenSmartphone">{L_plug_dep_title}</th>
-			<th align="left">{L_version}</th>
-			<th align="left" class="hiddenSmartphone">{L_portalplugin_author}</th>
-			<th align="left" class="hiddenSmartphone">{L_description}</th>
-			<th align="left" class="hiddenSmartphone">{L_infos}</th>
+			<th class="left" style="width:20px">&nbsp;</th>
+			<th class="left" style="width:16px">{L_action}</th>
+			<th class="left">{L_name}</th>
+			<th colspan="{DEP_COUNT}" class="hiddenSmartphone left">{L_plug_dep_title}</th>
+			<th class="left">{L_version}</th>
+			<th class="hiddenSmartphone left">{L_portalplugin_author}</th>
+			<th class="hiddenSmartphone left">{L_description}</th>
+			<th class="hiddenSmartphone left">{L_infos}</th>
 		</tr>
 		<!-- BEGIN plugins_row_red -->
 		<tr>
-			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
+			<td style="width:20px" class="center"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
 			<td class="nowrap desktopOnly">{plugins_row_red.ACTION_LINK}</td>
 			<td>{plugins_row_red.NAME}</td>
 			<!-- BEGIN dep_row -->
@@ -340,7 +340,7 @@ $(document).ready(function(){
 		<!-- END plugins_row_red -->
 		<!-- BEGIN plugins_row_yellow -->
 		<tr>
-			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
+			<td style="width:20px" class="center"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
 			<td class="nowrap desktopOnly">{plugins_row_yellow.ACTION_LINK}</td>
 			<td>{plugins_row_yellow.NAME}</td>
 			<!-- BEGIN dep_row -->
@@ -369,7 +369,7 @@ $(document).ready(function(){
 		<!-- END plugins_row_yellow -->
 		<!-- BEGIN plugins_row_green -->
 		<tr>
-			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
+			<td style="width:20px" class="center"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
 			<td class="nowrap desktopOnly">{plugins_row_green.ACTION_LINK}</td>
 			<td>{plugins_row_green.NAME}</td>
 			<!-- BEGIN dep_row -->
@@ -398,7 +398,7 @@ $(document).ready(function(){
 		<!-- END plugins_row_green -->
 		<!-- BEGIN plugins_row_grey -->
 		<tr>
-			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
+			<td style="width:20px" class="center"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
 			<td class="nowrap desktopOnly">{plugins_row_grey.ACTION_LINK}</td>
 			<td>{plugins_row_grey.NAME}</td>
 			<!-- BEGIN dep_row -->
@@ -427,7 +427,7 @@ $(document).ready(function(){
 		<!-- END plugins_row_grey -->
 		<!-- BEGIN plugins_row_grey_repo -->
 		<tr>
-			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
+			<td style="width:20px" class="center"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
 			<td class="nowrap desktopOnly">{plugins_row_grey_repo.ACTION_LINK}</td>
 			<td>{plugins_row_grey_repo.NAME}</td>
 			<!-- BEGIN dep_row -->
@@ -456,7 +456,7 @@ $(document).ready(function(){
 		<!-- END plugins_row_grey_repo -->
 		<!-- BEGIN plugins_row_broken -->
 		<tr>
-			 <td width="20" align="center"></td>
+			 <td style="width:20px" class="center"></td>
 			<td><!-- IF plugins_row_broken.DELETE --><a href="{plugins_row_broken.DEL_LINK}" title="{L_delete_plugin}"><i class="fa fa-exclamation-triangle fa-fw"></i>&nbsp;{L_delete}</a><!-- ENDIF -->&nbsp;</td>
 			<td colspan="20">{plugins_row_broken.NAME}: {L_broken_plugin}</td>
 		</tr>
@@ -569,7 +569,7 @@ $(document).ready(function(){
 					<a href="javascript:style_reset_warning({styles_row_yellow.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>	
 					<a href="javascript:style_preview({styles_row_yellow.ID});" title="{L_preview}"><i class="fa fa-eye fa-lg"></i></a>
 				</div>
-				<a class="style-preview" href="{styles_row_yellow.U_EDIT_STYLE}" <!-- IF styles_row_yellow.TT_CONTENT != "" -->style="background: url({styles_row_yellow.TT_CONTENT}) no-repeat; background-size: cover; background-position: center;"<!-- ENDIF -->></a>
+				<a class="style-preview" href="{styles_row_yellow.U_EDIT_STYLE}" title="{L_uc_bttn_update}" <!-- IF styles_row_yellow.TT_CONTENT != "" -->style="background: url({styles_row_yellow.TT_CONTENT}) no-repeat; background-size: cover; background-position: center;"<!-- ENDIF -->></a>
 			
 				<div class="style-info">
 					<h2>{styles_row_yellow.TT_NAME}<span class="style-version"><i class="fa fa-tags" title="{L_version}"></i> {styles_row_yellow.VERSION}</span></h2>
@@ -603,7 +603,7 @@ $(document).ready(function(){
 					<a href="javascript:style_reset_warning({styles_row_green.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>	
 					<a href="javascript:style_preview({styles_row_green.ID});" title="{L_preview}"><i class="fa fa-eye fa-lg"></i></a>
 				</div>
-				<a class="style-preview" href="{styles_row_green.U_EDIT_STYLE}" <!-- IF styles_row_green.TT_CONTENT != "" -->style="background: url({styles_row_green.TT_CONTENT}) no-repeat; background-size: cover; background-position: center;"<!-- ENDIF -->></a>
+				<a class="style-preview" title="{L_edit_style}" href="{styles_row_green.U_EDIT_STYLE}" <!-- IF styles_row_green.TT_CONTENT != "" -->style="background: url({styles_row_green.TT_CONTENT}) no-repeat; background-size: cover; background-position: center;"<!-- ENDIF -->></a>
 			
 				<div class="style-info">
 					<h2>{styles_row_green.TT_NAME}<span class="style-version"><i class="fa fa-tags" title="{L_version}"></i> {styles_row_green.VERSION}</span></h2>
@@ -663,18 +663,18 @@ $(document).ready(function(){
 		</div>
 		<table class="table fullwidth colorswitch">
 		  <tr>
-			<th align="left" width="20">&nbsp;</th>
-			<th align="left" width="16" colspan="3">{L_action}</th>
-			<th align="left">{L_name}</th>
-			<th align="left">{L_version}</th>
-			<th align="left" class="hiddenSmartphone">{L_contact}</th>
-			<th align="left" class="hiddenSmartphone">{L_description}</th>
-			<th align="left" style="width: 90px" class="hiddenSmartphone">{L_pi_rating}</th>
-			<th align="left" class="hiddenSmartphone">{L_infos}</th>
+			<th class="left" style="width:20px">&nbsp;</th>
+			<th class="left" style="width:16px" colspan="3">{L_action}</th>
+			<th class="left">{L_name}</th>
+			<th class="left">{L_version}</th>
+			<th class="hiddenSmartphone left">{L_contact}</th>
+			<th class="hiddenSmartphone left">{L_description}</th>
+			<th style="width: 90px" class="hiddenSmartphone left">{L_pi_rating}</th>
+			<th class="hiddenSmartphone left">{L_infos}</th>
 		  </tr>
 		  <!-- BEGIN pm_row_red -->
 		  <tr>
-			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
+			<td style="width:20px" class="center"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
 			<td class="nowrap desktopOnly">{pm_row_red.ACTION_LINK}</td>
 			<td class="nowrap desktopOnly">{pm_row_red.REINSTALL_LINK}</td>
 			<td class="nowrap desktopOnly">{pm_row_red.DELETE_LINK}</td>
@@ -692,7 +692,7 @@ $(document).ready(function(){
 		  <!-- END pm_row_red -->
 		  <!-- BEGIN pm_row_yellow -->
 		  <tr>
-			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
+			<td style="width:20px" class="center"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
 			<td class="nowrap desktopOnly">{pm_row_yellow.ACTION_LINK}</td>
 			<td class="nowrap desktopOnly">{pm_row_yellow.REINSTALL_LINK}</td>
 			<td class="nowrap desktopOnly">{pm_row_yellow.DELETE_LINK}</td>
@@ -710,7 +710,7 @@ $(document).ready(function(){
 		  <!-- END pm_row_yellow -->
 		  <!-- BEGIN pm_row_green -->
 		  <tr>
-			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
+			<td style="width:20px" class="center"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
 			<td class="nowrap desktopOnly">{pm_row_green.ACTION_LINK}</td>
 			<td class="nowrap desktopOnly">{pm_row_green.REINSTALL_LINK}</td>
 			<td class="nowrap desktopOnly">{pm_row_green.DELETE_LINK}</td>
@@ -728,7 +728,7 @@ $(document).ready(function(){
 		  <!-- END pm_row_green -->
 		  <!-- BEGIN pm_row_grey -->
 		  <tr>
-			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
+			<td style="width:20px" class="center"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
 			<td class="nowrap desktopOnly">{pm_row_grey.ACTION_LINK}</td>
 			<td class="nowrap desktopOnly">{pm_row_grey.REINSTALL_LINK}</td>
 			<td class="nowrap desktopOnly">{pm_row_grey.DELETE_LINK}</td>
@@ -758,18 +758,18 @@ $(document).ready(function(){
 		</div>
 		<table class="table fullwidth colorswitch">
 		  <tr>
-			<th align="left" width="20">&nbsp;</th>
-			<th align="left" width="16" colspan="2">{L_action}</th>
-			<th align="left">{L_name}</th>
-			<th align="left">{L_version}</th>
-			<th align="left" class="hiddenSmartphone">{L_contact}</th>
-			<th align="left" class="hiddenSmartphone">{L_description}</th>
-			<th align="left" style="width: 90px" class="hiddenSmartphone">{L_pi_rating}</th>
-			<th align="left" class="hiddenSmartphone">{L_infos}</th>
+			<th class="left" style="width:20px">&nbsp;</th>
+			<th class="left" style="width:16px" colspan="2">{L_action}</th>
+			<th class="left">{L_name}</th>
+			<th class="left">{L_version}</th>
+			<th class="hiddenSmartphone left">{L_contact}</th>
+			<th class="hiddenSmartphone left">{L_description}</th>
+			<th style="width: 90px" class="hiddenSmartphone left">{L_pi_rating}</th>
+			<th class="hiddenSmartphone left">{L_infos}</th>
 		  </tr>
 		  <!-- BEGIN games_row_red -->
 		  <tr>
-			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
+			<td style="width:20px" class="center"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
 			<td class="nowrap desktopOnly">{games_row_red.ACTION_LINK}</td>
 			<td class="nowrap desktopOnly">{games_row_red.DELETE_LINK}</td>
 			<td>{games_row_red.NAME}</td>
@@ -786,7 +786,7 @@ $(document).ready(function(){
 		  <!-- END games_row_red -->
 		  <!-- BEGIN games_row_yellow -->
 		  <tr>
-			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
+			<td style="width:20px" class="center"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
 			<td class="nowrap desktopOnly">{games_row_yellow.ACTION_LINK}</td>
 			<td class="nowrap desktopOnly">{games_row_yellow.DELETE_LINK}</td>
 			<td>{games_row_yellow.NAME}</td>
@@ -803,7 +803,7 @@ $(document).ready(function(){
 		  <!-- END games_row_yellow -->
 		  <!-- BEGIN games_row_green -->
 		  <tr>
-			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
+			<td style="width:20px" class="center"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
 			<td class="nowrap desktopOnly">{games_row_green.ACTION_LINK}</td>
 			<td class="nowrap desktopOnly">{games_row_green.DELETE_LINK}</td>
 			<td>{games_row_green.NAME}</td>
@@ -820,7 +820,7 @@ $(document).ready(function(){
 		  <!-- END games_row_green -->
 		  <!-- BEGIN games_row_grey -->
 		  <tr>
-			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
+			<td style="width:20px" class="center"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
 			<td class="nowrap desktopOnly">{games_row_grey.ACTION_LINK}</td>
 			<td class="nowrap desktopOnly">{games_row_grey.DELETE_LINK}</td>
 			<td>{games_row_grey.NAME}</td>
@@ -846,15 +846,15 @@ $(document).ready(function(){
 		</div>
 		<table class="table fullwidth colorswitch">
 		  <tr>
-			<th align="left" width="20">&nbsp;</th>
-			<th align="left" width="16">{L_action}</th>
-			<th align="left">{L_name}</th>
-			<th align="left">{L_version}</th>
-			<th align="left" class="hiddenSmartphone">{L_infos}</th>
+			<th class="left" style="width:20px">&nbsp;</th>
+			<th class="left" style="width:16px">{L_action}</th>
+			<th class="left">{L_name}</th>
+			<th class="left">{L_version}</th>
+			<th class="hiddenSmartphone left">{L_infos}</th>
 		  </tr>
 		  <!-- BEGIN language_row_red -->
 		  <tr>
-			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
+			<td style="width:20px" class="center"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
 			<td class="nowrap desktopOnly">{language_row_red.ACTION_LINK}</td>
 			<td>{language_row_red.NAME}</td>
 			<td>{language_row_red.VERSION}</td>
@@ -867,7 +867,7 @@ $(document).ready(function(){
 		  <!-- END language_row_red -->
 		  <!-- BEGIN language_row_yellow -->
 		  <tr>
-			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
+			<td style="width:20px" class="center"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
 			<td class="nowrap desktopOnly">{language_row_yellow.ACTION_LINK}</td>
 			<td>{language_row_yellow.NAME}</td>
 			<td>{language_row_yellow.VERSION}</td>
@@ -880,7 +880,7 @@ $(document).ready(function(){
 		  <!-- END language_row_yellow -->
 		  <!-- BEGIN language_row_green -->
 		  <tr>
-			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
+			<td style="width:20px" class="center"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
 			<td class="nowrap desktopOnly">{language_row_green.ACTION_LINK}</td>
 			<td>{language_row_green.NAME}</td>
 			<td>{language_row_green.VERSION}</td>
@@ -893,7 +893,7 @@ $(document).ready(function(){
 		  <!-- END language_row_green -->
 		  <!-- BEGIN language_row_grey -->
 		  <tr>
-			<td width="20" align="center"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
+			<td style="width:20px" class="center"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
 			<td class="nowrap desktopOnly">{language_row_grey.ACTION_LINK}</td>
 			<td>{language_row_grey.NAME}</td>
 			<td>{language_row_grey.VERSION}</td>
