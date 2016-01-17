@@ -598,8 +598,10 @@ class Manage_Extensions extends page_generic {
 				$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].',2, \''.$plugin_code.'\');" class="needs_update" data-id="'.$allUpdates[$plugin_code]['plugin_id'].'" data-category="2" data-code="'.$plugin_code.'" title="'.$this->user->lang('uc_bttn_update').'"><i class="fa fa-lg fa-refresh icon-color-yellow"></i></a>';
 				$link .= '&nbsp;&nbsp;&nbsp;<a href="manage_extensions.php' . $this->SID . '&amp;cat=2&amp;mode=remove&amp;code=' . $plugin_code. '&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('delete').'"><i class="fa fa-lg fa-trash-o"></i></a>';
 				$arrUpdateCount[2]['yellow'] ++;
+				$link_plain = 'javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].',2, \''.$plugin_code.'\');';
 			} else {
 				$row = 'grey';
+				$link_plain = 'manage_extensions.php' . $this->SID . '&amp;cat=2&amp;mode=install&amp;code=' . $key. '&amp;link_hash='.$this->CSRFGetToken('mode');
 				$link = '<a href="manage_extensions.php' . $this->SID . '&amp;cat=2&amp;mode=install&amp;code=' . $key. '&amp;link_hash='.$this->CSRFGetToken('mode').'" title="' . $this->user->lang('install') . '"><i class="fa fa-lg fa-toggle-off"></i></a>';
 				$link .= '&nbsp;&nbsp;&nbsp;<a href="manage_extensions.php' . $this->SID . '&amp;cat=2&amp;mode=remove&amp;code=' . $plugin_code. '&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('delete').'"><i class="fa fa-lg fa-trash-o"></i></a>';
 			}
@@ -620,6 +622,7 @@ class Manage_Extensions extends page_generic {
 				'ACTION_LINK'	=> $link,
 				'TEMPLATE'		=> $key,
 				'USERS'			=> 0,
+				'U_EDIT_STYLE'	=> $link_plain,
 			));
 			$arrStyles[] = (($install_xml->folder) ? $install_xml->folder : stripslashes($key));
 		}
