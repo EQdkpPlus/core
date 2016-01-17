@@ -1364,7 +1364,6 @@ class template extends gen_class {
 	}
 
 	private function compile_write(&$handle, $data){
-		$handle_filename	= ($handle == 'main') ? $this->body_filename : $this->files[$handle];
 		if($handle == 'main'){
 			$handle_filename = substr(sha1($this->files['body']), 0, 9).'_'.$this->body_filename;
 		} else {
