@@ -17,7 +17,8 @@
 	</div>
 	<!-- ELSEIF S_NEW_VERSION && not S_REQUIREMENTS -->
 	<div class="infobox infobox-large infobox-red clearfix">
-		<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> <!-- IF S_NO_UPDATE_PACKAGE -->{L_liveupdate_update_nopackages_failed}<!-- ELSE -->{L_liveupdate_update_requirements_failed}<!-- ENDIF -->
+		<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> <!-- IF S_NO_UPDATE_PACKAGE -->{L_liveupdate_update_nopackages_failed}<!-- ELSE -->{L_liveupdate_update_requirements_failed}
+		{REQUIREMENTS_NOTE}<!-- ENDIF -->
 	</div>
 	<!-- ELSE -->
 	<div class="infobox infobox-large infobox-green clearfix">

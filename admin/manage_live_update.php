@@ -544,13 +544,31 @@ class Manage_Live_Update extends page_generic {
 				'S_NO_UPDATE_PACKAGE' => ($updates['dep_php'] == '9.9') ? true : false,
 			));
 		}
+		
+		//Check some Requirements for LiveUpdate
+		$blnRequirements = true;
+		$strRequirementsNote = '<br />';
+		if(!class_exists("ZipArchive")) {
+			$blnRequirements = false;
+			$strRequirementsNote .= ' - ZipArchive-Class<br/>';
+		}
+		if($updates != NULL && $updates['dep_php'] != ''){
+			$blnPHPVersion = version_compare(PHP_VERSION, $updates['dep_php'], '>=');
+			if(!$blnPHPVersion){
+				$blnRequirements = false;
+				$strRequirementsNote .= ' - PHP Version '.$updates['dep_php'].' required, '.PHP_VERSION.' available<br/>';
+			}
+		}
+		
+		
 		$this->tpl->assign_vars(array(
 			'S_START'			=> true,
 			'S_RELEASE_CHANNEL' => ($this->repo->getChannel() != 'stable') ? true : false,
 			//'S_UPDATE_BUTTON'	=> ($this->repo->getChannel() != 'stable' || DEBUG > 1),
 			'RECENT_VERSION' 	=> VERSION_EXT,
 			'RELEASE_CHANNEL' 	=> ucfirst($this->repo->getChannel()),
-			'S_REQUIREMENTS'	=> (class_exists("ZipArchive") && (($updates != NULL && $updates['dep_php'] != '') ? version_compare(PHP_VERSION, $updates['dep_php'], '>=') : true)),
+			'S_REQUIREMENTS'	=> $blnRequirements,
+			'REQUIREMENTS_NOTE'	=> $strRequirementsNote,
 		));
 
 		$this->core->set_vars(array(
