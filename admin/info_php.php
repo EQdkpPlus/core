@@ -42,7 +42,6 @@ class php_info extends page_generic {
 		if (version_compare(phpversion(), '7.0', ">=")){
 			$intJitSetting = ini_get('pcre.jit');
 			if($intJitSetting) {
-				echo "disable jit";
 				ini_set('pcre.jit', 0);
 			}
 		}
