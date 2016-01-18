@@ -1721,6 +1721,12 @@ class template extends gen_class {
 		$strCSS .= $style['additional_less'];
 
 		try {
+			//ToDo: remove this if less parser is better
+			if (version_compare(phpversion(), '7.0', ">=")){
+				$intJitSetting = ini_get('pcre.jit');
+				if($intJitSetting) ini_set('pcre.jit', 0);
+			}
+			
 			require_once $this->root_path.'libraries/less/Less.php';
 
 			$options = array();
@@ -1728,6 +1734,11 @@ class template extends gen_class {
 			$parser->ModifyVars($lessVars);
 			$parser->parse($strCSS);
 			$strCSS = $parser->getCss();
+			
+			//ToDo: remove this if less parser is better
+			if (version_compare(phpversion(), '7.0', ">=") && $intJitSetting){
+				ini_set('pcre.jit', 1);
+			}
 
 		} catch (Exception $e) {
 			echo "Fatal error parsing less: ".(($strMapFile) ? $strMapFile : '')." ".nl2br($e->getMessage());
