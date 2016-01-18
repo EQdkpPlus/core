@@ -32,14 +32,21 @@ class php_info extends page_generic {
 		$this->process();
 	}
 
-	public function display(){
+	public function display(){		
 		ob_start();
 		phpinfo();
 		$pinfo = ob_get_contents();
 		ob_end_clean();
 		$pinfo = trim($pinfo);
-
-		preg_match_all('%^.*<body>(.*)</body>.*$%ms', $pinfo, $output);
+		
+		if (version_compare(phpversion(), '7.0', ">=")){
+			$intJitSetting = ini_get('pcre.jit');
+			if($intJitSetting) {
+				echo "disable jit";
+				ini_set('pcre.jit', 0);
+			}
+		}
+		preg_match_all("/<body>(.*)\<\/body>(.*)/ms", $pinfo, $output);
 
 		$output = $output[1][0];
 		$output = preg_replace('#<table[^>]+>#i', '<table>', $output);

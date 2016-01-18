@@ -1724,7 +1724,7 @@ class template extends gen_class {
 			//ToDo: remove this if less parser is better
 			if (version_compare(phpversion(), '7.0', ">=")){
 				$intJitSetting = ini_get('pcre.jit');
-				if($intJitSetting) ini_set('pcre.jit', false);
+				if($intJitSetting) ini_set('pcre.jit', 0);
 			}
 			
 			require_once $this->root_path.'libraries/less/Less.php';
