@@ -42,7 +42,7 @@ if ( !class_exists( "bridge_usersync_crontask" ) ) {
 		}
 
 		public function run(){
-			$crons		= $this->timekeeper->list_crons();
+			$crons		= $this->cronjobs->list_crons();
 			$params		= $crons['bridge_usersync']['params'];
 			
 			//Bridge not active, exit cronjob

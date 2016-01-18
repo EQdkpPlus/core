@@ -116,9 +116,9 @@ if ( !class_exists( "apa_startpoints" ) ) {
 		
 		public function pre_save_func($apa_id, $options) {
 			$options['pools'] = $this->pdh->get('event', 'multidkppools', array($options['event']));
-			$this->timekeeper->add_cron('startpoints', array('active' => true), true);
-			$this->timekeeper->run_cron('startpoints', true);
-			$cron = $this->timekeeper->list_crons('startpoints');
+			$this->cronjobs->add_cron('startpoints', array('active' => true), true);
+			$this->cronjobs->run_cron('startpoints', true);
+			$cron = $this->cronjobs->list_crons('startpoints');
 			$options['exectime'] = date('H', $cron['start_time'])*3600 + date('i', $cron['start_time'])*60;
 			return $options;
 		}

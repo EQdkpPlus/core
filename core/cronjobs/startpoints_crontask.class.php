@@ -35,7 +35,7 @@ if ( !class_exists( "startpoints_crontask" ) ) {
 		}
 
 		public function run() {
-			$cron = $this->timekeeper->list_crons('startpoints');
+			$cron = $this->cronjobs->list_crons('startpoints');
 			$apa_ids = $this->apa->get_apa_idsbytype('startpoints');
 			foreach($apa_ids as $apa_id) {
 				$this->apa->get_apa_type('startpoints')->update_startdkp($apa_id, $cron['last_run']);

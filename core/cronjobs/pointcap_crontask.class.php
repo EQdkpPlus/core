@@ -36,7 +36,7 @@ if ( !class_exists( "pointcap_crontask" ) ) {
 		}
 
 		public function run() {
-			$cron = $this->timekeeper->list_crons('pointcap');
+			$cron = $this->cronjobs->list_crons('pointcap');
 			$apa_ids = $this->apa->get_apa_idsbytype('cap_current');
 
 			foreach($apa_ids as $apa_id) {

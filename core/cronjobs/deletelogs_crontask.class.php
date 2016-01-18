@@ -44,7 +44,7 @@ if ( !class_exists( "deletelogs_crontask" ) ) {
 		);
 
 		public function run(){
-			$crons		= $this->timekeeper->list_crons();
+			$crons		= $this->cronjobs->list_crons();
 			$params		= $crons['deletelogs']['params'];
 			
 			//Per default, delete logs older half a year

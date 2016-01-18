@@ -40,7 +40,7 @@ if ( !class_exists( "game_crontask" ) ) {
 		}
 		
 		public function run(){
-			$crons		= $this->timekeeper->list_crons();
+			$crons		= $this->cronjobs->list_crons();
 			$params		= $crons['game']['params'];
 			$this->game->cronjob($params);
 		}

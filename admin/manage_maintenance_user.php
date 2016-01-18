@@ -63,7 +63,7 @@ class maintenance_user extends page_generic {
 		$this->config->set('maintenance_user', $this->crypt->encrypt(serialize($user_data)));
 		
 		$this->pdh->put('user', 'add_special_user', array($user_id));
-		$this->timekeeper->add_cron('maintenanceuser', array('repeat_type' => 'daily', 'repeat_interval' => $this->in->get('valid_until_days', 0), 'active' => true), true);
+		$this->cronjobs->add_cron('maintenanceuser', array('repeat_type' => 'daily', 'repeat_interval' => $this->in->get('valid_until_days', 0), 'active' => true), true);
 		$log_action = array(
 			'{L_maintenanceuser_valid}'	=> "{D_".$valid_until."}",
 		);
@@ -77,7 +77,7 @@ class maintenance_user extends page_generic {
 			$user_data['valid_until'] = $user_data['valid_until'] + 7*86400;
 			$days_to_end = ceil(($user_data['valid_until'] - $this->time->time) / 86400);
 			$this->config->set('maintenance_user', $this->crypt->encrypt(serialize($user_data)));
-			$this->timekeeper->add_cron('maintenanceuser', array('repeat_type' => 'daily', 'repeat_interval' => $days_to_end, 'active' => true), true);
+			$this->cronjobs->add_cron('maintenanceuser', array('repeat_type' => 'daily', 'repeat_interval' => $days_to_end, 'active' => true), true);
 			$this->core->message($this->user->lang('maintenanceuser_renew_suc'), $this->user->lang('success'), 'green');
 			$log_action = array(
 					'{L_maintenanceuser_valid}'	=> "{D_".$user_data['valid_until']."}",
@@ -99,7 +99,7 @@ class maintenance_user extends page_generic {
 			$this->logs->add('action_maintenanceuser_deleted', array(), $muser['user_id'], $this->user->lang('maintenanceuser_user'));
 		}
 		
-		$this->timekeeper->del_cron('maintenanceuser');
+		$this->cronjobs->del_cron('maintenanceuser');
 		
 		$this->display();
 	}

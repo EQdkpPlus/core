@@ -46,7 +46,7 @@ if ( !class_exists( "prunebackups_crontask" ) ) {
 		}
 
 		public function run() {
-			$crons		= $this->timekeeper->list_crons();
+			$crons		= $this->cronjobs->list_crons();
 			$params		= $crons['prunebackups']['params'];
 			
 			$this->backup->pruneBackups($params['days'], $params['count']);

@@ -79,9 +79,9 @@ if ( !class_exists( "apa_cap_current" ) ) {
 			// strip time off of start-date
 			$options['start_date'] -= ($this->time->date('H', $options['start_date'])*3600 + $this->time->date('i', $options['start_date'])*60);
 			list($h,$i) = explode(':',$options['exectime']);
-			$this->timekeeper->add_cron('pointcap', array('active' => true, 'start_time' => $options['start_date'] + $h*3600 + $i*60), true);
-			$this->timekeeper->run_cron('pointcap', true);
-			$cron = $this->timekeeper->list_crons('pointcap');
+			$this->cronjobs->add_cron('pointcap', array('active' => true, 'start_time' => $options['start_date'] + $h*3600 + $i*60), true);
+			$this->cronjobs->run_cron('pointcap', true);
+			$cron = $this->cronjobs->list_crons('pointcap');
 			return $options;
 		}
 		
@@ -137,7 +137,7 @@ if ( !class_exists( "apa_cap_current" ) ) {
 			$this->db->prepare("DELETE FROM __adjustments WHERE adjustment_reason=? AND event_id=? ")->execute($this->apa->get_data('name', $apa_id), intval($this->apa->get_data('event', $apa_id)));
 			$this->config->del('apa_cap_next_run_'.$apa_id);
 			$this->pdh->enqueue_hook('adjustment_update');
-			$this->timekeeper->run_cron('pointcap', true);
+			$this->cronjobs->run_cron('pointcap', true);
 		}
 	}//end class
 }//end if
