@@ -767,6 +767,10 @@ class admin_settings extends page_generic {
 			),
 			'itemtooltip'	=> array(),	// placeholder for sorting..
 		);
+		if($this->config->get('default_game') == 'dummy'){
+			$settingsdata['game']['game']['default_game']['text_after'] = '<button onclick="window.location=\'manage_extensions.php'.$this->SID.'#fragment-7\'" type="button"><i class="fa fa-lg fa-download"></i> '.$this->user->lang('install_other_games').'</button>';
+		}
+		
 		$this->form->add_tabs($settingsdata);
 
 		// add some additional fields
