@@ -552,6 +552,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 											'level'				=> $value['level'],
 											'release'			=> $this->time->user_date($value['date']),
 											'dep_php'			=> $value['dep_php'],
+											'bugtracker_url'	=> $value['bugtracker_url'],
 								);
 								$this->update_count++;
 							}
@@ -640,6 +641,124 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 
 			return true;
 		}
+		
+		public function checkRequirementsForNewCore($strRequirementsString, $updates){			
+			if(!$strRequirementsString || $strRequirementsString == "") return true;
+			
+			$blnRequirement = true;
+			$arrFailed  = array();
+			$arrArray = json_decode($strRequirementsString, true);
+			if($arrArray){
+				//PHP Version
+				$blnPHPVersion = version_compare(PHP_VERSION, $updates['dep_php'], '>=');
+				if(!$blnPHPVersion){
+					$blnRequirement = false;
+					$arrFailed[] = 'PHP Version '.$updates['dep_php'].' required, '.PHP_VERSION.' available';
+				}
+				
+				//PHP Memory
+				if(isset($arrArray['php_memory'])){
+					$installed = ini_get('memory_limit');
+					if (intval($installed) != -1){
+						$blnResult = $this->convert_hr_to_bytes($installed) >= $this->convert_hr_to_bytes($arrArray['php_memory']);
+						if(!$blnResult){
+							$blnRequirement = false;
+							$arrFailed[] = 'PHP Memory '.$arrArray['php_memory'].' required, '.$installed.' available';
+						}
+					}
+				}
+				//Ini Settings
+				if(isset($arrArray['ini'])){
+					foreach($arrArray['ini'] as $key => $val){
+						$iniVal = ini_get($key);
+						$charSign = substr($val, 0, 1);
+						if($charSign == '!'){
+							$blnResult = ($iniVal != substr($val, 1));
+						}elseif($charSign == '<'){
+							$blnResult = ($iniVal < substr($val, 1));
+						}elseif($charSign == '>'){
+							$blnResult = ($iniVal > substr($val, 1));
+						} else {
+							$blnResult = ($iniVal == substr($val, 1));
+						}
+						
+						if(!$blnResult){
+							$blnRequirement = false;
+							$arrFailed[] = 'PHP Ini Setting  '.$val.' required, '.$iniVal.' available';
+						}
+					}
+				}
+				
+				//Extensions
+				if(isset($arrArray['extensions'])){
+					foreach($arrArray['extensions'] as $val){
+						if(strpos($val, '|') !== false){
+							$arrExtensions = explode('|', $val);
+							$blnFound = false;
+							foreach($arrExtensions as $v){
+								if(extension_loaded($v)) {
+									$blnFound = true;
+									break;
+								}
+							}
+							if(!$blnFound){
+								$blnRequirement = false;
+								$arrFailed[] = 'PHP Extensions, one of  '.$val.' required, no one available';
+							}
+						} else {
+							if(!extension_loaded($val)){
+								$blnRequirement = false;
+								$arrFailed[] = 'PHP Extension '.$val.' required, not available';
+							}
+						}
+					}
+				}
+				
+				//PHP Functions
+				if(isset($arrArray['functions'])){
+					foreach($arrArray['functions'] as $val){
+						if(strpos($val, '|') !== false){
+							$arrExtensions = explode('|', $val);
+							$blnFound = false;
+							foreach($arrExtensions as $v){
+								if(function_exists($v)) {
+									$blnFound = true;
+									break;
+								}
+							}
+							if(!$blnFound){
+								$blnRequirement = false;
+								$arrFailed[] = 'PHP Functions, one of  '.$val.' required, no one available';
+							}
+						} else {
+							if(!function_exists($val)){
+								$blnRequirement = false;
+								$arrFailed[] = 'PHP Function '.$val.' required, not available';
+							}
+						}
+					}
+				}
+
+			}
+			
+			return (!$blnRequirement) ? $arrFailed : true;
+		}
+		
+		private function check_php_limit($needed){
+			$installed = ini_get('memory_limit');
+			if (intval($installed) == -1) return true;
+			return ($this->convert_hr_to_bytes($installed) >= $this->convert_hr_to_bytes($needed)) ? true : false;
+		}
+		
+		function convert_hr_to_bytes( $size ) {
+			( $bytes = (float) $size )
+			&& ( $last = strtolower( substr( $size, -1 ) ) )
+			&& ( $pos = strpos( ' kmg', $last , 1 ) )
+			&& $bytes *= pow( 1024, $pos )
+			;
+			return round( $bytes );
+		}
 	}
+	
 }
 ?>
