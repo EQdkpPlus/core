@@ -159,7 +159,7 @@ function redirect($url, $return=false, $extern=false, $blnShowPage=true){
 
 		if(defined('USER_INITIALIZED') && $blnShowPage) {
 			registry::register('template')->add_meta('<meta http-equiv="refresh" content="3;URL='.$out.'" />');
-		
+
 			registry::register('template')->assign_vars(array(
 				'MSG_CLASS'		=> 'blue',
 				'MSG_ICON'		=> 'fa-refresh',
@@ -167,7 +167,7 @@ function redirect($url, $return=false, $extern=false, $blnShowPage=true){
 				'MSG_TEXT'		=> '<br/><a href="'.$out.'">'.registry::register('user')->lang('redirection_info')."</a>",
 				'S_MESSAGE'		=> true,
 			));
-			
+
 			registry::register('core')->set_vars(array(
 				'header_format'		=> registry::register('core')->header_format,
 				'page_title'		=> registry::register('user')->lang('redirection'),
@@ -264,7 +264,7 @@ function sanitize($input){
 	if (is_array($input)){
 		return array_map("sanitize", $input);
 	}
-	
+
 	return filter_var($input, FILTER_SANITIZE_STRING);
 }
 
@@ -278,7 +278,7 @@ function unsanitize($input){
 	if (is_array($input)){
 		return array_map("unsanitize", $input);
 	}
-	
+
 	$input = str_replace("&#34;", "&quot;", $input);
 	return htmlspecialchars_decode($input, ENT_QUOTES);
 }
@@ -382,7 +382,7 @@ function infotooltip_js() {
 								if (mytitle == ''){
 									return;
 								}
-	
+
 								if (cached_itts['t_'+$(this).attr('title')] != undefined){
 									return cached_itts['t_'+$(this).attr('title')];
 								} else {
@@ -419,12 +419,12 @@ function infotooltip($name='', $game_id='', $lang=false, $direct=0, $onlyicon=0,
 	if($blnUseOwnTooltips){
 		$strLink = register('config')->get('infotooltip_own_link');
 		$strLink = str_replace(array('{ITEMID}', '{ITEMNAME}', '{ITEMLINK}'), array($game_id, $name, 'data-eqdkplink=""'), $strLink);
-		
+
 		return $strLink;
 	} else {
 		if(empty($data['server'])) $data['server'] = registry::register('config')->get("servername");
 		$lang = ($lang) ? $lang : registry::fetch('user')->lang('XML_LANG');
-		
+
 		$cachedname = register('infotooltip')->getcacheditem($name, $lang, $game_id, $onlyicon, $noicon, $data);
 		$id = unique_id();
 		$data = array('name' => $name, 'game_id' => $game_id, 'onlyicon' => $onlyicon, 'noicon' => $noicon, 'lang' => $lang, 'data' => $data);
@@ -757,11 +757,11 @@ function is_utf8($str){
 			return false;
 		}
 	}
-	
+
 	$strlen = strlen($str);
 	for($i=0; $i<$strlen; $i++){
 		$ord = ord($str[$i]);
-		
+
 		if($ord < 0x80) continue; // 0bbbbbbb
 		elseif(($ord&0xE0)===0xC0 && $ord>0xC1) $n = 1; // 110bbbbb (exkl C0-C1)
 		elseif(($ord&0xF0)===0xE0) $n = 2; // 1110bbbb
@@ -791,7 +791,7 @@ function random_string($hash = false, $length = 10){
 					'9','0');
 
 	$max_chars = count($chars) - 1;
-	
+
 	$rand_str = '';
 	for($i = 0; $i < $length; $i++){
 		$rand_str = ( $i == 0 ) ? $chars[rand(0, $max_chars)] : $rand_str . $chars[rand(0, $max_chars)];
@@ -844,7 +844,7 @@ function generateRandomBytes($length = 16)
 	if (function_exists('stream_set_read_buffer') && @is_readable('/dev/urandom'))
 	{
 		$handle = @fopen('/dev/urandom', 'rb');
-	
+
 		if ($handle)
 		{
 			$urandom = true;
@@ -940,7 +940,7 @@ function generateRandomBytes($length = 16)
 	}
 	$hex   = bin2hex($randomStr);
 	return substr($hex, 0, $length);
-	
+
 }
 
 function get_absolute_path($path) {
@@ -1096,7 +1096,7 @@ function get_first_image($strHTML, $blnGetFullImage = false){
 				if ($blnGetFullImage && strpos($src, 'eqdkp/news/thumb/')){
 					$src = str_replace('eqdkp/news/thumb/', 'eqdkp/news/', $src);
 				}
-			
+
 				if (strpos($src, '/') === 0){
 					return register('env')->httpHost.$src;
 				} else {
@@ -1257,7 +1257,70 @@ function inline_svg($strFile){
 	return $strContent;
 }
 
-function is_serialized($strValue){
+/**
+ * Check value to find if it was serialized.
+ *
+ * If $data is not an string, then returned value will always be false.
+ * Serialized data is always a string.
+ * Wordpress!
+ * http://jetpack.wp-a2z.org/oik_api/is_serialized/
+ */
+function is_serialized( $data, $strict = true ) {
+	// if it isn't a string, it isn't serialized.
+	if ( ! is_string( $data ) ) {
+		return false;
+	}
+	$data = trim( $data );
+ 	if ( 'N;' == $data ) {
+		return true;
+	}
+	if ( strlen( $data ) < 4 ) {
+		return false;
+	}
+	if ( ':' !== $data[1] ) {
+		return false;
+	}
+	if ( $strict ) {
+		$lastc = substr( $data, -1 );
+		if ( ';' !== $lastc && '}' !== $lastc ) {
+			return false;
+		}
+	} else {
+		$semicolon = strpos( $data, ';' );
+		$brace     = strpos( $data, '}' );
+		// Either ; or } must exist.
+		if ( false === $semicolon && false === $brace )
+			return false;
+		// But neither must be in the first X characters.
+		if ( false !== $semicolon && $semicolon < 3 )
+			return false;
+		if ( false !== $brace && $brace < 4 )
+			return false;
+	}
+	$token = $data[0];
+	switch ( $token ) {
+		case 's' :
+			if ( $strict ) {
+				if ( '"' !== substr( $data, -2, 1 ) ) {
+					return false;
+				}
+			} elseif ( false === strpos( $data, '"' ) ) {
+				return false;
+			}
+			// or else fall through
+		case 'a' :
+		case 'O' :
+			return (bool) preg_match( "/^{$token}:[0-9]+:/s", $data );
+		case 'b' :
+		case 'i' :
+		case 'd' :
+			$end = $strict ? '$' : '';
+			return (bool) preg_match( "/^{$token}:[0-9.E-]+;$end/", $data );
+	}
+	return false;
+}
+
+function is_serialized0($strValue){
 	$data = @unserialize($strValue);
 	if ($strValue === 'b:0;' || $data !== false) {
 		return true;
