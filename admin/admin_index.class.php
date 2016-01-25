@@ -335,7 +335,7 @@ class admin_index extends gen_class {
 			'ADJUSTMENTS_PER_DAY'	=> $adjs_per_day,
 			'EQDKP_STARTED'			=> $this->time->user_date($this->config->get('eqdkp_start'), true),
 			'SHOW_BETA_WARNING'		=> VERSION_WIP,
-			'SHOW_PHP_WARNING'		=> (version_compare(PHP_VERSION, VERSION_PHP_RQ, '<=') && !defined('EQDKP_DISABLE_PHP_CHECK')) ? true : false,
+			'SHOW_PHP_WARNING'		=> (version_compare(PHP_VERSION, VERSION_PHP_REC, '<') && !defined('EQDKP_DISABLE_PHP_CHECK')) ? true : false,
 			'ONLINE_FOOTCOUNT'		=> sprintf($this->user->lang('online_footcount'), $online_count),
 			'SHOW_LIMITED_FUNCS'	=> false,
 			'DATABASE_NAME'			=> $this->dbname,

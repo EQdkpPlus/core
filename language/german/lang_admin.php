@@ -24,7 +24,7 @@ if (!defined('EQDKP_INC')) {
 }
 
 $lang = array(
-"php_warning" => "Die PHP-Version auf diesem Server wird von künftigen EQdkp Plus-Versionen nicht mehr unterstützt. Du solltest möglichst bald die PHP-Version mindestens auf ".VERSION_PHP_RQ." aktualisieren. Solltest du das nicht selber durchführen können, kontaktiere deinen Hoster.",
+"php_warning" => "Die PHP-Version auf diesem Server wird von künftigen EQdkp Plus-Versionen wahrscheinlich nicht mehr unterstützt. Du solltest möglichst bald die PHP-Version mindestens auf ".VERSION_PHP_REC." aktualisieren. Solltest du das nicht selber durchführen können, kontaktiere deinen Hoster.",
 "manitempool_title" => "Itempool verwalten",
 "addevent_title" => "Ereignis zufügen",
 "addnews_title" => "Newsbeitrag zufügen",
@@ -1452,6 +1452,7 @@ $lang = array(
 "liveupdate_step1_error_404" => "Es konnte für deine EQdkp Plus Version kein passendes Updatepaket gefunden werden. Du kannst unter <a href='".EQDKP_DOWNLOADS_URL."'>".EQDKP_DOWNLOADS_URL."</a> manuell ein Update oder eine Vollversion herunterladen und einspielen.",
 "liveupdate_step1_error_403" => "Deine EQdkp Plus Installation hat keine Berechtigung, Pakete über diese Funktion zu beziehen.  Du kannst unter <a href='".EQDKP_DOWNLOADS_URL."'>".EQDKP_DOWNLOADS_URL."</a> manuell ein Update oder eine Vollversion herunterladen und einspielen.",
 "liveupdate_step1_error_500" => "Das Live-Update konnte nicht heruntergeladen werden, da keine Verbindung zum EQdkp Plus Repo-Server möglich war.",
+"liveupdate_step1_error_new_core" => "Es ist eine neuere Core-Version verfügbar. Bitte lade diese Seite neu und führe das Live-Update erneut durch.",
 "liveupdate_step2" => "Lade Paket herunter",
 "liveupdate_step2_error" => "Beim Herunterladen des Update-Pakets ist ein Fehler aufgetreten. Bitte starte das Live-Update erneut.",
 "liveupdate_step3" => "Entpacke Paket",
@@ -1831,7 +1832,7 @@ $lang = array(
 							<li><i class="fa fa-usd"></i> <a href="http://eqdkp-plus.eu/de/spenden.html">Unterstützte uns finanziell, damit wir euch weiterhin unsere Services anbieten können</a></li>
 						</ul>
 		
-						Also wenn ihr EQdkp Plus genauso liebt wie wir, denkt doch mal darüber nach, uns zu unterstützen!'
-		
+						Also wenn ihr EQdkp Plus genauso liebt wie wir, denkt doch mal darüber nach, uns zu unterstützen!',
+'install_other_games' => 'Andere Spiele herunterladen',
 );
 ?>
