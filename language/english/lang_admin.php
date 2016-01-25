@@ -30,7 +30,7 @@ if (!defined('EQDKP_INC')) {
 //Source-Language: german
 
 $lang = array(
-	"php_warning" => 'The version of PHP on this server will no longer be supported by future versions of EQdkp Plus. You should update your PHP-Version as soon as possible at least to Version '.VERSION_PHP_RQ.'. For any questions about updating your php version, please contact your hoster.',
+	"php_warning" => 'The version of PHP on this server will probably no longer be supported by future versions of EQdkp Plus. You should update your PHP-Version at least to Version '.VERSION_PHP_REC.'. For any questions about updating your php version, please contact your hoster.',
 	"manitempool_title" => 'Itempool Management',
 	"addevent_title" => 'Add an event',
 	"addnews_title" => 'Add a news',
@@ -1450,6 +1450,7 @@ $lang = array(
 	"liveupdate_step1_error_404" => "Couldn't find an Update-Package for your EQdkp Plus Version. You can download a packages from <a href='".EQDKP_DOWNLOADS_URL."'>".EQDKP_DOWNLOADS_URL."</a> and update your installation manually.",
 	"liveupdate_step1_error_403" => "Your EQdkp Plus Installation has no permission to download packages using this function. You can always download packages from <a href='".EQDKP_DOWNLOADS_URL."'>".EQDKP_DOWNLOADS_URL."</a> and update your installation manually.",
 	"liveupdate_step1_error_500" => "The update package couldn't be downloaded, because there was no connection possible to the EQdkp Plus Repo-Server.",
+	"liveupdate_step1_error_new_core" => "There is a new EQdkp Plus Version available. Please reload this page and start the live update again.",
 	"liveupdate_step2" => 'Downloading package',
 	"liveupdate_step2_error" => 'An error occured while downloading the update package. Please restart the live update.',
 	"liveupdate_step3" => 'Extracting package',
@@ -1825,7 +1826,8 @@ $lang = array(
 							<li><i class="fa fa-cogs"></i> <a href="http://eqdkp-plus.eu/en/development.html">Take part actively in the development of EQdkp Plus</a></li>
 							<li><i class="fa fa-usd"></i> <a href="http://eqdkp-plus.eu/en/donate.html">Support us financially so we can continue offering you our services</a></li>
 						</ul>
-						So if you love EQdkp Plus as much as we do, think about supporting us!'
+						So if you love EQdkp Plus as much as we do, think about supporting us!',
+		'install_other_games' => 'Download other games',
 		
 );
 
