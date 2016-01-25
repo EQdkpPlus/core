@@ -25,7 +25,7 @@ if ( !defined('EQDKP_INC') ){
 
 if(!class_exists("calevents_repeatable_crontask")){
 	class calevents_repeatable_crontask extends crontask{
-		
+
 		public function __construct(){
 			$this->defaults['active']			= true;
 			$this->defaults['repeat']			= true;
@@ -59,6 +59,11 @@ if(!class_exists("calevents_repeatable_crontask")){
 
 						// if the calendar id is < 1, continue
 						if($eventsdata['calendar_id'] < 1){
+							continue;
+						}
+
+						// prevent null errors... this one will never occur, just for saety...
+						if($this->time->time == null || $end_timestamp == null || $start_timestamp == null){
 							continue;
 						}
 
