@@ -168,8 +168,11 @@ class Manage_Live_Update extends page_generic {
 	//Get Download_Link
 	public function process_step1(){
 		$downloadLink = $this->repo->getCoreUpdateDownloadLink();
-		
-		if($downloadLink && $downloadLink['status'] == 1){
+		if($downloadLink && isset($downloadLink['info']) && $downloadLink['info'] == 'new core available'){
+			//Reset Repo, fetch again, and then bring a message to the user
+			$this->repo->CheckforPackages(true);
+			echo  $this->user->lang('liveupdate_step1_error_new_core');
+		} elseif($downloadLink && $downloadLink['status'] == 1){
 			$this->config->set('download_link', $this->encrypt->encrypt($downloadLink['link']), 'live_update');
 			$this->config->set('download_hash', $this->encrypt->encrypt($downloadLink['hash']), 'live_update');
 			$this->config->set('download_signature', $this->encrypt->encrypt($downloadLink['signature']), 'live_update');
@@ -543,18 +546,20 @@ class Manage_Live_Update extends page_generic {
 			));
 		}
 		
-		//Check some Requirements for LiveUpdate
+		//Check some Requirements for LiveUpdate itself
 		$blnRequirements = true;
 		$strRequirementsNote = '<br />';
 		if(!class_exists("ZipArchive")) {
 			$blnRequirements = false;
 			$strRequirementsNote .= ' - ZipArchive-Class<br/>';
 		}
-		if($updates != NULL && $updates['dep_php'] != ''){
-			$blnPHPVersion = version_compare(PHP_VERSION, $updates['dep_php'], '>=');
-			if(!$blnPHPVersion){
-				$blnRequirements = false;
-				$strRequirementsNote .= ' - PHP Version '.$updates['dep_php'].' required, '.PHP_VERSION.' available<br/>';
+		
+		//Check new Core Requirements
+		$mixResult = $this->repo->checkRequirementsForNewCore($updates['bugtracker_url'], $updates);
+		if($mixResult !== true && is_array($mixResult)){
+			$blnRequirements = false;
+			foreach($mixResult as $val){
+				$strRequirementsNote .= ' - '.$val.'<br />';
 			}
 		}
 		
