@@ -75,6 +75,8 @@ class core extends gen_class {
 				redirect('index.php'.$this->SID, false, false, false);
 			}
 		}
+		
+		die("Authentication Failed");
 	}
 
 	public function create_breadcrump($name, $url = false) {
@@ -110,13 +112,17 @@ class core extends gen_class {
 	}
 
 	public function page_header(){
+		//Has there been a redirect before?
+		$blnHeadersSent = headers_sent();
+		
 		@header('Last-Modified: ' . gmdate('D, d M Y H:i:s', time()) . ' GMT');
 		@header('Content-Type: text/html; charset=utf-8');
 		//Disable Browser Cache
 		@header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 		@header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Datum in der Vergangenheit
 		$protocol = ($this->env->protocol == 'HTTP/1.1') ? "HTTP/1.1" : "HTTP/1.0";
-		@header( "$protocol 503 Service Unavailable", true, 503 );
+		//Send 503 for SEO if there is no redirect
+		if(!$blnHeadersSent) @header( "$protocol 503 Service Unavailable", true, 503 );
 		@header('Retry-After: 300');//300 seconds
 	
 		$this->header_inc = true;
