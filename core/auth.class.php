@@ -570,7 +570,7 @@ class auth extends user {
 				
 				if (isset($functions[$method])){
 					$objClass = register('login_'.$strMethod);
-					if (method_exists($objClass, $functions[$method])) $arrReturn[$strMethod] = $objClass->$functions[$method]($arrOptions);
+					if (method_exists($objClass, $functions[$method])) $arrReturn[$strMethod] = $objClass->{$functions[$method]}($arrOptions);
 				}
 
 				if ($loginMethod) return $arrReturn[$strMethod];
