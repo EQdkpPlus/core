@@ -72,17 +72,18 @@ if (!class_exists('pdh_r_roles')){
 
 			// empty array as default
 			$this->roles	= $this->roles_id = array();
-			
+
 			$objQuery = $this->db->query('SELECT * FROM __roles');
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					$this->roles[$row['role_id']]['id']			= $row['role_id'];
 					$this->roles[$row['role_id']]['name']		= $row['role_name'];
+					$this->roles[$row['role_id']]['icon']		= $row['role_icon'];
 					$this->roles[$row['role_id']]['classes']	= (substr_count($row['role_classes'], "|") > 0) ? explode("|", $row['role_classes']) : ((count($row['role_classes']) > 0) ? array($row['role_classes']) : array());
 					$this->roles[$row['role_id']]['classes_r']	= $row['role_classes'];
 					$this->roles_id[$row['role_id']]			= $row['role_name'];
 				}
-				
+
 				$this->pdc->put('pdh_roles_table.roles', $this->roles, NULL);
 				$this->pdc->put('pdh_roles_table.roles_id', $this->roles_id, NULL);
 			}
@@ -113,6 +114,10 @@ if (!class_exists('pdh_r_roles')){
 
 		public function get_name($id){
 			return $this->roles[$id]['name'];
+		}
+
+		public function get_icon($id){
+			return $this->roles[$id]['icon'];
 		}
 
 		public function get_classes_list($id){

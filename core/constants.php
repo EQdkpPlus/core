@@ -18,7 +18,7 @@
  *	You should have received a copy of the GNU Affero General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
@@ -28,7 +28,7 @@ if ( !defined('EQDKP_INC') ){
  * CORE VERSIONS
  * -------------------------------------------------------------------------
  */
-define('VERSION_INT',		'2.3.0.0');				// the internal version number for updates & update check
+define('VERSION_INT',		'2.3.0.1');				// the internal version number for updates & update check
 define('VERSION_EXT',		'2.3.0');			// the external version number to be shown in the footer
 define('VERSION_WIP',		true);					// work in progress or stable?
 define('VERSION_PHP_RQ',	'5.5.0');				// required version of PHP
@@ -43,7 +43,7 @@ define('PLUGIN_DISABLED',		 4);
 define('PLUGIN_REGISTERED',		 8);
 define('PLUGIN_INITIALIZED',	16);
 define('PLUGIN_ALL', PLUGIN_INITIALIZED
-					| PLUGIN_REGISTERED 
+					| PLUGIN_REGISTERED
 					| PLUGIN_DISABLED
 					| PLUGIN_BROKEN
 					| PLUGIN_INSTALLED);

@@ -244,6 +244,7 @@ CREATE TABLE __roles (
 	`role_id` mediumint(8) unsigned NOT NULL,
 	`role_name` varchar(50) DEFAULT NULL,
 	`role_classes` varchar(255) DEFAULT NULL,
+	`role_icon` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	PRIMARY KEY (`c_index`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 

@@ -19,8 +19,29 @@
 				{MULTISELECT}
 			</dd>
 		</dl>
+		<dl>
+			<dt><label>{L_role_icon_header}:</label></dt>
+			<dd><button class="mainoption" type="button" id="iubuttonedit" onclick="elfinder_all();"><i class="fa fa-upload"></i> {L_upload_roleicon}</button></dd>
+		</dl>
+
+		<table class="table fullwidth scrollable-x">
+		<!-- IF ICONS -->
+		<!-- BEGIN files_row -->
+		<tr class="colorswitch">
+			<!-- BEGIN fields -->
+			<td class="nowrap" style="width:16%">
+				<!-- IF files_row.fields.CHECKBOX -->
+				<label><input type="radio" name="icon" {files_row.fields.CHECKED} value="{files_row.fields.NAME}" />
+				{files_row.fields.IMAGE}</label>
+				<!-- ENDIF -->
+			</td>
+			<!-- END fields -->
+		</tr>
+		<!-- END files_row -->
+		<!-- ENDIF -->
+	</table>
 	</fieldset>
-	<button class="mainoption" type="submit" name="{BUTTON_NAME}"><i class="fa fa-check"></i>{L_save}</button>
+	<button class="mainoption" type="submit" name="{BUTTON_NAME}" id="roleSubmBtn"><i class="fa fa-check"></i>{L_save}</button>
 {CSRF_TOKEN}
 </form>
 <!-- ELSE -->

@@ -112,6 +112,7 @@ $lang = array(
 	"user_activate_success" => 'The user <i>%s</i> has been successfully activated.',
 	"user_deactivate_success" => 'The user <i>%s</i> has been successfully deactivated.',
 	"event_icon_header" => 'Choose event-icon',
+	"role_icon_header" => 'Choose role-icon',
 	"multidkp_to_event" => 'Multidkp accounts assigned to the event',
 	"admin_action" => 'Admin task',
 	"account_enabled" => 'Account Enabled',
@@ -1644,6 +1645,7 @@ $lang = array(
 	"export_format" => 'Export-Format',
 	"export_data" => 'Data',
 	"upload_eventicon" => 'Upload Eventicon',
+	"upload_roleicon" => 'Upload Roleicon',
 	"selected_elements" => 'Selected Elements',
 	"show_on_teamlist" => 'Show on Teampage',
 	"show_teamlist" => 'Teampage',
@@ -1828,7 +1830,7 @@ $lang = array(
 						</ul>
 						So if you love EQdkp Plus as much as we do, think about supporting us!',
 		'install_other_games' => 'Download other games',
-		
+
 );
 
 ?>

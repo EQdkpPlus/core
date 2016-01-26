@@ -27,7 +27,7 @@ if ( !defined('EQDKP_INC') ){
 
 class game extends gen_class {
 	public static $shortcuts = array('itt' => 'infotooltip');
-	
+
 	protected $apiLevel		= 20;
 
 	private $data			= array();
@@ -98,7 +98,7 @@ class game extends gen_class {
 				$this->pdl->log('game', 'The Game API Level of the Game \''.$this->game.'\' should be updated ('.$intAPILevel.' vs. '.$this->apiLevel.')');
 			}
 		}
-		
+
 		// check for selected language
 		if(!in_array($this->lang_name, $this->gameinfo()->langs)) {
 			// file in selected language available but not listed, add it to the list
@@ -124,16 +124,16 @@ class game extends gen_class {
 	 */
 	public function chartooltip($intCharID){
 		$tt = "";
-		
+
 		if ($this->type_exists('chartooltip')){
-			$tt = $this->gameinfo()->chartooltip($intCharID);		
+			$tt = $this->gameinfo()->chartooltip($intCharID);
 		}
-		
+
 		if ($this->hooks->isRegistered('game_chartooltip')){
 			$hook_tt = $this->hooks->process('game_chartooltip', array('tooltip' => $tt, 'char_id' => $intCharID), true);
 			$tt = $hook_tt['tooltip'];
 		}
-		
+
 		return str_replace($this->root_path, register('env')->link, $tt);
 	}
 
@@ -145,7 +145,7 @@ class game extends gen_class {
 	 * @param bool $pathonly
 	 * @return html string
 	 */
-	private function decorate_classes($class_id, $profile=array(), $size=16, $pathonly=false){	
+	private function decorate_classes($class_id, $profile=array(), $size=16, $pathonly=false){
 		if(is_file($this->root_path.'games/'.$this->game.'/icons/classes/'.$class_id.'.png')){
 			$icon_path = $this->server_path.'games/'.$this->game.'/icons/classes/'.$class_id.'.png';
 			return ($pathonly) ? $icon_path : '<img src="'.$icon_path.'" height="'.$size.'"  alt="class '.$class_id.'" class="'.$this->game.'_classicon classicon'.'" title="'.$this->get_name('classes', $class_id).'" />';
@@ -184,9 +184,9 @@ class game extends gen_class {
 	 * @param bool $pathonly
 	 * @return html string
 	 */
-	private function decorate_ranks($rank_id, $profile=array(), $size=16, $pathonly=false){	
+	private function decorate_ranks($rank_id, $profile=array(), $size=16, $pathonly=false){
 		$strRankIcon = $this->pdh->get('rank', 'icon', array($rank_id));
-		
+
 		if(strlen($strRankIcon) && is_file($this->root_path.'games/'.$this->game.'/icons/ranks/'.$strRankIcon)){
 			$icon_path = $this->server_path.'games/'.$this->game.'/icons/ranks/'.$strRankIcon;
 			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' height='".$size."' alt='rank ".$rank_id."' class=\"".$this->game."_rankicon rankicon\" />";
@@ -201,7 +201,7 @@ class game extends gen_class {
 	 * @param bool $pathonly
 	 * @return html string
 	 */
-	private function decorate_talents($talent_id, $profile=array(), $size=16, $pathonly=false){	
+	private function decorate_talents($talent_id, $profile=array(), $size=16, $pathonly=false){
 		if(is_file($this->root_path.'games/'.$this->game.'/icons/talents/'.$talent_id.'.png')){
 			$icon_path = $this->server_path.'games/'.$this->game.'/icons/talents/'.$talent_id.'.png';
 			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' alt='' class=\"".$this->game."_talenticon talenticon\" />";
@@ -216,8 +216,8 @@ class game extends gen_class {
 	 * @param bool $pathonly
 	 * @return html string
 	 */
-	private function decorate_events($event_id, $profile=array(), $size=20, $pathonly=false){			
-		if(is_file($this->pfh->FolderPath("event_icons", "files").$this->pdh->get('event', 'icon', array($event_id)))){			
+	private function decorate_events($event_id, $profile=array(), $size=20, $pathonly=false){
+		if(is_file($this->pfh->FolderPath("event_icons", "files").$this->pdh->get('event', 'icon', array($event_id)))){
 			$icon_path = $this->pfh->FolderPath("event_icons", "files", "serverpath").$this->pdh->get('event', 'icon', array($event_id));
 			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' style='max-height: ".$size."px;' alt='eventicon".$event_id."' class=\"".$this->game."_eventicon eventicon\"/>";
 		}elseif(is_file($this->root_path.'games/'.$this->game.'/icons/events/'.$this->pdh->get('event', 'icon', array($event_id)))){
@@ -225,7 +225,7 @@ class game extends gen_class {
 			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' style='max-height: ".$size."px;' alt='eventicon".$event_id."' class=\"".$this->game."_eventicon eventicon\"/>";
 		}
 	}
-	
+
 	/**
 	 * Returns default ImageTag for events
 	 *
@@ -234,13 +234,13 @@ class game extends gen_class {
 	 * @param bool $pathonly
 	 * @return html string
 	 */
-	private function decorate_def_events($event_id, $profile=array(), $size=20, $pathonly=false){	
+	private function decorate_def_events($event_id, $profile=array(), $size=20, $pathonly=false){
 		if(is_file($this->root_path.$this->deficon_path['events'].$this->pdh->get('event', 'icon', array($event_id)))){
 			$icon_path = $this->server_path.$this->deficon_path['events'].$this->pdh->get('event', 'icon', array($event_id));
 			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' height='".$size."' alt='eventicon".$event_id."' class=\"".$this->game."_eventicon eventicon\"/>";
 		}
 	}
-	
+
 	/**
 	 * Returns per game ImageTag for roles
 	 *
@@ -250,8 +250,11 @@ class game extends gen_class {
 	 * @param bool $pathonly
 	 * @return html string
 	 */
-	private function decorate_roles($role_id, $profile=array(), $size=20, $pathonly=false){	
-		if(is_file($this->root_path.'games/'.$this->game.'/icons/roles/'.$role_id.'.png')){
+	private function decorate_roles($role_id, $profile=array(), $size=20, $pathonly=false){
+		if(is_file($this->pfh->FolderPath("role_icons", "files").$this->pdh->get('roles', 'icon', array($role_id)))){
+			$icon_path = $this->pfh->FolderPath("role_icons", "files", "serverpath").$this->pdh->get('roles', 'icon', array($role_id));
+			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' height='".$size."' alt='' class=\"".$this->game."_roleicon roleicon\"/>";
+		}elseif(is_file($this->root_path.'games/'.$this->game.'/icons/roles/'.$role_id.'.png')){
 			$icon_path = $this->server_path.'games/'.$this->game.'/icons/roles/'.$role_id.'.png';
 			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' height='".$size."' alt='' class=\"".$this->game."_roleicon roleicon\"/>";
 		}
@@ -267,7 +270,7 @@ class game extends gen_class {
 	 * @param bool $pathonly
 	 * @return html string
 	 */
-	private function decorate_def_roles($role_id, $profile=array(), $size=20, $pathonly=false){	
+	private function decorate_def_roles($role_id, $profile=array(), $size=20, $pathonly=false){
 		if(is_file($this->root_path.$this->deficon_path['roles'].$role_id.'.png')){
 			$icon_path = $this->server_path.$this->deficon_path['roles'].$role_id.'.png';
 			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' height='".$size."' alt='' class=\"".$this->game."_roleicon roleicon\"/>";
@@ -289,7 +292,7 @@ class game extends gen_class {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * get unique ID settings of Game. If set, chars will be identified by charname AND the given Profilesettings
 	 */
@@ -356,7 +359,7 @@ class game extends gen_class {
 		}
 		return $this->games;
 	}
-	
+
 	/**
 	 * returns an array containing versions of all games
 	 */
@@ -370,7 +373,7 @@ class game extends gen_class {
 		}
 		return $versions;
 	}
-	
+
 	/**
 	 * returns an array containing versions of all games
 	 */
@@ -431,9 +434,9 @@ class game extends gen_class {
 	 * @return bool
 	 */
 	public function icon_exists($type) {
-		return in_array($type, $this->gameinfo()->icons); 
+		return in_array($type, $this->gameinfo()->icons);
 	}
-	
+
 	/**
 	 * checks if there are default icons
 	 *
@@ -443,7 +446,7 @@ class game extends gen_class {
 	public function default_icons($icon){
 		return isset($this->deficon_path[$icon]) ? $this->deficon_path[$icon] : false;
 	}
-	
+
 	/**
 	 * Returns language var
 	 *
@@ -514,7 +517,7 @@ class game extends gen_class {
 	 */
 	private function load_class_color($style_id = false){
 		$style_id = (!$style_id) ? $this->user->style['style_id'] : $style_id;
-	
+
 		if(!isset($this->class_colors[$style_id]['fetched']) || $this->class_colors[$style_id]['fetched'] == false) {
 			$this->class_colors[$style_id] = $this->pdh->get('class_colors', 'class_colors', array($style_id));
 			$classes = $this->get_primary_classes(array('id_0'));
@@ -527,7 +530,7 @@ class game extends gen_class {
 				}
 				$this->pdh->process_hook_queue();
 			}
-						
+
 			if(!is_array($this->class_colors[$style_id])) {
 				$this->pdl->log('game', 'Unable to load class-colors.');
 			} else {
@@ -573,7 +576,7 @@ class game extends gen_class {
 				}
 			} else {
 				switch($filter) {
-					case 'id_0': 
+					case 'id_0':
 						unset($data[0]); break;
 
 					default: break;
@@ -611,7 +614,7 @@ class game extends gen_class {
 		$this->pdl->log('game', 'Type "'.$type.'" does not exists');
 		return false;
 	}
-	
+
 	/**
 	 * Returns name or type for the primary class (necessary in e.g. calendar, role assignment)
 	 *
@@ -623,7 +626,7 @@ class game extends gen_class {
 			$this->autoUpdateClassProfileFields();
 			$this->blnClassUpdateChecked = true;
 		}
-		
+
 		$class_dep = $this->gameinfo()->get_class_dependencies();
 		foreach($class_dep as $class) {
 			if(isset($class['primary']) && $class['primary']) {
@@ -631,8 +634,8 @@ class game extends gen_class {
 				return ($returnName) ? $class['name'] : $class['type'];
 			}
 		}
-	}	
-	
+	}
+
 	/**
 	 * Returns selectable data (respecting e.g. faction selection of admin) for the primary class
 	 *
@@ -645,7 +648,7 @@ class game extends gen_class {
 		$primary = $this->get_primary_class();
 		$todisplay = array_keys($admin_data);
 		$todisplay[] = $primary;
-		
+
 		$ids = $this->get_assoc_classes($todisplay, $filter, $lang);
 		$ids = $ids['data'];
 		reset($todisplay);
@@ -659,10 +662,10 @@ class game extends gen_class {
 		}
 		return $this->get($primary, array($ids), $lang);
 	}
-	
+
 	/**
 	 * Returns the type for the name, e.g. "classes" for name "class"
-	 * 
+	 *
 	 * @param string $strName
 	 * @return string
 	 */
@@ -673,7 +676,7 @@ class game extends gen_class {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Returns the name for the type, e.g. "class" for name "classes"
 	 *
@@ -687,7 +690,7 @@ class game extends gen_class {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Returns an array with all possible dependent classes
 	 *
@@ -717,7 +720,7 @@ class game extends gen_class {
 		}
 		return $all_data;
 	}
-	
+
 	/**
 	 * Returns the class-dependencies as an associative array for the roster
 	 *
@@ -735,7 +738,7 @@ class game extends gen_class {
 		}
 		return $this->get_assoc_classes($todisplay, $filter, $lang);
 	}
-	
+
 	/**
 	 * Returns the class-dependencies as an associative array for the recruitment module
 	 *
@@ -753,7 +756,7 @@ class game extends gen_class {
 		}
 		return $this->get_assoc_classes($todisplay, $filter, $lang);
 	}
-	
+
 	/**
 	 * Returns the class-dependencies as an associative array
 	 *
@@ -769,7 +772,7 @@ class game extends gen_class {
 		 */
 		$class_dep = $this->gameinfo()->get_class_dependencies();
 		$admin_data = ($blnWithAdminData) ? $this->get_admin_classdata(true) : array();
-		
+
 		// create a name 2 type array
 		$name2type = array();
 		foreach($class_dep as $class) {
@@ -784,24 +787,24 @@ class game extends gen_class {
 				$child_ids[$name2type[key($class['parent'])]] = current($class['parent']);
 			}
 		}
-		
+
 		if (count($relevant_deps) === 0){
 			return array(
 				'todisplay'	=> $todisplay,
 				'data'		=> array_keys($this->get($todisplay[0], $filter, $lang)),
 			);
 		}
-		
+
 		// build associative array
 		return array(
 			'todisplay'	=> $todisplay,
 			'data'		=> $this->build_assoc_array(key($relevant_deps), $relevant_deps, $child_ids, $todisplay, $filter, $lang, false, $admin_data)
 		);
 	}
-	
+
 	private function build_assoc_array($type, $dep_order, $child_ids, $todisplay, $filter=array(), $lang=false, $parent_id=false, $admin_data=array()) {
 		//echo "build assoc array ".$type."<br />";
-		
+
 		$assoc_array = array();
 		$data = $this->get($type, $filter, $lang);
 		if(!is_array($data)) $data = array();
@@ -809,14 +812,14 @@ class game extends gen_class {
 		foreach($data as $id => $name) {
 			//echo "foreach ".$type." id ".$id."<br />";
 			if($id === "" || $id === "_select") continue;
-			
+
 			if (isset($admin_data[$type])){
 				if ($id !== $admin_data[$type] && strlen($admin_data[$type])){
 					//echo "Admin data and not in ".$type."<br />";
 					continue;
 				}
 			}
-			
+
 			// filter out ids not allowed
 			if($parent_id !== false) {
 				//echo "parent_id filter out ".$type."<br />";
@@ -849,11 +852,11 @@ class game extends gen_class {
 						//echo "Vereinigung ".$type." mit ".$dep_order[$type]."id ".$id." end ".end($todisplay)."<br />";
 					} else {
 						//echo "Merge ".$type." mit ".$dep_order[$type]."id ".$id." end ".end($todisplay)."<br />";
-		
+
 						$assoc_array = array_merge($assoc_array, $this->build_assoc_array($dep_order[$type], $dep_order, $child_ids, $todisplay, $filter, $lang, $id, $admin_data));
 						if(!is_array(current($assoc_array))) $assoc_array = array_unique($assoc_array);
 						//echo "Merge ".$type." mit ".$dep_order[$type]."id ".$id." end ".end($todisplay)."<br />";
-						
+
 						//d($assoc_array);
 					}
 				}
@@ -863,7 +866,7 @@ class game extends gen_class {
 		return $assoc_array;
 	}
 
-	
+
 	/**
 	 * Returns a data-array containing all admin-selected class stuff
 	 *
@@ -975,7 +978,7 @@ class game extends gen_class {
 		}
 		return '';
 	}
-	
+
 	/**
 	 * Creates all Icons of classes/subclasses to decorate a character
 	 *
@@ -1003,16 +1006,16 @@ class game extends gen_class {
 	public function gameVersion(){
 		return $this->gameinfo()->version;
 	}
-	
+
 	private function autoUpdateClassProfileFields(){
 		// add fields for classes/subclasses etc
 		$class_data = $this->gameinfo()->get_class_dependencies();
-		
+
 		$strClassdataHash = md5(serialize($class_data));
 		if($strClassdataHash === $this->config->get('game_classdata_hash')){
 			return;
 		}
-		
+
 		// build an array with parent-name , child-name => child-type
 		$class_deps = array();
 		foreach($class_data as $class) {
@@ -1059,16 +1062,16 @@ class game extends gen_class {
 				if($iclass['name'] == $class['name'])
 					$field['options'] = $this->get($iclass['type']);
 			}
-			
+
 			$this->pdh->put('profile_fields', 'delete_fields_by_name', array(array($field['name'])));
 			$this->pdh->process_hook_queue();
 			$this->pdh->put('profile_fields', 'insert_field', array($field));
 			$this->pdh->process_hook_queue();
-			
+
 			$this->config->set('game_classdata_hash', $strClassdataHash);
 		}
 	}
-	
+
 
 	/**
 	 * Add the profile fields for selected game
@@ -1138,11 +1141,11 @@ class game extends gen_class {
 				$this->pdh->put('profile_fields', 'insert_field', array($values));
 			}
 		}
-		
+
 		//Reset Cache
 		$this->pdh->process_hook_queue();
 	}
-	
+
 	/**
 	 * initializes default-roles
 	 */
@@ -1163,7 +1166,7 @@ class game extends gen_class {
 		}
 		$this->load_default_classroles();
 		$this->pdh->process_hook_queue();
-	}	
+	}
 
 	// load the default role for each class if available in game file
 	public function load_default_classroles() {
@@ -1177,7 +1180,7 @@ class game extends gen_class {
 
 	/**
 	 * Installs a game
-	 * 
+	 *
 	 * @param string $strGamename
 	 * @param string $strGamelang
 	 * @param number $intOverwriteData {0:write no data; 1: overwrite all data; 2: append data}
@@ -1185,57 +1188,57 @@ class game extends gen_class {
 	public function installGame($strGamename, $strGamelang, $intOverwriteData=1){
 		//Uninstall old game
 		$this->uninstallGame();
-		
+
 		$this->game = $strGamename;
-		
+
 		//If Overwrite, reset some
 		if ($intOverwriteData === 1){
 			//Reset some data
 			$this->resetEvents();
 			$this->resetItempools();
 			$this->resetMultiDKPPools();
-			
+
 			//Add Default Pools - There is always an itempool with ID 1
 			$this->addMultiDKPPool("Default", "Default MultiDKPPool", array(), array(1));
-		}		
-		
+		}
+
 		//If write any data
 		if($intOverwriteData !== 0){
 			//Reset Ranks
 			$this->resetRanks();
 			//Reset Raidgroups
 			$this->resetRaidgroups();
-			
-			
+
+
 			//Install new game
 			$this->init_gameclass();
-			
+
 			if(!in_array($strGamelang, $this->gameinfo()->langs)) {
 				$strGamelang = $this->gameinfo()->langs[0];
 			}
-			
+
 			$this->gameinfo()->lang = $strGamelang;
 			$this->gameinfo()->overwriteMode = $intOverwriteData;
 			$this->overwriteMode = $intOverwriteData;
 			$install = (defined('EQDKP_INSTALLED') && EQDKP_INSTALLED) ? false : true;
-			
+
 			$info = $this->gameinfo()->install($install);
-			
+
 		}
-		
+
 		$game_config = array(
 				'default_game'		=> $strGamename,
 				'game_language'		=> $strGamelang,
 				'game_version'		=> $this->gameinfo()->version
 		);
-		
+
 		//If write any data
 		if($intOverwriteData !== 0){
 			//infotooltip-config changes
 			$itt_config = array(
 					'infotooltip_use' => 0
 			);
-			
+
 			$parserlist = $this->itt->get_parserlist($strGamename);
 			if(count($parserlist)) {
 				$itt_config['infotooltip_use'] = 1;
@@ -1252,7 +1255,7 @@ class game extends gen_class {
 			}
 
 			$queries = $info['queries'];
-			
+
 			//classcolors
 			if(is_array($this->gameinfo()->get_class_colors()) && $this->pdh->put('class_colors', 'truncate_classcolor', array())) {
 				$style_ids = array();
@@ -1263,7 +1266,7 @@ class game extends gen_class {
 					}
 				}
 			}
-			
+
 			//Custom Queries
 			if(is_array($queries)) {
 				foreach($queries as $sql) {
@@ -1272,17 +1275,17 @@ class game extends gen_class {
 			}
 			//Add Profilefields
 			$this->AddProfileFields();
-			
+
 			//roles
 			$this->load_default_roles();
 		}
-		
+
 		$this->config->set(array_merge($game_config, ((is_array($info['config'])) ? $info['config'] : array()), $itt_config, $this->itt->changed_prio1($newgame, $itt_config['itt_prio1'])));
-		
+
 		//Reset PDH Cache
 		$this->pdh->process_hook_queue();
 	}
-	
+
 	/**
 	 * Uninstalls recent game
 	 */
@@ -1291,7 +1294,7 @@ class game extends gen_class {
 			$this->gameinfo()->uninstall();
 		}
 	}
-	
+
 	/**
 	 * Delets all events
 	 */
@@ -1299,10 +1302,10 @@ class game extends gen_class {
 		$this->pdh->put("event", "reset", array());
 		$this->pdh->process_hook_queue();
 	}
-		
+
 	/**
 	 * Adds an Event
-	 * 
+	 *
 	 * @param unknown $strName
 	 * @param unknown $intValue
 	 * @param unknown $strIcon
@@ -1311,7 +1314,7 @@ class game extends gen_class {
 	public function addEvent($strName, $intValue, $strIcon){
 		return ($this->overwriteMode === 0) ? true : $this->pdh->put("event", "add_event", array($strName, $intValue, $strIcon));
 	}
-	
+
 	/**
 	 * Deletes all itempools execept the one with ID 1
 	 */
@@ -1319,10 +1322,10 @@ class game extends gen_class {
 		$this->pdh->put("itempool", "reset", array());
 		$this->pdh->process_hook_queue();
 	}
-	
+
 	/**
 	 * Adds an Itempool
-	 * 
+	 *
 	 * @param unknown $strName
 	 * @param unknown $strDescription
 	 * @return boolean|mixed
@@ -1330,10 +1333,10 @@ class game extends gen_class {
 	public function addItempool($strName, $strDescription){
 		return ($this->overwriteMode === 0) ? true : $this->pdh->put("itempool", "add_itempool", array($strName, $strDescription));
 	}
-	
+
 	/**
 	 * Adds a link
-	 * 
+	 *
 	 * @param unknown $strName
 	 * @param unknown $strURL
 	 * @return boolean|mixed
@@ -1341,17 +1344,17 @@ class game extends gen_class {
 	public function addLink($strName, $strURL){
 		return ($this->overwriteMode === 0) ? true : $this->pdh->put("links", "add", array($strName, $strURL));
 	}
-	
+
 	/**
 	 * Removes a Link by given name
-	 * 
+	 *
 	 * @param unknown $strName
 	 */
 	public function removeLink($strName){
 		$this->pdh->put("links", "deleteByName", array($strName));
 		$this->pdh->process_hook_queue();
 	}
-	
+
 	/**
 	 * Deletes all MultiDKP Pools. Default one will be created on game install.
 	 */
@@ -1359,10 +1362,10 @@ class game extends gen_class {
 		$this->pdh->put("multidkp", "reset", array());
 		$this->pdh->process_hook_queue();
 	}
-	
+
 	/**
 	 * Adds a MultiDKP Pool
-	 * 
+	 *
 	 * @param unknown $strName
 	 * @param unknown $strDescription
 	 * @param unknown $arrEventIDs
@@ -1375,7 +1378,7 @@ class game extends gen_class {
 
 	/**
 	 * Updates the default MultiDKP Pool
-	 * 
+	 *
 	 * @param unknown $strName
 	 * @param unknown $strDescription
 	 * @param unknown $arrEventIDs
@@ -1384,7 +1387,7 @@ class game extends gen_class {
 	public function updateDefaultMultiDKPPool($strName, $strDescription, $arrEventIDs){
 		return ($this->overwriteMode === 0) ? true : $this->pdh->put("multidkp", "update_multidkp", array(1, $strName, $strDescription, $arrEventIDs, array(1), array()));
 	}
-	
+
 
 	/**
 	 * Truncates all Ranks
@@ -1393,10 +1396,10 @@ class game extends gen_class {
 		$this->pdh->put("rank", "truncate", array());
 		$this->pdh->process_hook_queue();
 	}
-	
+
 	/**
 	 * Adds a Rank
-	 * 
+	 *
 	 * @param unknown $intID
 	 * @param unknown $strName
 	 * @param string $blnDefault
@@ -1406,7 +1409,7 @@ class game extends gen_class {
 	public function addRank($intID, $strName, $blnDefault=false, $strIcon=''){
 		return ($this->overwriteMode === 0) ? true : $this->pdh->put("rank", "add_rank", array($intID, $strName, false, '', '', $intID+1, $blnDefault, $strIcon));
 	}
-	
+
 	/**
 	 * Delete all Raidgroups except the Default Raidgroup with ID 1
 	 */
@@ -1414,10 +1417,10 @@ class game extends gen_class {
 		$this->pdh->put('raid_groups', 'reset', array());
 		$this->pdh->process_hook_queue();
 	}
-	
+
 	/**
 	 * Adds a Raidgroup
-	 * 
+	 *
 	 * @param unknown $name
 	 * @param unknown $color
 	 * @param string $desc
@@ -1429,8 +1432,8 @@ class game extends gen_class {
 	public function addRaidgroup($name, $color, $desc='', $standard=0, $sortid=0, $system=0){
 		return ($this->overwriteMode === 0) ? true : $this->pdh->put('raid_groups', 'add', array($name, $color, $desc, $standard, $sortid, $system));
 	}
-	
-	
+
+
 	/**
 	 * Will be executed from the Game Cronjob
 	 *
@@ -1439,7 +1442,7 @@ class game extends gen_class {
 	public function cronjob($params){
 		return $this->gameinfo()->cronjob($params);
 	}
-	
+
 	/**
 	 * Options for the Game Cronjob
 	 *
@@ -1448,7 +1451,7 @@ class game extends gen_class {
 	public function cronjobOptions(){
 		return $this->gameinfo()->cronjobOptions();
 	}
-		
+
 	/**
 	 * additional fields for admin-settings
 	 *
@@ -1468,7 +1471,7 @@ class game extends gen_class {
 		}
 		return $fields;
 	}
-	
+
 	public function handle_export_charnames($strCharname, $intCharID){
 		return $this->gameinfo()->handle_export_charnames($strCharname, $intCharID);
 	}
@@ -1489,18 +1492,18 @@ if(!class_exists('game_generic')) {
 			$this->scan_languages();
 			$this->scan_icons();
 		}
-		
+
 		public function __get($name) {
 			if(in_array($name, $this->types)) {
 				$this->$name = array();
 			}
 			return parent::__get($name);
 		}
-		
+
 		public static function getApiLevel(){
 			return (isset(static::$apiLevel)) ? static::$apiLevel : 0;
 		}
-		
+
 		protected function scan_languages() {
 			$languages = sdir($this->path.'language/', '*.php', '.php');
 			foreach($languages as $language) {
@@ -1509,12 +1512,12 @@ if(!class_exists('game_generic')) {
 				}
 			}
 		}
-				
+
 		public function get_dependency($dependency) {
 			if(isset($this->dependencies[$dependency])) return $this->dependencies[$dependency];
 			return false;
 		}
-		
+
 		/**
 		 * scan all available icons
 		 *
@@ -1551,7 +1554,7 @@ if(!class_exists('game_generic')) {
 			}
 			return $this->$type;
 		}
-		
+
 		protected function load_type($type, $langs){
 			foreach($langs as $lang) {
 				$this->load_lang_file($lang);
@@ -1661,7 +1664,7 @@ if(!class_exists('game_generic')) {
 			if($return_key) return $var;
 			return false;
 		}
-	
+
 		/**
 		 * Default profilefields
 		 *
@@ -1679,7 +1682,7 @@ if(!class_exists('game_generic')) {
 		public function changeprofilefields(){
 			return array();
 		}
-		
+
 		/**
 		 * Will be executed from the Game Cronjob
 		 *
@@ -1688,7 +1691,7 @@ if(!class_exists('game_generic')) {
 		public function cronjob($params = array()){
 			return false;
 		}
-		
+
 		/**
 		 * Options for the Game Cronjob
 		 *
@@ -1697,7 +1700,7 @@ if(!class_exists('game_generic')) {
 		public function cronjobOptions(){
 			return false;
 		}
-		
+
 		/**
 		 * additional fields for admin-settings
 		 *
@@ -1706,7 +1709,7 @@ if(!class_exists('game_generic')) {
 		public function admin_settings() {
 			return array();
 		}
-		
+
 		/**
 		 * class-dependency array
 		 *
@@ -1715,23 +1718,23 @@ if(!class_exists('game_generic')) {
 		public function get_class_dependencies() {
 			return $this->class_dependencies;
 		}
-		
+
 		public abstract function install($blnEQdkpInstall=false);
-		
+
 		public function uninstall(){
 			return false;
 		}
-		
+
 		protected abstract function load_filters($langs);
-		
+
 		public function get_class_colors(){
 			if (isset($this->class_colors)) return $this->class_colors;
 			return false;
 		}
-		
+
 		/**
 		 * Change the way a charname is exported in point export (data_export.class.php)
-		 * 
+		 *
 		 * @param string $strCharname
 		 * @param string $intCharID
 		 * @return string

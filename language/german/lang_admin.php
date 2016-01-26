@@ -105,7 +105,8 @@ $lang = array(
 "activate_user_warning" => "Sollen die ausgewählten Benutzer aktiviert werden?",
 "user_activate_success" => "Der Benutzer <i>%s</i> wurde erfolgreich aktiviert.",
 "user_deactivate_success" => "Der Benutzer <i>%s</i> wurde erfolgreich deaktiviert.",
-"event_icon_header" => "Ereignis Icon auswählen",
+"event_icon_header" => "Ereignisicon auswählen",
+"role_icon_header" => 'Rollenicon auswählen',
 "multidkp_to_event" => "Dem Ereignis zugeordnete Multidkp-Konten",
 "admin_action" => "Admin-Aktion",
 "account_enabled" => "Account aktiviert",
@@ -627,7 +628,7 @@ $lang = array(
 "rssadmin_head1" => "Benachrichtigungen",
 "rssadmin_head2" => "EQdkp-Plus Twitter Feed",
 "adminc_news" => "Neuigkeiten",
-"adminc_php_info" => 'Weitere PHP Informationen',		
+"adminc_php_info" => 'Weitere PHP Informationen',
 "adminc_statistics" => "Statistiken",
 "adminc_server" => "Server",
 "adminc_system" => "System",
@@ -1648,6 +1649,7 @@ $lang = array(
 "export_format"	=> "Ausgabe-Format",
 "export_data" => "Daten",
 "upload_eventicon" => "Ereignisicon hinzufügen",
+"upload_roleicon" => 'Rollenicon hinzufügen',
 "selected_elements" => "Ausgewählte Elemente",
 "show_on_teamlist" => "Auf Teamseite anzeigen",
 "show_teamlist" => "Teamseite",
@@ -1823,7 +1825,7 @@ $lang = array(
 'notification_prio_0' => 'Grün',
 'notification_prio_1' => 'Orange',
 'notification_prio_2' => 'Rot',
-		
+
 'support_eqdkplus'	=> 'So ein Projekt wie EQdkp Plus kann natürlich nur existieren, wenn wir für die ganze Mühe, Zeit und Liebe, die wir in EQdkp Plus stecken, auch wieder etwas zurückbekommen. Dies ist auf vielfältige Weise möglich:
 						<ul>
 							<li><i class="fa fa-puzzle-piece"></i> <a href="http://eqdkp-plus.eu/repository/">Veröffentliche ein Plugin oder Template, damit alle EQdkp Plus Benutzer was davon haben</a></li>
@@ -1831,7 +1833,7 @@ $lang = array(
 							<li><i class="fa fa-cogs"></i> <a href="http://eqdkp-plus.eu/de/entwicklung.html">Beteilige dich aktiv an der Weiterentwicklung von EQdkp Plus</a></li>
 							<li><i class="fa fa-usd"></i> <a href="http://eqdkp-plus.eu/de/spenden.html">Unterstützte uns finanziell, damit wir euch weiterhin unsere Services anbieten können</a></li>
 						</ul>
-		
+
 						Also wenn ihr EQdkp Plus genauso liebt wie wir, denkt doch mal darüber nach, uns zu unterstützen!',
 'install_other_games' => 'Andere Spiele herunterladen',
 );
