@@ -38,7 +38,7 @@ function httpHost(){
 	}
 	return $protocol.(!empty($xhost) ? $xhost . '/' : '').preg_replace('/[^A-Za-z0-9\.:-]/', '', $host);
 }
-	
+
 $strPath = substr(str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']), 0, -12);
 
 $eqdkp_path = httpHost().$strPath;
@@ -64,15 +64,15 @@ $eqdkp_path = httpHost().$strPath;
  *	You should have received a copy of the GNU Affero General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 var EQdkpTooltip = new function(){
 	//Init Vars
 	var mmocms_root_path = '<?php echo $eqdkp_path; ?>';
 	var cached_itts = new Array();
 	var cache_labels = new Array();
-	
+
 	function addResources(){
-		
+
 		if ("complete" != document.readyState && "loaded" != document.readyState) setTimeout(addResources, 50);
 		else {
 			var head = document.getElementsByTagName("head")[0];
@@ -99,12 +99,12 @@ var EQdkpTooltip = new function(){
 			aj.type = 'text/javascript';
 			aj.onload=scriptLoaded;
 			head.appendChild(aj);
-		
+
 		}
 	}
 	function scriptLoaded(){
 		jQuery.noConflict();
-		
+
 		(function($){
 			$.fn.extend({
 
@@ -117,7 +117,7 @@ var EQdkpTooltip = new function(){
 						//code to be inserted here
 						gameid = ($('#'+mid).attr('data-game_id')) ? $('#'+mid).attr('data-game_id') : 0;
 						jsondata = {"name": $('#'+mid).attr('data-name'), "game_id": gameid}
-						
+
 						if (cache_labels['t_'+ mid] != undefined){
 							$('#'+mid).empty();
 							$('#'+mid).prepend(cache_labels['t_'+ mid]);
@@ -133,23 +133,23 @@ var EQdkpTooltip = new function(){
 				}
 			});
 		})(jQuery);
-		
+
 		jQuery('body').append('<style type="text/css">.ui-infotooltip, .ui-tooltip, .ui-tooltip-content { border: 0px;} .ui-infotooltip { box-shadow:0 0 0 0 !important; max-width: 450px !important; padding: 0px; position: absolute;z-index: 9999;border-radius: 0px !important; background:none !important;}</style>');
-		
+
 		console.log("script loaded successful");
 		replaceContent();
 	}
-	
+
 	function replaceContent(){
 		jQuery(document).ready(function($){
-		
+
 			$(".EQdkpTooltip").each(function(){
 				var itemname = $(this).html();
 				var random = Math.random()*1000;
-				
+
 				var random2 = Math.random()*100;
 				var item_data = new Array();
-				
+
 				item_data['name'] = itemname.toString();
 				var is_numeric = /^[0-9]+$/.test(itemname);
 				var itemdatatag = ""
@@ -164,19 +164,16 @@ var EQdkpTooltip = new function(){
 					item_data['name'] = myitemid;
 					itemname = myitemid;
 				}
-				
+
 				var out = '<span class="infotooltip" id="bb_'+parseInt(random)+ parseInt(random2) +'" data-name="'+itemname.toString()+'" '+itemdatatag+' title="0'+ mmo_encode64(js_array_to_php_array(item_data)) +'">'+itemname+'</span>';
 
 				$(this).html(out);
 			});
 
 			$('.infotooltip').infotooltips();
-			
+
 			$('.infotooltip').tooltip({
 				track: true,
-				open: function(event, ui) {
-					$(ui.tooltip).siblings(".tooltip").remove();
-				},
 				content: function(response) {
 					var direct = $(this).attr('title').substr(0,1);
 					var mytitle = $(this).attr('title');
@@ -201,13 +198,13 @@ var EQdkpTooltip = new function(){
 			});
 		});
 	}
-	
-	
-	
+
+
+
 	this.init = function () {
 		addResources();
 	}
-	
+
 	function base64_encode (data) {
 		// http://kevin.vanzonneveld.net
 		// +   original by: Tyler Akins (http://rumkin.com)
