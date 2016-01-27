@@ -74,9 +74,8 @@ class core extends gen_class {
 			} else {
 				redirect('index.php'.$this->SID, false, false, false);
 			}
+			die("Authentication Failed");
 		}
-		
-		die("Authentication Failed");
 	}
 
 	public function create_breadcrump($name, $url = false) {
