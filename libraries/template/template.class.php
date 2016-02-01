@@ -1351,7 +1351,12 @@ class template extends gen_class {
 				$filename = implode('/', $arrFolders);
 			} else $filename = substr(sha1($this->files['body']), 0, 9).'_'.$this->body_filename;
 		} else {
-			$filename = $this->files[$handle];
+			if(strpos($this->files[$handle], './../') !== false){
+				$strBasename = pathinfo($this->files[$handle], PATHINFO_BASENAME);
+				$filename = substr(sha1($this->files[$handle]), 0, 9).'_'.$strBasename;
+			} else {
+				$filename = $this->files[$handle];
+			}
 		}
 		
 		$file = $this->cachedir . $filename . '.php';
@@ -1380,9 +1385,15 @@ class template extends gen_class {
 			} else $handle_filename = substr(sha1($this->files['body']), 0, 9).'_'.$this->body_filename;
 
 		} else {
-			$handle_filename	= $this->files[$handle];
+			if(strpos($this->files[$handle], './../') !== false){
+				$strBasename = pathinfo($this->files[$handle], PATHINFO_BASENAME);
+				$filename = substr(sha1($this->files[$handle]), 0, 9).'_'.$strBasename;
+				$handle_filename = $filename;
+			} else {
+				$handle_filename	= $this->files[$handle];
+			}
 		}
-		
+
 		$filename		= $this->cachedir . $handle_filename . '.php';
 		$data			= '<?php' . "\nif (\$this->security()) {\n" . $data . "\n}\n?".">";
 
