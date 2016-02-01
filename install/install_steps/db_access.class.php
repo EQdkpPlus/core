@@ -29,7 +29,7 @@ class db_access extends install_generic {
 	public $next_button		= 'test_db';
 
 	//default settings
-	private $table_prefix	= 'eqdkp22_';
+	private $table_prefix	= 'eqdkp23_';
 	private $dbtype			= 'mysql_pdo';
 	private $dbhost			= 'localhost';
 	private $dbname			= '';
