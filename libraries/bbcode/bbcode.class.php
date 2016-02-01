@@ -78,8 +78,8 @@ if (!class_exists("bbcode")) {
 				'<img alt=";)" src="'.$this->smiliepath.'/wink.svg" class="smilies" />',
 				'<img alt=";)" src="'.$this->smiliepath.'/wink.svg" class="smilies" />'
 			);
-			
-			$text = preg_replace('/<img(.*?)alt=\"(\W.*?)\" src=\"(.*?)\" class=\"smilies\" \/>/si' , '$2' , $text);
+
+			$text = preg_replace('/<img(.*?)alt=\"(.*?)\" src=\"(.*?)\" class=\"smilies\" \/>/Ui' , '$2' , $text);
 			$text = str_replace($in, $out, $text);
 			return $text;
 		}
