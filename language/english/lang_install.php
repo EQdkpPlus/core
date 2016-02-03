@@ -211,7 +211,15 @@ $lang = array(
 							<li><i class="fa fa-cogs"></i> <a href="https://eqdkp-plus.eu/en/development.html">Take part actively in the development of EQdkp Plus</a></li>
 							<li><i class="fa fa-usd"></i> <a href="https://eqdkp-plus.eu/en/donate.html">Support us financially so we can continue offering you our services like LiveUpdate</a></li>
 						</ul>
-						So if you love EQdkp Plus as much as we do, think about supporting us!'
+						So if you love EQdkp Plus as much as we do, think about supporting us!',
+	'additional_keys'		=> 'Additional Features',
+	//Step: additional_keys
+	'additional_keys_info'	=> 'We use features from other providers, like spam protection or converting links to videos or images. In order to use this features, you need own Keys for this features. Therefore you can create your own keys at the following pages.<br /><b>Of course you can skip this step, and insert the keys at any time at the EQdkp Plus Settings.</b>',
+	'recaptcha_info' 		=> 'reCATPCHA is a spam protection method. Enabling this method reduces spam and increases the security of your EQdkp Plus. You can create your own keys at this page: <br /> <a href="https://www.google.com/recaptcha/admin/create" target="_blank"><i class="fa fa-lg fa-external-link"></i> https://www.google.com/recaptcha/admin/create</a>',
+	"recaptcha_okey" 		=> "Public Key of reCATPCHA",
+	"recaptcha_pkey" 		=> "Private Key of reCATPCHA",
+	'embedly_info'			=> 'Embedly convertes links of images or videos to their corresponding image or video. Also, it is used at plugins like MediaCenter to embedd Videos. You can create an own API-Key at the following page: <br /> <a href="https://app.embed.ly/" target="_blank"><i class="fa fa-lg fa-external-link"></i> https://app.embed.ly/</a>',
+	'embedly_api_key'		=> 'Embedly API-Key',
 );
 
 ?>

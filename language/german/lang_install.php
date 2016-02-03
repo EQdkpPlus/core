@@ -48,6 +48,7 @@ $lang = array(
 	'inst_settings'			=> 'Einstellungen',
 	'admin_user'			=> 'Administrator Zugang',
 	'end'					=> 'Abschließen der Installation',
+	'additional_keys'		=> 'Zusätzliche Funktionen',
 
 	//Step: licence
 	"welcome"				=> "Willkommen zur Installation von EQdkp Plus. Um dieses Gamer CMS & DKP-System zu installieren, lies dir bitte die Lizenzbedingungen durch und klicke anschließend auf 'Akzeptieren & Installation starten'",
@@ -236,7 +237,15 @@ $lang = array(
 	'auto_login'			=> 'Angemeldet bleiben',
 	'user_required'			=> 'Benutzername, E-mail und Passwort müssen ausgefüllt werden!',
 	'no_pw_match'			=> 'Die Passwörter stimmen nicht überein.',
-
+		
+	//Step: additional_keys
+	'additional_keys_info'	=> 'Wir nutzen Funktionen anderer Anbieter, um euch Funktionen wie Spamschutz oder das automatische Umwandeln von Links in Videos anbieten zu können. Hierfür benötigt ihr aber eigene Keys, die ihr euch auf den verlinkten Seiten holen und hier eintragen könnt.<br /><b>Natürlich könnt ihr diesen Schritt auch überspringen und die Keys später in den Einstellungen nachtragen.</b>',
+	'recaptcha_info' 		=> 'reCAPTCHA ist ein Verfahren, um Aktionen von Bots zu unterbinden, z.B. um Spam oder Registrierungen. Neue Keys kannst du auf folgender Seite anlegen: <br /> <a href="https://www.google.com/recaptcha/admin/create" target="_blank"><i class="fa fa-lg fa-external-link"></i> https://www.google.com/recaptcha/admin/create</a>',
+	"recaptcha_okey" 		=> "Öffentlicher Key von reCATPCHA",
+	"recaptcha_pkey" 		=> "Privater Key von reCATPCHA",
+	'embedly_info'			=> 'Mit Hilfe von Embedly werden Links zu Bildern/Videos oder auch Tweets automatisch umgewandelt. Auch wird diese Funktion von Plugins wie dem MediaCenter zur Einbettung von Videos verwendet. Einen eigene API-Key kannst du auf folgender Seite anlegen: <br /> <a href="https://app.embed.ly/" target="_blank"><i class="fa fa-lg fa-external-link"></i> https://app.embed.ly/</a>',
+	'embedly_api_key'		=> 'Embedly API-Key',
+	
 	//Step: end
 	'install_end_text'		=> 'Die Installation kann nun erfolgreich abgeschlossen werden.',
 	'install_support_h1'	=> 'Unterstütze EQdkp Plus',
