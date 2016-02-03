@@ -47,7 +47,7 @@ class calendarevent_pageobject extends pageobject {
 			'logs'				=> array('process' => 'display_logs'),
 		);
 
-		parent::__construct(false, $handler, array(), null, '', 'eventid');
+		parent::__construct(false, $handler, array(), null, '', array('eventid', 'int'));
 		$this->process();
 	}
 
