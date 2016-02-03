@@ -69,8 +69,8 @@ class auth extends user {
 			return true;
 		}
 
-		// Remove old sessions and update user information if necessary.
-		if(($this->current_time - $this->session_length) > $this->config->get('session_last_cleanup')){
+		// Remove old sessions and update user information if necessary (10 minutes)
+		if(($this->current_time - 60*10) > $this->config->get('session_last_cleanup')){
 			$this->cleanup($this->current_time);
 		}
 		//Cookie-Data
