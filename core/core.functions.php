@@ -390,7 +390,9 @@ function infotooltip_js() {
 									return '<i class=\"fa fa-spinner fa-spin fa-lg\"></i> ".registry::fetch('user')->lang('lib_loading')."';
 								}
 							},
-							tooltipClass: \"ui-infotooltip\",
+							classes: {
+								\"ui-tooltip\": \"ui-infotooltip\"
+							}
 						});";
 			registry::register('template')->add_js($js, 'docready');
 			registry::register('template')->css_file(registry::get_const('server_path').'games/'.registry::register('config')->get('default_game').'/infotooltip/'.registry::register('config')->get('default_game').'.css');

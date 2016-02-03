@@ -194,7 +194,9 @@ var EQdkpTooltip = new function(){
 						return 'Loading...';
 					}
 				},
-				tooltipClass: "ui-infotooltip",
+				classes: {
+					"ui-tooltip": "ui-infotooltip"
+				}
 			});
 		});
 	}
