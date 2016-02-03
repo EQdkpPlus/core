@@ -44,13 +44,20 @@ if(!class_exists('page_generic')){
 		protected $simple_head = '';
 		protected $action = '';
 		protected $pre_check = '';
+		protected $url_id_type = 'string';
 		
 		public function __construct($pre_check, $handler=false, $pdh_call=array(), $params=null, $cb_name='', $url_id='') {
 			$this->pre_check = $pre_check;
 			$this->simple_head = ($this->in->exists('simple_head')) ? 'simple' : 'full';
 			$this->simple_head_url = ($this->simple_head == 'simple') ? '&amp;simple_head=simple' : '';
 			$this->url_id_ext = '';
-			if($url_id) {
+			if(is_array($url_id)){
+				$myUrlID = $url_id[0];
+				$this->url_id_type = $url_id[1];
+				$mixDefaultValue = ($this->url_id_type == 'int') ? 0 : (($this->url_id_type == 'float') ? 0.0 : '');
+				$this->url_id = $this->in->get($myUrlID, $mixDefaultValue);
+				$this->url_id_ext = '&amp;'.$myUrlID.'='.$this->url_id;
+			} elseif($url_id) {
 				$this->url_id = $this->in->get($url_id, 0);
 				$this->url_id_ext = '&amp;'.$url_id.'='.$this->url_id;
 			}
@@ -76,7 +83,7 @@ if(!class_exists('page_generic')){
 		}
 		
 		public function set_url_id($name, $param){
-			$this->url_id = $param;
+			$this->url_id = ($this->url_id_type == 'int') ? intval($param) : (($this->url_id_type == 'float') ? (float)$param : $param);
 			$this->url_id_ext = '&amp;'.$name.'='.$param;
 			$this->action = $this->env->phpself.$this->SID.$this->simple_head_url.$this->url_id_ext;
 			$this->tpl->assign_vars(array(
