@@ -84,7 +84,7 @@ if(!class_exists('pdh_r_adjustment')){
 			if($dkp_id) {
 				if(!isset($this->decayed[$dkp_id])) $this->decayed[$dkp_id] = $this->apa->is_decay('adjustment', $dkp_id);
 				if($this->decayed[$dkp_id]) {
-					$data = array('id' => $adj_id, 'value' =>  $this->objPagination->get($adj_id, 'adjustment_value'), 'date' => $this->get_date($id));
+					$data = array('id' => $adj_id, 'value' =>  $this->objPagination->get($adj_id, 'adjustment_value'), 'date' => $this->get_date($adj_id));
 					$val = $this->apa->get_decay_val('adjustment', $dkp_id, $date, $data);
 				}
 			}
