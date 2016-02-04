@@ -88,17 +88,22 @@ class login_twofactor extends gen_class {
 					));
 					
 					$blnShowCaptcha = false;
-					if (((int)$this->config->get('failed_logins_inactivity') - 2) > 0){
-						if ($this->user->data['session_failed_logins'] >= ((int)$this->config->get('failed_logins_inactivity') - 2)){
-							$blnShowCaptcha = true;
-						}
-						if (!$blnShowCaptcha){
-							$objQuery = $this->db->prepare("SELECT SUM(session_failed_logins) as failed_logins FROM __sessions WHERE session_ip =?")->execute($this->env->ip);
-							if ($objQuery){
-								$arrResult = $objQuery->fetchAssoc();
-								if ((int)$arrResult['failed_logins'] >= ((int)$this->config->get('failed_logins_inactivity') - 2)){
-									$blnShowCaptcha = true;
-								}
+					
+					if((int)$this->config->get('failed_logins_inactivity') > 0){
+						$intFailedLoginCountForCaptcha = (((int)$this->config->get('failed_logins_inactivity') - 2) > 0) ? (int)$this->config->get('failed_logins_inactivity') - 2 : 1;
+					} else {
+						$intFailedLoginCountForCaptcha = 4;
+					}
+					
+					if ($this->user->data['session_failed_logins'] >= $intFailedLoginCountForCaptcha){
+						$blnShowCaptcha = true;
+					}
+					if (!$blnShowCaptcha){
+						$objQuery = $this->db->prepare("SELECT SUM(session_failed_logins) as failed_logins FROM __sessions WHERE session_ip =?")->execute($this->env->ip);
+						if ($objQuery){
+							$arrResult = $objQuery->fetchAssoc();
+							if ((int)$arrResult['failed_logins'] >= $intFailedLoginCountForCaptcha){
+								$blnShowCaptcha = true;
 							}
 						}
 					}
