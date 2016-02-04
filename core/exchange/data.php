@@ -35,6 +35,7 @@ if (!class_exists('exchange_data')){
 				'dkp_name'			=> $this->config->get('dkp_name'),
 				'forum_url'			=> $this->config->get('cmsbridge_url'),
 				'language'			=> $this->config->get('default_lang'),
+				'version'			=> VERSION_EXT,
 			);
 			$out['game'] = array(
 				'name'				=> $this->config->get('default_game'),
