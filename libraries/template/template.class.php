@@ -1351,7 +1351,7 @@ class template extends gen_class {
 				$filename = implode('/', $arrFolders);
 			} else $filename = substr(sha1($this->files['body']), 0, 9).'_'.$this->body_filename;
 		} else {
-			if(strpos($this->files[$handle], './../') !== false){
+			if(strpos($this->files[$handle], './') !== false){
 				$strBasename = pathinfo($this->files[$handle], PATHINFO_BASENAME);
 				$filename = substr(sha1($this->files[$handle]), 0, 9).'_'.$strBasename;
 			} else {
@@ -1370,7 +1370,6 @@ class template extends gen_class {
 			}
 			return true;
 		}
-
 		return false;
 	}
 
@@ -1385,7 +1384,7 @@ class template extends gen_class {
 			} else $handle_filename = substr(sha1($this->files['body']), 0, 9).'_'.$this->body_filename;
 
 		} else {
-			if(strpos($this->files[$handle], './../') !== false){
+			if(strpos($this->files[$handle], './') !== false){
 				$strBasename = pathinfo($this->files[$handle], PATHINFO_BASENAME);
 				$filename = substr(sha1($this->files[$handle]), 0, 9).'_'.$strBasename;
 				$handle_filename = $filename;
