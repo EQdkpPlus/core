@@ -62,8 +62,6 @@ class notifications extends gen_class {
 			}
 			
 			foreach($arrUsers as $intUserID){
-				d($intUserID);
-				d($this->check_permission($mixPermission, $intUserID));
 				if ((int)$intUserID === $this->user->id) continue;
 				if(!$this->check_permission($mixPermission, $intUserID)) continue;
 				
