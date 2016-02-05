@@ -176,6 +176,9 @@ class bridge extends gen_class {
 				
 				$user_id = $this->pdh->put('user', 'insert_user_bridge', array(sanitize($arrUserdata['name']), $strPwdHash.':'.$salt, $arrUserdata['email'], false));
 				$this->pdh->process_hook_queue();
+				
+				//Notify Admins
+				$this->ntfy->add('eqdkp_user_new_registered', $user_id, $arrUserdata['name'], $this->root_path.'admin/manage_users.php'.$this->SID.'&u='.$user_id, false, "", false, array("a_users_man"));
 			}
 		}
 

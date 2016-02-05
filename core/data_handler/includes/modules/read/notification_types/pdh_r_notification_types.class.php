@@ -64,7 +64,7 @@ if ( !class_exists( "pdh_r_notification_types" ) ) {
 				return true;
 			}		
 
-			$objQuery = $this->db->query('SELECT * FROM __notification_types');
+			$objQuery = $this->db->query('SELECT * FROM __notification_types ORDER BY category ASC,id DESC');
 			if($objQuery){
 				while($drow = $objQuery->fetchAssoc()){
 					$this->notification_types[$drow['id']] = array(
