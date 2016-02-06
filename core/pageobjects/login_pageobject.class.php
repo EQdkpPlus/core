@@ -108,6 +108,7 @@ class login_pageobject extends pageobject {
 				//success
 				if ($this->in->exists('redirect')){
 					$redirect_url = preg_replace('#^.*?redirect=(.+?)&(.+?)$#', '\\1' . $this->SID . '&\\2', base64_decode($this->in->get('redirect')));
+					$redirect_url = $this->user->removeSIDfromString($redirect_url);
 					if (strpos($redirect_url, '?') === false) {
 						$redirect_url = $redirect_url.$this->SID;
 					} else {
@@ -117,7 +118,6 @@ class login_pageobject extends pageobject {
 				} else {
 					$redirect_url = $this->controller_path_plain.$this->SID;
 				}
-				
 				redirect($redirect_url);
 			}
 		} else {
