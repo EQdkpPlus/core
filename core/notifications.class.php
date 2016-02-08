@@ -51,7 +51,7 @@ class notifications extends gen_class {
 		}
 	}
 	
-	public function add($strType, $intDatasetID, $strFromUsername, $strLink, $intUserID=false, $strAdditionalData="", $intCategoryID=false){
+	public function add($strType, $intDatasetID, $strFromUsername, $strLink, $intUserID=false, $strAdditionalData="", $intCategoryID=false, $mixPermission=false){
 		
 		if ($intUserID === false){
 			if ($strType === 'comment_new_article'){
@@ -63,6 +63,7 @@ class notifications extends gen_class {
 			
 			foreach($arrUsers as $intUserID){
 				if ((int)$intUserID === $this->user->id) continue;
+				if(!$this->check_permission($mixPermission, $intUserID)) continue;
 				
 				$intNotificationID = $this->pdh->put('notifications', 'add', array($strType, $intUserID, $strFromUsername, $intDatasetID, $strLink, $strAdditionalData));
 				$this->sendNofiticationByMethod($intUserID, $intNotificationID, $strType, $strFromUsername, $intDatasetID, $strLink, $strAdditionalData);
@@ -76,6 +77,7 @@ class notifications extends gen_class {
 				if (is_array($intUserID)){
 					foreach($intUserID as $intUID){
 						if ((int)$intUID === $this->user->id) continue;
+						if(!$this->check_permission($mixPermission, (int)$intUID)) continue;
 						$blnHasAbo = $this->pdh->get('user', 'notification_articlecategory_abo', array($intCategoryID, $intUID));
 							
 						if ($blnHasAbo){
@@ -88,8 +90,7 @@ class notifications extends gen_class {
 					
 				} else {
 					$blnHasAbo = $this->pdh->get('user', 'notification_articlecategory_abo', array($intCategoryID, $intUserID));
-					
-					if ($blnHasAbo && intval($intUserID) !== $this->user->id){
+					if ($blnHasAbo && intval($intUserID) !== $this->user->id && $this->check_permission($mixPermission, (int)$intUserID)){
 						$intNotificationID = $this->pdh->put('notifications', 'add', array($strType, $intUserID, $strFromUsername, $intDatasetID, $strLink, $strAdditionalData));
 						$this->sendNofiticationByMethod($intUserID, $intNotificationID, $strType, $strFromUsername, $intDatasetID, $strLink, $strAdditionalData);	
 						$this->pdh->process_hook_queue();
@@ -101,6 +102,7 @@ class notifications extends gen_class {
 				if (is_array($intUserID)){
 					foreach($intUserID as $intUID){
 						if ((int)$intUID === $this->user->id) continue;
+						if(!$this->check_permission($mixPermission, (int)$intUID)) continue;
 						
 						$blnHasAbo = $this->pdh->get('user', 'notification_abo', array($strType, $intUID));
 						if ($blnHasAbo){
@@ -113,7 +115,7 @@ class notifications extends gen_class {
 				} else {
 				
 					$blnHasAbo = $this->pdh->get('user', 'notification_abo', array($strType, $intUserID));
-					if ($blnHasAbo && intval($intUserID) !== $this->user->id){
+					if ($blnHasAbo && intval($intUserID) !== $this->user->id && $this->check_permission($mixPermission, $intUserID)){
 						$intNotificationID = $this->pdh->put('notifications', 'add', array($strType, $intUserID, $strFromUsername, $intDatasetID, $strLink, $strAdditionalData));
 						$this->sendNofiticationByMethod($intUserID, $intNotificationID, $strType, $strFromUsername, $intDatasetID, $strLink, $strAdditionalData);
 						$this->pdh->process_hook_queue();
@@ -426,6 +428,26 @@ class notifications extends gen_class {
 	public function markAsRead($strType, $intUserId, $mixDatasetID){
 		$this->pdh->put('notifications', 'mark_as_read_bytype', array($strType, $intUserId, $mixDatasetID));
 		$this->pdh->process_hook_queue();
+	}
+	
+	private function check_permission($mixPermission, $intUserID){
+		if(!is_array($mixPermission)){
+			if($mixPermission != "") return $this->user->check_auth($mixPermission, false, $intUserID);
+		} else {
+			$strFirstValue = strtolower($mixPermission[0]);
+			if($strFirstValue == "and"){
+				unset($mixPermission[0]);
+				return $this->user->check_auths($mixPermission, "AND", false, $intUserID);
+			}elseif($strFirstValue == "or"){
+				unset($mixPermission[0]);
+				return $this->user->check_auths($mixPermission, "OR", false, $intUserID);
+			}else {
+				$arrPermissions = $mixPermission;
+				return $this->user->check_auths($arrPermissions, "AND", false, $intUserID);
+			}
+		}
+
+		return true;
 	}
 }
 ?>

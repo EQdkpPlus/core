@@ -251,6 +251,10 @@ class register_pageobject extends pageobject {
 				$title = '';
 			}
 		}
+		
+		//Notify Admins
+		$this->ntfy->add('eqdkp_user_new_registered', $user_id, $this->in->get('username'), $this->root_path.'admin/manage_users.php'.$this->SID.'&u='.$user_id, false, "", false, array("a_users_man"));
+		
 		message_die($success_message, $title);
 	}
 

@@ -1346,12 +1346,12 @@ class template extends gen_class {
 			if(strpos($this->body_filename, '/') !== false){
 				$arrFolders = explode("/", $this->body_filename);
 				$filename = $arrFolders[count($arrFolders)-1];
-				$filename = substr(sha1($this->files['body']), 0, 9).'_'.$filename;
+				$filename = substr(sha1($this->files['body']), 0, 9).'_body_'.$filename;
 				$arrFolders[count($arrFolders)-1] = $filename;
 				$filename = implode('/', $arrFolders);
-			} else $filename = substr(sha1($this->files['body']), 0, 9).'_'.$this->body_filename;
+			} else $filename = substr(sha1($this->files['body']), 0, 9).'_body_'.$this->body_filename;
 		} else {
-			if(strpos($this->files[$handle], './../') !== false){
+			if(strpos($this->files[$handle], './') !== false){
 				$strBasename = pathinfo($this->files[$handle], PATHINFO_BASENAME);
 				$filename = substr(sha1($this->files[$handle]), 0, 9).'_'.$strBasename;
 			} else {
@@ -1362,7 +1362,8 @@ class template extends gen_class {
 		$file = $this->cachedir . $filename . '.php';
  
 		// Recompile page if the original template is newer, otherwise load the compiled version
-		if($this->caching && file_exists($file) && $this->timekeeper->get('tpl_cache_'.$this->template, $filename) >= @filemtime($this->files['body'])){
+		$strMyHandle = ($handle == 'main') ? 'body' : $handle;
+		if($this->caching && file_exists($file) && $this->timekeeper->get('tpl_cache_'.$this->template, $filename) >= @filemtime($this->files[$strMyHandle])){
 			$_str	= '';
 			include($file);
 			if($do_echo && $_str != ''){
@@ -1370,7 +1371,6 @@ class template extends gen_class {
 			}
 			return true;
 		}
-
 		return false;
 	}
 
@@ -1379,13 +1379,13 @@ class template extends gen_class {
 			if(strpos($this->body_filename, '/') !== false){
 				$arrFolders = explode("/", $this->body_filename);
 				$filename = $arrFolders[count($arrFolders)-1];
-				$filename = substr(sha1($this->files['body']), 0, 9).'_'.$filename;
+				$filename = substr(sha1($this->files['body']), 0, 9).'_body_'.$filename;
 				$arrFolders[count($arrFolders)-1] = $filename;
 				$handle_filename = implode('/', $arrFolders);
-			} else $handle_filename = substr(sha1($this->files['body']), 0, 9).'_'.$this->body_filename;
+			} else $handle_filename = substr(sha1($this->files['body']), 0, 9).'_body_'.$this->body_filename;
 
 		} else {
-			if(strpos($this->files[$handle], './../') !== false){
+			if(strpos($this->files[$handle], './') !== false){
 				$strBasename = pathinfo($this->files[$handle], PATHINFO_BASENAME);
 				$filename = substr(sha1($this->files[$handle]), 0, 9).'_'.$strBasename;
 				$handle_filename = $filename;

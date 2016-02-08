@@ -70,6 +70,9 @@ if ( !class_exists( "bridge_usersync_crontask" ) ) {
 					$this->pdh->process_hook_queue();
 					//Sync Usergroups
 					$this->bridge->sync_usergroups((int)$arrUserdata['id'], $user_id);
+					//Notify Admins
+					$this->ntfy->add('eqdkp_user_new_registered', $user_id, $arrUserdata['name'], $this->root_path.'admin/manage_users.php'.$this->SID.'&u='.$user_id, false, "", false, array("a_users_man"));
+					
 				} else {
 					$user_id = $this->pdh->get('user', 'userid', array($arrUserdata['name']));
 					//Sync Usergroups
