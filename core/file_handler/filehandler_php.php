@@ -324,8 +324,12 @@ if (!class_exists("filehandler_php")) {
 		* If you want to move a file..
 		*/
 		public function FileMove($filename, $tofile, $tmpmove=false) {
-			$blnResult = $this->rename($filename, $tofile);
-			#unlink($filename);
+			if($tmpmove){
+				$blnResult = move_uploaded_file($filename, $tofile);
+			} else {
+				$blnResult = $this->rename($filename, $tofile);
+			}
+			//@unlink($filename);
 			if(!$this->on_iis()) @chmod($tofile, $this->get_chmod());
 			
 			return $blnResult;

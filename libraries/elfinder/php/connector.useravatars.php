@@ -52,7 +52,7 @@ $opts = array(
 	'roots' => array(
 		array(
 			'driver'        => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
-			'path'          => register('pfh')->FolderPath('users/'.register('user')->id, 'files'),         // path to files (REQUIRED)
+			'path'          => realpath(register('pfh')->FolderPath('users/'.register('user')->id, 'files')),         // path to files (REQUIRED)
 			'URL'           => register('pfh')->FileLink('users/'.register('user')->id.'/', 'files', 'absolute'), // URL to files (REQUIRED)
 			'accessControl' => 'access',             // disable and hide dot starting files (OPTIONAL)
 			'uploadAllow'	=> array('image/jpeg', 'image/png', 'image/gif'),
