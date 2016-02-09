@@ -195,6 +195,9 @@ abstract class Database extends gen_class {
 			$strSuffix = substr(registry::get_const("dbhost"), 0, 6);
 			$strHostReplace = str_pad($strSuffix, strlen(registry::get_const("dbhost")), '*');
 		}
+		
+		$strErrorMessage = preg_replace("/->login\('(.*)', '(.*)'/U", "->login('$1', '[Replaced]'", $strErrorMessage);
+		
 		$strErrorMessage = str_replace(registry::get_const("dbhost"), $strHostReplace, $strErrorMessage);
 		return $strErrorMessage;
 	}
