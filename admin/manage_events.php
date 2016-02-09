@@ -90,19 +90,21 @@ class Manage_Events extends page_generic {
 
 		//Get Icons
 			$events_folder = $this->pfh->FolderPath('event_icons', 'files');
-			$files = scandir($events_folder);
-			$ignorefiles = array('.', '..', '.svn', 'index.html', '.tmb');
-			
-			$icons = array();
+			$files = sdir($events_folder);
+			$arrImages = array('png', 'jpg', 'gif');
 			foreach($files as $file) {
-				if(!in_array($file, $ignorefiles)) $icons[] = $events_folder.'/'.$file;
+				$strExtension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+				if(!in_array($strExtension, $arrImages)) continue;
+			    $icons[] = $events_folder.'/'.$file;
 			}
 			
 			$events_folder = $this->root_path.'games/'.$this->config->get('default_game').'/icons/events';
 			if (is_dir($events_folder)){
-				$files = scandir($events_folder);
+				$files = sdir($events_folder);
 				foreach($files as $file) {
-					if(!in_array($file, $ignorefiles)) $icons[] = $events_folder.'/'.$file;
+					$strExtension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+					if(!in_array($strExtension, $arrImages)) continue;
+					$icons[] = $events_folder.'/'.$file;
 				}
 			}
 			$num = count($icons);

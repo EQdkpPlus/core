@@ -61,6 +61,20 @@ $opts = array(
 			'disabled'		=> array('extract', 'archive','mkdir', 'mkfile','help','rename','download','edit'),
 			'maxFilesInDir' => MAX_FILES_USERFOLDER,
 			'tmbPathMode'	=> get_chmod(true),
+			'attributes'	=>	array(
+					array(
+							'pattern' => '/(.*)/', //You can also set permissions for file types by adding, for example, .jpg inside pattern.
+							'read'    => false,
+							'write'   => false,
+							'hidden'  => true
+					),
+					array(
+							'pattern' => '/(.jpg|.png|.gif)/i', //You can also set permissions for file types by adding, for example, .jpg inside pattern.
+							'read'    => true,
+							'write'   => true,
+							'locked'  => false,
+					)
+			),
 		)
 	)
 );

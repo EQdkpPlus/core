@@ -40,7 +40,7 @@ function register($value, $params=array()){
  * @return		boolean
  */
 function valid_folder($path){
-	$ignore = array('.', '..', '.svn', 'CVS', 'cache', 'install', 'index.html', '.htaccess', '_images', 'libraries.php');
+	$ignore = array('.', '..', '.svn', 'CVS', 'cache', 'install', 'index.html', '.htaccess', '_images', 'libraries.php', '.tmb', '.quarantine');
 	if (isset($path)){
 		if (!in_array(basename($path), $ignore) && !is_file($path) && !is_link($path)){
 			return true;
@@ -62,7 +62,7 @@ function sdir( $path='.', $mask='*', $strip='', $nocache=0 ){
 	static $dir	= array(); // cache result in memory
 	if(!is_dir($path)) return array();
 	$sdir = array();
-	$ignore		= array('.', '..', '.svn', 'CVS', 'index.html', '.htaccess');
+	$ignore		= array('.', '..', '.svn', 'CVS', 'index.html', '.htaccess', '.tmb', '.quarantine');
 	if ( (!isset($dir[$path]) || $nocache)) {
 		$dir[$path] = scandir($path);
 	}

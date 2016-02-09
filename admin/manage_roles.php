@@ -85,23 +85,27 @@ class Manage_Roles extends page_generic {
 	}
 
 	public function display_edit(){
-		$ignorefiles	= array('.', '..', '.svn', 'index.html', '.tmb');
+		$arrImages = array('png', 'jpg', 'gif');
 		$icons			= array();
 		$row			= ($this->in->get('editid', 0) > 0) ? $this->pdh->get('roles', 'roles', array($this->in->get('editid', 0))) : array();
 
 		// first, get the cutom uploaded role icons
 		$roles_folder	= $this->pfh->FolderPath('role_icons', 'files');
-		$files			= scandir($roles_folder);
+		$files			= sdir($roles_folder);
 		foreach($files as $file) {
-			if(!in_array($file, $ignorefiles)) $icons[] = $roles_folder.'/'.$file;
+			$strExtension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+			if(!in_array($strExtension, $arrImages)) continue;
+			$icons[] = $roles_folder.'/'.$file;
 		}
 
 		// now, get the game file dependant icons
 		$roles_folder	= $this->root_path.'games/'.$this->config->get('default_game').'/icons/roles';
 		if (is_dir($roles_folder)){
-			$files = scandir($roles_folder);
+			$files = sdir($roles_folder);
 			foreach($files as $file) {
-				if(!in_array($file, $ignorefiles)) $icons[] = $roles_folder.'/'.$file;
+				$strExtension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+				if(!in_array($strExtension, $arrImages)) continue;
+				$icons[] = $roles_folder.'/'.$file;
 			}
 		}
 		$num		= count($icons);
