@@ -474,6 +474,7 @@ class bridge extends gen_class {
 		
 		foreach($arrGroupsToSync as $groupID){
 			$intEQdkpGroupID = $arrCMSToEQdkpID[$groupID];
+			if(!$intEQdkpGroupID) continue;
 			if (in_array($groupID, $arrUserGroups) && !in_array($intEQdkpGroupID, $arrEQdkpMemberships)){
 				//add to group
 				$this->pdh->put('user_groups_users', 'add_user_to_group', array($intUserID, $intEQdkpGroupID));
