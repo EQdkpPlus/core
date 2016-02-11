@@ -41,7 +41,7 @@ if(register('in')->get('ajax', 0) === 1){
 
 
 class settings_pageobject extends pageobject {
-	public static $shortcuts = array('form' => array('form', array('user_settings')));
+	public static $shortcuts = array('form' => array('form', array('user_settings')), 'email'=>'MyMailer');
 	private $logo_upload = false;
 
 	public function __construct() {
