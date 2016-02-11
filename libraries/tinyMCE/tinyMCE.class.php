@@ -143,7 +143,7 @@ class tinyMCE extends gen_class {
 							if(!isset($arrItems[$val['id']])) $arrItems[$val['id']] = array();
 							$link_list .= '{text: "'.$val['text'].'", value: "{{category_url_plain::'.$val['id'].'}}"},';
 							foreach($arrItems[$val['id']] as $value){
-								$link_list .= '{text: "'.$this->jquery->sanitize($value['text']).'", value: "{{article_url_plain::'.$value['id'].'}}"},';
+								$link_list .= '{text: "'.$this->jquery->sanitize($value['text'], true).'", value: "{{article_url_plain::'.$value['id'].'}}"},';
 							}
 							
 						$link_list .= ']},';
@@ -319,7 +319,7 @@ class tinyMCE extends gen_class {
 					if(!isset($arrItems[$val['id']])) $arrItems[$val['id']] = array();
 					$link_list .= '{text: "'.$val['text'].'", value: "{{category_url::'.$val['id'].'}}"},';
 					foreach($arrItems[$val['id']] as $value){
-						$link_list .= '{text: "'.$this->jquery->sanitize($value['text']).'", value: "{{article_url::'.$value['id'].'}}"},';
+						$link_list .= '{text: "'.$this->jquery->sanitize($value['text'], true).'", value: "{{article_url::'.$value['id'].'}}"},';
 					}
 
 					$link_list .= ']},';
