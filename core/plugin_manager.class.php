@@ -120,11 +120,11 @@ class plugin_manager extends gen_class {
 		$intAPILevel = $plugin_code::getApiLevel();
 		if (!$intAPILevel || $intAPILevel < $this->apiLevel-2){
 			$this->pdl->log('plugin_error', $plugin_code, 'The Plugin API Level of the Plugin \''.$plugin_code.'\' is too old ('.$intAPILevel.' vs. '.$this->apiLevel.')');
-			$this->broken($plugin_code);
+			$this->brokenApi($plugin_code);
 			return false;
 		} elseif ($intAPILevel < $this->apiLevel) {
 			$this->pdl->log('plugin_error', $plugin_code, 'The Plugin API Level of the Plugin \''.$plugin_code.'\' should be updated ('.$intAPILevel.' vs. '.$this->apiLevel.')');
-			$this->broken($plugin_code);
+			$this->brokenApi($plugin_code);
 			return false;
 		}
 		
@@ -153,6 +153,16 @@ class plugin_manager extends gen_class {
 		}
 		if(!$this->check($plugin_code, PLUGIN_DISABLED) && isset($this->status[$plugin_code])) {
 			$this->status[$plugin_code] |= PLUGIN_DISABLED;
+			$this->set_status($plugin_code);
+			$this->pdh->process_hook_queue();
+		}
+		return true;
+	}
+	
+	private function brokenApi($plugin_code){
+		$this->broken($plugin_code);
+		if(!$this->check($plugin_code, PLUGIN_BROKEN_API) && isset($this->status[$plugin_code])) {
+			$this->status[$plugin_code] |= PLUGIN_BROKEN_API;
 			$this->set_status($plugin_code);
 			$this->pdh->process_hook_queue();
 		}
