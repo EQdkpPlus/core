@@ -52,7 +52,8 @@ $opts = array(
 	'roots' => array(
 		array(
 			'driver'        => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
-			'path'          => realpath(register('pfh')->FolderPath('users/'.register('user')->id, 'files')),         // path to files (REQUIRED)
+			'path'          => realpath(register('pfh')->FolderPath('users/'.register('user')->id.'/', 'files')),         // path to files (REQUIRED)
+			'startPath'     => realpath(register('pfh')->FolderPath('users/'.register('user')->id.'/', 'files')),         // path to files (REQUIRED)
 			'URL'           => register('pfh')->FileLink('users/'.register('user')->id.'/', 'files', 'absolute'), // URL to files (REQUIRED)
 			'accessControl' => 'access',             // disable and hide dot starting files (OPTIONAL)
 			'uploadAllow'	=> array('image/jpeg', 'image/png', 'image/gif'),
@@ -63,21 +64,18 @@ $opts = array(
 			'tmbPathMode'	=> get_chmod(true),
 			'attributes'	=>	array(
 					array(
-							'pattern' => '/(.*)/', //You can also set permissions for file types by adding, for example, .jpg inside pattern.
-							'read'    => false,
-							'write'   => false,
-							'hidden'  => true
-					),
-					array(
 							'pattern' => '/(.jpg|.png|.gif)/i', //You can also set permissions for file types by adding, for example, .jpg inside pattern.
 							'read'    => true,
 							'write'   => true,
-							'locked'  => false,
+							'locked'  => true,
 					)
 			),
 		)
 	)
 );
+
+
+
 
 // run elFinder
 $connector = new elFinderConnector(new elFinder($opts));

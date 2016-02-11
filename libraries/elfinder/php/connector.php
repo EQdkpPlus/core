@@ -95,7 +95,7 @@ if (register('input')->get('sf') != ""){
 	$path = register('encrypt')->decrypt(str_replace(" ", "+", register('input')->get('sf')));
 	$rel_path = str_replace(register('environment')->link, registry::get_const('root_path'), $path);
 	$opts['roots'][0]['path'] = $opts['roots'][0]['startPath'] = realpath($rel_path);
-	$opts['roots'][0]['URL'] = realpath($path);
+	$opts['roots'][0]['URL'] = $path;
 	register('pfh')->FolderPath($rel_path);
 }
 
@@ -103,16 +103,10 @@ if (register('input')->get('sf') != ""){
 if(register('input')->get('filter') == 'image'){
 	$opts['roots'][0]['attributes'] = array(
 			array(
-					'pattern' => '/(.*)/', //You can also set permissions for file types by adding, for example, .jpg inside pattern.
-					'read'    => false,
-					'write'   => false,
-					'hidden'  => true
-			),
-			array(
 					'pattern' => '/(.jpg|.png|.gif)/i', //You can also set permissions for file types by adding, for example, .jpg inside pattern.
 					'read'    => true,
 					'write'   => true,
-					'locked'  => false,
+					'locked'  => true,
 			)
 	);
 	$opts['roots'][0]['uploadAllow'] = array('image/jpeg', 'image/png', 'image/gif');

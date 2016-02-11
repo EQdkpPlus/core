@@ -744,6 +744,7 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 		
 		$a = register('pfh')->CheckCreateFolder($path);
 		if ($a){
+			clearstatcache();
 			return $path;
 		}
 		
@@ -766,6 +767,7 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 		
 		$a = register('pfh')->CheckCreateFile($path);
 		if ($a){
+			clearstatcache();
 			return $path;
 		}
 		return false;
@@ -802,7 +804,10 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 		//Security by GodMod
 		if (!isFilelinkInFolder($path, get_absolute_path($this->root))) return false;
 		
-		return register('pfh')->copy($source, $path);
+		$a = register('pfh')->copy($source, $path);
+		clearstatcache();
+		
+		return $a;
 	}
 	
 	/**
@@ -821,7 +826,9 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 		//Security by GodMod
 		if (!isFilelinkInFolder($target, get_absolute_path($this->root))) return false;
 		
-		return register('pfh')->rename($source, $target) ? $target : false;
+		$a = register('pfh')->rename($source, $target) ? $target : false;
+		clearstatcache();
+		return $a;
 	}
 		
 	/**
@@ -836,6 +843,7 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 		if (!isFilelinkInFolder($path, get_absolute_path($this->root))) return false;
 		
 		register('pfh')->Delete($path);
+		clearstatcache();
 		return true;
 	}
 
@@ -851,6 +859,7 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 		if (!isFilelinkInFolder($path, get_absolute_path($this->root))) return false;
 		
 		register('pfh')->Delete($path);
+		clearstatcache();
 		return true;
 	}
 	
@@ -904,6 +913,7 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 		if (!isFilelinkInFolder($path, get_absolute_path($this->root))) return false;
 		
 		$a = register('pfh')->putContent($path, $content);
+		clearstatcache();
 		return $a;
 	}
 
