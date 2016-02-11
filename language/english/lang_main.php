@@ -440,7 +440,6 @@ $lang = array(
 	"manage_news" => 'News Management',
 	"edit_news" => 'Edit news',
 	"manage_users" => 'User Management',
-	"install_folder_warn" => 'Please delete the installation directory <b>/install/</b> from your webspace or rename the folder.',
 	"sort_desc" => 'sort column descending',
 	"sort_asc" => 'sort column ascending',
 	"licence_agreement" => 'Privacy Statement',

@@ -250,9 +250,6 @@ class core extends gen_class {
 			}
 
 			$s_in_admin		= (((defined('IN_ADMIN') ) ? IN_ADMIN : false) && ($this->user->check_auth('a_', false)) ) ? true : false;
-			if (file_exists($this->root_path.'install') && EQDKP_INSTALLED && $this->user->check_auth('a_', false) && $s_in_admin && !VERSION_WIP){
-				$this->global_warning($this->user->lang('install_folder_warn'));
-			}
 
 			// Add a javascript code to make some checkboxes clickable through table rows
 			$this->tpl->add_js("$('.trcheckboxclick tr').click(function(event) {
