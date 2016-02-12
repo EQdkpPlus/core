@@ -91,13 +91,13 @@ var EQdkpPortal = new function(){
 		if (!loaded){	
 			var head = document.getElementsByTagName("head")[0];
 			//Jquery CSS
-			/*
+			
 			var ac = document.createElement("link");
-			ac.href = url + "libraries/jquery/core/core.css";
+			ac.href = url + "libraries/FontAwesome/font-awesome.min.css";
 			ac.type = 'text/css';
 			ac.rel = 'stylesheet';
 			head.appendChild(ac);
-			*/
+			
 			
 			//JQuery core
 			var aj = document.createElement("script");
