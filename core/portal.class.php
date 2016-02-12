@@ -71,10 +71,11 @@ class portal extends gen_class {
 			$jsOut = '<div class="module_script"><script type="text/javascript">';
 			
 			$headerJS = $this->tpl->get_header_js();
+			$headerJS .= $this->tpl->get_footer_js();
 		
 			$headerJS = "jQuery(document).ready(function($) {".str_replace("$", "jQuery",  $headerJS).'});';
 			
-			$headerJS = str_replace("$", "jQuery", $headerJS);
+			//$headerJS = str_replace("$", "jQuery", $headerJS);
 			
 			$jsOut .= $headerJS.'</script></div>';
 			
@@ -259,7 +260,7 @@ class portal extends gen_class {
 		if(!$id = $this->pdh->put('portal', 'install', array($path, $plugin, $class_name::get_data('name'), $class_name::get_data('version'), $child))) return false;
 		
 		// set defaults for collapsable and visibility
-		if(!isset($inst['visibility'])) $inst['visibility'] = array(1);
+		if(!isset($inst['visibility'])) $inst['visibility'] = array(0 => '0');
 		$this->config->set('visibility', $inst['visibility'], 'pmod_'.$id);
 		if(!empty($inst['collapsable'])) $this->config->set('collapsable', $inst['collapsable'], 'pmod_'.$id);
 		

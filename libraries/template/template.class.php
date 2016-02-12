@@ -585,18 +585,30 @@ class template extends gen_class {
 		$imploded_jscode = "";
 
 		$imploded_jscode = implode("\n", $this->get_templatedata('js_code_head_top'));
-		$imploded_jscode = implode("\n", $this->get_templatedata('js_code_head'));
 
 		$imploded_jscode = implode("\n", $this->get_templatedata('js_code'));
-		$imploded_jscode = implode("\n", $this->get_templatedata('js_code_static'));
 
 		$imploded_jscode .= "jQuery(document).ready(function(){";
 
-		$imploded_jscode .= implode("\n", $this->get_templatedata('js_code_static_docready'));
-		$imploded_jscode .= implode("\n", $this->get_templatedata('js_code_docready'));
+		$imploded_jscode .= implode("\n", $this->get_templatedata('js_code_file'));
+		$imploded_jscode .= implode("\n", $this->get_templatedata('js_code_file_docready'));
 
 		$imploded_jscode .= "});";
 
+		return $imploded_jscode;
+	}
+	
+	public function get_footer_js(){
+		$imploded_jscode = "";
+		
+		$imploded_jscode = implode("\n", $this->get_templatedata('js_code_eop'));
+		
+		$imploded_jscode .= "jQuery(document).ready(function(){";
+		
+		$imploded_jscode .= implode("\n", $this->get_templatedata('js_code_eop_docready'));
+		
+		$imploded_jscode .= "});";
+		
 		return $imploded_jscode;
 	}
 
