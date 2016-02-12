@@ -131,7 +131,7 @@ class Manage_Roles extends page_generic {
 			$this->tpl->assign_block_vars('files_row.fields', array(
 					'NAME'		=> pathinfo($icon, PATHINFO_FILENAME).'.'.pathinfo($icon, PATHINFO_EXTENSION),
 					'CHECKED'	=> ($selected_icon && pathinfo($icon, PATHINFO_FILENAME).'.'.pathinfo($icon, PATHINFO_EXTENSION) == $selected_icon) ? ' checked="checked"' : '',
-					'IMAGE'		=> "<img src='".$icon."' alt='".$icon."' width='30px' style='eventicon' />",
+					'IMAGE'		=> "<img src='".$icon."' alt='".$icon."' width='30px' style='eventicon' title='".pathinfo($icon, PATHINFO_FILENAME).'.'.pathinfo($icon, PATHINFO_EXTENSION)."' />",
 					'CHECKBOX'	=> ($i < $num) ? true : false)
 				);
 			}

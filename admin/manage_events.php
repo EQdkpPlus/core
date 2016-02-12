@@ -122,7 +122,7 @@ class Manage_Events extends page_generic {
 				$this->tpl->assign_block_vars('files_row.fields', array(
 						'NAME'		=> pathinfo($icon, PATHINFO_FILENAME).'.'.pathinfo($icon, PATHINFO_EXTENSION),
 						'CHECKED'	=> (isset($event['icon']) AND pathinfo($icon, PATHINFO_FILENAME).'.'.pathinfo($icon, PATHINFO_EXTENSION) == $event['icon']) ? ' checked="checked"' : '',
-						'IMAGE'		=> "<img src='".$icon."' alt='".$icon."' width='48px' style='eventicon' />",
+						'IMAGE'		=> "<img src='".$icon."' alt='".$icon."' width='48px' style='eventicon' title='".pathinfo($icon, PATHINFO_FILENAME).'.'.pathinfo($icon, PATHINFO_EXTENSION)."' />",
 						'CHECKBOX'	=> ($i < $num) ? true : false)
 					);
 				}
