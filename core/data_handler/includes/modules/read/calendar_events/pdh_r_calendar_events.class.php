@@ -405,6 +405,11 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			$raideventname	= ($this->get_raidstatus($id) == '1') ? '<span class="linethrough">'.$raideventname.'</span>' : $raideventname;
 			return $this->pdh->geth('event', 'icon', array($this->events[$id]['extension']['raid_eventid'])).' '.$raideventname;
 		}
+		
+		public function get_raid_eventid($id){
+			if(!isset($this->events[$id]['extension']['raid_eventid'])) return false;
+			return $this->events[$id]['extension']['raid_eventid'];
+		}
 
 		public function get_next_event($id){
 			$this->helper_set_pointer($this->event_timestamps, $id);

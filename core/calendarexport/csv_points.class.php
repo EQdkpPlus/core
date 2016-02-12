@@ -48,7 +48,15 @@ if(!function_exists('CSVpointexport')){
 
 		$attendees	= registry::register('plus_datahandler')->get('calendar_raids_attendees', 'attendees', array($raid_id));
 		$guests		= registry::register('plus_datahandler')->get('calendar_raids_guests', 'members', array($raid_id));
-		$mdkp		= 1;			//Change here the Multidkp Pool
+		
+		$detail_settings = registry::register('plus_datahandler')->get_page_settings('listmembers', 'hptt_listmembers_memberlist_detail');
+		$intDefaultMDKP = $detail_settings['default_pool'];
+		
+		$eventId = registry::register('plus_datahandler')->get('calendar_events', 'raid_eventid', array($raid_id));
+		$arrMultiDkpIDs = registry::register('plus_datahandler')->get('event', 'multidkppools', array($eventId));
+		//Because the event can be with different MultiDKPIDs, take the first one
+		$mdkp = (is_array($arrMultiDkpIDs)) ? $arrMultiDkpIDs[0] : $intDefaultMDKP;
+
 		$a_json_d	= array();
 		$a_json_a	= array();
 		
