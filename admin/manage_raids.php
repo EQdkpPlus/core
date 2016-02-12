@@ -131,19 +131,21 @@ class ManageRaids extends page_generic {
 					}
 				}
 			}
+			
+			if(in_array(false, $adj_upd)) {
+				$messages[] = array('text' => $this->user->lang('adjustments'), 'title' => $this->user->lang('save_nosuc'), 'color' => 'red');
+			} else {
+				$messages[] = array('text' => $this->user->lang('adjustments'), 'title' => $this->user->lang('save_suc'), 'color' => 'green');
+			}
+			if(in_array(false, $item_upd)) {
+				$messages[] = array('text' => $this->user->lang('items'), 'title' => $this->user->lang('save_nosuc'), 'color' => 'red');
+			} else {
+				$messages[] = array('text' => $this->user->lang('items'), 'title' => $this->user->lang('save_suc'), 'color' => 'green');
+			}
+			
 			$messages[] = array('text' => $this->user->lang('raids'), 'title' => $this->user->lang('save_suc'), 'color' => 'green');
 		} else {
 			$messages[] = array('text' => $this->user->lang('raids'), 'title' => $this->user->lang('save_nosuc'), 'color' => 'red');
-		}
-		if(in_array(false, $adj_upd)) {
-			$messages[] = array('text' => $this->user->lang('adjustments'), 'title' => $this->user->lang('save_nosuc'), 'color' => 'red');
-		} else {
-			$messages[] = array('text' => $this->user->lang('adjustments'), 'title' => $this->user->lang('save_suc'), 'color' => 'green');
-		}
-		if(in_array(false, $item_upd)) {
-			$messages[] = array('text' => $this->user->lang('items'), 'title' => $this->user->lang('save_nosuc'), 'color' => 'red');
-		} else {
-			$messages[] = array('text' => $this->user->lang('items'), 'title' => $this->user->lang('save_suc'), 'color' => 'green');
 		}
 		
 		if($this->in->get('simple_head') != ""){
