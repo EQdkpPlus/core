@@ -53,13 +53,15 @@ if(!class_exists('pdh_w_roles')){
 			$this->pdh->enqueue_hook('roles_update');
 		}
 
-		public function update_role($role_id, $role_name='', $role_classes=''){
+		public function update_role($role_id, $role_name='', $role_classes='', $role_icon=''){
 			$role_name		= ($role_name)		? $role_name		: $this->pdh->get('roles', 'name', array($role_id));
 			$role_classes	= ($role_classes)	? $role_classes 	: $this->pdh->get('roles', 'classes_r', array($role_id));
+			$role_icon		= ($role_icon != "") ? $role_icon		: $this->pdh->get('roles', 'icon', array($role_id));
 
 			$objQuery = $this->db->prepare("UPDATE __roles :p WHERE role_id=?")->set(array(
 				'role_name'			=> $role_name,
-				'role_classes'		=> $role_classes
+				'role_classes'		=> $role_classes,
+				'role_icon'			=> $role_icon
 			))->execute($role_id);
 
 			if(!$objQuery) return false;

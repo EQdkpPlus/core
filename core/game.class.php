@@ -251,10 +251,14 @@ class game extends gen_class {
 	 * @return html string
 	 */
 	private function decorate_roles($role_id, $profile=array(), $size=20, $pathonly=false){
-		if(is_file($this->pfh->FolderPath("role_icons", "files").$this->pdh->get('roles', 'icon', array($role_id)))){
-			$icon_path = $this->pfh->FolderPath("role_icons", "files", "serverpath").$this->pdh->get('roles', 'icon', array($role_id));
+		$strCustomRoleIcon = $this->pdh->get('roles', 'icon', array($role_id));	
+		if(is_file($this->pfh->FolderPath("role_icons", "files").$strCustomRoleIcon)){
+			$icon_path = $this->pfh->FolderPath("role_icons", "files", "serverpath").$strCustomRoleIcon;
 			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' height='".$size."' alt='' class=\"".$this->game."_roleicon roleicon\"/>";
-		}elseif(is_file($this->root_path.'games/'.$this->game.'/icons/roles/'.$role_id.'.png')){
+		}elseif(is_file($this->root_path.'games/'.$this->game.'/icons/roles/'.$strCustomRoleIcon)){
+			$icon_path = $this->server_path.'games/'.$this->game.'/icons/roles/'.$strCustomRoleIcon;
+			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' height='".$size."' alt='' class=\"".$this->game."_roleicon roleicon\"/>";
+		} elseif(is_file($this->root_path.'games/'.$this->game.'/icons/roles/'.$role_id.'.png')){
 			$icon_path = $this->server_path.'games/'.$this->game.'/icons/roles/'.$role_id.'.png';
 			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' height='".$size."' alt='' class=\"".$this->game."_roleicon roleicon\"/>";
 		}

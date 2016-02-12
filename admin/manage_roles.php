@@ -61,9 +61,13 @@ class Manage_Roles extends page_generic {
 		$arole_name		= stripslashes($this->in->get('role_name'));
 		$arole_classes	= implode("|",$this->in->getArray('role_classes', 'int'));
 		$arole_icon		= $this->in->get('icon');
-		$this->pdh->put('roles', 'insert_role', array($maxxID, $arole_name, $arole_classes, $arole_icon));
-		$this->pdh->process_hook_queue();
-		#echo "<script>parent.window.location.href = 'manage_roles.php';</script>";
+		if($arole_name == "" || $arole_classes == ""){
+			$this->display_edit($arole_name);
+		} else {
+			$this->pdh->put('roles', 'insert_role', array($maxxID, $arole_name, $arole_classes, $arole_icon));
+			$this->pdh->process_hook_queue();
+			$this->tpl->add_js("jQuery.FrameDialog.closeDialog();");
+		}
 	}
 
 	public function update(){
@@ -77,11 +81,16 @@ class Manage_Roles extends page_generic {
 		$arole_id		= ($this->in->get('editid' ,0) > 0) ? $this->in->get('editid', 0) : $newID;
 		$arole_name		= stripslashes($this->in->get('role_name'));
 		$arole_classes	= implode("|",$this->in->getArray('role_classes', 'int'));
-
-		// Perform the action
-		$this->pdh->put('roles', 'update_role', array($arole_id, $arole_name, $arole_classes));
-		$this->pdh->process_hook_queue();
-		echo "<script>parent.window.location.href = 'manage_roles.php';</script>";
+		$arole_icon		= $this->in->get('icon');
+		
+		if($arole_name == "" || $arole_classes == ""){
+			$this->display_edit();
+		} else {		
+			// Perform the action
+			$this->pdh->put('roles', 'update_role', array($arole_id, $arole_name, $arole_classes, $arole_icon));
+			$this->pdh->process_hook_queue();
+			$this->tpl->add_js("jQuery.FrameDialog.closeDialog();");
+		}
 	}
 
 	public function display_edit(){
@@ -149,8 +158,8 @@ class Manage_Roles extends page_generic {
 	public function display(){
 		// The jQuery stuff
 		$this->confirm_delete($this->user->lang('delete_rolestext'));
-		$this->jquery->Dialog('newRole', $this->user->lang('role_new'), array('url'=>"manage_roles.php".$this->SID."&adddialog=true", 'width'=>'800', 'height'=>'500'));
-		$this->jquery->Dialog('editRole', $this->user->lang('edit_role2'), array('url'=>"manage_roles.php".$this->SID."&editid='+editid+'", 'width'=>'800', 'height'=>'500', 'withid' => 'editid'));
+		$this->jquery->Dialog('newRole', $this->user->lang('role_new'), array('url'=>"manage_roles.php".$this->SID."&adddialog=true", 'width'=>'800', 'height'=>'500', 'onclose'=> $this->env->link."admin/manage_roles.php".$this->SID));
+		$this->jquery->Dialog('editRole', $this->user->lang('edit_role2'), array('url'=>"manage_roles.php".$this->SID."&editid='+editid+'", 'width'=>'800', 'height'=>'500', 'withid' => 'editid', 'onclose'=> $this->env->link."admin/manage_roles.php".$this->SID));
 		$this->jquery->Dialog('ResetRoles', '', array('custom_js'=> "window.location = 'manage_roles.php".$this->SID."&reset=true&link_hash=".$this->CSRFGetToken('reset')."';", 'message'=> $this->user->lang('reset_rolestext')), 'confirm');
 
 		// Build the HPTT Table
