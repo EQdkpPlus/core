@@ -1808,6 +1808,7 @@ $lang = array(
 'stylesettings_misc_text2' => 'Sonstiger Text 2',
 'stylesettings_misc_text3' => 'Sonstiger Text 3',
 'stylesettings_additional_less' => 'Zusätzliche LESS-Definitionen',
+'stylesettings_heading_additional_links' => 'Zusätzliche Links',
 
 'core_sett_f_access_control_header' => 'Erlaubte JavaScript-Domains',
 'core_sett_f_help_access_control_header' => 'Trage hier Domains ein (eine pro Zeile, inklusive Protokoll, z.B. http://eqdkp.meineqdkp.de), von der aus auf JavaScript-Elemente wie Portalmodule oder Itemtooltips zugegriffen werden darf.',

@@ -125,7 +125,8 @@ if ( !class_exists( "pdh_r_styles" ) ) {
 						'misc_text2' 				=> $drow['misc_text2'],
 						'misc_text3' 				=> $drow['misc_text3'],
 						'additional_less' 			=> $drow['additional_less'],
-						'users'						=> $this->pdh->get('user','stylecount', array($drow['style_id']))
+						'users'						=> $this->pdh->get('user','stylecount', array($drow['style_id'])),
+						'additional_fields'			=> ($drow['additional_fields'] != "") ? unserialize($drow['additional_fields']) : array(),
 					);
 				}
 				

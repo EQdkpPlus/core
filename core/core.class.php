@@ -919,6 +919,13 @@ class core extends gen_class {
 				$this->tpl->add_css($this->config->get('global_css'), true);
 			}
 			
+			//Add additonal Template Links
+			$strAdditionalLinks = $this->user->style['additional_fields'];
+			$arrAdditionalLinks = ($strAdditionalLinks != "") ? unserialize($strAdditionalLinks) : array();
+			foreach($arrAdditionalLinks as $key => $val){
+				$this->tpl->assign_var('LINK_'.strtoupper($key), $val);
+			}
+			
 			$this->tpl->display();
 		}
 

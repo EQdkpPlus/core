@@ -103,6 +103,7 @@ if (!class_exists("styles")){
 			'misc_text2',
 			'misc_text3',
 			'additional_less',
+			'additional_fields',
 		);
 
 		public $allowed_extensions = array(

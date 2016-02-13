@@ -429,6 +429,7 @@ CREATE TABLE `__styles` (
 	`misc_text2` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_bin',
 	`misc_text3` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_bin',
 	`additional_less` TEXT NULL COLLATE 'utf8_bin',
+	`additional_fields` TEXT NULL COLLATE 'utf8_bin',
 	PRIMARY KEY (`style_id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 

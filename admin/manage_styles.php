@@ -191,6 +191,7 @@ class Manage_Styles extends page_generic{
 			'attendees_columns'		=> $this->in->get('attendees_columns'),
 			'logo_position'			=> $this->in->get('logo_position', 'center'),
 			'additional_less'		=> $this->in->get('additional_less', '', 'raw'),
+			'additional_fields'		=> serialize($this->in->getArray('add_links', 'string')),
 		);
 		
 		$arrOptions = $this->objStyles->styleOptions();
@@ -237,7 +238,7 @@ class Manage_Styles extends page_generic{
 			'none'	=>	$this->user->lang('info_opt_ml_0'),
 		);
 		
-		$arrUsedVariables = $this->get_used_variables($this->style['template_path']);		
+		$arrUsedVariables = $this->get_used_variables($this->style['template_path']);	
 		
 		// Attendee columns
 		for ($i = 1; $i < 11; $i++){
@@ -409,7 +410,33 @@ class Manage_Styles extends page_generic{
 				));
 			}
 		}
-
+		
+		//Additional Links
+		$arrAdditionalLinks = array();
+		foreach($arrUsedVariables as $val){
+			if(strpos($val, 'add_link_') === 0){
+				$arrAdditionalLinks[] = substr($val, 9);
+			}
+		}
+		if(count($arrAdditionalLinks) > 0){
+			$key = 'additional_links';
+			$this->tpl->assign_block_vars('fieldset_row', array(
+				'LEGEND' => $this->user->lang('stylesettings_heading_'.$key),
+				'KEY'	=> $key,
+			));
+			$this->jquery->Collapse('#toggleColorsettings'.$key);
+			
+			foreach($arrAdditionalLinks as $val){
+				$name = 'add_link_'.$key;
+				$this->tpl->assign_block_vars('fieldset_row.option_row', array(
+					'NAME' => ucfirst($val),
+					'FIELD'=> new htext('add_links['.$val.']', array('size' => 30, 'value' => $this->style['additional_fields'][$val])),
+					'HELP' => '',
+				));
+			}
+		}
+		
+		
 		$this->jquery->Collapse('#toggleColorsettingsadditional_less', true);
 		
 		$this->core->set_vars(array(
@@ -453,6 +480,13 @@ class Manage_Styles extends page_generic{
 				
 				if(strpos($strContent, 'TEMPLATE_BACKGROUND') !== false){
 					$arrVariables[] = 'background_image';
+				}
+				
+				//Search for additional Links
+				$arrFoundLinks = array();
+				preg_match_all("/{LINK_(\w*)}/U", $strContent, $arrFoundLinks);
+				foreach($arrFoundLinks[1] as $link){
+					$arrVariables[] = 'add_link_'.strtolower($link);
 				}
 			}
 		}
