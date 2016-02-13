@@ -36,11 +36,11 @@ class update_2304 extends sql_update_task {
 
 		$this->langs = array(
 			'english' => array(
-				'update_2304'	=> 'EQdkp Plus 2.3.0 Update 3',
+				'update_2304'	=> 'EQdkp Plus 2.3.0 Update 4',
 					1			=> 'Alter Style Table',
 				),
 			'german' => array(
-				'update_2304'	=> 'EQdkp Plus 2.3.0 Update 3',
+				'update_2304'	=> 'EQdkp Plus 2.3.0 Update 4',
 					1			=> 'Erweitere Style Tabelle',
 			),
 		);
