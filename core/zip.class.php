@@ -176,7 +176,7 @@ if (!class_exists("zip")) {
 					return false;
 				}
 				
-			} else {
+			} elseif($this->objZip) {
 				$strTempArchiv = $this->pfh->FilePath(md5(generateRandomBytes()).'.zip', 'tmp');
 				//Create new archive
 				$blnOpen = $this->objZip->open($strTempArchiv, ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE);
@@ -195,6 +195,7 @@ if (!class_exists("zip")) {
 					return false;
 				}
 			}
+			return false;
 		}
 		
 		public function extract($strTargetFolder, $arrFiles = false){
@@ -235,7 +236,7 @@ if (!class_exists("zip")) {
 		}
 	
 		public function getFileNumber(){
-			return $this->objZip->numFiles;
+			return ($this->objZip) ? $this->objZip->numFiles : 0;
 		}
 	}
 }
