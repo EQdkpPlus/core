@@ -406,8 +406,12 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			return $this->pdh->geth('event', 'icon', array($this->events[$id]['extension']['raid_eventid'])).' '.$raideventname;
 		}
 
-		public function get_next_event($id){
-			$this->helper_set_pointer($this->event_timestamps, $id);
+	public function get_next_event($id){
+			try {
+				$this->helper_set_pointer($this->event_timestamps, $id);
+			}catch(Exception $e){
+				return false;
+			}
 			next($this->event_timestamps);
 			$next_eventid	= key($this->event_timestamps);
 			reset($this->event_timestamps);
@@ -415,7 +419,11 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 		}
 
 		public function get_next_raid($id){
-			$this->helper_set_pointer($this->event_timestamps, $id);
+			try {
+				$this->helper_set_pointer($this->event_timestamps, $id);
+			}catch(Exception $e){
+				return false;
+			}
 			$blnRaidFound = false;
 			$next_raid = 0;
 
@@ -435,7 +443,11 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 		}
 
 		public function get_prev_event($id){
-			$this->helper_set_pointer($this->event_timestamps, $id);
+			try {
+				$this->helper_set_pointer($this->event_timestamps, $id);
+			}catch(Exception $e){
+				return false;
+			}
 			prev($this->event_timestamps);
 			$prev_eventid	= key($this->event_timestamps);
 			reset($this->event_timestamps);
@@ -443,7 +455,11 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 		}
 
 		public function get_prev_raid($id){
-			$this->helper_set_pointer($this->event_timestamps, $id);
+			try {
+				$this->helper_set_pointer($this->event_timestamps, $id);
+			}catch(Exception $e){
+				return false;
+			}
 			$blnRaidFound = false;
 			$prev_raid = 0;
 
