@@ -791,7 +791,7 @@ class calendarevent_pageobject extends pageobject {
 
 		$this->tpl->add_js("var roles_json = ".json_encode($drpdwn_roles).";", 'head');
 
-		// Dropdown Menu Array
+		
 		$nextraidevent	= $this->pdh->get('calendar_events', 'next_raid', array($this->url_id));
 		if($nextraidevent){
 			$nextevent = $this->pdh->get('calendar_events', 'data', array($nextraidevent));
@@ -814,7 +814,7 @@ class calendarevent_pageobject extends pageobject {
 					'PREV_RAID_EVENTNAME' => $this->pdh->get('event', 'name', array($prevevent['extension']['raid_eventid'])).', '.$this->time->user_date($prevevent['timestamp_start']).' '.$this->time->user_date($prevevent['timestamp_start'], false, true)
 			));
 		}
-
+		// Dropdown Menu Array
 		$optionsmenu = array(
 			1 => array(
 				'name'	=> $this->user->lang('raidevent_raid_edit'),
