@@ -251,7 +251,7 @@ class game extends gen_class {
 	 * @return html string
 	 */
 	private function decorate_roles($role_id, $profile=array(), $size=20, $pathonly=false){
-		$strCustomRoleIcon = $this->pdh->get('roles', 'icon', array($role_id));	
+		$strCustomRoleIcon = $this->pdh->get('roles', 'icon', array($role_id));
 		if(is_file($this->pfh->FolderPath("role_icons", "files").$strCustomRoleIcon)){
 			$icon_path = $this->pfh->FolderPath("role_icons", "files", "serverpath").$strCustomRoleIcon;
 			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' height='".$size."' alt='' class=\"".$this->game."_roleicon roleicon\"/>";
@@ -293,6 +293,13 @@ class game extends gen_class {
 		if(is_file($this->root_path.'games/'.$this->game.'/icons/'.$type.'/'.$id.'.png')){
 			$icon_path = $this->server_path.'games/'.$this->game.'/icons/'.$type.'/'.$id.'.png';
 			return ($pathonly) ? $icon_path : '<img src="'.$icon_path.'" height="'.$size.'"  alt="'.$type.' '.$id.'" class="'.$this->game.'_'.$type.'icon gameicon '.$type.'icon" title="'.$this->get_name($type, $id).'" />';
+		}
+		return false;
+	}
+
+	public function get_game_settings($value=false){
+		if(isset($this->gameinfo()->game_settings) && is_array($this->gameinfo()->game_settings)){
+			return (($value && isset($this->gameinfo()->game_settings[$value])) ? $this->gameinfo()->game_settings[$value] : $this->gameinfo()->game_settings);
 		}
 		return false;
 	}
@@ -1486,6 +1493,7 @@ if(!class_exists('game_generic')) {
 		private $icons_checked = false;
 		public $icons = array();
 		public $character_unique_ids = false;
+		public $game_settings = false;
 		public $author = "";
 		public $version = "";
 		public $lang = "";

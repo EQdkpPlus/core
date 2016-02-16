@@ -515,6 +515,14 @@ class calendarevent_pageobject extends pageobject {
 		$this->twinks			= array();
 		$this->guests			= $this->pdh->get('calendar_raids_guests', 'members', array($this->url_id));
 		$this->raidcategories	= ($eventdata['extension']['raidmode'] == 'role') ? $this->pdh->aget('roles', 'name', 0, array($this->pdh->get('roles', 'id_list'))) : $this->game->get_primary_classes(array('id_0'));
+		// hide empty roles if the game module allows it
+		if($eventdata['extension']['raidmode'] == 'role' && $this->game->get_game_settings('calendar_hide_emptyroles')){
+			foreach ($this->raidcategories as $classid=>$classname){
+				if($eventdata['extension']['distribution'][$classid] == 0){
+					unset($this->raidcategories[$classid]);
+				}
+			}
+		}
 		$this->mystatus			= $this->pdh->get('calendar_raids_attendees', 'myattendees', array($this->url_id, $this->user->data['user_id']));
 		$this->classbreakval	= ($this->config->get('calendar_raid_classbreak')) ? $this->config->get('calendar_raid_classbreak') : 4;
 		$modulocount			= intval(count($this->raidcategories)/$this->classbreakval);
