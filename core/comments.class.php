@@ -112,6 +112,7 @@ if (!class_exists("comments")){
 			);
 			
 			//Hooks
+			register('pm'); //To Get Plugin Hooks
 			$data = $this->hooks->process('comments_save', $data, true);
 			
 			if($data['permission']){
@@ -417,7 +418,7 @@ if (!class_exists("comments")){
 		// ---------------------------------------------------------
 		// Generate the JS Code
 		// ---------------------------------------------------------
-		private function JScode(){
+		private function JScode(){			
 			$jscode = "
 						// Delete Function
 						$(document).on('click', '#plusComments".$this->id." .comments_delete', function(){
@@ -484,7 +485,7 @@ if (!class_exists("comments")){
 						});
 						
 						";
-			$this->tpl->add_js($jscode, 'docready');
+			$this->tpl->add_js($jscode);
 			
 			$jscode =	"//Reload comments
 						function reload_comments".$this->id."(){
@@ -500,7 +501,7 @@ if (!class_exists("comments")){
 						}
 						window.setTimeout(\"reload_comments".$this->id."()\", 60000*5); // 5 Minute
 						";
-			$this->tpl->add_js($jscode, 'eop');				
+			$this->tpl->add_js($jscode);				
 
 		}
 	}
