@@ -47405,12 +47405,12 @@ if ( typeof Object.create !== 'function' ) {
 * Copyright (c) 2009 SolutionStream.com & Michael J. Ryan (http://www.solutionstream.com/)
 * Dual licensed under the MIT (MIT-LICENSE.txt)
 * and GPL (GPL-LICENSE.txt) licenses.
-* 
+*
 * Requires:
 *   jquery ui dialog
 *
 *   jQuery.FrameDialog namespaced
-*       .create()   function will create an iframe, pass on the options 
+*       .create()   function will create an iframe, pass on the options
 *                   and return from a jQueryUI Dialog.
 *                   additional url option
 *
@@ -47448,7 +47448,7 @@ if ( typeof Object.create !== 'function' ) {
 *
 *
 *   !!!!!!!!!! WARNING WARNING WARNING WARNING !!!!!!!!!!
-*   Modal must set the result from the same host address in order to access 
+*   Modal must set the result from the same host address in order to access
 *   the parent for setting the result.
 */
 (function($) {
@@ -47464,7 +47464,7 @@ if ( typeof Object.create !== 'function' ) {
     var Cancel = (window.localization && window.localization.CANCEL) || "Cancel";
     var buttons = {};
     var winSize = { w:$(window).width(), h:$(window).height() }
-    buttons[OK] = function() {                    
+    buttons[OK] = function() {
         $(this).dialog("close");
     };
     buttons[Cancel] = function() {
@@ -47481,7 +47481,7 @@ if ( typeof Object.create !== 'function' ) {
         	my: "center",
         	at: "center"
     	},
-        buttons: buttons,        
+        buttons: buttons,
         // TDR: class used to style the loading pane container
         loadingClass: null
     };
@@ -47507,17 +47507,17 @@ if ( typeof Object.create !== 'function' ) {
 
             //remove url argument from options to be passed to dialog.
             try { delete opts.url; } catch (err) { }
-            
+
             // TDR: create the loading pane and remove the loadingClass from the options hash
-            var $loadingPane = $('<div></div>').addClass(opts.loadingClass);            
+            var $loadingPane = $('<div></div>').addClass(opts.loadingClass);
             try { delete opts.loadingClass; } catch (err) {}
-            
+
             //create iframe object
             //  object type="text/html doesn't seem to work in IE :(
             //  using iframe, which seems to work cross browser, tested in IE7, and Firefox 3.0.7
             var iframe = $("<iframe frameborder='0' scrolling='auto' background='transparent' />")
                 .attr("id", uid + "-VIEW")
-                .attr("name", uid + "-VIEW")                
+                .attr("name", uid + "-VIEW")
                 .css("margin", "0")
                 .css("border", "0")
                 .css("padding", "0")
@@ -47526,7 +47526,7 @@ if ( typeof Object.create !== 'function' ) {
                 .css("right", "0")
                 .css("bottom", "0")
                 .css("width", "100px")
-                .css("height", "100px")                
+                .css("height", "100px")
                 // TDR: hide the iframe until it's assoicated page is loaded
                 .css("visibility", "hidden")
                 ;
@@ -47555,7 +47555,7 @@ if ( typeof Object.create !== 'function' ) {
                 .css("right", "0")
                 .css("bottom", "0")
                 .css("overflow", "hidden")
-                .hide()                
+                .hide()
                 // TDR: append the loading pane to the dialog's container.
                 .append($loadingPane)
                 .append(iframe)
@@ -47565,16 +47565,16 @@ if ( typeof Object.create !== 'function' ) {
                 //  - http://bugs.jqueryui.com/ticket/5166
                 //  - http://forum.jquery.com/topic/ui-dialog-with-iframe
                 //.appendTo(document.body)
-                
-                // TDR: 
+
+                // TDR:
                 //  - on dialog open, set the height of the loading pane to that of the dialog's content container
-                //  - set the iframe src property here - this avoids the iframe's multiple-request issue 
+                //  - set the iframe src property here - this avoids the iframe's multiple-request issue
                 .bind('dialogopen', function(event, ui){
                     $loadingPane.height($loadingPane.closest('.ui-dialog-content').height());
-                    iframe.attr('src', url).load(function(e){
+                    iframe.attr('src', url).on("load", function(e){
                         $(this).css('visibility', 'visible');
                         $loadingPane.hide();
-                    });             
+                    });
                 })
                 .bind("dialogbeforeclose", function(event, ui) {
                     var frame = $(this);
@@ -47598,27 +47598,27 @@ if ( typeof Object.create !== 'function' ) {
                     var uid = frame.attr("id");
                     var result = $.FrameDialog._results[uid] || null; //result or an explicit null
                     frame.attr("result", result);
-                    
+
                     // TDR: remove the iframe - this avoids the iframe's multiple-request issue
                     iframe.remove();
-                    
+
                     //Cleanup remnants in 15 seconds
                     //      Should be enough time for the results of the close to finish up.
                     window.setTimeout(
                         function() {
                             //cleanup the dialog
                             frame.dialog('destroy');
-                            
-                            // TDR: remove $loadingPane and reorder the other removals. 
+
+                            // TDR: remove $loadingPane and reorder the other removals.
                             //destroy the iframe, remove from the DOM
                             $loadingPane.remove();
                             overlay.remove();
                             frame.remove();
-                            // TDR: i don't think ret.remove is necessary, bc it points to the same object as frame                            
+                            // TDR: i don't think ret.remove is necessary, bc it points to the same object as frame
                             ret.remove();
 
                             //remove the placeholder for the result
-                            try { delete $.FrameDialog._results[uid]; } 
+                            try { delete $.FrameDialog._results[uid]; }
                             catch (err) { /*nothing to delete*/ }
                         },
                         100
@@ -47661,7 +47661,7 @@ if ( typeof Object.create !== 'function' ) {
                 });
 
             //force resize event.
-            window.setTimeout(function(){ 
+            window.setTimeout(function(){
                 wrap.trigger('resizestop');
             }, 100);
 
@@ -47713,7 +47713,7 @@ if ( typeof Object.create !== 'function' ) {
     $.FrameDialog.current = function() {
         if (window.parent && window.parent.jQuery)
             return window.parent.jQuery("#" + $.FrameDialog._getUid());
-        
+
         return null;
     };
 
@@ -47723,14 +47723,14 @@ if ( typeof Object.create !== 'function' ) {
     $.FrameDialog.clearResult = function(uid) {
         if (uid) {
             //clear child's value
-            try { delete $.FrameDialog._results[uid]; } 
+            try { delete $.FrameDialog._results[uid]; }
             catch (err) { /*nothing to delete*/ }
         } else {
             //clear for current dialog
             var uid = $.FrameDialog._getUid();
 
             if (uid != null && window.parent && window.parent.jQuery && window.parent.jQuery.FrameDialog && window.parent.jQuery.FrameDialog._results) {
-                try { delete window.parent.jQuery.FrameDialog._results[uid]; } 
+                try { delete window.parent.jQuery.FrameDialog._results[uid]; }
                 catch (err) { /*nothing to delete*/ }
             }
         }
@@ -47760,7 +47760,7 @@ if ( typeof Object.create !== 'function' ) {
             //close child
             jQuery("#" + uid).dialog('close');
         } else {
-            //close self            
+            //close self
             var uid = $.FrameDialog._getUid();
             if (uid != null && window.parent && window.parent.jQuery) {
                 window.parent.jQuery("#" + uid).dialog('close');
@@ -47791,7 +47791,7 @@ if ( typeof Object.create !== 'function' ) {
             $.FrameDialog.clearResult($(this).attr("id"));
         });
     };
-    
+
     $.fn.closeDialog = function() {
         return this.dialog('close');
     };
@@ -47799,13 +47799,13 @@ if ( typeof Object.create !== 'function' ) {
     $.fn.cancelDialog = function() {
         return this.clearResult().closeDialog();
     };
-    
+
     //get the window context for the object/iframe in question
     $.fn.window = function() {
         //this item is a frame or iframe
         if (this.attr('tagName') == "IFRAME" || this.attr('tagName') == "FRAME")
             return window.frames[this.attr('name') || this.attr('id')];
-            
+
         //get the first frame/iframe child
         var frame = this.find('iframe, frame')[0];
         return (frame && window.frames[frame.name || frame.id]) || null;
