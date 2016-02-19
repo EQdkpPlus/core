@@ -1189,7 +1189,7 @@ function d($content="-" ){
 	}
 
 	if (strlen($content) ==0) {
-		$content = "String Lenght=0";
+		$content = "String Length=0";
 	}
 
 	echo "<table border=0>\n";
