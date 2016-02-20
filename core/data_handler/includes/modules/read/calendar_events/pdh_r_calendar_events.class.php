@@ -344,7 +344,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 		}
 
 		// check calendar specific rights such as if the user is a raidleader or the creator
-		private function get_check_operatorperm($raidid, $userid=0){
+		public function get_check_operatorperm($raidid, $userid=0){
 			$userid	= ($userid > 0) ? $userid : $this->user->data['user_id'];
 			$creator			= $this->pdh->get('calendar_events', 'creatorid', array($raidid));
 			$ev_ext				= $this->pdh->get('calendar_events', 'extension', array($raidid));
