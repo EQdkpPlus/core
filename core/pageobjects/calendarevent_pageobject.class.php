@@ -51,15 +51,8 @@ class calendarevent_pageobject extends pageobject {
 		$this->process();
 	}
 
-	// check calendar specific rights such as if the user is a raidleader or the creator
 	private function check_permission($userid=0){
-		$userid	= ($userid > 0) ? $userid : $this->user->data['user_id'];
-		$creator			= $this->pdh->get('calendar_events', 'creatorid', array($this->url_id));
-		$ev_ext				= $this->pdh->get('calendar_events', 'extension', array($this->url_id));
-		$raidleaders_chars	= ($ev_ext['raidleader'] > 0) ? $ev_ext['raidleader'] : array();
-		$raidleaders_users	= $this->pdh->get('member', 'userid', array($raidleaders_chars));
-		if (!is_array($raidleaders_users)) $raidleaders_users = array();
-		return (($creator == $userid) || in_array($userid, $raidleaders_users))  ? true : false;
+		return $this->pdh->get('calendar_events', 'check_operatorperm', array($this->url_id, $userid));
 	}
 
 	public function display_logs(){

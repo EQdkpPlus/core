@@ -35,7 +35,7 @@
 				center: 'title',
 				right: 'month,agendaWeek,agendaDay'
 			},
-			<!-- IF IS_OPERATOR -->
+			<!-- IF ADD_RAID -->
 			dayClick: function(date, jsEvent, view) {
 				jQuery.FrameDialog.create({
 					url: '{U_EDIT_CALENDAREVENT}&simple_head=true&calview='+view.name+'&timestamp='+(moment.utc(date).unix()),
@@ -394,7 +394,7 @@
 //]]>
 </script>
 
-<!-- IF IS_OPERATOR -->
+<!-- IF ADD_RAID -->
 <style>
 td.fc-day:hover:after {
 	content: "{L_calendar_click_add}";

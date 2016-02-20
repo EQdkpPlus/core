@@ -31,7 +31,18 @@ class editcalendarevent_pageobject extends pageobject {
 			'ajax_dropdown'	=> array('process' => 'ajax_dropdown'),
 			'addevent'		=> array('process' => 'process_addevent',  'csrf'=>true)
 		);
-		$this->user->check_auth('u_cal_event_add');
+
+		if(($this->in->get('eventid', 0) > 0)){
+			echo 'test: '.$this->in->get('eventid', 0).', '.$this->user->data['user_id'];
+			if($this->user->check_auth('a_cal_revent_conf', false) || $this->pdh->get('calendar_events', 'check_operatorperm', array($this->in->get('eventid', 0), $this->user->data['user_id'])) ){
+				// permission granted
+			}else{
+				message_die($this->user->lang('noauth'), $this->user->lang('noauth_default_title'), 'access_denied', true);
+			}
+		}else{
+			$this->user->check_auth('u_cal_event_add');
+		}
+
 		parent::__construct(false, $handler, array(), null, '', 'eventid');
 		$this->process();
 	}
