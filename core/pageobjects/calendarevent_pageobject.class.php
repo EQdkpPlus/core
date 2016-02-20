@@ -112,8 +112,24 @@ class calendarevent_pageobject extends pageobject {
 		$tmp_classID	= $this->pdh->get('member', 'classid', array($this->in->get('requestid')));
 		$mystatus		= $this->pdh->get('calendar_raids_attendees', 'myattendees', array($this->url_id, $this->user->data['user_id']));
 		$myrole			= ($mystatus['member_role'] > 0) ? $mystatus['member_role'] : $this->pdh->get('member', 'defaultrole', array($this->in->get('requestid')));
+		$ddroles		= $this->pdh->get('roles', 'memberroles', array($tmp_classID));
+
+		// hide the role if null and such stuff
+		if($this->game->get_game_settings('calendar_hide_emptyroles')){
+			$eventdata = $this->pdh->get('calendar_events', 'data', array($this->url_id));
+			if($eventdata['extension']['raidmode'] == 'role'){
+				$raidcategories = $this->pdh->aget('roles', 'name', 0, array($this->pdh->get('roles', 'id_list')));
+				foreach ($raidcategories as $classid=>$classname){
+					if($eventdata['extension']['distribution'][$classid] == 0){
+						unset($ddroles[$classid]);
+					}
+				}
+			}
+		}
+
+		// start the output
 		header('content-type: text/html; charset=UTF-8');
-		echo $this->jquery->dd_create_ajax($this->pdh->get('roles', 'memberroles', array($tmp_classID)), array('selected'=>$myrole));exit;
+		echo $this->jquery->dd_create_ajax($ddroles, array('selected'=>$myrole));exit;
 	}
 
 	// user changes his status for that raid
