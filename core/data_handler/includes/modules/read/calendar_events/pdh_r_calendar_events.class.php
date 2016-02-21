@@ -406,6 +406,11 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			return '<a href="'.$this->routing->build('calendarevent', $this->get_name($id), $id).'"><i class="fa fa-lg fa-arrow-right"></i></a>';
 		}
 
+		public function get_raiddistribution($id, $classid=0){
+			$extension		= $this->get_extension($id);
+			return (isset($extension['distribution'][$classid])) ? $extension['distribution'][$classid] : ((isset($extension['distribution'])) ? $extension['distribution'] : 0);
+		}
+
 		public function get_edit($id){
 			return '<i class="fa fa-pencil fa-lg hand" title="'.$this->user->lang('calendar_edit').'" onclick="editEvent(\''.$id.'\')"></i>';
 		}
