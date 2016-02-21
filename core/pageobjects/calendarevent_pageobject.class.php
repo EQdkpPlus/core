@@ -525,10 +525,12 @@ class calendarevent_pageobject extends pageobject {
 		$this->guests			= $this->pdh->get('calendar_raids_guests', 'members', array($this->url_id));
 		$this->raidcategories	= ($eventdata['extension']['raidmode'] == 'role') ? $this->pdh->aget('roles', 'name', 0, array($this->pdh->get('roles', 'id_list'))) : $this->game->get_primary_classes(array('id_0'));
 		// hide empty roles if the game module allows it
-		if($eventdata['extension']['raidmode'] == 'role' && $this->game->get_game_settings('calendar_hide_emptyroles')){
+		if(isset($eventdata['extension']['raidmode']) && $eventdata['extension']['raidmode'] == 'role' && $this->game->get_game_settings('calendar_hide_emptyroles')){
+			$hidden_roles = array();
 			foreach ($this->raidcategories as $classid=>$classname){
 				if($eventdata['extension']['distribution'][$classid] == 0){
 					unset($this->raidcategories[$classid]);
+					$hidden_roles[] = $classid;
 				}
 			}
 		}
@@ -572,6 +574,15 @@ class calendarevent_pageobject extends pageobject {
 					foreach($this->twinks[$rolecharsid] as $twinkids){
 						$drpdwn_roles[$twinkids] = $this->pdh->get('roles', 'memberroles', array($this->pdh->get('member', 'classid', array($twinkids))));
 					}
+				}
+			}
+		}
+
+		// remove hidden roles out of the attendees/twinks array
+		if(isset($eventdata['extension']['raidmode']) && $eventdata['extension']['raidmode'] == 'role' && $this->game->get_game_settings('calendar_hide_emptyroles')){
+			foreach($drpdwn_roles as $charid_tmp=>$chardata_tmp){
+				foreach ($hidden_roles as $roleidtobehidden){
+					unset($drpdwn_roles[$charid_tmp][$roleidtobehidden]);
 				}
 			}
 		}
