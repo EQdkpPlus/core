@@ -35,7 +35,7 @@
 				center: 'title',
 				right: 'month,agendaWeek,agendaDay'
 			},
-			<!-- IF IS_OPERATOR -->
+			<!-- IF ADD_RAID -->
 			dayClick: function(date, jsEvent, view) {
 				jQuery.FrameDialog.create({
 					url: '{U_EDIT_CALENDAREVENT}&simple_head=true&calview='+view.name+'&timestamp='+(moment.utc(date).unix()),
@@ -95,29 +95,52 @@
 						tmpttcontent += "{L_calendar_eventparticipants}" + event.attendees;
 					}
 
-					element.qtip({
-						content: {
-							text: tmpttcontent,
-							<!-- IF IS_OPERATOR -->title: {
-								text: buttontext,
-								button: false
-							}<!-- ENDIF -->
-						},
-						hide: {
-							fixed: true,
-							delay: 300
-						},
-						position: {
-							at: "bottom center",
-							my: "top center"
-						},
-						style: {
-							tip: {
-								corner: true
+					if(event.editable){
+						element.qtip({
+							content: {
+								text: tmpttcontent,
+								title: {
+									text: buttontext,
+									button: false
+								}
 							},
-							widget: true
-						}
-					});
+							hide: {
+								fixed: true,
+								delay: 300
+							},
+							position: {
+								at: "bottom center",
+								my: "top center"
+							},
+							style: {
+								tip: {
+									corner: true
+								},
+								widget: true
+							}
+						});
+					}else{
+						element.qtip({
+							content: {
+								text: tmpttcontent,
+							},
+							hide: {
+								fixed: true,
+								delay: 300
+							},
+							position: {
+								at: "bottom center",
+								my: "top center"
+							},
+							style: {
+								tip: {
+									corner: true
+								},
+								widget: true
+							}
+						});
+					}
+
 				}else{
 					tmpttcontent = '';
 					tmpttcontent += (event.raidleader) ? "<div class='calendartt_raidleader'>{L_raidevent_raidleader}: "+event.raidleader+"</div><br/>" : '';
@@ -127,29 +150,52 @@
 					tmpttcontent += (event.rstatusdata) ? "<br/><div class='calendartt_raidcount'>"+event.rstatusdata+"</div>" : '';
 
 					tmpttcontent += (event.note) ? "<br/><div class='calendartt_note'>{L_note}: "+event.note+"</div>" : '';
-					element.qtip({
-						content: {
-							text: tmpttcontent,
-							<!-- IF IS_OPERATOR -->title: {
-								text: '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-pencil fa-lg hand" onClick="editEvent('+event.eventid+');"></i>  <i class="fa fa-trash-o fa-lg hand" onclick="deleteEvent('+event.eventid+');"></i></div>',
-								button: false
-							}<!-- ENDIF -->
-						},
-						hide: {
-							fixed: true,
-							delay: 300
-						},
-						position: {
-							at: "bottom center",
-							my: "top center"
-						},
-						style: {
-							tip: {
-								corner: true
+
+					if(event.editable){
+						element.qtip({
+							content: {
+								text: tmpttcontent,
+								title: {
+									text: '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-pencil fa-lg hand" onClick="editEvent('+event.eventid+');"></i>  <i class="fa fa-trash-o fa-lg hand" onclick="deleteEvent('+event.eventid+');"></i></div>',
+									button: false
+								}
 							},
-							widget: true
-						}
-					});
+							hide: {
+								fixed: true,
+								delay: 300
+							},
+							position: {
+								at: "bottom center",
+								my: "top center"
+							},
+							style: {
+								tip: {
+									corner: true
+								},
+								widget: true
+							}
+						});
+					}else{
+						element.qtip({
+							content: {
+								text: tmpttcontent,
+							},
+							hide: {
+								fixed: true,
+								delay: 300
+							},
+							position: {
+								at: "bottom center",
+								my: "top center"
+							},
+							style: {
+								tip: {
+									corner: true
+								},
+								widget: true
+							}
+						});
+					}
 				}
 			},
 			eventResize: function(event,delta,revertFunc) {
@@ -394,7 +440,7 @@
 //]]>
 </script>
 
-<!-- IF IS_OPERATOR -->
+<!-- IF ADD_RAID -->
 <style>
 td.fc-day:hover:after {
 	content: "{L_calendar_click_add}";

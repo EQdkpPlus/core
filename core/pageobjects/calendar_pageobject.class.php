@@ -38,12 +38,7 @@ class calendar_pageobject extends pageobject {
 
 	// check calendar specific rights such as if the user is a raidleader or the creator
 	private function check_permission($raidid, $userid=0){
-		$userid	= ($userid > 0) ? $userid : $this->user->data['user_id'];
-		$creator			= $eventdata = $this->pdh->get('calendar_events', 'creatorid', array($raidid));
-		$ev_ext				= $this->pdh->get('calendar_events', 'extension', array($raidid));
-		$raidleaders_chars	= ($ev_ext['raidleader'] > 0) ? $ev_ext['raidleader'] : array();
-		$raidleaders_users	= $this->pdh->get('member', 'userid', array($raidleaders_chars));
-		return (($creator == $userid) || in_array($userid, $raidleaders_users))  ? true : false;
+		return $this->pdh->get('calendar_events', 'check_operatorperm', array($raidid, $userid));
 	}
 
 	// sign into multiple raids in the raid list
@@ -441,7 +436,8 @@ class calendar_pageobject extends pageobject {
 			'DD_STATUS'				=> new hdropdown('member_signupstatus', array('options' => $raidstatus)),
 			'DD_MULTIDEL'			=> new hdropdown('deleteall_selection', array('options' => $deleteall_drpdown)),
 			'TXT_NOTE'				=> new htext('member_note', array('size' => '20')),
-			'IS_OPERATOR'			=> $this->user->check_auth('u_cal_event_add', false),
+			'IS_OPERATOR'			=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission($calid)) ? true : false,
+			'ADD_RAID'				=> $this->user->check_auth('u_cal_event_add', false),
 
 			'CSRF_MOVE_TOKEN'		=> $this->CSRFGetToken('move'),
 			'CSRF_RESIZE_TOKEN' 	=> $this->CSRFGetToken('resize'),
