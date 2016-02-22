@@ -343,6 +343,17 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			return true;
 		}
 
+		// check calendar specific rights such as if the user is a raidleader or the creator
+		public function get_check_operatorperm($raidid, $userid=0){
+			$userid	= ($userid > 0) ? $userid : $this->user->data['user_id'];
+			$creator			= $this->pdh->get('calendar_events', 'creatorid', array($raidid));
+			$ev_ext				= $this->pdh->get('calendar_events', 'extension', array($raidid));
+			$raidleaders_chars	= ($ev_ext['raidleader'] > 0) ? $ev_ext['raidleader'] : array();
+			$raidleaders_users	= $this->pdh->get('member', 'userid', array($raidleaders_chars));
+			if (!is_array($raidleaders_users)) $raidleaders_users = array();
+			return (($creator == $userid) || in_array($userid, $raidleaders_users))  ? true : false;
+		}
+
 		public function get_is_invited($id, $userid=0){
 			$extension	= $this->get_extension($id);
 			$userid		= ($userid > 0) ? $userid : $this->user->data['user_id'];
@@ -395,6 +406,11 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			return '<a href="'.$this->routing->build('calendarevent', $this->get_name($id), $id).'"><i class="fa fa-lg fa-arrow-right"></i></a>';
 		}
 
+		public function get_raiddistribution($id, $classid=0){
+			$extension		= $this->get_extension($id);
+			return (isset($extension['distribution'][$classid])) ? $extension['distribution'][$classid] : ((isset($extension['distribution'])) ? $extension['distribution'] : 0);
+		}
+
 		public function get_edit($id){
 			return '<i class="fa fa-pencil fa-lg hand" title="'.$this->user->lang('calendar_edit').'" onclick="editEvent(\''.$id.'\')"></i>';
 		}
@@ -405,7 +421,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			$raideventname	= ($this->get_raidstatus($id) == '1') ? '<span class="linethrough">'.$raideventname.'</span>' : $raideventname;
 			return $this->pdh->geth('event', 'icon', array($this->events[$id]['extension']['raid_eventid'])).' '.$raideventname;
 		}
-		
+
 		public function get_raid_eventid($id){
 			if(!isset($this->events[$id]['extension']['raid_eventid'])) return false;
 			return $this->events[$id]['extension']['raid_eventid'];

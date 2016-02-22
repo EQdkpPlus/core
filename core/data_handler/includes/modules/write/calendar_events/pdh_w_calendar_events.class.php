@@ -494,6 +494,14 @@ if(!class_exists('pdh_w_calendar_events')) {
 									}
 								}
 
+								// hide empty roles if the game module allows it
+								if($raidtype == 'role' && $defaultrole > 0 && $this->game->get_game_settings('calendar_hide_emptyroles')){
+									$raiddistri = $this->pdh->get('calendar_events', 'raiddistribution', array($raidid, $defaultrole));
+									if($raiddistri == 0){
+										continue;
+									}
+								}
+
 								$this->pdh->put('calendar_raids_attendees', 'update_status', array(
 									$raidid,
 									$memberid,
@@ -515,6 +523,15 @@ if(!class_exists('pdh_w_calendar_events')) {
 					$away_mode		= $this->pdh->get('calendar_raids_attendees', 'attendee_awaymode', array($raidleaderid, $raidid));
 					$rlstatus		= ($away_mode) ? 2 : 0;
 					$defaultrole	= $this->pdh->get('member', 'defaultrole', array($raidleaderid));
+
+					// hide empty roles if the game module allows it
+					if($raidtype == 'role' && $defaultrole > 0 && $this->game->get_game_settings('calendar_hide_emptyroles')){
+						$raiddistri = $this->pdh->get('calendar_events', 'raiddistribution', array($raidid, $defaultrole));
+						if($raiddistri == 0){
+							continue;
+						}
+					}
+
 					$this->pdh->put('calendar_raids_attendees', 'update_status', array(
 						$raidid,
 						$raidleaderid,

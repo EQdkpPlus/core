@@ -51,15 +51,8 @@ class calendarevent_pageobject extends pageobject {
 		$this->process();
 	}
 
-	// check calendar specific rights such as if the user is a raidleader or the creator
 	private function check_permission($userid=0){
-		$userid	= ($userid > 0) ? $userid : $this->user->data['user_id'];
-		$creator			= $this->pdh->get('calendar_events', 'creatorid', array($this->url_id));
-		$ev_ext				= $this->pdh->get('calendar_events', 'extension', array($this->url_id));
-		$raidleaders_chars	= ($ev_ext['raidleader'] > 0) ? $ev_ext['raidleader'] : array();
-		$raidleaders_users	= $this->pdh->get('member', 'userid', array($raidleaders_chars));
-		if (!is_array($raidleaders_users)) $raidleaders_users = array();
-		return (($creator == $userid) || in_array($userid, $raidleaders_users))  ? true : false;
+		return $this->pdh->get('calendar_events', 'check_operatorperm', array($this->url_id, $userid));
 	}
 
 	public function display_logs(){
@@ -119,8 +112,24 @@ class calendarevent_pageobject extends pageobject {
 		$tmp_classID	= $this->pdh->get('member', 'classid', array($this->in->get('requestid')));
 		$mystatus		= $this->pdh->get('calendar_raids_attendees', 'myattendees', array($this->url_id, $this->user->data['user_id']));
 		$myrole			= ($mystatus['member_role'] > 0) ? $mystatus['member_role'] : $this->pdh->get('member', 'defaultrole', array($this->in->get('requestid')));
+		$ddroles		= $this->pdh->get('roles', 'memberroles', array($tmp_classID));
+
+		// hide the role if null and such stuff
+		if($this->game->get_game_settings('calendar_hide_emptyroles')){
+			$eventdata = $this->pdh->get('calendar_events', 'data', array($this->url_id));
+			if($eventdata['extension']['raidmode'] == 'role'){
+				$raidcategories = $this->pdh->aget('roles', 'name', 0, array($this->pdh->get('roles', 'id_list')));
+				foreach ($raidcategories as $classid=>$classname){
+					if($eventdata['extension']['distribution'][$classid] == 0){
+						unset($ddroles[$classid]);
+					}
+				}
+			}
+		}
+
+		// start the output
 		header('content-type: text/html; charset=UTF-8');
-		echo $this->jquery->dd_create_ajax($this->pdh->get('roles', 'memberroles', array($tmp_classID)), array('selected'=>$myrole));exit;
+		echo $this->jquery->dd_create_ajax($ddroles, array('selected'=>$myrole));exit;
 	}
 
 	// user changes his status for that raid
@@ -515,6 +524,16 @@ class calendarevent_pageobject extends pageobject {
 		$this->twinks			= array();
 		$this->guests			= $this->pdh->get('calendar_raids_guests', 'members', array($this->url_id));
 		$this->raidcategories	= ($eventdata['extension']['raidmode'] == 'role') ? $this->pdh->aget('roles', 'name', 0, array($this->pdh->get('roles', 'id_list'))) : $this->game->get_primary_classes(array('id_0'));
+		// hide empty roles if the game module allows it
+		if(isset($eventdata['extension']['raidmode']) && $eventdata['extension']['raidmode'] == 'role' && $this->game->get_game_settings('calendar_hide_emptyroles')){
+			$hidden_roles = array();
+			foreach ($this->raidcategories as $classid=>$classname){
+				if($eventdata['extension']['distribution'][$classid] == 0){
+					unset($this->raidcategories[$classid]);
+					$hidden_roles[] = $classid;
+				}
+			}
+		}
 		$this->mystatus			= $this->pdh->get('calendar_raids_attendees', 'myattendees', array($this->url_id, $this->user->data['user_id']));
 		$this->classbreakval	= ($this->config->get('calendar_raid_classbreak')) ? $this->config->get('calendar_raid_classbreak') : 4;
 		$modulocount			= intval(count($this->raidcategories)/$this->classbreakval);
@@ -555,6 +574,15 @@ class calendarevent_pageobject extends pageobject {
 					foreach($this->twinks[$rolecharsid] as $twinkids){
 						$drpdwn_roles[$twinkids] = $this->pdh->get('roles', 'memberroles', array($this->pdh->get('member', 'classid', array($twinkids))));
 					}
+				}
+			}
+		}
+
+		// remove hidden roles out of the attendees/twinks array
+		if(isset($eventdata['extension']['raidmode']) && $eventdata['extension']['raidmode'] == 'role' && $this->game->get_game_settings('calendar_hide_emptyroles')){
+			foreach($drpdwn_roles as $charid_tmp=>$chardata_tmp){
+				foreach ($hidden_roles as $roleidtobehidden){
+					unset($drpdwn_roles[$charid_tmp][$roleidtobehidden]);
 				}
 			}
 		}
