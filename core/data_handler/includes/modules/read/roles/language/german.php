@@ -29,13 +29,15 @@ $module_lang = array(
 	'roleid'		=> 'ID',
 	'classes_list'	=> 'Klassen der Rolle',
 	'name'			=> 'Name',
+	'icon'			=> 'Icon',
 );
 
 $preset_lang = array(
-	'roleid'		=> 'Role ID',
-	'rolename'		=> 'Role Name',
-	'roleclasses'	=> 'Role Klassen',
-	'roleedit'		=> 'Role bearbeiten-Button',
-	'roledelete'	=> 'Role löschen-Button',
+	'roleid'		=> 'Rollen-ID',
+	'rolename'		=> 'Rollen-Name',
+	'roleclasses'	=> 'Rollen Klassen',
+	'roleedit'		=> 'Rolle bearbeiten-Button',
+	'roledelete'	=> 'Rolle löschen-Button',
+	'roleicon'		=> 'Rollen-Icon',
 );
 ?>

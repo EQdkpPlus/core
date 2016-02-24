@@ -38,6 +38,7 @@ if (!class_exists('pdh_r_roles')){
 			'roleclasses'	=> array('classes_list',	array('%role_id%'),	array()),
 			'roleedit'		=> array('edit',			array('%role_id%'),	array()),
 			'roledelete'	=> array('delete',			array('%role_id%'),	array()),
+			'roleicon'		=> array('icon',			array('%role_id%'),	array()),
 		);
 
 		/**
@@ -118,6 +119,10 @@ if (!class_exists('pdh_r_roles')){
 
 		public function get_icon($id){
 			return $this->roles[$id]['icon'];
+		}
+		
+		public function get_html_icon($id){
+			return $this->game->decorate('roles', $id);
 		}
 
 		public function get_classes_list($id){
