@@ -178,7 +178,7 @@ if(!class_exists('pdh_r_adjustment')){
 					$intRaidID = $this->get_raid_id($adj_id);
 					if($raid_id == $intRaidID){
 						$adjustment_ids[] = $adj_id;
-						$adjGrouped[$this->get_group_key($id)] = $adj_id;
+						$adjGrouped[$this->get_group_key($adj_id)] = $adj_id;
 					}
 				}
 			}

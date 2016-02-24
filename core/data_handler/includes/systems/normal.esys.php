@@ -690,6 +690,7 @@ $system_def = array(
 					array('name' => 'roleid',		'sort' => true, 'th_add' => 'width="20"', 'td_add' => ''),
 					array('name' => 'roleedit',		'sort' => false, 'th_add' => 'width="20"', 'td_add' => ''),
 					array('name' => 'rolename',		'sort' => true, 'th_add' => 'width="30%"', 'td_add' => ''),
+					array('name' => 'roleicon',		'sort' => true, 'th_add' => 'width="30%"', 'td_add' => ''),
 					array('name' => 'roleclasses',	'sort' => false, 'th_add' => 'width="70%"', 'td_add' => ''),
 				),
 			),

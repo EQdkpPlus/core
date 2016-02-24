@@ -185,6 +185,7 @@ class ManageUserProfileFields extends page_generic {
 				),
 				'enabled' => array(
 						'type' => 'radio',
+						'default' => 1,
 				),
 				'is_contact' => array(
 						'type' => 'radio',

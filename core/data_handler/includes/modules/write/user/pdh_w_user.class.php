@@ -64,13 +64,7 @@ if(!class_exists('pdh_w_user')) {
 			$new_password = $this->user->encrypt_password($arrData['user_password1'], $new_salt).':'.$new_salt;
 
 			//User Profilefields
-			$arrUserProfileFields = array();
-			if (is_array($arrProfileData)){
-				foreach($arrProfileData as $key => $value){
-					$newKey = intval(str_replace('userprofile_', '', $key));
-					$arrUserProfileFields[$newKey] = $value;
-				}
-			}
+			$arrProfileData = (is_array($arrProfileData)) ? $arrProfileData : array();
 			
 			$arrSave = array(
 				'username' 				=> $arrData['username'],
@@ -84,7 +78,7 @@ if(!class_exists('pdh_w_user')) {
 				'user_key'				=> $user_key,
 				'user_active'			=> $user_active,
 				'rules'					=> ($rules) ? 1 : 0,
-				'custom_fields'			=> serialize($arrUserProfileFields),
+				'custom_fields'			=> serialize($arrProfileData),
 			);
 			if ($strLoginMethod && $this->user->handle_login_functions('after_register', $strLoginMethod )){
 				$arrAfterRegister = $this->user->handle_login_functions('after_register', $strLoginMethod );

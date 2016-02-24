@@ -153,7 +153,12 @@ class config extends gen_class {
 	private function unserialize($val) {
 		//check for '{', only in this case we try an unserialize
 		if(strpos($val, ':{') === false) return $val;
+		
+		//fix escaped strings
+		$val = stripslashes( $val );
+		
 		$value = unserialize($val);
+		
 		// if value is an array now, return value, else return val
 		if(is_array($value)) return $value;
 		return $val;

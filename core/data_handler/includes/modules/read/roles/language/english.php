@@ -34,6 +34,7 @@ $module_lang = array(
 	"roleid" => 'ID',
 	"classes_list" => 'Classes of the Role',
 	"name" => 'Name',
+	"icon" => 'Icon',
 	);
 	$preset_lang = array(
 	"roleid" => 'Role ID',
@@ -41,6 +42,7 @@ $module_lang = array(
 	"roleclasses" => 'Role classes',
 	"roleedit" => 'Role edit button',
 	"roledelete" => 'Role delete button',
+	"roleicon" => 'Role icon'
 	);
 	
 
