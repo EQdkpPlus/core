@@ -43,9 +43,9 @@ class ManageProfileFields extends page_generic {
 		if ($this->in->get('enable', 0)){
 			$result = $this->pdh->put('profile_fields', 'enable_field', array($this->in->get('enable', 0)));
 		}
-		
+
 		$arrField = $this->pdh->get('profile_fields', 'field_by_id', array($this->in->get('enable', 0)));
-		
+
 		//Handle Result
 		if ($result){
 			$message = array('title' => $this->user->lang('success'), 'text' => sprintf($this->user->lang('pf_enable_suc'), $arrField['lang']), 'color' => 'green');
@@ -53,14 +53,14 @@ class ManageProfileFields extends page_generic {
 			$message = array('title' => $this->user->lang('error'), 'text' => sprintf($this->user->lang('pf_enable_nosuc'), $arrField['lang']), 'color' => 'red');
 		}
 		$this->display($message);
-		
+
 	} //close function
 
 	public function disable(){
 		if ($this->in->get('disable') != ""){
 			$result = $this->pdh->put('profile_fields', 'disable_field', array($this->in->get('disable', 0)));
 		}
-		
+
 		$arrField = $this->pdh->get('profile_fields', 'field_by_id', array($this->in->get('disable', 0)));
 
 		//Handle Result
@@ -82,7 +82,7 @@ class ManageProfileFields extends page_generic {
 		}
 		$this->display($message);
 	}
-	
+
 	public function save_sort(){
 		$arrSortOrder = $this->in->getArray('sort', 'int');
 		foreach($arrSortOrder as $intSortID => $intFieldID){
@@ -91,13 +91,13 @@ class ManageProfileFields extends page_generic {
 		$message = array('title' => $this->user->lang('success'), 'text' => $this->user->lang('save_suc'), 'color' => 'green');
 		$this->display($message);
 	}
-	
-	
+
+
 	public function process_reset(){
 		$this->game->AddProfileFields();
 		$this->display();
 	}
-	
+
 	public function add(){
 		if ($this->in->get('id', 0)){
 		//Update
@@ -117,7 +117,7 @@ class ManageProfileFields extends page_generic {
 
 	public function edit(){
 		$intProfilefieldID = $this->in->get('edit', 0);
-		
+
 		if($intProfilefieldID) $field_data = $this->pdh->get('profile_fields', 'field_by_id', array($intProfilefieldID));
 		else $field_data = array('name' => '', 'lang' => '', 'options_language' => '', 'type' => '', 'category' => '', 'size' => '', 'image' => '', 'options' => array());
 		$types = array(
@@ -126,10 +126,12 @@ class ManageProfileFields extends page_generic {
 			'dropdown'		=> 'Dropdown',
 			'link'			=> 'Link',
 			'multiselect'	=> 'Multiselect',
+			'spinner'		=> 'Spinner',
 			'checkbox'		=> 'Checkbox',
 			'radio'			=> 'Radio',
+			'datepicker'	=> 'Datepicker',
 		);
-		
+
 		$categories = array(
 			'character'	=> ($this->game->glang('uc_cat_character')) ? $this->game->glang('uc_cat_character') : $this->user->lang('uc_cat_character'),
 		);
@@ -146,7 +148,7 @@ class ManageProfileFields extends page_generic {
 			'LANGUAGE'					=> $field_data['lang'],
 			'OPTIONS_LANGUAGE'			=> $field_data['options_language'],
 			'TYPE_DD'					=> new hdropdown('type', array('options' => $types, 'value' => $field_data['type'], 'id' => 'type_dd')),
-			
+
 			'CATEGORY_DD'				=> new hdropdown('category', array('options' => $categories, 'value' => $field_data['category'])),
 			'SIZE'						=> $field_data['size'],
 			'IMAGE'						=> $field_data['image'],
@@ -161,7 +163,7 @@ class ManageProfileFields extends page_generic {
 				));
 			}
 		}
-		
+
 		$this->tpl->add_js('
 $("#addopt_icon").click(function(){
 	var fields = $("#new_options > span:last-child").clone(true);
@@ -189,10 +191,10 @@ $("#type_dd").change(function(){
 			$this->pdh->process_hook_queue();
 			$this->core->messages($message);
 		}
-		
+
 		$this->jquery->Dialog('ResetProfileFields', '', array('custom_js'=> "window.location = 'manage_profilefields.php".$this->SID."&reset=true&link_hash=".$this->CSRFGetToken('reset')."';", 'message'=> $this->user->lang('reset_profilefieldstext')), 'confirm');
-		
-		
+
+
 		$this->confirm_delete($this->user->lang('confirm_del_profilefields'));
 		$fields = $this->pdh->get('profile_fields', 'fields');
 		if (is_array($fields)) {
@@ -214,7 +216,7 @@ $("#type_dd").change(function(){
 				));
 			}
 		}
-		
+
 		$this->tpl->add_js("
 			$(\"#profilefield_table tbody\").sortable({
 				cancel: '.not-sortable, input, select, th',
