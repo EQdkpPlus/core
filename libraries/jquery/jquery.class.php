@@ -112,6 +112,16 @@ if (!class_exists("jquery")) {
 						$(this).next("span.errormessage").hide();
 					}
 				});', 'docready');
+				$this->tpl->add_js("function JQisLocalStorageNameSupported() {
+					var testKey = 'test', storage = window.sessionStorage;
+					try {
+						storage.setItem(testKey, '1');
+						storage.removeItem(testKey);
+						return true;
+					}catch (error){
+						return false;
+					}
+				}", 'head');
 			$this->init_formvalidation();
 			$this->init_spinner();
 		}
@@ -964,10 +974,10 @@ if (!class_exists("jquery")) {
 			$jsoptions = array();
 
 			if($cookie){
-				$jsoptions[] = "beforeActivate: function(e, ui) { localStorage.setItem('tabs.".$name."', ui.newTab.index()); },
+				$jsoptions[] = "beforeActivate: function(e, ui) { if(JQisLocalStorageNameSupported()){ localStorage.setItem('tabs.".$name."', ui.newTab.index());console.log('session saved');}else{console.log('session not saved');} },
 									create: function (e, ui) {
 										var tabID		= (window.location.hash) ? $('#' +  window.location.hash.replace('#', '')).index() : 0;
-										var selectionId	= (window.location.hash && tabID > 0) ? tabID-1 : ((localStorage.getItem('tabs.".$name."') != null) ? localStorage.getItem('tabs.".$name."') : 0);
+										var selectionId	= (window.location.hash && tabID > 0) ? tabID-1 : ((JQisLocalStorageNameSupported()) ? ((localStorage.getItem('tabs.".$name."') != null) ? localStorage.getItem('tabs.".$name."') : 0) : 0);
 										$(this).tabs('option', 'active', selectionId);
 									}";
 			}
