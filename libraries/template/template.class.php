@@ -683,14 +683,15 @@ class template extends gen_class {
 
 		if(!$this->get_templateout('js_file')){
 			if(is_array($this->get_templatedata('js_file'))){
-				ksort($this->get_templatedata('js_file'));
+				$aryJSFile = $this->get_templatedata('js_file');
+				ksort($aryJSFile);
 				$js_files = "";
 				if(is_array($this->get_templatedata('js_code_head_top')) && count($this->get_templatedata('js_code_head_top'))) {
 					$js_files .= "<script type='text/javascript'>";
 					$js_files .= implode("\n", $this->get_templatedata('js_code_head_top'));
 					$js_files .= "</script>\n";
 				}
-				$js_files .= $this->implode_cssjsfiles("<script type='text/javascript' src='", "'></script>", "\n", $this->get_templatedata('js_file'));
+				$js_files .= $this->implode_cssjsfiles("<script type='text/javascript' src='", "'></script>", "\n", $aryJSFile);
 				$this->assign_var('JS_FILES', $js_files);
 			}
 			$this->set_templateout('js_file', true);
