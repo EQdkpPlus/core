@@ -155,7 +155,7 @@ class config extends gen_class {
 		if(strpos($val, ':{') === false) return $val;
 		
 		//fix escaped strings
-		$val = str_replace( "\\\"", "\"", $val );
+		$val = stripslashes( $val );
 		
 		$value = unserialize($val);
 		
