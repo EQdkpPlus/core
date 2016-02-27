@@ -455,23 +455,27 @@ class form extends gen_class {
 			case 'dropdown':
 				$js = "
 	$('.form_change').change(function(){
+		var selected_values = [];
 		$.each($(this).find('option'), function(){
 			var selected = this.selected;
 			$.each($(this).data('form-change').split(','), function(index, value){
 				if(value){
 					if(selected){
-						$('#".$this->form_id."').find('#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"]').removeAttr('disabled');
-						var elem = $('#".$this->form_id."').find('#'+value);
-						if(elem && elem.prop('tagName') == 'SELECT' && typeof elem.attr('multiple') !== typeof undefined && elem.attr('multiple') !== false){
-							$('#'+value).multiselect('enable');
-						}		
-						$('#".$this->form_id."').find('dl:has(#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"])').show();
+						selected_values.push(value);
 					}else{
 						$('#".$this->form_id."').find('#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"]').attr('disabled', 'disabled');
 						$('#".$this->form_id."').find('dl:has(#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"])').hide();
 					}
 				}
 			});
+		});
+		$.each(selected_values, function(index, value){
+			$('#".$this->form_id."').find('#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"]').removeAttr('disabled');
+			var elem = $('#".$this->form_id."').find('#'+value);
+			if(elem && elem.prop('tagName') == 'SELECT' && typeof elem.attr('multiple') !== typeof undefined && elem.attr('multiple') !== false){
+				$('#'+value).multiselect('enable');
+			}		
+			$('#".$this->form_id."').find('dl:has(#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"])').show();
 		});
 	}).trigger('change');";
 				break;
