@@ -175,6 +175,13 @@ class ManageRaids extends page_generic {
 		//fetch events
 		$events = $this->pdh->aget('event', 'name', 0, array($this->pdh->get('event', 'id_list')));
 		asort($events);
+		
+		//Event Itempool Mapping
+		$arrEventItempoolMapping = array();
+		foreach($this->pdh->get('event', 'id_list') as $eventID){
+			$arrEventItempools = $this->pdh->get('event', 'itempools', array($eventID));
+			$arrEventItempoolMapping[$eventID] = (isset($arrEventItempools[0])) ? $arrEventItempools[0] : 0;
+		}
 
 		//fetch itempools
 		$itempools = $this->pdh->aget('itempool', 'name', 0, array($this->pdh->get('itempool', 'id_list')));
@@ -274,6 +281,7 @@ class ManageRaids extends page_generic {
 		}
 
 		if($raid['id'] AND $raid['id'] != 'new') $this->confirm_delete($this->user->lang('del_raid_with_itemadj')."<br />".$this->time->user_date($raid['date'])." ".$events[$raid['event']].": ".addslashes($raid['note']));
+		$arrEventKeys = array_keys($events);
 		$this->tpl->assign_vars(array(
 			'DATE'				=> $this->jquery->Calendar('date', (($this->in->get('dataimport', '') == 'true') ? $this->in->get('date', '') : $this->time->user_date($raid['date'], true, false, false, function_exists('date_create_from_format'))), '', array('timepicker' => true)),
 			'NOTE'				=> stripslashes((($this->in->get('dataimport', '') == 'true') ? $this->in->get('rnote', '') : $raid['note'])),
@@ -293,6 +301,8 @@ class ManageRaids extends page_generic {
 			'ITEM_KEY'			=> $intItemKey+1,
 			'ITEMPOOL_DROPDOWN' => new hdropdown('items[KEY][itempool_id]', array('options' => $itempools, 'value' => $item['itempool_id'], 'id' => 'itempool_id_KEY')),
 			'ITEM_AUTOCOMPLETE' => $this->jquery->Autocomplete('item_KEY', array_unique($item_names)),
+			'EVENT_ITEMPOOL_MAPPING' => json_encode($arrEventItempoolMapping),
+			'FIRST_EVENT_ID'	=> isset($arrEventKeys[0]) ? $arrEventKeys[0] : 0,
 				
 			//language vars
 			'L_RAID_SAVE'		=> ($raid['id'] AND $raid['id'] != 'new' && !$copy) ? $this->user->lang('update_raid') : $this->user->lang('add_raid'),

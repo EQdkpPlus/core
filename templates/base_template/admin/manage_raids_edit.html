@@ -77,7 +77,8 @@
 			$("#items_"+item_key).autocomplete({
 				source: auto_itemname
 			});
-
+			
+			if(new_itempool_option > 0) $('#itempool_id_'+item_key).val(new_itempool_option);
 			item_key++;
 		});
 	});
@@ -96,6 +97,15 @@
 		});
 	});
 	
+	var event_itempool_mapping = {EVENT_ITEMPOOL_MAPPING};
+	var new_itempool_option = event_itempool_mapping[{FIRST_EVENT_ID}];
+	$(document).ready(function(){
+		$('#event').on('change', function(){
+			var myval = $('#event').val();
+			new_itempool_option = event_itempool_mapping[myval];
+			if(!new_itempool_option) new_itempool_option = 0;
+		});
+	});
 </script>
 <form action='{ACTION}' method='post' name='post'>
 <div id="toggleRaidInfos">
