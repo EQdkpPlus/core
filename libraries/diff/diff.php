@@ -38,7 +38,7 @@ class diff
 	* @param array $from_lines  An array of strings. Typically these are lines from a file.
 	* @param array $to_lines    An array of strings.
 	*/
-	function diff(&$from_content, &$to_content, $preserve_cr = true)
+	function __construct(&$from_content, &$to_content, $preserve_cr = true)
 	{
 		$diff_engine = new diff_engine();
 		$this->_edits = $diff_engine->diff($from_content, $to_content, $preserve_cr);
@@ -318,7 +318,7 @@ class mapped_diff extends diff
 	*                                  compared when computing the diff.
 	* @param array $mapped_to_lines    This array should have the same number of elements as $to_lines.
 	*/
-	function mapped_diff(&$from_lines, &$to_lines, &$mapped_from_lines, &$mapped_to_lines)
+	function __construct(&$from_lines, &$to_lines, &$mapped_from_lines, &$mapped_to_lines)
 	{
 		if (sizeof($from_lines) != sizeof($mapped_from_lines) || sizeof($to_lines) != sizeof($mapped_to_lines))
 		{
@@ -382,7 +382,7 @@ class diff_op
 */
 class diff_op_copy extends diff_op
 {
-	function diff_op_copy($orig, $final = false)
+	function __construct($orig, $final = false)
 	{
 		if (!is_array($final))
 		{
@@ -407,7 +407,7 @@ class diff_op_copy extends diff_op
 */
 class diff_op_delete extends diff_op
 {
-	function diff_op_delete($lines)
+	function __construct($lines)
 	{
 		$this->orig = $lines;
 		$this->final = false;
@@ -428,7 +428,7 @@ class diff_op_delete extends diff_op
 */
 class diff_op_add extends diff_op
 {
-	function diff_op_add($lines)
+	function __construct($lines)
 	{
 		$this->final = $lines;
 		$this->orig = false;
@@ -449,7 +449,7 @@ class diff_op_add extends diff_op
 */
 class diff_op_change extends diff_op
 {
-	function diff_op_change($orig, $final)
+	function __construct($orig, $final)
 	{
 		$this->orig = $orig;
 		$this->final = $final;
@@ -484,7 +484,7 @@ class diff3 extends diff
 	* @param array $final1  The first version to compare to.
 	* @param array $final2  The second version to compare to.
 	*/
-	function diff3(&$orig, &$final1, &$final2, $preserve_cr = true)
+	function __construct(&$orig, &$final1, &$final2, $preserve_cr = true)
 	{
 		$diff_engine = new diff_engine();
 
@@ -740,7 +740,7 @@ class diff3 extends diff
 */
 class diff3_op
 {
-	function diff3_op($orig = false, $final1 = false, $final2 = false)
+	function __construct($orig = false, $final1 = false, $final2 = false)
 	{
 		$this->orig = $orig ? $orig : array();
 		$this->final1 = $final1 ? $final1 : array();
@@ -1052,7 +1052,7 @@ class diff3_op
 */
 class diff3_op_copy extends diff3_op
 {
-	function diff3_op_copy($lines = false)
+	function __construct($lines = false)
 	{
 		$this->orig = $lines ? $lines : array();
 		$this->final1 = &$this->orig;
@@ -1078,7 +1078,7 @@ class diff3_op_copy extends diff3_op
 */
 class diff3_block_builder
 {
-	function diff3_block_builder()
+	function __construct()
 	{
 		$this->_init();
 	}
