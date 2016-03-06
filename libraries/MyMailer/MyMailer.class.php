@@ -262,7 +262,8 @@ Subject: ".$this->Subject."
 Body: ".$this->Body."
 Method: ".$this->Mailer."
 Result: ".print_r($sendput, true)."
-Error: ".$this->ErrorInfo);
+Error: ".$this->ErrorInfo."
+=================================");
 		
 		$this->ClearAddresses();
 		return $sendput;
