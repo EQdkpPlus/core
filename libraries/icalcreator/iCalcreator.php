@@ -8,7 +8,7 @@
  * @link      http://kigkonsult.se/iCalcreator/index.php
  * @license   http://kigkonsult.se/downloads/dl.php?f=LGPL
  * @package   iCalcreator
- * @version   2.22.1
+ * @version   2.22
  */
 /**
  * This library is free software; you can redistribute it and/or
@@ -32,13 +32,13 @@
  *
  * @package icalcreator
  * @copyright Copyright (c) 2007-2015 Kjell-Inge Gustafsson, kigkonsult, All rights reserved
- * @since 2.22.1 - 2015-06-06
+ * @since 2.21.14 - 2015-04-02
  */
 /*********************************************************************************/
 /**
  *         Do NOT remove or change version!!
  */
-define( 'ICALCREATOR_VERSION', 'iCalcreator 2.22.1' );
+define( 'ICALCREATOR_VERSION', 'iCalcreator 2.22' );
 /*********************************************************************************/
 if( !defined( 'ICALCREATOR_LIB_DIR' ))
   define( 'ICALCREATOR_LIB_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR );
