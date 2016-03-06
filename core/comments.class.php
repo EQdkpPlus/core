@@ -37,6 +37,7 @@ if (!class_exists("comments")){
 		public $ntfy_type = false;
 		public $ntfy_title = false;
 		public $ntfy_category = 0;
+		public $ntfy_auth = false;
 
 		// ---------------------------------------------------------
 		// Constructor
@@ -89,6 +90,9 @@ if (!class_exists("comments")){
 			if(isset($array['ntfy_category'])){
 				$this->ntfy_category = $array['ntfy_category'];
 			}
+			if(isset($array['ntfy_auth'])){
+				$this->ntfy_auth = $array['ntfy_auth'];
+			}
 		}
 
 		// ---------------------------------------------------------
@@ -104,10 +108,10 @@ if (!class_exists("comments")){
 		public function Save(){
 			$data = array(
 				'user_id' 	=> $this->UserID,
-				'attach_id' => 	$this->in->get('attach_id'),
+				'attach_id' => $this->in->get('attach_id'),
 				'comment'	=> $this->in->get('comment', '', 'htmlescape'),
 				'page'		=> $this->in->get('page'),
-				'reply_to'	=>  $this->in->get('reply_to', 0),
+				'reply_to'	=> $this->in->get('reply_to', 0),
 				'permission'=> ($this->UserID && $this->userPerm),
 			);
 			
@@ -147,7 +151,7 @@ if (!class_exists("comments")){
 					if ($ntfyType === 'comment_new_article'){
 						$this->ntfy->add('comment_new_article', $intCommentId, $strFromUsername, $ntfyLink, $ntfyUser, $ntfyTitle, $ntfyCategory);
 					} else {
-						$this->ntfy->add($ntfyType, $intCommentId, $strFromUsername, $ntfyLink, $ntfyUser, $ntfyTitle);
+						$this->ntfy->add($ntfyType, $intCommentId, $strFromUsername, $ntfyLink, $ntfyUser, $ntfyTitle, false, $this->ntfy_auth);
 					}
 				
 					//Notify Comment Writer if its a reply
