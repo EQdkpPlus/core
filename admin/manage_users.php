@@ -656,7 +656,9 @@ class Manage_Users extends page_generic {
 			$user_data = array_merge($user_data, $this->pdh->get('user', 'privacy_settings', array($user_id)));
 			$user_data = array_merge($user_data, $this->pdh->get('user', 'custom_fields', array($user_id)));
 			$user_data = array_merge($user_data, $this->pdh->get('user', 'plugin_settings', array($user_id)));
+			$user_data = array_merge($user_data, $this->pdh->get('user', 'notification_settings', array($user_id)));
 		}
+
 		$this->confirm_delete($this->user->lang('confirm_delete_users').'<br />'.((isset($user_data['username'])) ? sanitize($user_data['username']) : '').'<br /><label><input type="checkbox" name="delete_associated_members" value="1"> '. $this->user->lang('delete_associated members').'</label>', '', true, array('height'	=> 300, 'custom_js' => "if($('input[name=delete_associated_members]').is(':checked')){ window.location='manage_users.php".$this->SID."&del=true&user_id='+selectedID+'&del_assocmem=1';}else{ window.location='manage_users.php".$this->SID."&del=true&user_id='+selectedID;}"));
 		$this->jquery->Tab_header('usersettings_tabs');
 		$this->jquery->Tab_header('permission_tabs');
