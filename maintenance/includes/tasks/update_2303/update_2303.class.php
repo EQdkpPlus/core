@@ -52,7 +52,7 @@ class update_2303 extends sql_update_task {
 		// init SQL querys
 		$this->sqls = array(
 			1	=> "DELETE FROM `__notification_types` WHERE `id` = 'eqdkp_user_new_registered';",
-			2	=> "INSERT INTO `__notification_types` (`id`, `name`, `category`, `prio`, `default`, `group`, `group_name`, `group_at`, `icon`, `default_method`) VALUES ('eqdkp_user_new_registered', 'notification_user_new_registered', 'user', 0, '0', 0, NULL, 0, 'fa-user-plus', '0');",			
+			2	=> "INSERT INTO `__notification_types` (`id`, `name`, `category`, `prio`, `default`, `group`, `group_name`, `group_at`, `icon`) VALUES ('eqdkp_user_new_registered', 'notification_user_new_registered', 'user', 0, '0', 0, NULL, 0, 'fa-user-plus');",			
 		);
 	}
 

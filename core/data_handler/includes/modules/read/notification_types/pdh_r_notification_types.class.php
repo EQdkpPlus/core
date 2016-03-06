@@ -72,12 +72,11 @@ if ( !class_exists( "pdh_r_notification_types" ) ) {
 						'name'				=> $drow['name'],
 						'category'			=> $drow['category'],
 						'prio'				=> (int)$drow['prio'],
-						'default'			=> (int)$drow['default'],
+						'default'			=> $drow['default'],
 						'group'				=> (int)$drow['group'],
 						'group_name'		=> $drow['group_name'],
 						'group_at'			=> (int)$drow['group_at'],
 						'icon'				=> $drow['icon'],
-						'default_method'	=> $drow['default_method'],
 					);
 				}
 				

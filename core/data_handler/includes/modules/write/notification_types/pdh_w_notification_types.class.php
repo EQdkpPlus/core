@@ -26,14 +26,14 @@ if(!defined('EQDKP_INC')) {
 if(!class_exists('pdh_w_notification_types')) {
 	class pdh_w_notification_types extends pdh_w_generic {
 		
-		public function add($strType, $strName, $strCategory, $intPrio=0, $blnDefault=0, $blnGroup=0, $strGroupName='', $intGroupAt=3, $strIcon=""){
+		public function add($strType, $strName, $strCategory, $intPrio=0, $strDefault=0, $blnGroup=0, $strGroupName='', $intGroupAt=3, $strIcon=""){
 				
 			$objQuery = $this->db->prepare("INSERT INTO __notification_types :p")->set(array(
 					'id'			=> $strType,
 					'name'			=> $strName,
 					'category'		=> $strCategory,
 					'prio'			=> $intPrio,
-					'`default`'		=> ($blnDefault) ? 1 : 0,
+					'`default`'		=> $strDefault,
 					'`group`'		=> ($blnGroup) ? 1 : 0,
 					'group_name'	=> $strGroupName,
 					'group_at'		=> $intGroupAt,
@@ -47,10 +47,10 @@ if(!class_exists('pdh_w_notification_types')) {
 			return false;
 		}
 		
-		public function update($strNotificationID, $intPrio, $blnDefault=0, $blnGroup=0, $intGroupAt=3, $strIcon=""){
+		public function update($strNotificationID, $intPrio, $strDefault=0, $blnGroup=0, $intGroupAt=3, $strIcon=""){
 			$objQuery = $this->db->prepare("UPDATE __notification_types :p WHERE id=?")->set(array(
 					'prio'			=> $intPrio,
-					'`default`'		=> ($blnDefault) ? 1 : 0,
+					'`default`'		=> $strDefault,
 					'`group`'		=> ($blnGroup) ? 1 : 0,
 					'group_at'		=> $intGroupAt,
 					'icon'			=> $strIcon,
