@@ -33,7 +33,6 @@ class editcalendarevent_pageobject extends pageobject {
 		);
 
 		if(($this->in->get('eventid', 0) > 0)){
-			echo 'test: '.$this->in->get('eventid', 0).', '.$this->user->data['user_id'];
 			if($this->user->check_auth('a_cal_revent_conf', false) || $this->pdh->get('calendar_events', 'check_operatorperm', array($this->in->get('eventid', 0), $this->user->data['user_id'])) ){
 				// permission granted
 			}else{
