@@ -403,9 +403,9 @@ class editcalendarevent_pageobject extends pageobject {
 				'LABEL'			=> $row['name'],
 				'NAME'			=> "roles_" . $row['id'] . "_count",
 				'CLSSID'		=> $row['id'],
-				'COUNT'			=> (isset($eventdata['extension']) && $eventdata['extension']['distribution'][$row['id']]) ? $eventdata['extension']['distribution'][$row['id']] : '0',
+				'COUNT'			=> (isset($eventdata['extension']) && isset($eventdata['extension']['distribution']) && $eventdata['extension']['distribution'][$row['id']]) ? $eventdata['extension']['distribution'][$row['id']] : '0',
 				'ICON'			=> $this->game->decorate('roles', $row['id']),
-				'DISABLED'		=> (isset($eventdata['extension']) && $eventdata['extension']['raidmode'] == 'class') ? 'disabled="disabled"' : ''
+				'DISABLED'		=> (isset($eventdata['extension']) && isset($eventdata['extension']['raidmode']) && $eventdata['extension']['raidmode'] == 'class') ? 'disabled="disabled"' : ''
 			));
 		}
 
@@ -418,7 +418,7 @@ class editcalendarevent_pageobject extends pageobject {
 				'CLSSID'		=> $classid,
 				'COUNT'			=> (isset($eventdata['extension']['distribution'][$classid]) && $eventdata['extension']['distribution'][$classid]) ? $eventdata['extension']['distribution'][$classid] : '0',
 				'ICON'			=> $this->game->decorate('primary', $classid),
-				'DISABLED'		=> (isset($eventdata['extension']) && $eventdata['extension']['raidmode'] == 'role') ? 'disabled="disabled"' : ''
+				'DISABLED'		=> (isset($eventdata['extension']) && isset($eventdata['extension']['raidmode']) && $eventdata['extension']['raidmode'] == 'role') ? 'disabled="disabled"' : ''
 			));
 		}
 
@@ -466,7 +466,7 @@ class editcalendarevent_pageobject extends pageobject {
 
 		$this->jquery->Dialog('AddEventDialog', $this->user->lang('raidevent_raidevent_add'), array('url'=>$this->server_path.'admin/manage_events.php'.$this->SID.'&upd=true&simple_head=true&calendar=true', 'width'=>'600', 'height'=>'420', 'beforeclose'=>$beforeclosefunc));
 
-		if (isset($eventdata['extension']) && $eventdata['extension']['calendarmode']){
+		if (isset($eventdata['extension']) && isset($eventdata['extension']['calendarmode']) && $eventdata['extension']['calendarmode']){
 			$calendermode = $eventdata['extension']['calendarmode'];
 		} elseif($this->url_id > 0){
 			$calendermode = 'event';
@@ -510,11 +510,11 @@ class editcalendarevent_pageobject extends pageobject {
 			'REPEAT_CUSTOM'		=> $dr_repeat_custom,
 			'DR_TEMPLATE'		=> new hdropdown('raidtemplate', array('options' => $this->pdh->get('calendar_raids_templates', 'dropdowndata'), 'id' => 'cal_raidtemplate')),
 			'DR_CALENDARMODE'	=> new hdropdown('calendarmode', array('options' => $calendar_mode_array, 'value' => $calendermode, 'id' => 'selectmode', 'class' => 'dropdown')),
-			'DR_EVENT'			=> new hdropdown('raid_eventid', array('options' => $this->pdh->aget('event', 'name', 0, array($this->pdh->sort($this->pdh->get('event', 'id_list'), 'event', 'name'))), 'value' => ((isset($eventdata['extension'])) ? $eventdata['extension']['raid_eventid'] : ''), 'id' => 'input_eventid', 'class' => 'resettemplate_input')),
-			'DR_RAIDMODE'		=> new hdropdown('raidmode', array('options' => $raidmode_array, 'value' => ((isset($eventdata['extension'])) ? $eventdata['extension']['raidmode'] : ''), 'id' => 'cal_raidmodeselect')),
-			'DR_RAIDLEADER'		=> $this->jquery->MultiSelect('raidleader', $raidleader_array, ((isset($eventdata['extension'])) ? $eventdata['extension']['raidleader'] : $this->pdh->get('member', 'mainchar', array($this->user->data['user_id']))), array('width' => 300, 'filter' => true)),
+			'DR_EVENT'			=> new hdropdown('raid_eventid', array('options' => $this->pdh->aget('event', 'name', 0, array($this->pdh->sort($this->pdh->get('event', 'id_list'), 'event', 'name'))), 'value' => ((isset($eventdata['extension']['raid_eventid'])) ? $eventdata['extension']['raid_eventid'] : ''), 'id' => 'input_eventid', 'class' => 'resettemplate_input')),
+			'DR_RAIDMODE'		=> new hdropdown('raidmode', array('options' => $raidmode_array, 'value' => ((isset($eventdata['extension']) && isset($eventdata['extension']['raidmode'])) ? $eventdata['extension']['raidmode'] : ''), 'id' => 'cal_raidmodeselect')),
+			'DR_RAIDLEADER'		=> $this->jquery->MultiSelect('raidleader', $raidleader_array, ((isset($eventdata['extension']) && isset($eventdata['extension']['raidleader'])) ? $eventdata['extension']['raidleader'] : $this->pdh->get('member', 'mainchar', array($this->user->data['user_id']))), array('width' => 300, 'filter' => true)),
 			'DR_GROUPS'			=> new hmultiselect('asi_group', array('options' => $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list'))), 'value' => $this->config->get('calendar_raid_autocaddchars'))),
-			'DR_SHARE_USERS'	=> new hmultiselect('invited', array('options' => $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list'))), 'filter' => true, 'value' => ((isset($eventdata['extension']) && $eventdata['extension']['invited']) ? $eventdata['extension']['invited'] : array()))),
+			'DR_SHARE_USERS'	=> new hmultiselect('invited', array('options' => $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list'))), 'filter' => true, 'value' => ((isset($eventdata['extension']['invited']) && $eventdata['extension']['invited']) ? $eventdata['extension']['invited'] : array()))),
 			'DR_STATUS'			=> new hdropdown('asi_status', array('options' => $raidstatus, 'value' => 0)),
 			'CB_ALLDAY'			=> new hcheckbox('allday', array('options' => array(1=>''), 'value' => ((isset($eventdata['allday'])) ? $eventdata['allday'] : 0), 'class' => 'allday_cb')),
 			'CB_PRIVATE'		=> new hcheckbox('private', array('options' => array(1=>''), 'value' => ((isset($eventdata['private'])) ? $eventdata['private'] : 0))),
@@ -531,8 +531,8 @@ class editcalendarevent_pageobject extends pageobject {
 			'LOCATION'			=> (isset($eventdata['extension']) && isset($eventdata['extension']['location'])) ? $eventdata['extension']['location'] : '',
 			'NOTE'				=> (isset($eventdata['notes'])) ? $eventdata['notes'] : '',
 			'EVENTNAME'			=> (isset($eventdata['name'])) ? $eventdata['name'] : '',
-			'RAID_VALUE'		=> (isset($eventdata['extension'])) ? $eventdata['extension']['raid_value'] : '',
-			'ATTENDEE_COUNT'	=> (isset($eventdata['extension'])) ? $eventdata['extension']['attendee_count'] : 0,
+			'RAID_VALUE'		=> (isset($eventdata['extension']) && isset($eventdata['extension']['raid_value'])) ? $eventdata['extension']['raid_value'] : '',
+			'ATTENDEE_COUNT'	=> (isset($eventdata['extension']) && isset($eventdata['extension']['attendee_count'])) ? $eventdata['extension']['attendee_count'] : 0,
 			'RAIDMODE_NONE'		=> (isset($eventdata['extension']['raidmode']) && $eventdata['extension']['raidmode'] == 'none') ? true : false,
 			'CSRF_DELETETEMPLATE' => $this->CSRFGetToken('deletetemplate'),
 		));
