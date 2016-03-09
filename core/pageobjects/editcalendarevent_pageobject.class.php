@@ -307,12 +307,13 @@ class editcalendarevent_pageobject extends pageobject {
 				)
 			));
 		}else{
+			$withtime		= ($this->in->get('allday') == '1') ? 0 : 1;
 			$this->pdh->put('calendar_events', 'update_cevents', array(
 				$this->url_id,
 				$this->in->get('calendar_id'),
 				$this->in->get('eventname'),
-				$this->time->fromformat($this->in->get('startdate'), 1),
-				$this->time->fromformat($this->in->get('enddate'), 1),
+				$this->time->fromformat($this->in->get('startdate'), $withtime),
+				$this->time->fromformat($this->in->get('enddate'), $withtime),
 				$this->in->get('repeating'),
 				$this->in->get('edit_clones', 0),
 				$this->in->get('note'),
