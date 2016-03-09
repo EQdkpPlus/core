@@ -130,6 +130,8 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 		public function get_id_list($raids_only=false, $start_date = 0, $end_date = PHP_INT_MAX, $idfilter=false, $filter=false){
 			$ids = array();
 			if(($start_date != 0) || ($end_date != PHP_INT_MAX)){
+				$start_date	 = $this->time->removetimefromtimestamp($start_date);
+				$end_date	 = ($end_date != PHP_INT_MAX) ? $this->time->removetimefromtimestamp($end_date) : $end_date;
 				$sqlstring	 = "SELECT id FROM __calendar_events WHERE";
 				$sqlstring	.= (is_array($idfilter)) ? ' (calendar_id IN ('.implode(",", $idfilter).')) AND' : '';
 				$sqlstring	.= " ((timestamp_start BETWEEN ".$this->db->escapeString($start_date)." AND ".$this->db->escapeString($end_date).") OR (timestamp_end BETWEEN ".$this->db->escapeString($start_date)." AND ".$this->db->escapeString($end_date)."))";
