@@ -106,6 +106,11 @@ class game extends gen_class {
 			// file for selected language not available, revert to default language
 			else $this->lang_name = $this->gameinfo()->langs[0];
 		}
+		
+		//Normal language
+		$arrNormalLanguage = $this->gameinfo()->getNormalLanguage($this->lang_name);
+		if(count($arrNormalLanguage)) $this->user->objLanguage->add_lang($this->lang_name, $arrNormalLanguage);
+
 		$this->gameinfo()->lang = $this->lang_name;
 		foreach($this->gameinfo()->get_types() as $type) {
 			$this->data[$type] = $this->gameinfo()->get($type);
@@ -1496,7 +1501,8 @@ if(!class_exists('game_generic')) {
 		public $game_settings = false;
 		public $author = "";
 		public $version = "";
-		public $lang = "";
+		public $lang = ""; //Game Language
+		public $arrNormalLang = array(); //Normal Language
 		public $overwriteMode;
 
 		public function __construct(){
@@ -1637,6 +1643,9 @@ if(!class_exists('game_generic')) {
 			if(!isset($this->lang_file[$lang]) && is_file($language_file)) {
 				include($language_file);
 				$this->lang_file[$lang] = ${$lang.'_array'};
+				if(isset($lang_array)){
+					$this->arrNormalLang[$lang] = $lang_array;
+				}
 			}
 		}
 
@@ -1649,6 +1658,8 @@ if(!class_exists('game_generic')) {
 			$this->load_lang_file($lang);
 			if(isset($this->lang_file[$lang]['lang'])){
 				$this->glang[$lang] = $this->lang_file[$lang]['lang'];
+			} else {
+				$this->glang[$lang] = array();
 			}
 		}
 
@@ -1676,6 +1687,15 @@ if(!class_exists('game_generic')) {
 			if($return_key) return $var;
 			return false;
 		}
+		
+		public function getNormalLanguage($lang=false){
+			if(!$lang) $lang = $this->lang;
+			if(!isset($this->glang[$lang])) {
+				$this->load_glang($lang);
+			}
+			return (isset($this->arrNormalLang[$lang])) ? $this->arrNormalLang[$lang] : array();
+		}
+		
 
 		/**
 		 * Default profilefields
