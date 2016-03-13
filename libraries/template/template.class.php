@@ -406,6 +406,7 @@ class template extends gen_class {
 				$imploded_jscodeeop .= implode("\n", $this->get_templatedata('js_code_file_docready'));
 				$imploded_jscodeeop .= "});";
 			}
+			$this->tpl_output['js_code_file'] = $this->tpl_output['js_code_file_docready'] = array();
 		}
 
 
@@ -632,9 +633,12 @@ class template extends gen_class {
 			// JS on end of page
 			if(is_array($this->get_templatedata('js_code_eop')) || is_array($this->get_templatedata('js_code_eop_docready'))){
 				$imploded_jscodeeop = implode("\n", $this->get_templatedata('js_code_eop'));
+				if($debug) $imploded_jscodeeop .= implode("\n", $this->get_templatedata('js_code_file'));
+				
 				if(is_array($this->get_templatedata('js_code_eop_docready'))){
 					$imploded_jscodeeop .= "$(document).ready(function(){";
 					$imploded_jscodeeop .= implode("\n", $this->get_templatedata('js_code_eop_docready'));
+					if($debug) $imploded_jscodeeop .= implode("\n", $this->get_templatedata('js_code_file_docready'));
 					$imploded_jscodeeop .= "});";
 				}
 
