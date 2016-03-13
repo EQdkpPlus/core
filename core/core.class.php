@@ -307,7 +307,7 @@ class core extends gen_class {
 
 			//Lightbox Zoom-Image
 			$this->tpl->add_js("
-			$('a.lightbox').each(function(index) {
+			$('a.lightbox,  a[rel=\"lightbox\"]').each(function(index) {
 				var image = $(this).html();
 				var image_obj = $(this).find('img');
 				var image_parent = image_obj.parent();

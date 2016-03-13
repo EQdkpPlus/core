@@ -100,7 +100,7 @@ if (!class_exists("jquery")) {
 					</div>
 				</div>');
 				$this->tpl->add_js('$("#notify_container").notify();', 'docready');
-				$this->tpl->add_js('$(".lightbox").colorbox({rel:"lightbox", transition:"none", maxWidth:"90%", maxHeight:"90%"});', 'docready');
+				$this->tpl->add_js('$(".lightbox, a[rel=\'lightbox\']").colorbox({rel:"lightbox", transition:"none", maxWidth:"90%", maxHeight:"90%"});', 'docready');
 				$this->tpl->add_js('$("time.datetime").relativeTime();', 'docready');
 				$this->tpl->add_js('$(".equalto").change(function(){
 					field1	= $("#" + $(this).data("equalto")).val();
