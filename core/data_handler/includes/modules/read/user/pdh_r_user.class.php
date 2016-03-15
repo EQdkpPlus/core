@@ -188,7 +188,7 @@ if (!class_exists("pdh_r_user")){
 		public function get_email($user_id, $checkForIgnoreMailsFlag = false){
 			if ($checkForIgnoreMailsFlag){
 				$arrPriv = $this->get_privacy_settings($user_id);
-				if (!$arrPriv['priv_no_boardemails']) return $this->users[$user_id]['user_email'];
+				if (isset($arrPriv['priv_no_boardemails']) &&  !$arrPriv['priv_no_boardemails']) return $this->users[$user_id]['user_email'];
 				return '';
 			} else {
 				return $this->users[$user_id]['user_email'];
