@@ -416,10 +416,10 @@ if( !class_exists( "plus_datahandler")){
 				$this->init_read_module( $module );
 				return call_user_func_array( array( $this->rm($module), $method ), $params );
 			} else {
-				if( isset( $this->rm($module)->module_lang[$tag] ) ) {
-					return $this->rm($module)->module_lang[$tag];
-				} elseif(isset( $this->rm($module)->preset_lang[$tag])) {
-					return $this->rm($module)->preset_lang[$tag];
+				if( $this->get_lang($module, $tag) ) {
+					return $this->get_lang($module, $tag);
+				} elseif($this->get_preset_lang($module, $tag)) {
+					return $this->get_preset_lang($module, $tag);
 				} else {
 					return $tag;
 				}
@@ -448,7 +448,13 @@ if( !class_exists( "plus_datahandler")){
 		}
 
 		public function get_lang( $module, $lang ) {
-			return $this->rm($module)->module_lang[$lang];
+			$strUserlang = $this->user->lang('pdh_lang_'.$module.'_'.$lang);
+			return ($strUserlang) ? $strUserlang : ((isset($this->rm($module)->module_lang[$lang])) ? $this->rm($module)->module_lang[$lang] : false );
+		}
+		
+		public function get_preset_lang($module, $lang){
+			$strUserlang = $this->user->lang('pdh_preset_lang_'.$module.'_'.$lang);
+			return ($strUserlang) ? $strUserlang : ((isset($this->rm($module)->preset_lang[$lang])) ? $this->rm($module)->preset_lang[$lang] : false );
 		}
 
 		/*************************************************************************************************************************
@@ -644,7 +650,9 @@ if( !class_exists( "plus_datahandler")){
 			if($blnResolveAlias) {
 				$preset_name = ( array_key_exists( $preset_name, $this->system_settings['aliases'] ) ) ? $this->system_settings['aliases'][$preset_name] : $preset_name;
 			}
-			return (isset($this->preset_lang[$preset_name])) ? $this->preset_lang[$preset_name] : $preset_name;
+			$strUserlang = $this->user->lang('pdh_preset_lang_'.$preset_name);
+			
+			return (($strUserlang) ? $strUserlang : ((isset($this->preset_lang[$preset_name])) ? $this->preset_lang[$preset_name] : $preset_name));
 		}
 
 		public function get_preset( $preset_name ) {
