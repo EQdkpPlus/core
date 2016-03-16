@@ -56,7 +56,7 @@ class Manage_Logs extends page_generic {
 	}
 
 	public function delete_errors(){
-		$arrLogFiles = $this->pdl->get_logfiles();
+		$arrLogFiles = $this->pdl->get_logfiles(true);
 		foreach($arrLogFiles as $logfile){
 			$this->pdl->delete_logfile(str_replace(".log", "", $logfile));
 		}
@@ -258,13 +258,14 @@ class Manage_Logs extends page_generic {
 		$start = $this->in->get('start', 0);
 		
 		$arrLogFiles = $this->pdl->get_logfiles();
+		
 		foreach($arrLogFiles as $logfile){
 			
 			$arrErrors = $this->pdl->get_file_log(str_replace(".log", "", $logfile), 50, $start);
 			
 			$this->tpl->assign_block_vars('errorlogs', array(
 					'TYPE' 			=> str_replace(".log", "", $logfile),
-					'PAGINATION'	=> generate_pagination('manage_logs.php'.$this->SID.'&amp;error='.sanitize($this->in->get('error')).'&amp;type='.sanitize($this->in->get('type')), $arrErrors['count'], 50, $start),
+					'PAGINATION'	=> generate_pagination('manage_logs.php'.$this->SID, $arrErrors['count'], 50, $start),
 					'FOOTCOUNT'		=> sprintf($this->user->lang('viewlogs_footcount'), $arrErrors['count'], 50),
 			));
 						

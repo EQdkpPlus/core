@@ -36,6 +36,8 @@ if ( !defined('EQDKP_INC') ){
 
 		private $logfile_info = array();
 		private $logfile_info_changed = false;
+		
+		private $date = false;
 
 		private $errorType = array(
 			E_ERROR					=> 'ERROR',
@@ -63,11 +65,12 @@ if ( !defined('EQDKP_INC') ){
 		public function __construct($root_path=false, $file_logging=true) {
 			if($root_path) $this->root_path = $root_path;
 
+			$this->date = date('Y-m-d');
 			$this->do_file_logging = $file_logging;
 			$this->register_type("unknown", null, null, array(0,1,2,3,4), true);
-			$this->register_type("php_error", array($this, 'php_error_pt_formatter'), array($this, 'php_error_html_formatter'), array(3,4), true);
+			$this->register_type("php_error", array($this, 'php_error_pt_formatter'), array($this, 'php_error_html_formatter'), array(3,4), true, true);
 			$this->register_type("deprecated", null, array($this, 'deprecated_html_formatter'), array(3,4));
-			$this->register_type("fatal_error", array($this, 'fatal_error_pt_formatter'), array($this, 'fatal_error_html_formatter'), array(3,4), true);
+			$this->register_type("fatal_error", array($this, 'fatal_error_pt_formatter'), array($this, 'fatal_error_html_formatter'), array(3,4), true, true);
 			
 			$this->php_error_reporting = intval(ini_get("error_reporting"));
 			$this->eqdkp_cwd = getcwd();
@@ -162,13 +165,14 @@ if ( !defined('EQDKP_INC') ){
 		public function add_logfile_entry($type, $text){
 			$msg = date('d.m.Y H:i:s') . "\t" . $text ."\n";
 			clearstatcache();
-			$size = @filesize($this->logfile_folder.$type.'.log');
+			$strLogfile = ($this->known_types[$type]['date_files']) ? $this->logfile_folder.$this->date.'-'.$type.'.log': $this->logfile_folder.$type.'.log';
+			$size = @filesize($strLogfile);
 			$this->logfile_info[$type][] = ($size) ? $size : 0;
-			@error_log($msg, 3, $this->logfile_folder.$type.'.log');
+			@error_log($msg, 3, $strLogfile);
 			$this->logfile_info_changed = true;
 		}
 
-		public function register_type($type, $plaintext_format_function = null, $html_format_function = null, $loglevels = null, $log_to_file = false){
+		public function register_type($type, $plaintext_format_function = null, $html_format_function = null, $loglevels = null, $log_to_file = false, $blnDateFiles=false){
 			if(array_key_exists($type, $this->known_types)){
 				message_die("$type already exists!");
 			}
@@ -192,6 +196,7 @@ if ( !defined('EQDKP_INC') ){
 			}
 
 			$this->known_types[$type]['log_to_file'] = $log_to_file;
+			$this->known_types[$type]['date_files'] = $blnDateFiles;
 		}
 
 		public function type_known($type){
@@ -276,7 +281,7 @@ if ( !defined('EQDKP_INC') ){
 		
 		// pdl html format function for sql errors
 		public function fatal_error_html_formatter($log_entry) {
-			$text =  '<b>Error ID: </b>'		. $log_entry['args'][0] . '<br /><br />
+			$text =  '<b>Internal error code: </b>'		. $log_entry['args'][0] . '<br /><br />
 			<b>Message:</b> '		. $log_entry['args'][2] . '<br /><br />
 			<b>Code:</b>'			. $log_entry['args'][3] . '<br />
 			<b>Backtrace:</b>'		. $log_entry['args'][4] . '<br />';
@@ -358,15 +363,16 @@ if ( !defined('EQDKP_INC') ){
 		}
 
 		
-		public function get_logfiles(){
+		public function get_logfiles($blnRealFiles=false){
 			$arrFiles = scandir($this->logfile_folder);
 			$arrLogFiles = array();
 			foreach($arrFiles as $file){
 				if(valid_folder($file) && $file != "info.data" && $file != "unknown.log"){
+					if(!$blnRealFiles && strpos($file, '20')===0) $file = substr($file, 11);
 					$arrLogFiles[] = $file;
 				}
 			}
-			return $arrLogFiles;
+			return array_unique($arrLogFiles);
 		}
 		
 		public function search_fatal_error_id($strErrorID){
@@ -411,6 +417,9 @@ if ( !defined('EQDKP_INC') ){
 		
 		//return logs from "behind", so most recent first
 		public function get_file_log($error_type, $number=25, $start=0){
+			//if Datefile, use another method
+			if($this->known_types[$error_type]['date_files']) return $this->get_datefile_log($error_type, $number, $start);
+			
 			$file = $this->logfile_folder.'/'.$error_type.'.log';
 			
 			$regexp = '/([0-9][0-9]\.[01][0-9]\.[0-9]{4}\s[0-9]{2}\:[0-9]{2}\:[0-9]{2}\s)/';
@@ -468,6 +477,95 @@ if ( !defined('EQDKP_INC') ){
 			
 			if(is_array($arrSplitted) && $count){
 				return array('entries' => $arrSplitted, 'count' => $count);
+			}
+			return array('entries' => array(), 'count' => 0);
+		}
+		
+		
+		/**
+		 * return logs from "behind", so most recent first
+		 * for date logfiles
+		 * 
+		 * @param unknown $error_type
+		 * @param number $number
+		 * @param number $start
+		 * @return number[]|number[]
+		 */
+		public function get_datefile_log($error_type, $number=25, $start=0){
+			$arrLogFiles = $this->get_logfiles(true);
+			$arrTimes = $arrLogs = array();
+			foreach($arrLogFiles as $strLogfile){
+				if(strpos($strLogfile, '20') === 0 && strpos($strLogfile, $error_type) !== false){
+					$arrTimes[] = strtotime(substr($strLogfile, 0, 10));
+					$arrLogs[] = $strLogfile;
+				} else continue;
+			}
+			
+			array_multisort($arrTimes, SORT_NUMERIC, SORT_DESC, $arrLogs);
+			
+			
+			$count = 0;
+			$blnRecord = "false";
+			$exceptions = $arrOut = array();
+			$regexp = '/([0-9][0-9]\.[01][0-9]\.[0-9]{4}\s[0-9]{2}\:[0-9]{2}\:[0-9]{2}\s)/';
+			
+			foreach($arrLogs as $strLogfile){
+			
+				$file = $this->logfile_folder.'/'.$strLogfile;
+
+				if(file_exists($file)){
+					//Read total number
+					$handle = fopen($file, "r");
+					if ($handle) {
+						while (!feof($handle)) {
+							$buffer = fgets($handle, 4096);
+			
+							if(preg_match($regexp, $buffer)){
+								$count++;
+							}
+						}
+						fclose($handle);
+					}
+			
+					//now get the entries
+					$s = $count-$start-$number;
+					if($s < 0) $s=0;
+					$e = $count-$start;
+					$i = 0;
+			
+					$handle = fopen($file, "r");
+					if ($handle) {
+						while (!feof($handle)) {
+							$buffer = fgets($handle, 4096);
+			
+							if(preg_match($regexp, $buffer)){
+								if($i >= $s && $i < $e){
+									$blnRecord = true;
+								} else {
+									$blnRecord = false;
+								}
+								$i++;
+							}
+			
+							if($blnRecord){
+								$exceptions[] = $buffer;
+							}
+						}
+						fclose($handle);
+					}
+				}
+				
+				$strException = implode("", $exceptions);
+				
+				$arrSplitted = preg_split($regexp, $strException, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+				
+				$arrSplittedReversed = array_reverse($arrSplitted);
+				$arrOut = array_merge($arrOut, $arrSplittedReversed);
+			}
+		
+			
+			if(is_array($arrOut) && $count){
+				return array('entries' => $arrOut, 'count' => $count);
 			}
 			return array('entries' => array(), 'count' => 0);
 		}
@@ -594,6 +692,18 @@ if ( !defined('EQDKP_INC') ){
 								color: #000;
 								text-decoration: none;
 							}
+										
+							.inlineCode {
+							    background-color: #ffffff;
+							    border: 1px solid #cccccc;
+							    border-radius: 3px;
+							    display: inline-block;
+							    font-family: Consolas, \'Courier New\', monospace;
+							    margin: 0 2px;
+							    padding: 0 5px;
+							    word-break: break-all;
+							    word-wrap: break-word;
+							}
 						</style>
 						</head>
 
@@ -605,7 +715,7 @@ if ( !defined('EQDKP_INC') ){
 							</div>
 		
 							<div class="innerWrapper">
-								<h1>A '.$strErrorName.' occured!</h1><br />	
+								<h1>A '.$strErrorName.' has occured</h1><br />	
 
 		
 ';
@@ -641,7 +751,7 @@ if ( !defined('EQDKP_INC') ){
 					$this->myErrorHandler($error['type'], $error['message'], $error['file'], $error['line']);
 					$output = $this->error_message_header();
 					
-					$strErrorID = md5(time().'fatal'.rand());
+					$strErrorID = str_replace('-', '', $this->date).':'.md5(time().'fatal'.rand());
 					
 					//template errors
 					if ($error['type'] == 4 && strpos($error['file'], 'template.class.php') && strpos($error['file'], ": eval()'d code")){
@@ -651,8 +761,7 @@ if ( !defined('EQDKP_INC') ){
 					}
 
 					$output = $this->error_message_header('Fatal error');
-					$output .= 'A fatal error occured.<br /><br />';
-					$output .= 'Error ID: '.$strErrorID.'<br /><br />';
+					$output .= 'Internal error code: <span class="inlineCode">'.$strErrorID.'</span><br /><br />';
 					if($this->debug_level > 2){
 					
 						//template errors
@@ -687,7 +796,9 @@ if ( !defined('EQDKP_INC') ){
 							}
 						}
 					} else {
-						$output .= 'The error message can be looked up at the data/.../tmp/fatal_error.log or at "ACP >> Logs >> Errors"';
+						$strLogFolder = ($this->table_prefix != "" && $this->dbname != "") ? md5($this->table_prefix.$this->dbname) : '<HASH>';
+						$output .= 'Please forward the above error code to the site administrator.<br /><br /> The error code can be used by an administrator to lookup the full error message in the Administration Control Panel via <span class="inlineCode">Logs >> Errors</span>.
+								In addition, the error has been written to the log file located at <span class="inlineCode">*/data/'.$strLogFolder.'/tmp/'.$this->date.'-fatal_error.log</span> and can be accessed with a FTP program or similar.';
 					}
 					$output .= $this->error_message_footer();
 					echo $output;
@@ -696,18 +807,18 @@ if ( !defined('EQDKP_INC') ){
 		}
 		
 		public function catch_dbal_exception($e){
-			$strErrorID = md5(time().'dbal_exception'.$e->getMessage());
+			$strErrorID = str_replace('-', '', $this->date).':'.md5(time().'dbal_exception'.$e->getMessage());
 			$this->log('fatal_error', $strErrorID, 'DBAL Exception', $e->getMessage(), $e->getCode(), $e->getTrace(), debug_backtrace());
 
 			if (!headers_sent()){
 				header('HTTP/1.1 500 Internal Server Error');
 			}
-			$output = $this->error_message_header('Fatal error');
-			$output .= 'A fatal error occured.<br /><br />';
-			$output .= 'Error ID: '.$strErrorID.'<br /><br />';
+			$output = $this->error_message_header('DBAL Exception');
+			$output .= 'A fatal error with the Database occured.<br /><br />';
+			$output .= 'Internal error code: <span class="inlineCode">'.$strErrorID.'</span><br /><br />';
 			
 			if($this->debug_level > 2){
-				$strErrorMessage = $e->getMessage();
+				$strErrorMessage = '<b>Error Message:</b><br />'.$e->getMessage();
 				$strErrorMessage = str_replace($this->dbpass, '*******', $strErrorMessage);
 				if (strlen($this->dbuser) > 3){
 					$strSuffix = substr($this->dbuser, 0, 3);
@@ -722,7 +833,9 @@ if ( !defined('EQDKP_INC') ){
 				
 				$output .= $strErrorMessage.'<br /><br />';
 			} else {
-				$output .= 'The error message can be looked up at the data/.../tmp/fatal_error.log or at "ACP >> Logs >> Errors"';
+				$strLogFolder = ($this->table_prefix != "" && $this->dbname != "") ? md5($this->table_prefix.$this->dbname) : '<HASH>';
+				$output .= 'Please forward the above error code to the site administrator.<br /><br /> The error code can be used by an administrator to lookup the full error message in the Administration Control Panel via <span class="inlineCode">Logs >> Errors</span>.
+								In addition, the error has been written to the log file located at <span class="inlineCode">*/data/'.$strLogFolder.'/tmp/'.$this->date.'-fatal_error.log</span> and can be accessed with a FTP program or similar.';
 			}
 			
 			$output .= $this->error_message_footer(false);
@@ -735,11 +848,11 @@ if ( !defined('EQDKP_INC') ){
 			if (!headers_sent()){
 				header('HTTP/1.1 500 Internal Server Error');
 			}
-			$strErrorID = md5(time().'class_404'.$class);
+			$strErrorID = str_replace('-', '', $this->date).':'.md5(time().'class_404'.$class);
 			$this->log('fatal_error', $strErrorID, 'Classloading Error', 'Class "'.$class.'" not found', 404, array(), debug_backtrace());
 			$output = $this->error_message_header('Fatal error');
 			$output .= 'A fatal error occured.<br /><br />';
-			$output .= 'Error ID: '.$strErrorID.'<br /><br />';
+			$output .= 'Internal error code: <span class="inlineCode">'.$strErrorID.'</span><br /><br />';
 			if($this->debug_level > 2){
 				$error_message = "Error while loading class <b>'".$class."'</b>: class not found!<br /><br /><b>Debug Backtrace:</b><br />";
 				$data = debug_backtrace();
@@ -751,7 +864,10 @@ if ( !defined('EQDKP_INC') ){
 				}
 				$output .= $error_message;
 			} else {
-				$output .= 'The error message can be looked up at the data/.../tmp/fatal_error.log or at "ACP >> Logs >> Errors"';
+				$strLogFolder = ($this->table_prefix != "" && $this->dbname != "") ? md5($this->table_prefix.$this->dbname) : '<HASH>';
+				$output .= 'Please forward the above error code to the site administrator.<br /><br /> The error code can be used by an administrator to lookup the full error message in the Administration Control Panel via <span class="inlineCode">Logs >> Errors</span>.
+								In addition, the error has been written to the log file located at <span class="inlineCode">*/data/'.$strLogFolder.'/tmp/'.$this->date.'-fatal_error.log</span> and can be accessed with a FTP program or similar.';
+					
 			}
 			echo $output.$this->error_message_footer();
 			//Die, otherwise the next fatal error will occure
@@ -762,11 +878,11 @@ if ( !defined('EQDKP_INC') ){
 			if (!headers_sent()){
 				header('HTTP/1.1 500 Internal Server Error');
 			}
-			$strErrorID = md5(time().'file_404'.$path);
+			$strErrorID = str_replace('-', '', $this->date).':'.md5(time().'file_404'.$path);
 			$this->log('fatal_error', $strErrorID, 'Fileloading Error', 'File "'.$path.'" not found', 404, array(), debug_backtrace());
 			$output = $this->error_message_header('Fatal error');
 			$output .= 'A fatal error occured.<br /><br />';
-			$output .= 'Error ID: '.$strErrorID.'<br /><br />';
+			$output .= 'Internal error code: <span class="inlineCode">'.$strErrorID.'</span><br /><br />';
 			if($this->debug_level > 2){		
 				$error_message = "Error while loading file <b>'".$path."'</b>: File not found!<br />";
 				$error_message .= "Please ensure that all files are uploaded correctly!";
@@ -782,7 +898,9 @@ if ( !defined('EQDKP_INC') ){
 				}
 				$output .= $error_message;
 			} else {
-				$output .= 'The error message can be looked up at the data/.../tmp/fatal_error.log or at "ACP >> Logs >> Errors"';
+				$strLogFolder = ($this->table_prefix != "" && $this->dbname != "") ? md5($this->table_prefix.$this->dbname) : '<HASH>';
+				$output .= 'Please forward the above error code to the site administrator.<br /><br /> The error code can be used by an administrator to lookup the full error message in the Administration Control Panel via <span class="inlineCode">Logs >> Errors</span>.
+								In addition, the error has been written to the log file located at <span class="inlineCode">*/data/'.$strLogFolder.'/tmp/'.$this->date.'-fatal_error.log</span> and can be accessed with a FTP program or similar.';
 			}
 			echo $output.$this->error_message_footer();
 			//Die, otherwise the next fatal error will occure

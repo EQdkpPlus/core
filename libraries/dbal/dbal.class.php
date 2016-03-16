@@ -146,7 +146,7 @@ abstract class Database extends gen_class {
 
 		// register logging handlers
 		if(!$this->objLogger->type_known($this->strDebugPrefix.'sql_error'))
-			$this->objLogger->register_type($this->strDebugPrefix.'sql_error', array($this, 'pdl_pt_format_sql_error'), array($this, 'pdl_html_format_sql_error'), array(2,3,4), true);
+			$this->objLogger->register_type($this->strDebugPrefix.'sql_error', array($this, 'pdl_pt_format_sql_error'), array($this, 'pdl_html_format_sql_error'), array(2,3,4), true, true);
 		if(!$this->objLogger->type_known($this->strDebugPrefix.'sql_query'))
 			$this->objLogger->register_type($this->strDebugPrefix.'sql_query', null, array($this, 'pdl_html_format_sql_query'), array(2,3,4));
 		if(isset($arrOptions['open'])) {
