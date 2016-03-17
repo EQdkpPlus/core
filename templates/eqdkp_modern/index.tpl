@@ -108,7 +108,7 @@
 									<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a></li>
 									<li class="tooltip-divider"></li>
 									<!-- BEGIN admin-tooltip -->
-									<li><a href="{admin-tooltip.link}">{admin-tooltip.text}</a></li>
+									<li><a href="{admin-tooltip.LINK}">{admin-tooltip.TEXT}</a></li>
 									<!-- END admin-tooltip -->
 								</ul>
 							</div>	
