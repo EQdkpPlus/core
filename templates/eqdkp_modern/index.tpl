@@ -107,9 +107,9 @@
 								<ul class="dropdown-menu admin-tooltip" role="menu" id="admin-tooltip">
 									<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a></li>
 									<li class="tooltip-divider"></li>
-									<!-- BEGIN admin-tooltip -->
-									<li><a href="{admin-tooltip.LINK}">{admin-tooltip.TEXT}</a></li>
-									<!-- END admin-tooltip -->
+									<!-- BEGIN admin_tooltip -->
+									<li><a href="{admin_tooltip.LINK}">{admin_tooltip.TEXT}</a></li>
+									<!-- END admin_tooltip -->
 								</ul>
 							</div>	
 							<!-- ENDIF -->
