@@ -3126,12 +3126,12 @@ ul#mychars-points-tooltip.dropdown-menu li table tbody tr td a {
 	max-height: 16px;
 }
 
-.fe-tooltip-container, .notification-tooltip-container, .user-tooltip-container, .mychars-points-tooltip-container, .langswitch-tooltip-container, .rss-tooltip-container {
+.fe-tooltip-container, .notification-tooltip-container, .user-tooltip-container, .admin-tooltip-container, .mychars-points-tooltip-container, .langswitch-tooltip-container, .rss-tooltip-container {
 	display: inline;
 	position: relative;
 }
 
-.fe-tooltip-container a, .notification-tooltip-container a, .user-tooltip-container a, .mychars-points-tooltip-container a {
+.fe-tooltip-container a, .notification-tooltip-container a, .user-tooltip-container a, .admin-tooltip-container a, .mychars-points-tooltip-container a {
 	cursor: pointer;
 }
 
@@ -3139,7 +3139,7 @@ ul#mychars-points-tooltip.dropdown-menu li table tbody tr td a {
 	min-width: 160px;
 }
 
-.fe-tooltip, .notification-tooltip, .user-tooltip, .mychars-points-tooltip, .langswitch-tooltip, .rss-tooltip {
+.fe-tooltip, .notification-tooltip, .user-tooltip, .admin-tooltip, .mychars-points-tooltip, .langswitch-tooltip, .rss-tooltip {
 	display: none;
 }
 
