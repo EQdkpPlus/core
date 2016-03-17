@@ -72,34 +72,44 @@
 					</ul>
 					
 					<!-- ELSE -->
-						<ul>
-							<li>
-								<div class="user-tooltip-container">
-									<a href="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}" class="user-tooltip-trigger tooltip-trigger" data-tooltip="user-tooltip"><span class="user-avatar user-avatar-border user-avatar-smallest"><img src="{USER_AVATAR}" alt="{USER_NAME}"/></span> <span class="hiddenSmartphone">{USER_NAME}<!-- IF USER_IS_AWAY --> <i class="fa fa-suitcase fa-lg"></i><!-- ENDIF --></span></a>
-									<ul class="dropdown-menu user-tooltip" role="menu" id="user-tooltip">
-										<li><a href="{U_USER_PROFILE}">
-												<div class="user-tooltip-avatar">
-													<img src="{USER_AVATAR}" alt="{USER_NAME}"/>
-												</div>
-												<div class="user-tooltip-name">
-													<span class="bold">{USER_NAME}</span><br />
+					<ul>
+						<li>
+							<div class="user-tooltip-container">
+								<a href="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}" class="user-tooltip-trigger tooltip-trigger" data-tooltip="user-tooltip"><span class="user-avatar user-avatar-border user-avatar-smallest"><img src="{USER_AVATAR}" alt="{USER_NAME}"/></span> <span class="hiddenSmartphone">{USER_NAME}<!-- IF USER_IS_AWAY --> <i class="fa fa-suitcase fa-lg"></i><!-- ENDIF --></span></a>
+								<ul class="dropdown-menu user-tooltip" role="menu" id="user-tooltip">
+									<li>
+										<a href="{U_USER_PROFILE}">
+											<div class="user-tooltip-avatar">
+												<img src="{USER_AVATAR}" alt="{USER_NAME}"/>
+											</div>
+											<div class="user-tooltip-name">
+												<span class="bold">{USER_NAME}</span><br />
 													{L_my_profile}
-												</div>
-											</a>
-										</li>
-										<li class="tooltip-divider"></li>
-										<!-- BEGIN user_tooltip_addition -->
-										<li class="{user_tooltip_addition.CLASS}">{user_tooltip_addition.TEXT}</li>
-										<!-- END user_tooltip_addition -->
-										<!-- IF USER_IS_AWAY -->
-										<li class="user_tooltip_awaymode"><a href="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}#fragment-calendar"><i class="fa fa-suitcase fa-lg"></i> {L_calendar_user_is_away}</a></li>
-										<!-- ENDIF -->
-										<li><a href="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}"><i class="fa fa-cog fa-lg"></i> {L_settings}</a></li>
-										<li><a href="{U_LOGOUT}"><i class="fa fa-sign-out fa-lg"></i> {L_logout}</a></li>
-									</ul>
-								</div>
-							</li>
-							<!-- IF S_ADMIN --><li><a href="{EQDKP_ROOT_PATH}admin/{SID}"><i class="fa fa-cog fa-lg"></i> <span class="hiddenSmartphone">{L_menu_admin_panel}</span></a></li><!-- ENDIF -->
+											</div>
+										</a>
+									</li>
+									<li class="tooltip-divider"></li>
+									<!-- BEGIN user_tooltip_addition -->
+									<li class="{user_tooltip_addition.CLASS}">{user_tooltip_addition.TEXT}</li>
+									<!-- END user_tooltip_addition -->
+									<!-- IF USER_IS_AWAY -->
+									<li class="user_tooltip_awaymode"><a href="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}#fragment-calendar"><i class="fa fa-suitcase fa-lg"></i> {L_calendar_user_is_away}</a></li>
+									<!-- ENDIF -->
+									<li><a href="{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}"><i class="fa fa-cog fa-lg"></i> {L_settings}</a></li>
+									<li><a href="{U_LOGOUT}"><i class="fa fa-sign-out fa-lg"></i> {L_logout}</a></li>
+								</ul>
+							</div>
+						</li>
+						<!-- IF S_ADMIN -->
+						<li>
+							<div class="admin-tooltip-container">
+								<a href="{EQDKP_ROOT_PATH}admin/{SID}" class="admin-tooltip-trigger tooltip-trigger" data-tooltip="admin-tooltip"><i class="fa fa-cog fa-lg"></i> <span class="hiddenSmartphone">{L_menu_admin_panel}</span></a>
+								<ul class="dropdown-menu admin-tooltip" role="menu" id="admin-tooltip">
+									<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a></li>
+									<li class="tooltip-divider"></li>
+								</ul>
+							</div>	
+							<!-- ENDIF -->
 							
 							<!-- IF U_CHARACTERS != "" --><li><a href="{U_CHARACTERS}"><i class="fa fa-group fa-lg"></i> <span class="hiddenSmartphone">{L_menu_members}</span></a></li><!-- ENDIF -->
 							
