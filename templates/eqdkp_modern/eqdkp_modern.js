@@ -53,7 +53,7 @@ $(document).ready(function(){
 		});
 
 		/* Admin Tooltip Doubleclick */
-		$('.admin-tooltip-trigger').on('dbclick', function(event){
+		$('.admin-tooltip-trigger').on('dblclick', function(event){
 			$("#admin-tooltip").hide('fast');
 			window.location=mmocms_root_path+"admin"+mmocms_sid;
 		});
