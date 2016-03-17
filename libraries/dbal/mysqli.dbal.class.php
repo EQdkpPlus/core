@@ -63,6 +63,7 @@ class dbal_mysqli extends Database
 	{			
 		$intPort = ($intPort !== false) ? $intPort : ini_get("mysqli.default_port");
 		if($blnPersistent) $strHost = 'p:'.$strHost;
+		if($strDatabase == "") throw new DBALException("Database Name missing");
 		
 		@$this->resConnection = new mysqli($strHost, $strUser, $strPassword, $strDatabase, $intPort);
 		if (@$this->resConnection->connect_error != ""){
