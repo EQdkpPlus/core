@@ -51,7 +51,13 @@ $(document).ready(function(){
 			$("#user-tooltip").hide('fast');
 			window.location=mmocms_controller_path+"Settings"+mmocms_seo_extension+mmocms_sid;
 		});
-		
+
+		/* Admin Tooltip Doubleclick */
+		$('.admin-tooltip-trigger').on('dbclick', function(event){
+			$("#admin-tooltip").hide('fast');
+			window.location=mmocms_root_path+"admin"+mmocms_sid;
+		});
+
 		user_clock();
 		
 		$( ".openLoginModal" ).on('click', function() {
