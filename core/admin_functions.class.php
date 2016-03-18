@@ -358,7 +358,7 @@ class admin_functions extends gen_class {
 		return $admin_menu;
 	}
 	
-	public function adminFavorites()
+	public function setAdminTooltip()
 	{
 		$admin_menu = $this->adminmenu();
 
