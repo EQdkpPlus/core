@@ -448,6 +448,8 @@ class core extends gen_class {
 			}
 			
 			$this->mycharacters();
+
+			$this->setAdminTooltip();
 		}
 		
 		public function addCommonTemplateVars(){
