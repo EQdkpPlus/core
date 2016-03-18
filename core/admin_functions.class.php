@@ -355,6 +355,13 @@ class admin_functions extends gen_class {
 			);
 		}
 
+		return $admin_menu;
+	}
+	
+	public function adminFavorites()
+	{
+		$admin_menu = $this->adminmenu()
+
 		// Add favorites to template vars
 		foreach ($admin_menu['favorits'] as $fav)
 		{
@@ -363,8 +370,6 @@ class admin_functions extends gen_class {
 				'TEXT' => $fav['text'],
 			));
 		}
-
-		return $admin_menu;
 	}
 }
 }
