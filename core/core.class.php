@@ -453,7 +453,7 @@ class core extends gen_class {
 			{
 				include_once 'admin_functions.class.php';
 			}
-			$this->admin->setAdminTooltip();
+			$this->setAdminTooltip();
 		}
 		
 		public function addCommonTemplateVars(){
