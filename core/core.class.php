@@ -448,6 +448,10 @@ class core extends gen_class {
 			}
 			
 			$this->mycharacters();
+
+			include_once($this->root_path.'core/admin_functions.class.php');
+			$admin_functions = register('admin_functions');
+			$admin_functions->setAdminTooltip();
 		}
 		
 		public function addCommonTemplateVars(){
