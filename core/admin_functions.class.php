@@ -362,7 +362,6 @@ class admin_functions extends gen_class {
 				'LINK' => $fav['link'],
 				'TEXT' => $fav['text'],
 			));
-			d($this->tpl->assign_block_vars('admin_tooltip'));
 		}
 
 		return $admin_menu;
