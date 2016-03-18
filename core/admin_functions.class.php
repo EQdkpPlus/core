@@ -360,7 +360,7 @@ class admin_functions extends gen_class {
 	
 	public function adminFavorites()
 	{
-		$admin_menu = $this->adminmenu()
+		$admin_menu = $this->adminmenu();
 
 		// Add favorites to template vars
 		foreach ($admin_menu['favorits'] as $fav)
