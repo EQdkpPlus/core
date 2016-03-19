@@ -1058,5 +1058,10 @@ $lang = array(
 "manage_userpf" => "Benutzerprofilfelder verwalten",
 "maintenanceuser_user" => "Wartungsbenutzer",
 "massmail" => "Massen-E-Mail",
+"extension_repo" => "Erweiterungen verwalten",
+"manage_menus" => "Menüs verwalten",
+"page_manager" => "Tabellen & Punktesystem verwalten",
+'manage_notifications' => 'Benachrichtigungen verwalten',
+"manage_articles" => "Artikel verwalten",
 );
 ?>
