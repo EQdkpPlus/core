@@ -1070,6 +1070,6 @@ $lang = array(
 "manage_calevents" => "Kalendereinträge verwalten",
 "manage_raid_groups" => "Raidgruppen verwalten",
 "manitempools_title" => "Item-Pools verwalten",
-"manraid_title" => "Raids verwalten",
+"manage_raids" => "Raids verwalten",
 );
 ?>
