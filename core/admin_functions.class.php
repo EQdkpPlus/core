@@ -363,7 +363,7 @@ class admin_functions extends gen_class {
 		$admin_menu = $this->adminmenu();
 
 		// Add favorites to template vars
-		foreach ($admin_menu['favorits'] as $fav)
+		foreach (array_slice($admin_menu['favorits'], 2) as $fav)
 		{
 			$this->tpl->assign_block_vars('admin_tooltip', array(
 				'LINK' => $fav['link'],
