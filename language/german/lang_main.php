@@ -1054,5 +1054,9 @@ $lang = array(
 "manage_pf_menue" => "Profilfelder verwalten",
 "rolemanager" => "Rollen verwalten",
 "manage_auto_points" => "Autom. Punktkorrekturen",
+"manage_user_groups" => "Benutzergruppen verwalten",
+"manage_userpf" => "Benutzerprofilfelder verwalten",
+"maintenanceuser_user" => "Wartungsbenutzer",
+"massmail" => "Massen-E-Mail",
 );
 ?>
