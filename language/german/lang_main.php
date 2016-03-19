@@ -1047,6 +1047,7 @@ $lang = array(
 
 //Admin menu tooltip
 "managing_styles" => "Styles verwalten",
+"styles_title" => "Styles verwalten",
 "managing_members" => "Charaktere verwalten",
 "manitems_title" => "Items verwalten",
 "manadjs_title" => "Korrekturen verwalten",
@@ -1074,5 +1075,10 @@ $lang = array(
 "manage_cronjobs" => "Zeitgesteuerte Aufgaben verwalten",
 "manage_media" => "Medien verwalten",
 "mantasks_title" => "Aufgaben verwalten",
+"liveupdate" => "Live-Update",
+"pdc_manager" => "Cache Manager",
+"mysql_info" => "Datenbank-Informationen",
+"backup" => "Sicherung",
+"maintenance" => "Wartungsbereich",
 );
 ?>
