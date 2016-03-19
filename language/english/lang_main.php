@@ -1117,6 +1117,7 @@ $lang = array(
 	"mysql_info" => 'MySQL Info',
 	"backup" => 'Backup Management',
 	"maintenance" => 'Maintenance mode',
+	"favorits" => 'Favorites',
 );
 
 ?>

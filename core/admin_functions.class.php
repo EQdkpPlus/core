@@ -235,7 +235,7 @@ class admin_functions extends gen_class {
 		return $strPrefix.$strOut;
 	}
 	
-	public function adminmenu($blnShowBadges = true, $coreUpdates="", $extensionUpdates=""){
+	public function adminmenu($blnShowBadges = true, $coreUpdates="", $extensionUpdates="", $blnShowFavorites=false){
 		$admin_menu = array(
 			'members' => array(
 				'icon'	=> 'fa-user fa-lg fa-fw',
@@ -313,46 +313,48 @@ class admin_functions extends gen_class {
 		$admin_menu = (is_array($this->pm->get_menus('admin'))) ? array_merge_recursive($admin_menu, array('extensions'=>$this->pm->get_menus('admin'))) : $admin_menu;
 
 		// Now get the admin-favorites
-		$favs_array = array();
-		if($this->config->get('admin_favs')) {
-			$favs_array = $this->config->get('admin_favs');
-		}
-		$admin_menu['favorits']['icon'] = 'fa-star fa-lg fa-fw';
-		$admin_menu['favorits']['name'] = $this->user->lang('favorits');
-		//Style Management
-		$admin_menu['favorits'][1] = array(
-			'link'	=> 'admin/manage_extensions.php'.$this->SID.'&tab=1',
-			'text'	=> $this->user->lang('styles_title'),
-			'check'	=> 'a_extensions_man',
-			'icon'	=> 'fa-paint-brush fa-lg fa-fw',
-		);
-			
-		$i = 2;
-		if (is_array($favs_array) && count($favs_array) > 0){
-			foreach ($favs_array as $fav){
-				$items = explode('|', $fav);
-				$adm = $admin_menu;
-				foreach ($items as $item){
-					$latest = $adm;
-					$adm = (isset($adm[$item])) ? $adm[$item] : false;
-				}
-				if (isset($adm['link'])){
-					$admin_menu['favorits'][$i] = array(
-						'link'	=> $adm['link'],
-						'text'	=> $adm['text'].((count($items) == 3) ? ' ('.$latest['name'].')': ''),
-						'check'	=> $adm['check'],
-						'icon'	=> $adm['icon'],
-					);
-				}
-				$i++;
+		if($blnShowFavorites){
+			$favs_array = array();
+			if($this->config->get('admin_favs')) {
+				$favs_array = $this->config->get('admin_favs');
 			}
-		} else {  // If there are no links, point to the favorites-management
-			$admin_menu['favorits'][2] = array(
-				'link'	=> 'admin/manage_menus.php'.$this->SID.'&tab=1',
-				'text'	=> $this->user->lang('manage_menus'),
-				'check'	=> 'a_config_man',
-				'icon'	=> 'fa-list fa-lg fa-fw',
+			$admin_menu['favorits']['icon'] = 'fa-star fa-lg fa-fw';
+			$admin_menu['favorits']['name'] = $this->user->lang('favorits');
+			//Style Management
+			$admin_menu['favorits'][1] = array(
+				'link'	=> 'admin/manage_extensions.php'.$this->SID.'&tab=1',
+				'text'	=> $this->user->lang('styles_title'),
+				'check'	=> 'a_extensions_man',
+				'icon'	=> 'fa-paint-brush fa-lg fa-fw',
 			);
+				
+			$i = 2;
+			if (is_array($favs_array) && count($favs_array) > 0){
+				foreach ($favs_array as $fav){
+					$items = explode('|', $fav);
+					$adm = $admin_menu;
+					foreach ($items as $item){
+						$latest = $adm;
+						$adm = (isset($adm[$item])) ? $adm[$item] : false;
+					}
+					if (isset($adm['link'])){
+						$admin_menu['favorits'][$i] = array(
+							'link'	=> $adm['link'],
+							'text'	=> $adm['text'].((count($items) == 3) ? ' ('.$latest['name'].')': ''),
+							'check'	=> $adm['check'],
+							'icon'	=> $adm['icon'],
+						);
+					}
+					$i++;
+				}
+			} else {  // If there are no links, point to the favorites-management
+				$admin_menu['favorits'][2] = array(
+					'link'	=> 'admin/manage_menus.php'.$this->SID.'&tab=1',
+					'text'	=> $this->user->lang('manage_menus'),
+					'check'	=> 'a_config_man',
+					'icon'	=> 'fa-list fa-lg fa-fw',
+				);
+			}
 		}
 
 		return $admin_menu;
@@ -360,7 +362,7 @@ class admin_functions extends gen_class {
 	
 	public function setAdminTooltip()
 	{
-		$admin_menu = $this->adminmenu();
+		$admin_menu = $this->adminmenu(false, "", "", true);
 
 		// Add favorites to template vars
 		foreach (array_slice($admin_menu['favorits'], 2) as $fav)

@@ -759,7 +759,6 @@ $lang = array(
 	"menus_info" => 'Here you may arrange the menu entries. Use drag and drop to move an entry to the desired position. You may also hide menu entries by moving them to the \'hidden menu entries\' section.<br /><b>Please note:</b> if menu entries are hidden, users may directly access the pages anyway if they have the right to to that.',
 	"inactive_entries" => 'Hidden menu entries',
 	"active_entries" => 'To show menu points, drag them here.',
-	"favorits" => 'Favorites',
 	"favorits_admin_menu" => 'Favorite admin menu',
 	"favorits_info" => 'Here you can set up your favorites menu for the administration area. Choose a menu item from the area below and drag and drop it to the desired position in your favorites area. To delete a favorite, klick on the delete button. The favorite will then be displayed in its former area again.',
 	"favorits_enable" => 'Activate favorites menu',

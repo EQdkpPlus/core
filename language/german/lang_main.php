@@ -1080,5 +1080,6 @@ $lang = array(
 "mysql_info" => "Datenbank-Informationen",
 "backup" => "Sicherung",
 "maintenance" => "Wartungsbereich",
+"favorits" => "Favoriten",
 );
 ?>

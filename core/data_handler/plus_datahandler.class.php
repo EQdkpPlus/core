@@ -416,9 +416,9 @@ if( !class_exists( "plus_datahandler")){
 				$this->init_read_module( $module );
 				return call_user_func_array( array( $this->rm($module), $method ), $params );
 			} else {
-				if( $this->get_lang($module, $tag) ) {
+				if( $this->get_lang($module, $tag) !== false) {
 					return $this->get_lang($module, $tag);
-				} elseif($this->get_preset_lang($module, $tag)) {
+				} elseif($this->get_preset_lang($module, $tag) !== false) {
 					return $this->get_preset_lang($module, $tag);
 				} else {
 					return $tag;

@@ -107,6 +107,7 @@
 								<ul class="dropdown-menu admin-tooltip" role="menu" id="admin-tooltip">
 									<li><a href="{EQDKP_ROOT_PATH}admin/{SID}"><i class="fa fa-cog fa-lg"></i> {L_menu_admin_panel}</a></li>
 									<li class="tooltip-divider"></li>
+										<div class="nav-header">{L_favorits}<span class="floatRight hand" title="{L_settings}"><i class="fa fa-cog fa-lg" onclick="window.location='{EQDKP_ROOT_PATH}admin/manage_menus.php{SID}&tab=1'"></i></span></div>
 									<!-- BEGIN admin_tooltip -->
 									<li><a href="{EQDKP_ROOT_PATH}{admin_tooltip.LINK}"><i class="fa {admin_tooltip.ICON} fa-lg"></i> {admin_tooltip.TEXT}</a></li>
 									<!-- END admin_tooltip -->

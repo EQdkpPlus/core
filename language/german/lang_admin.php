@@ -753,7 +753,6 @@ $lang = array(
 "menus_info" => "Hier kannst du die Menüeinträge individuell anordnen. Klicke dazu einen Eintrag an und verschiebe ihn an die gewünschte Position. <br /><b>Beachte: </b> Auch wenn Menüeinträge ausgeblendet sind, können die Benutzer trotzdem auf die Seite zugreifen, wenn sie die entsprechende Berechtigung haben.",
 "inactive_entries" => "Ziehe Menü-Einträge in diesen Bereich, um sie auszublenden.",
 "active_entries" => "Ziehe Menü-Einträge in diesen Bereich, um sie einzublenden.",
-"favorits" => "Favoriten",
 "favorits_admin_menu" => "Favoriten Admin-Menü",
 "favorits_info" => "Hier kannst Du Dir dein Favoriten-Menü für das Administrations-Bereich zusammenstellen. Wähle dazu einen Menüpunkt aus den Bereichen unten aus und verschiebe in an die gewünschte Stelle in den Favoriten-Bereich. Um einen Favoriten zu löschen, klicken auf den Lösch-Button. Der Favorit wird wieder in seinem Ursprungsbereich erscheinen.",
 "favorits_enable" => "Favoriten-Menü aktivieren",
