@@ -1043,9 +1043,9 @@ $lang = array(
 "user_sett_f_ntfy_xmpp_user" => "Jabber Account",
 "user_sett_f_help_ntfy_xmpp_user" => "Trage hier den Jabber Account ein, der Benachrichtigungen erhalten soll, z.B. user@jabber.org",
 "user_sett_f_ntfy_twitter_user" => "Twitter-Account",
-"user_sett_f_help_ntfy_twitter_user" => "Trage hier den Twitter-Account ein, der Benachrichtigungen erhalten soll. Er muss \"{TWITTER}\" auf Twitter folgen, um Nachrichten erhalten zu können."
+"user_sett_f_help_ntfy_twitter_user" => "Trage hier den Twitter-Account ein, der Benachrichtigungen erhalten soll. Er muss \"{TWITTER}\" auf Twitter folgen, um Nachrichten erhalten zu können.",
 
 //Admin menu tooltip
-"managing_members" => "Charaktere verwalten",
+"managing_members" => "Charaktere verwalten"
 );
 ?>
