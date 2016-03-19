@@ -1071,5 +1071,8 @@ $lang = array(
 "manage_raid_groups" => "Raidgruppen verwalten",
 "manitempools_title" => "Item-Pools verwalten",
 "manage_raids" => "Raids verwalten",
+"manage_cronjobs" => "Zeitgesteuerte Aufgaben verwalten",
+"manage_media" => "Medien verwalten",
+"mantasks_title" => "Aufgaben verwalten",
 );
 ?>
