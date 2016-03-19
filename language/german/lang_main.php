@@ -1046,6 +1046,13 @@ $lang = array(
 "user_sett_f_help_ntfy_twitter_user" => "Trage hier den Twitter-Account ein, der Benachrichtigungen erhalten soll. Er muss \"{TWITTER}\" auf Twitter folgen, um Nachrichten erhalten zu können.",
 
 //Admin menu tooltip
-"managing_members" => "Charaktere verwalten"
+"managing_styles" => "Styles verwalten",
+"managing_members" => "Charaktere verwalten",
+"manitems_title" => "Items verwalten",
+"manadjs_title" => "Korrekturen verwalten",
+"manrank_title" => "Ränge verwalten",
+"manage_pf_menue" => "Profilfelder verwalten",
+"rolemanager" => "Rollen verwalten",
+"manage_auto_points" => "Autom. Punktkorrekturen",
 );
 ?>
