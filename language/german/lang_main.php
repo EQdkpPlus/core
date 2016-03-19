@@ -1063,5 +1063,13 @@ $lang = array(
 "page_manager" => "Tabellen & Punktesystem verwalten",
 'manage_notifications' => 'Benachrichtigungen verwalten',
 "manage_articles" => "Artikel verwalten",
+"manmdkp_title" => "Multidkp-Konten verwalten",
+"manevents_title" => "Ereignisse verwalten",
+"manexport_title" => 'Daten-Export',
+"manage_calendars" => "Kalender verwalten",
+"manage_calevents" => "Kalendereinträge verwalten",
+"manage_raid_groups" => "Raidgruppen verwalten",
+"manitempools_title" => "Item-Pools verwalten",
+"manraid_title" => "Raids verwalten",
 );
 ?>
