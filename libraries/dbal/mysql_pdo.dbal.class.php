@@ -35,6 +35,7 @@ class dbal_mysql_pdo extends Database
 		$strPort = ($intPort !== false) ? ';port='.$intPort : "";
 		$arrOptions = array();
 		if($blnPersistent) $arrOptions[PDO::ATTR_PERSISTENT] = true;
+		if($strDatabase == "") throw new DBALException("Database Name missing");
 		
 		try {
 			$this->resConnection = new PDO('mysql:host='.$strHost.';dbname='.$strDatabase.';charset='.$this->strCharset.$strPort, $strUser, $strPassword, $arrOptions);
