@@ -93,7 +93,7 @@ class admin_functions extends gen_class {
 			$arrFolder = explode('/', $strPath);
 			$strOut = "";
 			
-			//Prefixes for Admin, Plugins, Maintenance
+			// Prefixes for Admin, Plugins, Maintenance
 			switch($arrFolder[0]){
 				case 'admin' : $strPrefix = registry::fetch('user')->lang('menu_admin_panel').': ';
 				break;
@@ -106,9 +106,9 @@ class admin_functions extends gen_class {
 				default: $strPrefix = '';
 			}
 			
-			//Resolve Admin Pages
+			// Resolve Admin Pages
 			if ($arrFolder[0] == "admin"){
-				//First, some admin pages without menu entry
+				// First, some admin pages without menu entry
 				switch($strPath){
 					case 'admin/info_php':
 						$strOut = '<a href="'.$this->root_path.'admin/info_php.php'.$this->SID.'">PHP-Info</a>';
@@ -129,7 +129,7 @@ class admin_functions extends gen_class {
 					break;
 				}
 				
-				//Now check if there is an menu entry
+				// Now check if there is an menu entry
 				if($strOut == ""){
 					$admin_menu = $this->adminmenu(false);
 					$result = search_in_array($strPath.".php".$this->SID, $admin_menu);
@@ -140,19 +140,19 @@ class admin_functions extends gen_class {
 				}
 			}
 			
-			//Resolve Frontend Page
+			// Resolve Frontend Page
 			if ($strOut == "" && $strPrefix == ""){
 				$intArticleID = $intCategoryID = 0;
 				
 				$arrPath = array_reverse($arrFolder);
 
-				//Suche Alias in Artikeln
+				// Suche Alias in Artikeln
 				$intArticleID = $this->pdh->get('articles', 'resolve_alias', array(str_replace(".html", "", utf8_strtolower($arrPath[0]))));
 				if (!$intArticleID){
-					//Suche Alias in Kategorien
+					// Suche Alias in Kategorien
 					$intCategoryID = $this->pdh->get('article_categories', 'resolve_alias', array(str_replace(".html", "", utf8_strtolower($arrPath[0]))));
 					
-					//Suche in Artikeln mit nächstem Index, denn könnte ein dynamischer Systemartikel sein
+					// Suche in Artikeln mit nächstem Index, denn könnte ein dynamischer Systemartikel sein
 					if (!$intCategoryID && isset($arrPath[1])) {					
 						$intArticleID = $this->pdh->get('articles', 'resolve_alias', array(str_replace(".html", "", utf8_strtolower($arrPath[1]))));
 					}
@@ -220,7 +220,7 @@ class admin_functions extends gen_class {
 						}
 					}		
 				} else {
-					//Some special frontend pages
+					// Some special frontend pages
 					switch($strPath){
 						case "api":
 						case "exchange": $strOut = registry::fetch('user')->lang('viewing_exchange');
@@ -312,7 +312,7 @@ class admin_functions extends gen_class {
 		// Now get plugin hooks for the menu
 		$admin_menu = (is_array($this->pm->get_menus('admin'))) ? array_merge_recursive($admin_menu, array('extensions'=>$this->pm->get_menus('admin'))) : $admin_menu;
 
-		//Now get the admin-favorits
+		// Now get the admin-favorites
 		$favs_array = array();
 		if($this->config->get('admin_favs')) {
 			$favs_array = $this->config->get('admin_favs');
@@ -346,7 +346,7 @@ class admin_functions extends gen_class {
 				}
 				$i++;
 			}
-		} else { //If there are no links, point to the favorits-management
+		} else {  // If there are no links, point to the favorites-management
 			$admin_menu['favorits'][2] = array(
 				'link'	=> 'admin/manage_menus.php'.$this->SID.'&tab=1',
 				'text'	=> $this->user->lang('manage_menus'),
@@ -354,8 +354,23 @@ class admin_functions extends gen_class {
 				'icon'	=> 'fa-list fa-lg fa-fw',
 			);
 		}
-		
+
 		return $admin_menu;
+	}
+	
+	public function setAdminTooltip()
+	{
+		$admin_menu = $this->adminmenu();
+
+		// Add favorites to template vars
+		foreach (array_slice($admin_menu['favorits'], 2) as $fav)
+		{
+			$this->tpl->assign_block_vars('admin_tooltip', array(
+				'LINK' => $fav['link'],
+				'TEXT' => $fav['text'],
+				'ICON' => $fav['icon'],
+			));
+		}
 	}
 }
 }
