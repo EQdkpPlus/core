@@ -103,7 +103,7 @@
 						<!-- IF S_ADMIN -->
 						<li>
 							<div class="admin-tooltip-container">
-								<a href="{EQDKP_ROOT_PATH}admin/{SID}" class="admin-tooltip-trigger tooltip-trigger" data-tooltip="admin-tooltip"><i class="fa fa-cog fa-lg"></i> <span class="hiddenSmartphone">{L_menu_admin_panel}</span></a>
+								<a href="{EQDKP_ROOT_PATH}admin/{SID}" class="admin-tooltip-trigger tooltip-trigger" data-tooltip="admin-tooltip"><i class="fa fa-wrench fa-lg fa-fw"></i> <span class="hiddenSmartphone">{L_menu_admin_panel}</span></a>
 								<ul class="dropdown-menu admin-tooltip" role="menu" id="admin-tooltip">
 									<li><a href="{EQDKP_ROOT_PATH}admin/{SID}"><i class="fa fa-cog fa-lg"></i> {L_menu_admin_panel}</a></li>
 									<li class="tooltip-divider"></li>
