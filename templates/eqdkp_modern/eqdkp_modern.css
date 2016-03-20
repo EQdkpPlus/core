@@ -4434,3 +4434,31 @@ button.thirdpartylogin.openid {
 .qtip-content.ui-widget-content {
 	border-radius: 3px;
 }
+
+/* Boolean Boxes */
+label.isBoolean > input {
+	display: none;
+}
+label.isBoolean > .red, label.isBoolean > .green {
+	border-radius: 4px 4px 4px 4px;
+	color: @eqdkpInputFontColor;
+	font-size: 13px;
+	line-height: 20px;
+	padding: 4px 6px;
+	vertical-align: middle;
+	background: @eqdkpInputBackgroundColor;
+	border: 1px solid @eqdkpInputBorderColor;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+	font-family: Tahoma,Arial,Verdana,sans-serif;
+	margin: 3px;
+}
+
+label.isBoolean > input[type="radio"]:checked + span.red, label.isBoolean > span.red:hover, label.isBoolean > span.red:active {
+	background: #e89795 !important;
+}
+
+label.isBoolean > input[type="radio"]:checked + span.green, label.isBoolean > span.green:hover, label.isBoolean > span.green:active {
+	background: #94aa72 !important;
+	color: #fff;
+}
+/* End Boolean Boxes */

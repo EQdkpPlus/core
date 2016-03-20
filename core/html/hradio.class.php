@@ -45,6 +45,7 @@ class hradio extends html {
 	public $tolang = false;
 	public $nodiv = false;
 	public $js = "";
+	public $blnIsBoolean = false;
 	
 	public function _construct() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
@@ -54,11 +55,13 @@ class hradio extends html {
 		$radiobox  = '';
 		if(empty($this->options)){
 			$this->options = array (
-				'0'   => $this->user->lang('cl_off'),
-				'1'   => $this->user->lang('cl_on')
+				'0'   => '<span class="red"><i class="fa fa-times fa-lg"></i> '. $this->user->lang('cl_off').'</span>',
+				'1'   => '<span class="green"><i class="fa fa-check fa-lg"></i> '.$this->user->lang('cl_on').'</span>'
 			);
+			$this->blnIsBoolean = true;
 		}
 		if(!empty($this->dependency)) $this->class .= ' form_change_radio';
+		if($this->blnIsBoolean) $this->class .= ' isBoolean';
 		foreach ($this->options as $key => $opt) {
 			$selected_choice = ((string)$key == (string)$this->value) ? ' checked="checked"' : '';
 			$disabled = ($this->disabled) ? ' disabled="disabled"' : '';
