@@ -4455,10 +4455,11 @@ label.isBoolean > .red, label.isBoolean > .green {
 
 label.isBoolean > input[type="radio"]:checked + span.red, label.isBoolean > span.red:hover, label.isBoolean > span.red:active {
 	background: #e89795 !important;
+	color: @eqdkpInputFontColor !important;
 }
 
 label.isBoolean > input[type="radio"]:checked + span.green, label.isBoolean > span.green:hover, label.isBoolean > span.green:active {
 	background: #94aa72 !important;
-	color: #fff;
+	color: #fff !important;
 }
 /* End Boolean Boxes */
