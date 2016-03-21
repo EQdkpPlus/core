@@ -202,7 +202,7 @@ if (!class_exists("jquery")) {
 		// http://benignware.github.io/jquery-placepicker/
 		public function init_placepicker(){
 			if(!$this->inits['placepicker']){
-				$this->tpl->js_file("http://maps.googleapis.com/maps/api/js?sensor=true&libraries=places", 'direct');
+				$this->tpl->js_file("https://maps.googleapis.com/maps/api/js?sensor=true&libraries=places", 'direct');
 				$this->tpl->js_file($this->path."js/placepicker/jquery.placepicker.min.js");
 				$this->inits['placepicker']	= true;
 			}
@@ -211,7 +211,7 @@ if (!class_exists("jquery")) {
 		// https://github.com/hpneo/gmaps
 		public function init_gmaps(){
 			if(!$this->inits['googlemaps']){
-				$this->tpl->js_file("http://maps.googleapis.com/maps/api/js?sensor=true", 'direct');
+				$this->tpl->js_file("https://maps.googleapis.com/maps/api/js?sensor=true", 'direct');
 				$this->tpl->js_file($this->path."js/gmaps/gmaps.min.js");
 				$this->inits['googlemaps']	= true;
 			}
