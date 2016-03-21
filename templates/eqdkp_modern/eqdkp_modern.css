@@ -4439,8 +4439,10 @@ button.thirdpartylogin.openid {
 label.isBoolean > input {
 	display: none;
 }
+label.isBoolean {
+	margin: 0px !important;
+}
 label.isBoolean > .red, label.isBoolean > .green {
-	border-radius: 4px 4px 4px 4px;
 	color: @eqdkpInputFontColor;
 	font-size: 13px;
 	line-height: 20px;
@@ -4450,7 +4452,16 @@ label.isBoolean > .red, label.isBoolean > .green {
 	border: 1px solid @eqdkpInputBorderColor;
 	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
 	font-family: Tahoma,Arial,Verdana,sans-serif;
-	margin: 3px;
+	margin: 0px;
+}
+
+label.isBoolean > .red {
+	border-radius: 4px 0px 0px 4px;
+}
+
+label.isBoolean > .green {
+	border-radius: 0px 4px 4px 0px;
+	margin-left: -5px !important;
 }
 
 label.isBoolean > input[type="radio"]:checked + span.red, label.isBoolean > span.red:hover, label.isBoolean > span.red:active {
