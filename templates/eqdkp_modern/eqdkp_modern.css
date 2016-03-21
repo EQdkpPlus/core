@@ -4464,22 +4464,17 @@ label.isBoolean > .green {
         margin-left: -5px !important;
 }
 
-label.isBoolean > input[type="radio"]:checked + span.red, label.isBoolean > span
-.red:hover, label.isBoolean > span.red:active, label.isBoolean > input[type="rad
-io"]:checked + span.green, label.isBoolean > span.green:hover, label.isBoolean >
- span.green:active {
+label.isBoolean > input[type="radio"]:checked + span.red, label.isBoolean > span.red:hover, label.isBoolean > span.red:active, label.isBoolean > input[type="radio"]:checked + span.green, label.isBoolean > span.green:hover, label.isBoolean > span.green:active {
         background-color: #d7d7d7;
         box-shadow: 0.5px 1px 2px #000 inset;
 }
 
-label.isBoolean > input[type="radio"]:checked + span.red, label.isBoolean > span
-.red:hover, label.isBoolean > span.red:active {
+label.isBoolean > input[type="radio"]:checked + span.red, label.isBoolean > span.red:hover, label.isBoolean > span.red:active {
         background: #e89795 !important;
         color: @eqdkpInputFontColor !important;
 }
 
-label.isBoolean > input[type="radio"]:checked + span.green, label.isBoolean > sp
-an.green:hover, label.isBoolean > span.green:active {
+label.isBoolean > input[type="radio"]:checked + span.green, label.isBoolean > span.green:hover, label.isBoolean > span.green:active {
         background: #89bf8b !important;
         color: #fff !important;
 }
