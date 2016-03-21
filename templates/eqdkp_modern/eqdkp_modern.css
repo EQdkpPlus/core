@@ -4437,40 +4437,50 @@ button.thirdpartylogin.openid {
 
 /* Boolean Boxes */
 label.isBoolean > input {
-	display: none;
+        display: none;
 }
 label.isBoolean {
-	margin: 0px !important;
+        margin: 0px !important;
 }
 label.isBoolean > .red, label.isBoolean > .green {
-	color: @eqdkpInputFontColor;
-	font-size: 13px;
-	line-height: 20px;
-	padding: 4px 6px;
-	vertical-align: middle;
-	background: @eqdkpInputBackgroundColor;
-	border: 1px solid @eqdkpInputBorderColor;
-	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
-	font-family: Tahoma,Arial,Verdana,sans-serif;
-	margin: 0px;
+        color: @eqdkpInputFontColor;
+        font-size: 13px;
+        line-height: 20px;
+        padding: 4px 6px;
+        vertical-align: middle;
+        background: @eqdkpInputBackgroundColor;
+        border: 1px solid @eqdkpInputBorderColor;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+        font-family: Tahoma,Arial,Verdana,sans-serif;
+        margin: 0px;
 }
 
 label.isBoolean > .red {
-	border-radius: 4px 0px 0px 4px;
+        border-radius: 4px 0px 0px 4px;
 }
 
 label.isBoolean > .green {
-	border-radius: 0px 4px 4px 0px;
-	margin-left: -5px !important;
+        border-radius: 0px 4px 4px 0px;
+        margin-left: -5px !important;
 }
 
-label.isBoolean > input[type="radio"]:checked + span.red, label.isBoolean > span.red:hover, label.isBoolean > span.red:active {
-	background: #e89795 !important;
-	color: @eqdkpInputFontColor !important;
+label.isBoolean > input[type="radio"]:checked + span.red, label.isBoolean > span
+.red:hover, label.isBoolean > span.red:active, label.isBoolean > input[type="rad
+io"]:checked + span.green, label.isBoolean > span.green:hover, label.isBoolean >
+ span.green:active {
+        background-color: #d7d7d7;
+        box-shadow: 0.5px 1px 2px #000 inset;
 }
 
-label.isBoolean > input[type="radio"]:checked + span.green, label.isBoolean > span.green:hover, label.isBoolean > span.green:active {
-	background: #94aa72 !important;
-	color: #fff !important;
+label.isBoolean > input[type="radio"]:checked + span.red, label.isBoolean > span
+.red:hover, label.isBoolean > span.red:active {
+        background: #e89795 !important;
+        color: @eqdkpInputFontColor !important;
+}
+
+label.isBoolean > input[type="radio"]:checked + span.green, label.isBoolean > sp
+an.green:hover, label.isBoolean > span.green:active {
+        background: #89bf8b !important;
+        color: #fff !important;
 }
 /* End Boolean Boxes */
