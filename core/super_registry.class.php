@@ -18,7 +18,7 @@
  *	You should have received a copy of the GNU Affero General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
@@ -91,6 +91,7 @@ abstract class super_registry {
 		'user'					=> 'core/',
 		'xmltools'				=> 'core/',
 		'zip'					=> 'core/',
+		'requirements'			=> 'core/',
 		'infotooltip'			=> 'infotooltip/',
 		'bbcode'				=> 'libraries/bbcode/',
 		'MyMailer'				=> 'libraries/MyMailer/',
@@ -102,55 +103,55 @@ abstract class super_registry {
 	public static $lite_igno = array('bridge');
 
 	protected static $const = array();
-	
+
 	public static function init($root_path, $lite=false) {
 		try{
 			self::$const['scriptstart'] = microtime(true);
 			self::$const['root_path'] = $root_path;
 			self::$const['lite_mode'] = $lite;
 			self::load_config();
-			
+
 			// Autoloader
 			spl_autoload_register('self::autoload_libraries');
 
 			// switch to userdefined error handler class
 			set_error_handler(array(registry::register('plus_debug_logger'),'myErrorHandler'), intval(ini_get("error_reporting")));
 			register_shutdown_function(array(registry::register('plus_debug_logger'), "catch_fatals"));
-			
+
 			// User Levels
 			define('ANONYMOUS',	-1);
 			define('USER',		0);
 			define('CRONJOB', -2);
-			
+
 			//DBAL
 			if (self::$const['dbtype'] == "mysql") self::$const['dbtype'] = "mysqli";
 			include_once(self::get_const('root_path') .'libraries/dbal/dbal.class.php');
 			require_once(self::get_const('root_path') . 'libraries/dbal/' . self::$const['dbtype'] . '.dbal.class.php');
 			self::$aliases['db'] = array('dbal_'.self::$const['dbtype'], array(array('open' => true)));
-			
+
 			registry::register('input');
 			registry::register('config');
 			self::set_debug_level();
-			
+
 			include_once(self::$const['root_path'].'core/core.functions.php');
 			registry::register('environment');
 			if(!registry::register('config')->get('server_path')) self::fix_server_path();
 			self::$const['server_path'] = registry::register('config')->get('server_path');
 			self::$const['controller_path'] = self::$const['server_path'].((!intval(registry::register('config')->get('seo_remove_index'))) ? 'index.php/' : '');
 			self::$const['controller_path_plain'] = ((!intval(registry::register('config')->get('seo_remove_index'))) ? 'index.php/' : '');
-						
+
 			//Auth/User
 			require(self::$const['root_path'] . 'core/auth.class.php');
 			$auth_method = 'auth_'.((registry::register('config')->get('auth_method') != '') ? registry::register('config')->get('auth_method') : 'db');
 			require_once(self::get_const('root_path') . 'core/auth/'. $auth_method . '.class.php');
 			self::$aliases['user'] = $auth_method;
-			
+
 			registry::fetch('user')->start();
-			
+
 			registry::fetch('user')->setup(registry::register('input')->get('lang', ''), registry::register('input')->get('style', 0));
 			self::set_timezone();
 			define('USER_INITIALIZED', true);
-			
+
 			if (!defined('MAINTENANCE_MODE')){
 				//Maintenance mode redirect for non admins
 				if(registry::register('config')->get('pk_maintenance_mode') && !registry::fetch('user')->check_auth('a_', false) && !defined('NO_MMODE_REDIRECT')){
@@ -159,8 +160,8 @@ abstract class super_registry {
 
 				//Maintenance Modus for admins
 				$task_hash = registry::register('mmtaskmanager')->get_task_hash();
-				
-				//redirect if there are necessary tasks or errors from pfh				
+
+				//redirect if there are necessary tasks or errors from pfh
 				if(!registry::register('config')->get('pk_known_task_hash') || registry::register('config')->get('pk_known_task_hash') !== $task_hash){
 					registry::register('config')->set('pk_known_task_hash', $task_hash);
 					registry::register('mmtaskmanager')->init_tasks();
@@ -171,7 +172,7 @@ abstract class super_registry {
 						}
 					}
 				}
-				
+
 				//activate and redirect to mmode if pfh-errors exist|
 				if(count(registry::register('file_handler')->get_errors()) > 0) {
 					registry::register('config')->set('pk_maintenance_mode', true);
@@ -179,7 +180,7 @@ abstract class super_registry {
 						redirect('maintenance/index.php'.self::get_const('SID'), false, false, false);
 					}
 				}
-				
+
 				//check if version in config needs update (no db update existing, since no task necessary at this point)
 				if(!defined('NO_MMODE_REDIRECT') && !registry::register('config')->get('pk_maintenance_mode')){
 					if(version_compare(registry::register('config')->get('plus_version'), VERSION_INT, '<')) {
@@ -190,7 +191,7 @@ abstract class super_registry {
 					}
 				}
 			}
-			
+
 			// Set the locale
 			setlocale(LC_ALL, registry::register('config')->get('default_locale'));
 			setlocale(LC_NUMERIC, "en_EN", "en", "eng");
@@ -201,7 +202,7 @@ abstract class super_registry {
 					registry::register('admin_index');
 				}
 			}
-			
+
 			if(!$lite) {
 				//Get Info about mobile/desktop
 				if(registry::register('input')->exists('toggleResponsive')){
@@ -214,17 +215,17 @@ abstract class super_registry {
 				} elseif(registry::register('input')->getEQdkpCookie('resp', '') == 'desktop'){
 					registry::add_const('mobile_view', false);
 				} else registry::add_const('mobile_view', true);
-				
+
 				//initiate PDH
 				$strPageLayout = ((registry::register('config')->get('eqdkp_layout') ) ? registry::register('config')->get('eqdkp_layout') : 'normal');
 				$strPageLayout = (registry::register('config')->get('mobile_pagelayout') && strlen(registry::register('config')->get('mobile_pagelayout')) && registry::register('environment')->agent->mobile && registry::get_const('mobile_view')) ? registry::register('config')->get('mobile_pagelayout') : $strPageLayout;
-				
+
 				registry::register('plus_datahandler')->init_eqdkp_layout($strPageLayout);
 
 				registry::register('portal');
-			
+
 				registry::register('cronjobs')->handle_crons();
-			
+
 				//EQdkp Tour
 				if (registry::fetch('user')->check_auth('a_', false)){
 					registry::register('tour')->init();
@@ -244,30 +245,30 @@ abstract class super_registry {
 		// maybe find a more elegant solution later on
 		self::load_html_fields();
 	}
-	
+
 	public static function class_exists($name) {
 		return (isset(registry::$locs[$name]) || class_exists($name));
 	}
-	
+
 	public static function get_const($name) {
 		if(isset(self::$const[$name])) return self::$const[$name];
 		return null;
 	}
-	
+
 	public static function isset_const($name) {
 		return isset(self::$const[$name]);
 	}
-	
+
 	public static function add_const($name, $val) {
 		self::$const[$name] = $val;
 		return true;
 	}
-	
+
 	public static function load_config($install=false) {
 		if(is_file(self::$const['root_path'] . 'config.php')) require_once(self::$const['root_path'] . 'config.php');
 		if (!defined('EQDKP_INSTALLED') && !$install ){
 			$script_name = $_SERVER['SCRIPT_NAME'];
-			
+
 			if (substr($script_name, -9) == "index.php" && substr($script_name, -15) != "admin/index.php"){
 				echo ("<script>window.location.href = '".str_replace("index.php", "", $script_name)."install/index.php';</script>");
 			} else {
@@ -281,7 +282,7 @@ abstract class super_registry {
 			if(isset($$config)) self::$const[$config] = $$config;
 		}
 	}
-	
+
 	public static function load_html_fields() {
 		$path = self::$const['root_path'].'core/html/';
 		$classes = sdir($path, '*.class.php');
@@ -289,7 +290,7 @@ abstract class super_registry {
 			include_once($path.$file);
 		}
 	}
-	
+
 	private static function set_debug_level() {
 		if(!defined('DEBUG')) {
 			if ( isset(self::$const['debug']) && self::$const['debug'] != 0 ){
@@ -302,12 +303,12 @@ abstract class super_registry {
 		} elseif (!defined('DEBUG')) define('DEBUG', 0);
 		registry::register('plus_debug_logger')->set_debug_level(DEBUG);
 	}
-	
+
 	private static function fix_server_path() {
 		registry::register('config')->set('server_path', registry::register('environment')->server_path);
 		redirect(registry::register('environment')->phpself, false, false, false);
 	}
-	
+
 	private static function set_timezone() {
 		if(!empty(registry::fetch('user')->data['user_id']) && registry::fetch('user')->data['user_timezone']) {
 			registry::register('time')->setTimezone(registry::fetch('user')->data['user_timezone']);
@@ -321,10 +322,10 @@ abstract class super_registry {
 			}
 		}
 	}
-	
+
 	/**
 	 * Libraries. Key is foldername in libraries-Folder, Value is First Namespace Key.s
-	 * 
+	 *
 	 * @var array
 	 */
 	protected static $libraries = array(
@@ -332,18 +333,18 @@ abstract class super_registry {
 		'oauth'		=> 'OAuth2',
 		'phpseclib'	=> 'phpseclib',
 	);
-	
+
 	public static function autoload_libraries($strClassname){
 		$arrParts = explode('\\', $strClassname);
-		
+
 		$arrKeyMapping = array_flip(self::$libraries);
-		
+
 		if( isset($arrKeyMapping[$arrParts[0]])){
 			$strKey = $arrKeyMapping[$arrParts[0]];
 			$arrParts[0] = $strKey;
 			if($strKey){
-				$className = implode(DIRECTORY_SEPARATOR, $arrParts).'.php';	
-				
+				$className = implode(DIRECTORY_SEPARATOR, $arrParts).'.php';
+
 				$strFolder = self::get_const('root_path').'libraries'.DIRECTORY_SEPARATOR.$className;
 				if(file_exists($strFolder)){
 					include($strFolder);
@@ -354,7 +355,7 @@ abstract class super_registry {
 
 		return false;
 	}
-	
+
 }
 
 ?>

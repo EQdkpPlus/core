@@ -282,6 +282,20 @@ class admin_index extends gen_class {
 			}
 		}
 
+		// requirements
+		$requirements	= $this->requirements->getRequirements();
+		$req_count 		= $this->requirements->getCounts();
+		foreach($requirements as $reqname=>$reqrow){
+			$this->tpl->assign_block_vars('requirements', array(
+					'NAME'			=> ($this->user->lang('requirements_'.$reqname) != '') ? $this->user->lang('requirements_'.$reqname) : $reqname,
+					'REQUIRED'		=> $reqrow['required'],
+					'AVAILABLE'		=> $reqrow['installed'],
+					'FA'			=> ($reqrow['passfail']) ? 'check-circle' : 'times-circle',
+					'COLOR'			=> ($reqrow['passfail']) ? 'green' : 'red',
+			));
+		}
+
+
 		// Log Actions
 		$s_logs = false;
 		$logs_table = '';
@@ -298,6 +312,10 @@ class admin_index extends gen_class {
 
 		// The Jquery Things & Update Check
 		$this->jquery->Tab_header('admininfos_tabs');
+		// highlight the tab
+		if($req_count > 0){
+			$this->jquery->Tab_Select('admininfos_tabs', 2);
+		}
 		$this->jquery->rssFeeder('notifications',	"index.php".$this->SID."&rssajax=notification", '3', '999');
 		$this->jquery->rssFeeder('twitterfeed',	"index.php".$this->SID."&rssajax=twitter");
 
@@ -348,6 +366,7 @@ class admin_index extends gen_class {
 			'CIRCLE_ITEMS'			=> sprintf("%.2F", ($total_items / $total_dkp_items)*100),
 			'CIRCLE_RAIDS'			=> sprintf("%.2F", ($total_raids / $total_dkp_items)*100),
 			'CIRCLE_ADJUSTMENTS'	=> sprintf("%.2F", ($total_adjustments / $total_dkp_items)*100),
+			'REQCOUNT'				=> $req_count,
 
 			'S_WHO_IS_ONLINE'		=> $this->user->check_group(2, false),
 		));

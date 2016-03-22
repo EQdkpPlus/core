@@ -26,10 +26,11 @@
 
 <div id='admininfos_tabs'>
   <ul>
-    <li><a href='#fragment-1'><span>{L_adminc_news}</span></a></li>
-    <li><a href='#fragment-2'><span>{L_adminc_system}</span></a></li>
-    <li><a href='#fragment-3'><span>{L_adminc_statistics}</span></a></li>
-    <li><a href='#fragment-4'><span>{L_adminc_support}</span></a></li>
+    <li><a href='#fragment-1'><i class="fa fa-book fa-lg"></i> <span>{L_adminc_news}</span></a></li>
+    <li><a href='#fragment-2'><i class="fa fa-desktop fa-lg"></i> <span>{L_adminc_system}</span></a></li>
+	<li><a href='#fragment-5'><i class="fa fa-check-square fa-lg"></i><!-- IF REQCOUNT > 0--><span class="bubble">{REQCOUNT}</span><!-- ENDIF --> <span>{L_adminc_requirements}</span></a></li>
+    <li><a href='#fragment-3'><i class="fa fa-line-chart fa-lg"></i> <span>{L_adminc_statistics}</span></a></li>
+    <li><a href='#fragment-4'><i class="fa fa-comments fa-lg"></i> <span>{L_adminc_support}</span></a></li>
   </ul>
 
   <div id="fragment-1">
@@ -46,16 +47,35 @@
 				</h2>
 				<div id="twitterfeed"></div>
   			</div>
-  			
+
   		</div>
   	</div>
+  </div>
+
+  <div id="fragment-5">
+	  <table class="table fullwidth">
+		  <tr>
+  			<th>{L_requirements_modulename}</th>
+  			<th>{L_requirements_available}</th>
+			<th>{L_requirements_required}</th>
+  			<th></th>
+  		</tr>
+		<!-- BEGIN requirements -->
+	 	<tr>
+			<td>{requirements.NAME}</td>
+			<td>{requirements.AVAILABLE}</td>
+			<td>{requirements.REQUIRED}</td>
+			<td><i class="fa fa-{requirements.FA} fa-lg" style="color: {requirements.COLOR}"></i></td>
+		</tr>
+	 <!-- END -->
+ </table>
 
   </div>
 
-  <div id="fragment-2">	
+  <div id="fragment-2">
 	<fieldset class="settings smallsettings">
 		<legend>EQdkp-Plus</legend>
-		
+
 		<dl>
 			<dt><label>{L_liveupdate_installed_version}</label></dt>
 			<dd>{EQDKP_VERSION}</dd>
@@ -77,7 +97,7 @@
 			<dd>{EQDKP_STARTED}</dd>
 		</dl>
 	</fieldset>
-	
+
 	<fieldset class="settings smallsettings">
 		<legend>{L_adminc_server}</legend>
 		<dl>
@@ -109,9 +129,9 @@
 			<dd>{DATABASE_SIZE}</dd>
 		</dl>
 	</fieldset>
-		
+
   </div>
-  
+
   <div id="fragment-3">
   	<div class="grid" style="overflow:hidden;">
   		<div class="col2">
@@ -132,7 +152,7 @@
   			  styleText:           true
   			});
   			</script>
-  		
+
   		</div>
   		<div class="col2">
   			<h3>{L_chars}</h3>
@@ -152,7 +172,7 @@
   			  styleText:           true
   			});
   			</script>
-  		
+
   		</div>
   		<div class="col2">
   			<h3>{L_items}</h3>
@@ -281,6 +301,6 @@
 <br />
 <h2>{L_new_actions}</h2>
 <table  class="table fullwidth colorswitch">
-  {LOGS_TABLE}  
+  {LOGS_TABLE}
 </table>
 <!-- ENDIF -->
