@@ -72,7 +72,7 @@ class template extends gen_class {
 	public function __construct($install=false) {
 		$this->is_install = $install;
 		require_once($this->root_path . 'libraries/yuicompressorPHP/CSSmin.php');
-		
+
 		$this->caching = (defined('DEBUG') && DEBUG > 2) ? false : true;
 	}
 
@@ -289,7 +289,7 @@ class template extends gen_class {
 				if(!defined('DISABLE_LESS')){
 					$strCSS = $this->parseLess($strCSS);
 				}
-				
+
 				//Minify CSS
 				if(!defined('DISABLE_CSS_MINIFY')){
 					$compressor = new CSSmin();
@@ -598,18 +598,18 @@ class template extends gen_class {
 
 		return $imploded_jscode;
 	}
-	
+
 	public function get_footer_js(){
 		$imploded_jscode = "";
-		
+
 		$imploded_jscode = implode("\n", $this->get_templatedata('js_code_eop'));
-		
+
 		$imploded_jscode .= "jQuery(document).ready(function(){";
-		
+
 		$imploded_jscode .= implode("\n", $this->get_templatedata('js_code_eop_docready'));
-		
+
 		$imploded_jscode .= "});";
-		
+
 		return $imploded_jscode;
 	}
 
@@ -634,7 +634,7 @@ class template extends gen_class {
 			if(is_array($this->get_templatedata('js_code_eop')) || is_array($this->get_templatedata('js_code_eop_docready'))){
 				$imploded_jscodeeop = implode("\n", $this->get_templatedata('js_code_eop'));
 				if($debug) $imploded_jscodeeop .= implode("\n", $this->get_templatedata('js_code_file'));
-				
+
 				if(is_array($this->get_templatedata('js_code_eop_docready'))){
 					$imploded_jscodeeop .= "$(document).ready(function(){";
 					$imploded_jscodeeop .= implode("\n", $this->get_templatedata('js_code_eop_docready'));
@@ -1358,7 +1358,7 @@ class template extends gen_class {
 		return $varref;
 	}
 
-	private function compile_load(&$_str, &$handle, $do_echo){		
+	private function compile_load(&$_str, &$handle, $do_echo){
 		if($handle == 'main'){
 			if(strpos($this->body_filename, '/') !== false){
 				$arrFolders = explode("/", $this->body_filename);
@@ -1375,9 +1375,9 @@ class template extends gen_class {
 				$filename = $this->files[$handle];
 			}
 		}
-		
+
 		$file = $this->cachedir . $filename . '.php';
- 
+
 		// Recompile page if the original template is newer, otherwise load the compiled version
 		$strMyHandle = ($handle == 'main') ? 'body' : $handle;
 		if($this->caching && file_exists($file) && $this->timekeeper->get('tpl_cache_'.$this->template, $filename) >= @filemtime($this->files[$strMyHandle])){
@@ -1749,12 +1749,6 @@ class template extends gen_class {
 		$strCSS .= $style['additional_less'];
 
 		try {
-			//ToDo: remove this if less parser is better
-			if (version_compare(phpversion(), '7.0', ">=")){
-				$intJitSetting = ini_get('pcre.jit');
-				if($intJitSetting) ini_set('pcre.jit', 0);
-			}
-			
 			require_once $this->root_path.'libraries/less/Less.php';
 
 			$options = array();
@@ -1762,7 +1756,7 @@ class template extends gen_class {
 			$parser->ModifyVars($lessVars);
 			$parser->parse($strCSS);
 			$strCSS = $parser->getCss();
-			
+
 			//ToDo: remove this if less parser is better
 			if (version_compare(phpversion(), '7.0', ">=") && $intJitSetting){
 				ini_set('pcre.jit', 1);

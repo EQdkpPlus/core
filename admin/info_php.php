@@ -32,19 +32,13 @@ class php_info extends page_generic {
 		$this->process();
 	}
 
-	public function display(){		
+	public function display(){
 		ob_start();
 		phpinfo();
 		$pinfo = ob_get_contents();
 		ob_end_clean();
 		$pinfo = trim($pinfo);
-		
-		if (version_compare(phpversion(), '7.0', ">=")){
-			$intJitSetting = ini_get('pcre.jit');
-			if($intJitSetting) {
-				ini_set('pcre.jit', 0);
-			}
-		}
+
 		preg_match_all("/<body>(.*)\<\/body>(.*)/ms", $pinfo, $output);
 
 		$output = $output[1][0];
