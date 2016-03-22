@@ -47241,12 +47241,12 @@ $.extend(TRUE, QTIP.defaults, {
  * @fileoverview  jQuery plugin that creates tooltip style toolbars.
  * @link          http://paulkinzett.github.com/toolbar/
  * @author        Paul Kinzett (http://kinzett.co.nz/)
- * @version       1.0.4
+ * @version       1.1.0
  * @requires      jQuery 1.7+
  *
- * @license jQuery Toolbar Plugin v1.0.4
+ * @license jQuery Toolbar Plugin v1.1.0
  * http://paulkinzett.github.com/toolbar/
- * Copyright 2013 Paul Kinzett (http://kinzett.co.nz/)
+ * Copyright 2013 - 2015 Paul Kinzett (http://kinzett.co.nz/)
  * Released under the MIT license.
  * <https://raw.github.com/paulkinzett/toolbar/master/LICENSE.txt>
  */
@@ -47267,9 +47267,11 @@ if ( typeof Object.create !== 'function' ) {
             self.elem = elem;
             self.$elem = $( elem );
             self.options = $.extend( {}, $.fn.toolbar.options, options );
-            self.toolbar = $('<div class="tool-container gradient" />')
+            self.metadata = self.$elem.data();
+            self.overrideOptions();
+            self.toolbar = $('<div class="tool-container" />')
                 .addClass('tool-'+self.options.position)
-                .addClass('tool-rounded')
+                .addClass('toolbar-'+self.options.style)
                 .append('<div class="tool-items" />')
                 .append('<div class="arrow" />')
                 .appendTo('body')
@@ -47277,6 +47279,15 @@ if ( typeof Object.create !== 'function' ) {
                 .hide();
             self.toolbar_arrow = self.toolbar.find('.arrow');
             self.initializeToolbar();
+        },
+
+        overrideOptions: function() {
+            var self = this;
+            $.each( self.options, function( $option ) {
+                if (typeof(self.$elem.data('toolbar-'+$option)) != "undefined") {
+                    self.options[$option] = self.$elem.data('toolbar-'+$option);
+                }
+            });
         },
 
         initializeToolbar: function() {
@@ -47289,23 +47300,91 @@ if ( typeof Object.create !== 'function' ) {
         setTrigger: function() {
             var self = this;
 
-            self.$elem.on('click', function(event) {
-                event.preventDefault();
-                if(self.$elem.hasClass('pressed')) {
-                    self.hide();
-                } else {
-                    self.show();
-                }
-            });
+            if (self.options.event != 'click') {
 
-            if (self.options.hideOnClick) {
-                $('html').on("click.toolbar", function ( event ) {
-                    if (event.target != self.elem &&
-                        self.$elem.has(event.target).length === 0 &&
-                        self.toolbar.has(event.target).length === 0 &&
-                        self.toolbar.is(":visible")) {
-                        self.hide();
+                var moveTime;
+                function decideTimeout () {
+                    if (self.$elem.hasClass('pressed')) {
+                        moveTime = setTimeout(function() {
+                            self.hide();
+                        }, 150);
+                    } else {
+                        clearTimeout(moveTime);
+                    };
+                };
+
+                self.$elem.on({
+                    mouseenter: function(event) {
+                        if (self.$elem.hasClass('pressed')) {
+                            clearTimeout(moveTime);
+                        } else {
+                            self.show();
+                        }
                     }
+                });
+
+                self.$elem.parent().on({
+                    mouseleave: function(event){ decideTimeout(); }
+                });
+
+                $('.tool-container').on({
+                    mouseenter: function(event){ clearTimeout(moveTime); },
+                    mouseleave: function(event){ decideTimeout(); }
+                });
+            }
+
+            if (self.options.event == 'click') {
+                self.$elem.on('click', function(event) {
+                    event.preventDefault();
+                    if(self.$elem.hasClass('pressed')) {
+                        self.hide();
+                    } else {
+                        self.show();
+                    }
+                });
+
+                if (self.options.hideOnClick) {
+                    $('html').on("click.toolbar", function ( event ) {
+                        if (event.target != self.elem &&
+                            self.$elem.has(event.target).length === 0 &&
+                            self.toolbar.has(event.target).length === 0 &&
+                            self.toolbar.is(":visible")) {
+                            self.hide();
+                        }
+                    });
+                }
+            }
+
+            if (self.options.hover) {
+                var moveTime;
+
+                function decideTimeout () {
+                    if (self.$elem.hasClass('pressed')) {
+                        moveTime = setTimeout(function() {
+                            self.hide();
+                        }, 150);
+                    } else {
+                        clearTimeout(moveTime);
+                    };
+                };
+
+                self.$elem.on({
+                    mouseenter: function(event) {
+                        if (self.$elem.hasClass('pressed')) {
+                            clearTimeout(moveTime);
+                        } else {
+                            self.show();
+                        }
+                    }
+                });
+
+                self.$elem.parent().on({
+                    mouseleave: function(event){ decideTimeout(); }
+                });
+
+                $('.tool-container').on({
+                    mouseenter: function(event){ clearTimeout(moveTime); },
+                    mouseleave: function(event){ decideTimeout(); }
                 });
             }
 
@@ -47313,7 +47392,7 @@ if ( typeof Object.create !== 'function' ) {
                 event.stopPropagation();
                 if ( self.toolbar.is(":visible") ) {
                     self.toolbarCss = self.getCoordinates(self.options.position, 20);
-                    self.collistionDetection();
+                    self.collisionDetection();
                     self.toolbar.css( self.toolbarCss );
                     self.toolbar_arrow.css( self.arrowCss );
                 }
@@ -47323,7 +47402,7 @@ if ( typeof Object.create !== 'function' ) {
         populateContent: function() {
             var self = this;
             var location = self.toolbar.find('.tool-items');
-            var content = $(self.options.content).clone( true ).find('a').addClass('tool-item gradient');
+            var content = $(self.options.content).clone( true ).find('a').addClass('tool-item');
             location.html(content);
             location.find('.tool-item').on('click', function(event) {
                 event.preventDefault();
@@ -47334,10 +47413,10 @@ if ( typeof Object.create !== 'function' ) {
         calculatePosition: function() {
             var self = this;
                 self.arrowCss = {};
-                self.toolbarCss = self.getCoordinates(self.options.position, 0);
+                self.toolbarCss = self.getCoordinates(self.options.position, self.options.adjustment);
                 self.toolbarCss.position = 'absolute';
                 self.toolbarCss.zIndex = self.options.zIndex;
-                self.collistionDetection();
+                self.collisionDetection();
                 self.toolbar.css(self.toolbarCss);
                 self.toolbar_arrow.css(self.arrowCss);
         },
@@ -47346,35 +47425,39 @@ if ( typeof Object.create !== 'function' ) {
             var self = this;
             self.coordinates = self.$elem.offset();
 
+            if (self.options.adjustment && self.options.adjustment[self.options.position]) {
+                adjustment = self.options.adjustment[self.options.position] + adjustment;
+            }
+
             switch(self.options.position) {
                 case 'top':
                     return {
-                        left: self.coordinates.left-(self.toolbar.width()/2)+(self.$elem.width()/2),
-                        top: self.coordinates.top-self.$elem.height()-adjustment,
+                        left: self.coordinates.left-(self.toolbar.width()/2)+(self.$elem.outerWidth()/2),
+                        top: self.coordinates.top-self.$elem.outerHeight()-adjustment,
                         right: 'auto'
                     };
                 case 'left':
                     return {
-                        left: self.coordinates.left-(self.toolbar.width()/2)-(self.$elem.width()/2)-adjustment,
-                        top: self.coordinates.top-(self.toolbar.height()/2)+(self.$elem.height()/2),
+                        left: self.coordinates.left-(self.toolbar.width()/2)-(self.$elem.outerWidth()/2)-adjustment,
+                        top: self.coordinates.top-(self.toolbar.height()/2)+(self.$elem.outerHeight()/2),
                         right: 'auto'
                     };
                 case 'right':
                     return {
-                        left: self.coordinates.left+(self.toolbar.width()/2)+(self.$elem.width()/3)+adjustment,
-                        top: self.coordinates.top-(self.toolbar.height()/2)+(self.$elem.height()/2),
+                        left: self.coordinates.left+(self.toolbar.width()/2)+(self.$elem.outerWidth()/2)+adjustment,
+                        top: self.coordinates.top-(self.toolbar.height()/2)+(self.$elem.outerHeight()/2),
                         right: 'auto'
                     };
                 case 'bottom':
                     return {
-                        left: self.coordinates.left-(self.toolbar.width()/2)+(self.$elem.width()/2),
-                        top: self.coordinates.top+self.$elem.height()+adjustment,
+                        left: self.coordinates.left-(self.toolbar.width()/2)+(self.$elem.outerWidth()/2),
+                        top: self.coordinates.top+self.$elem.outerHeight()+adjustment,
                         right: 'auto'
                     };
             }
         },
 
-        collistionDetection: function() {
+        collisionDetection: function() {
             var self = this;
             var edgeOffset = 20;
             if(self.options.position == 'top' || self.options.position == 'bottom') {
@@ -47394,27 +47477,9 @@ if ( typeof Object.create !== 'function' ) {
 
         show: function() {
             var self = this;
-            var animation = {'opacity': 1};
-
             self.$elem.addClass('pressed');
             self.calculatePosition();
-
-            switch(self.options.position) {
-                case 'top':
-                    animation.top = '-=20';
-                    break;
-                case 'left':
-                    animation.left = '-=20';
-                    break;
-                case 'right':
-                    animation.left = '+=20';
-                    break;
-                case 'bottom':
-                    animation.top = '+=20';
-                    break;
-            }
-
-            self.toolbar.show().animate(animation, 200 );
+            self.toolbar.show().css({'opacity': 1}).addClass('animate-'+self.options.animation);
             self.$elem.trigger('toolbarShown');
         },
 
@@ -47469,7 +47534,11 @@ if ( typeof Object.create !== 'function' ) {
         content: '#myContent',
         position: 'top',
         hideOnClick: false,
-        zIndex: 120
+        zIndex: 120,
+        hover: false,
+        style: 'default',
+        animation: 'standard',
+        adjustment: 10
     };
 
 }) ( jQuery, window, document );
