@@ -23,7 +23,7 @@ class Less_Parser{
 		'strictUnits'			=> false,			// whether units need to evaluate correctly
 		'strictMath'			=> false,			// whether math has to be within parenthesis
 		'relativeUrls'			=> true,			// option - whether to adjust URL's to be relative
-		'urlArgs'				=> array(),			// whether to add args into url tokens
+		'urlArgs'				=> '',				// whether to add args into url tokens
 		'numPrecision'			=> 8,
 
 		'import_dirs'			=> array(),
@@ -112,13 +112,14 @@ class Less_Parser{
 		self::$contentsMap = array();
 
 		$this->env = new Less_Environment($options);
-		$this->env->Init();
 
 		//set new options
 		if( is_array($options) ){
 			$this->SetOptions(Less_Parser::$default_options);
 			$this->SetOptions($options);
 		}
+
+		$this->env->Init();
 	}
 
 	/**
@@ -803,7 +804,8 @@ class Less_Parser{
 	public function expectChar($tok, $msg = null ){
 		$result = $this->MatchChar($tok);
 		if( !$result ){
-			$this->Error( $msg ? "Expected '" . $tok . "' got '" . $this->input[$this->pos] . "'" : $msg );
+			$msg = $msg ? $msg : "Expected '" . $tok . "' got '" . $this->input[$this->pos] . "'";
+			$this->Error( $msg );
 		}else{
 			return $result;
 		}
@@ -941,7 +943,8 @@ class Less_Parser{
 			$e = true; // Escaped strings
 		}
 
-		if( $this->input[$j] != '"' && $this->input[$j] !== "'" ){
+		$char = $this->input[$j];
+		if( $char !== '"' && $char !== "'" ){
 			return;
 		}
 
@@ -949,15 +952,52 @@ class Less_Parser{
 			$this->MatchChar('~');
 		}
 
-                // Fix for #124: match escaped newlines
-                //$str = $this->MatchReg('/\\G"((?:[^"\\\\\r\n]|\\\\.)*)"|\'((?:[^\'\\\\\r\n]|\\\\.)*)\'/');
-		$str = $this->MatchReg('/\\G"((?:[^"\\\\\r\n]|\\\\.|\\\\\r\n|\\\\[\n\r\f])*)"|\'((?:[^\'\\\\\r\n]|\\\\.|\\\\\r\n|\\\\[\n\r\f])*)\'/');
 
-		if( $str ){
-			$result = $str[0][0] == '"' ? $str[1] : $str[2];
-			return $this->NewObj5('Less_Tree_Quoted',array($str[0], $result, $e, $index, $this->env->currentFileInfo) );
+		$matched = $this->MatchQuoted($char, $j+1);
+		if( $matched === false ){
+			return;
 		}
-		return;
+
+		$quoted = $char.$matched.$char;
+		return $this->NewObj5('Less_Tree_Quoted',array($quoted, $matched, $e, $index, $this->env->currentFileInfo) );
+	}
+
+
+	/**
+	 * When PCRE JIT is enabled in php, regular expressions don't work for matching quoted strings
+	 *
+	 *	$regex	= '/\\G\'((?:[^\'\\\\\r\n]|\\\\.|\\\\\r\n|\\\\[\n\r\f])*)\'/';
+	 *	$regex	= '/\\G"((?:[^"\\\\\r\n]|\\\\.|\\\\\r\n|\\\\[\n\r\f])*)"/';
+	 *
+	 */
+	private function MatchQuoted($quote_char, $i){
+
+		$matched = '';
+		while( $i < $this->input_len ){
+			$c = $this->input[$i];
+
+			//escaped character
+			if( $c === '\\' ){
+				$matched .= $c . $this->input[$i+1];
+				$i += 2;
+				continue;
+			}
+
+			if( $c === $quote_char ){
+				$this->pos = $i+1;
+				$this->skipWhitespace(0);
+				return $matched;
+			}
+
+			if( $c === "\r" || $c === "\n" ){
+				return false;
+			}
+
+			$i++;
+			$matched .= $c;
+		}
+
+		return false;
 	}
 
 
@@ -1134,7 +1174,7 @@ class Less_Parser{
 	}
 
 
-	// A variable entity useing the protective {} e.g. @{var}
+	// A variable entity using the protective {} e.g. @{var}
 	private function parseEntitiesVariableCurly() {
 		$index = $this->pos;
 
@@ -1571,7 +1611,7 @@ class Less_Parser{
 	//
 	// A Rule terminator. Note that we use `peek()` to check for '}',
 	// because the `block` rule will be expecting it, but we still need to make sure
-	// it's there, if ';' was ommitted.
+	// it's there, if ';' was omitted.
 	//
 	private function parseEnd(){
 		return $this->MatchChar(';') || $this->PeekChar('}');
@@ -3772,7 +3812,12 @@ class Less_Functions{
 	 * @param string $unit
 	 */
 	public function isunit( $n, $unit ){
-		return ($n instanceof Less_Tree_Dimension) && $n->unit->is( ( property_exists($unit,'value') ? $unit->value : $unit) ) ? new Less_Tree_Keyword('true') : new Less_Tree_Keyword('false');
+
+		if( is_object($unit) && property_exists($unit,'value') ){
+			$unit = $unit->value;
+		}
+
+		return ($n instanceof Less_Tree_Dimension) && $n->unit->is($unit) ? new Less_Tree_Keyword('true') : new Less_Tree_Keyword('false');
 	}
 
 	/**
@@ -3782,11 +3827,11 @@ class Less_Functions{
 		return is_a($n, $type) ? new Less_Tree_Keyword('true') : new Less_Tree_Keyword('false');
 	}
 
-	public function tint($color, $amount) {
+	public function tint($color, $amount = null) {
 		return $this->mix( $this->rgb(255,255,255), $color, $amount);
 	}
 
-	public function shade($color, $amount) {
+	public function shade($color, $amount = null) {
 		return $this->mix($this->rgb(0, 0, 0), $color, $amount);
 	}
 
@@ -6079,13 +6124,6 @@ class Less_Tree_Import extends Less_Tree{
 					}
 				}elseif( !empty($rootpath) ){
 
-
-					if( $rooturi ){
-						if( strpos($evald_path,$rooturi) === 0 ){
-							$evald_path = substr( $evald_path, strlen($rooturi) );
-						}
-					}
-
 					$path = rtrim($rootpath,'/\\').'/'.ltrim($evald_path,'/\\');
 
 					if( file_exists($path) ){
@@ -7752,8 +7790,8 @@ class Less_Tree_Ruleset extends Less_Tree{
 
 
 		// The paths are [[Selector]]
-		// The first list is a list of comma seperated selectors
-		// The inner list is a list of inheritance seperated selectors
+		// The first list is a list of comma separated selectors
+		// The inner list is a list of inheritance separated selectors
 		// e.g.
 		// .a, .b {
 		//   .c {
@@ -8851,7 +8889,7 @@ class Less_Visitor_processExtends extends Less_Visitor{
 		// a target extend is the one on the ruleset we are looking at copy/edit/pasting in place
 		// e.g. .a:extend(.b) {} and .b:extend(.c) {} then the first extend extends the second one
 		// and the second is the target.
-		// the seperation into two lists allows us to process a subset of chains with a bigger set, as is the
+		// the separation into two lists allows us to process a subset of chains with a bigger set, as is the
 		// case when processing media queries
 		for( $extendIndex = 0, $extendsList_len = count($extendsList); $extendIndex < $extendsList_len; $extendIndex++ ){
 			for( $targetExtendIndex = 0; $targetExtendIndex < count($extendsListTarget); $targetExtendIndex++ ){
@@ -9906,7 +9944,7 @@ class Less_Exception_Chunk extends Less_Exception_Parser{
  */
 class Less_Exception_Compiler extends Less_Exception_Parser{
 
-}
+}/* ./Exception//Parser.php */ 
 
 
 /* ./Output/Mapped.php */ 
