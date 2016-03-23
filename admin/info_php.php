@@ -39,6 +39,14 @@ class php_info extends page_generic {
 		ob_end_clean();
 		$pinfo = trim($pinfo);
 
+		// is required for the regey on that page
+		if (version_compare(phpversion(), '7.0', ">=")){
+			$intJitSetting = ini_get('pcre.jit');
+			if($intJitSetting) {
+				ini_set('pcre.jit', 0);
+			}
+		}
+
 		preg_match_all("/<body>(.*)\<\/body>(.*)/ms", $pinfo, $output);
 
 		$output = $output[1][0];
