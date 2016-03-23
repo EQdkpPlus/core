@@ -209,7 +209,7 @@ class core extends gen_class {
 					break;
 				
 				//Style
-				default: 
+				default:
 					if(is_file($this->root_path . 'templates/' . $this->user->style['template_path'] . '/images/template_background.png')){
 						$template_background_file	= $this->server_path . 'templates/' . $this->user->style['template_path'] . '/images/template_background.png';
 					} else {
@@ -315,7 +315,7 @@ class core extends gen_class {
 					
 				var fullimage = $(this).attr('href');
 				var imagetitle = image_obj.attr('alt');
-				$(this).attr('title', imagetitle);			
+				$(this).attr('title', imagetitle);
 
 				var image_style = $(this).children().attr('style');
 				if (image_style) {
@@ -387,13 +387,13 @@ class core extends gen_class {
 				'U_LOGOUT'					=> $this->controller_path.'Login/Logout'.$this->routing->getSeoExtension().$this->SID.'&amp;link_hash='.$this->user->csrfGetToken("login_pageobjectlogout"),
 				'U_CHARACTERS'				=> ($this->user->is_signedin() && $this->user->check_auths(array('u_member_man', 'u_member_add', 'u_member_conn', 'u_member_del'), 'OR', false)) ? $this->controller_path.'MyCharacters' . $this->routing->getSeoExtension().$this->SID : '',
 				'U_REGISTER'				=> $registerLink,
-				'MAIN_MENU'					=> $this->build_menu_ul(),
-				'MAIN_MENU_MOBILE'			=> $this->build_menu_ul('mainmenu-mobile'),
+				'MAIN_MENU'					=> $this->build_menu_ul($this->build_menu_array(false)),
+				'MAIN_MENU_MOBILE'			=> $this->build_menu_ul($this->build_menu_array(false), 'mainmenu-mobile'),
 				'PAGE_CLASS'				=> 'page-'.$this->clean_url($this->env->get_current_page(false)),
 				'TEMPLATE_CLASS'			=> str_replace(array('.html', '/'), array('', '_'), $this->template_path.$this->template_file),
 				'BROWSER_CLASS'				=> (!registry::get_const('mobile_view')) ? str_replace(" mobile", "", $this->env->agent->class) : $this->env->agent->class,
 				'S_SHOW_PWRESET_LINK'		=> ($this->config->get('cmsbridge_active') == 1 && !strlen($this->config->get('cmsbridge_pwreset_url'))) ? false : true,
-				'U_PWRESET_LINK'			=> ($this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_pwreset_url'))) ? $this->createLink($arrPWresetLink) : '<a href="'.$this->controller_path."Login/LostPassword/".$this->SID."\">".$this->user->lang('lost_password').'</a>',	
+				'U_PWRESET_LINK'			=> ($this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_pwreset_url'))) ? $this->createLink($arrPWresetLink) : '<a href="'.$this->controller_path."Login/LostPassword/".$this->SID."\">".$this->user->lang('lost_password').'</a>',
 				'S_BRIDGE_INFO'				=> ($this->config->get('cmsbridge_active') ==1) ? true : false,
 				'U_USER_PROFILE'			=> $this->routing->build('user', (isset($this->user->data['username']) ? sanitize($this->user->data['username']) : $this->user->lang('anonymous')), 'u'.$this->user->id),
 				'HONEYPOT_VALUE'			=> $this->user->csrfGetToken("honeypot"),
@@ -430,7 +430,7 @@ class core extends gen_class {
 			}
 			$this->tpl->add_js("var mmocms_header_type = '".$this->header_format."';", 'head_top');
 			
-			//EU Cookie Usage Hint			
+			//EU Cookie Usage Hint
 			if ((int)$this->config->get('cookie_euhint_show') && $this->user->blnFirstVisit){
 				$intArticleID = $this->pdh->get('articles', 'resolve_alias', array('PrivacyPolicy'));
 				if ($intArticleID) $url = $this->controller_path.$this->pdh->get('articles', 'path', array($intArticleID));
@@ -644,74 +644,239 @@ class core extends gen_class {
 			return ($blnOneLevel) ? $arrOutOneLevel: $arrOut;
 		}
 
-		
-		public function build_menu_ul($strClass="mainmenu"){
-			$arrItems = $this->build_menu_array(false);
-			$html  = '<ul class="'.$strClass.'">';
+		/**
+		 * Build a Menu
+		 *
+		 * @param $arrMenuItems			Array with menu data
+		 * @param $strCssClass			Add CSS class
+		 * @param $blnAdminMenu			Is Admin Menu
+		 * @param $strImagePath			Image path for menu images
+		 * @param $blnDefaultImage		Do not use a default image
+		 */
+		public function build_menu_ul($arrMenuItems, $strCssClass = '', $blnAdminMenu = false, $strImagePath = '', $blnDefaultImage = false){
+			$strCssClass = (empty($strCssClass) && !$blnAdminMenu)? 'mainmenu' : (($blnAdminMenu && empty($strCssClass))? 'adminmenu' : $strCssClass);
+			$html  = '<ul class="'.$strCssClass.'">';
 			
-			foreach($arrItems as $k => $v){
-				if ( !is_array($v) )continue;
-				
-				if (!isset($v['childs'])){
-					if ( $this->check_url_for_permission($v)) {
-						$class = $this->clean_url($v['link']);
-						if (!strlen($class)) $class = "entry_".$this->clean_url($v['text']);
-						$html .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v, 'link_'.$class).'</li>';
-					} else {
-						continue;
-					}
-					
-				} else {
-					if ( $this->check_url_for_permission($v)) {
-						$class = $this->clean_url($v['link']);
-						if (!strlen($class)) $class = "entry_".$this->clean_url($v['text']);
-						$html .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v, 'link_'.$class).'<ul>';
-					} else {
-						continue;
-					}
-					
-					foreach($v['childs'] as $k2 => $v2){
-						if (!isset($v2['childs'])){
-							if ( $this->check_url_for_permission($v2)) {
-								$class = $this->clean_url($v2['link']);
-								if (!strlen($class)) $class = "entry_".$this->clean_url($v2['text']);
-								$html .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v2, 'link_'.$class).'</li>';
-							} else {
-								continue;
+			// Adminmenu
+			if($blnAdminMenu){
+				// Header row
+				if(is_array($arrMenuItems)){
+					foreach($arrMenuItems as $k => $v){
+						// Restart next loop if the element isn't an array we can use
+						if ( !is_array($v) ){continue;}
+
+						$header_row = '<li><a href="#" class="sub-menu-arrow">'.$this->core->icon_font((isset($v['icon'])) ? $v['icon'] : ((isset($v['img']) ? $v['img'] : (($blnDefaultImage) ? 'fa-puzzle-piece' : ''))), 'fa-lg fa-fw', $strImagePath).' '.$v['name'].'</a>
+											<ul class="sub-menu">';
+
+						// Generate the Menues
+						$sub_rows = '';
+						if(is_array($v)){
+							foreach ( $v as $k2 => $row ){
+								$admnsubmenu = ((isset($row['link']) && $row['text']) ? false : true);
+								// Ignore the first element (header)
+								if ( ($k2 == 'name' || $k2 == 'icon') &&  !$admnsubmenu){
+									continue;
+								}
+
+								// the extension submenues
+								if($admnsubmenu) {
+									// build the icons
+									$icon = $this->core->icon_font((isset($row['icon'])) ? $row['icon'] : ((isset($row['img']) ? $row['img'] : (($blnDefaultImage) ? '' : 'fa-puzzle-piece'))), 'fa-lg fa-fw', $strImagePath);
+									$plugin_header_row = '<li><a href="#" class="sub-menu-arrow">'.$icon.' '.((isset($row['name'])) ? $row['name'] : 'UNKNOWN').'</a>
+														<ul class="sub-menu">';
+									// Submenu
+									$plugin_sub_row = '';
+									if(!isset($row['link']) && !isset($row['text'])){
+										if(is_array($row)){
+											foreach($row as $k3 => $row2){
+												if ($k3 == 'name' || $k3 =='icon'){
+													continue;
+												}
+
+												if ($row2['check'] == '' || ((is_array($row2['check'])) ? $this->user->check_auths($row2['check'][1], $row2['check'][0], false) : $this->user->check_auth($row2['check'], false))){
+													$subsub_icon = $this->core->icon_font((isset($row2['icon'])) ? $row2['icon'] : ((isset($row2['img']) ? $row2['img'] : (($blnDefaultImage) ? '' : ''))), 'fa-lg fa-fw', $strImagePath);
+													$plugin_sub_row .= '<li><a href="'.$this->root_path.$row2['link'].'">';
+													$plugin_sub_row .= $subsub_icon.' '.$row2['text'].'</a></li>';
+												}
+											}
+										}
+									}
+									if(strlen($plugin_sub_row) > 0) $sub_rows .= $plugin_header_row.$plugin_sub_row.'</ul></li>';
+								}else{
+									if (($row['check'] == '' || ((is_array($row['check'])) ? $this->user->check_auths($row['check'][1], $row['check'][0], false) : $this->user->check_auth($row['check'], false))) && (!isset($row['check2']) || $row['check2'] == true)){
+										$subicon	= $this->core->icon_font((isset($row['icon'])) ? $row['icon'] : ((isset($row['img']) ? $row['img'] : (($blnDefaultImage) ? '' : ''))), 'fa-lg fa-fw', $strImagePath);
+										$sub_rows .= '<li><a href="'.$this->root_path.$row['link'].'">';
+										$sub_rows .= $subicon.' '.$row['text'].'</a></li>';
+									}
+								}
 							}
+						}
+
+						if(strlen($sub_rows)) $html .= $header_row.$sub_rows.'</ul></li>';
+					}
+				}
+				$html .= '</ul>';
+				return $html;
+			
+			// Mainmenu
+			}else{
+				foreach($arrMenuItems as $k => $v){
+					if ( !is_array($v) )continue;
+
+					if (!isset($v['childs'])){
+						if ( $this->check_url_for_permission($v)) {
+							$class = $this->clean_url($v['link']);
+							if (!strlen($class)) $class = "entry_".$this->clean_url($v['text']);
+							$html .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v, 'link_'.$class).'</li>';
 						} else {
-							if ( $this->check_url_for_permission($v2)) {							
-								$class = $this->clean_url($v2['link']);
-								if (!strlen($class)) $class = "entry_".$this->clean_url($v2['text']);
-								$html .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v2, 'link_'.$class).'<ul>';
-							} else {
-								continue;
-							}
-							
-							foreach($v2['childs'] as $k3 => $v3){
-								if ( $this->check_url_for_permission($v3)) {	
-									$class = $this->clean_url($v3['link']);
-									if (!strlen($class)) $class = "entry_".$this->clean_url($v3['text']);
-									$html .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v3, 'link_'.$class).'</li>';
+							continue;
+						}
+
+					} else {
+						
+						if ( $this->check_url_for_permission($v)) {
+							$class = $this->clean_url($v['link']);
+							if (!strlen($class)) $class = "entry_".$this->clean_url($v['text']);
+							$html .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v, 'link_'.$class.' sub-menu-arrow').'<ul class="sub-menu">';
+						} else {
+							continue;
+						}
+
+						foreach($v['childs'] as $k2 => $v2){
+							if (!isset($v2['childs'])){
+								if ( $this->check_url_for_permission($v2)) {
+									$class = $this->clean_url($v2['link']);
+									if (!strlen($class)) $class = "entry_".$this->clean_url($v2['text']);
+									$html .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v2, 'link_'.$class).'</li>';
 								} else {
 									continue;
 								}
+							} else {
+								if ( $this->check_url_for_permission($v2)) {
+									$class = $this->clean_url($v2['link']);
+									if (!strlen($class)) $class = "entry_".$this->clean_url($v2['text']);
+									$html .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v2, 'link_'.$class.' sub-menu-arrow').'<ul class="sub-menu">';
+								} else {
+									continue;
+								}
+
+								foreach($v2['childs'] as $k3 => $v3){
+									if ( $this->check_url_for_permission($v3)) {
+										$class = $this->clean_url($v3['link']);
+										if (!strlen($class)) $class = "entry_".$this->clean_url($v3['text']);
+										$html .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v3, 'link_'.$class).'</li>';
+									} else {
+										continue;
+									}
+								}
+
+								$html .= '</ul></li>';
 							}
-							
-							$html .= '</ul></li>';
+
 						}
-					
+
+						$html .= '</ul></li>';
 					}
-					
-					$html .= '</ul></li>';
+
 				}
-				
+
+				$html .= '</ul>';
+				return str_replace("<ul></ul>", "", $html);
+			}
+		}
+
+		/**
+		 * Build a ButtonDropDown Menu
+		 *
+		 * @param $strButtonText		Text of the button
+		 * @param $arrMenuItems			Array with menu data ['link','name','perm',.. 'icon','type','append']
+		 * @param $strCssClass			Add CSS class
+		 * @param $strCssID				Add CSS id for checkbox listener
+		 * @param $arrCheckBoxListener	Use checkbox listener to rename by count
+		 */
+		public function build_dropdown_menu($strButtonText, $arrMenuItems, $strCssClass = '', $strCssID = '', $arrCheckBoxListener = array()){
+			$strCssID = (!empty($strCssID))? $strCssID : $hash = 'ddm_'.md5(serialize($arrMenuItems));
+			$html = '<div id="'.$strCssID.'" class="btn-ddm '.$strCssClass.'"><button onclick="return false;">'.$strButtonText.'</button><ul>';
+			
+			foreach($arrMenuItems as $key => $arrMenuItem){
+				if($arrMenuItem['perm']){
+					#$arrMenuItem['icon'] = (isset($arrMenuItem['icon']) && !empty($arrMenuItem['icon']))? '<i class="fa '.$arrMenuItem['icon'].' fa-fw fa-lg"></i>' : '';
+					$arrMenuItem['icon'] = (isset($arrMenuItem['icon']) && !empty($arrMenuItem['icon']))? $this->icon_font($arrMenuItem['icon'], 'fa-lg') : '';
+					
+					switch($arrMenuItem['type']){
+						case 'button':
+							$html .= '<li><a href="javascript:void(0);" onclick="$(\''.$arrMenuItem['link'].'\').trigger(\'click\');">'.$arrMenuItem['icon'].'&nbsp;'.$arrMenuItem['name'].'</a>'.((isset($arrMenuItem['append'])) ? $arrMenuItem['append'] : '').'</li>';
+							break;
+
+						default: $html .= '<li><a href="'.$arrMenuItem['link'].'">'.$arrMenuItem['icon'].'&nbsp;'.$arrMenuItem['name'].'</a></li>';
+					}
+				}
+			}
+			$html .= '</ul></div><div class="clear"></div>';
+			
+			if(count($arrCheckBoxListener)){
+				foreach($arrCheckBoxListener as $strCheckBox) {
+					$this->tpl->add_js("
+						$('".$strCheckBox."').on('change', function(){
+							var count = 0;
+							if ($('".$strCheckBox."').prop(\"multiple\")){
+								$('".$strCheckBox." :selected').each(function(i, selected){
+									count += 1;
+								});
+							} else {
+								$('".$strCheckBox."').each(function(){
+									if (this.checked){
+										count += 1;
+									}
+								});
+							}
+							$('#".$strCssID.".btn-ddm > button').html((count > 0)? count + ' ".$strButtonText."' : '".$strButtonText."');
+						});
+						
+						// WorkAround for Select inputs
+						
+						/*
+						$('#".$strCssID.".btn-ddm > ul').find('select').each(function(){
+							$(this).on('click', function(){
+								console.log('select clicked-- addClass()');
+								$('#".$strCssID.".btn-ddm').addClass('active');
+							});
+						});
+						$('#".$strCssID.".btn-ddm > ul select').find('option').each(function(){
+							$(this).on('click', function(event){
+								event.stopPropagation();
+								console.log('option clicked-- removeClass()');				// danach wird irwie 1 nochmal getriggerd, why?
+								$('#".$strCssID.".btn-ddm').removeClass('active');
+							});
+						});
+						*/
+						
+						// Active on Click Select
+						// Active on Mover Option
+						// Inactive on Mleave Option after 3s
+						
+						var test = { };
+						
+						$('#".$strCssID.".btn-ddm select').on('click', function(){
+							$('#".$strCssID.".btn-ddm').addClass('active');
+						});
+						$('#".$strCssID.".btn-ddm select').on('mouseover', 'option', function(){
+							clearTimeout(test);
+							$('#".$strCssID.".btn-ddm').addClass('active');
+						});
+						$('#".$strCssID.".btn-ddm select').on('mouseleave', 'option', function(){
+							test = setTimeout(function(){
+								$('#".$strCssID.".btn-ddm').removeClass('active');
+							}, 3000);
+						});
+						
+					", 'docready');
+				}
 			}
 			
-			$html .= '</ul>';
 			return str_replace("<ul></ul>", "", $html);
 		}
-		
+
 		public function clean_url($strUrl){
 			return preg_replace("/[^a-zA-Z0-9_]/","",utf8_strtolower($this->user->removeSIDfromString($strUrl)));
 		}
@@ -754,7 +919,7 @@ class core extends gen_class {
 					break ;
 				case '2':
 				case '3':
-				case '4':  
+				case '4':
 				case '5':	{
 							switch($wrapper_id){
 								case 'Board':
@@ -826,7 +991,7 @@ class core extends gen_class {
 			$this->notifications = true;
 		}
 
-		public function page_tail(){			
+		public function page_tail(){
 			if ( !empty($this->template_path) ){
 				$this->tpl->set_template($this->user->style['template_path'], '', $this->template_path);
 			}

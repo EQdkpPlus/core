@@ -46,7 +46,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			'mname'			=> array('name', array('%member_id%'), array()),
 			'medit'			=> array('editbutton', array('%member_id%'), array()),
 			'mlink'			=> array('memberlink', array('%member_id%', '%link_url%', '%link_url_suffix%', true, true, false, '%use_controller%'), array()),
-			'mlevel'		=> array('level', array('%member_id%'), array()),		
+			'mlevel'		=> array('level', array('%member_id%'), array()),
 			'mrank'			=> array('rankname', array('%member_id%'), array()),
 			'mrank_sortid'	=> array('rankname_sortid', array('%member_id%'), array()),
 			'mrankimg'		=> array('rankimage', array('%member_id%'), array()),
@@ -55,7 +55,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			'mtwink'		=> array('twink', array('%member_id%', true), array(true)),
 			'mmainname'		=> array('mainname', array('%member_id%'), array(true)),
 			'muser'			=> array('user', array('%member_id%'), array()),
-			'mrole'			=> array('defaultrole',  array('%member_id%'), array()),	
+			'mrole'			=> array('defaultrole',  array('%member_id%'), array()),
 			'picture'		=> array('picture', array('%member_id%'), array(true)),
 			'note'			=> array('note', array('%member_id%'), array(true)),
 			'last_update'	=> array('last_update', array('%member_id%'), array(true)),
@@ -289,7 +289,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 						if (strpos($arrField['options_language'], 'lang:') === 0){
 							$arrSplitted = explode(':', $arrField['options_language']);
 							$arrGlang = $this->game->glang($arrSplitted[1]);
-							$arrLang = (isset($arrSplitted[2])) ? $arrGlang[$arrSplitted[2]] : $arrGlang;			
+							$arrLang = (isset($arrSplitted[2])) ? $arrGlang[$arrSplitted[2]] : $arrGlang;
 						} else $arrLang = $this->game->get($arrField['options_language']);
 						
 						if (isset($arrLang[$strMemberValue])) $out .= ' '.$arrLang[$strMemberValue];
@@ -386,7 +386,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 						if ($arrField['options_language'] != ""){
 							if (strpos($arrField['options_language'], 'lang:') === 0){
 								$arrSplitted = explode(':', $arrField['options_language']);
-								$arrGlang = $this->game->glang($arrSplitted[1]);				
+								$arrGlang = $this->game->glang($arrSplitted[1]);
 								$arrLang = (isset($arrSplitted[2])) ? $arrGlang[$arrSplitted[2]] : $arrGlang;
 								
 							} else $arrLang = $this->game->get($arrField['options_language']);
@@ -396,7 +396,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 						if ($arrField['options_language'] != ""){
 							if (strpos($arrField['options_language'], 'lang:') === 0){
 								$arrSplitted = explode(':', $arrField['options_language']);
-								$arrGlang = $this->game->glang($arrSplitted[1]);				
+								$arrGlang = $this->game->glang($arrSplitted[1]);
 								$arrLang = (isset($arrSplitted[2])) ? $arrGlang[$arrSplitted[2]] : $arrGlang;
 								
 							} else $arrLang = $this->game->get($arrField['options_language']);
@@ -495,7 +495,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			return $this->get_rankname($member_id);
 		}
 		
-		public function comp_rankname_sortid($params1, $params2){		
+		public function comp_rankname_sortid($params1, $params2){
 			$val1 = $this->pdh->get('rank', 'sortid', array($this->get_rankid($params1[0])));
 			$val2 = $this->pdh->get('rank', 'sortid', array($this->get_rankid($params2[0])));
 			if ($val1 > $val2) {
@@ -542,7 +542,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 						$intTotalCount = count($arrGameUniqueIDs);
 						if (count($blnResultArray) === $intTotalCount) return true;
 					}
-				}	
+				}
 			}
 			
 			//Char does not exist
@@ -792,7 +792,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 					'perm'		=> $this->game->get_importAuth('u_member_man', 'char_update') && !$this->game->get_require_apikey(),
 				),
 			);
-			return $this->jquery->DropDownMenu('actionmenu'.$memberid, $cm_actions, '<i class="fa fa-wrench fa-lg"></i>');
+			return $this->core->build_dropdown_menu('<i class="fa fa-wrench fa-lg"></i>', $cm_actions, '', 'actionmenu'.$memberid);
 		}
 
 		public function get_other_members($member_id){

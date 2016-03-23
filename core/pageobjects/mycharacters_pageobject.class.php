@@ -173,7 +173,7 @@ class mycharacters_pageobject extends pageobject {
 
 			// JS Code
 			'JS_CONNECTIONS'		=> $this->jquery->MultiSelect('member_id', $mselect_list, $mselect_selected, array('width' => 350, 'height' => 180, 'filter'=>true)),
-			'ADD_MENU'				=> $this->jquery->DropDownMenu('colortab', $cm_addmenu, '<i class="fa fa-plus fa-lg"> </i> '.$this->user->lang('uc_add_char')),
+			'ADD_MENU'				=> $this->core->build_dropdown_menu('<i class="fa fa-plus fa-lg"> </i> '.$this->user->lang('uc_add_char'), $cm_addmenu, 'floatRight'),
 
 			'S_SHOW_NO_CONN_INFO'	=> $show_no_conn_info,
 		));

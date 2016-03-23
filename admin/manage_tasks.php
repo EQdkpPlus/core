@@ -101,7 +101,7 @@ class ManageTasks extends page_generic {
 							'HEADLINE'	=> $this->user->lang($arrTask['name']),
 							'ID'		=> 't_'.md5($taskID),
 							'NAME'		=> $taskID,
-							'MENU'		=> $this->jquery->ButtonDropDownMenu('menu_t_'.md5($taskID), $arrMenuItems, array("input[name=\"cb_t_".md5($taskID)."[]\"]"), $this->user->lang('selected_elements').'...'),
+							'MENU'		=> $this->core->build_dropdown_menu($this->user->lang('selected_elements').'...', $arrMenuItems, '', 't_'.md5($taskID), array("input[name=\"cb_t_".md5($taskID)."[]\"]")),
 						));
 
 						foreach($arrMenuItems as $val){

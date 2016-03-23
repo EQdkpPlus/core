@@ -420,7 +420,7 @@ class Manage_User_Groups extends page_generic {
 			'KEY'					=> $key,
 			'ADD_USER_DROPDOWN'		=> $this->jquery->MultiSelect('add_user', $not_in, '', array('width' => 350, 'filter' => true)),
 			'GRP_ID'				=> $groupID,
-			'BUTTON_MENU'			=> $this->jquery->ButtonDropDownMenu('user_groups_user_menu', $arrMenuItems, array(".usercheckbox"), $this->user->lang('selected_user').'...'),
+			'BUTTON_MENU'			=> $this->core->build_dropdown_menu($this->user->lang('selected_user').'...', $arrMenuItems, '', 'user_groups_user_menu', array(".usercheckbox")),
 			'S_USERGROUP_ADMIN' 	=> $this->user->check_auth('a_usergroups_man', false),
 		));
 

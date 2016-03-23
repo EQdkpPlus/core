@@ -295,7 +295,7 @@ class Manage_Raid_Groups extends page_generic {
 			'KEY'					=> $key,
 			'ADD_USER_DROPDOWN'		=> $this->jquery->MultiSelect('add_user', $not_in, '', array('width' => 350, 'filter' => true)),
 			'GRP_ID'				=> $groupID,
-			'BUTTON_MENU'			=> $this->jquery->ButtonDropDownMenu('raid_groups_user_menu', $arrMenuItems, array(".usercheckbox"), $this->user->lang('selected_chars').'...'),
+			'BUTTON_MENU'			=> $this->core->build_dropdown_menu($this->user->lang('selected_chars').'...', $arrMenuItems, '', 'raid_groups_user_menu', array(".usercheckbox")),
 			'S_USERGROUP_ADMIN' 	=> $this->user->check_auth('a_raidgroups_man', false),
 		));
 

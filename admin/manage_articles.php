@@ -373,7 +373,7 @@ class Manage_Articles extends page_generic {
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
 			'CATEGORY_NAME' 	=> $this->pdh->get('article_categories', 'name', array($cid)),
 			'CID'				=> $cid,
-			'BUTTON_MENU'		=> $this->jquery->ButtonDropDownMenu('manage_members_menu', $arrMenuItems, array("input[name=\"selected_ids[]\"]"), $this->user->lang('selected_articles').'...'),		
+			'BUTTON_MENU'		=> $this->core->build_dropdown_menu($this->user->lang('selected_articles').'...', $arrMenuItems, '', 'manage_members_menu', array("input[name=\"selected_ids[]\"]")),
 		));
 
 		$this->core->set_vars(array(

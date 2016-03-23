@@ -582,6 +582,8 @@ if (!class_exists("jquery")) {
 		* @return CHAR
 		*/
 		public function DropDownMenu($id, $menuitems ,$button=''){
+			$this->pdl->deprecated('DropDownMenu');
+			
 			$dmmenu  = '<ul id="'.$id.'" class="sf-menu sf-ddm">
 							<li><a href="#">'.$button.'</a>
 						<ul>';
@@ -608,6 +610,8 @@ if (!class_exists("jquery")) {
 		* @return CHAR
 		*/
 		public function ButtonDropDownMenu($id, $menuitems, $checkbox_listener=array(), $button='', $buttonIcon=''){
+			$this->pdl->deprecated('ButtonDropDownMenu');
+			
 			if (count($checkbox_listener)){
 				foreach($checkbox_listener as $listener_id) {
 					$this->tpl->add_js("
@@ -695,6 +699,8 @@ if (!class_exists("jquery")) {
 		* @return CHAR
 		*/
 		public function SuckerFishMenu($array, $name, $mnuimagepth, $nodefimage=false, $scndclass=''){
+			$this->pdl->deprecated('SuckerFishMenu');
+			
 			$this->MenuConstruct_js($name);
 			return $this->MenuConstruct_html($array, $name, $mnuimagepth, $nodefimage, $scndclass);
 		}
@@ -710,6 +716,8 @@ if (!class_exists("jquery")) {
 		* @return CHAR
 		*/
 		public function MenuConstruct_html($array, $name, $mnuimagepth, $nodefimage, $scndclass='sf-admin'){
+			$this->pdl->deprecated('MenuConstruct_html');
+			
 			$hhm  = '<ul class="'.$name.' '.$scndclass.'">';
 
 			// Header row
@@ -779,6 +787,8 @@ if (!class_exists("jquery")) {
 		* @return CHAR
 		*/
 		private function MenuConstruct_js($name){
+			$this->pdl->deprecated('MenuConstruct_js');
+			
 			$this->tpl->add_js("
 					jQuery('ul.".$name."').superfish({
 						delay:		400,
