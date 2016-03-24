@@ -45,6 +45,11 @@ if(!class_exists('requirements')) {
 					'installed'		=> (extension_loaded('zlib')) ? $this->user->lang('yes') : $this->user->lang('no'),
 					'passfail'		=> (extension_loaded('zlib')) ? true : false
 				),
+				'ZipArchive'		=> array(
+						'required'		=> $this->user->lang('yes'),
+						'installed'		=> (class_exists('ZipArchive')) ? $this->user->lang('yes') : $this->user->lang('no'),
+						'passfail'		=> (class_exists('ZipArchive')) ? true : false
+				),
 				'memory'	=> array(
 					'required'		=> REQ_PHP_MEMORY,
 					'installed'		=> (intval(ini_get('memory_limit')) == -1) ? "Unlimited" : ini_get('memory_limit'),
