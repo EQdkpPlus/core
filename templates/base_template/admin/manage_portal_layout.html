@@ -17,7 +17,7 @@ $(document).ready(function(){
 				var childs = $('#'+value).children();
 				$.each(childs, function(index, value2){
 					$('#block_'+value2.id).val('disabled');
-					$('#'+value2.id).addClass('portal_disabled').addClass('equalHeights');
+					$('#'+value2.id).addClass('portal_disabled');
 					$('#disabled').append($('#'+value2.id));
 				});
 				$('#'+value).html('');
@@ -57,8 +57,8 @@ function createEmbeddLink(){
 	}
 	if($("#embedd_wide_content").is(":checked")){
 		addition = addition + "EQdkpPortal.setVar(\"wide\", 1); ";
-	}	
-	base = base.replace(/ADDITION/g, addition);	
+	}
+	base = base.replace(/ADDITION/g, addition);
 	$("#embedd_html").html(base);
 }
 
@@ -182,7 +182,7 @@ function createEmbeddLink(){
 				</li>
 				<!-- END bottom_row-->
 			</ul>
-		</div>	
+		</div>
 	</div>
 	
 	<div style="float:left; width:25%; min-width:200px; <!-- IF S_RIGHT_HIDDEN -->display:none;<!-- ENDIF -->" id="block_container_right">
@@ -198,7 +198,7 @@ function createEmbeddLink(){
 						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_portal_duplicate}"><a href="{ACTION}&amp;duplicate=true&amp;selected_id={right_row.ID}&amp;l={LAYOUT_ID}"><i class="fa fa-plus fa-lg"></i></a></div>
 						<!-- ENDIF -->
 						<!-- IF right_row.S_CHILD -->
-						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({right_row.ID});"><i class="fa fa-trash-o fa-lg"></i></div>					
+						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({right_row.ID});"><i class="fa fa-trash-o fa-lg"></i></div>
 						<!-- ENDIF -->
 						<div class="floatRight" style="height: 20px; padding: 2px;"><i class="fa fa-users coretip fa-lg" data-coretip="{right_row.PERMISSIONS}"></i></div>
 					</div>
@@ -227,7 +227,7 @@ function createEmbeddLink(){
 						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_portal_duplicate}"><a href="{ACTION}&amp;duplicate=true&amp;selected_id={block_row.module_row.ID}&amp;l={LAYOUT_ID}"><i class="fa fa-plus fa-lg"></i></a></div>
 						<!-- ENDIF -->
 						<!-- IF block_row.module_row.S_CHILD -->
-						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({block_row.module_row.ID});"><i class="fa fa-trash-o fa-lg"></i></div>					
+						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({block_row.module_row.ID});"><i class="fa fa-trash-o fa-lg"></i></div>
 						<!-- ENDIF -->
 						<div class="floatRight" style="height: 20px; padding: 2px;"><i class="fa fa-users coretip fa-lg" data-coretip="{block_row.PERMISSIONS}"></i></div>
 					</div>
@@ -253,9 +253,9 @@ function createEmbeddLink(){
 	<div style="width:100%;">
 		<div class="portal_block_border">
 			<h2>{L_portalplugin_disabled}:</h2>
-			<ul id="disabled" class="connectedSortable portal_block">
+			<ul id="disabled" class="connectedSortable portal_block" style="display: flex; flex-wrap: wrap;">
 				<!-- BEGIN disabled_row -->
-				<li class="ui-state-hover {disabled_row.CLASS} portal_disabled equalHeights" id="item_{disabled_row.ID}" style="padding: 7px; margin-top: 4px;">
+				<li class="ui-state-hover {disabled_row.CLASS} portal_disabled" id="item_{disabled_row.ID}" style="padding: 7px; margin-top: 4px;">
 					<div style="width: 90px;" class="floatRight">
 						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_portalplugin_settings}" onclick="javascript:portalsettings($(this).parent().parent().attr('id'));"><i class="fa fa-wrench fa-lg"></i></div>
 						<div class="hand floatRight" style="height: 20px; padding: 2px;" title="{L_embedd}" onclick="embedddialog($(this).parent().parent().attr('id'))" ><i class="fa fa-link fa-lg"></i></div>
@@ -263,7 +263,7 @@ function createEmbeddLink(){
 						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_portal_duplicate}"><a href="{ACTION}&amp;duplicate=true&amp;selected_id={disabled_row.ID}&amp;l={LAYOUT_ID}"><i class="fa fa-plus fa-lg"></i></a></div>
 						<!-- ENDIF -->
 						<!-- IF disabled_row.S_CHILD -->
-						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({disabled_row.ID});"><i class="fa fa-trash-o fa-lg"></i></div>					
+						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({disabled_row.ID});"><i class="fa fa-trash-o fa-lg"></i></div>
 						<!-- ENDIF -->
 						<div class="floatRight" style="height: 20px; padding: 2px;"><i class="fa fa-users coretip fa-lg" data-coretip="{disabled_row.PERMISSIONS}"></i></div>
 					</div>

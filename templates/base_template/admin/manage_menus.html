@@ -279,7 +279,7 @@
 						</dd>
 					</dl>
 					<dl>
-						<dt><label>{L_link}:</label></dt>					
+						<dt><label>{L_link}:</label></dt>
 						<dd><input type="text" style="width:90%" class="editlink-url"/></dd>
 					</dl>
 					<dl>
@@ -340,7 +340,7 @@
 			<input type="hidden" value='["0"]'  name="mainmenu[KEY][visibility]" class="link-visibility">
 			<input type="hidden" value="KEY"  name="mainmenu[KEY][specialid]" class="link-specialid">
 
-			<input type="hidden" value="pluslink"  name="mainmenu[KEY][type]" class="link-type">			
+			<input type="hidden" value="pluslink"  name="mainmenu[KEY][type]" class="link-type">
 			<input type="hidden" value="0"  name="mainmenu[KEY][hidden]" class="link-hidden">
 			<input type="hidden" value="new"  name="mainmenu[KEY][id]" class="link-id">
 		</div>
@@ -351,7 +351,7 @@
 			<span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}" style="display:inline-block;"></span>&nbsp;
 			<span class="link-hide eye"></span>&nbsp;
 			TEXT <i class="fa fa-trash-o fa-lg hand" title="{L_delete}" onclick="softdelete_row(this);"></i>
-			<input type="hidden" value="normal"  name="mainmenu[KEY][type]" class="link-type">			
+			<input type="hidden" value="normal"  name="mainmenu[KEY][type]" class="link-type">
 			<input type="hidden" value="0"  name="mainmenu[KEY][hidden]" class="link-hidden">
 			<input type="hidden" value="HASH"  name="mainmenu[KEY][id]" class="link-id">
 		</div>
@@ -385,15 +385,15 @@
 		<!-- ENDIF -->
 		</ul>
 	</div>
-	<div class="connectedSortable5" id="sortable10" >
+	<div class="connectedSortable5" id="sortable10" style="display: flex; flex-wrap: wrap;">
 		<!-- BEGIN group_row -->
-		<div class="manage_menues_block connector" style="float:left;">
+		<div class="manage_menues_block connector">
 			<!-- BEGIN menu_row -->
 			<div id="container_{group_row.menu_row.IDENT}">
 				<div class="not-sortable toggle_button">
 					<span class="togglebutton_name center">{group_row.menu_row.NAME}</span>
 				</div>
-				<div id="tt_{group_row.menu_row.IDENT}" class="toggle_container equalHeights">
+				<div id="tt_{group_row.menu_row.IDENT}" class="toggle_container">
 					<ul>
 						<!-- BEGIN item_row -->
 						<li class="t_{group_row.menu_row.IDENT}" id="{group_row.menu_row.item_row.ID}" title="{group_row.menu_row.GROUP}">{group_row.menu_row.item_row.ICON} {group_row.menu_row.item_row.NAME}

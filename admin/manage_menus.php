@@ -19,7 +19,7 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//tbody not allowed withoud thead, 
+//tbody not allowed withoud thead,
 
 define('EQDKP_INC', true);
 define('IN_ADMIN', true);
@@ -88,7 +88,7 @@ class Manage_Menus extends page_generic {
 					
 					$hidden = $arrItems[$item['item_id']]['hidden'];
 					switch((int)$item['depth']){
-						case 1: 	$intFirstLevel++;									
+						case 1: 	$intFirstLevel++;
 									$arrSorted[$intFirstLevel]['item'] = array('hash' => $hash, 'hidden' => $hidden);
 						break;
 						case 2:		$intSecondLevel++;
@@ -102,7 +102,7 @@ class Manage_Menus extends page_generic {
 			}
 
 			$this->config->set('mainmenu', serialize($arrSorted));
-			$this->pdh->process_hook_queue();			
+			$this->pdh->process_hook_queue();
 		}
 				
 		//Admin Favs
@@ -159,8 +159,6 @@ class Manage_Menus extends page_generic {
 
 					}
 			}).disableSelection();
-			
-			$(".equalHeights").equalHeights();
 			
 		', 'docready');
 
@@ -226,7 +224,7 @@ class Manage_Menus extends page_generic {
 									'ICON' => $this->core->icon_font((isset($adm['icon'])) ? $adm['icon'] : ((isset($adm['img']) ? $adm['img'] : (($nodefimage) ? '' : 'fa-puzzle-piece'))), 'fa-lg', $image_path),
 									'DATA'	=> $fav,
 									'IDENT'	=> 'i'.md5($latest['name']),
-									'GROUP'	=> $latest['name'],	
+									'GROUP'	=> $latest['name'],
 								));
 								$this->tpl->add_js('document.getElementById("cb_fav_'.$fav_key.'").checked = true;', 'docready');
 								$no_favs = false;
@@ -329,7 +327,7 @@ class Manage_Menus extends page_generic {
 		$arrLinkCategories = $this->build_link_categories();
 		if (count($arrLinkCategories)) $arrLinkTypes = array_merge($arrLinkTypes, $arrLinkCategories);
 		
-		$this->tpl->assign_vars(array(		
+		$this->tpl->assign_vars(array(
 			'CSRF_MODE_TOKEN'		=> $this->CSRFGetToken('mode'),
 			'S_NO_FAVS'				=> (count($favs_array) > 0) ? false : true,
 			'DD_LINK_WINDOW'		=> new hdropdown('editlink-window', array('options' => $a_linkMode, 'class' => 'editlink-window')),
@@ -469,9 +467,9 @@ class Manage_Menus extends page_generic {
 				';
 			} else {
 				$html .= ''.$arrLink['text'].' ('.$this->user->removeSIDfromString($arrLink['link']).') <i class="fa fa-trash-o fa-lg hand" title="'.$this->user->lang('delete').'" onclick="softdelete_row(this);"></i>';
-			}	
+			}
 			$html .= '
-			<input type="hidden" value="'.(($blnPluslink) ? 'pluslink' : 'normal').'"  name="mainmenu['.$id.'][type]" class="link-type">			
+			<input type="hidden" value="'.(($blnPluslink) ? 'pluslink' : 'normal').'"  name="mainmenu['.$id.'][type]" class="link-type">
 			<input type="hidden" value="'.(((int)$arrLink['hidden']) ? 1 : 0).'"  name="mainmenu['.$id.'][hidden]" class="link-hidden">
 			<input type="hidden" value="'.$hash.'"  name="mainmenu['.$id.'][id]" class="link-id">
 			</div>
