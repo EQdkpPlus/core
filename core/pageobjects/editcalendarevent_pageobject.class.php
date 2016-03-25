@@ -499,6 +499,15 @@ class editcalendarevent_pageobject extends pageobject {
 			$dr_repeat_custom = 0;
 		}
 
+		// build select-calendarmode dropdown
+		foreach($calendar_mode_array as $cm_type => $cm_name){
+			$this->tpl->assign_block_vars('calendar_modes', array(
+				'IS_SELECTED'	=> ($calendermode == $cm_type)? true : false,
+				'VALUE'			=> $cm_type,
+				'TEXT'			=> $cm_name,
+			));
+		}
+
 		$this->tpl->assign_vars(array(
 			'IS_EDIT'			=> ($this->url_id > 0) ? true : false,
 			'IS_CLONED'			=> ((isset($eventdata['repeating']) && $eventdata['repeating'] > 0) ? true : false),
@@ -509,7 +518,7 @@ class editcalendarevent_pageobject extends pageobject {
 			'DR_REPEAT'			=> new hdropdown('repeat_dd', array('options' => $drpdwn_repeat, 'value' => ((isset($eventdata['repeating']) && $eventdata['repeating'] > 0) ? $eventdata['repeating'] : '0'))),
 			'REPEAT_CUSTOM'		=> $dr_repeat_custom,
 			'DR_TEMPLATE'		=> new hdropdown('raidtemplate', array('options' => $this->pdh->get('calendar_raids_templates', 'dropdowndata'), 'id' => 'cal_raidtemplate')),
-			'DR_CALENDARMODE'	=> new hdropdown('calendarmode', array('options' => $calendar_mode_array, 'value' => $calendermode, 'id' => 'selectmode', 'class' => 'dropdown')),
+			#'DR_CALENDARMODE'	=> new hdropdown('calendarmode', array('options' => $calendar_mode_array, 'value' => $calendermode, 'id' => 'selectmode', 'class' => 'dropdown')),
 			'DR_EVENT'			=> new hdropdown('raid_eventid', array('options' => $this->pdh->aget('event', 'name', 0, array($this->pdh->sort($this->pdh->get('event', 'id_list'), 'event', 'name'))), 'value' => ((isset($eventdata['extension']['raid_eventid'])) ? $eventdata['extension']['raid_eventid'] : ''), 'id' => 'input_eventid', 'class' => 'resettemplate_input')),
 			'DR_RAIDMODE'		=> new hdropdown('raidmode', array('options' => $raidmode_array, 'value' => ((isset($eventdata['extension']) && isset($eventdata['extension']['raidmode'])) ? $eventdata['extension']['raidmode'] : ''), 'id' => 'cal_raidmodeselect')),
 			'DR_RAIDLEADER'		=> $this->jquery->MultiSelect('raidleader', $raidleader_array, ((isset($eventdata['extension']) && isset($eventdata['extension']['raidleader'])) ? $eventdata['extension']['raidleader'] : $this->pdh->get('member', 'mainchar', array($this->user->data['user_id']))), array('width' => 300, 'filter' => true)),
@@ -528,6 +537,7 @@ class editcalendarevent_pageobject extends pageobject {
 
 			// data
 			'EVENT_ID'			=> $this->url_id,
+			'CALENDARMODE'		=> $calendermode,
 			'LOCATION'			=> (isset($eventdata['extension']) && isset($eventdata['extension']['location'])) ? $eventdata['extension']['location'] : '',
 			'NOTE'				=> (isset($eventdata['notes'])) ? $eventdata['notes'] : '',
 			'EVENTNAME'			=> (isset($eventdata['name'])) ? $eventdata['name'] : '',

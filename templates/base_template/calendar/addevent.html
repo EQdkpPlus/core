@@ -42,8 +42,11 @@ $(document).ready(function() {
 		}
 	})
 
-	$('#selectmode').change(function() {
-		if($(this).val() == 'raid'){
+	$('#selectmode').change(function(){
+		$('#selectmode + ul > li').removeClass('open');
+		var value = $(this).val();
+		
+		if(value == 'raid'){
 			changeCalendars('1');
 			$('.raid').show();
 			$('.event').hide();
@@ -56,6 +59,9 @@ $(document).ready(function() {
 			$('#eventsettings').removeClass('floatLeft');
 			$('#eventsettings').width("98%");
 		}
+		
+		$('#selectmode + ul > li').html( $('#selectmode + ul > li + ul > li[data-value="'+value+'"]').html() );
+		$('#selectmode + ul > li').data('value', value );
 	});
 
 	// switch the raid distri modes
@@ -109,7 +115,7 @@ $(document).ready(function() {
 				$.each(data, function(i,item){
 					$("#"+item.field).val(item.value);
 					if(item.field == 'selectmode'){
-						$('#selectmode').easyDropDown('select', item.value)
+						$('#selectmode').value(item.value)
 						$('#selectmode').trigger('change');
 					}
 				});
@@ -210,7 +216,16 @@ function attendeeCount(){
 	<!-- ENDIF -->
 
 	<fieldset class="settings mediumsettings floatLeft" id="eventsettings" style="width: 540px;">
-		<legend>{DR_CALENDARMODE}</legend>
+		<legend>
+			<input id="selectmode" name="calendarmode" value="{CALENDARMODE}" style="display:none;" />
+			<ul><li data-value="{CALENDARMODE}" onclick="$(this).toggleClass('open')"></li>
+				<ul>
+					<!-- BEGIN calendar_modes -->
+					<li data-value="{calendar_modes.VALUE}" onclick="$('#selectmode').val( $(this).data('value') );$('#selectmode').trigger('change');">{calendar_modes.TEXT}</li>
+					<!-- END calendar_modes -->
+				</ul>
+			</ul>
+		</legend>
 		<dl>
 			<dt><label>{L_raidevent_template}</label></dt>
 			<dd>{DR_TEMPLATE}
