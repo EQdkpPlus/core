@@ -1,3 +1,45 @@
+@jqueryTimePickerBorder: #aaa;
+@jquerycboxBackground:#000000;
+@jquerycboxBorder:#FFFFFF;
+@jquerycboxContent:#FFFFFF;
+@jquerycboxFontColor:#949494;
+@jquerycboxSlideshow:#0092ef;
+
+@jqueryQtipBorder:#F1D031;
+@jqueryQtipBackground:#FFFFA3;
+@jqueryQtipFontColor:#555;
+@jqueryQtipShadow:#000;
+@jqueryBorderRadius:4px;
+@jqueryQtipYoutube:#4a4a4a;
+@jqueryQtipJtools:#232323;
+@jqueryQtipJtoolsBorder:#555;
+@jqueryQtipCluetipBackground:#D9D9C2;
+@jqueryQtipCluetipFont:#FFF;
+@jqueryQtipTipsyBackground:#000;
+@jqueryQtipTipsyFont:#FFF;
+
+@jquerySpBorder:#000;
+@jquerySpBackground:#fff;
+@jquerySpFont:#222;
+
+@jqueryToolBorder:#5e696d;
+@jqueryToolbarFontColor:#FFF;
+@jqueryToolbarPrimary:#02baf2;
+@jqueryToolbarDanger:#f84545;
+@jqueryToolbarWarning:#f3bc65;
+@jqueryToolbarInfo:#e96300;
+@jqueryToolbarSuccess:#28948c;
+@jqueryToolbarBackgroundL:#b2c6cd;
+@jqueryToolbarFontColorL:#FFF;
+@jqueryToolbarBackgroundD:#364347;
+@jqueryToolbarFontColorD:#FFF;
+@jqueryToolbarBackground:#9175bd;
+
+@jqueryUiNotifyColor:#fff;
+@jqueryUiNotifyShadow:#000;
+@jqueryUiNotifyBackground:#000;
+
+/************************/
 .ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
 .ui-timepicker-div dl { text-align: left; }
 .ui-timepicker-div dl dt { float: left; clear:left; padding: 0 0 0 5px; }
@@ -6,8 +48,8 @@
 .ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
 .ui-timepicker-div .ui_tpicker_unit_hide{ display: none; }
 
-.ui-timepicker-div .ui_tpicker_time .ui_tpicker_time_input { background: none; color: inherit; border: none; outline: none; border-bottom: solid 1px #555; width: 95%; }
-.ui-timepicker-div .ui_tpicker_time .ui_tpicker_time_input:focus { border-bottom-color: #aaa; }
+.ui-timepicker-div .ui_tpicker_time .ui_tpicker_time_input { background: none; color: inherit; border: none; outline: none; border-bottom: solid 1px darken(@jqueryTimePickerBorder,40); width: 95%; }
+.ui-timepicker-div .ui_tpicker_time .ui_tpicker_time_input:focus { border-bottom-color: @jqueryTimePickerBorder; }
 
 .ui-timepicker-rtl{ direction: rtl; }
 .ui-timepicker-rtl dl { text-align: right; padding: 0 5px 0 0; }
@@ -924,7 +966,7 @@ body .ui-tooltip {
     ordered & tabbed in a way that represents the nesting of the generated HTML.
 */
 #cboxOverlay{
-	background: #000000;
+	background: @jquerycboxBackground;
 	opacity: .6 !important;
 	filter: Alpha(Opacity=60) !important;
 }
@@ -932,17 +974,17 @@ body .ui-tooltip {
 	outline:0;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
-	border: 12px solid #fff;
+	border: 12px solid @jquerycboxBorder;
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
 
-#cboxContent{background:#fff; overflow:hidden;}
-.cboxIframe{background:#fff;}
-#cboxError{padding:50px; border:1px solid #ccc;}
+#cboxContent{background:@jquerycboxContent; overflow:hidden;}
+.cboxIframe{background:@jquerycboxContent;}
+#cboxError{padding:50px; border:1px solid lighten(@jquerycboxBorder,80);}
 #cboxLoadedContent{margin-bottom:52px;}
-#cboxTitle{position:absolute; bottom:26px; left:0; text-align:left; width:100%; color:#949494;}
-#cboxCurrent{position:absolute; bottom:4px; left:0px; color:#949494;}
-#cboxLoadingOverlay{background:#fff url(images/loading.gif) no-repeat 5px 5px;}
+#cboxTitle{position:absolute; bottom:26px; left:0; text-align:left; width:100%; color:@jquerycboxFontColor;}
+#cboxCurrent{position:absolute; bottom:4px; left:0px; color:@jquerycboxFontColor;}
+#cboxLoadingOverlay{background:@jquerycboxContent url(images/loading.gif) no-repeat 5px 5px;}
 
 /* these elements are buttons, and may need to have additional styles reset to avoid unwanted base styles */
 #cboxPrevious, #cboxNext, #cboxSlideshow, #cboxClose {border:0; padding:0; margin:0; overflow:visible; width:auto; background:none; }
@@ -954,13 +996,13 @@ body .ui-tooltip {
 	position:absolute;
 	bottom:4px;
 	right:0px;
-	color:#0092ef;
+	color:@jquerycboxSlideshow;
 }
 #cboxPrevious{
 	float: left;
 	background:none;
 	bottom: 55%;
-	color: #0092EF;
+	color: @jquerycboxSlideshow;
 	font-size: 35px;
 	left: 2px;
 	overflow: hidden;
@@ -974,9 +1016,9 @@ body .ui-tooltip {
 #cboxPrevious:before{
 	content: "\f053";
 	font-family: FontAwesome;
-	color: #fff;
+	color: lighten(@jquerycboxFontColor,70);
 	margin-right: 3px;
-	text-shadow: 0px 0px 7px rgba(150, 150, 150, 1);
+	text-shadow: 0px 0px 7px @jquerycboxFontColor;
 }
 #cboxPrevious:hover{
 	background-position:-75px -25px;
@@ -999,9 +1041,9 @@ body .ui-tooltip {
 #cboxNext:after {
 	content: "\f054";
 	font-family: FontAwesome;
-	color: #fff;
+	color: lighten(@jquerycboxFontColor,70);
 	margin-left: 13px;
-	text-shadow: 0px 0px 7px rgba(150, 150, 150, 1);
+	text-shadow: 0px 0px 7px @jquerycboxFontColor;
 }
 #cboxNext:hover{
 	background-position:-50px -25px;
@@ -1151,25 +1193,25 @@ body .ui-tooltip {
 
 /* Default tooltip style */
 .qtip-default{
-	border: 1px solid #F1D031;
+	border: 1px solid @jqueryQtipBorder;
 
-	background-color: #FFFFA3;
-	color: #555;
+	background-color: @jqueryQtipBackground;
+	color: @jqueryQtipFontColor;
 }
 
 	.qtip-default .qtip-titlebar{
-		background-color: #FFEF93;
+		background-color: @jqueryQtipBackground;
 	}
 
 	.qtip-default .qtip-icon{
-		border-color: #CCC;
-		background: #F1F1F1;
-		color: #777;
+		border-color: desaturate(lighten(@jqueryQtipBorder,10),90);
+		background: lighten(@jqueryQtipBackground,20);
+		color: litghten(@jqueryQtipFontColor,20);
 	}
 
 	.qtip-default .qtip-titlebar .qtip-close{
-		border-color: #AAA;
-		color: #111;
+		border-color: desaturate(lighten(@jqueryQtipBorder,10),90);
+		color: darken(@jqueryQtipFontColor,50);
 	}
 
 
@@ -1278,9 +1320,9 @@ body .ui-tooltip {
 
 
 .qtip-shadow{
-	-webkit-box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.15);
-	-moz-box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.15);
-	box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.15);
+	-webkit-box-shadow: 1px 1px 3px 1px fadeout(@jqueryQtipShadow,85);
+	-moz-box-shadow: 1px 1px 3px 1px fadeout(@jqueryQtipShadow,85);
+	box-shadow: 1px 1px 3px 1px fadeout(@jqueryQtipShadow,85);
 }
 
 /* Add rounded corners to your tooltips in: FF3+, Chrome 2+, Opera 10.6+, IE9+, Safari 2+ */
@@ -1304,74 +1346,71 @@ body .ui-tooltip {
 	-webkit-border-radius: 2px;
 	border-radius: 2px;
 
-	-webkit-box-shadow: 0 0 3px #333;
-	-moz-box-shadow: 0 0 3px #333;
-	box-shadow: 0 0 3px #333;
+	-webkit-box-shadow: 0 0 3px lighten(@jqueryQtipShadow,20);
+	-moz-box-shadow: 0 0 3px lighten(@jqueryQtipShadow,20);
+	box-shadow: 0 0 3px lighten(@jqueryQtipShadow,20);
 
-	color: white;
+	color: ligthen(@jqueryQtipYoutube,80);
 	border: 0 solid transparent;
 
-	background: #4A4A4A;
-	background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0,#4A4A4A),color-stop(100%,black));
-	background-image: -webkit-linear-gradient(top,#4A4A4A 0,black 100%);
-	background-image: -moz-linear-gradient(top,#4A4A4A 0,black 100%);
-	background-image: -ms-linear-gradient(top,#4A4A4A 0,black 100%);
-	background-image: -o-linear-gradient(top,#4A4A4A 0,black 100%);
+	background: @jqueryQtipYoutube;
+	background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0,@jqueryQtipYoutube),color-stop(100%,darken(@jqueryQtipYoutube,60)));
+	background-image: -webkit-linear-gradient(top,@jqueryQtipYoutube 0,darken(@jqueryQtipYoutube,60) 100%);
+	background-image: -moz-linear-gradient(top,@jqueryQtipYoutube 0,darken(@jqueryQtipYoutube,60) 100%);
+	background-image: -ms-linear-gradient(top,@jqueryQtipYoutube 0,darken(@jqueryQtipYoutube,60) 100%);
+	background-image: -o-linear-gradient(top,@jqueryQtipYoutube 0,darken(@jqueryQtipYoutube,60) 100%);
 }
 
 	.qtip-youtube .qtip-titlebar{
-		background-color: #4A4A4A;
-		background-color: rgba(0,0,0,0);
+		background-color: @jqueryQtipYoutube;
 	}
 
 	.qtip-youtube .qtip-content{
 		padding: .75em;
 		font: 12px arial,sans-serif;
 
-		filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr=#4a4a4a,EndColorStr=#000000);
-		-ms-filter: "progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr=#4a4a4a,EndColorStr=#000000);";
+		filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr=@jqueryQtipYoutube,EndColorStr=darken(@jqueryQtipYoutube,60));
+		-ms-filter: "progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr=@jqueryQtipYoutube,EndColorStr=darken(@jqueryQtipYoutube,60));";
 	}
 
 	.qtip-youtube .qtip-icon{
-		border-color: #222;
+		border-color: darken(@jqueryQtipYoutube,30);
 	}
 
 	.qtip-youtube .qtip-titlebar .ui-state-hover{
-		border-color: #303030;
+		border-color: darken(@jqueryQtipYoutube,20);
 	}
 
 
 /* jQuery TOOLS Tooltip style */
 .qtip-jtools{
-	background: #232323;
-	background: rgba(0, 0, 0, 0.7);
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#717171), to(#232323));
-	background-image: -moz-linear-gradient(top, #717171, #232323);
-	background-image: -webkit-linear-gradient(top, #717171, #232323);
-	background-image: -ms-linear-gradient(top, #717171, #232323);
-	background-image: -o-linear-gradient(top, #717171, #232323);
+	background: @jqueryQtipJtools;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(lighten(@jqueryQtipJtools,30)), to(@jqueryQtipJtools));
+	background-image: -moz-linear-gradient(top, lighten(@jqueryQtipJtools,30), @jqueryQtipJtools);
+	background-image: -webkit-linear-gradient(top, lighten(@jqueryQtipJtools,30), @jqueryQtipJtools);
+	background-image: -ms-linear-gradient(top, lighten(@jqueryQtipJtools,30), @jqueryQtipJtools);
+	background-image: -o-linear-gradient(top, lighten(@jqueryQtipJtools,30), @jqueryQtipJtools);
 
-	border: 2px solid #ddd;
-	border: 2px solid rgba(241,241,241,1);
+	border: 2px solid @jqueryQtipJtoolsBorder;
 
 	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;
 	border-radius: 2px;
 
-	-webkit-box-shadow: 0 0 12px #333;
-	-moz-box-shadow: 0 0 12px #333;
-	box-shadow: 0 0 12px #333;
+	-webkit-box-shadow: 0 0 12px lighten(@jqueryQtipJtools,10);
+	-moz-box-shadow: 0 0 12px lighten(@jqueryQtipJtools,10);
+	box-shadow: 0 0 12px lighten(@jqueryQtipJtools,10);
 }
 
 	/* IE Specific */
 	.qtip-jtools .qtip-titlebar{
 		background-color: transparent;
-		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#717171,endColorstr=#4A4A4A);
-		-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#717171,endColorstr=#4A4A4A)";
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=lighten(@jqueryQtipJtools,30),endColorstr=lighten(@jqueryQtipJtools,20));
+		-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=lighten(@jqueryQtipJtools,30),endColorstr=lighten(@jqueryQtipJtools,20))";
 	}
 	.qtip-jtools .qtip-content{
-		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#4A4A4A,endColorstr=#232323);
-		-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#4A4A4A,endColorstr=#232323)";
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=lighten(@jqueryQtipJtools,20),endColorstr=@jqueryQtipJtools);
+		-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=lighten(@jqueryQtipJtools,20),endColorstr=@jqueryQtipJtools)";
 	}
 
 	.qtip-jtools .qtip-titlebar,
@@ -1382,54 +1421,53 @@ body .ui-tooltip {
 	}
 
 	.qtip-jtools .qtip-icon{
-		border-color: #555;
+		border-color: @jqueryQtipJtoolsBorder;
 	}
 
 	.qtip-jtools .qtip-titlebar .ui-state-hover{
-		border-color: #333;
+		border-color: darken(@jqueryQtipJtoolsBorder,30);
 	}
 
 
 /* Cluetip style */
 .qtip-cluetip{
-	-webkit-box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.4);
-	-moz-box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.4);
-	box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.4);
+	-webkit-box-shadow: 4px 4px 5px fadeout(@jqueryQtipShadow,60);
+	-moz-box-shadow: 4px 4px 5px fadeout(@jqueryQtipShadow,60);
+	box-shadow: 4px 4px 5px fadeout(@jqueryQtipShadow,60);
 
-	background-color: #D9D9C2;
-	color: #111;
+	background-color: @jqueryQtipCluetipBackground;
+	color: darken(@jqueryQtipCluetipFont,90);
 	border: 0 dashed transparent;
 }
 
 	.qtip-cluetip .qtip-titlebar{
-		background-color: #87876A;
-		color: white;
+		background-color: darken(@jqueryQtipCluetipBackground,30);
+		color: @jqueryQtipCluetipFont;
 		border: 0 dashed transparent;
 	}
 
 	.qtip-cluetip .qtip-icon{
-		border-color: #808064;
+		border-color: darken(@jqueryQtipCluetipBackground,30);
 	}
 
 	.qtip-cluetip .qtip-titlebar .ui-state-hover{
-		border-color: #696952;
-		color: #696952;
+		border-color: darken(@jqueryQtipCluetipBackground,55);
+		color: darken(@jqueryQtipCluetipBackground,55);
 	}
 
 
 /* Tipsy style */
 .qtip-tipsy{
-	background: black;
-	background: rgba(0, 0, 0, .87);
+	background: fadeout(@jqueryQtipTipsyBackground,10);
 
-	color: white;
+	color: @jqueryQtipTipsyFont;
 	border: 0 solid transparent;
 
 	font-size: 11px;
 	font-family: 'Lucida Grande', sans-serif;
 	font-weight: bold;
 	line-height: 16px;
-	text-shadow: 0 1px black;
+	text-shadow: 0 1px @jqueryQtipTipsyBackground;
 }
 
 	.qtip-tipsy .qtip-titlebar{
@@ -1442,12 +1480,12 @@ body .ui-tooltip {
 	}
 
 	.qtip-tipsy .qtip-icon{
-		border-color: #222;
+		border-color: lighten(@jqueryQtipTipsyBackground,20);
 		text-shadow: none;
 	}
 
 	.qtip-tipsy .qtip-titlebar .ui-state-hover{
-		border-color: #303030;
+		border-color: lighten(@jqueryQtipTipsyBackground,30);
 	}
 
 
@@ -1748,8 +1786,8 @@ License: MIT
     width: 6px;
     left: 50%;
     cursor: pointer;
-    border: 1px solid black;
-    background: white;
+    border: 1px solid @jquerySpBorder;
+    background: @jquerySpBackground;
     opacity: .8;
 }
 .sp-alpha {
@@ -1761,7 +1799,7 @@ License: MIT
     height: 8px;
 }
 .sp-alpha-inner {
-    border: solid 1px #333;
+    border: solid 1px lighten(@jquerySpBorder,20);
 }
 
 .sp-clear {
@@ -1890,8 +1928,8 @@ License: MIT
    border-radius: 5px;
    height: 5px;
    width: 5px;
-   border: 1px solid #fff;
-   background: #000;
+   border: 1px solid @jquerySpBackground;
+   background: @jquerySpBorder;
    cursor: pointer;
    position:absolute;
    top:0;
@@ -1904,8 +1942,8 @@ License: MIT
     height: 3px;
     left: -1px;
     right: -1px;
-    border: 1px solid #000;
-    background: white;
+    border: 1px solid @jquerySpBorder;
+    background: @jquerySpBackground;
     opacity: .8;
 }
 
@@ -1917,8 +1955,8 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 
 .sp-container {
     border-radius: 0;
-    background-color: #ECECEC;
-    border: solid 1px #f0c49B;
+    background-color: darken(@jquerySpBackground,5);
+    border: solid 1px lighten(@jquerySpBorder,20);
     padding: 0;
 }
 .sp-container, .sp-container button, .sp-container input, .sp-color, .sp-hue, .sp-clear {
@@ -1932,7 +1970,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
     margin-bottom: 3px;
 }
 .sp-color, .sp-hue, .sp-clear {
-    border: solid 1px #666;
+    border: solid 1px lighten(@jquerySpBorder,40);
 }
 
 /* Input */
@@ -1952,7 +1990,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
    width: 100%;
    background:transparent;
    border-radius: 3px;
-   color: #222;
+   color: @jquerySpFont;
 }
 .sp-input:focus  {
     border: 1px solid orange;
@@ -1970,12 +2008,12 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 }
 .sp-picker-container {
     width: 172px;
-    border-left: solid 1px #fff;
+    border-left: solid 1px lighten(@jquerySpBorder,100);
 }
 
 /* Palettes */
 .sp-palette-container {
-    border-right: solid 1px #ccc;
+    border-right: solid 1px lighten(@jquerySpBorder,90);
 }
 
 .sp-palette-only .sp-palette-container {
@@ -2002,7 +2040,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 /* Initial */
 .sp-initial {
     float: left;
-    border: solid 1px #333;
+    border: solid 1px lighten(@jquerySpBorder,20);
 }
 .sp-initial span {
     width: 30px;
@@ -2033,13 +2071,13 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
     *zoom: 1;
     *display: inline;
     border: solid 1px #91765d;
-    background: #eee;
-    color: #333;
+    background: darken(@jquerySpBackground,10);
+    color: lighten(@jquerySpFont,10);
     vertical-align: middle;
 }
 .sp-replacer:hover, .sp-replacer.sp-active {
     border-color: #F0C49B;
-    color: #111;
+    color: darken(@jquerySpFont,10);
 }
 .sp-replacer.sp-disabled {
     cursor:default;
@@ -2057,7 +2095,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
     position:relative;
     width:25px;
     height: 20px;
-    border: solid 1px #222;
+    border: solid 1px lighten(@jquerySpBorder,10);
     margin-right: 5px;
     float:left;
     z-index: 0;
@@ -2071,7 +2109,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
     width:16px;
     height: 16px;
     margin:2px 1px;
-    border: solid 1px #d0d0d0;
+    border: solid 1px lighten(@jquerySpBorder,90);
 }
 
 .sp-container {
@@ -2081,16 +2119,16 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 
 /* Buttons: http://hellohappy.org/css3-buttons/ */
 .sp-container button {
-  background-color: #eeeeee;
-  background-image: -webkit-linear-gradient(top, #eeeeee, #cccccc);
-  background-image: -moz-linear-gradient(top, #eeeeee, #cccccc);
-  background-image: -ms-linear-gradient(top, #eeeeee, #cccccc);
-  background-image: -o-linear-gradient(top, #eeeeee, #cccccc);
-  background-image: linear-gradient(to bottom, #eeeeee, #cccccc);
-  border: 1px solid #ccc;
-  border-bottom: 1px solid #bbb;
+  background-color: darken(@jquerySpBackground,5);
+  background-image: -webkit-linear-gradient(top, darken(@jquerySpBackground,5), darken(@jquerySpBackground,10));
+  background-image: -moz-linear-gradient(top, darken(@jquerySpBackground,5), darken(@jquerySpBackground,10));
+  background-image: -ms-linear-gradient(top, darken(@jquerySpBackground,5), darken(@jquerySpBackground,10));
+  background-image: -o-linear-gradient(top, darken(@jquerySpBackground,5), darken(@jquerySpBackground,10));
+  background-image: linear-gradient(to bottom, darken(@jquerySpBackground,5), darken(@jquerySpBackground,10));
+  border: 1px solid lighten(@jquerySpBorder,90);
+  border-bottom: 1px solid lighten(@jquerySpBorder,80);
   border-radius: 3px;
-  color: #333;
+  color: lighten(@jquerySpFont,10);
   font-size: 14px;
   line-height: 1;
   padding: 5px 4px;
@@ -2099,25 +2137,25 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
   vertical-align: middle;
 }
 .sp-container button:hover {
-    background-color: #dddddd;
-    background-image: -webkit-linear-gradient(top, #dddddd, #bbbbbb);
-    background-image: -moz-linear-gradient(top, #dddddd, #bbbbbb);
-    background-image: -ms-linear-gradient(top, #dddddd, #bbbbbb);
-    background-image: -o-linear-gradient(top, #dddddd, #bbbbbb);
-    background-image: linear-gradient(to bottom, #dddddd, #bbbbbb);
-    border: 1px solid #bbb;
-    border-bottom: 1px solid #999;
+    background-color: darken(@jquerySpBackground,15);
+    background-image: -webkit-linear-gradient(top, darken(@jquerySpBackground,15), darken(@jquerySpBackground,30));
+    background-image: -moz-linear-gradient(top, darken(@jquerySpBackground,15), darken(@jquerySpBackground,30));
+    background-image: -ms-linear-gradient(top, darken(@jquerySpBackground,15), darken(@jquerySpBackground,30));
+    background-image: -o-linear-gradient(top, darken(@jquerySpBackground,15), darken(@jquerySpBackground,30));
+    background-image: linear-gradient(to bottom, darken(@jquerySpBackground,15), darken(@jquerySpBackground,30));
+    border: 1px solid darken(@jquerySpBackground,30);
+    border-bottom: 1px solid lighten(@jquerySpBorder,60);
     cursor: pointer;
-    text-shadow: 0 1px 0 #ddd;
+    text-shadow: 0 1px 0 lighten(@jquerySpFont,80);
 }
 .sp-container button:active {
-    border: 1px solid #aaa;
-    border-bottom: 1px solid #888;
-    -webkit-box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee;
-    -moz-box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee;
-    -ms-box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee;
-    -o-box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee;
-    box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee;
+    border: 1px solid lighten(@jquerySpBorder,70);
+    border-bottom: 1px solid lighten(@jquerySpBorder,60);
+    -webkit-box-shadow: inset 0 0 5px 2px lighten(@jquerySpBorder,80), 0 1px 0 0 lighten(@jquerySpBorder,90);
+    -moz-box-shadow: inset 0 0 5px 2px lighten(@jquerySpBorder,80), 0 1px 0 0 lighten(@jquerySpBorder,90);
+    -ms-box-shadow: inset 0 0 5px 2px lighten(@jquerySpBorder,80), 0 1px 0 0 lighten(@jquerySpBorder,90);
+    -o-box-shadow: inset 0 0 5px 2px lighten(@jquerySpBorder,80), 0 1px 0 0 lighten(@jquerySpBorder,90);
+    box-shadow: inset 0 0 5px 2px lighten(@jquerySpBorder,80), 0 1px 0 0 lighten(@jquerySpBorder,90);
 }
 .sp-cancel {
     font-size: 11px;
@@ -2136,7 +2174,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 
 
 .sp-palette span:hover, .sp-palette span.sp-thumb-active {
-    border-color: #000;
+    border-color: @jquerySpBorder;
 }
 
 .sp-preview, .sp-alpha, .sp-thumb-el {
@@ -2169,7 +2207,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 }
 
 .btn-toolbar {
-  background: #364347;
+  background: @jqueryToolbarBackgroundD;
   width: 20px;
   height: 20px;
   text-align: center;
@@ -2179,114 +2217,114 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
   transition: none;
 }
 .btn-toolbar > i {
-  color: #02baf2;
+  color: @jqueryToolbarPrimary;
   font-size: 16px;
 }
 .btn-toolbar:hover {
-  background: #02baf2;
+  background: @jqueryToolbarPrimary;
   cursor: pointer;
 }
 .btn-toolbar:hover > i {
-  color: white;
+  color: @jqueryToolbarFontColor;
 }
 .btn-toolbar-primary {
-  background-color: #009dcd;
+  background-color: darken(@jqueryToolbarPrimary,10);
 }
 .btn-toolbar-primary.pressed {
-  background-color: #02baf2;
+  background-color: @jqueryToolbarPrimary;
 }
 .btn-toolbar-primary:hover {
-  background-color: #02baf2;
+  background-color: @jqueryToolbarPrimary;
 }
 .btn-toolbar-primary > i {
-  color: white;
+  color: @jqueryToolbarFontColor;
 }
 .btn-toolbar-danger {
-  background-color: #cc0000;
+  background-color: darken(@jqueryToolbarDanger,10);
 }
 .btn-toolbar-danger.pressed {
-  background-color: #f84545;
+  background-color: @jqueryToolbarDanger;
 }
 .btn-toolbar-danger:hover {
-  background-color: #f84545;
+  background-color: @jqueryToolbarDanger;
 }
 .btn-toolbar-danger > i {
-  color: white;
+  color: @jqueryToolbarFontColor;
 }
 .btn-toolbar-warning {
-  background-color: #f3bc65;
+  background-color: @jqueryToolbarWarning;
 }
 .btn-toolbar-warning.pressed {
-  background-color: #fad46b;
+  background-color: lighten(@jqueryToolbarWarning,10);
 }
 .btn-toolbar-warning:hover {
-  background-color: #fad46b;
+  background-color: lighten(@jqueryToolbarWarning,10);
 }
 .btn-toolbar-warning > i {
-  color: white;
+  color: @jqueryToolbarFontColor;
 }
 .btn-toolbar-info {
-  background-color: #e96300;
+  background-color: @jqueryToolbarInfo;
 }
 .btn-toolbar-info.pressed {
-  background-color: #f58410;
+  background-color: lighten(@jqueryToolbarInfo,10);
 }
 .btn-toolbar-info:hover {
-  background-color: #f58410;
+  background-color: lighten(@jqueryToolbarInfo,10);
 }
 .btn-toolbar-info > i {
-  color: white;
+  color: @jqueryToolbarFontColor;
 }
 .btn-toolbar-success {
-  background-color: #28948c;
+  background-color: @jqueryToolbarSuccess;
 }
 .btn-toolbar-success.pressed {
-  background-color: #3eb5ac;
+  background-color: lighten(@jqueryToolbarSuccess,10);
 }
 .btn-toolbar-success:hover {
-  background-color: #3eb5ac;
+  background-color: lighten(@jqueryToolbarSuccess,10);
 }
 .btn-toolbar-success > i {
-  color: white;
+  color: @jqueryToolbarFontColor;
 }
 .btn-toolbar-info-o {
-  background-color: #9175bd;
+  background-color: @jqueryToolbarBackground;
 }
 .btn-toolbar-info-o.pressed {
-  background-color: #a88cd5;
+  background-color: lighten(@jqueryToolbarBackground,10);
 }
 .btn-toolbar-info-o:hover {
-  background-color: #a88cd5;
+  background-color: lighten(@jqueryToolbarBackground,10);
 }
 .btn-toolbar-info-o > i {
-  color: white;
+  color: @jqueryToolbarFontColor;
 }
 .btn-toolbar-light {
-  background-color: #b2c6cd;
+  background-color: @jqueryToolbarBackgroundL;
 }
 .btn-toolbar-light.pressed {
-  background-color: #d6e1e5;
+  background-color: lighten(@jqueryToolbarBackgroundL,10);
 }
 .btn-toolbar-light:hover {
-  background-color: #d6e1e5;
+  background-color: lighten(@jqueryToolbarBackgroundL,10);
 }
 .btn-toolbar-light > i {
-  color: white;
+  color: @jqueryToolbarFontColor;
 }
 .btn-toolbar-dark {
-  background-color: #364347;
+  background-color: @jqueryToolbarBackgroundD;
 }
 .btn-toolbar-dark.pressed {
-  background-color: #5e696d;
+  background-color: lighten(@jqueryToolbarBackgroundD,10);
 }
 .btn-toolbar-dark:hover {
-  background-color: #5e696d;
+  background-color: lighten(@jqueryToolbarBackgroundD,10);
 }
 .btn-toolbar-dark > i {
-  color: white;
+  color: @jqueryToolbarFontColor;
 }
 .tool-container {
-  background-color: #5e696d;
+  background-color: desaturate(darken(@jqueryToolbarBackground,20),40);
   background-size: 100% 100%;
   border-radius: 6px;
   position: absolute;
@@ -2294,7 +2332,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 .tool-container.tool-top,
 .tool-container.tool-bottom {
   height: 40px;
-  border-bottom: 0px solid #beb8b8;
+  border-bottom: 0px solid lighten(@jqueryToolBorder,30);
 }
 .tool-container.tool-top .tool-item,
 .tool-container.tool-bottom .tool-item {
@@ -2312,11 +2350,11 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
   transition: none;
 }
 .tool-item > .fa {
-  color: #b2c6cd;
+  color: mix(@jqueryToolbarFontColor,#b2c6cd,20);
 }
 .tool-item.selected,
 .tool-item:hover {
-  background: #02baf2;
+  background: @jqueryToolbarPrimary;
 }
 .tool-item.selected > .fa,
 .tool-item:hover > .fa {
@@ -2354,212 +2392,212 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
   border-style: solid;
 }
 .tool-container.tool-top .arrow {
-  border-color: #5e696d transparent transparent;
+  border-color: @jqueryToolBorder transparent transparent;
   left: 50%;
   bottom: -14px;
   margin-left: -7px;
 }
 .tool-container.tool-bottom .arrow {
-  border-color: transparent transparent #5e696d;
+  border-color: transparent transparent @jqueryToolBorder;
   left: 50%;
   top: -14px;
   margin-left: -7px;
 }
 .tool-container.tool-left .arrow {
-  border-color: transparent transparent transparent #5e696d;
+  border-color: transparent transparent transparent @jqueryToolBorder;
   top: 50%;
   right: -14px;
   margin-top: -7px;
 }
 .tool-container.tool-right .arrow {
-  border-color: transparent #5e696d transparent transparent;
+  border-color: transparent @jqueryToolBorder transparent transparent;
   top: 50%;
   left: -14px;
   margin-top: -7px;
 }
 .toolbar-primary {
-  background-color: #02baf2;
+  background-color: @jqueryToolbarPrimary;
 }
 .toolbar-primary.tool-top .arrow {
-  border-color: #02baf2 transparent transparent;
+  border-color: @jqueryToolbarPrimary transparent transparent;
 }
 .toolbar-primary.tool-bottom .arrow {
-  border-color: transparent transparent #02baf2;
+  border-color: transparent transparent @jqueryToolbarPrimary;
 }
 .toolbar-primary.tool-left .arrow {
-  border-color: transparent transparent transparent #02baf2;
+  border-color: transparent transparent transparent @jqueryToolbarPrimary;
 }
 .toolbar-primary.tool-right .arrow {
-  border-color: transparent #02baf2 transparent transparent;
+  border-color: transparent @jqueryToolbarPrimary transparent transparent;
 }
 .toolbar-primary .tool-item > .fa {
-  color: white;
+  color: @jqueryToolbarFontColor;
 }
 .toolbar-primary .tool-item.selected,
 .toolbar-primary .tool-item:hover {
-  background: #009dcd;
-  color: white;
+  background: darken(@jqueryToolbarPrimary,10);
+  color: @jqueryToolbarFontColor;
 }
 .toolbar-danger {
-  background-color: #f84545;
+  background-color: @jqueryToolbarDanger;
 }
 .toolbar-danger.tool-top .arrow {
-  border-color: #f84545 transparent transparent;
+  border-color: @jqueryToolbarDanger transparent transparent;
 }
 .toolbar-danger.tool-bottom .arrow {
-  border-color: transparent transparent #f84545;
+  border-color: transparent transparent @jqueryToolbarDanger;
 }
 .toolbar-danger.tool-left .arrow {
-  border-color: transparent transparent transparent #f84545;
+  border-color: transparent transparent transparent @jqueryToolbarDanger;
 }
 .toolbar-danger.tool-right .arrow {
-  border-color: transparent #f84545 transparent transparent;
+  border-color: transparent @jqueryToolbarDanger transparent transparent;
 }
 .toolbar-danger .tool-item > .fa {
-  color: white;
+  color: @jqueryToolbarFontColor;
 }
 .toolbar-danger .tool-item.selected,
 .toolbar-danger .tool-item:hover {
-  background: #cc0000;
-  color: white;
+  background: darken(@jqueryToolbarDanger,10);
+  color: @jqueryToolbarFontColor;
 }
 .toolbar-warning {
-  background-color: #f3bc65;
+  background-color: @jqueryToolbarWarning;
 }
 .toolbar-warning.tool-top .arrow {
-  border-color: #f3bc65 transparent transparent;
+  border-color: @jqueryToolbarWarning transparent transparent;
 }
 .toolbar-warning.tool-bottom .arrow {
-  border-color: transparent transparent #f3bc65;
+  border-color: transparent transparent @jqueryToolbarWarning;
 }
 .toolbar-warning.tool-left .arrow {
-  border-color: transparent transparent transparent #f3bc65;
+  border-color: transparent transparent transparent @jqueryToolbarWarning;
 }
 .toolbar-warning.tool-right .arrow {
-  border-color: transparent #f3bc65 transparent transparent;
+  border-color: transparent @jqueryToolbarWarning transparent transparent;
 }
 .toolbar-warning .tool-item > .fa {
-  color: white;
+  color: @jqueryToolbarFontColor;
 }
 .toolbar-warning .tool-item.selected,
 .toolbar-warning .tool-item:hover {
-  background: #fad46b;
-  color: white;
+  background: lighten(@jqueryToolbarWarning,10);
+  color: @jqueryToolbarFontColor;
 }
 .toolbar-info {
-  background-color: #e96300;
+  background-color: @jqueryToolbarInfo;
 }
 .toolbar-info.tool-top .arrow {
-  border-color: #e96300 transparent transparent;
+  border-color: @jqueryToolbarInfo transparent transparent;
 }
 .toolbar-info.tool-bottom .arrow {
-  border-color: transparent transparent #e96300;
+  border-color: transparent transparent @jqueryToolbarInfo;
 }
 .toolbar-info.tool-left .arrow {
-  border-color: transparent transparent transparent #e96300;
+  border-color: transparent transparent transparent @jqueryToolbarInfo;
 }
 .toolbar-info.tool-right .arrow {
-  border-color: transparent #e96300 transparent transparent;
+  border-color: transparent @jqueryToolbarInfo transparent transparent;
 }
 .toolbar-info .tool-item > .fa {
-  color: white;
+  color: @jqueryToolbarFontColor;
 }
 .toolbar-info .tool-item.selected,
 .toolbar-info .tool-item:hover {
-  background: #f58410;
-  color: white;
+  background: lighten(@jqueryToolbarInfo,10);
+  color: @jqueryToolbarFontColor;
 }
 .toolbar-success {
-  background-color: #28948c;
+  background-color: @jqueryToolbarSuccess;
 }
 .toolbar-success.tool-top .arrow {
-  border-color: #28948c transparent transparent;
+  border-color: @jqueryToolbarSuccess transparent transparent;
 }
 .toolbar-success.tool-bottom .arrow {
-  border-color: transparent transparent #28948c;
+  border-color: transparent transparent @jqueryToolbarSuccess;
 }
 .toolbar-success.tool-left .arrow {
-  border-color: transparent transparent transparent #28948c;
+  border-color: transparent transparent transparent @jqueryToolbarSuccess;
 }
 .toolbar-success.tool-right .arrow {
-  border-color: transparent #28948c transparent transparent;
+  border-color: transparent @jqueryToolbarSuccess transparent transparent;
 }
 .toolbar-success .tool-item > .fa {
-  color: white;
+  color: @jqueryToolbarFontColor;
 }
 .toolbar-success .tool-item.selected,
 .toolbar-success .tool-item:hover {
-  background: #3eb5ac;
-  color: white;
+  background: lighten(@jqueryToolbarSuccess,10);
+  color: @jqueryToolbarFontColor;
 }
 .toolbar-info-o {
-  background-color: #9175bd;
+  background-color: @jqueryToolbarBackground;
 }
 .toolbar-info-o.tool-top .arrow {
-  border-color: #9175bd transparent transparent;
+  border-color: @jqueryToolbarBackground transparent transparent;
 }
 .toolbar-info-o.tool-bottom .arrow {
-  border-color: transparent transparent #9175bd;
+  border-color: transparent transparent @jqueryToolbarBackground;
 }
 .toolbar-info-o.tool-left .arrow {
-  border-color: transparent transparent transparent #9175bd;
+  border-color: transparent transparent transparent @jqueryToolbarBackground;
 }
 .toolbar-info-o.tool-right .arrow {
-  border-color: transparent #9175bd transparent transparent;
+  border-color: transparent @jqueryToolbarBackground transparent transparent;
 }
 .toolbar-info-o .tool-item > .fa {
-  color: white;
+  color: @jqueryToolbarFontColor;
 }
 .toolbar-info-o .tool-item.selected,
 .toolbar-info-o .tool-item:hover {
-  background: #a88cd5;
-  color: white;
+  background: lighten(@jqueryToolbarBackground,10);
+  color: @jqueryToolbarFontColor;
 }
 .toolbar-light {
-  background-color: #b2c6cd;
+  background-color: @jqueryToolbarBackgroundL;
 }
 .toolbar-light.tool-top .arrow {
-  border-color: #b2c6cd transparent transparent;
+  border-color: @jqueryToolbarBackgroundL transparent transparent;
 }
 .toolbar-light.tool-bottom .arrow {
-  border-color: transparent transparent #b2c6cd;
+  border-color: transparent transparent @jqueryToolbarBackgroundL;
 }
 .toolbar-light.tool-left .arrow {
-  border-color: transparent transparent transparent #b2c6cd;
+  border-color: transparent transparent transparent @jqueryToolbarBackgroundL;
 }
 .toolbar-light.tool-right .arrow {
-  border-color: transparent #b2c6cd transparent transparent;
+  border-color: transparent @jqueryToolbarBackgroundL transparent transparent;
 }
 .toolbar-light .tool-item > .fa {
-  color: white;
+  color: @jqueryToolbarFontColorL;
 }
 .toolbar-light .tool-item.selected,
 .toolbar-light .tool-item:hover {
-  background: #d6e1e5;
-  color: white;
+  background: lighten(@jqueryToolbarBackgroundL,10);
+  color: @jqueryToolbarFontColorL;
 }
 .toolbar-dark {
-  background-color: #364347;
+  background-color: @jqueryToolbarBackgroundD;
 }
 .toolbar-dark.tool-top .arrow {
-  border-color: #364347 transparent transparent;
+  border-color: @jqueryToolbarBackgroundD transparent transparent;
 }
 .toolbar-dark.tool-bottom .arrow {
-  border-color: transparent transparent #364347;
+  border-color: transparent transparent @jqueryToolbarBackgroundD;
 }
 .toolbar-dark.tool-left .arrow {
-  border-color: transparent transparent transparent #364347;
+  border-color: transparent transparent transparent @jqueryToolbarBackgroundD;
 }
 .toolbar-dark.tool-right .arrow {
-  border-color: transparent #364347 transparent transparent;
+  border-color: transparent @jqueryToolbarBackgroundD transparent transparent;
 }
 .toolbar-dark .tool-item > .fa {
-  color: white;
+  color: @jqueryToolbarFontColorD;
 }
 .toolbar-dark .tool-item.selected,
 .toolbar-dark .tool-item:hover {
-  background: #5e696d;
-  color: white;
+  background: lighten(@jqueryToolbarBackgroundD,10);
+  color: @jqueryToolbarFontColorD;
 }
 .animate-standard {
   -webkit-animation: standardAnimate 0.3s 1 ease;
@@ -2655,11 +2693,11 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 .ui-notify-message h1 { font-size:14px; margin:0; padding:0 }
 .ui-notify-message p { margin:3px 0; padding:0; line-height:18px }
 .ui-notify-message:last-child { margin-bottom:0 }
-.ui-notify-message-style { background:#000; background:rgba(0,0,0,0.8); -moz-box-shadow: 0 0 6px #000; -webkit-box-shadow: 0 0 6px #000; box-shadow: 0 0 6px #000; }
-.ui-notify-message-style h1 { color:#fff; font-weight:bold }
-.ui-notify-message-style p { color:#fff }
-.ui-notify-close { color:#fff; text-decoration:underline }
+.ui-notify-message-style { background:@jqueryUiNotifyBackground; background:rgba(0,0,0,0.8); -moz-box-shadow: 0 0 6px @jqueryUiNotifyShadow; -webkit-box-shadow: 0 0 6px @jqueryUiNotifyShadow; box-shadow: 0 0 6px @jqueryUiNotifyShadow; }
+.ui-notify-message-style h1 { color:@jqueryUiNotifyColor; font-weight:bold }
+.ui-notify-message-style p { color:@jqueryUiNotifyColor }
+.ui-notify-close { color:@jqueryUiNotifyColor; text-decoration:underline }
 .ui-notify-click { cursor:pointer }
-.ui-notify-cross { margin-top:-4px; float:right; cursor:pointer; text-decoration:none; font-size:12px; font-weight:bold; text-shadow:0 1px 1px #fff; padding:2px }
-.ui-notify-cross:hover { color:#ffffab }
+.ui-notify-cross { margin-top:-4px; float:right; cursor:pointer; text-decoration:none; font-size:12px; font-weight:bold; text-shadow:0 1px 1px @jqueryUiNotifyColor; padding:2px }
+.ui-notify-cross:hover { color: mix(@jqueryUiNotifyColor,#ffffab, 10) }
 .ui-notify-cross:active { position:relative; top:1px }
