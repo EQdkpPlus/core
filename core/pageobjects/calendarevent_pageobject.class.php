@@ -845,50 +845,50 @@ class calendarevent_pageobject extends pageobject {
 
 		$optionsmenu = array(
 			1 => array(
-				'name'	=> $this->user->lang('raidevent_raid_edit'),
 				'link'	=> 'javascript:EditRaid()',
+				'text'	=> $this->user->lang('raidevent_raid_edit'),
 				'icon'	=> 'fa-pencil-square-o',
 				'perm'	=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()),
 			),
 			2 => array(
-				'name'	=> ($eventdata['closed'] == '1') ? $this->user->lang('raidevent_raid_open') : $this->user->lang('raidevent_raid_close'),
 				'link'	=> ($eventdata['closed'] == '1') ? $this->strPath.$this->SID.'&amp;closedstatus=open&amp;link_hash='.$this->CSRFGetToken('closedstatus') : $this->strPath.$this->SID.'&amp;closedstatus=close&amp;link_hash='.$this->CSRFGetToken('closedstatus'),
+				'text'	=> ($eventdata['closed'] == '1') ? $this->user->lang('raidevent_raid_open') : $this->user->lang('raidevent_raid_close'),
 				'icon'	=> ($eventdata['closed'] == '1') ? 'fa-unlock fa-lg' : 'fa-lock fa-lg',
 				'perm'	=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()),
 			),
 			3 => array(
-				'name'	=> $this->user->lang('raidevent_raid_transform'),
 				'link'	=> "javascript:TransformRaid('".$this->url_id."')",
+				'text'	=> $this->user->lang('raidevent_raid_transform'),
 				'icon'	=> 'fa-exchange',
 				'perm'	=> $this->user->check_auth('a_raid_add', false),
 			),
 			4 => array(
-				'name'	=> $this->user->lang('raideventlist_export_ical'),
 				'link'	=> $this->strPath.$this->SID.'&amp;ical=true',
+				'text'	=> $this->user->lang('raideventlist_export_ical'),
 				'icon'	=> 'fa-calendar',
 				'perm'	=> true,
 			),
 			5 => array(
-				'name'	=> $this->user->lang('raidevent_raid_export'),
 				'link'	=> 'javascript:ExportDialog()',
+				'text'	=> $this->user->lang('raidevent_raid_export'),
 				'icon'	=> 'fa-share-square-o',
 				'perm'	=> true,
 			),
 			6 => array(
-				'name'	=> $this->user->lang('calendars_add_title'),
 				'link'	=> 'javascript:AddRaid()',
+				'text'	=> $this->user->lang('calendars_add_title'),
 				'icon'	=> 'fa-plus',
 				'perm'	=> $this->user->check_auth('u_cal_event_add', false),
 			),
 			7 => array(
-				'name'	=> $this->user->lang('massmail_send'),
 				'link'	=> $this->server_path.'admin/manage_massmail.php'.$this->SID.'&amp;event_id='.$this->url_id,
+				'text'	=> $this->user->lang('massmail_send'),
 				'icon'	=> 'fa-envelope',
 				'perm'	=> $this->user->check_auth('a_users_massmail', false),
 			),
 			8 => array(
-				'name'	=> $this->user->lang('view_logs'),
 				'link'	=> 'javascript:ViewLogs('.$this->url_id.')',
+				'text'	=> $this->user->lang('view_logs'),
 				'icon'	=> 'fa-book',
 				'perm'	=> $this->user->check_auth('a_logs_view', false),
 			),

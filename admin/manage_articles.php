@@ -333,36 +333,35 @@ class Manage_Articles extends page_generic {
 
 		$arrMenuItems = array(
 			0 => array(
-				'name'	=> $this->user->lang('delete'),
-				'type'	=> 'button', //link, button, javascript
+				'type'	=> 'javascript',
 				'icon'	=> 'fa-trash-o',
+				'text'	=> $this->user->lang('delete'),
 				'perm'	=> true,
-				'link'	=> '#del_articles',
+				'js'	=> "$('#del_articles').click();",
+				'append'=> '<button name="del" onclick="delete_warning();" id="del_articles" class="mainoption" type="button" style="display:none;" />',
 			),
-
 			1 => array(
-				'name'	=> $this->user->lang('mass_stat_change').': '.$this->user->lang('published'),
-				'type'	=> 'button', //link, button, javascript
+				'type'	=> 'button',
 				'icon'	=> 'fa-eye',
+				'text'	=> $this->user->lang('mass_stat_change').': '.$this->user->lang('published'),
 				'perm'	=> true,
-				'link'	=> '#set_published',
+				'name'	=> 'set_published',
 			),
 			2 => array(
-				'name'	=> $this->user->lang('mass_stat_change').': '.$this->user->lang('not_published'),
-				'type'	=> 'button', //link, button, javascript
+				'type'	=> 'button',
 				'icon'	=> 'fa-eye-slash',
+				'text'	=> $this->user->lang('mass_stat_change').': '.$this->user->lang('not_published'),
 				'perm'	=> true,
-				'link'	=> '#set_unpublished',
+				'name'	=> 'set_unpublished',
 			),
 			3 => array(
-				'name'	=> $this->user->lang('move_to_other_category').':',
-				'type'	=> 'button', //link, button, javascript
+				'type'	=> 'select',
 				'icon'	=> 'fa-refresh',
+				'text'	=> $this->user->lang('move_to_other_category').':',
 				'perm'	=> true,
-				'link'	=> '#change_category',
-				'append' => new hdropdown('new_category', array('options' => $arrCategories)),
+				'name'	=> 'change_category',
+				'options' => array('new_category', $arrCategories),
 			),
-
 		);
 
 		$this->confirm_delete($this->user->lang('confirm_delete_articles'));
