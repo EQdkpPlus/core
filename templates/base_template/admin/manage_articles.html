@@ -65,15 +65,11 @@
 	</div>
 	<div class="contentFooter">
 		{BUTTON_MENU}
-		<button class="mainoption" type="button" name="del" onclick="delete_warning();" id="del_articles" style="display:none;"><i class="fa fa-times"></i>{L_delete_selected_entries}</button>
-		<button class="mainoption" type="submit" name="set_published" id="set_published" style="display:none;"></button>
-		<button class="mainoption" type="submit" name="set_unpublished" id="set_unpublished" style="display:none;"></button>
-		<button class="mainoption" type="submit" name="change_category" id="change_category" style="display:none;"></button>
 		
 		<input type="hidden" name="c" value="{CID}" />
 		<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
 		<button class="mainoption" type="submit" name="save"><i class="fa fa-check"></i>{L_save}</button>
 		<button class="mainoption" type="button" onclick="window.location='manage_article_categories.php{SID}'"><i class="fa fa-chevron-left"></i>{L_back}</button>
 	</div>
-{CSRF_TOKEN}	
+{CSRF_TOKEN}
 </form>

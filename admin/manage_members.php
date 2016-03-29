@@ -273,28 +273,29 @@ class Manage_Members extends page_generic {
 
 		$arrMenuItems = array(
 			0 => array(
-				'name'	=> $this->user->lang('delete'),
-				'type'	=> 'button', //link, button, javascript
+				'type'	=> 'javascript',
 				'icon'	=> 'fa-trash-o',
+				'text'	=> $this->user->lang('delete'),
 				'perm'	=> true,
-				'link'	=> '#del_members',
+				'name'	=> 'mdel',
+				'js'	=> "$('#del_members').click();",
+				'append'=> '<input name="mdel" onclick="delete_warning();" id="del_members" class="mainoption bi_delete" type="button" style="display:none;" />',
 			),
 			1 => array(
-				'name'	=> $this->user->lang('mass_stat_change'),
-				'type'	=> 'button', //link, button, javascript
+				'type'	=> 'button',
 				'icon'	=> 'fa-level-down',
+				'text'	=> $this->user->lang('mass_stat_change'),
 				'perm'	=> true,
-				'link'	=> '#member_statchange',
+				'name'	=> 'mstatus',
 			),
 			2 => array(
-				'name'	=> $this->user->lang('mass_rank_change'),
-				'type'	=> 'button', //link, button, javascript
+				'type'	=> 'select',
 				'icon'	=> 'fa-level-down',
+				'text'	=> $this->user->lang('mass_rank_change'),
 				'perm'	=> true,
-				'link'	=> '#member_rankchange',
-				'append' => new hdropdown('rank', array('options' => $ranks)),
+				'name'	=> 'rankc',
+				'options' => array('rank', $ranks),
 			),
-
 		);
 
 		$this->tpl->assign_vars(array(

@@ -788,27 +788,46 @@ class core extends gen_class {
 		/**
 		 * Build a ButtonDropDown Menu
 		 *
+		 * Use in your $arrMenuItems var everytime ['type','text','perm'] for button, select, javascript,.. output text & permissions
+		 * icon		[all]				(optional) supports png and fa-class icons
+		 * append	[javascript, link]	(optional) and add your own html code to the default code
+		 * js		[javascript]		(required) add your own onclick javascript code
+		 * name		[button, select]	(required) name attribute for the primary submit
+		 * options	[select]			(required) ex: array('name_of_input', array('opt_1', 'opt_2', ...))
+		 *
 		 * @param $strButtonText		Text of the button
-		 * @param $arrMenuItems			Array with menu data ['link','name','perm',.. 'icon','type','append']
+		 * @param $arrMenuItems			Array with menu data ['type','text','perm',.. 'icon','append','name','js','options']
 		 * @param $strCssClass			Add CSS class
 		 * @param $strCssID				Add CSS id for checkbox listener
 		 * @param $arrCheckBoxListener	Use checkbox listener to rename by count
+		 * @return string html
 		 */
-		public function build_dropdown_menu($strButtonText, $arrMenuItems, $strCssClass = '', $strCssID = '', $arrCheckBoxListener = array()){
-			$strCssID = (!empty($strCssID))? $strCssID : $hash = 'ddm_'.md5(serialize($arrMenuItems));
-			$html = '<div id="'.$strCssID.'" class="btn-ddm '.$strCssClass.'"><button onclick="return false;">'.$strButtonText.'</button><ul>';
+		public function build_dropdown_menu($strButtonText, $arrMenuItems, $strCssClass = 'floatLeft', $strCssID = '', $arrCheckBoxListener = array()){
+			$strCssID	= (!empty($strCssID))? $strCssID : $hash = 'ddm_'.md5(serialize($arrMenuItems));
+			$html		= '<div id="'.$strCssID.'" class="btn-ddm '.$strCssClass.'"><button onclick="return false;">'.$strButtonText.'</button><ul>';
 			
 			foreach($arrMenuItems as $key => $arrMenuItem){
 				if($arrMenuItem['perm']){
-					#$arrMenuItem['icon'] = (isset($arrMenuItem['icon']) && !empty($arrMenuItem['icon']))? '<i class="fa '.$arrMenuItem['icon'].' fa-fw fa-lg"></i>' : '';
-					$arrMenuItem['icon'] = (isset($arrMenuItem['icon']) && !empty($arrMenuItem['icon']))? $this->icon_font($arrMenuItem['icon'], 'fa-lg') : '';
+					$arrMenuItem['icon'] = (isset($arrMenuItem['icon']) && !empty($arrMenuItem['icon']))? $this->icon_font($arrMenuItem['icon'], 'fa-lg').'&nbsp;' : '';
 					
 					switch($arrMenuItem['type']){
-						case 'button':
-							$html .= '<li><a href="javascript:void(0);" onclick="$(\''.$arrMenuItem['link'].'\').trigger(\'click\');">'.$arrMenuItem['icon'].'&nbsp;'.$arrMenuItem['name'].'</a>'.((isset($arrMenuItem['append'])) ? $arrMenuItem['append'] : '').'</li>';
+						case 'javascript':
+							$html .= '<li data-type="javascript"><a href="javascript:void(0);" onclick="'.$arrMenuItem['js'].'">'.$arrMenuItem['icon'].$arrMenuItem['text'].'</a>'.((isset($arrMenuItem['append'])) ? $arrMenuItem['append'] : '').'</li>';
 							break;
-
-						default: $html .= '<li><a href="'.$arrMenuItem['link'].'">'.$arrMenuItem['icon'].'&nbsp;'.$arrMenuItem['name'].'</a></li>';
+						
+						case 'button':
+							$html .= '<li data-type="button"><a href="javascript:void(0);" onclick="$(this).next(\'button\').click();">'.$arrMenuItem['icon'].$arrMenuItem['text'].'</a><button name="'.$arrMenuItem['name'].'" type="submit" style="display:none;" /></li>';
+							break;
+						
+						case 'select':
+							$html .= '<li data-type="select"><a href="javascript:void(0);">'.$arrMenuItem['icon'].$arrMenuItem['text'].'</a><ul>';
+							foreach($arrMenuItem['options'][1] as $option_value => $option_text){
+								$html .= '<li data-value="'.$option_value.'"><a href="javascript:void(0);" onclick="$(this).parent().parent().next(\'input\').val(\''.$option_value.'\');$(this).parent().parent().next().next(\'button\').click();">'.$option_text.'</a></li>';
+							}
+							$html .= '</ul><input name="'.$arrMenuItem['options'][0].'" value="" type="hidden"><button name="'.$arrMenuItem['name'].'" type="submit" style="display:none;" /></li>';
+							break;
+						
+						default: $html .= '<li data-type="link"><a href="'.$arrMenuItem['link'].'">'.$arrMenuItem['icon'].$arrMenuItem['text'].'</a>'.((isset($arrMenuItem['append'])) ? $arrMenuItem['append'] : '').'</li>';
 					}
 				}
 			}
@@ -832,44 +851,6 @@ class core extends gen_class {
 							}
 							$('#".$strCssID.".btn-ddm > button').html((count > 0)? count + ' ".$strButtonText."' : '".$strButtonText."');
 						});
-						
-						// WorkAround for Select inputs
-						
-						/*
-						$('#".$strCssID.".btn-ddm > ul').find('select').each(function(){
-							$(this).on('click', function(){
-								console.log('select clicked-- addClass()');
-								$('#".$strCssID.".btn-ddm').addClass('active');
-							});
-						});
-						$('#".$strCssID.".btn-ddm > ul select').find('option').each(function(){
-							$(this).on('click', function(event){
-								event.stopPropagation();
-								console.log('option clicked-- removeClass()');				// danach wird irwie 1 nochmal getriggerd, why?
-								$('#".$strCssID.".btn-ddm').removeClass('active');
-							});
-						});
-						*/
-						
-						// Active on Click Select
-						// Active on Mover Option
-						// Inactive on Mleave Option after 3s
-						
-						var test = { };
-						
-						$('#".$strCssID.".btn-ddm select').on('click', function(){
-							$('#".$strCssID.".btn-ddm').addClass('active');
-						});
-						$('#".$strCssID.".btn-ddm select').on('mouseover', 'option', function(){
-							clearTimeout(test);
-							$('#".$strCssID.".btn-ddm').addClass('active');
-						});
-						$('#".$strCssID.".btn-ddm select').on('mouseleave', 'option', function(){
-							test = setTimeout(function(){
-								$('#".$strCssID.".btn-ddm').removeClass('active');
-							}, 3000);
-						});
-						
 					", 'docready');
 				}
 			}

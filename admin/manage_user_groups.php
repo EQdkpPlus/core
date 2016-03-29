@@ -390,27 +390,26 @@ class Manage_User_Groups extends page_generic {
 
 		$arrMenuItems = array(
 			0 => array(
-				'name'	=> $this->user->lang('delete_selected_from_group'),
-				'type'	=> 'button', //link, button, javascript
+				'type'	=> 'button',
 				'icon'	=> 'fa-trash-o',
+				'text'	=> $this->user->lang('delete_selected_from_group'),
 				'perm'	=> true,
-				'link'	=> '#del_group_users',
+				'name'	=> 'del_group_users',
 			),
 			1 => array(
-				'name'	=> $this->user->lang('add_grpleader'),
-				'type'	=> 'button', //link, button, javascript
+				'type'	=> 'button',
 				'icon'	=> 'fa-check',
+				'text'	=> $this->user->lang('add_grpleader'),
 				'perm'	=> $this->user->check_auth('a_usergroups_man', false),
-				'link'	=> '#add_grpleader',
+				'name'	=> 'add_grpleader',
 			),
 			2 => array(
-				'name'	=> $this->user->lang('remove_grpleader'),
-				'type'	=> 'button', //link, button, javascript
+				'type'	=> 'button',
 				'icon'	=> 'fa-times',
+				'text'	=> $this->user->lang('remove_grpleader'),
 				'perm'	=> $this->user->check_auth('a_usergroups_man', false),
-				'link'	=> '#remove_grpleader',
+				'name'	=> 'remove_grpleader',
 			),
-
 		);
 
 		$this->tpl->assign_vars(array(

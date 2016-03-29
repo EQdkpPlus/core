@@ -81,13 +81,16 @@ class ManageTasks extends page_generic {
 							if (!$blnPermission && $this->user->check_auths($arrActions['permissions'], 'OR', false)) $blnPermission = true;
 
 							if ($this->user->check_auths($arrActions['permissions'], 'OR', false)){
+								$trigger = '#t_'.md5($taskID.'.'.$actionID).'Trigger';
+								
 								$arrMenuItems[] = array(
-										'name'	=> $this->user->lang($arrActions['title']),
-										'type'	=> 'button', //link, button, javascript
-										'icon'	=> $arrActions['icon'],
-										'perm'	=> true,
-										'link'	=> '#t_'.md5($taskID.'.'.$actionID).'Trigger',
-										'__action' => $actionID,
+									'type'	=> 'javascript',
+									'icon'	=> $arrActions['icon'],
+									'text'	=> $this->user->lang($arrActions['title']),
+									'perm'	=> true,
+									'js'	=> "$('".$trigger."').click();",
+									'__action_id'	=> $trigger,
+									'__action_val'	=> $actionID,
 								);
 							}
 
@@ -106,8 +109,8 @@ class ManageTasks extends page_generic {
 
 						foreach($arrMenuItems as $val){
 							$this->tpl->assign_block_vars('task_row.button_row', array(
-								'ID' 	=> substr($val['link'],1),
-								'VALUE' => $val['__action'],
+								'ID' 	=> substr($val['__action_id'],1),
+								'VALUE' => $val['__action_val'],
 							));
 						}
 

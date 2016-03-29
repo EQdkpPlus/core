@@ -94,20 +94,20 @@ class mycharacters_pageobject extends pageobject {
 		// Action Menu
 		$cm_addmenu = array(
 			0 => array(
-				'name'		=> $this->user->lang('uc_add_char_plain'),
 				'link'		=> "javascript:AddChar()",
+				'text'		=> $this->user->lang('uc_add_char_plain'),
 				'icon'		=> 'fa-plus',
 				'perm'		=> $this->user->check_auth('u_member_add', false),
 			),
 			1 => array(
-				'name'		=> $this->user->lang('uc_add_char_armory'),
 				'link'		=> "javascript:AddCharArmory()",
+				'text'		=> $this->user->lang('uc_add_char_armory'),
 				'icon'		=> 'fa-download',
 				'perm'		=> $this->game->get_importAuth('u_member_add', 'char_import') && !$this->game->get_require_apikey(),
 			),
 			2 => array(
-				'name'		=> $this->user->lang('uc_add_massupdate'),
 				'link'		=> "javascript:MassUpdateChars()",
+				'text'		=> $this->user->lang('uc_add_massupdate'),
 				'icon'		=> 'fa-refresh',
 				'perm'		=> $this->game->get_importAuth('a_members_man', 'char_mupdate') && !$this->game->get_require_apikey(),
 			),
@@ -182,7 +182,7 @@ class mycharacters_pageobject extends pageobject {
 			'page_title'		=> $this->user->lang('manage_members_titl'),
 			'template_file'		=> 'mycharacters.html',
 			'display'			=> true)
-		);	
+		);
 	}
 }
 ?>

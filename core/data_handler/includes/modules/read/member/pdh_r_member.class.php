@@ -774,20 +774,20 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			// Action Menu
 			$cm_actions= array(
 				0 => array(
-					'name'		=> $this->user->lang('uc_edit_char'),
 					'link'		=> "javascript:EditChar('".$memberid."')",
+					'text'		=> $this->user->lang('uc_edit_char'),
 					'icon'		=> 'fa-pencil',
 					'perm'		=> $this->user->check_auth('u_member_man', false),
 				),
 				1 => array(
-					'name'		=> $this->user->lang('uc_delete_char'),
 					'link'		=> "javascript:DeleteChar('".$memberid."')",
+					'text'		=> $this->user->lang('uc_delete_char'),
 					'icon'		=> 'fa-times',
 					'perm'		=> $this->user->check_auth('u_member_del', false),
 				),
 				2 => array(
-					'name'		=> $this->game->glang('uc_updat_armory'),
 					'link'		=> "javascript:UpdateChar('".$memberid."')",
+					'text'		=> $this->game->glang('uc_updat_armory'),
 					'icon'		=> 'fa-refresh',
 					'perm'		=> $this->game->get_importAuth('u_member_man', 'char_update') && !$this->game->get_require_apikey(),
 				),
