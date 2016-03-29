@@ -26,8 +26,8 @@ if(!defined('EQDKP_INC')) {
 if(!class_exists('pdh_w_comment')) {
 	class pdh_w_comment extends pdh_w_generic {
 
-		public function insert($attach_id, $user_id, $comment, $page, $reply_to) {
-			if($this->config->get('enable_embedly')) $strComment = $this->embedly->parseString($comment, 400, false);
+		public function insert($attach_id, $user_id, $strComment, $page, $reply_to) {
+			if($this->config->get('enable_embedly')) $strComment = $this->embedly->parseString($strComment, 400, false);
 
 			$objQuery = $this->db->prepare("INSERT INTO __comments :p")->set(array(
 					'attach_id'		=> $attach_id,
