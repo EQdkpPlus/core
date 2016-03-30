@@ -4225,6 +4225,9 @@ button.thirdpartylogin.openid {
 }
 
 /* Boolean Boxes */
+@styleBooleanRed: #e89795;
+@styleBooleanGreen: #89bf8b;
+
 label.isBoolean > input {
         display: none;
 }
@@ -4259,12 +4262,12 @@ label.isBoolean > input[type="radio"]:checked + span.red, label.isBoolean > span
 }
 
 label.isBoolean > input[type="radio"]:checked + span.red, label.isBoolean > span.red:hover, label.isBoolean > span.red:active {
-        background: #e89795 !important;
+        background: @styleBooleanRed !important;
         color: @eqdkpInputFontColor !important;
 }
 
 label.isBoolean > input[type="radio"]:checked + span.green, label.isBoolean > span.green:hover, label.isBoolean > span.green:active {
-        background: #89bf8b !important;
-        color: #fff !important;
+        background: @styleBooleanGreen !important;
+        color: @eqdkpInputFontColor !important;
 }
 /* End Boolean Boxes */
