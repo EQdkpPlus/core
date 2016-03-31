@@ -83,17 +83,5 @@
 @styleArticleSitemapActiveBackgroundColor: #F7F7F9;
 @styleArticleSitemapActiveColor: #999999;
 @styleArticleSitemapHoverColor: #000;
-@jQueryUiWidgetBorder: #aaa;
-@jQueryUiWidgetFontColor: #222;
-@jQueryUiWidgetBackgroudColor: #fff;
-@jQueryUiStateFontColor: #555;
-@jQueryUiStateBorder: #d3d3d3;
-@jQueryUiStateBackground: #e6e6e6;
-@jQueryUiStateFontColorHover: #212121;
-@jQueryUiStateHighlightBorder: #3d5c89;
-@jQueryUiStateHighlightBackground: #d0e8f8;
-@jQueryUiStateHighlightFontColor: #363636;
-@jQueryUiStateErrorColor: #cd0a0a;
-@jQueryUiBorderRadius:4px;
 	</additional_less>
 </settings>
