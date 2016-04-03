@@ -70,18 +70,18 @@
 	<misc_text2></misc_text2>
 	<misc_text3></misc_text3>
 	<additional_less>@styleCommentContainerBackgroundColor: #fff;
-@styleCommentContainerBorderColor: #ccc;
-@styleCommentAuthorColor: #9f9f9f;
-@stylePaginationBorderColor: #ddd;
-@stylePaginationBackgroundColor: #fff;
-@stylePaginationActiveBackgroundColor: #F7F7F9;
-@stylePaginationActiveColor: #999;
-@stylePaginationActiveHoverBackgroundColor: #F7F7F9;
-@stylePaginationActiveHoverColor: #000;
-@styleArticleSitemapBorderColor: #ddd;
-@styleArticleSitemapBackgroundColor: #fff;
-@styleArticleSitemapActiveBackgroundColor: #F7F7F9;
-@styleArticleSitemapActiveColor: #999999;
-@styleArticleSitemapHoverColor: #000;
+	@styleCommentContainerBorderColor: #ccc;
+	@styleCommentAuthorColor: #9f9f9f;
+	@stylePaginationBorderColor: #ddd;
+	@stylePaginationBackgroundColor: #fff;
+	@stylePaginationActiveBackgroundColor: #F7F7F9;
+	@stylePaginationActiveColor: #999;
+	@stylePaginationActiveHoverBackgroundColor: #F7F7F9;
+	@stylePaginationActiveHoverColor: #000;
+	@styleArticleSitemapBorderColor: #ddd;
+	@styleArticleSitemapBackgroundColor: #fff;
+	@styleArticleSitemapActiveBackgroundColor: #F7F7F9;
+	@styleArticleSitemapActiveColor: #999999;
+	@styleArticleSitemapHoverColor: #000;
 	</additional_less>
 </settings>
