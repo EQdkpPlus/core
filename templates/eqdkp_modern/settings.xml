@@ -70,30 +70,18 @@
 	<misc_text2></misc_text2>
 	<misc_text3></misc_text3>
 	<additional_less>@styleCommentContainerBackgroundColor: #fff;
-@styleCommentContainerBorderColor: #ccc;
-@styleCommentAuthorColor: #9f9f9f;
-@stylePaginationBorderColor: #ddd;
-@stylePaginationBackgroundColor: #fff;
-@stylePaginationActiveBackgroundColor: #F7F7F9;
-@stylePaginationActiveColor: #999;
-@stylePaginationActiveHoverBackgroundColor: #F7F7F9;
-@stylePaginationActiveHoverColor: #000;
-@styleArticleSitemapBorderColor: #ddd;
-@styleArticleSitemapBackgroundColor: #fff;
-@styleArticleSitemapActiveBackgroundColor: #F7F7F9;
-@styleArticleSitemapActiveColor: #999999;
-@styleArticleSitemapHoverColor: #000;
-@jQueryUiWidgetBorder: #aaa;
-@jQueryUiWidgetFontColor: #222;
-@jQueryUiWidgetBackgroudColor: #fff;
-@jQueryUiStateFontColor: #555;
-@jQueryUiStateBorder: #d3d3d3;
-@jQueryUiStateBackground: #e6e6e6;
-@jQueryUiStateFontColorHover: #212121;
-@jQueryUiStateHighlightBorder: #3d5c89;
-@jQueryUiStateHighlightBackground: #d0e8f8;
-@jQueryUiStateHighlightFontColor: #363636;
-@jQueryUiStateErrorColor: #cd0a0a;
-@jQueryUiBorderRadius:4px;
+	@styleCommentContainerBorderColor: #ccc;
+	@styleCommentAuthorColor: #9f9f9f;
+	@stylePaginationBorderColor: #ddd;
+	@stylePaginationBackgroundColor: #fff;
+	@stylePaginationActiveBackgroundColor: #F7F7F9;
+	@stylePaginationActiveColor: #999;
+	@stylePaginationActiveHoverBackgroundColor: #F7F7F9;
+	@stylePaginationActiveHoverColor: #000;
+	@styleArticleSitemapBorderColor: #ddd;
+	@styleArticleSitemapBackgroundColor: #fff;
+	@styleArticleSitemapActiveBackgroundColor: #F7F7F9;
+	@styleArticleSitemapActiveColor: #999999;
+	@styleArticleSitemapHoverColor: #000;
 	</additional_less>
 </settings>
