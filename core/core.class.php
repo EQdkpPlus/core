@@ -855,6 +855,13 @@ class core extends gen_class {
 				}
 			}
 			
+			$this->tpl->add_js("
+				$('.btn-ddm li[data-type=\"select\"]').hover(function(){
+					var middle = -($(' > ul', this).outerHeight() / 2) + ($(this).height() / 2);
+					$(' > ul', this).css('top', middle +'px');
+				});
+			", 'docready');
+			
 			return str_replace("<ul></ul>", "", $html);
 		}
 
