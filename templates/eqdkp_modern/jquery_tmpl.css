@@ -1,20 +1,19 @@
 /*! jQuery UI - v1.12.0-rc.1 - 2016-03-17
 * http://jqueryui.com
 * Copyright jQuery Foundation and other contributors; Licensed MIT */
-/* Used Less Variables Default, see setting.xml for variable Info / Uncommend for fast adjustments during development
- * @jQueryUiWidgetBorder: #aaa;
-	@jQueryUiWidgetFontColor: #222;
-	@jQueryUiWidgetBackgroudColor: #fff;
-	@jQueryUiStateFontColor: #555;
-	@jQueryUiStateBorder: #d3d3d3;
+
+	@jQueryUiWidgetBorder: @eqdkpContentBorderColor;
+	@jQueryUiWidgetFontColor: @eqdkpContentFontColor;
+	@jQueryUiWidgetBackgroundColor: #FFF;
+	@jQueryUiStateFontColor: @eqdkpContentFontColor;
+	@jQueryUiStateBorder: @eqdkpContentBorderColor;
 	@jQueryUiStateBackground: #e6e6e6;
-	@jQueryUiStateFontColorHover: #212121;
-	@jQueryUiStateHighlightBorder: #3d5c89;
-	@jQueryUiStateHighlightBackground: #d0e8f8;
-	@jQueryUiStateHighlightFontColor: #363636;
+	@jQueryUiStateFontColorHover: @eqdkpContentFontColorHeadings;
+	@jQueryUiStateHighlightBorder: @eqdkpContentBorderColor;
+	@jQueryUiStateHighlightBackground: @eqdkpContentBackgroundColor;
+	@jQueryUiStateHighlightFontColor: @eqdkpContentFontColor;
 	@jQueryUiStateErrorColor: #cd0a0a;
 	@jQueryUiBorderRadius:4px;
-	*/
 
 .ui-widget{
 		font-family:Verdana,Arial,sans-serif;
@@ -27,15 +26,15 @@
 		font-family:Verdana,Arial,sans-serif;
 		font-size:1em}
 .ui-widget.ui-widget-content{
-		border:1px solid lighten(@jQueryUiWidgetBorder,20)}
+		border:1px solid darken(@jQueryUiWidgetBorder,5)}
 .ui-widget-content{
 		border:1px solid @jQueryUiWidgetBorder;
-		background:@jQueryUiWidgetBackgroudColor;
+		background:@jQueryUiWidgetBackgroundColor;
 		color:@jQueryUiWidgetFontColor}
 .ui-widget-content a{color:@jQueryUiWidgetFontColor}
 .ui-widget-header{
 		border:1px solid @jQueryUiWidgetBorder;
-		background:darken(@jQueryUiWidgetBackgroudColor,40) url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") 50% 50% repeat-x;
+		background:darken(@jQueryUiWidgetBackgroundColor,40) url("images/ui-bg_highlight-soft_75_cccccc_1x100.png") 50% 50% repeat-x;
 		color:@jQueryUiWidgetFontColor;font-weight:bold}
 .ui-widget-header a{color:@jQueryUiWidgetFontColor}
 .ui-state-default,
@@ -533,7 +532,7 @@
 .ui-corner-br{
 		border-bottom-right-radius:@jQueryUiBorderRadius}
 .ui-widget-overlay{
-		background:darken(@jQueryUiWidgetBackgroudColor,80);
+		background:darken(@jQueryUiWidgetBackgroundColor,80);
 		opacity:.5;
 		filter:Alpha(Opacity=50)}
 .ui-widget-shadow{
