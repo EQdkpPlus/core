@@ -636,7 +636,7 @@ ul.adminmenu ul.sub-menu li:hover > .sub-menu-arrow:after { border-left-color: #
 .btn-ddm > ul > li[data-type="select"] { position: relative; }
 .btn-ddm > ul > li[data-type="select"]:after { display: block; position: absolute; content: ''; height: 0; width: 0; top: 5px; right: -5px; border: 7px solid transparent; border-left-color: #b7b7b7; }
 .btn-ddm > ul > li[data-type="select"]:hover:after { right: 0; border-left-color: transparent; border-right-color: #b7b7b7; }
-.btn-ddm > ul > li[data-type="select"] > ul { display: none; padding: 3px; position: absolute; top: -400%; left: 100%; background: linear-gradient(to bottom, #fff 0%, #ededed 100%); border: 1px solid #b7b7b7; border-radius: 3px; box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.5); }
+.btn-ddm > ul > li[data-type="select"] > ul { display: none; padding: 3px; position: absolute; top: -1.5px; left: 100%; background: linear-gradient(to bottom, #fff 0%, #ededed 100%); border: 1px solid #b7b7b7; border-radius: 3px; box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.5); }
 .btn-ddm > ul > li[data-type="select"]:hover > ul { display: block; }
 .btn-ddm > ul > li[data-type="select"] > ul > li > a { display: block; padding: 2px 0; white-space: nowrap; }
 .btn-ddm > ul > li[data-type="select"] > ul > li > a:hover { background: #ededed; }
