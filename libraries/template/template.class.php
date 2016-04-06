@@ -1129,112 +1129,117 @@ class template extends gen_class {
 
 		$tokens = $match[0];
 		$is_arg_stack = array();
-		for($i = 0, $size = count($tokens); $i < $size; $i++){
-			$token = &$tokens[$i];
-			switch ($token){
-				case '!==':
-				case '===':
-				case '<<':
-				case '>>':
-				case '|':
-				case '^':
-				case '&':
-				case '~':
-				case ')':
-				case ',':
-				case '+':
-				case '-':
-				case '*':
-				case '/':
-				case '@':
-				break;
+		
+		if(is_array($tokens)){
+			foreach($tokens as $key => $token){
+				switch ($token){
+					case '!==':
+					case '===':
+					case '<<':
+					case '>>':
+					case '|':
+					case '^':
+					case '&':
+					case '~':
+					case ')':
+					case ',':
+					case '+':
+					case '-':
+					case '*':
+					case '/':
+					case '@':
+					break;
 
-				case '==':
-				case 'eq':
-				case 'EQ':
-					$token = '==';
-				break;
+					case '==':
+					case 'eq':
+					case 'EQ':
+						$token = '==';
+					break;
 
-				case '!=':
-				case '<>':
-				case 'ne':
-				case 'neq':
-				case 'NEQ':
-					$token = '!=';
-				break;
+					case '!=':
+					case '<>':
+					case 'ne':
+					case 'neq':
+					case 'NEQ':
+						$token = '!=';
+					break;
 
-				case '<':
-				case 'lt':
-				case 'LT':
-					$token = '<';
-				break;
+					case '<':
+					case 'lt':
+					case 'LT':
+						$token = '<';
+					break;
 
-				case '<=':
-				case 'le':
-				case 'lte':
-				case 'LE':
-					$token = '<=';
-				break;
+					case '<=':
+					case 'le':
+					case 'lte':
+					case 'LE':
+						$token = '<=';
+					break;
 
-				case '>':
-				case 'gt':
-				case 'GET':
-					$token = '>';
-				break;
+					case '>':
+					case 'gt':
+					case 'GET':
+						$token = '>';
+					break;
 
-				case '>=':
-				case 'ge':
-				case 'gte':
-					$token = '>=';
-				break;
+					case '>=':
+					case 'ge':
+					case 'gte':
+						$token = '>=';
+					break;
 
-				case '&&':
-				case 'and':
-				case 'AND':
-					$token = '&&';
-				break;
+					case '&&':
+					case 'and':
+					case 'AND':
+						$token = '&&';
+					break;
 
-				case '||':
-				case 'or':
-				case 'OR':
-					$token = '||';
-				break;
+					case '||':
+					case 'or':
+					case 'OR':
+						$token = '||';
+					break;
 
-				case '!':
-				case 'not':
-				case 'NOT':
-					$token = '!';
-				break;
+					case '!':
+					case 'not':
+					case 'NOT':
+						$token = '!';
+					break;
 
-				case '%':
-				case 'mod':
-				case 'MOD':
-					$token = '%';
-				break;
+					case '%':
+					case 'mod':
+					case 'MOD':
+						$token = '%';
+					break;
 
-				case '(':
-					array_push($is_arg_stack, $i);
-				break;
+					case '(':
+						array_push($is_arg_stack, $i);
+					break;
 
-				case 'IS':
-				case 'is':	$is_arg_start	= ($tokens[$i-1] == ')') ? array_pop($is_arg_stack) : $i-1;
-							$is_arg			= implode('    ', array_slice($tokens, $is_arg_start, $i - $is_arg_start));
-							$new_tokens		= $this->_parse_is_expr($is_arg, array_slice($tokens, $i+1));
-							array_splice($tokens, $is_arg_start, count($tokens), $new_tokens);
-							$i				= $is_arg_start;
-							// no break
+					case 'IS':
+					case 'is':	$is_arg_start	= ($tokens[$i-1] == ')') ? array_pop($is_arg_stack) : $i-1;
+								$is_arg			= implode('    ', array_slice($tokens, $is_arg_start, $i - $is_arg_start));
+								$new_tokens		= $this->_parse_is_expr($is_arg, array_slice($tokens, $i+1));
+								array_splice($tokens, $is_arg_start, count($tokens), $new_tokens);
+								$i				= $is_arg_start;
+								// no break
 
-				default:	if (preg_match('#^(([a-z0-9\-_]+?\.)+?)?([A-Z]+[A-Z0-9\-_]+?)$#s', $token, $varrefs)){
-								$token = (!empty($varrefs[1])) ? $this->generate_block_data_ref(substr($varrefs[1], 0, -1), true) . '[\'' . $varrefs[3] . '\']' : '$this->_data[\'.\'][0][\'' . $varrefs[3] . '\']';
-							}
-							break;
-			}	// end switch
-		}	// end for
+					default:	if (preg_match('#^(([a-z0-9\-_]+?\.)+?)?([A-Z]+[A-Z0-9\-_]+?)$#s', $token, $varrefs)){
+									$token = (!empty($varrefs[1])) ? $this->generate_block_data_ref(substr($varrefs[1], 0, -1), true) . '[\'' . $varrefs[3] . '\']' : '$this->_data[\'.\'][0][\'' . $varrefs[3] . '\']';
+								}
+								break;
+				}	// end switch
+				
+				$tokens[$key] = $token;
+			}
+		}
 
 		// If there are no valid tokens left or only control/compare characters left, we do skip this statement
-		if (!sizeof($tokens) || str_replace(array(' ', '=', '!', '<', '>', '&', '|', '%', '(', ')'), '', implode('', $tokens)) == ''){
+		if (!count($tokens) || str_replace(array(' ', '=', '!', '<', '>', '&', '|', '%', '(', ')'), '', implode('', $tokens)) == ''){
 			$tokens = array('false');
 		}
+		
 		return (($elseif) ? '} else if (' : 'if (') . (implode(' ', $tokens) . ') { ' . "\n");
 	}
 
