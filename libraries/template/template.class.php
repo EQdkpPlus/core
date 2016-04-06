@@ -72,7 +72,7 @@ class template extends gen_class {
 	public function __construct($install=false) {
 		$this->is_install = $install;
 		require_once($this->root_path . 'libraries/yuicompressorPHP/CSSmin.php');
-		
+
 		$this->caching = (defined('DEBUG') && DEBUG > 2) ? false : true;
 	}
 
@@ -289,7 +289,7 @@ class template extends gen_class {
 				if(!defined('DISABLE_LESS')){
 					$strCSS = $this->parseLess($strCSS);
 				}
-				
+
 				//Minify CSS
 				if(!defined('DISABLE_CSS_MINIFY')){
 					$compressor = new CSSmin();
@@ -406,6 +406,7 @@ class template extends gen_class {
 				$imploded_jscodeeop .= implode("\n", $this->get_templatedata('js_code_file_docready'));
 				$imploded_jscodeeop .= "});";
 			}
+			$this->tpl_output['js_code_file'] = $this->tpl_output['js_code_file_docready'] = array();
 		}
 
 
@@ -597,18 +598,18 @@ class template extends gen_class {
 
 		return $imploded_jscode;
 	}
-	
+
 	public function get_footer_js(){
 		$imploded_jscode = "";
-		
+
 		$imploded_jscode = implode("\n", $this->get_templatedata('js_code_eop'));
-		
+
 		$imploded_jscode .= "jQuery(document).ready(function(){";
-		
+
 		$imploded_jscode .= implode("\n", $this->get_templatedata('js_code_eop_docready'));
-		
+
 		$imploded_jscode .= "});";
-		
+
 		return $imploded_jscode;
 	}
 
@@ -632,9 +633,12 @@ class template extends gen_class {
 			// JS on end of page
 			if(is_array($this->get_templatedata('js_code_eop')) || is_array($this->get_templatedata('js_code_eop_docready'))){
 				$imploded_jscodeeop = implode("\n", $this->get_templatedata('js_code_eop'));
+				if($debug) $imploded_jscodeeop .= implode("\n", $this->get_templatedata('js_code_file'));
+
 				if(is_array($this->get_templatedata('js_code_eop_docready'))){
 					$imploded_jscodeeop .= "$(document).ready(function(){";
 					$imploded_jscodeeop .= implode("\n", $this->get_templatedata('js_code_eop_docready'));
+					if($debug) $imploded_jscodeeop .= implode("\n", $this->get_templatedata('js_code_file_docready'));
 					$imploded_jscodeeop .= "});";
 				}
 
@@ -683,14 +687,15 @@ class template extends gen_class {
 
 		if(!$this->get_templateout('js_file')){
 			if(is_array($this->get_templatedata('js_file'))){
-				ksort($this->get_templatedata('js_file'));
+				$aryJSFile = $this->get_templatedata('js_file');
+				ksort($aryJSFile);
 				$js_files = "";
 				if(is_array($this->get_templatedata('js_code_head_top')) && count($this->get_templatedata('js_code_head_top'))) {
 					$js_files .= "<script type='text/javascript'>";
 					$js_files .= implode("\n", $this->get_templatedata('js_code_head_top'));
 					$js_files .= "</script>\n";
 				}
-				$js_files .= $this->implode_cssjsfiles("<script type='text/javascript' src='", "'></script>", "\n", $this->get_templatedata('js_file'));
+				$js_files .= $this->implode_cssjsfiles("<script type='text/javascript' src='", "'></script>", "\n", $aryJSFile);
 				$this->assign_var('JS_FILES', $js_files);
 			}
 			$this->set_templateout('js_file', true);
@@ -1124,112 +1129,117 @@ class template extends gen_class {
 
 		$tokens = $match[0];
 		$is_arg_stack = array();
-		for($i = 0, $size = count($tokens); $i < $size; $i++){
-			$token = &$tokens[$i];
-			switch ($token){
-				case '!==':
-				case '===':
-				case '<<':
-				case '>>':
-				case '|':
-				case '^':
-				case '&':
-				case '~':
-				case ')':
-				case ',':
-				case '+':
-				case '-':
-				case '*':
-				case '/':
-				case '@':
-				break;
+		
+		if(is_array($tokens)){
+			foreach($tokens as $key => $token){
+				switch ($token){
+					case '!==':
+					case '===':
+					case '<<':
+					case '>>':
+					case '|':
+					case '^':
+					case '&':
+					case '~':
+					case ')':
+					case ',':
+					case '+':
+					case '-':
+					case '*':
+					case '/':
+					case '@':
+					break;
 
-				case '==':
-				case 'eq':
-				case 'EQ':
-					$token = '==';
-				break;
+					case '==':
+					case 'eq':
+					case 'EQ':
+						$token = '==';
+					break;
 
-				case '!=':
-				case '<>':
-				case 'ne':
-				case 'neq':
-				case 'NEQ':
-					$token = '!=';
-				break;
+					case '!=':
+					case '<>':
+					case 'ne':
+					case 'neq':
+					case 'NEQ':
+						$token = '!=';
+					break;
 
-				case '<':
-				case 'lt':
-				case 'LT':
-					$token = '<';
-				break;
+					case '<':
+					case 'lt':
+					case 'LT':
+						$token = '<';
+					break;
 
-				case '<=':
-				case 'le':
-				case 'lte':
-				case 'LE':
-					$token = '<=';
-				break;
+					case '<=':
+					case 'le':
+					case 'lte':
+					case 'LE':
+						$token = '<=';
+					break;
 
-				case '>':
-				case 'gt':
-				case 'GET':
-					$token = '>';
-				break;
+					case '>':
+					case 'gt':
+					case 'GET':
+						$token = '>';
+					break;
 
-				case '>=':
-				case 'ge':
-				case 'gte':
-					$token = '>=';
-				break;
+					case '>=':
+					case 'ge':
+					case 'gte':
+						$token = '>=';
+					break;
 
-				case '&&':
-				case 'and':
-				case 'AND':
-					$token = '&&';
-				break;
+					case '&&':
+					case 'and':
+					case 'AND':
+						$token = '&&';
+					break;
 
-				case '||':
-				case 'or':
-				case 'OR':
-					$token = '||';
-				break;
+					case '||':
+					case 'or':
+					case 'OR':
+						$token = '||';
+					break;
 
-				case '!':
-				case 'not':
-				case 'NOT':
-					$token = '!';
-				break;
+					case '!':
+					case 'not':
+					case 'NOT':
+						$token = '!';
+					break;
 
-				case '%':
-				case 'mod':
-				case 'MOD':
-					$token = '%';
-				break;
+					case '%':
+					case 'mod':
+					case 'MOD':
+						$token = '%';
+					break;
 
-				case '(':
-					array_push($is_arg_stack, $i);
-				break;
+					case '(':
+						array_push($is_arg_stack, $i);
+					break;
 
-				case 'IS':
-				case 'is':	$is_arg_start	= ($tokens[$i-1] == ')') ? array_pop($is_arg_stack) : $i-1;
-							$is_arg			= implode('    ', array_slice($tokens, $is_arg_start, $i - $is_arg_start));
-							$new_tokens		= $this->_parse_is_expr($is_arg, array_slice($tokens, $i+1));
-							array_splice($tokens, $is_arg_start, count($tokens), $new_tokens);
-							$i				= $is_arg_start;
-							// no break
+					case 'IS':
+					case 'is':	$is_arg_start	= ($tokens[$i-1] == ')') ? array_pop($is_arg_stack) : $i-1;
+								$is_arg			= implode('    ', array_slice($tokens, $is_arg_start, $i - $is_arg_start));
+								$new_tokens		= $this->_parse_is_expr($is_arg, array_slice($tokens, $i+1));
+								array_splice($tokens, $is_arg_start, count($tokens), $new_tokens);
+								$i				= $is_arg_start;
+								// no break
 
-				default:	if (preg_match('#^(([a-z0-9\-_]+?\.)+?)?([A-Z]+[A-Z0-9\-_]+?)$#s', $token, $varrefs)){
-								$token = (!empty($varrefs[1])) ? $this->generate_block_data_ref(substr($varrefs[1], 0, -1), true) . '[\'' . $varrefs[3] . '\']' : '$this->_data[\'.\'][0][\'' . $varrefs[3] . '\']';
-							}
-							break;
-			}	// end switch
-		}	// end for
+					default:	if (preg_match('#^(([a-z0-9\-_]+?\.)+?)?([A-Z]+[A-Z0-9\-_]+?)$#s', $token, $varrefs)){
+									$token = (!empty($varrefs[1])) ? $this->generate_block_data_ref(substr($varrefs[1], 0, -1), true) . '[\'' . $varrefs[3] . '\']' : '$this->_data[\'.\'][0][\'' . $varrefs[3] . '\']';
+								}
+								break;
+				}	// end switch
+				
+				$tokens[$key] = $token;
+			}
+		}
 
 		// If there are no valid tokens left or only control/compare characters left, we do skip this statement
-		if (!sizeof($tokens) || str_replace(array(' ', '=', '!', '<', '>', '&', '|', '%', '(', ')'), '', implode('', $tokens)) == ''){
+		if (!count($tokens) || str_replace(array(' ', '=', '!', '<', '>', '&', '|', '%', '(', ')'), '', implode('', $tokens)) == ''){
 			$tokens = array('false');
 		}
+		
 		return (($elseif) ? '} else if (' : 'if (') . (implode(' ', $tokens) . ') { ' . "\n");
 	}
 
@@ -1353,7 +1363,7 @@ class template extends gen_class {
 		return $varref;
 	}
 
-	private function compile_load(&$_str, &$handle, $do_echo){		
+	private function compile_load(&$_str, &$handle, $do_echo){
 		if($handle == 'main'){
 			if(strpos($this->body_filename, '/') !== false){
 				$arrFolders = explode("/", $this->body_filename);
@@ -1370,9 +1380,9 @@ class template extends gen_class {
 				$filename = $this->files[$handle];
 			}
 		}
-		
+
 		$file = $this->cachedir . $filename . '.php';
- 
+
 		// Recompile page if the original template is newer, otherwise load the compiled version
 		$strMyHandle = ($handle == 'main') ? 'body' : $handle;
 		if($this->caching && file_exists($file) && $this->timekeeper->get('tpl_cache_'.$this->template, $filename) >= @filemtime($this->files[$strMyHandle])){
@@ -1751,7 +1761,7 @@ class template extends gen_class {
 			$parser->ModifyVars($lessVars);
 			$parser->parse($strCSS);
 			$strCSS = $parser->getCss();
-			
+
 			//ToDo: remove this if less parser is better
 			if (version_compare(phpversion(), '7.0', ">=") && $intJitSetting){
 				ini_set('pcre.jit', 1);
