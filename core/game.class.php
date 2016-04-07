@@ -431,7 +431,9 @@ class game extends gen_class {
 	 * @return bool
 	 */
 	public function icon_exists($type) {
-		return in_array($type, $this->gameinfo()->icons); 
+		$arrDefaultIcons = array('roles', 'events');
+		$arrIcons = (is_array($this->gameinfo()->icons)) ? array_merge($arrDefaultIcons, $this->gameinfo()->icons) : $arrDefaultIcons;
+		return in_array($type, $arrIcons);
 	}
 	
 	/**
