@@ -330,14 +330,12 @@ class notifications extends gen_class {
 		$intLastCleanup = $this->config->get('notifications_last_cleanup');
 		//Once a day the complete cleanup
 		if(!$intLastCleanup || $intLastCleanup < ($this->time->time - (3600*24))){
-			echo "cleanup";
 			$intTime = $this->time->time;
 			$intTime = $intTime - ($intDays * 3600*24);
 			$this->pdh->put('notifications', 'cleanup_unread', array($intTime));
 			$this->pdh->process_hook_queue();
 			$this->config->set('notifications_last_cleanup', $this->time->time);
 		}
-		echo "no cleanup";
 	}
 	
 	public function getAvailableNotificationMethods($blnAllMethods=false){
