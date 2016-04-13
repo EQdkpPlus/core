@@ -25,7 +25,7 @@ include_once($eqdkp_root_path . 'common.php');
 
 class controller extends gen_class {
 	public static $shortcuts = array('social' => 'socialplugins');
-	
+
 	public function __construct() {
 		$blnCheckPost = $this->user->checkCsrfPostToken($this->in->get($this->user->csrfPostToken()));
 		$blnCheckPostOld = $this->user->checkCsrfPostToken($this->in->get($this->user->csrfPostToken(true)));
@@ -45,7 +45,7 @@ class controller extends gen_class {
 
 		$this->display();
 	}
-	
+
 	public function delete(){
 		$intArticleID = $this->in->get('aid', 0);
 		$intCategoryID = $this->pdh->get('articles','category', array($intArticleID));
@@ -60,7 +60,7 @@ class controller extends gen_class {
 			}
 		}
 	}
-	
+
 	public function unpublish(){
 		$intArticleID = $this->in->get('aid', 0);
 		$intCategoryID = $this->pdh->get('articles','category', array($intArticleID));
@@ -75,7 +75,7 @@ class controller extends gen_class {
 			}
 		}
 	}
-	
+
 	public function publish(){
 		$intArticleID = $this->in->get('aid', 0);
 		$intCategoryID = $this->pdh->get('articles','category', array($intArticleID));
@@ -84,18 +84,18 @@ class controller extends gen_class {
 			if ($arrPermissions && $arrPermissions['change_state']){
 				$strArticleTitle = $this->pdh->get('articles', 'title', array($intArticleID));
 				$this->pdh->put('articles', 'set_published', array(array($intArticleID)));
-	
+
 				$this->core->message($strArticleTitle, $this->user->lang('article_publish_success'), 'green');
 				$this->pdh->process_hook_queue();
 			}
 		}
 	}
-	
+
 	private function filterPathArray($arrPath){
 		foreach($arrPath as $key => $val){
 			$arrPath[$key] = str_replace(array(".html", ".php"), "", utf8_strtolower($arrPath[$key]));
 		}
-		
+
 		return $arrPath;
 	}
 
@@ -113,7 +113,7 @@ class controller extends gen_class {
 		$arrPath = $this->filterPathArray($arrPath);
 		//Required, otherwise the Routing of Plugin URLS wont work.
 		register('pm');
-		
+
 		if (count($arrPath) == 0 || str_ireplace('index.php', '', $strPath) === $this->config->get('server_path')){
 			$blnIsStartpage = true;
 			//Get Start Page
@@ -127,25 +127,25 @@ class controller extends gen_class {
 		}
 		registry::add_const('patharray', $arrPath);
 		$intArticleID = $intCategoryID = $strSpecificID = 0;
-		
+
 		//Search for static Routes first
 		$strPageObject = false;
 		foreach($arrPath as $intPathPart => $strPathPart){
 			if (register('routing')->staticRoute($strPathPart)){
 				if ($intPathPart == 0){
-		
+
 					$strPageObject = register('routing')->staticRoute($strPathPart);
 					registry::add_const('page_path', $strPath);
 					registry::add_const('page', $strPath);
 				} else {
-						
+
 					//Static Page Object
 					$strPageObject = register('routing')->staticRoute($arrPath[$intPathPart]);
-		
+
 					if ($strPageObject){
 						//Zerlege .html
 						$strID = str_replace("-", "", strrchr($arrPath[0], "-"));
-		
+
 						$arrMatches = array();
 						preg_match_all('/[a-z]+|[0-9]+/', $strID, $arrMatches, PREG_PATTERN_ORDER);
 						if (isset($arrMatches[0]) && count($arrMatches[0])){
@@ -169,7 +169,7 @@ class controller extends gen_class {
 				}
 			}
 		}
-			
+
 		if ($strPageObject){
 			$this->core->set_vars('portal_layout', 1);
 			$objPage = $this->routing->getPageObject($strPageObject);
@@ -177,13 +177,13 @@ class controller extends gen_class {
 
 				$classname = get_class($objPage);
 				$classname = str_replace("_pageobject", "", $classname);
-					
+
 				$intPortallayout = $this->pdh->get('portal_layouts', 'layout_for_route', array($classname, true));
 				if($intPortallayout !== false){
 					$portal_layout = $intPortallayout;
 				} else $portal_layout = 1;
 
-				
+
 				$arrVars = $objPage->get_vars();
 				$this->core->set_vars(array(
 						'page_title'		=> $arrVars['page_title'],
@@ -196,10 +196,10 @@ class controller extends gen_class {
 			}
 		} else {
 			//Search for Articles and Categories
-			
+
 			//Suche Alias in Artikeln
 			$intArticleID = ($this->in->exists('a')) ? $this->in->get('a', 0) : $this->pdh->get('articles', 'resolve_alias', array($arrPath[0]));
-			
+
 			if (!$intArticleID){
 				//Suche Alias in Kategorien
 				$intCategoryID = ($this->in->exists('c')) ? $this->in->get('c', 0) : $this->pdh->get('article_categories', 'resolve_alias', array($arrPath[0]));
@@ -211,10 +211,10 @@ class controller extends gen_class {
 						$intCategoryID = false;
 					}
 				}
-					
+
 				//Suche in Artikeln mit nächstem Index, denn könnte ein dynamischer Systemartikel sein
 				if (!$intCategoryID && isset($arrPath[1])) {
-			
+
 					$intArticleID = $this->pdh->get('articles', 'resolve_alias', array($arrPath[1]));
 					if ($intArticleID){
 						//Zerlege .html
@@ -243,12 +243,12 @@ class controller extends gen_class {
 							if ($intIndexArticle) {
 								$intArticleID = $intIndexArticle;
 								$intCategoryID = false;
-									
+
 								//Zerlege .html
 								$strID = str_replace("-", "", strrchr($arrPath[0], "-"));
 								$arrMatches = array();
 								preg_match_all('/[a-z]+|[0-9]+/', $strID, $arrMatches, PREG_PATTERN_ORDER);
-			
+
 								if (isset($arrMatches[0]) && count($arrMatches[0])){
 									if (count($arrMatches[0]) == 2){
 										if(is_numeric($arrMatches[0][1])) $arrMatches[0][1] = intval($arrMatches[0][1]);
@@ -264,20 +264,20 @@ class controller extends gen_class {
 									registry::add_const('url_id', $arrPath[0]);
 									$strSpecificID = $arrPath[0];
 								}
-									
+
 							}
 						}
 					}
-			
+
 				}
 			}
-			
+
 			//Display Artikel
 			if ($intArticleID){
 				$arrArticle = $this->pdh->get('articles', 'data', array($intArticleID));
-				
+
 				infotooltip_js();
-				
+
 				//Perform Vote
 				if ($this->in->exists('article_vote')){
 					$arrVotedUsers = $this->pdh->get('articles', 'votes_users', array($intArticleID));
@@ -286,47 +286,47 @@ class controller extends gen_class {
 						$this->pdh->put('articles', 'vote', array($intArticleID, $this->in->get('article_vote', 0)));
 						$this->pdh->process_hook_queue();
 					}
-			
+
 					$intSum = $this->pdh->get('articles', 'votes_sum', array($intArticleID));
 					$intCount = $this->pdh->get('articles', 'votes_count', array($intArticleID));
 					$intRating = ($intCount) ? round($intSum/$intCount) : 0;
-			
+
 					die();
 				}
-					
+
 				//Check if Published
 				$intPublished = $arrArticle['published'];
-					
+
 				//Check Start to/start from
 				if (($arrArticle['show_from'] != "" && $arrArticle['show_from'] > $this->time->time) || ($arrArticle['show_to'] != "" && $arrArticle['show_to'] < $this->time->time)) $intPublished = false;
-					
+
 				//Get Category Data
 				$intCategoryID = $arrArticle['category'];
 				registry::add_const('categoryid', $intCategoryID);
 				$arrCategory = $this->pdh->get('article_categories', 'data', array($intCategoryID));
-					
+
 				//Category Permissions
 				$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($arrArticle['category'], $this->user->id));
 				if (!$arrPermissions['read']) message_die($this->user->lang('article_noauth'), $this->user->lang('noauth_default_title'), 'access_denied', true);
-					
+
 				//Check Start to/start from
 				if ((!$intPublished && (!$arrPermissions['update'] && !$arrPermissions['change_state'])) || !$arrCategory['published']) message_die($this->user->lang('article_unpublished'));
-					
+
 				registry::add_const('page_path', $strPath);
 				$strPath = ucfirst($this->pdh->get('articles', 'path', array($intArticleID)));
 				registry::add_const('page', $this->user->removeSIDfromString($strPath));
-					
+
 				//User Memberships
 				$arrUsergroupMemberships = $this->acl->get_user_group_memberships($this->user->id);
-					
-			
+
+
 				//Page divisions
 				$strText = xhtml_entity_decode($arrArticle['text']);
 				$arrPagebreaks = array();
 				preg_match_all('#<hr(.*)class="system-pagebreak"(.*)\/>#iU', $strText, $arrPagebreaks, PREG_PATTERN_ORDER);
-				
+
 				$arrArticle['title'] = $this->user->multilangValue($arrArticle['title']);
-			
+
 				if (count($arrPagebreaks[0])){
 					$arrTitles[1] = $arrArticle['title'];
 					foreach($arrPagebreaks[2] as $key=>$val){
@@ -335,19 +335,19 @@ class controller extends gen_class {
 						$arrTitles[$key+2]	= ($intMatches && $titleMatches[1] != '' ) ? $titleMatches[1] : 'Page '.$key+2;
 					}
 					$arrContent = preg_split('#<hr(.*)class="system-pagebreak"(.*)\/>#iU', $strText);
-			
+
 					array_unshift($arrContent, "");
-			
+
 				} else {
 					$arrContent[0]	= "";
 					$arrContent[1]	= $strText;
 					$arrTitles[1]	= $arrArticle['title'];
 				}
-					
+
 				//Page
 				$pageCount = count($arrContent) - 1;
 				$intPageID = ($this->in->get('page', 0) && isset($arrContent[$this->in->get('page', 0)])) ? $this->in->get('page', 0) : 1;
-					
+
 				//Bring Page Sitemap to Template
 				if ($pageCount > 1) {
 					foreach($arrTitles as $key => $val){
@@ -357,15 +357,15 @@ class controller extends gen_class {
 						));
 					}
 				}
-					
-			
+
+
 				//Next and Previous Article
 				$arrArticleIDs = $this->pdh->get('article_categories', 'published_id_list', array($arrArticle['category']));
 				if (count($arrArticleIDs)){
 					$arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'date', 'asc');
 					$arrFlippedArticles = array_flip($arrSortedArticleIDs);
 					$intRecentArticlePosition = $arrFlippedArticles[$intArticleID];
-			
+
 					$prevID = (isset($arrSortedArticleIDs[$intRecentArticlePosition-1])) ? $arrSortedArticleIDs[$intRecentArticlePosition-1] : false;
 					$nextID = (isset($arrSortedArticleIDs[$intRecentArticlePosition+1])) ? $arrSortedArticleIDs[$intRecentArticlePosition+1] : false;
 					$this->tpl->assign_vars(array(
@@ -377,10 +377,10 @@ class controller extends gen_class {
 							'PREV_TITLE'		=> ($prevID) ? $this->pdh->get('articles', 'title', array($prevID)) : '',
 					));
 				}
-			
-					
+
+
 				$userlink = '<a href="'.$this->routing->build('user', $this->pdh->geth('articles',  'user_id', array($intArticleID)), 'u'.$this->pdh->get('articles',  'user_id', array($intArticleID))).'">'.$this->pdh->geth('articles',  'user_id', array($intArticleID)).'</a>';
-			
+
 				$arrToolbarItems = array();
 				if ($arrPermissions['create']) {
 					$arrToolbarItems[] = array(
@@ -395,9 +395,9 @@ class controller extends gen_class {
 							'js'	=> 'onclick="editArticle('.$intArticleID.')"',
 							'title'	=> $this->user->lang('edit_article'),
 					);
-						
+
 					$editor = register('tinyMCE');
-						
+
 					//Init Inline Editor
 					$editor->inline_editor_simple('.headline_inlineedit', array(
 							'setup' => 'editor.on("blur", function(e) {
@@ -406,15 +406,15 @@ class controller extends gen_class {
 							'autofocus' => true,
 							'start_onload' => false,
 					));
-						
-						
+
+
 					$csrf = $this->user->csrfGetToken('editarticle_pageobjectsave_headline');
 					$csrf_raw = $this->user->csrfGetToken('editarticle_pageobjectgetrawarticle');
 					$csrf_article = $this->user->csrfGetToken('editarticle_pageobjectsave_article');
-						
+
 					$this->tpl->add_js('function save_inline_editor_simple(selector, e){
 				if (e.target.editorManager.activeEditor.isDirty() == false) return true;
-			
+
 				var newHeadline = e.target.editorManager.activeEditor.getContent();
 					$.post( "'.$this->controller_path.'EditArticle/'.$this->SID.'&save_headline=1&aid='.$intArticleID.'&link_hash='.$csrf.'",
 					{ headline: newHeadline }, function( data ) {
@@ -423,13 +423,13 @@ class controller extends gen_class {
 						}
 					}, "json");
 			}
-			
+
 			var InlineLoaded = new Array();
 			function focus_inline_editor(selector, e){
 				if (InlineLoaded[selector] == undefined){
-			
+
 				e.target.editorManager.activeEditor.setContent("<b>Loading... <i class=\"fa fa-spinner fa-spin fa-lg\"></i></b><br /><br />", {format: "raw"});
-			
+
 				$.get( "'.$this->controller_path.'EditArticle/'.$this->SID.'&get_raw_article=1&aid='.$intArticleID.'&link_hash='.$csrf_raw.'",
 					function( data ) {
 						if (data.text != undefined && data.text != false){
@@ -439,10 +439,10 @@ class controller extends gen_class {
 					}, "json");
 				}
 			}
-		
+
 			function save_inline_editor(selector, e){
 				if (e.target.editorManager.activeEditor.isDirty() == false) return true;
-			
+
 				var newText = e.target.editorManager.activeEditor.getContent();
 					$.post( "'.$this->controller_path.'EditArticle/'.$this->SID.'&save_article=1&aid='.$intArticleID.'&link_hash='.$csrf_article.'",
 					{ text: newText }, function( data ) {
@@ -451,9 +451,9 @@ class controller extends gen_class {
 						}
 					}, "json");
 			}
-			
-			
-			
+
+
+
 			$(".headline_inlineedit").on("dblclick", function(){
 					tinyinlinesimple_21c3d11533bdc5e57418db4d323adbf5();
 					$(".headline_inlineedit").off("dblclick");
@@ -463,7 +463,7 @@ class controller extends gen_class {
 					$(".article-inlineedit").off("dblclick");
 			})
 			', 'docready');
-			
+
 					$editor->inline_editor('.article-inlineedit',array(
 							'relative_urls'	=> false,
 							'link_list'		=> true,
@@ -473,7 +473,7 @@ class controller extends gen_class {
 							'setup'			=> 'editor.on("blur", function(e) {
 							save_inline_editor(".article-inlineedit", e);
 			        	});
-			
+
 					 	editor.on("focus", function(e) {
 							focus_inline_editor(".article-inlineedit", e);
        					});',
@@ -481,7 +481,7 @@ class controller extends gen_class {
 							'autofocus'		=> true,
 							'autoresize'	=> true,
 					),false);
-						
+
 					$this->tpl->assign_vars(array(
 							'S_INLINE_EDIT' => true,
 					));
@@ -508,15 +508,15 @@ class controller extends gen_class {
 						);
 					}
 				}
-			
+
 				$jqToolbar = $this->jquery->toolbar('pages', $arrToolbarItems, array('position' => 'bottom'));
-			
+
 				$arrVotedUsers = $this->pdh->get('articles', 'votes_users', array($intArticleID));
 				$blnUserHasVoted = (is_array($arrVotedUsers) && in_array($this->user->id, $arrVotedUsers) && $this->user->id) ? true : false;
-			
+
 				//Tags
 				$arrTags = $this->pdh->get('articles', 'tags', array($intArticleID));
-			
+
 				if (count($arrTags) && $arrTags[0] != ""){
 					foreach($arrTags as $tag){
 						$this->tpl->assign_block_vars('tag_row', array(
@@ -525,7 +525,7 @@ class controller extends gen_class {
 						));
 					}
 				}
-			
+
 				$this->comments->SetVars(array(
 						'attach_id'	=> $intArticleID.(($strSpecificID) ? '_'.$strSpecificID : ''),
 						'page'		=> 'articles',
@@ -535,9 +535,9 @@ class controller extends gen_class {
 						'ntfy_link' => $this->controller_path_plain.$this->page_path.$this->SID,
 						'ntfy_category' => $intCategoryID,
 				));
-			
+
 				$intCommentsCount = $this->comments->Count();
-			
+
 				//Replace page objects from Content
 				$strContent = $this->bbcode->parse_shorttags($arrContent[$intPageID]);
 				$strAdditionalTitles = '';
@@ -560,14 +560,14 @@ class controller extends gen_class {
 					}
 					$this->tpl->assign_var('S_INLINE_EDIT', false);
 				}
-			
+
 				//Hook to replace content
 				if ($this->hooks->isRegistered('article_parse')){
 					$arrHooks = $this->hooks->process('article_parse', array('content' => $strContent, 'view' => 'article', 'article_id' => $intArticleID, 'specific_id' => $strSpecificID), true);
 					if (isset($arrHooks['content'])) $strContent = $arrHooks['content'];
 				}
-			
-			
+
+
 				//Replace Image Gallery
 				$arrGalleryObjects = array();
 				preg_match_all('#<p(.*)class="system-gallery"(.*) data-sort="(.*)" data-folder="(.*)">(.*)</p>#iU', $strContent, $arrGalleryObjects, PREG_PATTERN_ORDER);
@@ -579,12 +579,12 @@ class controller extends gen_class {
 						$strContent = str_replace($arrGalleryObjects[0][$key], $strGalleryContent, $strContent);
 					}
 				}
-			
+
 				//Replace Raidloot
 				$arrRaidlootObjects = array();
-			
+
 				preg_match_all('#<p(.*)class="system-raidloot"(.*) data-id="(.*)"(.*) data-chars="(.*)">(.*)</p>#iU', $strContent, $arrRaidlootObjects, PREG_PATTERN_ORDER);
-			
+
 				if (count($arrRaidlootObjects[0])){
 					include_once($this->root_path.'core/article.class.php');
 					foreach($arrRaidlootObjects[3] as $key=>$val){
@@ -594,14 +594,14 @@ class controller extends gen_class {
 						$strContent = str_replace($arrRaidlootObjects[0][$key], $strRaidlootContent, $strContent);
 					}
 				}
-				
+
 				//Replace Smilies
 				$strContent = $this->bbcode->MyEmoticons($strContent);
-			
+
 				if ($arrPermissions['create'] || $arrPermissions['update']) {
 					$this->jquery->dialog('editArticle', $this->user->lang('edit_article'), array('url' => $this->controller_path."EditArticle/".$this->SID."&aid='+id+'&cid=".$intCategoryID, 'withid' => 'id', 'width' => 920, 'height' => 740, 'onclose'=> $this->env->link.$this->controller_path_plain.$this->page_path.$this->SID));
 				}
-			
+
 				if ($arrPermissions['delete'] || $arrPermissions['change_state']){
 					$this->jquery->dialog('deleteArticle', $this->user->lang('delete_article'), array('custom_js' => 'deleteArticleSubmit(aid);', 'confirm', 'withid' => 'aid', 'message' => $this->user->lang('delete_article_confirm')), 'confirm');
 					$this->tpl->add_js(
@@ -610,7 +610,7 @@ class controller extends gen_class {
 				}"
 					);
 				}
-			
+
 				$this->tpl->assign_vars(array(
 						'ARTICLE_ID'		=> $intArticleID,
 						'PAGINATION'		=> generate_pagination($this->controller_path.$strPath, $pageCount, 1, $intPageID-1, 'page', 1),
@@ -626,7 +626,7 @@ class controller extends gen_class {
 						'ARTICLE_PUBLISHED' => ($intPublished) ? true : false,
 						'ARTICLE_TIME'		=> $this->time->user_date($arrArticle['date'], false, true),
 						'ARTICLE_REAL_CATEGORY' => $this->pdh->get('articles',  'category', array($intArticleID)),
-						'ARTICLE_REAL_CATEGORY_NAME' => $this->pdh->get('article_categories', 'name', array($this->pdh->get('articles',  'category', array($intArticleID)))),						
+						'ARTICLE_REAL_CATEGORY_NAME' => $this->pdh->get('article_categories', 'name', array($this->pdh->get('articles',  'category', array($intArticleID)))),
 						'S_PAGINATION'		=> ($pageCount > 1) ? true : false,
 						'ARTICLE_SOCIAL_BUTTONS'  => ($arrCategory['social_share_buttons']) ? $this->social->createSocialButtons($this->env->link.$this->controller_path_plain.$strPath, strip_tags($arrArticle['title'])) : '',
 						'PERMALINK'			=> $this->pdh->get('articles', 'permalink', array($intArticleID)),
@@ -641,16 +641,16 @@ class controller extends gen_class {
 						'S_HIDE_HEADER'		=> ($arrArticle['hide_header']),
 						'S_FEATURED'		=> ($this->pdh->get('articles',  'featured', array($intArticleID))),
 				));
-				
+
 				$strPreviewImage = ($this->pdh->get('articles',  'previewimage', array($intArticleID)) != "") ? $this->pdh->geth('articles', 'previewimage', array($intArticleID)) : '';
-				
+
 				if(!strlen($strPreviewImage)) $strPreviewImage = $this->social->getFirstImage($strContent);
 				$this->social->callSocialPlugins($arrTitles[$intPageID], strip_tags(xhtml_entity_decode($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(truncate($strContent, 600, '...', false, true))))), $strPreviewImage);
-				
-					
+
+
 				$this->tpl->add_meta('<link rel="canonical" href="'.$this->pdh->get('articles', 'permalink', array($intArticleID)).'" />');
 				$this->tpl->add_rssfeed($arrCategory['name'], $this->controller_path.'RSS/'.$this->routing->clean($arrCategory['name']).'-c'.$intCategoryID.'/'.(($this->user->is_signedin()) ? '?key='.$this->user->data['exchange_key'] : ''));
-			
+
 				//Comments
 				if ($arrArticle['comments'] && $this->config->get('enable_comments') == 1){
 					$this->comments->SetVars(array(
@@ -660,10 +660,10 @@ class controller extends gen_class {
 							'COMMENTS'		=> $this->comments->Show(),
 					));
 				};
-			
+
 				$intPortallayout = ($blnIsStartpage) ? $this->pdh->get('portal_layouts', 'layout_for_route', array('startpage', true)) : $arrCategory['portal_layout'];
 				if($intPortallayout === false) $intPortallayout = $arrCategory['portal_layout'];
-				
+
 				$this->core->set_vars(array(
 						'page_title'		=> $arrArticle['title'].$strAdditionalTitles,
 						'description'		=> truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrContent[$intPageID])))), 600, '...', false, true),
@@ -672,22 +672,22 @@ class controller extends gen_class {
 						'portal_layout'		=> $intPortallayout,
 						'display'			=> true)
 				);
-			
+
 			} elseif ($intCategoryID){
 				$arrCategory = $this->pdh->get('article_categories', 'data', array($intCategoryID));
 				//Check if Published
 				$intPublished = $arrCategory['published'];
-			
+
 				if (!$intPublished) message_die($this->user->lang('category_unpublished'));
-					
+
 				registry::add_const('categoryid', $intCategoryID);
-			
+
 				//User Memberships
 				$arrUsergroupMemberships = $this->acl->get_user_group_memberships($this->user->id);
 				$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($intCategoryID, $this->user->id));
-			
+
 				if (!$arrPermissions['read']) message_die($this->user->lang('category_noauth'), $this->user->lang('noauth_default_title'), 'access_denied', true);
-			
+
 				$arrArticleIDs = $this->pdh->get('article_categories', 'published_id_list', array($intCategoryID, false, false, NULL, (($arrPermissions['change_state']) ? true : false)));
 				switch($arrCategory['sortation_type']){
 					case 2: $arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'date', 'asc');
@@ -699,61 +699,61 @@ class controller extends gen_class {
 					case 1:
 					default: $arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'date', 'desc');
 				}
-					
+
 				if ($arrCategory['featured_ontop']){
 					$arrSortedArticleIDs = $this->pdh->get('articles', 'id_list_featured_ontop', array($arrSortedArticleIDs));
 				}
-			
+
 				$intStart = $this->in->get('start', 0);
 				$arrLimitedIDs = $this->pdh->limit($arrSortedArticleIDs, $intStart, $arrCategory['per_page']);
 				$strPath = $this->pdh->get('article_categories', 'path', array($intCategoryID));
 				registry::add_const('page_path', $this->user->removeSIDfromString($strPath));
-				
+
 				$arrCategory['name'] = $this->user->multilangValue($arrCategory['name']);
-				
+
 				infotooltip_js();
-					
+
 				//Articles to template
 				foreach($arrLimitedIDs as $intArticleID){
 					$userlink = '<a href="'.$this->routing->build('user', $this->pdh->geth('articles',  'user_id', array($intArticleID)), 'u'.$this->pdh->get('articles',  'user_id', array($intArticleID))).'">'.$this->pdh->geth('articles',  'user_id', array($intArticleID)).'</a>';
-			
+
 					//Content dependet from list_type
 					//1 = until readmore
 					//2 = Headlines only
 					//3 = only first 600 characters
 					$strText = $this->pdh->get('articles',  'text', array($intArticleID));
-					
+
 					//Page divisions
 					$strText = xhtml_entity_decode($strText);
 					$arrPagebreaks = array();
 					preg_match_all('#<hr(.*)class="system-pagebreak"(.*)\/>#iU', $strText, $arrPagebreaks, PREG_PATTERN_ORDER);
-					
+
 					if (count($arrPagebreaks[0])){
 						$arrContent = preg_split('#<hr(.*)class="system-pagebreak"(.*)\/>#iU', $strText);
 						array_unshift($arrContent, "");
-							
+
 					} else {
 						$arrContent[0]	= "";
 						$arrContent[1]	= $strText;
 					}
-					
+
 					$strText = $arrContent[1];
-					
+
 					$arrContent = preg_split('#<hr(.*)id="system-readmore"(.*)\/>#iU', xhtml_entity_decode($strText));
-			
+
 					$strText = $this->bbcode->parse_shorttags($arrContent[0]);
 					$blnPublished = $this->pdh->get('articles', 'published', array($intArticleID));
-			
+
 					//Hook to replace content
 					if ($this->hooks->isRegistered('article_parse')){
 						$arrHooks = $this->hooks->process('article_parse', array('content' => $strText, 'view' => 'category', 'article_id' => $intArticleID, 'specific_id' => $strSpecificID), true);
 						if (isset($arrHooks['content'])) $strText = $arrHooks['content'];
 					}
-			
+
 					//Replace Image Gallery
 					$arrGalleryObjects = array();
 					preg_match_all('#<p(.*)class="system-gallery"(.*) data-sort="(.*)" data-folder="(.*)">(.*)</p>#iU', $strText, $arrGalleryObjects, PREG_PATTERN_ORDER);
-			
+
 					if (count($arrGalleryObjects[0])){
 						include_once($this->root_path.'core/article.class.php');
 						foreach($arrGalleryObjects[4] as $key=>$val){
@@ -762,7 +762,7 @@ class controller extends gen_class {
 							$strText = str_replace($arrGalleryObjects[0][$key], $strGalleryContent, $strText);
 						}
 					}
-			
+
 					//Replace Raidloot
 					$arrRaidlootObjects = array();
 					preg_match_all('#<p(.*)class="system-raidloot"(.*) data-id="(.*)"(.*) data-chars="(.*)">(.*)</p>#iU', $strText, $arrRaidlootObjects, PREG_PATTERN_ORDER);
@@ -775,11 +775,11 @@ class controller extends gen_class {
 							$strText = str_replace($arrRaidlootObjects[0][$key], $strRaidlootContent, $strText);
 						}
 					}
-					
+
 
 					//Replace Smilies
 					$strText = $this->bbcode->MyEmoticons($strText);
-			
+
 					$arrToolbarItems = array();
 					if ($arrPermissions['create']) {
 						$arrToolbarItems[] = array(
@@ -817,18 +817,18 @@ class controller extends gen_class {
 							);
 						}
 					}
-			
+
 					if ($arrPermissions['create'] || $arrPermissions['update'] || $arrPermissions['delete'] || $arrPermissions['change_state']){
 						$jqToolbar = $this->jquery->toolbar('article_'.$intArticleID, $arrToolbarItems, array('position' => 'bottom'));
 					} else {
 						$jqToolbar['id'] = '';
 					}
-			
+
 					$this->comments->SetVars(array('attach_id'=> $intArticleID, 'page'=>'articles'));
 					$intCommentsCount = $this->comments->Count();
 					//Tags
 					$arrTags = $this->pdh->get('articles', 'tags', array($intArticleID));
-					
+
 					$strPreviewImage = ($this->pdh->get('articles',  'previewimage', array($intArticleID)) != "") ? $this->pdh->geth('articles', 'previewimage', array($intArticleID)) : '';
 
 					$this->tpl->assign_block_vars('article_row', array(
@@ -862,7 +862,7 @@ class controller extends gen_class {
 							'S_FEATURED'			=> ($this->pdh->get('articles',  'featured', array($intArticleID))),
 							'S_HIDE_HEADER'			=> ($this->pdh->get('articles',  'hide_header', array($intArticleID))),
 					));
-							
+
 					if (count($arrTags) && $arrTags[0] != ""){
 						foreach($arrTags as $tag){
 							$this->tpl->assign_block_vars('article_row.tag_row', array(
@@ -872,8 +872,8 @@ class controller extends gen_class {
 						}
 					}
 				}
-					
-					
+
+
 				//Childs
 				if ($arrCategory['show_childs']){
 					$arrChilds = $this->pdh->get('article_categories', 'childs', array($intCategoryID));
@@ -883,7 +883,7 @@ class controller extends gen_class {
 						));
 						foreach($arrChilds as $intChildID){
 							if(!$this->pdh->get('article_categories', 'published', array($intChildID))) continue;
-			
+
 							$this->tpl->assign_block_vars('child_row', array(
 									'NAME'	=> $this->pdh->get('article_categories', 'name', array($intChildID)),
 									'U_PATH'=> $this->controller_path.$this->pdh->get('article_categories', 'path', array($intChildID)),
@@ -893,8 +893,8 @@ class controller extends gen_class {
 						}
 					}
 				}
-					
-					
+
+
 				$arrToolbarItems = array();
 				if ($arrPermissions['create']) {
 					$arrToolbarItems[] = array(
@@ -914,11 +914,11 @@ class controller extends gen_class {
 							'js'	=> 'onclick="window.location=\''.$this->server_path."admin/manage_articles.php".$this->SID.'&c='.$intCategoryID.'\';"',
 							'title'	=> $this->user->lang('list_articles'),
 					);
-			
+
 				}
-			
+
 				$jqToolbar = $this->jquery->toolbar('pages', $arrToolbarItems, array('position' => 'bottom'));
-					
+
 				if ($arrPermissions['create'] || $arrPermissions['update']) {
 					$this->jquery->dialog('editArticle', $this->user->lang('edit_article'), array('url' => $this->controller_path."EditArticle/".$this->SID."&aid='+id+'&cid=".$intCategoryID, 'withid' => 'id', 'width' => 920, 'height' => 740, 'onclose'=> $this->env->link.$this->controller_path_plain.$this->page_path));
 				}
@@ -930,7 +930,7 @@ class controller extends gen_class {
 					}"
 					);
 				}
-					
+
 				$this->tpl->assign_vars(array(
 						'PAGINATION'			=> generate_pagination($this->controller_path.$strPath, count($arrSortedArticleIDs), $arrCategory['per_page'], $intStart, 'start'),
 						'CATEGORY_DESCRIPTION'	=> $this->bbcode->parse_shorttags(xhtml_entity_decode($arrCategory['description'])),
@@ -944,18 +944,18 @@ class controller extends gen_class {
 						'S_HIDE_HEADER'			=> $arrCategory['hide_header'],
 						'CATEGORY_ID'			=> $intCategoryID,
 				));
-				
+
 				$strPreviewImage = ($this->pdh->get('articles',  'previewimage', array($intArticleID)) != "") ? $this->pdh->geth('articles', 'previewimage', array($intArticleID)) : '';
-				if(!strlen($strPreviewImage)) $strPreviewImage = $this->social->getFirstImage($strContent);
-				
+				if(!strlen($strPreviewImage) && isset($strContent)) $strPreviewImage = $this->social->getFirstImage($strContent);
+
 				$this->social->callSocialPlugins($arrCategory['name'], strip_tags(xhtml_entity_decode($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(truncate($arrCategory['description'], 600, '...', false, true))))), $strPreviewImage);
-					
+
 				$this->tpl->add_rssfeed($arrCategory['name'], $this->controller_path.'RSS/'.$this->routing->clean($arrCategory['name']).'-c'.$intCategoryID.'/'.(($this->user->is_signedin()) ? '?key='.$this->user->data['exchange_key'] : ''));
 				$this->tpl->add_meta('<link rel="canonical" href="'.$this->pdh->get('article_categories', 'permalink', array($intCategoryID)).'" />');
-					
+
 				$intPortallayout = ($blnIsStartpage) ? $this->pdh->get('portal_layouts', 'layout_for_route', array('startpage', true)) : $arrCategory['portal_layout'];
 				if($intPortallayout === false) $intPortallayout = $arrCategory['portal_layout'];
-				
+
 				$this->core->set_vars(array(
 						'page_title'		=> $arrCategory['name'],
 						'description'		=> truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrCategory['description'])))), 600, '...', false, true),
@@ -964,12 +964,12 @@ class controller extends gen_class {
 						'portal_layout'		=> $intPortallayout,
 						'display'			=> true)
 				);
-			}		
+			}
 		}
 
 		if(!$this->env->is_ajax) message_die($this->user->lang('article_not_found'));
 	}
-	
+
 	protected function CSRFGetToken($strProcess){
 		$strAction = get_class($this).$strProcess;
 		return $this->user->csrfGetToken($strAction);
