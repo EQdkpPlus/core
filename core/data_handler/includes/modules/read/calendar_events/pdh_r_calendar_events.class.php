@@ -273,7 +273,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 		}
 
 		public function get_creatorid($id){
-			return ($this->events[$id]['creator']) ? $this->events[$id]['creator'] : 0;
+			return (isset($this->events[$id]['creator']) && $this->events[$id]['creator'] > 0) ? $this->events[$id]['creator'] : 0;
 		}
 
 		public function get_is_owner($id){
@@ -285,7 +285,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 		}
 
 		public function get_date($id) {
-			return $this->events[$id]['timestamp_start'];
+			return (isset($this->events[$id]['timestamp_start'])) ? $this->events[$id]['timestamp_start'] : 0;
 		}
 
 		public function get_html_date($id) {
@@ -328,11 +328,11 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 		}
 
 		public function get_allday($id){
-			return 	$this->events[$id]['allday'];
+			return 	(isset($this->events[$id]['allday'])) ? $this->events[$id]['allday'] : 0;
 		}
 
 		public function get_private($id){
-			return $this->events[$id]['private'];
+			return (isset($this->events[$id]['private'])) ? $this->events[$id]['private'] : 0;
 		}
 
 		public function get_private_userperm($id, $userid=0){
@@ -366,8 +366,10 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			if($this->get_is_invited($id, $userid)){
 				$extension		= $this->get_extension($id);
 				$userid			= ($userid > 0) ? $userid : $this->user->data['user_id'];
-				$inviteduser	= array_keys($extension['invited_attendees']);
-				return (isset($extension['invited_attendees']) && in_array($userid, $inviteduser)) ? true : false;
+				if(isset($extension['invited_attendees'])){
+					$inviteduser	= array_keys($extension['invited_attendees']);
+					return (in_array($userid, $inviteduser)) ? true : false;
+				}
 			}
 			return false;
 		}
@@ -389,11 +391,11 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 		}
 
 		public function get_visible($id){
-			return 	$this->events[$id]['visible'];
+			return 	(isset($this->events[$id]['visible'])) ? $this->events[$id]['visible'] : 0;
 		}
 
 		public function get_extension($id){
-			return 	$this->events[$id]['extension'];
+			return (isset($this->events[$id]['extension'])) ? 	$this->events[$id]['extension'] : array();
 		}
 
 		public function get_notes($id, $bbcode2html=false){

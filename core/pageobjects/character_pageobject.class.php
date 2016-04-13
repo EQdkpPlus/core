@@ -42,13 +42,13 @@ class character_pageobject extends pageobject {
 					redirect($this->routing->build('points',false,false,true,true));
 			}
 		}
-				
+
 		$member_name	= $this->pdh->get('member', 'name', array($this->url_id));
 
 		if($member_name == ''){
 			message_die($this->user->lang('error_invalid_name_provided'));
 		}
-		
+
 		$withTwinksDKP = ($this->in->exists('with_twinks')) ? $this->in->get('with_twinks') : !$this->config->get('show_twinks');
 
 		// Raid Attendance
@@ -114,14 +114,14 @@ class character_pageobject extends pageobject {
 		));
 
 		$this->jquery->Tab_header('profile_information', true);
-		
+
 		//Member DKP
 		$view_list = $this->pdh->get('multidkp', 'id_list');
 		$hptt_page_settings = $this->pdh->get_page_settings('viewmember', 'hptt_viewmember_points');
 		if (!$withTwinksDKP) $hptt_page_settings['show_detail_twink'] = false;
 		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%member_id%' => $this->url_id, '%with_twink%' => $withTwinksDKP, '%use_controller%' => true), $this->url_id.'.'.$withTwinksDKP, 'msort');
 		$hptt->setPageRef($this->strPath);
-		
+
 		$profile_out = array(
 			'PROFILE_OUTPUT'		=> $profile_tplfile,
 			'COMMENT'				=> ($this->config->get('enable_comments') == 1) ? $this->comments->Show() : '',
@@ -141,7 +141,7 @@ class character_pageobject extends pageobject {
 
 			// images
 			'IMG_CLASSICON'			=> $this->game->decorate('primary', $member[$this->game->get_primary_class(true)], $this->pdh->get('member', 'profiledata', array($this->url_id))),
-			'IMG_FULLYDECORATED'	=> $this->game->decorate_character($this->url_id, $char_id),
+			'IMG_FULLYDECORATED'	=> $this->game->decorate_character($this->url_id),
 		);
 
 		// Add the game-specific Fields...
@@ -152,7 +152,7 @@ class character_pageobject extends pageobject {
 
 			$profile_out['L_'.strtoupper($profile_id)]			= $this->game->glang($profile_id);
 		}
-		
+
 		// the profile fields
 		if(!$profile_owntpl){
 			$pfields	= $this->pdh->get('profile_fields', 'fields');
@@ -170,7 +170,7 @@ class character_pageobject extends pageobject {
 						'NAME'		=> ($this->game->glang('uc_cat_'.$catname)) ? $this->game->glang('uc_cat_'.$catname) : $this->user->lang('uc_cat_'.$catname),
 						'ID'		=> 'id_'.$catname
 					));
-					
+
 					foreach($catvalues as $pfname=>$pfoption){
 						if($pfoption['category'] == $catname && $pfoption['enabled'] == '1' && $pfoption['type'] != 'hidden'){
 							$this->tpl->assign_block_vars('cat_data.pfield_data', array(
@@ -203,19 +203,9 @@ class character_pageobject extends pageobject {
 
 		// Start the Output
 		$this->tpl->assign_vars($profile_out);
-		
-		
-		
-		
-		
-		
+
 		//=============================================
 		//Point History: Alpha
-		
-		
-		
-		
-		
 		//=============================================
 
 		$this->set_vars(array(

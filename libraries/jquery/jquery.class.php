@@ -1255,7 +1255,7 @@ if (!class_exists("jquery")) {
 
 			$output	= array(
 				new hdropdown($id1, array('options' => $array1, 'value' => $selected1, 'id' => $id1.$this->dyndd_counter, 'class' => $id1.$this->dyndd_counter)),
-				new hdropdown($id2, array('options' => $array2, 'id' => $id2.$this->dyndd_counter, 'class' => $id2.$this->dyndd_counter))
+				new hdropdown($id2, array('options' => array(), 'id' => $id2.$this->dyndd_counter, 'class' => $id2.$this->dyndd_counter))
 			);
 
 			$this->dyndd_counter++;
