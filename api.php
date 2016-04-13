@@ -42,7 +42,7 @@ if (registry::register('config')->get('pk_maintenance_mode')){
 	echo($myOut);
 	exit;
 }
-
+registry::register('core')->cors_headers();
 $return	= register('plus_exchange')->execute();
 header('Content-Length: '.strlen($return));
 if (registry::register('input')->get('format') != 'json' && registry::register('input')->get('format') != 'lua'){
