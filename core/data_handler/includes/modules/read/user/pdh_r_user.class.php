@@ -25,7 +25,7 @@ if ( !defined('EQDKP_INC') ){
 
 if (!class_exists("pdh_r_user")){
 	class pdh_r_user extends pdh_r_generic {
-	
+
 		public $default_lang = 'english';
 		public $users;
 		private $countries = false;
@@ -35,7 +35,7 @@ if (!class_exists("pdh_r_user")){
 		public $hooks = array(
 			'user', 'user_groups_update'
 		);
-		
+
 		public $presets = array(
 			'username'				=> array('name', array('%user_id%', '%link_url%', '%link_url_suffix%', '%use_controller%'), array()),
 			'useravatar'			=> array('avatarimglink', array('%user_id%'), array()),
@@ -49,7 +49,7 @@ if (!class_exists("pdh_r_user")){
 			'userlastvisit'			=> array('last_visit', array('%user_id%'), array()),
 			'usermainchar'			=> array('mainchar', array('%user_id%'), array()),
 		);
-		
+
 		public function init_presets(){
 			//generate presets
 			$this->userProfileFields = $this->pdh->get('user_profilefields', 'id_list');
@@ -67,7 +67,7 @@ if (!class_exists("pdh_r_user")){
 
 		public function init(){
 			$this->users = array();
-			
+
 			$objQuery = $this->db->query("SELECT * FROM __users u ORDER BY username ASC;");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
@@ -110,20 +110,20 @@ if (!class_exists("pdh_r_user")){
 				return $this->user->lang('unknown');
 			}
 		}
-		
+
 		public function get_names($user_ids){
 			return array_values($this->pdh->aget('user', 'name', 0, array($user_ids)));
 		}
-		
+
 		public function get_html_name($user_id, $link_url = '', $link_url_suffix = '', $blnUseController=false){
 			if ($blnUseController) return '<a href="'.$this->routing->build('User', $this->get_name($user_id), 'u'.$user_id).'" data-user-id="'.$user_id.'">'.$this->get_name($user_id).'</a>';
 			return '<a href="'.$link_url.$this->SID.'&u='.$user_id.'" data-user-id="'.$user_id.'">'.$this->get_name($user_id).'</a>';
 		}
-		
+
 		public function comp_name($params1, $params2) {
 			return strcasecmp($this->pdh->get('user', 'name', array($params1[0])), $this->pdh->get('user', 'name', array($params2[0])));
 		}
-		
+
 		public function get_check_username($name){
 			$name = clean_username($name);
 			return (is_array(search_in_array($name, $this->users, true, 'username_clean'))) ? 'false' : 'true';
@@ -137,12 +137,12 @@ if (!class_exists("pdh_r_user")){
 		public function get_check_auth_account($name, $strMethod){
 			return (is_array(search_in_array($name, $this->users, true, 'auth_account'))) ? false : true;
 		}
-		
+
 		public function get_is_online($user_id){
 			$this->init_online_user();
 			return (in_array($user_id, $this->online_user)) ? true : false;
 		}
-		
+
 		public function get_html_is_online($user_id){
 			return ($this->get_is_online($user_id)) ? '<i class="eqdkp-icon-online"></i>' : '<i class="eqdkp-icon-offline"></i>';
 		}
@@ -195,11 +195,11 @@ if (!class_exists("pdh_r_user")){
 			}
 			return '';
 		}
-		
+
 		public function get_lang($user_id){
 			return $this->users[$user_id]['user_lang'];
 		}
-		
+
 		public function get_html_email($user_id, $checkForIgnoreMailsFlag = false){
 			if ($this->get_check_privacy($user_id, 'userprofile_email') && strlen($this->get_email($user_id, $checkForIgnoreMailsFlag))) {
 				if ($this->user->is_signedin()) {
@@ -208,29 +208,29 @@ if (!class_exists("pdh_r_user")){
 					return '<i class="fa fa-envelope fa-lg"></i> '.$this->get_email($user_id);
 				}
 			}
-		
+
 			return '';
 		}
 
 		public function get_last_visit($user_id) {
 			return $this->users[$user_id]['user_lastvisit'];
 		}
-		
+
 		public function get_timezone($user_id) {
 			return $this->users[$user_id]['user_timezone'];
 		}
-		
+
 		public function get_html_last_visit($user_id) {
 			return $this->time->user_date($this->get_last_visit($user_id), true);
 		}
-		
+
 		public function get_country($user_id) {
 			return $this->users[$user_id]['country'];
 		}
-		
+
 		public function get_html_country($user_id){
 			if (!$this->get_check_privacy($user_id, 'userprofile_country')) return '';
-			
+
 			$country = $this->get_country($user_id);
 			if (strlen($country)){
 				$this->init_countries();
@@ -244,7 +244,10 @@ if (!class_exists("pdh_r_user")){
 		}
 
 		public function get_awaymode_enabled($user_id, $truefalse = false){
-			return ($truefalse) ? (int)$this->users[$user_id]['awaymode_enabled'] : (((int)$this->users[$user_id]['awaymode_enabled'] == 1) ? true : false);
+			if($user_id > 0){
+				return ($truefalse) ? (int)$this->users[$user_id]['awaymode_enabled'] : (((int)$this->users[$user_id]['awaymode_enabled'] == 1) ? true : false);
+			}
+			return false;
 		}
 
 		public function get_html_is_away($user_id){
@@ -255,17 +258,17 @@ if (!class_exists("pdh_r_user")){
 		}
 
 		public function get_awaymode_startdate($user_id){
-			return $this->time->removetimefromtimestamp($this->users[$user_id]['awaymode_startdate']);
+			return ($user_id > 0 && isset($this->users[$user_id]['awaymode_startdate'])) ? $this->time->removetimefromtimestamp($this->users[$user_id]['awaymode_startdate']) : 0;
 		}
 
 		public function get_awaymode_enddate($user_id){
-			return $this->time->removetimefromtimestamp($this->users[$user_id]['awaymode_enddate']);
+			return ($user_id > 0 && isset($this->users[$user_id]['awaymode_enddate'])) ? $this->time->removetimefromtimestamp($this->users[$user_id]['awaymode_enddate']) : 0;
 		}
 
 		public function get_awaymode_note($user_id){
-			return $this->users[$user_id]['awaymode_note'];
+			return ($user_id > 0 && isset($this->users[$user_id]['awaymode_note'])) ? $this->users[$user_id]['awaymode_note'] : '';
 		}
-		
+
 		public function comp_awaymode($params1, $params2){
 			$isAway1 = ($this->get_awaymode_enabled($params1[0], true) && $this->get_awaymode_enddate($params1[0]) > $this->time->time) ? $this->get_awaymode_startdate($params1[0]) : false;
 			$isAway2 = ($this->get_awaymode_enabled($params2[0], true) && $this->get_awaymode_enddate($params2[0]) > $this->time->time) ? $this->get_awaymode_startdate($params2[0]) : false;
@@ -279,14 +282,14 @@ if (!class_exists("pdh_r_user")){
 		}
 
 		public function get_failed_logins($user_id) {
-			return $this->users[$user_id]['failed_login_attempts'];	
+			return $this->users[$user_id]['failed_login_attempts'];
 		}
 
 		public function get_exchange_key($user_id){
 			return $this->users[$user_id]['exchange_key'];
 		}
 
-		
+
 		public function get_data($user_id=''){
 			if ($user_id == ''){
 				return $this->users;
@@ -305,7 +308,7 @@ if (!class_exists("pdh_r_user")){
 				}
 			}
 		}
-		
+
 		public function get_charnumber($user_id){
 			$arrConnections = $this->pdh->get('member', 'connection_id', array($user_id));
 			if ($arrConnections && is_array($arrConnections)){
@@ -313,33 +316,33 @@ if (!class_exists("pdh_r_user")){
 			}
 			return 0;
 		}
-		
+
 		public function get_groups($user_id){
 			$arrMemberships = $this->pdh->get('user_groups_users', 'memberships', array($user_id));
 			$arrMemberships = $this->pdh->sort($arrMemberships, 'user_groups', 'sortid');
 			return $arrMemberships;
 		}
-		
+
 
 		public function get_style($user_id){
 			return $this->users[$user_id]['user_style'];
 		}
-		
+
 		public function get_date_time($user_id){
 			return $this->users[$user_id]['user_date_time'];
 		}
-		
+
 		public function get_date_short($user_id){
 			return $this->users[$user_id]['user_date_short'];
 		}
-		
+
 		public function get_date_long($user_id){
 			return $this->users[$user_id]['user_date_long'];
 		}
-		
+
 		public function get_html_groups($user_id, $blnUseController=false){
 			$arrMemberships = $this->get_groups($user_id);
-			
+
 			$arrOut = array();
 			$arrOut[] = '<div class="user-groups">';
 			foreach($arrMemberships as $groupid){
@@ -348,12 +351,12 @@ if (!class_exists("pdh_r_user")){
 					$arrOut[] = '<a href="'.$this->routing->build('Usergroup', $this->pdh->get('user_groups', 'name', array($groupid)), $groupid).'" data-usergroup-id="'.$groupid.'"'.(($this->pdh->get('user_groups_users', 'is_grpleader', array($user_id, $groupid))) ? ' data-isgroupleader="1"' : ' data-isgroupleader="0"').'>'.$this->pdh->get('user_groups', 'name', array($groupid)).'</a>';
 				} else {
 					$arrOut[] = '<a href="listusers.php'.$this->SID.'&g='.$groupid.'" data-usergroup-id="'.$groupid.'"'.(($this->pdh->get('user_groups_users', 'is_grpleader', array($user_id, $groupid))) ? ' data-isgroupleader="1"' : ' data-isgroupleader="0"').'>'.$this->pdh->get('user_groups', 'name', array($groupid)).'</a>';
-				}			
+				}
 			}
 			$arrOut[] = '</div>';
 			return implode('', $arrOut);
 		}
-		
+
 		public function comp_groups($params1, $params2) {
 			$arrMemberships1 = $this->get_groups($params1[0]);
 			$arrMemberships2 = $this->get_groups($params2[0]);
@@ -364,7 +367,7 @@ if (!class_exists("pdh_r_user")){
 			if (array_shift($arrSorted) == array_shift($myArrayToSort)){
 				return 1;
 			}
-			
+
 			return -1;
 		}
 
@@ -395,7 +398,7 @@ if (!class_exists("pdh_r_user")){
 		public function get_regdate($user_id){
 			return $this->users[$user_id]['user_registered'];
 		}
-		
+
 		public function get_html_regdate($user_id){
 			return $this->time->user_date($this->get_regdate($user_id), true);
 		}
@@ -427,7 +430,7 @@ if (!class_exists("pdh_r_user")){
 				return array();
 			}
 		}
-		
+
 		public function get_avatar($user_id){
 			$avatarimg = $this->get_custom_fields($user_id, 'user_avatar');
 			return $avatarimg;
@@ -438,10 +441,10 @@ if (!class_exists("pdh_r_user")){
 
 			if ($intAvatarType == 0){
 				$avatarimg = $this->get_custom_fields($user_id, 'user_avatar');
-				
+
 				if($avatarimg && strlen($avatarimg)){
 					$fullSizeImage = $this->pfh->FolderPath('users/'.$user_id,'files').$avatarimg;
-					$thumbnail = $this->pfh->FolderPath('users/thumbs','files').'useravatar_'.$user_id.'_68.'.pathinfo($avatarimg, PATHINFO_EXTENSION);		
+					$thumbnail = $this->pfh->FolderPath('users/thumbs','files').'useravatar_'.$user_id.'_68.'.pathinfo($avatarimg, PATHINFO_EXTENSION);
 					if (!$fullSize && is_file($thumbnail)) return $thumbnail;
 					return $fullSizeImage;
 				} elseif($this->config->get('gravatar_defaultavatar')){
@@ -466,7 +469,7 @@ if (!class_exists("pdh_r_user")){
 
 			return '';
 		}
-		
+
 		public function get_html_avatarimglink($user_id, $fullSize=false){
 			$strImg = $this->get_avatarimglink($user_id, $fullSize);
 			if (!strlen($strImg)){
@@ -474,7 +477,7 @@ if (!class_exists("pdh_r_user")){
 			} else {
 				$strImg = $this->pfh->FileLink($strImg, false, 'absolute');
 			}
-			
+
 			return '<div class="user-tooltip-avatar"><img src="'.$strImg.'" class="user-avatar" alt="" /></div>';
 		}
 
@@ -485,12 +488,12 @@ if (!class_exists("pdh_r_user")){
 			} else {
 				$strImg = $this->pfh->FileLink($strImg, false, 'absolute');
 			}
-			
+
 			$usertooltip[]	= '<div class="tooltiprow"><i class="fa fa-user fa-lg"></i> '.$this->get_name($user_id).' ('.$this->get_charnumber($user_id).')  '.$this->get_html_country($user_id).'</div>';
 			//is_away, is_online,
 			$usertooltip[]	= '<div class="tooltiprow">'.$this->get_html_groups($user_id).'</div>';
 			$usertooltip[]	= '<div class="tooltiprow"><i class="fa fa-clock-o fa-lg"></i> '.$this->get_html_last_visit($user_id).'</div>';
-			
+
 			if(is_array($tt_extension) && count($tt_extension) > 0){
 				$usertooltip = $usertooltip + $tt_extension;
 			}
@@ -501,12 +504,12 @@ if (!class_exists("pdh_r_user")){
 			$fields = unserialize($this->users[$user_id]['privacy_settings']);
 			return ($fields) ? $fields : array();
 		}
-		
+
 		public function get_notification_settings($user_id){
 			$fields = unserialize($this->users[$user_id]['notifications']);
 			return ($fields) ? $fields : array();
 		}
-		
+
 		public function get_notification_abos($strNotificationID){
 			$arrUser = $this->get_id_list();
 			$arrOut = array();
@@ -515,10 +518,10 @@ if (!class_exists("pdh_r_user")){
 			}
 			return $arrOut;
 		}
-		
+
 		public function get_notification_abo($strNotificationID, $intUserID=false){
 			if ($intUserID === false) $intUserID = $this->user->id;
-			
+
 			$arrNotificationSettings = $this->get_notification_settings($intUserID);
 			if ($arrNotificationSettings && isset($arrNotificationSettings['ntfy_'.$strNotificationID])){
 				if ($arrNotificationSettings['ntfy_'.$strNotificationID] != "" && (string)$arrNotificationSettings['ntfy_'.$strNotificationID] !== "0") return true;
@@ -526,18 +529,18 @@ if (!class_exists("pdh_r_user")){
 				if ($this->pdh->get('notification_types', 'check_existing_type', array($strNotificationID))){
 					$intDefault = $this->pdh->get('notification_types', 'default', array($strNotificationID));
 					return ($intDefault) ? true : false;
-					
+
 				} else {
 					return true;
 				}
 			}
-			
+
 			return false;
 		}
-		
+
 		public function get_notification_articlecategory_abo($intCategoryID, $intUserID=false){
 			if ($intUserID === false) $intUserID = $this->user->id;
-			
+
 			$arrNotificationSettings = $this->get_notification_settings($intUserID);
 			if ($arrNotificationSettings && isset($arrNotificationSettings['ntfy_comment_new_article_categories'])){
 				$arrCategories = $arrNotificationSettings['ntfy_comment_new_article_categories'];
@@ -546,7 +549,7 @@ if (!class_exists("pdh_r_user")){
 				} else {
 					return false;
 				}
-				
+
 			} else {
 				//Default Value
 				$intDefault = $this->pdh->get('notification_types', 'default', array('comment_new_article'));
@@ -556,10 +559,10 @@ if (!class_exists("pdh_r_user")){
 					return false;
 				}
 			}
-				
+
 			return true;
 		}
-		
+
 		public function get_notification_articlecategory_abos($intCategoryID){
 			$arrUser = $this->get_id_list();
 			$arrOut = array();
@@ -568,7 +571,7 @@ if (!class_exists("pdh_r_user")){
 			}
 			return $arrOut;
 		}
-		
+
 		public function get_users_with_permission($strPermission){
 			$arrOut = array();
 			$arrUser = $this->get_id_list();
@@ -577,7 +580,7 @@ if (!class_exists("pdh_r_user")){
 			}
 			return $arrOut;
 		}
-		
+
 		public function get_html_mainchar($user_id){
 			$intMainID = $this->get_mainchar($user_id);
 			if($intMainID){
@@ -623,19 +626,19 @@ if (!class_exists("pdh_r_user")){
 			}
 			return $arrSearchResults;
 		}
-		
+
 		public function get_profilefield($user_id, $intFieldID, $blnIgnorePrivacyCheck=false, $blnPlainValue=false){
 			if (!$blnIgnorePrivacyCheck && !$this->get_check_privacy($user_id, 'userprofile_'.$intFieldID)) return '';
-			
+
 			return ($blnPlainValue) ? $this->get_custom_fields($user_id, 'userprofile_'.$intFieldID) : $this->pdh->get('user_profilefields', 'display_field', array($intFieldID, $user_id));
 		}
-		
+
 		public function get_html_profilefield($user_id, $intFieldID, $blnIgnorePrivacyCheck=false){
 			if (!$blnIgnorePrivacyCheck && !$this->get_check_privacy($user_id, 'userprofile_'.$intFieldID)) return '';
-			
+
 			return $this->pdh->geth('user_profilefields', 'display_field', array($intFieldID, $user_id));
 		}
-		
+
 		public function get_profilefield_by_name($intUserID, $strName, $blnIgnorePrivacyCheck=false, $blnPlainValue=false){
 			$intFieldID = $this->pdh->get('user_profilefields', 'field_by_name', array($strName));
 			if ($intFieldID){
@@ -643,7 +646,7 @@ if (!class_exists("pdh_r_user")){
 			}
 			return false;
 		}
-		
+
 		public function get_html_profilefield_by_name($intUserID, $strName, $blnIgnorePrivacyCheck=false){
 			$intFieldID = $this->pdh->get('user_profilefields', 'field_by_name', array($strName));
 			if ($intFieldID){
@@ -651,14 +654,14 @@ if (!class_exists("pdh_r_user")){
 			}
 			return false;
 		}
-		
+
 		public function get_html_caption_profilefield($param){
 			return $this->pdh->geth('user_profilefields', 'name', array($param));
 		}
-		
+
 		public function get_check_privacy($user_id, $strField){
 			$arrPrivacySettings = $this->get_privacy_settings($user_id);
-			
+
 			if (strpos($strField, 'priv_') !== 0) $strField = 'priv_'.$strField;
 			$intUserValue = isset($arrPrivacySettings[$strField]) ? $arrPrivacySettings[$strField] : $this->get_privacy_defaults($strField);
 
@@ -667,13 +670,13 @@ if (!class_exists("pdh_r_user")){
 			if (in_array($strField, $arrRadioFields)){
 				return ($intUserValue) ? true : false;
 			}
-			
+
 			//Now Check
 			$is_user		= ($this->user->is_signedin()) ? true : false;
 			$is_admin		= ($this->user->check_group(2, false) || $this->user->check_group(3, false));
-			
+
 			$perm = false;
-			
+
 			if ($strField == 'priv_wall_posts_read' || $strField ==  'priv_wall_posts_write'){
 
 				switch ($intUserValue){
@@ -691,7 +694,7 @@ if (!class_exists("pdh_r_user")){
 						}
 						break;
 				}
-				
+
 			} else {
 
 				switch ($intUserValue){
@@ -713,16 +716,16 @@ if (!class_exists("pdh_r_user")){
 							$perm = true;
 						};
 				}
-			}	
-				
+			}
+
 			return $perm;
 		}
-		
+
 		public function get_country_list(){
 			$this->init_countries();
 			return $this->countries;
 		}
-		
+
 		private function get_privacy_defaults($strField){
 			switch($strField){
 				case 'priv_wall_posts_read': return 0;
@@ -732,14 +735,14 @@ if (!class_exists("pdh_r_user")){
 				default: return 1;
 			}
 		}
-				
+
 		private function init_countries(){
 			if (!$this->countries){
 				include($this->root_path.'core/country_states.php');
 				$this->countries = $country_array;
 			}
 		}
-		
+
 		private function init_online_user(){
 			if (!$this->online_user){
 				$objQuery = $this->db->prepare("SELECT session_user_id FROM __sessions WHERE session_current > ? AND session_user_id > 0;")->execute($this->time->time-600);

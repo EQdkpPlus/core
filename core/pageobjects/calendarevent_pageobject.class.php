@@ -924,6 +924,7 @@ class calendarevent_pageobject extends pageobject {
 		$this->jquery->Dialog('ViewLogs', $this->user->lang('view_logs'), array('url'=>$this->routing->build('calendarevent')."&logs&eventid='+eventid+'&simple_head=true", 'width'=>'900', 'height'=>'600', 'withid' => 'eventid'));
 
 		// already signed in message
+		$alreadysignedinmsg = '';
 		if($presel_charid > 0){
 			$sstat_mname = $this->pdh->get('member', 'name', array($presel_charid));
 			switch($this->mystatus['signup_status']){
