@@ -1230,13 +1230,13 @@ class core extends gen_class {
 			foreach($arrAllowedDomains as $strAllowedDomain){
 				$arrDomainParts = parse_url($strAllowedDomain);
 				if($arrDomainParts['host'] != ""){
-				$pattern = '/^http:\/\/([\w_-]+\.)*' . $arrDomainParts['host'] . '$/';
-				
-				$allow = preg_match($pattern, $incomingOrigin);
-				if ($allow){
-					header('Access-Control-Allow-Origin: '.filter_var($incomingOrigin, FILTER_SANITIZE_URL));
-					return;
-				}
+					$pattern = '/^https?:\/\/([\w_-]+\.)*' . $arrDomainParts['host'] . '$/';
+					
+					$allow = preg_match($pattern, $incomingOrigin);
+					if ($allow){
+						header('Access-Control-Allow-Origin: '.filter_var($incomingOrigin, FILTER_SANITIZE_URL));
+						return;
+					}
 				}
 			}
 			

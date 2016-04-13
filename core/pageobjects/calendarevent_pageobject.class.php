@@ -924,6 +924,7 @@ class calendarevent_pageobject extends pageobject {
 		$this->jquery->Dialog('ViewLogs', $this->user->lang('view_logs'), array('url'=>$this->routing->build('calendarevent')."&logs&eventid='+eventid+'&simple_head=true", 'width'=>'900', 'height'=>'600', 'withid' => 'eventid'));
 
 		// already signed in message
+		$alreadysignedinmsg = '';
 		if($presel_charid > 0){
 			$sstat_mname = $this->pdh->get('member', 'name', array($presel_charid));
 			switch($this->mystatus['signup_status']){
@@ -956,7 +957,7 @@ class calendarevent_pageobject extends pageobject {
 		//Notify attendees, raidlead and admins on new comments
 		$arrUserToNotify		= $this->pdh->get('calendar_raids_attendees', 'attendee_users', array($this->url_id));
 		$arrRaidleaderChars		= ($eventdata['extension']['raidleader'] > 0) ? $eventdata['extension']['raidleader'] : array();
-		$arrRaidleaderUser		= $this->pdh->get('member', 'userid', array($raidleaders_chars));
+		$arrRaidleaderUser		= $this->pdh->get('member', 'userid', array($arrRaidleaderChars));
 		if ($arrRaidleaderUser && is_array($arrRaidleaderUser)) $arrUserToNotify	= array_merge($arrUserToNotify, $arrRaidleaderUser);
 		$arrUserToNotify[] 		= $this->pdh->get('calendar_events', 'creatorid', array($this->url_id));
 		$arrAdmins 				= $this->pdh->get('user', 'users_with_permission', array('a_cal_revent_conf'));

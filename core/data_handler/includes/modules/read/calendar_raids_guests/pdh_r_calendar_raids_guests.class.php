@@ -159,7 +159,7 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 
 		public function get_count($raidid, $status=0){
 			$tmpcount	= 0;
-			$tmpguests	= $this->guestsEvent[$raidid];
+			$tmpguests	= (isset($this->guestsEvent[$raidid])) ? $this->guestsEvent[$raidid] : array();
 			if(isset($tmpguests) && is_array($tmpguests) && count($tmpguests) > 0){
 				foreach($tmpguests as $guestdata){
 					if($guestdata['status'] == $status){

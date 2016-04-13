@@ -59,7 +59,7 @@ if(!class_exists('pdh_r_event')){
 			}
 
 			$this->events = array();
-			
+
 			$objQuery = $this->db->query("SELECT event_id, event_name, event_value, event_icon FROM __events;");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
@@ -86,22 +86,22 @@ if(!class_exists('pdh_r_event')){
 		public function get_html_name($event_id, $no_root=false) {
 			return $this->get_html_icon($event_id, 16, 16, false, $no_root).' '.$this->get_name($event_id);
 		}
-		
+
 		public function comp_name($params1, $params2){
 			return ($this->get_name($params1[0]) < $this->get_name($params2[0])) ? -1  : 1 ;
 		}
-		
+
 		public function get_value($event_id){
 			return $this->events[$event_id]['value'];
 		}
-		
+
 		public function get_html_value($event_id){
 			return runden($this->events[$event_id]['value']);
 		}
 
 		public function get_icon($event_id, $withpath=false){
 			if($withpath) return $this->game->decorate('events', $event_id, array(), 0, true);
-			return $this->events[$event_id]['icon'];
+			return (isset($this->events[$event_id]['icon'])) ? $this->events[$event_id]['icon'] : '';
 		}
 
 		public function get_html_icon($event_id, $width=16){
@@ -116,7 +116,7 @@ if(!class_exists('pdh_r_event')){
 		public function get_html_eventlink($event_id, $baseurl, $url_suffix='', $blnUseController=false){
 			return "<a href='".$this->get_eventlink($event_id, $baseurl, $url_suffix, $blnUseController)."'>".$this->get_name($event_id)."</a>";
 		}
-		
+
 		public function comp_eventlink($params1, $params2){
 			return ($this->get_name($params1[0]) < $this->get_name($params2[0])) ? -1  : 1 ;
 		}

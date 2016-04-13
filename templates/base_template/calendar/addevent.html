@@ -87,10 +87,12 @@ $(document).ready(function() {
 	});
 
 	$("input[type='checkbox'][name='allday']").change(function() {
-		if($(this).prop('checked') == true){
-			$('#cal_startdate, #cal_enddate').datetimepicker('disableTimepicker');
-		}else{
-			$('#cal_enddate, #cal_startdate').datetimepicker('enableTimepicker');
+		if($('#selectmode').val() == 'event'){
+			if($(this).prop('checked') == true){
+				$('#cal_startdate, #cal_enddate').datetimepicker('disableTimepicker');
+			}else{
+				$('#cal_enddate, #cal_startdate').datetimepicker('enableTimepicker');
+			}
 		}
 	}).trigger('change');
 
