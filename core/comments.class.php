@@ -116,7 +116,6 @@ if (!class_exists("comments")){
 			);
 			
 			//Hooks
-			register('pm'); //To Get Plugin Hooks
 			$data = $this->hooks->process('comments_save', $data, true);
 			
 			if($data['permission']){
