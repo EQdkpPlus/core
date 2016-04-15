@@ -55,6 +55,9 @@ class hooks extends gen_class {
 	 * return @array
 	 */
 	public function process($strHook, $arrParams=array(), $blnRecursive=false){
+		//Scan Plugins/Portal/All if not already done
+		if(!$this->blnScanned) $this->isRegistered($strHook);
+		
 		if (!isset($this->hooks[$strHook])) return ($blnRecursive) ? $arrParams : array();
 		
 		$arrOutput = ($blnRecursive) ? $arrParams : array();
