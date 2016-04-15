@@ -60,7 +60,7 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 
 		public function reset($ids=false){
 			$this->objPagination = register("cachePagination", array("logs", "log_id", "__logs", array(), 100));
-			return $this->objPagination->reset($ids);
+			return ($this->objPagination) ? $this->objPagination->reset($ids) : false;
 		}
 
 		public function get_plugins() {
