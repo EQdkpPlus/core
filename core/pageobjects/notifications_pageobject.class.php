@@ -105,8 +105,8 @@ class notifications_pageobject extends pageobject {
 	}
 
 	public function display(){
-		//Cleanup
-		$this->ntfy->cleanup(31);
+		//Cleanup and delete all read messages 
+		$this->ntfy->cleanup_read(31);
 		$this->pdh->process_hook_queue();
 		
 		$this->core->notifications();

@@ -136,9 +136,19 @@ if(!class_exists('pdh_w_notifications')) {
 			return false;
 		}
 		
-		public function cleanup($intTime){
+		public function cleanup_read($intTime){
 			$objQuery = $this->db->prepare("DELETE FROM __notifications WHERE `read` = 1 AND time < ?")->execute($intTime);
 			
+			if($objQuery) {
+				$this->pdh->enqueue_hook('notifications_update');
+				return true;
+			}
+			return false;
+		}
+		
+		public function cleanup_unread($intTime){
+			$objQuery = $this->db->prepare("DELETE FROM __notifications WHERE time < ?")->execute($intTime);
+				
 			if($objQuery) {
 				$this->pdh->enqueue_hook('notifications_update');
 				return true;

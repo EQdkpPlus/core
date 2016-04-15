@@ -29,6 +29,9 @@ class notifications extends gen_class {
 	
 	private $arrPersistentNotifications = array();
 	
+	public function __construct(){
+		$this->cleanup_unread();
+	}
 	
 	public function add_persistent($strType, $strMessage, $strLink, $intPrio=0, $strIcon='', $intCount=1){
 		if ($strType != ""){
@@ -312,12 +315,25 @@ class notifications extends gen_class {
 		$this->pdh->process_hook_queue();
 	}
 	
-	public function cleanup($intDays){
+	public function cleanup_read($intDays){
 		$intTime = $this->time->time;
 		$intTime = $intTime - ($intDays * 3600*24);
 		
-		$this->pdh->put('notifications', 'cleanup', array($intTime));
+		$this->pdh->put('notifications', 'cleanup_read', array($intTime));
 		$this->pdh->process_hook_queue();
+	}
+	
+	public function cleanup_unread(){
+		$intDays = 90; //Delete all notifications older than 90 days, even if unread
+		$intLastCleanup = $this->config->get('notifications_last_cleanup');
+		//Once a day the complete cleanup
+		if(!$intLastCleanup || $intLastCleanup < ($this->time->time - (3600*24))){
+			$intTime = $this->time->time;
+			$intTime = $intTime - ($intDays * 3600*24);
+			$this->pdh->put('notifications', 'cleanup_unread', array($intTime));
+			$this->pdh->process_hook_queue();
+			$this->config->set('notifications_last_cleanup', $this->time->time);
+		}
 	}
 	
 	public function getAvailableNotificationMethods($blnAllMethods=false){
