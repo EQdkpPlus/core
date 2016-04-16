@@ -1226,7 +1226,7 @@ class template extends gen_class {
 								// no break
 
 					default:	if (preg_match('#^(([a-z0-9\-_]+?\.)+?)?([A-Z]+[A-Z0-9\-_]+?)$#s', $token, $varrefs)){
-									$token = (!empty($varrefs[1])) ? $this->generate_block_data_ref(substr($varrefs[1], 0, -1), true) . '[\'' . $varrefs[3] . '\']' : '$this->_data[\'.\'][0][\'' . $varrefs[3] . '\']';
+									$token = (!empty($varrefs[1])) ? $this->generate_block_data_ref(substr($varrefs[1], 0, -1), true) . '[\'' . $varrefs[3] . '\']' : '(isset($this->_data[\'.\'][0][\'' . $varrefs[3] . '\']) ? $this->_data[\'.\'][0][\'' . $varrefs[3] . '\'] : false)';
 								}
 								break;
 				}	// end switch
@@ -1677,8 +1677,8 @@ class template extends gen_class {
 	}
 
 	public function parseLess($strCSS, $strMapFile=false){
-		$style = ($data) ? $data : $this->user->style;
-		$stylepath = ($stylepath) ? $stylepath : $this->style_code;
+		$style = $this->user->style;
+		$stylepath = $this->style_code;
 		$root_path = '../../../../../';
 
 		//Background Image
