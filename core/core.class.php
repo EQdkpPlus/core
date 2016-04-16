@@ -809,7 +809,7 @@ class core extends gen_class {
 			foreach($arrMenuItems as $key => $arrMenuItem){
 				if($arrMenuItem['perm']){
 					$arrMenuItem['icon'] = (isset($arrMenuItem['icon']) && !empty($arrMenuItem['icon']))? $this->icon_font($arrMenuItem['icon'], 'fa-lg').'&nbsp;' : '';
-					
+					if(!isset($arrMenuItem['type'])) $arrMenuItem['type'] = "";
 					switch($arrMenuItem['type']){
 						case 'javascript':
 							$html .= '<li data-type="javascript"><a href="javascript:void(0);" onclick="'.$arrMenuItem['js'].'">'.$arrMenuItem['icon'].$arrMenuItem['text'].'</a>'.((isset($arrMenuItem['append'])) ? $arrMenuItem['append'] : '').'</li>';

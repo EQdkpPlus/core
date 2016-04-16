@@ -994,7 +994,7 @@ if (!class_exists("jquery")) {
 		* @return TimePicker JS Code
 		*/
 		public function rssFeeder($name, $url, $items='4', $length='80', $backgr=false){
-			$backgr = ($backgr) ? $backgr : $this->user->style['tr_color1'];
+			$backgr = ($backgr) ? $backgr : $this->user->style['table_tr_background_color1'];
 			$tmpopt		= array();
 			$tmpopt[] = 'targeturl: "'.$url.'"';
 			$tmpopt[] = 'items: '.$items;

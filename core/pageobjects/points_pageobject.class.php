@@ -111,8 +111,8 @@ class points_pageobject extends pageobject {
 				));
 			}
 		}
-
-		$filter_array = array_merge($filter_array, $this->game->get('filters'));
+		$arrGameFilters = (is_array($this->game->get('filters'))) ? $this->game->get('filters') : array();
+		$filter_array = array_merge($filter_array, $arrGameFilters);
 		if(is_array($filter_array)) {
 			foreach($filter_array as $details){
 				$this->tpl->assign_block_vars('filter_row', array(

@@ -146,6 +146,8 @@ class items_pageobject extends pageobject {
 
 		//Output
 		$view_list = $filtered_list	= $this->pdh->get('item', 'id_list');
+		
+		$mySearch = $searchType = "";
 		if($this->in->exists('search')){
 			$mySearch		= $this->in->get('search');
 			$searchType		= ($this->in->get('search_type')) ? $this->in->get('search_type') : 'itemname';

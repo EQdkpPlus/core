@@ -85,11 +85,11 @@ if ( !class_exists( "pdh_r_rank" ) ) {
 		}
 
 		public function get_name($rank_id){
-			return $this->ranks[$rank_id]['name'];
+			return isset($this->ranks[$rank_id]) ? $this->ranks[$rank_id]['name'] : '';
 		}
 
 		public function get_html_name($rank_id){
-			return $this->game->decorate('ranks', $rank_id).$this->ranks[$rank_id]['name'];
+			return $this->game->decorate('ranks', $rank_id).$this->get_name($rank_id);
 		}
 
 		public function get_rank_image($rank_id){
@@ -101,19 +101,19 @@ if ( !class_exists( "pdh_r_rank" ) ) {
 		}
 
 		public function get_prefix($rank_id){
-			return $this->ranks[$rank_id]['prefix'];
+			return isset($this->ranks[$rank_id]) ? $this->ranks[$rank_id]['prefix'] : '';
 		}
 
 		public function get_suffix($rank_id){
-			return $this->ranks[$rank_id]['suffix'];
+			return isset($this->ranks[$rank_id]) ? $this->ranks[$rank_id]['suffix'] : '';
 		}
 
 		public function get_is_hidden($rank_id){
-			return $this->ranks[$rank_id]['hide'];
+			return isset($this->ranks[$rank_id]) ? $this->ranks[$rank_id]['hide'] : 0;
 		}
 		
 		public function get_sortid($rank_id){
-			return $this->ranks[$rank_id]['sortid'];
+			return isset($this->ranks[$rank_id]) ? $this->ranks[$rank_id]['sortid'] : 0;
 		}
 		
 		public function get_icon($rank_id){

@@ -217,7 +217,7 @@ class tinyMCE extends gen_class {
 						return false;
 					},
 					
-					'.$resizing.$relative_url.$removeHost.$image_upload.'
+					'.$relative_url.$removeHost.$image_upload.'
 
 				});
 						
@@ -228,11 +228,11 @@ class tinyMCE extends gen_class {
 	}
 	
 	public function inline_editor_simple($selector, $settings=array()){
-		if(!$this->trigger['inline_simple.'.$selector]){
+		if(!isset($this->trigger['inline_simple.'.$selector])){
 			//Language
-			$lang = ( !$settings['language'] ) ? $this->language : $settings['language'];
+			$lang = ( !isset($settings['language']) || (isset($settings['language']) && !$settings['language']) ) ? $this->language : $settings['language'];
 			if (is_file($this->root_path.'libraries/tinyMCE/tinymce/langs/'.$lang.'.js')){
-				$this->language	= ( !$settings['language'] ) ? $this->language : $settings['language'];
+				$this->language	= ( !isset($settings['language']) || (isset($settings['language']) && !$settings['language']) ) ? $this->language : $settings['language'];
 			} else $this->language = 'en';
 			
 			$strSetup = (isset($settings['setup'])) ? $settings['setup'] : '';
@@ -277,11 +277,11 @@ class tinyMCE extends gen_class {
 	}
 	
 	public function inline_editor($selector, $settings=false, $blnStart=true){
-		if(!$this->trigger['inline.'.$selector]){
+		if(!isset($this->trigger['inline.'.$selector])){
 			//Language
-			$lang = ( !$settings['language'] ) ? $this->language : $settings['language'];
+			$lang = ( !isset($settings['language']) || (isset($settings['language']) && !$settings['language']) ) ? $this->language : $settings['language'];
 			if (is_file($this->root_path.'libraries/tinyMCE/tinymce/langs/'.$lang.'.js')){
-				$this->language	= ( !$settings['language'] ) ? $this->language : $settings['language'];
+				$this->language	= ( !isset($settings['language']) || (isset($settings['language']) && !$settings['language']) ) ? $this->language : $settings['language'];
 			} else $this->language = 'en';
 			
 			$autoresize		= (isset($settings['autoresize']) && $settings['autoresize']) ? ' autoresize' : '';
@@ -394,7 +394,7 @@ class tinyMCE extends gen_class {
 					},
 					auto_focus: '.$strAutofocus.',
 			
-					'.$resizing.$relative_url.$removeHost.$image_upload.'
+					'.$relative_url.$removeHost.$image_upload.'
 	
 				});
 			}
