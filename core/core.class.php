@@ -802,7 +802,8 @@ class core extends gen_class {
 		 * @param $arrCheckBoxListener	Use checkbox listener to rename by count
 		 * @return string html
 		 */
-		public function build_dropdown_menu($strButtonText, $arrMenuItems, $strCssClass = 'floatLeft', $strCssID = '', $arrCheckBoxListener = array()){
+		public function build_dropdown_menu($strButtonText, $arrMenuItems, $strCssClass = '', $strCssID = '', $arrCheckBoxListener = array()){
+			$strCssClass= (!empty($strCssClass))? $strCssClass : 'floatLeft';
 			$strCssID	= (!empty($strCssID))? $strCssID : $hash = 'ddm_'.md5(serialize($arrMenuItems));
 			$html		= '<div id="'.$strCssID.'" class="btn-ddm '.$strCssClass.'"><button onclick="return false;">'.$strButtonText.'</button><ul>';
 			
