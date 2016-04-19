@@ -22,26 +22,26 @@
 if ( !defined('EQDKP_INC') ){
 	die('Do not access this file directly.');
 }
-				
+
 if ( !class_exists( "pdh_r_notifications" ) ) {
 	class pdh_r_notifications extends pdh_r_generic{
 		public static function __shortcuts() {
 			$shortcuts = array();
 			return array_merge(parent::$shortcuts, $shortcuts);
-		}				
-		
+		}
+
 		public $default_lang = 'english';
 		public $notifications = null;
 		public $user_notifications = null;
-	
+
 		public $hooks = array(
 			'notifications_update',
 		);
-		
+
 		//Trunks
 		private $index = array();
 		private $objPagination = null;
-				
+
 		public $presets = array(
 			'notifications_id' => array('id', array('%intNotificationID%'), array()),
 			'notifications_type' => array('type', array('%intNotificationID%'), array()),
@@ -50,123 +50,123 @@ if ( !class_exists( "pdh_r_notifications" ) ) {
 			'notifications_read' => array('read', array('%intNotificationID%'), array()),
 			'notifications_dataset_id' => array('dataset_id', array('%intNotificationID%'), array()),
 		);
-					
+
 		public function reset($affected_ids=array()){
 				$this->objPagination = register("cachePagination", array("notifications", "id", "__notifications", array(), 100));
-				return ($this->objPagination) ? $this->objPagination->reset($ids) : false;
+				return ($this->objPagination) ? $this->objPagination->reset($affected_ids) : false;
 		}
-						
+
 		public function init(){
 			$this->objPagination = register("cachePagination", array("notifications", "id", "__notifications", array(), 100));
 			$this->objPagination->initIndex();
 			$this->index = $this->objPagination->getIndex();
-	
+
 		}	//end init function
 
 		/**
 		 * @return multitype: List of all IDs
-		 */				
+		 */
 		public function get_id_list(){
 			return $this->index;
 		}
-		
+
 		/**
 		 * Get all data of Element with $strID
 		 * @return multitype: Array with all data
-		 */				
+		 */
 		public function get_data($intNotificationID){
 			return $this->objPagination->get($intNotificationID);
 		}
-		
+
 		public function get_notifications_for_user($intUserID){
 			$arrOut = array();
 			$objQuery = $this->db->prepare("SELECT id FROM __notifications WHERE user_id=? AND `read`=0")->execute($intUserID);
-			
+
 			if($objQuery){
 				while ( $row = $objQuery->fetchAssoc() ) {
 					$arrOut[] = $row['id'];
 				}
 			}
-			
+
 			return $arrOut;
 		}
-		
+
 		public function get_all_notifications_for_user($intUserID){
 			$arrOut = array();
 			$objQuery = $this->db->prepare("SELECT id FROM __notifications WHERE user_id=?")->execute($intUserID);
-			
+
 			if($objQuery){
 				while ( $row = $objQuery->fetchAssoc() ) {
 					$arrOut[] = $row['id'];
 				}
 			}
-			
+
 			return $arrOut;
 		}
-				
+
 		/**
-		 * Returns id for $intNotificationID				
+		 * Returns id for $intNotificationID
 		 * @param integer $intNotificationID
 		 * @return multitype id
 		 */
 		 public function get_id($intNotificationID){
 			return $this->objPagination->get($intNotificationID, 'id');
 		}
-	
+
 		/**
-		 * Returns type for $intNotificationID				
+		 * Returns type for $intNotificationID
 		 * @param integer $intNotificationID
 		 * @return multitype type
 		 */
 		 public function get_type($intNotificationID){
 			return $this->objPagination->get($intNotificationID, 'type');
 		}
-	
+
 		/**
-		 * Returns user_id for $intNotificationID				
+		 * Returns user_id for $intNotificationID
 		 * @param integer $intNotificationID
 		 * @return multitype user_id
 		 */
 		 public function get_user_id($intNotificationID){
 			return $this->objPagination->get($intNotificationID, 'user_id');
 		}
-	
+
 		/**
-		 * Returns time for $intNotificationID				
+		 * Returns time for $intNotificationID
 		 * @param integer $intNotificationID
 		 * @return multitype time
 		 */
 		 public function get_time($intNotificationID){
 			return $this->objPagination->get($intNotificationID, 'time');
 		}
-	
+
 		/**
-		 * Returns read for $intNotificationID				
+		 * Returns read for $intNotificationID
 		 * @param integer $intNotificationID
 		 * @return multitype read
 		 */
 		 public function get_read($intNotificationID){
 			return $this->objPagination->get($intNotificationID, 'read');
 		}
-	
+
 		/**
-		 * Returns username for $intNotificationID				
+		 * Returns username for $intNotificationID
 		 * @param integer $intNotificationID
 		 * @return multitype username
 		 */
 		 public function get_username($intNotificationID){
 			return $this->objPagination->get($intNotificationID, 'username');
 		}
-	
+
 		/**
-		 * Returns dataset_id for $intNotificationID				
+		 * Returns dataset_id for $intNotificationID
 		 * @param integer $intNotificationID
 		 * @return multitype dataset_id
 		 */
 		 public function get_dataset_id($intNotificationID){
 		 	return $this->objPagination->get($intNotificationID, 'dataset_id');
 		}
-		
+
 		/**
 		 * Returns additional_data for $intNotificationID
 		 * @param integer $intNotificationID
@@ -175,7 +175,7 @@ if ( !class_exists( "pdh_r_notifications" ) ) {
 		public function get_additional_data($intNotificationID){
 			return $this->objPagination->get($intNotificationID, 'additional_data');
 		}
-		
+
 		/**
 		 * Returns link for $intNotificationID
 		 * @param integer $intNotificationID
@@ -183,7 +183,7 @@ if ( !class_exists( "pdh_r_notifications" ) ) {
 		 */
 		public function get_link($intNotificationID){
 			$strLink = $this->objPagination->get($intNotificationID, 'link');
-			
+
 			if ($strLink && $strLink != ""){
 				$strLink = str_replace(array('{SERVER_PATH}', '{CONTROLLER_PATH_PLAIN}', '{CONTROLLER_PATH}','{SID}', '{ROOT_PATH}'), array('', $this->controller_path_plain, $this->controller_path, $this->SID, ''), $strLink);
 				return $strLink;
