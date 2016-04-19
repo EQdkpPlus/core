@@ -659,7 +659,7 @@ if( !class_exists( "plus_datahandler")){
 			$this->init_preset_list( );
 
 			$preset_name = ( array_key_exists( $preset_name, $this->system_settings['aliases'] ) ) ? $this->system_settings['aliases'][$preset_name] : $preset_name;
-			return $this->preset_list[$preset_name];
+			return (isset($this->preset_list[$preset_name])) ? $this->preset_list[$preset_name] : false;
 		}
 
 		public function pre_process_preset( $preset_name, $add_values = array( ), $index = null ) {

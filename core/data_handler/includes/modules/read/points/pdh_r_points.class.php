@@ -111,9 +111,14 @@ if ( !class_exists( "pdh_r_points" ) ) {
 								$member_id = $this->pdh->get('item', 'buyer', array($item_id));
 								$value = $this->pdh->get('item', 'value', array($item_id, $dkp_id));
 								$raid_id = $this->pdh->get('item', 'raid_id', array($item_id));
-								if(!isset($this->points[$member_id][$dkp_id]['single']['spent'][$raid2event[$raid_id]][$itempool_id]))
-									$this->points[$member_id][$dkp_id]['single']['spent'][$raid2event[$raid_id]][$itempool_id] = 0;
-								$this->points[$member_id][$dkp_id]['single']['spent'][$raid2event[$raid_id]][$itempool_id] += $value;
+								if(!isset($this->points[$member_id])) $this->points[$member_id] = array();
+								if(!isset($this->points[$member_id][$dkp_id])) $this->points[$member_id][$dkp_id] = array('single' => array('earned' => array(), 'spent' => array()));
+								$eventID = (isset($raid2event[$raid_id])) ? $raid2event[$raid_id] : 0;
+								if(!isset($this->points[$member_id][$dkp_id]['single']['spent'][$eventID])) $this->points[$member_id][$dkp_id]['single']['spent'][$eventID] = array();
+								
+								if(!isset($this->points[$member_id][$dkp_id]['single']['spent'][$eventID][$itempool_id]))
+									$this->points[$member_id][$dkp_id]['single']['spent'][$eventID][$itempool_id] = 0;
+								$this->points[$member_id][$dkp_id]['single']['spent'][$eventID][$itempool_id] += $value;
 							}
 						}
 					}

@@ -267,7 +267,7 @@ class Manage_Bridge extends page_generic {
 		
 		if (is_array($settings)){
 			$form->add_fields($settings);
-			
+			$arrValues = array();
 			//Build Settings Array
 			foreach($settings as $name=>$confvars){
 				$arrValues[$name] = $this->config->get($name);

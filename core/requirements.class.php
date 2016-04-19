@@ -99,7 +99,7 @@ if(!class_exists('requirements')) {
 			$arrCount	= array();
 			foreach($this->checks as $fname=>$fdata){
 				if(
-					($type == 'required' && (!$fdata['passfail'] || $fdata['ignore'])) ||
+					($type == 'required' && (!$fdata['passfail'] || (isset($fdata['ignore']) && $fdata['ignore']))) ||
 					($type == 'optional' && (isset($fdata['adviced_fail']) && $fdata['adviced_fail'])) ||
 					($type == 'both' && ((isset($fdata['adviced_fail']) && $fdata['adviced_fail']) || (isset($fdata['adviced_fail']) && $fdata['adviced_fail'])))
 				){

@@ -243,7 +243,7 @@ class bridge extends gen_class {
 	 * @return array
 	 */
 	public function get_settings(){
-		return $this->objBridge->settings;	
+		return ($this->objBridge) ? $this->objBridge->settings : array();
 	}
 
 	/**
