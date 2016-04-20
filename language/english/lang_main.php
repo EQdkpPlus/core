@@ -808,7 +808,6 @@ $lang = array(
 	),
 	"raidevent_raid_modstatus" => 'Change status',
 	"raidevent_raid_modgroup" => 'Change raid group',
-	"raidevent_raid_noraidnote" => 'No raid note available',
 	"raidevent_raid_noeventnote" => 'No event note available',
 	"raidevent_raid_moderation" => 'Moderation of the raid',
 	"raidevent_raid_selected_attendees" => "Selection: (#)",
