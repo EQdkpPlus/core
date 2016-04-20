@@ -763,7 +763,6 @@ $lang = array(
 ),
 "raidevent_raid_modstatus" => "Status ändern",
 "raidevent_raid_modgroup" => 'Raidgruppe ändern',
-"raidevent_raid_noraidnote" => "Keine Raidnotiz vorhanden",
 "raidevent_raid_noeventnote" => 'Keine Notiz für diesen Termin vorhanden',
 "raidevent_raid_moderation" => "Moderation des Raids",
 "raidevent_raid_selected_attendees" => "Auswahl: (#)",
