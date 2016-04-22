@@ -117,7 +117,7 @@ if(registry::register('input')->get('out') != ''){
 							foreach($caleventids as $calid){
 
 								// the attendee stuff
-								$raidcal_status = unserialize(registry::register('config')->get('calendar_raid_status'));
+								$raidcal_status = registry::register('config')->get('calendar_raid_status');
 								$raidstatus = array();
 								if(is_array($raidcal_status)){
 									foreach($raidcal_status as $raidcalstat_id){
@@ -147,16 +147,20 @@ if(registry::register('input')->get('out') != ''){
 								}
 
 								// get the status counts
-								$counts = '';
-								foreach($raidstatus as $statusid=>$statusname){
-									$counts[$statusid]  = ((isset($attendees[$statusid])) ? count($attendees[$statusid]) : 0);
+								$counts = array();
+								if(is_array($raidstatus)){
+									foreach($raidstatus as $statusid=>$statusname){
+										$counts[$statusid]  = ((isset($attendees[$statusid])) ? count($attendees[$statusid]) : 0);
+									}
 								}
 
 								// build the description data
 								$description_data	 = registry::register('plus_datahandler')->get('calendar_events', 'notes', array($calid));
 								$description_data	.= (!empty($description_data)) ? '\n\n' : '';
-								foreach($counts as $countid=>$countdata){
-									$description_data .= $raidstatus[$countid].' ('.$countdata.'): '.((isset($attendees[$countid]) && count($attendees[$countid]) > 0) ? implode(', ',$attendees[$countid]) : '--').'\n';
+								if(is_array($counts) && count($counts) > 0){
+									foreach($counts as $countid=>$countdata){
+										$description_data .= $raidstatus[$countid].' ('.$countdata.'): '.((isset($attendees[$countid]) && count($attendees[$countid]) > 0) ? implode(', ',$attendees[$countid]) : '--').'\n';
+									}
 								}
 
 								// generate the ical output
