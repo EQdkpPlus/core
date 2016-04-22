@@ -154,8 +154,18 @@ if(registry::register('input')->get('out') != ''){
 									}
 								}
 
+								// Build the user attendance
+								$description_usercontent	= false;
+								if(isset($userid) && $userid > 0){
+									$attendancestatus	= registry::register('plus_datahandler')->get('calendar_raids_attendees', 'html_status', array($calid, $userid, false));
+									if($attendancestatus != ''){
+										$description_usercontent	= registry::fetch('user')->lang('calendar_export_statustext').' '.registry::fetch('user')->lang(array('raidevent_raid_status', $attendancestatus));
+									}
+								}
+
 								// build the description data
-								$description_data	 = registry::register('plus_datahandler')->get('calendar_events', 'notes', array($calid));
+								$description_data = registry::register('plus_datahandler')->get('calendar_events', 'notes', array($calid));
+								if($description_usercontent) { $description_data	.= '\n'.$description_usercontent; }
 								$description_data	.= (!empty($description_data)) ? '\n\n' : '';
 								if(is_array($counts) && count($counts) > 0){
 									foreach($counts as $countid=>$countdata){
@@ -172,6 +182,16 @@ if(registry::register('input')->get('out') != ''){
 								$e->setProperty('class',		'PUBLIC');
 								$e->setProperty('categories',	'PERSONAL');
 								$v->setComponent($e);
+
+								// generate the alarm
+								if($description_usercontent){
+									$a = new valarm;
+									$a->setProperty('action', 'DISPLAY');					// set what to do
+									$a->setProperty('description', registry::register('plus_datahandler')->get('calendar_events', 'name', array($calid))));		// describe alarm
+									$a->setProperty('trigger', array( 'hour' => 1 ));		// set trigger one hour before
+									$e->setComponent($a);									// add alarm component to event component as subcomponent
+									$v->setComponent($e); 									// add event component to calendar
+								}
 							}
 						}
 					break;

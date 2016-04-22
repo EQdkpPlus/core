@@ -722,6 +722,7 @@ $lang = array(
 		"Appointments",
 		"Raids and appointments"
 	),
+	"calendar_export_statustext" => "Attendance status:",
 	"calendar_export_feed" => 'Link to the ical feed for external programms such as Outlook or iCal. This is a personal link with a secret hash. Do not share with other persons.',
 	"calendar_export_feedurl" => 'Feed URL',
 	"calendar_export_dl_ical" => 'Download *.ics',

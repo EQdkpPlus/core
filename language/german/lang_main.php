@@ -682,6 +682,7 @@ $lang = array(
 	"Termine",
 	"Raids und Termine"
 ),
+"calendar_export_statustext" => "Anmeldestatus:",
 "calendar_eventdetails_invitations" => 'Einladungen',
 "calendar_eventdetails_confirmations" => 'Zusagen',
 "calendar_eventdetails_maybes" => 'Vielleicht',
@@ -987,7 +988,7 @@ $lang = array(
 "user_sett_f_ntfy_comment_new_response" => "Antwort auf meinen Kommentar",
 "user_sett_f_ntfy_comment_new_mentioned" => "Erwähnungen in Kommentaren",
 "user_sett_f_ntfy_calendarevent_new" => "Neues Kalenderevent",
-"user_sett_f_ntfy_eqdkp_user_new_registered" => "Neue Benutzerregistrierungen",		
+"user_sett_f_ntfy_eqdkp_user_new_registered" => "Neue Benutzerregistrierungen",
 "mark_all_as_read" => "Alle als gelesen markieren",
 "show_all" => "Alle anzeigen",
 "notification_type_twitterdm" => "Twitter Direct Message",

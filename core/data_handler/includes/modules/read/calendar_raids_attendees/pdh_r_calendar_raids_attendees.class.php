@@ -41,7 +41,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			'raidcalstats_raids_signedin_30'	=> array('html_calstat_raids_signedin', array('%member_id%', '30', '%with_twink%'), array()),
 			'raidcalstats_raids_signedoff_30'	=> array('html_calstat_raids_signedoff', array('%member_id%', '30', '%with_twink%'), array()),
 			'raidcalstats_raids_backup_30'		=> array('html_calstat_raids_backup', array('%member_id%', '30', '%with_twink%'), array()),
-		
+
 			'raidcalstats_raids_confirmed_fromto'	=> array('calstat_raids_confirmed_fromto', array('%member_id%', '%from%', '%to%', '%with_twink%'), array()),
 			'raidcalstats_raids_signedin_fromto'	=> array('calstat_raids_signedin_fromto', array('%member_id%', '%from%', '%to%', '%with_twink%'), array()),
 			'raidcalstats_raids_signedoff_fromto'	=> array('calstat_raids_signedoff_fromto', array('%member_id%', '%from%', '%to%', '%with_twink%'), array()),
@@ -51,7 +51,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 
 		private $attendees;
 		private $attendees_fromto;
-		
+
 		public $hooks = array(
 			'calendar_raid_attendees_update',
 		);
@@ -85,7 +85,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			$this->attendees		= $this->pdc->get('pdh_calendar_raids_table.attendees');
 			$this->lastraid			= $this->pdc->get('pdh_calendar_raids_table.lastraid');
 			$this->attendee_status	= $this->pdc->get('pdh_calendar_raids_table.attendee_status');
-			
+
 			if($this->attendees !== NULL && $this->lastraid !== NULL && $this->attendee_status !== NULL){
 				return true;
 			}
@@ -97,20 +97,20 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			$raids_90d				= $this->pdh->get('calendar_events', 'amount_raids', array(90, false));
 			$raids_60d				= $this->pdh->get('calendar_events', 'amount_raids', array(60, false));
 			$raids_30d				= $this->pdh->get('calendar_events', 'amount_raids', array(30, false));
-			
+
 			$objQuery = $this->db->query('SELECT * FROM __calendar_raid_attendees');
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					// fill the last attendee raid array
 					$newdate	= $this->pdh->get('calendar_events', 'time_start', array($row['calendar_events_id']));
 					$actdate	= (isset($this->lastraid[$row['member_id']])) ? $this->lastraid[$row['member_id']] : false;
-					
+
 					if((!$actdate || ($actdate && $newdate > $actdate) && $newdate < time())){
 						$this->lastraid[$row['member_id']] = $newdate;
 					}
-	
+
 					// attendee status array
-					
+
 					if(in_array($row['calendar_events_id'], array_keys($raids_90d))){
 						if(in_array($row['calendar_events_id'], array_keys($raids_30d))){
 							$days	= '30';
@@ -125,7 +125,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 							$this->attendee_status[$row['member_id']][$row['signup_status']][$days] = 1;
 						}
 					}
-	
+
 					// fill the attendee array
 					$this->attendees[$row['calendar_events_id']][$row['member_id']] = array(
 						'member_role'				=> $row['member_role'],
@@ -139,24 +139,24 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 						'signedbyadmin'				=> $row['signedbyadmin'],
 					);
 				}
-				
+
 				$this->pdc->put('pdh_calendar_raids_table.attendees', $this->attendees, NULL);
 				$this->pdc->put('pdh_calendar_raids_table.lastraid', $this->lastraid, NULL);
 				$this->pdc->put('pdh_calendar_raids_table.attendee_status', $this->attendee_status, NULL);
 			}
-			
+
 			return true;
 		}
-		
+
 		public function init_fromto($from, $to){
 			$strTimeHash = md5($from.'.'.$to);
-			
+
 			$this->attendees_fromto[$strTimeHash] = $this->pdc->get('pdh_calendar_raids_table.attendees_fromto.'.$strTimeHash);
-			
+
 			if($this->attendees_fromto[$strTimeHash] !== NULL){
 				return true;
 			}
-			
+
 			// empty array as default
 			$this->attendees_fromto	= array();
 			$arrRaids = $this->pdh->get('calendar_events', 'amount_raids_fromto', array($from, $to, false));
@@ -176,7 +176,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 
 				$this->pdc->put('pdh_calendar_raids_table.attendees_fromto.'.$strTimeHash, $this->attendees_fromto[$strTimeHash], NULL);
 			}
-				
+
 			return true;
 		}
 
@@ -264,11 +264,11 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 		public function get_status($eventid, $memberid){
 			return (isset($this->attendees[$eventid][$memberid])) ? $this->attendees[$eventid][$memberid]['signup_status'] : '4';
 		}
-		
+
 		public function get_role($eventid, $memberid){
 			return (isset($this->attendees[$eventid][$memberid])) ? $this->attendees[$eventid][$memberid]['member_role'] : '';
 		}
-		
+
 		public function get_raidgroup($eventid, $memberid){
 			return (isset($this->attendees[$eventid][$memberid])) ? $this->attendees[$eventid][$memberid]['raidgroup'] : 0;
 		}
@@ -296,6 +296,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 					return ($flag) ? $this->get_status_flag($memberstatus) : $memberstatus;
 				}
 			}
+			return '';
 		}
 
 		public function get_note($raidid, $memberid){
@@ -443,7 +444,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			} else {
 				$number_of_raids_att	= (int)$this->get_calstat_raids_status($memberid, 3, $days);
 			}
-			
+
 			$number_of_raids_all	= (int)$this->pdh->get('calendar_events', 'amount_raids', array($days));
 			$percentage				= round(($number_of_raids_att/$number_of_raids_all)*100, 1);
 			return '<span class="' . color_item($percentage, true) . '">'.$percentage.'%</span>';
@@ -498,7 +499,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			} else {
 				$number_of_raids_att	= (int)$this->get_calstat_raids_status_fromto($memberid, 1, $from, $to);
 			}
-				
+
 			$number_of_raids_all	= (int)$this->pdh->get('calendar_events', 'amount_raids_fromto', array($from, $to));
 			$percentage				= round(($number_of_raids_att/$number_of_raids_all)*100, 1);
 			return $percentage;
@@ -516,7 +517,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			} else {
 				$number_of_raids_att	= (int)$this->get_calstat_raids_status_fromto($memberid, 1, $from, $to);
 			}
-			
+
 			$number_of_raids_all	= (int)$this->pdh->get('calendar_events', 'amount_raids_fromto', array($from, $to));
 			$percentage				= round(($number_of_raids_att/$number_of_raids_all)*100, 1);
 			return '<span class="' . color_item($percentage, true) . '">'.$percentage.'% ('.$number_of_raids_att.'/'.$number_of_raids_all.')</span>';
