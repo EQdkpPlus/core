@@ -187,7 +187,7 @@ if(registry::register('input')->get('out') != ''){
 								if($description_usercontent){
 									$a = new valarm;
 									$a->setProperty('action', 'DISPLAY');					// set what to do
-									$a->setProperty('description', registry::register('plus_datahandler')->get('calendar_events', 'name', array($calid))));		// describe alarm
+									$a->setProperty('description', registry::register('plus_datahandler')->get('calendar_events', 'name', array($calid)));		// describe alarm
 									$a->setProperty('trigger', array( 'hour' => 1 ));		// set trigger one hour before
 									$e->setComponent($a);									// add alarm component to event component as subcomponent
 									$v->setComponent($e); 									// add event component to calendar
