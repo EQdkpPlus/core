@@ -117,7 +117,7 @@ if(registry::register('input')->get('out') != ''){
 							foreach($caleventids as $calid){
 
 								// the attendee stuff
-								$raidcal_status = unserialize(registry::register('config')->get('calendar_raid_status'));
+								$raidcal_status = registry::register('config')->get('calendar_raid_status');
 								$raidstatus = array();
 								if(is_array($raidcal_status)){
 									foreach($raidcal_status as $raidcalstat_id){
@@ -164,7 +164,7 @@ if(registry::register('input')->get('out') != ''){
 								$e->setProperty('dtstart',		array("timestamp" => registry::register('plus_datahandler')->get('calendar_events', 'time_start', array($calid)).'Z'));
 								$e->setProperty('dtend',		array("timestamp" => registry::register('plus_datahandler')->get('calendar_events', 'time_end', array($calid)).'Z'));
 								$e->setProperty('summary',		registry::register('plus_datahandler')->get('calendar_events', 'name', array($calid)));
-								$e->setProperty('description',	$description_data);
+								$e->setProperty('description',	rtrim($description_data));
 								$e->setProperty('class',		'PUBLIC');
 								$e->setProperty('categories',	'PERSONAL');
 								$v->setComponent($e);
