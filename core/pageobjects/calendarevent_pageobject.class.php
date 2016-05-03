@@ -1085,7 +1085,7 @@ class calendarevent_pageobject extends pageobject {
 
 		$eventdata	= $this->pdh->get('calendar_events', 'data', array($this->url_id));
 		#d($eventdata);
-		$strPageTitle = sprintf($this->pdh->get('calendar_events', 'name', array($this->url_id)), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->user_date($eventdata['timestamp_start']).' '.$this->time->user_date($eventdata['timestamp_start'], false, true);
+		$strPageTitle = sprintf($this->pdh->get('calendar_events', 'name', array($this->url_id)), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->user_date($eventdata['timestamp_start']).(($eventdata['allday'] == 1) ? ', '.$this->user->lang('calendar_allday') : ' '.$this->time->user_date($eventdata['timestamp_start'], false, true));
 
 		// set the userstatus to zero
 		$userstatus		= array();
