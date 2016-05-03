@@ -253,10 +253,9 @@ class admin_index extends gen_class {
 							LEFT JOIN __users u
 							ON u.user_id = s.session_user_id )
 							WHERE s.session_current > ?
-							GROUP BY u.username, s.session_ip
 							ORDER BY u.username, s.session_current DESC';
 		$result = $this->db->prepare($sql)->execute($this->time->time-600);
-		$arrOnlineUsers = $arrBots = array();
+		$arrOnlineUsers = $arrBots = $arrDone = array();
 		if ($result){
 			while ($row = $result->fetchAssoc()){
 				$isBot = $this->env->is_bot($row['session_browser']) ? true : false;
@@ -270,6 +269,8 @@ class admin_index extends gen_class {
 
 		if($online_count){
 			foreach($arrOnlineUsers as $row){
+				$strDoneFlag = ( !empty($row['username']) ) ? 'u_'.$row['session_user_id'] : 'ip_'.md5($row['session_ip']);
+				if(isset($arrDone[$strDoneFlag])) continue;
 				$username = ( !empty($row['username']) ) ? $row['username'] : (($this->env->is_bot($row['session_browser'])) ? $this->env->is_bot($row['session_browser']) : $this->user->lang('anonymous'));
 				$this->tpl->assign_block_vars('online_row', array(
 						'USERNAME'		=> sanitize($username),
@@ -279,6 +280,7 @@ class admin_index extends gen_class {
 						'BROWSER'		=> $this->admin_functions->resolve_browser($row['session_browser']),
 						'IP_ADDRESS'	=> sanitize($row['session_ip']))
 				);
+				$arrDone[$strDoneFlag] = 1;
 			}
 		}
 

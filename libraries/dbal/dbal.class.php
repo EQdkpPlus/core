@@ -154,7 +154,7 @@ abstract class Database extends gen_class {
 			$blnPersistent = (registry::get_const("dbpers") !== null) ? registry::get_const("dbpers") : false;
 			$this->connect(registry::get_const("dbhost"), registry::get_const("dbname"), registry::get_const("dbuser"), registry::get_const("dbpass"), $intPort, $blnPersistent);
 			//dont print any error-messages for this query
-			if(defined('DEBUG') && DEBUG) $this->query("SET SESSION sql_mode = 'STRICT_TRANS_TABLES'");
+			if(defined('DEBUG') && DEBUG) $this->query("SET SESSION sql_mode = 'STRICT_TRANS_TABLES,ONLY_FULL_GROUP_BY'");
 		}
 		$this->blnInConstruct = false;
 	}
