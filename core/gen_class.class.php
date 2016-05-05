@@ -66,6 +66,19 @@ abstract class gen_class {
 	}
 	
 	public function __isset($name) {
+		if(isset($this->_class_index[$name])) {
+			return true;
+		}
+		if(isset($this->_shorts[$name])) {
+			return true;
+		}
+		if(isset(registry::$aliases[$name])) {
+			return true;
+		}
+		if(registry::class_exists($name)){
+			return true;
+		}
+		
 		return registry::isset_const($name);
 	}
 	
