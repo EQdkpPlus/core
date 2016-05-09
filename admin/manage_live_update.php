@@ -366,9 +366,9 @@ class Manage_Live_Update extends page_generic {
 		foreach($arrFiles as $file){
 			
 			if (file_exists($this->root_path.$file['name'])){
-				$strLog .= 'Replaced File '.$file['name'].'\r\n';
+				$strLog .= 'Replaced File '.$file['name']."\r\n";
 			} else {
-				$strLog .= 'Added File '.$file['name'].'\r\n';
+				$strLog .= 'Added File '.$file['name']."\r\n";
 			}
 			
 			$this->pfh->copy($tmp_folder.$file['name'],$this->root_path.$file['name']);
@@ -471,7 +471,7 @@ class Manage_Live_Update extends page_generic {
 			foreach ($arrFiles as $file){
 				if (file_exists($this->root_path.$file['name'])){
 					$this->pfh->Delete($this->root_path.$file['name']);
-					$strLog .= 'Deleted File '.$file['name'].'\r\n';
+					$strLog .= 'Deleted File '.$file['name']."\r\n";
 				}
 			}
 			
