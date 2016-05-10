@@ -311,10 +311,10 @@ class auth extends user {
 	public function cleanup($intTime){
 		
 		// Get expired sessions
-		$objQuery = $this->db->prepare("SELECT session_page, session_user_id, MAX(session_current) AS recent_time
-						FROM __sessions
-						WHERE session_start < ?
-						GROUP BY session_user_id")->execute($this->time->time - ($this->session_length*2));
+		$objQuery = $this->db->prepare("SELECT session_page, session_user_id,session_current FROM __sessions s1 
+				WHERE s1.session_start < ? AND session_current =
+				(SELECT MAX(session_current) FROM __sessions s2 WHERE s1.session_user_id = s2.session_user_id)
+		")->execute($this->time->time - ($this->session_length*2));
 
 		if ($objQuery){
 			while($row = $objQuery->fetchAssoc()){
