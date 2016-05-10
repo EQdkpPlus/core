@@ -166,8 +166,10 @@ if ( !defined('EQDKP_INC') ){
 			$msg = date('d.m.Y H:i:s') . "\t" . $text ."\n";
 			clearstatcache();
 			$strLogfile = ($this->known_types[$type]['date_files']) ? $this->logfile_folder.$this->date.'-'.$type.'.log': $this->logfile_folder.$type.'.log';
-			$size = @filesize($strLogfile);
-			$this->logfile_info[$type][] = ($size) ? $size : 0;
+			if(file_exists($strLogfile)){
+				$size = @filesize($strLogfile);
+			} else $size = 0;
+			$this->logfile_info[$type][] = $size;
 			@error_log($msg, 3, $strLogfile);
 			$this->logfile_info_changed = true;
 		}

@@ -747,8 +747,14 @@ class template extends gen_class {
 
 		foreach($array as $item){
 			$relative_file = $this->env->server_to_rootpath($item['file']);
+			
+			if(substr($item['file'],0,4) == "http"){
+				$filetime	= rand(1,100000000);
+			} else {
+				$filetime = (file_exists($relative_file)) ? filemtime($relative_file) : false;
+				if($filetime === false) continue;
+			}
 
-			$filetime	= (substr($item['file'],0,4) == "http") ? rand(1,100000000) : @filemtime($relative_file);
 			$type		= (is_array($item) && isset($item['type'])) ? "' type='".$item['type']."'" : '';
 			$media		= (is_array($item) && isset($item['media'])) ? " media='".$item['media']."'" : '';
 			$file 		= ((is_array($item)) ? $item['file'] : $item);
