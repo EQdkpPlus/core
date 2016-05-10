@@ -56,8 +56,8 @@ class register_pageobject extends pageobject {
 			'deny'				=> array('process' => 'process_deny'),
 			'confirmed'			=> array('process' => 'process_confirmed'),
 			'activate'			=> array('process' => 'process_activate'),
-			'resendactivation'	=> array('process' => 'display_resend_activation_mail'),
 			'resend_activation'	=> array('process' => 'process_resend_activation'),
+			'resendactivation'	=> array('process' => 'display_resend_activation_mail'),
 		);
 		parent::__construct(false, $handler);
 		if ($this->user->data['rules'] == 1){
@@ -303,16 +303,17 @@ class register_pageobject extends pageobject {
 					'USERNAME'		=> $row['username'],
 					'DATETIME'		=> $this->time->user_date($this->time->time, true),
 					'U_ACTIVATE' 	=> $this->server_url . 'Activate/?key=' . $user_key,
+					'GUILDTAG'		=> $this->config->get('guildtag'),
 				);
 
 				if(!$this->email->SendMailFromAdmin($row['user_email'], $this->user->lang('email_subject_activation_self'), 'register_activation_self.html', $bodyvars)) {
-					message_die($this->user->lang('error_email_send'), $this->user->lang('get_new_password'));
+					message_die($this->user->lang('error_email_send'), $this->user->lang('get_new_activation_mail'));
 				}
 			}
 			
 		}
 		
-		message_die($this->user->lang('password_resend_success'), $this->user->lang('get_new_password'));
+		message_die($this->user->lang('password_resend_success'), $this->user->lang('get_new_activation_mail'));
 	}
 
 
