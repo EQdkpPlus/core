@@ -189,8 +189,19 @@ class core extends gen_class {
 			if (!$this->config->get('disable_xframe_header')){
 				@header("X-Frame-Options: SAMEORIGIN");
 			}
-
+			
 			// some style additions (header, background image..)
+			$favicon = $this->user->style['favicon_img'];
+			switch(pathinfo($favicon, PATHINFO_EXTENSION)){
+				case 'png': $favicon_type = 'image/png';
+					break;
+				case 'ico': $favicon_type = 'image/x-icon';
+					break;
+				default:
+					$favicon = $this->server_path.'templates/'.$this->user->style['template_path'].'/images/favicon.png';
+					$favicon_type = 'image/png';
+			}
+			
 			$template_background_file = "";
 			switch($this->user->style['background_type']){
 				//Game
@@ -366,6 +377,8 @@ class core extends gen_class {
 
 			$this->tpl->assign_vars(array(
 				'PAGE_TITLE'				=> $this->pagetitle($this->page_title),
+				'FAVICON'					=> $favicon,
+				'FAVICON_TYPE'				=> $favicon_type,
 				'HEADER_LOGO'				=> $headerlogo,
 				'TEMPLATE_BACKGROUND'		=> $template_background_file,
 
