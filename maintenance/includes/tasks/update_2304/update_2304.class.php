@@ -38,16 +38,19 @@ class update_2304 extends sql_update_task {
 			'english' => array(
 				'update_2304'	=> 'EQdkp Plus 2.3.0 Update 4',
 					1			=> 'Alter Style Table',
+                    2			=> 'Alter Style Table',
 				),
 			'german' => array(
 				'update_2304'	=> 'EQdkp Plus 2.3.0 Update 4',
 					1			=> 'Erweitere Style Tabelle',
+                    2			=> 'Erweitere Style Tabelle',
 			),
 		);
 
 		// init SQL querys
 		$this->sqls = array(
 			1	=> "ALTER TABLE `__styles` ADD COLUMN `additional_fields` TEXT NULL COLLATE 'utf8_bin';",
+            2   => "ALTER TABLE `__styles` ADD `favicon_img` VARCHAR(255) NULL DEFAULT NULL AFTER `logo_position`;",
 		);
 	}
 

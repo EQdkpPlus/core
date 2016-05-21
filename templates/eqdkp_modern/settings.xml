@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<settings styleversion="0.2.2">	
+<settings styleversion="0.2.2">
 	<template_path>eqdkp_modern</template_path>
 	<attendees_columns>6</attendees_columns>
 	<logo_position>left</logo_position>
+	<favicon_img></favicon_img>
 	<background_img></background_img>
 	<column_right_width>0px</column_right_width>
 	<column_left_width>0px</column_left_width>

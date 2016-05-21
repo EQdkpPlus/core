@@ -1480,7 +1480,7 @@ class template extends gen_class {
 		$style = ($data) ? $data : $this->user->style;
 		$stylepath = ($stylepath) ? $stylepath : $this->style_code;
 		$root_path = '../../../../../';
-
+		
 		//Background Image
 		$template_background_file = "";
 		switch($style['background_type']){

@@ -166,7 +166,7 @@ class Manage_Styles extends page_generic{
 		$this->objStyles->ClassColorManagement($this->url_id, false);
 		$this->pdh->put('styles', 'update_style', array($this->url_id, $this->get_data()));
 		$this->pdh->process_hook_queue();
-		$this->style = $this->pdh->get('styles', 'styles', array($this->url_id));		
+		$this->style = $this->pdh->get('styles', 'styles', array($this->url_id));
 		
 		//Delete Template Cache
 		$this->objStyles->deleteStyleCache($this->style['template_path']);
@@ -178,10 +178,10 @@ class Manage_Styles extends page_generic{
 		$portal_width = (strlen($this->in->get('portal_width'))) ? $this->in->get('portal_width').$this->in->get('dd_portal_width') : '';
 		$column_left_width = (strlen($this->in->get('column_left_width'))) ? $this->in->get('column_left_width').$this->in->get('dd_column_left_width') : '';
 		$column_right_width = (strlen($this->in->get('column_right_width'))) ? $this->in->get('column_right_width').$this->in->get('dd_column_right_width') : '';
-				
+			
 		$data = array(
 			'style_name'			=> $this->in->get('style_name', $this->style['style_name']),
-			'style_version'			=> $this->in->get('style_version', $this->style['style_version']),				
+			'style_version'			=> $this->in->get('style_version', $this->style['style_version']),
 			'background_type'		=> $this->in->get('background_type', 0),
 			'background_pos'		=> $this->in->get('background_pos'),
 			'background_img'		=> $this->in->get('background_img'),
@@ -190,6 +190,7 @@ class Manage_Styles extends page_generic{
 			'column_right_width'	=> $column_right_width,
 			'attendees_columns'		=> $this->in->get('attendees_columns'),
 			'logo_position'			=> $this->in->get('logo_position', 'center'),
+			'favicon_img'			=> $this->in->get('favicon_img'),
 			'additional_less'		=> $this->in->get('additional_less', '', 'raw'),
 			'additional_fields'		=> serialize($this->in->getArray('add_links', 'string')),
 		);
@@ -201,7 +202,7 @@ class Manage_Styles extends page_generic{
 				$data[$name] = $this->in->get($name, '', 'raw');
 			}
 		}
-
+		
 		return $data;
 	}
 
@@ -225,12 +226,12 @@ class Manage_Styles extends page_generic{
 			'inset'		=> 'inset',
 			'outset'	=> 'outset'
 		);
-
+		
 		$width_options = array(
 			'px'	=> 'px',
 			'%'		=> '%',
 		);
-
+		
 		$logo_positions = array(
 			'center'=>	$this->user->lang('logo_position_center'),
 			'right'	=>	$this->user->lang('portalplugin_right'),
@@ -238,13 +239,13 @@ class Manage_Styles extends page_generic{
 			'none'	=>	$this->user->lang('info_opt_ml_0'),
 		);
 		
-		$arrUsedVariables = $this->get_used_variables($this->style['template_path']);	
+		$arrUsedVariables = $this->get_used_variables($this->style['template_path']);
 		
 		// Attendee columns
 		for ($i = 1; $i < 11; $i++){
 			$attendee_colums[$i] = $i;
 		}
-
+		
 		// Class Colors
 		$arrClasses = $this->game->get_primary_classes();
 		foreach($arrClasses as $class_id => $class_name){
@@ -254,7 +255,7 @@ class Manage_Styles extends page_generic{
 				'CPICKER'	=> $this->jquery->colorpicker('classc_'.$class_id, $this->game->get_class_color($class_id, $this->url_id)),
 			));
 		}
-
+		
 		//First: the base templates
 		$arrBaseTemplates = $this->objStyles->scan_templates($this->core->root_path . 'templates/base_template/');
 		//Now the files from the template
@@ -285,18 +286,18 @@ class Manage_Styles extends page_generic{
 			$files[base64_encode($path)] = $path;
 		}
 		
-
+		
 		//Read an spezific template-file to edit
 		$editor_type = 'html_js';
 		if ($this->in->get('template') != "" && !is_numeric(base64_decode($this->in->get('template')))){
 			$filename = base64_decode($this->in->get('template'));
-
+			
 			if(substr($filename, 0, 8) === 'plugins/'){
 				$realFilename = str_replace("plugins/", "", $filename);
 				$intFirstSlash = (strpos($realFilename, '/'));
 				$strPluginName = substr($realFilename, 0, $intFirstSlash);
 				$realFilename = str_replace($strPluginName.'/', "", $realFilename);
-
+				
 				$data_path = $this->pfh->FolderPath('templates/'.$this->style['template_path'], 'eqdkp').$filename;
 				$template_path = $this->core->root_path.'templates/'.$this->style['template_path'].'/'.$filename;
 				$plugin_path = $this->core->root_path.'plugins/'.$strPluginName.'/templates/'.$this->style['template_path'].'/'.$realFilename;
@@ -322,7 +323,7 @@ class Manage_Styles extends page_generic{
 				}
 				
 			}
-
+			
 			if (file_exists($filename)){
 				$contents = file_get_contents($filename);
 				$file_ext = pathinfo($filename, PATHINFO_EXTENSION);
@@ -330,27 +331,28 @@ class Manage_Styles extends page_generic{
 				$select_tab = 3;
 			}
 		}
-
+		
 		$this->confirm_delete($this->user->lang('confirm_delete_style'));
 		$this->jquery->Tab_header('style_tabs', true);
 		if(isset($select_tab) && $select_tab > 0){ $this->jquery->Tab_Select('style_tabs', $select_tab); }
 		
 		$this->jquery->fileBrowser('admin', 'image');
-
+		
 		$this->tpl->assign_vars(array(
 			// Form vars
 			'F_ADD_STYLE'			=> 'manage_styles.php' . $this->SID.'&amp;update=true',
 			'STYLE_ID'				=> $this->url_id,
 			'DD_EDIT_TEMPLTES'		=> new hdropdown('template_dd', array('options' => $files, 'value' => $this->in->get('template'), 'js' => 'onchange="this.form.template.value=this.value;this.form.action =\'manage_styles.php'.$this->SID.'&amp;edit=true&amp;styleid=' . $this->url_id.'\'; this.form.submit();"')),
 			'TEMPLATE_CONTENT'		=> $this->jquery->CodeEditor('template_edit', ((isset($contents)) ? htmlentities($contents) : ''), $editor_type),
-
+			
 			// Form Values
 			'STYLE_NAME'			=> $this->style['style_name'],
 			'STYLE_CODE'			=> (isset($this->style['style_code'])) ? $this->style['style_code'] : '',
 			'STYLE_AUTHOR'			=> $this->style['style_author'],
 			'STYLE_CONTACT'			=> $this->style['style_contact'],
-			'STYLE_VERSION'			=> $this->style['style_version'], 
-				
+			'STYLE_VERSION'			=> $this->style['style_version'],
+			
+			'FAVICON_IMG'			=> $this->style['favicon_img'],
 			'BACKGROUND_IMG'		=> $this->style['background_img'],
 			'CSS_FILE'				=> $this->style['css_file'],
 			
@@ -360,22 +362,22 @@ class Manage_Styles extends page_generic{
 			
 			'STYLE_PORTAL_WIDTH_DISABLED' => ((!in_array('portal_width', $arrUsedVariables)) ? 'disabled="disabled"' : ''),
 			'STYLE_COLUMN_LEFT_DISABLED' => ((!in_array('portal_column_left_width', $arrUsedVariables) && !in_array('column_left_width', $arrUsedVariables)) ? 'disabled="disabled"' : ''),
-			'STYLE_COLUMN_RIGHT_DISABLED' => ((!in_array('portal_column_right_width', $arrUsedVariables) && !in_array('column_right_width', $arrUsedVariables)) ? 'disabled="disabled"' : ''),	
+			'STYLE_COLUMN_RIGHT_DISABLED' => ((!in_array('portal_column_right_width', $arrUsedVariables) && !in_array('column_right_width', $arrUsedVariables)) ? 'disabled="disabled"' : ''),
 			'DD_PORTAL_WIDTH'		=> new hdropdown('dd_portal_width', array('options' => $width_options, 'value' => ((strpos($this->style['portal_width'], '%') !== false) ? '%' : 'px'),  'disabled' => ((!in_array('portal_width', $arrUsedVariables)) ? true : false))),
 			'DD_COLUMN_LEFT_WIDTH'	=> new hdropdown('dd_column_left_width', array('options' => $width_options, 'value' => ((strpos($this->style['column_left_width'], '%') !== false) ? '%' : 'px'),  'disabled' => ((!in_array('portal_column_left_width', $arrUsedVariables) && !in_array('column_left_width', $arrUsedVariables)) ? true : false))),
 			'DD_COLUMN_RIGHT_WIDTH'	=>new hdropdown('dd_column_right_width', array('options' => $width_options, 'value' => ((strpos($this->style['column_right_width'], '%') !== false) ? '%' : 'px'),  'disabled' => ((!in_array('portal_column_right_width', $arrUsedVariables) && !in_array('column_right_width', $arrUsedVariables)) ? true : false))),
-				
+			
 			'DD_ATTENDEE_COLUMNS'	=> new hdropdown('attendees_columns', array('options' => $attendee_colums, 'value' => $this->style['attendees_columns'])),
 			'DD_LOGO_POSITION'		=> new hdropdown('logo_position', array('options' => $logo_positions, 'value' => $this->style['logo_position'])),
-
+			
 			'RADIO_BACKGROUND_IMAGE_TYPE' => new hradio('background_type', array('options' => $this->user->lang("background_image_types"), 'value' => $this->style['background_type'], 'disabled' => ((!in_array('background_image', $arrUsedVariables)) ? true : false))),
 			'RADIO_BACKGROUND_POSITION' => new hradio('background_pos', array('options' => array('normal' => $this->user->lang('background_position_normal'), 'fixed' => $this->user->lang('background_position_fixed')), 'value' => $this->style['background_pos'], 'disabled' => ((!in_array('background_position', $arrUsedVariables) && !in_array('background_image_position', $arrUsedVariables)) ? true : false))),
 			'BACKGROUND_IMG_DISABLED' => ((!in_array('background_image', $arrUsedVariables)) ? 'disabled="disabled"' : ''),
 			'ADDITIONAL_LESS'		=> $this->style['additional_less'],
-	
+			
 			// Language
 			'L_TEMPLATE_WARNING'	=> sprintf($this->user->lang('template_warning'), $this->pfh->FileLink('templates', 'eqdkp').'/'.$this->style['template_path']),
-
+			
 			// Buttons
 			'S_ADD' 				 => ( !$this->url_id ) ? true : false)
 		);
@@ -457,7 +459,7 @@ class Manage_Styles extends page_generic{
 			foreach($val as $name => $type)
 			{
 				$arrVariablesToLook[] = $name;
-			}		
+			}
 		}
 
 		$arrFiles[] = $this->tpl->resolve_css_file($this->core->root_path . 'templates/'.$style_path.'/'.$style_path.'.css', $style_path);

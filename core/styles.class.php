@@ -35,6 +35,7 @@ if (!class_exists("styles")){
 		private $allowed_colors = array(
 			'attendees_columns',
 			'logo_position',
+			'favicon_img',
 			'background_img',
 			'background_pos',
 			'background_type',
@@ -58,7 +59,7 @@ if (!class_exists("styles")){
 			'content_link_color_hover',
 			'content_border_color',
 			'content_accent_color',
-			'content_contrast_color',	
+			'content_contrast_color',
 			'content_contrast_background_color',
 			'content_contrast_border_color',
 			'content_highlight_color',
@@ -321,7 +322,7 @@ if (!class_exists("styles")){
 				$this->pfh->putContent($storage_folder.'package.xml', $fot);
 				
 				$fot ='<?xml version="1.0" encoding="utf-8"?>
-<settings styleversion="'.$data['style_version'].'">	
+<settings styleversion="'.$data['style_version'].'">
 	<template_path>'.$data['template_path'].'</template_path>'."\n";
 				unset($data['style_id']);
 				unset($data['template_path']);
@@ -561,7 +562,7 @@ if (!class_exists("styles")){
 			$storage_folder  = $this->pfh->FolderPath('templates', 'eqdkp');
 
 			if ( $dir = @opendir($storage_folder) ){
-				while ($file = @readdir($dir)){					
+				while ($file = @readdir($dir)){
 					//Delete the Combined Files
 					if(is_dir($storage_folder.$file)){
 						$arrDir = sdir($storage_folder.$file, 'combined_*');
@@ -595,11 +596,11 @@ if (!class_exists("styles")){
 					'body_font_family'		=> 'font-family',
 					'body_link_color'		=> 'color',
 					'body_link_color_hover' => 'color',
-					'body_link_decoration'	=> 'decoration',	
+					'body_link_decoration'	=> 'decoration',
 				),
 				'container' => array(
 					'container_background_color' => 'color',
-					'container_border_color' => 'color',	
+					'container_border_color' => 'color',
 				),
 				'content' => array(
 					'content_background_color' => 'color',
@@ -608,7 +609,7 @@ if (!class_exists("styles")){
 					'content_link_color' => 'color',
 					'content_link_color_hover' => 'color',
 					'content_border_color' => 'color',
-					'content_accent_color' => 'color',	
+					'content_accent_color' => 'color',
 					'content_contrast_color'=> 'color',
 					'content_contrast_background_color'=> 'color',
 					'content_contrast_border_color'=> 'color',
@@ -621,7 +622,7 @@ if (!class_exists("styles")){
 					'userarea_background_color' => 'color',
 					'userarea_font_color' => 'color',
 					'userarea_link_color' => 'color',
-					'userarea_link_color_hover' => 'color',	
+					'userarea_link_color_hover' => 'color',
 				),
 				'table' => array(
 					'table_th_background_color' => 'color',
@@ -637,12 +638,12 @@ if (!class_exists("styles")){
 					'menu_font_color'		=> 'color',
 					'menu_item_background_color' => 'color',
 					'menu_item_background_color_hover' => 'color',
-					'menu_item_font_color_hover' => 'color',	
+					'menu_item_font_color_hover' => 'color',
 				),
 				'sidebar' => array(
 					'sidebar_background_color' => 'color',
 					'sidebar_font_color'		=> 'color',
-					'sidebar_border_color'		=> 'color',	
+					'sidebar_border_color'		=> 'color',
 				),
 				'button' => array(
 					'button_background_color' => 'color',
@@ -650,7 +651,7 @@ if (!class_exists("styles")){
 					'button_border_color'		=> 'color',
 					'button_background_color_hover' => 'color',
 					'button_font_color_hover'	=> 'color',
-					'button_border_color_hover'	=> 'color',	
+					'button_border_color_hover'	=> 'color',
 				),
 				'input' => array(
 					'input_background_color' => 'color',

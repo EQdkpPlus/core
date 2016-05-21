@@ -16,8 +16,8 @@
 		<title>{PAGE_TITLE}</title>
 		{CSS_FILES}
 		{JS_FILES}
-		<link rel="shortcut icon" href="{TEMPLATE_PATH}/images/favicon.png" type="image/png" />
-		<link rel="icon" href="{TEMPLATE_PATH}/images/favicon.png" type="image/png" />
+		<link rel="shortcut icon" href="{FAVICON}" type="{FAVICON_TYPE}" />
+		<link rel="icon" href="{FAVICON}" type="{FAVICON_TYPE}" />
 		<link rel="apple-touch-icon" href="{TEMPLATE_PATH}/images/apple-touch-icon.png" />
 		{RSS_FEEDS}
 		<!-- LISTENER head -->
@@ -113,7 +113,7 @@
 									<li><a href="{EQDKP_ROOT_PATH}{admin_tooltip.LINK}"><i class="fa {admin_tooltip.ICON} fa-lg"></i> {admin_tooltip.TEXT}</a></li>
 									<!-- END admin_tooltip -->
 								</ul>
-							</div>	
+							</div>
 							<!-- ENDIF -->
 							
 							<!-- IF U_CHARACTERS != "" --><li><a href="{U_CHARACTERS}"><i class="fa fa-group fa-lg"></i> <span class="hiddenSmartphone">{L_menu_members}</span></a></li><!-- ENDIF -->
@@ -145,7 +145,7 @@
 									<span class="notification-tooltip-trigger bubble-yellow notification-bubble-yellow hand" <!-- IF NOTIFICATION_COUNT_YELLOW == 0 -->style="display:none;"<!-- ENDIF -->>{NOTIFICATION_COUNT_YELLOW}</span>
 									<span class="notification-tooltip-trigger bubble-green notification-bubble-green hand" <!-- IF NOTIFICATION_COUNT_GREEN == 0 -->style="display:none;"<!-- ENDIF -->>{NOTIFICATION_COUNT_GREEN}</span>
 									<ul class="dropdown-menu notification-tooltip" role="menu" id="notification-tooltip-all">
-										<li class="notification-action-bar"> 
+										<li class="notification-action-bar">
 											<div class="floatLeft">
 												<span class="bubble-red notification-bubble-red notification-filter hand" <!-- IF NOTIFICATION_COUNT_RED == 0 -->style="display:none;"<!-- ENDIF --> >{NOTIFICATION_COUNT_RED}</span>
 												<span class="bubble-yellow notification-bubble-yellow notification-filter hand" <!-- IF NOTIFICATION_COUNT_YELLOW == 0 -->style="display:none;"<!-- ENDIF -->>{NOTIFICATION_COUNT_YELLOW}</span>
@@ -292,7 +292,7 @@
 									<!-- ENDIF -->
 								</div>
 							</header>
-							<!-- END global_warnings -->	
+							<!-- END global_warnings -->
 							<aside id="portal-middle">
 								<!-- LISTENER portal-middle-top -->
 								{PORTAL_MIDDLE}
@@ -304,7 +304,7 @@
 									<!-- LISTENER content_body_top -->
 									{GBL_CONTENT_BODY}
 									<!-- LISTENER content_body_bottom -->
-								</div>	
+								</div>
 							</div><!-- close contentBody -->
 							<!-- LISTENER content_middle_bottom -->
 							
@@ -435,7 +435,7 @@
 	
 	<div class="reponsiveTestClass" style="display:none;"><!-- This div is for testing the responsiveness --></div>
 	<script type="text/javascript">
-		//<![CDATA[			
+		//<![CDATA[
 			<!-- IF not S_LOGGED_IN -->
 			$(document).ready(function() {
 				/* Login Dialog */

@@ -14,13 +14,13 @@
 		<legend>{L_style_localupdate}</legend>
 		<dl>
 			<dt><label>{L_template_files}</label></dt>
-			<dd><label><input type="radio" name="template" value="1" checked="checked" />{L_style_localupdate_overwrite} <em>({L_recommended})</em></label> 
+			<dd><label><input type="radio" name="template" value="1" checked="checked" />{L_style_localupdate_overwrite} <em>({L_recommended})</em></label>
 				<label><!-- IF S_CHANGED_FILES --><input type="radio" name="template" value="0" />{L_style_localupdate_dontoverwrite}<!-- ENDIF --></label>
 			</dd>
 		</dl>
 		<dl>
 			<dt><label>{L_color_settings}</label></dt>
-			<dd><label><input type="radio" name="colors" value="1" checked="checked" />{L_style_localupdate_overwrite} <em>({L_recommended})</em></label> 
+			<dd><label><input type="radio" name="colors" value="1" checked="checked" />{L_style_localupdate_overwrite} <em>({L_recommended})</em></label>
 				<label><input type="radio" name="colors" value="0" />{L_style_localupdate_dontoverwrite}</label>
 			</dd>
 		</dl>
@@ -103,9 +103,18 @@ $(document).ready(function(){
 			<dt><label>{L_logo_position}</label></dt>
 			<dd>{DD_LOGO_POSITION}</dd>
 		</dl>
+		<dl>
+			<dt><label>{L_favicon_image}</label><br /><span>{L_favicon_image_note}</span></dt>
+			<dd>
+			<div class="input-icon-append">
+			<input id="favicon_image" type="text" name="favicon_img" size="25" maxlength="255" value="{FAVICON_IMG}" class="input" />
+			<i class="fa fa-lg fa-folder-open hand" onclick="elfinder_all('favicon_image');"></i>
+			</div>
+			</dd>
+		</dl>
 	</fieldset>
 	<fieldset class="settings">
-		<legend>{L_background_image}</legend>	
+		<legend>{L_background_image}</legend>
 		<dl>
 			<dt><label>{L_background_image_type}</label><br /><span>{L_background_image_type_help}</span></dt>
 			<dd>{RADIO_BACKGROUND_IMAGE_TYPE}</dd>
@@ -186,7 +195,7 @@ $(document).ready(function(){
 	</fieldset>
 </div>
 
-<div id="templates">			
+<div id="templates">
 	<fieldset class="settings smallsettings">
 		<legend>{L_edit_templates}</legend>
 		<div class="infobox infobox-large infobox-red clearfix">
