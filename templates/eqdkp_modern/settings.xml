@@ -4,6 +4,7 @@
 	<attendees_columns>6</attendees_columns>
 	<logo_position>left</logo_position>
 	<favicon_img></favicon_img>
+	<banner_img>../../../../../templates/eqdkp_modern/images/background-head.svg</banner_img>
 	<background_img></background_img>
 	<column_right_width>0px</column_right_width>
 	<column_left_width>0px</column_left_width>

@@ -191,6 +191,7 @@ class Manage_Styles extends page_generic{
 			'attendees_columns'		=> $this->in->get('attendees_columns'),
 			'logo_position'			=> $this->in->get('logo_position', 'center'),
 			'favicon_img'			=> $this->in->get('favicon_img'),
+			'banner_img'			=> $this->in->get('banner_img'),
 			'additional_less'		=> $this->in->get('additional_less', '', 'raw'),
 			'additional_fields'		=> serialize($this->in->getArray('add_links', 'string')),
 		);
@@ -353,6 +354,7 @@ class Manage_Styles extends page_generic{
 			'STYLE_VERSION'			=> $this->style['style_version'],
 			
 			'FAVICON_IMG'			=> $this->style['favicon_img'],
+			'BANNER_IMG'			=> $this->style['banner_img'],
 			'BACKGROUND_IMG'		=> $this->style['background_img'],
 			'CSS_FILE'				=> $this->style['css_file'],
 			

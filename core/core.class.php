@@ -379,6 +379,7 @@ class core extends gen_class {
 				'PAGE_TITLE'				=> $this->pagetitle($this->page_title),
 				'FAVICON'					=> $favicon,
 				'FAVICON_TYPE'				=> $favicon_type,
+				'TEMPLATE_BANNER'			=> $this->user->style['banner_img'],
 				'HEADER_LOGO'				=> $headerlogo,
 				'TEMPLATE_BACKGROUND'		=> $template_background_file,
 
