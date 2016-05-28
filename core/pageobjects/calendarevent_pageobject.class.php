@@ -1074,8 +1074,13 @@ class calendarevent_pageobject extends pageobject {
 			$event_attendees		= (isset($eventdata['extension']['attendance']) && count($eventdata['extension']['attendance']) > 0) ? $eventdata['extension']['attendance'] : array();
 			if(count($event_attendees) > 0){
 				foreach($event_attendees as $attendeedata=>$status){
+					switch($status){
+						case 1:		$attstatus = 'attendance'; break;
+						case 2:		$attstatus = 'maybe'; break;
+						case 3:		$attstatus = 'decline'; break;
+					}
 					$statusofuser[$attendeedata] = $status;
-					$userstatus['attendance'][] = array(
+					$userstatus[$attstatus][] = array(
 						'name'		=> $this->pdh->get('user', 'name', array($attendeedata)),
 						'icon'		=> $this->pdh->get('user', 'avatar_withtooltip', array($attendeedata)),
 						'joined'	=> false,
