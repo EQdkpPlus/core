@@ -1071,13 +1071,13 @@ class calendarevent_pageobject extends pageobject {
 			}
 
 			// attending users
-			$event_attendees		= (isset($eventdata['extension']['invited']) && count($eventdata['extension']['invited']) > 0) ? $eventdata['extension']['invited'] : array();
+			$event_attendees		= (isset($eventdata['extension']['attendance']) && count($eventdata['extension']['attendance']) > 0) ? $eventdata['extension']['attendance'] : array();
 			if(count($event_attendees) > 0){
 				foreach($event_attendees as $attendeedata=>$status){
 					$statusofuser[$attendeedata] = $status;
 					$userstatus['attendance'][] = array(
 						'name'		=> $this->pdh->get('user', 'name', array($attendeedata)),
-						'icon'		=> $this->pdh->get('user', 'avatar_withtooltip', array($inviteddata)),
+						'icon'		=> $this->pdh->get('user', 'avatar_withtooltip', array($attendeedata)),
 						'joined'	=> false,
 					);
 				}
