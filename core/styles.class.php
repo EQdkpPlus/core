@@ -36,6 +36,7 @@ if (!class_exists("styles")){
 			'attendees_columns',
 			'logo_position',
 			'favicon_img',
+			'banner_img',
 			'background_img',
 			'background_pos',
 			'background_type',

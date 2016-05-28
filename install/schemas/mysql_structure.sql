@@ -363,6 +363,7 @@ CREATE TABLE `__styles` (
 	`attendees_columns` ENUM('1','2','3','4','5','6','7','8','9','10') NOT NULL DEFAULT '6' COLLATE 'utf8_bin',
 	`logo_position` VARCHAR(6) NULL DEFAULT NULL COLLATE 'utf8_bin',
 	`favicon_img` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_bin',
+	`banner_img` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_bin',
 	`background_img` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_bin',
 	`column_right_width` VARCHAR(20) NULL DEFAULT '' COLLATE 'utf8_bin',
 	`column_left_width` VARCHAR(20) NULL DEFAULT '' COLLATE 'utf8_bin',

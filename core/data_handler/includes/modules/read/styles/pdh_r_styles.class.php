@@ -59,6 +59,7 @@ if ( !class_exists( "pdh_r_styles" ) ) {
 						'attendees_columns'			=> $drow['attendees_columns'],
 						'logo_position'				=> $drow['logo_position'],
 						'favicon_img'				=> $drow['favicon_img'],
+						'banner_img'				=> $drow['banner_img'],
 						'background_img'			=> $drow['background_img'],
 						'column_right_width'		=> $drow['column_right_width'],
 						'column_left_width'			=> $drow['column_left_width'],
