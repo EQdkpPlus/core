@@ -493,20 +493,20 @@ class editcalendarevent_pageobject extends pageobject {
 		// the hack for the custom repeating period
 		$dr_repeat_custom = 1;
 		if(isset($eventdata['repeating']) && $eventdata['repeating'] > 0 && !in_array((int)$eventdata['repeating'], array(1,7,14))){
-			$eventdata['repeating']	= 'custom';
 			$dr_repeat_custom		= $eventdata['repeating'];
+			$eventdata['repeating']		= 'custom';
 		}elseif($this->url_id > 0 && isset($eventdata['repeating']) && $eventdata['repeating'] == 0){
 			$dr_repeat_custom = 0;
 		}
 
 		$this->tpl->assign_vars(array(
 			'IS_EDIT'			=> ($this->url_id > 0) ? true : false,
-			'IS_CLONED'			=> ((isset($eventdata['repeating']) && $eventdata['repeating'] > 0) ? true : false),
+			'IS_CLONED'			=> ((isset($eventdata['repeating']) && ($eventdata['repeating'] > 0 || ($eventdata['repeating'] == 'custom' && $dr_repeat_custom > 0))) ? true : false),
 			'DKP_ENABLED'		=> ($this->config->get('disable_points') == 0) ? true :false,
 			#'IS_OPERATOR'		=> $this->user->check_auth('a_cal_revent_conf', false),
 			'DR_CALENDAR_JSON'	=> json_encode($calendars),
 			'DR_CALENDAR_CID'	=> (isset($eventdata['calendar_id'])) ? $eventdata['calendar_id'] : 0,
-			'DR_REPEAT'			=> new hdropdown('repeat_dd', array('options' => $drpdwn_repeat, 'value' => ((isset($eventdata['repeating']) && $eventdata['repeating'] > 0) ? $eventdata['repeating'] : '0'))),
+			'DR_REPEAT'			=> new hdropdown('repeat_dd', array('options' => $drpdwn_repeat, 'value' => ((isset($eventdata['repeating']) && (($eventdata['repeating'] == 'custom'  && $dr_repeat_custom > 0) || $eventdata['repeating'] > 0)) ? $eventdata['repeating'] : '0'))),
 			'REPEAT_CUSTOM'		=> $dr_repeat_custom,
 			'DR_TEMPLATE'		=> new hdropdown('raidtemplate', array('options' => $this->pdh->get('calendar_raids_templates', 'dropdowndata'), 'id' => 'cal_raidtemplate')),
 			'DR_CALENDARMODE'	=> new hdropdown('calendarmode', array('options' => $calendar_mode_array, 'value' => $calendermode, 'id' => 'selectmode', 'class' => 'dropdown')),
