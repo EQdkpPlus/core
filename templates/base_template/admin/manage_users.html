@@ -135,13 +135,13 @@ function handle_assoc_members(){
 }
 
 function delete_single(id){
-	$('input:checkbox[name="user_id[]"]').attr('checked', false);
+	$('input:checkbox[name="user_id[]"]').prop('checked', false);
 	if ($('input[name=delete_associated_members_single]').is(':checked')){
 		$('#del_assocmem').val('1');
 	} else {
 		$('#del_assocmem').val('0');
 	}
-	$('#user_id_'+id).attr('checked', true);
+	$('#user_id_'+id).prop('checked', true);
 	$('#mass_del_submit').removeAttr('disabled');
 	$('form:has(#mass_del_submit)').submit();
 }

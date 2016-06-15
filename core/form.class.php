@@ -18,29 +18,29 @@
  *	You should have received a copy of the GNU Affero General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
 class form extends gen_class {
-	
+
 	/**
 	 *	the form_id is the identifier of the form, it should be unique and has otherwise no specific use
 	 */
 	public $form_id = '';
-	
+
 	public $use_tabs 		= false;
 	public $use_fieldsets 	= false;
 	public $use_dependency 	= false;
 	public $validate		= false;
 	public $assign2tpl 		= true;
 	public $ajax_url		= '';
-	
+
 	/**
 	 *	the language variables are build as follows:
 	 *	- for tabs: $this->lang_prefix.'tab_'.$tabname
-	 *	- for fieldsets: 
+	 *	- for fieldsets:
 	 *		- $lang = $this->lang_prefix.'fs_'.$fieldsetname;
 	 *		- $info = $this->lang_prefix.'fs_info_'.$fieldsetname;
 	 *	- for fields:
@@ -48,10 +48,10 @@ class form extends gen_class {
 	 *		- $help = $this->lang_prefix.'f_help_'.$name;
 	 */
 	public $lang_prefix 	= '';
-	
+
 	/**
 	 *	structure: tab => array(fieldset => array(field => array(options)), field => array(options), field => array(options))
-	 * 
+	 *
 	 *	the options of each field is an array containing the following elements
 	 * 		- type: the type of the field to use (e.g. 'dropdown')
 	 *		- any additional options for the chosen fieldtype
@@ -66,15 +66,15 @@ class form extends gen_class {
 	 */
 	private $field_array 	= array();
 	private $hidden			= '';
-	
+
 	// flags if dependency jquery stuff has been initialised
 	private $jq_dropdown 	= false;
 	private $jq_checkbox 	= false;
 	private $jq_radio 		= false;
-	
+
 	// error flag (to redisplay form in case of wrong input)
 	private $error			= false;
-	
+
 	/**
 	 *	shortcut to create a field
 	 *
@@ -95,7 +95,7 @@ class form extends gen_class {
 		if(is_object($field)) $options['id'] = $field->id;
 		return $text.$field.$text2;
 	}
-	
+
 	/**
 	 *	shortcut for the return value of a field
 	 *
@@ -108,7 +108,7 @@ class form extends gen_class {
 		$class_name = 'h'.$options['type'];
 		if(!registry::class_exists($class_name)) return null;
 		$class = new $class_name($name, $options);
-		
+
 		// choose language var
 		if(!isset($options['lang'])) {
 			$lang = ($lang_prefix) ? $lang_prefix.'f_'.$name : $name;
@@ -122,29 +122,29 @@ class form extends gen_class {
 			$language = (register('user')->lang($lang, false, false)) ? register('user')->lang($lang) : ((register('game')->glang($lang)) ? register('game')->glang($lang) : $lang);
 		}
 		$class->_lang = $language;
-		
+
 		if(!empty($options['encrypt'])) return register('encrypt')->encrypt($class->inpval());
 		return $class->inpval();
 	}
-	
+
 	public function __construct($form_id) {
 		$this->form_id = $form_id;
 	}
-	
+
 	public function __get($name) {
 		switch($name) {
 			case 'error':
 				return $this->error;
-				
+
 			default:
 				return parent::__get($name);
 		}
 	}
-	
+
 	public function reset_fields() {
 		$this->field_array = array();
 	}
-	
+
 	/**
 	 *	add a tab and put existing fieldsets and fields into it
 	 *
@@ -172,7 +172,7 @@ class form extends gen_class {
 			}
 		}
 	}
-	
+
 	/**
 	 *	add multiple tabs at once
 	 *
@@ -181,7 +181,7 @@ class form extends gen_class {
 	public function add_tabs($fieldarray) {
 		$this->field_array = array_merge($this->field_array, $fieldarray);
 	}
-	
+
 	/**
 	 *	group existing fields in a fieldset
 	 *
@@ -207,7 +207,7 @@ class form extends gen_class {
 			}
 		}
 	}
-	
+
 	/**
 	 *	add one or more fieldsets including its fields in array format
 	 *
@@ -220,7 +220,7 @@ class form extends gen_class {
 		else
 			$this->field_array['fs'] = array_merge($this->field_array, $fieldarray);
 	}
-	
+
 	/**
 	 *	add a single field to the form
 	 *
@@ -239,7 +239,7 @@ class form extends gen_class {
 		else
 			$this->field_array['f'][$name] = $options;
 	}
-	
+
 	/*	add multiple fields in array format
 	 *	@fieldarray (array):	fieldname => array(options)
 	 *	@fieldset (string):		name of the fieldset where the fields shall be placed
@@ -260,7 +260,7 @@ class form extends gen_class {
 			else $this->field_array['f'] = array_merge($this->field_array['f'], $fieldarray);
 		}
 	}
-	
+
 	/*	assign output to template variables
 	 *	@values (array):	key => value, array containing the values with which to fill the formular
 	 */
@@ -310,7 +310,7 @@ class form extends gen_class {
 			$this->form_class .= ' fv_checkit';
 		}
 
-		if($this->assign2tpl) 
+		if($this->assign2tpl)
 			$this->tpl->assign_vars(array(
 				'FORM_ID'	=> $this->form_id,
 				'HIDDEN'	=> $this->hidden,
@@ -318,7 +318,7 @@ class form extends gen_class {
 			));
 		else return $out;
 	}
-	
+
 	/*	read input data according to form-fields
 	 *	@return (array):	inputname => value
 	 */
@@ -344,7 +344,7 @@ class form extends gen_class {
 				if(strpos($fieldsetname, '_') === 0) continue;
 				foreach($fields as $name => $options) {
 					if (!is_array($options)) continue;
-					
+
 					try {
 						$values[$name] = self::value($name, $options, $this->lang_prefix);
 					} catch (FormException $e) {
@@ -357,7 +357,7 @@ class form extends gen_class {
 		}
 		return $values;
 	}
-	
+
 	private function tab2tpl($tabname, $data) {
 		$lang = (!empty($data['_lang'])) ? $data['_lang'] : $this->lang_prefix.'tab_'.$tabname;
 		$this->tpl->assign_block_vars('tabs', array(
@@ -366,7 +366,7 @@ class form extends gen_class {
 			)
 		);
 	}
-	
+
 	private function fs2tpl($fieldsetname, $data, $key) {
 		$lang = (!empty($data['_lang'])) ? $data['_lang'] : $this->lang_prefix.'fs_'.$fieldsetname;
 		$info = (!empty($data['_info'])) ? $data['_info'] : $this->lang_prefix.'fs_info_'.$fieldsetname;
@@ -376,12 +376,12 @@ class form extends gen_class {
 			'ID'		=> 'fs_'.substr(md5($fieldsetname), 0, 10),
 		));
 	}
-	
+
 	private function f2tpl($name, $options, $key, $value) {
 		// TODO: check 'disabled'
-		
+
 		if (!is_array($options)) return;
-		
+
 		// choose language var
 		if(!isset($options['lang'])) {
 			$lang = $this->lang_prefix.'f_'.$name;
@@ -403,17 +403,17 @@ class form extends gen_class {
 		} else {
 			$help_message = $this->lang($help, false);
 		}
-		
+
 		// fill in the field
 
 		if(!empty($value) || $value === '0' || $value === 0) $options['value'] = $value;
-		
+
 		// create the field
 		$field = self::field($name, $options);
-		
+
 		// dependency stuff - hide other elements depening on selection
 		if(!empty($options['dependency'])) $this->jq_dep_init($options['type']);
-		
+
 		// ajax-reload for dropdown-options
 		if(!empty($options['ajax_reload'])) {
 			if(isset($options['ajax_reload']['multiple'])) {
@@ -428,7 +428,7 @@ class form extends gen_class {
 				$this->jquery->js_dd_ajax($options['id'], $ajre[0], $ajre[1], (isset($ajre[2]) ? $ajre[2] : ''));
 			}
 		}
-		
+
 		if($this->assign2tpl) {
 			if($options['type'] == 'hidden') {
 				$this->hidden .= $field;
@@ -448,7 +448,7 @@ class form extends gen_class {
 				'type'		=> $options['type'],
 			);
 	}
-	
+
 	private function jq_dep_init($type) {
 		if($this->{'jq_'.$type}) return;
 		switch($type) {
@@ -463,23 +463,23 @@ class form extends gen_class {
 					if(selected){
 						selected_values.push(value);
 					}else{
-						$('#".$this->form_id."').find('#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"]').attr('disabled', 'disabled');
+						$('#".$this->form_id."').find('#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"]').prop('disabled', true);
 						$('#".$this->form_id."').find('dl:has(#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"])').hide();
 					}
 				}
 			});
 		});
 		$.each(selected_values, function(index, value){
-			$('#".$this->form_id."').find('#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"]').removeAttr('disabled');
+			$('#".$this->form_id."').find('#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"]').prop('disabled', false);
 			var elem = $('#".$this->form_id."').find('#'+value);
 			if(elem && elem.prop('tagName') == 'SELECT' && typeof elem.attr('multiple') !== typeof undefined && elem.attr('multiple') !== false){
 				$('#'+value).multiselect('enable');
-			}		
+			}
 			$('#".$this->form_id."').find('dl:has(#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"])').show();
 		});
 	}).trigger('change');";
 				break;
-				
+
 			case 'checkbox':
 			case 'radio':
 				$js = "
@@ -489,14 +489,14 @@ class form extends gen_class {
 			$.each($(this).data('form-change').split(','), function(index, value){
 				if(value){
 					if(checked){
-						$('#".$this->form_id."').find('#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"]').removeAttr('disabled');
+						$('#".$this->form_id."').find('#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"]').prop('disabled', false);
 						var elem = $('#".$this->form_id."').find('#'+value);
 						if(elem && elem.prop('tagName') == 'SELECT' && typeof elem.attr('multiple') !== typeof undefined && elem.attr('multiple') !== false){
 							$('#'+value).multiselect('enable');
-						}	
+						}
 						$('#".$this->form_id."').find('dl:has(#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"])').show();
 					}else{
-						$('#".$this->form_id."').find('#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"]').attr('disabled', 'disabled');
+						$('#".$this->form_id."').find('#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"]').prop('disabled', true);
 						$('#".$this->form_id."').find('dl:has(#'+value+',input[name=\"'+value+'\"],select[name=\"'+value+'\"],textarea[name=\"'+value+'\"])').hide();
 					}
 				}
@@ -504,13 +504,13 @@ class form extends gen_class {
 		});
 	}).trigger('change');";
 				break;
-				
+
 			default: return;
 		}
 		$this->{'jq_'.$type} = true;
 		$this->tpl->add_js($js, 'docready');
 	}
-	
+
 	private function lang($lang, $no_empty=true) {
 		$fallback = ($no_empty) ? $lang : '';
 		return ($this->user->lang($lang, false, false)) ? $this->user->lang($lang) : (($this->game->glang($lang)) ? $this->game->glang($lang) : $fallback);

@@ -249,19 +249,19 @@ function check_unsigned(selector, unsigned_attendees_f, a_checkboxes){
 		if($(selector).prop('checked')) {
 			$.each(userchars, function(index, value){
 				if(memberid != value){
-					$('#member'+value).attr("disabled", true);
+					$('#member'+value).prop("disabled", true);
 					$('#memberid_'+value).css("textDecoration", "line-through");
 					if($('#memroles'+value).length > 0){
-						$('#memroles'+value).attr("disabled", true);
+						$('#memroles'+value).prop("disabled", true);
 					}
 				}
 			});
 		}else{
 			$.each(userchars, function(index, value){
-				$('#member'+value).attr("disabled", false);
+				$('#member'+value).prop("disabled", false);
 				$('#memberid_'+value).css("textDecoration", "none");
 				if($('#memroles'+value).length > 0){
-					$('#memroles'+value).attr("disabled", false);
+					$('#memroles'+value).prop("disabled", false);
 				}
 			});
 		}

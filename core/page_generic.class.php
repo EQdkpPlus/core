@@ -29,23 +29,23 @@ if(!class_exists('page_generic')){
 		private $cd_tag = false;
 		private $cd_params = array('%id%');
 		private $cb_name = '';
-		
-		
+
+
 		private $params = array();
-		
+
 		protected $handler = array(
 			'del'	=> array('process' => 'delete', 'csrf'=>true),
 			'add'	=> array('process' => 'add', 'csrf'=>true),
 			'upd'	=> array('process' => 'update', 'csrf'=>true),
 			'edit'	=> array('process' => 'edit'),
 		);
-		
+
 		protected $url_id = false;
 		protected $simple_head = '';
 		protected $action = '';
 		protected $pre_check = '';
 		protected $url_id_type = 'string';
-		
+
 		public function __construct($pre_check, $handler=false, $pdh_call=array(), $params=null, $cb_name='', $url_id='') {
 			$this->pre_check = $pre_check;
 			$this->simple_head = ($this->in->exists('simple_head')) ? 'simple' : 'full';
@@ -81,7 +81,7 @@ if(!class_exists('page_generic')){
 				'ACTION'	=> $this->action,
 			));
 		}
-		
+
 		public function set_url_id($name, $param){
 			$this->url_id = ($this->url_id_type == 'int') ? intval($param) : (($this->url_id_type == 'float') ? (float)$param : $param);
 			$this->url_id_ext = '&amp;'.$name.'='.$param;
@@ -90,11 +90,11 @@ if(!class_exists('page_generic')){
 				'ACTION'	=> $this->action,
 			));
 		}
-		
+
 		public function get_hptt($hptt_settings, $full_list, $filtered_list, $sub_array, $cache_suffix = '', $sort_suffix = 'sort') {
 			return registry::register('html_pdh_tag_table', array($hptt_settings, $full_list, $filtered_list, $sub_array, $cache_suffix, $sort_suffix));
 		}
-	
+
 		protected function confirm_delete($message='', $url='', $single=false, $options=array()) {
 			$url = ($url) ? $url : $this->env->request;
 			$url .= (strpos($url, '?') !== false) ? '&' : '?';
@@ -114,7 +114,7 @@ if(!class_exists('page_generic')){
 			$options['confirm_name'] = $this->cb_name;
 			$options['message'] = sprintf($message, ((($this->cd_module AND !$single) || (isset($options['force_ajax']) && $options['force_ajax'])) ? '<div class="confirm_content"><span style="display:none;">#replacedata#</span></div>' : ''));
 			if(($this->cb_name == '_class_' OR strpos($this->cb_name, '[]') !== false) AND !$single) {
-				$options['custom_js'] = "$('#mass_del_submit').removeAttr('disabled'); $('form:has(#mass_del_submit)').submit();";
+				$options['custom_js'] = "$('#mass_del_submit').prop('disabled', false); $('form:has(#mass_del_submit)').submit();";
 			}
 			$funcname = 'delete_warning';
 			if(isset($options['function'])) {
@@ -125,12 +125,12 @@ if(!class_exists('page_generic')){
 			$options['height'] = 280;
 			$this->jquery->Dialog($funcname, $this->user->lang('confirm_deletion'), $options, 'confirm');
 		}
-		
+
 		protected function process() {
-			foreach($this->handler as $key => $process) {				
+			foreach($this->handler as $key => $process) {
 				if($this->in->exists($key) AND !is_array(current($process))) {
 					if($this->pre_check && $process['check'] !== false) $this->user->check_auth($process['check']);
-					
+
 					if(isset($process['csrf']) && $process['csrf']) {
 						$blnResult = $this->checkCSRF($key);
 						if (!$blnResult) break;
@@ -142,12 +142,12 @@ if(!class_exists('page_generic')){
 					foreach($process as $subprocess) {
 						if($subprocess['value'] == $this->in->get($key)) {
 							if($this->pre_check && $subprocess['check'] !== false) $this->user->check_auth($subprocess['check']);
-							
+
 							if(isset($subprocess['csrf']) && $subprocess['csrf']) {
 								$blnResult = $this->checkCSRF($key);
 								if (!$blnResult) break;
 							}
-							
+
 							$this->{$subprocess['process']}();
 							break 2;
 						}
@@ -159,7 +159,7 @@ if(!class_exists('page_generic')){
 			}
 			$this->display();
 		}
-		
+
 		/*
 		 * Echoes Additional text for delete_confirm window
 		 * expects ids given via _GET or _POST with key $this->cb_name
@@ -181,20 +181,20 @@ if(!class_exists('page_generic')){
 			echo '<ul><li>'.implode('</li><li>', $text).'</li></ul>';
 			exit;
 		}
-		
+
 		protected function checkCSRF($strProcess){
 			$strAction = get_class($this).$strProcess;
 			$blnCheckGet = $this->user->checkCsrfGetToken($this->in->get('link_hash'), $strAction);
 			$blnCheckPost = $this->user->checkCsrfPostToken($this->in->get($this->user->csrfPostToken()));
 			$blnCheckPostOld = $this->user->checkCsrfPostToken($this->in->get($this->user->csrfPostToken(true)));
-			
+
 			if ($blnCheckGet || $blnCheckPost || $blnCheckPostOld) {
 				return true;
 			}
 			$this->core->message($this->user->lang('error_invalid_session_key'), $this->user->lang('error'), 'red');
 			return false;
 		}
-				
+
 		protected function CSRFGetToken($strProcess){
 			$strAction = get_class($this).$strProcess;
 			return $this->user->csrfGetToken($strAction);

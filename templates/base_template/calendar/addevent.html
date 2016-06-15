@@ -45,7 +45,7 @@ $(document).ready(function() {
 	$('#selectmode').change(function(){
 		$('#selectmode + ul > li').removeClass('open');
 		var value = $(this).val();
-		
+
 		if(value == 'raid'){
 			changeCalendars('1');
 			$('.raid').show();
@@ -59,7 +59,7 @@ $(document).ready(function() {
 			$('#eventsettings').removeClass('floatLeft');
 			$('#eventsettings').width("98%");
 		}
-		
+
 		$('#selectmode + ul > li').html( $('#selectmode + ul > li + ul > li[data-value="'+value+'"]').html() );
 		$('#selectmode + ul > li').data('value', value );
 	});
@@ -69,20 +69,20 @@ $(document).ready(function() {
 		$('#raidmode_class').hide();
 		$('#raidmode_role').hide();
 		$('#raidmode_seperator').hide();
-		$('#attendees_summ').attr('readonly', true);
+		$('#attendees_summ').prop('readonly', true);
 		$('#attendees_summ').val(0);
-		$('.attendees_count').attr('disabled', true);
+		$('.attendees_count').prop('disabled', true);
 		if($(this).val() == 'none'){
 			$('#attendees_summ').val('{ATTENDEE_COUNT}');
-			$('#attendees_summ').attr('readonly', false);
+			$('#attendees_summ').prop('readonly', false);
 		}else if($(this).val() == 'role'){
 			$('#raidmode_role').show();
 			$('#raidmode_seperator').show();
-			$('#raidmode_role').find('.attendees_count').attr('disabled', false);
+			$('#raidmode_role').find('.attendees_count').prop('disabled', false);
 		}else{
 			$('#raidmode_class').show();
 			$('#raidmode_seperator').show();
-			$('#raidmode_class').find('.attendees_count').attr('disabled', false);
+			$('#raidmode_class').find('.attendees_count').prop('disabled', false);
 		}
 	});
 
@@ -200,7 +200,7 @@ function ModalAlert(text){
 function attendeeCount(){
 	var calcsumm = 0;
 	$('.attendees_count').each(function(index) {
-		if(!$(this).attr("disabled")) {
+		if(!$(this).prop("disabled")) {
 			calcsumm += parseInt($(this).val());
 		}
 	});
