@@ -188,7 +188,7 @@ var EQdkpTooltip = new function(){
 						return cached_itts['t_'+$(this).attr('title')];
 					} else {
 						var bla = $.get(mmocms_root_path+'infotooltip/infotooltip_feed.php?direct=1&data='+$(this).attr('title'), response);
-						bla.success(function(data) {
+						bla.done(function(data) {
 							cached_itts['t_'+mytitle] = $.trim(data);
 						});
 						return 'Loading...';

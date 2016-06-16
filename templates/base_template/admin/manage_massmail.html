@@ -42,7 +42,7 @@ function add_template(){
 		var subject = $('#subject').val();
 		var message = $('#mm_body').tinymce().getContent();
 		$.post("manage_massmail.php{SID}&add_template=true&link_hash={CSRF_ADDTEMPLATE_TOKEN}", { templatename: templatename, subject: subject, message: message, eventid:{NUM_EVENT_ID}})
-		.success(function(data) {
+		.done(function(data) {
 			$('.template_loading_indicator').hide();
 			var mydata = $.trim(data);
 			if(mydata.substring(0, 2) == 'ok'){
@@ -72,7 +72,7 @@ function add_template(){
 				$('#notify_container').notify('create', 'error', {text: {L_massmail_save_nosuccess|jsencode},title: '',custom: true,},{expires: 30000, speed: 1000});
 			}
 		})
-		.error(function(data) { 
+		.fail(function(data) { 
 			$('#notify_container').notify('create', 'error', {text: {L_massmail_save_nosuccess|jsencode},title: '',custom: true,},{expires: 30000, speed: 1000});	
 		});
 		
@@ -95,7 +95,7 @@ function load_template(){
 	$('.template_loading_indicator').show();
 	
 	$.post("manage_massmail.php{SID}&load_template=true", { template: templatename})
-	.success(function(data) {
+	.done(function(data) {
 		$('.template_loading_indicator').hide();
 		var mydata = $.trim(data);
 		if(mydata.substring(0, 2) == 'ok'){
@@ -117,7 +117,7 @@ function load_template(){
 			recent_template = templatename;
 		}
 	})
-	.error(function(data) { 
+	.fail(function(data) { 
 	});
 }
 
