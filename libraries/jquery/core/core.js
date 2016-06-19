@@ -31625,7 +31625,7 @@ var tooltip = $.widget( "ui.tooltip", {
 		}
 	});
 
-	/* 
+	/*
 	* Timepicker manager.
 	* Use the singleton instance of this class, $.timepicker, to interact with the time picker.
 	* Settings for (groups of) time pickers are maintained in an instance object,
@@ -31752,7 +31752,7 @@ var tooltip = $.widget( "ui.tooltip", {
 		support: {},
 		control: null,
 
-		/* 
+		/*
 		* Override the default settings for all instances of the time picker.
 		* @param  {Object} settings  object - the new settings to use as defaults (anonymous object)
 		* @return {Object} the manager object
@@ -31825,7 +31825,7 @@ var tooltip = $.widget( "ui.tooltip", {
 
 			// detect which units are supported
 			tp_inst.support = detectSupport(
-					tp_inst._defaults.timeFormat + 
+					tp_inst._defaults.timeFormat +
 					(tp_inst._defaults.pickerTimeFormat ? tp_inst._defaults.pickerTimeFormat : '') +
 					(tp_inst._defaults.altTimeFormat ? tp_inst._defaults.altTimeFormat : ''));
 
@@ -32024,7 +32024,7 @@ var tooltip = $.widget( "ui.tooltip", {
 					}
 					html += '</dd>';
 				}
-				
+
 				// Timezone
 				var showTz = o.showTimezone !== null ? o.showTimezone : this.support.timezone;
 				html += '<dt class="ui_tpicker_timezone_label' + (showTz ? '' : noDisplay) + '">' + o.timezoneText + '</dt>';
@@ -32039,7 +32039,7 @@ var tooltip = $.widget( "ui.tooltip", {
 					$tp.prepend('<div class="ui-widget-header ui-helper-clearfix ui-corner-all">' + '<div class="ui-datepicker-title">' + o.timeOnlyTitle + '</div>' + '</div>');
 					$dp.find('.ui-datepicker-header, .ui-datepicker-calendar').hide();
 				}
-				
+
 				// add sliders, adjust grids, add events
 				for (i = 0, l = tp_inst.units.length; i < l; i++) {
 					litem = tp_inst.units[i];
@@ -32074,7 +32074,7 @@ var tooltip = $.widget( "ui.tooltip", {
 										}
 									}
 								}
-								
+
 								tp_inst.control.value(tp_inst, tp_inst[f + '_slider'], litem, n);
 
 								tp_inst._onTimeChange();
@@ -32114,7 +32114,7 @@ var tooltip = $.widget( "ui.tooltip", {
 					tp_inst._afterInject();
 				});
 				// End timezone options
-				
+
 				// inject timepicker into datepicker
 				var $buttonPanel = $dp.find('.ui-datepicker-buttonpane');
 				if ($buttonPanel.length) {
@@ -32150,7 +32150,7 @@ var tooltip = $.widget( "ui.tooltip", {
 					var sliderAccessArgs = this._defaults.sliderAccessArgs,
 						rtl = this._defaults.isRTL;
 					sliderAccessArgs.isRTL = rtl;
-						
+
 					setTimeout(function () { // fix for inline mode
 						if ($tp.find('.ui-slider-access').length === 0) {
 							$tp.find('.ui-slider:visible').sliderAccess(sliderAccessArgs);
@@ -32302,44 +32302,44 @@ var tooltip = $.widget( "ui.tooltip", {
 				}
 			}
 
-			if (dp_inst.settings.minTime!==null) {				
-				var tempMinTime=new Date("01/01/1970 " + dp_inst.settings.minTime);				
+			if (dp_inst.settings.minTime!==null) {
+				var tempMinTime=new Date("01/01/1970 " + dp_inst.settings.minTime);
 				if (this.hour<tempMinTime.getHours()) {
 					this.hour=this._defaults.hourMin=tempMinTime.getHours();
-					this.minute=this._defaults.minuteMin=tempMinTime.getMinutes();							
+					this.minute=this._defaults.minuteMin=tempMinTime.getMinutes();
 				} else if (this.hour===tempMinTime.getHours() && this.minute<tempMinTime.getMinutes()) {
 					this.minute=this._defaults.minuteMin=tempMinTime.getMinutes();
-				} else {						
+				} else {
 					if (this._defaults.hourMin<tempMinTime.getHours()) {
 						this._defaults.hourMin=tempMinTime.getHours();
-						this._defaults.minuteMin=tempMinTime.getMinutes();					
+						this._defaults.minuteMin=tempMinTime.getMinutes();
 					} else if (this._defaults.hourMin===tempMinTime.getHours()===this.hour && this._defaults.minuteMin<tempMinTime.getMinutes()) {
-						this._defaults.minuteMin=tempMinTime.getMinutes();						
+						this._defaults.minuteMin=tempMinTime.getMinutes();
 					} else {
 						this._defaults.minuteMin=0;
 					}
-				}				
+				}
 			}
-			
-			if (dp_inst.settings.maxTime!==null) {				
+
+			if (dp_inst.settings.maxTime!==null) {
 				var tempMaxTime=new Date("01/01/1970 " + dp_inst.settings.maxTime);
 				if (this.hour>tempMaxTime.getHours()) {
-					this.hour=this._defaults.hourMax=tempMaxTime.getHours();						
+					this.hour=this._defaults.hourMax=tempMaxTime.getHours();
 					this.minute=this._defaults.minuteMax=tempMaxTime.getMinutes();
-				} else if (this.hour===tempMaxTime.getHours() && this.minute>tempMaxTime.getMinutes()) {							
-					this.minute=this._defaults.minuteMax=tempMaxTime.getMinutes();						
+				} else if (this.hour===tempMaxTime.getHours() && this.minute>tempMaxTime.getMinutes()) {
+					this.minute=this._defaults.minuteMax=tempMaxTime.getMinutes();
 				} else {
 					if (this._defaults.hourMax>tempMaxTime.getHours()) {
 						this._defaults.hourMax=tempMaxTime.getHours();
-						this._defaults.minuteMax=tempMaxTime.getMinutes();					
+						this._defaults.minuteMax=tempMaxTime.getMinutes();
 					} else if (this._defaults.hourMax===tempMaxTime.getHours()===this.hour && this._defaults.minuteMax>tempMaxTime.getMinutes()) {
-						this._defaults.minuteMax=tempMaxTime.getMinutes();						
+						this._defaults.minuteMax=tempMaxTime.getMinutes();
 					} else {
 						this._defaults.minuteMax=59;
 					}
-				}						
+				}
 			}
-			
+
 			if (adjustSliders !== undefined && adjustSliders === true) {
 				var hourMax = parseInt((this._defaults.hourMax - ((this._defaults.hourMax - this._defaults.hourMin) % this._defaults.stepHour)), 10),
 					minMax = parseInt((this._defaults.minuteMax - ((this._defaults.minuteMax - this._defaults.minuteMin) % this._defaults.stepMinute)), 10),
@@ -32433,11 +32433,11 @@ var tooltip = $.widget( "ui.tooltip", {
 			// If the update was done using the sliders, update the input field.
 			var hasChanged = (
 						hour !== parseInt(this.hour,10) || // sliders should all be numeric
-						minute !== parseInt(this.minute,10) || 
-						second !== parseInt(this.second,10) || 
-						millisec !== parseInt(this.millisec,10) || 
-						microsec !== parseInt(this.microsec,10) || 
-						(this.ampm.length > 0 && (hour < 12) !== ($.inArray(this.ampm.toUpperCase(), this.amNames) !== -1)) || 
+						minute !== parseInt(this.minute,10) ||
+						second !== parseInt(this.second,10) ||
+						millisec !== parseInt(this.millisec,10) ||
+						microsec !== parseInt(this.microsec,10) ||
+						(this.ampm.length > 0 && (hour < 12) !== ($.inArray(this.ampm.toUpperCase(), this.amNames) !== -1)) ||
 						(this.timezone !== null && timezone !== this.timezone.toString()) // could be numeric or "EST" format, so use toString()
 					);
 
@@ -32510,8 +32510,8 @@ var tooltip = $.widget( "ui.tooltip", {
 		*/
 		_updateDateTime: function (dp_inst) {
 			dp_inst = this.inst || dp_inst;
-			var dtTmp = (dp_inst.currentYear > 0? 
-							new Date(dp_inst.currentYear, dp_inst.currentMonth, dp_inst.currentDay) : 
+			var dtTmp = (dp_inst.currentYear > 0?
+							new Date(dp_inst.currentYear, dp_inst.currentMonth, dp_inst.currentDay) :
 							new Date(dp_inst.selectedYear, dp_inst.selectedMonth, dp_inst.selectedDay)),
 				dt = $.datepicker._daylightSavingAdjust(dtTmp),
 				//dt = $.datepicker._daylightSavingAdjust(new Date(dp_inst.selectedYear, dp_inst.selectedMonth, dp_inst.selectedDay)),
@@ -32521,7 +32521,7 @@ var tooltip = $.widget( "ui.tooltip", {
 				timeAvailable = dt !== null && this.timeDefined;
 			this.formattedDate = $.datepicker.formatDate(dateFmt, (dt === null ? new Date() : dt), formatCfg);
 			var formattedDateTime = this.formattedDate;
-			
+
 			// if a slider was changed but datepicker doesn't have a value yet, set it
 			if (dp_inst.lastVal === "") {
                 dp_inst.currentYear = dp_inst.selectedYear;
@@ -32531,7 +32531,7 @@ var tooltip = $.widget( "ui.tooltip", {
 
 			/*
 			* remove following lines to force every changes in date picker to change the input value
-			* Bug descriptions: when an input field has a default value, and click on the field to pop up the date picker. 
+			* Bug descriptions: when an input field has a default value, and click on the field to pop up the date picker.
 			* If the user manually empty the value in the input field, the date picker will never change selected value.
 			*/
 			//if (dp_inst.lastVal !== undefined && (dp_inst.lastVal.length > 0 && this.$input.val().length === 0)) {
@@ -32556,7 +32556,7 @@ var tooltip = $.widget( "ui.tooltip", {
 				var altFormattedDateTime = '',
 					altSeparator = this._defaults.altSeparator !== null ? this._defaults.altSeparator : this._defaults.separator,
 					altTimeSuffix = this._defaults.altTimeSuffix !== null ? this._defaults.altTimeSuffix : this._defaults.timeSuffix;
-				
+
 				if (!this._defaults.timeOnly) {
 					if (this._defaults.altFormat) {
 						altFormattedDateTime = $.datepicker.formatDate(this._defaults.altFormat, (dt === null ? new Date() : dt), formatCfg);
@@ -32623,7 +32623,7 @@ var tooltip = $.widget( "ui.tooltip", {
 						stop: function (event, ui) {
 							tp_inst._onSelectHandler();
 						}
-					});	
+					});
 				},
 				options: function (tp_inst, obj, unit, opts, val) {
 					if (tp_inst._defaults.isRTL) {
@@ -32636,7 +32636,7 @@ var tooltip = $.widget( "ui.tooltip", {
 							}
 							return obj.slider(opts);
 						}
-						var min = opts.min, 
+						var min = opts.min,
 							max = opts.max;
 						opts.min = opts.max = null;
 						if (min !== undefined) {
@@ -32699,7 +32699,7 @@ var tooltip = $.widget( "ui.tooltip", {
 						if (val === undefined) {
 							return $t.data(opts);
 						}
-						o[opts] = val;	
+						o[opts] = val;
 					}
 					else { o = opts; }
 					return tp_inst.control.create(tp_inst, obj, $t.data('unit'), $t.val(), o.min>=0 ? o.min : $t.data('min'), o.max || $t.data('max'), o.step || $t.data('step'));
@@ -32934,11 +32934,11 @@ var tooltip = $.widget( "ui.tooltip", {
 				}
 				catch (err2) {
 					$.timepicker.log("Unable to parse \ntimeString: " + s + "\ntimeFormat: " + f);
-				}				
+				}
 			}
 			return false;
 		}; // end looseParse
-		
+
 		if (typeof o.parse === "function") {
 			return o.parse(timeFormat, timeString, o);
 		}
@@ -33087,11 +33087,11 @@ var tooltip = $.widget( "ui.tooltip", {
 											.replace(/tT/g, ampm ? 'AaPpMm' : '')
 											.replace(/T/g, ampm ? 'AP' : '')
 											.replace(/tt/g, ampm ? 'apm' : '')
-											.replace(/t/g, ampm ? 'ap' : '') + 
-											" " + tp_inst._defaults.separator + 
-											tp_inst._defaults.timeSuffix + 
-											(tz ? tp_inst._defaults.timezoneList.join('') : '') + 
-											(tp_inst._defaults.amNames.join('')) + (tp_inst._defaults.pmNames.join('')) + 
+											.replace(/t/g, ampm ? 'ap' : '') +
+											" " + tp_inst._defaults.separator +
+											tp_inst._defaults.timeSuffix +
+											(tz ? tp_inst._defaults.timezoneList.join('') : '') +
+											(tp_inst._defaults.amNames.join('')) + (tp_inst._defaults.pmNames.join('')) +
 											dateChars,
 					chr = String.fromCharCode(event.charCode === undefined ? event.keyCode : event.charCode);
 				return event.ctrlKey || (chr < ' ' || !dateChars || datetimeChars.indexOf(chr) > -1);
@@ -33114,11 +33114,11 @@ var tooltip = $.widget( "ui.tooltip", {
 				var altFormat = tp_inst._defaults.altFormat || tp_inst._defaults.dateFormat,
 					date = this._getDate(inst),
 					formatCfg = $.datepicker._getFormatConfig(inst),
-					altFormattedDateTime = '', 
-					altSeparator = tp_inst._defaults.altSeparator ? tp_inst._defaults.altSeparator : tp_inst._defaults.separator, 
+					altFormattedDateTime = '',
+					altSeparator = tp_inst._defaults.altSeparator ? tp_inst._defaults.altSeparator : tp_inst._defaults.separator,
 					altTimeSuffix = tp_inst._defaults.altTimeSuffix ? tp_inst._defaults.altTimeSuffix : tp_inst._defaults.timeSuffix,
 					altTimeFormat = tp_inst._defaults.altTimeFormat !== null ? tp_inst._defaults.altTimeFormat : tp_inst._defaults.timeFormat;
-				
+
 				altFormattedDateTime += $.datepicker.formatTime(altTimeFormat, tp_inst, tp_inst._defaults) + altTimeSuffix;
 				if (!tp_inst._defaults.timeOnly && !tp_inst._defaults.altFieldTimeOnly && date !== null) {
 					if (tp_inst._defaults.altFormat) {
@@ -33132,7 +33132,7 @@ var tooltip = $.widget( "ui.tooltip", {
 			}
 		}
 		else {
-			$.datepicker._base_updateAlternate(inst);	
+			$.datepicker._base_updateAlternate(inst);
 		}
 	};
 
@@ -33222,7 +33222,7 @@ var tooltip = $.widget( "ui.tooltip", {
 			tp_inst.millisec = date ? date.getMilliseconds() : defaults.millisec;
 			tp_inst.microsec = date ? date.getMicroseconds() : defaults.microsec;
 
-			//check if within min/max times.. 
+			//check if within min/max times..
 			tp_inst._limitMinMaxDateTime(inst, true);
 
 			tp_inst._onTimeChange();
@@ -33290,9 +33290,9 @@ var tooltip = $.widget( "ui.tooltip", {
 		} else {
 			tp_date = date;
 		}
-		
-		// This is important if you are using the timezone option, javascript's Date 
-		// object will only return the timezone offset for the current locale, so we 
+
+		// This is important if you are using the timezone option, javascript's Date
+		// object will only return the timezone offset for the current locale, so we
 		// adjust it accordingly.  If not using timezone option this won't matter..
 		// If a timezone is different in tp, keep the timezone as is
 		if (tp_inst && tp_date) {
@@ -33333,8 +33333,8 @@ var tooltip = $.widget( "ui.tooltip", {
 				date.setHours(tp_inst.hour, tp_inst.minute, tp_inst.second, tp_inst.millisec);
 				date.setMicroseconds(tp_inst.microsec);
 
-				// This is important if you are using the timezone option, javascript's Date 
-				// object will only return the timezone offset for the current locale, so we 
+				// This is important if you are using the timezone option, javascript's Date
+				// object will only return the timezone offset for the current locale, so we
 				// adjust it accordingly.  If not using timezone option this won't matter..
 				if (tp_inst.timezone != null) {
 					// look out for DST if tz wasn't specified
@@ -33465,8 +33465,8 @@ var tooltip = $.widget( "ui.tooltip", {
 				tp_inst._defaults.onSelect = onselect;
 			}
 
-			// Datepicker will override our date when we call _base_optionDatepicker when 
-			// calling minDate/maxDate, so we will first grab the value, call 
+			// Datepicker will override our date when we call _base_optionDatepicker when
+			// calling minDate/maxDate, so we will first grab the value, call
 			// _base_optionDatepicker, then set our value back.
 			if(min || max){
 				$target = $(target);
@@ -33481,7 +33481,7 @@ var tooltip = $.widget( "ui.tooltip", {
 		}
 		return this._base_optionDatepicker.call($.datepicker, target, name_clone || name, value);
 	};
-	
+
 	/*
 	* jQuery isEmptyObject does not check hasOwnProperty - if someone has added to the object prototype,
 	* it will return false for all objects
@@ -33639,7 +33639,7 @@ var tooltip = $.widget( "ui.tooltip", {
 			hours = (off - minutes) / 60,
 			iso = iso8601 ? ':' : '',
 			tz = (off >= 0 ? '+' : '-') + ('0' + Math.abs(hours)).slice(-2) + iso + ('0' + Math.abs(minutes)).slice(-2);
-		
+
 		if (tz === '+00:00') {
 			return 'Z';
 		}
@@ -33783,7 +33783,7 @@ var tooltip = $.widget( "ui.tooltip", {
 					date.setMilliseconds(date.getMilliseconds() - options.minInterval);
 				}
 			}
-			
+
 			if (date.getTime) {
 				other[method].call(other, 'option', option, date);
 			}
@@ -33809,7 +33809,7 @@ var tooltip = $.widget( "ui.tooltip", {
 		}, options, options.end));
 
 		checkDates(startTime, endTime);
-		
+
 		selected(startTime, endTime, 'minDate');
 		selected(endTime, startTime, 'maxDate');
 
@@ -34979,7 +34979,7 @@ var tooltip = $.widget( "ui.tooltip", {
 
 
 (function($){
-	
+
 	function EasyDropDown(){
 		this.isField = true,
 		this.down = false,
@@ -34992,13 +34992,13 @@ var tooltip = $.widget( "ui.tooltip", {
 		this.wrapperClass = 'dropdown',
 		this.onChange = null;
 	};
-	
+
 	EasyDropDown.prototype = {
 		constructor: EasyDropDown,
 		instances: {},
 		init: function(domNode, settings){
 			var	self = this;
-			
+
 			$.extend(self, settings);
 			self.$select = $(domNode);
 			self.id = domNode.id;
@@ -35042,12 +35042,12 @@ var tooltip = $.widget( "ui.tooltip", {
 				self.render();
 			};
 		},
-	
+
 		render: function(){
 			var	self = this,
 				touchClass = self.isTouch && self.nativeTouch ? ' touch' : '',
 				disabledClass = self.disabled ? ' disabled' : '';
-			
+
 			self.$container = self.$select.wrap('<div class="'+self.wrapperClass+touchClass+disabledClass+'"><span class="old"/></div>').parent().parent();
 			self.$active = $('<span class="selected">'+self.selected.title+'</span>').appendTo(self.$container);
 			self.$carat = $('<span class="carat"/>').prependTo(self.$container);
@@ -35060,23 +35060,23 @@ var tooltip = $.widget( "ui.tooltip", {
 				self.$dropDown.append('<li'+active+'>'+option.title+'</li>');
 			});
 			self.$items = self.$dropDown.find('li');
-			
+
 			if(self.cutOff && self.$items.length > self.cutOff)self.$container.addClass('scrollable');
-			
+
 			self.getMaxHeight();
-	
+
 			if(self.isTouch && self.nativeTouch){
 				self.bindTouchHandlers();
 			} else {
 				self.bindHandlers();
 			};
 		},
-		
+
 		getMaxHeight: function(){
 			var self = this;
-			
+
 			self.maxHeight = 0;
-			
+
 			for(i = 0; i < self.$items.length; i++){
 				var $item = self.$items.eq(i);
 				self.maxHeight += $item.outerHeight();
@@ -35085,7 +35085,7 @@ var tooltip = $.widget( "ui.tooltip", {
 				};
 			};
 		},
-		
+
 		bindTouchHandlers: function(){
 			var	self = this;
 			self.$container.on('click.easyDropDown',function(){
@@ -35096,11 +35096,11 @@ var tooltip = $.widget( "ui.tooltip", {
 					var	$selected = $(this).find('option:selected'),
 						title = $selected.text(),
 						value = $selected.val();
-						
+
 					self.$active.text(title);
 					if(typeof self.onChange === 'function'){
 						self.onChange.call(self.$select[0],{
-							title: title, 
+							title: title,
 							value: value
 						});
 					};
@@ -35113,7 +35113,7 @@ var tooltip = $.widget( "ui.tooltip", {
 				}
 			});
 		},
-	
+
 		bindHandlers: function(){
 			var	self = this;
 			self.query = '';
@@ -35131,7 +35131,7 @@ var tooltip = $.widget( "ui.tooltip", {
 					};
 				}
 			});
-			
+
 			$('body').on('click.easyDropDown.'+self.id,function(e){
 				var $target = $(e.target),
 					classNames = self.wrapperClass.split(' ').join('.');
@@ -35146,7 +35146,7 @@ var tooltip = $.widget( "ui.tooltip", {
 					var index = $(this).index();
 					self.select(index);
 					if(!self.isTouch || self.nativeTouch === true){
-						self.$select.focus();  
+						self.$select.focus();
 					}
 
 				},
@@ -35225,7 +35225,7 @@ var tooltip = $.widget( "ui.tooltip", {
 					},1200);
 				}
 			});
-			
+
 			self.$dropDown.on('scroll.easyDropDown',function(e){
 				if(self.$dropDown[0].scrollTop >= self.$dropDown[0].scrollHeight - self.maxHeight){
 					self.$container.addClass('bottom');
@@ -35233,7 +35233,7 @@ var tooltip = $.widget( "ui.tooltip", {
 					self.$container.removeClass('bottom');
 				};
 			});
-			
+
 			if(self.$form.length){
 				self.$form.on('reset.easyDropDown', function(){
 					var active = self.hasLabel ? self.label : self.options[0].title;
@@ -35241,10 +35241,10 @@ var tooltip = $.widget( "ui.tooltip", {
 				});
 			};
 		},
-		
+
 		unbindHandlers: function(){
 			var self = this;
-			
+
 			self.$container
 				.add(self.$select)
 				.add(self.$items)
@@ -35253,7 +35253,7 @@ var tooltip = $.widget( "ui.tooltip", {
 				.off('.easyDropDown');
 			$('body').off('.'+self.id);
 		},
-		
+
 		open: function(){
 			var self = this,
 				scrollTop = window.scrollY || document.documentElement.scrollTop,
@@ -35270,7 +35270,7 @@ var tooltip = $.widget( "ui.tooltip", {
 			self.$scrollWrapper.css('height',self.maxHeight+'px');
 			self.down = true;
 		},
-		
+
 		close: function(){
 			var self = this;
 			self.$container.removeClass('open');
@@ -35279,7 +35279,7 @@ var tooltip = $.widget( "ui.tooltip", {
 			self.query = '';
 			self.down = false;
 		},
-		
+
 		closeAll: function(){
 			var self = this,
 				instances = Object.getPrototypeOf(self).instances;
@@ -35288,14 +35288,14 @@ var tooltip = $.widget( "ui.tooltip", {
 				instance.close();
 			};
 		},
-	
+
 		select: function(index){
 			var self = this;
-			
+
 			if(typeof index === 'string'){
 				index = self.$select.find('option[value='+index+']').index();
 			};
-			
+
 			var	option = self.options[index],
 				selectIndex = self.hasLabel ? index + 1 : index;
 			self.$items.removeClass('active').eq(index).addClass('active');
@@ -35307,7 +35307,7 @@ var tooltip = $.widget( "ui.tooltip", {
 				.prop('selected',true)
 				.parent()
 				.trigger('change');
-				
+
 			self.selected = {
 				index: index,
 				title: option.title
@@ -35315,23 +35315,23 @@ var tooltip = $.widget( "ui.tooltip", {
 			self.focusIndex = i;
 			if(typeof self.onChange === 'function'){
 				self.onChange.call(self.$select[0],{
-					title: option.title, 
+					title: option.title,
 					value: option.value
 				});
 			};
 		},
-		
+
 		search: function(){
 			var self = this,
 				lock = function(i){
 					self.focusIndex = i;
 					self.$items.removeClass('focus').eq(self.focusIndex).addClass('focus');
-					self.scrollToView();	
+					self.scrollToView();
 				},
 				getTitle = function(i){
 					return self.options[i].title.toUpperCase();
 				};
-				
+
 			for(i = 0; i < self.options.length; i++){
 				var title = getTitle(i);
 				if(title.indexOf(self.query) == 0){
@@ -35339,7 +35339,7 @@ var tooltip = $.widget( "ui.tooltip", {
 					return;
 				};
 			};
-			
+
 			for(i = 0; i < self.options.length; i++){
 				var title = getTitle(i);
 				if(title.indexOf(self.query) > -1){
@@ -35348,17 +35348,17 @@ var tooltip = $.widget( "ui.tooltip", {
 				};
 			};
 		},
-		
+
 		scrollToView: function(){
 			var self = this;
 			if(self.focusIndex >= self.cutOff){
 				var $focusItem = self.$items.eq(self.focusIndex),
 					scroll = ($focusItem.outerHeight() * (self.focusIndex + 1)) - self.maxHeight;
-			
+
 				self.$dropDown.scrollTop(scroll);
 			};
 		},
-		
+
 		notInViewport: function(scrollTop){
 			var self = this,
 				range = {
@@ -35366,14 +35366,14 @@ var tooltip = $.widget( "ui.tooltip", {
 					max: scrollTop + (window.innerHeight || document.documentElement.clientHeight)
 				},
 				menuBottom = self.$dropDown.offset().top + self.maxHeight;
-				
+
 			if(menuBottom >= range.min && menuBottom <= range.max){
 				return 0;
 			} else {
 				return (menuBottom - range.max) + 5;
 			};
 		},
-		
+
 		destroy: function(){
 			var self = this;
 			self.unbindHandlers();
@@ -35381,7 +35381,7 @@ var tooltip = $.widget( "ui.tooltip", {
 			self.$select.unwrap();
 			delete Object.getPrototypeOf(self).instances[self.$select[0].id];
 		},
-		
+
 		disable: function(){
 			var self = this;
 			self.disabled = true;
@@ -35389,7 +35389,7 @@ var tooltip = $.widget( "ui.tooltip", {
 			self.$select.attr('disabled',true);
 			if(!self.down)self.close();
 		},
-		
+
 		enable: function(){
 			var self = this;
 			self.disabled = false;
@@ -35397,7 +35397,7 @@ var tooltip = $.widget( "ui.tooltip", {
 			self.$select.attr('disabled',false);
 		}
 	};
-	
+
 	var instantiate = function(domNode, settings){
 			domNode.id = !domNode.id ? 'EasyDropDown'+rand() : domNode.id;
 			var instance = new EasyDropDown();
@@ -35409,12 +35409,12 @@ var tooltip = $.widget( "ui.tooltip", {
 		rand = function(){
 			return ('00000'+(Math.random()*16777216<<0).toString(16)).substr(-6).toUpperCase();
 		};
-	
+
 	$.fn.easyDropDown = function(){
 		var args = arguments,
 			dataReturn = [],
 			eachReturn;
-			
+
 		eachReturn = this.each(function(){
 			if(args && typeof args[0] === 'string'){
 				var data = EasyDropDown.prototype.instances[this.id][args[0]](args[1], args[2]);
@@ -35423,14 +35423,14 @@ var tooltip = $.widget( "ui.tooltip", {
 				instantiate(this, args[0]);
 			};
 		});
-		
+
 		if(dataReturn.length){
 			return dataReturn.length > 1 ? dataReturn : dataReturn[0];
 		} else {
 			return eachReturn;
 		};
 	};
-	
+
 	$(function(){
 		if(typeof Object.getPrototypeOf !== 'function'){
 			if(typeof 'test'.__proto__ === 'object'){
@@ -35443,10 +35443,10 @@ var tooltip = $.widget( "ui.tooltip", {
 				};
 			};
 		};
-		
+
 		$('select.dropdown').each(function(){
 			var json = $(this).attr('data-settings');
-				settings = json ? $.parseJSON(json) : {}; 
+				settings = json ? $.parseJSON(json) : {};
 			instantiate(this, settings);
 		});
 	});
@@ -35455,11 +35455,11 @@ var tooltip = $.widget( "ui.tooltip", {
     Equal Heights Plugin
     Equalize the heights of elements. Great for columns or any elements
     that need to be the same size (floats, etc).
-  
+
     Version 1.01
     Updated 1/30/2014
- 
-    Copyright (c) 2008 Rob Glazebrook (cssnewbie.com) 
+
+    Copyright (c) 2008 Rob Glazebrook (cssnewbie.com)
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -35472,9 +35472,9 @@ var tooltip = $.widget( "ui.tooltip", {
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+
     Usage: $(object).equalHeights([minHeight], [maxHeight]);
-  
+
     Example 1: $(".cols").equalHeights(); Sets all columns to the same height.
     Example 2: $(".cols").equalHeights(400); Sets all cols to at least 400px tall.
     Example 3: $(".cols").equalHeights(100,300); Cols are at least 100 but no more
@@ -35569,7 +35569,7 @@ feature.formdata = window.FormData !== undefined;
 var hasProp = !!$.fn.prop;
 
 // attr2 uses prop when it can but checks the return type for
-// an expected string.  this accounts for the case where a form 
+// an expected string.  this accounts for the case where a form
 // contains inputs with names like "action" or "method"; in those
 // cases "prop" returns the element
 $.fn.attr2 = function() {
@@ -35958,7 +35958,7 @@ $.fn.ajaxSubmit = function(options) {
 
         var CLIENT_TIMEOUT_ABORT = 1;
         var SERVER_ABORT = 2;
-                
+
         function getDoc(frame) {
             /* it looks like contentWindow or contentDocument do not
              * carry the protocol property in ie8, when running under ssl
@@ -35966,9 +35966,9 @@ $.fn.ajaxSubmit = function(options) {
              * the protocol is know but not on the other two objects. strange?
              * "Same origin policy" http://en.wikipedia.org/wiki/Same_origin_policy
              */
-            
+
             var doc = null;
-            
+
             // IE8 cascading access check
             try {
                 if (frame.contentWindow) {
@@ -36004,8 +36004,8 @@ $.fn.ajaxSubmit = function(options) {
         // take a breath so that pending repaints get some cpu time before the upload starts
         function doSubmit() {
             // make sure form attrs are set
-            var t = $form.attr2('target'), 
-                a = $form.attr2('action'), 
+            var t = $form.attr2('target'),
+                a = $form.attr2('action'),
                 mp = 'multipart/form-data',
                 et = $form.attr('enctype') || $form.attr('encoding') || mp;
 
@@ -36116,7 +36116,7 @@ $.fn.ajaxSubmit = function(options) {
             if (xhr.aborted || callbackProcessed) {
                 return;
             }
-            
+
             doc = getDoc(io);
             if(!doc) {
                 log('cannot access response document');
@@ -36788,21 +36788,24 @@ function log() {
 
 		//pass the options variable to the function
 		jcollapser: function(options) {
-			
+
 			//Set the default values, use comma to separate the settings, example:
 			var defaults = {
 				state			: 'active',
 				persistence		: true,
 			}
-			
+
 			var hasLocalstorage = function(){
+				var testKey = 'test', storage = window.sessionStorage;
 				try {
-					return ('localStorage' in window) && window[localstorage] !== null;
-				} catch(e) {
+					storage.setItem(testKey, '1');
+					storage.removeItem(testKey);
+					return true;
+				}catch (error){
 					return false;
 				}
 			}
-			
+
 			var debug			= true;
 			var options 		= $.extend(defaults, options);
 			var o				= options;
@@ -36810,18 +36813,18 @@ function log() {
 			var state			= (hasLocalstorage()) ? localStorage.getItem(n_persistence) : false;
 			var container		= this;
 			state				= (state) ? state : options.state;
-			
+
 			//Collapse the container on load if needed
 			$('.toggle_container', this).hide();
 			if(state == 'active'){
 				$('.toggle_container', this).show();
 			}
-			
+
 			// add the active class to the active state..
 			if($('.toggle_container', this).is(":visible")){
 				$('.toggle_button', this).addClass("active");
 			}
-	
+
 			//Slide up and down on click
 			$('.toggle_button', this).click(function(){
 				$('.toggle_container', container).slideToggle("slow", function() {
@@ -37491,7 +37494,7 @@ function log() {
 				this._sort_current === this._uiHash().item.index())) {
 				this._trigger("relocate", this._relocate_event, this._uiHash());
 			}
-			
+
 			// mjs - clean last empty ul/ol
 			for (i = this.items.length - 1; i >= 0; i--) {
 				item = this.items[i].item[0];
@@ -38157,7 +38160,7 @@ function log() {
       return value;
     },
 
-    // this exists as a separate method so that the developer 
+    // this exists as a separate method so that the developer
     // can easily override it.
     _setButtonValue: function(value) {
       this.buttonlabel.text(value);
@@ -38712,7 +38715,7 @@ function log() {
       this.openNotifications = this.openNotifications || 0;
 
       // return a new notification instance
-      return new $.ech.notify.instance(this)._create(msg, $.extend({}, this.options, opts), tpl);            
+      return new $.ech.notify.instance(this)._create(msg, $.extend({}, this.options, opts), tpl);
     }
   });
 
@@ -38820,7 +38823,7 @@ function log() {
  * qTip2 - Pretty powerful tooltips - v2.2.1
  * http://qtip2.com
  *
- * Copyright (c) 2014 
+ * Copyright (c) 2014
  * Released under the MIT licenses
  * http://jquery.org/license
  *
@@ -39782,7 +39785,7 @@ C.string = function(join) {
 	var x = this.x, y = this.y;
 
 	var result = x !== y ?
-		(x === 'center' || y !== 'center' && (this.precedance === Y || this.forceY) ? 
+		(x === 'center' || y !== 'center' && (this.precedance === Y || this.forceY) ?
 			[y,x] : [x,y]
 		) :
 	[x];
@@ -42868,63 +42871,63 @@ $.extend(TRUE, QTIP.defaults, {
 
 		_domNodeInserted: function(){
 			if (this._settings.debug) console.log("dom");
-			
+
 			this._domInserted = 1;
 		},
 
 		init: function (options, selector){
 			this._settings = options;
 			this._selector = selector;
-			
+
 			this._elements = $(selector);
 			this._refresh();
-			
+
 			$("html").bind("DOMNodeInserted", function( e ) {
 				if (e.target.className != "user_time") {
 					$.proxy(relativeTime, "_domNodeInserted")();
 				}
 			});
-			
+
 			this._periodic();
 			this._periodicDomInserted();
 		},
-		
+
 		_periodic: function (){
 			if (this._settings.debug) console.log("periodic");
-			
+
 			this._refresh();
-		
+
 			window.setTimeout($.proxy(function() {
 				relativeTime._periodic();
 			}), 60000);
 		},
-		
+
 		_periodicDomInserted: function() {
 			if (this._domInserted){
 				this._elements = $(this._selector);
 				this._refresh();
-				
-				this._domInserted = 0;	
+
+				this._domInserted = 0;
 			}
-			
+
 			window.setTimeout($.proxy(function() {
 				relativeTime._periodicDomInserted();
 			}), 500);
 		},
-		
+
 		_refresh: function (){
 			if (this._settings.debug) console.log("refresh");
-						
+
 			this._elements.each($.proxy(this._refreshElement, this));
 		},
-		
+
 		_refreshElement: function(index, element){
 			var $element = $(element);
 			timestamp = moment($element.attr('datetime'));
 			unix = moment().unix();
 			if (moment.isMoment(timestamp)){
 				delta = unix - timestamp.unix();
-				
+
 				if (this._settings.debug) console.log("Delta: "+delta);
 				if (this._settings.disableAtDiff){
 					if (delta <= this._settings.disableAtDiff){
@@ -42933,12 +42936,12 @@ $.extend(TRUE, QTIP.defaults, {
 				}
 
 			}
-			
+
 		}
-		
-		
+
+
 	};
-	
+
 	$.fn.relativeTime = function( options ) {
 
 		// Establish our default settings
@@ -42983,7 +42986,7 @@ $.extend(TRUE, QTIP.defaults, {
 			$(container).ajaxError(function () {
 				$(this).append("<strong>"+l.lang_errorpage+"</strong>")
 			});
-			
+
 			$.ajax({
 				type: "get",
 				url: l.targeturl,
@@ -43013,7 +43016,7 @@ $.extend(TRUE, QTIP.defaults, {
 						$('<a class="rss_readmore" href="' + c + '">' + l.lang_readmore + '</a><br />').appendTo(container);
 					})
 				}
-				
+
 				function atom(e){
 					$(f).find('entry').each(function (i) {
 						if (i > e - 1) return;
@@ -43030,7 +43033,7 @@ $.extend(TRUE, QTIP.defaults, {
 						$('<a class="rss_readmore" href="' + c + '">' + l.lang_readmore + '</a><br />').appendTo(container);
 					})
 				}
-				
+
 				if (jQuery('channel', f).length == 1) {
 					return h(g);
 				} else if (jQuery('feed', f).length == 1) {
@@ -43038,7 +43041,7 @@ $.extend(TRUE, QTIP.defaults, {
 				}
 			}
 			});
-			
+
 		} else {
 			var n = "xml";
 			$.ajax({
@@ -43078,7 +43081,7 @@ $.extend(TRUE, QTIP.defaults, {
 							$('<a class="rss_readmore" href="' + c + '">' + l.lang_readmore + '</a><br /><br />').appendTo(container);
 						})
 					}
-					
+
 					function atom(e){
 						$(f).find('entry').each(function (i) {
 							if (i > e - 1) return;
@@ -43095,7 +43098,7 @@ $.extend(TRUE, QTIP.defaults, {
 							$('<a class="rss_readmore" href="' + c + '">' + l.lang_readmore + '</a><br />').appendTo(container);
 						})
 					}
-					
+
 					if (jQuery('channel', f).length == 1) {
 						return h(g);
 					} else if (jQuery('feed', f).length == 1) {
@@ -45952,12 +45955,12 @@ if ( typeof Object.create !== 'function' ) {
 * Copyright (c) 2009 SolutionStream.com & Michael J. Ryan (http://www.solutionstream.com/)
 * Dual licensed under the MIT (MIT-LICENSE.txt)
 * and GPL (GPL-LICENSE.txt) licenses.
-* 
+*
 * Requires:
 *   jquery ui dialog
 *
 *   jQuery.FrameDialog namespaced
-*       .create()   function will create an iframe, pass on the options 
+*       .create()   function will create an iframe, pass on the options
 *                   and return from a jQueryUI Dialog.
 *                   additional url option
 *
@@ -45995,7 +45998,7 @@ if ( typeof Object.create !== 'function' ) {
 *
 *
 *   !!!!!!!!!! WARNING WARNING WARNING WARNING !!!!!!!!!!
-*   Modal must set the result from the same host address in order to access 
+*   Modal must set the result from the same host address in order to access
 *   the parent for setting the result.
 */
 (function($) {
@@ -46011,7 +46014,7 @@ if ( typeof Object.create !== 'function' ) {
     var Cancel = (window.localization && window.localization.CANCEL) || "Cancel";
     var buttons = {};
     var winSize = { w:$(window).width(), h:$(window).height() }
-    buttons[OK] = function() {                    
+    buttons[OK] = function() {
         $(this).dialog("close");
     };
     buttons[Cancel] = function() {
@@ -46028,7 +46031,7 @@ if ( typeof Object.create !== 'function' ) {
         	my: "center",
         	at: "center"
     	},
-        buttons: buttons,        
+        buttons: buttons,
         // TDR: class used to style the loading pane container
         loadingClass: null
     };
@@ -46054,17 +46057,17 @@ if ( typeof Object.create !== 'function' ) {
 
             //remove url argument from options to be passed to dialog.
             try { delete opts.url; } catch (err) { }
-            
+
             // TDR: create the loading pane and remove the loadingClass from the options hash
-            var $loadingPane = $('<div></div>').addClass(opts.loadingClass);            
+            var $loadingPane = $('<div></div>').addClass(opts.loadingClass);
             try { delete opts.loadingClass; } catch (err) {}
-            
+
             //create iframe object
             //  object type="text/html doesn't seem to work in IE :(
             //  using iframe, which seems to work cross browser, tested in IE7, and Firefox 3.0.7
             var iframe = $("<iframe frameborder='0' scrolling='auto' background='transparent' />")
                 .attr("id", uid + "-VIEW")
-                .attr("name", uid + "-VIEW")                
+                .attr("name", uid + "-VIEW")
                 .css("margin", "0")
                 .css("border", "0")
                 .css("padding", "0")
@@ -46073,7 +46076,7 @@ if ( typeof Object.create !== 'function' ) {
                 .css("right", "0")
                 .css("bottom", "0")
                 .css("width", "100px")
-                .css("height", "100px")                
+                .css("height", "100px")
                 // TDR: hide the iframe until it's assoicated page is loaded
                 .css("visibility", "hidden")
                 ;
@@ -46102,7 +46105,7 @@ if ( typeof Object.create !== 'function' ) {
                 .css("right", "0")
                 .css("bottom", "0")
                 .css("overflow", "hidden")
-                .hide()                
+                .hide()
                 // TDR: append the loading pane to the dialog's container.
                 .append($loadingPane)
                 .append(iframe)
@@ -46112,16 +46115,16 @@ if ( typeof Object.create !== 'function' ) {
                 //  - http://bugs.jqueryui.com/ticket/5166
                 //  - http://forum.jquery.com/topic/ui-dialog-with-iframe
                 //.appendTo(document.body)
-                
-                // TDR: 
+
+                // TDR:
                 //  - on dialog open, set the height of the loading pane to that of the dialog's content container
-                //  - set the iframe src property here - this avoids the iframe's multiple-request issue 
+                //  - set the iframe src property here - this avoids the iframe's multiple-request issue
                 .bind('dialogopen', function(event, ui){
                     $loadingPane.height($loadingPane.closest('.ui-dialog-content').height());
                     iframe.attr('src', url).load(function(e){
                         $(this).css('visibility', 'visible');
                         $loadingPane.hide();
-                    });             
+                    });
                 })
                 .bind("dialogbeforeclose", function(event, ui) {
                     var frame = $(this);
@@ -46145,27 +46148,27 @@ if ( typeof Object.create !== 'function' ) {
                     var uid = frame.attr("id");
                     var result = $.FrameDialog._results[uid] || null; //result or an explicit null
                     frame.attr("result", result);
-                    
+
                     // TDR: remove the iframe - this avoids the iframe's multiple-request issue
                     iframe.remove();
-                    
+
                     //Cleanup remnants in 15 seconds
                     //      Should be enough time for the results of the close to finish up.
                     window.setTimeout(
                         function() {
                             //cleanup the dialog
                             frame.dialog('destroy');
-                            
-                            // TDR: remove $loadingPane and reorder the other removals. 
+
+                            // TDR: remove $loadingPane and reorder the other removals.
                             //destroy the iframe, remove from the DOM
                             $loadingPane.remove();
                             overlay.remove();
                             frame.remove();
-                            // TDR: i don't think ret.remove is necessary, bc it points to the same object as frame                            
+                            // TDR: i don't think ret.remove is necessary, bc it points to the same object as frame
                             ret.remove();
 
                             //remove the placeholder for the result
-                            try { delete $.FrameDialog._results[uid]; } 
+                            try { delete $.FrameDialog._results[uid]; }
                             catch (err) { /*nothing to delete*/ }
                         },
                         100
@@ -46208,7 +46211,7 @@ if ( typeof Object.create !== 'function' ) {
                 });
 
             //force resize event.
-            window.setTimeout(function(){ 
+            window.setTimeout(function(){
                 wrap.trigger('resizestop');
             }, 100);
 
@@ -46260,7 +46263,7 @@ if ( typeof Object.create !== 'function' ) {
     $.FrameDialog.current = function() {
         if (window.parent && window.parent.jQuery)
             return window.parent.jQuery("#" + $.FrameDialog._getUid());
-        
+
         return null;
     };
 
@@ -46270,14 +46273,14 @@ if ( typeof Object.create !== 'function' ) {
     $.FrameDialog.clearResult = function(uid) {
         if (uid) {
             //clear child's value
-            try { delete $.FrameDialog._results[uid]; } 
+            try { delete $.FrameDialog._results[uid]; }
             catch (err) { /*nothing to delete*/ }
         } else {
             //clear for current dialog
             var uid = $.FrameDialog._getUid();
 
             if (uid != null && window.parent && window.parent.jQuery && window.parent.jQuery.FrameDialog && window.parent.jQuery.FrameDialog._results) {
-                try { delete window.parent.jQuery.FrameDialog._results[uid]; } 
+                try { delete window.parent.jQuery.FrameDialog._results[uid]; }
                 catch (err) { /*nothing to delete*/ }
             }
         }
@@ -46307,7 +46310,7 @@ if ( typeof Object.create !== 'function' ) {
             //close child
             jQuery("#" + uid).dialog('close');
         } else {
-            //close self            
+            //close self
             var uid = $.FrameDialog._getUid();
             if (uid != null && window.parent && window.parent.jQuery) {
                 window.parent.jQuery("#" + uid).dialog('close');
@@ -46338,7 +46341,7 @@ if ( typeof Object.create !== 'function' ) {
             $.FrameDialog.clearResult($(this).attr("id"));
         });
     };
-    
+
     $.fn.closeDialog = function() {
         return this.dialog('close');
     };
@@ -46346,13 +46349,13 @@ if ( typeof Object.create !== 'function' ) {
     $.fn.cancelDialog = function() {
         return this.clearResult().closeDialog();
     };
-    
+
     //get the window context for the object/iframe in question
     $.fn.window = function() {
         //this item is a frame or iframe
         if (this.attr('tagName') == "IFRAME" || this.attr('tagName') == "FRAME")
             return window.frames[this.attr('name') || this.attr('id')];
-            
+
         //get the first frame/iframe child
         var frame = this.find('iframe, frame')[0];
         return (frame && window.frames[frame.name || frame.id]) || null;
