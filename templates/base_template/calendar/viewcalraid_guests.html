@@ -39,7 +39,7 @@
 										</td>
 										<td style="width: 70%;">
 											<!-- BEGIN guests -->
-												<span class="guesttooltip <!-- IF COLORED_NAMESBYCLASS --> class_{raidstatus.guests.CLASSID}<!-- ENDIF -->" data-guestid="{raidstatus.guests.ID}" data-approval="{raidstatus.guests.TOBEAPPROVED}">
+												<span class="guesttooltip <!-- IF COLORED_NAMESBYCLASS --> class_{raidstatus.guests.CLASSID}<!-- ENDIF -->" data-guestid="{raidstatus.guests.ID}" data-approval="{raidstatus.guests.TOBEAPPROVED}" data-status="{raidstatus.guests.SIGNEDSTATUS}">
 													<!-- IF raidstatus.guests.CLASSICON -->{raidstatus.guests.CLASSICON} <!-- ENDIF -->{raidstatus.guests.NAME}<!-- IF raidstatus.guests.EXTERNALAPPL --> <!-- IF raidstatus.guests.TOBEAPPROVED --> <i class="fa fa-external-link-square icon-color-red"><!-- ELSE --> <i class="fa fa-check-square icon-color-green"><!-- ENDIF --></i><!-- ENDIF -->
 												</span>
 												<span class="guesttooltip-data" style="display:none">{raidstatus.guests.TOOLTIP}</span>

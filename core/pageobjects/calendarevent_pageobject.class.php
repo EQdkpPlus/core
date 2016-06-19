@@ -811,6 +811,7 @@ class calendarevent_pageobject extends pageobject {
 							'TOBEAPPROVED'	=> ($guestsdata['status'] == 1 && $guestsdata['email'] != '') ? true : false,
 							'EXTERNALAPPL'	=> ($guestsdata['creator'] == 0 && $guestsdata['email'] != '') ? true : false,
 							'EMAIL'			=> (isset($guestsdata['email']) && $guestsdata['email'] != '') ? $guestsdata['email'] : false,
+							'SIGNEDSTATUS'	=> ($guestsdata['status'] == 0 || $guestsdata['status'] == 2 || $guestsdata['status'] == 3) ? $guestsdata['status'] : false,
 						));
 					}
 				}

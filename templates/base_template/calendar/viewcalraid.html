@@ -37,9 +37,12 @@ $(function(){
 	$('.guesttooltip').each(function() {
 		var guestid		= $(this).data('guestid');
 		var approval	= $(this).data('approval');
+		var signedstatus= $(this).data('status');
 		var titletext	= '';
 		if(approval){
 			var titletext = '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-thumbs-up fa-lg hand" onclick="ChangeGuestStatus('+guestid+', 0);"></i>   <i class="fa fa-thumbs-down fa-lg hand" onclick="ChangeGuestStatus('+guestid+', 2);"></i>   <i class="fa fa-question-circle fa-lg hand" onclick="ChangeGuestStatus('+guestid+', 3);"></i>   <i class="fa fa-trash-o fa-lg hand" onclick="DeleteGuest('+guestid+');"></i></div>';
+		}else if(signedstatus){
+			var titletext = '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-thumbs-up fa-lg hand '+((signedstatus == 0) ? 'icon-color-green' : 'icon-color-gray')+'" onclick="ChangeGuestStatus('+guestid+', 0);"></i>   <i class="fa fa-thumbs-down fa-lg hand '+((signedstatus == 2) ? 'icon-color-green' : 'icon-color-gray')+'" onclick="ChangeGuestStatus('+guestid+', 2);"></i>   <i class="fa fa-question-circle fa-lg hand '+((signedstatus == 3) ? 'icon-color-green' : 'icon-color-gray')+'" onclick="ChangeGuestStatus('+guestid+', 3);"></i>   <i class="fa fa-trash-o fa-lg hand" onclick="DeleteGuest('+guestid+');"></i></div>';
 		}else{
 			var titletext = '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-pencil fa-lg hand" onclick="EditGuest('+guestid+');"></i>  <i class="fa fa-trash-o fa-lg hand" onclick="DeleteGuest('+guestid+');"></i></div>';
 		}
