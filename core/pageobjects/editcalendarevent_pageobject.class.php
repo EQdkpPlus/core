@@ -150,8 +150,12 @@ class editcalendarevent_pageobject extends pageobject {
 		// Build the new select
 		$seldata = $this->pdh->get('calendar_raids_templates', 'dropdowndata');
 		if(is_array($seldata)){
-			foreach($seldata as $ddid=>$ddval){
-				$out .= "<option value='".$ddid."'>".$ddval."</option>";
+			foreach($seldata as $tpl_category=>$tpl_data){
+				$out .= '<optgroup label="'.$tpl_category.'">';
+				foreach($tpl_data as $ddid=>$ddval){
+					$out .= "<option value='".$ddid."'>".$ddval."</option>";
+				}
+				$out .= '</optgroup>';
 			}
 		}
 		echo $out;
