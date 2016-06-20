@@ -117,8 +117,7 @@ $(document).ready(function() {
 				$.each(data, function(i,item){
 					$("#"+item.field).val(item.value);
 					if(item.field == 'selectmode'){
-						$('#selectmode').value(item.value)
-						$('#selectmode').trigger('change');
+						$('#selectmode').val(item.value).trigger('change');
 					}
 				});
 				$("#dw_raidleader").multiselect("refresh");
