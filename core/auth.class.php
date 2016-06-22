@@ -69,8 +69,8 @@ class auth extends user {
 			return true;
 		}
 
-		// Remove old sessions and update user information if necessary (10 minutes)
-		if(($this->current_time - 60*10) > $this->config->get('session_last_cleanup')){
+		// Remove old sessions and update user information if necessary (every 5 minutes)
+		if(($this->current_time - 60*5) > $this->config->get('session_last_cleanup')){
 			$this->cleanup($this->current_time);
 		}
 		//Cookie-Data
@@ -309,15 +309,20 @@ class auth extends user {
 	* @return true
 	*/
 	public function cleanup($intTime){
+		//Delete all guest sessions
+		$this->db->prepare("DELETE FROM __sessions
+									WHERE session_user_id = ?
+									AND session_start < ?")->execute(ANONYMOUS, $this->time->time - $this->session_length);
 		
-		// Get expired sessions
+		// Get expired user sessions
 		$objQuery = $this->db->prepare("SELECT session_page, session_user_id,session_current FROM __sessions s1 
 				WHERE s1.session_start < ? AND session_current =
-				(SELECT MAX(session_current) FROM __sessions s2 WHERE s1.session_user_id = s2.session_user_id)
-		")->execute($this->time->time - ($this->session_length*2));
+				(SELECT MAX(session_current) FROM __sessions s2 WHERE s1.session_user_id = s2.session_user_id) AND s1.session_user_id > ?
+		")->execute($this->time->time - ($this->session_length*2), ANONYMOUS);
 
 		if ($objQuery){
 			while($row = $objQuery->fetchAssoc()){
+				//Update User last visit
 				if ( intval($row['session_user_id']) != ANONYMOUS ){
 					$this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
 						'user_lastvisit'	=> $row['recent_time'],
@@ -325,6 +330,7 @@ class auth extends user {
 					))->execute($row['session_user_id']);
 				}
 				
+				//Delete user sessions
 				$this->db->prepare("DELETE FROM __sessions
 									WHERE session_user_id = ?
 									AND session_start < ?")->execute($row['session_user_id'], ($this->time->time - $this->session_length));
