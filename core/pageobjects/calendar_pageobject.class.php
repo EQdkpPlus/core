@@ -332,7 +332,7 @@ class calendar_pageobject extends pageobject {
 								'note'			=> $this->pdh->get('calendar_events', 'notes', array($calid)),
 								'color'			=> $eventcolor,
 								'textColor'		=> $eventcolor_txt,
-								'isowner'		=> $this->pdh->get('calendar_events', 'is_owner', array($calid)),
+								'isowner'		=> $this->pdh->get('calendar_events', 'is_owner', array($calid)) || $this->user->check_auth('a_cal_revent_conf', false),
 								'isinvited'		=> $this->pdh->get('calendar_events', 'is_invited', array($calid)),
 								'joinedevent'	=> $this->pdh->get('calendar_events', 'joined_invitation', array($calid)),
 								'author'		=> $this->pdh->get('calendar_events', 'creator', array($calid)),

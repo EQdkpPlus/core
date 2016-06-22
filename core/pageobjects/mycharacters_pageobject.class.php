@@ -30,11 +30,11 @@ class mycharacters_pageobject extends pageobject {
 			'hide_info'			=> array('process' => 'hide_nochar_info', 'check' => 'u_member_'),
 		);
 		$this->user->check_auths(array('u_member_man', 'u_member_add', 'u_member_conn', 'u_member_del'), 'OR');
-	
+
 		parent::__construct('u_member_', $handler, array());
 		$this->process();
 	}
-	
+
 	public function hide_nochar_info(){
 		$this->pdh->put('user', 'hide_nochar_info', array($this->user->id));
 	}
@@ -51,11 +51,11 @@ class mycharacters_pageobject extends pageobject {
 		}
 		$this->display();
 	}
-	
+
 	public function delete_char(){
 		if($this->in->get('delete_id', 0) > 0){
 			$this->pdh->put('member', 'suspend', array($this->in->get('delete_id', 0)));
-			
+
 			//Change Mainchar
 			$arrOtherMembers	= $this->pdh->get('member', 'other_members', array($this->in->get('delete_id', 0)));
 			$strMemID			= (count($arrOtherMembers) && isset($arrOtherMembers[0])) ? $arrOtherMembers[0] : $this->in->get('delete_id', 0);
@@ -64,21 +64,21 @@ class mycharacters_pageobject extends pageobject {
 		}
 		$this->display();
 	}
-	
+
 	public function ajax_mainchar(){
 		$this->pdh->put('member', 'change_mainid', array($this->pdh->get('member', 'connection_id', array($this->user->data['user_id'])), $this->in->get('maincharchange', 0)));
 		$this->pdh->process_hook_queue();
 		echo($this->user->lang('uc_savedmsg_main'));
 		exit;
 	}
-	
+
 	public function ajax_defaultrole(){
 		$this->pdh->put('member', 'change_defaultrole', array($this->in->get('defrolechange_memberid', 0), $this->in->get('defrolechange', 0)));
 		$this->pdh->process_hook_queue();
 		echo($this->user->lang('uc_savedmsg_roles'));
 		exit;
 	}
-	
+
 	public function display(){
 		// Build member drop-down
 		$freemember_data = $this->pdh->get('member', 'freechars', array($this->user->data['user_id']));
@@ -121,19 +121,19 @@ class mycharacters_pageobject extends pageobject {
 		// The javascript for the mainchar change
 		$this->tpl->add_js("
 			$('.cmainradio').change( function(){
-				$('#connection_submit').attr('disabled', 'disabled');
-				
+				$('#connection_submit').prop('disabled', true);
+
 				$.post('".$this->SID."&link_hash=".$this->CSRFGetToken('maincharchange')."', { maincharchange: $( \"input:radio[name=mainchar]:checked\" ).val() },
 					function(data){
-						$('#connection_submit').removeAttr('disabled');
+						$('#connection_submit').prop('disabled', false);
 						$('#notify_container').notify('create', 'success', {text: data,title: '',custom: true,},{expires: 3000, speed: 1000});
 					});
 				});
 			$('.cdefroledd').change( function(){
-				$('#connection_submit').attr('disabled', 'disabled');
+				$('#connection_submit').prop('disabled', true);
 				$.post('".$this->SID."&link_hash=".$this->CSRFGetToken('defrolechange')."', { defrolechange: $(this).val(), defrolechange_memberid: $(this).attr('name').replace('defaultrole_', '') },
 					function(data){
-						$('#connection_submit').removeAttr('disabled');
+						$('#connection_submit').prop('disabled', false);
 						$('#notify_container').notify('create', 'success', {text: data,title: '',custom: true,},{expires: 3000, speed: 1000});
 					});
 			});
@@ -163,7 +163,7 @@ class mycharacters_pageobject extends pageobject {
 		$footer_text		= sprintf($this->user->lang('listmembers_footcount'), ((is_array($view_list)) ? count($view_list) : 0));
 		$page_suffix		= '&amp;start='.$this->in->get('start', 0);
 		$sort_suffix		= '&amp;sort='.$this->in->get('sort');
-		
+
 		$this->tpl->assign_vars(array(
 			'CHAR_LIST'				=> $hptt->get_html_table($this->in->get('sort',''), $page_suffix, $this->in->get('start', 0), $this->user->data['user_climit'], $footer_text),
 			'CHAR_PAGINATION'		=> generate_pagination($this->SID.$sort_suffix, ((is_array($view_list)) ? count($view_list) : 0), $this->user->data['user_climit'], $this->in->get('start', 0)),

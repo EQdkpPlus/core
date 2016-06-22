@@ -38,7 +38,7 @@
 		<!-- END changed_files_row -->
 	</fieldset>
 	<!-- ENDIF -->
-	
+
 	<button type="submit" name="process_update" class="mainoption"><i class="fa fa-check"></i>{L_bridge_continue}</button> <!-- IF S_CHANGED_FILES --><button type="button" class="mainoption" onclick="window.location='manage_styles.php{SID}&export_changed_files=true&styleid={TEMPLATE_ID}'"><i class="fa fa-download"></i>{L_style_localupdate_dlchangedfiles}</button><!-- ENDIF -->
 {CSRF_TOKEN}
 	</form>
@@ -59,16 +59,16 @@
 $(document).ready(function(){
 	$('input[name="background_type"]').on('change', function(){
 		if($(this).val() == "2"){
-			$("#background_image").attr("disabled", false);
+			$("#background_image").prop("disabled", false);
 		} else {
-			$("#background_image").attr("disabled", true);
+			$("#background_image").prop("disabled", true);
 		}
 	})
 	var recent = $('input[name="background_type"]:checked').val();
 	if(recent == "2"){
-		$("#background_image").attr("disabled", false);
+		$("#background_image").prop("disabled", false);
 	} else {
-		$("#background_image").attr("disabled", true);
+		$("#background_image").prop("disabled", true);
 	}
 })
 </script>

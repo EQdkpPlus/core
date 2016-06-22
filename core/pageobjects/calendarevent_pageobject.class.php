@@ -811,6 +811,7 @@ class calendarevent_pageobject extends pageobject {
 							'TOBEAPPROVED'	=> ($guestsdata['status'] == 1 && $guestsdata['email'] != '') ? true : false,
 							'EXTERNALAPPL'	=> ($guestsdata['creator'] == 0 && $guestsdata['email'] != '') ? true : false,
 							'EMAIL'			=> (isset($guestsdata['email']) && $guestsdata['email'] != '') ? $guestsdata['email'] : false,
+							'SIGNEDSTATUS'	=> ($guestsdata['status'] == 0 || $guestsdata['status'] == 2 || $guestsdata['status'] == 3) ? $guestsdata['status'] : false,
 						));
 					}
 				}
@@ -1062,6 +1063,15 @@ class calendarevent_pageobject extends pageobject {
 		));
 	}
 
+	private function statusID2status($status){
+		switch($status){
+			case 1:		$attendancestatus = 'attendance'; break;
+			case 2:		$attendancestatus = 'maybe'; break;
+			case 3:		$attendancestatus = 'decline'; break;
+		}
+		return $attendancestatus;
+	}
+
 	public function display_eventdetails(){
 		// Show an error Message if no ID is set
 		if(!$this->url_id){
@@ -1106,26 +1116,23 @@ class calendarevent_pageobject extends pageobject {
 			}
 
 			// attending users
-			$event_attendees		= (isset($eventdata['extension']['invited']) && count($eventdata['extension']['invited']) > 0) ? $eventdata['extension']['invited'] : array();
+			$event_attendees		= (isset($eventdata['extension']['attendance']) && count($eventdata['extension']['attendance']) > 0) ? $eventdata['extension']['attendance'] : array();
 			if(count($event_attendees) > 0){
 				foreach($event_attendees as $attendeedata=>$status){
-					$statusofuser[$attendeedata] = $status;
-					$userstatus['attendance'][] = array(
+					$statusofuser[$attendeedata]	= $status;
+					$attendancestatus				= $this->statusID2status($status);
+					$userstatus[$attendancestatus][] = array(
 						'name'		=> $this->pdh->get('user', 'name', array($attendeedata)),
-						'icon'		=> $this->pdh->get('user', 'avatar_withtooltip', array($inviteddata)),
+						'icon'		=> $this->pdh->get('user', 'avatar_withtooltip', array($attendeedata)),
 						'joined'	=> false,
 					);
 				}
-			}
+			}d($statusofuser);
 		}else{
 			$event_attendees		= (isset($eventdata['extension']['attendance']) && count($eventdata['extension']['attendance']) > 0) ? $eventdata['extension']['attendance'] : array();
 			foreach($event_attendees as $attuserid=>$attstatus){
-				switch($attstatus){
-					case 1:		$attendancestatus = 'attendance'; break;
-					case 2:		$attendancestatus = 'maybe'; break;
-					case 3:		$attendancestatus = 'decline'; break;
-				}
-				$statusofuser[$attuserid] = $attstatus;
+				$attendancestatus			= $this->statusID2status($attstatus);
+				$statusofuser[$attuserid]	= $attstatus;
 				$userstatus[$attendancestatus][] = array(
 					'name'		=> $this->pdh->get('user', 'name', array($attuserid)),
 					'icon'		=> $this->pdh->get('user', 'avatar_withtooltip', array($attuserid)),

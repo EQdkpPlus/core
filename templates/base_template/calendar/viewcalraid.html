@@ -37,9 +37,12 @@ $(function(){
 	$('.guesttooltip').each(function() {
 		var guestid		= $(this).data('guestid');
 		var approval	= $(this).data('approval');
+		var signedstatus= $(this).data('status');
 		var titletext	= '';
 		if(approval){
 			var titletext = '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-thumbs-up fa-lg hand" onclick="ChangeGuestStatus('+guestid+', 0);"></i>   <i class="fa fa-thumbs-down fa-lg hand" onclick="ChangeGuestStatus('+guestid+', 2);"></i>   <i class="fa fa-question-circle fa-lg hand" onclick="ChangeGuestStatus('+guestid+', 3);"></i>   <i class="fa fa-trash-o fa-lg hand" onclick="DeleteGuest('+guestid+');"></i></div>';
+		}else if($.isNumeric(signedstatus)){
+			var titletext = '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-thumbs-up fa-lg hand '+((signedstatus == 0) ? 'icon-color-green' : 'icon-color-gray')+'" onclick="ChangeGuestStatus('+guestid+', 0);"></i>   <i class="fa fa-thumbs-down fa-lg hand '+((signedstatus == 2) ? 'icon-color-green' : 'icon-color-gray')+'" onclick="ChangeGuestStatus('+guestid+', 2);"></i>   <i class="fa fa-question-circle fa-lg hand '+((signedstatus == 3) ? 'icon-color-green' : 'icon-color-gray')+'" onclick="ChangeGuestStatus('+guestid+', 3);"></i>   <i class="fa fa-trash-o fa-lg hand" onclick="DeleteGuest('+guestid+');"></i></div>';
 		}else{
 			var titletext = '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-pencil fa-lg hand" onclick="EditGuest('+guestid+');"></i>  <i class="fa fa-trash-o fa-lg hand" onclick="DeleteGuest('+guestid+');"></i></div>';
 		}
@@ -249,19 +252,19 @@ function check_unsigned(selector, unsigned_attendees_f, a_checkboxes){
 		if($(selector).prop('checked')) {
 			$.each(userchars, function(index, value){
 				if(memberid != value){
-					$('#member'+value).attr("disabled", true);
+					$('#member'+value).prop("disabled", true);
 					$('#memberid_'+value).css("textDecoration", "line-through");
 					if($('#memroles'+value).length > 0){
-						$('#memroles'+value).attr("disabled", true);
+						$('#memroles'+value).prop("disabled", true);
 					}
 				}
 			});
 		}else{
 			$.each(userchars, function(index, value){
-				$('#member'+value).attr("disabled", false);
+				$('#member'+value).prop("disabled", false);
 				$('#memberid_'+value).css("textDecoration", "none");
 				if($('#memroles'+value).length > 0){
-					$('#memroles'+value).attr("disabled", false);
+					$('#memroles'+value).prop("disabled", false);
 				}
 			});
 		}

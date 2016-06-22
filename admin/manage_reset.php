@@ -50,11 +50,11 @@ class reset_eqdkp extends page_generic {
 		parent::__construct(false, false, 'plain', null, '_class_');
 		$this->process();
 	}
-	
+
 	public function delete(){
 		//Make a backup
-		$this->backup->createDatabaseBackup('zip',true,false,true);	
-			
+		$this->backup->createDatabaseBackup('zip',true,false,true);
+
 		$this->toreset = $this->in->getArray('selected', 'string');
 		$log_action = array('{L_entries_reset}' => '');
 		foreach ($this->toreset as $value){
@@ -67,7 +67,7 @@ class reset_eqdkp extends page_generic {
 		$this->logs->add('action_reset', $log_action);
 		$this->display();
 	}
-	
+
 	public function reset_val($value) {
 		if(!in_array($value, $this->resets) || in_array($value, $this->resetted)) return false;
 		if(isset($this->dependency[$value])) {
@@ -94,7 +94,7 @@ class reset_eqdkp extends page_generic {
 			$this->pm->uninstall($value);
 		}
 	}
-	
+
 	public function reset__calendar() {
 		$this->pdh->put('calendar_events', 'reset');
 		$this->pdh->put('calendar_raids_attendees', 'reset');
@@ -102,7 +102,7 @@ class reset_eqdkp extends page_generic {
 		$this->pdh->put('calendar_raids_templates', 'reset');
 		$this->pdh->put('calendars', 'reset');
 	}
-	
+
 	public function reset__logs() {
 		$this->pdh->put('logs', 'truncate_log');
 	}
@@ -134,7 +134,7 @@ class reset_eqdkp extends page_generic {
 					for(var current in dependency[id]) {
 						current = dependency[id][current];
 						if(!$('#cb_'+current).attr('checked')) {
-							$('#cb_'+id).removeAttr('checked');
+							$('#cb_'+id).prop('checked', false);
 							eval(id+'_warning()');
 							break;
 						}
@@ -144,18 +144,18 @@ class reset_eqdkp extends page_generic {
 		";
 		$this->tpl->add_js($js, 'docready');
 		foreach(array_keys($this->dependency) as $key) {
-			$custom_js = "$('#cb_".$key."').attr('checked', 'checked');$('#cb_".implode("').attr('checked', 'checked');$('#cb_", $this->dependency[$key])."').attr('checked', 'checked');";
+			$custom_js = "$('#cb_".$key."').prop('checked', true);$('#cb_".implode("').prop('checked', true);$('#cb_", $this->dependency[$key])."').prop('checked', true);";
 			$this->jquery->Dialog($key.'_warning', $this->user->lang('attention'), array('message'=> $this->user->lang('reset_'.$key.'_warning'), 'custom_js'	=> $custom_js, 'height' => 260), 'confirm');
 		}
 		$this->confirm_delete($this->user->lang('reset_confirm'));
-		
+
 		$this->tpl->add_js('$("#reset_selectall").click(function(){
 					var checked_status = this.checked;
 					$(".cb_select_class").each(function(){
 						this.checked = checked_status;
 					});
 				});', 'docready');
-		
+
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('title_resetdkp'),
 			'template_file'		=> 'admin/manage_reset.html',

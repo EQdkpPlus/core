@@ -445,7 +445,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 		}
 
 		public function handle_attendance($eventid, $userid, $status='decline'){
-			if($eventid > 0){
+			if($eventid > 0 && $userid > 0){
 				$extensiondata		= $this->pdh->get('calendar_events', 'extension', array($eventid));
 				$attendance			= (isset($extensiondata['attendance']) && isset($extensiondata['attendance'][$userid])) ? $extensiondata['attendance'][$userid] : false;
 				switch($status){

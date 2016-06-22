@@ -42,7 +42,7 @@ class install extends gen_class {
 		$this->pdl->register_type("install_warning", null, array($this, 'install_warning'), array(DEBUG));
 		$this->pdl->register_type("install_success", null, array($this, 'install_success'), array(DEBUG));
 		$this->current_step = $this->in->get('current_step', 'start');
-		
+
 		//dont let them install, if already installed (but show clean end of installation
 		if(defined('EQDKP_INSTALLED') && EQDKP_INSTALLED) {
 			if($this->current_step == 'end' && !$this->in->exists('next')) {
@@ -59,13 +59,13 @@ class install extends gen_class {
 					</head>
 					<body>
 					<div class="ui-widget">
-						<div class="ui-state-error ui-corner-all" style="padding: 0pt 0.7em;"> 
+						<div class="ui-state-error ui-corner-all" style="padding: 0pt 0.7em;">
 							<p>
 							<strong>Alert:</strong> Already Installed. Remove the \'install\' folder, or remove your config.php to install again.</p>
 						</div>
 					</div>
-					
-					</body>	
+
+					</body>
 				</html>';
 				die();
 			}
@@ -87,12 +87,12 @@ class install extends gen_class {
 		}
 		$this->show();
 	}
-	
+
 	private function init_language() {
 		if (!$this->in->exists('inst_lang')){
 			$usersprache = explode(",", $_SERVER["HTTP_ACCEPT_LANGUAGE"]);
 			$usersprache = explode(";", $usersprache[0]);
-			
+
 			if(strlen($usersprache[0]) == "5") {
 				$code = substr($usersprache[0], 3, 2);
 			} elseif(strlen($usersprache[0]) == "2") {
@@ -101,7 +101,7 @@ class install extends gen_class {
 				$code = "";
 			}
 			$code = strtolower($code);
-			
+
 			$language = $this->translate_iso_langcode($code);
 			if (!is_file($this->root_path .'language/'.$language.'/lang_install.php')){
 				$language = "english";
@@ -109,14 +109,14 @@ class install extends gen_class {
 		} else {
 			$language = $this->in->get('inst_lang', 'english');
 		}
-		
+
 		if( !include_once($this->root_path .'language/'.$language.'/lang_install.php') ){
 			die('Could not include the language files! Check to make sure that "' . $this->root_path . 'language/'.$language.'/lang_install.php" exists!');
 		}
 		registry::add_const('lang', $lang);
 		registry::add_const('langcode', $language);
 	}
-	
+
 	private function scan_steps() {
 		$steps = scandir($this->root_path.'install/install_steps');
 		foreach($steps as $file) {
@@ -133,24 +133,24 @@ class install extends gen_class {
 				if(method_exists($_step, 'ajax_out')) $_step->ajax_out();
 			}
 		}
-		
+
 		$this->order = $this->sort_steps();
 	}
-	
+
 	private function sort_steps(){
 		$arrOut = array();
-		
+
 		$current = 'start';
 		for($i=0; $i < count($this->order); $i++){
 			$arrOut[$current] = $this->order[$current];
 			$current = $this->order[$current];
 		}
-		
+
 		return $arrOut;
-		
+
 	}
 
-	
+
 	private function parse_step() {
 		//remove all steps following this from the done array
 		$step = end($this->order);
@@ -174,7 +174,7 @@ class install extends gen_class {
 		if(!$back) $this->retry_step = true;
 		return $back;
 	}
-	
+
 	private function next_step() {
 		$old_current = $this->current_step;
 		foreach($this->steps as $step) {
@@ -185,13 +185,13 @@ class install extends gen_class {
 		}
 		if($old_current == $this->current_step) $this->current_step = 'end';
 	}
-	
+
 	private function next_button() {
 		if($this->current_step == 'end') return $this->lang['inst_finish'];
 		if($this->retry_step) return $this->lang['retry'];
 		return $this->lang[registry::register($this->current_step)->next_button];
 	}
-	
+
 	private function end() {
 		//define EQDKP_INSTALLED
 		$config = substr(file_get_contents($this->root_path.'config.php'), 0, -2);
@@ -200,19 +200,19 @@ class install extends gen_class {
 		$pfh->putContent($this->root_path.'config.php', $config);
 		//delete temporary pfh folder
 		$pfh->Delete($this->root_path.'data/'.md5('installer'));
-		
+
 		//Secure tmp-Folder for logs and ftp
 		$pfh = registry::register('file_handler');
 		$pfh->secure_folder('', 'tmp');
-		
+
 		//Set chmod644 for config.php
 		@chmod($this->root_path."config.php", 0644);
-		
+
 		//Reset Opcache, for PHP7
 		if(function_exists('opcache_reset')){
 			opcache_reset();
 		}
-		
+
 		$donateText = '
 						<br /><br />
 						<div><i class="fa fa-heart fa-5x" style="color:red;vertical-align:middle;"></i>
@@ -222,17 +222,17 @@ class install extends gen_class {
 						</span><h1 style="display:inline-block;">'.$this->lang['install_support_h1'].'</h1><br />
 						'.$this->lang['install_support_text'].'
 						</div>
-				
+
 				';
-		
+
 		return $this->lang['install_end_text'].$donateText;
 	}
-	
+
 	private function parse_end() {
 		header('Location: '.$this->root_path.'maintenance/?splash=true');
 		exit;
 	}
-	
+
 	private function get_content() {
 		$this->previous = array_search($this->current_step, $this->order);
 		if($this->current_step == 'end') return $this->end();
@@ -242,7 +242,7 @@ class install extends gen_class {
 		$this->data[$this->current_step] = $_step->data;
 		return $content;
 	}
-	
+
 	private function gen_menu() {
 		$menu = '';
 		foreach($this->order as $step) {
@@ -253,7 +253,7 @@ class install extends gen_class {
 		}
 		return $menu;
 	}
-	
+
 	private function lang_drop() {
 		$drop = '<select name="inst_lang" id="language_drop">';
 		$options = array();
@@ -268,7 +268,7 @@ class install extends gen_class {
 		}
 		return $drop.'</select>';
 	}
-	
+
 	private function show() {
 		if(class_exists($this->current_step)) $_step = registry::register($this->current_step);
 		$progress = round(100*(count($this->done)/count($this->order)), 0);
@@ -276,7 +276,7 @@ class install extends gen_class {
 <html>
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-		
+
 		<link rel="stylesheet" type="text/css" media="screen" href="../libraries/jquery/core/core.min.css" />
 		<script type="text/javascript" language="javascript" src="../libraries/jquery/core/core.min.js"></script>
 		<link href="../libraries/FontAwesome/font-awesome.min.css" rel="stylesheet">
@@ -292,10 +292,10 @@ class install extends gen_class {
 				value: '.$progress.'
 			});
 			$(".done, .done2, #previous_step").click(function(){
-				$("#back_"+$(this).attr("id")).removeAttr("disabled");
+				$("#back_"+$(this).attr("id")).prop("disabled", false);
 				$("#form_install").submit();
 			});
-			
+
 			'.$_step->head_js.'
 		});
 			//]]>
@@ -312,7 +312,7 @@ class install extends gen_class {
 				<div id="languageselect"><i class="fa fa-globe"></i> '.$this->lang['language'].': '.$this->lang_drop().'</div>
 				<div id="logotext">Installation '.VERSION_EXT.'</div>
 			</div>
-				
+
 		<div id="installer">
 			<div id="steps">
 				<div id="progressbar"><span class="install_label">'.$progress.'%</span></div>
@@ -357,7 +357,7 @@ class install extends gen_class {
 </html>';
 		echo $content;
 	}
-	
+
 	public function install_error($log) {
 		$title = (isset($log['args'][1])) ? $log['args'][1] : $this->lang['error'];
 
@@ -366,163 +366,163 @@ class install extends gen_class {
 	</div>';
 
 	}
-	
+
 	public function install_warning($log) {
 		$title = (isset($log['args'][1])) ? $log['args'][1] : $this->lang['warning'];
-		
+
 		return '<div class="infobox infobox-large infobox-red clearfix">
 			<i class="fa fa-exclamation-triangle fa-4x pull-left"></i><strong>'.$title.'</strong><br />'.$log['args'][0].'
 		</div>';
 	}
-	
+
 	public function install_success($log) {
 		$title = (isset($log['args'][1])) ? $log['args'][1] : $this->lang['success'];
-		
+
 		return '<div class="infobox infobox-large infobox-green clearfix">
 		<i class="fa fa-check fa-4x pull-left"></i><strong>'.$title.'</strong><br />'.$log['args'][0].'
 	</div>';
 	}
-	
+
 	//Returns English as Default
 	public function translate_iso_langcode($isoCode){
 		$language_codes = array(
-			'en' => 'English' , 
-			'aa' => 'Afar' , 
-			'ab' => 'Abkhazian' , 
-			'af' => 'Afrikaans' , 
-			'am' => 'Amharic' , 
-			'ar' => 'Arabic' , 
-			'as' => 'Assamese' , 
-			'ay' => 'Aymara' , 
-			'az' => 'Azerbaijani' , 
-			'ba' => 'Bashkir' , 
-			'be' => 'Byelorussian' , 
-			'bg' => 'Bulgarian' , 
-			'bh' => 'Bihari' , 
-			'bi' => 'Bislama' , 
-			'bn' => 'Bengali/Bangla' , 
-			'bo' => 'Tibetan' , 
-			'br' => 'Breton' , 
-			'ca' => 'Catalan' , 
-			'co' => 'Corsican' , 
-			'cs' => 'Czech' , 
-			'cy' => 'Welsh' , 
-			'da' => 'Danish' , 
-			'de' => 'German' , 
-			'dz' => 'Bhutani' , 
-			'el' => 'Greek' , 
-			'eo' => 'Esperanto' , 
-			'es' => 'Spanish' , 
-			'et' => 'Estonian' , 
-			'eu' => 'Basque' , 
-			'fa' => 'Persian' , 
-			'fi' => 'Finnish' , 
-			'fj' => 'Fiji' , 
-			'fo' => 'Faeroese' , 
-			'fr' => 'French' , 
-			'fy' => 'Frisian' , 
-			'ga' => 'Irish' , 
-			'gd' => 'Scots/Gaelic' , 
-			'gl' => 'Galician' , 
-			'gn' => 'Guarani' , 
-			'gu' => 'Gujarati' , 
-			'ha' => 'Hausa' , 
-			'hi' => 'Hindi' , 
-			'hr' => 'Croatian' , 
-			'hu' => 'Hungarian' , 
-			'hy' => 'Armenian' , 
-			'ia' => 'Interlingua' , 
-			'ie' => 'Interlingue' , 
-			'ik' => 'Inupiak' , 
-			'in' => 'Indonesian' , 
-			'is' => 'Icelandic' , 
-			'it' => 'Italian' , 
-			'iw' => 'Hebrew' , 
-			'ja' => 'Japanese' , 
-			'ji' => 'Yiddish' , 
-			'jw' => 'Javanese' , 
-			'ka' => 'Georgian' , 
-			'kk' => 'Kazakh' , 
-			'kl' => 'Greenlandic' , 
-			'km' => 'Cambodian' , 
-			'kn' => 'Kannada' , 
-			'ko' => 'Korean' , 
-			'ks' => 'Kashmiri' , 
-			'ku' => 'Kurdish' , 
-			'ky' => 'Kirghiz' , 
-			'la' => 'Latin' , 
-			'ln' => 'Lingala' , 
-			'lo' => 'Laothian' , 
-			'lt' => 'Lithuanian' , 
-			'lv' => 'Latvian/Lettish' , 
-			'mg' => 'Malagasy' , 
-			'mi' => 'Maori' , 
-			'mk' => 'Macedonian' , 
-			'ml' => 'Malayalam' , 
-			'mn' => 'Mongolian' , 
-			'mo' => 'Moldavian' , 
-			'mr' => 'Marathi' , 
-			'ms' => 'Malay' , 
-			'mt' => 'Maltese' , 
-			'my' => 'Burmese' , 
-			'na' => 'Nauru' , 
-			'ne' => 'Nepali' , 
-			'nl' => 'Dutch' , 
-			'no' => 'Norwegian' , 
-			'oc' => 'Occitan' , 
-			'om' => '(Afan)/Oromoor/Oriya' , 
-			'pa' => 'Punjabi' , 
-			'pl' => 'Polish' , 
-			'ps' => 'Pashto/Pushto' , 
-			'pt' => 'Portuguese' , 
-			'qu' => 'Quechua' , 
-			'rm' => 'Rhaeto-Romance' , 
-			'rn' => 'Kirundi' , 
-			'ro' => 'Romanian' , 
-			'ru' => 'Russian' , 
-			'rw' => 'Kinyarwanda' , 
-			'sa' => 'Sanskrit' , 
-			'sd' => 'Sindhi' , 
-			'sg' => 'Sangro' , 
-			'sh' => 'Serbo-Croatian' , 
-			'si' => 'Singhalese' , 
-			'sk' => 'Slovak' , 
-			'sl' => 'Slovenian' , 
-			'sm' => 'Samoan' , 
-			'sn' => 'Shona' , 
-			'so' => 'Somali' , 
-			'sq' => 'Albanian' , 
-			'sr' => 'Serbian' , 
-			'ss' => 'Siswati' , 
-			'st' => 'Sesotho' , 
-			'su' => 'Sundanese' , 
-			'sv' => 'Swedish' , 
-			'sw' => 'Swahili' , 
-			'ta' => 'Tamil' , 
-			'te' => 'Tegulu' , 
-			'tg' => 'Tajik' , 
-			'th' => 'Thai' , 
-			'ti' => 'Tigrinya' , 
-			'tk' => 'Turkmen' , 
-			'tl' => 'Tagalog' , 
-			'tn' => 'Setswana' , 
-			'to' => 'Tonga' , 
-			'tr' => 'Turkish' , 
-			'ts' => 'Tsonga' , 
-			'tt' => 'Tatar' , 
-			'tw' => 'Twi' , 
-			'uk' => 'Ukrainian' , 
-			'ur' => 'Urdu' , 
-			'uz' => 'Uzbek' , 
-			'vi' => 'Vietnamese' , 
-			'vo' => 'Volapuk' , 
-			'wo' => 'Wolof' , 
-			'xh' => 'Xhosa' , 
-			'yo' => 'Yoruba' , 
-			'zh' => 'Chinese' , 
-			'zu' => 'Zulu' , 
+			'en' => 'English' ,
+			'aa' => 'Afar' ,
+			'ab' => 'Abkhazian' ,
+			'af' => 'Afrikaans' ,
+			'am' => 'Amharic' ,
+			'ar' => 'Arabic' ,
+			'as' => 'Assamese' ,
+			'ay' => 'Aymara' ,
+			'az' => 'Azerbaijani' ,
+			'ba' => 'Bashkir' ,
+			'be' => 'Byelorussian' ,
+			'bg' => 'Bulgarian' ,
+			'bh' => 'Bihari' ,
+			'bi' => 'Bislama' ,
+			'bn' => 'Bengali/Bangla' ,
+			'bo' => 'Tibetan' ,
+			'br' => 'Breton' ,
+			'ca' => 'Catalan' ,
+			'co' => 'Corsican' ,
+			'cs' => 'Czech' ,
+			'cy' => 'Welsh' ,
+			'da' => 'Danish' ,
+			'de' => 'German' ,
+			'dz' => 'Bhutani' ,
+			'el' => 'Greek' ,
+			'eo' => 'Esperanto' ,
+			'es' => 'Spanish' ,
+			'et' => 'Estonian' ,
+			'eu' => 'Basque' ,
+			'fa' => 'Persian' ,
+			'fi' => 'Finnish' ,
+			'fj' => 'Fiji' ,
+			'fo' => 'Faeroese' ,
+			'fr' => 'French' ,
+			'fy' => 'Frisian' ,
+			'ga' => 'Irish' ,
+			'gd' => 'Scots/Gaelic' ,
+			'gl' => 'Galician' ,
+			'gn' => 'Guarani' ,
+			'gu' => 'Gujarati' ,
+			'ha' => 'Hausa' ,
+			'hi' => 'Hindi' ,
+			'hr' => 'Croatian' ,
+			'hu' => 'Hungarian' ,
+			'hy' => 'Armenian' ,
+			'ia' => 'Interlingua' ,
+			'ie' => 'Interlingue' ,
+			'ik' => 'Inupiak' ,
+			'in' => 'Indonesian' ,
+			'is' => 'Icelandic' ,
+			'it' => 'Italian' ,
+			'iw' => 'Hebrew' ,
+			'ja' => 'Japanese' ,
+			'ji' => 'Yiddish' ,
+			'jw' => 'Javanese' ,
+			'ka' => 'Georgian' ,
+			'kk' => 'Kazakh' ,
+			'kl' => 'Greenlandic' ,
+			'km' => 'Cambodian' ,
+			'kn' => 'Kannada' ,
+			'ko' => 'Korean' ,
+			'ks' => 'Kashmiri' ,
+			'ku' => 'Kurdish' ,
+			'ky' => 'Kirghiz' ,
+			'la' => 'Latin' ,
+			'ln' => 'Lingala' ,
+			'lo' => 'Laothian' ,
+			'lt' => 'Lithuanian' ,
+			'lv' => 'Latvian/Lettish' ,
+			'mg' => 'Malagasy' ,
+			'mi' => 'Maori' ,
+			'mk' => 'Macedonian' ,
+			'ml' => 'Malayalam' ,
+			'mn' => 'Mongolian' ,
+			'mo' => 'Moldavian' ,
+			'mr' => 'Marathi' ,
+			'ms' => 'Malay' ,
+			'mt' => 'Maltese' ,
+			'my' => 'Burmese' ,
+			'na' => 'Nauru' ,
+			'ne' => 'Nepali' ,
+			'nl' => 'Dutch' ,
+			'no' => 'Norwegian' ,
+			'oc' => 'Occitan' ,
+			'om' => '(Afan)/Oromoor/Oriya' ,
+			'pa' => 'Punjabi' ,
+			'pl' => 'Polish' ,
+			'ps' => 'Pashto/Pushto' ,
+			'pt' => 'Portuguese' ,
+			'qu' => 'Quechua' ,
+			'rm' => 'Rhaeto-Romance' ,
+			'rn' => 'Kirundi' ,
+			'ro' => 'Romanian' ,
+			'ru' => 'Russian' ,
+			'rw' => 'Kinyarwanda' ,
+			'sa' => 'Sanskrit' ,
+			'sd' => 'Sindhi' ,
+			'sg' => 'Sangro' ,
+			'sh' => 'Serbo-Croatian' ,
+			'si' => 'Singhalese' ,
+			'sk' => 'Slovak' ,
+			'sl' => 'Slovenian' ,
+			'sm' => 'Samoan' ,
+			'sn' => 'Shona' ,
+			'so' => 'Somali' ,
+			'sq' => 'Albanian' ,
+			'sr' => 'Serbian' ,
+			'ss' => 'Siswati' ,
+			'st' => 'Sesotho' ,
+			'su' => 'Sundanese' ,
+			'sv' => 'Swedish' ,
+			'sw' => 'Swahili' ,
+			'ta' => 'Tamil' ,
+			'te' => 'Tegulu' ,
+			'tg' => 'Tajik' ,
+			'th' => 'Thai' ,
+			'ti' => 'Tigrinya' ,
+			'tk' => 'Turkmen' ,
+			'tl' => 'Tagalog' ,
+			'tn' => 'Setswana' ,
+			'to' => 'Tonga' ,
+			'tr' => 'Turkish' ,
+			'ts' => 'Tsonga' ,
+			'tt' => 'Tatar' ,
+			'tw' => 'Twi' ,
+			'uk' => 'Ukrainian' ,
+			'ur' => 'Urdu' ,
+			'uz' => 'Uzbek' ,
+			'vi' => 'Vietnamese' ,
+			'vo' => 'Volapuk' ,
+			'wo' => 'Wolof' ,
+			'xh' => 'Xhosa' ,
+			'yo' => 'Yoruba' ,
+			'zh' => 'Chinese' ,
+			'zu' => 'Zulu' ,
 		);
-		
+
 		if (isset($language_codes[$isoCode])) {
 			return utf8_strtolower($language_codes[$isoCode]);
 		} else {
@@ -538,17 +538,17 @@ abstract class install_generic extends gen_class {
 	public $next_button 		= 'continue';
 	public $skippable			= false;
 	public $parseskip			= false;
-	
+
 	public $data	= array();
-	
+
 	public function __construct() {
 		$this->data = registry::register('install')->data[get_class($this)];
 	}
-	
+
 	public static function before() {
 		return self::$before;
 	}
-	
+
 	public static function ajax() {
 		return self::$ajax;
 	}

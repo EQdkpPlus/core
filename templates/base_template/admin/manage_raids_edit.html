@@ -20,32 +20,32 @@
 		loadEventValue($("#event").val());
 	});
 	<!-- ENDIF -->
-	
+
 	function delete_row(obj){
 		$(obj).parent().parent().remove();
 	}
-	
+
 	function delete_adj(obj, id){
-		$(obj).parent().find("input[type='checkbox']").attr("checked", "checked");
+		$(obj).parent().find("input[type='checkbox']").prop("checked", true);
 		$(obj).parent().parent().hide();
 		var value = $("#del_adjustments").val();
 		$("#del_adjustments").val(value+","+id);
 	}
-	
+
 	function delete_item(obj, id){
-		$(obj).parent().find("input[type='checkbox']").attr("checked", "checked");
+		$(obj).parent().find("input[type='checkbox']").prop("checked", true);
 		$(obj).parent().parent().hide();
 		var value = $("#del_items").val();
 		$("#del_items").val(value+","+id);
 	}
-	
+
 	var auto_adj_reason = {ADJ_REASON_AUTOCOMPLETE};
 	var adj_key = {ADJ_KEY};
 	$(document).ready(function(){
 		$('#add-adjustment-btn').on('click', function(){
 			var event = $('#event').val();
 			$('#event_KEY').val(event);
-			
+
 			var new_row = $('#template-adjustments>tbody').html()+"";
 			new_row = new_row.replace(/KEY/g, adj_key);
 
@@ -61,11 +61,11 @@
 			adj_key++;
 		});
 	});
-	
+
 	var auto_itemname = {ITEM_AUTOCOMPLETE};
 	var item_key = {ITEM_KEY};
 	$(document).ready(function(){
-		$('#add-item-btn').on('click', function(){			
+		$('#add-item-btn').on('click', function(){
 			var new_row = $('#template-items>tbody').html()+"";
 			new_row = new_row.replace(/KEY/g, item_key);
 
@@ -77,12 +77,12 @@
 			$("#items_"+item_key).autocomplete({
 				source: auto_itemname
 			});
-			
+
 			if(new_itempool_option > 0) $('#itempool_id_'+item_key).val(new_itempool_option);
 			item_key++;
 		});
 	});
-	
+
 	var show_additional = {ADDITIONAL_INFOS};
 	$(document).ready(function(){
 		if(show_additional){
@@ -90,13 +90,13 @@
 		} else {
 			$('.additional-note-container').hide();
 		}
-		
+
 		$('.additional-note-btn').on('click', function(){
 			$('.additional-note-container').show();
 			$(this).hide();
 		});
 	});
-	
+
 	var event_itempool_mapping = {EVENT_ITEMPOOL_MAPPING};
 	var new_itempool_option = event_itempool_mapping[{FIRST_EVENT_ID}];
 	$(document).ready(function(){
@@ -182,9 +182,9 @@
 				</tr>
 				<!-- END adjs -->
 			</tbody>
-		</table>	
+		</table>
 	</div>
-		
+
 </div>
 <br />
 <!-- ENDIF -->
@@ -226,7 +226,7 @@
 				<!-- END items -->
 			</tbody>
 		</table>
-			
+
 	</div>
 </div>
 <br />
@@ -256,7 +256,7 @@
 </table>
 
 <table id="template-items" style="display:none;">
-	<tr>				
+	<tr>
 		<td style="text-align:center;"><i class="fa fa-trash fa-lg hand" onclick="delete_row(this)"></i> <input type="hidden" name="items[KEY][group_key]" value="new" /></td>
 		<td><input type="text" name="items[KEY][name]" value="" class="input" style="width: 95%" id="items_KEY"/></td>
 		<td><input type="text" name="items[KEY][itemid]" value="" class="input" style="width: 95%" /></td>
