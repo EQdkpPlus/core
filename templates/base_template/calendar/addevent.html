@@ -125,8 +125,8 @@ $(document).ready(function() {
 
 	// Delete templates
 	$("#template_delbutton").bind("click", function(){
-		if($("#cal_raidtemplate").val() > 0){
-			$.get('{EQDKP_CONTROLLER_PATH}editcalendarevent{SEO_EXTENSION}{SID}&link_hash={CSRF_DELETETEMPLATE}&deletetemplate='+$("#cal_raidtemplate").val(), function(data) {
+		if ($("#cal_raidtemplate").val().match("^t_")) {
+			$.get('{EQDKP_CONTROLLER_PATH}editcalendarevent{SEO_EXTENSION}{SID}&link_hash={CSRF_DELETETEMPLATE}&deletetemplate='+$("#cal_raidtemplate").val().slice(2), function(data) {
 				$('#cal_raidtemplate').find('option').remove();
 				$('#cal_raidtemplate').append(data);
 			});
