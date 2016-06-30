@@ -123,6 +123,13 @@ $(document).ready(function() {
 				$("#dw_raidleader").multiselect("refresh");
 				$('#cal_raidmodeselect').trigger('change');
 			});
+
+			// gray out the button if a last-generated item is selected
+			if ($("#cal_raidtemplate").val().match("^l_")) {
+				$("#template_delbutton").prop('disabled', true);
+			}else{
+				$("#template_delbutton").prop('disabled', false);
+			}
 		}
 	});
 
@@ -130,7 +137,7 @@ $(document).ready(function() {
 	$("#template_delbutton").bind("click", function(){
 		if ($("#cal_raidtemplate").val().match("^t_")) {
 			$.get('{EQDKP_CONTROLLER_PATH}editcalendarevent{SEO_EXTENSION}{SID}&link_hash={CSRF_DELETETEMPLATE}&deletetemplate='+$("#cal_raidtemplate").val().slice(2), function(data) {
-				$('#cal_raidtemplate').find('option').remove();
+				$('#cal_raidtemplate').children().remove("optgroup");
 				$('#cal_raidtemplate').append(data);
 			});
 		}
