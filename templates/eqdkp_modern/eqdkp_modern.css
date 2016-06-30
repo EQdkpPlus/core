@@ -2481,6 +2481,13 @@ a.attendee_Link{
 a.attendee_Link:hover{
 	text-decoration: underline;
 }
+.raidcal_warningbox table {
+	border: 2px solid #edc9ce !important;
+}
+.raidcal_warningbox table th {
+	background-color: #F2DEDE;
+	color: red;
+}
 
 /* calendar: raidevent view - Not signed in Members Bar */
 .notsignedpanel {

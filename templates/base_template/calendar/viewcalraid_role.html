@@ -22,10 +22,14 @@
 		<table class="table fullwidth scrollable-x">
 			<tr>
 				<!-- BEGIN classes -->
-				<td class="top" style="width: {COLUMN_WIDTH}%;">
+				<td class="top<!-- IF raidstatus.classes.ID == -1 --> raidcal_warningbox<!-- ENDIF -->" style="width: {COLUMN_WIDTH}%;">
 					<table class="table fullwidth borderless">
 						<tr>
-							<th class="w100p"> {raidstatus.classes.CLASS_ICON} {raidstatus.classes.NAME} ({raidstatus.classes.COUNT}{raidstatus.classes.MAX})</th>
+							<!-- IF raidstatus.classes.ID == -1 -->
+								<th class="w100p coretip" data-coretip="{L_raidevent_deleted_role_assigned_info}"><i class="fa fa-exclamation-triangle fa-lg icon-red"></i> {raidstatus.classes.CLASS_ICON} {raidstatus.classes.NAME} ({raidstatus.classes.COUNT}{raidstatus.classes.MAX})</th>
+							<!-- ELSE -->
+								<th class="w100p">{raidstatus.classes.CLASS_ICON} {raidstatus.classes.NAME} ({raidstatus.classes.COUNT}{raidstatus.classes.MAX})</th>
+							<!-- ENDIF -->
 						</tr>
 						<tr>
 							<td class="top">

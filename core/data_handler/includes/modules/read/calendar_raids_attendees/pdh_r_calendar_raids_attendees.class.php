@@ -269,6 +269,18 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			return (isset($this->attendees[$eventid][$memberid])) ? $this->attendees[$eventid][$memberid]['member_role'] : '';
 		}
 
+		public function get_chars_with_wrong_role($eventid, $roles){
+			$chars_out = array();
+			if(is_array($this->attendees[$eventid])){
+				foreach($this->attendees[$eventid] as $charID=>$charData){
+					if(!in_array($charData['member_role'], $roles)){
+						$chars_out[$charID] = $charData;
+					}
+				}
+			}
+			return $chars_out;
+		}
+
 		public function get_raidgroup($eventid, $memberid){
 			return (isset($this->attendees[$eventid][$memberid])) ? $this->attendees[$eventid][$memberid]['raidgroup'] : 0;
 		}
