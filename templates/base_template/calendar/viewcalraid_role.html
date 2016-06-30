@@ -22,7 +22,8 @@
 		<table class="table fullwidth scrollable-x">
 			<tr>
 				<!-- BEGIN classes -->
-				<td class="top<!-- IF raidstatus.classes.ID == -1 --> raidcal_warningbox<!-- ENDIF -->" style="width: {COLUMN_WIDTH}%;">
+				<!-- IF raidstatus.classes.SHOW -->
+				<td class="top<!-- IF raidstatus.classes.ID == -1 --> raidcal_warningbox<!-- ENDIF -->" style="width: {raidstatus.classes.BREAK_WIDTH}%;">
 					<table class="table fullwidth borderless">
 						<tr>
 							<!-- IF raidstatus.classes.ID == -1 -->
@@ -100,6 +101,7 @@
 				</td>
 			<!-- IF raidstatus.classes.BREAK -->
 			</tr><tr>
+			<!-- ENDIF -->
 			<!-- ENDIF -->
 			<!-- END classes -->
 			</tr>

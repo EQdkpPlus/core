@@ -558,7 +558,6 @@ class calendarevent_pageobject extends pageobject {
 			$this->attendees = $this->attendees_count = array();
 			foreach($this->attendees_raw as $attendeeid=>$attendeedata){
 				if($attendeeid > 0){
-					echo 'Attendee: '.$attendeeid.' -- Bla: '.in_array($attendeeid, $this->charswithdeletedroles);
 					$charshasdeletedrole	= (is_array($this->charswithdeletedroles) && count($this->charswithdeletedroles) > 0 && in_array($attendeeid, $this->charswithdeletedroles)) ? true : false;
 					$attclassid = (isset($eventdata['extension']['raidmode']) && $eventdata['extension']['raidmode'] == 'role') ? $attendeedata['member_role'] : $this->pdh->get('member', 'classid', array($attendeeid));
 					$role_class = (($eventdata['extension']['raidmode'] == 'role') ? (($charshasdeletedrole) ? '-1' : $attendeedata['member_role']) : $attclassid);
@@ -702,6 +701,7 @@ class calendarevent_pageobject extends pageobject {
 
 				}
 
+				$classsbrk	= ($classid == -1 && (!isset($this->attendees[$statuskey][$classid]) || (isset($this->attendees[$statuskey][$classid]) && count($this->attendees[$statuskey][$classid]) == 0))) ? count($this->raidcategories) - 1 : count($this->raidcategories);
 				$this->tpl->assign_block_vars('raidstatus.classes', array(
 					'BREAK'			=> ($mybreak) ? true : false,
 					'ID'			=> $classid,
@@ -709,6 +709,8 @@ class calendarevent_pageobject extends pageobject {
 					'CLASS_ICON'	=> ($eventdata['extension']['raidmode'] == 'role') ? $this->game->decorate('roles', $classid) : $this->game->decorate('primary', $classid),
 					'MAX'			=> ($eventdata['extension']['raidmode'] == 'none' && $eventdata['extension']['distribution'][$classid] == 0) ? '' : '/'.(($classid == '-1') ? '&infin;' : $eventdata['extension']['distribution'][$classid]),
 					'COUNT'			=> (isset($this->attendees[$statuskey][$classid])) ? count($this->attendees[$statuskey][$classid]) : 0,
+					'SHOW'			=> ($classid > 0 || ($classid == -1 && isset($this->attendees[$statuskey][$classid]) && count($this->attendees[$statuskey][$classid]) > 0)) ? true : false,
+					'BREAK_WIDTH'	=> (isset($user_brakclm) && $classsbrk > $this->classbreakval) ? str_replace(',','.',100/$this->classbreakval) : str_replace(',','.',100/$classsbrk),
 				));
 				// The characters
 				if(isset($this->attendees[$statuskey][$classid]) && is_array($this->attendees[$statuskey][$classid])){
