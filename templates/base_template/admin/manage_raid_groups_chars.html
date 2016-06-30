@@ -29,6 +29,7 @@
 					<th class="hiddenSmartphone">{L_level}</th>
 					<th>{L_rank}</th>
 					<th class="hiddenSmartphone">{L_class}</th>
+					<th class="hiddenSmartphone">{L_user}</th>
 					<th class="hiddenSmartphone">{L_active}</th>
 				</tr>
 				<tr>
@@ -47,11 +48,12 @@
 					<td class="hiddenSmartphone">{char_row_grpleader.LEVEL}</td>
 					<td>{char_row_grpleader.RANK}</td>
 					<td class="hiddenSmartphone">{char_row_grpleader.CLASS}</td>
+					<td class="hiddenSmartphone">{char_row_grpleader.USER}</td>
 					<td class="hiddenSmartphone">{char_row_grpleader.ACTIVE}</td>
 				</tr>
 				<!-- END char_row_grpleader -->
-				
-				
+
+
 				<tr>
 					<th colspan="7" />{L_group_members}</th>
 				</tr>
@@ -64,6 +66,7 @@
 					<td class="hiddenSmartphone">{char_row.LEVEL}</td>
 					<td>{char_row.RANK}</td>
 					<td class="hiddenSmartphone">{char_row.CLASS}</td>
+					<td class="hiddenSmartphone">{char_row.USER}</td>
 					<td class="hiddenSmartphone">{char_row.ACTIVE}</td>
 				</tr>
 				<!-- END char_row -->
@@ -72,7 +75,7 @@
 						{BUTTON_MENU}
 					</th>
 				</tr>
-				
+
 				</table>
 				<br />
 				<fieldset class="settings mediumsettings" class="settings">
@@ -98,7 +101,7 @@ $(document).ready(function(){
 			$('#span_'+this.id).attr('class', 'negative');
 		}
 	});
-	
+
 	$("#selall_usergr").click(function(){
 		var checked_status = this.checked;
 		$(".usercheckbox").each(function(){

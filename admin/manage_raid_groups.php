@@ -254,6 +254,7 @@ class Manage_Raid_Groups extends page_generic {
 					'ID'			=> $memberid,
 					'NAME'			=> sanitize($this->pdh->get('member', 'name', array($memberid))),
 					'CLASS'			=> $this->pdh->get('member', 'html_classname', array($memberid)),
+					'USER'			=> $this->pdh->get('user', 'name', array($this->pdh->get('member', 'userid', array($memberid)))),
 					'LEVEL'			=> $this->pdh->get('member', 'level', array($memberid)),
 					'RANK'			=> $this->pdh->get('member', 'html_rankname', array($memberid)),
 					'ACTIVE'		=> ($this->pdh->get('member', 'active', array($memberid)) == '1') ? '<i class="eqdkp-icon-online"></i>' : '<i class="eqdkp-icon-offline"></i>',
