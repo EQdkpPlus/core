@@ -538,9 +538,22 @@ if (!class_exists("pdh_r_user")){
 			return false;
 		}
 
-		public function get_notification_articlecategory_abo($intCategoryID, $intUserID=false){
+		public function get_notification_articlecategory_abo($intCategoryID, $strDatasetID=false, $intUserID=false){
 			if ($intUserID === false) $intUserID = $this->user->id;
-
+			
+			//Check Permission of Category
+			$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($intCategoryID, $intUserID));
+			if (!$arrPermissions['read']) return false;
+			
+			/*Check Permission of Article
+			  Not needed now
+			if($strDatasetID !== false){
+				$arrArticleID = explode("_", $strDatasetID);
+				$intArticleID = intval($arrArticleID[0]);
+			}
+			*/
+			
+			
 			$arrNotificationSettings = $this->get_notification_settings($intUserID);
 			if ($arrNotificationSettings && isset($arrNotificationSettings['ntfy_comment_new_article_categories'])){
 				$arrCategories = $arrNotificationSettings['ntfy_comment_new_article_categories'];
@@ -563,11 +576,11 @@ if (!class_exists("pdh_r_user")){
 			return true;
 		}
 
-		public function get_notification_articlecategory_abos($intCategoryID){
+		public function get_notification_articlecategory_abos($intCategoryID, $strDatasetID){
 			$arrUser = $this->get_id_list();
 			$arrOut = array();
 			foreach($arrUser as $intUserID){
-				if ($this->get_notification_articlecategory_abo($intCategoryID, $intUserID)) $arrOut[] = $intUserID;
+				if ($this->get_notification_articlecategory_abo($intCategoryID, $strDatasetID, $intUserID)) $arrOut[] = $intUserID;
 			}
 			return $arrOut;
 		}

@@ -54,12 +54,12 @@ class notifications extends gen_class {
 		}
 	}
 	
-	public function add($strType, $intDatasetID, $strFromUsername, $strLink, $intUserID=false, $strAdditionalData="", $intCategoryID=false, $mixPermission=false){
+	public function add($strType, $strDatasetID, $strFromUsername, $strLink, $intUserID=false, $strAdditionalData="", $intCategoryID=false, $mixPermission=false){
 		
 		if ($intUserID === false){
 			if ($strType === 'comment_new_article'){
 				if ($intCategoryID === false) return false;
-				$arrUsers = $this->pdh->get('user', 'notification_articlecategory_abos', array($intCategoryID));
+				$arrUsers = $this->pdh->get('user', 'notification_articlecategory_abos', array($intCategoryID, $strDatasetID));
 			} else {
 				$arrUsers = $this->pdh->get('user', 'notification_abos', array($strType));
 			}
@@ -68,8 +68,8 @@ class notifications extends gen_class {
 				if ((int)$intUserID === $this->user->id) continue;
 				if(!$this->check_permission($mixPermission, $intUserID)) continue;
 				
-				$intNotificationID = $this->pdh->put('notifications', 'add', array($strType, $intUserID, $strFromUsername, $intDatasetID, $strLink, $strAdditionalData));
-				$this->sendNofiticationByMethod($intUserID, $intNotificationID, $strType, $strFromUsername, $intDatasetID, $strLink, $strAdditionalData);
+				$intNotificationID = $this->pdh->put('notifications', 'add', array($strType, $intUserID, $strFromUsername, $strDatasetID, $strLink, $strAdditionalData));
+				$this->sendNofiticationByMethod($intUserID, $intNotificationID, $strType, $strFromUsername, $strDatasetID, $strLink, $strAdditionalData);
 			}
 			$this->pdh->process_hook_queue();
 			
@@ -81,21 +81,21 @@ class notifications extends gen_class {
 					foreach($intUserID as $intUID){
 						if ((int)$intUID === $this->user->id) continue;
 						if(!$this->check_permission($mixPermission, (int)$intUID)) continue;
-						$blnHasAbo = $this->pdh->get('user', 'notification_articlecategory_abo', array($intCategoryID, $intUID));
+						$blnHasAbo = $this->pdh->get('user', 'notification_articlecategory_abo', array($intCategoryID, $strDatasetID, $intUID));
 							
 						if ($blnHasAbo){
-							$intNotificationID = $this->pdh->put('notifications', 'add', array($strType, $intUID, $strFromUsername, $intDatasetID, $strLink, $strAdditionalData));
-							$this->sendNofiticationByMethod($intUID, $intNotificationID, $strType, $strFromUsername, $intDatasetID, $strLink, $strAdditionalData);
+							$intNotificationID = $this->pdh->put('notifications', 'add', array($strType, $intUID, $strFromUsername, $strDatasetID, $strLink, $strAdditionalData));
+							$this->sendNofiticationByMethod($intUID, $intNotificationID, $strType, $strFromUsername, $strDatasetID, $strLink, $strAdditionalData);
 								
 						}
 					}
 					$this->pdh->process_hook_queue();
 					
 				} else {
-					$blnHasAbo = $this->pdh->get('user', 'notification_articlecategory_abo', array($intCategoryID, $intUserID));
+					$blnHasAbo = $this->pdh->get('user', 'notification_articlecategory_abo', array($intCategoryID, $strDatasetID, $intUserID));
 					if ($blnHasAbo && intval($intUserID) !== $this->user->id && $this->check_permission($mixPermission, (int)$intUserID)){
-						$intNotificationID = $this->pdh->put('notifications', 'add', array($strType, $intUserID, $strFromUsername, $intDatasetID, $strLink, $strAdditionalData));
-						$this->sendNofiticationByMethod($intUserID, $intNotificationID, $strType, $strFromUsername, $intDatasetID, $strLink, $strAdditionalData);	
+						$intNotificationID = $this->pdh->put('notifications', 'add', array($strType, $intUserID, $strFromUsername, $strDatasetID, $strLink, $strAdditionalData));
+						$this->sendNofiticationByMethod($intUserID, $intNotificationID, $strType, $strFromUsername, $strDatasetID, $strLink, $strAdditionalData);	
 						$this->pdh->process_hook_queue();
 					}
 					
@@ -109,8 +109,8 @@ class notifications extends gen_class {
 						
 						$blnHasAbo = $this->pdh->get('user', 'notification_abo', array($strType, $intUID));
 						if ($blnHasAbo){
-							$intNotificationID = $this->pdh->put('notifications', 'add', array($strType, $intUID, $strFromUsername, $intDatasetID, $strLink, $strAdditionalData));
-							$this->sendNofiticationByMethod($intUID, $intNotificationID, $strType, $strFromUsername, $intDatasetID, $strLink, $strAdditionalData);
+							$intNotificationID = $this->pdh->put('notifications', 'add', array($strType, $intUID, $strFromUsername, $strDatasetID, $strLink, $strAdditionalData));
+							$this->sendNofiticationByMethod($intUID, $intNotificationID, $strType, $strFromUsername, $strDatasetID, $strLink, $strAdditionalData);
 						}
 					}
 					$this->pdh->process_hook_queue();
@@ -119,8 +119,8 @@ class notifications extends gen_class {
 				
 					$blnHasAbo = $this->pdh->get('user', 'notification_abo', array($strType, $intUserID));
 					if ($blnHasAbo && intval($intUserID) !== $this->user->id && $this->check_permission($mixPermission, $intUserID)){
-						$intNotificationID = $this->pdh->put('notifications', 'add', array($strType, $intUserID, $strFromUsername, $intDatasetID, $strLink, $strAdditionalData));
-						$this->sendNofiticationByMethod($intUserID, $intNotificationID, $strType, $strFromUsername, $intDatasetID, $strLink, $strAdditionalData);
+						$intNotificationID = $this->pdh->put('notifications', 'add', array($strType, $intUserID, $strFromUsername, $strDatasetID, $strLink, $strAdditionalData));
+						$this->sendNofiticationByMethod($intUserID, $intNotificationID, $strType, $strFromUsername, $strDatasetID, $strLink, $strAdditionalData);
 						$this->pdh->process_hook_queue();
 					}
 				}
@@ -298,8 +298,8 @@ class notifications extends gen_class {
 		return $strLang;
 	}
 
-	public function deleteNotification($strType, $intDatasetID){
-		$this->pdh->put('notifications', 'delete_by_type_and_recordset', array($strType, $intDatasetID));
+	public function deleteNotification($strType, $strDatasetID){
+		$this->pdh->put('notifications', 'delete_by_type_and_recordset', array($strType, $strDatasetID));
 		$this->pdh->process_hook_queue();
 	}
 	
@@ -408,7 +408,7 @@ class notifications extends gen_class {
 		return $types;
 	}
 	
-	public function sendNofiticationByMethod($intUserID, $intNotificationID, $strType, $strFromUsername, $intDatasetID, $strLink, $strAdditionalData){
+	public function sendNofiticationByMethod($intUserID, $intNotificationID, $strType, $strFromUsername, $strDatasetID, $strLink, $strAdditionalData){
 		$arrNotificationSettings = $this->pdh->get('user', 'notification_settings', array($intUserID));
 		$strNotificationMethod = $arrNotificationSettings['ntfy_'.$strType];
 		if(!$strNotificationMethod || $strNotificationMethod == "") return true;
@@ -424,7 +424,7 @@ class notifications extends gen_class {
 			'type' 				=> $strType,
 			'link' 				=> $this->env->buildlink().$this->routing->build('Notifications', false, false, false, true).'?redirect='.$intNotificationID,
 			'additional_data'	=> $strAdditionalData,
-			'dataset_id'		=> $intDatasetID,
+			'dataset_id'		=> $strDatasetID,
 			'prio'				=> $arrNotificationType['prio'],
 			'type_lang'			=> $this->user->lang('user_sett_f_ntfy_'.$strType, false, false, $strUserLanguage),
 			'name'				=> $this->parseLang($arrNotificationType['name'], $strFromUsername, $strAdditionalData, 1, $strUserLanguage),
