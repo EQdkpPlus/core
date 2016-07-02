@@ -57,7 +57,6 @@ class inst_settings extends install_generic {
 		'start_page'					=> 'news',
 		'cookie_path'					=> '/',
 		'session_length'				=> '3600',
-		'session_cleanup'				=> '0',
 		'session_last_cleanup'			=> '0',
 		'enable_gzip'					=> '0',
 		'account_activation'			=> 1,
