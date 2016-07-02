@@ -210,7 +210,42 @@ class auth extends user {
 				'session_key'			=> $strSessionKey,
 				'session_type'			=> (defined('SESSION_TYPE')) ? SESSION_TYPE : '',
 		);
-		$this->db->prepare('INSERT INTO __sessions :p')->set($arrData)->execute();
+		
+		//Select count of concurrent sessions - if guest
+		if($user_id === ANONYMOUS){
+			//Guest
+			$blnCreateSession = false;
+			$objQuery = $this->db->prepare("SELECT count(*) as count FROM __sessions WHERE session_ip=? AND session_browser=?")->execute($this->env->ip, $this->env->useragent);
+			if($objQuery){
+				$arrQuery = $objQuery->fetchAssoc();
+				$intCount = $arrQuery['count'];
+				if($intCount > MAX_CONCURRENT_SESSIONS){
+					//Try to reuse a guest session
+					$objGuestQuerySession = $this->db->prepare("SELECT * FROM __sessions WHERE session_ip=? AND session_browser=? AND session_user_id=? ORDER BY session_current DESC LIMIT 1")->execute($this->env->ip, $this->env->useragent, ANONYMOUS);
+					if($objGuestQuerySession){
+						$arrGuestData = $objGuestQuerySession->fetchAssoc();
+						if($arrGuestData && $arrGuestData['session_id']){
+							$arrData['session_id'] = $arrGuestData['session_id'];
+							$this->sid = $arrData['session_id'];
+						} else {
+							//Don't create a new session
+							$arrData['session_id'] = "sharedguestsession";
+							$this->sid = "sharedguestsession";	
+						}
+					} else {
+						//Don't create a new session
+						$arrData['session_id'] = "sharedguestsession";
+						$this->sid = "sharedguestsession";
+					}
+				} else {
+					$this->db->prepare('INSERT INTO __sessions :p')->set($arrData)->execute();
+				}
+			}
+
+		} else {
+			//Normal User
+			$this->db->prepare('INSERT INTO __sessions :p')->set($arrData)->execute();
+		}
 
 		//generate cookie-Data
 		$arrCookieData = array();
@@ -222,9 +257,7 @@ class auth extends user {
 				$this->updateAutologinKey($user_id, $strAutologinKey);
 			}
 			$arrCookieData['auto_login_id'] = $strAutologinKey;
-
 		}
-		
 		
 		// set the cookies
 		set_cookie('data', base64_encode(serialize($arrCookieData)), $this->current_time + 2592000); //30 days
@@ -325,7 +358,7 @@ class auth extends user {
 				//Update User last visit
 				if ( intval($row['session_user_id']) != ANONYMOUS ){
 					$this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
-						'user_lastvisit'	=> $row['recent_time'],
+						'user_lastvisit'	=> $row['session_current'],
 						'user_lastpage'		=> $row['session_page'],
 					))->execute($row['session_user_id']);
 				}
