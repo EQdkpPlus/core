@@ -325,7 +325,7 @@ class auth extends user {
 				//Update User last visit
 				if ( intval($row['session_user_id']) != ANONYMOUS ){
 					$this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
-						'user_lastvisit'	=> $row['recent_time'],
+						'user_lastvisit'	=> $row['session_current'],
 						'user_lastpage'		=> $row['session_page'],
 					))->execute($row['session_user_id']);
 				}
