@@ -80,7 +80,7 @@ if ( !class_exists( "pdh_r_notifications" ) ) {
 
 		public function get_notifications_for_user($intUserID){
 			$arrOut = array();
-			$objQuery = $this->db->prepare("SELECT id FROM __notifications WHERE user_id=? AND `read`=0")->execute($intUserID);
+			$objQuery = $this->db->prepare("SELECT id FROM __notifications WHERE user_id=? AND `read`=0 ORDER BY `time` DESC")->execute($intUserID);
 
 			if($objQuery){
 				while ( $row = $objQuery->fetchAssoc() ) {
@@ -93,7 +93,7 @@ if ( !class_exists( "pdh_r_notifications" ) ) {
 
 		public function get_all_notifications_for_user($intUserID){
 			$arrOut = array();
-			$objQuery = $this->db->prepare("SELECT id FROM __notifications WHERE user_id=?")->execute($intUserID);
+			$objQuery = $this->db->prepare("SELECT id FROM __notifications WHERE user_id=? ORDER BY `time` DESC")->execute($intUserID);
 
 			if($objQuery){
 				while ( $row = $objQuery->fetchAssoc() ) {
