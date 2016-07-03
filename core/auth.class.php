@@ -211,8 +211,9 @@ class auth extends user {
 				'session_type'			=> (defined('SESSION_TYPE')) ? SESSION_TYPE : '',
 		);
 		
+		$blnIsBot = $this->env->is_bot($this->env->useragent);
 		//Select count of concurrent sessions - if guest
-		if($user_id === ANONYMOUS){
+		if($user_id === ANONYMOUS && !$blnIsBot){
 			//Guest
 			$blnCreateSession = false;
 			$objQuery = $this->db->prepare("SELECT count(*) as count FROM __sessions WHERE session_ip=? AND session_browser=?")->execute($this->env->ip, $this->env->useragent);
@@ -242,6 +243,10 @@ class auth extends user {
 				}
 			}
 
+		} elseif($blnIsBot && $user_id === ANONYMOUS){
+			//Bot
+			$arrData['session_id'] = "sharedbotsession";
+			$this->sid = "sharedbotsession";
 		} else {
 			//Normal User
 			$this->db->prepare('INSERT INTO __sessions :p')->set($arrData)->execute();
