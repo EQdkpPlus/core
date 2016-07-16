@@ -1762,7 +1762,7 @@ hr#system-readmore {
 	display:none;
 }
 
-ul.breamcrumb {
+ul.breadcrumb {
 	color: @eqdkpContentFontColor;
 	font-size: 13px;
 	border-width: 1px;
@@ -1773,11 +1773,11 @@ ul.breamcrumb {
 	width: 100%;
 }
 
-ul.breamcrumb li {
+ul.breadcrumb li {
 	float: left;
 }
 
-ul.breamcrumb a {
+ul.breadcrumb a {
 	padding: .7em 1em .7em 2em;
 	float: left;
 	text-decoration: none;
@@ -1788,23 +1788,23 @@ ul.breamcrumb a {
 	background-image: linear-gradient(to right, @eqdkpContentAccentColor, lighten(@eqdkpContentBackgroundColor, 5));
 }
 
-ul.breamcrumb li:first-child a{
+ul.breadcrumb li:first-child a{
 	padding-left: 1em;
 	padding-right: 0.5em;
 	padding-bottom: 0.3em;
 }
 
-ul.breamcrumb li:first-child a i {
+ul.breadcrumb li:first-child a i {
 	font-size: 1.5em;
 	margin-top: -0.1em;
 }
 
-ul.breamcrumb a:hover{
+ul.breadcrumb a:hover{
 	background: lighten(@eqdkpContentBackgroundColor, 5);
 }
 
-ul.breamcrumb a::after,
-ul.breamcrumb a::before{
+ul.breadcrumb a::after,
+ul.breadcrumb a::before{
 	content: "";
 	position: absolute;
 	top: 50%;
@@ -1815,29 +1815,29 @@ ul.breamcrumb a::before{
 	right: -1em;
 }
 
-ul.breamcrumb a::after{
+ul.breadcrumb a::after{
 	z-index: 2;
 	border-left-color: lighten(@eqdkpContentBackgroundColor, 5);
 }
 
-ul.breamcrumb a::before{
+ul.breadcrumb a::before{
 	border-left-color: darken(@eqdkpContentAccentColor, 5);
 	right: -1.1em;
 	z-index: 1;
 }
 
-ul.breamcrumb a:hover::after{
+ul.breadcrumb a:hover::after{
 	border-left-color: lighten(@eqdkpContentBackgroundColor, 5);
 }
 
-ul.breamcrumb .current,
-ul.breamcrumb .current:hover{
+ul.breadcrumb .current,
+ul.breadcrumb .current:hover{
 	font-weight: bold;
 	background: none;
 }
 
-ul.breamcrumb .current::after,
-ul.breamcrumb .current::before{
+ul.breadcrumb .current::after,
+ul.breadcrumb .current::before{
 	content: normal;
 }
 
@@ -3694,30 +3694,30 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		float: none;
 	}
 
-	.responsive .breamcrumb li, .responsive .breamcrumb li a:after, .responsive .breamcrumb li a:before {
+	.responsive .breadcrumb li, .responsive .breadcrumb li a:after, .responsive .breadcrumb li a:before {
 		display: none;
 	}
 
-	.responsive .breamcrumb li:first-child, .responsive .breamcrumb li:nth-last-of-type(2) {
+	.responsive .breadcrumb li:first-child, .responsive .breadcrumb li:nth-last-of-type(2) {
 		display: inline;
 	}
 
-	.responsive .breamcrumb li:first-child a {
+	.responsive .breadcrumb li:first-child a {
 		border-right: 1px solid #ccc;
 		padding-right: 8px;
 		line-height: 27px;
 		padding-left: 8px !important;
 	}
 
-	.responsive .breamcrumb li {
+	.responsive .breadcrumb li {
 		font-size: 14px;
 	}
 
-	.responsive .breamcrumb li:nth-last-of-type(2) a {
+	.responsive .breadcrumb li:nth-last-of-type(2) a {
 		padding-left: 22px;
 	}
 
-	.responsive .breamcrumb li:nth-last-of-type(2) a:before {
+	.responsive .breadcrumb li:nth-last-of-type(2) a:before {
 		content:"\f060";
 		display:inline;
 		border: none;
@@ -3730,7 +3730,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		font-family: "FontAwesome";
 	}
 
-	.responsive .breamcrumb li:first-child a:before {
+	.responsive .breadcrumb li:first-child a:before {
 		display: none;
 	}
 

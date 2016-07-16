@@ -46,7 +46,7 @@
 		<div class="innerWrapper">
 			<!-- IF S_IS_ADMIN -->
 			<div class="breadcrumbContainer">
-				<ul class="breamcrumb">
+				<ul class="breadcrumb">
 					<li><a href="{ROOT_PATH}index.php"><i class="fa fa-home"></i></a></li>
 					<li><a href="{U_ACP}">{L_ADMIN_PANEL}</a></li>
 					<li><a href="{U_MMODE}">{L_MMODE}</a></li>
