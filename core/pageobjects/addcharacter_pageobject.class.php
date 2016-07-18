@@ -55,7 +55,7 @@ class addcharacter_pageobject extends pageobject {
 	public function add(){
 		$this->build_form();
 		$data = $this->form->return_values();
-		$data['notes'] = htmlspecialchars($this->in->get('notes'), ENT_QUOTES);
+		$data['notes'] = $this->in->get('notes');
 
 		if (strlen($data['name'])){
 			$blnResult = $this->pdh->put('member', 'addorupdate_member', array($this->url_id, $data, $data['overtakechar']));
@@ -78,7 +78,7 @@ class addcharacter_pageobject extends pageobject {
 	public function edit(){
 		$this->build_form();
 		$data = $this->form->return_values();
-		$data['notes'] = htmlspecialchars($this->in->get('notes'), ENT_QUOTES);
+		$data['notes'] = $this->in->get('notes');
 
 		// dont allow name-change if not in adminmode
 		if(!$this->adminmode) {
