@@ -185,12 +185,12 @@ class wbb4_bridge extends bridge_generic {
 		
 		$result = $this->bridgedb->prepare("SELECT * FROM ".$this->prefix."session WHERE userID = ? and sessionID=?")->execute($userID, $cookieHash);
 		if ($result){
-			$row = $result->fetchRow();
+			$row = $result->fetchAssoc();
 			if ($row){
 				if ($row['ipAddress'] == self::getIpAddress() && $row['userAgent'] == $this->env->useragent){
 					$result2 = $this->bridgedb->prepare("SELECT * FROM ".$this->prefix."user WHERE userID=?")->execute($userID);
 					if ($result2){
-						$row2 = $result2->fetchRow();
+						$row2 = $result2->fetchAssoc();
 						if($row2){
 							$strUsername = utf8_strtolower($row2['username']);
 							$user_id = $this->pdh->get('user', 'userid', array($strUsername));
