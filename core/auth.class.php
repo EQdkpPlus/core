@@ -63,6 +63,7 @@ class auth extends user {
 		$this->current_time = $this->time->time;
 		$this->data['user_id'] = ANONYMOUS;
 		$boolValid = false;
+		$boolIsExistingGuestSession = false;
 
 		//Return, if we don't want a session
 		if (defined('NO_SESSION')) {
@@ -125,10 +126,16 @@ class auth extends user {
 								'session_page'		=> strlen($this->env->current_page) ? substr(utf8_strtolower($this->env->current_page), 0, 254) : '',
 							))->execute($this->sid);
 						}
-						//The Session is valid, copy the user-data to the data-array and finish the init. You you can work with this data.
+						//The Session is valid, copy the user-data to the data-array and finish the init. You can work with this data.
 	
 						registry::add_const('SID', "?s=".((!empty($arrCookieData['sid'])) ? '' : $this->sid));
-						return true;
+						
+						//If its an guest session, try autologins, otherwise return true;
+						if($this->id == ANONYMOUS){
+							$boolIsExistingGuestSession = true;
+						} else {
+							return true;
+						}
 					} else {
 						$arrSessionKeys = explode(";", $arrResult['session_key']);
 						$arrSessionKeys = array_reverse($arrSessionKeys);
@@ -159,8 +166,8 @@ class auth extends user {
 			}
 		}
 
-		//EQdkp Autologin
-		if (!$boolSetAutoLogin){
+		//EQdkp Autologin (not if existing guest session)
+		if (!$boolSetAutoLogin && !$boolIsExistingGuestSession){
 			$arrAutologin = $this->autologin($arrCookieData);
 			if ($arrAutologin){
 				$this->data = array_merge($this->data, $arrAutologin);
@@ -178,6 +185,12 @@ class auth extends user {
 		}
 		//END Autologin
 
+		//Return true if its a valid guest session, because autologin failed
+		if($boolIsExistingGuestSession && !$boolSetAutoLogin){
+			return true;
+		}
+		
+		
 		//Let's create a session
 		$this->create($this->data['user_id'], (isset($this->data['user_login_key']) ? $this->data['user_login_key'] : ''), $boolSetAutoLogin, ((isset($this->data['old_sessionkey'])) ? $this->data['old_sessionkey'] : false)  );
 		$this->id = $this->data['user_id'];
