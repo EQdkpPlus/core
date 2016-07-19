@@ -166,7 +166,7 @@ class core extends gen_class {
 
 		private function page_header(){
 			define('HEADER_INC', true);		// Define a variable so we know the header's been included
-			
+
 			$intGuildrulesArticleID = $this->pdh->get('articles', 'resolve_alias', array('guildrules'));
 			$blnGuildrules = ($intGuildrulesArticleID && $this->pdh->get('articles', 'published', array($intGuildrulesArticleID)));
 			if ($this->user->is_signedin() && (int)$this->user->data['rules'] != 1 && $blnGuildrules){
@@ -174,7 +174,7 @@ class core extends gen_class {
 					redirect($this->controller_path_plain.'Register/'.$this->SID, false, false, false);
 				}
 			}
-			
+
 			// Check if gzip is enabled & send the HTTP headers
 			if ( $this->config->get('enable_gzip') == '1' ){
 				if ( (extension_loaded('zlib')) && (!headers_sent()) ){
@@ -189,9 +189,9 @@ class core extends gen_class {
 			if (!$this->config->get('disable_xframe_header')){
 				@header("X-Frame-Options: SAMEORIGIN");
 			}
-			
+
 			// some style additions (header, background image..)
-			$favicon = $this->user->style['favicon_img'];
+			$favicon = (isset($this->user->style['favicon_img'])) ? $this->user->style['favicon_img'] : '';
 			switch(pathinfo($favicon, PATHINFO_EXTENSION)){
 				case 'png': $favicon_type = 'image/png';
 					break;
@@ -201,13 +201,13 @@ class core extends gen_class {
 					$favicon = $this->server_path.'templates/'.$this->user->style['template_path'].'/images/favicon.png';
 					$favicon_type = 'image/png';
 			}
-			
+
 			$template_background_file = "";
 			switch($this->user->style['background_type']){
 				//Game
 				case 1: $template_background_file = $this->server_path . 'games/' .$this->config->get('default_game') . '/template_background.jpg' ;
 					break;
-					
+
 				//Own
 				case 2:
 					if ($this->user->style['background_img'] != ''){
@@ -218,7 +218,7 @@ class core extends gen_class {
 						}
 					}
 					break;
-				
+
 				//Style
 				default:
 					if(is_file($this->root_path . 'templates/' . $this->user->style['template_path'] . '/images/template_background.png')){
@@ -237,25 +237,25 @@ class core extends gen_class {
 			if(is_file($templatejs)){
 				$this->tpl->js_file($templatejs);
 			}
-			
+
 			// add the custom JS file
 			$customjs		= $this->root_path.'templates/'.$this->user->style['template_path'].'/custom.js';
 			if(is_file($customjs)){
 				$this->tpl->js_file($customjs);
 			}
-			
+
 			if(strlen($this->config->get('global_js'))){
 				$global_js = $this->config->get('global_js');
 				$this->tpl->assign_var('FOOTER_CODE', $global_js);
 			}
-			
+
 			//CSS
 			$this->tpl->add_common_cssfiles();
-			
+
 			if ($this->config->get('pk_maintenance_mode') && $this->user->check_auth('a_', false)){
 				$this->global_warning($this->user->lang('maintenance_mode_warn'), 'fa-cog');
 			}
-			
+
 			if(defined('EQDKP_UPDATE') && EQDKP_UPDATE){
 				$this->global_warning($this->user->lang('maintenance_mode_noauth_warn'), 'fa-cog');
 			}
@@ -268,7 +268,7 @@ class core extends gen_class {
 							$(':checkbox', this).trigger('click');
 						}
 					});
-					
+
 					$(function(){
 						var search = $('#loginarea_search');
 						original_val = search.val();
@@ -283,7 +283,7 @@ class core extends gen_class {
 							}
 						});
 					});", 'static_docready');
-			
+
 			$this->tpl->add_js("
 					$('.paginationPageSelector').on('click', function(){
 						var base_url = $(this).parent().parent().data('base-url');
@@ -291,7 +291,7 @@ class core extends gen_class {
 						var per_page = $(this).parent().parent().data('per-page');
 						var hint = '".$this->user->lang('pagination_goto_hint')."';
 						hint = hint.replace(/PAGE/g, pages);
-					
+
 						$('<div></div>')
 								.html('<fieldset class=\"settings mediumsettings\"><dl><dt><label>".$this->user->lang('pagination_goto').":</label></dt><dd><input type=\"text\" size=\"10\" maxlength=\"30\" class=\"input\" id=\"goToPageInput\" placeholder=\"'+hint+'\" /><br />'+hint+'</dd></dl></fieldset>')
 								.dialog({
@@ -312,7 +312,7 @@ class core extends gen_class {
 								}
 						});
 					});
-					
+
 					", 'docready');
 
 
@@ -323,7 +323,7 @@ class core extends gen_class {
 				var image_obj = $(this).find('img');
 				var image_parent = image_obj.parent();
 				var image_string = image_parent.html();
-					
+
 				var fullimage = $(this).attr('href');
 				var imagetitle = image_obj.attr('alt');
 				$(this).attr('title', imagetitle);
@@ -344,12 +344,12 @@ class core extends gen_class {
 			$this->jquery->qtip(".coretip-large", "return $(this).attr('data-coretip');", array('contfunc'=>true, 'width'=>400));
 			$this->jquery->qtip(".coretip-left", "return $(this).attr('data-coretip');", array('contfunc'=>true, 'width'=>280, 'my'	=> 'top right', 'at' => 'bottom right'));
 			$this->jquery->qtip(".coretip-right", "return $(this).attr('data-coretip');", array('contfunc'=>true, 'width'=>280, 'my'	=> 'top left', 'at' => 'bottom left'));
-			
+
 			//Portal Output
 			$intPortalLayout = ($this->portal_layout != NULL) ? $this->portal_layout : 1;
 			$intPortalLayout = ($this->config->get('mobile_portallayout') && strlen($this->config->get('mobile_portallayout')) && $this->env->agent->mobile && registry::get_const('mobile_view')) ? $this->config->get('mobile_portallayout') : $intPortalLayout;
 			$this->portal->module_output($intPortalLayout);
-			
+
 			//Registration Link
 			$registerLink = '';
 			if ( ! $this->user->is_signedin() && intval($this->config->get('enable_registration'))){
@@ -360,7 +360,7 @@ class core extends gen_class {
 					$registerLink = $this->createLink(array('link' => $this->controller_path_plain.'Register' . $this->routing->getSeoExtension().$this->SID, 'text' => $this->user->lang('menu_register'), 'icon' => 'fa fa-check-square-o fa-lg'));
 				}
 			}
-			
+
 			$arrPWresetLink = $this->handle_link($this->config->get('cmsbridge_pwreset_url'),$this->user->lang('lost_password'),$this->config->get('cmsbridge_embedded'),'LostPassword');
 			$strAvatarImg = ($this->user->is_signedin() && $this->pdh->get('user', 'avatarimglink', array($this->user->id))) ? $this->pfh->FileLink($this->pdh->get('user', 'avatarimglink', array($this->user->id)), false, 'absolute') : $this->server_path.'images/global/avatar-default.svg';
 			$strHeaderLogoPath	= "templates/".$this->user->style['template_path']."/images/";
@@ -371,15 +371,14 @@ class core extends gen_class {
 			} else if(file_exists($this->root_path.$strHeaderLogoPath.'logo.svg')){
 				$headerlogo	= $this->server_path.$strHeaderLogoPath.'logo.svg';
 			} else $headerlogo = "";
-			
+
 			// Load the jQuery stuff
 			$this->addCommonTemplateVars();
-
 			$this->tpl->assign_vars(array(
 				'PAGE_TITLE'				=> $this->pagetitle($this->page_title),
 				'FAVICON'					=> $favicon,
 				'FAVICON_TYPE'				=> $favicon_type,
-				'TEMPLATE_BANNER'			=> $this->user->style['banner_img'],
+				'TEMPLATE_BANNER'			=> ((isset($this->user->style['banner_img'])) ? $this->user->style['banner_img'] : ''),
 				'HEADER_LOGO'				=> $headerlogo,
 				'TEMPLATE_BACKGROUND'		=> $template_background_file,
 
@@ -425,7 +424,7 @@ class core extends gen_class {
 					'PORTAL_BOTTOM' => '',
 				));
 			}
-			
+
 			if (isset($this->page_body) && $this->page_body == 'full_width'){
 				$this->tpl->assign_vars(array(
 						'S_PORTAL_LEFT'	=> false,
@@ -443,31 +442,31 @@ class core extends gen_class {
 				}
 			}
 			$this->tpl->add_js("var mmocms_header_type = '".$this->header_format."';", 'head_top');
-			
+
 			//EU Cookie Usage Hint
 			if ((int)$this->config->get('cookie_euhint_show') && $this->user->blnFirstVisit){
 				$intArticleID = $this->pdh->get('articles', 'resolve_alias', array('PrivacyPolicy'));
 				if ($intArticleID) $url = $this->controller_path.$this->pdh->get('articles', 'path', array($intArticleID));
-				
+
 				$this->tpl->assign_vars(array(
 					'S_SHOW_COOKIE_HINT'	=> true,
 					'COOKIE_HINT'			=> str_replace("{COOKIE_LINK}", $url.'#Cookies', $this->user->lang('cookie_usage_hint')),
 				));
 			}
-						
+
 			//Template Vars for Group Memberships
 			$arrGroupmemberships = $this->acl->get_user_group_memberships($this->user->id);
 			foreach($arrGroupmemberships as $groupID => $status){
 				if ($status) $this->tpl->assign_var("S_AUTH_GROUP_".$groupID, true);
 			}
-			
+
 			$this->mycharacters();
 
 			include_once($this->root_path.'core/admin_functions.class.php');
 			$admin_functions = register('admin_functions');
 			$admin_functions->setAdminTooltip();
 		}
-		
+
 		public function addCommonTemplateVars(){
 			$arrLanguages = $this->user->getAvailableLanguages(false, true);
 			$this->tpl->assign_vars(array(
@@ -495,7 +494,7 @@ class core extends gen_class {
 					'USER_LANGUAGE_NAME'		=> $arrLanguages[$this->user->lang_name],
 			));
 		}
-		
+
 		public function createLink($arrLinkData, $strCssClass = '', $blnHrefOnly=false){
 			$target = '';
 			if (isset($arrLinkData['target']) && strlen($arrLinkData['target'])){
@@ -507,23 +506,23 @@ class core extends gen_class {
 			}
 			$strHref = ((isset($arrLinkData['plus_link']) && $arrLinkData['plus_link']==true && $arrLinkData['link']) ? $arrLinkData['link'] : $this->server_path . $arrLinkData['link']);
 			if ($strHref == $this->server_path.'#') $strHref = "#";
-			
+
 			if ($blnHrefOnly) return $strHref;
 			return '<a href="' . $strHref . '"'.$target.' class="'.$strCssClass.'">' . $icon . $arrLinkData['text'] . '</a>';
 		}
-		
+
 		//Returns all possible Menu Items
 		public function menu_items($show_hidden = false){
 			$arrItems = array(
 				array('link' => $this->controller_path_plain.$this->SID,				'text' => $this->user->lang('home'), 'static' => 1, 'default_hide' => 1, 'hidden' => 1),
 				array('link' => $this->controller_path_plain.'User'.$this->routing->getSeoExtension().$this->SID, 'text' => $this->user->lang('user_list'),'check' => 'u_userlist', 'static' => 1, 'default_hide' => 1, 'hidden' => 1),
 			);
-			
+
 			//Articles & Categories
 			$arrCategoryIDs = $this->pdh->sort($this->pdh->get('article_categories', 'id_list', array()), 'article_categories', 'sort_id', 'asc');
 			foreach($arrCategoryIDs as $cid){
 				if (!$this->pdh->get('article_categories', 'published', array($cid))) continue;
-				
+
 				if ($cid != 1) $arrItems[] = array('link' => $this->controller_path_plain.$this->pdh->get('article_categories', 'path', array($cid)), 'text' => $this->pdh->get('article_categories', 'name', array($cid)), 'category' => true, 'id' => $cid);
 				$arrArticles = $this->pdh->get('articles', 'id_list', array($cid));
 				foreach($arrArticles as $articleID){
@@ -531,22 +530,22 @@ class core extends gen_class {
 					$arrItems[] = array('link' => $this->controller_path_plain.$this->pdh->get('articles', 'path', array($articleID)), 'text' => $this->pdh->get('articles', 'title', array( $articleID)), 'article' => true, 'id' => $articleID);
 				}
 			}
-			
+
 			//Plugins
 			if (is_object($this->pm)){
 				$plugin_menu = $this->pm->get_menus('main');
 				$arrItems = (is_array($plugin_menu)) ? array_merge($arrItems, $plugin_menu) : $arrItems;
 			}
-			
+
 			//Forum
 			if (strlen($this->config->get('cmsbridge_url')) > 0 && $this->config->get('cmsbridge_active') == 1){
 				$inlineforum = $this->handle_link($this->config->get('cmsbridge_url'), $this->user->lang('forum'), $this->config->get('cmsbridge_embedded'), 'Board');
 				$arrItems[]	= $inlineforum;
 			}
-			
+
 			//Plus Links
 			$arrItems = array_merge($arrItems, $this->pdh->get('links', 'menu', array($show_hidden)));
-			
+
 			//Hooks
 			if ($this->hooks->isRegistered('main_menu_items')){
 				$arrHooks = $this->hooks->process('main_menu_items', array());
@@ -557,9 +556,9 @@ class core extends gen_class {
 
 			return $arrItems;
 		}
-		
+
 		public function build_link_hash($arrLinkData){
-		
+
 			if (isset( $arrLinkData['category'])) {
 				return md5('category'.$arrLinkData['id']);
 			} elseif (isset( $arrLinkData['category']) ) {
@@ -572,10 +571,10 @@ class core extends gen_class {
 				if (substr($toHash, -1) == "/") $toHash = substr($toHash, 0, -1);
 				if (substr($toHash, -1) == "?") $toHash = substr($toHash, 0, -1);
 				return md5($toHash);
-				
+
 			}
 		}
-		
+
 		public function build_menu_array($show_hidden = true, $blnOneLevel = false){
 			$arrItems = $this->menu_items($show_hidden);
 			$arrSortation = $this->config->get('mainmenu');
@@ -608,7 +607,7 @@ class core extends gen_class {
 				//Second Level
 				if (isset($item['_childs']) && is_array($item['_childs'])){
 					$secondlevel_show = $show;
-					
+
 					foreach($item['_childs'] as $key2 => $item2){
 						$hidden = $item2['item']['hidden'];
 						if ($hidden && !$show_hidden) $show = false;
@@ -643,17 +642,17 @@ class core extends gen_class {
 				}
 				$show = true;
 			}
-			
+
 			foreach($arrToDo as $hash => $item){
 				$item['hidden'] = (isset($item['article']) || isset($item['category']) || isset($item['default_hide'])) ? 1 : 0;
 				if (!$show_hidden && $item['hidden']) continue;
 				$arrOut[] = $item;
 				$arrOutOneLevel[] = $item;
 			}
-			
+
 			$arrOut = $this->hooks->process("menu", $arrOut, true);
 			$arrOutOneLevel = $this->hooks->process("menu_onelevel", $arrOutOneLevel, true);
-			
+
 
 			return ($blnOneLevel) ? $arrOutOneLevel: $arrOut;
 		}
@@ -670,7 +669,7 @@ class core extends gen_class {
 		public function build_menu_ul($arrMenuItems, $strCssClass = '', $blnAdminMenu = false, $strImagePath = '', $blnDefaultImage = false){
 			$strCssClass = (empty($strCssClass) && !$blnAdminMenu)? 'mainmenu' : (($blnAdminMenu && empty($strCssClass))? 'adminmenu' : $strCssClass);
 			$html  = '<ul class="'.$strCssClass.'">';
-			
+
 			// Adminmenu
 			if($blnAdminMenu){
 				// Header row
@@ -731,7 +730,7 @@ class core extends gen_class {
 				}
 				$html .= '</ul>';
 				return $html;
-			
+
 			// Mainmenu
 			}else{
 				foreach($arrMenuItems as $k => $v){
@@ -747,7 +746,7 @@ class core extends gen_class {
 						}
 
 					} else {
-						
+
 						if ( $this->check_url_for_permission($v)) {
 							$class = $this->clean_url($v['link']);
 							if (!strlen($class)) $class = "entry_".$this->clean_url($v['text']);
@@ -820,7 +819,7 @@ class core extends gen_class {
 			$strCssClass= (!empty($strCssClass))? $strCssClass : 'floatLeft';
 			$strCssID	= (!empty($strCssID))? $strCssID : $hash = 'ddm_'.md5(serialize($arrMenuItems));
 			$html		= '<div id="'.$strCssID.'" class="btn-ddm '.$strCssClass.'"><button onclick="return false;">'.$strButtonText.'</button><ul>';
-			
+
 			foreach($arrMenuItems as $key => $arrMenuItem){
 				if($arrMenuItem['perm']){
 					$arrMenuItem['icon'] = (isset($arrMenuItem['icon']) && !empty($arrMenuItem['icon']))? $this->icon_font($arrMenuItem['icon'], 'fa-lg').'&nbsp;' : '';
@@ -829,11 +828,11 @@ class core extends gen_class {
 						case 'javascript':
 							$html .= '<li data-type="javascript"><a href="javascript:void(0);" onclick="'.$arrMenuItem['js'].'">'.$arrMenuItem['icon'].$arrMenuItem['text'].'</a>'.((isset($arrMenuItem['append'])) ? $arrMenuItem['append'] : '').'</li>';
 							break;
-						
+
 						case 'button':
 							$html .= '<li data-type="button"><a href="javascript:void(0);" onclick="$(this).next(\'button\').click();">'.$arrMenuItem['icon'].$arrMenuItem['text'].'</a><button name="'.$arrMenuItem['name'].'" type="submit" style="display:none;" /></li>';
 							break;
-						
+
 						case 'select':
 							$html .= '<li data-type="select"><a href="javascript:void(0);">'.$arrMenuItem['icon'].$arrMenuItem['text'].'</a><ul>';
 							foreach($arrMenuItem['options'][1] as $option_value => $option_text){
@@ -841,13 +840,13 @@ class core extends gen_class {
 							}
 							$html .= '</ul><input name="'.$arrMenuItem['options'][0].'" value="" type="hidden"><button name="'.$arrMenuItem['name'].'" type="submit" style="display:none;" /></li>';
 							break;
-						
+
 						default: $html .= '<li data-type="link"><a href="'.$arrMenuItem['link'].'">'.$arrMenuItem['icon'].$arrMenuItem['text'].'</a>'.((isset($arrMenuItem['append'])) ? $arrMenuItem['append'] : '').'</li>';
 					}
 				}
 			}
 			$html .= '</ul></div><div class="clear"></div>';
-			
+
 			if(count($arrCheckBoxListener)){
 				foreach($arrCheckBoxListener as $strCheckBox) {
 					$this->tpl->add_js("
@@ -869,21 +868,21 @@ class core extends gen_class {
 					", 'docready');
 				}
 			}
-			
+
 			$this->tpl->add_js("
 				$('.btn-ddm li[data-type=\"select\"]').hover(function(){
 					var middle = -($(' > ul', this).outerHeight() / 2) + ($(this).height() / 2);
 					$(' > ul', this).css('top', middle +'px');
 				});
 			", 'docready');
-			
+
 			return str_replace("<ul></ul>", "", $html);
 		}
 
 		public function clean_url($strUrl){
 			return preg_replace("/[^a-zA-Z0-9_]/","",utf8_strtolower($this->user->removeSIDfromString($strUrl)));
 		}
-		
+
 		public function check_url_for_permission($arrLinkData){
 			if ( (empty($arrLinkData['check'])) || ($this->user->check_auth($arrLinkData['check'], false))) {
 				if (isset($arrLinkData['signedin'])){
@@ -896,17 +895,17 @@ class core extends gen_class {
 					}
 					if (!$perm) return false;
 				}
-				
+
 				if (isset($arrLinkData['article']) && $arrLinkData['article']){
 					$arrPermission = $this->pdh->get('articles', 'user_permissions', array(intval($arrLinkData['id']), $this->user->id));
 					if (!$arrPermission['read']) return false;
 				}
-				
+
 				if (isset($arrLinkData['category']) && $arrLinkData['category']){
 					$arrPermission = $this->pdh->get('article_categories', 'user_permissions', array(intval($arrLinkData['id']), $this->user->id));
 					if (!$arrPermission['read']) return false;
 				}
-				
+
 				return true;
 			}
 			return false;
@@ -932,7 +931,7 @@ class core extends gen_class {
 								break;
 								default: $wrapperText = $text;$wrapperID = $wrapper_id;
 							}
-						
+
 							$url = $this->routing->build("external", $wrapperText, $wrapperID, true, true);
 						}
 					break ;
@@ -945,11 +944,11 @@ class core extends gen_class {
 			if (!$editable) $arrData['editable'] = false;
 			return $arrData;
 		}
-		
+
 		//Everything that creates Notifications
 		public function notifications(){
 			if ($this->notifications) return;
-			
+
 			//Update Warnings
 			if ($this->user->check_auths(array('a_extensions_man', 'a_maintenance'), 'or', false)){
 				$objRepository = register("repository");
@@ -959,7 +958,7 @@ class core extends gen_class {
 						$this->ntfy->add_persistent('eqdkp_core_update', $this->user->lang("pluskernel_new_version"), $this->server_path.'admin/manage_live_update.php'.$this->SID, 2, 'fa-cog');
 						unset($arrUpdates['pluskernel']);
 					}
-			
+
 					if (count($arrUpdates)){
 						$text = "";
 						foreach($arrUpdates as $id => $data){
@@ -969,7 +968,7 @@ class core extends gen_class {
 					}
 				}
 			}
-			
+
 			//Check for unpublished articles
 			$arrCategories = $this->pdh->get('article_categories', 'unpublished_articles_notify', array());
 			if (count($arrCategories) > 0 && $this->user->check_auth('a_articles_man',false)){
@@ -983,14 +982,14 @@ class core extends gen_class {
 					);
 				}
 			}
-			
+
 			//Admin Tasks
 			$this->admin_tasks->createNotifications();
-			
-			
+
+
 			//Do portal hook
 			register('hooks')->process('portal', array($this->env->eqdkp_page));
-			
+
 			$this->notifications = true;
 		}
 
@@ -1008,7 +1007,7 @@ class core extends gen_class {
 				'S_NORMAL_FOOTER' 			=> ($this->header_format != 'simple') ? true : false,
 				'EQDKP_PLUS_COPYRIGHT'		=> $this->Copyright())
 			);
-			
+
 			//Language Switcher
 			$arrLanguages = $this->user->getAvailableLanguages(false, true);
 			$url = (preg_replace('#\&lang\=([a-zA-Z]*)#', "", $this->env->request));
@@ -1018,7 +1017,7 @@ class core extends gen_class {
 						'LINK'		=> sanitize($url).((strpos($url, "?") === false) ? '?' : '&').'lang='.$strKey,
 				));
 			}
-			
+
 			//Call Social Plugins
 			$default_img_link	= $this->env->buildlink()."templates/".$this->user->style['template_path']."/images/";
 			$default_img_link_rel = $this->root_path."templates/".$this->user->style['template_path']."/images/";
@@ -1027,7 +1026,7 @@ class core extends gen_class {
 
 			$description = ($this->description != '') ? $this->description : (($this->config->get('meta_description') && strlen($this->config->get('meta_description'))) ? $this->config->get('meta_description') : $this->config->get('guildtag'));
 			register('socialplugins')->callSocialPlugins($this->page_title, $description, $image);
-						
+
 			//Notifications
 			$arrNotifications = $this->ntfy->createNotifications();
 			$this->tpl->assign_vars(array(
@@ -1079,25 +1078,25 @@ class core extends gen_class {
 					'S_SHOW_QUERIES'	=> false)
 				);
 			}
-			
+
 			//Add custom CSS file - as late as possible
 			$css_custom = $this->root_path.'templates/'.$this->user->style['template_path'].'/custom.css';
 			if(file_exists($css_custom)){
 				$this->tpl->css_file($css_custom);
 			}
-			
+
 			//Global CSS - Direct Output into template
 			if(strlen($this->config->get('global_css'))){
 				$this->tpl->add_css($this->config->get('global_css'), true);
 			}
-			
+
 			//Add additonal Template Links
 			$strAdditionalLinks = $this->user->style['additional_fields'];
 			$arrAdditionalLinks = ($strAdditionalLinks != "") ? unserialize($strAdditionalLinks) : array();
 			foreach($arrAdditionalLinks as $key => $val){
 				$this->tpl->assign_var('LINK_'.strtoupper($key), $val);
 			}
-			
+
 			$this->tpl->display();
 		}
 
@@ -1158,7 +1157,7 @@ class core extends gen_class {
 			}
 		}
 
-		
+
 		public function icon_font($icon, $size="", $pathext=""){
 			if(isset($icon) && pathinfo($icon, PATHINFO_EXTENSION) == 'png'){
 				return '<img src="'.$pathext.$icon.'" alt="img" />';
@@ -1168,15 +1167,15 @@ class core extends gen_class {
 				return '';
 			}
 		}
-		
+
 		public function mycharacters(){
 			if ($this->config->get('enable_points') && $this->user->id != ANONYMOUS){
-				
+
 				//get member ID from UserID
 				$memberids = $this->pdh->get('member', 'connection_id', array($this->user->id));
 				$multidkps	= $this->pdh->sort($this->pdh->get('multidkp', 'id_list'), 'multidkp', 'sortid');
 				$preset		= $this->pdh->pre_process_preset('current', array(), 0);
-		
+
 				if(is_array($memberids) && count($memberids) > 0){
 					// start the output
 					foreach($memberids as $member_id) {
@@ -1199,22 +1198,22 @@ class core extends gen_class {
 								'IS_MAIN'  => ($this->pdh->get('member', 'is_main', array($member_id)) && ($i==0)),
 								'ID'	   => md5($this->user->id.'m'.$member_id.'mdkp'.$mdkpid),
 							));
-							
+
 							$this->tpl->assign_var("S_MYCHARS_POINTS", true);
 							$i++;
 						}
-						
+
 					}
 				}
 			}
 		}
-		
+
 		public function cors_headers(){
 			$strDomains = $this->config->get('access_control_header');
 			$arrDomains = explode("\n", $strDomains);
-			
+
 			$arrAllowedDomains = array();
-			
+
 			foreach($arrDomains as $strDomain){
 				$strDomain = trim(unsanitize($strDomain));
 				if($strDomain === '*') {
@@ -1224,7 +1223,7 @@ class core extends gen_class {
 
 				$arrAllowedDomains[] = $strDomain; // http://mydomain.com
 			}
-			
+
 			//Some generic domains
 			$strDomain = $this->env->httpHost;
 			$urlData = parse_url($strDomain);
@@ -1233,7 +1232,7 @@ class core extends gen_class {
 			if(count($hostData) > 1) $strDomain = $hostData[1].'.'.$hostData[0];
 			else $strDomain = $hostData[0];
 			$arrAllowedDomains[] = $strDomain;
-			
+
 			$incomingOrigin = array_key_exists('HTTP_ORIGIN', $_SERVER) ? $_SERVER['HTTP_ORIGIN'] : NULL;
 			if($incomingOrigin === NULL) $incomingOrigin = array_key_exists('ORIGIN', $_SERVER) ? $_SERVER['ORIGIN'] : NULL;
 			if($incomingOrigin === NULL){
@@ -1241,12 +1240,12 @@ class core extends gen_class {
 				$arrRefererInfo = parse_url($strReferer);
 				$incomingOrigin = $arrRefererInfo['scheme'].'://'.$arrRefererInfo['host'];
 			}
-			
+
 			foreach($arrAllowedDomains as $strAllowedDomain){
 				$arrDomainParts = parse_url($strAllowedDomain);
 				if($arrDomainParts['host'] != ""){
 					$pattern = '/^https?:\/\/([\w_-]+\.)*' . $arrDomainParts['host'] . '$/';
-					
+
 					$allow = preg_match($pattern, $incomingOrigin);
 					if ($allow){
 						header('Access-Control-Allow-Origin: '.filter_var($incomingOrigin, FILTER_SANITIZE_URL));
@@ -1254,7 +1253,7 @@ class core extends gen_class {
 					}
 				}
 			}
-			
+
 		}
 }
 ?>

@@ -72,11 +72,12 @@ if (!class_exists("pdh_r_user")){
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					//decrypt email address
-					$row['user_email'] = $this->encrypt->decrypt($row['user_email']);
-					$row['auth_account'] = unserialize($this->encrypt->decrypt($row['auth_account']));
-					$this->users[$row['user_id']] = $row;
-					$this->users[$row['user_id']]['username_clean'] = clean_username($row['username']);
-					$this->users[$row['user_id']]['user_email_clean'] = utf8_strtolower($row['user_email']);
+					$row['user_email']									= $this->encrypt->decrypt($row['user_email']);
+					$tmpCryptAuthAccount								= $this->encrypt->decrypt($row['auth_account']);
+					$row['auth_account']								= (is_serialized($tmpCryptAuthAccount)) ? unserialize($tmpCryptAuthAccount) : $tmpCryptAuthAccount;
+					$this->users[$row['user_id']]						= $row;
+					$this->users[$row['user_id']]['username_clean']		= clean_username($row['username']);
+					$this->users[$row['user_id']]['user_email_clean']	= utf8_strtolower($row['user_email']);
 				}
 			}
 
