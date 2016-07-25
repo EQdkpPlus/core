@@ -289,11 +289,7 @@ class Manage_User_Groups extends page_generic {
 		$group_name = $this->pdh->get('user_groups', 'name', array($groupID));
 
 		//Get all Userdata
-		$sql = 'SELECT u.user_id, u.username, u.user_email, u.user_lastvisit, u.user_active, s.session_id
-				FROM (__users u
-				LEFT JOIN __sessions s
-				ON u.user_id = s.session_user_id)
-				GROUP BY u.username
+		$sql = 'SELECT u.user_id, u.username, u.user_email, u.user_lastvisit, u.user_active FROM __users u
 				ORDER BY u.username '.(($order == '0.0') ? 'ASC' : 'DESC');
 
 		$user_query = $this->db->query($sql);
@@ -313,7 +309,7 @@ class Manage_User_Groups extends page_generic {
 		foreach($userNames as $key => $name) {
 			if (in_array($key, $members)){
 			$elem = $user_data[$key];
-			$user_online = ( !empty($elem['session_id']) ) ? '<i class="eqdkp-icon-online"></i>' : '<i class="eqdkp-icon-offline"></i>';
+			$user_online = ( $this->pdh->get('user', 'is_online', array($elem['user_id'])) ) ? '<i class="eqdkp-icon-online"></i>' : '<i class="eqdkp-icon-offline"></i>';
 			$user_active = ( $elem['user_active'] == '1' ) ? '<i class="eqdkp-icon-online"></i>' : '<i class="eqdkp-icon-offline"></i>';
 
 			$row = ($this->pdh->get('user_groups_users', 'is_grpleader', array($elem['user_id'], $groupID))) ? '_grpleader' : '';

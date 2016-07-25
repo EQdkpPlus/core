@@ -774,7 +774,7 @@ $lang = array(
 "profilefield_image_note" => "Gib hier den Bildnamen ein, z.B. 'games/wow/talents/{CLASSID}{VALUE}.png'",
 "profilefield_optionen" => "Dropdown-Optionen",
 "options_language" => "Sprachvariable",
-"options_language_help" => "Sprachvariable in der Spiel-Sprache. Befindet sich die Variablen in einem Subarray, benutze ':' um zu trenne. Beispiele: 'professions', 'lang:talents:{CLASSID}'",
+"options_language_help" => "Sprachvariable in der Spiel-Sprache. Befindet sich die Variablen in einem Subarray, benutze ':' um zu trennen. Beispiele: 'professions', 'lang:talents:{CLASSID}'",
 "profilefields_help" => "Als Platzhalter können {VALUE} (= ausgewählter Wert), {CHARNAME}, {SERVERNAME}, {SERVERLOC}, und {CLASSID} verwendet werden",
 "pf_enable_suc" => "Profilfeld \"%s\" wurde erfolgreich aktiviert.",
 "pf_enable_nosuc" => "Profilfeld \"%s\" konnte nicht aktiviert werden.",

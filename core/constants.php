@@ -59,9 +59,11 @@ define('SQL_UNINSTALL',	2);
 //Max Images in Useravatar Folder
 define('MAX_FILES_USERFOLDER', 20);
 
+//Max concurrent sessions from one IP with the same Browser
+define('MAX_CONCURRENT_SESSIONS', 200);
+
 //URLs
 //-------------------------------------------------------------------------
-//Sourceforge
 define('EQDKP_PROJECT_URL',			"http://eqdkp-plus.eu");
 define('EQDKP_ABOUT_URL',			"http://eqdkp-plus.eu/about");
 define('EQDKP_DOWNLOADS_URL',		"http://eqdkp-plus.eu/repository/");
