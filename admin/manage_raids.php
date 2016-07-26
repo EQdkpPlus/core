@@ -107,8 +107,9 @@ class ManageRaids extends page_generic {
 		if(!$data['raid']['id']) {
 			$raid_upd = $this->pdh->put('raid', 'add_raid', array($data['raid']['date'], $data['raid']['attendees'], $data['raid']['event'], $data['raid']['note'], $data['raid']['value'], $data['raid']['additonal_data']));
 			$data['raid']['id'] = ($raid_upd) ? $raid_upd : false;
-			if($raid_upd && $this->in->get('caldata_import', 0) > 0 && $this->in->get('calevent_id', 0) > 0){
-				$this->pdh->put('calendar_events', 'raid_transformed', array($this->in->get('calevent_id', 0), $data['raid']['id']));
+
+			if($raid_upd && $data['raid']['caleventid'] > 0){
+				$this->pdh->put('calendar_events', 'raid_transformed', array($data['raid']['caleventid'], $data['raid']['id']));
 			}
 		} else {
 			$raid_upd = $this->pdh->put('raid', 'update_raid', array($data['raid']['id'], $data['raid']['date'], $data['raid']['attendees'], $data['raid']['event'], $data['raid']['note'], $data['raid']['value'], $data['raid']['additonal_data']));
@@ -453,6 +454,7 @@ class ManageRaids extends page_generic {
 		$data['raid']['note'] = $this->in->get('rnote','');
 		$data['raid']['additonal_data'] = $this->in->get('additional_data','');
 		$data['raid']['event'] = $this->in->get('event',0);
+		$data['raid']['caleventid'] = $this->in->get('caldata_import',0);
 		$data['raid']['value'] = $this->in->get('value',0.0);
 		$data['raid']['attendees'] = $this->in->getArray('raid_attendees','int');
 		if(empty($data['raid']['attendees'])) {

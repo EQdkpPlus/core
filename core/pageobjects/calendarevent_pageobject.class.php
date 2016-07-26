@@ -1002,8 +1002,7 @@ class calendarevent_pageobject extends pageobject {
 		// tooltip for transformed raid events with more details
 		$tooltip_transformedraid	 = '';
 		if(isset($eventdata['extension']['transformed'])){
-			$tooltip_transformedraid	.= '<i class="fa fa-calendar"></i> '.$this->time->user_date($eventdata['extension']['transformed']['date'], true).'<br/>';
-			$tooltip_transformedraid	.= '<i class="fa fa-user"></i> '.sprintf($this->user->lang('raidevent_raidtransformedby'), $this->pdh->get('user', 'name', array($eventdata['extension']['transformed']['user'])));
+			$tooltip_transformedraid	.= '<i class="fa fa-calendar"></i> '.$this->time->user_date($eventdata['extension']['transformed']['date'], true).'<br/><i class="fa fa-user"></i> '.sprintf($this->user->lang('raidevent_raidtransformedby'), $this->pdh->get('user', 'name', array($eventdata['extension']['transformed']['user'])));
 		}
 
 		$this->tpl->assign_vars(array(

@@ -348,8 +348,9 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 		public function get_transformed_raid_link($eventID){
 			$raidextension	= $this->get_extension($eventID);
 			$intRaidID		= (isset($raidextension['transformed']['id']) && $raidextension['transformed']['id'] > 0) ? $raidextension['transformed']['id'] : 0;
-			$intRaidEventID	= (isset($raidextension['extension']['raid_eventid'])) ? $raidextension['extension']['raid_eventid'] : 0;
-			if($intRaidID > 0 && $intRaidEventID != 0){
+			$intRaidEventID	= (isset($raidextension['raid_eventid'])) ? $raidextension['raid_eventid'] : 0;
+
+			if($intRaidID > 0 && $intRaidEventID > 0){
 				return $this->pdh->get('event', 'html_icon', array($intRaidEventID)).$this->pdh->get('raid', 'html_raidlink', array($intRaidID, register('routing')->simpleBuild('raids'), '', true));
 			}
 		}
