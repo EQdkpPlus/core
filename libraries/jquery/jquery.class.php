@@ -817,8 +817,8 @@ if (!class_exists("jquery")) {
 		public function colorpicker($id, $value, $name='', $size='14', $jscode='', $options=array(), $returnJS=false){
 			if(count($options) === 0){
 				if(!$this->inits['colorpicker']) {
-					$returnJScache['colorpicker'][$id] = '$(".colorpicker").spectrum({showInput: true, preferredFormat: "hex6"});';
-					if(!$returnJS){ $this->tpl->add_js($returnJScache['colorpicker'][$id], 'docready'); }
+					$this->returnJScache['colorpicker'][$id] = '$(".colorpicker").spectrum({showInput: true, preferredFormat: "hex6"});';
+					if(!$returnJS){ $this->tpl->add_js($$this->returnJScache['colorpicker'][$id], 'docready'); }
 					$this->inits['colorpicker'] = true;
 				}
 				return '<input type="text" class="colorpicker" id="'.$id.'_input" name="'.(($name) ? $name : $id).'" value="'.$value.'" size="'.$size.'" '.$jscode.' />';
@@ -828,13 +828,13 @@ if (!class_exists("jquery")) {
 				if(isset($options['showAlpha'])) $jsoptions[] = 'showAlpha: true';
 				if(isset($options['group'])){
 					if(!isset($this->inits['colorpicker_'.$options['group']])){
-						$returnJScache['colorpicker'][$id] = '$(".colorpicker_group_'.$options['group'].'").spectrum('.$this->gen_options($jsoptions).');';
-						if(!$returnJS){ $this->tpl->add_js($returnJScache['colorpicker'][$id], 'docready'); }
+						$this->returnJScache['colorpicker'][$id] = '$(".colorpicker_group_'.$options['group'].'").spectrum('.$this->gen_options($jsoptions).');';
+						if(!$returnJS){ $this->tpl->add_js($this->returnJScache['colorpicker'][$id], 'docready'); }
 						$this->inits['colorpicker_'.$options['group']] = true;
 					}
 				} else {
-					$returnJScache['colorpicker'][$id] = '$(".colorpicker_'.$id.'").spectrum('.$this->gen_options($jsoptions).');';
-					if(!$returnJS){ $this->tpl->add_js($returnJScache['colorpicker'][$id], 'docready'); }
+					$this->returnJScache['colorpicker'][$id] = '$(".colorpicker_'.$id.'").spectrum('.$this->gen_options($jsoptions).');';
+					if(!$returnJS){ $this->tpl->add_js($this->returnJScache['colorpicker'][$id], 'docready'); }
 				}
 				return '<input type="text" class="colorpicker_group_'.$options['group'].' colorpicker_'.$id.'" id="'.$id.'_input" name="'.(($name) ? $name : $id).'" value="'.$value.'" size="'.$size.'" '.$jscode.' />';
 			}
