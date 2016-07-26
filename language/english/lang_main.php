@@ -853,6 +853,7 @@ $lang = array(
 	"raidevent_raid_required" => 'required',
 	"raidevent_raid_notitle" => '[Event deleted]',
 	"raidevent_raidtransformed" => "Event transformed",
+	"raidevent_raidtransformedby" => "Event transformed by %s",
 	"calendar_rss_title" => 'Recent raid events',
 	"calendar_rss_itemdesc" => 'free places: %1$s, signup deadline %2$s',
 	"calendar_page_noid" => 'There\'s no raid ID, we cannot show any raid events....',

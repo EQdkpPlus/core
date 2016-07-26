@@ -809,6 +809,7 @@ $lang = array(
 "raidevent_raid_required" => "Benötigt",
 "raidevent_raid_notitle" => "[Event gelöscht]",
 "raidevent_raidtransformed" => "Ereignis umgewandelt",
+"raidevent_raidtransformedby" => "Raidereignis umgewandelt von %s",
 "calendar_rss_title" => "Aktuelle Raidtermine",
 "calendar_rss_itemdesc" => "Freie Plätze: %1\$s, Anmeldeschluss %2\$s",
 "calendar_page_noid" => "Es wurde keine Raidevent ID angegeben. Es kann nichts angezeigt werden!",

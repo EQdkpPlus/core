@@ -999,6 +999,13 @@ class calendarevent_pageobject extends pageobject {
 
 		$strPageTitle = sprintf($this->pdh->get('event', 'name', array($eventdata['extension']['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->user_date($eventdata['timestamp_start']).' '.$this->time->user_date($eventdata['timestamp_start'], false, true);
 
+		// tooltip for transformed raid events with more details
+		$tooltip_transformedraid	 = '';
+		if(isset($eventdata['extension']['transformed'])){
+			$tooltip_transformedraid	.= '<i class="fa fa-calendar"></i> '.$this->time->user_date($eventdata['extension']['transformed']['date'], true).'<br/>';
+			$tooltip_transformedraid	.= '<i class="fa fa-user"></i> '.sprintf($this->user->lang('raidevent_raidtransformedby'), $this->pdh->get('user', 'name', array($eventdata['extension']['transformed']['user'])));
+		}
+
 		$this->tpl->assign_vars(array(
 			// error messages
 			'RAID_CLOSED'			=> ($eventdata['closed'] == '1') ? true : false,
@@ -1057,6 +1064,7 @@ class calendarevent_pageobject extends pageobject {
 			'DATE_MONTH'			=> $this->time->date('F', $eventdata['timestamp_start']),
 			'DATE_YEAR'				=> $this->time->date('Y', $eventdata['timestamp_start']),
 			'LINK2TRANSFORMEDRAID'	=> $this->pdh->get('calendar_events', 'transformed_raid_link', array($this->url_id)),
+			'TRANSFORMEDRAID_TT'	=> $tooltip_transformedraid,
 			// guests
 			'GUEST_COUNT'			=> count($this->guests),
 
