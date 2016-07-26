@@ -233,6 +233,9 @@ $lang = array(
 	"calendar_sortbutton_attendance" => "Attendance",
 
 
+	"calendars_continue_raid" => "Continue Raid",
+	"calendars_continue_raid_button" => "Continue raid",
+
 	"user_app_key" => 'Private Exchangekey',
 	"user_create_new_appkey" => 'Generate new private keys',
 	"user_create_new_appkey_success" => 'New private Keys have been created. Your old URLs are not longer valid.',

@@ -566,6 +566,56 @@ if(!class_exists('pdh_w_calendar_events')) {
 				'user'	=> $this->user->data['user_id']
 			);
 			$this->add_extension($eventID, $data);
+
+		// continue an existing raid at a new date
+		public function ContinueRaid($eventID, $startdate, $enddate, $note){
+			$eventdata		= $this->pdh->get('calendar_events', 'data', array($eventID));
+			$arrGuests      = $this->pdh->get('calendar_raids_guests', 'members', array($eventID));
+			$arrAttendees   = $this->pdh->get('calendar_raids_attendees', 'attendees', array($eventID));
+
+			$new_eventid = $this->add_cevent(
+				$eventdata['calendar_id'],
+				$eventdata['name'],
+				$eventdata['creator'],
+				$startdate,
+				$enddate,
+				0,
+				$note,
+				$eventdata['allday'],
+				$eventdata['extension'],
+				$eventdata['cloneid'],
+				$eventdata['private']
+			);
+			$this->pdh->enqueue_hook('calendar_events_update');
+
+			// clone the attendees
+			foreach($arrAttendees as $attendeeID=>$attendeeData){
+				$this->pdh->put('calendar_raids_attendees', 'update_status', array(
+					$new_eventid,
+					$attendeeID,
+					$attendeeData['member_role'],
+					$attendeeData['signup_status'],
+					$attendeeData['raidgroup'],
+					0,
+					$attendeeData['note'],
+					$attendeeData['signedbyadmin'],
+				));
+			}
+			$this->pdh->enqueue_hook('calendar_raid_attendees_update');
+
+			// clone the guests
+			foreach($arrGuests as $guestID=>$guestData){
+				$this->pdh->put('calendar_raids_attendees', 'insert_guest', array(
+					$new_eventid,
+					$guestData['name'],
+					$guestData['class'],
+					$guestData['raidgroup'],
+					$guestData['note'],
+					$guestData['email'],
+				));
+			}
+			$this->pdh->enqueue_hook('guests_update');
+			$this->pdh->process_hook_queue();
 		}
 	}
 }

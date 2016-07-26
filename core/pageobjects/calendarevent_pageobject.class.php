@@ -44,6 +44,7 @@ class calendarevent_pageobject extends pageobject {
 			'change_group'		=> array('process' => 'change_group',			'csrf'=>true),
 			'guestid'			=> array('process' => 'delete_guest',			'csrf'=>true),
 			'confirm_guest'		=> array('process' => 'confirm_guest',			'csrf'=>true),
+			'doContinueRaid'	=> array('process' => 'perform_continue'),
 			'logs'				=> array('process' => 'display_logs'),
 		);
 
@@ -86,18 +87,64 @@ class calendarevent_pageobject extends pageobject {
 		$sort_suffix		= $this->SID.'&amp;sort='.$this->in->get('sort');
 		$logs_list 			= $hptt->get_html_table($this->in->get('sort',''), $page_suffix);
 		$this->tpl->assign_vars(array(
-				'LOGS_LIST'				=> $logs_list,
-				'LOGS_PAGINATION'		=> generate_pagination('manage_logs.php'.$sort_suffix.$strFilterSuffix, $actionlog_count, 100, $this->in->get('start', 0)),
-				'HPTT_LOGS_COUNT'		=> $hptt->get_column_count(),
-				'S_COMMENTS'				=> false,
+			'LOGS_LIST'				=> $logs_list,
+			'LOGS_PAGINATION'		=> generate_pagination('manage_logs.php'.$sort_suffix.$strFilterSuffix, $actionlog_count, 100, $this->in->get('start', 0)),
+			'HPTT_LOGS_COUNT'		=> $hptt->get_column_count(),
+			'S_COMMENTS'				=> false,
 		));
 
 		$this->core->set_vars(array(
-				'page_title'		=> sprintf($this->pdh->get('event', 'name', array($eventdata['extension']['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->user_date($eventdata['timestamp_start']).' '.$this->time->user_date($eventdata['timestamp_start'], false, true),
-				'template_file'		=> 'calendar/viewlogs.html',
-				'header_format'		=> $this->simple_head,
-				'display'			=> true
+			'page_title'		=> sprintf($this->pdh->get('event', 'name', array($eventdata['extension']['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->user_date($eventdata['timestamp_start']).' '.$this->time->user_date($eventdata['timestamp_start'], false, true),
+			'template_file'		=> 'calendar/viewlogs.html',
+			'header_format'		=> $this->simple_head,
+			'display'			=> true
 		));
+	}
+
+	public function display_continueraid(){
+		$eventdata				= $this->pdh->get('calendar_events', 'data', array($this->url_id));
+		$default_deadlineoffset	= (($this->config->get('calendar_addraid_deadline')) ? $this->config->get('calendar_addraid_deadline') : 1);
+		$default_raidduration	= ((($this->config->get('calendar_addraid_duration')) ? $this->config->get('calendar_addraid_duration') : 120)*60);
+		$use_default_starttime	= $this->config->get('calendar_addraid_use_def_start') && preg_match('#[:]#', $this->config->get('calendar_addraid_def_starttime'));
+		$starttimestamp			= ($use_default_starttime) ? $this->time->fromformat($this->config->get('calendar_addraid_def_starttime'), $this->user->style['time']) : $this->time->time;
+
+		$startdate_onselect = "var startDate = $(this).datetimepicker('getDate');
+				var endDate = new Date(startDate.getTime() + (".(($this->config->get('calendar_addraid_duration') > 0) ? $this->config->get('calendar_addraid_duration') : 120)."*60000))
+				var newDate	= new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(), endDate.getHours(), endDate.getMinutes());
+				$('#cal_enddate').datetimepicker('setDate', newDate);";
+
+		$defdates = array(
+			'start'		=> $starttimestamp,
+			'end'		=> $starttimestamp+$default_raidduration,
+			'deadline'	=> $default_deadlineoffset,
+		);
+
+		$this->tpl->assign_vars(array(
+			'EVENT_ID'			=> $this->url_id,
+			'BBCODE_NOTE'		=> new hbbcodeeditor('note', array('rows' => 3, 'value' => ((isset($eventdata['notes'])) ? $eventdata['notes'] : ''), 'id' => 'input_note')),
+			'JQ_DATE_START'		=> $this->jquery->Calendar('startdate', $this->time->user_date($defdates['start'], true, false, false), '', array('timepicker' => true, 'onselect' => $startdate_onselect)),
+			'JQ_DATE_END'		=> $this->jquery->Calendar('enddate',$this->time->user_date($defdates['end'], true, false, false), '', array('timepicker' => true)),
+		));
+
+		$this->core->set_vars(array(
+			'page_title'		=> 'Test',
+			'template_file'		=> 'calendar/continue_raid.html',
+			'header_format'		=> $this->simple_head,
+			'display'			=> true
+		));
+	}
+
+	public function perform_continue(){
+		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()){
+			$this->pdh->put('calendar_events', 'ContinueRaid', array(
+				$this->url_id,
+				$this->time->fromformat($this->in->get('startdate', 0), 1),
+				$this->time->fromformat($this->in->get('enddate', 0), 1),
+				$this->in->get('note', '')
+			));
+			$this->pdh->process_hook_queue();
+			$this->tpl->add_js('jQuery.FrameDialog.closeDialog();');
+		}
 	}
 
 	public function change_attendancestatus($eventid, $status){
@@ -470,6 +517,12 @@ class calendarevent_pageobject extends pageobject {
 			return;
 		}
 
+		// Show continue window
+		if($this->in->exists('continueraid')){
+			$this->display_continueraid();
+			return;
+		}
+
 		$eventdata	= $this->pdh->get('calendar_events', 'data', array($this->url_id));
 
 		// check if roles are available
@@ -505,7 +558,9 @@ class calendarevent_pageobject extends pageobject {
 				if(is_array($user_chars) && count($user_chars) > 0){
 					foreach($user_chars as $char_id){
 						$char_status			= $this->pdh->get('calendar_raids_attendees', 'status', array($this->url_id, $char_id));
-						$tmp_chars[$char_id]	= $this->members[$char_id];
+						if(isset($this->members[$char_id])){
+							$tmp_chars[$char_id]	= $this->members[$char_id];
+						}
 
 						// if one member of this char is in the raid, remove the members and go to next user
 						if($char_status != '4'){
@@ -864,6 +919,8 @@ class calendarevent_pageobject extends pageobject {
 			));
 		}
 
+		$pastraid	= ($this->time->time > $eventdata['timestamp_end']) ? true : false;
+
 		$optionsmenu = array(
 			1 => array(
 				'link'	=> 'javascript:EditRaid()',
@@ -896,18 +953,24 @@ class calendarevent_pageobject extends pageobject {
 				'perm'	=> true,
 			),
 			6 => array(
+				'link'	=> 'javascript:ContinueRaid('.$this->url_id.')',
+				'text'	=> $this->user->lang('calendars_continue_raid'),
+				'icon'	=> 'fa-repeat',
+				'perm'	=> $pastraid && $this->user->check_auth('u_cal_event_add', false),
+			),
+			7 => array(
 				'link'	=> 'javascript:AddRaid()',
 				'text'	=> $this->user->lang('calendars_add_title'),
 				'icon'	=> 'fa-plus',
 				'perm'	=> $this->user->check_auth('u_cal_event_add', false),
 			),
-			7 => array(
+			8 => array(
 				'link'	=> $this->server_path.'admin/manage_massmail.php'.$this->SID.'&amp;event_id='.$this->url_id,
 				'text'	=> $this->user->lang('massmail_send'),
 				'icon'	=> 'fa-envelope',
 				'perm'	=> $this->user->check_auth('a_users_massmail', false),
 			),
-			8 => array(
+			9 => array(
 				'link'	=> 'javascript:ViewLogs('.$this->url_id.')',
 				'text'	=> $this->user->lang('view_logs'),
 				'icon'	=> 'fa-book',
@@ -943,6 +1006,7 @@ class calendarevent_pageobject extends pageobject {
 		$this->jquery->Dialog('AddGuest', $this->user->lang('raidevent_raid_addguest_win'), array('url'=>$this->routing->build('calendareventguests')."&eventid='+eventid+'&simple_head=true", 'width'=>'490', 'height'=>'460', 'onclose' => $this->strPath.$this->SID, 'withid' => 'eventid'));
 		$this->jquery->Dialog('DeleteGuest', $this->user->lang('raidevent_raid_guest_del'), array('custom_js'=>"document.guestp.submit();", 'message'=>$this->user->lang('raidevent_raid_guest_delmsg'), 'withid'=>'id', 'onlickjs'=>'$("#guestid_field").val(id);', 'buttontxt'=>$this->user->lang('delete')), 'confirm');
 		$this->jquery->Dialog('ViewLogs', $this->user->lang('view_logs'), array('url'=>$this->routing->build('calendarevent')."&logs&eventid='+eventid+'&simple_head=true", 'width'=>'900', 'height'=>'600', 'withid' => 'eventid'));
+		$this->jquery->Dialog('ContinueRaid', $this->user->lang('calendars_continue_raid'), array('url'=>$this->routing->build('calendarevent')."&continueraid&eventid='+eventid+'&simple_head=true", 'width'=>'600', 'height'=>'400', 'withid' => 'eventid'));
 
 		// already signed in message
 		$alreadysignedinmsg = '';
