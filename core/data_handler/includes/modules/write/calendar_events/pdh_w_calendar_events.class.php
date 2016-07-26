@@ -566,6 +566,8 @@ if(!class_exists('pdh_w_calendar_events')) {
 				'user'	=> $this->user->data['user_id']
 			);
 			$this->add_extension($eventID, $data);
+			$this->pdh->enqueue_hook('calendar_events_update');
+		}
 
 		// continue an existing raid at a new date
 		public function ContinueRaid($eventID, $startdate, $enddate, $note){
