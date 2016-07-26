@@ -210,12 +210,18 @@ if (!class_exists("jquery")) {
 		}
 
 		// http://benignware.github.io/jquery-placepicker/
-		public function init_placepicker(){
+		public function init_placepicker($returnJS){
 			if(!$this->inits['placepicker']){
-				$this->tpl->js_file("https://maps.googleapis.com/maps/api/js?sensor=true&libraries=places", 'direct');
-				$this->tpl->js_file($this->path."js/placepicker/jquery.placepicker.min.js");
+				if($returnJS){
+					$output	 = "<script type='text/javascript' src='https://maps.googleapis.com/maps/api/js?sensor=true&libraries=places'></script>";
+					$output .= "<script type='text/javascript' src='".$this->path."js/placepicker/jquery.placepicker.min.js'></script>";
+				}else{
+					$this->tpl->js_file("https://maps.googleapis.com/maps/api/js?sensor=true&libraries=places", 'direct');
+					$this->tpl->js_file($this->path."js/placepicker/jquery.placepicker.min.js");
+				}
 				$this->inits['placepicker']	= true;
 			}
+			return $output;
 		}
 
 		// https://github.com/hpneo/gmaps
@@ -1504,8 +1510,8 @@ if (!class_exists("jquery")) {
 		}
 
 		public function placepicker($id, $withmap=false, $returnJS=false){
-			$this->init_placepicker();
-			$this->returnJScache['placepicker'][$id] = "$('#".$id."').placepicker();";
+			$init_PP	= $this->init_placepicker($returnJS);
+			$this->returnJScache['placepicker'][$id] = (($returnJS) ? $init_PP : '')."$('#".$id."').placepicker();";
 			if(!$returnJS){ $this->tpl->add_js($this->returnJScache['placepicker'][$id], "docready"); }
 			return true;
 		}
