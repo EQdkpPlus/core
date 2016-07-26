@@ -818,7 +818,7 @@ if (!class_exists("jquery")) {
 			if(count($options) === 0){
 				if(!$this->inits['colorpicker']) {
 					$this->returnJScache['colorpicker'][$id] = '$(".colorpicker").spectrum({showInput: true, preferredFormat: "hex6"});';
-					if(!$returnJS){ $this->tpl->add_js($$this->returnJScache['colorpicker'][$id], 'docready'); }
+					if(!$returnJS){ $this->tpl->add_js($this->returnJScache['colorpicker'][$id], 'docready'); }
 					$this->inits['colorpicker'] = true;
 				}
 				return '<input type="text" class="colorpicker" id="'.$id.'_input" name="'.(($name) ? $name : $id).'" value="'.$value.'" size="'.$size.'" '.$jscode.' />';
