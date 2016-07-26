@@ -40,17 +40,18 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 class hdatepicker extends html {
 
 	protected static $type = 'datepicker';
-	
-	public $name = '';
-	public $disabled = false;
-	public $allow_empty = false;
-	public $readonly = false;
-	
-	private $out = '';
-	private $php_format = false;
-	private $php_timeformat = false;
-	private $all_options = array('id', 'format', 'change_fields', 'cal_icons', 'show_buttons', 'number_months', 'year_range', 'other_months', 'timeformat', 'enablesecs', 'onselect', 'onclose', 'timepicker', 'return_function');
-	
+
+	public $name				= '';
+	public $disabled			= false;
+	public $allow_empty			= false;
+	public $readonly			= false;
+	public $returnJS			= false;
+
+	private $out				= '';
+	private $php_format			= false;
+	private $php_timeformat		= false;
+	private $all_options		= array('id', 'format', 'change_fields', 'cal_icons', 'show_buttons', 'number_months', 'year_range', 'other_months', 'timeformat', 'enablesecs', 'onselect', 'onclose', 'timepicker', 'return_function', 'returnJS');
+
 	protected function _construct() {
 		if(!($this->allow_empty && (empty($this->value) || $this->value == '0')) && is_numeric($this->value)) {
 			$this->value = $this->time->date($this->js_calendarformat(), $this->value);
@@ -64,40 +65,44 @@ class hdatepicker extends html {
 		if($this->readonly) $out .= 'readonly="readonly" ';
 		if($this->disabled) $out .= 'disabled="disabled" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
-		
+
 		if(isset($this->format)) {
 			$this->php_format = $this->format;
 			$this->format = $this->time->translateformat2js($this->format);
 		}
-		
+
 		if(isset($this->timeformat)) {
 			$this->php_timeformat = $this->timeformat;
 			$this->timeformat = $this->time->translateformat2js($this->timeformat);
 		}
-		
+
 		//copy options
 		$opts = array();
 		foreach($this->all_options as $opt) {
 			if(isset($this->$opt)) $opts[$opt] = $this->$opt;
 		}
-		
+
+		$jsout = '';
 		if (!$this->readonly){
 			$this->jquery->Calendar($this->name, $this->value, '', $opts);
+			if($this->returnJS){
+				$jsout = '<script>'.$this->jquery->get_jscode('calendar', $this->name).'</script>';
+			}
 		}
-		
-		$this->out = $out.' />'.((!$this->readonly) ? '<i class="fa fa-calendar" onclick="$( \'#'.$this->id.'\' ).datepicker( \'show\' );"></i>' : '<i class="fa fa-calendar"></i>').'</span>';
+
+		$this->out = $jsout.$out.' />'.((!$this->readonly) ? '<i class="fa fa-calendar" onclick="$( \'#'.$this->id.'\' ).datepicker( \'show\' );"></i>' : '<i class="fa fa-calendar"></i>').'</span>';
 	}
-	
+
 	public function _toString() {
 		return $this->out;
 	}
-	
+
 	public function _inpval() {
 		$input = $this->in->get($this->name, '');
 		if($this->allow_empty && empty($input)) return null;
 		return $this->time->fromformat($input, $this->php_calendarformat());
 	}
-			
+
 	/**
 	 * Output dateformat in Calendar format, according to options
 	 *
@@ -112,7 +117,7 @@ class hdatepicker extends html {
 		if(isset($this->timepicker)) $format .= ' '.$this->php_timeformat;
 		return $format;
 	}
-	
+
 	public function js_calendarformat(){
 		// Load default settings if no custom ones are defined..
 		if(!isset($this->format)) $this->format = $this->user->style['date_notime_short'];

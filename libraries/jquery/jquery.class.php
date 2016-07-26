@@ -441,25 +441,26 @@ if (!class_exists("jquery")) {
 		* @param $type		normal/range
 		* @return HTML
 		*/
-		public function Slider($id, $options, $type='normal'){
+		public function Slider($id, $options, $type='normal', $returnJS=false){
 			switch($type){
 				case 'normal' :
 					if (!isset($options['value'])) $options['value'] = 0;
-					$this->tpl->add_js('$("#'.$id.'").slider({
+					$this->returnJScache['slider'][$id] = '$("#'.$id.'").slider({
 						slide: function(event, ui) {
 							console.log(ui);
 								$("#'.$id.'-label").html(ui.value);
 								$("#'.$id.'_0").val(ui.value);
 						},
 						value: '.(int)$options['value'].'
-					});', 'docready');
+					});';
+					if(!$returnJS) { $this->tpl->add_js($this->returnJScache['slider'][$id], 'docready'); }
 					$class = (!empty($options['class'])) ? ' class="'.$options['class'].'"' : '';
 					return '<label for="'.$id.'-label">'.$options['label'].': <span id="'.$id.'-label">'.$options['value'].'</span></label><div id="'.$id.'"'.$class.' style="width:'.((isset($options['width'])) ? $options['width'] : '100%').';"></div>
 							<input type="hidden" id="'.$id.'_0" name="'.$options['name'].'" value="'.$options['value'].'" />';
 				break;
 
 				case 'range' :
-					$this->tpl->add_js('
+					$this->returnJScache['slider'][$id] = '
 						$("#'.$id.'-sr").slider({
 							range: true,
 							min: '.$options['min'].',
@@ -474,7 +475,8 @@ if (!class_exists("jquery")) {
 						$("#'.$id.'-label").val($("#'.$id.'-sr").slider("values", 0) + \' - \' + $("#'.$id.'-sr").slider("values", 1));
 						$("#'.$id.'_0").val($("#'.$id.'-sr").slider("values", 0));
 						$("#'.$id.'_1").val($("#'.$id.'-sr").slider("values", 1));
-				', 'docready');
+				';
+				if(!$returnJS) { $this->tpl->add_js($this->returnJScache['slider'][$id], 'docready'); }
 				if(empty($options['name'])) $options['name'] = $id;
 				$class = (!empty($options['class'])) ? ' class="'.$options['class'].'"' : '';
 				$html = '<label for="'.$id.'-label">'.$options['label'].': <span id="'.$id.'-label">'.$options['value'][0].' - '.$options['value'][1].'</span></label>
@@ -672,7 +674,7 @@ if (!class_exists("jquery")) {
 		* @param $options	Array with Options for calendar
 		* @return CHAR
 		*/
-		public function Calendar($name, $value, $jscode='', $options=''){
+		public function Calendar($name, $value, $jscode='', $options='', $returnJS=false){
 			$mclass		= (isset($options['class'])) ? ' '.$options['class'] : '';
 			$itemid		= (isset($options['id'])) ? $options['id'] : 'cal_'.$name;
 			$myreadonly = (isset($options['readonly']) && $options['readonly']) ? ' readonly="readonly"' : '';
@@ -732,16 +734,20 @@ if (!class_exists("jquery")) {
 				);
 				$functioncall = "datetimepicker({".$MySettings.",".implode(", ", $addisettings)."})";
 				if(!isset($options['return_function'])) {
-					$this->tpl->add_js("
-						$('#".$itemid."').".$functioncall.";", 'docready');
+					$this->returnJScache['calendar'][$name] = "$('#".$itemid."').".$functioncall.";";
+
 				}
 			}else{
 				$functioncall = "datepicker({".$MySettings."})";
 				if(!isset($options['return_function'])) {
-					$this->tpl->add_js("
-						$('#".$itemid."').".$functioncall.";", 'docready');
+					$this->returnJScache['calendar'][$name] =  "$('#".$itemid."').".$functioncall.";";
 				}
 			}
+
+			if(!$returnJS){
+				$this->tpl->add_js($this->returnJScache['calendar'][$name], 'docready');
+			}
+
 			/*if(!isset($options['return_function'])) {
 				$this->tpl->add_js("
 					$(\"img[class='ui-datepicker-trigger']\").each(function(){
@@ -962,7 +968,7 @@ if (!class_exists("jquery")) {
 		* @param $options	Array with options [id, preview_num, no_animation, sel_text, header, multiple]
 		* @return CHAR
 		*/
-		public function MultiSelect($name, $list, $selected, $options=''){
+		public function MultiSelect($name, $list, $selected, $options='', $returnJS=false){
 			$myID		= (isset($options['id'])) ? $options['id'] : "dw_".$name;
 			if(empty($options['height'])) $options['height'] = 200;
 			if(empty($options['width'])) $options['width'] = 200;
@@ -981,7 +987,9 @@ if (!class_exists("jquery")) {
 			}
 			$javascript = (isset($options['javascript'])) ? $options['javascript'] : '';
 
-			$this->tpl->add_js('$("#'.$myID.'").multiselect('.$this->gen_options($tmpopt).')'.$filterme.';', 'docready');
+			$this->returnJScache['multiselect'][$name] = '$("#'.$myID.'").multiselect('.$this->gen_options($tmpopt).')'.$filterme.';';
+			if(!$returnJS) {$this->tpl->add_js($this->returnJScache['multiselect'][$name], 'docready'); }
+
 			$dropdown = "<select name='".$name."[]' id='".$myID."' multiple='multiple'".$javascript.">";
 			$selected = (is_array($selected))? $selected : explode("|", $selected);
 			if(is_array($list)){
@@ -1042,7 +1050,7 @@ if (!class_exists("jquery")) {
 		* @param $hourf			Format of the time: 24 or 12
 		* @return TimePicker	JS Code
 		*/
-		public function timePicker($id, $name='', $value='', $enablesecs=false, $hourf=24){
+		public function timePicker($id, $name='', $value='', $enablesecs=false, $hourf=24, $returnJS=false){
 			if(!$name) $name = 'input_'.$id;
 			$tmpopt		= array();
 			$tmpopt[] = 'hour: "'.($value-$value%3600)/3600 .'"';
@@ -1051,7 +1059,8 @@ if (!class_exists("jquery")) {
 			$tmpopt[] = 'showSecond: '.(($enablesecs) ? 'true' : 'false');
 			$tmpopt[] = 'ampm: '.(($hourf == 12) ? 'true' : 'false');
 
-			$this->tpl->add_js("$('#".$id."').timepicker(".$this->gen_options($tmpopt).");", 'docready');
+			$this->returnJScache['timepicker'][$id] = "$('#".$id."').timepicker(".$this->gen_options($tmpopt).");");
+			if(!$returnJS){ $this->tpl->add_js($this->returnJScache['timepicker'][$id], 'docready'); }
 			$this->setLanguage('timepicker', "$.timepicker.setDefaults($.timepicker.regional['{!language!}']);");
 			return '<input name="'.$name.'" id="'.$id.'" value="'.$value.'" type="text" />';
 		}
@@ -1494,7 +1503,7 @@ if (!class_exists("jquery")) {
 			return array('id' => $toolbar_id, 'items' => $intItems);
 		}
 
-		public function placepicker($id, $withmap=false, $returnJS){
+		public function placepicker($id, $withmap=false, $returnJS=false){
 			$this->init_placepicker();
 			$this->returnJScache['placepicker'][$id] = "$('#".$id."').placepicker();";
 			if(!$returnJS){ $this->tpl->add_js($this->returnJScache['placepicker'][$id], "docready"); }
