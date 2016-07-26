@@ -345,6 +345,15 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			return true;
 		}
 
+		public function get_transformed_raid_link($eventID){
+			$raidextension	= $this->get_extension($eventID);
+			$intRaidID		= (isset($raidextension['transformed']['id']) && $raidextension['transformed']['id'] > 0) ? $raidextension['transformed']['id'] : 0;
+			$intRaidEventID	= (isset($raidextension['extension']['raid_eventid'])) ? $raidextension['extension']['raid_eventid'] : 0;
+			if($intRaidID > 0 && $intRaidEventID != 0){
+				return $this->pdh->get('event', 'html_icon', array($intRaidEventID)).$this->pdh->get('raid', 'html_raidlink', array($intRaidID, register('routing')->simpleBuild('raids'), '', true));
+			}
+		}
+
 		// check calendar specific rights such as if the user is a raidleader or the creator
 		public function get_check_operatorperm($raidid, $userid=0){
 			$userid	= ($userid > 0) ? $userid : $this->user->data['user_id'];
@@ -527,9 +536,9 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			return $arrSearchResults;
 		}
 
-	    /* -----------------------------------------------------------------------
-	    * Planned raid to RLI/Raid creation
-	    * -----------------------------------------------------------------------*/
+		/* -----------------------------------------------------------------------
+		* Planned raid to RLI/Raid creation
+		* -----------------------------------------------------------------------*/
 		public function get_export_data($id, $json=false){
 			$exportdata = $this->get_data($id);
 
@@ -549,10 +558,10 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			return ($json) ? json_encode($exportdata) : $exportdata;
 		}
 
-	    /* -----------------------------------------------------------------------
-	    * Statistic stuff
+		/* -----------------------------------------------------------------------
+		* Statistic stuff
 		* - amount of raids in the x days
-	    * -----------------------------------------------------------------------*/
+		* -----------------------------------------------------------------------*/
 
 		public function get_amount_raids($days, $retcount=true){
 			$events = (is_array($this->events)) ? $this->events : array();

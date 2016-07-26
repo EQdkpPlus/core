@@ -33,22 +33,22 @@ class ManageRaids extends page_generic {
 			'itemadj_del' => array('process' => 'update', 'check' => 'a_raid_del', 'csrf'=>true),
 			'copy'		=> array('process' => 'copy', 'check' => 'a_raid_add'),
 			'refresh'	=> array('process' => 'refresh', 'check' => 'a_raid_add', 'csrf' => true),
-			'upd'		=> array('process' => 'update', 'csrf'=>false),			
+			'upd'		=> array('process' => 'update', 'csrf'=>false),
 		);
 		parent::__construct('a_raid_', $handler, array('raid', 'event_name'), null, 'selected_ids[]', 'r');
 		$this->process();
 
 	}
-	
+
 	public function ajax_raidvalue(){
 		header('content-type: text/html; charset=UTF-8');
-		
+
 		$event_id = $this->in->get('event', 0);
 		$event_value = $this->pdh->geth("event", "value", array($event_id));
 		echo runden($event_value);
 		die();
 	}
-	
+
 	public function copy(){
 		$this->core->message($this->user->lang('copy_info'), $this->user->lang('copy'));
 		$this->update(false, false, true);
@@ -56,17 +56,17 @@ class ManageRaids extends page_generic {
 
 	public function delete() {
 		$ids = $pos = $neg = $messages = array();
-		
+
 		if(count($this->in->getArray('selected_ids', 'int')) > 0) {
 			foreach($this->in->getArray('selected_ids','int') as $s_id) {
 					$ids[] = $s_id;
-			}		
+			}
 		} elseif ($this->url_id > 0) {
 			$ids[] = $this->url_id;
-		} 
-		
-		
-		if (count($ids)){		
+		}
+
+
+		if (count($ids)){
 			foreach ($ids as $raidid){
 				//delete everything connected to the raid
 				//adjustments first
@@ -85,20 +85,20 @@ class ManageRaids extends page_generic {
 				if(in_array(false, $adj_del)) {
 					$messages[] = array('text' => $this->user->lang('adjustments').' '.$this->user->lang('raid').' '.$raidid, 'title' => $this->user->lang('del_nosuc'), 'color' => 'red');
 				}
-			}		
+			}
 		}
-		
+
 		if(!empty($pos)) {
 			$messages[] = array('title' => $this->user->lang('del_suc'), 'text' => implode(', ', $pos), 'color' => 'green');
 		}
 		if(!empty($neg)) {
 			$messages[] = array('title' => $this->user->lang('del_no_suc'), 'text' => implode(', ', $neg), 'color' => 'red');
 		}
-		
+
 		if($this->in->get('simple_head') != ""){
 			$this->tpl->add_js("jQuery.FrameDialog.closeDialog();");
 		}
-		
+
 		$this->display($messages);
 	}
 
@@ -107,6 +107,9 @@ class ManageRaids extends page_generic {
 		if(!$data['raid']['id']) {
 			$raid_upd = $this->pdh->put('raid', 'add_raid', array($data['raid']['date'], $data['raid']['attendees'], $data['raid']['event'], $data['raid']['note'], $data['raid']['value'], $data['raid']['additonal_data']));
 			$data['raid']['id'] = ($raid_upd) ? $raid_upd : false;
+			if($raid_upd && $this->in->get('caldata_import', 0) > 0 && $this->in->get('calevent_id', 0) > 0){
+				$this->pdh->put('calendar_events', 'raid_transformed', array($this->in->get('calevent_id', 0), $data['raid']['id']));
+			}
 		} else {
 			$raid_upd = $this->pdh->put('raid', 'update_raid', array($data['raid']['id'], $data['raid']['date'], $data['raid']['attendees'], $data['raid']['event'], $data['raid']['note'], $data['raid']['value'], $data['raid']['additonal_data']));
 		}
@@ -131,7 +134,7 @@ class ManageRaids extends page_generic {
 					}
 				}
 			}
-			
+
 			if(in_array(false, $adj_upd)) {
 				$messages[] = array('text' => $this->user->lang('adjustments'), 'title' => $this->user->lang('save_nosuc'), 'color' => 'red');
 			} else {
@@ -142,12 +145,12 @@ class ManageRaids extends page_generic {
 			} else {
 				$messages[] = array('text' => $this->user->lang('items'), 'title' => $this->user->lang('save_suc'), 'color' => 'green');
 			}
-			
+
 			$messages[] = array('text' => $this->user->lang('raids'), 'title' => $this->user->lang('save_suc'), 'color' => 'green');
 		} else {
 			$messages[] = array('text' => $this->user->lang('raids'), 'title' => $this->user->lang('save_nosuc'), 'color' => 'red');
 		}
-		
+
 		if($this->in->get('simple_head') != ""){
 			$this->tpl->add_js("jQuery.FrameDialog.closeDialog();");
 		}
@@ -157,12 +160,12 @@ class ManageRaids extends page_generic {
 	public function refresh(){
 		$this->update(false, true);
 	}
-	
+
 	public function update($message=false, $force_refresh=false, $copy=false) {
 		if($message) {
 			$this->core->messages($message);
 		}
-		
+
 		$data = array();
 		if($force_refresh){
 			$data = $this->get_post(true);
@@ -175,7 +178,7 @@ class ManageRaids extends page_generic {
 		//fetch events
 		$events = $this->pdh->aget('event', 'name', 0, array($this->pdh->get('event', 'id_list')));
 		asort($events);
-		
+
 		//Event Itempool Mapping
 		$arrEventItempoolMapping = array();
 		foreach($this->pdh->get('event', 'id_list') as $eventID){
@@ -204,7 +207,7 @@ class ManageRaids extends page_generic {
 		//Autocompletes
 		$adjustment_reasons = $this->pdh->aget('adjustment', 'reason', 0, array($this->pdh->get('adjustment', 'id_list')));
 		$item_names = $this->pdh->aget('item', 'name', 0, array($this->pdh->get('item', 'id_list')));
-		
+
 		$raid = array('id' => $this->url_id, 'date' => $this->time->time, 'note' => '', 'event' => 0, 'value' => 0.00, 'attendees' => array());
 		if($raid['id'])
 		{ //we're updating a raid
@@ -214,7 +217,7 @@ class ManageRaids extends page_generic {
 			$adjs = $this->get_adjsofraid($raid['id']);
 			//fetch items
 			$items = $this->get_itemsofraid($raid['id']);
-			
+
 			//Add additional members
 			if (count($raid['attendees']) > 0){
 				$arrIDList = array_keys($members);
@@ -227,7 +230,7 @@ class ManageRaids extends page_generic {
 				}
 				if ($blnResort) $members = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($arrIDList, 'member', 'name', 'asc')));
 			}
-			
+
 		}
 		//If we get a draft
 		if ($this->in->get('draft', 0) > 0) {
@@ -235,7 +238,7 @@ class ManageRaids extends page_generic {
 			$raid['id']	 = 0;
 			$raid['date']	 = $this->time->time;
 		}
-		
+
 		//we're refreshing the view
 		if($force_refresh) {
 			if(!empty($data['raid'])) $raid = $data['raid'];
@@ -292,10 +295,10 @@ class ManageRaids extends page_generic {
 			'VALUE'				=> runden((($this->in->get('dataimport', '') == 'true') ? $this->in->get('value', 0) : $raid['value'])),
 			'NEW_MEM_SEL'		=> $this->jquery->MultiSelect('raid_attendees', $members, (($this->in->get('dataimport', '') == 'true') ? $this->in->getArray('attendees', 'int') : $raid['attendees']), array('width' => 400, 'filter' => true)),
 			'RAID_DROPDOWN'		=> new hdropdown('draft', array('options' => $raids, 'value' => $this->in->get('draft', 0), 'js' => 'onchange="window.location=\'manage_raids.php'.$this->SID.'&amp;upd=true&amp;draft=\'+this.value"')),
-			
+
 			'ADJ_KEY'			=> $intAdjKey+1,
 			'MEMBER_DROPDOWN'	=> $this->jquery->MultiSelect('adjs[KEY][members]', $members, array(), array('width' => 250, 'id'=>'adjs_KEY_members', 'filter' => true)),
-			'MEMBER_ITEM_DROPDOWN'	=> $this->jquery->MultiSelect('items[KEY][members]', $members, array(), array('width' => 250, 'id'=>'items_KEY_members', 'filter' => true)),	
+			'MEMBER_ITEM_DROPDOWN'	=> $this->jquery->MultiSelect('items[KEY][members]', $members, array(), array('width' => 250, 'id'=>'items_KEY_members', 'filter' => true)),
 			'EVENT_DROPDOWN'	=> new hdropdown('adjs[KEY][event]', array('options' => $events, 'value' => $adj['event'], 'id' => 'event_KEY')),
 			'ADJ_REASON_AUTOCOMPLETE' => $this->jquery->Autocomplete('adjs_KEY', array_unique($adjustment_reasons)),
 			'ITEM_KEY'			=> $intItemKey+1,
@@ -303,12 +306,13 @@ class ManageRaids extends page_generic {
 			'ITEM_AUTOCOMPLETE' => $this->jquery->Autocomplete('item_KEY', array_unique($item_names)),
 			'EVENT_ITEMPOOL_MAPPING' => json_encode($arrEventItempoolMapping),
 			'FIRST_EVENT_ID'	=> isset($arrEventKeys[0]) ? $arrEventKeys[0] : 0,
-				
+
 			//language vars
 			'L_RAID_SAVE'		=> ($raid['id'] AND $raid['id'] != 'new' && !$copy) ? $this->user->lang('update_raid') : $this->user->lang('add_raid'),
 			//other needed vars
 			'S_RAID_UPD'		=> ($raid['id'] AND $raid['id'] != 'new' && !$copy) ? true : false,
 			'S_EVENTVAL_ONLOAD' => ($raid['id'] == 'new' && !$force_refresh && $this->in->get('dataimport', '') != 'true') ? true : false,
+			'S_CALDATAIMPORT'	=> ($this->in->get('dataimport', '') == 'true') ? $this->in->get('calevent_id', 0) : 0,
 			'ADDITIONAL_INFOS_EDITOR' => new hbbcodeeditor('additional_data', array('rows' => 10, 'value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->get('additional_data') : $raid['additional_data']))),
 			'ADDITIONAL_INFOS'	=> ((isset($raid['additional_data']) AND strlen($raid['additional_data'])) || (($this->in->get('dataimport', '') == 'true') && strlen($this->in->get('additional_data')))) ? 'true' : 'false',
 		));
@@ -325,7 +329,7 @@ class ManageRaids extends page_generic {
 		$this->jquery->Collapse('#toggleAdjustments');
 		$this->jquery->Collapse('#toggleItems');
 		$this->jquery->Collapse('#toggleRaidInfos');
-		
+
 		$this->core->set_vars(array(
 			'page_title'    => $this->user->lang('manraid_title'),
 			'template_file' => 'admin/manage_raids_edit.html',
@@ -350,7 +354,7 @@ class ManageRaids extends page_generic {
 		//footer
 		$raid_count = count($view_list);
 		$footer_text = sprintf($this->user->lang('listraids_footcount'), $raid_count ,$this->user->data['user_rlimit']);
-		
+
 		$this->confirm_delete($this->user->lang('confirm_delete'));
 
 		$this->tpl->assign_vars(array(
@@ -473,7 +477,7 @@ class ManageRaids extends page_generic {
 				}
 			}
 		}
-		
+
 		if(is_array($this->in->getArray('items', 'int'))) {
 			foreach($this->in->getArray('items', 'int') as $key => $item) {
 				if(!isset($item['delete'])){
@@ -483,10 +487,10 @@ class ManageRaids extends page_generic {
 					if($this->in->get('items:'.$key.':name','') == "" && $this->in->get('items:'.$key.':itemid','') == ""){
 						$data['false'][] = 'item';
 					}
-					
+
 					$data['items'][$key]['group_key'] = $this->in->get('items:'.$key.':group_key','','hash');
 					$data['items'][$key]['name'] = $this->in->get('items:'.$key.':name','');
-					$data['items'][$key]['item_id'] = $this->in->get('items:'.$key.':itemid','');					
+					$data['items'][$key]['item_id'] = $this->in->get('items:'.$key.':itemid','');
 					$data['items'][$key]['members'] = $this->in->getArray('items:'.$key.':members','int');
 					$data['items'][$key]['value'] = $this->in->get('items:'.$key.':value',0.0);
 					$data['items'][$key]['itempool_id'] = $this->in->get('items:'.$key.':itempool_id',0);
@@ -498,7 +502,7 @@ class ManageRaids extends page_generic {
 				}
 			}
 		}
-		
+
 		if(isset($data['false']) && !$refresh) {
 			$missing = '';
 			foreach($data['false'] as $miss) {
@@ -507,7 +511,7 @@ class ManageRaids extends page_generic {
 			}
 			$this->update(array('title' => $this->user->lang('missing_values'), 'text' => $missing, 'color' => 'red'), true);
 		}
-		
+
 		return $data;
 	}
 }

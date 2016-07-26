@@ -545,6 +545,28 @@ if(!class_exists('pdh_w_calendar_events')) {
 			}
 			$this->pdh->process_hook_queue();
 		}
+
+		public function add_extension($eventID, $arrExtension){
+			$current_extensiondata = $this->pdh->get('calendar_events', 'extension', array($eventID));
+			if(is_array($arrExtension)){
+				$new_extensiondata = array_merge($current_extensiondata, $arrExtension);
+
+				// write the extension data to the database
+				$objQuery = $this->db->prepare("UPDATE __calendar_events :p WHERE id=?")->set(array(
+					'extension'				=> serialize($new_extensiondata),
+				))->execute($eventID);
+				$this->pdh->enqueue_hook('calendar_events_update');
+			}
+		}
+
+		public function raid_transformed($eventID, $raidID){
+			$data['transformed']	= array(
+				'id'	=> $raidID,
+				'date'	=> $this->time->time,
+				'user'	=> $this->user->data['user_id']
+			);
+			$this->add_extension($eventID, $data);
+		}
 	}
 }
 ?>

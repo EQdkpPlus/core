@@ -1025,6 +1025,7 @@ class calendarevent_pageobject extends pageobject {
 			'IS_STATUSCHANGE_WARN'	=> ($this->config->get('calendar_raid_statuschange_status', 0) == 1) ? true : false,
 			'IS_STATUS_CONFIRMED'	=> ($this->mystatus['signup_status'] == 0) ? true : false,
 			'SHOW_CONFIRMBUTTON'	=> (in_array(0, $raidcal_status)) ? true : false,
+			'IS_RAID_TRANSFORMED'	=> (isset($eventdata['extension']['transformed']) && isset($eventdata['extension']['transformed']['id']) && $eventdata['extension']['transformed']['id'] > 0) ? $eventdata['extension']['transformed']['id'] : false,
 
 			//Data
 			'MENU_OPTIONS'			=> $this->core->build_dropdown_menu('<i class="fa fa-cog fa-lg"></i> '.$this->user->lang('raidevent_raid_settbutton'), $optionsmenu, 'floatRight'),
@@ -1055,6 +1056,7 @@ class calendarevent_pageobject extends pageobject {
 			'DATE_DAY'				=> $this->time->date('d', $eventdata['timestamp_start']),
 			'DATE_MONTH'			=> $this->time->date('F', $eventdata['timestamp_start']),
 			'DATE_YEAR'				=> $this->time->date('Y', $eventdata['timestamp_start']),
+			'LINK2TRANSFORMEDRAID'	=> $this->pdh->get('calendar_events', 'transformed_raid_link', array($this->url_id)),
 			// guests
 			'GUEST_COUNT'			=> count($this->guests),
 
