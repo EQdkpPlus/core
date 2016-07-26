@@ -1059,7 +1059,7 @@ if (!class_exists("jquery")) {
 			$tmpopt[] = 'showSecond: '.(($enablesecs) ? 'true' : 'false');
 			$tmpopt[] = 'ampm: '.(($hourf == 12) ? 'true' : 'false');
 
-			$this->returnJScache['timepicker'][$id] = "$('#".$id."').timepicker(".$this->gen_options($tmpopt).");");
+			$this->returnJScache['timepicker'][$id] = "$('#".$id."').timepicker(".$this->gen_options($tmpopt).");";
 			if(!$returnJS){ $this->tpl->add_js($this->returnJScache['timepicker'][$id], 'docready'); }
 			$this->setLanguage('timepicker', "$.timepicker.setDefaults($.timepicker.regional['{!language!}']);");
 			return '<input name="'.$name.'" id="'.$id.'" value="'.$value.'" type="text" />';
