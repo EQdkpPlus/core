@@ -409,6 +409,9 @@ function ChangeGuestStatus(guestid, status){
 						<!-- IF RAIDLEADER -->
 						<div class="eventdata-details-raidleader"><i class="fa fa-users fa-lg" title="{L_raidevent_raidleader}"></i> {RAIDLEADER} </div>
 						<!-- ENDIF -->
+						<!-- IF IS_RAID_TRANSFORMED -->
+						<div class="eventdata-details-transformed"><i class="fa fa-exchange fa-lg" title="{L_raidevent_raidtransformed}"></i> {LINK2TRANSFORMEDRAID} <span class="coretip" data-coretip='{TRANSFORMEDRAID_TT}'><i class="fa fa-info-circle fa-lg"></i></span></div>
+						<!-- ENDIF -->
 					</div>
 				</div>
 				<!-- IF RAIDNOTE -->

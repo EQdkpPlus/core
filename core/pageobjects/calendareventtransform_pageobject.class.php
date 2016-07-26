@@ -26,7 +26,7 @@ class calendareventtransform_pageobject extends pageobject {
 			'transformraid'			=> array('process' => 'transform_raid'),
 		);
 		$this->user->check_auth('a_raid_add');
-		
+
 		parent::__construct(false, $handler, array(), null, '', 'eventid');
 		$this->process();
 	}
@@ -55,7 +55,7 @@ class calendareventtransform_pageobject extends pageobject {
 				$attendees = array_unique($attendees);
 			}
 		}
-		
+
 		//Additional Data like Roles
 		if($this->in->get('roleinfo', 0) && $raidext['raidmode'] != 'class'){
 			$additional_data = "";
@@ -69,10 +69,11 @@ class calendareventtransform_pageobject extends pageobject {
 		$htmlcode	= '<html>
 			<body onload="document.transform.submit();">
 			<form method="post" action="'.$this->server_path.'admin/manage_raids.php'.$this->SID.'&upd=true&dataimport=true" name="transform" target="_parent">
-			<input name="event" value="'.$raidext['raid_eventid'].'" type="hidden">
-			<input name="value" value="'.(($raidext['raid_value'] > 0) ? $raidext['raid_value'] : 0).'" type="hidden">
-			<input name="date" value="'.$this->time->user_date($this->pdh->get('calendar_events', 'time_start', array($this->url_id)), true, false, false, function_exists('date_create_from_format')).'" type="hidden">
-			<input name="rnote" value="'.$this->pdh->get('calendar_events', 'notes', array($this->url_id)).'" type="hidden">
+			<input name="calevent_id" value="'.$this->url_id.'" type="hidden" />
+			<input name="event" value="'.$raidext['raid_eventid'].'" type="hidden" />
+			<input name="value" value="'.(($raidext['raid_value'] > 0) ? $raidext['raid_value'] : 0).'" type="hidden" />
+			<input name="date" value="'.$this->time->user_date($this->pdh->get('calendar_events', 'time_start', array($this->url_id)), true, false, false, function_exists('date_create_from_format')).'" type="hidden" />
+			<input name="rnote" value="'.$this->pdh->get('calendar_events', 'notes', array($this->url_id)).'" type="hidden" />
 			<input name="'.$this->user->csrfPostToken().'" value="'.$this->user->csrfPostToken().'" type="hidden" />
 			<textarea name="additional_data" style="display:none;">'.$additional_data.'</textarea>
 					';
