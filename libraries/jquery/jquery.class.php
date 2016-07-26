@@ -214,7 +214,7 @@ if (!class_exists("jquery")) {
 			if(!$this->inits['placepicker']){
 				if($returnJS){
 					$output	 = "<script type='text/javascript' src='https://maps.googleapis.com/maps/api/js?sensor=true&libraries=places'></script>";
-					$output .= "<script type='text/javascript' src='".$this->path."js/placepicker/jquery.placepicker.min.js'></script>";
+					$output .= "<script type='text/javascript' src='".$this->env->buildlink()."/libraries/jquery/js/placepicker/jquery.placepicker.min.js'></script>";
 				}else{
 					$this->tpl->js_file("https://maps.googleapis.com/maps/api/js?sensor=true&libraries=places", 'direct');
 					$this->tpl->js_file($this->path."js/placepicker/jquery.placepicker.min.js");
