@@ -32,6 +32,7 @@ if (!class_exists("jquery")) {
 		private $language_set			= array();
 		private $dyndd_counter			= 0;
 		private $file_browser			= array();
+		private $returnJScache			= false;
 		private $inits					= array(
 			'colorpicker'		=> false,
 			'starrating'		=> false,
@@ -151,6 +152,14 @@ if (!class_exists("jquery")) {
 				// now load the fullcalendar language file
 				$this->tpl->js_file($this->path."js/fullcalendar/lang-all.js");
 				$this->inits['fullcalendar']	= true;
+			}
+		}
+
+		public function get_jscode($module='all', $id=0){
+			if($module == 'all'){
+				return $this->returnJScache;
+			}else{
+				return (isset($this->returnJScache[$module][$id])) ? $this->returnJScache[$module][$id] : false;
 			}
 		}
 
@@ -512,8 +521,7 @@ if (!class_exists("jquery")) {
 		* @param $myarray	Data Array
 		* @return false
 		*/
-		public function Autocomplete($id, $myarray){
-
+		public function Autocomplete($id, $myarray, $returnJS=false){
 			if(is_array($myarray) && count($myarray) > 0){
 				$myarray = str_replace('"', '', $myarray);	// clean the array, remove hyphens
 				$js_array = $this->implode_wrapped('"','"', ",", $myarray);
@@ -524,12 +532,14 @@ if (!class_exists("jquery")) {
 					$ids = $id;
 				}
 
-				$this->tpl->add_js('
-						var jquiac_'.$id.' = ['.$js_array.'];
+
+				$this->returnJScache['autocomplete'][$id] = 'var jquiac_'.$id.' = ['.$js_array.'];
 						$("#'.$ids.'").autocomplete({
 							source: jquiac_'.$id.'
-						});
-					', 'docready');
+						});';
+				if(!$returnJS){
+					$this->tpl->add_js($this->returnJScache['autocomplete'][$id], 'docready');
+				}
 				return '['.$js_array.']';
 			}
 			return '[]';
@@ -798,10 +808,11 @@ if (!class_exists("jquery")) {
 		* @param $jscode	Optional JavaScript Code tags
 		* @return CHAR
 		*/
-		public function colorpicker($id, $value, $name='', $size='14', $jscode='', $options=array()){
+		public function colorpicker($id, $value, $name='', $size='14', $jscode='', $options=array(), $returnJS=false){
 			if(count($options) === 0){
 				if(!$this->inits['colorpicker']) {
-					$this->tpl->add_js('$(".colorpicker").spectrum({showInput: true, preferredFormat: "hex6"});', 'docready');
+					$returnJScache['colorpicker'][$id] = '$(".colorpicker").spectrum({showInput: true, preferredFormat: "hex6"});';
+					if(!$returnJS){ $this->tpl->add_js($returnJScache['colorpicker'][$id], 'docready'); }
 					$this->inits['colorpicker'] = true;
 				}
 				return '<input type="text" class="colorpicker" id="'.$id.'_input" name="'.(($name) ? $name : $id).'" value="'.$value.'" size="'.$size.'" '.$jscode.' />';
@@ -811,13 +822,14 @@ if (!class_exists("jquery")) {
 				if(isset($options['showAlpha'])) $jsoptions[] = 'showAlpha: true';
 				if(isset($options['group'])){
 					if(!isset($this->inits['colorpicker_'.$options['group']])){
-						$this->tpl->add_js('$(".colorpicker_group_'.$options['group'].'").spectrum('.$this->gen_options($jsoptions).');', 'docready');
+						$returnJScache['colorpicker'][$id] = '$(".colorpicker_group_'.$options['group'].'").spectrum('.$this->gen_options($jsoptions).');';
+						if(!$returnJS){ $this->tpl->add_js($returnJScache['colorpicker'][$id], 'docready'); }
 						$this->inits['colorpicker_'.$options['group']] = true;
 					}
 				} else {
-					$this->tpl->add_js('$(".colorpicker_'.$id.'").spectrum('.$this->gen_options($jsoptions).');', 'docready');
+					$returnJScache['colorpicker'][$id] = '$(".colorpicker_'.$id.'").spectrum('.$this->gen_options($jsoptions).');';
+					if(!$returnJS){ $this->tpl->add_js($returnJScache['colorpicker'][$id], 'docready'); }
 				}
-
 				return '<input type="text" class="colorpicker_group_'.$options['group'].' colorpicker_'.$id.'" id="'.$id.'_input" name="'.(($name) ? $name : $id).'" value="'.$value.'" size="'.$size.'" '.$jscode.' />';
 			}
 		}
@@ -1482,11 +1494,10 @@ if (!class_exists("jquery")) {
 			return array('id' => $toolbar_id, 'items' => $intItems);
 		}
 
-		public function placepicker($id, $withmap=false){
+		public function placepicker($id, $withmap=false, $returnJS){
 			$this->init_placepicker();
-			$this->tpl->add_js(
-				"$('#".$id."').placepicker();"
-			, "docready");
+			$this->returnJScache['placepicker'][$id] = "$('#".$id."').placepicker();";
+			if(!$returnJS){ $this->tpl->add_js($this->returnJScache['placepicker'][$id], "docready"); }
 			return true;
 		}
 
