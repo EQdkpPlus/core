@@ -228,6 +228,9 @@ $lang = array(
 "calendar_sortbutton_mine" => "Meine",
 "calendar_sortbutton_attendance" => "Teilnahme",
 
+"calendars_continue_raid" => "Raid fortsetzen",
+"calendars_continue_raid_button" => "Raid fortsetzen",
+
 "adduser_send_mail" => "E-Mail senden",
 "adduser_send_mail2" => "E-Mail  an \"%s\" senden",
 "adduser_send_mail_subject" => "Betreff",

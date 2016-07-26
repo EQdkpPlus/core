@@ -1,0 +1,17 @@
+<form method="post" action="{ACTION}" name="doContinueRaid">
+<input type="hidden" name="eventid" value="{EVENT_ID}">
+<input type="hidden" name="doContinueRaid" value="true">
+
+<fieldset class="settings smallsettings">
+	<dl>
+		<dt><label>{L_calendar_date}:</label></dt>
+		<dd>{JQ_DATE_START} - {JQ_DATE_END}</dd>
+	</dl>
+	<dl>
+		<dt><label>{L_note}:</label></dt>
+		<dd>{BBCODE_NOTE}</dd>
+	</dl>
+</fieldset>
+<input type="submit" name="perform_continue2" value="{L_calendars_continue_raid_button}" class="mainoption bi_ok" />
+{CSRF_TOKEN}
+</form>
