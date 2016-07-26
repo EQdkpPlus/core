@@ -65,12 +65,12 @@ class htext extends html {
 		if(!empty($this->autocomplete)) {
 			$this->jquery->Autocomplete($this->id, $this->autocomplete, $this->returnJS);
 			if($this->returnJS){
-				$jsout = $this->jquery->get_jscode('autocomplete', $this->id);
+				$jsout = '<script>'.$this->jquery->get_jscode('autocomplete', $this->id).'</script>';
 			}
 		} elseif($this->colorpicker) {
 			$this->jquery->colorpicker($this->id,0,'',14,'',array(),$this->returnJS);
 			if($this->returnJS){
-				$jsout = $this->jquery->get_jscode('colorpicker', $this->id);
+				$jsout = '<script>'.$this->jquery->get_jscode('colorpicker', $this->id).'</script>';
 			}
 			$this->class = (empty($this->class)) ? 'colorpicker' : $this->class.' colorpicker';
 		}elseif($this->placepicker){
@@ -81,7 +81,7 @@ class htext extends html {
 		}
 
 		// start the output
-		$out	 = '<script>'.$jsout.'</script><input type="'.self::$type.'" name="'.$this->name.'" ';
+		$out	 = $jsout.'<input type="'.self::$type.'" name="'.$this->name.'" ';
 		$out	.= 'id="'.$this->id.'" ';
 		if(isset($this->value)) $out .= 'value="'.$this->value.'" ';
 		if(!empty($this->pattern) && !empty($this->successmsg)) $this->class .= ' fv_success';

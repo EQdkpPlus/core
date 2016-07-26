@@ -1511,7 +1511,7 @@ if (!class_exists("jquery")) {
 
 		public function placepicker($id, $withmap=false, $returnJS=false){
 			$init_PP	= $this->init_placepicker($returnJS);
-			$this->returnJScache['placepicker'][$id] = (($returnJS) ? $init_PP : '')."$('#".$id."').placepicker();";
+			$this->returnJScache['placepicker'][$id] = (($returnJS) ? $init_PP : '')."<script>$('#".$id."').placepicker();</script>";
 			if(!$returnJS){ $this->tpl->add_js($this->returnJScache['placepicker'][$id], "docready"); }
 			return true;
 		}
