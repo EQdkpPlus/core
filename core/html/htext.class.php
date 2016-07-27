@@ -78,6 +78,11 @@ class htext extends html {
 			if($this->returnJS){
 				$jsout = $this->jquery->get_jscode('placepicker', $this->id);
 			}
+		}elseif($this->spinner && $this->returnJS){
+			$jsout = "<script>
+						var self = $('#".$this->id."'), min = self.data('min'), max = self.data('max'), step = self.data('step');
+						self.spinner({ min: min, max: max, step: step, });
+					</script>";
 		}
 
 		// start the output

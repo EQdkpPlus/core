@@ -92,7 +92,7 @@ class hmultiselect extends html {
 		foreach($this->jq_options as $opt) $options[$opt] = $this->$opt;
 
 		$this->jquery->MultiSelect('', array(), array(), $options, $this->returnJS);
-		$jsout = ($this->returnJS) ? '<script>'.$this->jquery->get_jscode('multiselect', $this->name).'</script>' : '';
+		$jsout = ($this->returnJS) ? '<script>'.$this->jquery->get_jscode('multiselect', $this->id).'</script>' : '';
 		if(strlen($this->text_after)) $dropdown .= $this->text_after;
 		$this->out = $jsout.$dropdown;
 	}

@@ -993,8 +993,8 @@ if (!class_exists("jquery")) {
 			}
 			$javascript = (isset($options['javascript'])) ? $options['javascript'] : '';
 
-			$this->returnJScache['multiselect'][$name] = '$("#'.$myID.'").multiselect('.$this->gen_options($tmpopt).')'.$filterme.';';
-			if(!$returnJS) {$this->tpl->add_js($this->returnJScache['multiselect'][$name], 'docready'); }
+			$this->returnJScache['multiselect'][$myID] = '$("#'.$myID.'").multiselect('.$this->gen_options($tmpopt).')'.$filterme.';';
+			if(!$returnJS) {$this->tpl->add_js($this->returnJScache['multiselect'][$myID], 'docready'); }
 
 			$dropdown = "<select name='".$name."[]' id='".$myID."' multiple='multiple'".$javascript.">";
 			$selected = (is_array($selected))? $selected : explode("|", $selected);
