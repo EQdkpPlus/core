@@ -33,6 +33,7 @@ if (!class_exists("jquery")) {
 		private $dyndd_counter			= 0;
 		private $file_browser			= array();
 		private $returnJScache			= false;
+		private $googleAPIkey			= 'AIzaSyAogA0D9EuHGziYSXc9XUktG_FJrV6rIKA';
 		private $inits					= array(
 			'colorpicker'		=> false,
 			'starrating'		=> false,
@@ -213,10 +214,10 @@ if (!class_exists("jquery")) {
 		public function init_placepicker($returnJS){
 			if(!$this->inits['placepicker']){
 				if($returnJS){
-					$output	 = "<script type='text/javascript' src='https://maps.googleapis.com/maps/api/js?sensor=true&libraries=places'></script>";
+					$output	 = "<script type='text/javascript' src='https://maps.googleapis.com/maps/api/js?key=".$this->googleAPIkey."&sensor=true&libraries=places'></script>";
 					$output .= "<script type='text/javascript' src='".$this->env->buildlink()."/libraries/jquery/js/placepicker/jquery.placepicker.min.js'></script>";
 				}else{
-					$this->tpl->js_file("https://maps.googleapis.com/maps/api/js?sensor=true&libraries=places", 'direct');
+					$this->tpl->js_file("https://maps.googleapis.com/maps/api/js?key=".$this->googleAPIkey."&sensor=true&libraries=places", 'direct');
 					$this->tpl->js_file($this->path."js/placepicker/jquery.placepicker.min.js");
 				}
 				$this->inits['placepicker']	= true;
@@ -227,7 +228,7 @@ if (!class_exists("jquery")) {
 		// https://github.com/hpneo/gmaps
 		public function init_gmaps(){
 			if(!$this->inits['googlemaps']){
-				$this->tpl->js_file("https://maps.googleapis.com/maps/api/js?sensor=true", 'direct');
+				$this->tpl->js_file("https://maps.googleapis.com/maps/api/js?key=".$this->googleAPIkey."&sensor=true", 'direct');
 				$this->tpl->js_file($this->path."js/gmaps/gmaps.min.js");
 				$this->inits['googlemaps']	= true;
 			}
