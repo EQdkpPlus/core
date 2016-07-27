@@ -51,20 +51,21 @@ class hmultiselect extends html {
 
 	protected static $type = 'dropdown';
 
-	public $name = '';
-	public $disabled = false;
+	public $name				= '';
+	public $disabled			= false;
 
-	public $multiple = true;
-	public $width = 200;
-	public $height = 200;
-	public $preview_num = 5;
-	public $datatype = 'string';
-	public $tolang = false;
-	public $text_after = "";
-	public $text_before = "";
+	public $multiple			= true;
+	public $width				= 200;
+	public $height				= 200;
+	public $preview_num			= 5;
+	public $datatype			= 'string';
+	public $tolang				= false;
+	public $text_after			= "";
+	public $text_before			= "";
+	public $returnJS			= false;
 
 	private $jq_options = array('height', 'width', 'preview_num', 'multiple', 'no_animation', 'header', 'filter', 'clickfunc');
-	private $out = '';
+	private $out				= '';
 
 	public function _construct() {
 		$dropdown = "";
@@ -90,9 +91,10 @@ class hmultiselect extends html {
 		$options = array('id' => $this->id);
 		foreach($this->jq_options as $opt) $options[$opt] = $this->$opt;
 
-		$this->jquery->MultiSelect('', array(), array(), $options);
+		$this->jquery->MultiSelect('', array(), array(), $options, $this->returnJS);
+		$jsout = ($this->returnJS) ? '<script>'.$this->jquery->get_jscode('multiselect', $this->id).'</script>' : '';
 		if(strlen($this->text_after)) $dropdown .= $this->text_after;
-		$this->out = $dropdown;
+		$this->out = $jsout.$dropdown;
 	}
 
 	public function _toString() {

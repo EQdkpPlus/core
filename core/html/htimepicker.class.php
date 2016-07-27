@@ -38,37 +38,39 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 class htimepicker extends html {
 
 	protected static $type = 'timepicker';
-	
-	public $name = '';
-	public $enablesecs = false;
-	public $hourf = 24;
-	public $value = '';
-	public $required = false;
-	
-	private $out = '';
-	
+
+	public $name				= '';
+	public $enablesecs			= false;
+	public $hourf				= 24;
+	public $value				= '';
+	public $required			= false;
+	public $returnJS			= false;
+
+	private $out				= '';
+
 	public function _construct() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		$out = '<input type="text" name="'.$this->name.'" id="'.$this->id.'" value="'.$this->time->date("H:i", $this->value).'"';
 		if(!empty($this->class)) $out .= ' class="'.$this->class.'"';
 		if($this->required) $out .= ' required="required"';
-		$this->jquery->timePicker($this->id, $this->name, $this->value, $this->enablesecs, $this->hourf);
+		$this->jquery->timePicker($this->id, $this->name, $this->value, $this->enablesecs, $this->hourf, $this->returnJS);
 		$out .= ' />';
+		$jsout = ($this->returnJS) ? '<script>'.$this->jquery->get_jscode('timepicker', $this->id).'</script>' : '';
 		if($this->required) $out .= '<span class="fv_msg" data-errormessage="'.registry::fetch('user')->lang('fv_required').'"></span>';
-		$this->out = $out;
+		$this->out = $jsout.$out;
 	}
-	
+
 	public function _toString() {
 		return $this->out;
 	}
-	
+
 	/**
 	 * Returns Time in Format H:i, in GMT
-	 * 
+	 *
 	 * @return string
 	 */
 	public function _inpval() {
-		$strTimeInUserTime = $this->in->get($this->name, '');		
+		$strTimeInUserTime = $this->in->get($this->name, '');
 		$intTimestamp = $this->time->convert_usertimestring_to_utc($strTimeInUserTime);
 		return date("H:i", $intTimestamp);
 	}

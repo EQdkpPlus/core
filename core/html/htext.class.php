@@ -29,7 +29,7 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
  * available options
  * name			(string) 	name of the textarea
  * id			(string)	id of the field, defaults to a clean form of name if not set
- * value		
+ * value
  * class		(string)	class for the field
  * readonly		(boolean)	field readonly?
  * size			(int)		size of the field
@@ -42,33 +42,52 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 class htext extends html {
 
 	protected static $type = 'text';
-	
-	public $name = '';
-	public $readonly = false;
-	public $spinner = false;
-	public $colorpicker = false;
-	public $placepicker = false;
-	public $placepicker_withmap = false;
-	public $required = false;
-	public $autocomplete = array();
-	public $class = 'input';
-	public $inptype = '';
-	public $disabled = false;
+
+	public $name				= '';
+	public $readonly			= false;
+	public $spinner				= false;
+	public $colorpicker			= false;
+	public $placepicker			= false;
+	public $placepicker_withmap	= false;
+	public $required			= false;
+	public $returnJS			= false;
+	public $autocomplete		= array();
+	public $class				= 'input';
+	public $inptype				= '';
+	public $disabled			= false;
 
 	private $out = '';
-	
+
 	public function _construct() {
-		$out = '<input type="'.self::$type.'" name="'.$this->name.'" ';
+		$jsout	= '';
+
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
-		$out .= 'id="'.$this->id.'" ';
 		if(!empty($this->autocomplete)) {
-			$this->jquery->Autocomplete($this->id, $this->autocomplete);
+			$this->jquery->Autocomplete($this->id, $this->autocomplete, $this->returnJS);
+			if($this->returnJS){
+				$jsout = '<script>'.$this->jquery->get_jscode('autocomplete', $this->id).'</script>';
+			}
 		} elseif($this->colorpicker) {
-			$this->jquery->colorpicker(0,0);
+			$this->jquery->colorpicker($this->id,0,'',14,'',array(),$this->returnJS);
+			if($this->returnJS){
+				$jsout = '<script>'.$this->jquery->get_jscode('colorpicker', $this->id).'</script>';
+			}
 			$this->class = (empty($this->class)) ? 'colorpicker' : $this->class.' colorpicker';
 		}elseif($this->placepicker){
-			$this->jquery->placepicker($this->id, $this->placepicker_withmap);
+			$this->jquery->placepicker($this->id, $this->placepicker_withmap, $this->returnJS);
+			if($this->returnJS){
+				$jsout = $this->jquery->get_jscode('placepicker', $this->id);
+			}
+		}elseif($this->spinner && $this->returnJS){
+			$jsout = "<script>
+						var self = $('#".$this->id."'), min = self.data('min'), max = self.data('max'), step = self.data('step');
+						self.spinner({ min: min, max: max, step: step, });
+					</script>";
 		}
+
+		// start the output
+		$out	 = $jsout.'<input type="'.self::$type.'" name="'.$this->name.'" ';
+		$out	.= 'id="'.$this->id.'" ';
 		if(isset($this->value)) $out .= 'value="'.$this->value.'" ';
 		if(!empty($this->pattern) && !empty($this->successmsg)) $this->class .= ' fv_success';
 		if(!empty($this->equalto)) $this->class .= ' equalto';
@@ -99,11 +118,11 @@ class htext extends html {
 		if(!empty($this->after_txt)) $out .= $this->after_txt;
 		$this->out = $out;
 	}
-	
+
 	public function _toString() {
 		return $this->out;
 	}
-	
+
 	public function _inpval() {
 		return $this->in->get($this->name, '', $this->inptype);
 	}

@@ -29,7 +29,7 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
  * available options
  * name			(string) 	name of the field
  * id			(string)	id of the field, defaults to a clean form of name if not set
- * value		
+ * value
  * class		(string)	class for the field
  * readonly		(boolean)	field readonly?
  * js			(string)	extra js which shall be injected into the field
@@ -37,17 +37,17 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 class hpassword extends html {
 
 	protected static $type = 'password';
-	
+
 	public $name = '';
 	public $set_value = false;
 	public $required = false;
 	public $pattern = 'password';
 	public $autocomplete = false;
-	
+
 	public function _construct() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 	}
-	
+
 	public function _toString() {
 		$out = '<input type="'.self::$type.'" name="'.$this->name.'" id="'.$this->id.'" ';
 		if($this->set_value && !empty($this->value)) $out .= 'value="'.$this->value.'" ';
@@ -65,7 +65,7 @@ class hpassword extends html {
 		if(!empty($this->equalto)) $out .= '<span class="errormessage error-message-red" style="display:none;"><i class="fa fa-exclamation-triangle fa-lg"></i>'.registry::fetch('user')->lang('fv_required_password_repeat').'</span>';
 		return $out;
 	}
-	
+
 	public function _inpval() {
 		return $this->in->get($this->name, '');
 	}

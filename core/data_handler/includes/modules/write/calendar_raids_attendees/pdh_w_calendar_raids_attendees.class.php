@@ -31,7 +31,7 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 			$this->pdh->enqueue_hook('calendar_raid_attendees_update');
 		}
 
-		public function update_status($eventid, $memberid, $memberrole='', $signupstatus='', $raidgroup=0, $signed_memberid=0, $note='', $signedbyadmin=0){		
+		public function update_status($eventid, $memberid, $memberrole='', $signupstatus='', $raidgroup=0, $signed_memberid=0, $note='', $signedbyadmin=0){
 			$memberrole = ($memberrole>0) ? $memberrole : 0;
 			if($signed_memberid > 0){
 				// fetch the old note
@@ -75,29 +75,29 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 					'member'=> $this->pdh->get('member', 'name', array($memberid)),
 					'status'=> '{LA_raidevent_raid_status['.$signupstatus.']}',
 				);
-				
+
 				$arrOld = false;
 			}
-			
+
 			$arrLang = array(
 				'note'	=> '{L_NOTE}',
 				'member'=> '{L_MEMBER}',
 				'status'=> '{L_calendar_log_charadd_status}',
 			);
-			
+
 			// add log entry
 			$log_action = $this->logs->diff($arrOld, $arrNew, $arrLang);
 			if ($arrOld['member'] == $arrNew['member']) $log_action['{L_MEMBER}'] = $this->pdh->get('member', 'name', array($memberid));
-			
+
 			$this->log_insert('calendar_log_charchanged', $log_action, $eventid, $this->pdh->get('calendar_events', 'name', array($eventid)), true, 'calendar');
 			$this->pdh->enqueue_hook('calendar_raid_attendees_update', array($eventid));
 		}
-		
+
 		public function moderate_status($eventid, $status, $memberids){
 			if(is_array($memberids) && count($memberids) > 0){
 				$objQuery = $this->db->prepare("UPDATE __calendar_raid_attendees :p WHERE calendar_events_id=? AND member_id :in")->set(array(
 						'signup_status'	=> $status
-						
+
 				))->in($memberids)->execute($eventid);
 				// add log entry
 				$log_action = array(
@@ -108,13 +108,13 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 				$this->pdh->enqueue_hook('calendar_raid_attendees_update', array($eventid));
 			}
 		}
-		
+
 		public function automatic_signoff($eventid, $memberids){
 			if(is_array($memberids) && count($memberids) > 0){
 				$objQuery = $this->db->prepare("UPDATE __calendar_raid_attendees :p WHERE calendar_events_id=? AND member_id :in")->set(array(
 						'signup_status'	=> 2,
 						'note'			=> $this->user->lang('raidevent_raid_autosignoffnote')
-						
+
 				))->in($memberids)->execute($eventid);
 				// add log entry
 				$log_action = array(
@@ -125,12 +125,12 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 				$this->pdh->enqueue_hook('calendar_raid_attendees_update', array($eventid));
 			}
 		}
-		
+
 		public function moderate_group($eventid, $group, $memberids){
 			if(is_array($memberids) && count($memberids) > 0){
 				$objQuery = $this->db->prepare("UPDATE __calendar_raid_attendees :p WHERE calendar_events_id=? AND member_id :in")->set(array(
 						'raidgroup'	=> $group
-						
+
 				))->in($memberids)->execute($eventid);
 				// add log entry
 				$log_action = array(
@@ -141,7 +141,7 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 				$this->pdh->enqueue_hook('calendar_raid_attendees_update', array($eventid));
 			}
 		}
-		
+
 		public function add_notsigned($eventid, $memberids, $status, $roles=false){
 			if(is_array($memberids)){
 				foreach($memberids as $realmemids){
@@ -155,15 +155,15 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 			}
 			$this->pdh->enqueue_hook('calendar_raid_attendees_update', array($eventid));
 		}
-		
+
 		public function toggle_twinks($eventid, $new_memid, $old_memid, $role){;
 			$objQuery = $this->db->prepare("UPDATE __calendar_raid_attendees :p WHERE member_id=? AND calendar_events_id=?")->set(array(
 				'member_id'		=> (int) $new_memid,
 				'member_role'	=> (int) $role
 			))->execute($old_memid, $eventid);
-			
+
 			$arrOld = array(
-				'member' => $this->pdh->get('member', 'name', array($old_memid)),	
+				'member' => $this->pdh->get('member', 'name', array($old_memid)),
 			);
 			$arrNew = array(
 				'member' => $this->pdh->get('member', 'name', array($new_memid)),
@@ -171,22 +171,22 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 			);
 			$arrLang = array(
 				'member' => "{L_member}",
-				'role'	=> "{L_role}",	
+				'role'	=> "{L_role}",
 			);
-			
+
 			//Logging
 			$log_action = $this->logs->diff($arrOld, $arrNew, $arrLang);
 			$this->log_insert('calendar_log_twinkchanged', $log_action, $eventid, $this->pdh->get('calendar_events', 'name', array($eventid)), true, 'calendar');
-			
+
 			$this->pdh->enqueue_hook('calendar_raid_attendees_update', array($eventid));
 		}
-		
+
 		public function update_group($eventid, $memberid, $tempgroup){
 			$old_raidgroup = $this->pdh->get('calendar_raids_attendees', 'raidgroup', array($eventid, $memberid));
 			$objQuery = $this->db->prepare("UPDATE __calendar_raid_attendees :p WHERE member_id=? AND calendar_events_id=?")->set(array(
 				'raidgroup'		=> $tempgroup
 			))->execute($memberid, $eventid);
-			
+
 			$log_action = $this->logs->diff(array($old_raidgroup), array($tempgroup), array("{L_CALENDAR_RAIDGROUP}"));
 			if($log_action) {
 				$log_action["{L_MEMBER}"] = $this->pdh->get('member', 'name', array($memberid));
@@ -200,7 +200,7 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 			$objQuery = $this->db->prepare("UPDATE __calendar_raid_attendees :p WHERE member_id=? AND calendar_events_id=?")->set(array(
 				'note'		=> $note
 			))->execute($memberid, $eventid);
-			
+
 			$log_action = $this->logs->diff(array($old_note), array($note), array("{L_NOTE}"));
 			if($log_action) {
 				$log_action["{L_MEMBER}"] = $this->pdh->get('member', 'name', array($memberid));
@@ -214,7 +214,7 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 			$objQuery = $this->db->prepare("UPDATE __calendar_raid_attendees :p WHERE member_id=? AND calendar_events_id=?")->set(array(
 				'member_role'		=> $role
 			))->execute($memberid, $eventid);
-			
+
 			$log_action = $this->logs->diff(array($this->pdh->get('roles', 'name', array($old_role))), array($this->pdh->get('roles', 'name', array($role))), array("{L_ROLE}"));
 			if($log_action) {
 				$log_action["{L_MEMBER}"] = $this->pdh->get('member', 'name', array($memberid));
@@ -228,7 +228,7 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 			$objQuery = $this->db->prepare("UPDATE __calendar_raid_attendees :p WHERE calendar_events_id=? AND signup_status=1")->set(array(
 				'signup_status'		=> 0
 			))->execute($eventid);
-			
+
 			// add log entry
 			$log_action = array(
 				'{L_calendar_log_charadd_names}'	=> implode(', ', $this->pdh->aget('member', 'name', 0, array($arrMembers))),
@@ -237,7 +237,7 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 			if(count($arrMembers)) $this->log_insert('calendar_log_confirmedall', $log_action, $eventid, $this->pdh->get('calendar_events', 'name', array($eventid)),true, 'calendar');
 			$this->pdh->enqueue_hook('calendar_raid_attendees_update', array($eventid));
 		}
-		
+
 		public function delete_attendees($memberids){
 			$memberids = (is_array($memberids)) ? $memberids : array($memberids);
 			$objQuery = $this->db->prepare("DELETE FROM __calendar_raid_attendees WHERE member_id :in")->in($memberids)->execute();

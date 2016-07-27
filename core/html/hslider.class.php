@@ -29,7 +29,7 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
  * available options
  * name			(string) 	name of the field
  * id			(string)	id of the field, defaults to a clean form of name if not set
- * value		
+ * value
  * label		(string)	displayed text next to the slider
  * range		(boolean)	a double slider (range of two values) or a single slider (one value)?
  * min			(int)		minimum value of the field
@@ -39,23 +39,28 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 class hslider extends html {
 
 	protected static $type = 'slider';
-	
-	public $name = '';
-	public $range = true;
-	private $options = array('min', 'max', 'value', 'width', 'label', 'name');
-	private $out = '';
-	
+
+	public $name				= '';
+	public $range				= true;
+	public $returnJS			= false;
+	private $options			= array('min', 'max', 'value', 'width', 'label', 'name');
+	private $out				= '';
+
 	protected function _construct() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		$options = array();
 		foreach($this->options as $opt) $options[$opt] = $this->$opt;
-		$this->out = $this->jquery->Slider($this->id, $options, ($this->range) ? 'range' : 'normal');
+
+		$out	= $this->jquery->Slider($this->id, $options, (($this->range) ? 'range' : 'normal'), $this->returnJS);
+		$jsout	= ($this->returnJS) ? '<script>'.$this->jquery->get_jscode('slider', $this->id).'</script>' : '';
+
+		$this->out = $jsout.$out;
 	}
-	
+
 	public function _toString() {
 		return $this->out;
 	}
-	
+
 	public function _inpval() {
 		return ($this->range) ? $this->in->getArray($this->name, 'int') : $this->in->get($this->name, 0);
 	}
