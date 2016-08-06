@@ -79,16 +79,17 @@ if ($blnIsAdmin){
 				'driver'        => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
 				'path'          => register('pfh')->FolderPath('system', 'files'),         // path to files (REQUIRED)
 				'startPath'		=> register('pfh')->FolderPath('system', 'files'), 
-				'URL'           => register('pfh')->FileLink('', 'files', 'absolute'), // URL to files (REQUIRED)
+				'URL'           => register('pfh')->FileLink('system', 'files', 'absolute'), // URL to files (REQUIRED)
 				'accessControl' => 'access',             // disable and hide dot starting files (OPTIONAL)				
 				'uploadAllow'	=> array('image/jpeg', 'image/png', 'image/gif', 'application/x-zip-compressed', 'application/zip', 'application/x-zip'),
 				'uploadDeny'	=> array('all'),
 				//'uploadOrder'	=> array('allow', 'deny'),
 				'disabled'		=> array('extract', 'archive','mkdir', 'mkfile','help','rename','download','edit'),
-				
+				'tmbPathMode'	=> get_chmod(true),
 			)
 		)
 	);
+	
 }
 
 if (register('input')->get('sf') != ""){
@@ -102,6 +103,7 @@ if (register('input')->get('sf') != ""){
 
 //Create system folder
 register('pfh')->FolderPath('system', 'files');
+register('pfh')->FolderPath('system/.tmb', 'files');
 
 // run elFinder
 $connector = new elFinderConnector(new elFinder($opts));
