@@ -63,7 +63,7 @@ class tinyMCE extends gen_class {
 					plugins: [
 						"bbcode autolink link image charmap",
 						"searchreplace visualblocks code fullscreen",
-						"media paste textcolor'.$mention.'"
+						"media textcolor'.$mention.'"
 					],
 					language : "'.$this->language.'",
 					theme : "'.$this->theme.'",
@@ -80,6 +80,17 @@ class tinyMCE extends gen_class {
 					},
 					
 					setup: function(editor){
+						editor.on("init", function(evt){					
+					        $(editor.getBody().parentNode).bind("dragover dragenter dragend drag drop", function(event){
+					            event.stopPropagation();
+					            event.preventDefault();
+					        });
+					        $(editor.getDoc()).bind("draggesture", function(event){
+					            event.stopPropagation();
+					            event.preventDefault();
+					        });
+					    });
+					
 						'.$strHooks.'
 					},
 
