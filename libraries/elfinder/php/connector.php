@@ -79,13 +79,13 @@ if ($blnIsAdmin){
 				'driver'        => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
 				'path'          => realpath(register('pfh')->FolderPath('system', 'files')),         // path to files (REQUIRED)
 				'startPath'		=> realpath(register('pfh')->FolderPath('system', 'files')), 
-				'URL'           => register('pfh')->FileLink('', 'files', 'absolute'), // URL to files (REQUIRED)
+				'URL'           => register('pfh')->FileLink('system', 'files', 'absolute'), // URL to files (REQUIRED)
 				'accessControl' => 'access',             // disable and hide dot starting files (OPTIONAL)				
 				'uploadAllow'	=> array('image/jpeg', 'image/png', 'image/gif', 'application/x-zip-compressed', 'application/zip', 'application/x-zip'),
 				'uploadDeny'	=> array('all'),
 				//'uploadOrder'	=> array('allow', 'deny'),
 				'disabled'		=> array('extract', 'archive','mkdir', 'mkfile','help','rename','download','edit'),
-				
+				'tmbPathMode'	=> get_chmod(true),
 			)
 		)
 	);
