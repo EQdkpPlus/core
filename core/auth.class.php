@@ -352,28 +352,32 @@ class auth extends user {
 									WHERE session_user_id = ?
 									AND session_start < ?")->execute(ANONYMOUS, $this->time->time - $this->session_length);
 		
+		
 		// Get expired user sessions
-		$objQuery = $this->db->prepare("SELECT session_page, session_user_id,session_current FROM __sessions s1 
-				WHERE s1.session_start < ? AND session_current =
-				(SELECT MAX(session_current) FROM __sessions s2 WHERE s1.session_user_id = s2.session_user_id) AND s1.session_user_id > ?
-		")->execute($this->time->time - ($this->session_length*2), ANONYMOUS);
-
+		$objQuery = $this->db->prepare("SELECT DISTINCT(session_user_id) FROM __sessions WHERE session_start < ?")
+						->execute($this->time->time - ($this->session_length*2));
+		
 		if ($objQuery){
 			while($row = $objQuery->fetchAssoc()){
-				//Update User last visit
-				if ( intval($row['session_user_id']) != ANONYMOUS ){
-					$this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
-						'user_lastvisit'	=> $row['session_current'],
-						'user_lastpage'		=> $row['session_page'],
-					))->execute($row['session_user_id']);
+				$intUserID = intval($row['session_user_id']);
+				
+				if ($intUserID > 0 ){
+					$objQueryMaxSession = $this->db->prepare("SELECT MAX(session_current) as max_session_current FROM __sessions WHERE session_user_id=?")->execute($intUserID);
+					if($objQueryMaxSession){
+						$rowMaxSession = $objQueryMaxSession->fetchAssoc();
+						$this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
+								'user_lastvisit'	=> $rowMaxSession['max_session_current'],
+						))->execute($intUserID);
+					}
 				}
 				
 				//Delete user sessions
 				$this->db->prepare("DELETE FROM __sessions
 									WHERE session_user_id = ?
-									AND session_start < ?")->execute($row['session_user_id'], ($this->time->time - $this->session_length));
+									AND session_start < ?")->execute($intUserID, ($this->time->time - $this->session_length));
 			}
 		}
+		
 		$this->config->set('session_last_cleanup', $this->time->time);
 		return true;
 	}

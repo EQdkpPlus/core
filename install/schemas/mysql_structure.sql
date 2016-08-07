@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `__groups_users` (
 DROP TABLE IF EXISTS __sessions;
 CREATE TABLE `__sessions` (
 	`session_id` varchar(40) COLLATE utf8_bin NOT NULL,
-	`session_user_id` smallint(5) NOT NULL DEFAULT '-1',
+	`session_user_id` int(11) NOT NULL DEFAULT '-1',
 	`session_last_visit` int(11) NOT NULL DEFAULT '0',
 	`session_start` int(11) NOT NULL,
 	`session_current` int(11) NOT NULL,
@@ -120,11 +120,13 @@ CREATE TABLE `__sessions` (
 	`session_browser` TEXT COLLATE 'utf8_bin',
 	`session_key` varchar(50) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`session_type` varchar(15) COLLATE utf8_bin NOT NULL DEFAULT '',
-	`session_perm_id` smallint(5) NULL DEFAULT '-1',
+	`session_perm_id` int(11) NULL DEFAULT '-1',
 	`session_failed_logins` INT(10) UNSIGNED NOT NULL DEFAULT '0',
 	`session_vars` MEDIUMTEXT COLLATE 'utf8_bin' NULL,
 	PRIMARY KEY (`session_id`),
-	KEY `session_current` (`session_current`)
+	KEY `session_current` (`session_current`),
+	KEY `session_start` (`session_start`),
+	KEY `session_user_id` (`session_user_id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 DROP TABLE IF EXISTS __member_user;
