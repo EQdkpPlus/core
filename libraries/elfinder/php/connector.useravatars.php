@@ -64,7 +64,7 @@ $opts = array(
 							'pattern' => '/(.jpg|.png|.gif)/i', //You can also set permissions for file types by adding, for example, .jpg inside pattern.
 							'read'    => true,
 							'write'   => true,
-							'locked'  => true,
+							//'locked'  => true,
 					)
 			),
 		)
