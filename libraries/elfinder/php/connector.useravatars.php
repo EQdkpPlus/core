@@ -28,10 +28,7 @@ if (!register('user')->is_signedin()){
 	echo('You have no permission to see this page as you are not logged in'); exit;
 }
 
-include_once $eqdkp_root_path.'libraries/elfinder/php/elFinderConnector.class.php';
-include_once $eqdkp_root_path.'libraries/elfinder/php/elFinder.class.php';
-include_once $eqdkp_root_path.'libraries/elfinder/php/elFinderVolumeDriver.class.php';
-include_once $eqdkp_root_path.'libraries/elfinder/php/elFinderVolumeLocalFileSystem.class.php';
+require './autoload.php';
 
 
 /**

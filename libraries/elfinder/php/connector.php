@@ -29,11 +29,7 @@ $blnIsUser = register('user')->is_signedin() && register('user')->check_auth('u_
 
 if (!$blnIsUser && !$blnIsAdmin) die('Access denied.');
 
-include_once $eqdkp_root_path.'libraries/elfinder/php/elFinderConnector.class.php';
-include_once $eqdkp_root_path.'libraries/elfinder/php/elFinder.class.php';
-include_once $eqdkp_root_path.'libraries/elfinder/php/elFinderVolumeDriver.class.php';
-include_once $eqdkp_root_path.'libraries/elfinder/php/elFinderVolumeLocalFileSystem.class.php';
-
+require './autoload.php';
 
 /**
  * Simple function to demonstrate how to control file access using "accessControl" callback.
