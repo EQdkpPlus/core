@@ -224,9 +224,10 @@ class admin_index extends gen_class {
 								url: \'index.php'.$this->SID.'\',
 								data: { ip_resolve: $(this).html() }
 							})
-							.then(function(content) {
+							.done(function(content) {
 								api.set(\'content.text\', content);
-							}, function(xhr, status, error) {
+							})
+							.fail(function(xhr, status, error) {
 								api.set(\'content.text\', status + \': \' + error);
 							});
 							return \'<i class="fa fa-refresh fa-spin fa-lg"></i>\';
