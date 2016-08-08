@@ -29,7 +29,7 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
  * available options
  * name			(string) 	name of the textarea
  * id			(string)	id of the field, defaults to a clean form of name if not set
- * value		
+ * value
  * class		(string)	class for the field
  * readonly		(boolean)	field readonly?
  * size			(int)		size of the field
@@ -42,27 +42,27 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 class hfiletree extends html {
 
 	protected static $type = 'text';
-	
+
 	public $name = '';
 	public $folder;
 	public $extensions = array();
 	public $inputBoxFormat = 'radio';
 	public $dirsOnly = false;
-	
+
 
 	public $inptype = '';
-	
+
 	private $out = '';
-	
+
 	public function _construct() {
+
 		
-		
-		
-		$this->tpl->add_js('$(document).ready( function() {
-		
+
+		$this->tpl->add_js('$(function() {
+
 			// Hide all sub$folders at startup
 			$(".file-tree-'.$this->name.'").find("UL").hide();
-		
+
 			// Expand/collapse on click
 			$(".file-tree-'.$this->name.' .pft-directory a").click( function() {
 				$(this).parent().find("UL:first").slideToggle("medium");
@@ -73,17 +73,17 @@ class hfiletree extends html {
 				$(this).parent().parent().find("UL:first").slideToggle("medium");
 			});
 		});', 'docready');
-		
-		
-		$this->tpl->add_css('				
+
+
+		$this->tpl->add_css('
 			.pft-directory ul {
 				margin-left: 10px;
 			}
-				
+
 			.file-tree-'.$this->name.' > ul {
 				margin-left: 10px;
 			}
-				
+
 			.file-tree-'.$this->name.' li {
 				padding: 3px;
 			}
@@ -92,21 +92,21 @@ class hfiletree extends html {
 		$this->out = "<ul class=\"file-tree-".$this->name."\"><li class=\"pft-root-directory\"><a href=\"javascript:void(0);\"><i class=\"fa fa-lg fa-folder\"></i> ".$this->folder.'</a></li>'.$this->file_tree($this->folder).'</ul>';
 		if (!$this->out) $this->out = "";
 	}
-	
+
 	public function _toString() {
 		return $this->out;
 	}
-	
+
 	public function _inpval() {
 		return $this->in->get($this->name, '', $this->inptype);
 	}
-	
+
 	private function file_tree($folder, $first_call=true) {
 		if (!is_array($this->value)) $this->value = array($this->value);
 		// Get and sort directories/files
 		$file = scandir($folder);
 		natcasesort($file);
-	
+
 		// Make directories first
 		$files = $dirs = array();
 		foreach($file as $this_file) {
@@ -117,7 +117,7 @@ class hfiletree extends html {
 			}
 		}
 		$file = array_merge($dirs, $files);
-	
+
 		// Filter unwanted extensions
 		if( !empty($this->extensions) ) {
 			foreach( array_keys($file) as $key ) {
@@ -128,12 +128,12 @@ class hfiletree extends html {
 			}
 		}
 		$dd_data = array();
-	
+
 		if( count($file) > 2 ) { // Use 2 instead of 0 to account for . and .. "directories"
 			$php_file_tree = "<ul";
 			//if( $first_call ) { $php_file_tree .= " class=\"file-tree-".$this->name."\""; $first_call = false; }
 			$php_file_tree .= ">";
-				
+
 			foreach( $file as $this_file ) {
 				if( $this_file != "." && $this_file != ".." ) {
 					if( is_dir("$folder/$this_file") ) {
@@ -143,7 +143,7 @@ class hfiletree extends html {
 						$php_file_tree .= "</li>";
 						$dd_data["$folder/$this_file"] = $this_file;
 						$bla = $this->file_tree(str_replace("//", "/", $folder."/".$this_file), false);
-	
+
 						if (is_array($bla)){
 							foreach ($bla as $key => $value){
 								$dd_data[$key] = '&nbsp;&nbsp;&nbsp;'. $value;
@@ -161,7 +161,7 @@ class hfiletree extends html {
 			}
 			$php_file_tree .= "</ul>";
 		}
-		
+
 		return $php_file_tree;
 	}
 }

@@ -402,7 +402,7 @@ class template extends gen_class {
 		if(is_array($this->get_templatedata('js_code_file')) || is_array($this->get_templatedata('js_code_file_docready'))){
 			$imploded_jscodeeop = implode("\n", $this->get_templatedata('js_code_file'));
 			if(is_array($this->get_templatedata('js_code_file_docready'))){
-				$imploded_jscodeeop .= "$(document).ready(function(){";
+				$imploded_jscodeeop .= "$(function(){";
 				$imploded_jscodeeop .= implode("\n", $this->get_templatedata('js_code_file_docready'));
 				$imploded_jscodeeop .= "});";
 			}
@@ -589,7 +589,7 @@ class template extends gen_class {
 
 		$imploded_jscode = implode("\n", $this->get_templatedata('js_code'));
 
-		$imploded_jscode .= "jQuery(document).ready(function(){";
+		$imploded_jscode .= "jQuery(function(){";
 
 		$imploded_jscode .= implode("\n", $this->get_templatedata('js_code_file'));
 		$imploded_jscode .= implode("\n", $this->get_templatedata('js_code_file_docready'));
@@ -604,7 +604,7 @@ class template extends gen_class {
 
 		$imploded_jscode = implode("\n", $this->get_templatedata('js_code_eop'));
 
-		$imploded_jscode .= "jQuery(document).ready(function(){";
+		$imploded_jscode .= "jQuery(function(){";
 
 		$imploded_jscode .= implode("\n", $this->get_templatedata('js_code_eop_docready'));
 
@@ -622,7 +622,7 @@ class template extends gen_class {
 			if(is_array($this->get_templatedata('js_code')) || is_array($this->get_templatedata('js_code_head_docready'))){
 				$imploded_jscode = implode("\n", $this->get_templatedata('js_code'));
 				if(is_array($this->get_templatedata('js_code_head_docready'))){
-					$imploded_jscode .= "$(document).ready(function(){";
+					$imploded_jscode .= "$(function(){";
 					$imploded_jscode .= implode("\n", $this->get_templatedata('js_code_head_docready'));
 					$imploded_jscode .= "});";
 				}
@@ -636,7 +636,7 @@ class template extends gen_class {
 				if($debug) $imploded_jscodeeop .= implode("\n", $this->get_templatedata('js_code_file'));
 
 				if(is_array($this->get_templatedata('js_code_eop_docready'))){
-					$imploded_jscodeeop .= "$(document).ready(function(){";
+					$imploded_jscodeeop .= "$(function(){";
 					$imploded_jscodeeop .= implode("\n", $this->get_templatedata('js_code_eop_docready'));
 					if($debug) $imploded_jscodeeop .= implode("\n", $this->get_templatedata('js_code_file_docready'));
 					$imploded_jscodeeop .= "});";
@@ -747,7 +747,7 @@ class template extends gen_class {
 
 		foreach($array as $item){
 			$relative_file = $this->env->server_to_rootpath($item['file']);
-			
+
 			if(substr($item['file'],0,4) == "http"){
 				$filetime	= rand(1,100000000);
 			} else {
@@ -1135,7 +1135,7 @@ class template extends gen_class {
 
 		$tokens = $match[0];
 		$is_arg_stack = array();
-		
+
 		if(is_array($tokens)){
 			foreach($tokens as $key => $token){
 				switch ($token){
@@ -1236,7 +1236,7 @@ class template extends gen_class {
 								}
 								break;
 				}	// end switch
-				
+
 				$tokens[$key] = $token;
 			}
 		}
@@ -1245,7 +1245,7 @@ class template extends gen_class {
 		if (!count($tokens) || str_replace(array(' ', '=', '!', '<', '>', '&', '|', '%', '(', ')'), '', implode('', $tokens)) == ''){
 			$tokens = array('false');
 		}
-		
+
 		return (($elseif) ? '} else if (' : 'if (') . (implode(' ', $tokens) . ') { ' . "\n");
 	}
 
@@ -1480,7 +1480,7 @@ class template extends gen_class {
 		$style = ($data) ? $data : $this->user->style;
 		$stylepath = ($stylepath) ? $stylepath : $this->style_code;
 		$root_path = '../../../../../';
-		
+
 		//Background Image
 		$template_background_file = "";
 		switch($style['background_type']){

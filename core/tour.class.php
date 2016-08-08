@@ -157,7 +157,7 @@ class tour extends gen_class {
 
 			$this->jquery->Dialog('tour_step', $this->lang['navi_title'], array('message'	=> '<b>'.$this->lang['navi_title'].' - '.$this->lang['step_'.$step.'_title'].'</b><br/><br/>'.$this->lang['step_'.$step], 'width' => 300, 'height'	=> 300, 'custom_js' => $custom_js, 'cancel_js'	=> "window.location='".$this->SID."&tour=cancel'"), 'confirm');
 			$this->tpl->add_js(
-				"$(document).ready(function () {
+				"$(function () {
 					tour_step();
 				});"
 			);

@@ -1,36 +1,36 @@
 <!-- IF S_USERGROUP_ADMIN -->
 
 <script type="text/javascript">
-	$(document).ready(function() {
-		
+	$(function() {
+
 		$( "#dialog-add-usergroup" ).dialog({
 			height: 280,
 			width: 500,
 			modal: true,
 			autoOpen: false,
 		});
-		
+
 		$('.add_user_group_trigger').on('click', function(event){
 			$('.addgroup-name').val('');
 			$('.addgroup-desc').val('');
 			$('.addgroup-hidden').prop("checked", false);
 			$('.addgroup-team').prop("checked", false);
-			
+
 			$( "#dialog-add-usergroup" ).dialog( "open" );
 		});
-		
+
 		var newid = {ID};
 		var newkey = {KEY};
-		
+
 		$('#addgroup-button').on('click', function(event){
 			var name = $('.addgroup-name').val();
 			var desc = $('.addgroup-desc').val();
 			var hidden = $('.addgroup-hidden').prop("checked");
 			var strHidden = (hidden) ? 'hide]" checked="checked"' : 'hide]"';
-			
+
 			var team = $('.addgroup-team').prop("checked");
 			var strTeam = (team) ? 'team]" checked="checked"' : 'team]"';
-			
+
 			var new_row = $('#usergroup_template>tbody').html()+"";
 			new_row = new_row.replace(/KEY/g, newkey);
 			new_row = new_row.replace(/ID/g, newid);
@@ -44,10 +44,10 @@
 			newid++;
 
 			$('.add_container').append(new_row);
-						
+
 			$( "#dialog-add-usergroup" ).dialog( "close" );
 		});
-		
+
 	});
 </script>
 
@@ -65,11 +65,11 @@
 				</dd>
 			</dl>
 			<dl>
-				<dt><label>{L_hidden}:</label></dt>					
+				<dt><label>{L_hidden}:</label></dt>
 				<dd><input type="checkbox" class="addgroup-hidden" value="1"/></dd>
 			</dl>
 			<dl>
-				<dt><label>{L_show_on_teamlist}:</label></dt>					
+				<dt><label>{L_show_on_teamlist}:</label></dt>
 				<dd><input type="checkbox" class="addgroup-team" value="1"/></dd>
 			</dl>
 		</fieldset>
@@ -118,7 +118,7 @@
 				<a href="javascript:delete_single_warning({user_groups.ID});" title="{L_delete}"><i class="fa fa-trash-o fa-lg" title="{L_delete}"></i></a>
 				<!-- ENDIF -->
 			</td>
-			<td><input type="text" name="user_groups[{user_groups.KEY}][name]" size="40" maxlength="50" value="{user_groups.NAME}" class="maininput" style="width:95%" /></td>    
+			<td><input type="text" name="user_groups[{user_groups.KEY}][name]" size="40" maxlength="50" value="{user_groups.NAME}" class="maininput" style="width:95%" /></td>
 			<td><input type="text" name="user_groups[{user_groups.KEY}][desc]" size="50" maxlength="75" value="{user_groups.DESC}" class="maininput" style="width:95%" /></td>
 			<td class="hiddenSmartphone">{user_groups.USER_COUNT}</td>
 			<td style="width:50px" class="nowrap"><!-- IF not user_groups.S_NO_STANDARD --><input type="radio" value="{user_groups.ID}" name="user_groups_standard" {user_groups.STANDARD} /><!-- ENDIF --></td>
@@ -133,7 +133,7 @@
 		<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="fa fa-times" ></i>{L_delete_selected_group}</button>
 		<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
 	</div>
-	
+
 {CSRF_TOKEN}
 </form>
 	<table id="usergroup_template" style="visibility:hidden;">
@@ -142,7 +142,7 @@
 			<td class="center"></td>
 			<td class="center"></td>
 			<td class="center"></td>
-			<td><input type="hidden" name="user_groups[KEY][id]" value="ID" /><input type="text" name="user_groups[KEY][name]" size="40" maxlength="50" value="NAME" class="maininput" style="width:95%" /></td>    
+			<td><input type="hidden" name="user_groups[KEY][id]" value="ID" /><input type="text" name="user_groups[KEY][name]" size="40" maxlength="50" value="NAME" class="maininput" style="width:95%" /></td>
 			<td><input type="text" name="user_groups[KEY][desc]" size="50" maxlength="75" value="DESC" class="maininput" style="width:95%" /></td>
 			<td></td>
 			<td style="width:50px" class="nowrap"></td>
@@ -150,7 +150,7 @@
 			<td><input type="checkbox" value="1" name="user_groups[KEY][team]" /></td>
 		</tr>
 	</table>
-	
+
 <!-- ELSE -->
 <div class="breadcrumb-container">
 	<ul class="breamcrumb">
@@ -178,7 +178,7 @@
 		<!-- IF user_groups.S_IS_GRPLEADER -->
 		<tr>
 			<td class="center"><a href="manage_user_groups.php{SID}&amp;g={user_groups.ID}&amp;edit=true" title="{L_manage_user_group}"><i class="fa fa-user fa-lg"></i></a></td>
-			<td>{user_groups.NAME}</td>    
+			<td>{user_groups.NAME}</td>
 			<td>{user_groups.DESC}</td>
 			<td>{user_groups.USER_COUNT}</td>
 		</tr>

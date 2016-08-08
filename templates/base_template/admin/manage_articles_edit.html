@@ -1,6 +1,6 @@
 <script type="text/javascript">
 //<![CDATA[
-$(document).ready(function(){
+$(function(){
 	$('#alias').change(check_alias);
 });
 
@@ -10,7 +10,7 @@ function check_alias() {
 		jQuery.ajax({
 			type: "POST",
 			url: "manage_articles.php{SID}&checkalias=1&a={AID}",
-			data: 'alias='+ alias, 
+			data: 'alias='+ alias,
 			cache: false,
 			success: function(response){
 				if($.trim(response) == 'false'){
@@ -35,7 +35,7 @@ function check_alias() {
 		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
 		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
 		<li><a href="{EQDKP_ROOT_PATH}admin/manage_article_categories.php{SID}">{L_manage_article_categories}</a></li>
-		<li><a href="{EQDKP_ROOT_PATH}admin/manage_articles.php{SID}&c={CID}">{CATEGORY_NAME}</a></li>		
+		<li><a href="{EQDKP_ROOT_PATH}admin/manage_articles.php{SID}&c={CID}">{CATEGORY_NAME}</a></li>
 		<li><a href="{EQDKP_ROOT_PATH}admin/manage_articles.php{SID}&c={CID}">{L_manage_articles}</a></li>
 		<li class="current"><a><!-- IF ARTICLE_NAME != "" -->{ARTICLE_NAME}<!-- ELSE -->{L_add_new_article}<!-- ENDIF --></a></li>
 	</ul>
@@ -52,7 +52,7 @@ function check_alias() {
 			<li><a href='#general'>{L_core_sett_fs_globalsettings}</a></li>
 			<li><a href='#settings'>{L_settings}</a></li>
 		</ul>
-	
+
 		<div id="general">
 			<fieldset class="settings smallsettings">
 			<legend>{L_core_sett_fs_globalsettings}</legend>
@@ -124,11 +124,11 @@ function check_alias() {
 				<dt><label>{L_hide_header}</label></dt>
 				<dd>{HIDE_HEADER_RADIO}</dd>
 			</dl>
-			
+
 			</fieldset>
-		
+
 		</div>
-		
+
 		</div>
 	</div>
 	<div class="contentFooter">
@@ -138,5 +138,5 @@ function check_alias() {
 		<button type="reset" name="reset" class="liteoption"><i class="fa fa-trash-o"></i>{L_reset}</button>
 		<button type="button" class="liteoption" onclick="window.location='manage_articles.php{SID}&c={CID}'"><i class="fa fa-chevron-left"></i>{L_back}</button>
 	</div>
-{CSRF_TOKEN}	
+{CSRF_TOKEN}
 </form>

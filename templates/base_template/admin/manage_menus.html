@@ -1,5 +1,5 @@
 <script type="text/javascript">
-	$(document).ready(function() {
+	$(function() {
 		$( "#dialog-edit-menuitem" ).dialog({
 			height: 380,
 			width: 500,
@@ -9,10 +9,10 @@
 				close_menuitem();
 			}
 		});
-		
+
 		var visible_linktype =  'internal';
 		var last_action = '';
-		
+
 		$('.link_type').on('change', function(event){
 			if ($('.link_type').val() == 'internal'){
 				$('.internalLink').show();
@@ -29,35 +29,35 @@
 					$('.otherLinks').hide();
 					$('.internalLink').hide();
 					$('.externalLink').hide();
-					
+
 					visible_linktype =  $('.link_type').val();
-	
+
 					$('.'+$('.link_type').val()).show();
 				}
 			}
 		});
-		
+
 		function close_menuitem(){
 			if (last_action === "add"){
 				$('#list_'+(newitemid-1)).remove();
 				last_action = '';
 			}
 		}
-		
+
 		function editMenuLink(){
 			$('.edit-menulink-trigger').on('click', function(event){
 				$('.link_type').val('external');
 				$('.link_type').trigger('change');
-				
+
 				var parent = $(this).parent();
 				var linkid = $(this).parent().attr('data-linkid');
-				
+
 				var url = $(this).siblings('.link-url').val();
 				var name = $(this).siblings('.link-name').val();
 				var window = $(this).siblings('.link-window').val();
 				var windowsize = $(this).siblings('.link-windowsize').val();
 				var visibility = $(this).siblings('.link-visibility').val();
-						
+
 				$('#editlink-button').val(linkid);
 				$('.editlink-name').val(name);
 				$('.editlink-url').val(url);
@@ -75,53 +75,53 @@
 				$( "#dialog-edit-menuitem" ).dialog( "open" );
 			});
 		}
-		
+
 		editMenuLink();
-		
+
 		$('#editlink-button').on('click', function(event){
 			var article = $('#editlink-article').val();
 			var linkid  = $('#editlink-button').val();
 			var container = $('div[data-linkid='+linkid+']');
-			
+
 			if (visible_linktype == "external") {
 				var name = $('.editlink-name').val();
 				var url = $('.editlink-url').val();
 				var window = $('.editlink-window').val();
 				var windowsize = $('.editlink-windowsize').val();
-				
+
 				var selectedVis = $('#dw_editlink-visibility').val();
 				var visibility = JSON.stringify(selectedVis);
-				
+
 				container.find('.link-url').val(url);
 				container.find('.link-name').val(name);
 				container.find('.link-window').val(window);
 				container.find('.link-windowsize').val(windowsize);
 				container.find('.link-visibility').val(visibility);
-				
+
 				container.find('.edit-menulink-trigger').html(name + ' ('+url+')');
 			} else {
 				if (visible_linktype == 'internal'){
 					var selected_text = $("#editlink-article option:selected").text();
 					$('#list_'+linkid).remove();
-					
+
 					var new_row = $('#addArticleItemTemplate').html()+"";
 					new_row = new_row.replace(/KEY/g, linkid);
 					new_row = new_row.replace(/HASH/g, article);
 					new_row = new_row.replace(/TEXT/g, selected_text);
 					$(".sortable").append('<li id="list_'+linkid+'" class="mjs-nestedSortable-leaf">'+new_row+'</li>');
-				
+
 					$('#list_'+linkid).find('.link-hide').remove();
 				} else {
 					article = $('#links_'+visible_linktype).val();
 					var selected_text = $('#links_'+visible_linktype+' option:selected').text();
 					$('#list_'+linkid).remove();
-					
+
 					var new_row = $('#addArticleItemTemplate').html()+"";
 					new_row = new_row.replace(/KEY/g, linkid);
 					new_row = new_row.replace(/HASH/g, article);
 					new_row = new_row.replace(/TEXT/g, selected_text);
 					$(".sortable").append('<li id="list_'+linkid+'" class="mjs-nestedSortable-leaf">'+new_row+'</li>');
-				
+
 				}
 
 				hide();
@@ -129,7 +129,7 @@
 			last_action = '';
 			$( "#dialog-edit-menuitem" ).dialog( "close" );
 		});
-		
+
 		function hide(){
 			$('.link-hide').unbind('click');
 			$('.link-hide').on('click', function(event){
@@ -166,14 +166,14 @@
 			isTree: true,
 			expandOnHover: 700,
 		});
-		
+
 		var newitemid = {NEW_ID};
-		
+
 		$('#addMenuItem').on('click',function(event){
 			var new_row = $('#addMenuItemTemplate').html()+"";
 			new_row = new_row.replace(/KEY/g, newitemid);
 			$(".sortable").append('<li id="list_'+newitemid+'" class="mjs-nestedSortable-leaf">'+new_row+'</li>');
-			
+
 			editMenuLink();
 			hide();
 			$('.editlink-article').val('');
@@ -186,15 +186,15 @@
 			$('#dw_editlink-visibility').multiselect('refresh');
 			last_action = "add";
 			$( "#dialog-edit-menuitem" ).dialog( "open" );
-			
+
 			newitemid = newitemid + 1;
 		});
-		
-		
-		
+
+
+
 
 	});
-	
+
 	function delete_row(obj){
 		var container = $(obj).closest('div');
 		var siblings = container.siblings('ol');
@@ -207,7 +207,7 @@
 			$(obj).closest('li').remove();
 		}
 	}
-	
+
 	function softdelete_row(obj){
 		var container = $(obj).closest('div');
 		var siblings = container.siblings('ol');
@@ -221,13 +221,13 @@
 			$(obj).closest('li').hide();
 		}
 	}
-	
+
 	function delete_plink(pid, obj){
 		var container = $(obj).closest('div');
 		var siblings = container.siblings('ol');
 		var hidden = siblings.children('li:hidden').length;
 		var not_hidden = siblings.children('li').length;
-		
+
 		if(not_hidden > 0 && (hidden < not_hidden)){
 			alert("{L_pluslink_delete_warning}");
 		} else {
@@ -237,7 +237,7 @@
 			$(obj).closest('li').hide();
 		}
 	}
-	
+
 	function serialize_menuitems(){
 		arraied = $('ol.sortable').nestedSortable('toArray');
 		$('#menuitems-serialized').val(JSON.stringify(arraied));
@@ -261,7 +261,7 @@
 						{DD_LINK_TYPE}
 					</dd>
 				</dl>
-				
+
 				<div class="internalLink">
 				<dl>
 					<dt><label>{L_category}/{L_article}:</label></dt>
@@ -270,7 +270,7 @@
 					</dd>
 				</dl>
 				</div>
-				
+
 				<div class="externalLink" style="display:none;">
 					<dl>
 						<dt><label>{L_menu_entry}:</label></dt>
@@ -295,7 +295,7 @@
 						<dd>{MS_LINK_VISIBILITY}</dd>
 					</dl>
 				</div>
-				
+
 				<!-- BEGIN link_type_row -->
 				<div class="otherLinks {link_type_row.ID}" style="display:none;">
 					<dl>
@@ -318,16 +318,16 @@
 	<div class="contentHeader">
 		<h1 class="contentTitle">{L_info_opt_ml_1}</h1>
 	</div>
-	
+
 	<div class="infobox infobox-large infobox-blue clearfix">
 		<i class="fa fa-info-circle fa-4x pull-left"></i> {L_menus_info}
 	</div>
-	
+
 	{MENU_OL}
 	<input type="hidden" value="" id="menuitems-serialized" name="serialized"/>
 	<input type="hidden" value="0" id="delete-pluslinks" name="del_pluslinks"/>
 	<button type="button" id="addMenuItem"><i class="fa fa-plus"></i>{L_pluslink_add}</button>
-	
+
 	<div id="addMenuItemTemplate" style="display:none;">
 		<div data-linkid="KEY">
 			<span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}" style="display:inline-block;"></span>&nbsp;
@@ -345,7 +345,7 @@
 			<input type="hidden" value="new"  name="mainmenu[KEY][id]" class="link-id">
 		</div>
 	</div>
-	
+
 	<div id="addArticleItemTemplate" style="display:none;">
 		<div data-linkid="KEY">
 			<span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}" style="display:inline-block;"></span>&nbsp;

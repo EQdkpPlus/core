@@ -25,7 +25,7 @@
 		(idx = $.inArray(cmd, myCommands)) !== -1 && myCommands.splice(idx,1);
 	});
 
-	$().ready(function() {
+	$(function() {
 		var elf = $('#elfinder').elfinder({
 			url : '{EQDKP_ROOT_PATH}libraries/elfinder/php/connector.php',  // connector URL (REQUIRED)
 			// lang: 'ru',             // language (OPTIONAL)

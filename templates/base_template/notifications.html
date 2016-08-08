@@ -11,7 +11,7 @@
 </div>
 
 <script>
-$(document).ready(function() {
+$(function() {
 	$('.notification_list_mark_as_read').on('click', function(event){
 		var id = $(this).parent().parent().data('id');
 		$(this).parent().parent().removeClass("unread");

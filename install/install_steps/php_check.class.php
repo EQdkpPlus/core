@@ -112,13 +112,13 @@ class php_check extends install_generic {
 			),
 		);
 	}
-	
+
 	private function check_php_limit($needed){
 		$installed = ini_get('memory_limit');
 		if (intval($installed) == -1) return true;
 		return ($this->convert_hr_to_bytes($installed) >= $this->convert_hr_to_bytes($needed)) ? true : false;
 	}
-	
+
 	function convert_hr_to_bytes( $size ) {
 		( $bytes = (float) $size )
 		&& ( $last = strtolower( substr( $size, -1 ) ) )
@@ -147,7 +147,7 @@ class php_check extends install_generic {
 	public function get_output() {
 		$content = '';
 		$phpcheckdata	= $this->getCheckParams();
-		
+
 		//Check for Apache on Windows System, because of ThreadStackSize
 		//https://eqdkp-plus.eu/wiki/Versionsaktualisierung#EQdkp_Plus_2.1_l.C3.A4uft_nicht_mehr_auf_Windows-Servern
 		$output_array = array();
@@ -156,7 +156,7 @@ class php_check extends install_generic {
 			<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> <strong>'.$this->lang['windows_apache_hint'].'</strong>
 		</div>';
 		}
-		
+
 		if(!$this->do_match_req()){
 			$content .='<div class="infobox infobox-large infobox-red clearfix">
 			<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> <strong>'.$this->lang['phpcheck_failed'].'</strong>
@@ -169,7 +169,7 @@ class php_check extends install_generic {
 						<p>'.$this->lang['safemode_warning'].'</p>
 					</div>';
 			}
-	
+
 			// show a warning if one of the optional steps does not match
 			if($this->do_match_opt()){
 				$content .='<div class="infobox infobox-large infobox-orange clearfix">
@@ -202,7 +202,7 @@ class php_check extends install_generic {
 			$content .= '<tr>
 				<td>'.(($this->lang['module_'.$fname]) ? $this->lang['module_'.$fname] : $fname).'</td>
 				<td class="'.$passfail_color.'">'.$fdata['installed'].'</td>
-				<td class="positive">'.((isset($fdata['recommended'])) ? $fdata['recommended'] : $fdata['required']).'</td>		
+				<td class="positive">'.((isset($fdata['recommended'])) ? $fdata['recommended'] : $fdata['required']).'</td>
 				<td class="positive">'.$fdata['required'].'</td>
 				<td><i class="fa '.$passfail_icon.' fa-2x '.$passfail_color.'"></i></td>
 			</tr>';
@@ -216,18 +216,18 @@ class php_check extends install_generic {
 		}else{
 			$this->pdl->log('install_error', $this->lang['phpcheck_failed']);
 		}
-		
+
 		//JavaScript check pathinfo
-		$content .= '<script>$(document).ready(function(){
+		$content .= '<script>$(function(){
 			$.get( "index.php/pathinfotest", function( data ) {
 				if($.trim(data) != "/pathinfotest"){
 					pathinfotest_failed();
 				}
-			  
+
 			}).fail(function() {
 			    pathinfotest_failed();
 			});
-			
+
 			function pathinfotest_failed(){
 				var myFirstColumn = $(".colorswitch tr:last td:nth-child(2)");
 				var myLastColum = $(".colorswitch tr:last td:nth-child(5)");

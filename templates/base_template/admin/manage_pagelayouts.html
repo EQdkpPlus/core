@@ -1,12 +1,12 @@
 <script type="text/javascript">
-$(document).ready(function() {
+$(function() {
 	$( "#dialog-new-layout" ).dialog({
 		height: 310,
 		width: 500,
 		modal: true,
 		autoOpen: false,
 	});
-	
+
 	$("#newLayoutTrigger").on('click', function(){
 		$( "#dialog-new-layout" ).dialog('open');
 	});
@@ -53,7 +53,7 @@ $(document).ready(function() {
 				</td>
 				<td>{layouts_row.NAME}</td>
 				<td>{layouts_row.DESC}</td>
-				
+
 			</tr>
 			<!-- END layouts_row -->
 			<tr>
@@ -74,7 +74,7 @@ $(document).ready(function() {
 		<br />
 		<button type="submit" name="set_current_layout" class="mainoption"><i class="fa fa-check"></i>{L_lm_make_current}</button>
 		<button type="button" name="add_layout" class="mainoption" id="newLayoutTrigger"><i class="fa fa-plus"></i>{L_lm_new_layout}</button>
-				
+
 	</div>
 	<div id="advanced">
 		<div class="infobox infobox-large infobox-red clearfix">
@@ -87,11 +87,11 @@ $(document).ready(function() {
 			<tr>
 				<th>{L_action}</th>
 				<th>{L_name}</th>
-				
+
 				<th>{L_lm_module}</th>
 				<th>{L_lm_tag}</th>
 				<th>{L_lm_aparam}</th>
-				<th>{L_lm_dparam}</th>			
+				<th>{L_lm_dparam}</th>
 			</tr>
 			<!-- BEGIN preset_row -->
 			<tr>
@@ -125,7 +125,7 @@ $(document).ready(function() {
 			<dd><!-- BEGIN param_row -->
 				<!-- IF param_row.IS_OPTIONAL -->(<!-- ENDIF -->
 					{param_row.NAME}: <input type="text" name="param[]" value="{param_row.DEFAULT}" />
-					<!-- IF param_row.IS_OPTIONAL -->)<!-- ENDIF --><br />			
+					<!-- IF param_row.IS_OPTIONAL -->)<!-- ENDIF --><br />
 				<!-- END param_row -->
 			</dd>
 		</dl>
@@ -134,7 +134,7 @@ $(document).ready(function() {
 			<dd><!-- BEGIN caption_row -->
 				<!-- IF caption_row.IS_OPTIONAL -->(<!-- ENDIF -->
 					{caption_row.NAME}: <input type="text" name="caption[]" value="{caption_row.DEFAULT}" />
-					<!-- IF caption_row.IS_OPTIONAL -->)<!-- ENDIF --><br />			
+					<!-- IF caption_row.IS_OPTIONAL -->)<!-- ENDIF --><br />
 				<!-- END caption_row -->
 			</dd>
 		</dl>

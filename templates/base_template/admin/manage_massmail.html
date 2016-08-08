@@ -34,11 +34,11 @@ function save_template(){
 
 function add_template(){
 	var templatename = $('#mytemplatename').val();
-	
+
 	if (templatename != ""){
 		$('.template_loading_indicator').show();
 		$( "#dialog-add-template" ).dialog("close");
-		
+
 		var subject = $('#subject').val();
 		var message = $('#mm_body').tinymce().getContent();
 		$.post("manage_massmail.php{SID}&add_template=true&link_hash={CSRF_ADDTEMPLATE_TOKEN}", { templatename: templatename, subject: subject, message: message, eventid:{NUM_EVENT_ID}})
@@ -47,21 +47,21 @@ function add_template(){
 			var mydata = $.trim(data);
 			if(mydata.substring(0, 2) == 'ok'){
 				//Check if it was saved as a new template
-				
-				
+
+
 				if(mode == "save"){
 					if(templatename != recent_template){
 						mode = "add";
 					}
 				}
-				
-				if(mode == "add"){	
+
+				if(mode == "add"){
 					var arrSplitted = mydata.split("||");
 					recent_template = arrSplitted[1];
 					var new_dropdown = arrSplitted[2];
-					
+
 					$('#dropdown_templates_container').html(new_dropdown);
-					
+
 					$('#add_template_button').hide();
 					$('#save_template_button').show();
 					$('#delete_template_button').show();
@@ -72,10 +72,10 @@ function add_template(){
 				$('#notify_container').notify('create', 'error', {text: {L_massmail_save_nosuccess|jsencode},title: '',custom: true,},{expires: 30000, speed: 1000});
 			}
 		})
-		.fail(function(data) { 
-			$('#notify_container').notify('create', 'error', {text: {L_massmail_save_nosuccess|jsencode},title: '',custom: true,},{expires: 30000, speed: 1000});	
+		.fail(function(data) {
+			$('#notify_container').notify('create', 'error', {text: {L_massmail_save_nosuccess|jsencode},title: '',custom: true,},{expires: 30000, speed: 1000});
 		});
-		
+
 	}
 }
 
@@ -85,15 +85,15 @@ function load_template(){
 		$('#subject').val("");
 		$('#mm_body').tinymce().setContent('');
 		mode = "add";
-		
+
 		$('#add_template_button').show();
 		$('#save_template_button').hide();
 		$('#delete_template_button').hide();
 		return;
 	}
-	
+
 	$('.template_loading_indicator').show();
-	
+
 	$.post("manage_massmail.php{SID}&load_template=true", { template: templatename})
 	.done(function(data) {
 		$('.template_loading_indicator').hide();
@@ -102,39 +102,39 @@ function load_template(){
 			var arrSplitted = mydata.split("|;|;|;");
 			var subject = arrSplitted[1];
 			var body = arrSplitted[2];
-			
+
 			$('#subject').val(subject);
-			
+
 			$('#mm_body').tinymce().setContent('');
 			$('#mm_body').tinymce().execCommand('mceInsertContent',false,body);
-			
+
 			//Display some buttons
 			$('#add_template_button').hide();
 			$('#save_template_button').show();
 			$('#delete_template_button').show();
-			
+
 			//Set recent template
 			recent_template = templatename;
 		}
 	})
-	.fail(function(data) { 
+	.fail(function(data) {
 	});
 }
 
-$(document).ready(function() {
+$(function() {
 	$( "#dialog-add-template" ).dialog({
 		height: 200,
 		width: 400,
 		modal: true,
 		autoOpen: false,
 	});
-	
+
 	$('#addtemplate-button').click(function(){
 		add_template();
 	});
 });
 </script>
-	
+
 <form method="post" action="{ACTION}{EVENT_ID}" name="massmail">
 	<fieldset class="settings smallsettings">
 		<legend>{L_massmail}</legend>
@@ -171,7 +171,7 @@ $(document).ready(function() {
 			<dd><input name="subject" type="text" class="input" id="subject" size="65" value="{SUBJECT}"/></dd>
 		</dl>
 		<dl>
-			<dt><label>{L_adduser_send_mail_body}</label><br /><br />			
+			<dt><label>{L_adduser_send_mail_body}</label><br /><br />
 			<span>{L_massmail_vars}<br />
 			&#123;DKP_NAME&#125;<br />
 			&#123;EQDKP_LINK&#125;<br />
@@ -190,7 +190,7 @@ $(document).ready(function() {
 	</fieldset>
 	<div class="contentFooter">
 		<button class="mainoption" type="submit" name="submit"><i class="fa fa-check"></i>{L_maintenanceuser_send}</button>
-		
+
 		<button type="button" id="save_template_button" name="save_template" onclick="open_save_template()" <!-- IF not S_IS_TEMPLATE -->style="display:none;"<!-- ENDIF -->><i class="fa fa-floppy-o"></i> {L_massmail_save_template}</button>
 		<button type="button" id="add_template_button" name="add_template" onclick="open_add_template()" <!-- IF S_IS_TEMPLATE -->style="display:none;"<!-- ENDIF -->><i class="fa fa-clipboard"></i> {L_massmail_add_template}</button>
 		<button type="submit" id="delete_template_button" name="delete_template" <!-- IF not S_IS_TEMPLATE -->style="display:none;"<!-- ENDIF -->><i class="fa fa-trash"></i> {L_massmail_delete_template}</button>

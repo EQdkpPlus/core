@@ -216,7 +216,7 @@ if(!class_exists('requirements')) {
 			}
 
 			//JavaScript check pathinfo
-			$content .= '<script>$(document).ready(function(){
+			$content .= '<script>$(function(){
 				$.get( "index.php/pathinfotest", function( data ) {
 					if($.trim(data) != "/pathinfotest"){
 						pathinfotest_failed();

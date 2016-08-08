@@ -27,11 +27,11 @@ function set_progress_bar_value(recentNumber){
 	});
 }
 
-$(document).ready(function(){
+$(function(){
 	$("#nl_progressbar").progressbar({
 		value: 100
 	});
-	
+
 	set_progress_bar_value(0);
 	send_mail(0);
 });
@@ -46,7 +46,7 @@ $(document).ready(function(){
 			} else if(data.status == "error") {
 				$( "<tr><td class=\"negative\"><i class=\"fa fa-times fa-lg\"></i></td><td>"+data.name+"</td></tr>" ).appendTo( "#massmail_status_table" );
 			}
-			
+
 			if (recentNumber < totalMails){
 				set_progress_bar_value(recentNumber+1);
 				send_mail(recentNumber+1);

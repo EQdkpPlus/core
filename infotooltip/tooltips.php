@@ -141,7 +141,7 @@ var EQdkpTooltip = new function(){
 	}
 
 	function replaceContent(){
-		jQuery(document).ready(function($){
+		jQuery(function($){
 
 			$(".EQdkpTooltip").each(function(){
 				var itemname = $(this).html();

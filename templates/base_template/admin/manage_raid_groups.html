@@ -1,32 +1,32 @@
 <!-- IF S_USERGROUP_ADMIN -->
 
 <script type="text/javascript">
-	$(document).ready(function() {
-		
+	$(function() {
+
 		$( "#dialog-add-raidgroup" ).dialog({
 			height: 240,
 			width: 500,
 			modal: true,
 			autoOpen: false,
 		});
-		
+
 		$('.add_raid_group_trigger').on('click', function(event){
 			$('.addgroup-name').val('');
 			$('.addgroup-desc').val('');
 			$('.addgroup-hidden').prop("checked", false);
-			
+
 			$( "#dialog-add-raidgroup" ).dialog( "open" );
 		});
-		
+
 		var newid = {ID};
 		var newkey = {KEY};
-		
+
 		$('#addgroup-button').on('click', function(event){
 			var name = $('.addgroup-name').val();
 			var desc = $('.addgroup-desc').val();
 			var hidden = $('.addgroup-hidden').prop("checked");
 			var strHidden = (hidden) ? 'checked="checked"' : "";
-			
+
 			var new_row = $('#raidgroup_template>tbody').html()+"";
 			new_row = new_row.replace(/KEY/g, newkey);
 			new_row = new_row.replace(/ID/g, newid);
@@ -37,10 +37,10 @@
 			newid++;
 
 			$('.add_container').append(new_row);
-						
+
 			$( "#dialog-add-raidgroup" ).dialog( "close" );
 		});
-		
+
 	});
 </script>
 
@@ -75,7 +75,7 @@
 	</div>
 	<div class="tableHeader floatRight">
 		<button class="mainoption add_raid_group_trigger" type="button"><i class="fa fa-plus"></i>{L_add_raid_group}</button>
-		
+
 	</div>
 	<div class="clear"></div>
 	<table id="raid_groups_table" class="table fullwidth colorswitch">
@@ -116,7 +116,7 @@
 		<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="fa fa-times" ></i>{L_delete_selected_group}</button>
 		<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
 	</div>
-	
+
 {CSRF_TOKEN}
 </form>
 	<table id="raidgroup_template" style="visibility:hidden;">
@@ -131,7 +131,7 @@
 			<td style="width:50px" class="nowrap"></td>
 		</tr>
 	</table>
-	
+
 <!-- ELSE -->
 <div class="breadcrumb-container">
 	<ul class="breamcrumb">

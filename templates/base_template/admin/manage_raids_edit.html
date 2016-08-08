@@ -16,7 +16,7 @@
 		});
 	}
 	<!-- IF S_EVENTVAL_ONLOAD -->
-	$(document).ready(function(){
+	$(function(){
 		loadEventValue($("#event").val());
 	});
 	<!-- ENDIF -->
@@ -41,7 +41,7 @@
 
 	var auto_adj_reason = {ADJ_REASON_AUTOCOMPLETE};
 	var adj_key = {ADJ_KEY};
-	$(document).ready(function(){
+	$(function(){
 		$('#add-adjustment-btn').on('click', function(){
 			var event = $('#event').val();
 			$('#event_KEY').val(event);
@@ -64,7 +64,7 @@
 
 	var auto_itemname = {ITEM_AUTOCOMPLETE};
 	var item_key = {ITEM_KEY};
-	$(document).ready(function(){
+	$(function(){
 		$('#add-item-btn').on('click', function(){
 			var new_row = $('#template-items>tbody').html()+"";
 			new_row = new_row.replace(/KEY/g, item_key);
@@ -84,7 +84,7 @@
 	});
 
 	var show_additional = {ADDITIONAL_INFOS};
-	$(document).ready(function(){
+	$(function(){
 		if(show_additional){
 			$('.additional-note-btn').hide();
 		} else {
@@ -99,7 +99,7 @@
 
 	var event_itempool_mapping = {EVENT_ITEMPOOL_MAPPING};
 	var new_itempool_option = event_itempool_mapping[{FIRST_EVENT_ID}];
-	$(document).ready(function(){
+	$(function(){
 		$('#event').on('change', function(){
 			var myval = $('#event').val();
 			new_itempool_option = event_itempool_mapping[myval];

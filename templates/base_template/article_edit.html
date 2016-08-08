@@ -1,6 +1,6 @@
 <script type="text/javascript">
 //<![CDATA[
-$(document).ready(function(){
+$(function(){
 	$('#alias').change(check_alias);
 });
 
@@ -10,7 +10,7 @@ function check_alias() {
 		jQuery.ajax({
 			type: "POST",
 			url: "{CONTROLLER_PATH}EditArticle/{SID}&checkalias=1&aid={AID}",
-			data: 'alias='+ alias, 
+			data: 'alias='+ alias,
 			cache: false,
 			success: function(response){
 				if($.trim(response) == 'false'){
@@ -40,7 +40,7 @@ function check_alias() {
 			<li><a href='#general'>{L_article}</a></li>
 			<li><a href='#settings'>{L_settings}</a></li>
 		</ul>
-	
+
 		<div id="general">
 			<fieldset class="settings smallsettings">
 			<legend>{L_article}</legend>
@@ -111,11 +111,11 @@ function check_alias() {
 				<dt><label>{L_hide_header}</label></dt>
 				<dd>{HIDE_HEADER_RADIO}</dd>
 			</dl>
-			
+
 			</fieldset>
-		
+
 		</div>
-		
+
 		</div>
 	</div>
 	<div class="contentFooter">
@@ -124,5 +124,5 @@ function check_alias() {
 		<button type="submit" name="update" class="mainoption"><i class="fa fa-check"></i>{L_save}</button>
 		<button type="reset" name="reset" class="liteoption"><i class="fa fa-trash-o"></i>{L_reset}</button>
 	</div>
-{CSRF_TOKEN}	
+{CSRF_TOKEN}
 </form>

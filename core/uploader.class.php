@@ -26,7 +26,7 @@ if ( !defined('EQDKP_INC') ){
 class uploader extends gen_class {
 
 	private $added_js = false;
-	
+
 	public function upload_mime($strFieldname, $strFolder, $arrMimetypes, $arrExtensions, $strDestFilename=false, $strBaseFolder=false){
 		$tempname		= $_FILES[$strFieldname]['tmp_name'];
 		$fileEnding		= pathinfo($_FILES[$strFieldname]['name'], PATHINFO_EXTENSION);
@@ -34,7 +34,7 @@ class uploader extends gen_class {
 		$filetype		= $_FILES[$strFieldname]['type'];
 		if ($tempname == '') return false;
 		$filename = preg_replace('/[^a-zA-Z0-9_.-]/', '_', $filename);
-		
+
 		// get the mime....
 		$mime = false;
 		if(function_exists('finfo_open') && function_exists('finfo_file') && function_exists('finfo_close')){
@@ -45,15 +45,15 @@ class uploader extends gen_class {
 			$mime			= mime_content_type( $tempname );
 		}else{
 			// try to get the extension... not really secure...
-			
+
 			if (in_array($fileEnding, $arrExtensions)) {
 				$mime			= $arrMimetypes[0];
 			}
 		}
-		
+
 		$arrSplitted = preg_split('/[; ]/', $mime);
 		$mime = array_shift($arrSplitted);
-		
+
 		$strBaseFolder = ($strBaseFolder === false) ? $this->pfh->FolderPath('files', 'eqdkp') : $strBaseFolder;
 
 		if (in_array($mime, $arrMimetypes)){
@@ -82,7 +82,7 @@ class uploader extends gen_class {
 
 			$filename = str_replace($name, $name . '_' . ++$offset, $filename);
 			$strFolder = ($strFolder == '/') ? '' : $strFolder;
-			
+
 			if (isFilelinkInFolder($strBaseFolder.$strFolder.'/'.$filename, $strBaseFolder, false)) {
 				$this->pfh->FileMove($tempname, $strBaseFolder.$strFolder.'/'.$filename, true);
 				return $filename;
@@ -90,7 +90,7 @@ class uploader extends gen_class {
 				unlink($tempname);
 			}
 		}
-		
+
 		return false;
 	}
 
@@ -117,7 +117,7 @@ class uploader extends gen_class {
 
 				$pathinfo = pathinfo($filename);
 				$name = $pathinfo['filename'];
-				
+
 
 				$arrFiles = preg_grep('/^' . preg_quote($name, '/') . '.*\.' . preg_quote($extension, '/') . '/', $files);
 
@@ -131,7 +131,7 @@ class uploader extends gen_class {
 
 				$filename = str_replace($name, $name . '_' . ++$offset, $filename);
 				$folder = ($folder == '/') ? '' : $folder;
-				
+
 				if (isFilelinkInFolder($this->pfh->FolderPath('files/'.$folder, 'eqdkp', true), $this->pfh->FolderPath('files','eqdkp', true))) {
 					$this->pfh->FileMove($_FILES[$fieldname]['tmp_name'], $this->pfh->FolderPath('files/'.$folder, 'eqdkp').$filename, true);
 				} else {
@@ -182,12 +182,12 @@ class uploader extends gen_class {
 		// Get and sort directories/files
 		$file = scandir($directory);
 		natcasesort($file);
-		
+
 		// Make directories first
 		$files = $dirs = array();
 		foreach($file as $this_file) {
 			if( is_dir("$directory/$this_file" ) ) {
-				$dirs[] = $this_file; 
+				$dirs[] = $this_file;
 			} elseif (!$only_dir && valid_folder($this_file)){
 				$files[] = $this_file;
 			}
@@ -198,18 +198,18 @@ class uploader extends gen_class {
 		if( !empty($extensions) ) {
 			foreach( array_keys($file) as $key ) {
 				if( !is_dir("$directory/$file[$key]") ) {
-					$ext = substr($file[$key], strrpos($file[$key], ".") + 1); 
+					$ext = substr($file[$key], strrpos($file[$key], ".") + 1);
 					if( !in_array($ext, $extensions) ) unset($file[$key]);
 				}
 			}
 		}
 		$dd_data = array();
-		
+
 		if( count($file) > 2 ) { // Use 2 instead of 0 to account for . and .. "directories"
 			$php_file_tree = "<ul";
 			if( $first_call ) { $php_file_tree .= " class=\"php-file-tree\""; $first_call = false; }
 			$php_file_tree .= ">";
-			
+
 			foreach( $file as $this_file ) {
 				if( $this_file != "." && $this_file != ".." ) {
 					if( is_dir("$directory/$this_file") ) {
@@ -229,7 +229,7 @@ class uploader extends gen_class {
 					} else {
 						// File
 						// Get extension (prepend 'ext-' to prevent invalid classes from extensions that begin with numbers)
-						$ext = "ext-" . substr($this_file, strrpos($this_file, ".") + 1); 
+						$ext = "ext-" . substr($this_file, strrpos($this_file, ".") + 1);
 						$link = str_replace("[link]", "$directory/" . urlencode($this_file), $return_link);
 						$php_file_tree .= "<li class=\"pft-file " . strtolower($ext) . "\">".(($checkboxes) ? '<input type="checkbox" name="files[]" value="'.str_replace("//", "/", $directory."/".$this_file).'"> ': '').(($radiobox) ? "<input type=\"radio\" name=\"".$radiobox."\" value=\"".str_replace("//", "/", $directory."/".$this_file)."\"".((in_array(str_replace("//", "/", $directory."/".$this_file), $selected)) ? ' checked="checked"' : '')."> " : '')."<a href=\"$link\">" . sanitize($this_file) . "</a></li>";
 					}
@@ -332,7 +332,7 @@ class uploader extends gen_class {
 	}
 
 	public function add_js(){
-		$output = '$(document).ready( function() {
+		$output = '$(function() {
 
 			// Hide all subfolders at startup
 			$(".php-file-tree").find("UL").hide();
@@ -341,7 +341,7 @@ class uploader extends gen_class {
 			$(".pft-directory a").click( function() {
 				$(this).parent().find("UL:first").slideToggle("medium");
 				if( $(this).parent().attr(\'className\') == "pft-directory" ) return false;
-			});	
+			});
 		});';
 		return $output;
 	}

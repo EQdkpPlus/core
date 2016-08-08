@@ -1,6 +1,6 @@
 <script type="text/javascript">
 //<![CDATA[
-$(document).ready(function(){
+$(function(){
 	$('#alias').change(check_alias);
 });
 
@@ -10,7 +10,7 @@ function check_alias() {
 		jQuery.ajax({
 			type: "POST",
 			url: "manage_article_categories.php{SID}&checkalias=1&c={CID}",
-			data: 'alias='+ alias, 
+			data: 'alias='+ alias,
 			cache: false,
 			success: function(response){
 				if($.trim(response) == 'false'){
@@ -30,11 +30,11 @@ function check_alias() {
 function calculate_permission(perm, gid, obj){
 	tr = $(obj).closest('tr');
 	tr.find('.calc-perm').html('<i class="fa fa-spinner fa-spin fa-lg"></i>');
-				
+
 	jQuery.ajax({
 			type: "POST",
 			url: "manage_article_categories.php{SID}&calcperm=1&c={CID}",
-			data: 'perm='+ perm+'&gid='+gid+'&value='+$(obj).val()+'&parent='+$('#parent').val(), 
+			data: 'perm='+ perm+'&gid='+gid+'&value='+$(obj).val()+'&parent='+$('#parent').val(),
 			cache: false,
 			success: function(response){
 				tr = $(obj).closest('tr');
@@ -70,7 +70,7 @@ function renew_all_permissions(){
 			<li><a href='#settings'>{L_settings}</a></li>
 			<li><a href='#permissions'>{L_permissions}</a></li>
 		</ul>
-	
+
 		<div id="general">
 			<fieldset class="settings mediumsettings">
 			<legend>{L_core_sett_fs_globalsettings}</legend>
@@ -105,12 +105,12 @@ function renew_all_permissions(){
 				<dt><label>{L_article_per_page}</label></dt>
 				<dd><input type="text" name="per_page" value="{PER_PAGE}" class="input required core-spinner" data-min="0" size="3" id="article_per_page" /></dd>
 			</dl>
-			
+
 			<dl>
 				<dt><label>{L_parent_category}</label></dt>
 				<dd>{DD_PARENT}</dd>
 			</dl>
-			
+
 			<dl>
 				<dt><label>{L_list_type}</label></dt>
 				<dd>{DD_LIST_TYPE}</dd>
@@ -127,44 +127,44 @@ function renew_all_permissions(){
 				<dt><label>{L_featured_only}</label></dt>
 				<dd>{R_FEATURED_ONLY}</dd>
 			</dl>
-			
+
 			<dl>
 				<dt><label>{L_featured_ontop}</label></dt>
 				<dd>{R_FEATURED_ONTOP}</dd>
 			</dl>
-			
+
 			<dl>
 				<dt><label>{L_social_share_buttons}</label></dt>
 				<dd>{R_SHOW_SSB}</dd>
 			</dl>
-			
+
 			<dl>
 				<dt><label>{L_article_published_state}</label></dt>
 				<dd>{R_PUBLISHED_STATE}</dd>
 			</dl>
-			
+
 			<dl>
 				<dt><label>{L_notify_on_unpublished_articles}</label></dt>
 				<dd>{R_NOTIFY_UNPUBLISHED}</dd>
 			</dl>
-			
+
 			<dl>
 				<dt><label>{L_hide_header}</label></dt>
 				<dd>{R_HIDE_HEADER}</dd>
 			</dl>
-			
+
 			<dl>
 				<dt><label>{L_hide_on_rss}</label></dt>
 				<dd>{R_HIDE_ON_RSS}</dd>
 			</dl>
-			
+
 			<dl>
 				<dt><label>{L_sortation_type}</label></dt>
 				<dd>{DD_SORTATION_TYPE}</dd>
 			</dl>
-			
+
 			</fieldset>
-		
+
 		</div>
 		<div id="permissions">
 			 <script>
@@ -180,8 +180,8 @@ function renew_all_permissions(){
 			.ui-tabs-vertical .ui-tabs-nav li a { width: 12em; display:block; }
 			.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { padding-bottom: 0; padding-right: .1em; border-right-width: 0px; margin-bottom:0px;}
 			.ui-tabs-vertical .ui-tabs-panel { padding: 1em; float: right; width: 40em;}
-			
-			
+
+
 			</style>
 			<div id="category-permission-tabs">
 				<ul><!-- BEGIN group_row -->
@@ -216,7 +216,7 @@ function renew_all_permissions(){
 				</div>
 				<!-- END group_row -->
 			</div>
-			
+
 		</div>
 	</div>
 	<div class="contentFooter">
@@ -225,5 +225,5 @@ function renew_all_permissions(){
 		<button type="reset" name="reset" class="liteoption"><i class="fa fa-trash-o"></i>{L_reset}</button>
 		<button type="button" class="liteoption" onclick="window.location='manage_article_categories.php{SID}'"><i class="fa fa-chevron-left"></i>{L_back}</button>
 	</div>
-{CSRF_TOKEN}	
+{CSRF_TOKEN}
 </form>

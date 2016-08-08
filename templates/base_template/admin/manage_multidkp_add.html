@@ -9,31 +9,31 @@
 </div>
 
 <script>
-$(document).ready(function(){
+$(function(){
 	$("#dw_events").multiselect().bind("multiselectclick multiselectcheckall multiselectuncheckall", function( event, ui ){
 		var checkedValues = $.map($(this).multiselect("getChecked"), function( input ){
 			return input.value;
 		});
-		
+
 		var checkedValuesNA = $.map($("#dw_no_atts").multiselect("getChecked"), function( input ){
 			return input.value;
 		});
-		
+
 		$("#dw_no_atts").html("");
-		
+
 		$.each(checkedValues, function(index, value) {
 			var text = $("#dw_events option[value='"+value+"']").text();
-			
-			
+
+
 			$("#dw_no_atts").append(
 			    $('<option></option>').val(value).html(text)
 			);
 		});
-		
+
 		$.each(checkedValuesNA, function(index, value) {
 			$("#dw_no_atts option[value='"+value+"']").prop("selected", true);
 		});
-		
+
 		$("#dw_no_atts").multiselect("refresh");
 	});
 });
@@ -55,7 +55,7 @@ $(document).ready(function(){
 			<dd>{ITEMPOOL_SEL}</dd>
 		</dl>
 		<dl>
-			<dt><label>{L_Multi_kontoname_short}:</label><br /><span>{L_Multi_discnottolong}</span></dt>		
+			<dt><label>{L_Multi_kontoname_short}:</label><br /><span>{L_Multi_discnottolong}</span></dt>
 			<dd><input type="text" name="name" size="10" maxlength="254" value="{NAME}" class="input" /></dd>
 		</dl>
 		<dl>

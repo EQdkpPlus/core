@@ -1,6 +1,6 @@
 <script language="JavaScript" type="text/javascript">
 //<![CDATA[
-$(document).ready(function(){
+$(function(){
 	$('#username').change(function() {
 		var username = $(this).val();
 		if(username.length > 0){
@@ -67,7 +67,7 @@ $(document).ready(function(){
 			reset_permissions();
 			set_user_permissions();
 			console.log(checkedValues);
-			
+
 			$.each(checkedValues, function(index, value) {
 				set_group_permissions(value);
 			});
@@ -293,13 +293,13 @@ $(document).ready(function(){
 		<div class="contentFooter">
 			<button class="mainoption" type="submit" name="submit" ><i class="fa fa-check"></i>{L_uc_connectme}</button>
 			<button class="liteoption" type="reset" name="reset"><i class="fa fa-trash-o"></i>{L_reset}</button>
-			<!-- IF S_SETTING_ADMIN -->	
+			<!-- IF S_SETTING_ADMIN -->
 			<!-- IF not S_PROTECT_USER -->
 			<button class="liteoption cancel" type="button" name="del" onclick="delete_warning({USERID});" id="delete_button"><i class="fa fa-times"></i>{L_delete}</button>
 			<!-- ENDIF -->
 			<button class="mainoption cancel" type="submit" name=""><i class="fa fa-chevron-left"></i>{L_back}</button>
 			<!-- ENDIF -->
-			
+
 		</div>
 	</div>
 

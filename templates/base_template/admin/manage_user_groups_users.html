@@ -58,8 +58,8 @@
 					<td>{user_row_grpleader.ONLINE}</td>
 				</tr>
 				<!-- END user_row_grpleader -->
-				
-				
+
+
 				<tr>
 					<th colspan="6" />{L_group_members}</th>
 				</tr>
@@ -80,7 +80,7 @@
 						{BUTTON_MENU}
 					</th>
 				</tr>
-				
+
 				</table>
 				<br />
 				<fieldset class="settings mediumsettings" class="settings">
@@ -97,7 +97,7 @@
 					<li><a href='#user_perms'><span>{L_user_permissions}</span></a></li>
 					<li><a href='#admin_perms'><span class="adminicon">{L_admin_permissions}</span></a></li>
 				</ul>
-				
+
 				<div id="user_perms">
 					<!-- BEGIN u_permissions_row -->
 					<fieldset class="settings mediumsettings" class="settings">
@@ -113,14 +113,14 @@
 					</fieldset>
 					<!-- END u_permissions_row -->
 				</div>
-				
+
 				<div id="admin_perms">
 					<!-- IF GRP_ID == 1 -->
 					<div class="infobox infobox-large infobox-blue clearfix">
 						<i class="fa fa-info-circle fa-4x pull-left"></i> {L_guest_no_admin_perms_note}
 					</div>
 					<!-- ENDIF -->
-					
+
 					<!-- BEGIN a_permissions_row -->
 					<fieldset class="settings mediumsettings" class="settings">
 						<legend>{a_permissions_row.ICON} {a_permissions_row.GROUP}</legend>
@@ -135,7 +135,7 @@
 					</fieldset>
 					<!-- END a_permissions_row -->
 				</div>
-				
+
 			</div>
 			<div class="contentFooter">
 				<button class="mainoption" type="submit" name="save_group_perms"><i class="fa fa-check"></i>{L_save}</button>
@@ -151,7 +151,7 @@
 </form>
 <script type="text/javascript">
 //<![CDATA[
-$(document).ready(function(){
+$(function(){
 	$('.changepermcolor').change(function() {
 		if($(this).prop('checked')){
 			$('#span_'+this.id).attr('class', 'positive');
@@ -159,7 +159,7 @@ $(document).ready(function(){
 			$('#span_'+this.id).attr('class', 'negative');
 		}
 	});
-	
+
 	$("#selall_usergr").click(function(){
 		var checked_status = this.checked;
 		$(".usercheckbox").each(function(){

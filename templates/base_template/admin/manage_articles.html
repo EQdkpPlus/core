@@ -1,5 +1,5 @@
 <script type="text/javascript">
-	$(document).ready(function() {
+	$(function() {
 		$('.eyeToggleTrigger').on('click', function(event){
 			if ($(this).hasClass('eye')){
 				//Hide
@@ -12,7 +12,7 @@
 				$(this).addClass('eye');
 			}
 		});
-		
+
 		$('.featuredToggleTrigger').on('click', function(event){
 			if ($(this).hasClass('featured')){
 				//Hide
@@ -25,7 +25,7 @@
 				$(this).addClass('featured');
 			}
 		});
-		
+
 		$('.index_cb').on('click', function(){
 			if(this.checked){
 				$('.index_cb').prop('disabled', true);
@@ -65,7 +65,7 @@
 	</div>
 	<div class="contentFooter">
 		{BUTTON_MENU}
-		
+
 		<input type="hidden" name="c" value="{CID}" />
 		<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
 		<button class="mainoption" type="submit" name="save"><i class="fa fa-check"></i>{L_save}</button>

@@ -36,8 +36,8 @@ if(!registry::fetch('user')->is_signedin()){
 			$.each(disabled, function(i, cmd) {
 				(idx = $.inArray(cmd, myCommands)) !== -1 && myCommands.splice(idx,1);
 			});
-		
-			$().ready(function() {
+
+			$(function() {
 				var elf = $('#elfinder').elfinder({
 					url : 'php/connector.useravatars.php<?php echo registry::get_const('SID');?>',  // connector URL (REQUIRED)
 					// lang: 'ru',             // language (OPTIONAL)

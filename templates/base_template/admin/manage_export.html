@@ -9,17 +9,17 @@
 
 <fieldset class="settings mediumsettings">
 	<legend>{L_manexport_title}</legend>
-	
+
 	<dl>
 		<dt><label>{L_export_memberitems}</label></dt>
 		<dd><input type="checkbox" id="memberitems" value="1" onchange="ajax_reload_export()" checked="checked"/></dd>
 	</dl>
-	
+
 	<dl>
 		<dt><label>{L_export_memberadjustments}</label></dt>
 		<dd><input type="checkbox" id="memberadjs" value="1" onchange="ajax_reload_export()" checked="checked"/></dd>
 	</dl>
-	
+
 	<dl>
 		<dt><label>{L_export_format}</label></dt>
 		<dd><label><input type="radio" id="format" name="format" value="lua" checked="checked"  onchange="ajax_reload_export()"/>LUA</label>
@@ -32,7 +32,7 @@
 	</dl>
 </fieldset>
 <script type="text/javascript">
-$(document).ready(function(){
+$(function(){
 	document.getElementById("export_data").focus();
     document.getElementById("export_data").select();
 });
@@ -44,7 +44,7 @@ function ajax_reload_export(){
 	} else {
 		memberitems = 0;
 	}
-	
+
 	var memberadjs = $('#memberadjs').attr("checked");
 	if (memberadjs == "checked") {
 		memberadjs = 1;
@@ -52,7 +52,7 @@ function ajax_reload_export(){
 		memberadjs = 0;
 	}
 	var format = $('input[name=format]:checked').val();
-	
+
 	$.get('manage_export.php{SID}&ajax_export=1&format='+format+'&memberitems='+memberitems+'&memberadjs='+memberadjs, function(data) {
 		$('#export_data').val(data);
 		document.getElementById("export_data").focus();
@@ -64,7 +64,7 @@ function ajax_reload_export(){
 <form action="" method="post">
 <fieldset class="settings mediumsettings">
 	<legend>{L_core_sett_f_settings_apikey}</legend>
-	
+
 	<dl>
 		<dt><label>{L_core_sett_f_settings_apikey}</label></dt>
 		<dd>{API_KEY}<br /><button type="submit" name="regenerate_apikey"><i class="fa fa-lg fa-refresh"></i> {L_user_create_new_appkey}</button></dd>

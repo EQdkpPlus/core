@@ -17,13 +17,13 @@ function set_progress_bar_value(recentNumber, labeltext){
 	$("#nl_progressbar").progressbar({
 		value: percent
 	});
-	
+
 	$("#nl_progressbar_label").html(labeltext);
 }
 
 function update_error(data){
 	locked = false;
-	
+
 	$("#lu_error").show();
 	$("#lu_error_label").html("<b>"+{L_liveupdate_step_error|jsencode}+"</b>" + data);
 	$("#lu_loading_img").hide();
@@ -34,9 +34,9 @@ function repo_update(extid, cat, extensioncode){
 		alert({L_extension_install_locked|jsencode});
 		return false;
 	}
-	
+
 	locked = true;
-	
+
 	if(updateWarning){
 		if (cat != 2) {
 			update_confirm(extid, cat, extensioncode);
@@ -48,9 +48,9 @@ function repo_update(extid, cat, extensioncode){
 	}
 }
 
-function repo_update_start(extid, cat, extensioncode){	
+function repo_update_start(extid, cat, extensioncode){
 	locked = true;
-	
+
 	$("#lu_error").hide();
 	$("#nl_progressbar").show();
 	$("#lu_loading_img").show();
@@ -64,7 +64,7 @@ function repo_install(extid, cat, extensioncode){
 		return false;
 	}
 	locked = true;
-	
+
 	$("#lu_error").hide();
 	$("#nl_progressbar").show();
 	$("#lu_loading_img").show();
@@ -130,7 +130,7 @@ function repo_step5(extid, cat, extensioncode, mode){
 		url = url + "&autoupd=1&current="+auto_current+"&{ME_URL_SUFFIX}try="+auto_try;
 	}
 	window.location=url;
-	return;	
+	return;
 }
 
 function hide_update_warning(status){
@@ -144,7 +144,7 @@ var auto_current = {AUTOUPD_CURRENT};
 var auto_try = {AUTOUPD_TRY};
 var updates = new Array();
 
-function init_auto_update(){	
+function init_auto_update(){
 	$('.needs_update').each(function(){
 		var cat = $(this).data('category');
 		var id = $(this).data('id');
@@ -162,7 +162,7 @@ function init_auto_update(){
 
 function start_auto_update(){
 	$('.update-all-btn').hide();
-	
+
 	//get first to update
 	if(updates.length > 0){
 		var myid = updates[0];
@@ -174,7 +174,7 @@ function start_auto_update(){
 			alert({L_extension_install_locked|jsencode});
 			return false;
 		}
-		
+
 		auto_update = 1;
 		auto_current = myid;
 		auto_try = 0;
@@ -184,17 +184,17 @@ function start_auto_update(){
 
 function continue_auto_update(){
 	$('.update-all-btn').hide();
-	
+
 	if(updates.length > 0){
 		var myid = false;
-		
+
 		$.each(updates, function( index, value ) {
 		 	if(value >= auto_current){
 		 		myid = updates[index];
 		 		return false;
 		 	}
 		});
-		
+
 		if(!myid){
 			console.log("finished");
 			return;
@@ -203,9 +203,9 @@ function continue_auto_update(){
 		var myobj = $("a[data-id='"+myid+"']");
 		var mycat = $(myobj).data('category');
 		var mycode = $(myobj).data('code');
-		
+
 		console.log(myid);
-		
+
 		if(auto_current == myid){
 			console.log(auto_try);
 			if(auto_try > 2){
@@ -222,36 +222,36 @@ function continue_auto_update(){
 					myobj = $("a[data-id='"+myid+"']");
 					mycat = $(myobj).data('category');
 					mycode = $(myobj).data('code');
-					
+
 					auto_try = 0;
 					auto_current = myid;
 					repo_update_start(myid, mycat, mycode);
-					
+
 				} else {
 					console.log("finished");
 					return;
 				}
-				
+
 			} else {
 				auto_try = auto_try + 1;
 				repo_update_start(myid, mycat, mycode);
 			}
-			
+
 		} else {
 			auto_try = 0;
 			auto_current = myid;
-			
+
 			repo_update_start(myid, mycat, mycode);
 		}
-		
+
 	} else {
 		console.log("finished");
 	}
 }
 
-$(document).ready(function(){
+$(function(){
 	init_auto_update();
-	
+
 	<!-- IF AUTOUPD_ON -->
 	continue_auto_update();
 	<!-- ENDIF -->
@@ -297,7 +297,7 @@ $(document).ready(function(){
 		<div class="contentHeader">
 			<h1 class="contentTitle">{L_CATEGORY_1}</h1>
 		</div>
-	
+
 		<table class="table fullwidth colorswitch">
 		<tr>
 			<th class="left" style="width:20px">&nbsp;</th>
@@ -482,7 +482,7 @@ $(document).ready(function(){
 			document.post.submit();
 		}
 		</script>
-		
+
 		<form method="post" action="{ACTION}&amp;cat=2&amp;mode=default_style" name="post">
 		<input type="hidden" name="override" value="0" />
 		<ul class="styles-container">
@@ -497,10 +497,10 @@ $(document).ready(function(){
 					</div>
 					{styles_row_red_local.ACTION_LINK}
 					<!-- IF not styles_row_red_local.S_DEFAULT -->
-					<a href="{styles_row_red_local.U_ENABLE}" title="{styles_row_red_local.L_ENABLE}"><i class="{styles_row_red_local.ENABLE} fa-lg"></i></a>  
+					<a href="{styles_row_red_local.U_ENABLE}" title="{styles_row_red_local.L_ENABLE}"><i class="{styles_row_red_local.ENABLE} fa-lg"></i></a>
 					<!-- ENDIF -->
 					<a href="{styles_row_red_local.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg"></i></a>
-					<a href="javascript:style_reset_warning({styles_row_red_local.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>	
+					<a href="javascript:style_reset_warning({styles_row_red_local.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>
 					<a href="javascript:style_preview({styles_row_red_local.ID});" title="{L_preview}"><i class="fa fa-eye fa-lg"></i></a>
 				</div>
 				<a class="style-preview" href="{styles_row_red_local.U_EDIT_STYLE}" <!-- IF styles_row_red_local.TT_CONTENT != "" -->style="background: url({styles_row_red_local.TT_CONTENT}) no-repeat; background-size: cover; background-position: center;"<!-- ENDIF -->></a>
@@ -527,13 +527,13 @@ $(document).ready(function(){
 						<label for="style-radio{styles_row_red.ID}"></label>
 						<!-- ENDIF -->
 					</div>
-				
+
 					{styles_row_red.ACTION_LINK}
 					<!-- IF not styles_row_red.S_DEFAULT -->
-					<a href="{styles_row_red.U_ENABLE}" title="{styles_row_red.L_ENABLE}"><i class="{styles_row_red.ENABLE} fa-lg"></i></a>  
+					<a href="{styles_row_red.U_ENABLE}" title="{styles_row_red.L_ENABLE}"><i class="{styles_row_red.ENABLE} fa-lg"></i></a>
 					<!-- ENDIF -->
 					<a href="{styles_row_red.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg"></i></a>
-					<a href="javascript:style_reset_warning({styles_row_red.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>	
+					<a href="javascript:style_reset_warning({styles_row_red.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>
 					<a href="javascript:style_preview({styles_row_red.ID});" title="{L_preview}"><i class="fa fa-eye fa-lg"></i></a>
 				</div>
 				<a class="style-preview" href="{styles_row_red.U_EDIT_STYLE}" <!-- IF styles_row_red.TT_CONTENT != "" -->style="background: url({styles_row_red.TT_CONTENT}) no-repeat; background-size: cover; background-position: center;"<!-- ENDIF -->></a>
@@ -560,17 +560,17 @@ $(document).ready(function(){
 						<label for="style-radio{styles_row_yellow.ID}"></label>
 						<!-- ENDIF -->
 					</div>
-				
+
 					{styles_row_yellow.ACTION_LINK}
 					<!-- IF not styles_row_yellow.S_DEFAULT -->
-					<a href="{styles_row_yellow.U_ENABLE}" title="{styles_row_yellow.L_ENABLE}"><i class="{styles_row_yellow.ENABLE} fa-lg"></i></a>  
+					<a href="{styles_row_yellow.U_ENABLE}" title="{styles_row_yellow.L_ENABLE}"><i class="{styles_row_yellow.ENABLE} fa-lg"></i></a>
 					<!-- ENDIF -->
 					<a href="{styles_row_yellow.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg"></i></a>
-					<a href="javascript:style_reset_warning({styles_row_yellow.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>	
+					<a href="javascript:style_reset_warning({styles_row_yellow.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>
 					<a href="javascript:style_preview({styles_row_yellow.ID});" title="{L_preview}"><i class="fa fa-eye fa-lg"></i></a>
 				</div>
 				<a class="style-preview" href="{styles_row_yellow.U_EDIT_STYLE}" title="{L_uc_bttn_update}" <!-- IF styles_row_yellow.TT_CONTENT != "" -->style="background: url({styles_row_yellow.TT_CONTENT}) no-repeat; background-size: cover; background-position: center;"<!-- ENDIF -->></a>
-			
+
 				<div class="style-info">
 					<h2>{styles_row_yellow.TT_NAME}<span class="style-version"><i class="fa fa-tags" title="{L_version}"></i> {styles_row_yellow.VERSION}</span></h2>
 					<table>
@@ -594,17 +594,17 @@ $(document).ready(function(){
 						<label for="style-radio{styles_row_green.ID}"></label>
 						<!-- ENDIF -->
 					</div>
-				
+
 					{styles_row_green.ACTION_LINK}
 					<!-- IF not styles_row_green.S_DEFAULT -->
-					<a href="{styles_row_green.U_ENABLE}" title="{styles_row_green.L_ENABLE}"><i class="{styles_row_green.ENABLE} fa-lg"></i></a>  
+					<a href="{styles_row_green.U_ENABLE}" title="{styles_row_green.L_ENABLE}"><i class="{styles_row_green.ENABLE} fa-lg"></i></a>
 					<!-- ENDIF -->
 					<a href="{styles_row_green.U_DOWNLOAD_STYLE}" title="{L_download_style}"><i class="fa fa-floppy-o fa-lg"></i></a>
-					<a href="javascript:style_reset_warning({styles_row_green.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>	
+					<a href="javascript:style_reset_warning({styles_row_green.ID})" title="{L_reset_style}"><i class="fa fa-retweet fa-lg"></i></a>
 					<a href="javascript:style_preview({styles_row_green.ID});" title="{L_preview}"><i class="fa fa-eye fa-lg"></i></a>
 				</div>
 				<a class="style-preview" title="{L_edit_style}" href="{styles_row_green.U_EDIT_STYLE}" <!-- IF styles_row_green.TT_CONTENT != "" -->style="background: url({styles_row_green.TT_CONTENT}) no-repeat; background-size: cover; background-position: center;"<!-- ENDIF -->></a>
-			
+
 				<div class="style-info">
 					<h2>{styles_row_green.TT_NAME}<span class="style-version"><i class="fa fa-tags" title="{L_version}"></i> {styles_row_green.VERSION}</span></h2>
 					<table>
@@ -641,7 +641,7 @@ $(document).ready(function(){
 			<!-- END styles_row_grey -->
 		</ul>
 		<div class="clear"></div>
-		
+
 		<div class="contentFooter">
 			<button name="standard" type="button" id="standard" class="mainoption" onclick="style_default_info();"><i class="fa fa-check"></i>{L_make_default_style}</button>
 			<button name="cache_reset" type="button" class="liteoption" onclick="window.location='manage_extensions.php{SID}&amp;cat=2&amp;mode=delete_cache&amp;link_hash={CSRF_MODE_TOKEN}'"><i class="fa fa-trash-o"></i>{L_delete_template_cache}</button>
@@ -838,7 +838,7 @@ $(document).ready(function(){
 		  </table>
 	</div>
 	<!-- ENDIF -->
-	
+
 	<!-- IF S_SHOW_CAT_11 -->
 	<div id="fragment-11">
 		<div class="contentHeader">
@@ -907,7 +907,7 @@ $(document).ready(function(){
 		  </table>
 	</div>
 	<!-- ENDIF -->
-	
+
 	<!-- IF S_SHOW_CAT_UPLOAD -->
 	<div id="fragment-upload">
 		<div class="infobox infobox-large infobox-blue clearfix">

@@ -18,7 +18,7 @@
 <!-- ELSE -->
 <script language="JavaScript" type="text/javascript">
 //<![CDATA[
-$(document).ready(function() { 
+$(function() { 
 	$('#username').change(function() {
 		var username = $(this).val();
 		if(username.length > 0){
@@ -74,7 +74,7 @@ $(document).ready(function() {
 			</fieldset>
 			<br />
 			<!-- ENDIF -->
-		
+
 			<fieldset class="settings">
 				<legend>{L_user_sett_tab_registration_info}</legend>
 				<i class="fa fa-info-circle fa-lg"></i> {L_required_field_note}<br/><br/>
@@ -130,7 +130,7 @@ $(document).ready(function() {
 			</fieldset>
 
 		</div>
-		
+
 		<!-- IF S_PROFILEFIELDS -->
 		<div id="profilefields">
 			<fieldset class="settings">
@@ -144,7 +144,7 @@ $(document).ready(function() {
 			</fieldset>
 		</div>
 		<!-- ENDIF -->
-		
+
 		<div id="view">
 			<fieldset class="settings">
 				<legend>{L_user_sett_tab_view_options}</legend>
