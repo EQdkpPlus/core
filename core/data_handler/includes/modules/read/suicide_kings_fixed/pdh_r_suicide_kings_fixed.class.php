@@ -79,7 +79,7 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 				$startList = $this->config->get('sk_fix_startlist_'.$mdkp_id);
 				if (!$startList){
 					shuffle($arrMembers);
-					$this->config->set('sk_fix_startlist_'.$mdkp_id, serialize($arrMembers));
+					$this->config->set('sk_fix_startlist_'.$mdkp_id, $arrMembers);
 				}
 				
 				foreach($startList as $intMemberID){
