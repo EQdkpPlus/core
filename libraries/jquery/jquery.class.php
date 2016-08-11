@@ -1766,16 +1766,15 @@ if (!class_exists("jquery")) {
 							/*to allow people to choose to quit the menu*/
 							focused_".$id." = null;
 						});
-					})
-				},
-				onHide: function(){
-					var ul = $(this);
-					if(focused_".$id." != null){
-						this.stop(true, true);
-						//ul.css('display', 'block');
-						this.show();
+					},
+					onHide: function(){
+						var ul = $(this);
+						if(focused_".$id." != null){
+							this.stop(true, true);
+							//ul.css('display', 'block');
+							this.show();
+						}
 					}
-				}
 			}); ", 'docready');
 			return $dmmenu;
 		}
