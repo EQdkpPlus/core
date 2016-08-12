@@ -80,8 +80,8 @@ class php_check extends install_generic {
 				'passfail'		=> (function_exists('hash')) ? true : false
 			),
 			'xml'	=> array(
-				'required'		=> $this->user->lang('yes'),
-				'installed'		=> (function_exists('simplexml_load_string')) ? $this->user->lang('yes') : $this->user->lang('no'),
+				'required'		=> $this->lang['yes'],
+				'installed'		=> (function_exists('simplexml_load_string')) ? $this->lang['yes'] : $this->lang['no'],
 				'passfail'		=> (function_exists('simplexml_load_string')) ? true : false
 			),
 			'autoload'	=> array(
