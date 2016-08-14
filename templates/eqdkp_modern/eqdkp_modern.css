@@ -841,6 +841,10 @@ ul.adminmenu ul.sub-menu li:hover > .sub-menu-arrow:after {
 	background: #ededed;
 }
 
+ul.mainmenu li a.link_indexphp, ul.mainmenu li a.link_entry_home {
+	padding-top: calc(.75em - 0px);
+	padding-bottom: calc(.75em - 4px);
+}
 ul.mainmenu li a.link_indexphp:before, ul.mainmenu li a.link_entry_home:before {
 	content:"\f015";
 	font-family: FontAwesome;
