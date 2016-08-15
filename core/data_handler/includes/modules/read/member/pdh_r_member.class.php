@@ -792,7 +792,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 					'perm'		=> $this->game->get_importAuth('u_member_man', 'char_update') && !$this->game->get_require_apikey(),
 				),
 			);
-			return $this->core->build_dropdown_menu('<i class="fa fa-wrench fa-lg"></i>', $cm_actions, '', 'actionmenu'.$memberid);
+			return $this->core->build_dropdown_menu('<i class="fa fa-wrench fa-lg"></i>', $cm_actions, 'floatRight', 'actionmenu'.$memberid);
 		}
 
 		public function get_other_members($member_id){
