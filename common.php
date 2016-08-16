@@ -24,12 +24,18 @@ if ( !defined('EQDKP_INC') ){
 }
 
 // Check for required PHP Version and quit exec if requirements are not reached
-if (!version_compare(phpversion(), '5.4.0', ">=")){
+if (!version_compare(phpversion(), '5.5.0', ">=")){
 	die('
-		<b>PHP 5.4 required!</b><br/><br/>
-		You need at least PHP 5.4 running on your server! <br />
-		All PHP versions below are no longer supported! Dont ask in the <a href="http://eqdkp-plus.eu">EQdkp-Plus Forum</a> for a different Release!<br />
-		Ask your Admin or Hoster for a PHP5 update! If they do not update, you should leave your hoster!<br/><br/>
+		<b>Your PHP Version is outdated!</b><br/><br/>
+		Your PHP Version is outdated and not longer maintained by the PHP project. The Version is end of life. If you are using these releases, you are strongly<br />
+		urged to upgrade to a current version, as using older versions may expose you to security vulnerabilities and bugs that have been<br />
+		fixed in more recent versions of PHP.<br />
+		You are able to check which versions are End of life on the <a href="http://php.net/eol.php" target="_blank">homepage of the PHP Project</a>.<br />
+		As Eqdkp-Plus is a modern Web Application and uses current technology, future versions will not be tested on unsupported PHP Versions and might <br />
+		not work on these PHP Versions. Please do not ask in the official <a href="http://eqdkp-plus.eu">EQdkp-Plus Forum</a> for a comparible release.<br />
+		Please Ask your Hoster or Admin to Upgrade to a recent Version of PHP. If the Hoster refuses to update, you should consider to change Hoster.<br />
+		Security should be worth the effort of a hoster change.<br /><br />
+		You need at least PHP 5.5.x running on your server! <br />
 	');
 }
 
