@@ -758,7 +758,8 @@ if (!class_exists("pdh_r_user")){
 		}
 
 		private function init_online_user(){
-			if (!$this->online_user){
+			if ($this->online_user === false){
+				$this->online_user = array();
 				$objQuery = $this->db->prepare("SELECT session_user_id FROM __sessions WHERE session_current > ? AND session_user_id > 0;")->execute($this->time->time-600);
 				if($objQuery){
 					while($row = $objQuery->fetchAssoc()){
