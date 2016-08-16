@@ -151,6 +151,7 @@ abstract class super_registry {
 			registry::fetch('user')->setup(registry::register('input')->get('lang', ''), registry::register('input')->get('style', 0));
 			self::set_timezone();
 			define('USER_INITIALIZED', true);
+			registry::fetch('user')->fireHooks();
 
 			if (!defined('MAINTENANCE_MODE')){
 				//Maintenance mode redirect for non admins

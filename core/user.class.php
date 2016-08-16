@@ -364,6 +364,16 @@ class user extends gen_class {
 		return false;
 	}
 
+	public function fireHooks(){
+		if(isset($this->user->data['hooks'])){
+			foreach($this->user->data['hooks'] as $key => $arrHook){
+				$this->hooks->process($arrHook['id'], array($arrHook['data']));
+				unset($this->user->data['hooks'][$key]);
+			}
+			unset($this->user->data['hooks']);
+		}
+	}
+	
 
 	public function updateAutologinKey($intUserID, $strAutologinKey){
 		$objQuery = $this->db->prepare('UPDATE __users :p WHERE user_id=?')->set(array(

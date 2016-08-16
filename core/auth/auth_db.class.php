@@ -210,7 +210,7 @@ class auth_db extends auth {
 			
 		} else {
 			$this->pdl->log('login', 'User successfull authenticated');
-			$this->hooks->process('user_login_successful', array('auth_method' => 'db', 'user_id' => $arrStatus['user_id'], 'autologin' => ((isset($arrStatus['autologin'])) ? $arrStatus['autologin'] : $boolSetAutoLogin)));
+			$this->data['hooks'][] = array('id' => 'user_login_successful', 'data' => array('auth_method' => 'db', 'user_id' => $arrStatus['user_id'], 'autologin' => ((isset($arrStatus['autologin'])) ? $arrStatus['autologin'] : $boolSetAutoLogin)));
 			//User successfull authenticated - destroy old session and create a new one
 			$this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array('failed_login_attempts' => 0))->execute($arrStatus['user_id']);
 
@@ -242,7 +242,7 @@ class auth_db extends auth {
 				$arrUserResult = $objQuery->fetchAssoc();
 				if ($arrUserResult){
 					if ($strCookieAutologinKey != "" && strlen($arrUserResult['user_login_key']) && $strCookieAutologinKey===$arrUserResult['user_login_key'] && (int)$arrUserResult['user_active']){
-						$this->hooks->process('user_autologin_successful', array('auth_method' => 'db', 'user_data' => $arrUserResult));
+						$arrUserResult['hooks'][] = array('id' => 'user_autologin_successful', 'data' => array('auth_method' => 'db', 'user_data' => $arrUserResult));
 						return $arrUserResult;
 					}
 				}	
