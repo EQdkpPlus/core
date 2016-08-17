@@ -40,7 +40,6 @@ if ( !isset($eqdkp_root_path) ){
 
 //set error options
 error_reporting (E_ALL);
-ini_set("display_errors", 0);
 
 include_once($eqdkp_root_path.'core/constants.php');
 include_once($eqdkp_root_path.'core/super_registry.class.php');

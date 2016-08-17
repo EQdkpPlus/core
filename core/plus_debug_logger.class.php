@@ -107,7 +107,7 @@ if ( !defined('EQDKP_INC') ){
 		public function myErrorHandler($errno, $errstr, $errfile, $errline){
 			//don't show suppressed (@) errors
 			if($this->php_error_reporting == 0)
-				return false;
+				return true;
 				// create error message
 			if (array_key_exists($errno, $this->errorType)){
 				$err = $this->errorType[$errno];
@@ -123,7 +123,7 @@ if ( !defined('EQDKP_INC') ){
 				$this->log('php_error', $err, $errno, $errstr, $errfile, $errline);
 			}
 			//give it back to the original php error handler
-			return false;
+			return (defined('NO_PHP_LOGGING')) ? true : false;
 		}
 
 		public function set_debug_level($debug_level){
