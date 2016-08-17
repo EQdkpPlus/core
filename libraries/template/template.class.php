@@ -99,7 +99,7 @@ class template extends gen_class {
 
 	private function glang($key, $lang=false, $exists=false) {
 		if($this->is_install) return '';
-		return $this->game->glang($key, $lang, $exists);
+		return $this->game->glang($key, false, $lang, $exists);
 	}
 
 	public function get_templatedata($key){
