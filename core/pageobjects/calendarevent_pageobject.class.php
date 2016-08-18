@@ -919,7 +919,7 @@ class calendarevent_pageobject extends pageobject {
 			));
 		}
 
-		$pastraid	= ($this->time->time > $eventdata['timestamp_end']) ? true : false;
+		$pastraid	= ($this->time->time > $eventdata['extension']['deadlinedate']) ? true : false;
 
 		$optionsmenu = array(
 			1 => array(
@@ -935,28 +935,28 @@ class calendarevent_pageobject extends pageobject {
 				'perm'	=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()),
 			),
 			3 => array(
+				'link'	=> 'javascript:ContinueRaid('.$this->url_id.')',
+				'text'	=> $this->user->lang('calendars_continue_raid'),
+				'icon'	=> 'fa-repeat',
+				'perm'	=> $pastraid && $this->user->check_auth('u_cal_event_add', false),
+			),
+			4 => array(
 				'link'	=> "javascript:TransformRaid('".$this->url_id."')",
 				'text'	=> $this->user->lang('raidevent_raid_transform'),
 				'icon'	=> 'fa-exchange',
 				'perm'	=> $this->user->check_auth('a_raid_add', false),
 			),
-			4 => array(
+			5 => array(
 				'link'	=> $this->strPath.$this->SID.'&amp;ical=true',
 				'text'	=> $this->user->lang('raideventlist_export_ical'),
 				'icon'	=> 'fa-calendar',
 				'perm'	=> true,
 			),
-			5 => array(
+			6 => array(
 				'link'	=> 'javascript:ExportDialog()',
 				'text'	=> $this->user->lang('raidevent_raid_export'),
 				'icon'	=> 'fa-share-square-o',
 				'perm'	=> true,
-			),
-			6 => array(
-				'link'	=> 'javascript:ContinueRaid('.$this->url_id.')',
-				'text'	=> $this->user->lang('calendars_continue_raid'),
-				'icon'	=> 'fa-repeat',
-				'perm'	=> $pastraid && $this->user->check_auth('u_cal_event_add', false),
 			),
 			7 => array(
 				'link'	=> 'javascript:AddRaid()',
