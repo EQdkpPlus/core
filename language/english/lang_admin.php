@@ -1476,6 +1476,8 @@ $lang = array(
 	"liveupdate_diff_line" => 'Line',
 	"liveupdate_update_requirements_failed" => 'The Live-Update cannot be used, because some requirements are not fulfilled. Please check the requirements, and if you think you have fulfilled thmen, download the Update from our <a href="http://eqdkp-plus.eu/repository/">Repository</a>.',
 	"liveupdate_update_nopackages_failed" => 'There are no Live-Update packages for this EQdkp Plus Version. Please download the Update from our <a href="http://eqdkp-plus.eu/repository/">Repository</a>.',
+	"skip" => "Skip",
+	"liveupdate_skip_confirm" => "If you skip this step, the live update cannot detect if all new files have been copied. You are responsable on your own to copy the new files. Therefore it is not recommended skipping this step.",
 	"pi_rating" => 'Rating',
 	"pi_category_1" => 'Plugins',
 	"pi_category_2" => 'Templates',

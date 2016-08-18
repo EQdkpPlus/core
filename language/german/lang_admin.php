@@ -1478,6 +1478,8 @@ $lang = array(
 "liveupdate_diff_line" => "Zeile",
 "liveupdate_update_requirements_failed" => "Das Live-Update kann nicht durchgeführt werden, da bestimmte Voraussetzungen nicht erfüllt sind. Bitte überprüfe die Voraussetzungen, und lade dir das Update aus unserem <a href=\"".EQDKP_REPO_URL."\">Repository</a> herunter.",
 "liveupdate_update_nopackages_failed" => "Es werden für diese Version keine Live-Update-Pakete bereitgestellt. Lade dir das Update aus unserem <a href=\"".EQDKP_REPO_URL."\">Repository</a> herunter.",
+"skip" => "Überspringen",
+"liveupdate_skip_confirm" => "Wenn du diesen Schritt überspringst, kann nicht sichergestellt werden, dass auch wirklich alle neuen Dateien ersetzt worden sind. Du bist also selbst dafür verantwortlich, die neuen Dateien einzuspielen. Es wird nicht empfohlen diesen Schritt zu überspringen.",
 "pi_rating" => "Bewertung",
 "pi_category_1" => "Plugins",
 "pi_category_2" => "Styles",
