@@ -86,6 +86,7 @@
 	<!-- IF S_SHOW_5 -->
 	<form method="post" action="{ACTION}">
 		<!-- IF S_CONFLICTED_FILES -->
+		<br />
 		<div class="infobox infobox-large infobox-red clearfix" id="lu_dontclose">
 			<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> {L_liveupdate_conflictedfiles_note}
 		</div>
@@ -116,7 +117,7 @@
 		<br />
 		<!-- ENDIF -->
 		<button type="submit" class="mainoption" name="submit" <!-- IF S_CONFLICTED_FILES -->onclick="confirm_conflicted(); return false;"<!-- ENDIF -->><i class=""></i>{L_bridge_continue}</button>
-		<button type="button" name="cancel" class="mainoption" onclick="window.location.href='manage_live_update.php{SID}'"><i class="fa fa-chevron-left"></i>{L_cancel}</button>
+		<button type="button" name="cancel" class="mainoption" onclick="window.location.href='manage_live_update.php{SID}'"><i class="fa fa-chevron-left"></i> {L_cancel}</button>
 		<input type="hidden" name="show" value="5" >
 	</form>
 	<!-- ENDIF -->
@@ -124,6 +125,7 @@
 
 	<!-- IF S_SHOW_9 -->
 	<form method="post" action="{ACTION}">
+		<br />
 		<div class="infobox infobox-large infobox-red clearfix" id="lu_dontclose">
 			<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> {L_liveupdate_missingfiles_note}
 		</div>
@@ -137,13 +139,15 @@
 			<td>&bull; {missing_row.FILENAME}</td>
 		  </tr>
 		  <!-- END missing_row -->
-		  <tr>
-			<th><input  value=""  /> <input  class=" bi_save"/></th>
-			</tr> 
 		</table>
-		<button type="button" name="submit" class="mainoption" onclick="lu_step8();"><i class="fa fa-refresh"></i>{L_liveupdate_checkagain}</button>
-		<button class="mainoption" type="submit" value="" name="download"><i class="fa fa-download"></i>{L_liveupdate_downloadfiles}</button>
-		<input type="hidden" name="show" value="9" >
+		<div class="contentFooter">
+			<button type="button" name="submit" class="mainoption" onclick="lu_step8();"><i class="fa fa-refresh"></i>{L_liveupdate_checkagain}</button>
+			<button class="mainoption" type="submit" value="" name="download"><i class="fa fa-download"></i>{L_liveupdate_downloadfiles}</button>
+			<input type="hidden" name="show" value="9" >
+			<!-- IF S_SHOW_CONTINUE_BTN -->
+			<button type="submit" name="continue" onclick="confirm_conflicted(); return false;"><i class="fa fa-chevron-right"></i> {L_skip}</button>
+			<!-- ENDIF -->
+		</div>
 	</form>
 	<!-- ENDIF -->
 

@@ -441,15 +441,29 @@ class Manage_Live_Update extends page_generic {
 		if ($this->in->exists('download')){
 			$this->download_missing_files();
 			return;
+		} elseif($this->in->exists('continue')){
+			$this->bring_steps_to_template(10, true);
+			return;
 		}
 		
 		$arrMissingFiles = unserialize($this->encrypt->decrypt($this->config->get('missing_files', 'live_update')));
 		if ($arrMissingFiles && count($arrMissingFiles) > 0){
 			$this->bring_steps_to_template(9, false, 8);
+			$intMyCookie = (int)$this->in->getEQdkpCookie('lu_step9', 0);
+			$intMyCookie = $intMyCookie+1;
+			set_cookie('lu_step9', $intMyCookie, time()+3600);
 
 			foreach ($arrMissingFiles as $file){
 				$this->tpl->assign_block_vars('missing_row', array(
 					'FILENAME'	=> $file,
+				));
+			}
+			
+			if($intMyCookie > 4){
+				$this->jquery->Dialog('confirm_conflicted', '', array('url' => 'manage_live_update.php'.$this->SID.'&show=9&continue', 'message'=>$this->user->lang('liveupdate_skip_confirm')), 'confirm');
+				
+				$this->tpl->assign_vars(array(
+					'S_SHOW_CONTINUE_BTN' => true,	
 				));
 			}
 
@@ -488,6 +502,9 @@ class Manage_Live_Update extends page_generic {
 		$folder = $this->pfh->FolderPath('update_to_'.$new_version.'/','live_update');
 		$this->pfh->Delete('update_to_'.$new_version, 'live_update');
 		$this->config->del('live_update');
+		
+		//Delete Cookie
+		set_cookie('lu_step9', 0, time()-3600);
 		
 		//Reset Opcache, for PHP7
 		if(function_exists('opcache_reset')){
