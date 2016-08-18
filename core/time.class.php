@@ -246,7 +246,7 @@ if (!class_exists("time")){
 			if($timeonly) $format = $this->pdh->get('user', 'date_time', array($intUserID));
 			if(!$fromformat) $format = 'Y-m-d'.(($withtime) ? ' H:i' : '');
 			$dateTime = new DateTimeLocale($this->helper_dtime($time), $this->utcTimeZone, $strUserlang);
-			$dateTime->setTimezone(new DateTimeZone($strTimezone));
+			if(isset($strTimezone) && $strTimezone != '') { $dateTime->setTimezone(new DateTimeZone($strTimezone)); }
 			return $dateTime->format($format);
 		}
 
