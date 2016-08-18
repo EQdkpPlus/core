@@ -459,6 +459,7 @@ class Manage_Live_Update extends page_generic {
 				));
 			}
 			
+			if($intMyCookie > 4){
 				$this->jquery->Dialog('confirm_conflicted', '', array('url' => 'manage_live_update.php'.$this->SID.'&show=9&continue', 'message'=>$this->user->lang('liveupdate_skip_confirm')), 'confirm');
 				
 				$this->tpl->assign_vars(array(
