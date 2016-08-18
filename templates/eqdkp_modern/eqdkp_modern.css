@@ -1512,6 +1512,10 @@ img {
 	min-height: 50px;
 	color: #fff;
 }
+.notify_hint {
+	background: rgba(255, 165, 0, 0.6) !important;
+	min-height: 50px;
+}
 .ui-notify-message {
 	text-align:left;
 }
