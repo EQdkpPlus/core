@@ -138,8 +138,8 @@ class calendarevent_pageobject extends pageobject {
 		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()){
 			$this->pdh->put('calendar_events', 'ContinueRaid', array(
 				$this->url_id,
-				$this->time->fromformat($this->in->get('startdate', 0), 1),
-				$this->time->fromformat($this->in->get('enddate', 0), 1),
+				$this->time->fromformat($this->in->get('startdate'), 1),
+				$this->time->fromformat($this->in->get('enddate'), 1),
 				$this->in->get('note', '')
 			));
 			$this->pdh->process_hook_queue();
