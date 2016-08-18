@@ -1661,6 +1661,7 @@ if (!class_exists("jquery")) {
 		private function init_suckerfish(){
 			if(!$this->inits['depr_suckerfish']){
 				$this->tpl->js_file($this->path."js/superfish/superfish.min.js");
+				$this->tpl->css_file($this->path."js/superfish/superfish.css");
 				$this->inits['depr_suckerfish']	= true;
 			}
 		}
