@@ -1513,7 +1513,7 @@ img {
 	color: #fff;
 }
 .notify_hint {
-	background: rgba(255, 165, 0, 0.6) !important;
+	background: rgba(255, 140, 0, 0.8) !important;
 	min-height: 50px;
 }
 .ui-notify-message {

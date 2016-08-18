@@ -244,31 +244,47 @@ class calendarevent_pageobject extends pageobject {
 				}
 			}
 		}
+		$do_updatestatuschange = true;
 		if (((int)$eventdata['closed'] == 1) || $deadlinepassed){
-			return false;
+			$do_updatestatuschange = false;
+			$message = array(
+				'style'	=> 'hint',
+				'title'	=> $this->user->lang('calendar_statuschange_title_notchanged'),
+				'text'	=> $this->user->lang('calendar_statuschange_mmsg_notchanged'),
+			);
+			#return false;
 		}
 
-		$this->pdh->put('calendar_raids_attendees', 'update_status', array(
-			$this->url_id,
-			$this->in->get('member_id', 0),
-			$myrole,
-			$signupstatus,
-			$this->in->get('raidgroup', 0),
-			$this->in->get('subscribed_member_id', 0),
-			$this->in->get('signupnote'),
-		));
+		if($do_updatestatuschange){
+			$this->pdh->put('calendar_raids_attendees', 'update_status', array(
+				$this->url_id,
+				$this->in->get('member_id', 0),
+				$myrole,
+				$signupstatus,
+				$this->in->get('raidgroup', 0),
+				$this->in->get('subscribed_member_id', 0),
+				$this->in->get('signupnote'),
+			));
 
-		//Send Notification to Raidlead, Creator and Admins
-		$raidleaders_chars	= ($eventdata['extension']['raidleader'] > 0) ? $eventdata['extension']['raidleader'] : array();
-		$arrSendTo			= $this->pdh->get('member', 'userid', array($raidleaders_chars));
-		$arrSendTo[] 		= $this->pdh->get('calendar_events', 'creatorid', array($this->url_id));
-		$arrAdmins 			= $this->pdh->get('user', 'users_with_permission', array('a_cal_revent_conf'));
-		$arrSendTo			= array_merge($arrSendTo, $arrAdmins);
-		$arrSendTo			= array_unique($arrSendTo);
-		$strEventTitle		= sprintf($this->pdh->get('event', 'name', array($eventdata['extension']['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->user_date($eventdata['timestamp_start']).' '.$this->time->user_date($eventdata['timestamp_start'], false, true);
-		if (!in_array($this->user->id, $arrSendTo)) $this->ntfy->add('calendarevent_char_statuschange', $this->url_id.'_'.$this->in->get('member_id', 0), $this->pdh->get('member', 'name', array($this->in->get('member_id', 0))), $this->controller_path_plain.$this->page_path.$this->SID, $arrSendTo, $strEventTitle);
+			//Send Notification to Raidlead, Creator and Admins
+			$raidleaders_chars	= ($eventdata['extension']['raidleader'] > 0) ? $eventdata['extension']['raidleader'] : array();
+			$arrSendTo			= $this->pdh->get('member', 'userid', array($raidleaders_chars));
+			$arrSendTo[] 		= $this->pdh->get('calendar_events', 'creatorid', array($this->url_id));
+			$arrAdmins 			= $this->pdh->get('user', 'users_with_permission', array('a_cal_revent_conf'));
+			$arrSendTo			= array_merge($arrSendTo, $arrAdmins);
+			$arrSendTo			= array_unique($arrSendTo);
+			$strEventTitle		= sprintf($this->pdh->get('event', 'name', array($eventdata['extension']['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->user_date($eventdata['timestamp_start']).' '.$this->time->user_date($eventdata['timestamp_start'], false, true);
+			if (!in_array($this->user->id, $arrSendTo)) $this->ntfy->add('calendarevent_char_statuschange', $this->url_id.'_'.$this->in->get('member_id', 0), $this->pdh->get('member', 'name', array($this->in->get('member_id', 0))), $this->controller_path_plain.$this->page_path.$this->SID, $arrSendTo, $strEventTitle);
+
+			$message = array(
+				'style'	=> 'success',
+				'title'	=> $this->user->lang('calendar_statuschange_title_success'),
+				'text'	=> $this->user->lang('calendar_statuschange_mmsg_success'),
+			);
+		}
 
 		$this->pdh->process_hook_queue();
+		$this->display($message);
 	}
 
 	// moderator/operator changes a status for an already signed in char
@@ -504,11 +520,15 @@ class calendarevent_pageobject extends pageobject {
 	}
 
 	// the main page display
-	public function display() {
+	public function display($mssg=false) {
 		// Show an error Message if no ID is set
 		if(!$this->url_id){
 			redirect($this->routing->build('calendar',false,false,true,true));
 			//message_die($this->user->lang('calendar_page_noid'));
+		}
+
+		if($mssg && is_array($mssg)){
+			$this->core->message($mssg['text'], $mssg['title'], $mssg['style']);
 		}
 
 		//Show Event Details if it's not an raid

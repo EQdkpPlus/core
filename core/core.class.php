@@ -75,6 +75,9 @@ class core extends gen_class {
 					case 'error':
 					case 'red': $kkind = 'error';
 						break;
+					case 'hint':
+					case 'orange': $kkind = 'hint';
+							break;
 					case 'success':
 					case 'ok':
 					case 'green': $kkind = 'success';

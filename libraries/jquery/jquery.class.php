@@ -101,6 +101,13 @@ if (!class_exists("jquery")) {
 						<h1>T{title}</h1>
 						<p>T{text}</p>
 					</div>
+
+					<div id="hint" class="notify_hint">
+						<a class="ui-notify-close ui-notify-cross" href="#">x</a>
+						<div style="float:left;margin:0 10px 0 0"><i class="fa fa-exclamation-triangle fa-3x"></i></div>
+						<h1>T{title}</h1>
+						<p>T{text}</p>
+					</div>
 				</div>');
 				$this->tpl->add_js('$("#notify_container").notify();', 'docready');
 				$this->tpl->add_js('$(".lightbox, a[rel=\'lightbox\']").colorbox({rel:"lightbox", transition:"none", maxWidth:"90%", maxHeight:"90%"});', 'docready');

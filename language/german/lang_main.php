@@ -685,6 +685,10 @@ $lang = array(
 	"Termine",
 	"Raids und Termine"
 ),
+"calendar_statuschange_title_success" => "Statusänderung erfolgreich",
+"calendar_statuschange_title_notchanged" => "Status wurde nicht geändert",
+"calendar_statuschange_mmsg_success" => "Der Anmeldestatus wurde erfolgreich geändert",
+"calendar_statuschange_mmsg_notchanged" => "Der Anmeldestatus konnte nicht geändert werden. Nach Ablauf der Deadline kann man sich nur noch abmelden, nicht mehr anmelden.",
 "calendar_export_statustext" => "Anmeldestatus:",
 "calendar_eventdetails_invitations" => 'Einladungen',
 "calendar_eventdetails_confirmations" => 'Zusagen',
