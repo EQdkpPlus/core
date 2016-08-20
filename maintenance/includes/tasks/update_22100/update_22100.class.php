@@ -40,12 +40,14 @@ class update_22100 extends sql_update_task {
 					1			=> 'Change session table',
 					2			=> 'Change session table',
 					3			=> 'Change session table',
+					4			=> 'Cleanup session table',
 				),
 			'german' => array(
 				'update_22100'	=> 'EQdkp Plus 2.2.10 Update',
 					1			=> 'Ändere Session-Tabelle',
 					2			=> 'Ändere Session-Tabelle',
 					3			=> 'Ändere Session-Tabelle',
+					4			=> 'Räume Session-Tabelle auf',	
 			),
 		);
 
@@ -54,6 +56,7 @@ class update_22100 extends sql_update_task {
 			1	=> "ALTER TABLE `__sessions` CHANGE COLUMN `session_user_id` `session_user_id` INT(11) NOT NULL DEFAULT '-1', CHANGE COLUMN `session_perm_id` `session_perm_id` INT(11) NULL DEFAULT '-1';",
 			2	=> "ALTER TABLE `__sessions` ADD INDEX `session_start` (`session_start`), ADD INDEX `session_user_id` (`session_user_id`);",
 			3	=> "ALTER TABLE `__sessions` ADD INDEX `session_current` (`session_current`);",
+			4	=> "DELETE FROM `__sessions` WHERE `session_user_id` < 1;"
 		);
 	}
 
