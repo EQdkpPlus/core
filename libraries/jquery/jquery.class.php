@@ -152,8 +152,10 @@ if (!class_exists("jquery")) {
 				$this->tpl->js_file($this->path."js/fullcalendar/fullcalendar.min.js");
 				if(is_file($this->root_path.'templates/'.$this->user->style['template_path'].'/fullcalendar.css')){
 					$this->tpl->css_file($this->root_path.'templates/'.$this->user->style['template_path'].'/fullcalendar.css');
+				}elseif(is_file($this->root_path.'templates/'.$this->user->style['template_path'].'/fullcalendar.min.css')){
+					$this->tpl->css_file($this->root_path.'templates/'.$this->user->style['template_path'].'/fullcalendar.min.css');
 				}else{
-					$this->tpl->css_file($this->root_path.'templates/base_template/fullcalendar.css');
+					$this->tpl->css_file($this->root_path.'templates/base_template/fullcalendar.min.css');
 				}
 				$this->tpl->css_file($this->root_path.'templates/fullcalendar.print.css', 'print');
 
