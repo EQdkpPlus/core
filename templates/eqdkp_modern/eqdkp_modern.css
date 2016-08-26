@@ -2395,6 +2395,9 @@ fieldset.settings.floatRight.raid input[type="text"]{
 	border-radius: 10px 10px 0px 0px;
 }
 .bottommenu_chars_table {
+	display: flex;
+	align-items: center;
+	flex-wrap: nowrap;
 	height: 70px;
 	width:100%;
 }
@@ -2403,10 +2406,14 @@ fieldset.settings.floatRight.raid input[type="text"]{
 	width:100%;
 }
 .bottommenu_chars_icons {
+	flex: 0 0 auto;
 	width:65px;
 }
 .bottommenu_admin_icons {
 	width:48px;
+}
+.bottommenu_chars_change {
+	flex:1 0 auto;
 }
 .bottommenu_chars_note {
 	width:60%;
@@ -2511,6 +2518,32 @@ a.attendee_Link:hover{
 .raidcal_warningbox table th {
 	background-color: #F2DEDE;
 	color: red;
+}
+
+.attendee_table {
+	// table header
+	.state_header	{ color:#000; font-size:13px; font-weight:bold; font-family:'Trebuchet MS',Arial,sans-serif; padding:10px 0px; background:#e8e8e8; border:1px solid #ccc; margin-bottom:2px; }
+	.toggle_button	{ float:left; margin:-1px 5px 0; }
+	.state_count	{ font-size:95%; font-weight:normal; margin-left:5px; letter-spacing:1px; }
+	.state_noguests	{ color:#777; font-size:90%; font-weight:normal; font-style:italic; }
+	
+	.class_table							{ display:flex; flex-wrap:wrap; justify-content:space-between; margin-bottom:5px; }
+	.class_column							{ display:flex; flex-direction:column; width:200px; margin-bottom:5px; white-space:nowrap; }
+	.class_column[data-attendee-count="0"]	{ opacity: .3; }
+	
+	// column header
+	.class_header					{ display:flex; justify-content:space-between; text-align:center; padding:2px 3px; background:#e8e8e8; border-bottom:1px solid #aaa; }
+	.class_name						{ font-weight:bold; }
+	.class_name[class*='class_']	{ text-shadow:1px 1px 0px rgba(0,0,0,.7); }
+	.attendee_count					{ font-size:9px; letter-spacing:1px; margin-top:auto; line-height:11px; }
+	
+	// attendee
+	.attendee_box						{ display:flex; padding:2px; margin:4px 4px 0; border:1px solid #4d4d4d; background: transparent linear-gradient(to bottom, #fff 0%, #cdcdcd 100%); color: #000; }
+	.attendee_select					{ flex:0 0 22px; }
+	.attendee_name, .attendee_name a	{ flex:2 1 100%; color: #000; overflow:hidden; text-overflow:ellipsis; }
+	.attendee_name a[class*='class_']	{ text-shadow:0 0 0 rgba(0,0,0,.7); }
+	.attendee_info						{ flex:1 0 0px; }
+	
 }
 
 /* calendar: raidevent view - Not signed in Members Bar */
