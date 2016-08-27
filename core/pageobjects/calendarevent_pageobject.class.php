@@ -1099,7 +1099,7 @@ class calendarevent_pageobject extends pageobject {
 			'NO_STATUSES'			=> (is_array($raidcal_status) && count($raidcal_status) < 1) ? true : false,
 			'ROLESWOCLASS'			=> ($rolewnclass) ? true : false,
 			'EVENT_ID'				=> $this->url_id,
-			'MEMBERDATA_FILE'		=> ($eventdata['extension']['raidmode'] == 'role') ? 'calendar/viewcalraid_role.html' : 'calendar/viewcalraid_class.html',
+			'RAIDMODE'				=> $eventdata['extension']['raidmode'],
 			'S_NEXT_OR_PREV_RAIDEVENT' => ($nextraidevent || $prevraidevent),
 
 			// settings endabled?
