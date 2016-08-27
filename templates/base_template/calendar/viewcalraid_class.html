@@ -6,24 +6,29 @@
 		<span class="state_count">({raidstatus.COUNT}/{raidstatus.MAXCOUNT})</span>
 		<!-- IF raidstatus.COUNT_GUESTS --><span class="state_noguests">[{raidstatus.COUNT_GUESTS}]</span><!-- ENDIF -->
 	</h4>
-	
+
 	<div class="class_table toggle_container">
 		<!-- BEGIN classes -->
-		<div class="class_column" data-class-id="{raidstatus.classes.ID}" data-attendee-count="{raidstatus.classes.COUNT}">
+		<!-- IF raidstatus.classes.SHOW -->
+		<div class="class_column<!-- IF RAIDMODE == 'role' AND raidstatus.classes.ID == -1 --> raidcal_warningbox<!-- ENDIF -->" data-class-id="{raidstatus.classes.ID}" data-attendee-count="{raidstatus.classes.COUNT}">
+			<!-- IF RAIDMODE == 'role' AND raidstatus.classes.ID == -1 -->
+			<div class="class_header coretip" data-coretip="{L_raidevent_deleted_role_assigned_info}"><i class="fa fa-exclamation-triangle fa-lg icon-red"></i>
+			<!-- ELSE -->
 			<div class="class_header">
+			<!-- ENDIF -->
 				{raidstatus.classes.CLASS_ICON}
 				<span class="class_name class_{raidstatus.classes.ID}">{raidstatus.classes.NAME}</span>
 				<span class="attendee_count">({raidstatus.classes.COUNT}{raidstatus.classes.MAX})</span>
 			</div>
-			
+
 			<!-- BEGIN status -->
-			<div class="attendee_box">
+			<div class="attendee_box" id="attendee_{raidstatus.classes.status.MEMBERID}">
 				<div class="attendee_select">
 					<!-- IF IS_OPERATOR -->
 					<input type="checkbox" name="modstat_change[]" value="{raidstatus.classes.status.MEMBERID}" />
 					<!-- ENDIF -->
 				</div>
-				
+
 				<div class="attendee_name">
 					<span class="coretip-large" data-coretip='{raidstatus.classes.status.TOOLTIP}'>
 						<a class="normal <!-- IF COLORED_NAMESBYCLASS -->class_{raidstatus.classes.status.CLASSID}<!-- ENDIF -->" href="{raidstatus.classes.status.MEMBERLINK}" target="_blank">{raidstatus.classes.status.NAME}</a>
@@ -34,18 +39,18 @@
 						<!-- ENDIF -->
 					</span>
 				</div>
-				
+
 				<div class="attendee_info">
 					<!-- IF NOTEPERMISSION -->
 					<!-- IF raidstatus.classes.status.NOTE_PUBLIC -->
 					<i class="fa <!-- IF raidstatus.classes.status.ADMINNOTE -->fa-info-circle<!-- ELSE -->fa-comment<!-- ENDIF --> fa-lg coretip<!-- IF IS_OPERATOR --> hand<!-- ENDIF -->" data-coretip="{raidstatus.classes.status.NOTE_TT}"></i>
 					<!-- ENDIF -->
 					<!-- ENDIF -->
-					
+
 					<!-- IF raidstatus.classes.status.RAIDGROUP_TT && SHOW_RAIDGROUPS -->
 					<i class="fa fa-users coretip" data-coretip="{raidstatus.classes.status.RAIDGROUP_TT}" style="color:{raidstatus.classes.status.GROUPCOLOR};"></i>
 					<!-- ENDIF -->
-					
+
 					<!-- IF IS_OPERATOR -->
 					<span class="fa fa-cog fa-lg char_adminmenu hand" title="{L_raidevent_raid_changecharmenu}" data-character-id="member_{raidstatus.classes.status.MEMBERID}" data-status-id="{raidstatus.ID}"></span>
 					<div class="charadmintooltip nodisplay" id="member_{raidstatus.classes.status.MEMBERID}">
@@ -80,6 +85,7 @@
 			</div>
 			<!-- END status -->
 		</div>
+		<!-- ENDIF -->
 		<!-- END classes -->
 	</div>
 </div>
