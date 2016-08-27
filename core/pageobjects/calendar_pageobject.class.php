@@ -309,7 +309,7 @@ class calendar_pageobject extends pageobject {
 								'closed'		=> ($this->pdh->get('calendar_events', 'raidstatus', array($calid)) == 1) ? true : false,
 								'flag'			=> $deadlineflag.$this->pdh->get('calendar_raids_attendees', 'html_status', array($calid, $this->user->data['user_id'])),
 								'icon'			=> ($eventextension['raid_eventid']) ? $this->pdh->get('event', 'icon', array($eventextension['raid_eventid'], true)) : '',
-								'note'			=> $this->pdh->get('calendar_events', 'notes', array($calid)),
+								'note'			=> $this->pdh->get('calendar_events', 'notes', array($calid, true)),
 								'raidleader'	=> ($eventextension['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'name', 0, array($eventextension['raidleader']))) : '',
 								'rstatusdata'	=> $rstatusdata,
 								'color'			=> $eventcolor.' !important',
