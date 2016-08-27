@@ -5,7 +5,7 @@ $(function(){
 		var number_attendees	= $("[name='modstat_change[]']:checked").length;
 		var lang_attendeetext	= '{L_raidevent_raid_selected_attendees}';
 
-		if(number_attendees > 0){console.log('test')
+		if(number_attendees > 0){
 			if($('#bottommenu_chars').is(":visible")){
 				// move it a bit
 				$('#bottommenu_chars').animate({bottom:'42px'}, 500);
