@@ -88,7 +88,6 @@ class inst_settings extends install_generic {
 		// Calendar settings
 		'calendar_addevent_mode'		=> 'raid',
 		'calendar_raid_guests'			=> '2',
-		'calendar_raid_classbreak'		=> '5',
 		'calendar_raid_status'			=> array(0,1,2,3,4),
 		'calendar_raid_nsfilter' 		=> array (0 => 'twinks',1 => 'inactive',2 => 'hidden'),
 		'calendar_addraid_deadline'		=> '1',

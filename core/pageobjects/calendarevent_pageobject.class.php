@@ -623,8 +623,6 @@ class calendarevent_pageobject extends pageobject {
 		}
 
 		$this->mystatus			= $this->pdh->get('calendar_raids_attendees', 'myattendees', array($this->url_id, $this->user->data['user_id']));
-		$this->classbreakval	= ($this->config->get('calendar_raid_classbreak')) ? $this->config->get('calendar_raid_classbreak') : 4;
-		$modulocount			= intval(count($this->raidcategories)/$this->classbreakval);
 		$shownotes_ugroups		= $this->acl->get_groups_with_active_auth('u_calendar_raidnotes');
 		$this->raidgroup_dd		= $this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list')));
 
@@ -761,31 +759,17 @@ class calendarevent_pageobject extends pageobject {
 
 			// the class categories
 			$act_classcount = 0;
-			$user_brakclm = true;
-			$number_break=0;
 			foreach ($this->raidcategories as $classid=>$classname){
 				$act_classcount++;
 
-				// the break-validation hack
-				if($user_brakclm){
-					$mybreak = false;
-					if(($act_classcount%$this->classbreakval) == 0){
-						$mybreak = ($number_break < $modulocount) ? true : false;
-						$number_break++;
-					}
-
-				}
-
 				$classsbrk	= ($classid == -1 && (!isset($this->attendees[$statuskey][$classid]) || (isset($this->attendees[$statuskey][$classid]) && count($this->attendees[$statuskey][$classid]) == 0))) ? count($this->raidcategories) - 1 : count($this->raidcategories);
 				$this->tpl->assign_block_vars('raidstatus.classes', array(
-					'BREAK'			=> ($mybreak) ? true : false,
 					'ID'			=> $classid,
 					'NAME'			=> ($classid == -1) ? $this->user->lang('raidevent_deleted_role_assigned') : $classname,
 					'CLASS_ICON'	=> ($eventdata['extension']['raidmode'] == 'role') ? $this->game->decorate('roles', $classid) : $this->game->decorate('primary', $classid),
 					'MAX'			=> ($eventdata['extension']['raidmode'] == 'none' && $eventdata['extension']['distribution'][$classid] == 0) ? '' : '/'.(($classid == '-1') ? '&infin;' : $eventdata['extension']['distribution'][$classid]),
 					'COUNT'			=> (isset($this->attendees[$statuskey][$classid])) ? count($this->attendees[$statuskey][$classid]) : 0,
 					'SHOW'			=> ($classid > 0 || ($classid == -1 && isset($this->attendees[$statuskey][$classid]) && count($this->attendees[$statuskey][$classid]) > 0)) ? true : false,
-					'BREAK_WIDTH'	=> (isset($user_brakclm) && $classsbrk > $this->classbreakval) ? str_replace(',','.',100/$this->classbreakval) : str_replace(',','.',100/$classsbrk),
 				));
 				// The characters
 				if(isset($this->attendees[$statuskey][$classid]) && is_array($this->attendees[$statuskey][$classid])){
@@ -1142,7 +1126,6 @@ class calendarevent_pageobject extends pageobject {
 			'CALENDAR'				=> $this->pdh->get('calendars', 'name', array($eventdata['calendar_id'])),
 			'RAIDDATE_ADDED'		=> (isset($eventdata['extension']['created_on']) && $eventdata['extension']['created_on'] > 0) ? $this->time->user_date($eventdata['extension']['created_on'], true, false, true) : false,
 			'PLAYER_NOTE'			=> $this->mystatus['note'],
-			'COLUMN_WIDTH'			=> (isset($user_brakclm) && count($this->raidcategories) > $this->classbreakval) ? str_replace(',','.',100/$this->classbreakval) : str_replace(',','.',100/count($this->raidcategories)),
 			'DATE_DAY'				=> $this->time->date('d', $eventdata['timestamp_start']),
 			'DATE_MONTH'			=> $this->time->date('F', $eventdata['timestamp_start']),
 			'DATE_YEAR'				=> $this->time->date('Y', $eventdata['timestamp_start']),
