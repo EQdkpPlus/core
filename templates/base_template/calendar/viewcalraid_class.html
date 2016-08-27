@@ -1,106 +1,86 @@
 <!-- BEGIN raidstatus -->
-<div id="viewraidcal_colapse_{raidstatus.ID}" class="classdistribution center" >
-	<table class="table fullwidth">
-		<tr>
-			<td class="left w100p">
-				<table class="table fullwidth borderless">
-					<tr class="middle">
-						<th class="left" style="width:14px;">
-							<span class="toggle_button">&nbsp;</span>
-						</th>
-						<th colspan="{ATTENDEES_COLSPAN}" class="raidstatushead center">
-							<font class="status{raidstatus.ID}"> {raidstatus.NAME}</font>
-							({raidstatus.COUNT}/{raidstatus.MAXCOUNT}) <!-- IF raidstatus.COUNT_GUESTS -->[{raidstatus.COUNT_GUESTS}]<!-- ENDIF -->
-						</th>
-					</tr>
-				</table>
-			</td>
-		</tr>
-	</table>
-
-	<div class="toggle_container">
-		<table class="table fullwidth scrollable-x">
-			<tr>
-				<!-- BEGIN classes -->
-				<td class="middle" style="width: {COLUMN_WIDTH}%;">
-					<table class="table fullwidth borderless">
-						<tr>
-							<th class="class_{raidstatus.classes.ID} w100p"> {raidstatus.classes.CLASS_ICON} {raidstatus.classes.NAME} ({raidstatus.classes.COUNT}{raidstatus.classes.MAX})</th>
-						</tr>
-						<tr>
-							<td class="top">
-								<!-- BEGIN status -->
-								<div class="ui-state-hover table fullwidth noMobileTransform attendee_box<!-- IF raidstatus.classes.status.CHARISAWAY --> attendee_awaymode<!-- ENDIF -->" style="padding: 5px; margin-top: 4px;">
-									<div class="tr class_{raidstatus.classes.status.CLASSID}">
-										<div class="td" style="vertical-align:middle;">
-											<!-- IF IS_OPERATOR --><input class="status_confirm" type="checkbox" name="modstat_change[]" value="{raidstatus.classes.status.MEMBERID}" /><!-- ENDIF -->
-										</div>
-										<div class="td" style="vertical-align:middle;">
-											<span class="coretip-large" data-coretip='{raidstatus.classes.status.TOOLTIP}'>
-												<a class="normal <!-- IF COLORED_NAMESBYCLASS -->class_{raidstatus.classes.status.CLASSID}<!-- ENDIF -->" href="{raidstatus.classes.status.MEMBERLINK}" target="_blank">{raidstatus.classes.status.NAME}</a>
-												<!-- IF SHOW_RANDOMVALUE -->
-												<!-- IF raidstatus.classes.status.RANDOM gt 0 -->
-												[{raidstatus.classes.status.RANDOM}]
-												<!-- ENDIF -->
-												<!-- ENDIF -->
-											</span>
-										</div>
-										<div class="td buttonblock" style="float:right;vertical-align:middle;">
-											<!-- IF NOTEPERMISSION -->
-											<!-- IF raidstatus.classes.status.NOTE_PUBLIC -->
-											<i class="fa <!-- IF raidstatus.classes.status.ADMINNOTE -->fa-info-circle<!-- ELSE -->fa-comment<!-- ENDIF --> fa-lg coretip<!-- IF IS_OPERATOR --> hand<!-- ENDIF -->" data-coretip="{raidstatus.classes.status.NOTE_TT}"></i>
-											<!-- ENDIF -->
-											<!-- ENDIF -->
-											<!-- IF raidstatus.classes.status.RAIDGROUP_TT && SHOW_RAIDGROUPS -->
-											<i class="fa fa-users coretip" data-coretip="{raidstatus.classes.status.RAIDGROUP_TT}" style="color:{raidstatus.classes.status.GROUPCOLOR};"></i>
-											<!-- ENDIF -->
-											<!-- IF IS_OPERATOR -->
-											<span class="fa fa-cog fa-lg char_adminmenu hand" title="{L_raidevent_raid_changecharmenu}" data-character-id="member_{raidstatus.classes.status.MEMBERID}" data-status-id="{raidstatus.ID}"></span>
-											<div class="charadmintooltip nodisplay" id="member_{raidstatus.classes.status.MEMBERID}">
-												<div class="table bottommenu_chars_table">
-													<div class="tr">
-														<!-- IF raidstatus.classes.status.SHOW_CHARCHANGE -->
-														<div class="td absmiddle bottommenu_chars_icons">
-															<i class="fa fa-random fa-3x"></i>
-														</div>
-														<div class="td absmiddle">
-															{L_raidevent_raid_changecharmenu}<br/>
-															<input type="hidden" name="charchange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
-															<input type="hidden" name="charchange_status" class="charchange_status" value="{raidstatus.ID}" />
-															{raidstatus.classes.status.DD_CHARS}{raidstatus.classes.status.DD_ROLES}
-															<button type="button" name="submit_charchange" value=""><i class="fa fa-check fa-lg"></i></button>
-														</div>
-														<!-- ENDIF -->
-														<div class="td absmiddle bottommenu_chars_icons">
-															<i class="fa fa-comment fa-3x"></i>
-														</div>
-														<div class="td absmiddle">
-															<span>
-																{L_raidevent_raid_changenotemenu}<br/>
-																<input type="hidden" name="notechange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
-																<textarea name="notechange_note" class="bottommenu_chars_note" rows="1">{raidstatus.classes.status.NOTE}</textarea>
-																<button type="button" name="submit_notechange" value=""><i class="fa fa-check fa-lg"></i></button>
-															</span>
-														</div>
-													</div>
-												</div>
-											</div>
-											<!-- ENDIF -->
-										</div>
-									</div>
-								</div>
-								<!-- END status -->
-							</td>
-						</tr>
-					</table>
-				</td>
-			<!-- IF raidstatus.classes.BREAK -->
-			</tr><tr>
-			<!-- ENDIF -->
-			<!-- END classes -->
-			</tr>
-		</table>
+<div id="viewraidcal_colapse_{raidstatus.ID}" class="attendee_table">
+	<h4 class="state_header">
+		<span class="toggle_button">&nbsp;</span>
+		{raidstatus.NAME}
+		<span class="state_count">({raidstatus.COUNT}/{raidstatus.MAXCOUNT})</span>
+		<!-- IF raidstatus.COUNT_GUESTS --><span class="state_noguests">[{raidstatus.COUNT_GUESTS}]</span><!-- ENDIF -->
+	</h4>
+	
+	<div class="class_table toggle_container">
+		<!-- BEGIN classes -->
+		<div class="class_column" data-class-id="{raidstatus.classes.ID}" data-attendee-count="{raidstatus.classes.COUNT}">
+			<div class="class_header">
+				{raidstatus.classes.CLASS_ICON}
+				<span class="class_name class_{raidstatus.classes.ID}">{raidstatus.classes.NAME}</span>
+				<span class="attendee_count">({raidstatus.classes.COUNT}{raidstatus.classes.MAX})</span>
+			</div>
+			
+			<!-- BEGIN status -->
+			<div class="attendee_box">
+				<div class="attendee_select">
+					<!-- IF IS_OPERATOR -->
+					<input type="checkbox" name="modstat_change[]" value="{raidstatus.classes.status.MEMBERID}" />
+					<!-- ENDIF -->
+				</div>
+				
+				<div class="attendee_name">
+					<span class="coretip-large" data-coretip='{raidstatus.classes.status.TOOLTIP}'>
+						<a class="normal <!-- IF COLORED_NAMESBYCLASS -->class_{raidstatus.classes.status.CLASSID}<!-- ENDIF -->" href="{raidstatus.classes.status.MEMBERLINK}" target="_blank">{raidstatus.classes.status.NAME}</a>
+						<!-- IF SHOW_RANDOMVALUE -->
+						<!-- IF raidstatus.classes.status.RANDOM gt 0 -->
+						[{raidstatus.classes.status.RANDOM}]
+						<!-- ENDIF -->
+						<!-- ENDIF -->
+					</span>
+				</div>
+				
+				<div class="attendee_info">
+					<!-- IF NOTEPERMISSION -->
+					<!-- IF raidstatus.classes.status.NOTE_PUBLIC -->
+					<i class="fa <!-- IF raidstatus.classes.status.ADMINNOTE -->fa-info-circle<!-- ELSE -->fa-comment<!-- ENDIF --> fa-lg coretip<!-- IF IS_OPERATOR --> hand<!-- ENDIF -->" data-coretip="{raidstatus.classes.status.NOTE_TT}"></i>
+					<!-- ENDIF -->
+					<!-- ENDIF -->
+					
+					<!-- IF raidstatus.classes.status.RAIDGROUP_TT && SHOW_RAIDGROUPS -->
+					<i class="fa fa-users coretip" data-coretip="{raidstatus.classes.status.RAIDGROUP_TT}" style="color:{raidstatus.classes.status.GROUPCOLOR};"></i>
+					<!-- ENDIF -->
+					
+					<!-- IF IS_OPERATOR -->
+					<span class="fa fa-cog fa-lg char_adminmenu hand" title="{L_raidevent_raid_changecharmenu}" data-character-id="member_{raidstatus.classes.status.MEMBERID}" data-status-id="{raidstatus.ID}"></span>
+					<div class="charadmintooltip nodisplay" id="member_{raidstatus.classes.status.MEMBERID}">
+						<div class="bottommenu_chars_table">
+							<!-- IF raidstatus.classes.status.SHOW_CHARCHANGE -->
+							<div class="bottommenu_chars_icons">
+								<i class="fa fa-random fa-3x"></i>
+							</div>
+							<div class="bottommenu_chars_change">
+								{L_raidevent_raid_changecharmenu}<br/>
+								<input type="hidden" name="charchange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
+								<input type="hidden" name="charchange_status" class="charchange_status" value="{raidstatus.ID}" />
+								{raidstatus.classes.status.DD_CHARS}{raidstatus.classes.status.DD_ROLES}
+								<button type="button" name="submit_charchange" value=""><i class="fa fa-check fa-lg"></i></button>
+							</div>
+							<!-- ENDIF -->
+							<div class="bottommenu_chars_icons">
+								<i class="fa fa-comment fa-3x"></i>
+							</div>
+							<div class="bottommenu_chars_change">
+								<span>
+									{L_raidevent_raid_changenotemenu}<br/>
+									<input type="hidden" name="notechange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
+									<textarea name="notechange_note" class="bottommenu_chars_note" rows="1">{raidstatus.classes.status.NOTE}</textarea>
+									<button type="button" name="submit_notechange" value=""><i class="fa fa-check fa-lg"></i></button>
+								</span>
+							</div>
+						</div>
+					</div>
+					<!-- ENDIF -->
+				</div>
+			</div>
+			<!-- END status -->
+		</div>
+		<!-- END classes -->
 	</div>
 </div>
-<br />
- <!-- END raidstatus -->
+<!-- END raidstatus -->
