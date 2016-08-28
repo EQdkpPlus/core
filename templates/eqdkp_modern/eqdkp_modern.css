@@ -2470,11 +2470,6 @@ fieldset.raidcal_infos dt, fieldset.moderation_panel dt {
 	height: 32px;
 	fill: white;
 }
-
-.guesttooltip-data {
-	line-height: 1.4em;
-}
-
 .default-avatar{
 	background: url(EQDKP_IMAGE_PATHsvg/avatar-default.svg) no-repeat;
 	background-size: contain;
@@ -2482,37 +2477,9 @@ fieldset.raidcal_infos dt, fieldset.moderation_panel dt {
 	width: 24px;
 	height: 24px;
 }
-
 .default-avatar.small{
 	width: 24px;
 	height: 24px;
-}
-
-.guesttable b {
-	font-family: 'Trebuchet MS',Arial,sans-serif;
-	font-weight: bold;
-}
-
-table.guesttable {
-	padding: 5px;
-	border: 1px solid #ccc;
-	background: #E8E8E8;
-}
-table.guesttable td{
-	color:black;
-}
-table.guesttable_status td{
-	border: 0;
-	padding: 2px;
-}
-.style1 {
-	text-align: center;
-}
-a.attendee_Link{
-	text-decoration: none;
-}
-a.attendee_Link:hover{
-	text-decoration: underline;
 }
 .raidcal_warningbox table {
 	border: 2px solid #edc9ce !important;
