@@ -887,6 +887,7 @@ class calendarevent_pageobject extends pageobject {
 							'CLASSID'		=> $guestsdata['class'],
 							'CLASSICON'		=> $guest_clssicon,
 							'TOOLTIP'		=> $guest_tooltip,
+							'COLOR'			=> $this->game->get_class_color($guestsdata['class']),
 							'TOBEAPPROVED'	=> ($guestsdata['status'] == 1 && $guestsdata['email'] != '') ? true : false,
 							'EXTERNALAPPL'	=> ($guestsdata['creator'] == 0 && $guestsdata['email'] != '') ? true : false,
 							'EMAIL'			=> (isset($guestsdata['email']) && $guestsdata['email'] != '') ? $guestsdata['email'] : false,
