@@ -747,14 +747,12 @@ class calendarevent_pageobject extends pageobject {
 			}
 
 			$this->tpl->assign_block_vars('raidstatus', array(
-				'FIRSTROW'		=> ($status_first) ? true : false,
 				'ID'			=> $statuskey,
 				'NAME'			=> $statusname,
 				'COUNT'			=> $statuscount,
 				'COUNT_GUESTS'	=> ($this->config->get('calendar_raid_guests') > 0) ? $lang_guestcount : false,
 				'MAXCOUNT'		=> $eventdata['extension']['attendee_count'],
 				'GUESTCOUNT'	=> $guestcount,
-				'GUESTBREAK'	=> ($statuskey % 2 != 0) ? true : false,
 			));
 
 			// the class categories
@@ -778,7 +776,6 @@ class calendarevent_pageobject extends pageobject {
 						// generate the member tooltip
 						$membertooltip		= array();
 						$memberrank			= $this->pdh->get('member', 'rankname', array($memberid));
-
 
 						$membertooltip[]	= $this->pdh->get('member', 'name', array($memberid)).' ['.$this->user->lang('level').': '.$this->pdh->get('member', 'level', array($memberid)).']';
 						if($eventdata['extension']['raidmode'] == 'role'){
@@ -897,7 +894,6 @@ class calendarevent_pageobject extends pageobject {
 				}
 			}
 		}
-
 		$this->tpl->add_js("var roles_json = ".json_encode($drpdwn_roles).";", 'head');
 
 		// Dropdown Menu Array
@@ -906,10 +902,10 @@ class calendarevent_pageobject extends pageobject {
 			$nextevent = $this->pdh->get('calendar_events', 'data', array($nextraidevent));
 
 			$this->tpl->assign_vars(array(
-				'S_NEXT_RAID_EVENT' => true,
-				'U_NEXT_RAID_EVENT' => $this->routing->build("calendarevent", $this->pdh->get('event', 'name', array($nextevent['extension']['raid_eventid'])), $nextraidevent),
-				'NEXT_RAID_EVENTID' => $nextraidevent,
-				'NEXT_RAID_EVENTNAME' => $this->pdh->get('event', 'name', array($nextevent['extension']['raid_eventid'])).', '.$this->time->user_date($nextevent['timestamp_start']).' '.$this->time->user_date($nextevent['timestamp_start'], false, true)
+				'S_NEXT_RAID_EVENT'		=> true,
+				'U_NEXT_RAID_EVENT'		=> $this->routing->build("calendarevent", $this->pdh->get('event', 'name', array($nextevent['extension']['raid_eventid'])), $nextraidevent),
+				'NEXT_RAID_EVENTID'		=> $nextraidevent,
+				'NEXT_RAID_EVENTNAME'	=> $this->pdh->get('event', 'name', array($nextevent['extension']['raid_eventid'])).', '.$this->time->user_date($nextevent['timestamp_start']).' '.$this->time->user_date($nextevent['timestamp_start'], false, true)
 			));
 		}
 		$prevraidevent = $this->pdh->get('calendar_events', 'prev_raid', array($this->url_id));
@@ -917,10 +913,10 @@ class calendarevent_pageobject extends pageobject {
 			$prevevent = $this->pdh->get('calendar_events', 'data', array($prevraidevent));
 
 			$this->tpl->assign_vars(array(
-					'S_PREV_RAID_EVENT' => true,
-					'U_PREV_RAID_EVENT' => $this->routing->build("calendarevent", $this->pdh->get('event', 'name', array($prevevent['extension']['raid_eventid'])), $prevraidevent),
-					'PREV_RAID_EVENTID' => $prevraidevent,
-					'PREV_RAID_EVENTNAME' => $this->pdh->get('event', 'name', array($prevevent['extension']['raid_eventid'])).', '.$this->time->user_date($prevevent['timestamp_start']).' '.$this->time->user_date($prevevent['timestamp_start'], false, true)
+				'S_PREV_RAID_EVENT'		=> true,
+				'U_PREV_RAID_EVENT'		=> $this->routing->build("calendarevent", $this->pdh->get('event', 'name', array($prevevent['extension']['raid_eventid'])), $prevraidevent),
+				'PREV_RAID_EVENTID'		=> $prevraidevent,
+				'PREV_RAID_EVENTNAME'	=> $this->pdh->get('event', 'name', array($prevevent['extension']['raid_eventid'])).', '.$this->time->user_date($prevevent['timestamp_start']).' '.$this->time->user_date($prevevent['timestamp_start'], false, true)
 			));
 		}
 
@@ -1085,7 +1081,7 @@ class calendarevent_pageobject extends pageobject {
 			'ROLESWOCLASS'			=> ($rolewnclass) ? true : false,
 			'EVENT_ID'				=> $this->url_id,
 			'RAIDMODE'				=> $eventdata['extension']['raidmode'],
-			'S_NEXT_OR_PREV_RAIDEVENT' => ($nextraidevent || $prevraidevent),
+			'S_NEXTPREV_RAIDEVENT'	=> ($nextraidevent || $prevraidevent),
 
 			// settings endabled?
 			'S_NOTSIGNED_VISIBLE'	=> (in_array(4, $raidcal_status) && ($this->user->check_auth('a_cal_revent_conf', false) || $this->config->get('calendar_raid_shownotsigned') || $this->check_permission())) ? true : false,
