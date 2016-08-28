@@ -2402,6 +2402,9 @@ fieldset.settings.floatRight.raid input[type="text"]{
 	width:100%;
 }
 .bottommenu_admin_table {
+	display: flex;
+	align-items: center;
+	flex-wrap: nowrap;
 	height: 42px;
 	width:100%;
 }
@@ -2410,14 +2413,13 @@ fieldset.settings.floatRight.raid input[type="text"]{
 	width:65px;
 }
 .bottommenu_admin_icons {
+	flex: 0 0 auto;
 	width:48px;
 }
-.bottommenu_chars_change {
-	flex:1 0 auto;
-}
-.bottommenu_chars_note {
-	width:60%;
-}
+.bottommenu_chars_change { flex: 1 0 auto; }
+.bottommenu_admin_status { flex: 1 0 auto; }
+.bottommenu_chars_note { width: 60%; }
+
 .hl_attendee_checked{
 	box-shadow: 0px 0px 3px #008AFF;
 	border-color: #008AFF;
@@ -2532,18 +2534,24 @@ a.attendee_Link:hover{
 	.class_column[data-attendee-count="0"]	{ opacity: .3; }
 	
 	// column header
-	.class_header					{ display:flex; justify-content:space-between; text-align:center; padding:2px 3px; background:#e8e8e8; border-bottom:1px solid #aaa; }
-	.class_name						{ font-weight:bold; }
-	.class_name[class*='class_']	{ text-shadow:1px 1px 0px rgba(0,0,0,.7); }
-	.attendee_count					{ font-size:9px; letter-spacing:1px; margin-top:auto; line-height:11px; }
+	.class_header	{ display:flex; justify-content:space-between; text-align:center; padding:2px 3px; background:#e8e8e8; border-bottom:1px solid #aaa; }
 	
 	// attendee
-	.attendee_box						{ display:flex; padding:2px; margin:4px 4px 0; border:1px solid #4d4d4d; background: transparent linear-gradient(to bottom, #fff 0%, #cdcdcd 100%); color: #000; }
-	.attendee_select					{ flex:0 0 22px; }
-	.attendee_name, .attendee_name a	{ flex:2 1 100%; color: #000; overflow:hidden; text-overflow:ellipsis; }
-	.attendee_name a[class*='class_']	{ text-shadow:0 0 0 rgba(0,0,0,.7); }
-	.attendee_info						{ flex:1 0 0px; }
+	.attendee_box			{ display:flex; padding:2px; margin:4px 4px 0; border:1px solid #4d4d4d; background: transparent linear-gradient(to bottom, #fff 0%, #cdcdcd 100%); color: #000; transition:all .2s ease-in; }
+	.attendee_box.selected	{ border:1px solid #f55; background: linear-gradient(to bottom, #cdcdcd 0%, #fff 100%); }
+	.attendee_select		{ flex:0 0 22px; }
+	.attendee_name			{ flex:2 1 100%; color: #000; overflow:hidden; text-overflow:ellipsis; }
+	.attendee_name a		{ color: #000; overflow:hidden; text-overflow:ellipsis; }
+	.attendee_info			{ flex:1 0 auto; }
 	
+	// guest additions -- cause similar structure, but same design
+	.state_header #addguest	{ height:28px; float:right; position:relative; bottom:8px; right:20px; }
+	.guest_table			{ display:flex; flex-wrap:wrap; margin-bottom:5px; border:1px solid #ccc; border-bottom:none; width:100%; box-sizing:border-box; }
+	.guest_column			{ flex:1 0 50%; background:#e8e8e8; padding:5px; box-sizing:border-box; border-bottom:1px solid #ccc; }
+	.guest_header			{ display:inline-block; }
+	.guest_box				{ display:inline-block; margin-left:5px; padding-right:5px; background:#fff; border:1px solid #ccc; border-radius:4px; }
+	.guest_box img			{ margin-top:-3px; }
+	.guest_box i			{ padding-left:4px; }
 }
 
 /* calendar: raidevent view - Not signed in Members Bar */

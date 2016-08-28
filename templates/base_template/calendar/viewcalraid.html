@@ -30,12 +30,12 @@ $(function(){
 			return;
 		}
 		var checkbox = $(this).find("input[type='checkbox']");
-		$(this).toggleClass("ui-state-highlight", !checkbox.is(':checked'));
+		$(this).toggleClass("selected", !checkbox.is(':checked'));
 		checkbox.prop("checked", !checkbox.is(':checked'));
 		$('[name="modstat_change[]"]').trigger('change');
 	});
 
-	$('.guesttooltip').each(function() {
+	$('.guest_box').each(function() {
 		var guestid		= $(this).data('guestid');
 		var approval	= $(this).data('approval');
 		var signedstatus= $(this).data('status');
@@ -49,7 +49,7 @@ $(function(){
 		}
 		$(this).qtip({
 			content: {
-				text: $(this).next('.guesttooltip-data'),
+				text: $(this).children('.guest_tooltip'),
 				<!-- IF IS_OPERATOR -->title: {
 					text: titletext,
 					button: false
@@ -516,31 +516,29 @@ function ChangeGuestStatus(guestid, status){
 		</div>
 
 		<!-- IF IS_OPERATOR -->
-		<div id="bottommenu_admin" class="absmiddle">
-			<div class="table bottommenu_admin_table">
-				<div class="tr">
-					<div class="td absmiddle bottommenu_admin_icons">
-						<i class="fa fa-user fa-lg"></i>
-					</div>
-					<div class="td absmiddle bottommenu_admin_status">
-						<span id="bottommenu_count"></span> - {DD_MODSIGNUPSTATUS} <button type = "submit" name="moderate_status" value="" id="moderate_status_btn"><i class="fa fa-check fa-lg"></i></button>
-					</div>
-					<div class="td absmiddle bottommenu_admin_icons">
-						<i class="fa fa-users fa-lg"></i>
-					</div>
-					<div class="td absmiddle bottommenu_admin_status">
-						<!-- IF SHOW_RAIDGROUPS -->
-						{DD_MODRAIDGROUPS} <button type = "submit" name="moderate_group" value=""><i class="fa fa-check fa-lg"></i></button>
-						<!-- ELSE -->
-						{L_raidevent_no_groups_avail}
-						<!-- ENDIF -->
-					</div>
+		<div id="bottommenu_admin">
+			<div class="bottommenu_admin_table">
+				<div class="bottommenu_admin_icons">
+					<i class="fa fa-user fa-lg"></i>
+				</div>
+				<div class="bottommenu_admin_status">
+					<span id="bottommenu_count"></span> - {DD_MODSIGNUPSTATUS} <button type = "submit" name="moderate_status" value="" id="moderate_status_btn"><i class="fa fa-check fa-lg"></i></button>
+				</div>
+				<div class="bottommenu_admin_icons">
+					<i class="fa fa-users fa-lg"></i>
+				</div>
+				<div class="bottommenu_admin_status">
+					<!-- IF SHOW_RAIDGROUPS -->
+					{DD_MODRAIDGROUPS} <button type = "submit" name="moderate_group" value=""><i class="fa fa-check fa-lg"></i></button>
+					<!-- ELSE -->
+					{L_raidevent_no_groups_avail}
+					<!-- ENDIF -->
 				</div>
 			</div>
 		</div>
 		<!-- ENDIF -->
 		<!-- INCLUDE calendar/viewcalraid_guests.html -->
-	<!-- INCLUDE calendar/viewcalraid_attendees.html -->
+		<!-- INCLUDE calendar/viewcalraid_attendees.html -->
 	</div>
 {CSRF_TOKEN}
 </form>
