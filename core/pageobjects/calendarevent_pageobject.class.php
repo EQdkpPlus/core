@@ -873,10 +873,10 @@ class calendarevent_pageobject extends pageobject {
 				foreach($this->guests as $guestid=>$guestsdata){
 					if($guestsdata['status'] == $statuskey){
 						$guest_clssicon	= $this->game->decorate('primary', $guestsdata['class']);
-						$guest_tooltip 	= '<i class="fa fa-clock-o fa-lg"></i> '.$this->user->lang('raidevent_raid_signedin').": ".$this->time->user_date($guestsdata['timestamp_signup'], true, false, true).'<br/><i class="fa fa-user fa-lg"></i> '.
-											$guest_clssicon.'&nbsp;'.$this->game->get_name('primary', $guestsdata['class']).'<br/><i class="fa fa-comment fa-lg"></i> '.
-											((isset($guestsdata['note']) && $guestsdata['note'] !='') ? $guestsdata['note'] : $this->user->lang('raidevent_no_guest_note')).
-											((isset($guestsdata['email']) && $guestsdata['email'] !='' && ($this->check_permission() || $this->user->check_auth('a_cal_revent_conf', false))) ? '<br/><i class="fa fa-envelope fa-lg"></i> '.$guestsdata['email'] : '');
+						$guest_tooltip 	= '<span><i class="fa fa-clock-o fa-lg"></i> '.$this->user->lang('raidevent_raid_signedin').": ".$this->time->user_date($guestsdata['timestamp_signup'], true, false, true).'</span>
+											<span><i class="fa fa-user fa-lg"></i>'.$guest_clssicon.'&nbsp;'.$this->game->get_name('primary', $guestsdata['class']).'</span>
+											<span><i class="fa fa-comment fa-lg"></i> '.((isset($guestsdata['note']) && $guestsdata['note'] !='') ? $guestsdata['note'] : $this->user->lang('raidevent_no_guest_note')).'</span>'.
+											((isset($guestsdata['email']) && $guestsdata['email'] !='' && ($this->check_permission() || $this->user->check_auth('a_cal_revent_conf', false))) ? '<span><i class="fa fa-envelope fa-lg"></i> '.$guestsdata['email'].'</span>' : '');
 						$this->tpl->assign_block_vars('raidstatus.guests', array(
 							'NAME'			=> $guestsdata['name'],
 							'ID'			=> $guestid,

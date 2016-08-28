@@ -2521,21 +2521,24 @@ a.attendee_Link:hover{
 	background-color: #F2DEDE;
 	color: red;
 }
-
+.guest_tooltip span {
+	display: block;
+	padding: 3px 0px;
+}
 .attendee_table {
 	// table header
 	.state_header	{ color:#000; font-size:13px; font-weight:bold; font-family:'Trebuchet MS',Arial,sans-serif; padding:10px 0px; background:#e8e8e8; border:1px solid #ccc; margin-bottom:2px; }
 	.toggle_button	{ float:left; margin:-1px 5px 0; }
 	.state_count	{ font-size:95%; font-weight:normal; margin-left:5px; letter-spacing:1px; }
 	.state_noguests	{ color:#777; font-size:90%; font-weight:normal; font-style:italic; }
-	
+
 	.class_table							{ display:flex; flex-wrap:wrap; justify-content:space-between; margin-bottom:5px; }
 	.class_column							{ display:flex; flex-direction:column; width:200px; margin-bottom:5px; white-space:nowrap; }
 	.class_column[data-attendee-count="0"]	{ opacity: .3; }
-	
+
 	// column header
 	.class_header	{ display:flex; justify-content:space-between; text-align:center; padding:2px 3px; background:#e8e8e8; border-bottom:1px solid #aaa; }
-	
+
 	// attendee
 	.attendee_box			{ display:flex; padding:2px; margin:4px 4px 0; border:1px solid #4d4d4d; background: transparent linear-gradient(to bottom, #fff 0%, #cdcdcd 100%); color: #000; transition:all .2s ease-in; }
 	.attendee_box.selected	{ border:1px solid #f55; background: linear-gradient(to bottom, #cdcdcd 0%, #fff 100%); }
@@ -2543,7 +2546,7 @@ a.attendee_Link:hover{
 	.attendee_name			{ flex:2 1 100%; color: #000; overflow:hidden; text-overflow:ellipsis; }
 	.attendee_name a		{ color: #000; overflow:hidden; text-overflow:ellipsis; }
 	.attendee_info			{ flex:1 0 auto; }
-	
+
 	// guest additions -- cause similar structure, but same design
 	.state_header #addguest	{ height:28px; float:right; position:relative; bottom:8px; right:20px; }
 	.guest_table			{ display:flex; flex-wrap:wrap; margin-bottom:5px; border:1px solid #ccc; border-bottom:none; width:100%; box-sizing:border-box; }
