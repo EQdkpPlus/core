@@ -22,6 +22,14 @@
 			</div>
 
 			<!-- BEGIN status -->
+			<!-- IF raidstatus.classes.status.GUEST -->
+			<div class="guest_box <!-- IF COLORED_NAMESBYCLASS -->class_{raidstatus.classes.status.CLASSID}<!-- ENDIF -->" data-guestid="{raidstatus.classes.status.ID}" data-approval="{raidstatus.classes.status.TOBEAPPROVED}" data-status="{raidstatus.classes.status.SIGNEDSTATUS}">
+				<!-- IF raidstatus.classes.status.CLASSICON -->{raidstatus.classes.status.CLASSICON}<!-- ENDIF -->
+				<span class="guest_name">{raidstatus.classes.status.NAME}</span>
+				<!-- IF raidstatus.classes.status.EXTERNALAPPL --><!-- IF raidstatus.classes.status.TOBEAPPROVED --><i class="fa fa-external-link-square icon-color-red"><!-- ELSE --><i class="fa fa-check-square icon-color-green"><!-- ENDIF --></i><!-- ENDIF -->
+				<span class="guest_tooltip" style="display:none">{raidstatus.classes.status.TOOLTIP}</span>
+			</div>
+			<!-- ELSE -->
 			<div class="attendee_box" id="attendee_{raidstatus.classes.status.MEMBERID}">
 				<div class="attendee_select">
 					<!-- IF IS_OPERATOR -->
@@ -83,6 +91,7 @@
 					<!-- ENDIF -->
 				</div>
 			</div>
+			<!-- ENDIF -->
 			<!-- END status -->
 		</div>
 		<!-- ENDIF -->

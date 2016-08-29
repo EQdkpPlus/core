@@ -43,6 +43,7 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 		public function reset(){
 			$this->pdc->del('pdh_calendar_raids_table.guests');
 			$this->pdc->del('pdh_calendar_raids_table.guestsEvents');
+			$this->pdc->del('pdh_calendar_raids_table.guestsStatus');
 			$this->pdc->del_prefix('plugin.guests');
 			$this->guests = NULL;
 		}
@@ -56,7 +57,8 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 			// try to get from cache first
 			$this->guests		= $this->pdc->get('pdh_calendar_raids_table.guests');
 			$this->guestsEvent	= $this->pdc->get('pdh_calendar_raids_table.guestsEvents');
-			if($this->guests !== NULL && $this->guestsEvent !== NULL){
+			$this->guestsStatus = $this->pdc->get('pdh_calendar_raids_table.guestsStatus');
+			if($this->guests !== NULL && $this->guestsEvent !== NULL && $this->guestsStatus !== NULL){
 				return true;
 			}
 
@@ -78,9 +80,11 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 						'eventid'			=> $row['calendar_events_id'],
 					);
 					$this->guestsEvent[$row['calendar_events_id']][$row['id']] = $this->guests[$row['id']];
+					$this->guestsStatus[$row['calendar_events_id']][$row['status']][$row['class']][$row['id']] = $this->guests[$row['id']];
 				}
 				$this->pdc->put('pdh_calendar_raids_table.guests', $this->guests, NULL);
 				$this->pdc->put('pdh_calendar_raids_table.guestsEvents', $this->guestsEvent, NULL);
+				$this->pdc->put('pdh_calendar_raids_table.guestsStatus', $this->guestsStatus, NULL);
 			}
 
 			return true;
@@ -98,8 +102,12 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 			return $output;
 		}
 
-		public function get_members($eventid=''){
-			$output = ($eventid) ? ((isset($this->guestsEvent[$eventid])) ? $this->guestsEvent[$eventid] : '') : $this->guests;
+		public function get_members($eventid='', $bystatus=false){
+			if($bystatus && $eventid > 0){
+				$output = (isset($this->guestsStatus[$eventid])) ? $this->guestsStatus[$eventid] : '';
+			}else{
+				$output = ($eventid) ? ((isset($this->guestsEvent[$eventid])) ? $this->guestsEvent[$eventid] : '') : $this->guests;
+			}
 			return (is_array($output)) ? $output : array();
 		}
 

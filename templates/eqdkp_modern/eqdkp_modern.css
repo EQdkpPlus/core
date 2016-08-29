@@ -2425,21 +2425,23 @@ fieldset.settings.floatRight.raid input[type="text"]{
 	border-color: #008AFF;
 }
 .raidcal_buttonrow{
-	vertical-align:middle;
+	display: flex;
+	flex-wrap: nowrap;
+	justify-content: space-between;
 	width: 100%;
 	margin: 0px 0px 10px 0px;
 }
-.raidcal_buttonrow_left{
-	width: 60%;
-	vertical-align:middle;
+.raidcal_buttonrow_raidgroups{
+	width: 200px;
 }
-.raidcal_buttonrow_middle{
-	width: 22%;
-	vertical-align:middle;
+.raidcal_buttonrow_confirmall, .raidcal_buttonrow_guestattend{
+	width: 210px;
 }
-.raidcal_buttonrow_right{
-	width: 18%;
-	vertical-align:middle;
+.raidcal_buttonrow_addguest{
+	width: 55px;
+}
+.raidcal_buttonrow_notsigned{
+	width: 184px;
 }
 .buttonblock{
 	color:black;
@@ -2494,7 +2496,7 @@ fieldset.raidcal_infos dt, fieldset.moderation_panel dt {
 }
 .attendee_table {
 	// table header
-	.state_header	{ color:#000; font-size:13px; font-weight:bold; font-family:'Trebuchet MS',Arial,sans-serif; padding:10px 0px; background:#e8e8e8; border:1px solid #ccc; margin-bottom:2px; }
+	.state_header	{ color:#000; font-size:13px; font-weight:bold; font-family:'Trebuchet MS',Arial,sans-serif; padding:6px 0px; background:#e8e8e8; border:1px solid #ccc; margin-bottom:2px; }
 	.toggle_button	{ float:left; margin:-1px 5px 0; }
 	.state_count	{ font-size:95%; font-weight:normal; margin-left:5px; letter-spacing:1px; }
 	.state_noguests	{ color:#777; font-size:90%; font-weight:normal; font-style:italic; }
@@ -2519,7 +2521,7 @@ fieldset.raidcal_infos dt, fieldset.moderation_panel dt {
 	.guest_table			{ display:flex; flex-wrap:wrap; margin-bottom:5px; border:1px solid #ccc; border-bottom:none; width:100%; box-sizing:border-box; }
 	.guest_column			{ flex:1 0 50%; background:#e8e8e8; padding:5px; box-sizing:border-box; border-bottom:1px solid #ccc; }
 	.guest_header			{ display:inline-block; }
-	.guest_box				{ display:inline-block; margin-left:5px; padding-right:5px; background:#fff; border:1px solid #ccc; border-radius:4px; }
+	.guest_box				{ display:inline-block; margin:4px 4px 0; background:#fff; border:1px solid #ccc; border-radius:4px; }
 	.guest_box img			{ margin-top:-3px; }
 	.guest_box i			{ padding-left:4px; }
 }

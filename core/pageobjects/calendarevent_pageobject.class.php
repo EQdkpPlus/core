@@ -597,7 +597,8 @@ class calendarevent_pageobject extends pageobject {
 
 		// Guests / rest
 		$this->twinks			= array();
-		$this->guests			= $this->pdh->get('calendar_raids_guests', 'members', array($this->url_id));
+		$this->guests			= $this->pdh->get('calendar_raids_guests', 'members', array($this->url_id, true));
+		#d($this->pdh->get('calendar_raids_guests', 'members', array($this->url_id, true)));
 		$this->raidcategories	= ($eventdata['extension']['raidmode'] == 'role') ? $this->pdh->aget('roles', 'name', 0, array($this->pdh->get('roles', 'id_list'))) : $this->game->get_primary_classes(array('id_0'));
 
 		// hide empty roles if the game module allows it
@@ -752,7 +753,6 @@ class calendarevent_pageobject extends pageobject {
 				'COUNT'			=> $statuscount,
 				'COUNT_GUESTS'	=> ($this->config->get('calendar_raid_guests') > 0) ? $lang_guestcount : false,
 				'MAXCOUNT'		=> $eventdata['extension']['attendee_count'],
-				'GUESTCOUNT'	=> $guestcount,
 			));
 
 			// the class categories
@@ -761,12 +761,14 @@ class calendarevent_pageobject extends pageobject {
 				$act_classcount++;
 
 				$classsbrk	= ($classid == -1 && (!isset($this->attendees[$statuskey][$classid]) || (isset($this->attendees[$statuskey][$classid]) && count($this->attendees[$statuskey][$classid]) == 0))) ? count($this->raidcategories) - 1 : count($this->raidcategories);
+				$classcount	= (isset($this->attendees[$statuskey][$classid])) ? count($this->attendees[$statuskey][$classid]) : 0;
+				$classcount	+= (isset($this->guests[$statuskey][$classid])) ? count($this->guests[$statuskey][$classid]) : 0;
 				$this->tpl->assign_block_vars('raidstatus.classes', array(
 					'ID'			=> $classid,
 					'NAME'			=> ($classid == -1) ? $this->user->lang('raidevent_deleted_role_assigned') : $classname,
 					'CLASS_ICON'	=> ($eventdata['extension']['raidmode'] == 'role') ? $this->game->decorate('roles', $classid) : $this->game->decorate('primary', $classid),
 					'MAX'			=> ($eventdata['extension']['raidmode'] == 'none' && $eventdata['extension']['distribution'][$classid] == 0) ? '' : '/'.(($classid == '-1') ? '&infin;' : $eventdata['extension']['distribution'][$classid]),
-					'COUNT'			=> (isset($this->attendees[$statuskey][$classid])) ? count($this->attendees[$statuskey][$classid]) : 0,
+					'COUNT'			=> $classcount,
 					'SHOW'			=> ($classid > 0 || ($classid == -1 && isset($this->attendees[$statuskey][$classid]) && count($this->attendees[$statuskey][$classid]) > 0)) ? true : false,
 				));
 				// The characters
@@ -862,37 +864,43 @@ class calendarevent_pageobject extends pageobject {
 							'GROUPCOLOR'		=> $this->pdh->get('raid_groups', 'color', array($raidgroup)),
 							'DD_CHARS'			=> $charchangemenu['chars'],
 							'DD_ROLES'			=> $charchangemenu['roles'],
+							'GUEST'				=> false,
 						));
+					}
+				}
+
+
+				// The guests
+				if(isset($this->guests[$statuskey][$classid]) && is_array($this->guests[$statuskey][$classid]) && count($this->guests) > 0){
+					foreach($this->guests[$statuskey][$classid] as $guestid=>$guestsdata){
+						if($guestsdata['status'] == $statuskey){
+							$guest_clssicon	= $this->game->decorate('primary', $guestsdata['class']);
+							$guest_tooltip 	= '<span><i class="fa fa-clock-o fa-lg"></i> '.$this->user->lang('raidevent_raid_signedin').": ".$this->time->user_date($guestsdata['timestamp_signup'], true, false, true).'</span>
+												<span><i class="fa fa-user fa-lg"></i>'.$guest_clssicon.'&nbsp;'.$this->game->get_name('primary', $guestsdata['class']).'</span>
+												<span><i class="fa fa-comment fa-lg"></i> '.((isset($guestsdata['note']) && $guestsdata['note'] !='') ? $guestsdata['note'] : $this->user->lang('raidevent_no_guest_note')).'</span>'.
+												((isset($guestsdata['email']) && $guestsdata['email'] !='' && ($this->check_permission() || $this->user->check_auth('a_cal_revent_conf', false))) ? '<span><i class="fa fa-envelope fa-lg"></i> '.$guestsdata['email'].'</span>' : '');
+
+							$this->tpl->assign_block_vars('raidstatus.classes.status', array(
+								'GUEST'			=> true,
+								'NAME'			=> $guestsdata['name'],
+								'ID'			=> $guestid,
+								'STATUS'		=> $guestsdata['status'],
+								'CLASSID'		=> $guestsdata['class'],
+								'CLASSICON'		=> $guest_clssicon,
+								'TOOLTIP'		=> $guest_tooltip,
+								'TOBEAPPROVED'	=> ($guestsdata['status'] == 1 && $guestsdata['email'] != '') ? true : false,
+								'EXTERNALAPPL'	=> ($guestsdata['creator'] == 0 && $guestsdata['email'] != '') ? true : false,
+								'EMAIL'			=> (isset($guestsdata['email']) && $guestsdata['email'] != '') ? $guestsdata['email'] : false,
+								'SIGNEDSTATUS'	=> ($guestsdata['status'] == 0 || $guestsdata['status'] == 2 || $guestsdata['status'] == 3) ? $guestsdata['status'] : false,
+							));
+						}
 					}
 				}
 			}
 			$status_first = false;
 
 			// raid guests
-			if(is_array($this->guests) && count($this->guests) > 0){
-				foreach($this->guests as $guestid=>$guestsdata){
-					if($guestsdata['status'] == $statuskey){
-						$guest_clssicon	= $this->game->decorate('primary', $guestsdata['class']);
-						$guest_tooltip 	= '<span><i class="fa fa-clock-o fa-lg"></i> '.$this->user->lang('raidevent_raid_signedin').": ".$this->time->user_date($guestsdata['timestamp_signup'], true, false, true).'</span>
-											<span><i class="fa fa-user fa-lg"></i>'.$guest_clssicon.'&nbsp;'.$this->game->get_name('primary', $guestsdata['class']).'</span>
-											<span><i class="fa fa-comment fa-lg"></i> '.((isset($guestsdata['note']) && $guestsdata['note'] !='') ? $guestsdata['note'] : $this->user->lang('raidevent_no_guest_note')).'</span>'.
-											((isset($guestsdata['email']) && $guestsdata['email'] !='' && ($this->check_permission() || $this->user->check_auth('a_cal_revent_conf', false))) ? '<span><i class="fa fa-envelope fa-lg"></i> '.$guestsdata['email'].'</span>' : '');
-						$this->tpl->assign_block_vars('raidstatus.guests', array(
-							'NAME'			=> $guestsdata['name'],
-							'ID'			=> $guestid,
-							'STATUS'		=> $guestsdata['status'],
-							'CLASSID'		=> $guestsdata['class'],
-							'CLASSICON'		=> $guest_clssicon,
-							'TOOLTIP'		=> $guest_tooltip,
-							'COLOR'			=> $this->game->get_class_color($guestsdata['class']),
-							'TOBEAPPROVED'	=> ($guestsdata['status'] == 1 && $guestsdata['email'] != '') ? true : false,
-							'EXTERNALAPPL'	=> ($guestsdata['creator'] == 0 && $guestsdata['email'] != '') ? true : false,
-							'EMAIL'			=> (isset($guestsdata['email']) && $guestsdata['email'] != '') ? $guestsdata['email'] : false,
-							'SIGNEDSTATUS'	=> ($guestsdata['status'] == 0 || $guestsdata['status'] == 2 || $guestsdata['status'] == 3) ? $guestsdata['status'] : false,
-						));
-					}
-				}
-			}
+
 		}
 		$this->tpl->add_js("var roles_json = ".json_encode($drpdwn_roles).";", 'head');
 
@@ -1129,7 +1137,7 @@ class calendarevent_pageobject extends pageobject {
 			'LINK2TRANSFORMEDRAID'	=> $this->pdh->get('calendar_events', 'transformed_raid_link', array($this->url_id)),
 			'TRANSFORMEDRAID_TT'	=> $tooltip_transformedraid,
 			// guests
-			'GUEST_COUNT'			=> count($this->guests),
+			#'GUEST_COUNT'			=> count($this->guests),
 
 			// Language files
 			'L_NOTSIGNEDIN'			=> $this->user->lang(array('raidevent_raid_status', 4)),
