@@ -2500,19 +2500,21 @@ fieldset.raidcal_infos dt, fieldset.moderation_panel dt {
 	.state_noguests	{ color:#777; font-size:90%; font-weight:normal; font-style:italic; }
 
 	.class_table							{ display:flex; flex-wrap:wrap; justify-content:space-between; margin-bottom:5px; }
-	.class_column							{ display:flex; flex-direction:column; width:200px; margin-bottom:5px; white-space:nowrap; }
+	.class_column							{ display:flex; flex-direction:column; width:200px; margin-bottom:5px; padding-bottom:4px; white-space:nowrap; background:#e8e8e8; border:1px solid #ccc; }
 	.class_column[data-attendee-count="0"]	{ opacity: .3; }
 
 	// column header
-	.class_header	{ display:flex; justify-content:space-between; text-align:center; padding:2px 3px; background:#e8e8e8; border-bottom:1px solid #aaa; }
+	.class_header	{ display:flex; justify-content:space-between; text-align:center; padding:4px 3px; border-bottom:1px solid #aaa; }
+	.class_name		{ margin-top:-2px; }
+	.attendee_count	{ margin-top:-2px; }
 
 	// attendee
-	.attendee_box			{ display:flex; padding:2px; margin:4px 4px 0; border:1px solid #4d4d4d; background: transparent linear-gradient(to bottom, #fff 0%, #cdcdcd 100%); color: #000; transition:all .2s ease-in; }
+	.attendee_box			{ display:flex; padding:2px; margin:4px 4px 0; border:1px solid #4d4d4d; background:#fff; color:#000; transition:all .2s ease-in; }
 	.attendee_box.selected	{ border:1px solid #f55; background: linear-gradient(to bottom, #cdcdcd 0%, #fff 100%); }
 	.attendee_select		{ flex:0 0 22px; }
 	.attendee_name			{ flex:2 1 100%; color: #000; overflow:hidden; text-overflow:ellipsis; }
 	.attendee_name a		{ color: #000; overflow:hidden; text-overflow:ellipsis; }
-	.attendee_info			{ flex:1 0 auto; }
+	.attendee_info			{ flex:1 0 auto; padding-right:3px; }
 
 	// guest additions -- cause similar structure, but same design
 	.state_header #addguest	{ height:28px; float:right; position:relative; bottom:8px; right:20px; }
