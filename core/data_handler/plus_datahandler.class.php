@@ -330,7 +330,7 @@ if( !class_exists( "plus_datahandler")){
 			}
 			$method = 'get_'.$tag;
 			if( method_exists( $this->rm($module), $method ) ) {
-				$this->init_read_module( $module );
+				if( !$this->read_modules[$module] ) $this->init_read_module( $module );
 				return call_user_func_array( array( $this->rm($module), $method ), $params );
 			} else {
 				$data = debug_backtrace();
@@ -383,7 +383,7 @@ if( !class_exists( "plus_datahandler")){
 			}
 			$method = 'get_html_'.$tag;
 			if( method_exists( $this->rm($module), $method ) ) {
-				$this->init_read_module( $module );
+				if( !$this->read_modules[$module] ) $this->init_read_module( $module );
 				return call_user_func_array( array( $this->rm($module), $method ), $params );
 			} else {
 				return $this->get( $module, $tag, $params );
@@ -413,7 +413,7 @@ if( !class_exists( "plus_datahandler")){
 			}
 			$method = 'get_caption_'.$tag;
 			if( method_exists( $this->rm($module), $method ) ) {
-				$this->init_read_module( $module );
+				if( !$this->read_modules[$module] ) $this->init_read_module( $module );
 				return call_user_func_array( array( $this->rm($module), $method ), $params );
 			} else {
 				if( $this->get_lang($module, $tag) !== false) {
@@ -436,7 +436,7 @@ if( !class_exists( "plus_datahandler")){
 			}
 			$method = 'get_html_caption_'.$tag;
 			if( method_exists( $this->rm($module), $method ) ) {
-				$this->init_read_module( $module );
+				if( !$this->read_modules[$module] ) $this->init_read_module( $module );
 				return call_user_func_array( array( $this->rm($module), $method ), $params );
 			} else {
 				return $this->get_caption( $module, $tag, $params );
@@ -475,7 +475,7 @@ if( !class_exists( "plus_datahandler")){
 			}
 			$comp_method = 'comp_'.$tag;
 			if( method_exists( $this->rm($module), $comp_method ) ) {
-				$this->init_read_module( $module );
+				if( !$this->read_modules[$module] ) $this->init_read_module( $module );
 				return $direction * call_user_func_array( array( $this->rm($module), $comp_method ), array( $params1, $params2 ) );
 			} else {
 				$get_method = 'get_'.$tag;
@@ -497,7 +497,7 @@ if( !class_exists( "plus_datahandler")){
 
 			//check for a sort function in read-module
 			if(method_exists($this->rm($module), 'sort')) {
-				$this->init_read_module( $module );
+				if( !$this->read_modules[$module] ) $this->init_read_module( $module );
 				return $this->rm($module)->sort($id_list, $tag, $direction, $params, $id_position);
 			}
 			// select a clean cache instance
