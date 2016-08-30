@@ -44,20 +44,35 @@ if ( !class_exists( "html_leaderboard" ) ) {
 			$column = (isset($settings['column_type'])) ? $settings['column_type'] : 'classid';
 
 			//sort direction
-			$this->sort_direction = ($sort == 'asc') ? 1 : -1;
+			$this->sort_direction = ($sort == 'asc') ? 'asc' : 'desc';
 
 			//system dependant output
 			$this->vpre = $this->pdh->pre_process_preset('current', array(), 0);
-
-			$view_list = $this->pdh->aget('member', $column, 0, array($view_list));
-
-			$column_list = array();
-			foreach($view_list as $member_id => $col){
-				if(is_array($columns) && in_array($col, $columns) ){
-					$column_list[$col][] = $member_id;
+			
+			//check if reset is necessary
+			$reset_time = $this->timekeeper->get('lb_reset_times', $this->mdkpid);
+			$needs_update = false;
+			$used_modules[] = $this->vpre[0];
+			$used_modules[] = 'member';
+			
+			foreach($used_modules as $module_name){
+				if($this->pdh->module_needs_update($module_name) || $this->pdh->get_module_update_time($module_name) >= $reset_time){
+					$needs_update = true;
+					break;
 				}
 			}
-			if(count($column_list) < 1 || count(current($column_list)) < 1) return '';
+			
+			if($needs_update) {
+				//reset
+				$this->pdc->del_prefix('lb_'.$this->mdkpid);
+				//put new update time
+				$this->timekeeper->put('lb_reset_times', $this->mdkpid, time(), true);
+			}
+			
+			$strCacheKey = md5('lb_'.$this->mdkpid.'_'.$column.'_'.$sort.'_'.$max_member);
+			$cachedViewList = $this->pdc->get('lb_'.$this->mdkpid.'_'.$strCacheKey);
+
+			$member_classes_mapping = $this->pdh->aget('member', $column, 0, array($view_list));
 
 			$mdkp_sel = new hdropdown('lb_mdkpid', array('options' => $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), 'js' => ' onchange="$(\'#lbc\').val(1); form.submit();"', 'value' => $this->mdkpid));
 
@@ -66,16 +81,37 @@ if ( !class_exists( "html_leaderboard" ) ) {
 			
 			$with_twinks = ($with_twinks === false) ? (!intval($this->config->get('show_twinks'))) : $with_twinks;
 			
+			if($cachedViewList !== null){
+				$column_list = $cachedViewList;
+			} else {
+				$params = $this->pdh->post_process_preset( $this->vpre[2], array('%dkp_id%' => $this->mdkpid, '%with_twink%' => !intval($this->config->get('show_twinks'))));
+				$myfulllist = $this->pdh->sort($view_list, $this->vpre[0], $this->vpre[1], $this->sort_direction, $params, 0);
+				//key = memberid, val = classid
+				$column_list = array();
+				foreach($myfulllist as $key => $member_id){
+					$col = $member_classes_mapping[$member_id];
+					if(is_array($columns) && in_array($col, $columns) ){
+						$column_list[$col][] = $member_id;
+					}	
+				}
+				
+				//Put to Cache
+				$this->pdc->put('lb_'.$this->mdkpid.'_'.$strCacheKey, $column_list);
+			}
+			
+
+			if(count($column_list) < 1 || count(current($column_list)) < 1) return '';
 			$intWidth = (count($column_list) < $break) ? floor(100 / count($column_list)) : floor(100 / $break);
+			
 			
 			foreach($columns as $col) {
 				if(!isset($column_list[$col])) continue;
 				
 				$member_ids = $column_list[$col];
+
 				$leaderboard .= '<div class="floatLeft '.(($column == 'classid') ? 'leaderboard_class_'.$col : 'leaderboard_role_'.$col).'" style="width:'.$intWidth.'%"><div><table class="table fullwidth borderless nowrap colorswitch"><tr><th colspan="2">';
 				$leaderboard .= ($column == 'classid') ? $this->game->decorate('primary', $col).' <span class="class_'.$col.'">'.$this->game->get_name('primary', $col).'</span>' : $this->game->decorate('roles', $col).' '.$this->pdh->get('roles', 'name', array($col));
 				$leaderboard .= '</th></tr>';
-				usort($member_ids, array(&$this, "sort_by_points"));
 
 				$rows = ($max_member < count($member_ids)) ? $max_member : count($member_ids);
 				for($i=0; $i<$rows; $i++){
@@ -85,16 +121,10 @@ if ( !class_exists( "html_leaderboard" ) ) {
 			}
 			$this->jquery->Collapse('#toggleLeaderboard');
 			$leaderboard .= '</div><div class="clear"></div></div></div>';
+
 			return $leaderboard;
 		}
 
-		private function sort_by_points($a, $b){
-			//return $this->pdh->comp('points', 'current', -1, array($a, $this->mdkpid ), array($b, $this->mdkpid ));
-			$params1 = $this->pdh->post_process_preset($this->vpre[2], array('%member_id%' => $a, '%dkp_id%' => $this->mdkpid, '%with_twink%' => !intval($this->config->get('show_twinks'))));
-			$params2 = $this->pdh->post_process_preset($this->vpre[2], array('%member_id%' => $b, '%dkp_id%' => $this->mdkpid, '%with_twink%' => !intval($this->config->get('show_twinks'))));
-
-			return $this->pdh->comp($this->vpre[0], $this->vpre[1], $this->sort_direction, $params1, $params2);
-		}
 	}//end class
 }//end if
 ?>
