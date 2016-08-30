@@ -49,7 +49,7 @@ if(!class_exists( "cache_file")){
 			$key = md5($global_prefix.$key);
 			$filename = $this->cache_folder.$key[0].DIRECTORY_SEPARATOR.$key.$this->file_extension;
 			$result = false;
-			if(is_file($filename)){
+			if(file_exists($filename)){
 				$result = file_get_contents($filename);
 			}
 

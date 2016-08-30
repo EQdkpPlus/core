@@ -428,7 +428,7 @@ if( !class_exists( "plus_datahandler")){
 
 		public function get_html_caption( $module, $tag, $params, $preset='' ) {
 			if(!$this->check_read_module($module, true)) return null;
-			if($preset) $this->init_preset_list();
+			if($preset && !$this->presets_loaded) $this->init_preset_list();
 			if( !is_array( $params ) ) {
 				$params = array(
 					$params,
@@ -623,6 +623,8 @@ if( !class_exists( "plus_datahandler")){
 		);
 
 		private function init_preset_list( ) {
+			if($this->presets_loaded) return true;
+			
 			//init module presets
 			foreach($this->read_modules as $module_name => $init) {
 				
@@ -640,7 +642,6 @@ if( !class_exists( "plus_datahandler")){
 			}
 
 			//get users custom presets
-			if($this->presets_loaded) return true;
 			$this->preset_list = array_merge( $this->preset_list, $this->get_user_presets( ));
 			$this->preset_lang = array_merge( $this->preset_lang, $this->get_user_preset_lang( ));
 			$this->presets_loaded = true;
@@ -656,7 +657,7 @@ if( !class_exists( "plus_datahandler")){
 		}
 
 		public function get_preset( $preset_name ) {
-			$this->init_preset_list( );
+			if(!$this->presets_loaded) $this->init_preset_list( );
 
 			$preset_name = ( array_key_exists( $preset_name, $this->system_settings['aliases'] ) ) ? $this->system_settings['aliases'][$preset_name] : $preset_name;
 			return (isset($this->preset_list[$preset_name])) ? $this->preset_list[$preset_name] : false;
@@ -731,7 +732,7 @@ if( !class_exists( "plus_datahandler")){
 		}
 
 		public function update_user_preset($preset_name, $preset=false, $preset_lang='') {
-			$this->init_preset_list();
+			if(!$this->presets_loaded) $this->init_preset_list();
 			if(!$preset_name) return false;
 			if(!isset($this->user_presets[$preset_name]) && isset($this->preset_list[$preset_name])) return false; //preset name already used
 			if($preset) $this->user_presets[$preset_name] = $preset;
@@ -741,7 +742,7 @@ if( !class_exists( "plus_datahandler")){
 		}
 
 		public function delete_user_preset($preset_name) {
-			$this->init_preset_list();
+			if(!$this->presets_loaded) $this->init_preset_list();
 			if(!$preset_name || !isset($this->user_presets[$preset_name])) return false;
 			unset($this->user_presets[$preset_name]);
 			if(isset($this->user_presets_lang[$preset_name])) unset($this->user_presets_lang[$preset_name]);
