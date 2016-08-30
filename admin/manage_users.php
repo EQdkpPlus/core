@@ -34,9 +34,15 @@ class Manage_Users extends page_generic {
 			'mode' => array(
 				array('process' => 'delete_authaccount', 'value' => 'delauthacc', 'csrf' => true),
 				array('process' => 'activate', 'value' => 'activate', 'csrf' => true),
-				array('process' => 'deactivate', 'value' => 'deactivate', 'csrf' => true),
+				array('process' => 'force_email_confirm', 'value' => 'forceemail', 'csrf' => true),
+				array('process' => 'unlock', 'value' => 'unlock', 'csrf' => true),
+				array('process' => 'lock', 'value' => 'lock', 'csrf' => true),
 				array('process' => 'overtake_permissions', 'value' => 'ovperms', 'csrf' => true),
 			),
+			'bulk_lock' =>	array('process' => 'bulk_lock', 'csrf' => true),
+			'bulk_unlock' => array('process' => 'bulk_unlock', 'csrf' => true),
+			'bulk_confirmemail' =>	array('process' => 'bulk_confirmemail', 'csrf' => true),
+			'bulk_activate' => array('process' => 'bulk_activate', 'csrf' => true),
 			'submit' => array('process' => 'submit', 'csrf' => true),
 			'send_new_pw' => array('process' => 'send_new_pw', 'csrf' => true),
 			'u' => array('process' => 'edit'),
@@ -44,6 +50,58 @@ class Manage_Users extends page_generic {
 		parent::__construct(false, $handler, array('user', 'name'), null, 'user_id[]');
 		$this->process();
 	}
+	
+	public function bulk_unlock(){
+		$user_ids = $this->in->getArray('user_id', 'int');
+		
+		foreach($user_ids as $intUserID){
+			$this->pdh->put('user', 'activate', array($intUserID, 1));
+		}
+		$this->pdh->process_hook_queue();
+		$this->display();
+	}
+	
+	public function bulk_lock(){
+		$user_ids = $this->in->getArray('user_id', 'int');
+	
+		foreach($user_ids as $intUserID){
+			$this->pdh->put('user', 'activate', array($intUserID, 0));
+		}
+		$this->pdh->process_hook_queue();
+		$this->display();
+	}
+	
+	public function bulk_activate(){
+		$user_ids = $this->in->getArray('user_id', 'int');
+		
+		foreach($user_ids as $intUserID){
+			$this->pdh->put('user', 'confirm_email', array($intUserID, 1));
+		}
+		$this->pdh->process_hook_queue();
+		$this->display();
+	}
+	
+	public function bulk_confirmemail(){
+		$user_ids = $this->in->getArray('user_id', 'int');
+		$email = registry::register('MyMailer');
+	
+		foreach($user_ids as $intUserID){
+			$this->pdh->put('user', 'confirm_email', array($intUserID, 0));
+			//Send the User an Email with activation link
+			$user_key = $this->pdh->put('user', 'create_new_activationkey', array($intUserID));
+			$username = $this->pdh->get('user', 'name', array($intUserID));
+				
+			// Email them their new key
+			$bodyvars = array(
+					'USERNAME'		=> $username,
+					'U_ACTIVATE'	=> $this->env->link.$this->controller_path_plain.'Register/Activate/?key=' . $user_key,
+			);
+			$email->SendMailFromAdmin($this->pdh->get('user', 'email', array($intUserID)), $this->user->lang('email_subject_email_confirm'), 'user_email_confirm.html', $bodyvars);
+		}
+		$this->pdh->process_hook_queue();
+		$this->display();
+	}
+	
 
 	public function send_new_pw(){
 		$pwkey = $this->pdh->put('user', 'create_new_activationkey', array($this->in->get('u')));
@@ -68,20 +126,49 @@ class Manage_Users extends page_generic {
 		$this->display();
 	}
 
-	public function activate() {
+	public function unlock() {
 		$this->pdh->put('user', 'activate', array($this->in->get('u')));
+		$username = $this->pdh->get('user', 'name', array($this->in->get('u')));
+		$this->core->message(sprintf($this->user->lang('user_unlock_success'), sanitize($username)), $this->user->lang('success'), 'green');
+		$this->pdh->process_hook_queue();
+		$this->display();
+	}
+
+	public function lock() {
+		if (!(($this->user->data['user_id'] == $this->in->get('u')) || (!$this->user->check_group(2, false) && $this->user->check_group(2, false, $this->in->get('u'))))){
+			$this->pdh->put('user', 'activate', array($this->in->get('u'), 0));
+			$username = $this->pdh->get('user', 'name', array($this->in->get('u')));
+			$this->core->message(sprintf($this->user->lang('user_lock_success'), sanitize($username)), $this->user->lang('success'), 'green');
+		}
+		$this->pdh->process_hook_queue();
+		$this->display();
+	}
+	
+	public function activate(){
+		$this->pdh->put('user', 'confirm_email', array($this->in->get('u'), 1));
 		$username = $this->pdh->get('user', 'name', array($this->in->get('u')));
 		$this->core->message(sprintf($this->user->lang('user_activate_success'), sanitize($username)), $this->user->lang('success'), 'green');
 		$this->pdh->process_hook_queue();
 		$this->display();
 	}
-
-	public function deactivate() {
-		if (!(($this->user->data['user_id'] == $this->in->get('u')) || (!$this->user->check_group(2, false) && $this->user->check_group(2, false, $this->in->get('u'))))){
-			$this->pdh->put('user', 'activate', array($this->in->get('u'), 0));
-			$username = $this->pdh->get('user', 'name', array($this->in->get('u')));
-			$this->core->message(sprintf($this->user->lang('user_deactivate_success'), sanitize($username)), $this->user->lang('success'), 'green');
-		}
+	
+	public function force_email_confirm(){
+		$userid = $this->in->get('u', 0);
+		$this->pdh->put('user', 'confirm_email', array($userid, 0));
+		//Send the User an Email with activation link
+		$user_key = $this->pdh->put('user', 'create_new_activationkey', array($userid));
+		$username = $this->pdh->get('user', 'name', array($this->in->get('u')));
+		
+		// Email them their new key
+		$email = registry::register('MyMailer');
+		$bodyvars = array(
+				'USERNAME'		=> $username,
+				'U_ACTIVATE'	=> $this->env->link.$this->controller_path_plain.'Register/Activate/?key=' . $user_key,
+		);
+		$email->SendMailFromAdmin($this->pdh->get('user', 'email', array($userid)), $this->user->lang('email_subject_email_confirm'), 'user_email_confirm.html', $bodyvars);
+			
+		
+		$this->core->message(sprintf($this->user->lang('user_force_emailconfirm_success'), sanitize($username)), $this->user->lang('success'), 'green');
 		$this->pdh->process_hook_queue();
 		$this->display();
 	}
@@ -437,10 +524,17 @@ class Manage_Users extends page_generic {
 			$user_online = (in_array($user_id, $online_users)) ? '<i class="eqdkp-icon-online"></i>' : '<i class="eqdkp-icon-offline"></i>';
 			if($this->pdh->get('user', 'active', array($user_id))) {
 				$user_active = '<i class="eqdkp-icon-online"></i>';
-				$activate_icon = '<a href="manage_users.php'.$this->SID.'&amp;mode=deactivate&amp;u='.$user_id.'&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('deactivate').'"><i class="fa fa-check-square-o fa-lg icon-color-green"></i></a>';
+				$activate_icon = '<a href="manage_users.php'.$this->SID.'&amp;mode=lock&amp;u='.$user_id.'&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('lock').'"><i class="fa fa-unlock fa-lg icon-color-green"></i></a>';
 			} else {
 				$user_active = '<i class="eqdkp-icon-offline"></i>';
-				$activate_icon = '<a href="manage_users.php'.$this->SID.'&amp;mode=activate&amp;u='.$user_id.'&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('activate').'"><i class="fa fa-square-o fa-lg icon-color-red"></i></a>';
+				$activate_icon = '<a href="manage_users.php'.$this->SID.'&amp;mode=unlock&amp;u='.$user_id.'&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('unlock').'"><i class="fa fa-lock fa-lg icon-color-red"></i></a>';
+			}
+			
+			if($this->pdh->get('user', 'email_confirmed', array($user_id)) > 0) {
+				$user_mail_confirmed_icon = '<a href="manage_users.php'.$this->SID.'&amp;mode=forceemail&amp;u='.$user_id.'&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('confirm_email').'"><i class="fa fa-check-square-o fa-lg icon-color-green"></i></a>';
+			} else {
+
+				$user_mail_confirmed_icon = '<a href="manage_users.php'.$this->SID.'&amp;mode=activate&amp;u='.$user_id.'&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('activate').'"><i class="fa fa-square-o fa-lg icon-color-red"></i></a>';
 			}
 			$user_memberships = $this->pdh->get('user_groups_users', 'memberships', array($user_id));
 			$a_members = $this->pdh->get('member', 'connection_id', array($user_id));
@@ -460,6 +554,7 @@ class Manage_Users extends page_generic {
 				'PROTECT_SUPERADMIN'=> ((is_array($user_memberships) && in_array(2, $user_memberships) && !isset($adm_memberships[2])) || ($user_id == $this->user->data['user_id'])) ? true : false,
 				'ACTIVE'			=> $user_active,
 				'ACTIVATE_ICON'		=> $activate_icon,
+				'EMAIL_CONFIRM'		=> $user_mail_confirmed_icon,
 				'ONLINE'			=> $user_online,
 				'MEMBER_COUNT'		=> count($a_members),
 				'AWAY'				=> $this->pdh->get('user', 'html_is_away', array($user_id)),
@@ -485,6 +580,46 @@ class Manage_Users extends page_generic {
 		$this->confirm_delete($this->user->lang('confirm_delete_users').'<br /><input type="checkbox" name="delete_associated_members_single" value="1" id="delete_associated_members_single" /><label for="delete_associated_members_single"> '. $this->user->lang('delete_associated members').'</label>', '', true, array('height'	=> 300,'function' => 'delete_single_warning', 'force_ajax' => true, 'custom_js' => 'delete_single(selectedID);'));
 		$this->jquery->selectall_checkbox('selall_user', 'user_id[]', $this->user->data['user_id']);
 
+		$arrMenuItems = array(
+				0 => array(
+						'type'	=> 'javascript',
+						'icon'	=> 'fa-trash-o',
+						'text'	=> $this->user->lang('delete'),
+						'perm'	=> true,
+						'name'	=> 'mdel',
+						'js'	=> "$('#del_members').click();",
+						'append'=> '<input name="mdel" onclick="delete_warning();" id="del_members" class="mainoption bi_delete" type="button" style="display:none;" />',
+				),
+				1 => array(
+						'type'	=> 'button',
+						'icon'	=> 'fa-lock',
+						'text'	=> $this->user->lang('lock'),
+						'perm'	=> true,
+						'name'	=> 'bulk_lock',
+				),
+				2 => array(
+						'type'	=> 'button',
+						'icon'	=> 'fa-unlock',
+						'text'	=> $this->user->lang('unlock'),
+						'perm'	=> true,
+						'name'	=> 'bulk_unlock',
+				),
+				3 => array(
+						'type'	=> 'button',
+						'icon'	=> 'fa-check-square-o',
+						'text'	=> $this->user->lang('activate'),
+						'perm'	=> true,
+						'name'	=> 'bulk_activate',
+				),
+				4 => array(
+						'type'	=> 'button',
+						'icon'	=> 'fa-square-o',
+						'text'	=> $this->user->lang('confirm_email'),
+						'perm'	=> true,
+						'name'	=> 'bulk_confirmemail',
+				),
+		);
+		
 		$this->tpl->assign_vars(array(
 			// Sorting
 			'O_USERNAME'			=> ($this->in->get('o', '0.0') == '0.0') ? '0.1' : '0.0',
@@ -502,6 +637,8 @@ class Manage_Users extends page_generic {
 			// Page vars
 			'U_MANAGE_USERS'		=> 'manage_users.php' . $this->SID . '&amp;start=' . $start . '&amp;',
 			'LISTUSERS_FOOTCOUNT'	=> sprintf($this->user->lang('listusers_footcount'), $total_users, 100),
+			'BUTTON_MENU'		=> $this->core->build_dropdown_menu($this->user->lang('selected_user').'...', $arrMenuItems, '', 'manage_users_menu', array("input[name=\"user_id[]\"]")),
+				
 			'USER_PAGINATION'		=> generate_pagination('manage_users.php'.$this->SID.'&amp;o='.$this->in->get('o'), $total_users, 100, $start))
 		);
 

@@ -96,7 +96,9 @@ $lang = array(
 "activate_all" => "Alle Benutzer aktivieren",
 "activate_user_warning" => "Sollen die ausgewählten Benutzer aktiviert werden?",
 "user_activate_success" => "Der Benutzer <i>%s</i> wurde erfolgreich aktiviert.",
-"user_deactivate_success" => "Der Benutzer <i>%s</i> wurde erfolgreich deaktiviert.",
+"user_lock_success" => "Der Benutzer <i>%s</i> wurde erfolgreich gesperrt. Eine Anmeldung dieses Benutzers ist nicht mehr möglich.",
+"user_unlock_success" => "Der Benutzer <i>%s</i> wurde erfolgreich entsperrt. Eine Anmeldung dieses Benutzers ist nun wieder möglich.",		
+"user_force_emailconfirm_success" => "Der Benutzer <i>%s</i> muss nun seine Email-Adresse bestätigen.",
 "event_icon_header" => "Ereignisicon auswählen",
 "role_icon_header" => 'Rollenicon auswählen',
 "multidkp_to_event" => "Dem Ereignis zugeordnete Multidkp-Konten",
@@ -1812,5 +1814,8 @@ $lang = array(
 
 						Also wenn ihr EQdkp Plus genauso liebt wie wir, denkt doch mal darüber nach, uns zu unterstützen!',
 'install_other_games' => 'Andere Spiele herunterladen',
+'lock' => 'Sperren',
+'unlock' => 'Entsperren',
+'confirm_email' => 'Email-Adresse bestätigen lassen',
 );
 ?>

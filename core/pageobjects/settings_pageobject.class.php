@@ -163,8 +163,41 @@ class settings_pageobject extends pageobject {
 			$bodyvars = array('USERNAME' => $this->pdh->get('user', 'name', array($this->user->id)));
 			$this->email->SendMailFromAdmin($this->pdh->get('user', 'email', array($this->user->id)), $this->user->lang('email_subject_password_changed'), 'user_password_changed.html', $bodyvars);
 		}
+		
+		//Send email to confirm new email address
+		if($change_email){
+			if($this->user->data['user_email_confirmed'] > 0){
+				$this->pdh->put('user', 'confirm_email', array($this->user->id, 2));
+			}
+			$user_key = $this->pdh->put('user', 'create_new_activationkey', array($this->user->id, $values['user_email']));
+			
+			// Email them their new key
+			$email = registry::register('MyMailer');
+			$bodyvars = array(
+					'USERNAME'		=> $this->pdh->get('user', 'name', array($this->user->id)),
+					'U_ACTIVATE'	=> $this->env->link.$this->controller_path_plain.'Register/Activate/?key=' . $user_key,
+			);
+			$email->SendMailFromAdmin($values['user_email'], $this->user->lang('email_subject_email_confirm'), 'user_email_confirm.html', $bodyvars);
+			
+			$this->core->message($this->user->lang('email_confirm_note'), '', 'hint');
+		} elseif($this->user->data['user_email_confirmed'] < 1) {
+			//Just send new message
+			
+			$user_key = $this->pdh->put('user', 'create_new_activationkey', array($this->user->id, $values['user_email']));
+				
+			// Email them their new key
+			$email = registry::register('MyMailer');
+			$bodyvars = array(
+					'USERNAME'		=> $this->pdh->get('user', 'name', array($this->user->id)),
+					'U_ACTIVATE'	=> $this->env->link.$this->controller_path_plain.'Register/Activate/?key=' . $user_key,
+			);
+			$email->SendMailFromAdmin($values['user_email'], $this->user->lang('email_subject_email_confirm'), 'user_email_confirm.html', $bodyvars);
+			
+			$this->core->message($this->user->lang('email_confirm_note'), '', 'hint');
+		}
 
-		$query_ary['user_email']	= $this->encrypt->encrypt($values['user_email']);
+		//Do not use new email here, because it just have to be confirmed
+		$query_ary['user_email']	= $this->encrypt->encrypt($this->user->data['user_email']);
 		$query_ary['exchange_key']	= $this->pdh->get('user', 'exchange_key', array($this->user->id));
 		
 		$plugin_settings = array();
@@ -246,13 +279,16 @@ class settings_pageobject extends pageobject {
 		$this->pdh->process_hook_queue();
 		
 		//Only redirect if saving was successfull so we can grad an error message
-		if ($blnResult) redirect($this->controller_path_plain.'Settings/'.$this->SID.'&amp;save');
+		if ($blnResult) redirect($this->controller_path_plain.'Settings/'.$this->SID.'&amp;save'.(($change_email) ? '=mailconfirm' : ''));
 		return;
 	}
 	
 	public function display($userdata=array()) {
 		
 		if ($this->in->exists('save')){
+			if($this->in->get('save') == 'mailconfirm'){
+				$this->core->message($this->user->lang('email_confirm_note'), '', 'hint');
+			} 
 			$this->core->message( $this->user->lang('update_settings_success'),$this->user->lang('save_suc'), 'green');
 		}
 		if(empty($userdata)) {

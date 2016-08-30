@@ -168,7 +168,7 @@ class admin_tasks extends gen_class {
 		$arrContent = array();
 
 		//Inactive Users
-		$inactive = $this->pdh->get('user', 'inactive');
+		$inactive = $this->pdh->get('user', 'not_confirmed');
 		if (count($inactive) > 0){
 			$nothing = false;
 			foreach ($inactive as $member){
@@ -186,7 +186,7 @@ class admin_tasks extends gen_class {
 	public function ntfyInactiveUsers(){
 		if ($this->config->get('account_activation') != 2) return array();
 
-		$inactive = $this->pdh->get('user', 'inactive');
+		$inactive = $this->pdh->get('user', 'not_confirmed');
 		if (count($inactive) > 0){
 			return array(array(
 				'type'		=> 'eqdkp_user_enable_requested',
@@ -279,7 +279,7 @@ class admin_tasks extends gen_class {
 		if($strAction == 'activate'){
 			if (count($arrIDs)){
 				foreach($arrIDs as $user_id){
-					$this->pdh->put('user', 'activate', array((int)$user_id));
+					$this->pdh->put('user', 'confirm_email', array((int)$user_id));
 				}
 				$this->pdh->process_hook_queue();
 				$this->core->message($this->user->lang('activate_user'), $this->user->lang('success'), 'green');

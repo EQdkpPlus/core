@@ -170,6 +170,7 @@ class core extends gen_class {
 		private function page_header(){
 			define('HEADER_INC', true);		// Define a variable so we know the header's been included
 
+			//Redirect to Guildrules if user hasn't accepted them
 			$intGuildrulesArticleID = $this->pdh->get('articles', 'resolve_alias', array('guildrules'));
 			$blnGuildrules = ($intGuildrulesArticleID && $this->pdh->get('articles', 'published', array($intGuildrulesArticleID)));
 			if ($this->user->is_signedin() && (int)$this->user->data['rules'] != 1 && $blnGuildrules){
@@ -177,6 +178,14 @@ class core extends gen_class {
 					redirect($this->controller_path_plain.'Register/'.$this->SID, false, false, false);
 				}
 			}
+
+			//Redirect to Settings if user has not confirmed their email
+			if($this->user->is_signedin() && (int)$this->user->data['user_email_confirmed'] < 1 && $this->config->get('cmsbridge_active') != 1){
+				if(stripos($this->env->path, 'settings') === false && stripos($this->env->path, 'activate') === false){
+					redirect($this->controller_path_plain.'Settings/'.$this->SID, false, false, false);
+				}
+			}
+			
 
 			// Check if gzip is enabled & send the HTTP headers
 			if ( $this->config->get('enable_gzip') == '1' ){

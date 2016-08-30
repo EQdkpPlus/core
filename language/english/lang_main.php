@@ -1129,6 +1129,9 @@ $lang = array(
 	"backup" => 'Backup Management',
 	"maintenance" => 'Maintenance mode',
 	"favorits" => 'Favorites',
+	"email_subject_email_confirm" => 'Email Confirmation Required',
+	"email_confirmed" => "Your Email-Address has been successfully confirmed.",
+	"email_confirm_note" => "Your new Email-Address will get valid if you confirm it by using the link sent to your new EMail-Address.",	
 );
 
 ?>

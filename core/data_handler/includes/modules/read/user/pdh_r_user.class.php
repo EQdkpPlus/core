@@ -243,6 +243,10 @@ if (!class_exists("pdh_r_user")){
 		public function get_active($user_id) {
 			return $this->users[$user_id]['user_active'];
 		}
+		
+		public function get_email_confirmed($user_id){
+			return $this->users[$user_id]['user_email_confirmed'];
+		}
 
 		public function get_awaymode_enabled($user_id, $truefalse = false){
 			if($user_id > 0){
@@ -376,10 +380,10 @@ if (!class_exists("pdh_r_user")){
 			return countWhere($this->users, '==', $styleid, 'user_style');
 		}
 
-		public function get_inactive(){
+		public function get_not_confirmed(){
 			$users = array();
 			foreach ($this->users as $user_id => $value){
-				if ($value['user_active'] == '0'){
+				if ((int)$value['user_email_confirmed'] < 1){
 					$users[] = $user_id;
 				}
 			}
@@ -390,6 +394,16 @@ if (!class_exists("pdh_r_user")){
 			$users = array();
 			foreach ($this->users as $user_id => $value){
 				if ($value['user_active'] == '1'){
+					$users[] = $user_id;
+				}
+			}
+			return $users;
+		}
+		
+		public function get_locked(){
+			$users = array();
+			foreach ($this->users as $user_id => $value){
+				if ($value['user_active'] == '0'){
 					$users[] = $user_id;
 				}
 			}

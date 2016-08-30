@@ -68,7 +68,7 @@ class auth_db extends auth {
 			//Auth Login, because all other failed
 			if (!$arrStatus){
 				$this->pdl->log('login', 'Try EQdkp Plus Login');
-				$objQuery = $this->db->prepare("SELECT user_id, username, user_password, user_email, user_active, failed_login_attempts, user_login_key
+				$objQuery = $this->db->prepare("SELECT user_id, username, user_password, user_email, user_active, user_email_confirmed, failed_login_attempts, user_login_key
 								FROM __users
 								WHERE LOWER(username) =?")->execute(clean_username($strUsername));
 				
@@ -78,7 +78,7 @@ class auth_db extends auth {
 					//If it's an old password without salt or there is a better algorythm
 					$blnNeedsUpdate = ($this->checkIfHashNeedsUpdate($strUserPassword) || !$strUserSalt);
 					if($blnNeedsUpdate){
-					if (((int)$row['user_active'])){
+					if (((int)$row['user_active']) && (int)$row['user_email_confirmed'] > 0){
 						$this->pdl->log('login', 'EQDKP User needs update');
 						if($this->checkPassword($strPassword, $row['user_password'], $boolUseHash)){
 							
@@ -99,7 +99,10 @@ class auth_db extends auth {
 								$this->pdl->log('login', 'EQDKP Login failed: wrong password');
 								$this->error = 'wrong_password';
 							}
-						} else {
+						} elseif((int)$row['user_email_confirmed'] < 0) {
+							$this->error = 'user_inactive';
+							$this->pdl->log('login', 'EQDKP Login failed: '.$this->error);
+						} else {	
 							$this->error = 'user_inactive';
 							if ($row['failed_login_attempts'] >= (int)$this->config->get('failed_logins_inactivity') ){
 								$this->error = 'user_inactive_failed_logins';
@@ -109,7 +112,7 @@ class auth_db extends auth {
 						
 					}else{
 						$strLoginPassword = $this->checkPassword($strPassword, $row['user_password'], $boolUseHash, true);
-						if ((int)$row['user_active']){
+						if ((int)$row['user_active'] && (int)$row['user_email_confirmed'] >= 0){
 							if($strLoginPassword){
 								$arrStatus = array(
 									'status'	=> 1,
@@ -188,7 +191,7 @@ class auth_db extends auth {
 
 					//Set him inactive
 					if ((int)$this->config->get('failed_logins_inactivity') > 0 && $intFailedLogins == (int)$this->config->get('failed_logins_inactivity')){
-						$this->pdh->put('user', 'activate', array($userid, 0));
+						$this->pdh->put('user', 'confirm_email', array($userid, -2));
 						
 						//Write to admin-Log
 						$this->logs->add('action_user_failed_logins', '', $userid, $strUsername, false, '', 1, $userid);
@@ -241,7 +244,7 @@ class auth_db extends auth {
 			if ($objQuery && $objQuery->numRows){
 				$arrUserResult = $objQuery->fetchAssoc();
 				if ($arrUserResult){
-					if ($strCookieAutologinKey != "" && strlen($arrUserResult['user_login_key']) && $strCookieAutologinKey===$arrUserResult['user_login_key'] && (int)$arrUserResult['user_active']){
+					if ($strCookieAutologinKey != "" && strlen($arrUserResult['user_login_key']) && $strCookieAutologinKey===$arrUserResult['user_login_key'] && (int)$arrUserResult['user_active']  && (int)$arrUserResult['user_email_confirmed'] > 0){
 						$arrUserResult['hooks'][] = array('id' => 'user_autologin_successful', 'data' => array('auth_method' => 'db', 'user_data' => $arrUserResult));
 						return $arrUserResult;
 					}

@@ -544,6 +544,7 @@ $lang = array(
 "email_subject_send_error" => "Beim senden der E-Mail ist ein Fehler aufgetreten.",
 "email_receiver" => "Empfänger",
 "email_subject_password_changed" => "Passwort wurde geändert",
+"email_subject_email_confirm" => "Email-Adresse bestätigen",		
 "uc_add_char" => "Charakter hinzufügen",
 "uc_add_char_plain" => "Neu erstellen",
 "uc_add_char_armory" => "Importieren",
@@ -1092,5 +1093,8 @@ $lang = array(
 "backup" => "Sicherung",
 "maintenance" => "Wartungsbereich",
 "favorits" => "Favoriten",
+"email_confirmed" => "Deine Email-Adresse wurde erfolgreich bestätigt.",
+"email_confirm_note" => "Damit deine neue Email-Adresse gültig wird, musst diese über einen Link aktivieren, der dir soeben per Email an die neue Adresse gesendet wurde.",
+		
 );
 ?>

@@ -59,7 +59,7 @@ if(!class_exists('pdh_w_user')) {
 			return $user_id;
 		}
 
-		public function register_user($arrData, $user_active = 1, $user_key = '', $rules = false, $strLoginMethod = false, $arrProfileData=false) {
+		public function register_user($arrData, $user_active = 1, $user_key = '', $rules = false, $strLoginMethod = false, $arrProfileData=false, $intEmailConfirmed=1) {
 			$new_salt = $this->user->generate_salt();
 			$new_password = $this->user->encrypt_password($arrData['user_password1'], $new_salt).':'.$new_salt;
 
@@ -75,7 +75,8 @@ if(!class_exists('pdh_w_user')) {
 				'user_style'			=> $arrData['user_style'],
 				'user_lang'				=> $arrData['user_lang'],
 				'user_timezone'			=> $arrData['user_timezone'],
-				'user_key'				=> $user_key,
+				'user_email_confirmkey'	=> $user_key,
+				'user_email_confirmed'	=> $intEmailConfirmed,
 				'user_active'			=> $user_active,
 				'rules'					=> ($rules) ? 1 : 0,
 				'custom_fields'			=> serialize($arrProfileData),
@@ -97,6 +98,7 @@ if(!class_exists('pdh_w_user')) {
 				'user_password'			=> $password,
 				'user_email'			=> $this->crypt->encrypt($email),
 				'user_active'			=> 1,
+				'user_email_confirmed'	=> 1,
 				'rules'					=> ($rules) ? 1 : 0,
 			);
 			$user_id = $this->insert_user($arrData, false);
@@ -235,7 +237,23 @@ if(!class_exists('pdh_w_user')) {
 			
 			return true;
 		}
-
+		
+		public function confirm_email($user_id, $status = 1, $strNewEmail=false) {
+			$arrData = array(
+					'user_email_confirmed'	=> $status,
+					'user_temp_email' => '',
+			);
+			if($strNewEmail !== false){
+				$arrData['user_email'] = register('encrypt')->encrypt($strNewEmail); 
+			}
+			
+			$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set($arrData)->execute($user_id);
+			if(!$objQuery) return false;
+			$this->pdh->enqueue_hook('user');
+			
+			return true;
+		}
+		
 		public function update_failed_logins($user_id, $intFailedLogins) {
 			$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
 					'failed_login_attempts'	=> $intFailedLogins
@@ -254,12 +272,13 @@ if(!class_exists('pdh_w_user')) {
 			return true;
 		}
 
-		public function create_new_activationkey($user_id){
+		public function create_new_activationkey($user_id, $new_email = ''){
 			// Create a new activation key
 			$user_key = random_string(true, 32);
 
 			$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
-					'user_key'	=> $user_key
+					'user_email_confirmkey'	=> $user_key,
+					'user_temp_email' => $new_email,
 			))->execute($user_id);
 			
 			if(!$objQuery) return false;
