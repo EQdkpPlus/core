@@ -32,6 +32,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 
 	public $default_lang = 'english';
 	public $user_profilefields = null;
+	private $arrFieldByNameCache = array();
 
 	public $hooks = array(
 		'user_profilefields_update',
@@ -58,6 +59,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 			$this->pdc->del('pdh_user_profilefields_table');
 			
 			$this->user_profilefields = NULL;
+			$this->arrFieldByNameCache = array();
 	}
 
 	public function init(){
@@ -316,17 +318,22 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 		}
 
 		public function get_field_by_name($strName){
+			$strNameToLower = utf8_strtolower($strName);
+			if(isset($this->arrFieldByNameCache[$strNameToLower])) return $this->arrFieldByNameCache[$strNameToLower];
+			
 			foreach($this->user_profilefields as $intFieldID => $arrValue){
 
 				if(is_serialized($arrValue['name'])){
 					$arrNames = unserialize($arrValue['name']);
 					foreach($arrNames as $lang => $val){
-						if (utf8_strtolower($val) === utf8_strtolower($strName)){
+						if (utf8_strtolower($val) === $strNameToLower){
+							$this->arrFieldByNameCache[$strNameToLower] = $intFieldID;
 							return $intFieldID;
 						}
 					}
 				} else {	
-					if (utf8_strtolower($arrValue['name']) === utf8_strtolower($strName)){
+					if (utf8_strtolower($arrValue['name']) === $strNameToLower){
+						$this->arrFieldByNameCache[$strNameToLower] = $intFieldID;
 						return $intFieldID;
 					}
 				}
