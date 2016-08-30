@@ -789,7 +789,7 @@ class Manage_Users extends page_generic {
 		// user field values
 		$user_data = array();
 		if($user_id > 0) {
-			$user_data = $this->pdh->get('user', 'data', array($user_id));
+			$user_data = $this->pdh->get('user', 'data', array($user_id, true));
 			$user_data = array_merge($user_data, $this->pdh->get('user', 'privacy_settings', array($user_id)));
 			$user_data = array_merge($user_data, $this->pdh->get('user', 'custom_fields', array($user_id)));
 			$user_data = array_merge($user_data, $this->pdh->get('user', 'plugin_settings', array($user_id)));
@@ -871,7 +871,7 @@ class Manage_Users extends page_generic {
 
 		$user_data = array();
 		if($user_id > 0) {
-			$user_data = $this->pdh->get('user', 'data', array($user_id));
+			$user_data = $this->pdh->get('user', 'data', array($user_id, true));
 		}
 
 		foreach($auth_options as $method => $options){
