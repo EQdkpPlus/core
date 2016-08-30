@@ -228,6 +228,25 @@ $(function(){
 	$(document).on("click", '.notsigned_check', function(){
 		check_unsigned(this, unsigned_attendees_f, a_checkboxes);
 	});
+
+	// the drag and drop stuff
+	$('.guest_box, .attendee_box').draggable({revert: true});
+	$('.class_column').droppable({
+		accept: function (draggable) {
+		  var item_wheretodrop, container;
+		  item_wheretodrop = $(draggable).data("droppable-to");
+		  container = $(this).data("droppable");
+console.log('test: '+item_wheretodrop+', container: '+container+', match: '+item_wheretodrop.indexOf(container))
+		  return item_wheretodrop.indexOf(container) >= 0;
+	  },
+	  classes: {
+			"ui-droppable-active": "highlight-dropzone"
+		},
+		hoverClass: 'hovering',
+		drop: function(event, ui) {
+			$(ui.draggable).detach().css({top: 0,left: 0}).appendTo(this);
+		}
+	});
 });
 
 function check_unsigned(selector, unsigned_attendees_f, a_checkboxes){

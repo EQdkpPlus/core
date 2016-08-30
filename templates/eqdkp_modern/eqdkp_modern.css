@@ -2526,6 +2526,8 @@ fieldset.raidcal_infos dt, fieldset.moderation_panel dt {
 	.guest_box				{ display:inline-block; margin:4px 4px 0; background:#fff; border:1px solid #ccc; border-radius:4px; }
 	.guest_box img			{ margin-top:-3px; }
 	.guest_box i			{ padding-left:4px; }
+
+	.highlight-dropzone		{ background: green;}
 }
 
 /* calendar: raidevent view - Not signed in Members Bar */

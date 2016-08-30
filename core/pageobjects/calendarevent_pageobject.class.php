@@ -865,10 +865,10 @@ class calendarevent_pageobject extends pageobject {
 							'DD_CHARS'			=> $charchangemenu['chars'],
 							'DD_ROLES'			=> $charchangemenu['roles'],
 							'GUEST'				=> false,
+							'DRAGDROP_TO'		=> ($eventdata['extension']['raidmode'] == 'role') ? '' : 'classrole_'.$this->pdh->get('member', 'classid', array($memberid)),
 						));
 					}
 				}
-
 
 				// The guests
 				if(isset($this->guests[$statuskey][$classid]) && is_array($this->guests[$statuskey][$classid]) && count($this->guests) > 0){
@@ -892,11 +892,12 @@ class calendarevent_pageobject extends pageobject {
 								'EXTERNALAPPL'	=> ($guestsdata['creator'] == 0 && $guestsdata['email'] != '') ? true : false,
 								'EMAIL'			=> (isset($guestsdata['email']) && $guestsdata['email'] != '') ? $guestsdata['email'] : false,
 								'SIGNEDSTATUS'	=> ($guestsdata['status'] == 0 || $guestsdata['status'] == 2 || $guestsdata['status'] == 3) ? $guestsdata['status'] : false,
+								'DRAGDROP_TO'	=> ($eventdata['extension']['raidmode'] == 'role') ? '' : 'classrole_'.$guestsdata['class'],
 							));
 						}
 					}
 				}
-			}
+			}//$this->pdh->get('roles', 'memberroles', array($tmp_classID))
 			$status_first = false;
 
 			// raid guests
