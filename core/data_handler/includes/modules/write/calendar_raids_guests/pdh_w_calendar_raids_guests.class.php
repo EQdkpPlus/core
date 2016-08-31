@@ -87,6 +87,16 @@ if(!class_exists('pdh_w_calendar_raids_guests')){
 			$this->pdh->enqueue_hook('guests_update', array($guestid));
 		}
 
+		public function dragdrop_update($guestid, $role=0, $status=1){
+			$role		= ($role > 0)	? $role 	: $this->pdh->get('guests', 'role', array($guestid));
+			$status		= ($status)		? $status 	: $this->pdh->get('guests', 'status', array($guestid));
+			$objQuery = $this->db->prepare("UPDATE __calendar_raid_guests :p WHERE id=?")->set(array(
+				'status'		=> $status,
+				'role'			=> $role
+			))->execute($guestid);
+			$this->pdh->enqueue_hook('guests_update', array($guestid));
+		}
+
 		public function delete_guest($guestid){
 			$objQuery = $this->db->prepare("DELETE FROM __calendar_raid_guests WHERE id=?;")->execute($guestid);
 

@@ -156,21 +156,21 @@ class calendarevent_pageobject extends pageobject {
 			$isguest		= $this->in->get("isguest", 'false');
 			$eventextension	= $this->pdh->get('calendar_events', 'extension', array($this->url_id));
 			$newrole		= ($eventextension['raidmode'] == 'role') ? $this->in->get("newroleclass", 0) : 0;
-			$new_status 	= $this->in->get("newstatus", 0);
-die('classid: '.$classid.'  / attendeeid: '.$attendeeid.' / is guest: '.$isguest.' / NEW role: '.$newrole.' / NEW status: '.$new_status );
+			$newstatus 		= $this->in->get("newstatus", 0);
+
 			// do the math
 			if($classid > 0 && $attendeeid > 0){
 				if($isguest == 'true'){
-					#update_guest($guestid, $classid=0, $group=0, $note='', $role=0)
-					$this->pdh->put('calendar_raids_guests', 'update_guest', array($attendeeid, 0, 0, '', $newrole));
+					#dragdrop_update($guestid, $role=0, $status=1)
+					$this->pdh->put('calendar_raids_guests', 'dragdrop_update', array($attendeeid, $newrole, $newstatus));
 				}else{
 					#update_status($eventid, $memberid, $memberrole='', $signupstatus='', $raidgroup=0, $signed_memberid=0, $note='', $signedbyadmin=0)
-					$this->pdh->put('calendar_raids_attendees', 'update_status', array($this->url_id, $attendeeid, $newrole, $new_status));
+					$this->pdh->put('calendar_raids_attendees', 'update_status', array($this->url_id, $attendeeid, $newrole, $newstatus));
 				}
 				$this->pdh->process_hook_queue();
 			}
 		}
-		die();
+		die('classid: '.$classid.'  / attendeeid: '.$attendeeid.' / is guest: '.$isguest.' / NEW role: '.$newrole.' / NEW status: '.$newstatus);
 	}
 
 	public function change_attendancestatus($eventid, $status){
