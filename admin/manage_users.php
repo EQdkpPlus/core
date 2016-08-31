@@ -57,6 +57,7 @@ class Manage_Users extends page_generic {
 		foreach($user_ids as $intUserID){
 			$this->pdh->put('user', 'activate', array($intUserID, 1));
 		}
+		$this->core->message($this->user->lang('bulk_user_unlock_success'), $this->user->lang('success'), 'green');
 		$this->pdh->process_hook_queue();
 		$this->display();
 	}
@@ -67,6 +68,7 @@ class Manage_Users extends page_generic {
 		foreach($user_ids as $intUserID){
 			$this->pdh->put('user', 'activate', array($intUserID, 0));
 		}
+		$this->core->message($this->user->lang('bulk_user_lock_success'), $this->user->lang('success'), 'green');
 		$this->pdh->process_hook_queue();
 		$this->display();
 	}
@@ -77,6 +79,9 @@ class Manage_Users extends page_generic {
 		foreach($user_ids as $intUserID){
 			$this->pdh->put('user', 'confirm_email', array($intUserID, 1));
 		}
+		$this->core->message($this->user->lang('bulk_user_activate_success'), $this->user->lang('success'), 'green');
+		
+		
 		$this->pdh->process_hook_queue();
 		$this->display();
 	}
@@ -98,6 +103,7 @@ class Manage_Users extends page_generic {
 			);
 			$email->SendMailFromAdmin($this->pdh->get('user', 'email', array($intUserID)), $this->user->lang('email_subject_email_confirm'), 'user_email_confirm.html', $bodyvars);
 		}
+		$this->core->message($this->user->lang('bulk_user_forceemailconfirm_success'), $this->user->lang('success'), 'green');
 		$this->pdh->process_hook_queue();
 		$this->display();
 	}

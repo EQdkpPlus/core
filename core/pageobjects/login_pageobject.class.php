@@ -92,6 +92,8 @@ class login_pageobject extends pageobject {
 				switch($strErrorCode){
 					case 'user_inactive': $strErrorMessage = $this->user->lang('error_account_inactive');
 					break;
+					case 'user_locked': $strErrorMessage = $this->user->lang('error_account_locked');
+					break;
 					case 'user_inactive_failed_logins': $strErrorMessage = $this->user->lang('error_account_inactive_failed_logins');
 					break;
 					case 'wrong_password':

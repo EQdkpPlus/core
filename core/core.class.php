@@ -184,6 +184,7 @@ class core extends gen_class {
 				if(stripos($this->env->path, 'settings') === false && stripos($this->env->path, 'activate') === false){
 					redirect($this->controller_path_plain.'Settings/'.$this->SID, false, false, false);
 				}
+				$this->core->message($this->user->lang('email_must_confirm_note'), '', 'hint');
 			}
 			
 

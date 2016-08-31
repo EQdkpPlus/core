@@ -1817,5 +1817,9 @@ $lang = array(
 'lock' => 'Sperren',
 'unlock' => 'Entsperren',
 'confirm_email' => 'Email-Adresse bestätigen lassen',
+"bulk_user_activate_success" => "Die ausgewählten Benutzer und ihre Email-Adressen wurden aktiviert.",
+"bulk_user_forceemailconfirm_success" => "Die ausgewählten Benutzer werden dazu gezwungen, ihre Email-Adresse zu bestätigen.",
+"bulk_user_lock_success" => "Die ausgewählten Benutzer wurden gesperrt.",
+"bulk_user_unlock_success" => "Die ausgewählten Benutzer wurden entsperrt.",		
 );
 ?>

@@ -78,7 +78,7 @@ class auth_db extends auth {
 					//If it's an old password without salt or there is a better algorythm
 					$blnNeedsUpdate = ($this->checkIfHashNeedsUpdate($strUserPassword) || !$strUserSalt);
 					if($blnNeedsUpdate){
-					if (((int)$row['user_active']) && (int)$row['user_email_confirmed'] > 0){
+					if (((int)$row['user_active']) && (int)$row['user_email_confirmed'] >= 0){
 						$this->pdl->log('login', 'EQDKP User needs update');
 						if($this->checkPassword($strPassword, $row['user_password'], $boolUseHash)){
 							
@@ -101,12 +101,12 @@ class auth_db extends auth {
 							}
 						} elseif((int)$row['user_email_confirmed'] < 0) {
 							$this->error = 'user_inactive';
-							$this->pdl->log('login', 'EQDKP Login failed: '.$this->error);
-						} else {	
-							$this->error = 'user_inactive';
 							if ($row['failed_login_attempts'] >= (int)$this->config->get('failed_logins_inactivity') ){
 								$this->error = 'user_inactive_failed_logins';
 							}
+							$this->pdl->log('login', 'EQDKP Login failed: '.$this->error);
+						} else {	
+							$this->error = 'user_locked';
 							$this->pdl->log('login', 'EQDKP Login failed: '.$this->error);
 						}
 						
@@ -124,11 +124,14 @@ class auth_db extends auth {
 								$this->error = 'wrong_password';
 								$this->pdl->log('login', 'EQDKP Login failed: '.$this->error);
 							}	
-						} else {
+						} elseif((int)$row['user_email_confirmed'] < 0) {
 							$this->error = 'user_inactive';
 							if ($row['failed_login_attempts'] >= (int)$this->config->get('failed_logins_inactivity') ){
 								$this->error = 'user_inactive_failed_logins';
 							}
+							$this->pdl->log('login', 'EQDKP Login failed: '.$this->error);
+						} else {
+							$this->error = 'user_locked';
 							$this->pdl->log('login', 'EQDKP Login failed: '.$this->error);
 						}
 						

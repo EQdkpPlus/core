@@ -1812,6 +1812,10 @@ $lang = array(
 		'lock' => 'Lock',
 		'unlock' => 'Unlock',
 		'confirm_email' => 'User must confirm Email-Address',
+		"bulk_user_activate_success" => "The selected users and their Email-Addresses have been confirmed.",
+		"bulk_user_forceemailconfirm_success" => "The selected users must confirm their Email-Addresses",
+		"bulk_user_lock_success" => "The selected users have been locked.",
+		"bulk_user_unlock_success" => "The selected user have been unlocked.",
 );
 
 ?>
