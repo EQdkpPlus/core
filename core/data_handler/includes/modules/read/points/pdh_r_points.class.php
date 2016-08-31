@@ -29,10 +29,13 @@ if ( !class_exists( "pdh_r_points" ) ) {
 		
 		public $default_lang = 'english';
 
+		private $cache;
 		public $points;
 		// initialise array to store multipools which are decayed
 		private $decayed = array();
-
+		private $arrCalculatedSingle = array();
+		private $arrCalculatedMulti = array();
+		
 		public $hooks = array(
 			'adjustment_update',
 			'event_update',
@@ -70,12 +73,14 @@ if ( !class_exists( "pdh_r_points" ) ) {
 			$this->apa->enqueue_update('current', $apaAffectedIDs);
 			
 			$this->pdc->del('pdh_points_table');
+			$this->pdc->del_prefix('pdh_points_member_');
 			$this->points = NULL;
 		}
 
 		public function init() {
 			//cached data not outdated?
 			$this->points = $this->pdc->get('pdh_points_table');
+
 			if($this->points !== NULL){
 				return true;
 			}
@@ -138,19 +143,24 @@ if ( !class_exists( "pdh_r_points" ) ) {
 					}
 				}
 			}
-			//ok, that was the basic table, now we calculate the real values
-			$members = $this->pdh->get('member', 'id_list', array(false, false));
-			$mdkps = $this->pdh->get('multidkp',  'id_list', array());
-			foreach($members as $member_id){
-				foreach($mdkps as $mdkp_id){
-					$this->calculate_multi_points($member_id, $mdkp_id);
-				}
-			}
 			$this->pdc->put('pdh_points_table', $this->points, null);
 		}
-
+		
 		public function get_earned($member_id, $multidkp_id, $event_id=0, $with_twink=true){
-			$with_twink = ($with_twink) ? 'multi' : 'single';
+			if($with_twink){
+				if(!isset($this->arrCalculatedMulti[$member_id]) && !isset($this->arrCalculatedMulti[$member_id][$multidkp_id])){
+					$this->calculate_multi_points($member_id, $multidkp_id);
+					$this->arrCalculatedMulti[$member_id][$multidkp_id] = 1;
+				}
+				$with_twink = 'multi';
+			} else {
+				if(!isset($this->arrCalculatedSingle[$member_id]) && !isset($this->arrCalculatedSingle[$member_id][$multidkp_id])){
+					$this->calculate_single_points($member_id, $multidkp_id);
+					$this->arrCalculatedSingle[$member_id][$multidkp_id] = 1;
+				}
+				$with_twink = 'single';
+			}
+			
 			if(!isset($this->points[$member_id][$multidkp_id][$with_twink]['earned'][$event_id])) return 0;
 			return $this->points[$member_id][$multidkp_id][$with_twink]['earned'][$event_id];
 		}
@@ -160,7 +170,20 @@ if ( !class_exists( "pdh_r_points" ) ) {
 		}
 
 		public function get_spent($member_id, $multidkp_id, $event_id=0, $itempool_id=0, $with_twink=true){
-			$with_twink = ($with_twink) ? 'multi' : 'single';
+			if($with_twink){
+				if(!isset($this->arrCalculatedMulti[$member_id]) && !isset($this->arrCalculatedMulti[$member_id][$multidkp_id])){
+					$this->calculate_multi_points($member_id, $multidkp_id);
+					$this->arrCalculatedMulti[$member_id][$multidkp_id] = 1;
+				}
+				$with_twink = 'multi';
+			} else {
+				if(!isset($this->arrCalculatedSingle[$member_id]) && !isset($this->arrCalculatedSingle[$member_id][$multidkp_id])){
+					$this->calculate_single_points($member_id, $multidkp_id);
+					$this->arrCalculatedSingle[$member_id][$multidkp_id] = 1;
+				}
+				$with_twink = 'single';
+			}
+			
 			if(!isset($this->points[$member_id][$multidkp_id][$with_twink]['spent'][$event_id][$itempool_id])) return 0;
 			return $this->points[$member_id][$multidkp_id][$with_twink]['spent'][$event_id][$itempool_id];
 		}
@@ -170,7 +193,20 @@ if ( !class_exists( "pdh_r_points" ) ) {
 		}
 
 		public function get_adjustment($member_id, $multidkp_id, $event_id=0, $with_twink=true){
-			$with_twink = ($with_twink) ? 'multi' : 'single';
+			if($with_twink){
+				if(!isset($this->arrCalculatedMulti[$member_id]) && !isset($this->arrCalculatedMulti[$member_id][$multidkp_id])){
+					$this->calculate_multi_points($member_id, $multidkp_id);
+					$this->arrCalculatedMulti[$member_id][$multidkp_id] = 1;
+				}
+				$with_twink = 'multi';
+			} else {
+				if(!isset($this->arrCalculatedSingle[$member_id]) && !isset($this->arrCalculatedSingle[$member_id][$multidkp_id])){
+					$this->calculate_single_points($member_id, $multidkp_id);
+					$this->arrCalculatedSingle[$member_id][$multidkp_id] = 1;
+				}
+				$with_twink = 'single';
+			}
+			
 			if(!isset($this->points[$member_id][$multidkp_id][$with_twink]['adjustment'][$event_id])) return 0;
 			return $this->points[$member_id][$multidkp_id][$with_twink]['adjustment'][$event_id];
 		}
@@ -231,7 +267,22 @@ if ( !class_exists( "pdh_r_points" ) ) {
 		}
 
 		public function calculate_single_points($memberid, $multidkpid = 1){
+			
 			//already cached?
+			$cacheEntry = $this->pdc->get('pdh_points_member_'.$memberid.'_'.$multidkpid);
+			if($cacheEntry !== null){
+				if(!isset($this->points[$memberid][$multidkpid])) $this->points[$memberid][$multidkpid] = array();
+				if(!isset($this->points[$memberid][$multidkpid]['single'])) $this->points[$memberid][$multidkpid]['single'] = array();
+				$this->points[$memberid][$multidkpid]['single']['earned'][0] = $cacheEntry[0];
+				$this->points[$memberid][$multidkpid]['single']['spent'][0][0] = $cacheEntry[1];
+				$this->points[$memberid][$multidkpid]['single']['adjustment'][0] = $cacheEntry[2];
+				
+				
+				$this->points[$memberid][$multidkpid]['single'] = array_merge($this->points[$memberid][$multidkpid]['single'], $cacheEntry);
+
+				return $this->points[$memberid][$multidkpid]['single'];
+			}
+			
 			if(isset($this->points[$memberid][$multidkpid]['single']['earned'][0])){
 				return $this->points[$memberid][$multidkpid]['single'];
 			}
@@ -265,6 +316,11 @@ if ( !class_exists( "pdh_r_points" ) ) {
 					$this->points[$memberid][$multidkpid]['single']['adjustment'][0] += $adjustment;
 				}
 			}
+
+			$arrToSave = array($this->points[$memberid][$multidkpid]['single']['earned'][0],
+					$this->points[$memberid][$multidkpid]['single']['spent'][0][0],
+					$this->points[$memberid][$multidkpid]['single']['adjustment'][0]);
+			$this->pdc->put('pdh_points_member_'.$memberid.'_'.$multidkpid, $arrToSave);
 			return $this->points[$memberid][$multidkpid]['single'];
 		}
 
@@ -273,6 +329,11 @@ if ( !class_exists( "pdh_r_points" ) ) {
 			//already cached?
 			if(isset($this->points[$memberid][$multidkpid]['multi'])){
 				return $this->points[$memberid][$multidkpid]['multi'];
+			}
+			
+			if(!isset($this->arrCalculatedSingle[$memberid]) && !isset($this->arrCalculatedSingle[$memberid][$multidkpid])){
+				$this->calculate_single_points($memberid, $multidkpid);
+				$this->arrCalculatedSingle[$memberid][$multidkpid] = 1;
 			}
 
 			//twink stuff

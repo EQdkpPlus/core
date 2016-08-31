@@ -329,9 +329,11 @@ if( !class_exists( "plus_datahandler")){
 				$params = $this->post_process_preset( $params, $sub_arr );
 			}
 			$method = 'get_'.$tag;
-			if( method_exists( $this->rm($module), $method ) ) {
+			$objModule = $this->rm($module);
+			
+			if( method_exists( $objModule, $method ) ) {
 				if( !$this->read_modules[$module] ) $this->init_read_module( $module );
-				return call_user_func_array( array( $this->rm($module), $method ), $params );
+				return call_user_func_array( array( $objModule, $method ), $params );
 			} else {
 				$data = debug_backtrace();
 				$extra = array('module: '.$module, 'tag: '.$tag, 'params: '.implode( ", ", $params ), 'sub_array: '.implode( ", ", $sub_arr ));
@@ -382,9 +384,10 @@ if( !class_exists( "plus_datahandler")){
 				$params = $this->post_process_preset( $params, $sub_arr );
 			}
 			$method = 'get_html_'.$tag;
-			if( method_exists( $this->rm($module), $method ) ) {
+			$objModule = $this->rm($module);
+			if( method_exists( $objModule, $method ) ) {
 				if( !$this->read_modules[$module] ) $this->init_read_module( $module );
-				return call_user_func_array( array( $this->rm($module), $method ), $params );
+				return call_user_func_array( array( $objModule, $method ), $params );
 			} else {
 				return $this->get( $module, $tag, $params );
 			}
@@ -412,9 +415,10 @@ if( !class_exists( "plus_datahandler")){
 				);
 			}
 			$method = 'get_caption_'.$tag;
-			if( method_exists( $this->rm($module), $method ) ) {
+			$objModule = $this->rm($module);
+			if( method_exists( $objModule, $method ) ) {
 				if( !$this->read_modules[$module] ) $this->init_read_module( $module );
-				return call_user_func_array( array( $this->rm($module), $method ), $params );
+				return call_user_func_array( array( $objModule, $method ), $params );
 			} else {
 				if( $this->get_lang($module, $tag) !== false) {
 					return $this->get_lang($module, $tag);
@@ -435,9 +439,10 @@ if( !class_exists( "plus_datahandler")){
 				);
 			}
 			$method = 'get_html_caption_'.$tag;
-			if( method_exists( $this->rm($module), $method ) ) {
+			$objModule = $this->rm($module);
+			if( method_exists($objModule , $method ) ) {
 				if( !$this->read_modules[$module] ) $this->init_read_module( $module );
-				return call_user_func_array( array( $this->rm($module), $method ), $params );
+				return call_user_func_array( array( $objModule, $method ), $params );
 			} else {
 				return $this->get_caption( $module, $tag, $params );
 			}
