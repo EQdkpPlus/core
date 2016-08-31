@@ -181,12 +181,12 @@ $(function(){
 			$(ui.draggable).detach().css({top: 0,left: 0}).appendTo(this);
 
 			// save the status to the database
-			var is_guest = $(this).data("is-guest");
+			var is_guest = ($(ui.draggable).data("is-guest") == true) ? true : false;
 			$.post("{U_CALENDAREVENT}", {
 				ajax_dragdrop:	true,
 				classid:		$(ui.draggable).data("class-id"),
 				roleid:			$(ui.draggable).data("role-id"),
-				attendeeid:		(is_guest) ? $(ui.draggable).data("guestid") : $(ui.draggable).data("attendeeid"),
+				attendeeid:		((is_guest) ? $(ui.draggable).data("guestid") : $(ui.draggable).data("attendeeid")),
 				newstatus:		$(this).data("status-id"),
 				newroleclass:	$(this).data("class-id"),
 				isguest:		is_guest,

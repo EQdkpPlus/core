@@ -155,22 +155,22 @@ class calendarevent_pageobject extends pageobject {
 			$attendeeid		= $this->in->get("attendeeid", 0);
 			$isguest		= $this->in->get("isguest", 'false');
 			$eventextension	= $this->pdh->get('calendar_events', 'extension', array($this->url_id));
-			$newrole		= ($eventextension['raidmode'] == 'role') ? $this->in->get("roleid", 0) : 0;
-
+			$newrole		= ($eventextension['raidmode'] == 'role') ? $this->in->get("newroleclass", 0) : 0;
+			$new_status 	= $this->in->get("newstatus", 0);
+die('classid: '.$classid.'  / attendeeid: '.$attendeeid.' / is guest: '.$isguest.' / NEW role: '.$newrole.' / NEW status: '.$new_status );
 			// do the math
 			if($classid > 0 && $attendeeid > 0){
 				if($isguest == 'true'){
-					$new_status 	= $this->in->get("newstatus", 0);
 					#update_guest($guestid, $classid=0, $group=0, $note='', $role=0)
 					$this->pdh->put('calendar_raids_guests', 'update_guest', array($attendeeid, 0, 0, '', $newrole));
 				}else{
-					$new_status 	= $this->in->get("newstatus", 0);
 					#update_status($eventid, $memberid, $memberrole='', $signupstatus='', $raidgroup=0, $signed_memberid=0, $note='', $signedbyadmin=0)
-					$this->pdh->put('calendar_raids_attendees', 'update_status', array($this->url_id, $attendeeid, $newrole, $new_status);
+					$this->pdh->put('calendar_raids_attendees', 'update_status', array($this->url_id, $attendeeid, $newrole, $new_status));
 				}
 				$this->pdh->process_hook_queue();
 			}
 		}
+		die();
 	}
 
 	public function change_attendancestatus($eventid, $status){
@@ -575,6 +575,7 @@ class calendarevent_pageobject extends pageobject {
 		$allroles		= $this->pdh->get('roles', 'roles', array());
 		$rolewnclass	= false;
 		$drpdwn_roles	= array();
+		$ddroles		= $this->pdh->get('roles', 'classroles', array());
 
 		foreach($allroles as $v_roles){
 			if(count($v_roles['classes']) == 0){
@@ -800,8 +801,8 @@ class calendarevent_pageobject extends pageobject {
 				));
 
 				// generate the applicable roles for the specific class, used by drag & drop
-				$ddroles		= $this->pdh->get('roles', 'memberroles', array($classid));
-				$dragto_roles	= (is_array($ddroles) && count($ddroles) > 0) ? 'classrole_'.implode(', classrole_', $values) : '';
+
+				$dragto_roles	= (isset($ddroles[$classid]) && is_array($ddroles[$classid]) && count($ddroles[$classid]) > 0) ? 'classrole_'.implode(', classrole_', $ddroles[$classid]) : '';
 
 				// The characters
 				if(isset($this->attendees[$statuskey][$classid]) && is_array($this->attendees[$statuskey][$classid])){
@@ -906,6 +907,7 @@ class calendarevent_pageobject extends pageobject {
 				if(isset($this->guests[$statuskey][$classid]) && is_array($this->guests[$statuskey][$classid]) && count($this->guests) > 0){
 					foreach($this->guests[$statuskey][$classid] as $guestid=>$guestsdata){
 						if($guestsdata['status'] == $statuskey){
+							$dragto_roles	= (isset($ddroles[$guestsdata['class']]) && is_array($ddroles[$guestsdata['class']]) && count($ddroles[$guestsdata['class']]) > 0) ? 'classrole_'.implode(', classrole_', $ddroles[$guestsdata['class']]) : '';
 							$guest_clssicon	= $this->game->decorate('primary', $guestsdata['class']);
 							$guest_tooltip 	= '<span><i class="fa fa-clock-o fa-lg"></i> '.$this->user->lang('raidevent_raid_signedin').": ".$this->time->user_date($guestsdata['timestamp_signup'], true, false, true).'</span>
 												<span><i class="fa fa-user fa-lg"></i>'.$guest_clssicon.'&nbsp;'.$this->game->get_name('primary', $guestsdata['class']).'</span>

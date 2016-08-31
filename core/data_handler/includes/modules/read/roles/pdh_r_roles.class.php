@@ -120,7 +120,7 @@ if (!class_exists('pdh_r_roles')){
 		public function get_icon($id){
 			return $this->roles[$id]['icon'];
 		}
-		
+
 		public function get_html_icon($id){
 			return $this->game->decorate('roles', $id);
 		}
@@ -146,6 +146,18 @@ if (!class_exists('pdh_r_roles')){
 			foreach($this->roles as $rolearray){
 				if(in_array($classid, $rolearray['classes'])){
 					$whatcanibe[$rolearray['id']] = $this->roles[$rolearray['id']]['name'];
+				}
+			}
+			return $whatcanibe;
+		}
+
+		public function get_classroles(){
+			$whatcanibe = array();
+			foreach($this->game->get_primary_classes(array('id_0')) as $classid=>$classname){
+				foreach($this->roles as $rolearray){
+					if(in_array($classid, $rolearray['classes'])){
+						$whatcanibe[$classid][$rolearray['id']] = $rolearray['id'];
+					}
 				}
 			}
 			return $whatcanibe;
