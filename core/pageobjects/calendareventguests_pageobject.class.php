@@ -65,11 +65,11 @@ class calendareventguests_pageobject extends pageobject {
 			if($this->in->get('membername')){
 				if($this->in->get('guestid', 0) > 0){
 					$blub = $this->pdh->put('calendar_raids_guests', 'update_guest', array(
-						$this->in->get('guestid', 0), $this->in->get('class'), $this->in->get('group'), $this->in->get('note'), '', $this->in->get('role', 0)
+						$this->in->get('guestid', 0), $this->in->get('class'), $this->in->get('group'), $this->in->get('note'), $this->in->get('role', 0)
 					));
 				}else{
 					$blub = $this->pdh->put('calendar_raids_guests', 'insert_guest', array(
-						$this->in->get('eventid', 0), $this->in->get('membername'), $this->in->get('class'), $this->in->get('group'), $this->in->get('note'), $this->in->get('role', 0)
+						$this->in->get('eventid', 0), $this->in->get('membername'), $this->in->get('class'), $this->in->get('group'), $this->in->get('note'), '' ,$this->in->get('role', 0)
 					));
 				}
 			}
