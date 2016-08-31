@@ -794,6 +794,7 @@ class calendarevent_pageobject extends pageobject {
 					'NAME'			=> ($classid == -1) ? $this->user->lang('raidevent_deleted_role_assigned') : $classname,
 					'CLASS_ICON'	=> ($eventdata['extension']['raidmode'] == 'role') ? $this->game->decorate('roles', $classid) : $this->game->decorate('primary', $classid),
 					'MAX'			=> ($eventdata['extension']['raidmode'] == 'none' && $eventdata['extension']['distribution'][$classid] == 0) ? '' : '/'.(($classid == '-1') ? '&infin;' : $eventdata['extension']['distribution'][$classid]),
+					'MAXCOUNT'		=> (isset($eventdata['extension']['distribution'][$classid])) ? $eventdata['extension']['distribution'][$classid] : 0,
 					'COUNT'			=> $classcount,
 					'SHOW'			=> ($classid > 0 || ($classid == -1 && isset($this->attendees[$statuskey][$classid]) && count($this->attendees[$statuskey][$classid]) > 0)) ? true : false,
 				));

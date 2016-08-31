@@ -10,7 +10,7 @@
 	<div class="class_table toggle_container">
 		<!-- BEGIN classes -->
 		<!-- IF raidstatus.classes.SHOW -->
-		<div class="class_column<!-- IF RAIDMODE == 'role' AND raidstatus.classes.ID == -1 --> raidcal_warningbox<!-- ENDIF -->" data-class-id="{raidstatus.classes.ID}" data-attendee-count="{raidstatus.classes.COUNT}" data-attendee-max="{raidstatus.classes.MAX}" data-droppable="classrole_{raidstatus.classes.ID}">
+		<div class="class_column<!-- IF RAIDMODE == 'role' AND raidstatus.classes.ID == -1 --> raidcal_warningbox<!-- ENDIF -->" data-class-id="{raidstatus.classes.ID}" data-attendee-count="{raidstatus.classes.COUNT}" data-attendee-max="{raidstatus.classes.MAXCOUNT}" data-droppable="classrole_{raidstatus.classes.ID}">
 			<!-- IF RAIDMODE == 'role' AND raidstatus.classes.ID == -1 -->
 			<div class="class_header coretip" data-coretip="{L_raidevent_deleted_role_assigned_info}"><i class="fa fa-exclamation-triangle fa-lg icon-red"></i>
 			<!-- ELSE -->

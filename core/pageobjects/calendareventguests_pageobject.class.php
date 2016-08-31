@@ -65,11 +65,11 @@ class calendareventguests_pageobject extends pageobject {
 			if($this->in->get('membername')){
 				if($this->in->get('guestid', 0) > 0){
 					$blub = $this->pdh->put('calendar_raids_guests', 'update_guest', array(
-						$this->in->get('guestid', 0), $this->in->get('class'), $this->in->get('group'), $this->in->get('note')
+						$this->in->get('guestid', 0), $this->in->get('class'), $this->in->get('group'), $this->in->get('note'), '', $this->in->get('role', 0)
 					));
 				}else{
 					$blub = $this->pdh->put('calendar_raids_guests', 'insert_guest', array(
-						$this->in->get('eventid', 0), $this->in->get('membername'), $this->in->get('class'), $this->in->get('group'), $this->in->get('note')
+						$this->in->get('eventid', 0), $this->in->get('membername'), $this->in->get('class'), $this->in->get('group'), $this->in->get('note'), $this->in->get('role', 0)
 					));
 				}
 			}
@@ -127,7 +127,7 @@ class calendareventguests_pageobject extends pageobject {
 		$eventdata		= $this->pdh->get('calendar_events', 'data', array($this->in->get('eventid', 0)));
 		if($eventdata['extension']['raidmode'] == 'role'){
 			$is_roleraid = true;
-			$classrole = $this->jquery->dd_ajax_request('class_id', 'role', $this->game->get_primary_classes(array('id_0')), array(), ((isset($guestdata['class'])) ? $guestdata['class'] : ''), $this->strPath.$this->SID.'&eventid='.$this->in->get('eventid', 0).'&guestid='.$this->in->get('guestid', 0).'&ajax=role');
+			$classrole = $this->jquery->dd_ajax_request('class', 'role', $this->game->get_primary_classes(array('id_0')), array(), ((isset($guestdata['class'])) ? $guestdata['class'] : ''), $this->strPath.$this->SID.'&eventid='.$this->in->get('eventid', 0).'&guestid='.$this->in->get('guestid', 0).'&ajax=role');
 		}
 
 		$this->tpl->assign_vars(array(
