@@ -902,6 +902,7 @@ class calendarevent_pageobject extends pageobject {
 						}
 					}
 				}
+			}
 			$status_first = false;
 		}
 		$this->tpl->add_js("var roles_json = ".json_encode($drpdwn_roles).";", 'head');
