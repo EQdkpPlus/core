@@ -23,14 +23,14 @@
 
 			<!-- BEGIN status -->
 			<!-- IF raidstatus.classes.status.GUEST -->
-			<div class="guest_box <!-- IF COLORED_NAMESBYCLASS -->class_{raidstatus.classes.status.CLASSID}<!-- ENDIF -->" data-guestid="{raidstatus.classes.status.ID}" data-approval="{raidstatus.classes.status.TOBEAPPROVED}" data-status="{raidstatus.classes.status.SIGNEDSTATUS}" data-droppable-to="{raidstatus.classes.status.DRAGDROP_TO}">
+			<div class="guest_box <!-- IF COLORED_NAMESBYCLASS -->class_{raidstatus.classes.status.CLASSID}<!-- ENDIF -->" data-role-id="{raidstatus.ID}" data-class-id="{raidstatus.classes.status.CLASSID}" data-guestid="{raidstatus.classes.status.ID}" data-approval="{raidstatus.classes.status.TOBEAPPROVED}" data-status="{raidstatus.classes.status.SIGNEDSTATUS}" data-droppable-to="{raidstatus.classes.status.DRAGDROP_TO}" is-guest="true">
 				<!-- IF raidstatus.classes.status.CLASSICON -->{raidstatus.classes.status.CLASSICON}<!-- ENDIF -->
 				<span class="guest_name">{raidstatus.classes.status.NAME}</span>
 				<!-- IF raidstatus.classes.status.EXTERNALAPPL --><!-- IF raidstatus.classes.status.TOBEAPPROVED --><i class="fa fa-external-link-square icon-color-red"><!-- ELSE --><i class="fa fa-check-square icon-color-green"><!-- ENDIF --></i><!-- ENDIF -->
 				<span class="guest_tooltip" style="display:none">{raidstatus.classes.status.TOOLTIP}</span>
 			</div>
 			<!-- ELSE -->
-			<div class="attendee_box" id="attendee_{raidstatus.classes.status.MEMBERID}" data-droppable-to="{raidstatus.classes.status.DRAGDROP_TO}">
+			<div class="attendee_box" id="attendee_{raidstatus.classes.status.MEMBERID}" data-droppable-to="{raidstatus.classes.status.DRAGDROP_TO}" is-guest="false" data-role-id="{raidstatus.ID}" data-class-id="{raidstatus.classes.status.CLASSID}" data-attendeeid="{raidstatus.classes.status.ID}">
 				<div class="attendee_select">
 					<!-- IF IS_OPERATOR -->
 					<input type="checkbox" name="modstat_change[]" value="{raidstatus.classes.status.MEMBERID}" />

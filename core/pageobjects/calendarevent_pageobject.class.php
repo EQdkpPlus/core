@@ -32,6 +32,7 @@ class calendarevent_pageobject extends pageobject {
 			'ajax'	=> array(
 				array('process' => 'role_ajax',	'value' => 'role'),
 			),
+			'ajax_dragdrop'		=> array('process' => 'perform_dragndrop'		'csrf'=>true).
 			'savenote'			=> array('process' => 'save_raidnote',			'csrf'=>true),
 			'update_status'		=> array('process' => 'update_status',			'csrf'=>true),
 			'moderate_status'	=> array('process' => 'moderate_status',		'csrf'=>true),
@@ -144,6 +145,31 @@ class calendarevent_pageobject extends pageobject {
 			));
 			$this->pdh->process_hook_queue();
 			$this->tpl->add_js('jQuery.FrameDialog.closeDialog();');
+		}
+	}
+
+	// save the drag & drop action
+	public function perform_dragndrop(){
+		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()){
+			$classid		= $this->in->get('classid', 0);
+			$attendeeid		= $this->in->get("attendeeid", 0);
+			$isguest		= $this->in->get("isguest", 'false')
+			$eventextension	= $this->pdh->get('calendar_events', 'extension', array($this->url_id));
+			$newrole		= ($eventextension['raidmode'] == 'role') ? $this->in->get("roleid", 0); : 0;
+
+			// do the math
+			if($classid > 0 && $attendeeid > 0){
+				if($isguest == 'true'){
+					$new_status 	= $this->in->get("newstatus", 0);
+					#update_guest($guestid, $classid=0, $group=0, $note='', $role=0)
+					#$this->pdh->put('calendar_raids_guests', 'update_guest', array($attendeeid, 0, 0, '', $newrole));
+				}else{
+					$new_status 	= $this->in->get("newstatus", 0);
+					#update_status($eventid, $memberid, $memberrole='', $signupstatus='', $raidgroup=0, $signed_memberid=0, $note='', $signedbyadmin=0)
+					#$this->pdh->put('calendar_raids_attendees', 'update_status', array($this->url_id, $attendeeid, $newrole, $new_status);
+				}
+				$this->pdh->process_hook_queue();
+			}
 		}
 	}
 
@@ -1139,8 +1165,6 @@ class calendarevent_pageobject extends pageobject {
 			'DATE_YEAR'				=> $this->time->date('Y', $eventdata['timestamp_start']),
 			'LINK2TRANSFORMEDRAID'	=> $this->pdh->get('calendar_events', 'transformed_raid_link', array($this->url_id)),
 			'TRANSFORMEDRAID_TT'	=> $tooltip_transformedraid,
-			// guests
-			#'GUEST_COUNT'			=> count($this->guests),
 
 			// Language files
 			'L_NOTSIGNEDIN'			=> $this->user->lang(array('raidevent_raid_status', 4)),
@@ -1150,6 +1174,7 @@ class calendarevent_pageobject extends pageobject {
 			'CSRF_CHANGENOTE_TOKEN'	=> $this->CSRFGetToken('change_note'),
 			'CSRF_CHANGEGRP_TOKEN'	=> $this->CSRFGetToken('change_group'),
 			'CSRF_GUESTAPPRV_TOKEN'	=> $this->CSRFGetToken('confirm_guest'),
+			'CSRF_DRAGNDROP_TOKEN'	=> $this->CSRFGetToken('ajax_dragdrop'),
 
 			'U_CALENDAREVENT'		=> $this->strPath.$this->SID,
 			'MY_SOCIAL_BUTTONS'		=> ($arrCategory['social_share_buttons']) ? $this->social->createSocialButtons($this->env->link.$this->strPathPlain, $strPageTitle) : '',

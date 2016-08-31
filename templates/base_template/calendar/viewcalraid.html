@@ -162,8 +162,8 @@ $(function(){
 	$('.class_column').droppable({
 		accept: function (draggable) {
 			var item_wheretodrop, container;
-			item_wheretodrop = $(draggable).data("droppable-to");
-			container = $(this).data("droppable");
+			item_wheretodrop	= $(draggable).data("droppable-to");
+			container			= $(this).data("droppable");
 			console.log('test: '+item_wheretodrop+', container: '+container+', match: '+item_wheretodrop.indexOf(container))
 			return item_wheretodrop.indexOf(container) >= 0;
 		},
@@ -173,6 +173,22 @@ $(function(){
 		hoverClass: 'hovering',
 		drop: function(event, ui) {
 			$(ui.draggable).detach().css({top: 0,left: 0}).appendTo(this);
+
+			// save the status to the database
+			var is_guest = $(this).data("is-guest");
+			$.post("{U_CALENDAREVENT}", {
+				ajax_dragdrop:	true,
+				classid:		$(ui.draggable).data("class-id"),
+				roleid:			$(ui.draggable).data("role-id"),
+				attendeeid:		(is_guest) ? $(ui.draggable).data("guestid") : $(ui.draggable).data("attendeeid"),
+				newstatus:		$(this).data("status-id"),
+				newroleclass:	$(this).data("class-id"),
+				isguest:		is_guest,
+				link_hash:		'{CSRF_DRAGNDROP_TOKEN}'
+			},
+			function(data){
+				// TODO: trigger success message some day
+			});
 		}
 	});
 });
@@ -510,27 +526,27 @@ function ChangeGuestStatus(guestid, status){
 					<span class="group_selector"><i class="fa fa-users fa-lg"></i> {DD_RAIDGROUPS}</span>
 				</div>
 				<!-- ENDIF -->
-				
+
 				<!-- IF not IS_SIGNEDIN and SHOW_GUESTAPPLICATION -->
 				<div class="raidcal_buttonrow_guestattend">
 					<button type="button" name="guestattend" id="button_guestattend"><i class="fa fa-user-plus fa-lg"></i> {L_raidevent_guest_attendraid}</button>
 				</div>
 				<!-- ENDIF -->
 			</div>
-			
+
 			<div class="raidcal_buttonrow_right">
 				<!-- IF IS_OPERATOR and SHOW_CONFIRMBUTTON -->
 				<div class="raidcal_buttonrow_confirmall">
 					<button type="submit" name="confirmall" id="button_confirmall">{L_raidevent_raid_confirmall}</button>
 				</div>
 				<!-- ENDIF -->
-				
+
 				<!-- IF IS_OPERATOR -->
 				<div class="raidcal_buttonrow_addguest">
 					<button id="addguest" type="button"><i class="fa fa-user-plus fa-lg"></i></button>
 				</div>
 				<!-- ENDIF -->
-				
+
 				<!-- IF S_NOTSIGNED_VISIBLE -->
 				<div class="raidcal_buttonrow_notsigned">
 					<button type="button" class="notsigned_button"><i class="fa fa-plus-circle"></i>{L_raidevent_raid_unsigned_button}</button>

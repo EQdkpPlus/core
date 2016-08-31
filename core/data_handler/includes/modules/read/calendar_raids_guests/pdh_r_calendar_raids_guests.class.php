@@ -78,6 +78,7 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 						'creator'			=> $row['creator'],
 						'status'			=> $row['status'],
 						'eventid'			=> $row['calendar_events_id'],
+						'role'				=> $row['role'],
 					);
 					$this->guestsEvent[$row['calendar_events_id']][$row['id']] = $this->guests[$row['id']];
 					$this->guestsStatus[$row['calendar_events_id']][$row['status']][$row['class']][$row['id']] = $this->guests[$row['id']];
@@ -133,6 +134,10 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 
 		public function get_status($id){
 			return $this->guests[$id]['status'];
+		}
+
+		public function get_role($id){
+			return $this->guests[$id]['role'];
 		}
 
 		public function get_eventlink($id, $external=false){
