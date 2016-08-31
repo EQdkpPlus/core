@@ -2424,25 +2424,18 @@ fieldset.settings.floatRight.raid input[type="text"]{
 	box-shadow: 0px 0px 3px #008AFF;
 	border-color: #008AFF;
 }
-.raidcal_buttonrow{
+
+.raidcal_buttonrow {
 	display: flex;
 	flex-wrap: nowrap;
-	justify-content: space-between;
-	width: 100%;
-	margin: 0px 0px 10px 0px;
+	margin-bottom: 10px;
 }
-.raidcal_buttonrow_raidgroups{
-	width: 200px;
-}
-.raidcal_buttonrow_confirmall, .raidcal_buttonrow_guestattend{
-	width: 210px;
-}
-.raidcal_buttonrow_addguest{
-	width: 55px;
-}
-.raidcal_buttonrow_notsigned{
-	width: 184px;
-}
+.raidcal_buttonrow_left { margin-right: auto; }
+.raidcal_buttonrow_right { margin-left: auto; }
+.raidcal_buttonrow_left > *,
+.raidcal_buttonrow_right > * { display: inline; }
+.raidcal_buttonrow_confirmall { margin-right: 15px; }
+
 .buttonblock{
 	color:black;
 }
@@ -2511,23 +2504,22 @@ fieldset.raidcal_infos dt, fieldset.moderation_panel dt {
 	.attendee_count	{ margin-top:-2px; }
 
 	// attendee
-	.attendee_box			{ display:flex; padding:2px; margin:4px 4px 0; border:1px solid #4d4d4d; background:#fff; color:#000; transition:all .2s ease-in; }
-	.attendee_box.selected	{ border:1px solid #f55; background: linear-gradient(to bottom, #cdcdcd 0%, #fff 100%); }
+	.attendee_box			{ display:flex; padding:2px; margin:4px 4px 0; border:1px solid #4d4d4d; background:#fff; color:#000; transition:border .2s ease-in, background .2s ease-in; }
+	// .attendee_box.selected	{ border:1px solid #f55; background: linear-gradient(to bottom, #cdcdcd 0%, #fff 100%); }
 	.attendee_select		{ flex:0 0 22px; }
 	.attendee_name			{ flex:2 1 100%; color: #000; overflow:hidden; text-overflow:ellipsis; }
 	.attendee_name a		{ color: #000; overflow:hidden; text-overflow:ellipsis; }
 	.attendee_info			{ flex:1 0 auto; padding-right:3px; }
 
-	// guest additions -- cause similar structure, but same design
-	.state_header #addguest	{ height:28px; float:right; position:relative; bottom:8px; right:20px; }
-	.guest_table			{ display:flex; flex-wrap:wrap; margin-bottom:5px; border:1px solid #ccc; border-bottom:none; width:100%; box-sizing:border-box; }
-	.guest_column			{ flex:1 0 50%; background:#e8e8e8; padding:5px; box-sizing:border-box; border-bottom:1px solid #ccc; }
-	.guest_header			{ display:inline-block; }
+	// guest
 	.guest_box				{ display:inline-block; margin:4px 4px 0; background:#fff; border:1px solid #ccc; border-radius:4px; }
-	.guest_box img			{ margin-top:-3px; }
+	.guest_box img			{ margin-top:-4px; }
 	.guest_box i			{ padding-left:4px; }
 
-	.highlight-dropzone		{ background: green;}
+	// drag & drop
+	.ui-draggable			{ cursor:pointer; }
+	.ui-draggable-dragging	{ border:1px dotted #3f0; z-index:1; }
+	.highlight-dropzone		{ opacity:1 !important; min-height:60px; background:rgba(0, 200, 0, 0.3); }
 }
 
 /* calendar: raidevent view - Not signed in Members Bar */
@@ -2549,11 +2541,6 @@ fieldset.raidcal_infos dt, fieldset.moderation_panel dt {
 .notsigned_button {
 	outline: none;
 	float: right;
-	display: block;
-}
-
-span.group_selector {
-	outline: none;
 	display: block;
 }
 
