@@ -771,6 +771,11 @@ class calendarevent_pageobject extends pageobject {
 					'COUNT'			=> $classcount,
 					'SHOW'			=> ($classid > 0 || ($classid == -1 && isset($this->attendees[$statuskey][$classid]) && count($this->attendees[$statuskey][$classid]) > 0)) ? true : false,
 				));
+
+				// generate the applicable roles for the specific class, used by drag & drop
+				$ddroles		= $this->pdh->get('roles', 'memberroles', array($classid));
+				$dragto_roles	= (is_array($ddroles) && count($ddroles) > 0) ? 'classrole_'.implode(', classrole_', $values) : '';
+
 				// The characters
 				if(isset($this->attendees[$statuskey][$classid]) && is_array($this->attendees[$statuskey][$classid])){
 					foreach($this->attendees[$statuskey][$classid] as $memberid=>$memberdata){
@@ -865,12 +870,12 @@ class calendarevent_pageobject extends pageobject {
 							'DD_CHARS'			=> $charchangemenu['chars'],
 							'DD_ROLES'			=> $charchangemenu['roles'],
 							'GUEST'				=> false,
-							'DRAGDROP_TO'		=> ($eventdata['extension']['raidmode'] == 'role') ? '' : 'classrole_'.$this->pdh->get('member', 'classid', array($memberid)),
+							'DRAGDROP_TO'		=> ($eventdata['extension']['raidmode'] == 'role') ? $dragto_roles : 'classrole_'.$this->pdh->get('member', 'classid', array($memberid)),
 						));
 					}
 				}
 
-				// The guests
+				// add the guests to the attendee list
 				if(isset($this->guests[$statuskey][$classid]) && is_array($this->guests[$statuskey][$classid]) && count($this->guests) > 0){
 					foreach($this->guests[$statuskey][$classid] as $guestid=>$guestsdata){
 						if($guestsdata['status'] == $statuskey){
@@ -892,16 +897,12 @@ class calendarevent_pageobject extends pageobject {
 								'EXTERNALAPPL'	=> ($guestsdata['creator'] == 0 && $guestsdata['email'] != '') ? true : false,
 								'EMAIL'			=> (isset($guestsdata['email']) && $guestsdata['email'] != '') ? $guestsdata['email'] : false,
 								'SIGNEDSTATUS'	=> ($guestsdata['status'] == 0 || $guestsdata['status'] == 2 || $guestsdata['status'] == 3) ? $guestsdata['status'] : false,
-								'DRAGDROP_TO'	=> ($eventdata['extension']['raidmode'] == 'role') ? '' : 'classrole_'.$guestsdata['class'],
+								'DRAGDROP_TO'	=> ($eventdata['extension']['raidmode'] == 'role') ? $dragto_roles : 'classrole_'.$guestsdata['class'],
 							));
 						}
 					}
 				}
-			}//$this->pdh->get('roles', 'memberroles', array($tmp_classID))
 			$status_first = false;
-
-			// raid guests
-
 		}
 		$this->tpl->add_js("var roles_json = ".json_encode($drpdwn_roles).";", 'head');
 
