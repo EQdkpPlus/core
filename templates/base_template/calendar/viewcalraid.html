@@ -158,13 +158,19 @@ $(function(){
 	});
 
 	// the drag and drop stuff
-	$('.guest_box, .attendee_box').draggable({revert: true});
+	var dnd_start_container = { };
+	$('.guest_box, .attendee_box').draggable({
+		start: function(event, ui){
+			dnd_start_container = $(this).parent();
+		},
+		revert: true
+	});
 	$('.class_column').droppable({
 		accept: function (draggable) {
 			var item_wheretodrop, container;
-			item_wheretodrop	= $(draggable).data("droppable-to");
-			container			= $(this).data("droppable");
-			console.log('test: '+item_wheretodrop+', container: '+container+', match: '+item_wheretodrop.indexOf(container))
+			item_wheretodrop = $(draggable).data("droppable-to");
+			container = $(this).data("droppable");
+			// console.log('test: '+item_wheretodrop+', container: '+container+', match: '+item_wheretodrop.indexOf(container))
 			return item_wheretodrop.indexOf(container) >= 0;
 		},
 		classes: {
@@ -185,10 +191,18 @@ $(function(){
 				newroleclass:	$(this).data("class-id"),
 				isguest:		is_guest,
 				link_hash:		'{CSRF_DRAGNDROP_TOKEN}'
-			},
-			function(data){
+			}, function(data){
 				// TODO: trigger success message some day
 			});
+
+			// count attendees
+			max_count	= dnd_start_container.data('attendee-max');
+			start_count	= parseInt(dnd_start_container.data('attendee-count')) - 1;
+			dnd_start_container.attr('data-attendee-count', start_count).data('attendee-count', start_count);
+			dnd_start_container.find('.attendee_count').text('('+start_count+max_count+')');
+			end_count	= parseInt($(this).data('attendee-count')) + 1;
+			$(this).attr('data-attendee-count', end_count).data('attendee-count', end_count);
+			$(this).find('.attendee_count').text('('+end_count+max_count+')');
 		}
 	});
 });
