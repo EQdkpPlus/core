@@ -153,9 +153,9 @@ class calendarevent_pageobject extends pageobject {
 		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()){
 			$classid		= $this->in->get('classid', 0);
 			$attendeeid		= $this->in->get("attendeeid", 0);
-			$isguest		= $this->in->get("isguest", 'false')
+			$isguest		= $this->in->get("isguest", 'false');
 			$eventextension	= $this->pdh->get('calendar_events', 'extension', array($this->url_id));
-			$newrole		= ($eventextension['raidmode'] == 'role') ? $this->in->get("roleid", 0); : 0;
+			$newrole		= ($eventextension['raidmode'] == 'role') ? $this->in->get("roleid", 0) : 0;
 
 			// do the math
 			if($classid > 0 && $attendeeid > 0){
