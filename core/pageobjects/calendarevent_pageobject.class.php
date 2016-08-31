@@ -32,7 +32,7 @@ class calendarevent_pageobject extends pageobject {
 			'ajax'	=> array(
 				array('process' => 'role_ajax',	'value' => 'role'),
 			),
-			'ajax_dragdrop'		=> array('process' => 'perform_dragndrop'		'csrf'=>true).
+			'ajax_dragdrop'		=> array('process' => 'perform_dragndrop'		'csrf'=>true),
 			'savenote'			=> array('process' => 'save_raidnote',			'csrf'=>true),
 			'update_status'		=> array('process' => 'update_status',			'csrf'=>true),
 			'moderate_status'	=> array('process' => 'moderate_status',		'csrf'=>true),
