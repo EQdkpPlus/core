@@ -623,7 +623,7 @@ class calendarevent_pageobject extends pageobject {
 
 		// Guests / rest
 		$this->twinks			= array();
-		$this->guests			= $this->pdh->get('calendar_raids_guests', 'members', array($this->url_id, true));
+		$this->guests			= $this->pdh->get('calendar_raids_guests', 'members', array($this->url_id, true, (($eventdata['extension']['raidmode'] == 'role') ? true : false)));
 		#d($this->pdh->get('calendar_raids_guests', 'members', array($this->url_id, true)));
 		$this->raidcategories	= ($eventdata['extension']['raidmode'] == 'role') ? $this->pdh->aget('roles', 'name', 0, array($this->pdh->get('roles', 'id_list'))) : $this->game->get_primary_classes(array('id_0'));
 
