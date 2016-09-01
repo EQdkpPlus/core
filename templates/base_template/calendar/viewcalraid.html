@@ -122,7 +122,6 @@ $(function(){
 			$('#bottommenu_chars').data('charid', charid);
 		}
 
-
 		$('[name="submit_charchange"]').click(function(){
 			$.post("{U_CALENDAREVENT}", {
 				change_char: true,
@@ -166,6 +165,7 @@ $(function(){
 	});
 
 	// the drag and drop stuff
+	<!-- IF IS_OPERATOR -->
 	var dnd_start_container = { };
 	$('.guest_box, .attendee_box').draggable({
 		start: function(event, ui){
@@ -230,6 +230,7 @@ $(function(){
 			// if(is_guest) end_state_header.find('.state_guests').text(start_guests[1] + (parseInt(start_guests[2]) + 1) + start_guests[3])
 		}
 	});
+	<!-- ENDIF -->
 });
 
 <!-- IF S_NOTSIGNED_VISIBLE -->
