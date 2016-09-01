@@ -44,7 +44,6 @@ class calendarevent_pageobject extends pageobject {
 			'change_note'		=> array('process' => 'change_note',			'csrf'=>true),
 			'change_group'		=> array('process' => 'change_group',			'csrf'=>true),
 			'guestid'			=> array('process' => 'delete_guest',			'csrf'=>true),
-			'confirm_guest'		=> array('process' => 'confirm_guest',			'csrf'=>true),
 			'doContinueRaid'	=> array('process' => 'perform_continue'),
 			'logs'				=> array('process' => 'display_logs'),
 		);
@@ -353,14 +352,6 @@ class calendarevent_pageobject extends pageobject {
 			}
 			$this->pdh->process_hook_queue();
 		}
-	}
-
-	public function confirm_guest(){
-		if($this->in->get('confirm_id', 0) > 0){
-			$this->pdh->put('calendar_raids_guests', 'approve_guest', array($this->in->get('confirm_id', 0), $this->in->get('gueststatus', 0)));
-		}
-		$this->pdh->process_hook_queue();
-		return 'true';
 	}
 
 	// moderator/operator add an unsigned char to the raid
@@ -1176,7 +1167,6 @@ class calendarevent_pageobject extends pageobject {
 			'CSRF_CHANGECHAR_TOKEN'	=> $this->CSRFGetToken('change_char'),
 			'CSRF_CHANGENOTE_TOKEN'	=> $this->CSRFGetToken('change_note'),
 			'CSRF_CHANGEGRP_TOKEN'	=> $this->CSRFGetToken('change_group'),
-			'CSRF_GUESTAPPRV_TOKEN'	=> $this->CSRFGetToken('confirm_guest'),
 			'CSRF_DRAGNDROP_TOKEN'	=> $this->CSRFGetToken('ajax_dragdrop'),
 
 			'U_CALENDAREVENT'		=> $this->strPath.$this->SID,

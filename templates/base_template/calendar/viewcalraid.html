@@ -25,7 +25,7 @@ $(function(){
 	$(document).on("click", "div.attendee_box", function (event) {
 		var target		= $(event.target);
 		var checkbox	= $(this).find("input[type='checkbox']");
-		
+
 		if(target.is('.buttonblock, .char_adminmenu')){
 			if($(this).hasClass('char_edit')){
 				$('.attendee_box.char_edit').each(function(){ $(this).removeClass('char_edit'); });
@@ -39,7 +39,7 @@ $(function(){
 			$(this).toggleClass("selected", checkbox.is(':checked'));
 			return;
 		}
-		
+
 		$(this).toggleClass("selected", !checkbox.is(':checked'));
 		checkbox.prop("checked", !checkbox.is(':checked'));
 		$('[name="modstat_change[]"]').trigger('change');
@@ -50,10 +50,8 @@ $(function(){
 		var approval	= $(this).data('approval');
 		var signedstatus= $(this).data('status');
 		var titletext	= '';
-		if(approval){
-			var titletext = '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-thumbs-up fa-lg hand" onclick="ChangeGuestStatus('+guestid+', 0);"></i>   <i class="fa fa-thumbs-down fa-lg hand" onclick="ChangeGuestStatus('+guestid+', 2);"></i>   <i class="fa fa-question-circle fa-lg hand" onclick="ChangeGuestStatus('+guestid+', 3);"></i>   <i class="fa fa-trash-o fa-lg hand" onclick="DeleteGuest('+guestid+');"></i></div>';
-		}else if($.isNumeric(signedstatus)){
-			var titletext = '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-thumbs-up fa-lg hand '+((signedstatus == 0) ? 'icon-color-green' : 'icon-color-gray')+'" onclick="ChangeGuestStatus('+guestid+', 0);"></i>   <i class="fa fa-thumbs-down fa-lg hand '+((signedstatus == 2) ? 'icon-color-green' : 'icon-color-gray')+'" onclick="ChangeGuestStatus('+guestid+', 2);"></i>   <i class="fa fa-question-circle fa-lg hand '+((signedstatus == 3) ? 'icon-color-green' : 'icon-color-gray')+'" onclick="ChangeGuestStatus('+guestid+', 3);"></i>   <i class="fa fa-trash-o fa-lg hand" onclick="DeleteGuest('+guestid+');"></i></div>';
+		if(approval || $.isNumeric(signedstatus)){
+			var titletext = '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-trash-o fa-lg hand" onclick="DeleteGuest('+guestid+');"></i></div>';
 		}else{
 			var titletext = '<div style="text-align:right;margin-right:-26px;"><i class="fa fa-pencil fa-lg hand" onclick="EditGuest('+guestid+');"></i>  <i class="fa fa-trash-o fa-lg hand" onclick="DeleteGuest('+guestid+');"></i></div>';
 		}
@@ -213,18 +211,18 @@ $(function(){
 			end_count	= parseInt($(this).data('attendee-count')) + 1;
 			$(this).attr('data-attendee-count', end_count).data('attendee-count', end_count);
 			$(this).find('.attendee_count').text('('+end_count+max_count+')');
-			
+
 			// count state attendees
 			start_state_header	= dnd_start_container.parent().parent().children('.state_header');
 			end_state_header	= $(this).parent().parent().children('.state_header');
 			max_count			= parseInt(start_state_header.data('attendee-max'));
-			
+
 			start_count	= parseInt(start_state_header.data('attendee-count')) - 1;
 			// start_guests	= start_state_header.find('.state_guests').text().match(/\[(.*)(\d+)(.*)\]/);
 			start_state_header.attr('data-attendee-count', start_count).data('attendee-count', start_count);
 			start_state_header.find('.state_count').text('('+start_count+'/'+max_count+')');
 			// if(is_guest) start_state_header.find('.state_guests').text(start_guests[1] + (parseInt(start_guests[2]) - 1) + start_guests[3])
-			
+
 			end_count	= parseInt(end_state_header.data('attendee-count')) + 1;
 			// end_guests	= end_state_header.find('.state_guests').text().match(/\[(.*)(\d+)(.*)\]/);
 			end_state_header.attr('data-attendee-count', end_count).data('attendee-count', end_count);
@@ -380,18 +378,6 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 		});
 	}
 	$("#memberScroller").html(attoutput);
-}
-function ChangeGuestStatus(guestid, status){
-	$.post("{U_CALENDAREVENT}", {
-		confirm_guest: true,
-		confirm_id: guestid,
-		gueststatus: status,
-		eventid: '{EVENT_ID}',
-		link_hash: '{CSRF_GUESTAPPRV_TOKEN}'
-	},
-	function(data){
-		window.location = '{U_CALENDAREVENT}';
-	});
 }
 
 <!-- ENDIF -->
