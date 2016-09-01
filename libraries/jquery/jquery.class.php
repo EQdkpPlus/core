@@ -76,9 +76,6 @@ if (!class_exists("jquery")) {
 			$langfile = '';
 			$this->langfile('lang_jquery.js');
 
-			// set the custom UI for jquery.ui
-			$this->CustomUI((isset($this->user->style['template_path'])) ? $this->user->style['template_path'] : 'eqdkp_modern');
-
 			// set the static html for notification
 			$this->tpl->staticHTML('
 				<div id="notify_container">
@@ -312,18 +309,6 @@ if (!class_exists("jquery")) {
 				});
 			", 'eop');
 			return '<textarea name="'.$id.'" class="'.$id.'" id="'.$id.'" cols="120" rows="30">'.$code.'</textarea>';
-		}
-
-		/**
-		* Load custom UI css file
-		*
-		* @param $template		Template name
-		*/
-		public function CustomUI($template){
-			$customui_css = $this->root_path.'templates/'.$template.'/jquery_tmpl.css';
-			if(is_file($customui_css)){
-				$this->tpl->css_file($customui_css);
-			}
 		}
 
 		/**

@@ -281,7 +281,6 @@ class install extends gen_class {
 		<script type="text/javascript" language="javascript" src="../libraries/jquery/core/core.min.js"></script>
 		<link href="../libraries/FontAwesome/font-awesome.min.css" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" media="screen" href="style/install.css" />
-		<link rel="stylesheet" type="text/css" media="screen" href="style/jquery_tmpl.css" />
 		<script type="text/javascript">
 			//<![CDATA[
 		$(function() {
