@@ -770,6 +770,7 @@ class calendarevent_pageobject extends pageobject {
 				'NAME'			=> $statusname,
 				'COUNT'			=> $statuscount,
 				'COUNT_GUESTS'	=> ($this->config->get('calendar_raid_guests') > 0) ? $lang_guestcount : false,
+				'GUESTCOUNT'	=> $guestcount,
 				'MAXCOUNT'		=> $eventdata['extension']['attendee_count'],
 			));
 
@@ -1163,6 +1164,9 @@ class calendarevent_pageobject extends pageobject {
 			// Language files
 			'L_NOTSIGNEDIN'			=> $this->user->lang(array('raidevent_raid_status', 4)),
 			'L_SIGNEDIN_MSG'		=> $alreadysignedinmsg,
+			'L_NO_GUESTS'			=> $this->user->lang(array('raidevent_raid_guest_summ_txt',0)),
+			'L_ONE_GUEST'			=> $this->user->lang(array('raidevent_raid_guest_summ_txt',1)),
+			'L_MORE_GUESTS'			=> $this->user->lang(array('raidevent_raid_guest_summ_txt',2)),
 
 			'CSRF_CHANGECHAR_TOKEN'	=> $this->CSRFGetToken('change_char'),
 			'CSRF_CHANGENOTE_TOKEN'	=> $this->CSRFGetToken('change_note'),
