@@ -23,13 +23,23 @@ $(function(){
 	}).trigger('change');
 
 	$(document).on("click", "div.attendee_box", function (event) {
-		var target = $(event.target);
-		if(target.is('.buttonblock, .char_adminmenu')) return;
-
-		if (target.is('input:checkbox')) {
+		var target		= $(event.target);
+		var checkbox	= $(this).find("input[type='checkbox']");
+		
+		if(target.is('.buttonblock, .char_adminmenu')){
+			if($(this).hasClass('char_edit')){
+				$('.attendee_box.char_edit').each(function(){ $(this).removeClass('char_edit'); });
+			}else{
+				$('.attendee_box.char_edit').each(function(){ $(this).removeClass('char_edit'); });
+				$(this).addClass('char_edit');
+			}
 			return;
 		}
-		var checkbox = $(this).find("input[type='checkbox']");
+		if(target.is('input:checkbox')){
+			$(this).toggleClass("selected", checkbox.is(':checked'));
+			return;
+		}
+		
 		$(this).toggleClass("selected", !checkbox.is(':checked'));
 		checkbox.prop("checked", !checkbox.is(':checked'));
 		$('[name="modstat_change[]"]').trigger('change');
@@ -195,7 +205,7 @@ $(function(){
 				// TODO: trigger success message some day
 			});
 
-			// count attendees
+			// count class attendees
 			max_count	= dnd_start_container.data('attendee-max');
 			start_count	= parseInt(dnd_start_container.data('attendee-count')) - 1;
 			dnd_start_container.attr('data-attendee-count', start_count).data('attendee-count', start_count);
@@ -203,6 +213,23 @@ $(function(){
 			end_count	= parseInt($(this).data('attendee-count')) + 1;
 			$(this).attr('data-attendee-count', end_count).data('attendee-count', end_count);
 			$(this).find('.attendee_count').text('('+end_count+max_count+')');
+			
+			// count state attendees
+			start_state_header	= dnd_start_container.parent().parent().children('.state_header');
+			end_state_header	= $(this).parent().parent().children('.state_header');
+			max_count			= parseInt(start_state_header.data('attendee-max'));
+			
+			start_count	= parseInt(start_state_header.data('attendee-count')) - 1;
+			// start_guests	= start_state_header.find('.state_guests').text().match(/\[(.*)(\d+)(.*)\]/);
+			start_state_header.attr('data-attendee-count', start_count).data('attendee-count', start_count);
+			start_state_header.find('.state_count').text('('+start_count+'/'+max_count+')');
+			// if(is_guest) start_state_header.find('.state_guests').text(start_guests[1] + (parseInt(start_guests[2]) - 1) + start_guests[3])
+			
+			end_count	= parseInt(end_state_header.data('attendee-count')) + 1;
+			// end_guests	= end_state_header.find('.state_guests').text().match(/\[(.*)(\d+)(.*)\]/);
+			end_state_header.attr('data-attendee-count', end_count).data('attendee-count', end_count);
+			end_state_header.find('.state_count').text('('+end_count+'/'+max_count+')');
+			// if(is_guest) end_state_header.find('.state_guests').text(start_guests[1] + (parseInt(start_guests[2]) + 1) + start_guests[3])
 		}
 	});
 });

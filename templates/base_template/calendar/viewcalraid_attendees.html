@@ -1,10 +1,10 @@
 <!-- BEGIN raidstatus -->
 <div id="viewraidcal_colapse_{raidstatus.ID}" class="attendee_table">
-	<h4 class="state_header">
+	<h4 class="state_header" data-attendee-count="{raidstatus.COUNT}" data-attendee-max="{raidstatus.MAXCOUNT}">
 		<span class="toggle_button">&nbsp;</span>
 		{raidstatus.NAME}
 		<span class="state_count">({raidstatus.COUNT}/{raidstatus.MAXCOUNT})</span>
-		<!-- IF raidstatus.COUNT_GUESTS --><span class="state_noguests">[{raidstatus.COUNT_GUESTS}]</span><!-- ENDIF -->
+		<!-- IF raidstatus.COUNT_GUESTS --><span class="state_guests">[{raidstatus.COUNT_GUESTS}]</span><!-- ENDIF -->
 	</h4>
 
 	<div class="class_table toggle_container">
