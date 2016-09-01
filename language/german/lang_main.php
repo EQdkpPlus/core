@@ -544,7 +544,7 @@ $lang = array(
 "email_subject_send_error" => "Beim senden der E-Mail ist ein Fehler aufgetreten.",
 "email_receiver" => "Empfänger",
 "email_subject_password_changed" => "Passwort wurde geändert",
-"email_subject_email_confirm" => "Email-Adresse bestätigen",		
+"email_subject_email_confirm" => "E-Mail-Adresse bestätigen",		
 "uc_add_char" => "Charakter hinzufügen",
 "uc_add_char_plain" => "Neu erstellen",
 "uc_add_char_armory" => "Importieren",
@@ -1093,8 +1093,8 @@ $lang = array(
 "backup" => "Sicherung",
 "maintenance" => "Wartungsbereich",
 "favorits" => "Favoriten",
-"email_confirmed" => "Deine Email-Adresse wurde erfolgreich bestätigt.",
-"email_confirm_note" => "Damit deine neue Email-Adresse gültig wird, musst diese über einen Link aktivieren, der dir soeben per Email an die neue Adresse gesendet wurde.",
-"email_must_confirm_note" => "Der Administrator hat veranlasst, dass du deine Email-Adresse bestätigen musst. Eine Email mit einem Link zur Bestätigung wurde an deine Email-Adresse gesendet. Bist zur Bestätigung ist nur dein Benutzerprofil zugänglich.",		
+"email_confirmed" => "Deine E-Mail-Adresse wurde erfolgreich bestätigt.",
+"email_confirm_note" => "Damit deine neue E-Mail-Adresse gültig wird, musst diese über einen Link aktivieren, der dir soeben per E-Mail an die neue Adresse gesendet wurde.",
+"email_must_confirm_note" => "Der Administrator hat die Bestätigung deiner E-Mail-Adresse veranlasst. Eine E-Mail mit einem Link zur Bestätigung wurde an deine E-Mail-Adresse gesendet. Bis zur Bestätigung ist nur dein Benutzerprofil zugänglich.",		
 );
 ?>
