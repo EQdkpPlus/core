@@ -102,7 +102,10 @@ class login_pageobject extends pageobject {
 					default: $strErrorMessage = $strErrorCode;
 				}
 				
-				$this->core->global_warning($strErrorMessage.$this->user->lang('invalid_login_goto_admin'), 'fa-exclamation-circle');
+				if ($strErrorCode != 'user_locked')
+				{
+					$this->core->global_warning($strErrorMessage.$this->user->lang('invalid_login_goto_admin'), 'fa-exclamation-circle');
+				}
 				
 				$this->display();
 				
