@@ -32,7 +32,7 @@ if(!class_exists('pdh_w_calendar_raids_guests')){
 			$this->pdh->enqueue_hook('guests_update');
 		}
 
-		public function insert_guest($eventid, $name='', $classid=0, $group=0, $note='', $email=''){
+		public function insert_guest($eventid, $name='', $classid=0, $group=0, $note='', $email='', $role=0){
 			$userid		= $this->user->data['user_id'];
 			$creator 	= ($userid && $userid > 0) ? $userid : 0;
 			$objQuery = $this->db->prepare("INSERT INTO __calendar_raid_guests :p")->set(array(
@@ -45,6 +45,7 @@ if(!class_exists('pdh_w_calendar_raids_guests')){
 				'raidgroup'				=> ((int) $group > 0) ? $group : 0,
 				'creator'				=> $creator,
 				'status'				=> ($creator > 0) ? 0 : 1,
+				'role'					=> $role
 			))->execute();
 			$this->pdh->enqueue_hook('guests_update', array($objQuery->insertId));
 			if ($objQuery) return $objQuery->insertId;
@@ -72,14 +73,26 @@ if(!class_exists('pdh_w_calendar_raids_guests')){
 			$this->email->SendMailFromAdmin($email, $subject, 'calendarguests_application.html', $arrBodyvars, $this->config->get('lib_email_method'));
 		}
 
-		public function update_guest($guestid, $classid=0, $group=0, $note=''){
+		public function update_guest($guestid, $classid=0, $group=0, $note='', $role=0){
 			$classid	= ((int)$classid > 0)	? $classid: $this->pdh->get('guests', 'class', array($guestid));
 			$group		= ((int)$group > 0)		? $group	: $this->pdh->get('guests', 'group', array($guestid));
 			$note		= ($note)		? $note 	: $this->pdh->get('guests', 'note', array($guestid));
+			$role		= ($role)		? $role 	: $this->pdh->get('guests', 'role', array($guestid));
 			$objQuery = $this->db->prepare("UPDATE __calendar_raid_guests :p WHERE id=?")->set(array(
 				'class'			=> $classid,
 				'raidgroup'		=> $group,
 				'note'			=> $note,
+				'role'			=> $role
+			))->execute($guestid);
+			$this->pdh->enqueue_hook('guests_update', array($guestid));
+		}
+
+		public function dragdrop_update($guestid, $role=0, $status=1){
+			$role		= ($role > 0)	? $role 	: $this->pdh->get('guests', 'role', array($guestid));
+			$status		= ($status)		? $status 	: $this->pdh->get('guests', 'status', array($guestid));
+			$objQuery = $this->db->prepare("UPDATE __calendar_raid_guests :p WHERE id=?")->set(array(
+				'status'		=> $status,
+				'role'			=> $role
 			))->execute($guestid);
 			$this->pdh->enqueue_hook('guests_update', array($guestid));
 		}

@@ -25,37 +25,29 @@ if ( !defined('EQDKP_INC') ){
 
 include_once(registry::get_const('root_path').'maintenance/includes/sql_update_task.class.php');
 
-
-//ToDo: This Update is the same as 2.2.3, therefore delete when release 2.3.0
-class update_2302 extends sql_update_task {
-	public $author			= 'Wallenium';
-	public $version			= '2.3.0.2'; //new plus-version
-	public $ext_version		= '2.3.0'; //new plus-version
-	public $name			= 'Update 2.3.0';
+class update_2307 extends sql_update_task {
+	public $author			= 'GodMod';
+	public $version			= '2.3.0.7.0'; //new plus-version
+	public $ext_version		= '2.3.0.7'; //new plus-version
+	public $name			= 'Update 2.3.0.7';
 
 	public function __construct(){
 		parent::__construct();
 
 		$this->langs = array(
 			'english' => array(
-				'update_2302'	=> 'EQdkp Plus 2.3.0 Update 2',
-					1			=> 'Change article table',
-					2			=> 'Change calendar_raid_attendees table',
-					3			=> 'Change log table',
+				'update_2307'	=> 'EQdkp Plus 2.3.0.7 Update',
+					1			=> 'Add roles field to raid guests table',
 				),
 			'german' => array(
-				'update_2302'	=> 'EQdkp Plus 2.3.0 Update 2',
-					1			=> 'Ändere Article-Tabelle',
-					2			=> 'Ändere calendar_raid_attendees-Tabelle',
-					3			=> 'Ändere Logs-Tabelle',
+				'update_2307'	=> 'EQdkp Plus 2.3.0.7 Update',
+					1			=> 'Füge Rollenfeld zur Raid-Gästetabelle',
 			),
 		);
 
 		// init SQL querys
 		$this->sqls = array(
-			1	=> "ALTER TABLE `__articles` CHANGE COLUMN `last_edited_user` `last_edited_user` INT(11) NOT NULL DEFAULT '0';",
-			2	=> "ALTER TABLE `__calendar_raid_attendees` CHANGE COLUMN `status_changedby` `status_changedby` INT(11) NOT NULL DEFAULT '0';",
-			3	=> "ALTER TABLE `__logs` CHANGE COLUMN `log_value` `log_value` MEDIUMTEXT NOT NULL COLLATE 'utf8_bin';",
+			1	=> "ALTER TABLE `__calendar_raid_guests` ADD `role` int(10) UNSIGNED NOT NULL DEFAULT '0' AFTER `status`;",
 		);
 	}
 

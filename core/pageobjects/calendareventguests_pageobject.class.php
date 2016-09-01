@@ -22,7 +22,11 @@
 class calendareventguests_pageobject extends pageobject {
 
 	public function __construct() {
-		$handler = array();
+		$handler = array(
+			'ajax'	=> array(
+				array('process' => 'role_ajax',	'value' => 'role'),
+			),
+		);
 		parent::__construct(false, $handler, array());
 		$this->process();
 	}
@@ -34,16 +38,38 @@ class calendareventguests_pageobject extends pageobject {
 		return (is_array($raidleaders_users) && in_array($this->user->data['user_id'], $raidleaders_users)) ? true : false;
 	}
 
+	// the role dropdown, attached to the character selection
+	public function role_ajax(){
+		$ddroles		= $this->pdh->get('roles', 'memberroles', array($this->in->get('requestid')));
+
+		// hide the role if null and such stuff
+		if($this->game->get_game_settings('calendar_hide_emptyroles')){
+			$eventdata = $this->pdh->get('calendar_events', 'data', array($this->url_id));
+			if($eventdata['extension']['raidmode'] == 'role'){
+				$raidcategories = $this->pdh->aget('roles', 'name', 0, array($this->pdh->get('roles', 'id_list')));
+				foreach ($raidcategories as $classid=>$classname){
+					if($eventdata['extension']['distribution'][$classid] == 0){
+						unset($ddroles[$classid]);
+					}
+				}
+			}
+		}
+
+		// start the output
+		header('content-type: text/html; charset=UTF-8');
+		echo $this->jquery->dd_create_ajax($ddroles, array('selected'=>$this->pdh->get('member', 'defaultrole', array($this->in->get('requestid')))));exit;
+	}
+
 	public function add(){
 		if($this->user->check_auth('a_cal_revent_conf', false) || $this->is_raidleader()){
 			if($this->in->get('membername')){
 				if($this->in->get('guestid', 0) > 0){
 					$blub = $this->pdh->put('calendar_raids_guests', 'update_guest', array(
-						$this->in->get('guestid', 0), $this->in->get('class'), $this->in->get('group'), $this->in->get('note')
+						$this->in->get('guestid', 0), $this->in->get('class'), $this->in->get('group'), $this->in->get('note'), $this->in->get('role', 0)
 					));
 				}else{
 					$blub = $this->pdh->put('calendar_raids_guests', 'insert_guest', array(
-						$this->in->get('eventid', 0), $this->in->get('membername'), $this->in->get('class'), $this->in->get('group'), $this->in->get('note')
+						$this->in->get('eventid', 0), $this->in->get('membername'), $this->in->get('class'), $this->in->get('group'), $this->in->get('note'), '' ,$this->in->get('role', 0)
 					));
 				}
 			}
@@ -97,12 +123,21 @@ class calendareventguests_pageobject extends pageobject {
 			$display_captcha = $captcha->get_html($this->config->get('lib_recaptcha_okey'));
 		}
 
+		$is_roleraid	= false;
+		$eventdata		= $this->pdh->get('calendar_events', 'data', array($this->in->get('eventid', 0)));
+		if($eventdata['extension']['raidmode'] == 'role'){
+			$is_roleraid = true;
+			$classrole = $this->jquery->dd_ajax_request('class', 'role', $this->game->get_primary_classes(array('id_0')), array(), ((isset($guestdata['class'])) ? $guestdata['class'] : ''), $this->strPath.$this->SID.'&eventid='.$this->in->get('eventid', 0).'&guestid='.$this->in->get('guestid', 0).'&ajax=role');
+		}
+
 		$this->tpl->assign_vars(array(
 			'PERM_ADD'				=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->is_raidleader()) ? true : false,
 			'PERM_GUESTAPPLICATION'	=> ($this->config->get('calendar_raid_guests') == 2) ? true : false,
+			'ROLERAID'				=> $is_roleraid,
 			'EVENT_ID'				=> $this->in->get('eventid', 0),
 			'GUEST_ID'				=> $this->in->get('guestid', 0),
-			'CLASS_DD'				=> new hdropdown('class', array('options' => $this->game->get_primary_classes(array('id_0')), 'value' => ((isset($guestdata['class'])) ? $guestdata['class'] : ''))),
+			'ROLE_DD'				=> ($eventdata['extension']['raidmode'] == 'role') ? $classrole[1] : '',
+			'CLASS_DD'				=> ($eventdata['extension']['raidmode'] == 'role') ? $classrole[0] : new hdropdown('class', array('options' => $this->game->get_primary_classes(array('id_0')), 'value' => ((isset($guestdata['class'])) ? $guestdata['class'] : ''))),
 
 			// captcha
 			'CEG_CAPTCHA'			=> $display_captcha,

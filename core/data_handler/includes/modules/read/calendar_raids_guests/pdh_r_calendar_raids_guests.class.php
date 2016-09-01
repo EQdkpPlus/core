@@ -43,6 +43,8 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 		public function reset(){
 			$this->pdc->del('pdh_calendar_raids_table.guests');
 			$this->pdc->del('pdh_calendar_raids_table.guestsEvents');
+			$this->pdc->del('pdh_calendar_raids_table.guestsStatus');
+			$this->pdc->del('pdh_calendar_raids_table.guestsStatus2');
 			$this->pdc->del_prefix('plugin.guests');
 			$this->guests = NULL;
 		}
@@ -54,9 +56,11 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 		*/
 		public function init(){
 			// try to get from cache first
-			$this->guests		= $this->pdc->get('pdh_calendar_raids_table.guests');
-			$this->guestsEvent	= $this->pdc->get('pdh_calendar_raids_table.guestsEvents');
-			if($this->guests !== NULL && $this->guestsEvent !== NULL){
+			$this->guests			= $this->pdc->get('pdh_calendar_raids_table.guests');
+			$this->guestsEvent		= $this->pdc->get('pdh_calendar_raids_table.guestsEvents');
+			$this->guestsStatus 	= $this->pdc->get('pdh_calendar_raids_table.guestsStatus');
+			$this->guestsStatus2 	= $this->pdc->get('pdh_calendar_raids_table.guestsStatus2');
+			if($this->guests !== NULL && $this->guestsEvent !== NULL && $this->guestsStatus !== NULL && $this->guestsStatus2 !== NULL){
 				return true;
 			}
 
@@ -76,11 +80,18 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 						'creator'			=> $row['creator'],
 						'status'			=> $row['status'],
 						'eventid'			=> $row['calendar_events_id'],
+						'role'				=> $row['role'],
 					);
 					$this->guestsEvent[$row['calendar_events_id']][$row['id']] = $this->guests[$row['id']];
+					$this->guestsStatus[$row['calendar_events_id']][$row['status']][$row['class']][$row['id']] = $this->guests[$row['id']];
+					$defautrole_config	= json_decode($this->config->get('roles_defaultclasses'), true);
+					$role	= ($row['role'] > 0) ? $row['role'] : (($defautrole_config > 0 && $row['class'] > 0 && isset($defautrole_config[$row['class']])) ? $defautrole_config[$row['class']] : 0);
+					$this->guestsStatus2[$row['calendar_events_id']][$row['status']][$role][$row['id']] = $this->guests[$row['id']];
 				}
 				$this->pdc->put('pdh_calendar_raids_table.guests', $this->guests, NULL);
 				$this->pdc->put('pdh_calendar_raids_table.guestsEvents', $this->guestsEvent, NULL);
+				$this->pdc->put('pdh_calendar_raids_table.guestsStatus', $this->guestsStatus, NULL);
+				$this->pdc->put('pdh_calendar_raids_table.guestsStatus2', $this->guestsStatus2, NULL);
 			}
 
 			return true;
@@ -98,8 +109,16 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 			return $output;
 		}
 
-		public function get_members($eventid=''){
-			$output = ($eventid) ? ((isset($this->guestsEvent[$eventid])) ? $this->guestsEvent[$eventid] : '') : $this->guests;
+		public function get_members($eventid='', $bystatus=false, $role=false){
+			if($bystatus && $eventid > 0){
+				if($role){
+					$output = (isset($this->guestsStatus2[$eventid])) ? $this->guestsStatus2[$eventid] : '';
+				}else{
+					$output = (isset($this->guestsStatus[$eventid])) ? $this->guestsStatus[$eventid] : '';
+				}
+			}else{
+				$output = ($eventid) ? ((isset($this->guestsEvent[$eventid])) ? $this->guestsEvent[$eventid] : '') : $this->guests;
+			}
 			return (is_array($output)) ? $output : array();
 		}
 
@@ -125,6 +144,10 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 
 		public function get_status($id){
 			return $this->guests[$id]['status'];
+		}
+
+		public function get_role($id){
+			return $this->guests[$id]['role'];
 		}
 
 		public function get_eventlink($id, $external=false){

@@ -32,6 +32,7 @@ class calendarevent_pageobject extends pageobject {
 			'ajax'	=> array(
 				array('process' => 'role_ajax',	'value' => 'role'),
 			),
+			'ajax_dragdrop'		=> array('process' => 'perform_dragndrop',		'csrf'=>true),
 			'savenote'			=> array('process' => 'save_raidnote',			'csrf'=>true),
 			'update_status'		=> array('process' => 'update_status',			'csrf'=>true),
 			'moderate_status'	=> array('process' => 'moderate_status',		'csrf'=>true),
@@ -145,6 +146,31 @@ class calendarevent_pageobject extends pageobject {
 			$this->pdh->process_hook_queue();
 			$this->tpl->add_js('jQuery.FrameDialog.closeDialog();');
 		}
+	}
+
+	// save the drag & drop action
+	public function perform_dragndrop(){
+		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission()){
+			$classid		= $this->in->get('classid', 0);
+			$attendeeid		= $this->in->get("attendeeid", 0);
+			$isguest		= $this->in->get("isguest", 'false');
+			$eventextension	= $this->pdh->get('calendar_events', 'extension', array($this->url_id));
+			$newrole		= ($eventextension['raidmode'] == 'role') ? $this->in->get("newroleclass", 0) : 0;
+			$newstatus 		= $this->in->get("newstatus", 0);
+
+			// do the math
+			if($classid > 0 && $attendeeid > 0){
+				if($isguest == 'true'){
+					#dragdrop_update($guestid, $role=0, $status=1)
+					$this->pdh->put('calendar_raids_guests', 'dragdrop_update', array($attendeeid, $newrole, $newstatus));
+				}else{
+					#update_status($eventid, $memberid, $memberrole='', $signupstatus='', $raidgroup=0, $signed_memberid=0, $note='', $signedbyadmin=0)
+					$this->pdh->put('calendar_raids_attendees', 'update_status', array($this->url_id, $attendeeid, $newrole, $newstatus));
+				}
+				$this->pdh->process_hook_queue();
+			}
+		}
+		die('classid: '.$classid.'  / attendeeid: '.$attendeeid.' / is guest: '.$isguest.' / NEW role: '.$newrole.' / NEW status: '.$newstatus);
 	}
 
 	public function change_attendancestatus($eventid, $status){
@@ -549,6 +575,7 @@ class calendarevent_pageobject extends pageobject {
 		$allroles		= $this->pdh->get('roles', 'roles', array());
 		$rolewnclass	= false;
 		$drpdwn_roles	= array();
+		$ddroles		= $this->pdh->get('roles', 'classroles', array());
 
 		foreach($allroles as $v_roles){
 			if(count($v_roles['classes']) == 0){
@@ -597,7 +624,8 @@ class calendarevent_pageobject extends pageobject {
 
 		// Guests / rest
 		$this->twinks			= array();
-		$this->guests			= $this->pdh->get('calendar_raids_guests', 'members', array($this->url_id));
+		$this->guests			= $this->pdh->get('calendar_raids_guests', 'members', array($this->url_id, true, (($eventdata['extension']['raidmode'] == 'role') ? true : false)));
+		#d($this->pdh->get('calendar_raids_guests', 'members', array($this->url_id, true)));
 		$this->raidcategories	= ($eventdata['extension']['raidmode'] == 'role') ? $this->pdh->aget('roles', 'name', 0, array($this->pdh->get('roles', 'id_list'))) : $this->game->get_primary_classes(array('id_0'));
 
 		// hide empty roles if the game module allows it
@@ -623,8 +651,6 @@ class calendarevent_pageobject extends pageobject {
 		}
 
 		$this->mystatus			= $this->pdh->get('calendar_raids_attendees', 'myattendees', array($this->url_id, $this->user->data['user_id']));
-		$this->classbreakval	= ($this->config->get('calendar_raid_classbreak')) ? $this->config->get('calendar_raid_classbreak') : 4;
-		$modulocount			= intval(count($this->raidcategories)/$this->classbreakval);
 		$shownotes_ugroups		= $this->acl->get_groups_with_active_auth('u_calendar_raidnotes');
 		$this->raidgroup_dd		= $this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list')));
 
@@ -749,44 +775,35 @@ class calendarevent_pageobject extends pageobject {
 			}
 
 			$this->tpl->assign_block_vars('raidstatus', array(
-				'FIRSTROW'		=> ($status_first) ? true : false,
 				'ID'			=> $statuskey,
 				'NAME'			=> $statusname,
 				'COUNT'			=> $statuscount,
 				'COUNT_GUESTS'	=> ($this->config->get('calendar_raid_guests') > 0) ? $lang_guestcount : false,
 				'MAXCOUNT'		=> $eventdata['extension']['attendee_count'],
-				'GUESTCOUNT'	=> $guestcount,
-				'GUESTBREAK'	=> ($statuskey % 2 != 0) ? true : false,
 			));
 
 			// the class categories
 			$act_classcount = 0;
-			$user_brakclm = true;
-			$number_break=0;
 			foreach ($this->raidcategories as $classid=>$classname){
 				$act_classcount++;
 
-				// the break-validation hack
-				if($user_brakclm){
-					$mybreak = false;
-					if(($act_classcount%$this->classbreakval) == 0){
-						$mybreak = ($number_break < $modulocount) ? true : false;
-						$number_break++;
-					}
-
-				}
-
 				$classsbrk	= ($classid == -1 && (!isset($this->attendees[$statuskey][$classid]) || (isset($this->attendees[$statuskey][$classid]) && count($this->attendees[$statuskey][$classid]) == 0))) ? count($this->raidcategories) - 1 : count($this->raidcategories);
+				$classcount	= (isset($this->attendees[$statuskey][$classid])) ? count($this->attendees[$statuskey][$classid]) : 0;
+				$classcount	+= (isset($this->guests[$statuskey][$classid])) ? count($this->guests[$statuskey][$classid]) : 0;
 				$this->tpl->assign_block_vars('raidstatus.classes', array(
-					'BREAK'			=> ($mybreak) ? true : false,
 					'ID'			=> $classid,
 					'NAME'			=> ($classid == -1) ? $this->user->lang('raidevent_deleted_role_assigned') : $classname,
 					'CLASS_ICON'	=> ($eventdata['extension']['raidmode'] == 'role') ? $this->game->decorate('roles', $classid) : $this->game->decorate('primary', $classid),
 					'MAX'			=> ($eventdata['extension']['raidmode'] == 'none' && $eventdata['extension']['distribution'][$classid] == 0) ? '' : '/'.(($classid == '-1') ? '&infin;' : $eventdata['extension']['distribution'][$classid]),
-					'COUNT'			=> (isset($this->attendees[$statuskey][$classid])) ? count($this->attendees[$statuskey][$classid]) : 0,
+					'MAXCOUNT'		=> (isset($eventdata['extension']['distribution'][$classid])) ? $eventdata['extension']['distribution'][$classid] : 0,
+					'COUNT'			=> $classcount,
 					'SHOW'			=> ($classid > 0 || ($classid == -1 && isset($this->attendees[$statuskey][$classid]) && count($this->attendees[$statuskey][$classid]) > 0)) ? true : false,
-					'BREAK_WIDTH'	=> (isset($user_brakclm) && $classsbrk > $this->classbreakval) ? str_replace(',','.',100/$this->classbreakval) : str_replace(',','.',100/$classsbrk),
 				));
+
+				// generate the applicable roles for the specific class, used by drag & drop
+
+				$dragto_roles	= (isset($ddroles[$classid]) && is_array($ddroles[$classid]) && count($ddroles[$classid]) > 0) ? 'classrole_'.implode(', classrole_', $ddroles[$classid]) : '';
+
 				// The characters
 				if(isset($this->attendees[$statuskey][$classid]) && is_array($this->attendees[$statuskey][$classid])){
 					foreach($this->attendees[$statuskey][$classid] as $memberid=>$memberdata){
@@ -794,7 +811,6 @@ class calendarevent_pageobject extends pageobject {
 						// generate the member tooltip
 						$membertooltip		= array();
 						$memberrank			= $this->pdh->get('member', 'rankname', array($memberid));
-
 
 						$membertooltip[]	= $this->pdh->get('member', 'name', array($memberid)).' ['.$this->user->lang('level').': '.$this->pdh->get('member', 'level', array($memberid)).']';
 						if($eventdata['extension']['raidmode'] == 'role'){
@@ -881,38 +897,43 @@ class calendarevent_pageobject extends pageobject {
 							'GROUPCOLOR'		=> $this->pdh->get('raid_groups', 'color', array($raidgroup)),
 							'DD_CHARS'			=> $charchangemenu['chars'],
 							'DD_ROLES'			=> $charchangemenu['roles'],
+							'GUEST'				=> false,
+							'DRAGDROP_TO'		=> ($eventdata['extension']['raidmode'] == 'role') ? $dragto_roles : 'classrole_'.$this->pdh->get('member', 'classid', array($memberid)),
 						));
+					}
+				}
+
+				// add the guests to the attendee list
+				if(isset($this->guests[$statuskey][$classid]) && is_array($this->guests[$statuskey][$classid]) && count($this->guests) > 0){
+					foreach($this->guests[$statuskey][$classid] as $guestid=>$guestsdata){
+						if($guestsdata['status'] == $statuskey){
+							$dragto_roles	= (isset($ddroles[$guestsdata['class']]) && is_array($ddroles[$guestsdata['class']]) && count($ddroles[$guestsdata['class']]) > 0) ? 'classrole_'.implode(', classrole_', $ddroles[$guestsdata['class']]) : '';
+							$guest_clssicon	= $this->game->decorate('primary', $guestsdata['class']);
+							$guest_tooltip 	= '<span><i class="fa fa-clock-o fa-lg"></i> '.$this->user->lang('raidevent_raid_signedin').": ".$this->time->user_date($guestsdata['timestamp_signup'], true, false, true).'</span>
+												<span><i class="fa fa-user fa-lg"></i>'.$guest_clssicon.'&nbsp;'.$this->game->get_name('primary', $guestsdata['class']).'</span>
+												<span><i class="fa fa-comment fa-lg"></i> '.((isset($guestsdata['note']) && $guestsdata['note'] !='') ? $guestsdata['note'] : $this->user->lang('raidevent_no_guest_note')).'</span>'.
+												((isset($guestsdata['email']) && $guestsdata['email'] !='' && ($this->check_permission() || $this->user->check_auth('a_cal_revent_conf', false))) ? '<span><i class="fa fa-envelope fa-lg"></i> '.$guestsdata['email'].'</span>' : '');
+
+							$this->tpl->assign_block_vars('raidstatus.classes.status', array(
+								'GUEST'			=> true,
+								'NAME'			=> $guestsdata['name'],
+								'ID'			=> $guestid,
+								'STATUS'		=> $guestsdata['status'],
+								'CLASSID'		=> $guestsdata['class'],
+								'CLASSICON'		=> $guest_clssicon,
+								'TOOLTIP'		=> $guest_tooltip,
+								'TOBEAPPROVED'	=> ($guestsdata['status'] == 1 && $guestsdata['email'] != '') ? true : false,
+								'EXTERNALAPPL'	=> ($guestsdata['creator'] == 0 && $guestsdata['email'] != '') ? true : false,
+								'EMAIL'			=> (isset($guestsdata['email']) && $guestsdata['email'] != '') ? $guestsdata['email'] : false,
+								'SIGNEDSTATUS'	=> ($guestsdata['status'] == 0 || $guestsdata['status'] == 2 || $guestsdata['status'] == 3) ? $guestsdata['status'] : false,
+								'DRAGDROP_TO'	=> ($eventdata['extension']['raidmode'] == 'role') ? $dragto_roles : 'classrole_'.$guestsdata['class'],
+							));
+						}
 					}
 				}
 			}
 			$status_first = false;
-
-			// raid guests
-			if(is_array($this->guests) && count($this->guests) > 0){
-				foreach($this->guests as $guestid=>$guestsdata){
-					if($guestsdata['status'] == $statuskey){
-						$guest_clssicon	= $this->game->decorate('primary', $guestsdata['class']);
-						$guest_tooltip 	= '<i class="fa fa-clock-o fa-lg"></i> '.$this->user->lang('raidevent_raid_signedin').": ".$this->time->user_date($guestsdata['timestamp_signup'], true, false, true).'<br/><i class="fa fa-user fa-lg"></i> '.
-											$guest_clssicon.'&nbsp;'.$this->game->get_name('primary', $guestsdata['class']).'<br/><i class="fa fa-comment fa-lg"></i> '.
-											((isset($guestsdata['note']) && $guestsdata['note'] !='') ? $guestsdata['note'] : $this->user->lang('raidevent_no_guest_note')).
-											((isset($guestsdata['email']) && $guestsdata['email'] !='' && ($this->check_permission() || $this->user->check_auth('a_cal_revent_conf', false))) ? '<br/><i class="fa fa-envelope fa-lg"></i> '.$guestsdata['email'] : '');
-						$this->tpl->assign_block_vars('raidstatus.guests', array(
-							'NAME'			=> $guestsdata['name'],
-							'ID'			=> $guestid,
-							'STATUS'		=> $guestsdata['status'],
-							'CLASSID'		=> $guestsdata['class'],
-							'CLASSICON'		=> $guest_clssicon,
-							'TOOLTIP'		=> $guest_tooltip,
-							'TOBEAPPROVED'	=> ($guestsdata['status'] == 1 && $guestsdata['email'] != '') ? true : false,
-							'EXTERNALAPPL'	=> ($guestsdata['creator'] == 0 && $guestsdata['email'] != '') ? true : false,
-							'EMAIL'			=> (isset($guestsdata['email']) && $guestsdata['email'] != '') ? $guestsdata['email'] : false,
-							'SIGNEDSTATUS'	=> ($guestsdata['status'] == 0 || $guestsdata['status'] == 2 || $guestsdata['status'] == 3) ? $guestsdata['status'] : false,
-						));
-					}
-				}
-			}
 		}
-
 		$this->tpl->add_js("var roles_json = ".json_encode($drpdwn_roles).";", 'head');
 
 		// Dropdown Menu Array
@@ -921,10 +942,10 @@ class calendarevent_pageobject extends pageobject {
 			$nextevent = $this->pdh->get('calendar_events', 'data', array($nextraidevent));
 
 			$this->tpl->assign_vars(array(
-				'S_NEXT_RAID_EVENT' => true,
-				'U_NEXT_RAID_EVENT' => $this->routing->build("calendarevent", $this->pdh->get('event', 'name', array($nextevent['extension']['raid_eventid'])), $nextraidevent),
-				'NEXT_RAID_EVENTID' => $nextraidevent,
-				'NEXT_RAID_EVENTNAME' => $this->pdh->get('event', 'name', array($nextevent['extension']['raid_eventid'])).', '.$this->time->user_date($nextevent['timestamp_start']).' '.$this->time->user_date($nextevent['timestamp_start'], false, true)
+				'S_NEXT_RAID_EVENT'		=> true,
+				'U_NEXT_RAID_EVENT'		=> $this->routing->build("calendarevent", $this->pdh->get('event', 'name', array($nextevent['extension']['raid_eventid'])), $nextraidevent),
+				'NEXT_RAID_EVENTID'		=> $nextraidevent,
+				'NEXT_RAID_EVENTNAME'	=> $this->pdh->get('event', 'name', array($nextevent['extension']['raid_eventid'])).', '.$this->time->user_date($nextevent['timestamp_start']).' '.$this->time->user_date($nextevent['timestamp_start'], false, true)
 			));
 		}
 		$prevraidevent = $this->pdh->get('calendar_events', 'prev_raid', array($this->url_id));
@@ -932,10 +953,10 @@ class calendarevent_pageobject extends pageobject {
 			$prevevent = $this->pdh->get('calendar_events', 'data', array($prevraidevent));
 
 			$this->tpl->assign_vars(array(
-					'S_PREV_RAID_EVENT' => true,
-					'U_PREV_RAID_EVENT' => $this->routing->build("calendarevent", $this->pdh->get('event', 'name', array($prevevent['extension']['raid_eventid'])), $prevraidevent),
-					'PREV_RAID_EVENTID' => $prevraidevent,
-					'PREV_RAID_EVENTNAME' => $this->pdh->get('event', 'name', array($prevevent['extension']['raid_eventid'])).', '.$this->time->user_date($prevevent['timestamp_start']).' '.$this->time->user_date($prevevent['timestamp_start'], false, true)
+				'S_PREV_RAID_EVENT'		=> true,
+				'U_PREV_RAID_EVENT'		=> $this->routing->build("calendarevent", $this->pdh->get('event', 'name', array($prevevent['extension']['raid_eventid'])), $prevraidevent),
+				'PREV_RAID_EVENTID'		=> $prevraidevent,
+				'PREV_RAID_EVENTNAME'	=> $this->pdh->get('event', 'name', array($prevevent['extension']['raid_eventid'])).', '.$this->time->user_date($prevevent['timestamp_start']).' '.$this->time->user_date($prevevent['timestamp_start'], false, true)
 			));
 		}
 
@@ -1099,8 +1120,8 @@ class calendarevent_pageobject extends pageobject {
 			'NO_STATUSES'			=> (is_array($raidcal_status) && count($raidcal_status) < 1) ? true : false,
 			'ROLESWOCLASS'			=> ($rolewnclass) ? true : false,
 			'EVENT_ID'				=> $this->url_id,
-			'MEMBERDATA_FILE'		=> ($eventdata['extension']['raidmode'] == 'role') ? 'calendar/viewcalraid_role.html' : 'calendar/viewcalraid_class.html',
-			'S_NEXT_OR_PREV_RAIDEVENT' => ($nextraidevent || $prevraidevent),
+			'RAIDMODE'				=> $eventdata['extension']['raidmode'],
+			'S_NEXTPREV_RAIDEVENT'	=> ($nextraidevent || $prevraidevent),
 
 			// settings endabled?
 			'S_NOTSIGNED_VISIBLE'	=> (in_array(4, $raidcal_status) && ($this->user->check_auth('a_cal_revent_conf', false) || $this->config->get('calendar_raid_shownotsigned') || $this->check_permission())) ? true : false,
@@ -1142,14 +1163,11 @@ class calendarevent_pageobject extends pageobject {
 			'CALENDAR'				=> $this->pdh->get('calendars', 'name', array($eventdata['calendar_id'])),
 			'RAIDDATE_ADDED'		=> (isset($eventdata['extension']['created_on']) && $eventdata['extension']['created_on'] > 0) ? $this->time->user_date($eventdata['extension']['created_on'], true, false, true) : false,
 			'PLAYER_NOTE'			=> $this->mystatus['note'],
-			'COLUMN_WIDTH'			=> (isset($user_brakclm) && count($this->raidcategories) > $this->classbreakval) ? str_replace(',','.',100/$this->classbreakval) : str_replace(',','.',100/count($this->raidcategories)),
 			'DATE_DAY'				=> $this->time->date('d', $eventdata['timestamp_start']),
 			'DATE_MONTH'			=> $this->time->date('F', $eventdata['timestamp_start']),
 			'DATE_YEAR'				=> $this->time->date('Y', $eventdata['timestamp_start']),
 			'LINK2TRANSFORMEDRAID'	=> $this->pdh->get('calendar_events', 'transformed_raid_link', array($this->url_id)),
 			'TRANSFORMEDRAID_TT'	=> $tooltip_transformedraid,
-			// guests
-			'GUEST_COUNT'			=> count($this->guests),
 
 			// Language files
 			'L_NOTSIGNEDIN'			=> $this->user->lang(array('raidevent_raid_status', 4)),
@@ -1159,6 +1177,7 @@ class calendarevent_pageobject extends pageobject {
 			'CSRF_CHANGENOTE_TOKEN'	=> $this->CSRFGetToken('change_note'),
 			'CSRF_CHANGEGRP_TOKEN'	=> $this->CSRFGetToken('change_group'),
 			'CSRF_GUESTAPPRV_TOKEN'	=> $this->CSRFGetToken('confirm_guest'),
+			'CSRF_DRAGNDROP_TOKEN'	=> $this->CSRFGetToken('ajax_dragdrop'),
 
 			'U_CALENDAREVENT'		=> $this->strPath.$this->SID,
 			'MY_SOCIAL_BUTTONS'		=> ($arrCategory['social_share_buttons']) ? $this->social->createSocialButtons($this->env->link.$this->strPathPlain, $strPageTitle) : '',

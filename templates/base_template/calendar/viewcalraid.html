@@ -2,8 +2,9 @@
 //<![CDATA[
 $(function(){
 	$('[name="modstat_change[]"]').change(function(){
-		var number_attendees	= $(".status_confirm:checked").length;
+		var number_attendees	= $("[name='modstat_change[]']:checked").length;
 		var lang_attendeetext	= '{L_raidevent_raid_selected_attendees}';
+
 		if(number_attendees > 0){
 			if($('#bottommenu_chars').is(":visible")){
 				// move it a bit
@@ -29,12 +30,12 @@ $(function(){
 			return;
 		}
 		var checkbox = $(this).find("input[type='checkbox']");
-		$(this).toggleClass("ui-state-highlight", !checkbox.is(':checked'));
+		$(this).toggleClass("selected", !checkbox.is(':checked'));
 		checkbox.prop("checked", !checkbox.is(':checked'));
 		$('[name="modstat_change[]"]').trigger('change');
 	});
 
-	$('.guesttooltip').each(function() {
+	$('.guest_box').each(function() {
 		var guestid		= $(this).data('guestid');
 		var approval	= $(this).data('approval');
 		var signedstatus= $(this).data('status');
@@ -48,7 +49,7 @@ $(function(){
 		}
 		$(this).qtip({
 			content: {
-				text: $(this).next('.guesttooltip-data'),
+				text: $(this).children('.guest_tooltip'),
 				<!-- IF IS_OPERATOR -->title: {
 					text: titletext,
 					button: false
@@ -154,6 +155,55 @@ $(function(){
 				window.location = '{U_CALENDAREVENT}';
 			});
 		});
+	});
+
+	// the drag and drop stuff
+	var dnd_start_container = { };
+	$('.guest_box, .attendee_box').draggable({
+		start: function(event, ui){
+			dnd_start_container = $(this).parent();
+		},
+		revert: true
+	});
+	$('.class_column').droppable({
+		accept: function (draggable) {
+			var item_wheretodrop, container;
+			item_wheretodrop = $(draggable).data("droppable-to");
+			container = $(this).data("droppable");
+			// console.log('test: '+item_wheretodrop+', container: '+container+', match: '+item_wheretodrop.indexOf(container))
+			return item_wheretodrop.indexOf(container) >= 0;
+		},
+		classes: {
+			"ui-droppable-active": "highlight-dropzone"
+		},
+		hoverClass: 'hovering',
+		drop: function(event, ui) {
+			$(ui.draggable).detach().css({top: 0,left: 0}).appendTo(this);
+
+			// save the status to the database
+			var is_guest = ($(ui.draggable).data("is-guest") == true) ? true : false;
+			$.post("{U_CALENDAREVENT}", {
+				ajax_dragdrop:	true,
+				classid:		$(ui.draggable).data("class-id"),
+				roleid:			$(ui.draggable).data("role-id"),
+				attendeeid:		((is_guest) ? $(ui.draggable).data("guestid") : $(ui.draggable).data("attendeeid")),
+				newstatus:		$(this).data("status-id"),
+				newroleclass:	$(this).data("class-id"),
+				isguest:		is_guest,
+				link_hash:		'{CSRF_DRAGNDROP_TOKEN}'
+			}, function(data){
+				// TODO: trigger success message some day
+			});
+
+			// count attendees
+			max_count	= dnd_start_container.data('attendee-max');
+			start_count	= parseInt(dnd_start_container.data('attendee-count')) - 1;
+			dnd_start_container.attr('data-attendee-count', start_count).data('attendee-count', start_count);
+			dnd_start_container.find('.attendee_count').text('('+start_count+max_count+')');
+			end_count	= parseInt($(this).data('attendee-count')) + 1;
+			$(this).attr('data-attendee-count', end_count).data('attendee-count', end_count);
+			$(this).find('.attendee_count').text('('+end_count+max_count+')');
+		}
 	});
 });
 
@@ -361,7 +411,7 @@ function ChangeGuestStatus(guestid, status){
 </div>
 <!-- ENDIF -->
 
-<!-- IF S_NEXT_OR_PREV_RAIDEVENT -->
+<!-- IF S_NEXTPREV_RAIDEVENT -->
 <div>
 	<!-- IF S_PREV_RAID_EVENT -->
 	<div class="floatLeft">
@@ -483,30 +533,40 @@ function ChangeGuestStatus(guestid, status){
 	<!-- ENDIF -->
 
 
-	<div class="table raidcal_buttonrow">
-		<div class="tr">
-			<!-- IF SHOW_RAIDGROUPS -->
-			<div class="td raidcal_buttonrow_left">
-				<span class="group_selector"><i class="fa fa-users fa-lg"></i> {DD_RAIDGROUPS}</span>
-			</div>
-			<!-- ENDIF -->
-			<!-- IF IS_OPERATOR and SHOW_CONFIRMBUTTON -->
-			<div class="td raidcal_buttonrow_middle">
-				<button type="submit" name="confirmall" id="button_confirmall">{L_raidevent_raid_confirmall}</button>
-			</div>
-			<!-- ELSE -->
+	<div class="raidcal_buttonrow">
+			<div class="raidcal_buttonrow_left">
+				<!-- IF SHOW_RAIDGROUPS -->
+				<div class="raidcal_buttonrow_raidgroups">
+					<span class="group_selector"><i class="fa fa-users fa-lg"></i> {DD_RAIDGROUPS}</span>
+				</div>
+				<!-- ENDIF -->
+
 				<!-- IF not IS_SIGNEDIN and SHOW_GUESTAPPLICATION -->
-				<div class="td raidcal_buttonrow_middle">
+				<div class="raidcal_buttonrow_guestattend">
 					<button type="button" name="guestattend" id="button_guestattend"><i class="fa fa-user-plus fa-lg"></i> {L_raidevent_guest_attendraid}</button>
 				</div>
 				<!-- ENDIF -->
-			<!-- ENDIF -->
-			<!-- IF S_NOTSIGNED_VISIBLE -->
-			<div class="td raidcal_buttonrow_right">
-				<button type="button" class="notsigned_button"><i class="fa fa-plus-circle"></i>{L_raidevent_raid_unsigned_button}</button>
 			</div>
-			<!-- ENDIF -->
-		</div>
+
+			<div class="raidcal_buttonrow_right">
+				<!-- IF IS_OPERATOR and SHOW_CONFIRMBUTTON -->
+				<div class="raidcal_buttonrow_confirmall">
+					<button type="submit" name="confirmall" id="button_confirmall">{L_raidevent_raid_confirmall}</button>
+				</div>
+				<!-- ENDIF -->
+
+				<!-- IF IS_OPERATOR -->
+				<div class="raidcal_buttonrow_addguest">
+					<button id="addguest" type="button"><i class="fa fa-user-plus fa-lg"></i></button>
+				</div>
+				<!-- ENDIF -->
+
+				<!-- IF S_NOTSIGNED_VISIBLE -->
+				<div class="raidcal_buttonrow_notsigned">
+					<button type="button" class="notsigned_button"><i class="fa fa-plus-circle"></i>{L_raidevent_raid_unsigned_button}</button>
+				</div>
+				<!-- ENDIF -->
+			</div>
 	</div>
 
 	<div class="row1">
@@ -515,31 +575,28 @@ function ChangeGuestStatus(guestid, status){
 		</div>
 
 		<!-- IF IS_OPERATOR -->
-		<div id="bottommenu_admin" class="absmiddle">
-			<div class="table bottommenu_admin_table">
-				<div class="tr">
-					<div class="td absmiddle bottommenu_admin_icons">
-						<i class="fa fa-user fa-lg"></i>
-					</div>
-					<div class="td absmiddle bottommenu_admin_status">
-						<span id="bottommenu_count"></span> - {DD_MODSIGNUPSTATUS} <button type = "submit" name="moderate_status" value="" id="moderate_status_btn"><i class="fa fa-check fa-lg"></i></button>
-					</div>
-					<div class="td absmiddle bottommenu_admin_icons">
-						<i class="fa fa-users fa-lg"></i>
-					</div>
-					<div class="td absmiddle bottommenu_admin_status">
-						<!-- IF SHOW_RAIDGROUPS -->
-						{DD_MODRAIDGROUPS} <button type = "submit" name="moderate_group" value=""><i class="fa fa-check fa-lg"></i></button>
-						<!-- ELSE -->
-						{L_raidevent_no_groups_avail}
-						<!-- ENDIF -->
-					</div>
+		<div id="bottommenu_admin">
+			<div class="bottommenu_admin_table">
+				<div class="bottommenu_admin_icons">
+					<i class="fa fa-user fa-lg"></i>
+				</div>
+				<div class="bottommenu_admin_status">
+					<span id="bottommenu_count"></span> - {DD_MODSIGNUPSTATUS} <button type = "submit" name="moderate_status" value="" id="moderate_status_btn"><i class="fa fa-check fa-lg"></i></button>
+				</div>
+				<div class="bottommenu_admin_icons">
+					<i class="fa fa-users fa-lg"></i>
+				</div>
+				<div class="bottommenu_admin_status">
+					<!-- IF SHOW_RAIDGROUPS -->
+					{DD_MODRAIDGROUPS} <button type = "submit" name="moderate_group" value=""><i class="fa fa-check fa-lg"></i></button>
+					<!-- ELSE -->
+					{L_raidevent_no_groups_avail}
+					<!-- ENDIF -->
 				</div>
 			</div>
 		</div>
 		<!-- ENDIF -->
-		<!-- INCLUDE calendar/viewcalraid_guests.html -->
-	<!-- INCLUDE {MEMBERDATA_FILE} -->
+		<!-- INCLUDE calendar/viewcalraid_attendees.html -->
 	</div>
 {CSRF_TOKEN}
 </form>

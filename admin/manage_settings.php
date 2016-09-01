@@ -558,7 +558,7 @@ class admin_settings extends page_generic {
 				'raids'		=> array(
 					/*'calendar_raid_enabled'	=> array(
 						'type'	=> 'radio',
-						'dependency'	=> array(1 => array('calendar_raid_guests', 'calendar_raid_random', 'calendar_raid_classbreak', 'calendar_raid_status', 'calendar_raid_nsfilter', 'calendar_addraid_deadline', 'calendar_addraid_duration', 'calendar_addraid_use_def_start', 'calendar_repeat_crondays', 'calendar_raid_autoconfirm', 'calendar_raid_autocaddchars', 'calendar_raidleader_autoinvite', 'calendar_raid_notsigned_classsort', 'calendar_raid_coloredclassnames', 'calendar_raid_shownotsigned', 'calendar_raid_allowstatuschange', 'calendar_raid_statuschange_status')),
+						'dependency'	=> array(1 => array('calendar_raid_guests', 'calendar_raid_random', 'calendar_raid_status', 'calendar_raid_nsfilter', 'calendar_addraid_deadline', 'calendar_addraid_duration', 'calendar_addraid_use_def_start', 'calendar_repeat_crondays', 'calendar_raid_autoconfirm', 'calendar_raid_autocaddchars', 'calendar_raidleader_autoinvite', 'calendar_raid_notsigned_classsort', 'calendar_raid_coloredclassnames', 'calendar_raid_shownotsigned', 'calendar_raid_allowstatuschange', 'calendar_raid_statuschange_status')),
 					),*/
 					'calendar_raid_guests'	=> array(
 						'type'			=> 'dropdown',
@@ -567,10 +567,6 @@ class admin_settings extends page_generic {
 					),
 					'calendar_raid_random'	=> array(
 						'type'			=> 'radio',
-					),
-					'calendar_raid_classbreak'	=> array(
-						'type'			=> 'spinner',
-						'size'			=> 4,
 					),
 					'calendar_raid_status'	=> array(
 						'type'			=> 'multiselect',
@@ -770,7 +766,7 @@ class admin_settings extends page_generic {
 		if($this->config->get('default_game') == 'dummy'){
 			$settingsdata['game']['game']['default_game']['text_after'] = '<button onclick="window.location=\'manage_extensions.php'.$this->SID.'#fragment-7\'" type="button"><i class="fa fa-lg fa-download"></i> '.$this->user->lang('install_other_games').'</button>';
 		}
-		
+
 		$this->form->add_tabs($settingsdata);
 
 		// add some additional fields
@@ -1007,7 +1003,7 @@ class admin_settings extends page_generic {
 		$this->tpl->assign_vars(array(
 			'SET_GAME_LANG'	=> $this->config->get('game_language'),
 		));
-		
+
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('config_title'),
 			'template_file'		=> 'admin/manage_settings.html',
