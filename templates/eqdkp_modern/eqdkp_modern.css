@@ -2492,7 +2492,7 @@ fieldset.raidcal_infos dt, fieldset.moderation_panel dt {
 	.state_header	{ color:#000; font-size:13px; font-weight:bold; font-family:'Trebuchet MS',Arial,sans-serif; padding:6px 0px; background:#e8e8e8; border:1px solid #ccc; margin-bottom:2px; }
 	.toggle_button	{ float:left; margin:-1px 5px 0; }
 	.state_count	{ font-size:95%; font-weight:normal; margin-left:5px; letter-spacing:1px; }
-	.state_noguests	{ color:#777; font-size:90%; font-weight:normal; font-style:italic; }
+	.state_guests	{ color:#777; font-size:90%; font-weight:normal; font-style:italic; }
 
 	.class_table							{ display:flex; flex-wrap:wrap; justify-content:space-between; margin-bottom:5px; }
 	.class_column							{ display:flex; flex-direction:column; width:200px; margin-bottom:5px; padding-bottom:4px; white-space:nowrap; background:#e8e8e8; border:1px solid #ccc; }
@@ -2504,8 +2504,9 @@ fieldset.raidcal_infos dt, fieldset.moderation_panel dt {
 	.attendee_count	{ margin-top:-2px; }
 
 	// attendee
-	.attendee_box			{ display:flex; padding:2px; margin:4px 4px 0; border:1px solid #4d4d4d; background:#fff; color:#000; transition:border .2s ease-in, background .2s ease-in; }
-	// .attendee_box.selected	{ border:1px solid #f55; background: linear-gradient(to bottom, #cdcdcd 0%, #fff 100%); }
+	.attendee_box			{ display:flex; padding:2px; margin:4px 4px 0; border:1px solid #4d4d4d; background:#fff; color:#000; transition:border .2s ease-in; }
+	.attendee_box.selected	{ border:1px solid #f55; }
+	.attendee_box.char_edit	{ border:1px solid #ff9d55; }
 	.attendee_select		{ flex:0 0 22px; }
 	.attendee_name			{ flex:2 1 100%; color: #000; overflow:hidden; text-overflow:ellipsis; }
 	.attendee_name a		{ color: #000; overflow:hidden; text-overflow:ellipsis; }
