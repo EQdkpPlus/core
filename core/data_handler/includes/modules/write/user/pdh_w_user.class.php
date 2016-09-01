@@ -232,7 +232,19 @@ if(!class_exists('pdh_w_user')) {
 			$this->email->Set_Language($this->pdh->get('user', 'lang', array($user_id)));
 			if ($active && $oldState === 0){
 				$result = $this->email->SendMailFromAdmin($this->pdh->get('user', 'email', array($user_id)), $this->user->lang('email_subject_activation_none'), 'register_account_activated.html', $bodyvars);		
+				
+				$log_action = array(
+						'{L_USER}'	=> $this->pdh->get('user', 'name', array($user_id)),
+				);
+				$this->log_insert('action_user_unlocked', $log_action, $user_id, sanitize( $this->pdh->get('user', 'name', array($user_id))));
+				
 				if (!$result) return false;
+			} elseif(!$active){
+				$log_action = array(
+						'{L_USER}'	=> $this->pdh->get('user', 'name', array($user_id)),
+				);
+				$this->log_insert('action_user_locked', $log_action, $user_id, sanitize( $this->pdh->get('user', 'name', array($user_id))));
+				
 			}
 			
 			return true;
