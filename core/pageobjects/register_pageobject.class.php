@@ -166,18 +166,18 @@ class register_pageobject extends pageobject {
 		// If the config requires account activation, generate a random key for validation
 		if ( ((int)$this->config->get('account_activation') == 1) || ((int)$this->config->get('account_activation') == 2) ) {
 			$user_key = random_string(true, 32);
-			$user_active = '0';
+			$intEmailConfirmed = -1;
 
 			if ($this->user->is_signedin()) {
 				$this->user->destroy();
 			}
 		} else {
 			$user_key = '';
-			$user_active = '1';
+			$intEmailConfirmed = '1';
 		}
 
 		//Insert the user into the DB
-		$user_id = $this->pdh->put('user', 'register_user', array($this->data, $user_active, $user_key, true, $this->in->get('lmethod'), $this->userProfileData));
+		$user_id = $this->pdh->put('user', 'register_user', array($this->data, 1, $user_key, true, $this->in->get('lmethod'), $this->userProfileData, $intEmailConfirmed));
 		if(!$user_id) message_die('Error while saving the user.', $this->user->lang('error'));
 		
 		//Add auth-account
@@ -284,7 +284,7 @@ class register_pageobject extends pageobject {
 		$username   = ( $this->in->exists('username') )   ? trim(strip_tags($this->in->get('username'))) : '';
 
 		// Look up record based on the username and e-mail		
-		$objQuery = $this->db->prepare("SELECT user_id, username, user_email, user_active, user_lang
+		$objQuery = $this->db->prepare("SELECT user_id, username, user_email, user_active, user_lang, user_email_confirmed
 				FROM __users
 				WHERE LOWER(user_email) = ?
 				OR LOWER(username)=?")->limit(1)->execute(utf8_strtolower($username), clean_username($username));
@@ -293,7 +293,7 @@ class register_pageobject extends pageobject {
 				$row = $objQuery->fetchAssoc();
 				
 				// Account's inactive, can't give them their password
-				if ( $row['user_active'] || $this->config->get('account_activation') != 1) {
+				if ( (int)$row['user_active'] || $this->config->get('account_activation') != 1 || ((int)$row['user_email_confirmed'] != -1)) {
 					message_die($this->user->lang('error_already_activated'));
 				}
 
@@ -324,31 +324,50 @@ class register_pageobject extends pageobject {
 	// Process Activate
 	// ---------------------------------------------------------
 	public function process_activate() {
-		$objQuery = $this->db->prepare("SELECT user_id, username, user_active, user_email, user_lang, user_key
+		$objQuery = $this->db->prepare("SELECT user_id, username, user_active, user_email_confirmed, user_email, user_lang, user_email_confirmkey, user_email_confirmed, user_temp_email
 				FROM __users
-				WHERE user_key=?")->execute($this->in->get('key'));
+				WHERE user_email_confirmkey=?")->execute($this->in->get('key'));	
 		if($objQuery){
 			if($objQuery->numRows){
 				$row = $objQuery->fetchAssoc();
 				
+				$intConfirmType = intval($row['user_email_confirmed']);
+				
 				// If they're already active, just bump them back
-				if ( ($row['user_active'] == '1') && ($row['user_key'] == '') ) {
+				if (intval($row['user_active']) == 0 || ((intval($row['user_email_confirmed']) == 1) && ($row['user_email_confirmkey'] == '')) ) {
 					message_die($this->user->lang('error_already_activated'), $this->user->lang('error'), 'error');
 				} else {
-					
 					//Activate User; Email is sent in activation method
-					$blnResult = $this->pdh->put('user', 'activate', array($row['user_id']));
+					$blnResult = $this->pdh->put('user', 'confirm_email', array($row['user_id'], 1));
 					
 					if ($blnResult) {
-						$type = 'ok';
 						
-						// E-mail the user if this was activated by the admin
-						if ( $this->config->get('account_activation') == 2 ) {
-							$success_message = $this->user->lang('account_activated_admin');
-						} else {
+						//Registration
+						if($intConfirmType == -1){
+							// E-mail the user if this was activated by the admin
+							if ( $this->config->get('account_activation') == 2 ) {
+								$success_message = $this->user->lang('account_activated_admin');
+							} else {
+								$success_message = sprintf($this->user->lang('account_activated_user'), '<a href="'.$this->controller_path.'Login/' . $this->SID . '">', '</a>');
+								$this->tpl->add_meta('<meta http-equiv="refresh" content="3;'.$this->controller_path.'Login/' . $this->SID . '">');
+							}
+						//Admin requestes email confirmation
+						} elseif($intConfirmType == 0){
+							$success_message = $this->user->lang('email_confirmed');
+							$this->tpl->add_meta('<meta http-equiv="refresh" content="3;'.$this->controller_path. $this->SID . '">');
+						//Account was locked by too much logins
+						} elseif($intConfirmType == -2){
 							$success_message = sprintf($this->user->lang('account_activated_user'), '<a href="'.$this->controller_path.'Login/' . $this->SID . '">', '</a>');
 							$this->tpl->add_meta('<meta http-equiv="refresh" content="3;'.$this->controller_path.'Login/' . $this->SID . '">');
-						}				
+						//User changed his Email on his own
+						} elseif($intConfirmType == 2){
+							$this->pdh->put('user', 'confirm_email', array($row['user_id'], 1, $row['user_temp_email']));
+							$success_message = $this->user->lang('email_confirmed');
+							$this->tpl->add_meta('<meta http-equiv="refresh" content="3;'.$this->controller_path. $this->SID . '">');
+						}
+						
+						
+			
 					} else {
 						message_die($this->user->lang('email_subject_send_error'), $this->user->lang('success'), 'error');
 					}

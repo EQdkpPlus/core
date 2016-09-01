@@ -1804,7 +1804,16 @@ $lang = array(
 						</ul>
 						So if you love EQdkp Plus as much as we do, think about supporting us!',
 		'install_other_games' => 'Download other games',
-
+		'user_lock_success' => 'The user <i>%s</i> has been successfully locked. This user cannot login anymore.',
+		'user_unlock_success' => 'The user <i>%s</i> has been successfully unlocked. This user can login again.',
+		'user_force_emailconfirm_success' => 'The user <i>%s</i> must confirm his Email-Address.',
+		'lock' => 'Lock',
+		'unlock' => 'Unlock',
+		'confirm_email' => 'User must confirm Email-Address',
+		"bulk_user_activate_success" => "The selected users and their Email-Addresses have been confirmed.",
+		"bulk_user_forceemailconfirm_success" => "The selected users must confirm their Email-Addresses",
+		"bulk_user_lock_success" => "The selected users have been locked.",
+		"bulk_user_unlock_success" => "The selected user have been unlocked.",
 );
 
 ?>

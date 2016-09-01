@@ -161,8 +161,32 @@ class phpbb31_bridge extends bridge_generic {
 		//Is user active?
 		if ($boolLoginResult){
 		
+			//Account deactivated
 			if ($arrUserdata['user_type'] == '1') {
 				return false;
+			}
+			
+			//Check Banned
+			$query = $this->bridgedb->prepare("SELECT * FROM ".$this->prefix."banlist WHERE ban_userid=?")->execute($arrUserdata['user_id']);
+			if ($query){
+				$intAffectedRows = $query->numRows;
+				if($intAffectedRows > 0){
+					$blnIsBanned = false;
+					$blnIsExcluded = false;
+						
+					while($row = $query->fetchAssoc()){
+						//Permanent Ban
+						if((int)$row['ban_end'] == 0 || (int)$row['ban_end'] > time()) {
+							$blnIsBanned = true;
+						}
+						//Check if excluded
+						if((int)$row['ban_exclude']){
+							$blnIsExcluded = true;
+						}
+					}
+						
+					if($blnIsBanned && !$blnIsExcluded) return false;
+				}
 			}
 			//Single Sign On
 			if ($this->config->get('cmsbridge_disable_sso') != '1'){

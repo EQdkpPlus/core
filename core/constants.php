@@ -28,6 +28,7 @@ if ( !defined('EQDKP_INC') ){
  * CORE VERSIONS
  * -------------------------------------------------------------------------
  */
+ 
 define('VERSION_INT',		'2.3.0.7');				// the internal version number for updates & update check
 define('VERSION_EXT',		'2.3.0 Dev');			// the external version number to be shown in the footer
 define('VERSION_WIP',		true);					// work in progress or stable?

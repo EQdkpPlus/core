@@ -1129,6 +1129,12 @@ $lang = array(
 	"backup" => 'Backup Management',
 	"maintenance" => 'Maintenance mode',
 	"favorits" => 'Favorites',
+	"email_subject_email_confirm" => 'Email Confirmation Required',
+	"email_confirmed" => "Your Email-Address has been successfully confirmed.",
+	"email_confirm_note" => "Your new Email-Address will get valid if you confirm it by using the link sent to your new Email-Address.",
+	"error_account_locked" => "Your account was locked. A login is not possible. If you have questions, please contact the Administrator.",
+	"email_must_confirm_note" => "The Administrator has initiated that you must confirm your Email-Address. You should have already received an Email with a link to confirm your Email-Address. Until you haven't confirmed it, only this userprofile is accessible.",
+		
 );
 
 ?>

@@ -92,10 +92,13 @@ class language extends gen_class {
 	private function init_plug_lang($lang_name) {
 		$lang = array();
 		foreach($this->plugs_to_load as $plug) {
+			if(isset($this->loaded_plugs[$plug][$lang_name]) && $this->loaded_plugs[$plug][$lang_name]) continue;
+			
 			$file_path = $this->root_path.'plugins/'.$plug.'/language/'.$lang_name.'/lang_main.php';
 			if(file_exists($file_path)) {
-				include($file_path);
+				include_once($file_path);
 			}
+			
 			$this->loaded_plugs[$plug][$lang_name] = true;
 		}
 		if(count($this->plugs_to_load) > 0) $this->add_lang($lang_name, $lang);

@@ -31,6 +31,8 @@ if (!class_exists("pdh_r_user")){
 		private $countries = false;
 		private $online_user = false;
 		private $userProfileFields = false;
+		private $blnDecryptedAll = false;
+		private $arrUserdataDecrypted = array();
 
 		public $hooks = array(
 			'user', 'user_groups_update'
@@ -71,13 +73,8 @@ if (!class_exists("pdh_r_user")){
 			$objQuery = $this->db->query("SELECT * FROM __users u ORDER BY username ASC;");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
-					//decrypt email address
-					$row['user_email']									= $this->encrypt->decrypt($row['user_email']);
-					$tmpCryptAuthAccount								= $this->encrypt->decrypt($row['auth_account']);
-					$row['auth_account']								= (is_serialized($tmpCryptAuthAccount)) ? unserialize($tmpCryptAuthAccount) : $tmpCryptAuthAccount;
 					$this->users[$row['user_id']]						= $row;
 					$this->users[$row['user_id']]['username_clean']		= clean_username($row['username']);
-					$this->users[$row['user_id']]['user_email_clean']	= utf8_strtolower($row['user_email']);
 				}
 			}
 
@@ -132,10 +129,15 @@ if (!class_exists("pdh_r_user")){
 
 		public function get_check_email($email){
 			$email = utf8_strtolower($email);
+			
+			if(!$this->blnDecryptedAll) $this->decrypt_data_all();
+			
 			return (is_array(search_in_array($email, $this->users, true, 'user_email_clean'))) ? 'false' : 'true';
 		}
 
 		public function get_check_auth_account($name, $strMethod){
+			if(!$this->blnDecryptedAll) $this->decrypt_data_all();
+			
 			return (is_array(search_in_array($name, $this->users, true, 'auth_account'))) ? false : true;
 		}
 
@@ -162,6 +164,9 @@ if (!class_exists("pdh_r_user")){
 		public function get_userid_for_email($strEmail){
 			if ($strEmail != ""){
 				$strEmail = utf8_strtolower($strEmail);
+				
+				if(!$this->blnDecryptedAll) $this->decrypt_data_all();
+				
 				$arrResult = search_in_array($strEmail, $this->users, true, 'user_email_clean');
 				if (is_array($arrResult)){
 					$arrResultKeys = array_keys($arrResult);
@@ -189,9 +194,13 @@ if (!class_exists("pdh_r_user")){
 		public function get_email($user_id, $checkForIgnoreMailsFlag = false){
 			if ($checkForIgnoreMailsFlag){
 				$arrPriv = $this->get_privacy_settings($user_id);
-				if (isset($arrPriv['priv_no_boardemails']) &&  !$arrPriv['priv_no_boardemails']) return $this->users[$user_id]['user_email'];
+				if (isset($arrPriv['priv_no_boardemails']) &&  !$arrPriv['priv_no_boardemails']) {
+					$this->decrypt_data_single($user_id);
+					return $this->users[$user_id]['user_email'];
+				}
 				return '';
 			} else {
+				$this->decrypt_data_single($user_id);
 				return $this->users[$user_id]['user_email'];
 			}
 			return '';
@@ -243,6 +252,10 @@ if (!class_exists("pdh_r_user")){
 		public function get_active($user_id) {
 			return $this->users[$user_id]['user_active'];
 		}
+		
+		public function get_email_confirmed($user_id){
+			return $this->users[$user_id]['user_email_confirmed'];
+		}
 
 		public function get_awaymode_enabled($user_id, $truefalse = false){
 			if($user_id > 0){
@@ -291,11 +304,13 @@ if (!class_exists("pdh_r_user")){
 		}
 
 
-		public function get_data($user_id=''){
+		public function get_data($user_id='', $blnDecrypted=false){
 			if ($user_id == ''){
+				if($blnDecrypted) $this->decrypt_data_all();
 				return $this->users;
 			} else {
 				if (isset($this->users[$user_id])){
+					if($blnDecrypted) $this->decrypt_data_single($user_id);
 					$data = $this->users[$user_id];
 					if (strpos($data['user_password'], ':') === false){
 						$data['password'] = $data['user_password'];
@@ -376,10 +391,10 @@ if (!class_exists("pdh_r_user")){
 			return countWhere($this->users, '==', $styleid, 'user_style');
 		}
 
-		public function get_inactive(){
+		public function get_not_confirmed(){
 			$users = array();
 			foreach ($this->users as $user_id => $value){
-				if ($value['user_active'] == '0'){
+				if ((int)$value['user_email_confirmed'] < 1){
 					$users[] = $user_id;
 				}
 			}
@@ -390,6 +405,16 @@ if (!class_exists("pdh_r_user")){
 			$users = array();
 			foreach ($this->users as $user_id => $value){
 				if ($value['user_active'] == '1'){
+					$users[] = $user_id;
+				}
+			}
+			return $users;
+		}
+		
+		public function get_locked(){
+			$users = array();
+			foreach ($this->users as $user_id => $value){
+				if ($value['user_active'] == '0'){
 					$users[] = $user_id;
 				}
 			}
@@ -621,6 +646,7 @@ if (!class_exists("pdh_r_user")){
 		}
 
 		public function get_auth_account($user_id){
+			$this->decrypt_data_single($user_id);
 			return $this->users[$user_id]['auth_account'];
 		}
 
@@ -766,6 +792,36 @@ if (!class_exists("pdh_r_user")){
 						$this->online_user[] = $row['session_user_id'];
 					}
 				}
+			}
+		}
+		
+		private function decrypt_data_all(){
+			if(!$this->blnDecryptedAll){
+				foreach($this->users as $userid => $row){
+					//decrypt email address
+					$this->users[$row['user_id']]['user_email']			= $this->encrypt->decrypt($row['user_email']);
+					$tmpCryptAuthAccount								= $this->encrypt->decrypt($row['auth_account']);
+					$this->users[$row['user_id']]['auth_account']		= (is_serialized($tmpCryptAuthAccount)) ? unserialize($tmpCryptAuthAccount) : $tmpCryptAuthAccount;
+						
+					$this->users[$row['user_id']]['user_email_clean']	= utf8_strtolower($row['user_email']);
+					
+				}
+				
+				$this->blnDecryptedAll = true;
+			}
+		}
+		
+		private function decrypt_data_single($intUserID){
+			if(!$this->blnDecryptedAll && !in_array($intUserID, $this->arrUserdataDecrypted)){
+				if(isset($this->users[$intUserID])){
+					$row = $this->users[$intUserID];
+					$this->users[$row['user_id']]['user_email']			= $this->encrypt->decrypt($row['user_email']);
+					$tmpCryptAuthAccount								= $this->encrypt->decrypt($row['auth_account']);
+					$this->users[$row['user_id']]['auth_account']		= (is_serialized($tmpCryptAuthAccount)) ? unserialize($tmpCryptAuthAccount) : $tmpCryptAuthAccount;
+					
+					$this->users[$row['user_id']]['user_email_clean']	= utf8_strtolower($row['user_email']);
+				}
+				$this->arrUserdataDecrypted[] = $intUserID;
 			}
 		}
 	}//end class

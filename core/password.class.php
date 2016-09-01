@@ -67,6 +67,7 @@ class password extends gen_class {
 		$strHashedPassword = (!$blnUseHash) ? $this->prehash($strPassword, $strSalt) : $strPassword;
 		$strMethod = $this->getHashMethod($strStoredHash);
 		$strHash = false;
+		$status = 0;
 
 		switch ($strMethod){
 			case "ext_des":

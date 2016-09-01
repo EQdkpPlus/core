@@ -36,19 +36,20 @@ if(!class_exists( "cache_file")){
 		}
 
 		public function put( $key, $data, $ttl, $global_prefix, $compress = false ) {
-			$key = $global_prefix.$key;
+			$key = md5($global_prefix.$key);
+			$this->pfh->FolderPath( 'data'.DIRECTORY_SEPARATOR.$key[0], 'cache' );
 			if( $compress ) {
-				$ret = $this->pfh->putContent($this->cache_folder.md5( $key ).$this->file_extension, gzcompress( serialize( $data ), 9 ));
+				$ret = $this->pfh->putContent($this->cache_folder.$key[0].DIRECTORY_SEPARATOR.$key.$this->file_extension, gzcompress( serialize( $data ), 9 ));
 			} else {
-				$ret = $this->pfh->putContent($this->cache_folder.md5( $key ).$this->file_extension, serialize( $data ));
+				$ret = $this->pfh->putContent($this->cache_folder.$key[0].DIRECTORY_SEPARATOR.$key.$this->file_extension, serialize( $data ));
 			}
 		}
 
 		public function get( $key, $global_prefix, $uncompress = false ) {
-			$key = $global_prefix.$key;
-			$filename = $this->cache_folder.md5($key).$this->file_extension;
+			$key = md5($global_prefix.$key);
+			$filename = $this->cache_folder.$key[0].DIRECTORY_SEPARATOR.$key.$this->file_extension;
 			$result = false;
-			if(is_file($filename)){
+			if(file_exists($filename)){
 				$result = file_get_contents($filename);
 			}
 
@@ -66,8 +67,8 @@ if(!class_exists( "cache_file")){
 		}
 
 		public function del( $key, $global_prefix ) {
-			$key = $global_prefix.$key;
-			$file = $this->cache_folder.md5( $key ).$this->file_extension;
+			$key = md5($global_prefix.$key);
+			$file = $this->cache_folder.$key[0].DIRECTORY_SEPARATOR.$key.$this->file_extension;
 			if( file_exists( $file ) ) {
 				$ret = $this->pfh->Delete($file);
 			} else {

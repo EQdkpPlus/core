@@ -191,7 +191,7 @@ if( !class_exists( "plus_datahandler")){
 			//Scan "local" read modules
 			$dh = opendir( $this->rm_path );
 			while( false !== ( $file = readdir( $dh ) ) ) {
-				if( $file != '.' && $file != '..' && $file != '.svn' && is_dir( $this->rm_path.$file ) && is_file( $this->rm_path.$file.'/pdh_r_'.$file.'.class.php' ) ) {
+				if( $file != '.' && $file != '..'  && is_file( $this->rm_path.$file.'/pdh_r_'.$file.'.class.php' ) ) {
 					$this->register_read_module( $file, $this->rm_path.$file );
 				}
 			}
@@ -329,9 +329,11 @@ if( !class_exists( "plus_datahandler")){
 				$params = $this->post_process_preset( $params, $sub_arr );
 			}
 			$method = 'get_'.$tag;
-			if( method_exists( $this->rm($module), $method ) ) {
-				$this->init_read_module( $module );
-				return call_user_func_array( array( $this->rm($module), $method ), $params );
+			$objModule = $this->rm($module);
+			
+			if( method_exists( $objModule, $method ) ) {
+				if( !$this->read_modules[$module] ) $this->init_read_module( $module );
+				return call_user_func_array( array( $objModule, $method ), $params );
 			} else {
 				$data = debug_backtrace();
 				$extra = array('module: '.$module, 'tag: '.$tag, 'params: '.implode( ", ", $params ), 'sub_array: '.implode( ", ", $sub_arr ));
@@ -382,9 +384,10 @@ if( !class_exists( "plus_datahandler")){
 				$params = $this->post_process_preset( $params, $sub_arr );
 			}
 			$method = 'get_html_'.$tag;
-			if( method_exists( $this->rm($module), $method ) ) {
-				$this->init_read_module( $module );
-				return call_user_func_array( array( $this->rm($module), $method ), $params );
+			$objModule = $this->rm($module);
+			if( method_exists( $objModule, $method ) ) {
+				if( !$this->read_modules[$module] ) $this->init_read_module( $module );
+				return call_user_func_array( array( $objModule, $method ), $params );
 			} else {
 				return $this->get( $module, $tag, $params );
 			}
@@ -412,9 +415,10 @@ if( !class_exists( "plus_datahandler")){
 				);
 			}
 			$method = 'get_caption_'.$tag;
-			if( method_exists( $this->rm($module), $method ) ) {
-				$this->init_read_module( $module );
-				return call_user_func_array( array( $this->rm($module), $method ), $params );
+			$objModule = $this->rm($module);
+			if( method_exists( $objModule, $method ) ) {
+				if( !$this->read_modules[$module] ) $this->init_read_module( $module );
+				return call_user_func_array( array( $objModule, $method ), $params );
 			} else {
 				if( $this->get_lang($module, $tag) !== false) {
 					return $this->get_lang($module, $tag);
@@ -428,16 +432,17 @@ if( !class_exists( "plus_datahandler")){
 
 		public function get_html_caption( $module, $tag, $params, $preset='' ) {
 			if(!$this->check_read_module($module, true)) return null;
-			if($preset) $this->init_preset_list();
+			if($preset && !$this->presets_loaded) $this->init_preset_list();
 			if( !is_array( $params ) ) {
 				$params = array(
 					$params,
 				);
 			}
 			$method = 'get_html_caption_'.$tag;
-			if( method_exists( $this->rm($module), $method ) ) {
-				$this->init_read_module( $module );
-				return call_user_func_array( array( $this->rm($module), $method ), $params );
+			$objModule = $this->rm($module);
+			if( method_exists($objModule , $method ) ) {
+				if( !$this->read_modules[$module] ) $this->init_read_module( $module );
+				return call_user_func_array( array( $objModule, $method ), $params );
 			} else {
 				return $this->get_caption( $module, $tag, $params );
 			}
@@ -475,7 +480,7 @@ if( !class_exists( "plus_datahandler")){
 			}
 			$comp_method = 'comp_'.$tag;
 			if( method_exists( $this->rm($module), $comp_method ) ) {
-				$this->init_read_module( $module );
+				if( !$this->read_modules[$module] ) $this->init_read_module( $module );
 				return $direction * call_user_func_array( array( $this->rm($module), $comp_method ), array( $params1, $params2 ) );
 			} else {
 				$get_method = 'get_'.$tag;
@@ -497,7 +502,7 @@ if( !class_exists( "plus_datahandler")){
 
 			//check for a sort function in read-module
 			if(method_exists($this->rm($module), 'sort')) {
-				$this->init_read_module( $module );
+				if( !$this->read_modules[$module] ) $this->init_read_module( $module );
 				return $this->rm($module)->sort($id_list, $tag, $direction, $params, $id_position);
 			}
 			// select a clean cache instance
@@ -623,6 +628,8 @@ if( !class_exists( "plus_datahandler")){
 		);
 
 		private function init_preset_list( ) {
+			if($this->presets_loaded) return true;
+			
 			//init module presets
 			foreach($this->read_modules as $module_name => $init) {
 				
@@ -640,7 +647,6 @@ if( !class_exists( "plus_datahandler")){
 			}
 
 			//get users custom presets
-			if($this->presets_loaded) return true;
 			$this->preset_list = array_merge( $this->preset_list, $this->get_user_presets( ));
 			$this->preset_lang = array_merge( $this->preset_lang, $this->get_user_preset_lang( ));
 			$this->presets_loaded = true;
@@ -656,7 +662,7 @@ if( !class_exists( "plus_datahandler")){
 		}
 
 		public function get_preset( $preset_name ) {
-			$this->init_preset_list( );
+			if(!$this->presets_loaded) $this->init_preset_list( );
 
 			$preset_name = ( array_key_exists( $preset_name, $this->system_settings['aliases'] ) ) ? $this->system_settings['aliases'][$preset_name] : $preset_name;
 			return (isset($this->preset_list[$preset_name])) ? $this->preset_list[$preset_name] : false;
@@ -731,7 +737,7 @@ if( !class_exists( "plus_datahandler")){
 		}
 
 		public function update_user_preset($preset_name, $preset=false, $preset_lang='') {
-			$this->init_preset_list();
+			if(!$this->presets_loaded) $this->init_preset_list();
 			if(!$preset_name) return false;
 			if(!isset($this->user_presets[$preset_name]) && isset($this->preset_list[$preset_name])) return false; //preset name already used
 			if($preset) $this->user_presets[$preset_name] = $preset;
@@ -741,7 +747,7 @@ if( !class_exists( "plus_datahandler")){
 		}
 
 		public function delete_user_preset($preset_name) {
-			$this->init_preset_list();
+			if(!$this->presets_loaded) $this->init_preset_list();
 			if(!$preset_name || !isset($this->user_presets[$preset_name])) return false;
 			unset($this->user_presets[$preset_name]);
 			if(isset($this->user_presets_lang[$preset_name])) unset($this->user_presets_lang[$preset_name]);

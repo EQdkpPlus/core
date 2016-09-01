@@ -92,6 +92,8 @@ class login_pageobject extends pageobject {
 				switch($strErrorCode){
 					case 'user_inactive': $strErrorMessage = $this->user->lang('error_account_inactive');
 					break;
+					case 'user_locked': $strErrorMessage = $this->user->lang('error_account_locked');
+					break;
 					case 'user_inactive_failed_logins': $strErrorMessage = $this->user->lang('error_account_inactive_failed_logins');
 					break;
 					case 'wrong_password':
@@ -152,7 +154,7 @@ class login_pageobject extends pageobject {
 			
 			$objQuery = $this->db->prepare("SELECT user_id, user_active, username, user_email
 				FROM __users
-				WHERE user_key =?")->limit(1)->execute($this->in->get('key', ''));
+				WHERE user_email_confirmkey =?")->limit(1)->execute($this->in->get('key', ''));
 			
 			if ($objQuery && $objQuery->numRows){
 				$row = $objQuery->fetchAssoc();
@@ -167,7 +169,7 @@ class login_pageobject extends pageobject {
 
 				$arrSet = array(
 						'user_password' => $this->user->encrypt_password($user_password, $user_salt).':'.$user_salt,
-						'user_key' => '',
+						'user_email_confirmkey' => '',
 				);
 				
 				$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set($arrSet)->execute($row['user_id']);
