@@ -2483,10 +2483,7 @@ fieldset.raidcal_infos dt, fieldset.moderation_panel dt {
 	background-color: #F2DEDE;
 	color: red;
 }
-.guest_tooltip span {
-	display: block;
-	padding: 3px 0px;
-}
+
 .attendee_stats_table { display:flex; flex-direction:column; }
 .attendee_table {
 	// table header
@@ -2510,13 +2507,17 @@ fieldset.raidcal_infos dt, fieldset.moderation_panel dt {
 	.attendee_box.char_edit	{ border:1px solid #ff9d55; }
 	.attendee_select		{ flex:0 0 22px; }
 	.attendee_name			{ flex:2 1 100%; color: #000; overflow:hidden; text-overflow:ellipsis; }
-	.attendee_name a		{ color: #000; overflow:hidden; text-overflow:ellipsis; }
+	.attendee_name a		{ color:#000; overflow:hidden; text-overflow:ellipsis; vertical-align:middle; }
 	.attendee_info			{ flex:1 0 auto; padding-right:3px; }
+	.attendee_info .fa-info	{ padding-right:5px; }
 
 	// guest
-	.guest_box				{ display:inline-block; margin:4px 4px 0; background:#fff; border:1px solid #ccc; border-radius:4px; order:2; }
-	.guest_box img			{ margin-top:-4px; }
-	.guest_box i			{ padding-left:4px; }
+	.guest_box						{ display:flex; justify-content:space-between; margin:4px 4px 0; background:#fff; border:1px solid #ccc; border-radius:4px; order:2; }
+	.guest_name						{ flex:2 1 100%; overflow:hidden; text-overflow:ellipsis; }
+	.guest_name img					{ margin-top:-4px; }
+	.guest_info						{ flex:1 0 auto; font-size:10px; overflow:hidden; }
+	.guest_info i					{ position:relative; left:calc(~'100% - 15px'); padding-right:4px; }
+	.guest_box:hover .guest_info i	{ left:0; transition:all .4s ease-in 1s; }
 
 	// drag & drop
 	.ui-draggable			{ cursor:pointer; }

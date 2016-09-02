@@ -25,10 +25,17 @@
 				<!-- BEGIN status -->
 				<!-- IF raidstatus.classes.status.GUEST -->
 				<div class="guest_box <!-- IF COLORED_NAMESBYCLASS -->class_{raidstatus.classes.status.CLASSID}<!-- ENDIF -->" data-role-id="{raidstatus.classes.ID}" data-class-id="{raidstatus.classes.status.CLASSID}" data-guestid="{raidstatus.classes.status.ID}" data-approval="{raidstatus.classes.status.TOBEAPPROVED}" data-status="{raidstatus.classes.status.SIGNEDSTATUS}" data-droppable-to="{raidstatus.classes.status.DRAGDROP_TO}" data-is-guest="true">
-					<!-- IF raidstatus.classes.status.CLASSICON -->{raidstatus.classes.status.CLASSICON}<!-- ENDIF -->
-					<span class="guest_name">{raidstatus.classes.status.NAME}</span>
-					<!-- IF raidstatus.classes.status.EXTERNALAPPL --><!-- IF raidstatus.classes.status.TOBEAPPROVED --><i class="fa fa-external-link-square icon-color-red"><!-- ELSE --><i class="fa fa-check-square icon-color-green"><!-- ENDIF --></i><!-- ENDIF -->
-					<span class="guest_tooltip" style="display:none">{raidstatus.classes.status.TOOLTIP}</span>
+					<div class="guest_name">
+						<!-- IF raidstatus.classes.status.CLASSICON -->{raidstatus.classes.status.CLASSICON}<!-- ENDIF -->
+						{raidstatus.classes.status.NAME}
+						<!-- IF raidstatus.classes.status.EXTERNALAPPL --><!-- IF raidstatus.classes.status.TOBEAPPROVED --><i class="fa fa-external-link-square icon-color-red"><!-- ELSE --><i class="fa fa-check-square icon-color-green"><!-- ENDIF --></i><!-- ENDIF -->
+					</div>
+					
+					<div class="guest_info">
+						<i class="fa fa-info-circle fa-lg coretip-large" data-coretip='{raidstatus.classes.status.TOOLTIP}'></i>
+						<i class="fa fa-pencil fa-lg hand" onclick="EditGuest(11);"></i>
+						<i class="fa fa-trash-o fa-lg hand" onclick="DeleteGuest(11);"></i>
+					</div>
 				</div>
 				<!-- ELSE -->
 				<div class="attendee_box" id="attendee_{raidstatus.classes.status.MEMBERID}" data-droppable-to="{raidstatus.classes.status.DRAGDROP_TO}" data-is-guest="false" data-role-id="{raidstatus.classes.ID}" data-class-id="{raidstatus.classes.status.CLASSID}" data-attendeeid="{raidstatus.classes.status.MEMBERID}">
@@ -39,17 +46,18 @@
 					</div>
 
 					<div class="attendee_name">
-						<span class="coretip-large" data-coretip='{raidstatus.classes.status.TOOLTIP}'>
-							<a class="normal <!-- IF COLORED_NAMESBYCLASS -->class_{raidstatus.classes.status.CLASSID}<!-- ENDIF -->" href="{raidstatus.classes.status.MEMBERLINK}" target="_blank">{raidstatus.classes.status.NAME}</a>
-							<!-- IF SHOW_RANDOMVALUE -->
-							<!-- IF raidstatus.classes.status.RANDOM gt 0 -->
-							[{raidstatus.classes.status.RANDOM}]
-							<!-- ENDIF -->
-							<!-- ENDIF -->
-						</span>
+						<!-- IF RAIDMODE == 'role' and raidstatus.classes.status.CLASSICON -->{raidstatus.classes.status.CLASSICON}<!-- ENDIF -->
+						<a class="normal <!-- IF COLORED_NAMESBYCLASS -->class_{raidstatus.classes.status.CLASSID}<!-- ENDIF -->" href="{raidstatus.classes.status.MEMBERLINK}" target="_blank" style="color:{raidstatus.classes.status.GROUPCOLOR};">{raidstatus.classes.status.NAME}</a>
+						<!-- IF SHOW_RANDOMVALUE -->
+						<!-- IF raidstatus.classes.status.RANDOM gt 0 -->
+						[{raidstatus.classes.status.RANDOM}]
+						<!-- ENDIF -->
+						<!-- ENDIF -->
 					</div>
 
 					<div class="attendee_info">
+						<i class="fa fa-info-circle fa-lg coretip-large" data-coretip='{raidstatus.classes.status.TOOLTIP}'></i>
+						
 						<!-- IF NOTEPERMISSION -->
 						<!-- IF raidstatus.classes.status.NOTE_PUBLIC -->
 						<i class="fa <!-- IF raidstatus.classes.status.ADMINNOTE -->fa-info-circle<!-- ELSE -->fa-comment<!-- ENDIF --> fa-lg coretip<!-- IF IS_OPERATOR --> hand<!-- ENDIF -->" data-coretip="{raidstatus.classes.status.NOTE_TT}"></i>
