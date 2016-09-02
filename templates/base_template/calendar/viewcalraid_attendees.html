@@ -1,101 +1,103 @@
-<!-- BEGIN raidstatus -->
-<div id="viewraidcal_colapse_{raidstatus.ID}" class="attendee_table">
-	<h4 class="state_header" data-attendee-count="{raidstatus.COUNT}" data-attendee-max="{raidstatus.MAXCOUNT}">
-		<span class="toggle_button">&nbsp;</span>
-		{raidstatus.NAME}
-		<span class="state_count">({raidstatus.COUNT}/{raidstatus.MAXCOUNT})</span>
-		<!-- IF raidstatus.COUNT_GUESTS --><span class="state_guests">[{raidstatus.COUNT_GUESTS}]</span><!-- ENDIF -->
-	</h4>
+<div class="attendee_stats_table">
+	<!-- BEGIN raidstatus -->
+	<div id="viewraidcal_colapse_{raidstatus.ID}" class="attendee_table">
+		<h4 class="state_header" data-attendee-count="{raidstatus.COUNT}" data-attendee-max="{raidstatus.MAXCOUNT}">
+			<span class="toggle_button">&nbsp;</span>
+			{raidstatus.NAME}
+			<span class="state_count">({raidstatus.COUNT}/{raidstatus.MAXCOUNT})</span>
+			<!-- IF raidstatus.COUNT_GUESTS --><span class="state_guests">[{raidstatus.COUNT_GUESTS}]</span><!-- ENDIF -->
+		</h4>
 
-	<div class="class_table toggle_container">
-		<!-- BEGIN classes -->
-		<!-- IF raidstatus.classes.SHOW -->
-		<div class="class_column<!-- IF RAIDMODE == 'role' AND raidstatus.classes.ID == -1 --> raidcal_warningbox<!-- ENDIF -->" data-status-id="{raidstatus.ID}" data-class-id="{raidstatus.classes.ID}" data-attendee-count="{raidstatus.classes.COUNT}" data-attendee-max="{raidstatus.classes.MAXCOUNT}" data-droppable="classrole_{raidstatus.classes.ID}">
-			<!-- IF RAIDMODE == 'role' AND raidstatus.classes.ID == -1 -->
-			<div class="class_header coretip" data-coretip="{L_raidevent_deleted_role_assigned_info}"><i class="fa fa-exclamation-triangle fa-lg icon-red"></i>
-			<!-- ELSE -->
-			<div class="class_header">
-			<!-- ENDIF -->
-				{raidstatus.classes.CLASS_ICON}
-				<span class="class_name<!-- IF RAIDMODE == 'class' --> class_{raidstatus.classes.ID}<!-- ENDIF -->">{raidstatus.classes.NAME}</span>
-				<span class="attendee_count">({raidstatus.classes.COUNT}{raidstatus.classes.MAX})</span>
-			</div>
-
-			<!-- BEGIN status -->
-			<!-- IF raidstatus.classes.status.GUEST -->
-			<div class="guest_box <!-- IF COLORED_NAMESBYCLASS -->class_{raidstatus.classes.status.CLASSID}<!-- ENDIF -->" data-role-id="{raidstatus.classes.ID}" data-class-id="{raidstatus.classes.status.CLASSID}" data-guestid="{raidstatus.classes.status.ID}" data-approval="{raidstatus.classes.status.TOBEAPPROVED}" data-status="{raidstatus.classes.status.SIGNEDSTATUS}" data-droppable-to="{raidstatus.classes.status.DRAGDROP_TO}" data-is-guest="true">
-				<!-- IF raidstatus.classes.status.CLASSICON -->{raidstatus.classes.status.CLASSICON}<!-- ENDIF -->
-				<span class="guest_name">{raidstatus.classes.status.NAME}</span>
-				<!-- IF raidstatus.classes.status.EXTERNALAPPL --><!-- IF raidstatus.classes.status.TOBEAPPROVED --><i class="fa fa-external-link-square icon-color-red"><!-- ELSE --><i class="fa fa-check-square icon-color-green"><!-- ENDIF --></i><!-- ENDIF -->
-				<span class="guest_tooltip" style="display:none">{raidstatus.classes.status.TOOLTIP}</span>
-			</div>
-			<!-- ELSE -->
-			<div class="attendee_box" id="attendee_{raidstatus.classes.status.MEMBERID}" data-droppable-to="{raidstatus.classes.status.DRAGDROP_TO}" data-is-guest="false" data-role-id="{raidstatus.classes.ID}" data-class-id="{raidstatus.classes.status.CLASSID}" data-attendeeid="{raidstatus.classes.status.MEMBERID}">
-				<div class="attendee_select">
-					<!-- IF IS_OPERATOR -->
-					<input type="checkbox" name="modstat_change[]" value="{raidstatus.classes.status.MEMBERID}" />
-					<!-- ENDIF -->
+		<div class="class_table toggle_container">
+			<!-- BEGIN classes -->
+			<!-- IF raidstatus.classes.SHOW -->
+			<div class="class_column<!-- IF RAIDMODE == 'role' AND raidstatus.classes.ID == -1 --> raidcal_warningbox<!-- ENDIF -->" data-status-id="{raidstatus.ID}" data-class-id="{raidstatus.classes.ID}" data-attendee-count="{raidstatus.classes.COUNT}" data-attendee-max="{raidstatus.classes.MAXCOUNT}" data-droppable="classrole_{raidstatus.classes.ID}">
+				<!-- IF RAIDMODE == 'role' AND raidstatus.classes.ID == -1 -->
+				<div class="class_header coretip" data-coretip="{L_raidevent_deleted_role_assigned_info}"><i class="fa fa-exclamation-triangle fa-lg icon-red"></i>
+				<!-- ELSE -->
+				<div class="class_header">
+				<!-- ENDIF -->
+					{raidstatus.classes.CLASS_ICON}
+					<span class="class_name<!-- IF RAIDMODE == 'class' --> class_{raidstatus.classes.ID}<!-- ENDIF -->">{raidstatus.classes.NAME}</span>
+					<span class="attendee_count">({raidstatus.classes.COUNT}{raidstatus.classes.MAX})</span>
 				</div>
 
-				<div class="attendee_name">
-					<span class="coretip-large" data-coretip='{raidstatus.classes.status.TOOLTIP}'>
-						<a class="normal <!-- IF COLORED_NAMESBYCLASS -->class_{raidstatus.classes.status.CLASSID}<!-- ENDIF -->" href="{raidstatus.classes.status.MEMBERLINK}" target="_blank">{raidstatus.classes.status.NAME}</a>
-						<!-- IF SHOW_RANDOMVALUE -->
-						<!-- IF raidstatus.classes.status.RANDOM gt 0 -->
-						[{raidstatus.classes.status.RANDOM}]
-						<!-- ENDIF -->
-						<!-- ENDIF -->
-					</span>
+				<!-- BEGIN status -->
+				<!-- IF raidstatus.classes.status.GUEST -->
+				<div class="guest_box <!-- IF COLORED_NAMESBYCLASS -->class_{raidstatus.classes.status.CLASSID}<!-- ENDIF -->" data-role-id="{raidstatus.classes.ID}" data-class-id="{raidstatus.classes.status.CLASSID}" data-guestid="{raidstatus.classes.status.ID}" data-approval="{raidstatus.classes.status.TOBEAPPROVED}" data-status="{raidstatus.classes.status.SIGNEDSTATUS}" data-droppable-to="{raidstatus.classes.status.DRAGDROP_TO}" data-is-guest="true">
+					<!-- IF raidstatus.classes.status.CLASSICON -->{raidstatus.classes.status.CLASSICON}<!-- ENDIF -->
+					<span class="guest_name">{raidstatus.classes.status.NAME}</span>
+					<!-- IF raidstatus.classes.status.EXTERNALAPPL --><!-- IF raidstatus.classes.status.TOBEAPPROVED --><i class="fa fa-external-link-square icon-color-red"><!-- ELSE --><i class="fa fa-check-square icon-color-green"><!-- ENDIF --></i><!-- ENDIF -->
+					<span class="guest_tooltip" style="display:none">{raidstatus.classes.status.TOOLTIP}</span>
 				</div>
+				<!-- ELSE -->
+				<div class="attendee_box" id="attendee_{raidstatus.classes.status.MEMBERID}" data-droppable-to="{raidstatus.classes.status.DRAGDROP_TO}" data-is-guest="false" data-role-id="{raidstatus.classes.ID}" data-class-id="{raidstatus.classes.status.CLASSID}" data-attendeeid="{raidstatus.classes.status.MEMBERID}">
+					<div class="attendee_select">
+						<!-- IF IS_OPERATOR -->
+						<input type="checkbox" name="modstat_change[]" value="{raidstatus.classes.status.MEMBERID}" />
+						<!-- ENDIF -->
+					</div>
 
-				<div class="attendee_info">
-					<!-- IF NOTEPERMISSION -->
-					<!-- IF raidstatus.classes.status.NOTE_PUBLIC -->
-					<i class="fa <!-- IF raidstatus.classes.status.ADMINNOTE -->fa-info-circle<!-- ELSE -->fa-comment<!-- ENDIF --> fa-lg coretip<!-- IF IS_OPERATOR --> hand<!-- ENDIF -->" data-coretip="{raidstatus.classes.status.NOTE_TT}"></i>
-					<!-- ENDIF -->
-					<!-- ENDIF -->
-
-					<!-- IF raidstatus.classes.status.RAIDGROUP_TT && SHOW_RAIDGROUPS -->
-					<i class="fa fa-users coretip" data-coretip="{raidstatus.classes.status.RAIDGROUP_TT}" style="color:{raidstatus.classes.status.GROUPCOLOR};"></i>
-					<!-- ENDIF -->
-
-					<!-- IF IS_OPERATOR -->
-					<span class="fa fa-cog fa-lg char_adminmenu hand" title="{L_raidevent_raid_changecharmenu}" data-character-id="member_{raidstatus.classes.status.MEMBERID}" data-status-id="{raidstatus.ID}"></span>
-					<div class="charadmintooltip nodisplay" id="member_{raidstatus.classes.status.MEMBERID}">
-						<div class="bottommenu_chars_table">
-							<!-- IF raidstatus.classes.status.SHOW_CHARCHANGE -->
-							<div class="bottommenu_chars_icons">
-								<i class="fa fa-random fa-3x"></i>
-							</div>
-							<div class="bottommenu_chars_change">
-								{L_raidevent_raid_changecharmenu}<br/>
-								<input type="hidden" name="charchange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
-								<input type="hidden" name="charchange_status" class="charchange_status" value="{raidstatus.ID}" />
-								{raidstatus.classes.status.DD_CHARS}{raidstatus.classes.status.DD_ROLES}
-								<button type="button" name="submit_charchange" value=""><i class="fa fa-check fa-lg"></i></button>
-							</div>
+					<div class="attendee_name">
+						<span class="coretip-large" data-coretip='{raidstatus.classes.status.TOOLTIP}'>
+							<a class="normal <!-- IF COLORED_NAMESBYCLASS -->class_{raidstatus.classes.status.CLASSID}<!-- ENDIF -->" href="{raidstatus.classes.status.MEMBERLINK}" target="_blank">{raidstatus.classes.status.NAME}</a>
+							<!-- IF SHOW_RANDOMVALUE -->
+							<!-- IF raidstatus.classes.status.RANDOM gt 0 -->
+							[{raidstatus.classes.status.RANDOM}]
 							<!-- ENDIF -->
-							<div class="bottommenu_chars_icons">
-								<i class="fa fa-comment fa-3x"></i>
-							</div>
-							<div class="bottommenu_chars_change">
-								<span>
-									{L_raidevent_raid_changenotemenu}<br/>
-									<input type="hidden" name="notechange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
-									<textarea name="notechange_note" class="bottommenu_chars_note" rows="1">{raidstatus.classes.status.NOTE}</textarea>
-									<button type="button" name="submit_notechange" value=""><i class="fa fa-check fa-lg"></i></button>
-								</span>
+							<!-- ENDIF -->
+						</span>
+					</div>
+
+					<div class="attendee_info">
+						<!-- IF NOTEPERMISSION -->
+						<!-- IF raidstatus.classes.status.NOTE_PUBLIC -->
+						<i class="fa <!-- IF raidstatus.classes.status.ADMINNOTE -->fa-info-circle<!-- ELSE -->fa-comment<!-- ENDIF --> fa-lg coretip<!-- IF IS_OPERATOR --> hand<!-- ENDIF -->" data-coretip="{raidstatus.classes.status.NOTE_TT}"></i>
+						<!-- ENDIF -->
+						<!-- ENDIF -->
+
+						<!-- IF raidstatus.classes.status.RAIDGROUP_TT && SHOW_RAIDGROUPS -->
+						<i class="fa fa-users coretip" data-coretip="{raidstatus.classes.status.RAIDGROUP_TT}" style="color:{raidstatus.classes.status.GROUPCOLOR};"></i>
+						<!-- ENDIF -->
+
+						<!-- IF IS_OPERATOR -->
+						<span class="fa fa-cog fa-lg char_adminmenu hand" title="{L_raidevent_raid_changecharmenu}" data-character-id="member_{raidstatus.classes.status.MEMBERID}" data-status-id="{raidstatus.ID}"></span>
+						<div class="charadmintooltip nodisplay" id="member_{raidstatus.classes.status.MEMBERID}">
+							<div class="bottommenu_chars_table">
+								<!-- IF raidstatus.classes.status.SHOW_CHARCHANGE -->
+								<div class="bottommenu_chars_icons">
+									<i class="fa fa-random fa-3x"></i>
+								</div>
+								<div class="bottommenu_chars_change">
+									{L_raidevent_raid_changecharmenu}<br/>
+									<input type="hidden" name="charchange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
+									<input type="hidden" name="charchange_status" class="charchange_status" value="{raidstatus.ID}" />
+									{raidstatus.classes.status.DD_CHARS}{raidstatus.classes.status.DD_ROLES}
+									<button type="button" name="submit_charchange" value=""><i class="fa fa-check fa-lg"></i></button>
+								</div>
+								<!-- ENDIF -->
+								<div class="bottommenu_chars_icons">
+									<i class="fa fa-comment fa-3x"></i>
+								</div>
+								<div class="bottommenu_chars_change">
+									<span>
+										{L_raidevent_raid_changenotemenu}<br/>
+										<input type="hidden" name="notechange_attendee" value="{raidstatus.classes.status.MEMBERID}" />
+										<textarea name="notechange_note" class="bottommenu_chars_note" rows="1">{raidstatus.classes.status.NOTE}</textarea>
+										<button type="button" name="submit_notechange" value=""><i class="fa fa-check fa-lg"></i></button>
+									</span>
+								</div>
 							</div>
 						</div>
+						<!-- ENDIF -->
 					</div>
-					<!-- ENDIF -->
 				</div>
+				<!-- ENDIF -->
+				<!-- END status -->
 			</div>
 			<!-- ENDIF -->
-			<!-- END status -->
+			<!-- END classes -->
 		</div>
-		<!-- ENDIF -->
-		<!-- END classes -->
 	</div>
+	<!-- END raidstatus -->
 </div>
-<!-- END raidstatus -->

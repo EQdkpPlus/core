@@ -520,6 +520,7 @@ if (!class_exists("styles")){
 						$files = array_merge($files, $files_rec);
 					} else {
 						$ext = pathinfo($file, PATHINFO_EXTENSION);
+						$this->pdl->deprecated('jquery_tmpl.css');
 						if ($file != "index.php" && $file != "index.html" && $file != 'user_additions.css' && $file != 'jquery_tmpl.css' && in_array($ext, $this->allowed_extensions)){
 							$filepath = ($remove_templatepath) ? str_replace($orig_templatepath, '', $templatepath.'/'.$file) : $file;
 							$filepath = (substr($filepath, 0, 1) === '/') ? substr($filepath, 1) : $filepath;

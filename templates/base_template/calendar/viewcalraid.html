@@ -22,6 +22,7 @@ $(function(){
 		}
 	}).trigger('change');
 
+	<!-- IF IS_OPERATOR -->
 	$(document).on("click", "div.attendee_box", function (event) {
 		var target		= $(event.target);
 		var checkbox	= $(this).find("input[type='checkbox']");
@@ -44,6 +45,7 @@ $(function(){
 		checkbox.prop("checked", !checkbox.is(':checked'));
 		$('[name="modstat_change[]"]').trigger('change');
 	});
+	<!-- ENDIF -->
 
 	$('.guest_box').each(function() {
 		var guestid		= $(this).data('guestid');
@@ -205,13 +207,15 @@ $(function(){
 
 			// count class attendees
 			max_count	= dnd_start_container.data('attendee-max');
-			start_count	= parseInt(dnd_start_container.data('attendee-count')) - 1;
+			start_count	= dnd_start_container.find('.guest_box, .attendee_box').length;
+			end_count	= $(this).find('.guest_box, .attendee_box').length;
+			
+			// replace class text
 			dnd_start_container.attr('data-attendee-count', start_count).data('attendee-count', start_count);
 			dnd_start_container.find('.attendee_count').text('('+start_count+'/'+max_count+')');
-			end_count	= parseInt($(this).data('attendee-count')) + 1;
 			$(this).attr('data-attendee-count', end_count).data('attendee-count', end_count);
 			$(this).find('.attendee_count').text('('+end_count+'/'+max_count+')');
-
+			
 			// count the guests
 			start_guests		= dnd_start_container.parent().parent().find(".guest_box").length;
 			end_guests			= $(this).parent().parent().find(".guest_box").length;
@@ -220,19 +224,19 @@ $(function(){
 			start_state_header	= dnd_start_container.parent().parent().children('.state_header');
 			end_state_header	= $(this).parent().parent().children('.state_header');
 			max_count			= parseInt(start_state_header.data('attendee-max'));
-
+			start_count			= start_state_header.parent().find('.guest_box, .attendee_box').length;
+			end_count			= end_state_header.parent().find('.guest_box, .attendee_box').length;
+			
 			// replace the guest text
-			txt_noguest		= 'L_NO_GUEST';
-			txt_oneguest	= '{L_ONE_GUEST}';
-			txt_multiguests	= '{L_MORE_GUESTS}';
+			txt_noguest		= '[{L_NO_GUESTS}]';
+			txt_oneguest	= '[{L_ONE_GUEST}]';
+			txt_multiguests	= '[{L_MORE_GUESTS}]';
 			if(is_guest) start_state_header.find('.state_guests').text(((start_guests < 2) ? ((start_guests == 1) ? txt_oneguest : txt_noguest) : txt_multiguests.replace(/%s/g, start_guests)))
 			if(is_guest) end_state_header.find('.state_guests').text(((end_guests < 2) ? ((end_guests == 1) ? txt_oneguest : txt_noguest) : txt_multiguests.replace(/%s/g, end_guests)))
 
-			// replace the attendees
-			start_count			= parseInt(start_state_header.data('attendee-count')) - 1;
+			// replace the attendees text
 			start_state_header.attr('data-attendee-count', start_count).data('attendee-count', start_count);
 			start_state_header.find('.state_count').text('('+start_count+'/'+max_count+')');
-			end_count	= parseInt(end_state_header.data('attendee-count')) + 1;
 			end_state_header.attr('data-attendee-count', end_count).data('attendee-count', end_count);
 			end_state_header.find('.state_count').text('('+end_count+'/'+max_count+')');
 		}
