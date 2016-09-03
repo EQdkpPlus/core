@@ -1751,11 +1751,17 @@ class template extends gen_class {
 			}
 		}
 
-		$gameclasses = $this->game->get_primary_classes();
+		$gameclasses = $this->game->get_primary_classes([], 'english');
 		if(isset($gameclasses) && is_array($gameclasses)){
+			$strClassColorList = '';
 			foreach($gameclasses as $class_id => $class_name) {
-				$lessVars['eqdkpClasscolor'.$class_id] = ($this->game->get_class_color($class_id) != "") ? $this->game->get_class_color($class_id) : '""';
+				$strClassColor = ($this->game->get_class_color($class_id) != '') ? $this->game->get_class_color($class_id) : "''";
+				$lessVars['eqdkpClasscolor'.$class_id] = $strClassColor;
+				$strClassColorList .= $class_id." '".addcslashes(strtolower($class_name), "'")."' ".$strClassColor.", ";
 			}
+			$lessVars['eqdkpGameClasses'] = $strClassColorList;
+		}else{
+			$lessVars['eqdkpGameClasses'] = "''";
 		}
 
 		//Add Additional LESS
