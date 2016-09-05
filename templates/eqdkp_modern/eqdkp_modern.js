@@ -103,7 +103,7 @@ $(function(){
 			}
 		});
 		//Periodic Update of Notifications
-		window.setTimeout("notification_update()", 1000*60*5);
+		window.setTimeout(notification_update, 1000*60*5);
 	}
 })
 
