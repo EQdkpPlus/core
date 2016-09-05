@@ -45,7 +45,7 @@ if (!class_exists("environment")) {
 			$this->agent			= $this->agent();
 			$this->is_ajax			= $this->is_ajax();
 			$this->referer			= $this->get_referer();
-			$this->protocol			= $this->get_protocol(); 
+			$this->protocol			= $this->get_protocol();
 		}
 		
 		/**
@@ -587,6 +587,25 @@ if (!class_exists("environment")) {
 		
 		public function get_protocol(){
 			return filter_var($_SERVER["SERVER_PROTOCOL"], FILTER_SANITIZE_STRING);
+		}
+		
+		/**
+		 * Returns the document root
+		 * e.g. C:/xampp/htdocs/
+		 * $blnWithServerPath = true: Path to current script, e.g. C:/xampp/htdocs/eqdkp/core/admin/
+		 * $blnPathToEQdkpRoot = true ($blnWithServerPath must also be true): path to eqdkp root: e.g. C:/xampp/htdocs/eqdkp/core/
+		 */
+		public function get_document_root($blnWithServerPath=true, $blnPathToEQdkpRoot=false){
+			$strRoot = filter_var($_SERVER["DOCUMENT_ROOT"], FILTER_SANITIZE_STRING);
+			if($blnWithServerPath){
+				$strRoot .= $this->server_path;
+				
+				if($eqdkp_root_path){
+					$strRoot = realpath(registry::get_const('root_path'));
+				}
+			}
+			
+			return $strRoot;
 		}
 	}
 }
