@@ -57,11 +57,17 @@ define('PMOD_VIS_EXT', -1);
 define('SQL_INSTALL',	1);
 define('SQL_UNINSTALL',	2);
 
+//-------------------------------------------------------------------------
+//Things user can modify at config.php
+
 //Max Images in Useravatar Folder
-define('MAX_FILES_USERFOLDER', 20);
+if(!defined('MAX_FILES_USERFOLDER')) define('MAX_FILES_USERFOLDER', 20);
 
 //Max concurrent sessions from one IP with the same Browser
-define('MAX_CONCURRENT_SESSIONS', 200);
+if(!defined('MAX_CONCURRENT_SESSIONS')) define('MAX_CONCURRENT_SESSIONS', 200);
+
+//Snapshot time - default: three weeks
+if(!defined('POINTS_SNAPSHOT_TIME')) define('POINTS_SNAPSHOT_TIME', 1814400);
 
 //URLs
 //-------------------------------------------------------------------------
