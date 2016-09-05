@@ -770,6 +770,7 @@ class calendarevent_pageobject extends pageobject {
 				'NAME'			=> $statusname,
 				'COUNT'			=> $statuscount,
 				'COUNT_GUESTS'	=> ($this->config->get('calendar_raid_guests') > 0) ? $lang_guestcount : false,
+				'GUESTCOUNT'	=> $guestcount,
 				'MAXCOUNT'		=> $eventdata['extension']['attendee_count'],
 			));
 
@@ -875,7 +876,8 @@ class calendarevent_pageobject extends pageobject {
 							'MEMBERLINK'		=> $this->pdh->get('member', 'memberlink', array($memberid, $this->routing->simpleBuild('character'), '', true)),
 							'CHARISAWAY'		=> $this->pdh->get('calendar_raids_attendees', 'attendee_awaymode', array($memberid, $this->url_id)),
 							'SHOW_CHARCHANGE'	=> (count($twinkarray) > 0 || $eventdata['extension']['raidmode'] == 'role') ? true : false,
-							'CLASSID'			=> $this->pdh->get('member', 'classid', array($memberid)),
+							'CLASSID'			=> $this->pdh->get('member', 'classid', [$memberid]),
+							'CLASSICON'			=> $this->game->decorate('primary', $this->pdh->get('member', 'classid', [$memberid])),
 							'NAME'				=> $this->pdh->get('member', 'name', array($memberid)),
 							'RANDOM'			=> $memberdata['random_value'],
 							'GROUPS'			=> new hdropdown('groupchange_group', array('options' => $this->raidgroup_dd, 'value' => $raidgroup)),
@@ -900,10 +902,10 @@ class calendarevent_pageobject extends pageobject {
 						if($guestsdata['status'] == $statuskey){
 							$dragto_roles	= (isset($ddroles[$guestsdata['class']]) && is_array($ddroles[$guestsdata['class']]) && count($ddroles[$guestsdata['class']]) > 0) ? 'classrole_'.implode(', classrole_', $ddroles[$guestsdata['class']]) : '';
 							$guest_clssicon	= $this->game->decorate('primary', $guestsdata['class']);
-							$guest_tooltip 	= '<span><i class="fa fa-clock-o fa-lg"></i> '.$this->user->lang('raidevent_raid_signedin').": ".$this->time->user_date($guestsdata['timestamp_signup'], true, false, true).'</span>
-												<span><i class="fa fa-user fa-lg"></i>'.$guest_clssicon.'&nbsp;'.$this->game->get_name('primary', $guestsdata['class']).'</span>
-												<span><i class="fa fa-comment fa-lg"></i> '.((isset($guestsdata['note']) && $guestsdata['note'] !='') ? $guestsdata['note'] : $this->user->lang('raidevent_no_guest_note')).'</span>'.
-												((isset($guestsdata['email']) && $guestsdata['email'] !='' && ($this->check_permission() || $this->user->check_auth('a_cal_revent_conf', false))) ? '<span><i class="fa fa-envelope fa-lg"></i> '.$guestsdata['email'].'</span>' : '');
+							$guest_tooltip 	= '<span style="display:block;"><i class="fa fa-clock-o fa-lg"></i> '.$this->user->lang('raidevent_raid_signedin').": ".$this->time->user_date($guestsdata['timestamp_signup'], true, false, true).'</span><br>
+												<span style="display:block;margin-top:-6px;"><i class="fa fa-user fa-lg"></i>'.$guest_clssicon.'&nbsp;'.$this->game->get_name('primary', $guestsdata['class']).'</span><br>
+												<span style="display:block;margin-top:-6px;"><i class="fa fa-comment fa-lg"></i> '.((isset($guestsdata['note']) && $guestsdata['note'] !='') ? $guestsdata['note'] : $this->user->lang('raidevent_no_guest_note')).'</span><br>'.
+												((isset($guestsdata['email']) && $guestsdata['email'] !='' && ($this->check_permission() || $this->user->check_auth('a_cal_revent_conf', false))) ? '<span style="display:block;margin-top:-6px;"><i class="fa fa-envelope fa-lg"></i> '.$guestsdata['email'].'</span><br>' : '');
 
 							$this->tpl->assign_block_vars('raidstatus.classes.status', array(
 								'GUEST'			=> true,
@@ -1163,6 +1165,9 @@ class calendarevent_pageobject extends pageobject {
 			// Language files
 			'L_NOTSIGNEDIN'			=> $this->user->lang(array('raidevent_raid_status', 4)),
 			'L_SIGNEDIN_MSG'		=> $alreadysignedinmsg,
+			'L_NO_GUESTS'			=> $this->user->lang(array('raidevent_raid_guest_summ_txt',0)),
+			'L_ONE_GUEST'			=> $this->user->lang(array('raidevent_raid_guest_summ_txt',1)),
+			'L_MORE_GUESTS'			=> $this->user->lang(array('raidevent_raid_guest_summ_txt',2)),
 
 			'CSRF_CHANGECHAR_TOKEN'	=> $this->CSRFGetToken('change_char'),
 			'CSRF_CHANGENOTE_TOKEN'	=> $this->CSRFGetToken('change_note'),

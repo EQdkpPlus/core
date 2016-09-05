@@ -1,75 +1,57 @@
-@jqueryTimePickerBorder: #aaa;
-@jquerycboxBackground:#000000;
-@jquerycboxBorder:#FFFFFF;
-@jquerycboxContent:#FFFFFF;
-@jquerycboxFontColor:#949494;
-@jquerycboxSlideshow:#0092ef;
 
-@jqueryQtipBorder:#F1D031;
-@jqueryQtipBackground:#FFFFA3;
-@jqueryQtipFontColor:#555;
-@jqueryQtipShadow:#000;
-@jqueryBorderRadius:4px;
-@jqueryQtipYoutube:#4a4a4a;
-@jqueryQtipJtools:#232323;
-@jqueryQtipJtoolsBorder:#555;
-@jqueryQtipCluetipBackground:#D9D9C2;
-@jqueryQtipCluetipFont:#FFF;
-@jqueryQtipTipsyBackground:#000;
-@jqueryQtipTipsyFont:#FFF;
+// jQueryUI Themeroller
+@jqueryUIFontFamily: Verdana,Arial,sans-serif;
+@jqueryUIFontSize: 1.1em;
+@jqueryUIFontWeight: normal;
+@jqueryUIBorderRadius: 4px;
+@jqueryUIHeaderBackground: #999999;
+@jqueryUIHeaderBorderColor: #ccc;
+@jqueryUIHeaderFontColor: #000;
+@jqueryUIHeaderIconColor: 'ffffff';
+@jqueryUIContentBackground: #fff;
+@jqueryUIContentBorderColor: #ccc;
+@jqueryUIContentFontColor: #000;
+@jqueryUIContentIconColor: 'cccccc';
+@jqueryUIStateDefaultBackground: #e6e6e6;
+@jqueryUIStateDefaultBorderColor: #ccc;
+@jqueryUIStateDefaultFontColor: #000;
+@jqueryUIStateDefaultIconColor: 'ffffff';
+@jqueryUIStateHoverBackground: #cdcdcd;
+@jqueryUIStateHoverBorderColor: #4d4d4d;
+@jqueryUIStateHoverFontColor: #000;
+@jqueryUIStateHoverIconColor: 'ffffff';
+@jqueryUIStateActiveBackground: #ffffff;
+@jqueryUIStateActiveBorderColor: #ccc;
+@jqueryUIStateActiveFontColor: #000;
+@jqueryUIStateActiveIconColor: '222222';
+@jqueryUIHighlightBackground: #f5f5f5;
+@jqueryUIHighlightBorderColor: #ccc;
+@jqueryUIHighlightFontColor: #000;
+@jqueryUIHighlightIconColor: '4b8e0b';
+@jqueryUIErrorBackground: #cd0a0a;
+@jqueryUIErrorBorderColor: #cd0a0a;
+@jqueryUIErrorFontColor: #cd0a0a;
+@jqueryUIErrorIconColor: 'a83300';
+@jqueryUIOverlayBackground: #333333;
+@jqueryUIOverlayOpacity: .5;
+@jqueryUIShadowColor: #ccc;
+@jqueryUIShadowThickness: 8px;
+@jqueryUIShadowTop: -8px;
+@jqueryUIShadowLeft: -8px;
 
-@jquerySpBorder:#000;
-@jquerySpBackground:#fff;
-@jquerySpFont:#222;
+@_path: replace(@eqdkpTemplateImagePath, '(\.\./)|(images/)', '');
+@import (once, optional, less) '@{_path}jquery.less';
 
-@jqueryToolBorder:#5e696d;
-@jqueryToolbarFontColor:#FFF;
-@jqueryToolbarPrimary:#02baf2;
-@jqueryToolbarDanger:#f84545;
-@jqueryToolbarWarning:#f3bc65;
-@jqueryToolbarInfo:#e96300;
-@jqueryToolbarSuccess:#28948c;
-@jqueryToolbarBackgroundL:#b2c6cd;
-@jqueryToolbarFontColorL:#FFF;
-@jqueryToolbarBackgroundD:#364347;
-@jqueryToolbarFontColorD:#FFF;
-@jqueryToolbarBackground:#9175bd;
-
-@jqueryUiNotifyColor:#fff;
-@jqueryUiNotifyShadow:#000;
-@jqueryUiNotifyBackground:#000;
-
-/************************/
-.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
-.ui-timepicker-div dl { text-align: left; }
-.ui-timepicker-div dl dt { float: left; clear:left; padding: 0 0 0 5px; }
-.ui-timepicker-div dl dd { margin: 0 10px 10px 40%; }
-.ui-timepicker-div td { font-size: 90%; }
-.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
-.ui-timepicker-div .ui_tpicker_unit_hide{ display: none; }
-
-.ui-timepicker-div .ui_tpicker_time .ui_tpicker_time_input { background: none; color: inherit; border: none; outline: none; border-bottom: solid 1px darken(@jqueryTimePickerBorder,40); width: 95%; }
-.ui-timepicker-div .ui_tpicker_time .ui_tpicker_time_input:focus { border-bottom-color: @jqueryTimePickerBorder; }
-
-.ui-timepicker-rtl{ direction: rtl; }
-.ui-timepicker-rtl dl { text-align: right; padding: 0 5px 0 0; }
-.ui-timepicker-rtl dl dt{ float: right; clear: right; }
-.ui-timepicker-rtl dl dd { margin: 0 40% 10px 10px; }
-
-/* Shortened version style */
-.ui-timepicker-div.ui-timepicker-oneLine { padding-right: 2px; }
-.ui-timepicker-div.ui-timepicker-oneLine .ui_tpicker_time, 
-.ui-timepicker-div.ui-timepicker-oneLine dt { display: none; }
-.ui-timepicker-div.ui-timepicker-oneLine .ui_tpicker_time_label { display: block; padding-top: 2px; }
-.ui-timepicker-div.ui-timepicker-oneLine dl { text-align: right; }
-.ui-timepicker-div.ui-timepicker-oneLine dl dd, 
-.ui-timepicker-div.ui-timepicker-oneLine dl dd > div { display:inline-block; margin:0; }
-.ui-timepicker-div.ui-timepicker-oneLine dl dd.ui_tpicker_minute:before,
-.ui-timepicker-div.ui-timepicker-oneLine dl dd.ui_tpicker_second:before { content:':'; display:inline-block; }
-.ui-timepicker-div.ui-timepicker-oneLine dl dd.ui_tpicker_millisec:before,
-.ui-timepicker-div.ui-timepicker-oneLine dl dd.ui_tpicker_microsec:before { content:'.'; display:inline-block; }
-.ui-timepicker-div.ui-timepicker-oneLine .ui_tpicker_unit_hide,
-.ui-timepicker-div.ui-timepicker-oneLine .ui_tpicker_unit_hide:before{ display: none; }
+/*!
+ * jQuery UI CSS Framework 1.12.0
+ * http://jqueryui.com
+ *
+ * Copyright jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * http://jquery.org/license
+ *
+ * http://api.jqueryui.com/category/theming/
+ */
 .ui-draggable-handle {
 	-ms-touch-action: none;
 	touch-action: none;
@@ -267,7 +249,7 @@
 	padding: 0;
 	margin: 0;
 	display: block;
-	outline: none;
+	outline: 0;
 }
 .ui-menu .ui-menu {
 	position: absolute;
@@ -774,10 +756,14 @@ button.ui-button::-moz-focus-inner {
 .ui-selectmenu-open {
 	display: block;
 }
-.ui-selectmenu-button.ui-button {
-	text-align: left;
+.ui-selectmenu-text {
+	display: block;
+	margin-right: 20px;
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+.ui-selectmenu-button.ui-button {
+	text-align: left;
 	white-space: nowrap;
 	width: 14em;
 }
@@ -943,6 +929,533 @@ body .ui-tooltip {
 	border-width: 2px;
 }
 
+
+/*!
+ * jQuery UI CSS Framework 1.12.0
+ * http://jqueryui.com
+ *
+ * Copyright jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * http://jquery.org/license
+ *
+ * http://api.jqueryui.com/category/theming/
+ *
+ * To view and modify this theme, visit http://jqueryui.com/themeroller/?dynamicImage=true&dynamicImageHost=&ffDefault=%40jqueryUIFontFamily&fsDefault=%40jqueryUIFontSize&fwDefault=%40jqueryUIFontWeight&cornerRadius=%40jqueryUIBorderRadius&bgColorHeader=%40jqueryUIHeaderBackground&bgTextureHeader=flat&borderColorHeader=%40jqueryUIHeaderBorderColor&fcHeader=%40jqueryUIHeaderFontColor&iconColorHeader=F00001&bgColorContent=%40jqueryUIContentBackground&bgTextureContent=flat&borderColorContent=%40jqueryUIContentBorderColor&fcContent=%40jqueryUIContentFontColor&iconColorContent=F00002&bgColorDefault=%40jqueryUIStateDefaultBackground&bgTextureDefault=flat&borderColorDefault=%40jqueryUIStateDefaultBorderColor&fcDefault=%40jqueryUIStateDefaultFontColor&iconColorDefault=F00003&bgColorHover=%40jqueryUIStateHoverBackground&bgTextureHover=flat&borderColorHover=%40jqueryUIStateHoverBorderColor&fcHover=%40jqueryUIStateHoverFontColor&iconColorHover=F00004&bgColorActive=%40jqueryUIStateActiveBackground&bgTextureActive=flat&borderColorActive=%40jqueryUIStateActiveBorderColor&fcActive=%40jqueryUIStateActiveFontColor&iconColorActive=F00005&bgColorHighlight=%40jqueryUIHighlightBackground&bgTextureHighlight=flat&borderColorHighlight=%40jqueryUIHighlightBorderColor&fcHighlight=%40jqueryUIHighlightFontColor&iconColorHighlight=F00006&bgColorError=%40jqueryUIErrorBackground&bgTextureError=flat&borderColorError=%40jqueryUIErrorBorderColor&fcError=%40jqueryUIErrorFontColor&iconColorError=F00007&bgColorOverlay=%40jqueryUIOverlayBackground&bgTextureOverlay=flat&bgImgOpacityOverlay=flat&opacityOverlay=%40jqueryUIOverlayOpacity&bgColorShadow=%40jqueryUIShadowColor&bgTextureShadow=flat&bgImgOpacityShadow=flat&opacityShadow=flat&thicknessShadow=%40jqueryUIShadowThickness&offsetTopShadow=%40jqueryUIShadowTop&offsetLeftShadow=%40jqueryUIShadowLeft&cornerRadiusShadow=flat
+ */
+
+
+/* Component containers
+----------------------------------*/
+.ui-widget {
+	font-family: @jqueryUIFontFamily;
+	font-size: @jqueryUIFontSize;
+}
+.ui-widget .ui-widget {
+	font-size: 1em;
+}
+.ui-widget input,
+.ui-widget select,
+.ui-widget textarea,
+.ui-widget button {
+	font-family: @jqueryUIFontFamily;
+	font-size: 1em;
+}
+.ui-widget.ui-widget-content {
+	border: 1px solid @jqueryUIStateDefaultBorderColor;
+}
+.ui-widget-content {
+	border: 1px solid @jqueryUIContentBorderColor;
+	background: @jqueryUIContentBackground;
+	color: @jqueryUIContentFontColor;
+}
+.ui-widget-content a {
+	color: @jqueryUIContentFontColor;
+}
+.ui-widget-header {
+	border: 1px solid @jqueryUIHeaderBorderColor;
+	background: @jqueryUIHeaderBackground;
+	color: @jqueryUIHeaderFontColor;
+	font-weight: bold;
+}
+.ui-widget-header a {
+	color: @jqueryUIHeaderFontColor;
+}
+
+/* Interaction states
+----------------------------------*/
+.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default,
+.ui-button,
+
+/* We use html here because we need a greater specificity to make sure disabled
+works properly when clicked or hovered */
+html .ui-button.ui-state-disabled:hover,
+html .ui-button.ui-state-disabled:active {
+	border: 1px solid @jqueryUIStateDefaultBorderColor;
+	background: @jqueryUIStateDefaultBackground;
+	font-weight: @jqueryUIFontWeight;
+	color: @jqueryUIStateDefaultFontColor;
+}
+.ui-state-default a,
+.ui-state-default a:link,
+.ui-state-default a:visited,
+a.ui-button,
+a:link.ui-button,
+a:visited.ui-button,
+.ui-button {
+	color: @jqueryUIStateDefaultFontColor;
+	text-decoration: none;
+}
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus,
+.ui-button:hover,
+.ui-button:focus {
+	border: 1px solid @jqueryUIStateHoverBorderColor;
+	background: @jqueryUIStateHoverBackground;
+	font-weight: @jqueryUIFontWeight;
+	color: @jqueryUIStateHoverFontColor;
+}
+.ui-state-hover a,
+.ui-state-hover a:hover,
+.ui-state-hover a:link,
+.ui-state-hover a:visited,
+.ui-state-focus a,
+.ui-state-focus a:hover,
+.ui-state-focus a:link,
+.ui-state-focus a:visited,
+a.ui-button:hover,
+a.ui-button:focus {
+	color: @jqueryUIStateHoverFontColor;
+	text-decoration: none;
+}
+
+.ui-visual-focus {
+	box-shadow: 0 0 3px 1px rgb(94, 158, 214);
+}
+.ui-state-active,
+.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active,
+a.ui-button:active,
+.ui-button:active,
+.ui-button.ui-state-active:hover {
+	border: 1px solid @jqueryUIStateActiveBorderColor;
+	background: @jqueryUIStateActiveBackground;
+	font-weight: @jqueryUIFontWeight;
+	color: @jqueryUIStateActiveFontColor;
+}
+.ui-icon-background,
+.ui-state-active .ui-icon-background {
+	border: @jqueryUIStateActiveBorderColor;
+	background-color: @jqueryUIStateActiveFontColor;
+}
+.ui-state-active a,
+.ui-state-active a:link,
+.ui-state-active a:visited {
+	color: @jqueryUIStateActiveFontColor;
+	text-decoration: none;
+}
+
+/* Interaction Cues
+----------------------------------*/
+.ui-state-highlight,
+.ui-widget-content .ui-state-highlight,
+.ui-widget-header .ui-state-highlight {
+	border: 1px solid @jqueryUIHighlightBorderColor;
+	background: @jqueryUIHighlightBackground;
+	color: @jqueryUIHighlightFontColor;
+}
+.ui-state-checked {
+	border: 1px solid @jqueryUIHighlightBorderColor;
+	background: @jqueryUIHighlightBackground;
+}
+.ui-state-highlight a,
+.ui-widget-content .ui-state-highlight a,
+.ui-widget-header .ui-state-highlight a {
+	color: @jqueryUIHighlightFontColor;
+}
+.ui-state-error,
+.ui-widget-content .ui-state-error,
+.ui-widget-header .ui-state-error {
+	border: 1px solid @jqueryUIErrorBorderColor;
+	background: @jqueryUIErrorBackground;
+	color: @jqueryUIErrorFontColor;
+}
+.ui-state-error a,
+.ui-widget-content .ui-state-error a,
+.ui-widget-header .ui-state-error a {
+	color: @jqueryUIErrorFontColor;
+}
+.ui-state-error-text,
+.ui-widget-content .ui-state-error-text,
+.ui-widget-header .ui-state-error-text {
+	color: @jqueryUIErrorFontColor;
+}
+.ui-priority-primary,
+.ui-widget-content .ui-priority-primary,
+.ui-widget-header .ui-priority-primary {
+	font-weight: bold;
+}
+.ui-priority-secondary,
+.ui-widget-content .ui-priority-secondary,
+.ui-widget-header .ui-priority-secondary {
+	opacity: .7;
+	filter:Alpha(Opacity=70); /* support: IE8 */
+	font-weight: normal;
+}
+.ui-state-disabled,
+.ui-widget-content .ui-state-disabled,
+.ui-widget-header .ui-state-disabled {
+	opacity: .35;
+	filter:Alpha(Opacity=35); /* support: IE8 */
+	background-image: none;
+}
+.ui-state-disabled .ui-icon {
+	filter:Alpha(Opacity=35); /* support: IE8 - See #6059 */
+}
+
+/* Icons
+----------------------------------*/
+
+/* states and images */
+.ui-icon {
+	width: 16px;
+	height: 16px;
+}
+.ui-icon,
+.ui-widget-content .ui-icon {
+	background-image: url("../../../@{_path}images/ui-icons_@{jqueryUIContentIconColor}_256x240.png")
+}
+.ui-widget-header .ui-icon {
+	background-image: url("../../../@{_path}images/ui-icons_@{jqueryUIHeaderIconColor}_256x240.png")
+}
+.ui-button .ui-icon {
+	background-image: url("../../../@{_path}images/ui-icons_@{jqueryUIStateDefaultIconColor}_256x240.png")
+}
+.ui-state-hover .ui-icon,
+.ui-state-focus .ui-icon,
+.ui-button:hover .ui-icon,
+.ui-button:focus .ui-icon,
+.ui-state-default .ui-icon {
+	background-image: url("../../../@{_path}images/ui-icons_@{jqueryUIStateHoverIconColor}_256x240.png")
+}
+.ui-state-active .ui-icon,
+.ui-button:active .ui-icon {
+	background-image: url("../../../@{_path}images/ui-icons_@{jqueryUIStateActiveIconColor}_256x240.png")
+}
+.ui-state-highlight .ui-icon,
+.ui-button .ui-state-highlight.ui-icon {
+	background-image: url("../../../@{_path}images/ui-icons_@{jqueryUIHighlightIconColor}_256x240.png")
+}
+.ui-state-error .ui-icon,
+.ui-state-error-text .ui-icon {
+	background-image: url("../../../@{_path}images/ui-icons_@{jqueryUIErrorIconColor}_256x240.png")
+}
+
+/* positioning */
+.ui-icon-blank { background-position: 16px 16px; }
+.ui-icon-caret-1-n { background-position: 0 0; }
+.ui-icon-caret-1-ne { background-position: -16px 0; }
+.ui-icon-caret-1-e { background-position: -32px 0; }
+.ui-icon-caret-1-se { background-position: -48px 0; }
+.ui-icon-caret-1-s { background-position: -65px 0; }
+.ui-icon-caret-1-sw { background-position: -80px 0; }
+.ui-icon-caret-1-w { background-position: -96px 0; }
+.ui-icon-caret-1-nw { background-position: -112px 0; }
+.ui-icon-caret-2-n-s { background-position: -128px 0; }
+.ui-icon-caret-2-e-w { background-position: -144px 0; }
+.ui-icon-triangle-1-n { background-position: 0 -16px; }
+.ui-icon-triangle-1-ne { background-position: -16px -16px; }
+.ui-icon-triangle-1-e { background-position: -32px -16px; }
+.ui-icon-triangle-1-se { background-position: -48px -16px; }
+.ui-icon-triangle-1-s { background-position: -65px -16px; }
+.ui-icon-triangle-1-sw { background-position: -80px -16px; }
+.ui-icon-triangle-1-w { background-position: -96px -16px; }
+.ui-icon-triangle-1-nw { background-position: -112px -16px; }
+.ui-icon-triangle-2-n-s { background-position: -128px -16px; }
+.ui-icon-triangle-2-e-w { background-position: -144px -16px; }
+.ui-icon-arrow-1-n { background-position: 0 -32px; }
+.ui-icon-arrow-1-ne { background-position: -16px -32px; }
+.ui-icon-arrow-1-e { background-position: -32px -32px; }
+.ui-icon-arrow-1-se { background-position: -48px -32px; }
+.ui-icon-arrow-1-s { background-position: -65px -32px; }
+.ui-icon-arrow-1-sw { background-position: -80px -32px; }
+.ui-icon-arrow-1-w { background-position: -96px -32px; }
+.ui-icon-arrow-1-nw { background-position: -112px -32px; }
+.ui-icon-arrow-2-n-s { background-position: -128px -32px; }
+.ui-icon-arrow-2-ne-sw { background-position: -144px -32px; }
+.ui-icon-arrow-2-e-w { background-position: -160px -32px; }
+.ui-icon-arrow-2-se-nw { background-position: -176px -32px; }
+.ui-icon-arrowstop-1-n { background-position: -192px -32px; }
+.ui-icon-arrowstop-1-e { background-position: -208px -32px; }
+.ui-icon-arrowstop-1-s { background-position: -224px -32px; }
+.ui-icon-arrowstop-1-w { background-position: -240px -32px; }
+.ui-icon-arrowthick-1-n { background-position: 1px -48px; }
+.ui-icon-arrowthick-1-ne { background-position: -16px -48px; }
+.ui-icon-arrowthick-1-e { background-position: -32px -48px; }
+.ui-icon-arrowthick-1-se { background-position: -48px -48px; }
+.ui-icon-arrowthick-1-s { background-position: -64px -48px; }
+.ui-icon-arrowthick-1-sw { background-position: -80px -48px; }
+.ui-icon-arrowthick-1-w { background-position: -96px -48px; }
+.ui-icon-arrowthick-1-nw { background-position: -112px -48px; }
+.ui-icon-arrowthick-2-n-s { background-position: -128px -48px; }
+.ui-icon-arrowthick-2-ne-sw { background-position: -144px -48px; }
+.ui-icon-arrowthick-2-e-w { background-position: -160px -48px; }
+.ui-icon-arrowthick-2-se-nw { background-position: -176px -48px; }
+.ui-icon-arrowthickstop-1-n { background-position: -192px -48px; }
+.ui-icon-arrowthickstop-1-e { background-position: -208px -48px; }
+.ui-icon-arrowthickstop-1-s { background-position: -224px -48px; }
+.ui-icon-arrowthickstop-1-w { background-position: -240px -48px; }
+.ui-icon-arrowreturnthick-1-w { background-position: 0 -64px; }
+.ui-icon-arrowreturnthick-1-n { background-position: -16px -64px; }
+.ui-icon-arrowreturnthick-1-e { background-position: -32px -64px; }
+.ui-icon-arrowreturnthick-1-s { background-position: -48px -64px; }
+.ui-icon-arrowreturn-1-w { background-position: -64px -64px; }
+.ui-icon-arrowreturn-1-n { background-position: -80px -64px; }
+.ui-icon-arrowreturn-1-e { background-position: -96px -64px; }
+.ui-icon-arrowreturn-1-s { background-position: -112px -64px; }
+.ui-icon-arrowrefresh-1-w { background-position: -128px -64px; }
+.ui-icon-arrowrefresh-1-n { background-position: -144px -64px; }
+.ui-icon-arrowrefresh-1-e { background-position: -160px -64px; }
+.ui-icon-arrowrefresh-1-s { background-position: -176px -64px; }
+.ui-icon-arrow-4 { background-position: 0 -80px; }
+.ui-icon-arrow-4-diag { background-position: -16px -80px; }
+.ui-icon-extlink { background-position: -32px -80px; }
+.ui-icon-newwin { background-position: -48px -80px; }
+.ui-icon-refresh { background-position: -64px -80px; }
+.ui-icon-shuffle { background-position: -80px -80px; }
+.ui-icon-transfer-e-w { background-position: -96px -80px; }
+.ui-icon-transferthick-e-w { background-position: -112px -80px; }
+.ui-icon-folder-collapsed { background-position: 0 -96px; }
+.ui-icon-folder-open { background-position: -16px -96px; }
+.ui-icon-document { background-position: -32px -96px; }
+.ui-icon-document-b { background-position: -48px -96px; }
+.ui-icon-note { background-position: -64px -96px; }
+.ui-icon-mail-closed { background-position: -80px -96px; }
+.ui-icon-mail-open { background-position: -96px -96px; }
+.ui-icon-suitcase { background-position: -112px -96px; }
+.ui-icon-comment { background-position: -128px -96px; }
+.ui-icon-person { background-position: -144px -96px; }
+.ui-icon-print { background-position: -160px -96px; }
+.ui-icon-trash { background-position: -176px -96px; }
+.ui-icon-locked { background-position: -192px -96px; }
+.ui-icon-unlocked { background-position: -208px -96px; }
+.ui-icon-bookmark { background-position: -224px -96px; }
+.ui-icon-tag { background-position: -240px -96px; }
+.ui-icon-home { background-position: 0 -112px; }
+.ui-icon-flag { background-position: -16px -112px; }
+.ui-icon-calendar { background-position: -32px -112px; }
+.ui-icon-cart { background-position: -48px -112px; }
+.ui-icon-pencil { background-position: -64px -112px; }
+.ui-icon-clock { background-position: -80px -112px; }
+.ui-icon-disk { background-position: -96px -112px; }
+.ui-icon-calculator { background-position: -112px -112px; }
+.ui-icon-zoomin { background-position: -128px -112px; }
+.ui-icon-zoomout { background-position: -144px -112px; }
+.ui-icon-search { background-position: -160px -112px; }
+.ui-icon-wrench { background-position: -176px -112px; }
+.ui-icon-gear { background-position: -192px -112px; }
+.ui-icon-heart { background-position: -208px -112px; }
+.ui-icon-star { background-position: -224px -112px; }
+.ui-icon-link { background-position: -240px -112px; }
+.ui-icon-cancel { background-position: 0 -128px; }
+.ui-icon-plus { background-position: -16px -128px; }
+.ui-icon-plusthick { background-position: -32px -128px; }
+.ui-icon-minus { background-position: -48px -128px; }
+.ui-icon-minusthick { background-position: -64px -128px; }
+.ui-icon-close { background-position: -80px -128px; }
+.ui-icon-closethick { background-position: -96px -128px; }
+.ui-icon-key { background-position: -112px -128px; }
+.ui-icon-lightbulb { background-position: -128px -128px; }
+.ui-icon-scissors { background-position: -144px -128px; }
+.ui-icon-clipboard { background-position: -160px -128px; }
+.ui-icon-copy { background-position: -176px -128px; }
+.ui-icon-contact { background-position: -192px -128px; }
+.ui-icon-image { background-position: -208px -128px; }
+.ui-icon-video { background-position: -224px -128px; }
+.ui-icon-script { background-position: -240px -128px; }
+.ui-icon-alert { background-position: 0 -144px; }
+.ui-icon-info { background-position: -16px -144px; }
+.ui-icon-notice { background-position: -32px -144px; }
+.ui-icon-help { background-position: -48px -144px; }
+.ui-icon-check { background-position: -64px -144px; }
+.ui-icon-bullet { background-position: -80px -144px; }
+.ui-icon-radio-on { background-position: -96px -144px; }
+.ui-icon-radio-off { background-position: -112px -144px; }
+.ui-icon-pin-w { background-position: -128px -144px; }
+.ui-icon-pin-s { background-position: -144px -144px; }
+.ui-icon-play { background-position: 0 -160px; }
+.ui-icon-pause { background-position: -16px -160px; }
+.ui-icon-seek-next { background-position: -32px -160px; }
+.ui-icon-seek-prev { background-position: -48px -160px; }
+.ui-icon-seek-end { background-position: -64px -160px; }
+.ui-icon-seek-start { background-position: -80px -160px; }
+/* ui-icon-seek-first is deprecated, use ui-icon-seek-start instead */
+.ui-icon-seek-first { background-position: -80px -160px; }
+.ui-icon-stop { background-position: -96px -160px; }
+.ui-icon-eject { background-position: -112px -160px; }
+.ui-icon-volume-off { background-position: -128px -160px; }
+.ui-icon-volume-on { background-position: -144px -160px; }
+.ui-icon-power { background-position: 0 -176px; }
+.ui-icon-signal-diag { background-position: -16px -176px; }
+.ui-icon-signal { background-position: -32px -176px; }
+.ui-icon-battery-0 { background-position: -48px -176px; }
+.ui-icon-battery-1 { background-position: -64px -176px; }
+.ui-icon-battery-2 { background-position: -80px -176px; }
+.ui-icon-battery-3 { background-position: -96px -176px; }
+.ui-icon-circle-plus { background-position: 0 -192px; }
+.ui-icon-circle-minus { background-position: -16px -192px; }
+.ui-icon-circle-close { background-position: -32px -192px; }
+.ui-icon-circle-triangle-e { background-position: -48px -192px; }
+.ui-icon-circle-triangle-s { background-position: -64px -192px; }
+.ui-icon-circle-triangle-w { background-position: -80px -192px; }
+.ui-icon-circle-triangle-n { background-position: -96px -192px; }
+.ui-icon-circle-arrow-e { background-position: -112px -192px; }
+.ui-icon-circle-arrow-s { background-position: -128px -192px; }
+.ui-icon-circle-arrow-w { background-position: -144px -192px; }
+.ui-icon-circle-arrow-n { background-position: -160px -192px; }
+.ui-icon-circle-zoomin { background-position: -176px -192px; }
+.ui-icon-circle-zoomout { background-position: -192px -192px; }
+.ui-icon-circle-check { background-position: -208px -192px; }
+.ui-icon-circlesmall-plus { background-position: 0 -208px; }
+.ui-icon-circlesmall-minus { background-position: -16px -208px; }
+.ui-icon-circlesmall-close { background-position: -32px -208px; }
+.ui-icon-squaresmall-plus { background-position: -48px -208px; }
+.ui-icon-squaresmall-minus { background-position: -64px -208px; }
+.ui-icon-squaresmall-close { background-position: -80px -208px; }
+.ui-icon-grip-dotted-vertical { background-position: 0 -224px; }
+.ui-icon-grip-dotted-horizontal { background-position: -16px -224px; }
+.ui-icon-grip-solid-vertical { background-position: -32px -224px; }
+.ui-icon-grip-solid-horizontal { background-position: -48px -224px; }
+.ui-icon-gripsmall-diagonal-se { background-position: -64px -224px; }
+.ui-icon-grip-diagonal-se { background-position: -80px -224px; }
+
+
+/* Misc visuals
+----------------------------------*/
+
+/* Corner radius */
+.ui-corner-all,
+.ui-corner-top,
+.ui-corner-left,
+.ui-corner-tl {
+	border-top-left-radius: @jqueryUIBorderRadius;
+}
+.ui-corner-all,
+.ui-corner-top,
+.ui-corner-right,
+.ui-corner-tr {
+	border-top-right-radius: @jqueryUIBorderRadius;
+}
+.ui-corner-all,
+.ui-corner-bottom,
+.ui-corner-left,
+.ui-corner-bl {
+	border-bottom-left-radius: @jqueryUIBorderRadius;
+}
+.ui-corner-all,
+.ui-corner-bottom,
+.ui-corner-right,
+.ui-corner-br {
+	border-bottom-right-radius: @jqueryUIBorderRadius;
+}
+
+/* Overlays */
+.ui-widget-overlay {
+	background: @jqueryUIOverlayBackground;
+	opacity: NaN;
+	filter: Alpha(Opacity=@jqueryUIOverlayOpacity); /* support: IE8 */
+}
+.ui-widget-shadow {
+	-webkit-box-shadow: @jqueryUIShadowLeft @jqueryUIShadowTop @jqueryUIShadowThickness @jqueryUIShadowColor;
+	box-shadow: @jqueryUIShadowLeft @jqueryUIShadowTop @jqueryUIShadowThickness @jqueryUIShadowColor;
+}
+
+
+.ui-dialog .ui-icon,
+.ui-datepicker .ui-icon,
+.ui-multiselect .ui-icon,
+.ui-multiselect-menu .ui-icon,
+.ui-spinner .ui-icon{
+	background: none repeat scroll 0 0 transparent !important;
+	text-indent: 0;
+	vertical-align: middle;
+	font-family: FontAwesome !important;
+	font-weight: normal;
+	font-style: normal;
+	text-decoration: none !important;
+	display: inline-block !important;
+	-webkit-font-smoothing: antialiased;
+	float: none;
+	display: inline !important;
+	font-size: 0;
+}
+.ui-dialog .ui-icon:before,
+.ui-datepicker .ui-icon:before,
+.ui-multiselect .ui-icon:before,
+.ui-multiselect-menu .ui-icon:before,
+.ui-spinner .ui-icon:before{
+	text-decoration: inherit;
+	text-indent: 0 !important; 
+	speak: none;
+	font-size: 14px;
+}
+
+.ui-datepicker .ui-icon:before {
+	font-size: 16px;
+}
+
+/* Icons */
+.ui-icon-carat-1-s:before { content: "\f0d7"; }
+.ui-icon-closethick:before { content: "\f00d"; }
+.ui-icon-circle-triangle-e:before,
+.ui-icon-carat-1-e:before{ content: "\f138"; }
+.ui-icon-carat-1-n:before { content: "\f0d8"; }
+.ui-icon-circle-triangle-w:before,
+.ui-icon-carat-1-w:before{ content: "\f137"; }
+.ui-icon-trash:before { content: "\f014"; }
+.ui-icon-arrowthickstop-1-n:before { content: "\f148"; }
+.ui-icon-arrowthickstop-1-s:before { content: "\f149"; }
+.ui-icon-arrowthick-2-n-s:before { content: "\f0dc"; }
+.ui-icon-triangle-1-n:before { content:"\f0d8"; }
+.ui-icon-triangle-1-s:before { content:"\f0d7"; }
+.ui-icon-check:before { content: '\f00c'; }
+.ui-icon-circle-close:before { content: '\f057'; }
+.ui-icon-closethick:before { content: '\f00d'; font-weight: bold; }
+.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
+.ui-timepicker-div dl { text-align: left; }
+.ui-timepicker-div dl dt { float: left; clear:left; padding: 0 0 0 5px; }
+.ui-timepicker-div dl dd { margin: 0 10px 10px 40%; }
+.ui-timepicker-div td { font-size: 90%; }
+.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
+.ui-timepicker-div .ui_tpicker_unit_hide{ display: none; }
+
+.ui-timepicker-div .ui_tpicker_time .ui_tpicker_time_input { background: none; color: inherit; border: none; outline: none; border-bottom: solid 1px #555; width: 95%; }
+.ui-timepicker-div .ui_tpicker_time .ui_tpicker_time_input:focus { border-bottom-color: #aaa; }
+
+.ui-timepicker-rtl{ direction: rtl; }
+.ui-timepicker-rtl dl { text-align: right; padding: 0 5px 0 0; }
+.ui-timepicker-rtl dl dt{ float: right; clear: right; }
+.ui-timepicker-rtl dl dd { margin: 0 40% 10px 10px; }
+
+/* Shortened version style */
+.ui-timepicker-div.ui-timepicker-oneLine { padding-right: 2px; }
+.ui-timepicker-div.ui-timepicker-oneLine .ui_tpicker_time, 
+.ui-timepicker-div.ui-timepicker-oneLine dt { display: none; }
+.ui-timepicker-div.ui-timepicker-oneLine .ui_tpicker_time_label { display: block; padding-top: 2px; }
+.ui-timepicker-div.ui-timepicker-oneLine dl { text-align: right; }
+.ui-timepicker-div.ui-timepicker-oneLine dl dd, 
+.ui-timepicker-div.ui-timepicker-oneLine dl dd > div { display:inline-block; margin:0; }
+.ui-timepicker-div.ui-timepicker-oneLine dl dd.ui_tpicker_minute:before,
+.ui-timepicker-div.ui-timepicker-oneLine dl dd.ui_tpicker_second:before { content:':'; display:inline-block; }
+.ui-timepicker-div.ui-timepicker-oneLine dl dd.ui_tpicker_millisec:before,
+.ui-timepicker-div.ui-timepicker-oneLine dl dd.ui_tpicker_microsec:before { content:'.'; display:inline-block; }
+.ui-timepicker-div.ui-timepicker-oneLine .ui_tpicker_unit_hide,
+.ui-timepicker-div.ui-timepicker-oneLine .ui_tpicker_unit_hide:before{ display: none; }
 /*
     Colorbox Core Style:
     The following CSS is consistent between example themes and should not be altered.
@@ -966,7 +1479,7 @@ body .ui-tooltip {
     ordered & tabbed in a way that represents the nesting of the generated HTML.
 */
 #cboxOverlay{
-	background: @jquerycboxBackground;
+	background: #000000;
 	opacity: .6 !important;
 	filter: Alpha(Opacity=60) !important;
 }
@@ -974,17 +1487,17 @@ body .ui-tooltip {
 	outline:0;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
-	border: 12px solid @jquerycboxBorder;
+	border: 12px solid #fff;
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
 
-#cboxContent{background:@jquerycboxContent; overflow:hidden;}
-.cboxIframe{background:@jquerycboxContent;}
-#cboxError{padding:50px; border:1px solid lighten(@jquerycboxBorder,80);}
+#cboxContent{background:#fff; overflow:hidden;}
+.cboxIframe{background:#fff;}
+#cboxError{padding:50px; border:1px solid #ccc;}
 #cboxLoadedContent{margin-bottom:52px;}
-#cboxTitle{position:absolute; bottom:26px; left:0; text-align:left; width:100%; color:@jquerycboxFontColor;}
-#cboxCurrent{position:absolute; bottom:4px; left:0px; color:@jquerycboxFontColor;}
-#cboxLoadingOverlay{background:@jquerycboxContent url(images/loading.gif) no-repeat 5px 5px;}
+#cboxTitle{position:absolute; bottom:26px; left:0; text-align:left; width:100%; color:#949494;}
+#cboxCurrent{position:absolute; bottom:4px; left:0px; color:#949494;}
+#cboxLoadingOverlay{background:#fff url(images/loading.gif) no-repeat 5px 5px;}
 
 /* these elements are buttons, and may need to have additional styles reset to avoid unwanted base styles */
 #cboxPrevious, #cboxNext, #cboxSlideshow, #cboxClose {border:0; padding:0; margin:0; overflow:visible; width:auto; background:none; }
@@ -996,13 +1509,13 @@ body .ui-tooltip {
 	position:absolute;
 	bottom:4px;
 	right:0px;
-	color:@jquerycboxSlideshow;
+	color:#0092ef;
 }
 #cboxPrevious{
 	float: left;
 	background:none;
 	bottom: 55%;
-	color: @jquerycboxSlideshow;
+	color: #0092EF;
 	font-size: 35px;
 	left: 2px;
 	overflow: hidden;
@@ -1016,9 +1529,9 @@ body .ui-tooltip {
 #cboxPrevious:before{
 	content: "\f053";
 	font-family: FontAwesome;
-	color: lighten(@jquerycboxFontColor,70);
+	color: #fff;
 	margin-right: 3px;
-	text-shadow: 0px 0px 7px @jquerycboxFontColor;
+	text-shadow: 0px 0px 7px rgba(150, 150, 150, 1);
 }
 #cboxPrevious:hover{
 	background-position:-75px -25px;
@@ -1041,9 +1554,9 @@ body .ui-tooltip {
 #cboxNext:after {
 	content: "\f054";
 	font-family: FontAwesome;
-	color: lighten(@jquerycboxFontColor,70);
+	color: #fff;
 	margin-left: 13px;
-	text-shadow: 0px 0px 7px @jquerycboxFontColor;
+	text-shadow: 0px 0px 7px rgba(150, 150, 150, 1);
 }
 #cboxNext:hover{
 	background-position:-50px -25px;
@@ -1090,14 +1603,14 @@ body .ui-tooltip {
 .ui-multiselect-filter input { width:100px; font-size:10px; margin-left:5px; height:15px; padding:2px; border:1px solid #292929; -webkit-appearance:textfield; -webkit-box-sizing:content-box; }
 
 /*
- * qTip2 - Pretty powerful tooltips - v2.2.1
+ * qTip2 - Pretty powerful tooltips - v3.0.3
  * http://qtip2.com
  *
- * Copyright (c) 2014 
+ * Copyright (c) 2016 
  * Released under the MIT licenses
  * http://jquery.org/license
  *
- * Date: Sun Sep 7 2014 09:48 EDT-0400
+ * Date: Thu May 12 2016 09:07 EDT-0400
  * Plugins: tips viewport svg modal
  * Styles: core basic css3
  */
@@ -1107,7 +1620,7 @@ body .ui-tooltip {
 	top: -28000px;
 	display: none;
 
-	max-width: 400px;
+	max-width: 280px;
 	min-width: 50px;
 
 	font-size: 10.5px;
@@ -1193,25 +1706,25 @@ body .ui-tooltip {
 
 /* Default tooltip style */
 .qtip-default{
-	border: 1px solid @jqueryQtipBorder;
+	border: 1px solid #F1D031;
 
-	background-color: @jqueryQtipBackground;
-	color: @jqueryQtipFontColor;
+	background-color: #FFFFA3;
+	color: #555;
 }
 
 	.qtip-default .qtip-titlebar{
-		background-color: @jqueryQtipBackground;
+		background-color: #FFEF93;
 	}
 
 	.qtip-default .qtip-icon{
-		border-color: desaturate(lighten(@jqueryQtipBorder,10),90);
-		background: lighten(@jqueryQtipBackground,20);
-		color: litghten(@jqueryQtipFontColor,20);
+		border-color: #CCC;
+		background: #F1F1F1;
+		color: #777;
 	}
 
 	.qtip-default .qtip-titlebar .qtip-close{
-		border-color: desaturate(lighten(@jqueryQtipBorder,10),90);
-		color: darken(@jqueryQtipFontColor,50);
+		border-color: #AAA;
+		color: #111;
 	}
 
 
@@ -1320,9 +1833,9 @@ body .ui-tooltip {
 
 
 .qtip-shadow{
-	-webkit-box-shadow: 1px 1px 3px 1px fadeout(@jqueryQtipShadow,85);
-	-moz-box-shadow: 1px 1px 3px 1px fadeout(@jqueryQtipShadow,85);
-	box-shadow: 1px 1px 3px 1px fadeout(@jqueryQtipShadow,85);
+	-webkit-box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.15);
+	-moz-box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.15);
+	box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.15);
 }
 
 /* Add rounded corners to your tooltips in: FF3+, Chrome 2+, Opera 10.6+, IE9+, Safari 2+ */
@@ -1346,71 +1859,74 @@ body .ui-tooltip {
 	-webkit-border-radius: 2px;
 	border-radius: 2px;
 
-	-webkit-box-shadow: 0 0 3px lighten(@jqueryQtipShadow,20);
-	-moz-box-shadow: 0 0 3px lighten(@jqueryQtipShadow,20);
-	box-shadow: 0 0 3px lighten(@jqueryQtipShadow,20);
+	-webkit-box-shadow: 0 0 3px #333;
+	-moz-box-shadow: 0 0 3px #333;
+	box-shadow: 0 0 3px #333;
 
-	color: ligthen(@jqueryQtipYoutube,80);
+	color: white;
 	border: 0 solid transparent;
 
-	background: @jqueryQtipYoutube;
-	background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0,@jqueryQtipYoutube),color-stop(100%,darken(@jqueryQtipYoutube,60)));
-	background-image: -webkit-linear-gradient(top,@jqueryQtipYoutube 0,darken(@jqueryQtipYoutube,60) 100%);
-	background-image: -moz-linear-gradient(top,@jqueryQtipYoutube 0,darken(@jqueryQtipYoutube,60) 100%);
-	background-image: -ms-linear-gradient(top,@jqueryQtipYoutube 0,darken(@jqueryQtipYoutube,60) 100%);
-	background-image: -o-linear-gradient(top,@jqueryQtipYoutube 0,darken(@jqueryQtipYoutube,60) 100%);
+	background: #4A4A4A;
+	background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0,#4A4A4A),color-stop(100%,black));
+	background-image: -webkit-linear-gradient(top,#4A4A4A 0,black 100%);
+	background-image: -moz-linear-gradient(top,#4A4A4A 0,black 100%);
+	background-image: -ms-linear-gradient(top,#4A4A4A 0,black 100%);
+	background-image: -o-linear-gradient(top,#4A4A4A 0,black 100%);
 }
 
 	.qtip-youtube .qtip-titlebar{
-		background-color: @jqueryQtipYoutube;
+		background-color: #4A4A4A;
+		background-color: rgba(0,0,0,0);
 	}
 
 	.qtip-youtube .qtip-content{
 		padding: .75em;
 		font: 12px arial,sans-serif;
 
-		filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr=@jqueryQtipYoutube,EndColorStr=darken(@jqueryQtipYoutube,60));
-		-ms-filter: "progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr=@jqueryQtipYoutube,EndColorStr=darken(@jqueryQtipYoutube,60));";
+		filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr=#4a4a4a,EndColorStr=#000000);
+		-ms-filter: "progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr=#4a4a4a,EndColorStr=#000000);";
 	}
 
 	.qtip-youtube .qtip-icon{
-		border-color: darken(@jqueryQtipYoutube,30);
+		border-color: #222;
 	}
 
 	.qtip-youtube .qtip-titlebar .ui-state-hover{
-		border-color: darken(@jqueryQtipYoutube,20);
+		border-color: #303030;
 	}
 
 
 /* jQuery TOOLS Tooltip style */
 .qtip-jtools{
-	background: @jqueryQtipJtools;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(lighten(@jqueryQtipJtools,30)), to(@jqueryQtipJtools));
-	background-image: -moz-linear-gradient(top, lighten(@jqueryQtipJtools,30), @jqueryQtipJtools);
-	background-image: -webkit-linear-gradient(top, lighten(@jqueryQtipJtools,30), @jqueryQtipJtools);
-	background-image: -ms-linear-gradient(top, lighten(@jqueryQtipJtools,30), @jqueryQtipJtools);
-	background-image: -o-linear-gradient(top, lighten(@jqueryQtipJtools,30), @jqueryQtipJtools);
+	background: #232323;
+	background: rgba(0, 0, 0, 0.7);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#717171), to(#232323));
+	background-image: -moz-linear-gradient(top, #717171, #232323);
+	background-image: -webkit-linear-gradient(top, #717171, #232323);
+	background-image: -ms-linear-gradient(top, #717171, #232323);
+	background-image: -o-linear-gradient(top, #717171, #232323);
 
-	border: 2px solid @jqueryQtipJtoolsBorder;
+	border: 2px solid #ddd;
+	border: 2px solid rgba(241,241,241,1);
 
 	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;
 	border-radius: 2px;
 
-	-webkit-box-shadow: 0 0 12px lighten(@jqueryQtipJtools,10);
-	-moz-box-shadow: 0 0 12px lighten(@jqueryQtipJtools,10);
-	box-shadow: 0 0 12px lighten(@jqueryQtipJtools,10);
+	-webkit-box-shadow: 0 0 12px #333;
+	-moz-box-shadow: 0 0 12px #333;
+	box-shadow: 0 0 12px #333;
 }
 
 	/* IE Specific */
 	.qtip-jtools .qtip-titlebar{
 		background-color: transparent;
-		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=lighten(@jqueryQtipJtools,30),endColorstr=lighten(@jqueryQtipJtools,20));
-		-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=lighten(@jqueryQtipJtools,30),endColorstr=lighten(@jqueryQtipJtools,20))";
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#717171,endColorstr=#4A4A4A);
+		-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#717171,endColorstr=#4A4A4A)";
 	}
 	.qtip-jtools .qtip-content{
-		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=lighten(@jqueryQtipJtools,20),endColorstr=@jqueryQtipJtools);
-		-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=lighten(@jqueryQtipJtools,20),endColorstr=@jqueryQtipJtools)";
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#4A4A4A,endColorstr=#232323);
+		-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#4A4A4A,endColorstr=#232323)";
 	}
 
 	.qtip-jtools .qtip-titlebar,
@@ -1421,53 +1937,54 @@ body .ui-tooltip {
 	}
 
 	.qtip-jtools .qtip-icon{
-		border-color: @jqueryQtipJtoolsBorder;
+		border-color: #555;
 	}
 
 	.qtip-jtools .qtip-titlebar .ui-state-hover{
-		border-color: darken(@jqueryQtipJtoolsBorder,30);
+		border-color: #333;
 	}
 
 
 /* Cluetip style */
 .qtip-cluetip{
-	-webkit-box-shadow: 4px 4px 5px fadeout(@jqueryQtipShadow,60);
-	-moz-box-shadow: 4px 4px 5px fadeout(@jqueryQtipShadow,60);
-	box-shadow: 4px 4px 5px fadeout(@jqueryQtipShadow,60);
+	-webkit-box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.4);
+	-moz-box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.4);
+	box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.4);
 
-	background-color: @jqueryQtipCluetipBackground;
-	color: darken(@jqueryQtipCluetipFont,90);
+	background-color: #D9D9C2;
+	color: #111;
 	border: 0 dashed transparent;
 }
 
 	.qtip-cluetip .qtip-titlebar{
-		background-color: darken(@jqueryQtipCluetipBackground,30);
-		color: @jqueryQtipCluetipFont;
+		background-color: #87876A;
+		color: white;
 		border: 0 dashed transparent;
 	}
 
 	.qtip-cluetip .qtip-icon{
-		border-color: darken(@jqueryQtipCluetipBackground,30);
+		border-color: #808064;
 	}
 
 	.qtip-cluetip .qtip-titlebar .ui-state-hover{
-		border-color: darken(@jqueryQtipCluetipBackground,55);
-		color: darken(@jqueryQtipCluetipBackground,55);
+		border-color: #696952;
+		color: #696952;
 	}
 
 
 /* Tipsy style */
 .qtip-tipsy{
-	background: fadeout(@jqueryQtipTipsyBackground,10);
+	background: black;
+	background: rgba(0, 0, 0, .87);
 
-	color: @jqueryQtipTipsyFont;
+	color: white;
 	border: 0 solid transparent;
 
 	font-size: 11px;
 	font-family: 'Lucida Grande', sans-serif;
 	font-weight: bold;
 	line-height: 16px;
-	text-shadow: 0 1px @jqueryQtipTipsyBackground;
+	text-shadow: 0 1px black;
 }
 
 	.qtip-tipsy .qtip-titlebar{
@@ -1480,12 +1997,12 @@ body .ui-tooltip {
 	}
 
 	.qtip-tipsy .qtip-icon{
-		border-color: lighten(@jqueryQtipTipsyBackground,20);
+		border-color: #222;
 		text-shadow: none;
 	}
 
 	.qtip-tipsy .qtip-titlebar .ui-state-hover{
-		border-color: lighten(@jqueryQtipTipsyBackground,30);
+		border-color: #303030;
 	}
 
 
@@ -1699,7 +2216,7 @@ body .ui-tooltip {
 	}
 
 /***
-Spectrum Colorpicker v1.7.0
+Spectrum Colorpicker v1.8.0
 https://github.com/bgrins/spectrum
 Author: Brian Grinstead
 License: MIT
@@ -1786,8 +2303,8 @@ License: MIT
     width: 6px;
     left: 50%;
     cursor: pointer;
-    border: 1px solid @jquerySpBorder;
-    background: @jquerySpBackground;
+    border: 1px solid black;
+    background: white;
     opacity: .8;
 }
 .sp-alpha {
@@ -1799,7 +2316,7 @@ License: MIT
     height: 8px;
 }
 .sp-alpha-inner {
-    border: solid 1px lighten(@jquerySpBorder,20);
+    border: solid 1px #333;
 }
 
 .sp-clear {
@@ -1928,8 +2445,8 @@ License: MIT
    border-radius: 5px;
    height: 5px;
    width: 5px;
-   border: 1px solid @jquerySpBackground;
-   background: @jquerySpBorder;
+   border: 1px solid #fff;
+   background: #000;
    cursor: pointer;
    position:absolute;
    top:0;
@@ -1942,8 +2459,8 @@ License: MIT
     height: 3px;
     left: -1px;
     right: -1px;
-    border: 1px solid @jquerySpBorder;
-    background: @jquerySpBackground;
+    border: 1px solid #000;
+    background: white;
     opacity: .8;
 }
 
@@ -1955,8 +2472,8 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 
 .sp-container {
     border-radius: 0;
-    background-color: darken(@jquerySpBackground,5);
-    border: solid 1px lighten(@jquerySpBorder,20);
+    background-color: #ECECEC;
+    border: solid 1px #f0c49B;
     padding: 0;
 }
 .sp-container, .sp-container button, .sp-container input, .sp-color, .sp-hue, .sp-clear {
@@ -1970,7 +2487,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
     margin-bottom: 3px;
 }
 .sp-color, .sp-hue, .sp-clear {
-    border: solid 1px lighten(@jquerySpBorder,40);
+    border: solid 1px #666;
 }
 
 /* Input */
@@ -1990,7 +2507,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
    width: 100%;
    background:transparent;
    border-radius: 3px;
-   color: @jquerySpFont;
+   color: #222;
 }
 .sp-input:focus  {
     border: 1px solid orange;
@@ -2008,12 +2525,12 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 }
 .sp-picker-container {
     width: 172px;
-    border-left: solid 1px lighten(@jquerySpBorder,100);
+    border-left: solid 1px #fff;
 }
 
 /* Palettes */
 .sp-palette-container {
-    border-right: solid 1px lighten(@jquerySpBorder,90);
+    border-right: solid 1px #ccc;
 }
 
 .sp-palette-only .sp-palette-container {
@@ -2040,7 +2557,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 /* Initial */
 .sp-initial {
     float: left;
-    border: solid 1px lighten(@jquerySpBorder,20);
+    border: solid 1px #333;
 }
 .sp-initial span {
     width: 30px;
@@ -2071,13 +2588,13 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
     *zoom: 1;
     *display: inline;
     border: solid 1px #91765d;
-    background: darken(@jquerySpBackground,10);
-    color: lighten(@jquerySpFont,10);
+    background: #eee;
+    color: #333;
     vertical-align: middle;
 }
 .sp-replacer:hover, .sp-replacer.sp-active {
     border-color: #F0C49B;
-    color: darken(@jquerySpFont,10);
+    color: #111;
 }
 .sp-replacer.sp-disabled {
     cursor:default;
@@ -2095,7 +2612,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
     position:relative;
     width:25px;
     height: 20px;
-    border: solid 1px lighten(@jquerySpBorder,10);
+    border: solid 1px #222;
     margin-right: 5px;
     float:left;
     z-index: 0;
@@ -2109,7 +2626,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
     width:16px;
     height: 16px;
     margin:2px 1px;
-    border: solid 1px lighten(@jquerySpBorder,90);
+    border: solid 1px #d0d0d0;
 }
 
 .sp-container {
@@ -2119,16 +2636,16 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 
 /* Buttons: http://hellohappy.org/css3-buttons/ */
 .sp-container button {
-  background-color: darken(@jquerySpBackground,5);
-  background-image: -webkit-linear-gradient(top, darken(@jquerySpBackground,5), darken(@jquerySpBackground,10));
-  background-image: -moz-linear-gradient(top, darken(@jquerySpBackground,5), darken(@jquerySpBackground,10));
-  background-image: -ms-linear-gradient(top, darken(@jquerySpBackground,5), darken(@jquerySpBackground,10));
-  background-image: -o-linear-gradient(top, darken(@jquerySpBackground,5), darken(@jquerySpBackground,10));
-  background-image: linear-gradient(to bottom, darken(@jquerySpBackground,5), darken(@jquerySpBackground,10));
-  border: 1px solid lighten(@jquerySpBorder,90);
-  border-bottom: 1px solid lighten(@jquerySpBorder,80);
+  background-color: #eeeeee;
+  background-image: -webkit-linear-gradient(top, #eeeeee, #cccccc);
+  background-image: -moz-linear-gradient(top, #eeeeee, #cccccc);
+  background-image: -ms-linear-gradient(top, #eeeeee, #cccccc);
+  background-image: -o-linear-gradient(top, #eeeeee, #cccccc);
+  background-image: linear-gradient(to bottom, #eeeeee, #cccccc);
+  border: 1px solid #ccc;
+  border-bottom: 1px solid #bbb;
   border-radius: 3px;
-  color: lighten(@jquerySpFont,10);
+  color: #333;
   font-size: 14px;
   line-height: 1;
   padding: 5px 4px;
@@ -2137,25 +2654,25 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
   vertical-align: middle;
 }
 .sp-container button:hover {
-    background-color: darken(@jquerySpBackground,15);
-    background-image: -webkit-linear-gradient(top, darken(@jquerySpBackground,15), darken(@jquerySpBackground,30));
-    background-image: -moz-linear-gradient(top, darken(@jquerySpBackground,15), darken(@jquerySpBackground,30));
-    background-image: -ms-linear-gradient(top, darken(@jquerySpBackground,15), darken(@jquerySpBackground,30));
-    background-image: -o-linear-gradient(top, darken(@jquerySpBackground,15), darken(@jquerySpBackground,30));
-    background-image: linear-gradient(to bottom, darken(@jquerySpBackground,15), darken(@jquerySpBackground,30));
-    border: 1px solid darken(@jquerySpBackground,30);
-    border-bottom: 1px solid lighten(@jquerySpBorder,60);
+    background-color: #dddddd;
+    background-image: -webkit-linear-gradient(top, #dddddd, #bbbbbb);
+    background-image: -moz-linear-gradient(top, #dddddd, #bbbbbb);
+    background-image: -ms-linear-gradient(top, #dddddd, #bbbbbb);
+    background-image: -o-linear-gradient(top, #dddddd, #bbbbbb);
+    background-image: linear-gradient(to bottom, #dddddd, #bbbbbb);
+    border: 1px solid #bbb;
+    border-bottom: 1px solid #999;
     cursor: pointer;
-    text-shadow: 0 1px 0 lighten(@jquerySpFont,80);
+    text-shadow: 0 1px 0 #ddd;
 }
 .sp-container button:active {
-    border: 1px solid lighten(@jquerySpBorder,70);
-    border-bottom: 1px solid lighten(@jquerySpBorder,60);
-    -webkit-box-shadow: inset 0 0 5px 2px lighten(@jquerySpBorder,80), 0 1px 0 0 lighten(@jquerySpBorder,90);
-    -moz-box-shadow: inset 0 0 5px 2px lighten(@jquerySpBorder,80), 0 1px 0 0 lighten(@jquerySpBorder,90);
-    -ms-box-shadow: inset 0 0 5px 2px lighten(@jquerySpBorder,80), 0 1px 0 0 lighten(@jquerySpBorder,90);
-    -o-box-shadow: inset 0 0 5px 2px lighten(@jquerySpBorder,80), 0 1px 0 0 lighten(@jquerySpBorder,90);
-    box-shadow: inset 0 0 5px 2px lighten(@jquerySpBorder,80), 0 1px 0 0 lighten(@jquerySpBorder,90);
+    border: 1px solid #aaa;
+    border-bottom: 1px solid #888;
+    -webkit-box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee;
+    -moz-box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee;
+    -ms-box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee;
+    -o-box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee;
+    box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee;
 }
 .sp-cancel {
     font-size: 11px;
@@ -2174,7 +2691,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 
 
 .sp-palette span:hover, .sp-palette span.sp-thumb-active {
-    border-color: @jquerySpBorder;
+    border-color: #000;
 }
 
 .sp-preview, .sp-alpha, .sp-thumb-el {
@@ -2207,7 +2724,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 }
 
 .btn-toolbar {
-  background: @jqueryToolbarBackgroundD;
+  background: #364347;
   width: 20px;
   height: 20px;
   text-align: center;
@@ -2217,114 +2734,114 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
   transition: none;
 }
 .btn-toolbar > i {
-  color: @jqueryToolbarPrimary;
+  color: #02baf2;
   font-size: 16px;
 }
 .btn-toolbar:hover {
-  background: @jqueryToolbarPrimary;
+  background: #02baf2;
   cursor: pointer;
 }
 .btn-toolbar:hover > i {
-  color: @jqueryToolbarFontColor;
+  color: white;
 }
 .btn-toolbar-primary {
-  background-color: darken(@jqueryToolbarPrimary,10);
+  background-color: #009dcd;
 }
 .btn-toolbar-primary.pressed {
-  background-color: @jqueryToolbarPrimary;
+  background-color: #02baf2;
 }
 .btn-toolbar-primary:hover {
-  background-color: @jqueryToolbarPrimary;
+  background-color: #02baf2;
 }
 .btn-toolbar-primary > i {
-  color: @jqueryToolbarFontColor;
+  color: white;
 }
 .btn-toolbar-danger {
-  background-color: darken(@jqueryToolbarDanger,10);
+  background-color: #cc0000;
 }
 .btn-toolbar-danger.pressed {
-  background-color: @jqueryToolbarDanger;
+  background-color: #f84545;
 }
 .btn-toolbar-danger:hover {
-  background-color: @jqueryToolbarDanger;
+  background-color: #f84545;
 }
 .btn-toolbar-danger > i {
-  color: @jqueryToolbarFontColor;
+  color: white;
 }
 .btn-toolbar-warning {
-  background-color: @jqueryToolbarWarning;
+  background-color: #f3bc65;
 }
 .btn-toolbar-warning.pressed {
-  background-color: lighten(@jqueryToolbarWarning,10);
+  background-color: #fad46b;
 }
 .btn-toolbar-warning:hover {
-  background-color: lighten(@jqueryToolbarWarning,10);
+  background-color: #fad46b;
 }
 .btn-toolbar-warning > i {
-  color: @jqueryToolbarFontColor;
+  color: white;
 }
 .btn-toolbar-info {
-  background-color: @jqueryToolbarInfo;
+  background-color: #e96300;
 }
 .btn-toolbar-info.pressed {
-  background-color: lighten(@jqueryToolbarInfo,10);
+  background-color: #f58410;
 }
 .btn-toolbar-info:hover {
-  background-color: lighten(@jqueryToolbarInfo,10);
+  background-color: #f58410;
 }
 .btn-toolbar-info > i {
-  color: @jqueryToolbarFontColor;
+  color: white;
 }
 .btn-toolbar-success {
-  background-color: @jqueryToolbarSuccess;
+  background-color: #28948c;
 }
 .btn-toolbar-success.pressed {
-  background-color: lighten(@jqueryToolbarSuccess,10);
+  background-color: #3eb5ac;
 }
 .btn-toolbar-success:hover {
-  background-color: lighten(@jqueryToolbarSuccess,10);
+  background-color: #3eb5ac;
 }
 .btn-toolbar-success > i {
-  color: @jqueryToolbarFontColor;
+  color: white;
 }
 .btn-toolbar-info-o {
-  background-color: @jqueryToolbarBackground;
+  background-color: #9175bd;
 }
 .btn-toolbar-info-o.pressed {
-  background-color: lighten(@jqueryToolbarBackground,10);
+  background-color: #a88cd5;
 }
 .btn-toolbar-info-o:hover {
-  background-color: lighten(@jqueryToolbarBackground,10);
+  background-color: #a88cd5;
 }
 .btn-toolbar-info-o > i {
-  color: @jqueryToolbarFontColor;
+  color: white;
 }
 .btn-toolbar-light {
-  background-color: @jqueryToolbarBackgroundL;
+  background-color: #b2c6cd;
 }
 .btn-toolbar-light.pressed {
-  background-color: lighten(@jqueryToolbarBackgroundL,10);
+  background-color: #d6e1e5;
 }
 .btn-toolbar-light:hover {
-  background-color: lighten(@jqueryToolbarBackgroundL,10);
+  background-color: #d6e1e5;
 }
 .btn-toolbar-light > i {
-  color: @jqueryToolbarFontColor;
+  color: white;
 }
 .btn-toolbar-dark {
-  background-color: @jqueryToolbarBackgroundD;
+  background-color: #364347;
 }
 .btn-toolbar-dark.pressed {
-  background-color: lighten(@jqueryToolbarBackgroundD,10);
+  background-color: #5e696d;
 }
 .btn-toolbar-dark:hover {
-  background-color: lighten(@jqueryToolbarBackgroundD,10);
+  background-color: #5e696d;
 }
 .btn-toolbar-dark > i {
-  color: @jqueryToolbarFontColor;
+  color: white;
 }
 .tool-container {
-  background-color: desaturate(darken(@jqueryToolbarBackground,20),40);
+  background-color: #5e696d;
   background-size: 100% 100%;
   border-radius: 6px;
   position: absolute;
@@ -2332,7 +2849,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 .tool-container.tool-top,
 .tool-container.tool-bottom {
   height: 40px;
-  border-bottom: 0px solid lighten(@jqueryToolBorder,30);
+  border-bottom: 0px solid #beb8b8;
 }
 .tool-container.tool-top .tool-item,
 .tool-container.tool-bottom .tool-item {
@@ -2350,11 +2867,11 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
   transition: none;
 }
 .tool-item > .fa {
-  color: mix(@jqueryToolbarFontColor,#b2c6cd,20);
+  color: #b2c6cd;
 }
 .tool-item.selected,
 .tool-item:hover {
-  background: @jqueryToolbarPrimary;
+  background: #02baf2;
 }
 .tool-item.selected > .fa,
 .tool-item:hover > .fa {
@@ -2392,212 +2909,212 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
   border-style: solid;
 }
 .tool-container.tool-top .arrow {
-  border-color: @jqueryToolBorder transparent transparent;
+  border-color: #5e696d transparent transparent;
   left: 50%;
   bottom: -14px;
   margin-left: -7px;
 }
 .tool-container.tool-bottom .arrow {
-  border-color: transparent transparent @jqueryToolBorder;
+  border-color: transparent transparent #5e696d;
   left: 50%;
   top: -14px;
   margin-left: -7px;
 }
 .tool-container.tool-left .arrow {
-  border-color: transparent transparent transparent @jqueryToolBorder;
+  border-color: transparent transparent transparent #5e696d;
   top: 50%;
   right: -14px;
   margin-top: -7px;
 }
 .tool-container.tool-right .arrow {
-  border-color: transparent @jqueryToolBorder transparent transparent;
+  border-color: transparent #5e696d transparent transparent;
   top: 50%;
   left: -14px;
   margin-top: -7px;
 }
 .toolbar-primary {
-  background-color: @jqueryToolbarPrimary;
+  background-color: #02baf2;
 }
 .toolbar-primary.tool-top .arrow {
-  border-color: @jqueryToolbarPrimary transparent transparent;
+  border-color: #02baf2 transparent transparent;
 }
 .toolbar-primary.tool-bottom .arrow {
-  border-color: transparent transparent @jqueryToolbarPrimary;
+  border-color: transparent transparent #02baf2;
 }
 .toolbar-primary.tool-left .arrow {
-  border-color: transparent transparent transparent @jqueryToolbarPrimary;
+  border-color: transparent transparent transparent #02baf2;
 }
 .toolbar-primary.tool-right .arrow {
-  border-color: transparent @jqueryToolbarPrimary transparent transparent;
+  border-color: transparent #02baf2 transparent transparent;
 }
 .toolbar-primary .tool-item > .fa {
-  color: @jqueryToolbarFontColor;
+  color: white;
 }
 .toolbar-primary .tool-item.selected,
 .toolbar-primary .tool-item:hover {
-  background: darken(@jqueryToolbarPrimary,10);
-  color: @jqueryToolbarFontColor;
+  background: #009dcd;
+  color: white;
 }
 .toolbar-danger {
-  background-color: @jqueryToolbarDanger;
+  background-color: #f84545;
 }
 .toolbar-danger.tool-top .arrow {
-  border-color: @jqueryToolbarDanger transparent transparent;
+  border-color: #f84545 transparent transparent;
 }
 .toolbar-danger.tool-bottom .arrow {
-  border-color: transparent transparent @jqueryToolbarDanger;
+  border-color: transparent transparent #f84545;
 }
 .toolbar-danger.tool-left .arrow {
-  border-color: transparent transparent transparent @jqueryToolbarDanger;
+  border-color: transparent transparent transparent #f84545;
 }
 .toolbar-danger.tool-right .arrow {
-  border-color: transparent @jqueryToolbarDanger transparent transparent;
+  border-color: transparent #f84545 transparent transparent;
 }
 .toolbar-danger .tool-item > .fa {
-  color: @jqueryToolbarFontColor;
+  color: white;
 }
 .toolbar-danger .tool-item.selected,
 .toolbar-danger .tool-item:hover {
-  background: darken(@jqueryToolbarDanger,10);
-  color: @jqueryToolbarFontColor;
+  background: #cc0000;
+  color: white;
 }
 .toolbar-warning {
-  background-color: @jqueryToolbarWarning;
+  background-color: #f3bc65;
 }
 .toolbar-warning.tool-top .arrow {
-  border-color: @jqueryToolbarWarning transparent transparent;
+  border-color: #f3bc65 transparent transparent;
 }
 .toolbar-warning.tool-bottom .arrow {
-  border-color: transparent transparent @jqueryToolbarWarning;
+  border-color: transparent transparent #f3bc65;
 }
 .toolbar-warning.tool-left .arrow {
-  border-color: transparent transparent transparent @jqueryToolbarWarning;
+  border-color: transparent transparent transparent #f3bc65;
 }
 .toolbar-warning.tool-right .arrow {
-  border-color: transparent @jqueryToolbarWarning transparent transparent;
+  border-color: transparent #f3bc65 transparent transparent;
 }
 .toolbar-warning .tool-item > .fa {
-  color: @jqueryToolbarFontColor;
+  color: white;
 }
 .toolbar-warning .tool-item.selected,
 .toolbar-warning .tool-item:hover {
-  background: lighten(@jqueryToolbarWarning,10);
-  color: @jqueryToolbarFontColor;
+  background: #fad46b;
+  color: white;
 }
 .toolbar-info {
-  background-color: @jqueryToolbarInfo;
+  background-color: #e96300;
 }
 .toolbar-info.tool-top .arrow {
-  border-color: @jqueryToolbarInfo transparent transparent;
+  border-color: #e96300 transparent transparent;
 }
 .toolbar-info.tool-bottom .arrow {
-  border-color: transparent transparent @jqueryToolbarInfo;
+  border-color: transparent transparent #e96300;
 }
 .toolbar-info.tool-left .arrow {
-  border-color: transparent transparent transparent @jqueryToolbarInfo;
+  border-color: transparent transparent transparent #e96300;
 }
 .toolbar-info.tool-right .arrow {
-  border-color: transparent @jqueryToolbarInfo transparent transparent;
+  border-color: transparent #e96300 transparent transparent;
 }
 .toolbar-info .tool-item > .fa {
-  color: @jqueryToolbarFontColor;
+  color: white;
 }
 .toolbar-info .tool-item.selected,
 .toolbar-info .tool-item:hover {
-  background: lighten(@jqueryToolbarInfo,10);
-  color: @jqueryToolbarFontColor;
+  background: #f58410;
+  color: white;
 }
 .toolbar-success {
-  background-color: @jqueryToolbarSuccess;
+  background-color: #28948c;
 }
 .toolbar-success.tool-top .arrow {
-  border-color: @jqueryToolbarSuccess transparent transparent;
+  border-color: #28948c transparent transparent;
 }
 .toolbar-success.tool-bottom .arrow {
-  border-color: transparent transparent @jqueryToolbarSuccess;
+  border-color: transparent transparent #28948c;
 }
 .toolbar-success.tool-left .arrow {
-  border-color: transparent transparent transparent @jqueryToolbarSuccess;
+  border-color: transparent transparent transparent #28948c;
 }
 .toolbar-success.tool-right .arrow {
-  border-color: transparent @jqueryToolbarSuccess transparent transparent;
+  border-color: transparent #28948c transparent transparent;
 }
 .toolbar-success .tool-item > .fa {
-  color: @jqueryToolbarFontColor;
+  color: white;
 }
 .toolbar-success .tool-item.selected,
 .toolbar-success .tool-item:hover {
-  background: lighten(@jqueryToolbarSuccess,10);
-  color: @jqueryToolbarFontColor;
+  background: #3eb5ac;
+  color: white;
 }
 .toolbar-info-o {
-  background-color: @jqueryToolbarBackground;
+  background-color: #9175bd;
 }
 .toolbar-info-o.tool-top .arrow {
-  border-color: @jqueryToolbarBackground transparent transparent;
+  border-color: #9175bd transparent transparent;
 }
 .toolbar-info-o.tool-bottom .arrow {
-  border-color: transparent transparent @jqueryToolbarBackground;
+  border-color: transparent transparent #9175bd;
 }
 .toolbar-info-o.tool-left .arrow {
-  border-color: transparent transparent transparent @jqueryToolbarBackground;
+  border-color: transparent transparent transparent #9175bd;
 }
 .toolbar-info-o.tool-right .arrow {
-  border-color: transparent @jqueryToolbarBackground transparent transparent;
+  border-color: transparent #9175bd transparent transparent;
 }
 .toolbar-info-o .tool-item > .fa {
-  color: @jqueryToolbarFontColor;
+  color: white;
 }
 .toolbar-info-o .tool-item.selected,
 .toolbar-info-o .tool-item:hover {
-  background: lighten(@jqueryToolbarBackground,10);
-  color: @jqueryToolbarFontColor;
+  background: #a88cd5;
+  color: white;
 }
 .toolbar-light {
-  background-color: @jqueryToolbarBackgroundL;
+  background-color: #b2c6cd;
 }
 .toolbar-light.tool-top .arrow {
-  border-color: @jqueryToolbarBackgroundL transparent transparent;
+  border-color: #b2c6cd transparent transparent;
 }
 .toolbar-light.tool-bottom .arrow {
-  border-color: transparent transparent @jqueryToolbarBackgroundL;
+  border-color: transparent transparent #b2c6cd;
 }
 .toolbar-light.tool-left .arrow {
-  border-color: transparent transparent transparent @jqueryToolbarBackgroundL;
+  border-color: transparent transparent transparent #b2c6cd;
 }
 .toolbar-light.tool-right .arrow {
-  border-color: transparent @jqueryToolbarBackgroundL transparent transparent;
+  border-color: transparent #b2c6cd transparent transparent;
 }
 .toolbar-light .tool-item > .fa {
-  color: @jqueryToolbarFontColorL;
+  color: white;
 }
 .toolbar-light .tool-item.selected,
 .toolbar-light .tool-item:hover {
-  background: lighten(@jqueryToolbarBackgroundL,10);
-  color: @jqueryToolbarFontColorL;
+  background: #d6e1e5;
+  color: white;
 }
 .toolbar-dark {
-  background-color: @jqueryToolbarBackgroundD;
+  background-color: #364347;
 }
 .toolbar-dark.tool-top .arrow {
-  border-color: @jqueryToolbarBackgroundD transparent transparent;
+  border-color: #364347 transparent transparent;
 }
 .toolbar-dark.tool-bottom .arrow {
-  border-color: transparent transparent @jqueryToolbarBackgroundD;
+  border-color: transparent transparent #364347;
 }
 .toolbar-dark.tool-left .arrow {
-  border-color: transparent transparent transparent @jqueryToolbarBackgroundD;
+  border-color: transparent transparent transparent #364347;
 }
 .toolbar-dark.tool-right .arrow {
-  border-color: transparent @jqueryToolbarBackgroundD transparent transparent;
+  border-color: transparent #364347 transparent transparent;
 }
 .toolbar-dark .tool-item > .fa {
-  color: @jqueryToolbarFontColorD;
+  color: white;
 }
 .toolbar-dark .tool-item.selected,
 .toolbar-dark .tool-item:hover {
-  background: lighten(@jqueryToolbarBackgroundD,10);
-  color: @jqueryToolbarFontColorD;
+  background: #5e696d;
+  color: white;
 }
 .animate-standard {
   -webkit-animation: standardAnimate 0.3s 1 ease;
@@ -2693,11 +3210,11 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 .ui-notify-message h1 { font-size:14px; margin:0; padding:0 }
 .ui-notify-message p { margin:3px 0; padding:0; line-height:18px }
 .ui-notify-message:last-child { margin-bottom:0 }
-.ui-notify-message-style { background:@jqueryUiNotifyBackground; background:rgba(0,0,0,0.8); -moz-box-shadow: 0 0 6px @jqueryUiNotifyShadow; -webkit-box-shadow: 0 0 6px @jqueryUiNotifyShadow; box-shadow: 0 0 6px @jqueryUiNotifyShadow; }
-.ui-notify-message-style h1 { color:@jqueryUiNotifyColor; font-weight:bold }
-.ui-notify-message-style p { color:@jqueryUiNotifyColor }
-.ui-notify-close { color:@jqueryUiNotifyColor; text-decoration:underline }
+.ui-notify-message-style { background:#000; background:rgba(0,0,0,0.8); -moz-box-shadow: 0 0 6px #000; -webkit-box-shadow: 0 0 6px #000; box-shadow: 0 0 6px #000; }
+.ui-notify-message-style h1 { color:#fff; font-weight:bold }
+.ui-notify-message-style p { color:#fff }
+.ui-notify-close { color:#fff; text-decoration:underline }
 .ui-notify-click { cursor:pointer }
-.ui-notify-cross { margin-top:-4px; float:right; cursor:pointer; text-decoration:none; font-size:12px; font-weight:bold; text-shadow:0 1px 1px @jqueryUiNotifyColor; padding:2px }
-.ui-notify-cross:hover { color: mix(@jqueryUiNotifyColor,#ffffab, 10) }
+.ui-notify-cross { margin-top:-4px; float:right; cursor:pointer; text-decoration:none; font-size:12px; font-weight:bold; text-shadow:0 1px 1px #fff; padding:2px }
+.ui-notify-cross:hover { color:#ffffab }
 .ui-notify-cross:active { position:relative; top:1px }

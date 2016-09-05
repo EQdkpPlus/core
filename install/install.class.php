@@ -272,6 +272,7 @@ class install extends gen_class {
 	private function show() {
 		if(class_exists($this->current_step)) $_step = registry::register($this->current_step);
 		$progress = round(100*(count($this->done)/count($this->order)), 0);
+		$this->pdl->deprecated('jquery_tmpl.css');
 		$content = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 	<head>
