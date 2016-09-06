@@ -792,10 +792,6 @@ class calendarevent_pageobject extends pageobject {
 					'SHOW'			=> ($classid > 0 || ($classid == -1 && isset($this->attendees[$statuskey][$classid]) && count($this->attendees[$statuskey][$classid]) > 0)) ? true : false,
 				));
 
-				// generate the applicable roles for the specific class, used by drag & drop
-
-				$dragto_roles	= (isset($ddroles[$classid]) && is_array($ddroles[$classid]) && count($ddroles[$classid]) > 0) ? 'classrole_'.implode(', classrole_', $ddroles[$classid]) : '';
-
 				// The characters
 				if(isset($this->attendees[$statuskey][$classid]) && is_array($this->attendees[$statuskey][$classid])){
 					foreach($this->attendees[$statuskey][$classid] as $memberid=>$memberdata){
@@ -803,11 +799,15 @@ class calendarevent_pageobject extends pageobject {
 						// generate the member tooltip
 						$membertooltip		= array();
 						$memberrank			= $this->pdh->get('member', 'rankname', array($memberid));
+						$realclassID 		= $this->pdh->get('member', 'classid', [$memberid]);
+						$dragto_roles		= '';
 
 						$membertooltip[]	= $this->pdh->get('member', 'name', array($memberid)).' ['.$this->user->lang('level').': '.$this->pdh->get('member', 'level', array($memberid)).']';
 						if($eventdata['extension']['raidmode'] == 'role'){
 							$real_classid = $this->pdh->get('member', 'classid', array($memberid));
 							$membertooltip[]	= $this->game->decorate('primary', $real_classid).' '.$this->game->get_name('primary', $real_classid);
+							// generate the applicable roles for the specific class, used by drag & drop
+							$dragto_roles	= (isset($ddroles[$realclassID]) && is_array($ddroles[$realclassID]) && count($ddroles[$realclassID]) > 0) ? 'classrole_'.implode(', classrole_', $ddroles[$realclassID]) : '';
 						}
 						if($memberrank){
 							$membertooltip[]	= $this->user->lang('rank').": ".$memberrank;
