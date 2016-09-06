@@ -1772,6 +1772,7 @@ class template extends gen_class {
 
 			$options = array();
 			$parser = new Less_Parser($options);
+			$parser->SetImportDirs([$this->env->get_document_root(false).registry::get_const('server_path') => registry::get_const('server_path')]);
 			$parser->ModifyVars($lessVars);
 			$parser->parse($strCSS);
 			$strCSS = $parser->getCss();
