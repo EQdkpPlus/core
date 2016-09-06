@@ -59,6 +59,7 @@ if( !class_exists( "plus_datahandler")){
 		private $undone_hooks				= array( );
 		private $session_hooks				= array( );
 		private $hook_callbacks				= array( );
+		private $arrAdditonalHookData		= array( );
 
 		private $sort_cache = array(0 => 1); //important: sortcache index
 
@@ -145,7 +146,7 @@ if( !class_exists( "plus_datahandler")){
 			foreach( $this->undone_hooks as $hook => $ids ) {
 				if( is_array( $this->registered_hooks[$hook] ) ) {
 					foreach( $this->registered_hooks[$hook] as $module ) {
-						$this->rm($module)->reset($ids);
+						$this->rm($module)->reset($ids, $hook, (isset($this->arrAdditonalHookData[$hook]) ? $this->arrAdditonalHookData[$hook] : array()));
 						$this->read_modules[$module] = false;
 					}
 				}
@@ -172,10 +173,11 @@ if( !class_exists( "plus_datahandler")){
 			}
 		}
 
-		public function enqueue_hook( $hook, $ids = array() ) {
+		public function enqueue_hook( $hook, $ids = array(), $arrAdditionalData = array()) {
 			if(!is_array($ids) && !empty($ids)) $ids = array($ids);
 			if(!empty($ids) && isset($this->undone_hooks[$hook])) $ids = array_merge($this->undone_hooks[$hook], $ids);
 			$this->undone_hooks[$hook] = (!empty($ids)) ? $ids : array();
+			$this->arrAdditonalHookData[$hook] = $arrAdditionalData;
 		}
 
 

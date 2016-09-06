@@ -160,7 +160,9 @@ if ( !class_exists( "pdh_r_member" ) ) {
 						profiledata,
 						requested_del,
 						require_confirm,
-						defaultrole
+						defaultrole,
+						points,
+						points_apa
 						FROM __members;";
 			
 			
@@ -180,6 +182,8 @@ if ( !class_exists( "pdh_r_member" ) ) {
 						$this->data[$bmd_row['member_id']]['requested_del']		= $bmd_row['requested_del'];
 						$this->data[$bmd_row['member_id']]['require_confirm']	= $bmd_row['require_confirm'];
 						$this->data[$bmd_row['member_id']]['defaultrole']		= $bmd_row['defaultrole'];
+						$this->data[$bmd_row['member_id']]['points']			= $bmd_row['points'];
+						$this->data[$bmd_row['member_id']]['apa_points']		= $bmd_row['points_apa'];
 						$this->data[$bmd_row['member_id']]['profiledata']		= json_decode($bmd_row['profiledata'], true);
 						$this->data[$bmd_row['member_id']]['user']				= isset($this->member_user[$bmd_row['member_id']]) ? $this->member_user[$bmd_row['member_id']] : 0;
 						if(is_array($this->cmfields)){
@@ -948,6 +952,33 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			}
 			return $this->pdh->get('profile_fields', 'lang', array($params));
 		}
+		
+		public function get_points($memberID, $mdkpID=false){
+			$strPoints = $this->data[$memberID]['points'];
+			if($strPoints != ""){
+				$arrPoints = unserialize($strPoints);
+				if(!$mdkpID) return $arrPoints;
+				
+				if(isset($arrPoints[$mdkpID])){
+					return $arrPoints[$mdkpID];
+				}
+			}
+			return false;
+		}
+		
+		public function get_apa_points($memberID, $apaID=false, $mdkpID=false, $blnWithTwink=false){
+			$strPoints = $this->data[$memberID]['apa_points'];
+			$strWithTwink = ($blnWithTwink) ? 'multi' : 'single';
+			if($strPoints != ""){
+				$arrPoints = unserialize($strPoints);
+				if(!$apaID) return $arrPoints;
+				if(isset($arrPoints[$apaID][$mdkpID][$strWithTwink])){
+					return $arrPoints[$apaID][$mdkpID][$strWithTwink];
+				}
+			}
+			return false;
+		}
+		
 		
 	}//end class
 }//end if

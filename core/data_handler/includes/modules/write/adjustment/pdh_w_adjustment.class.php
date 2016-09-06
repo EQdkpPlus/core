@@ -67,7 +67,7 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 				'{L_RAID}'			=> $raid_id,
 			);
 			$this->log_insert('action_indivadj_added', $log_action, $group_key, $adjustment_reason);
-			$this->pdh->enqueue_hook('adjustment_update', $ids);
+			$this->pdh->enqueue_hook('adjustment_update', $ids, array('action' => 'add', 'time' => $time));
 			return $ids;
 		}
 
@@ -182,7 +182,7 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
 				
 				$this->log_insert('action_indivadj_updated', $log_action, $new_group_key, $old['reason']);
-				$this->pdh->enqueue_hook('adjustment_update', $hook_id);
+				$this->pdh->enqueue_hook('adjustment_update', $hook_id,  array('action' => 'update', 'time' => $time));
 				return $retu;
 			}
 			return false;
@@ -195,6 +195,7 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 			$old['reason'] = $this->pdh->get('adjustment', 'reason', array($adjustment_id));
 			$old['event'] = $this->pdh->get('adjustment', 'event', array($adjustment_id));
 			$old['raid'] = $this->pdh->get('adjustment', 'raid_id', array($adjustment_id));
+			$old['date'] = $this->pdh->get('adjustment', 'date', array($adjustment_id));
 			
 			if($this->db->prepare("DELETE FROM __adjustments WHERE adjustment_id = ?;")->execute($adjustment_id)){
 				//insert log
@@ -206,7 +207,7 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 					'{L_RAID}'		=> $old['raid'],
 				);
 				$this->log_insert('action_indivadj_deleted', $log_action, $adjustment_id, $old['reason']);
-				$this->pdh->enqueue_hook('adjustment_update', $adjustment_id);
+				$this->pdh->enqueue_hook('adjustment_update', $adjustment_id, array('action' => 'delete', 'time' => $old['date']));
 				return true;
 			}
 			return false;
@@ -220,6 +221,7 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 				$old['reason'] = $this->pdh->get('adjustment', 'reason', array($adjustment_id));
 				$old['event'] = $this->pdh->get('adjustment', 'event', array($adjustment_id));
 				$old['raid'] = $this->pdh->get('adjustment', 'raid_id', array($adjustment_id));
+				$old['date'] = $this->pdh->get('adjustment', 'date', array($adjustment_id));
 			}
 			
 			if($this->db->prepare("DELETE FROM __adjustments WHERE adjustment_group_key = ?")->execute($group_key)){
@@ -236,7 +238,7 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 				);
 				
 				$this->log_insert('action_indivadj_deleted', $log_action, $group_key, $old['reason']);
-				$this->pdh->enqueue_hook('adjustment_update', $adj_ids);
+				$this->pdh->enqueue_hook('adjustment_update', $adj_ids, array('action' => 'delete', 'time' => $old['date']));
 				return true;
 			}
 			return false;
@@ -251,7 +253,7 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 				'{L_RAID_ID}'	=> $raid_id,
 			);
 			$this->log_insert('action_indivadjofraid_deleted', $log_action, $raid_id);
-			$this->pdh->enqueue_hook('adjustment_update', $adjs);
+			$this->pdh->enqueue_hook('adjustment_update', $adjs, array('action' => 'delete', 'time' => 0));
 			return true;
 		}
 		
@@ -265,7 +267,21 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 				'{L_EVENT_ID}'	=> $event_id,
 			);
 			$this->log_insert('action_indivadjofevent_deleted', $log_action, $event_id);
-			$this->pdh->enqueue_hook('adjustment_update', $adjs);
+			$this->pdh->enqueue_hook('adjustment_update', $adjs, array('action' => 'delete', 'time' => 0));
+			return true;
+		}
+		
+		public function update_apa_value($adj_id, $apa_id, $val){
+			$arrCurrentApaValue = $this->pdh->get('adjustment', 'apa_value', array($adj_id, $apa_id));
+			if(!$arrCurrentApaValue || !is_array($arrCurrentApaValue)) $arrCurrentApaValue = array();
+			$arrCurrentApaValue[$apa_id] = $val;
+			
+			$objQuery = $this->db->prepare("UPDATE __adjustments :p WHERE adjustment_id=?")->set(array(
+					'adjustment_apa_value' => serialize($arrCurrentApaValue),
+			))->execute($adj_id);
+			
+			$this->pdh->enqueue_hook('adjustment_update', array($adj_id), array('action' => 'update', 'apa' => true));
+			
 			return true;
 		}
 

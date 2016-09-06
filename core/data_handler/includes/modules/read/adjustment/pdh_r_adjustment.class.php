@@ -33,10 +33,6 @@ if(!class_exists('pdh_r_adjustment')){
 
 		public $hooks = array(
 			'adjustment_update',
-			'event_update',
-			'item_update',
-			'member_update',
-			'raid_update'
 		);
 
 		public $presets = array(
@@ -57,10 +53,12 @@ if(!class_exists('pdh_r_adjustment')){
 		private $index = array();
 		private $objPagination = null;
 
-		public function reset($affected_ids=array()) {
+		public function reset($affected_ids=array(), $strHook='', $arrAdditionalData=array()) {
 			//tell apas which ids to delete
-			if(empty($affected_ids) && !empty($this->index)) $affected_ids = array_keys($this->index);
-			$this->apa->enqueue_update('adjustment', $affected_ids);
+			if($strHook == ''){
+				if(empty($affected_ids) && !empty($this->index)) $affected_ids = array_keys($this->index);
+				$this->apa->enqueue_update('adjustment', $affected_ids);
+			}
 			
 			$this->objPagination = register("cachePagination", array("adjustments", "adjustment_id", "__adjustments", array(), 100));
 			return $this->objPagination->reset($affected_ids);
@@ -93,6 +91,19 @@ if(!class_exists('pdh_r_adjustment')){
 
 		public function get_html_value($adj_id, $dkp_id=0) {
 			return '<span class="' . color_item($this->get_value($adj_id, $dkp_id)) . '">'.runden($this->get_value($adj_id, $dkp_id)).'</span>';
+		}
+		
+		public function get_apa_value($adj_id, $apa_id=false){
+			$strApaValue =  $this->objPagination->get($adj_id, 'adjustment_apa_value');
+			if($strApaValue != ""){
+				$arrApaValue = unserialize($strApaValue);
+				if($apa_id){
+					if(isset($arrApaValue[$apa_id])) return $arrApaValue[$apa_id];
+				} else {
+					return $arrApaValue;
+				}
+			}
+			return false;
 		}
 
 		public function get_caption_value($dkp_id=0) {

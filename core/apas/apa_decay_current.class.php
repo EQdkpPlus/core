@@ -69,24 +69,12 @@ if ( !class_exists( "apa_decay_current" ) ) {
 			$this->options = array_merge($this->options, $this->ext_options);
 		}
 		
-		public function add_layout_changes($apa_id) {
-			return true;
-		}
-		
-		public function update_layout_changes($apa_id) {
-			return true;
-		}
-		
-		public function delete_layout_changes($apa_id) {
-			return true;
-		}
-		
 		public function modules_affected($apa_id) {
 			return $this->modules_affected;
 		}
 		
 		// get date of last calculation
-		public function get_cache_date($date, $apa_id) {
+		public function get_last_run($date, $apa_id) {
 			$max_ttl = $this->apa->get_data('decay_time', $apa_id)*86400; //decay time in days
 			$exectime = $this->apa->get_data('exectime', $apa_id); //exectime as seconds from midnight
 			$decay_start = $this->apa->get_data('start_date', $apa_id); //start_date for fetching first day (wether we start on monday, thursday or w/e)
@@ -98,7 +86,7 @@ if ( !class_exists( "apa_decay_current" ) ) {
 			return $date;
 		}
 		
-		public function get_decay_val($apa_id, $cache_date, $module, $dkp_id, $data) {
+		public function get_decay_val($apa_id, $last_run, $module, $dkp_id, $data) {
 			// load decay parameters, set decay_start to its proper timestamp (from somewhere at that day to exectime)
 			$decay_start = $this->apa->get_data('start_date', $apa_id);	
 			$exectime = $this->apa->get_data('exectime', $apa_id);
@@ -106,34 +94,85 @@ if ( !class_exists( "apa_decay_current" ) ) {
 			$decay_start = $decay_start + $exectime - $decay_start%86400;
 			$decay_time = $this->apa->get_data('decay_time', $apa_id)*86400;
 			
+			$blnNeedsRecalc = false;
+			$blnFromCache = false;
+			
 			// check if it's the first calculation
-			if($cache_date == $decay_start) {
+			if($last_run == $decay_start) {
 				$value = $this->pdh->get('points', 'current_history', array($data['member_id'], $data['dkp_id'], 0, $decay_start, $data['event_id'], $data['itempool_id'], $data['with_twink']));
-				
 			// check if it's in the zero-time
-			} elseif(($this->time->time - $this->apa->get_data('zero_time', $apa_id)*2592000) > $cache_date) {
+			} elseif(($this->time->time - $this->apa->get_data('zero_time', $apa_id)*2592000) > $last_run) {
 				$value = 0;
-				
 			// normal calculation, get points from previous decay and add currently earned points
 			} else {
-				$previous_calc = $cache_date-$decay_time;
-				$value = $this->apa->get_decay_val($module, $dkp_id, $previous_calc, $data);
-				$value += $this->pdh->get('points', 'current_history', array($data['member_id'], $data['dkp_id'], $previous_calc, $cache_date, $data['event_id'], $data['itempool_id'], $data['with_twink']));
+				//get from member_cache
+				$arrMemberCache = $this->pdh->get('member', 'apa_points', array($data['member_id'], $apa_id, $data['dkp_id'], $data['with_twink']));
+				if($arrMemberCache && $arrMemberCache['time'] == $last_run){
+					$value = $arrMemberCache['val'];
+					$blnFromCache = true;
+				} else {
+					//Recalculate Value until the Cache Date
+					$previous_calc = $last_run-$decay_time;
+					$value = $this->apa->get_decay_val($module, $dkp_id, $previous_calc, $data);
+					$value += $this->pdh->get('points', 'current_history', array($data['member_id'], $data['dkp_id'], $previous_calc, $last_run, $data['event_id'], $data['itempool_id'], $data['with_twink']));
+					$blnNeedsRecalc = true;
+				}
 			}
-			
+
 			// got points up until now (now = cache date), decay them
-			$ref_value = 0; // probably unnecessary 
-			$decayed_val = $this->apa->run_calc_func($this->apa->get_data('calc_func', $apa_id), array($value, $cache_date, $this->time->time, $ref_value));
-			$decay_adj = $value - $decayed_val;
+			$ref_value = 0; // probably unnecessary
+			if(!$blnFromCache){
+				$decayed_val = $this->apa->run_calc_func($this->apa->get_data('calc_func', $apa_id), array($value, $last_run, $this->time->time, $ref_value));
+				$decay_adj = $value - $decayed_val;
+			} else {
+				$decayed_val = $value;
+			}
 			
 			// if this is the most recent decay, add current points from from last cache date to now
-			if(($cache_date + $decay_time) > $this->time->time) {
-				$decayed_val += $this->pdh->get('points', 'current_history', array($data['member_id'], $data['dkp_id'], $cache_date, $this->time->time+1, $data['event_id'], $data['itempool_id'], $data['with_twink']));
+			if(($last_run + $decay_time) > $this->time->time) {
+				$decayed_val += $this->pdh->get('points', 'current_history', array($data['member_id'], $data['dkp_id'], $last_run, $this->time->time+1, $data['event_id'], $data['itempool_id'], $data['with_twink']));
 			}
 			
-			$ttl = $decay_time*3; //3 times decay_period
-			return array($decayed_val, $decay_adj, $ttl);
+			//apa_points($memberID, $apaID, $mdkpid, $blnWithTwink, $arrPoints)
+			if($blnNeedsRecalc){
+				$this->pdh->put('member', 'apa_points', array($data['member_id'], $apa_id, $data['dkp_id'], $data['with_twink'], array('time' => $last_run, 'val' => $decayed_val)));
+			}
+			
+			return array($decayed_val, $blnNeedsRecalc, $decay_adj);
 		}
+		
+		public function recalculate($apa_id){
+			$this->pdh->put('member', 'reset_all_apa_points', array($apa_id));
+			
+			return true;
+		}
+
+		public function add_layout_changes($apa_id) {
+			$this->pdh->put('member', 'reset_all_apa_points', array($apa_id));
+				
+			return true;
+		}
+		
+		public function update_layout_changes($apa_id) {
+			$this->pdh->put('member', 'reset_all_apa_points', array($apa_id));
+			
+			return true;
+		}
+		
+		public function delete_layout_changes($apa_id) {
+			$this->pdh->put('member', 'reset_all_apa_points', array($apa_id));
+			
+			return true;
+		}
+		
+		public function reset_cache($apa_id, $module, $id){
+			if($module == 'current'){
+				list($memberId, $mdkpid) = explode("_", $id);
+				$this->pdh->put('member', 'reset_apa_points', array($memberId, $apa_id));
+			}
+		}
+		
+		
 	}//end class
 }//end if
 ?>

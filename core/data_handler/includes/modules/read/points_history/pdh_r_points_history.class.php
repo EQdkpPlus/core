@@ -29,6 +29,11 @@ if ( !class_exists( "pdh_r_points_history" ) ) {
 		public $default_lang = 'english';
 
 		public $points;
+		
+		private $arrLocalMappingCache = array();
+		private $arrLocalPointsCache = array();
+		private $arrCalculatedSingle = array();
+		private $arrCalculatedMulti = array();
 
 		public $hooks = array(
 			'adjustment_update',
@@ -57,266 +62,213 @@ if ( !class_exists( "pdh_r_points_history" ) ) {
 
 		public function reset(){
 			$this->pdc->del_prefix('pdh_points_history');
-			$this->points = NULL;
+			$arrPoints = NULL;
 		}
 
 		public function init() {
-			//cached data not outdated?
-			$this->points = $this->pdc->get('pdh_points_history');
-			if($this->points !== NULL){
-				return true;
-			}
-			$this->points = array();
-			$mdkpids = $this->pdh->maget('multidkp', array('event_ids', 'itempool_ids'), 0, array($this->pdh->get('multidkp', 'id_list')));
-			$raid2event = array();
-			foreach($mdkpids as $dkp_id => $evip) {
-				if((!is_array($evip['event_ids']) || count($evip['event_ids']) < 1) && (!is_array($evip['itempool_ids']) || count($evip['itempool_ids']) < 1)) continue;
-				//earned
-				if(is_array($evip['event_ids'])) {
-					foreach($evip['event_ids'] as $event_id) {
-						$raid_ids = $this->pdh->get('raid', 'raidids4eventid', array($event_id));
-						foreach($raid_ids as $raid_id) {
-							$raid2event[$raid_id] = $event_id;
-							$attendees = $this->pdh->get('raid', 'raid_attendees', array($raid_id));
-							if( !is_array($attendees) ) continue;
-							$value = $this->pdh->get('raid', 'value', array($raid_id, $dkp_id));
-							$raiddate = $this->pdh->get('raid', 'date', array($raid_id));
-							foreach($attendees as $attendee){
-								if(!isset($this->points[$attendee][$dkp_id]['single']['earned'][$event_id]))
-									$this->points[$attendee][$dkp_id]['single']['earned'][$event_id] = array();
-								$this->points[$attendee][$dkp_id]['single']['earned'][$event_id][] = array($value, $raiddate, $raid_id, $attendee);
-							}
-						}
-					}
-				}
 
-				//spent
-				if(is_array($evip['itempool_ids'])) {
-					foreach($evip['itempool_ids'] as $itempool_id) {
-						$item_ids = $this->pdh->get('item', 'item_ids_of_itempool', array($itempool_id));
-						if(is_array($item_ids)) {
-							foreach($item_ids as $item_id){
-								$member_id = $this->pdh->get('item', 'buyer', array($item_id));
-								$value = $this->pdh->get('item', 'value', array($item_id, $dkp_id));
-								$raid_id = $this->pdh->get('item', 'raid_id', array($item_id));
-								if(!isset($this->points[$member_id][$dkp_id]['single']['spent'][$raid2event[$raid_id]][$itempool_id]))
-									$this->points[$member_id][$dkp_id]['single']['spent'][$raid2event[$raid_id]][$itempool_id] = array();
-								$this->points[$member_id][$dkp_id]['single']['spent'][$raid2event[$raid_id]][$itempool_id][] = array($value, $this->pdh->get('item', 'date', array($item_id)), $item_id, $member_id);
-							}
-						}
-					}
-				}
-
-				//adjustment
-				if(is_array($evip['event_ids'])) {
-					foreach($evip['event_ids'] as $event_id) {
-						$adjustment_ids = $this->pdh->get('adjustment', 'adjsofeventid', array($event_id));
-						foreach($adjustment_ids as $adjustment_id) {
-							$member_id = $this->pdh->get('adjustment', 'member', array($adjustment_id));
-							$value = $this->pdh->get('adjustment', 'value', array($adjustment_id, $dkp_id));
-							if(!isset($this->points[$member_id][$dkp_id]['single']['adjustment'][$event_id]))
-								$this->points[$member_id][$dkp_id]['single']['adjustment'][$event_id] = array();
-							$this->points[$member_id][$dkp_id]['single']['adjustment'][$event_id][] = array($value, $this->pdh->get('adjustment', 'date', array($adjustment_id)), $adjustment_id, $member_id);
-						}
-					}
-				}
-			}
-			//ok, that was the basic table, now we calculate the real values
-			$members = $this->pdh->get('member', 'id_list', array(false, false));
-			$mdkps = $this->pdh->get('multidkp',  'id_list', array());
-			foreach($members as $member_id){
-				foreach($mdkps as $mdkp_id){
-					$this->calculate_multi_points($member_id, $mdkp_id);
-				}
-			}
-			$this->pdc->put('pdh_points_history', $this->points, null);
 		}
 		
-		public function calculate_multi_points($memberid, $multidkpid = 1){
-			//already cached?
-			if(isset($this->points[$memberid][$multidkpid]['multi'])){
-				return $this->points[$memberid][$multidkpid]['multi'];
+		public function calculate_single_points($memberid, $multidkpid=1, $from=0, $to=PHP_INT_MAX){
+			$strCacheKey = md5('single_'.$memberid.'.'.$multidkpid.'.'.$from.'.'.$to);
+			if(isset($this->arrLocalPointsCache[$strCacheKey])) return $this->arrLocalPointsCache[$strCacheKey];
+			
+			if($from == 0){
+				$arrLastSnapshot = $this->pdh->get('points', 'latest_snapshot', array($memberid, $multidkpid, $to));
+	
+				if($arrLastSnapshot){
+					$intTime = (int)$arrLastSnapshot['time'];
+					if($intTime >= $from && $intTime <= $to){
+						$arrPoints = unserialize($arrLastSnapshot['misc']);
+					}
+					
+					//Get latest activities
+					$arrEvents = $this->get_time_items($intTime+1, $to);
+					
+				} else {
+					//No help from Snapshots
+					$arrEvents = $this->get_time_items($from, $to);
+					$arrPoints = array('earned' => array(), 'spent' => array(), 'adjustment' => array());
+				}
+			} else {
+				$arrEvents = $this->get_time_items($from, $to);
+				$arrPoints = array('earned' => array(), 'spent' => array(), 'adjustment' => array());
 			}
+			
+			//For each item
+			foreach($arrEvents['items'] as $itemID){
+				$member_id = $this->pdh->get('item', 'buyer', array($itemID));
+				if($member_id != $memberid) continue;
+				
+				$intItempoolId = $this->pdh->get('item', 'itempool_id', array($itemID));
+				$intRaidId = $this->pdh->get('item', 'raid_id', array($itemID));
+				if($intRaidId){
+					$eventID = $this->pdh->get('raid', 'event', array($intRaidId));
+					$arrMDkpPools = $this->pdh->get('event', 'multidkppools', array($eventID));
+					if(in_array($multidkpid, $arrMDkpPools)){
+						$value = $this->pdh->get('item', 'value', array($itemID, $multidkpid));
+						if(!isset($arrPoints['spent'][$eventID])) $arrPoints['spent'][$eventID] = array();
+						if(!isset($arrPoints['spent'][$eventID][$intItempoolId])) $arrPoints['spent'][$eventID][$intItempoolId] = 0;
+						$arrPoints['spent'][$eventID][$intItempoolId] += $value;
+					}
+				}
+			}
+			
+			//Adjustments
+			foreach($arrEvents['adjustments'] as $adjID){
+				$member_id = $this->pdh->get('adjustment', 'member', array($adjID));
+				if($member_id != $memberid) continue;
+				
+				$eventID = $this->pdh->get('adjustment', 'event', array($adjID));
+				$arrMDkpPools = $this->pdh->get('event', 'multidkppools', array($eventID));
+				if(in_array($multidkpid, $arrMDkpPools)){
+					if(!isset($arrPoints['adjustment'][$eventID])) $arrPoints['adjustment'][$eventID] = 0;
+					$value = $this->pdh->get('adjustment', 'value', array($adjID, $multidkpid));
+					$arrPoints['adjustment'][$eventID] += $value;
+				}
+			}
+			
+			//Raids
+			foreach($arrEvents['raids'] as $raidID){
+				$attendees = $this->pdh->get('raid', 'raid_attendees', array($raidID));
+				if( !is_array($attendees) || !in_array($memberid, $attendees)) continue;
+				
+				$eventID = $this->pdh->get('raid', 'event', array($raidID));
+				$arrMDkpPools = $this->pdh->get('event', 'multidkppools', array($eventID));
+				if(in_array($multidkpid, $arrMDkpPools)){
+					if(!isset($arrPoints['earned'][$eventID])) $arrPoints['earned'][$eventID] = 0;
+					$value = $this->pdh->get('raid', 'value', array($raidID, $multidkpid));
+					$arrPoints['earned'][$eventID] += $value;
+				}
+			}
+
+			
+			//calculate
+			if(is_array($arrPoints['earned'])){
+				foreach($arrPoints['earned'] as $event_id => $earned){
+					$arrPoints['earned'][0] += $earned;
+				}
+			}
+			
+			if(is_array($arrPoints['spent'])){
+				foreach($arrPoints['spent'] as $event_id => $itempools) {
+					foreach($itempools as $itempool_id => $spent){
+						$arrPoints['spent'][0][0] += $spent;
+						if(!isset($arrPoints['spent'][$event_id][0])) $arrPoints['spent'][$event_id][0] = 0;
+						$arrPoints['spent'][$event_id][0] += $spent;
+						if(!isset($arrPoints['spent'][0][$itempool_id])) $arrPoints['spent'][0][$itempool_id] = 0;
+						$arrPoints['spent'][0][$itempool_id] += $spent;
+					}
+				}
+			}
+			
+			if(is_array($arrPoints['adjustment'])){
+				foreach($arrPoints['adjustment'] as $event_id => $adjustment){
+					$arrPoints['adjustment'][0] += $adjustment;
+				}
+			}
+
+			$this->arrLocalPointsCache[$strCacheKey] = $arrPoints;
+			$this->arrCalculatedSingle[$strCacheKey] = 1;
+			return $arrPoints;
+		
+	}	
+		
+		
+	public function calculate_multi_points($memberid, $multidkpid = 1, $from=0, $to=PHP_INT_MAX){
+			$strCacheKey = md5('multi_'.$memberid.'.'.$multidkpid.'.'.$from.'.'.$to);
+			//already cached?
+			if(isset($this->arrLocalPointsCache[$strCacheKey])) return true;
+
+			$arrPoints = array();
 
 			//twink stuff
 			if($this->pdh->get('member', 'is_main', array($memberid))){
 				$twinks = $this->pdh->get('member', 'other_members', $memberid);
 
-				
-				$this->points[$memberid][$multidkpid]['multi'] = array();
-				
 				//main points
-				if (!empty($this->points[$memberid][$multidkpid]['single'])) $this->points[$memberid][$multidkpid]['multi'] = $this->points[$memberid][$multidkpid]['single'];
+				$points = $this->calculate_single_points($memberid, $multidkpid, $from, $to);
+				$arrPoints['earned'][0] = $points['earned'][0];
+				$arrPoints['spent'][0] = $points['spent'][0];
+				$arrPoints['adjustment'][0] = $points['adjustment'][0];
 
 				//Accumulate points from twinks
 				if(!empty($twinks) && is_array($twinks)){
 					foreach($twinks as $twinkid){
-						if(isset($this->points[$twinkid][$multidkpid]) && isset($this->points[$twinkid][$multidkpid]['single']['earned'])){
-							foreach($this->points[$twinkid][$multidkpid]['single']['earned'] as $event_id => $earned){
-								if(!is_array($this->points[$memberid][$multidkpid]['multi']['earned'][$event_id])) $this->points[$memberid][$multidkpid]['multi']['earned'][$event_id] = array(); 
-								$this->points[$memberid][$multidkpid]['multi']['earned'][$event_id] = array_merge($this->points[$memberid][$multidkpid]['multi']['earned'][$event_id], $earned);
-							}
-						}
-						
-						if(isset($this->points[$twinkid][$multidkpid]) && isset($this->points[$twinkid][$multidkpid]['single']['spent'])){
-							foreach($this->points[$twinkid][$multidkpid]['single']['spent'] as $event_id => $itempools) {
-								foreach($itempools as $itempool_id => $spent){
-									if(!is_array($this->points[$memberid][$multidkpid]['multi']['spent'][ $event_id][$itempool_id])) $this->points[$memberid][$multidkpid]['multi']['spent'][ $event_id][$itempool_id] = array();
-									$this->points[$memberid][$multidkpid]['multi']['spent'][ $event_id][$itempool_id] = array_merge($this->points[$memberid][$multidkpid]['multi']['spent'][ $event_id][$itempool_id], $spent);
-									
+						$twinkpoints = $this->calculate_single_points($twinkid, $multidkpid);
+						$arrPoints['earned'][0] += $twinkpoints['earned'][0];
+						$arrPoints['adjustment'][0] += $twinkpoints['adjustment'][0];
+						//calculate points of member+twinks per event / itempool
+						foreach(array('earned', 'adjustment') as $type) {
+							if(isset($arrPoints[$memberid][$multidkpid][$type]) && is_array($arrPoints[$memberid][$multidkpid][$type])) {
+								foreach($arrPoints[$memberid][$multidkpid][$type] as $id => $point) {
+									if(!isset($arrPoints[$type][$id])) $arrPoints[$type][$id] = 0;
+									$arrPoints[$type][$id] += $arrPoints[$twinkid][$multidkpid]['single'][$type][$id];
 								}
 							}
 						}
-						
-						if(isset($this->points[$twinkid][$multidkpid]) && isset($this->points[$twinkid][$multidkpid]['single']['adjustment'])){
-							foreach($this->points[$twinkid][$multidkpid]['single']['adjustment'] as $event_id => $adjustment){
-								if(!isset($this->points[$memberid][$multidkpid]['multi']['adjustment'][$event_id])) $this->points[$memberid][$multidkpid]['multi']['adjustment'][$event_id] = array();
-								$this->points[$memberid][$multidkpid]['multi']['adjustment'][$event_id] = array_merge($this->points[$memberid][$multidkpid]['multi']['adjustment'][$event_id], $adjustment);
+						foreach($twinkpoints['spent'] as $event_id => $vals) {
+							foreach($vals as $ip_id => $val) {
+								if(!isset($arrPoints['spent'][$event_id][$ip_id])) $arrPoints['spent'][$event_id][$ip_id] = 0;
+								$arrPoints['spent'][$event_id][$ip_id] += $val;
 							}
 						}
-						
 					}
 				}
-				
-				return $this->points[$memberid][$multidkpid]['multi'];
+				$this->arrLocalPointsCache[$strCacheKey] = $arrPoints;
+				return $arrPoints;
 			} else {
 				$main_id = $this->pdh->get('member', 'mainid', array($memberid));
-				if($main_id) $this->points[$memberid][$multidkpid]['multi'] = $this->calculate_multi_points($main_id, $multidkpid);
-				return $this->points[$memberid][$multidkpid]['multi'];
+				if($main_id) $arrPoints = $this->calculate_multi_points($main_id, $multidkpid, $from, $to);
+				$this->arrLocalPointsCache[$strCacheKey] = $arrPoints;
+				return $arrPoints;
+			}
+		}
+		
+		public function get_points($member_id, $multidkp_id, $from=0, $to=PHP_INT_MAX, $event_id=0, $itempool_id=0, $with_twink=true){
+			if($with_twink){
+				$arrPoints = $this->calculate_multi_points($member_id, $multidkp_id, $from, $to);
+				return $arrPoints;
+			} else {
+				$arrPoints = $this->calculate_single_points($member_id, $multidkp_id, $from, $to);
+				return $arrPoints;
 			}
 		}
 		
 		
-		public function get_history($member_id, $multidkp_id, $from=0, $to=PHP_INT_MAX, $event_id=0, $itempool_id=0, $with_twink=true ){
-			$arrDate = $arrOut = array();
-
-			$cacheKey = md5($member_id.'.'.$multidkp_id.'.'.$from.'.'.$to.'.'.$event_id.'.'.$itempool_id.'.'.$with_twink);
-			$cachedData = $this->pdc->get('pdh_points_history_'.$cacheKey);
-			if($cachedData !== NULL){
-				return $cachedData;
-			}
-			
-			$arrEarned = $this->get_earned($member_id, $multidkp_id, $from, $to, $event_id, $with_twink);
-			foreach($arrEarned as $val){
-				$arrDate[] = $val[1];
-				$arrOut[] = array(
-					'value' => $val[0],
-					'date'	=> $val[1],
-					'type'	=> 'earned',
-					'id'	=> $val[2],
-					'character' => $val[3],
-				);
-			}
-			
-			$arrSpent = $this->get_spent($member_id, $multidkp_id, $from, $to, $event_id, $itempool_id, $with_twink);
-			foreach($arrSpent as $val){
-				$arrDate[] = $val[1];
-				$arrOut[] = array(
-						'value' => $val[0],
-						'date'	=> $val[1],
-						'type'	=> 'spent',
-						'id'	=> $val[2],
-						'character' => $val[3],
-				);
-			}
-			
-			$arrAdjustment = $this->get_adjustment($member_id, $multidkp_id, $from, $to, $event_id, $with_twink);
-			foreach($arrAdjustment as $val){
-				$arrDate[] = $val[1];
-				$arrOut[] = array(
-						'value' => $val[0],
-						'date'	=> $val[1],
-						'type'	=> 'adjustment',
-						'id'	=> $val[2],
-						'character' => $val[3],
-				);
-			}
-			
-			array_multisort($arrDate, SORT_ASC, SORT_NUMERIC, $arrOut);
-			
-			$this->pdc->put('pdh_points_history_'.$cacheKey, $arrOut, null);
-			
-			return $arrOut;
-		}
+		//ToDo: Build history for single character, with each items, adjustment and raid
 		
-		public function get_spent($member_id, $multidkp_id, $from=0, $to=PHP_INT_MAX, $event_id=0, $itempool_id=0, $with_twink=true){
-			$strTwink = ($with_twink) ? 'multi' : 'single';
-			$arrSpent = array();
+		private function get_time_items($from, $to){
+			$strCacheKey = md5($from.'.'.$to);
+			if(isset($this->arrLocalMappingCache[$strCacheKey])) return $this->arrLocalMappingCache[$strCacheKey];
 			
-			//Get Array
-			if(!empty($this->points[$member_id][$multidkp_id][$strTwink]['spent'])) {
-				foreach($this->points[$member_id][$multidkp_id][$strTwink]['spent'] as $_event_id => $itempools) {
-					if ($event_id != 0 && $_event_id != $event_id) continue;
-					foreach($itempools as $_itempool_id => $spent){
-						
-						if ($itempool_id != 0 && $itempool_id != $_itempool_id) continue;
-						foreach($spent as $val){
-							if ($val[1] < $from || $val[1] > $to) continue;
-							$arrSpent[] = $val;
-						}
-					}
+			$arrEvents = array('items' => array(), 'raids' => array(), 'adjustments' => array());
+			//items
+			$objQuery = $this->db->prepare("SELECT item_id FROM __items WHERE item_date >= ? AND item_date <= ?")->execute($from, $to);
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$arrEvents['items'][] = $row['item_id'];
+				}
+			}
+			//raids
+			$objQuery = $this->db->prepare("SELECT raid_id FROM __raids WHERE raid_date >= ? AND raid_date <= ?")->execute($from, $to);
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$arrEvents['raids'][] = $row['raid_id'];
 				}
 			}
 			
-			//Sort
-			$arrDate = array();
-			foreach($arrSpent as $val){
-				$arrDate[] = $val[1];
-			}
-			
-			array_multisort($arrDate, SORT_ASC, SORT_NUMERIC, $arrSpent);
-			return $arrSpent;
-		}
-		
-		public function get_earned($member_id, $multidkp_id, $from=0, $to=PHP_INT_MAX, $event_id=0, $with_twink=true){
-			
-			$strTwink = ($with_twink) ? 'multi' : 'single';
-			$arrEarned = array();
-			//Get Array
-			if (isset($this->points[$member_id][$multidkp_id][$strTwink]['earned'])){
-				foreach($this->points[$member_id][$multidkp_id][$strTwink]['earned'] as $_event_id => $earned){
-					if ($event_id != 0 && $_event_id != $event_id) continue;
-					foreach($earned as $val){
-						if ($val[1] < $from || $val[1] > $to) continue;
-						$arrEarned[] = $val;
-					}
-				}
-			}
-				
-			//Sort
-			$arrDate = array();
-			foreach($arrEarned as $val){
-				$arrDate[] = $val[1];
-			}
-				
-			array_multisort($arrDate, SORT_ASC, SORT_NUMERIC, $arrEarned);
-			return $arrEarned;
-		}
-		
-		public function get_adjustment($member_id, $multidkp_id, $from=0, $to=PHP_INT_MAX, $event_id=0, $with_twink=true){
-			$strTwink = ($with_twink) ? 'multi' : 'single';
-			
-			$arrAdjustment = array();
-			//Get Array
-			if (isset($this->points[$member_id][$multidkp_id][$strTwink]['adjustment'])) {
-				foreach($this->points[$member_id][$multidkp_id][$strTwink]['adjustment'] as $_event_id => $earned){
-				if ($event_id != 0 && $_event_id != $event_id) continue;
-					foreach($earned as $val){
-						if ($val[1] < $from || $val[1] > $to) continue;
-						$arrAdjustment[] = $val;
-					}
+			//adjustments
+			$objQuery = $this->db->prepare("SELECT adjustment_id FROM __adjustments WHERE adjustment_date >= ? AND adjustment_date <= ?")->execute($from, $to);
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$arrEvents['adjustments'][] = $row['adjustment_id'];
 				}
 			}
 			
-			//Sort
-			$arrDate = array();
-			foreach($arrAdjustment as $val){
-				$arrDate[] = $val[1];
-			}
+			$this->arrLocalMappingCache[$strCacheKey] = $arrEvents;
 			
-			array_multisort($arrDate, SORT_ASC, SORT_NUMERIC, $arrAdjustment);
-			return $arrAdjustment;
-			
+			return $arrEvents;
 		}
 	}//end class
 }//end if

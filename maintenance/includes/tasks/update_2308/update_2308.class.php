@@ -25,29 +25,41 @@ if ( !defined('EQDKP_INC') ){
 
 include_once(registry::get_const('root_path').'maintenance/includes/sql_update_task.class.php');
 
-class update_2307 extends sql_update_task {
-	public $author			= 'Wallenium';
-	public $version			= '2.3.0.7.0'; //new plus-version
-	public $ext_version		= '2.3.0.7'; //new plus-version
-	public $name			= 'Update 2.3.0.7';
+class update_2308 extends sql_update_task {
+	public $author			= 'GodMod';
+	public $version			= '2.3.0.8.0'; //new plus-version
+	public $ext_version		= '2.3.0.8'; //new plus-version
+	public $name			= 'Update 2.3.0.8';
 
 	public function __construct(){
 		parent::__construct();
 
 		$this->langs = array(
 			'english' => array(
-				'update_2307'	=> 'EQdkp Plus 2.3.0.7 Update',
-					1			=> 'Add roles field to raid guests table',
+				'update_2308'	=> 'EQdkp Plus 2.3.0.8 Update',
+					1			=> 'Alter table raids',
+					2			=> 'Alter table items',
+					3			=> 'Alter table adjustments',
+					4			=> 'Alter table members',
+					5			=> 'Alter table members',
 				),
 			'german' => array(
-				'update_2307'	=> 'EQdkp Plus 2.3.0.7 Update',
-					1			=> 'Füge Rollenfeld zur Raid-Gästetabelle',
+				'update_2308'	=> 'EQdkp Plus 2.3.0.8 Update',
+					1			=> 'Erweitere Tabelle raids',
+					2			=> 'Erweitere Tabelle items',
+					3			=> 'Erweitere Tabelle adjustments',
+					4			=> 'Erweitere Tabelle members',
+					5			=> 'Erweitere Tabelle members',
 			),
 		);
 
 		// init SQL querys
 		$this->sqls = array(
-			1	=> "ALTER TABLE `__calendar_raid_guests` ADD `role` int(10) UNSIGNED NOT NULL DEFAULT '0' AFTER `status`;",
+			1	=> "ALTER TABLE `__raids` ADD COLUMN `raid_apa_value` TEXT NULL COLLATE 'utf8_bin'",
+			2	=> "ALTER TABLE `__items` ADD COLUMN `item_apa_value` TEXT NULL COLLATE 'utf8_bin'",
+			3	=> "ALTER TABLE `__adjustments` ADD COLUMN `adjustment_apa_value` TEXT NULL COLLATE 'utf8_bin'",
+			4	=> "ALTER TABLE `__members` ADD COLUMN `points` TEXT NULL COLLATE 'utf8_bin'",
+			5	=> "ALTER TABLE `__members` ADD COLUMN `points_apa` TEXT NULL COLLATE 'utf8_bin'",
 		);
 	}
 

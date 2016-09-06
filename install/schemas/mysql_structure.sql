@@ -146,6 +146,7 @@ DROP TABLE IF EXISTS __adjustments;
 CREATE TABLE `__adjustments` (
 	`adjustment_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	`adjustment_value` float(11,2) DEFAULT NULL,
+	`adjustment_apa_value` TEXT NULL COLLATE 'utf8_bin',
 	`adjustment_date` int(11) NOT NULL DEFAULT '0',
 	`member_id` smallint(5) unsigned NOT NULL,
 	`adjustment_reason` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -175,6 +176,7 @@ CREATE TABLE `__items` (
 	`member_id` smallint(5) unsigned NOT NULL,
 	`raid_id` mediumint(8) unsigned NOT NULL,
 	`item_value` float(10,2) DEFAULT NULL,
+	`item_apa_value` TEXT NULL COLLATE 'utf8_bin',
 	`item_date` int(11) NOT NULL DEFAULT '0',
 	`item_added_by` varchar(30) COLLATE utf8_bin NOT NULL,
 	`item_updated_by` varchar(30) COLLATE utf8_bin DEFAULT NULL,
@@ -200,6 +202,8 @@ CREATE TABLE `__members` (
 	`requested_del` tinyint(1) NOT NULL DEFAULT 0,
 	`require_confirm` tinyint(1) NOT NULL DEFAULT 0,
 	`defaultrole` tinyint(2) NOT NULL DEFAULT '0',
+	`points` TEXT NULL COLLATE 'utf8_bin',
+	`points_apa` TEXT NULL COLLATE 'utf8_bin',
 	PRIMARY KEY (`member_id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -259,6 +263,7 @@ CREATE TABLE `__raids` (
 	`raid_date` int(11) NOT NULL DEFAULT '0',
 	`raid_note` text COLLATE utf8_bin,
 	`raid_value` float(6,2) NOT NULL DEFAULT '0.00',
+	`raid_apa_value` TEXT NULL COLLATE 'utf8_bin',
 	`raid_added_by` varchar(30) COLLATE utf8_bin NOT NULL,
 	`raid_updated_by` varchar(30) COLLATE utf8_bin DEFAULT NULL,
 	`raid_additional_data` TEXT NULL DEFAULT NULL COLLATE 'utf8_bin',

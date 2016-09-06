@@ -53,7 +53,7 @@ if(!class_exists('pdh_w_multidkp')) {
 							'multidkp2itempool_itempool_id' => $itempool_id))->execute()) ? true : false;
 				}
 				if(!in_array(false, $retu)) {
-					$this->pdh->enqueue_hook('multidkp_update',array($id));
+					$this->pdh->enqueue_hook('multidkp_update',array($id), array('action' => 'add'));
 					return $id;
 				}
 			}
@@ -68,7 +68,7 @@ if(!class_exists('pdh_w_multidkp')) {
 					
 				$objQuery = $this->db->prepare("UPDATE __multidkp :p WHERE multidkp_id=?")->set($arrSet)->execute($id);
 			}
-			$this->pdh->enqueue_hook('multidkp_update',array());
+			$this->pdh->enqueue_hook('multidkp_update',array(),array('action' => 'sort'));
 		}
 
 		public function update_multidkp($id, $name, $desc, $events, $itempools, $no_atts) {
@@ -132,7 +132,7 @@ if(!class_exists('pdh_w_multidkp')) {
 				}
 				if(!in_array(false, $retu)) {
 					$this->db->commitTransaction();
-					$this->pdh->enqueue_hook('multidkp_update', array($id));
+					$this->pdh->enqueue_hook('multidkp_update', array($id), array('action' => 'update'));
 					return true;
 				}
 			}
@@ -150,7 +150,7 @@ if(!class_exists('pdh_w_multidkp')) {
 				$retu[] = ($objQuery);
 				if(!in_array(false, $retu)) {
 					$this->db->commitTransaction();
-					$this->pdh->enqueue_hook('multidkp_update', array($id));
+					$this->pdh->enqueue_hook('multidkp_update', array($id), array('action' => 'delete'));
 					return true;
 				}
 			}

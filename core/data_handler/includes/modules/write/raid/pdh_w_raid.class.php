@@ -80,7 +80,7 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 				);
 				$this->log_insert('action_raid_added', $log_action, $raid_id, $this->pdh->get('event', 'name', array($event_id)));
 				//call pdh hooks
-				$this->pdh->enqueue_hook('raid_update', $raid_id);
+				$this->pdh->enqueue_hook('raid_update', $raid_id, array('action' => 'add', 'time' => $raid_date));
 				return $raid_id;
 			} else {
 				return false;
@@ -145,7 +145,7 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
 				
 				$this->log_insert('action_raid_updated', $log_action, $raid_id, $this->pdh->get('event', 'name', array($old['event'])));
-				$this->pdh->enqueue_hook('raid_update', $raid_id);
+				$this->pdh->enqueue_hook('raid_update', $raid_id, array('action' => 'update', 'time' => $raid_date));
 				return true;
 			}
 			return false;
@@ -197,7 +197,7 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 					$this->log_insert('action_raid_deleted', $log_action, $raid_id, $old['event']);
 
 					//call pdh hook
-					$this->pdh->enqueue_hook('raid_update', $raid_id);
+					$this->pdh->enqueue_hook('raid_update', $raid_id, array('action' => 'delete', 'time' => $old['date']));
 					return true;
 				}
 			}
@@ -220,7 +220,21 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 				'{L_EVENT}'	=> $this->pdh->get('event', 'name', array($event_id))
 			);
 			$this->log_insert('action_raidsofevent_deleted', $log_action, $event_id, $this->pdh->get('event', 'name', array($event_id)));
-			$this->pdh->enqueue_hook('raid_update', $raids);
+			$this->pdh->enqueue_hook('raid_update', $raids, array('action' => 'delete', 'time' => 0));
+			return true;
+		}
+		
+		public function update_apa_value($raid_id, $apa_id, $val){
+			$arrCurrentApaValue = $this->pdh->get('raid', 'apa_value', array($raid_id, $apa_id));
+			if(!$arrCurrentApaValue || !is_array($arrCurrentApaValue)) $arrCurrentApaValue = array();
+			$arrCurrentApaValue[$apa_id] = $val;
+			
+			$objQuery = $this->db->prepare("UPDATE __raids :p WHERE raid_id=?")->set(array(
+				'raid_apa_value' => serialize($arrCurrentApaValue),
+			))->execute($item_id);
+		
+			$this->pdh->enqueue_hook('raid_update', array($raid_id), array('action' => 'update', 'apa' => true));
+		
 			return true;
 		}
 		

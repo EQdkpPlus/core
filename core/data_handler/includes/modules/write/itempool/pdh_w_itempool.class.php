@@ -36,7 +36,7 @@ if(!class_exists('pdh_w_itempool')) {
 			
 			if($objQuery) {
 				$id = $objQuery->insertId;
-				$this->pdh->enqueue_hook('itempool_update', array($id));
+				$this->pdh->enqueue_hook('itempool_update', array($id), array('action' => 'add'));
 				return $id;
 			}
 			return false;
@@ -53,7 +53,7 @@ if(!class_exists('pdh_w_itempool')) {
 			$objQuery = $this->db->prepare("UPDATE __itempool :p WHERE itempool_id=?")->set($arrSet)->execute($id);
 			
 			if($objQuery) {
-				$this->pdh->enqueue_hook('itempool_update', array($id));
+				$this->pdh->enqueue_hook('itempool_update', array($id), array('action' => 'update'));
 				return true;
 			}
 			return false;
@@ -72,7 +72,7 @@ if(!class_exists('pdh_w_itempool')) {
 					if($this->db->prepare("UPDATE __items SET itempool_id = '1' WHERE itempool_id = ?")->execute($id)) {
 						$this->pdh->enqueue_hook('itempool_update', array($id));
 						$items = $this->pdh->get('item', 'item_ids_of_itempool', array($id));
-						$this->pdh->enqueue_hook('item_update', array($items));
+						$this->pdh->enqueue_hook('item_update', array($items), array('action' => 'delete'));
 						$this->db->commitTransaction();
 						return true;
 					}

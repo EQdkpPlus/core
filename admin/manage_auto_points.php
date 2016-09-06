@@ -26,16 +26,6 @@ define('IN_ADMIN', true);
 $eqdkp_root_path = './../';
 include_once ($eqdkp_root_path . 'common.php');
 
-/*
-$pdh->enqueue_hook('test_hook');
-$pdh->process_hook_queue();
-$pdh->register_hook_callback('dummy', "test_hook");
-$apa->register_test_hook();
-function dummy(){
-	echo("in dummy");
-}
-//d(uniqid("hallo_", false));
-*/
 class ManageAutoPoints extends page_generic {
 	public static $shortcuts = array('apa' => 'auto_point_adjustments');
 	
@@ -311,7 +301,6 @@ class ManageAutoPoints extends page_generic {
 		$used_funcs = array();
 		if(is_array($job_list)){
 			foreach($job_list as $key => $details){
-				pd($details['exectime']);
 				$this->tpl->assign_block_vars('apa_row', array(
 					'ID'			=> $key,
 					'TYPE'			=> $this->user->lang('apa_type_'.$details['type']),

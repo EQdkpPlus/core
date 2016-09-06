@@ -38,17 +38,17 @@ if ( !defined('EQDKP_INC') ){
 		private $apa_types_inst		= array();
 		
 		private $cached_data		= array();
-		private $ttls				= array();
-		private $needs_update		= array();
 		private $call_start			= false;
 		
 		public $available_types		= array();
+		private $needs_update		= array();
 
 		public function __construct(){
 			$this->apa_tab_file  = $this->pfh->FilePath('apa/apatab.php', 'eqdkp', 'relative');
 			$this->apa_func_file = $this->pfh->FilePath('apa/apafunc.php', 'eqdkp', 'relative');
 			$this->load_apa_tab();
 			$this->load_calc_func();
+			
 			$this->needs_update = $this->pdc->get('apa_update_table');
 			if(empty($this->needs_update)) $this->needs_update = array();
 		}
@@ -226,59 +226,27 @@ if ( !defined('EQDKP_INC') ){
 		 */
 		public function get_decay_val($module, $dkp_id, $date=0, $data=array()) {
 			if(!$this->call_start) $this->call_start = true;
+
 			if(!$date) $date = $this->time->time;
 			$apa_id = $this->get_apa_id($dkp_id, $module);
-			$cache_date = $this->get_apa_type($this->apa_tab[$apa_id]['type'])->get_cache_date($date, $apa_id);
-			if(!isset($this->cached_data[$apa_id][$cache_date])) $this->cached_data[$apa_id][$cache_date] = $this->pdc->get('apa_'.$apa_id.'_'.$cache_date);
-			//check if update is necessary
-			if(!isset($this->cached_data[$apa_id][$cache_date][$module][$data['id']]) || $this->needs_update($module, $data['id'])) {
-				list($val, $adj, $ttl) = $this->get_apa_type($this->apa_tab[$apa_id]['type'])->get_decay_val($apa_id, $cache_date, $module, $dkp_id, $data);
-				$this->cached_data[$apa_id][$cache_date][$module][$data['id']]['val'] = $val;
-				$this->cached_data[$apa_id][$cache_date][$module][$data['id']]['adj'] = $adj;
-				$this->ttls[$apa_id][$cache_date] = $ttl;
-				// only flag update done if this is the top-level call (so cache entries for older cache_dates get reset as well)
+			$last_run = $this->get_apa_type($this->apa_tab[$apa_id]['type'])->get_last_run($date, $apa_id);
+			
+			//Check if update needed
+			if($this->needs_update($module, $data['id'])){
+				$this->get_apa_type($this->apa_tab[$apa_id]['type'])->reset_cache($apa_id, $module, $data['id']);
+				
 				if($this->call_start) $this->update_done($module, $data['id']);
+			} else {
+				if(isset($this->cached_data[$apa_id][$last_run][$data['id']])) return $this->cached_data[$apa_id][$last_run][$data['id']];
 			}
-			$this->call_start = false;
-			return $this->cached_data[$apa_id][$cache_date][$module][$data['id']]['val'];
+			
+			//$arrResult=0: value, 1: bln was new calculated
+			list($fltVal, $blnNewCalculated, $decay_adj) = $this->get_apa_type($this->apa_tab[$apa_id]['type'])->get_decay_val($apa_id, $last_run, $module, $dkp_id, $data);
+			$this->cached_data[$apa_id][$last_run][$data['id']] = $fltVal;
+			
+			return $fltVal;
 		}
-		
-		public function get_decay_history($module, $dkp_id, $data=array()) {
-			$apa_id = $this->get_apa_id($dkp_id, $module);
-			// init cache with a call to get_decay_val
-			$this->get_decay_val($module, $dkp_id, 0, $data);
-			// create history array
-			$arrOut = array();
-			foreach($this->cached_data[$apa_id] as $cache_date => $decay_data) {				
-				$arrOut[] = array(
-					'value' 	=> $decay_data[$module][$data['id']]['adj'],
-					'date'		=> $cache_date,
-					'type'		=> 'apa',
-					'id'		=> $apa_id,
-					'character' => $char_id,
-				);
-			}
-			return $arrOut;
-		}
-		
-		public function enqueue_update($module, $ids) {
-			if(!is_array($ids)) $this->needs_update[$module][$ids] = true;
-			else {
-				foreach($ids as $id) {
-					$this->needs_update[$module][$id] = true;
-				}
-			}
-		}
-		
-		private function needs_update($module, $id) {
-			if(isset($this->needs_update[$module][$id])) return true;
-			return false;
-		}
-		
-		private function update_done($module, $id) {
-			if(isset($this->needs_update[$module][$id])) unset($this->needs_update[$module][$id]);
-		}
-
+				
 		public function get_apa_edit_form($apa_id){
 			if(!isset($this->apa_tab[$apa_id])) return null;
 			$apa_obj = $this->get_apa_type($this->apa_tab[$apa_id]['type']);
@@ -361,17 +329,30 @@ if ( !defined('EQDKP_INC') ){
 			$this->save_calc_function();
 			return true;
 		}
-
-		public function __destruct() {
-			foreach($this->ttls as $apa_id => $data) {
-				foreach($data as $cache_date => $ttl) {
-					$this->pdc->put('apa_'.$apa_id.'_'.$cache_date, $this->cached_data[$apa_id][$cache_date], $ttl);
+		
+		public function enqueue_update($module, $ids) {
+			if(!is_array($ids)) $this->needs_update[$module][$ids] = true;
+			else {
+				foreach($ids as $id) {
+					$this->needs_update[$module][$id] = true;
 				}
 			}
+		}
+		
+		private function needs_update($module, $id) {
+			if(isset($this->needs_update[$module][$id])) return true;
+			return false;
+		}
+		
+		private function update_done($module, $id) {
+			if(isset($this->needs_update[$module][$id])) unset($this->needs_update[$module][$id]);
+		}
+		
+		public function __destruct() {
 			$this->pdc->put('apa_update_table', $this->needs_update, 15768000); //cache half a year
 			unset($this->cached_data);
-			unset($this->ttls);
 			parent::__destruct();
 		}
+
 	}//end class
 ?>

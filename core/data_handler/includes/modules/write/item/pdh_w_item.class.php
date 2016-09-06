@@ -74,7 +74,7 @@ if ( !class_exists( "pdh_w_item" ) ) {
 				
 				$log_action = $this->logs->diff(false, $arrNew, $this->arrLogLang);
 				$this->log_insert('action_item_added', $log_action, $item_id, $item_name);
-				$this->pdh->enqueue_hook('item_update', $item_id);
+				$this->pdh->enqueue_hook('item_update', $item_id, array('action' => 'add', 'time' => $time));
 				return $item_id;
 			}
 			return false;
@@ -206,7 +206,7 @@ if ( !class_exists( "pdh_w_item" ) ) {
 				
 				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
 				$this->log_insert('action_item_updated', $log_action, $item_id, $old['name']);
-				$this->pdh->enqueue_hook('item_update', $hook_id);
+				$this->pdh->enqueue_hook('item_update', $hook_id, array('action' => 'update', 'time' => $time));
 				$this->db->commitTransaction();
 				return true;
 			}
@@ -236,7 +236,7 @@ if ( !class_exists( "pdh_w_item" ) ) {
 					'{L_VALUE}'		=> $old['value']);
 				
 				$this->log_insert('action_item_deleted', $log_action, $item_id, $old['name']);
-				$this->pdh->enqueue_hook('item_update', $item_id);
+				$this->pdh->enqueue_hook('item_update', $item_id, array('action' => 'delete', 'time' => $old['date']));
 				return true;
 			}
 			return false;
@@ -252,7 +252,21 @@ if ( !class_exists( "pdh_w_item" ) ) {
 				'{L_RAID_ID}'	=> $raid_id
 			);
 			$this->log_insert('action_itemsofraid_deleted', $log_action, $raid_id, $this->pdh->get('raid', 'event_name', array($raid_id)));
-			$this->pdh->enqueue_hook('item_update', $items);
+			$this->pdh->enqueue_hook('item_update', $items, array('action' => 'delete', 'time' => 0));
+			return true;
+		}
+		
+		public function update_apa_value($item_id, $apa_id, $val){
+			$arrCurrentApaValue = $this->pdh->get('item', 'apa_value', array($item_id, $apa_id));
+			if(!$arrCurrentApaValue || !is_array($arrCurrentApaValue)) $arrCurrentApaValue = array();
+			$arrCurrentApaValue[$apa_id] = $val;
+				
+			$objQuery = $this->db->prepare("UPDATE __items :p WHERE item_id=?")->set(array(
+				'item_apa_value' => serialize($arrCurrentApaValue),
+			))->execute($item_id);
+				
+			$this->pdh->enqueue_hook('item_update', array($item_id), array('action' => 'update', 'apa' => true));
+				
 			return true;
 		}
 		

@@ -129,6 +129,7 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 			$this->pdl->debug($layout);
 			$this->pdl->debug($layout_def);
 			$this->pdh->save_layout($layout, $layout_def);
+			$this->pdh->put('member', 'reset_points');
 			return true;
 		}
 		
@@ -138,6 +139,7 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 				$preset_name = $module.'_decay_'.$apa_id;
 				$this->pdh->update_user_preset($preset_name, false, $this->apa->get_data('name', $apa_id));
 			}
+			$this->pdh->put('member', 'reset_points');
 			return true;
 		}
 		
@@ -158,6 +160,7 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 				$preset_name = $module.'_decay_'.$apa_id;
 				$this->pdh->delete_user_preset($preset_name);
 			}
+			$this->pdh->put('member', 'reset_points');
 			return true;
 		}
 		
@@ -166,7 +169,7 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 		}
 		
 		// get date of last calculation
-		public function get_cache_date($date, $apa_id) {
+		public function get_last_run($date, $apa_id) {
 			$max_ttl = $this->apa->get_data('decay_time', $apa_id)*86400; //decay time in days
 			$exectime = $this->apa->get_data('exectime', $apa_id); //exectime as seconds from midnight
 			$decay_start = $this->apa->get_data('start_date', $apa_id); //start_date for fetching first day (wether we start on monday, thursday or w/e)
@@ -178,21 +181,86 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 			return $date;
 		}
 		
-		public function get_decay_val($apa_id, $cache_date, $module, $dkp_id, $data) {
-			$decay_start = $this->apa->get_data('start_date', $apa_id);
+		public function get_decay_val($apa_id, $last_run, $module, $dkp_id, $data) {
+			// load decay parameters, set decay_start to its proper timestamp (from somewhere at that day to exectime)
+			$decay_start = $this->apa->get_data('start_date', $apa_id);	
+			$exectime = $this->apa->get_data('exectime', $apa_id);
+			if(($decay_start%86400) > $exectime) $decay_start += 86400;
+			$decay_start = $decay_start + $exectime - $decay_start%86400;
+			$decay_time = $this->apa->get_data('decay_time', $apa_id)*86400;
+			
 			//relevant item/raid/adj ?
 			if($decay_start > $data['date']) return NULL;
-			if(($cache_date - $this->apa->get_data('zero_time', $apa_id)*2592000) > $data['date']) {
+			
+			$blnNeedsRecalc = false;
+			$blnFromCache = false;
+			
+			//Check Zero Time
+			if(($last_run - $this->apa->get_data('zero_time', $apa_id)*2592000) > $data['date']) {
 				$decayed_val = 0;
 				$decay_adj = 0;
 			} else {
-				$previous_calc = $cache_date - $this->apa->get_data('decay_time', $apa_id)*86400;
-				$value = ($previous_calc < $data['date']) ? $data['value'] : $this->apa->get_decay_val($module, $dkp_id, $previous_calc, $data);
-				$decayed_val = ($cache_date < $data['date']) ? $data['value'] : $this->apa->run_calc_func($this->apa->get_data('calc_func', $apa_id), array($value, $cache_date, $data['date'], $data['value']));
-				$decay_adj = $value - $decayed_val;
+
+				//Get Cache Entry
+				switch($module){
+					case 'item': $arrCache = $this->pdh->get('item', 'apa_value', array($data['id'], $apa_id)); 
+						break;
+					case 'raid': $arrCache = $this->pdh->get('raid', 'apa_value', array($data['id'], $apa_id)); 
+						break;
+					case 'adjustment': $arrCache = $this->pdh->get('adjustment', 'apa_value', array($data['id'], $apa_id)); 
+						break;
+				}
+
+				if($arrCache != "" && is_array($arrCache) && ($arrCache['time'] == $last_run)){
+					$decayed_val = $arrCache['val'];
+					$blnFromCache = true;
+				} else {
+					$previous_calc = $last_run-$decay_time;
+					$value = ($previous_calc < $data['date']) ? $data['value'] : $this->apa->get_decay_val($module, $dkp_id, $previous_calc, $data);
+					$decayed_val = ($last_run < $data['date']) ? $data['value'] : $this->apa->run_calc_func($this->apa->get_data('calc_func', $apa_id), array($value, $last_run, $data['date'], $data['value']));
+					$decay_adj = $value - $decayed_val;
+					
+					$blnNeedsRecalc = true;
+				}
 			}
-			$ttl = $this->apa->get_data('decay_time', $apa_id)*86400*3; //3 times decay_period
-			return array($decayed_val, $decay_adj, $ttl);
+			
+			if($blnNeedsRecalc){
+				$arrToSave = array('time' => $last_run, 'val' => $decayed_val);
+				
+				switch($module){
+					case 'item': $this->pdh->put('item', 'update_apa_value', array($data['id'], $apa_id, $arrToSave));
+					break;
+					case 'raid': $this->pdh->put('raid', 'update_apa_value', array($data['id'], $apa_id, $arrToSave));
+					break;
+					case 'adjustment': $this->pdh->put('adjustment', 'update_apa_value', array($data['id'], $apa_id, $arrToSave));
+					break;
+				}
+			}
+			
+			return array($decayed_val, $blnNeedsRecalc, $decay_adj);
+		}
+		
+		public function recalculate($apa_id){
+			$this->db->query("UPDATE __adjustments SET adjustment_apa_value='';");
+			$this->db->query("UPDATE __items SET item_apa_value='';");
+			$this->db->query("UPDATE __raids SET raid_apa_value='';");
+			
+			$this->pdh->enqueue_hook('adjustment_update');
+			$this->pdh->enqueue_hook('item_update');
+			$this->pdh->enqueue_hook('raid_update');
+			$this->pdh->put('member', 'reset_points');
+			
+			$this->pdh->process_hook_queue();
+		}
+		
+		public function reset_cache($apa_id, $module, $id){
+			if($module == 'item'){
+				$this->pdh->put('item', 'update_apa_value', array($apa_id, $id, ''));
+			} elseif($module == 'adjustment'){
+				$this->pdh->put('adjustment', 'update_apa_value', array($apa_id, $id, ''));
+			} elseif($module == 'raid'){
+				$this->pdh->put('raid', 'update_apa_value', array($apa_id, $id, ''));
+			}
 		}
 	}//end class
 }//end if

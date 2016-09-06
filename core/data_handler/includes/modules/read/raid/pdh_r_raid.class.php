@@ -31,10 +31,6 @@ if(!class_exists('pdh_r_raid')){
 		public $default_lang = 'english';
 
 		public $hooks = array(
-			'adjustment_update',
-			'event_update',
-			'item_update',
-			'member_update',
 			'raid_update'
 		);
 
@@ -55,25 +51,27 @@ if(!class_exists('pdh_r_raid')){
 		private $index = array();
 		private $objPagination = null;
 
-		//Finished
-		public function reset($affected_ids=array()){
-			//tell apas which ids to delete
-			$apaAffectedIDs = (empty($affected_ids) && !empty($this->index)) ? $this->index : $affected_ids;
-			$this->apa->enqueue_update('raid', $apaAffectedIDs);
+
+		public function reset($affected_ids=array(), $strHook='', $arrAdditionalData=array()){
+			if($strHook == 'raid_update'){
+				//tell apas which ids to delete
+				$apaAffectedIDs = (empty($affected_ids) && !empty($this->index)) ? $this->index : $affected_ids;
+				$this->apa->enqueue_update('raid', $apaAffectedIDs);
+			}
 
 			$affected_ids = (empty($affected_ids) || !$affected_ids) ? false : $affected_ids;
 			$this->objPagination = register("cachePagination", array("raids", "raid_id", "__raids", array('additionalData' => "SELECT member_id, raid_id as object_key FROM __raid_attendees WHERE raid_id >= ? AND raid_id"), 100));
 			return $this->objPagination->reset($affected_ids);
 		}
 
-		//Finished
+
 		public function init(){
 			$this->objPagination = register("cachePagination", array("raids", "raid_id", "__raids", array('additionalData' => "SELECT member_id, raid_id as object_key FROM __raid_attendees WHERE raid_id >= ? AND raid_id"), 100));
 			$this->objPagination->initIndex();
 			$this->index = $this->objPagination->getIndex();
 		}
 
-		//Finished
+
 		public function get_id_list(){
 			if(is_array($this->index)){
 				return $this->index;
@@ -82,39 +80,39 @@ if(!class_exists('pdh_r_raid')){
 			}
 		}
 
-		//Finished
+
 		public function get_added_by($id){
 			return $this->objPagination->get($id, "raid_added_by");
 		}
 
-		//Finished
+
 		public function get_updated_by($id){
 			return $this->objPagination->get($id, "raid_updated_by");
 		}
 
-		//Finished
+
 		public function get_event($id){
 			return $this->objPagination->get($id, "event_id");
 		}
 
-		//Finished
+
 		public function get_event_name($id){
 			$strEventName = $this->pdh->get('event', 'name', array($this->get_event($id)));
 			return (strlen($strEventName)) ? $strEventName : '';
 		}
 
-		//Finished
+
 		public function get_date($id){
 			return $this->objPagination->get($id, "raid_date");
 		}
 
-		//Finished
+
 		public function get_html_date($id){
 			$date = $this->get_date($id);
 			return ( !empty($date) ) ? $this->time->user_date($date) : '&nbsp;';
 		}
 
-		//Finished
+
 		public function get_value($id, $dkp_id=0, $date=0){
 			if($dkp_id) {
 				if(!isset($this->decayed[$dkp_id])) $this->decayed[$dkp_id] = $this->apa->is_decay('raid', $dkp_id);
@@ -126,29 +124,42 @@ if(!class_exists('pdh_r_raid')){
 			return (isset($val)) ? $val : $this->objPagination->get($id, 'raid_value');
 		}
 
-		//Finished
+
 		public function get_html_value($id, $dkp_id=0){
 			return '<span class="positive">' . runden($this->get_value($id, $dkp_id)) . '</span>';
 		}
+		
+		public function get_apa_value($raid_id, $apa_id){
+			$strApaValue =  $this->objPagination->get($raid_id, 'raid_apa_value');
+			if($strApaValue != ""){
+				$arrApaValue = unserialize($strApaValue);
+				if($apa_id){
+					if(isset($arrApaValue[$apa_id])) return $arrApaValue[$apa_id];
+				} else {
+					return $arrApaValue;
+				}
+			}
+			return false;
+		}
 
-		//Finished
+
 		public function get_caption_value($dkp_id=0) {
 			$caption = '';
 			if($dkp_id && $this->apa->is_decay('raid', $dkp_id)) $caption = $this->apa->get_caption('raid', $dkp_id);
 			return ($caption) ? $caption : $this->pdh->get_lang('raid', 'value');
 		}
 
-		//Finished
+
 		public function get_note($id){
 			return $this->objPagination->get($id, 'raid_note');
 		}
 
-		//Finished
+
 		public function get_html_note($id){
 			return $this->get_note($id);
 		}
 
-		//Finished
+
 		public function get_additional_data($id){
 			return $this->objPagination->get($id, 'raid_additional_data');
 		}
@@ -158,7 +169,7 @@ if(!class_exists('pdh_r_raid')){
 			return $this->bbcode->toHTML($strData);
 		}
 
-		//Finished
+
 		public function get_raid_attendees($id, $skip_special = true){
 			$arrMembers = array();
 			$arrAttendees = $this->objPagination->get($id, 'additional');
@@ -172,22 +183,22 @@ if(!class_exists('pdh_r_raid')){
 			return $arrMembers;
 		}
 
-		//Finished
+
 		public function get_attendee_count($raid_id, $skip_special = true){
 			return count($this->get_raid_attendees($raid_id, $skip_special));
 		}
 
-		//Finished
+
 		public function get_raid_count(){
 			return count($this->index);
 		}
 
-		//Finished
+
 		public function get_item_count($raid_id){
 			return count($this->pdh->get('item', 'itemsofraid', array($raid_id)));
 		}
 
-		//Finished
+
 		public function get_raidids4memberid($member_id){
 			$raids4member = array();
 			foreach($this->index as $raid_id){
@@ -222,7 +233,7 @@ if(!class_exists('pdh_r_raid')){
 			return array_unique($raids4member);
 		}
 
-		//Finished
+
 		public function get_raidids4userid($user_id){
 			$arrMemberList = $this->pdh->get('member', 'connection_id', array($user_id));
 
@@ -240,7 +251,7 @@ if(!class_exists('pdh_r_raid')){
 			return $raids4member;
 		}
 
-		//Finished
+
 		public function get_raidids4eventid($event_id) {
 			return $this->objPagination->search("event_id", $event_id);
 		}
@@ -261,7 +272,7 @@ if(!class_exists('pdh_r_raid')){
 			return $arrRaids;
 		}
 
-		//Finished
+
 		public function get_lastnraids($count = 1){
 			$objQuery = $this->db->prepare("SELECT raid_id FROM __raids ORDER BY raid_date DESC")->limit($count)->execute();
 			$arrRaids = array();
@@ -274,13 +285,13 @@ if(!class_exists('pdh_r_raid')){
 			return $arrRaids;
 		}
 
-		//Finished
+
 		public function get_raidlink($raid_id, $base_url, $url_suffix = '', $blnUseController=false){
 			if ($blnUseController && $blnUseController !== '%use_controller%') return $base_url.register('routing')->clean($this->get_event_name($raid_id)).'-r'.$raid_id.register('routing')->getSeoExtension().$this->SID.$url_suffix;
 			return $base_url.$this->SID . '&amp;r='.$raid_id.$url_suffix;
 		}
 
-		//Finished
+
 		public function get_editicon($raid_id, $base_url, $url_suffix = ''){
 			$out = '<a href="'.$this->get_raidlink($raid_id, $base_url, $url_suffix).'">
 				<i class="fa fa-pencil fa-lg" title="'.$this->user->lang('edit').'"></i>
@@ -293,17 +304,17 @@ if(!class_exists('pdh_r_raid')){
 			return $out;
 		}
 
-		//Finished
+
 		public function get_html_raidlink($raid_id, $base_url, $url_suffix='',$blnUseController=false){
 			return '<a href="'.$this->get_raidlink($raid_id, $base_url, $url_suffix, $blnUseController).'">'.$this->get_event_name($raid_id).'</a>';
 		}
 
-		//Finished
+
 		public function comp_raidlink($params1, $params2){
 			return ($this->get_event_name($params1[0]) < $this->get_event_name($params2[0])) ? -1  : 1 ;
 		}
 
-		//Finished
+
 		public function get_search($search_value) {
 			$arrSearchResults = array();
 			if (is_array($this->index)){

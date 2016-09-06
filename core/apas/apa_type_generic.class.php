@@ -50,7 +50,7 @@ if( !class_exists( "apa_type_generic" ) ) {
 		
 		abstract public function modules_affected($apa_id);
 		abstract public function get_decay_val($apa_id, $date, $module, $dkp_id, $data);
-		abstract public function get_cache_date($date, $apa_id);
+		abstract public function get_last_run($date, $apa_id);
 		
 		public function pre_save_func($apa_id, $options) {
 			return $options;
