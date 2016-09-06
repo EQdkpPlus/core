@@ -103,6 +103,8 @@ abstract class super_registry {
 	public static $lite_igno = array('bridge');
 
 	protected static $const = array();
+	
+	private static $autoloadedLibs = array();
 
 	public static function init($root_path, $lite=false) {
 		try{
@@ -336,6 +338,8 @@ abstract class super_registry {
 	);
 
 	public static function autoload_libraries($strClassname){
+		if(isset(self::$autoloadedLibs[$strClassname])) return true;
+		
 		$arrParts = explode('\\', $strClassname);
 
 		$arrKeyMapping = array_flip(self::$libraries);
@@ -354,6 +358,7 @@ abstract class super_registry {
 			}
 		}
 
+		self::$autoloadedLibs[$strClassname] = 1;
 		return false;
 	}
 

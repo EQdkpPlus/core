@@ -326,7 +326,8 @@ class admin_index extends gen_class {
 
 		//Users
 		$intTotalUsers = count($this->pdh->get('user', 'id_list', array()));
-		$intInactiveUsers = count($this->pdh->get('user', 'inactive', array()));
+		$intActiveUsers = count($this->pdh->get('user', 'active_users', array()));
+		
 		//Adjustments
 		$total_adjustments  = count($this->pdh->get('adjustment', 'id_list', array()));
 		$total_dkp_items = $total_adjustments + $total_raids + $total_items;
@@ -363,7 +364,7 @@ class admin_index extends gen_class {
 			'TABLE_PREFIX'			=> $this->table_prefix,
 			'DATA_FOLDER'			=> md5($this->table_prefix.$this->dbname),
 			'EQDKP_VERSION'			=> 'FILE: '.VERSION_INT.', DB: '.$this->config->get('plus_version'),
-			'CIRCLE_USER_VALUE'		=> sprintf("%.2F", (($intTotalUsers - $intInactiveUsers) / $intTotalUsers) * 100),
+			'CIRCLE_USER_VALUE'		=> sprintf("%.2F", (($intTotalUsers - ($intTotalUsers-$intActiveUsers)) / $intTotalUsers) * 100),
 			'CIRCLE_MEMBER_VALUE'	=> sprintf("%.2F", (($total_members_ - $total_members_inactive) / $total_members_) * 100),
 			'TOTAL_USERS'			=> $intTotalUsers,
 			'CIRCLE_ITEMS'			=> sprintf("%.2F", ($total_items / $total_dkp_items)*100),

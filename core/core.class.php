@@ -32,7 +32,7 @@ class core extends gen_class {
 		public $description		= '';				// Description of the page, relevant for META-Tags
 		public $page_image		= '';				// Preview-Image, relevant for META-Tags
 		private $notifications	= false;			// Flag if notifications have been done
-
+		private $cache = array();
 		/**
 		* Construct
 		*/
@@ -526,6 +526,7 @@ class core extends gen_class {
 
 		//Returns all possible Menu Items
 		public function menu_items($show_hidden = false){
+			if(isset($this->cache['menu_items'.(($show_hidden) ? '_h' : '')])) return $this->cache['menu_items'.(($show_hidden) ? '_h' : '')];	
 			$arrItems = array(
 				array('link' => $this->controller_path_plain.$this->SID,				'text' => $this->user->lang('home'), 'static' => 1, 'default_hide' => 1, 'hidden' => 1),
 				array('link' => $this->controller_path_plain.'User'.$this->routing->getSeoExtension().$this->SID, 'text' => $this->user->lang('user_list'),'check' => 'u_userlist', 'static' => 1, 'default_hide' => 1, 'hidden' => 1),
@@ -566,7 +567,7 @@ class core extends gen_class {
 					if (is_array($arrHookItems)) $arrItems = array_merge($arrItems, $arrHookItems);
 				}
 			}
-
+			$this->cache['menu_items'.(($show_hidden) ? '_h' : '')] = $arrItems;
 			return $arrItems;
 		}
 
