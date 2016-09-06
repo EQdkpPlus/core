@@ -43,7 +43,7 @@ if (!class_exists("styles")){
 			'column_left_width',
 			'column_right_width',
 			'portal_width',
-				
+
 			'body_background_color',
 			'body_font_color',
 			'body_font_size',
@@ -172,11 +172,11 @@ if (!class_exists("styles")){
 									foreach($this->allowed_colors as $color){
 										$data_array[$color] = (string)$settings_xml->$color;
 									}
-									
+
 									$data		= array_merge($data, $data_array);
-								
+
 									$style_id	= $this->pdh->put('styles', 'update_style', array($styleid,$data));
-									
+
 									if (isset($settings_xml->classcolors) && $style_id > 0){
 										$this->ClassColorManagement($style_id, $settings_xml->classcolors, true);
 									}
@@ -184,12 +184,12 @@ if (!class_exists("styles")){
 							} else {
 								$this->pdh->put('class_colors', 'delete_classcolor', array($styleid));
 							}
-							
+
 						} else {
 							$this->pdh->put('styles', 'update_version', array((string)$xml->version, $styleid));
 						}
 					}
-					
+
 					if (!$update){
 						$this->core->message(sprintf($this->user->lang('style_reset_success'), $style['style_name']), $this->user->lang('success'), 'green');
 					} else {
@@ -233,7 +233,7 @@ if (!class_exists("styles")){
 					if (!in_array($data['style_name'], $styles)){
 						$data_array = array();
 						$blnClassColors = false;
-						
+
 						$settings_file = $this->root_path."templates/".$stylename."/settings.xml";
 						if (file_exists($settings_file)){
 							$settings_xml = simplexml_load_file($settings_file);
@@ -242,15 +242,15 @@ if (!class_exists("styles")){
 									$data_array[$color] = (string)$settings_xml->$color;
 								}
 								$data		= array_merge($data, $data_array);
-								
+
 								if (isset($settings_xml->classcolors)) $blnClassColors = true;
 							}
-							
-							
+
+
 						}
-		
+
 						$style_id	= $this->pdh->put('styles', 'add_style', array($data));
-						
+
 						if ($blnClassColors && $style_id > 0){
 							$this->ClassColorManagement($style_id, $settings_xml->classcolors, false);
 						} else {
@@ -286,7 +286,7 @@ if (!class_exists("styles")){
 				$this->core->message( $this->user->lang('admin_delete_style_success'), $this->user->lang('success'), 'green');
 			}
 		}
-		
+
 		public function remove($stylename){
 			$stylename = preg_replace("/[^a-zA-Z0-9-_]/", "", $stylename);
 			if($stylename == "") return false;
@@ -297,11 +297,11 @@ if (!class_exists("styles")){
 			$styleid = intval($styleid);
 
 			$data	= $this->pdh->get('styles', 'styles', array($styleid));
-			
+
 			if ($data){
 				$template_path = $data['template_path'];
 				$style_version = $data['style_version'];
-			
+
 				//Create here the package.xml
 
 				$fot ='<?xml version="1.0" encoding="utf-8"?>
@@ -321,7 +321,7 @@ if (!class_exists("styles")){
 				$storage_folder  = $this->pfh->FolderPath('templates/'.$template_path, 'eqdkp');
 
 				$this->pfh->putContent($storage_folder.'package.xml', $fot);
-				
+
 				$fot ='<?xml version="1.0" encoding="utf-8"?>
 <settings styleversion="'.$data['style_version'].'">
 	<template_path>'.$data['template_path'].'</template_path>'."\n";
@@ -348,7 +348,7 @@ if (!class_exists("styles")){
 
 				$fot.= '	</classcolors>'."\n";
 				$fot.='</settings>';
-				
+
 				$this->pfh->putContent($storage_folder.'settings.xml', $fot);
 
 
@@ -414,9 +414,9 @@ if (!class_exists("styles")){
 					'ENCODED_FILENAME' => base64_encode($file),
 				));
 			}
-			
+
 			$this->jquery->Dialog('diffviewer', $this->user->lang('liveupdate_show_differences'), array('url'=>$this->root_path.'admin/manage_styles.php'.$this->SID.'&styleid='.$styleid.'&diff=\'+file+\'', 'withid'=>'file', 'height'=> '700', 'width'=>'900'));
-			
+
 			$this->tpl->assign_vars(array(
 				'S_LOCAL_UPDATE'	=> true,
 				'S_CHANGED_FILES'	=> (count($arrChangedFiles) > 0) ? true : false,
@@ -508,11 +508,11 @@ if (!class_exists("styles")){
 				$this->pdh->put('class_colors', 'add_classcolor', array($template, $class_id, $color));
 			}
 		}
-		
+
 		public function scan_templates($templatepath, $orig_templatepath=false, $remove_templatepath = true){
 			$files = array();
 			if (!$orig_templatepath) $orig_templatepath = $templatepath;
-			
+
 			if ( is_dir($templatepath) && $dir = @opendir($templatepath) ){
 				while ($file = @readdir($dir)){
 					if (is_dir($templatepath.'/'.$file) && valid_folder($templatepath.'/'.$file)){
@@ -520,8 +520,7 @@ if (!class_exists("styles")){
 						$files = array_merge($files, $files_rec);
 					} else {
 						$ext = pathinfo($file, PATHINFO_EXTENSION);
-						$this->pdl->deprecated('jquery_tmpl.css');
-						if ($file != "index.php" && $file != "index.html" && $file != 'user_additions.css' && $file != 'jquery_tmpl.css' && in_array($ext, $this->allowed_extensions)){
+						if ($file != "index.php" && $file != "index.html" && $file != 'user_additions.css' && in_array($ext, $this->allowed_extensions)){
 							$filepath = ($remove_templatepath) ? str_replace($orig_templatepath, '', $templatepath.'/'.$file) : $file;
 							$filepath = (substr($filepath, 0, 1) === '/') ? substr($filepath, 1) : $filepath;
 							$files[$filepath] = $file;
@@ -574,21 +573,21 @@ if (!class_exists("styles")){
 					}
 				}
 			}
-			
-			
+
+
 		}
-		
+
 		public function deleteStyleCache($templatepath){
 			//Delete the Combined Files
 			$arrDir = sdir($storage_folder = $this->pfh->FolderPath('templates', 'eqdkp').$templatepath, 'combined_*');
 			foreach($arrDir as $file){
 				$this->pfh->Delete('templates/'.$templatepath.'/'.$file, 'eqdkp');
 			}
-			
+
 			$this->tpl->delete_cache($templatepath);
 		}
-		
-		
+
+
 		public function styleOptions(){
 			$arrOptions = array(
 				'body' => array(
@@ -672,11 +671,11 @@ if (!class_exists("styles")){
 					'misc_text3' => 'font-family',
 				)
 			);
-			
+
 			return $arrOptions;
 		}
 
-		
+
 		public function convertNameToLessVar($strName){
 			$strName = preg_replace_callback(
 					"/(?:^|_)(.?)/",
@@ -688,6 +687,6 @@ if (!class_exists("styles")){
 			return $strName;
 		}
 	}
-	
+
 }
 ?>

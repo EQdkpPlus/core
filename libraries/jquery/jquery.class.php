@@ -320,10 +320,9 @@ if (!class_exists("jquery")) {
 		* @param $template		Template name
 		*/
 		public function CustomUI($template){
-			$this->pdl->deprecated('jquery_tmpl.css');
-			
 			$customui_css = $this->root_path.'templates/'.$template.'/jquery_tmpl.css';
 			if(is_file($customui_css)){
+				$this->pdl->deprecated('jquery_tmpl.css');
 				$this->tpl->css_file($customui_css);
 			}
 		}
