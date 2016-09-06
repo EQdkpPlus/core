@@ -636,7 +636,7 @@ class calendarevent_pageobject extends pageobject {
 			$available_roles	= array_keys($this->raidcategories);
 			$charswithwrongrole	= $this->pdh->get('calendar_raids_attendees', 'chars_with_wrong_role', array($this->url_id, $available_roles));
 			if(is_array($charswithwrongrole) && count($charswithwrongrole) > 0){
-				$this->raidcategories[-1]		= 'DeletedRole';
+				$this->raidcategories[-9]		= 'DeletedRole';
 				$this->charswithdeletedroles	= array_keys($charswithwrongrole);
 			}
 		}
@@ -652,12 +652,12 @@ class calendarevent_pageobject extends pageobject {
 				if($attendeeid > 0){
 					$charshasdeletedrole	= (is_array($this->charswithdeletedroles) && count($this->charswithdeletedroles) > 0 && in_array($attendeeid, $this->charswithdeletedroles)) ? true : false;
 					$attclassid = (isset($eventdata['extension']['raidmode']) && $eventdata['extension']['raidmode'] == 'role') ? $attendeedata['member_role'] : $this->pdh->get('member', 'classid', array($attendeeid));
-					$role_class = (($eventdata['extension']['raidmode'] == 'role') ? (($charshasdeletedrole) ? '-1' : $attendeedata['member_role']) : $attclassid);
+					$role_class = (($eventdata['extension']['raidmode'] == 'role') ? (($charshasdeletedrole) ? '-9' : $attendeedata['member_role']) : $attclassid);
 
 					// we need a roleID or a classID. If not, the char is not shown but counted
-					if($role_class > 0 || $role_class == '-1'){
+					if($role_class > 0 || $role_class == '-9'){
 						if($charshasdeletedrole){
-							$attendeedata['member_role']	= '-1';
+							$attendeedata['member_role']	= '-9';
 						}
 						$this->attendees[$attendeedata['signup_status']][$role_class][$attendeeid] = $attendeedata;
 						$this->attendees_count[$attendeedata['signup_status']][$attendeeid] = true;
@@ -779,17 +779,16 @@ class calendarevent_pageobject extends pageobject {
 			foreach ($this->raidcategories as $classid=>$classname){
 				$act_classcount++;
 
-				$classsbrk	= ($classid == -1 && (!isset($this->attendees[$statuskey][$classid]) || (isset($this->attendees[$statuskey][$classid]) && count($this->attendees[$statuskey][$classid]) == 0))) ? count($this->raidcategories) - 1 : count($this->raidcategories);
 				$classcount	= (isset($this->attendees[$statuskey][$classid])) ? count($this->attendees[$statuskey][$classid]) : 0;
 				$classcount	+= (isset($this->guests[$statuskey][$classid])) ? count($this->guests[$statuskey][$classid]) : 0;
 				$this->tpl->assign_block_vars('raidstatus.classes', array(
 					'ID'			=> $classid,
-					'NAME'			=> ($classid == -1) ? $this->user->lang('raidevent_deleted_role_assigned') : $classname,
+					'NAME'			=> ($classid == -9) ? $this->user->lang('raidevent_deleted_role_assigned') : $classname,
 					'CLASS_ICON'	=> ($eventdata['extension']['raidmode'] == 'role') ? $this->game->decorate('roles', $classid) : $this->game->decorate('primary', $classid),
-					'MAX'			=> ($eventdata['extension']['raidmode'] == 'none' && $eventdata['extension']['distribution'][$classid] == 0) ? '' : '/'.(($classid == '-1') ? '&infin;' : $eventdata['extension']['distribution'][$classid]),
+					'MAX'			=> ($eventdata['extension']['raidmode'] == 'none' && $eventdata['extension']['distribution'][$classid] == 0) ? '' : '/'.(($classid == '-9') ? '&infin;' : $eventdata['extension']['distribution'][$classid]),
 					'MAXCOUNT'		=> (isset($eventdata['extension']['distribution'][$classid])) ? $eventdata['extension']['distribution'][$classid] : 0,
 					'COUNT'			=> $classcount,
-					'SHOW'			=> ($classid > 0 || ($classid == -1 && isset($this->attendees[$statuskey][$classid]) && count($this->attendees[$statuskey][$classid]) > 0)) ? true : false,
+					'SHOW'			=> ($classid > 0 || ($classid == -9 && isset($this->attendees[$statuskey][$classid]) && count($this->attendees[$statuskey][$classid]) > 0) || ($classid == 0 && $eventdata['extension']['distribution'][$classid] > 0)) ? true : false,
 				));
 
 				// The characters
