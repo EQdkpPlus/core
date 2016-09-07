@@ -42,6 +42,7 @@ class update_2308 extends sql_update_task {
 					3			=> 'Alter table adjustments',
 					4			=> 'Alter table members',
 					5			=> 'Alter table members',
+					6			=> 'Create table member_points'
 				),
 			'german' => array(
 				'update_2308'	=> 'EQdkp Plus 2.3.0.8 Update',
@@ -50,6 +51,7 @@ class update_2308 extends sql_update_task {
 					3			=> 'Erweitere Tabelle adjustments',
 					4			=> 'Erweitere Tabelle members',
 					5			=> 'Erweitere Tabelle members',
+					6			=> 'Erstelle Tabelle member_points',
 			),
 		);
 
@@ -60,6 +62,19 @@ class update_2308 extends sql_update_task {
 			3	=> "ALTER TABLE `__adjustments` ADD COLUMN `adjustment_apa_value` TEXT NULL COLLATE 'utf8_bin'",
 			4	=> "ALTER TABLE `__members` ADD COLUMN `points` TEXT NULL COLLATE 'utf8_bin'",
 			5	=> "ALTER TABLE `__members` ADD COLUMN `points_apa` TEXT NULL COLLATE 'utf8_bin'",
+			6 => "CREATE TABLE `__member_points` (
+	`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`time` INT(11) UNSIGNED NOT NULL DEFAULT '0',
+	`member_id` INT(11) UNSIGNED NOT NULL DEFAULT '0',
+	`mdkp_id` INT(11) UNSIGNED NOT NULL DEFAULT '0',
+	`current` FLOAT(10,2) UNSIGNED NOT NULL DEFAULT '0.00',
+	`earned` FLOAT(10,2) UNSIGNED NOT NULL DEFAULT '0.00',
+	`spent` FLOAT(10,2) UNSIGNED NOT NULL DEFAULT '0.00',
+	`adjustments` FLOAT(10,2) UNSIGNED NOT NULL DEFAULT '0.00',
+	`misc` TEXT NULL COLLATE 'utf8_bin',
+	`type` VARCHAR(10) NULL DEFAULT NULL,
+	PRIMARY KEY (`id`)
+) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;",
 		);
 	}
 
