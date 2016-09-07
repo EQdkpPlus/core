@@ -669,7 +669,7 @@ class Less_Parser{
 
 
 	private function isWhitespace($offset = 0) {
-		return preg_match('/\s/',$this->input[ $this->pos + $offset]);
+		return strpos(" \t\n\r\v\f", $this->input[$this->pos + $offset]) !== false;
 	}
 
 	/**
