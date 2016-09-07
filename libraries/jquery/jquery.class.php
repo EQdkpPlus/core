@@ -160,7 +160,7 @@ if (!class_exists("jquery")) {
 				$this->tpl->css_file($this->root_path.'templates/fullcalendar.print.css', 'print');
 
 				// now load the fullcalendar language file
-				$this->tpl->js_file($this->path."js/fullcalendar/lang-all.js");
+				$this->tpl->js_file($this->path."js/fullcalendar/locale-all.js");
 				$this->inits['fullcalendar']	= true;
 			}
 		}
