@@ -48,7 +48,14 @@ if(!class_exists('pdh_r_generic')){
 			$lang_inc = $module_path.'/language/'.registry::fetch('user')->data['user_lang'].'.php';
 			if(!file_exists($lang_inc)){
 				$lang_inc = $module_path.'/language/'.$this->default_lang.'.php';
+			} else {
+				include($lang_inc);
+				$this->module_lang = isset($module_lang) ? $module_lang : array();
+				$this->preset_lang = isset($preset_lang) ? $preset_lang : array();
+				return;
 			}
+			
+			//Include the default lang file
 			if(file_exists($lang_inc)){
 				include($lang_inc);
 				$this->module_lang = isset($module_lang) ? $module_lang : array();

@@ -83,8 +83,11 @@ if (!class_exists("filehandler_php")) {
 			//Create a .htaccess
 			if($deny_all){
 				$htaccess = $this->FilePath($folder.'/.htaccess', $plugin, true);
-				$blnWritten = $this->putContent($htaccess, "<Files *>\nOrder Allow,Deny\nDeny from All\n</Files>\n");
-				return $blnWritten;
+				if(!file_exists($htaccess)){
+					$blnWritten = $this->putContent($htaccess, "<Files *>\nOrder Allow,Deny\nDeny from All\n</Files>\n");
+					return $blnWritten;
+				}
+				return true;
 			}else{
 				return true;	
 			}

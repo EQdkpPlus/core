@@ -26,7 +26,11 @@ if (!defined('EQDKP_INC')){
 if (!class_exists('pdh_r_calendar_raids_guests')){
 	class pdh_r_calendar_raids_guests extends pdh_r_generic{
 
-		private $guests;
+		private $guests = array();
+		private $guestsEvent = array();
+		private $guestsStatus = array();
+		private $guestsStatus2 = array();
+		
 		public $hooks = array(
 			'guests_update',
 		);
@@ -47,6 +51,9 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 			$this->pdc->del('pdh_calendar_raids_table.guestsStatus2');
 			$this->pdc->del_prefix('plugin.guests');
 			$this->guests = NULL;
+			$this->guestsStatus = NULL;
+			$this->guestsStatus2 = NULL;
+			$this->guestsEvent = NULL;
 		}
 
 		/**
@@ -60,12 +67,13 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 			$this->guestsEvent		= $this->pdc->get('pdh_calendar_raids_table.guestsEvents');
 			$this->guestsStatus 	= $this->pdc->get('pdh_calendar_raids_table.guestsStatus');
 			$this->guestsStatus2 	= $this->pdc->get('pdh_calendar_raids_table.guestsStatus2');
+			
 			if($this->guests !== NULL && $this->guestsEvent !== NULL && $this->guestsStatus !== NULL && $this->guestsStatus2 !== NULL){
 				return true;
 			}
 
 			// empty array as default
-			$this->guests	= array();
+			$this->guests = $this->guestsEvent = $this->guestsStatus = $this->guestsStatus2 = array();
 
 			$objQuery = $this->db->query('SELECT * FROM __calendar_raid_guests;');
 			if($objQuery){
