@@ -600,8 +600,8 @@ if (!class_exists("environment")) {
 			if($blnWithServerPath){
 				$strRoot .= $this->server_path;
 				
-				if($eqdkp_root_path){
-					$strRoot = realpath(registry::get_const('root_path'));
+				if($blnPathToEQdkpRoot){
+					$strRoot = realpath($strRoot.registry::get_const('root_path'));
 				}
 			}
 			
