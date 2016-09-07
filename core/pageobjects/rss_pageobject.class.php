@@ -32,11 +32,13 @@ class rss_pageobject extends pageobject {
 		$intCategoryID = $this->in->get('c', 0);
 		$strExchangeKey = $this->in->get('key');
 		$user_id = $this->user->getUserIDfromExchangeKey($strExchangeKey);
-		
+		$strTitle = '';
 		//Get latest Articles for a specific category
 		if ($intCategoryID){
 			$arrArticleIDs = $this->pdh->get('article_categories', 'published_id_list', array($intCategoryID, $user_id, true));
 			$arrCategory = $this->pdh->get('article_categories', 'data', array($intCategoryID));
+			$arrCategory['name'] = $this->user->multilangValue($arrCategory['name']);
+			$strTitle = ': '.$arrCategory['name'];
 			
 			switch($arrCategory['sortation_type']){
 				case 4:
@@ -61,8 +63,8 @@ class rss_pageobject extends pageobject {
 		$feed				= registry::register('feed');
 		$feed->feedfile		= $this->env->link.$this->strPathPlain.'?key='.$strExchangeKey;
 		$feed->link			= $this->env->link;
-		$feed->title		= $this->config->get('main_title').": ".$arrCategory['name'];
-		$feed->description	= strip_tags(xhtml_entity_decode($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags($arrCategory['description']))));
+		$feed->title		= $this->config->get('main_title').$strTitle;
+		$feed->description	= strip_tags(br2nl(xhtml_entity_decode($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags($arrCategory['description'])))));
 		$feed->published	= time();
 		$feed->language		= 'EN-EN';
 		
@@ -95,8 +97,8 @@ class rss_pageobject extends pageobject {
 
 				$rssitem = registry::register('feeditems', array($intArticleID));
 				$rssitem->title			= sanitize($this->pdh->get('articles', 'title', array($intArticleID)));
-				$rssitem->description	= $strText;
-				$rssitem->link			= $this->user->removeSIDfromString($this->env->link.$this->pdh->get('articles',  'path', array($intArticleID)));
+				$rssitem->description	= strip_tags(br2nl(xhtml_entity_decode($strText)));
+				$rssitem->link			= $this->user->removeSIDfromString($this->env->link.$this->controller_path_plain.$this->pdh->get('articles',  'path', array($intArticleID)));
 				$rssitem->published		= $this->pdh->get('articles', 'date', array($intArticleID));
 				$rssitem->author		= $this->pdh->geth('articles', 'user_id', array($intArticleID));
 				$rssitem->source		= $feed->link;

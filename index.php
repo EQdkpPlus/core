@@ -304,6 +304,7 @@ class controller extends gen_class {
 				$intCategoryID = $arrArticle['category'];
 				registry::add_const('categoryid', $intCategoryID);
 				$arrCategory = $this->pdh->get('article_categories', 'data', array($intCategoryID));
+				$arrCategory['name'] = $this->user->multilangValue($arrCategory['name']);
 
 				//Category Permissions
 				$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($arrArticle['category'], $this->user->id));

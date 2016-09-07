@@ -1109,6 +1109,10 @@ function get_chmod(){
 	return 0775;
 }
 
+function br2nl( $input ) {
+	return preg_replace('/<br(\s+)?\/?>/i', "\n", $input);
+}
+
 function human_filesize($bytes, $dec = 2)
 {
 	$size   = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
