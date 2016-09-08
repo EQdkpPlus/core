@@ -57,6 +57,7 @@ CREATE TABLE `__users` (
 	`awaymode_startdate` INT(11) NULL DEFAULT '0',
 	`awaymode_enddate` INT(11) NULL DEFAULT '0',
 	`awaymode_note` text COLLATE utf8_bin,
+	`user_email_confirmed` INT(2) NOT NULL DEFAULT '1',
 	PRIMARY KEY (`user_id`),
 	UNIQUE KEY `username` (`username`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
