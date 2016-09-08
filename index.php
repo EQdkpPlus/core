@@ -304,7 +304,8 @@ class controller extends gen_class {
 				$intCategoryID = $arrArticle['category'];
 				registry::add_const('categoryid', $intCategoryID);
 				$arrCategory = $this->pdh->get('article_categories', 'data', array($intCategoryID));
-					
+				$arrCategory['name'] = $this->user->multilangValue($arrCategory['name']);
+			
 				//Category Permissions
 				$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($arrArticle['category'], $this->user->id));
 				if (!$arrPermissions['read']) message_die($this->user->lang('article_noauth'), $this->user->lang('noauth_default_title'), 'access_denied', true);
