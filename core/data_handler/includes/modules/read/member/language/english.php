@@ -58,6 +58,7 @@ $module_lang = array(
 	"defaultrole" => 'Role',
 	"raidgroups" => 'Raidgroups',
 	"picture" => 'Avatar',
+	"user" => 'User',
 	);
 	$preset_lang = array(
 	"mname" => 'Character name',

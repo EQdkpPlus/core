@@ -872,8 +872,14 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_editbutton($id){
-			return '<span onclick="EditChar('.$id.')" class="hand"><i class="fa fa-pencil fa-lg" title="'.$this->user->lang('edit').'"></i></span>
-					<a href="'.$this->root_path.'admin/manage_members.php'.$this->SID.'&member='.$id.'"><i class="fa fa-lg fa-list-alt"></i></a>';
+			$out = '<span onclick="EditChar('.$id.')" class="hand"><i class="fa fa-pencil fa-lg" title="'.$this->user->lang('edit').'"></i></span>
+					&nbsp;&nbsp;<a href="'.$this->root_path.'admin/manage_members.php'.$this->SID.'&member='.$id.'"><i class="fa fa-lg fa-list-alt"></i></a>';
+			if($this->get_active($id)){
+				$out .= '&nbsp;&nbsp;&nbsp;<a href="'.$this->root_path.'admin/manage_members.php'.$this->SID.'&setinactive='.$id.'&link_hash='.$this->user->csrfGetToken('Manage_Memberssetinactive').'"><i class="fa fa-check-square-o fa-lg icon-color-green"></i></a>';
+			} else {
+				$out .= '&nbsp;&nbsp;&nbsp;<a href="'.$this->root_path.'admin/manage_members.php'.$this->SID.'&setactive='.$id.'&link_hash='.$this->user->csrfGetToken('Manage_Memberssetactive').'"><i class="fa fa-square-o fa-lg icon-color-red"></i></a>';
+			}
+			return $out;
 		}
 
 		public function get_delete_requested(){

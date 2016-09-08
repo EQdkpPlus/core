@@ -34,6 +34,8 @@ class Manage_Members extends page_generic {
 			'mstatus' => array('process' => 'member_status', 'csrf'=>true),
 			'rankc' => array('process' => 'member_ranks', 'csrf'=>true),
 			'defrolechange'	=> array('process' => 'ajax_defaultrole', 'csrf'=>true),
+			'setinactive' => array('process' => 'process_set_inactive', 'csrf'=>true),
+			'setactive' => array('process' => 'process_set_active', 'csrf'=>true),
 			'member' => array('process' => 'display_member_history'),
 		);
 		parent::__construct(false, $handler, array('member', 'name'), null, 'selected_ids[]');
@@ -45,6 +47,22 @@ class Manage_Members extends page_generic {
 		$this->pdh->process_hook_queue();
 		echo($this->user->lang('uc_savedmsg_roles'));
 		exit;
+	}
+	
+	public function process_set_active(){
+		$intMemberID = $this->in->get('setactive', 0);
+		$this->pdh->put('member', 'change_status', array($intMemberID, 1));
+		
+		$messages[] = array('title' => $this->user->lang('save_suc'), 'text' => $this->user->lang('mems_status_change').$this->pdh->get('member', 'name', array($intMemberID)), 'color' => 'green');
+		$this->display($messages);
+	}
+	
+	public function process_set_inactive(){
+		$intMemberID = $this->in->get('setinactive', 0);
+		$this->pdh->put('member', 'change_status', array($intMemberID, 0));
+		
+		$messages[] = array('title' => $this->user->lang('save_suc'), 'text' => $this->user->lang('mems_status_change').$this->pdh->get('member', 'name', array($intMemberID)), 'color' => 'green');
+		$this->display($messages);
 	}
 
 	public function delete_history_items(){

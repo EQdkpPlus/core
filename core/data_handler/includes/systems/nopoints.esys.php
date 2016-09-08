@@ -498,7 +498,6 @@ $system_def = array(
 					array('name' => 'mcname', 'sort' => true, 'th_add' => 'class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
 					array('name' => 'mlevel', 'sort' => true, 'th_add' => 'class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
 					array('name' => 'mmainname', 'sort' => true, 'th_add' => 'class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
-					array('name' => 'mactive', 'sort' => true, 'th_add' => 'class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
 				),
 			),
 		),//end manage members

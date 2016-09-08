@@ -294,7 +294,7 @@ class portal extends gen_class {
 	public function check_file($path, $plugin='', $nodelete=false){
 		$cwd = ($plugin) ? $this->root_path . 'plugins/'.$plugin.'/portal/'.$path.'_portal.class.php' : $this->root_path . 'portal/' . $path .'/'.$path.'_portal.class.php';
 		// File not there -> Delete it from DB!
-		if(!is_file($cwd) || ($plugin && !$this->pm->check($plugin, PLUGIN_INSTALLED))){
+		if(!file_exists($cwd) || ($plugin && !$this->pm->check($plugin, PLUGIN_INSTALLED))){
 			if(!$nodelete) {
 				$this->pdh->put('portal', 'delete', array($path, 'path'));
 				$this->pdh->process_hook_queue();
