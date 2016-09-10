@@ -112,6 +112,7 @@ if ( !class_exists( "apa_startpoints" ) ) {
 				$this->pdh->put('adjustment', 'add_adjustment', array($this->apa->get_data('value', $apa_id), $this->apa->get_data('name', $apa_id), $member_id, $this->apa->get_data('event', $apa_id), NULL, $date));
 			}
 
+			$this->pdh->process_hook_queue();
 		}
 		
 		public function pre_save_func($apa_id, $options) {
@@ -137,6 +138,8 @@ if ( !class_exists( "apa_startpoints" ) ) {
 			
 			$this->db->prepare("DELETE FROM __adjustments WHERE adjustment_reason=? AND event_id=? ")->execute($this->apa->get_data('name', $apa_id), intval($this->apa->get_data('event', $apa_id)));
 			$this->pdh->enqueue_hook('adjustment_update');
+			
+			$this->pdh->process_hook_queue();
 		}
 	}//end class
 }//end if

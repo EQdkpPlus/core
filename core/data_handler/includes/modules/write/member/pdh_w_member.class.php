@@ -447,8 +447,8 @@ if ( !class_exists( "pdh_w_member" ) ) {
 			if($arrMemberids === false){
 				$this->db->query("UPDATE __members SET points='';");
 				$this->pdh->enqueue_hook('member_update', array(), array('action' => 'update'));
-			}elseif(is_array($arrMemberids)){
-				$this->db->prepare("UPDATE __members SET points='' WHERE member_id :in;")->in($arrMemberids)->execute();
+			}elseif(is_array($arrMemberids) && count($arrMemberids)){
+				$this->db->prepare("UPDATE __members SET points='' WHERE member_id :in")->in($arrMemberids)->execute();
 				$this->pdh->enqueue_hook('member_update', $arrMemberids, array('action' => 'update', 'members' => $arrMemberids));
 			}
 		}

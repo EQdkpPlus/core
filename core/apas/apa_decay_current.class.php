@@ -101,13 +101,14 @@ if ( !class_exists( "apa_decay_current" ) ) {
 			// check if it's the first calculation
 			if($last_run == $decay_start) {
 				$value = $this->pdh->get('points', 'current_history', array($data['member_id'], $data['dkp_id'], 0, $decay_start, $data['event_id'], $data['itempool_id'], $data['with_twink']));
-			// check if it's in the zero-time
+			// check if it's in the zero-time	
 			} elseif(($refdate - $this->apa->get_data('zero_time', $apa_id)*2592000) > $last_run) {
 				$value = 0;
 			// normal calculation, get points from previous decay and add currently earned points
 			} else {
 				//get from member_cache
 				$arrMemberCache = $this->pdh->get('member', 'apa_points', array($data['member_id'], $apa_id, $data['dkp_id'], $data['with_twink']));
+
 				if($arrMemberCache && $arrMemberCache['time'] == $last_run){
 					$value = $arrMemberCache['val'];
 					$intCacheTime = $arrMemberCache['time'];
@@ -115,7 +116,7 @@ if ( !class_exists( "apa_decay_current" ) ) {
 				} else {
 					//Recalculate Value until the Cache Date
 					$previous_calc = $last_run-$decay_time;
-					$value = $this->apa->get_value($module, $dkp_id, $previous_calc, $data);
+					$value = $this->apa->get_value($module, $dkp_id, $previous_calc, $data, true);
 					$value += $this->pdh->get('points', 'current_history', array($data['member_id'], $data['dkp_id'], $previous_calc, $last_run, $data['event_id'], $data['itempool_id'], $data['with_twink']));
 					$blnNeedsRecalc = true;
 					$intCacheTime = ($arrMemberCache && isset($arrMemberCache['time'])) ? $arrMemberCache['time'] : 0;
@@ -146,25 +147,25 @@ if ( !class_exists( "apa_decay_current" ) ) {
 		
 		public function recalculate($apa_id){
 			$this->pdh->put('member', 'reset_all_apa_points', array($apa_id));
-			
+			$this->pdh->process_hook_queue();
 			return true;
 		}
 
 		public function add_layout_changes($apa_id) {
 			$this->pdh->put('member', 'reset_all_apa_points', array($apa_id));
-				
+			$this->pdh->process_hook_queue();
 			return true;
 		}
 		
 		public function update_layout_changes($apa_id) {
 			$this->pdh->put('member', 'reset_all_apa_points', array($apa_id));
-			
+			$this->pdh->process_hook_queue();
 			return true;
 		}
 		
 		public function delete_layout_changes($apa_id) {
 			$this->pdh->put('member', 'reset_all_apa_points', array($apa_id));
-			
+			$this->pdh->process_hook_queue();
 			return true;
 		}
 		
@@ -172,6 +173,7 @@ if ( !class_exists( "apa_decay_current" ) ) {
 			if($module == 'current'){
 				list($memberId, $mdkpid) = explode("_", $id);
 				$this->pdh->put('member', 'reset_apa_points', array($memberId, $apa_id));
+				$this->pdh->process_hook_queue();
 			}
 		}
 		

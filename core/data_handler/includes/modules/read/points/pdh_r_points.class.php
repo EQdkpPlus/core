@@ -91,8 +91,9 @@ if ( !class_exists( "pdh_r_points" ) ) {
 				
 				}			
 			}
-			
-			if($strHook == 'member_update' && is_array($affected_ids) && count($affected_ids)) {
+			if((isset($arrData['apa']) && $arrData['apa']) || ($strAction == 'add' && ($strHook == 'itempool_update' || $strHook == 'multidkp_update' || $strHook == 'member_update'))){
+				//Nothing to do with APA or member_cache
+			} elseif($strHook == 'member_update' && is_array($affected_ids) && count($affected_ids)) {
 				$apaAffectedIDs = array();
 				$arrTotalAffected = array_merge($arrTotalAffected, $affected_ids);
 				foreach($this->pdh->get('multidkp', 'id_list') as $mdkpid){

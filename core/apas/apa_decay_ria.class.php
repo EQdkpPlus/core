@@ -261,6 +261,7 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 			} elseif($module == 'raid'){
 				$this->pdh->put('raid', 'update_apa_value', array($apa_id, $id, ''));
 			}
+			$this->pdh->process_hook_queue();
 		}
 	}//end class
 }//end if

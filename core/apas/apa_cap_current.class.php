@@ -159,6 +159,7 @@ if ( !class_exists( "apa_cap_current" ) ) {
 			$this->config->del('apa_cap_next_run_'.$apa_id);
 			$this->pdh->enqueue_hook('adjustment_update');
 			$this->cronjobs->run_cron('pointcap', true);
+			$this->pdh->process_hook_queue();
 		}
 	}//end class
 }//end if
