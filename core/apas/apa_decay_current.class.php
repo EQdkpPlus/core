@@ -87,7 +87,6 @@ if ( !class_exists( "apa_decay_current" ) ) {
 		}
 		
 		public function get_value($apa_id, $last_run, $module, $dkp_id, $data, $refdate) {
-			echo "get_decay_value ".$last_run." ".$data['id'];
 			// load decay parameters, set decay_start to its proper timestamp (from somewhere at that day to exectime)
 			$decay_start = $this->apa->get_data('start_date', $apa_id);	
 			$exectime = $this->apa->get_data('exectime', $apa_id);

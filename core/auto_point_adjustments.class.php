@@ -268,7 +268,7 @@ if ( !defined('EQDKP_INC') ){
 			if(!$date) $date = $this->time->time;
 			$apa_id = $this->get_apa_id($dkp_id, $module);
 			$last_run = $this->get_apa_type($this->apa_tab[$apa_id]['type'])->get_last_run($date, $apa_id);
-			d("last run ".$this->apa_tab[$apa_id]['type']." ".$last_run);
+
 			//Check if update needed
 			if($this->needs_update($module, $data['id'])){
 				$this->get_apa_type($this->apa_tab[$apa_id]['type'])->reset_cache($apa_id, $module, $data['id']);

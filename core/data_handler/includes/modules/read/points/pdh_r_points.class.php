@@ -274,8 +274,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 		 */
 		public function get_current_history($member_id, $multidkp_id, $from=0, $to=PHP_INT_MAX, $event_id=0, $itempool_id=0, $with_twink=true, $blnWithAPA=false){
 			if(!isset($this->decayed[$multidkp_id])) $this->decayed[$multidkp_id] = $this->apa->is_decay('current', $multidkp_id);
-			echo "current_history mid".$member_id." ".$multidkp_id." ".$from." to ".$to;
-			
+
 			if($blnWithAPA && $this->decayed[$multidkp_id]){
 				echo "decayed";
 				$data =  array(
