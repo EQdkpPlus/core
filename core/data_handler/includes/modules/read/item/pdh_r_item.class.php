@@ -108,7 +108,7 @@ if(!class_exists('pdh_r_item')){
 				if(!isset($this->decayed[$dkp_id])) $this->decayed[$dkp_id] = $this->apa->is_decay('item', $dkp_id);
 				if($this->decayed[$dkp_id]) {
 					$data = array('id' => $id, 'value' => $this->objPagination->get($id, 'item_value'), 'date' => $this->objPagination->get($id, 'item_date'));
-					$val = $this->apa->get_decay_val('item', $dkp_id, $date, $data);
+					$val = $this->apa->get_value('item', $dkp_id, $date, $data);
 				}
 			}
 			return (isset($val)) ? (float)$val : (float)$this->objPagination->get($id, 'item_value');

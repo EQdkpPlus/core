@@ -74,7 +74,7 @@ if ( !class_exists( "pdh_w_item" ) ) {
 				
 				$log_action = $this->logs->diff(false, $arrNew, $this->arrLogLang);
 				$this->log_insert('action_item_added', $log_action, $item_id, $item_name);
-				$this->pdh->enqueue_hook('item_update', $item_id, array('action' => 'add', 'time' => $time));
+				$this->pdh->enqueue_hook('item_update', $item_id, array('action' => 'add', 'time' => $time, 'members' => $item_buyers));
 				return $item_id;
 			}
 			return false;
@@ -206,7 +206,7 @@ if ( !class_exists( "pdh_w_item" ) ) {
 				
 				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
 				$this->log_insert('action_item_updated', $log_action, $item_id, $old['name']);
-				$this->pdh->enqueue_hook('item_update', $hook_id, array('action' => 'update', 'time' => $time));
+				$this->pdh->enqueue_hook('item_update', $hook_id, array('action' => 'update', 'time' => $time, 'members' => array_merge($updated_mems, $added_mems, $items2del)));
 				$this->db->commitTransaction();
 				return true;
 			}
@@ -236,7 +236,7 @@ if ( !class_exists( "pdh_w_item" ) ) {
 					'{L_VALUE}'		=> $old['value']);
 				
 				$this->log_insert('action_item_deleted', $log_action, $item_id, $old['name']);
-				$this->pdh->enqueue_hook('item_update', $item_id, array('action' => 'delete', 'time' => $old['date']));
+				$this->pdh->enqueue_hook('item_update', $item_id, array('action' => 'delete', 'time' => $old['date'], 'members' => array($old['buyer'] )));
 				return true;
 			}
 			return false;

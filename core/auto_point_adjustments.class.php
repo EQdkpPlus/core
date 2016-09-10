@@ -34,6 +34,8 @@ if ( !defined('EQDKP_INC') ){
 		private $valid_symbols		= array('+', '-', '*', '/', ',', '(', ')', '?', ':', '==', '<=', '>=', '>', '<', '!=', '!', '&&', '||', '%'); //symbols left of a symbol should not occur in symbols to the right of them
 		
 		private $decayed_pools		= array();
+		private $cap_pools			= array();
+		private $hardcap_pools		= array();
 		
 		private $apa_types_inst		= array();
 		
@@ -190,6 +192,7 @@ if ( !defined('EQDKP_INC') ){
 			if(empty($this->apa_tab)) return false;
 			if(empty($this->decayed_pools)) {
 				foreach($this->apa_tab as $apa_id=> $apa) {
+					if(stripos($apa['type'], 'decay') === false) continue;
 					$modules = $this->get_apa_type($apa['type'])->modules_affected($apa_id);
 					foreach($apa['pools'] as $dkp_id) {
 						foreach($modules as $_module) {
@@ -199,6 +202,41 @@ if ( !defined('EQDKP_INC') ){
 				}
 			}
 			if(!empty($this->decayed_pools[$pool]) && in_array($module, $this->decayed_pools[$pool])) return true;
+			return false;
+		}
+		
+		public function is_cap($module, $pool) {
+			if(empty($this->apa_tab)) return false;
+			if(empty($this->cap_pools)) {
+				foreach($this->apa_tab as $apa_id=> $apa) {
+					if(stripos($apa['type'], 'cap') === false) continue;
+					$modules = $this->get_apa_type($apa['type'])->modules_affected($apa_id);
+					foreach($apa['pools'] as $dkp_id) {
+						foreach($modules as $_module) {
+							$this->cap_pools[$dkp_id][] = $_module;
+						}
+					}
+				}
+			}
+			if(!empty($this->cap_pools[$pool]) && in_array($module, $this->cap_pools[$pool])) return true;
+			return false;
+		}
+		
+		public function is_hardcap($module, $pool) {
+			if(empty($this->apa_tab)) return false;
+			if(empty($this->hardcap_pools)) {
+				foreach($this->apa_tab as $apa_id=> $apa) {
+					
+					if(stripos($apa['type'], 'hardcap') === false) continue;
+					$modules = $this->get_apa_type($apa['type'])->modules_affected($apa_id);
+					foreach($apa['pools'] as $dkp_id) {
+						foreach($modules as $_module) {
+							$this->hardcap_pools[$dkp_id][] = $_module;
+						}
+					}
+				}
+			}
+			if(!empty($this->hardcap_pools[$pool]) && in_array($module, $this->hardcap_pools[$pool])) return true;
 			return false;
 		}
 		
@@ -224,13 +262,13 @@ if ( !defined('EQDKP_INC') ){
 		 *
 		 * @return 		float
 		 */
-		public function get_decay_val($module, $dkp_id, $date=0, $data=array()) {
+		public function get_value($module, $dkp_id, $date=0, $data=array()) {
 			if(!$this->call_start) $this->call_start = true;
 
 			if(!$date) $date = $this->time->time;
 			$apa_id = $this->get_apa_id($dkp_id, $module);
 			$last_run = $this->get_apa_type($this->apa_tab[$apa_id]['type'])->get_last_run($date, $apa_id);
-			
+			d("last run ".$this->apa_tab[$apa_id]['type']." ".$last_run);
 			//Check if update needed
 			if($this->needs_update($module, $data['id'])){
 				$this->get_apa_type($this->apa_tab[$apa_id]['type'])->reset_cache($apa_id, $module, $data['id']);
@@ -241,7 +279,7 @@ if ( !defined('EQDKP_INC') ){
 			}
 			
 			//$arrResult=0: value, 1: bln was new calculated
-			list($fltVal, $blnNewCalculated, $decay_adj) = $this->get_apa_type($this->apa_tab[$apa_id]['type'])->get_decay_val($apa_id, $last_run, $module, $dkp_id, $data);
+			list($fltVal, $blnNewCalculated, $decay_adj) = $this->get_apa_type($this->apa_tab[$apa_id]['type'])->get_value($apa_id, $last_run, $module, $dkp_id, $data, $date);
 			$this->cached_data[$apa_id][$last_run][$data['id']] = $fltVal;
 			
 			return $fltVal;
@@ -333,6 +371,7 @@ if ( !defined('EQDKP_INC') ){
 		public function enqueue_update($module, $ids) {
 			if(!is_array($ids)) $this->needs_update[$module][$ids] = true;
 			else {
+				$ids = array_unique($ids);
 				foreach($ids as $id) {
 					$this->needs_update[$module][$id] = true;
 				}
@@ -346,6 +385,11 @@ if ( !defined('EQDKP_INC') ){
 		
 		private function update_done($module, $id) {
 			if(isset($this->needs_update[$module][$id])) unset($this->needs_update[$module][$id]);
+		}
+		
+		public function reset_local_cache($apa_id=false){
+			if($apa_id && isset($this->cached_data[$apa_id])) unset($this->cached_data[$apa_id]);
+			if(!$apa_id) $this->cached_data = array();
 		}
 		
 		public function __destruct() {

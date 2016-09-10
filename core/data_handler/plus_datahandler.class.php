@@ -158,6 +158,7 @@ if( !class_exists( "plus_datahandler")){
 				$this->session_hooks[] = $hook;
 			}
 			$this->undone_hooks = array( );
+			$this->arrAdditonalHookData = array();
 		}
 
 		public function register_hook_callback( $callback, $hooks ) {
@@ -177,7 +178,7 @@ if( !class_exists( "plus_datahandler")){
 			if(!is_array($ids) && !empty($ids)) $ids = array($ids);
 			if(!empty($ids) && isset($this->undone_hooks[$hook])) $ids = array_merge($this->undone_hooks[$hook], $ids);
 			$this->undone_hooks[$hook] = (!empty($ids)) ? $ids : array();
-			$this->arrAdditonalHookData[$hook] = $arrAdditionalData;
+			$this->arrAdditonalHookData[$hook][] = $arrAdditionalData;
 		}
 
 

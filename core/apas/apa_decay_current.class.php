@@ -86,7 +86,8 @@ if ( !class_exists( "apa_decay_current" ) ) {
 			return $date;
 		}
 		
-		public function get_decay_val($apa_id, $last_run, $module, $dkp_id, $data) {
+		public function get_value($apa_id, $last_run, $module, $dkp_id, $data, $refdate) {
+			echo "get_decay_value ".$last_run." ".$data['id'];
 			// load decay parameters, set decay_start to its proper timestamp (from somewhere at that day to exectime)
 			$decay_start = $this->apa->get_data('start_date', $apa_id);	
 			$exectime = $this->apa->get_data('exectime', $apa_id);
@@ -96,12 +97,13 @@ if ( !class_exists( "apa_decay_current" ) ) {
 			
 			$blnNeedsRecalc = false;
 			$blnFromCache = false;
+			$intCacheTime = 0;
 			
 			// check if it's the first calculation
 			if($last_run == $decay_start) {
 				$value = $this->pdh->get('points', 'current_history', array($data['member_id'], $data['dkp_id'], 0, $decay_start, $data['event_id'], $data['itempool_id'], $data['with_twink']));
 			// check if it's in the zero-time
-			} elseif(($this->time->time - $this->apa->get_data('zero_time', $apa_id)*2592000) > $last_run) {
+			} elseif(($refdate - $this->apa->get_data('zero_time', $apa_id)*2592000) > $last_run) {
 				$value = 0;
 			// normal calculation, get points from previous decay and add currently earned points
 			} else {
@@ -109,13 +111,15 @@ if ( !class_exists( "apa_decay_current" ) ) {
 				$arrMemberCache = $this->pdh->get('member', 'apa_points', array($data['member_id'], $apa_id, $data['dkp_id'], $data['with_twink']));
 				if($arrMemberCache && $arrMemberCache['time'] == $last_run){
 					$value = $arrMemberCache['val'];
+					$intCacheTime = $arrMemberCache['time'];
 					$blnFromCache = true;
 				} else {
 					//Recalculate Value until the Cache Date
 					$previous_calc = $last_run-$decay_time;
-					$value = $this->apa->get_decay_val($module, $dkp_id, $previous_calc, $data);
+					$value = $this->apa->get_value($module, $dkp_id, $previous_calc, $data);
 					$value += $this->pdh->get('points', 'current_history', array($data['member_id'], $data['dkp_id'], $previous_calc, $last_run, $data['event_id'], $data['itempool_id'], $data['with_twink']));
 					$blnNeedsRecalc = true;
+					$intCacheTime = ($arrMemberCache && isset($arrMemberCache['time'])) ? $arrMemberCache['time'] : 0;
 				}
 			}
 
@@ -129,12 +133,12 @@ if ( !class_exists( "apa_decay_current" ) ) {
 			}
 			
 			// if this is the most recent decay, add current points from from last cache date to now
-			if(($last_run + $decay_time) > $this->time->time) {
+			if(($last_run + $decay_time) > $refdate) {
 				$decayed_val += $this->pdh->get('points', 'current_history', array($data['member_id'], $data['dkp_id'], $last_run, $this->time->time+1, $data['event_id'], $data['itempool_id'], $data['with_twink']));
 			}
 			
-			//apa_points($memberID, $apaID, $mdkpid, $blnWithTwink, $arrPoints)
-			if($blnNeedsRecalc){
+			// write to cache if the entry is new
+			if($blnNeedsRecalc && ($last_run > $intCacheTime)){
 				$this->pdh->put('member', 'apa_points', array($data['member_id'], $apa_id, $data['dkp_id'], $data['with_twink'], array('time' => $last_run, 'val' => $decayed_val)));
 			}
 			

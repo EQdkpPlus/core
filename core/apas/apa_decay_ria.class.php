@@ -181,7 +181,7 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 			return $date;
 		}
 		
-		public function get_decay_val($apa_id, $last_run, $module, $dkp_id, $data) {
+		public function get_value($apa_id, $last_run, $module, $dkp_id, $data, $refdate) {
 			// load decay parameters, set decay_start to its proper timestamp (from somewhere at that day to exectime)
 			$decay_start = $this->apa->get_data('start_date', $apa_id);	
 			$exectime = $this->apa->get_data('exectime', $apa_id);
@@ -216,7 +216,7 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 					$blnFromCache = true;
 				} else {
 					$previous_calc = $last_run-$decay_time;
-					$value = ($previous_calc < $data['date']) ? $data['value'] : $this->apa->get_decay_val($module, $dkp_id, $previous_calc, $data);
+					$value = ($previous_calc < $data['date']) ? $data['value'] : $this->apa->get_value($module, $dkp_id, $previous_calc, $data);
 					$decayed_val = ($last_run < $data['date']) ? $data['value'] : $this->apa->run_calc_func($this->apa->get_data('calc_func', $apa_id), array($value, $last_run, $data['date'], $data['value']));
 					$decay_adj = $value - $decayed_val;
 					

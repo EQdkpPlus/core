@@ -63,6 +63,8 @@ if ( !class_exists( "apa_cap_current" ) ) {
 		private $modules_affected = array();
 		
 		private $cached_data = array();
+		
+		private $last_run = 0;
 
 		public function __construct() {
 			$this->ext_options['start_date']['value'] = $this->time->time;
@@ -91,6 +93,7 @@ if ( !class_exists( "apa_cap_current" ) ) {
 			if(!$next_run) {
 				list($h,$i) = explode(':',$this->apa->get_data('exectime', $apa_id));
 				$next_run = $this->apa->get_data('start_date', $apa_id) + $h*3600 + $i*60;
+				echo "No next run. Run first at: ".date("d.m.Y", $next_run)."<br/>";
 			}
 			if($next_run > $this->time->time) {
 				echo "Next run > time. No point update. <br/>";
@@ -100,23 +103,37 @@ if ( !class_exists( "apa_cap_current" ) ) {
 			// check for points over cap for each character
 			$this->pdh->process_hook_queue();
 			$char_ids = $this->pdh->get('member', 'id_list', array(true, false, true, !(int)$this->apa->get_data('twinks', $apa_id)));
+			$char_ids = array(1);
 			$pools = $this->apa->get_data('pools', $apa_id);
+			$blnHaveAdjustmentMade = false;
+			
 			foreach($pools as $pool) {
-				$points = $this->pdh->aget('points', 'current_history', 0, array($char_ids, $pool, 0, $next_run-1, 0, 0, !$this->apa->get_data('twinks', $apa_id)));
-
+				
 				//Check if Event is in Same MDKP Pool
 				$eventID = $this->apa->get_data('event', $apa_id);
 				$arrEventPools = $this->pdh->get('event', 'multidkppools', array($eventID));
 				if(!$eventID || !in_array($pool, $arrEventPools)) continue;
 				echo "Pool ".$pool."<br/>";
+				//With Decay value
+				$points = $this->pdh->aget('points', 'current_history', 0, array($char_ids, $pool, 0, $next_run-1, 0, 0, !$this->apa->get_data('twinks', $apa_id), true));
+				d($points);
+
 				foreach($char_ids as $char_id) {
 					if($points[$char_id] > $this->apa->get_data('upper_cap', $apa_id)) {
 						$value = $this->apa->get_data('upper_cap', $apa_id) - $points[$char_id];
 						$this->pdh->put('adjustment', 'add_adjustment', array($value, $this->apa->get_data('name', $apa_id), $char_id, $this->apa->get_data('event', $apa_id), NULL, $next_run+1));
+						$blnHaveAdjustmentMade = true;
+						echo "insert adjustment at ".($next_run+1);
 					} elseif($points[$char_id] < $this->apa->get_data('lower_cap', $apa_id)) {
 						$value = $this->apa->get_data('lower_cap', $apa_id) - $points[$char_id];
 						$this->pdh->put('adjustment', 'add_adjustment', array($value, $this->apa->get_data('name', $apa_id), $char_id, $this->apa->get_data('event', $apa_id), NULL, $next_run+1));
+						$blnHaveAdjustmentMade = true;
+						echo "insert adjustment at ".($next_run+1);
 					}
+				}
+				
+				if($blnHaveAdjustmentMade) {
+					echo "There were adjustments made";
 					$this->pdh->process_hook_queue();
 				}
 			}
@@ -126,12 +143,16 @@ if ( !class_exists( "apa_cap_current" ) ) {
 			$this->config->set('apa_cap_next_run_'.$apa_id, $next_run);
 			// run again if we have a backlog
 			echo "Next run inserted ".date("d.m.Y", $next_run).' '.$next_run."<br/>";
+			$this->last_run++;
+			$this->apa->reset_local_cache();
 			if($next_run < $this->time->time) $this->update_point_cap($apa_id);
 		}
 		
 		public function modules_affected($apa_id) { return array(); }
-		public function get_last_run($date, $apa_id) { return; }
-		public function get_decay_val($apa_id, $cache_date, $module, $dkp_id, $data) { return; }
+		public function get_last_run($date, $apa_id) { 
+			return $this->last_run; 
+		}
+		public function get_value($apa_id, $cache_date, $module, $dkp_id, $data, $refdate) { return; }
 		
 		public function recalculate($apa_id){
 			$this->db->prepare("DELETE FROM __adjustments WHERE adjustment_reason=? AND event_id=? ")->execute($this->apa->get_data('name', $apa_id), intval($this->apa->get_data('event', $apa_id)));

@@ -301,7 +301,7 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 				if(!isset($this->decayed[$dkp_id])) $this->decayed[$dkp_id] = $this->apa->is_decay('raid', $dkp_id);
 				if($this->decayed[$dkp_id]) {
 					$data = array('id' => $id, 'value' => $this->raid_vals[$id], 'date' => $this->pdh->get('raid', 'date', array($id)));
-					$val = $this->apa->get_decay_val('raid', $dkp_id, $date, $data);
+					$val = $this->apa->get_value('raid', $dkp_id, $date, $data);
 				}
 			}
 			return (isset($val)) ? $val : $this->raid_vals[$id];

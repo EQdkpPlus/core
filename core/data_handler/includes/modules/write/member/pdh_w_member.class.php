@@ -125,7 +125,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 					$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
 
 					if($blnCreateLogentry) $this->log_insert('action_member_updated', $log_action, $member_id, $old['name']);
-					$this->pdh->enqueue_hook('member_update', array($member_id), array('action' => 'update'));
+					$this->pdh->enqueue_hook('member_update', array($member_id), array('action' => 'update', 'members' => array($member_id)));
 					
 					//Überprüfe Ringabhängigkeit von Mainchars
 					$this->pdh->process_hook_queue();
@@ -178,7 +178,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 						}
 					}
 					
-					$this->pdh->enqueue_hook('member_update', array($member_id), array('action' => 'add'));
+					$this->pdh->enqueue_hook('member_update', array($member_id), array('action' => 'add', 'members' => array($member_id)));
 					return $member_id;
 				}
 			}
@@ -234,9 +234,9 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				$this->db->prepare("DELETE FROM __member_user WHERE member_id = ?;")->execute($member_id);
 				// delete member snapshots
 				$this->db->prepare("DELETE FROM __member_points WHERE member_id = ?;")->execute($member_id);
-				$this->pdh->enqueue_hook('member_update', array($member_id), array('action' =>'delete'));
+				$this->pdh->enqueue_hook('member_update', array($member_id), array('action' =>'delete', 'members' => array($member_id)));
 				$raids = $this->pdh->get('raid', 'raidids4memberid', array());
-				$this->pdh->enqueue_hook('raid_update', $raids);
+				$this->pdh->enqueue_hook('raid_update', $raids, array('action' => 'update', 'members' => array($member_id)));
 				// check for new mainchar
 				$twinks = $this->pdh->get('member', 'other_members', array());
 				if(!empty($twinks)) {
@@ -289,7 +289,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 			}else{
 				$myupdate	= false;
 			}
-			$this->pdh->enqueue_hook('update_connection', array($member_id));
+			$this->pdh->enqueue_hook('update_connection', array($member_id), array('members' => array($member_id, $userchars, $mainchar), 'users' => array($user_id)));
 			return $myupdate;
 		}
 
@@ -300,7 +300,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				'require_confirm'	=> '0',
 			))->execute($member_id);
 			
-			$this->pdh->enqueue_hook('member_update', $member_id, array('action' => 'update'));
+			$this->pdh->enqueue_hook('member_update', $member_id, array('action' => 'update', 'members' => array($member_id)));
 			return true;
 		}
 
@@ -310,7 +310,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				'user_id'		=> $this->user->id
 			))->execute();
 			
-			$this->pdh->enqueue_hook('member_update', $id, array('action' => 'update'));
+			$this->pdh->enqueue_hook('member_update', $id, array('action' => 'update', 'members' => array($id), 'users' => array($this->user->id)));
 			return true;
 		}
 
@@ -322,14 +322,17 @@ if ( !class_exists( "pdh_w_member" ) ) {
 						'member_status' => 0,
 						'requested_del' => 1,
 					))->in($id_list)->execute();
+					
+					$this->pdh->enqueue_hook('member_update', $member_id, array('action' => 'update', 'members' => $id_list));
 				}
 			} else {
 				$objQuery = $this->db->prepare("UPDATE __members :p WHERE member_id=?")->set(array(
 					'member_status' => 0,
 					'requested_del' => 1,
 				))->execute($member_id);
+				
+				$this->pdh->enqueue_hook('member_update', $member_id, array('action' => 'update', 'members' => array($member_id)));
 			}
-			$this->pdh->enqueue_hook('member_update', $member_id, array('action' => 'update'));
 		}
 		
 
@@ -339,22 +342,22 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				'requested_del' => 0,
 			))->execute($member_id);
 
-			$this->pdh->enqueue_hook('member_update', $member_id, array('action' => 'update'));
+			$this->pdh->enqueue_hook('member_update', $member_id, array('action' => 'update', 'members' => array($member_id)));
 		}
 
 		public function change_mainid($member_id, $mainid){
 			if(is_array($member_id)){
 				$objQuery = $this->db->prepare("UPDATE __members :p WHERE member_id :in")->set(array(
 						'member_main_id'	=> $mainid
-						
 				))->in($member_id)->execute();
-
+				
+				$this->pdh->enqueue_hook('member_update', $member_id, array('action' => 'update', 'members' => $member_id));
 			}else{
 				$objQuery = $this->db->prepare("UPDATE __members :p WHERE member_id =?")->set(array(
 						'member_main_id'	=> $mainid		
 				))->execute($member_id);
+				$this->pdh->enqueue_hook('member_update', $member_id, array('action' => 'update', 'members' => array($member_id)));
 			}
-			$this->pdh->enqueue_hook('member_update', $member_id, array('action' => 'update'));
 		}
 
 		public function update_profilefield($member_id, $data){
@@ -363,7 +366,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				$data['profiledata'] = $this->profilefields(array_merge($old['profiledata'], $data));
 			}
 			$objQuery = $this->db->prepare("UPDATE __members :p WHERE member_id = ?;")->set(array('profiledata'=>$data['profiledata']))->execute($member_id);
-			$this->pdh->enqueue_hook('member_update', $member_id, array('action' => 'update'));
+			$this->pdh->enqueue_hook('member_update', $member_id, array('action' => 'update', 'members' => array($member_id)));
 			return ($objQuery) ? true : false;
 		}
 
@@ -371,7 +374,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 			$objQuery = $this->db->prepare("UPDATE __members :p WHERE member_id =?")->set(array(
 					'member_rank_id'	=> $rankid			
 			))->execute($member_id);
-			$this->pdh->enqueue_hook('member_update', $member_id, array('action' => 'update'));
+			$this->pdh->enqueue_hook('member_update', $member_id, array('action' => 'update', 'members' => array($member_id)));
 			return ($objQuery) ? true : false;
 		}
 
@@ -379,7 +382,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 			$objQuery = $this->db->prepare("UPDATE __members :p WHERE member_id =?")->set(array(
 					'member_status'	=> $status
 			))->execute($member_id);
-			$this->pdh->enqueue_hook('member_update', $member_id, array('action' => 'update'));
+			$this->pdh->enqueue_hook('member_update', $member_id, array('action' => 'update', 'members' => array($member_id)));
 			return ($objQuery) ? true : false;
 		}
 		
@@ -387,7 +390,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 			$objQuery = $this->db->prepare("UPDATE __members :p WHERE member_id =?")->set(array(
 				'defaultrole'	=> $roleid
 			))->execute($member_id);
-			$this->pdh->enqueue_hook('member_update', array($member_id), array('action' => 'update'));
+			$this->pdh->enqueue_hook('member_update', array($member_id), array('action' => 'update', 'members' => array($member_id)));
 			return ($objQuery) ? true : false;
 		}
 
@@ -436,7 +439,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				'points' => serialize($arrCurrentPoints),
 			))->execute($memberID);
 			
-			$this->pdh->enqueue_hook('member_update', array($memberID), array('action' => 'update'));
+			$this->pdh->enqueue_hook('member_update', array($memberID), array('action' => 'update', 'members' => array($memberID)));
 			return ($objQuery) ? true : false;
 		}
 		
@@ -446,7 +449,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				$this->pdh->enqueue_hook('member_update', array(), array('action' => 'update'));
 			}elseif(is_array($arrMemberids)){
 				$this->db->prepare("UPDATE __members SET points='' WHERE member_id :in;")->in($arrMemberids)->execute();
-				$this->pdh->enqueue_hook('member_update', $arrMemberids, array('action' => 'update'));
+				$this->pdh->enqueue_hook('member_update', $arrMemberids, array('action' => 'update', 'members' => $arrMemberids));
 			}
 		}
 		
@@ -464,7 +467,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 			$objQuery = $this->db->prepare("UPDATE __members :p WHERE member_id =?")->set(array(
 					'points_apa' => serialize($arrCurrentPoints),
 			))->execute($memberID);
-			$this->pdh->enqueue_hook('member_update', array($memberID), array('action' => 'update'));
+			$this->pdh->enqueue_hook('member_update', array($memberID), array('action' => 'update', 'apa' => true));
 			return ($objQuery) ? true : false;
 		}
 		
@@ -482,7 +485,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 			} else {
 				$this->db->prepare("UPDATE __members SET apa_points='' WHERE member_id=?;")->execute($memberID);
 			}
-			$this->pdh->enqueue_hook('member_update', array($memberID), array('action' => 'update'));
+			$this->pdh->enqueue_hook('member_update', array($memberID), array('action' => 'update', 'members' => array($memberID)));
 			return true;
 		}
 		

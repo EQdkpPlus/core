@@ -118,7 +118,7 @@ if(!class_exists('pdh_r_raid')){
 				if(!isset($this->decayed[$dkp_id])) $this->decayed[$dkp_id] = $this->apa->is_decay('raid', $dkp_id);
 				if($this->decayed[$dkp_id]) {
 					$data = array('id' => $id, 'value' => $this->objPagination->get($id, 'raid_value'), 'date' => $this->get_date($id));
-					$val = $this->apa->get_decay_val('raid', $dkp_id, $date, $data);
+					$val = $this->apa->get_value('raid', $dkp_id, $date, $data);
 				}
 			}
 			return (isset($val)) ? $val : $this->objPagination->get($id, 'raid_value');

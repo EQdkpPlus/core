@@ -61,8 +61,10 @@ if ( !class_exists( "pdh_r_points_history" ) ) {
 		);
 
 		public function reset(){
-			$this->pdc->del_prefix('pdh_points_history');
-			$arrPoints = NULL;
+			$this->arrCalculatedMulti = array();
+			$this->arrCalculatedSingle = array();
+			$this->arrLocalMappingCache = array();
+			$this->arrLocalPointsCache = array();
 		}
 
 		public function init() {
@@ -71,6 +73,7 @@ if ( !class_exists( "pdh_r_points_history" ) ) {
 		
 		public function calculate_single_points($memberid, $multidkpid=1, $from=0, $to=PHP_INT_MAX){
 			$strCacheKey = md5('single_'.$memberid.'.'.$multidkpid.'.'.$from.'.'.$to);
+
 			if(isset($this->arrLocalPointsCache[$strCacheKey])) return $this->arrLocalPointsCache[$strCacheKey];
 			
 			if($from == 0){
@@ -170,6 +173,7 @@ if ( !class_exists( "pdh_r_points_history" ) ) {
 
 			$this->arrLocalPointsCache[$strCacheKey] = $arrPoints;
 			$this->arrCalculatedSingle[$strCacheKey] = 1;
+
 			return $arrPoints;
 		
 	}	

@@ -33,6 +33,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 		public $points;
 		// initialise array to store multipools which are decayed
 		private $decayed = array();
+		private $hardcap = array();
 		private $arrCalculatedSingle = array();
 		private $arrCalculatedMulti = array();
 		private $arrSnapshotTime = array();
@@ -63,29 +64,37 @@ if ( !class_exists( "pdh_r_points" ) ) {
 		);
 
 		public function reset($affected_ids=array(), $strHook='', $arrAdditionalData=array()){
-			if(isset($arrAdditionalData['action'])){
-				$strAction = $arrAdditionalData['action'];
-				if((isset($arrAdditionalData['apa']) && $arrAdditionalData['apa']) || ($strAction == 'add' && ($strHook == 'itempool_update' || $strHook == 'multidkp_update' || $strHook == 'member_update'))){
-					//Nothing to do with APA or member_cache
-				} elseif($strAction == 'add' && isset($arrAdditionalData['time'])){
-					//New one, but shouldn't really delete one here
-					$this->get_delete_from_snapshot($arrAdditionalData['time']);
-				} else {
-					//delete all snapshots because of massive changes
-					$this->get_delete_from_snapshot(0);
-					
-					//Reset the APA Cache for all members
-					$apaAffectedIDs = array();
-					foreach($this->pdh->get('multidkp', 'id_list') as $mdkpid){
-						foreach($this->pdh->get('member', 'id_list')  as $memberid){
-							$apaAffectedIDs[] = $mdkpid.'_'.$memberid;
+			$arrTotalAffected = array();
+			
+			//For Hooks with additional data
+			foreach($arrAdditionalData as $arrData){
+				if(isset($arrData['action'])){
+					$strAction = $arrData['action'];
+					if((isset($arrData['apa']) && $arrData['apa']) || ($strAction == 'add' && ($strHook == 'itempool_update' || $strHook == 'multidkp_update' || $strHook == 'member_update'))){	
+						//Nothing to do with APA or member_cache
+					} else {
+						$arrAffectedMembers = (isset($arrData['members']) && is_array($arrData['members'])) ? $arrData['members'] : $this->pdh->get('member', 'id_list');
+						$intAffectedTime = (isset($arrData['time'])) ? $arrData['time'] : 0;
+						
+						$arrTotalAffected = array_merge($arrTotalAffected, $arrAffectedMembers);
+						$this->get_delete_from_snapshot($intAffectedTime, $arrAffectedMembers);
+							
+						//Reset the APA Cache for the affected members
+						$apaAffectedIDs = array();
+						foreach($this->pdh->get('multidkp', 'id_list') as $mdkpid){
+							foreach($arrAffectedMembers as $memberid){
+								$apaAffectedIDs[] = $mdkpid.'_'.$memberid;
+							}
 						}
+						$this->apa->enqueue_update('current', $apaAffectedIDs);
 					}
-					$this->apa->enqueue_update('current', $apaAffectedIDs);
-				}
 				
-			} elseif($strHook == 'member_update' && is_array($affected_ids) && count($affected_ids)) {
+				}			
+			}
+			
+			if($strHook == 'member_update' && is_array($affected_ids) && count($affected_ids)) {
 				$apaAffectedIDs = array();
+				$arrTotalAffected = array_merge($arrTotalAffected, $affected_ids);
 				foreach($this->pdh->get('multidkp', 'id_list') as $mdkpid){
 					foreach($affected_ids  as $memberid){
 						$apaAffectedIDs[] = $mdkpid.'_'.$memberid;
@@ -93,9 +102,6 @@ if ( !class_exists( "pdh_r_points" ) ) {
 				}
 				$this->apa->enqueue_update('current', $apaAffectedIDs);
 			} else {
-				//Reset the member point cache
-				$this->pdh->put('member', 'reset_points');
-				
 				//Reset the APA Cache for all members
 				$apaAffectedIDs = array();
 				foreach($this->pdh->get('multidkp', 'id_list') as $mdkpid){
@@ -104,12 +110,18 @@ if ( !class_exists( "pdh_r_points" ) ) {
 					}
 				}
 				$this->apa->enqueue_update('current', $apaAffectedIDs);
+				$arrTotalAffected = false;
 			}
 						
 			$this->pdc->del('pdh_points_snapshot_mapping');
 			$this->pdc->del('pdh_points_table');
-			//Reset the member point cache
-			$this->pdh->put('member', 'reset_points');
+			
+			//Reset the member point cache for affected members only
+			if(is_array($arrTotalAffected)) $arrTotalAffected = array_unique($arrTotalAffected);
+			$this->pdh->put('member', 'reset_points', array($arrTotalAffected));
+			
+			$this->arrCalculatedMulti = array();
+			$this->arrCalculatedSingle = array();
 			$this->points = NULL;
 		}
 
@@ -256,18 +268,53 @@ if ( !class_exists( "pdh_r_points" ) ) {
 			return '<span class="'.color_item($this->get_adjustment($member_id, $multidkp_id, $event_id, $with_twink)).'">'.runden($this->get_adjustment($member_id, $multidkp_id, $event_id, $with_twink)).'</span>';
 		}
 		
-		public function get_current_history($member_id, $multidkp_id, $from=0, $to=PHP_INT_MAX, $event_id=0, $itempool_id=0, $with_twink=true){
-			$arrPoints = $this->pdh->get('points_history', 'points', array($member_id, $multidkp_id, $from, $to, $event_id, $itempool_id, $with_twink));
+		
+		/**
+		 * Default without APA decay!
+		 */
+		public function get_current_history($member_id, $multidkp_id, $from=0, $to=PHP_INT_MAX, $event_id=0, $itempool_id=0, $with_twink=true, $blnWithAPA=false){
+			if(!isset($this->decayed[$multidkp_id])) $this->decayed[$multidkp_id] = $this->apa->is_decay('current', $multidkp_id);
+			echo "current_history mid".$member_id." ".$multidkp_id." ".$from." to ".$to;
 			
-			$earned = (float)$arrPoints['earned'][$event_id];
-			$spent = (float)$arrPoints['spent'][$event_id][$itempool_id];
-			$adj = (float)$arrPoints['adjustment'][$event_id];
-			return (float)($earned - $spent + $adj);
+			if($blnWithAPA && $this->decayed[$multidkp_id]){
+				echo "decayed";
+				$data =  array(
+						'id'			=> $multidkp_id.'_'.$member_id,
+						'member_id'		=> $member_id,
+						'dkp_id'		=> $multidkp_id,
+						'event_id'		=> $event_id,
+						'itempool_id'	=> $itempool_id,
+						'with_twink'	=> ($with_twink) ? true : false,
+						'date'			=> $to,
+				);
+				
+				$toPoints = $this->apa->get_value('current', $multidkp_id, $to, $data);
+				
+				if($from > 0) {
+					$fromPoints = $this->apa->get_value('current', $multidkp_id, $from, $data);
+					return $toPoints - $fromPoints;
+				} else {
+					return $toPoints;
+				}
+				
+			} else {			
+				$arrPoints = $this->pdh->get('points_history', 'points', array($member_id, $multidkp_id, $from, $to, $event_id, $itempool_id, $with_twink));
+				
+				$earned = (float)$arrPoints['earned'][$event_id];
+				$spent = (float)$arrPoints['spent'][$event_id][$itempool_id];
+				$adj = (float)$arrPoints['adjustment'][$event_id];
+				return (float)($earned - $spent + $adj);
+			}
 		}
 
+		/**
+		 * Default with APA decay!
+		 */
 		public function get_current($member_id, $multidkp_id, $event_id=0, $itempool_id=0, $with_twink=true, $with_apa=true){
 			if(!isset($this->decayed[$multidkp_id])) $this->decayed[$multidkp_id] = $this->apa->is_decay('current', $multidkp_id);
-			if($this->decayed[$multidkp_id] && $with_apa) {
+			if(!isset($this->hardcap[$multidkp_id])) $this->hardcap[$multidkp_id] = $this->apa->is_hardcap('current_hardcap', $multidkp_id);
+
+			if($with_apa && $this->decayed[$multidkp_id]) {
 				$data =  array(
 					'id'			=> $multidkp_id.'_'.$member_id,
 					'member_id'		=> $member_id,
@@ -277,10 +324,19 @@ if ( !class_exists( "pdh_r_points" ) ) {
 					'with_twink'	=> ($with_twink) ? true : false,
 					'date'			=> $this->time->time,
 				);
-				return $this->apa->get_decay_val('current', $multidkp_id, $this->time->time, $data);
+				$value = $this->apa->get_value('current', $multidkp_id, $this->time->time, $data);
 			} else {			
-				return ($this->get_earned($member_id, $multidkp_id, $event_id, $with_twink) - $this->get_spent($member_id, $multidkp_id, $event_id, $itempool_id, $with_twink) + $this->get_adjustment($member_id, $multidkp_id, $event_id, $with_twink));
+				$value = ($this->get_earned($member_id, $multidkp_id, $event_id, $with_twink) - $this->get_spent($member_id, $multidkp_id, $event_id, $itempool_id, $with_twink) + $this->get_adjustment($member_id, $multidkp_id, $event_id, $with_twink));
 			}
+			
+			if($with_apa && $this->hardcap[$multidkp_id]){
+				$data =  array(
+						'id'			=> $multidkp_id.'_'.$member_id,
+						'val'			=> $value,
+				);
+				$value = $this->apa->get_value('current_cap', $multidkp_id, $this->time->time, $data);
+			}
+			return $value;
 		}
 
 		public function get_html_current($member_id, $multidkp_id,  $event_id=0, $itempool_id=0, $with_twink=true){
@@ -468,8 +524,14 @@ if ( !class_exists( "pdh_r_points" ) ) {
 			return $this->arrSnapshotTime;
 		}
 		
-		public function get_delete_from_snapshot($intTime){
-			$objQuery = $this->db->prepare("DELETE FROM __member_points WHERE time > ?")->execute($intTime);
+		public function get_delete_from_snapshot($intTime, $arrMembers=false){
+			if($arrMembers && is_array($arrMembers)){
+				$objQuery = $this->db->prepare("DELETE FROM __member_points WHERE time > ? AND member_id :in")->in($arrMembers)->execute($intTime);
+			} else {
+				$objQuery = $this->db->prepare("DELETE FROM __member_points WHERE time > ?")->execute($intTime);
+			}
+			
+			
 			//Recalculate Mapping
 			$this->snapshot_mapping();
 			return ($objQuery) ? true : false;

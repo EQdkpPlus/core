@@ -67,7 +67,7 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 				'{L_RAID}'			=> $raid_id,
 			);
 			$this->log_insert('action_indivadj_added', $log_action, $group_key, $adjustment_reason);
-			$this->pdh->enqueue_hook('adjustment_update', $ids, array('action' => 'add', 'time' => $time));
+			$this->pdh->enqueue_hook('adjustment_update', $ids, array('action' => 'add', 'time' => $time, 'members' => $member_ids));
 			return $ids;
 		}
 
@@ -182,7 +182,7 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
 				
 				$this->log_insert('action_indivadj_updated', $log_action, $new_group_key, $old['reason']);
-				$this->pdh->enqueue_hook('adjustment_update', $hook_id,  array('action' => 'update', 'time' => $time));
+				$this->pdh->enqueue_hook('adjustment_update', $hook_id,  array('action' => 'update', 'time' => $time, 'members' => $updated_mems, $added_mems, $adjs2del));
 				return $retu;
 			}
 			return false;
@@ -207,7 +207,7 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 					'{L_RAID}'		=> $old['raid'],
 				);
 				$this->log_insert('action_indivadj_deleted', $log_action, $adjustment_id, $old['reason']);
-				$this->pdh->enqueue_hook('adjustment_update', $adjustment_id, array('action' => 'delete', 'time' => $old['date']));
+				$this->pdh->enqueue_hook('adjustment_update', $adjustment_id, array('action' => 'delete', 'time' => $old['date'], 'members' => array($old['member'])));
 				return true;
 			}
 			return false;
@@ -238,7 +238,7 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 				);
 				
 				$this->log_insert('action_indivadj_deleted', $log_action, $group_key, $old['reason']);
-				$this->pdh->enqueue_hook('adjustment_update', $adj_ids, array('action' => 'delete', 'time' => $old['date']));
+				$this->pdh->enqueue_hook('adjustment_update', $adj_ids, array('action' => 'delete', 'time' => $old['date'], 'members' => $old['member']));
 				return true;
 			}
 			return false;

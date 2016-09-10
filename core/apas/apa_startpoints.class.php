@@ -125,7 +125,7 @@ if ( !class_exists( "apa_startpoints" ) ) {
 		
 		public function modules_affected($apa_id) { return array(); }
 		public function get_last_run($date, $apa_id) { return; }
-		public function get_decay_val($apa_id, $cache_date, $module, $dkp_id, $data) { return; }
+		public function get_value($apa_id, $cache_date, $module, $dkp_id, $data, $refdate) { return; }
 		
 		public function recalculate($apa_id){
 			if($this->apa->get_data('before', $apa_id)) {
