@@ -752,7 +752,6 @@ class DateTimeLocale extends DateTime {
 	private $cache = array();
 
 	public function __construct($time='now', $timezone=null, $language=false) {
-		echo "new datetime";
 		try {
 			parent::__construct($time, $timezone);
 		} catch(Exception $e) {
