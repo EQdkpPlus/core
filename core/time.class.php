@@ -749,9 +749,10 @@ class DateTimeLocale extends DateTime {
 	private static $english_days_short	= array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');
 	private static $english_months		= array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
 	private static $language = false;
-	private static $cache = array();
+	private $cache = array();
 
 	public function __construct($time='now', $timezone=null, $language=false) {
+		echo "new datetime";
 		try {
 			parent::__construct($time, $timezone);
 		} catch(Exception $e) {
@@ -776,11 +777,11 @@ class DateTimeLocale extends DateTime {
 			$arrSearch = array_merge(self::$english_days, self::$english_days_short, self::$english_months);
 			$arrReplace = array_merge(registry::fetch('user')->lang('time_daynames', false, false, self::$language), registry::fetch('user')->lang('time_daynames_short', false, false, self::$language), registry::fetch('user')->lang('time_monthnames', false, false, self::$language));
 			$out =  parent::format($format);
-			if(isset(self::$cache[self::$language][$format])) return self::$cache[self::$language][$format];
+			if(isset($this->cache[self::$language][$format])) return $this->cache[self::$language][$format];
 			foreach($arrSearch as $key => $val){
 				$out = preg_replace('/\b'.$val.'\b/u', $arrReplace[$key], $out);
 			}
-			self::$cache[self::$language][$format] = $out;
+			$this->cache[self::$language][$format] = $out;
 			return $out;
 
 		}else{
