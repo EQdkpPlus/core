@@ -40,7 +40,6 @@ if ( !defined('EQDKP_INC') ){
 		private $apa_types_inst		= array();
 		
 		private $cached_data		= array();
-		private $call_start			= false;
 		
 		public $available_types		= array();
 		private $needs_update		= array();
@@ -52,6 +51,7 @@ if ( !defined('EQDKP_INC') ){
 			$this->load_calc_func();
 			
 			$this->needs_update = $this->pdc->get('apa_update_table');
+
 			if(empty($this->needs_update)) $this->needs_update = array();
 		}
 
@@ -262,9 +262,7 @@ if ( !defined('EQDKP_INC') ){
 		 *
 		 * @return 		float
 		 */
-		public function get_value($module, $dkp_id, $date=0, $data=array()) {
-			if(!$this->call_start) $this->call_start = true;
-
+		public function get_value($module, $dkp_id, $date=0, $data=array(), $blnRecursiv=false) {
 			if(!$date) $date = $this->time->time;
 			$apa_id = $this->get_apa_id($dkp_id, $module);
 			$last_run = $this->get_apa_type($this->apa_tab[$apa_id]['type'])->get_last_run($date, $apa_id);
@@ -272,8 +270,7 @@ if ( !defined('EQDKP_INC') ){
 			//Check if update needed
 			if($this->needs_update($module, $data['id'])){
 				$this->get_apa_type($this->apa_tab[$apa_id]['type'])->reset_cache($apa_id, $module, $data['id']);
-				
-				if($this->call_start) $this->update_done($module, $data['id']);
+				if(!$blnRecursiv) $this->update_done($module, $data['id']);
 			} else {
 				if(isset($this->cached_data[$apa_id][$last_run][$data['id']])) return $this->cached_data[$apa_id][$last_run][$data['id']];
 			}
@@ -281,7 +278,9 @@ if ( !defined('EQDKP_INC') ){
 			//$arrResult=0: value, 1: bln was new calculated
 			list($fltVal, $blnNewCalculated, $decay_adj) = $this->get_apa_type($this->apa_tab[$apa_id]['type'])->get_value($apa_id, $last_run, $module, $dkp_id, $data, $date);
 			$this->cached_data[$apa_id][$last_run][$data['id']] = $fltVal;
-			
+			if(!$blnRecursiv && $blnNewCalculated){
+				$this->pdh->process_hook_queue();
+			}
 			return $fltVal;
 		}
 				
