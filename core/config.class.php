@@ -197,7 +197,7 @@ class config extends gen_class {
 	}
 	
 	private function init_config(){
-		$this->get_cacheconfig();
+		if(!defined('NO_CONFIG_CACHE')) $this->get_cacheconfig();
 				
 		// If the config file is empty, load it out of the database
 		if(count($this->config) < 1){
@@ -278,16 +278,18 @@ class config extends gen_class {
 		}
 
 		// Build the plain file config cache, reload from database first
-		$this->get_dbconfig();
-		ksort($this->config);
-		$file = $this->pfh->FolderPath('config', 'eqdkp')."localconf.php";
-		$data = "<?php\n";
-		$data .= "if (!defined('EQDKP_INC')){\n\tdie('You cannot access this file directly.');\n}\n";
-		$data .= '$localconf = ';
-		$data .= var_export($this->config, true);
-		$data .= ";\n?";
-		$data .= ">";
-		$this->pfh->putContent($file, $data);
+		if(!defined('NO_CONFIG_CACHE')){
+			$this->get_dbconfig();
+			ksort($this->config);
+			$file = $this->pfh->FolderPath('config', 'eqdkp')."localconf.php";
+			$data = "<?php\n";
+			$data .= "if (!defined('EQDKP_INC')){\n\tdie('You cannot access this file directly.');\n}\n";
+			$data .= '$localconf = ';
+			$data .= var_export($this->config, true);
+			$data .= ";\n?";
+			$data .= ">";
+			$this->pfh->putContent($file, $data);
+		}
 
 		$this->config_modified = false;
 	}
