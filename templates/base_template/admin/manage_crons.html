@@ -24,7 +24,7 @@
 	<!-- BEGIN cron_row -->
 	<tr>
 		<td style="width:25px" class="center"><i class="eqdkp-icon-{cron_row.ENABLE_ICON}"></i></td>
-		<td style="width:20px" class="nowrap"><a href="{cron_row.U_RUN_CRON}" title="{L_execute}"><i class="fa fa-play fa-lg"></i></a>&nbsp;&nbsp;&nbsp;<a href="{cron_row.U_ACTIVATE_CRON}" title="{cron_row.L_ENABLE}"><i class="{cron_row.ACTIVATE_ICON} fa-lg"></i></a><!-- IF cron_row.S_EDITABLE -->&nbsp;&nbsp;&nbsp;<a href="{cron_row.U_EDIT_CRON}" title="{L_edit}"><i class="fa fa-pencil fa-lg" title="{L_edit}"></i></a><!-- ENDIF --></td>
+		<td style="width:20px" class="nowrap"><a href="{cron_row.U_RUN_CRON}" title="{L_execute}"><i class="fa fa-play fa-lg"></i></a>&nbsp;&nbsp;&nbsp;<!-- IF cron_row.S_ACTIVATE --><a href="{cron_row.U_ACTIVATE_CRON}" title="{cron_row.L_ENABLE}"><i class="{cron_row.ACTIVATE_ICON} fa-lg"></i></a><!-- ENDIF --><!-- IF cron_row.S_EDITABLE -->&nbsp;&nbsp;&nbsp;<a href="{cron_row.U_EDIT_CRON}" title="{L_edit}"><i class="fa fa-pencil fa-lg" title="{L_edit}"></i></a><!-- ENDIF --></td>
 		<td><!-- IF cron_row.S_EDITABLE --><a href="{cron_row.U_EDIT_CRON}">{cron_row.NAME}</a><!-- ELSE -->{cron_row.NAME}<!-- ENDIF --></td>
 		<td class="hiddenSmartphone">{cron_row.REPEAT}</td>
 		<td class="hiddenSmartphone">{cron_row.START}</td>

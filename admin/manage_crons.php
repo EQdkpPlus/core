@@ -155,6 +155,7 @@ class ManageCrons extends page_generic {
 					'ENABLE_ICON'	=> ($value['active']) ? 'online' : 'offline',
 					'L_ENABLE'	=> ($value['active']) ? $this->user->lang('deactivate') : $this->user->lang('activate'),
 					'S_EDITABLE'	=> $value['editable'],
+					'S_ACTIVATE'	=> ($value['editable'] || (!$value['editable'] && !$value['active'])) ? true : false,
 					'LAST_RUN'	=> $last_run,
 					'NEXT_RUN'	=> $next_run,
 					'START'			=> ($value['active']) ? $this->time->user_date($value['start_time'], true) : ' - ',
