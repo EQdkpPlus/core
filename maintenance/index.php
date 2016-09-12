@@ -109,6 +109,15 @@ class task_manager_display extends gen_class {
 			return $ret;
 		}
 		
+		function sort_plugin_tasks($a, $b) {
+			$ret = strcmp($a['name'], $b['name']);
+			if($ret == 0) {
+				return compareVersion($a['version'], $b['version']);
+			}
+			return $ret;
+		}
+		
+		
 		//output tasks
 		if($this->in->get('type', 'home') == 'home'){
 			$update_all = false;
@@ -123,7 +132,12 @@ class task_manager_display extends gen_class {
 							'L_TASKS'	=> $this->user->lang($type))
 						);
 						//sort task_data 1st by type, 2nd by version
-						uasort($task_data['necessary_tasks'], 'sort_tasks');
+						if($type == 'plugin_update'){
+							uasort($task_data['necessary_tasks'], 'sort_plugin_tasks');
+						} else {
+							uasort($task_data['necessary_tasks'], 'sort_tasks');
+						}
+						
 						foreach($task_data['necessary_tasks'] as $task => $data) {
 							if($data['type'] == $type) {
 								$this->tpl->assign_block_vars('tasks_list.spec_task_list', array(
@@ -162,7 +176,12 @@ class task_manager_display extends gen_class {
 					));
 
 					//sort task_data 1st by type, 2nd by version
-					uasort($task_data[$key], 'sort_tasks');
+					if($this->in->get('type', 'home') == 'plugin_update'){
+						uasort($task_data[$key], 'sort_plugin_tasks');
+					} else {
+						uasort($task_data[$key], 'sort_tasks');
+					}
+					
 					foreach($task_data[$key] as $task => $data) {
 						if($this->in->get('type', 'home') != $data['type'] AND $this->in->get('type', 'home') != 'home') continue;
 						$this->tpl->assign_block_vars('tasks_list.spec_task_list', array(
