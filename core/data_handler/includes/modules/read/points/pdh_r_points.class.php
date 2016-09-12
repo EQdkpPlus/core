@@ -102,7 +102,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 					}
 				}
 				$this->apa->enqueue_update('current', $apaAffectedIDs);
-			} else {
+			} elseif(count($arrAdditionalData) > 0) {
 				//Reset the APA Cache for all members
 				$apaAffectedIDs = array();
 				foreach($this->pdh->get('multidkp', 'id_list') as $mdkpid){
