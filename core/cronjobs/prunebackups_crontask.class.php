@@ -49,7 +49,9 @@ if ( !class_exists( "prunebackups_crontask" ) ) {
 			$crons		= $this->cronjobs->list_crons();
 			$params		= $crons['prunebackups']['params'];
 			
-			$this->backup->pruneBackups($params['days'], $params['count']);
+			if($params['days'] > 0 || $params['count'] > 0) {
+				$this->backup->pruneBackups($params['days'], $params['count']);
+			}
 		}
 	}
 }

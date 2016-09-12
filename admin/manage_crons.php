@@ -54,16 +54,14 @@ class ManageCrons extends page_generic {
 	}
 
 	public function enable(){
-		if ($this->crons[$this->in->get('cron')]['editable']){
-			$this->cronjobs->add_cron($this->in->get('cron'), array('active' => true), true);
-		}
+		$this->cronjobs->add_cron($this->in->get('cron'), array('active' => true), true);
+
 		$this->display();
 	}
 	
 	public function disable(){
-		if ($this->crons[$this->in->get('cron')]['editable']){
-			$this->cronjobs->add_cron($this->in->get('cron'), array('active' => false), true);
-		}			
+		$this->cronjobs->add_cron($this->in->get('cron'), array('active' => false), true);	
+		
 		$this->display();
 	}
 
