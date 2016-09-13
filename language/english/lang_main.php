@@ -803,7 +803,7 @@ $lang = array(
 	"raidevent_raid_unsigned_active" => 'Only show active character',
 	"raidevent_raid_unsigned_level" => 'Filter: Level',
 	"raidevent_raid_unsigned_level_help" => '0 = All, Show all results larger or equal to the selected level',
-	"raidevent_raid_unsigned_button" => 'Unsigned chars',
+	"raidevent_raid_unsigned_button" => 'Unsigned characters',
 	"raidevent_raid_status" => array(
 	0 => 'confirmed',
 	1 => 'signed up',
@@ -1135,7 +1135,7 @@ $lang = array(
 	"email_confirm_note" => "Your new email address will get valid once you confirm it by using the link sent to your new email address.",
 	"error_account_locked" => "Your account was locked. A login is not possible. If you have questions, please contact the Administrator.",
 	"email_must_confirm_note" => "The Administrator has initiated an email address confirmation. You should have already received an email with a link to confirm your email address. Until you haven't confirmed, only this userprofile is accessible.",
-		
+
 );
 
 ?>

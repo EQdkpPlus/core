@@ -173,13 +173,13 @@ $(function(){
 			max_count	= dnd_start_container.data('attendee-max');
 			start_count	= dnd_start_container.find('.guest_box, .attendee_box').length;
 			end_count	= $(this).find('.guest_box, .attendee_box').length;
-			
+
 			// replace class text
 			dnd_start_container.attr('data-attendee-count', start_count).data('attendee-count', start_count);
 			dnd_start_container.find('.attendee_count').text('('+start_count+'/'+max_count+')');
 			$(this).attr('data-attendee-count', end_count).data('attendee-count', end_count);
 			$(this).find('.attendee_count').text('('+end_count+'/'+max_count+')');
-			
+
 			// count the guests
 			start_guests		= dnd_start_container.parent().parent().find(".guest_box").length;
 			end_guests			= $(this).parent().parent().find(".guest_box").length;
@@ -190,7 +190,7 @@ $(function(){
 			max_count			= parseInt(start_state_header.data('attendee-max'));
 			start_count			= start_state_header.parent().find('.guest_box, .attendee_box').length;
 			end_count			= end_state_header.parent().find('.guest_box, .attendee_box').length;
-			
+
 			// replace the guest text
 			txt_noguest		= '[{L_NO_GUESTS}]';
 			txt_oneguest	= '[{L_ONE_GUEST}]';
@@ -552,7 +552,7 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 
 				<!-- IF S_NOTSIGNED_VISIBLE -->
 				<div class="raidcal_buttonrow_notsigned">
-					<button type="button" class="notsigned_button"><i class="fa fa-plus-circle"></i> {L_raidevent_raid_unsigned_button}</button>
+					<button type="button" class="notsigned_button"><i class="fa fa-plus-circle fa-lg"></i> {L_raidevent_raid_unsigned_button}</button>
 				</div>
 				<!-- ENDIF -->
 			</div>

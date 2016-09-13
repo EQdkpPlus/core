@@ -2250,7 +2250,6 @@ fieldset.settings.floatRight.raid input[type="text"]{
 .raidcal_buttonrow_right { margin-left: auto; }
 .raidcal_buttonrow_left > *,
 .raidcal_buttonrow_right > * { display: inline; }
-.raidcal_buttonrow_confirmall { margin-right: 15px; }
 
 .buttonblock{
 	color:black;
@@ -2318,7 +2317,7 @@ fieldset.raidcal_infos dt, fieldset.moderation_panel dt {
 	.attendee_count	{ margin-top:-2px; }
 
 	/* attendee */
-	.attendee_box			{ display:flex; padding:2px; margin:4px 4px 0; border:1px solid @eqdkpContainerBorderColor; background:@eqdkpContentBackgroundColor; color:@eqdkpContentFontColor; transition:border .2s ease-in; order:1; cursor: move; }
+	.attendee_box			{ display:flex; padding:2px; margin:4px 4px 0; border:1px solid @eqdkpContainerBorderColor; background:@eqdkpContentBackgroundColor; color:@eqdkpContentFontColor; transition:border .2s ease-in; order:1; }
 	.attendee_box.selected	{ border:1px solid #f55; }
 	.attendee_box.char_edit	{ border:1px solid #ff9d55; }
 	.attendee_select		{ flex:0 0 22px; }
@@ -2328,7 +2327,7 @@ fieldset.raidcal_infos dt, fieldset.moderation_panel dt {
 	.attendee_info .fa-info	{ padding-right:5px; }
 
 	/* guest */
-	.guest_box						{ display:flex; justify-content:space-between; margin:4px 4px 0; background:@eqdkpContentBackgroundColor; border:1px solid @eqdkpContentBorderColor; border-radius:4px; order:2; cursor: move; }
+	.guest_box						{ display:flex; justify-content:space-between; margin:4px 4px 0; background:@eqdkpContentBackgroundColor; border:1px solid @eqdkpContentBorderColor; border-radius:4px; order:2; }
 	.guest_name						{ flex:2 1 100%; overflow:hidden; text-overflow:ellipsis; }
 	.guest_name img					{ margin-top:-4px; }
 	.guest_info						{ flex:1 0 auto; font-size:10px; overflow:hidden; }
@@ -2336,7 +2335,7 @@ fieldset.raidcal_infos dt, fieldset.moderation_panel dt {
 	.guest_box:hover .guest_info i	{ left:0; transition:all .4s ease-in 1s; }
 
 	/* drag & drop */
-	.ui-draggable			{ cursor:pointer; }
+	.ui-draggable			{ cursor:move; }
 	.ui-draggable-dragging	{ border:1px dotted @eqdkpContentPositiveColor; z-index:1; }
 	.highlight-dropzone		{ opacity:1 !important; min-height:60px; background:fadeout(@eqdkpContentHighlightColor,20%); }
 }

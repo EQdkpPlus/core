@@ -544,7 +544,7 @@ $lang = array(
 "email_subject_send_error" => "Beim senden der E-Mail ist ein Fehler aufgetreten.",
 "email_receiver" => "Empfänger",
 "email_subject_password_changed" => "Passwort wurde geändert",
-"email_subject_email_confirm" => "E-Mail-Adresse bestätigen",		
+"email_subject_email_confirm" => "E-Mail-Adresse bestätigen",
 "uc_add_char" => "Charakter hinzufügen",
 "uc_add_char_plain" => "Neu erstellen",
 "uc_add_char_armory" => "Importieren",
@@ -759,7 +759,7 @@ $lang = array(
 "raidevent_raid_unsigned_active" => "Nur aktive Charakter zeigen",
 "raidevent_raid_unsigned_level" => "Filter: Level",
 "raidevent_raid_unsigned_level_help" => "0 = Alle, Zeigt alle Ergebnisse größer oder gleich der Eingabe an",
-"raidevent_raid_unsigned_button" => "Unangemeldete Chars",
+"raidevent_raid_unsigned_button" => "Unangemeldete Charaktere",
 "raidevent_raid_status" => array(
 	0	=> 'Bestätigt',
 	1	=> 'Angemeldet',
@@ -1096,6 +1096,6 @@ $lang = array(
 "favorits" => "Favoriten",
 "email_confirmed" => "Deine E-Mail-Adresse wurde erfolgreich bestätigt.",
 "email_confirm_note" => "Damit deine neue E-Mail-Adresse gültig wird, musst diese über einen Link aktivieren, der dir soeben per E-Mail an die neue Adresse gesendet wurde.",
-"email_must_confirm_note" => "Der Administrator hat die Bestätigung deiner E-Mail-Adresse veranlasst. Eine E-Mail mit einem Link zur Bestätigung wurde an deine E-Mail-Adresse gesendet. Bis zur Bestätigung ist nur dein Benutzerprofil zugänglich.",		
+"email_must_confirm_note" => "Der Administrator hat die Bestätigung deiner E-Mail-Adresse veranlasst. Eine E-Mail mit einem Link zur Bestätigung wurde an deine E-Mail-Adresse gesendet. Bis zur Bestätigung ist nur dein Benutzerprofil zugänglich.",
 );
 ?>
