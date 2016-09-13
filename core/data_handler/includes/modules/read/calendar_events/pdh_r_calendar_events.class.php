@@ -27,8 +27,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 	class pdh_r_calendar_events extends pdh_r_generic{
 
 		public $default_lang = 'english';
-		public $events;
-		public $repeatable_events;
+		public $events, $events_unique, $repeatable_events, $event_timestamps;
 
 		public $calendar_event_wl = array(
 			'raid_eventid', 'raid_value', 'invitedate', 'deadlinedate', 'raidmode', 'distribution', 'raidleader'
@@ -75,6 +74,12 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 				return true;
 			}
 
+			//Get from Cache
+			$this->events				= array();
+			$this->events_unique		= array();
+			$this->repeatable_events	= array();
+			$this->event_timestamps		= array();
+			
 			$objQuery = $this->db->query("SELECT * FROM __calendar_events ORDER BY id ASC");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
