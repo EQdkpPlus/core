@@ -741,6 +741,7 @@ $lang = array(
 	"raidevent_deleted_role_assigned" => 'Wrong role assignment',
 	"raidevent_deleted_role_assigned_info" => 'The role was deleted after the char signed into this raid or the default role was missing on signup.',
 	"raidevent_guest_attendraid" => 'Attend raid as guest',
+	"raidevent_guest_addguest" => 'Add guest',
 	"raidevent_raid_apply" => 'Apply as guest attendee',
 	"raidevent_raidleader" => 'Raidleader',
 	"raidevent_export_seperator" => "CSV Seperator",

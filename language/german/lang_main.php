@@ -698,6 +698,7 @@ $lang = array(
 "raidevent_deleted_role_assigned" => 'Fehlerhafte Zuordnung',
 "raidevent_deleted_role_assigned_info" => 'Entweder wurde die Rolle nach der Anmeldung des Charakters gelöscht oder der Benutzer hatte keine zugewiesene Standardrolle.',
 "raidevent_guest_attendraid" => 'Als Gast teilnehmen',
+"raidevent_guest_addguest" => 'Gast hinzufügen',
 "raidevent_raid_apply" => 'Als Gastteilnehmer bewerben',
 "raidevent_raidleader" => "Raidleiter",
 "raidevent_export_seperator" => "CSV Seperator",

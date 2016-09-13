@@ -449,7 +449,7 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 						<div class="eventdata-details-raidleader"><i class="fa fa-users fa-lg" title="{L_raidevent_raidleader}"></i> {RAIDLEADER} </div>
 						<!-- ENDIF -->
 						<!-- IF IS_RAID_TRANSFORMED -->
-						<div class="eventdata-details-transformed"><i class="fa fa-exchange fa-lg" title="{L_raidevent_raidtransformed}"></i> {LINK2TRANSFORMEDRAID} <span class="coretip" data-coretip='{TRANSFORMEDRAID_TT}'><i class="fa fa-info-circle fa-lg"></i></span></div>
+						<div class="eventdata-details-transformed"><i class="fa fa-exchange fa-lg" title="{L_raidevent_raidtransformed}"></i> {LINK2TRANSFORMEDRAID} <span class="coretip" data-coretip='{TRANSFORMEDRAID_TT}'><i class="fa fa-external-link-square fa-lg"></i></span></div>
 						<!-- ENDIF -->
 					</div>
 				</div>
@@ -540,19 +540,19 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 			<div class="raidcal_buttonrow_right">
 				<!-- IF IS_OPERATOR and SHOW_CONFIRMBUTTON -->
 				<div class="raidcal_buttonrow_confirmall">
-					<button type="submit" name="confirmall" id="button_confirmall">{L_raidevent_raid_confirmall}</button>
+					<button type="submit" name="confirmall" id="button_confirmall"><i class="fa fa-check-circle fa-lg"></i> {L_raidevent_raid_confirmall}</button>
 				</div>
 				<!-- ENDIF -->
 
 				<!-- IF IS_OPERATOR -->
 				<div class="raidcal_buttonrow_addguest">
-					<button id="addguest" type="button"><i class="fa fa-user-plus fa-lg"></i></button>
+					<button id="addguest" type="button"><i class="fa fa-user-plus fa-lg"></i> {L_raidevent_guest_addguest}</button>
 				</div>
 				<!-- ENDIF -->
 
 				<!-- IF S_NOTSIGNED_VISIBLE -->
 				<div class="raidcal_buttonrow_notsigned">
-					<button type="button" class="notsigned_button"><i class="fa fa-plus-circle"></i>{L_raidevent_raid_unsigned_button}</button>
+					<button type="button" class="notsigned_button"><i class="fa fa-plus-circle"></i> {L_raidevent_raid_unsigned_button}</button>
 				</div>
 				<!-- ENDIF -->
 			</div>
