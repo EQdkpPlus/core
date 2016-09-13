@@ -148,6 +148,9 @@ class vbulletin51_bridge extends bridge_generic {
 	}
 	
 	public function autologin($arrCookieData){
+		//If Single Sign On is disabled, abort
+		if ($this->config->get('cmsbridge_disable_sso') != '1') return false;
+		
 		$config = array();
 		$objQuery =  $this->bridgedb->query("SELECT data FROM ".$this->prefix."datastore WHERE title = 'options'");
 		if($objQuery){
@@ -189,6 +192,9 @@ class vbulletin51_bridge extends bridge_generic {
 	}
 	
 	public function logout(){
+		//If Single Sign On is disabled, abort
+		if ($this->config->get('cmsbridge_disable_sso') != '1') return false;
+		
 		$arrUserdata = $this->bridge->get_userdata($this->user->data['username']);
 		if (isset($arrUserdata['id'])){
 			$this->bridgedb->prepare("DELETE FROM ".$this->prefix."session WHERE userid=?")->execute($arrUserdata['id']);
