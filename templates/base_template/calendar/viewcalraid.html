@@ -63,6 +63,11 @@ $(function(){
 		$('#raidcal_alrdysignin').hide();
 	});
 
+	$('button[name="abort_statuschange"]').click(function(){
+		$('#toogleRaidcalSignin').hide();
+		$('#raidcal_alrdysignin').show();
+	});
+
 	$('.char_adminmenu').click(function (){
 		var charid		= $(this).attr('data-character-id');
 		var $this		= $(this);
@@ -484,14 +489,15 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 				<dt><label>{L_status}<!-- IF IS_SIGNEDIN and IS_STATUSCHANGE_WARN --> <i class="fa fa-exclamation-triangle coretip" data-coretip="{L_raidevent_raid_statuschange_warning}"></i><!-- ENDIF --></label></dt>
 				<dd>{DD_SIGNUPSTATUS} </dd>
 			</dl>
-			<input type="submit" name="update_status" value="{L_raidevent_raid_statusbttn}" 	class="mainoption" />
+			<button type="submit" name="update_status" class="mainoption"><i class="fa fa-check"></i> {L_raidevent_raid_statusbttn}</button>
+			<button type="button" name="abort_statuschange" class="mainoption"><i class="fa fa-times"></i> {L_cancel}</button>
 		</fieldset>
 	</div>
 
 	<div class="infobox infobox-large infobox-green clearfix" id="raidcal_alrdysignin" <!-- IF not IS_SIGNEDIN -->style="display:none"<!-- ENDIF -->>
 		<i class="fa fa-user fa-4x pull-left"></i>
 		{L_SIGNEDIN_MSG}
-		<input type="button" value="{L_raidevent_raid_changesignin}" id="raidcal_change_signin" class="mainoption bi_edit" />
+		<button type="button" id="raidcal_change_signin" class="mainoption"><i class="fa fa-pencil"></i> {L_raidevent_raid_changesignin}</button>
 	</div>
 	<!-- ELSE -->
 	<!-- IF NO_CHAR_ASSIGNED and S_LOGGED_IN -->
