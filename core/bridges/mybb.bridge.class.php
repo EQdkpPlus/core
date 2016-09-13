@@ -225,6 +225,9 @@ class mybb_bridge extends bridge_generic {
 	}
 
 	public function logout(){
+		//If Single Sign On is disabled, abort
+		if ($this->config->get('cmsbridge_disable_sso') != '1') return false;
+		
 		$query = $this->bridgedb->query("SELECT name,value FROM ".$this->prefix."settings");
 		if ($query){
 			$result = $query->fetchAllAssoc();

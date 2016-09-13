@@ -140,6 +140,9 @@ class smf21_bridge extends bridge_generic {
 	}
 	
 	public function logout() {
+		//If Single Sign On is disabled, abort
+		if ($this->config->get('cmsbridge_disable_sso') != '1') return false;
+		
 		$strBoardURL = parse_url($this->config->get('cmsbridge_url'), PHP_URL_HOST);
 		$strBoardPath = parse_url($this->config->get('cmsbridge_url'), PHP_URL_PATH);
 		$arrDomains = explode('.', $strBoardURL);

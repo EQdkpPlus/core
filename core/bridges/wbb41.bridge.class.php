@@ -207,7 +207,10 @@ class wbb41_bridge extends bridge_generic {
 	}
 	
 	public function autologin($arrCookieData){
-	$config = array();
+		//If Single Sign On is disabled, abort
+		if ($this->config->get('cmsbridge_disable_sso') != '1') return false;
+		
+		$config = array();
 		$objQuery =  $this->bridgedb->query("SELECT * FROM ".$this->prefix."option WHERE optionName = 'cookie_prefix'");
 		if($objQuery){
 			$result = $objQuery->fetchAllAssoc();
@@ -246,6 +249,9 @@ class wbb41_bridge extends bridge_generic {
 	}
 	
 	public function logout(){
+		//If Single Sign On is disabled, abort
+		if ($this->config->get('cmsbridge_disable_sso') != '1') return false;
+		
 		$arrUserdata = $this->bridge->get_userdata($this->user->data['username']);
 		if (isset($arrUserdata['id'])){
 			$this->bridgedb->prepare("DELETE FROM ".$this->prefix."session WHERE userID=?")->execute($arrUserdata['id']);

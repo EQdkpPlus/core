@@ -267,6 +267,9 @@ class phpbb31_bridge extends bridge_generic {
 	}
 	
 	public function autologin($arrCookieData){
+		//If Single Sign On is disabled, abort
+		if ($this->config->get('cmsbridge_disable_sso') != '1') return false;
+		
 		$query = $this->bridgedb->query("SELECT * FROM ".$this->prefix."config");
 		if ($query){
 			while($row = $query->fetchAssoc()){
@@ -304,6 +307,9 @@ class phpbb31_bridge extends bridge_generic {
 	}
 		
 	public function logout() {
+		//If Single Sign On is disabled, abort
+		if ($this->config->get('cmsbridge_disable_sso') != '1') return false;
+		
 		$arrUserdata = $this->bridge->get_userdata($this->user->data['username']);
 		if (isset($arrUserdata['id'])){
 			$this->bridgedb->prepare("DELETE FROM ".$this->prefix."sessions WHERE session_user_id=?")->execute($arrUserdata['id']);
