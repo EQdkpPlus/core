@@ -10076,7 +10076,7 @@ return jQuery;
 /*! jQuery Migrate v3.0.0 | (c) jQuery Foundation and other contributors | jquery.org/license */
 "undefined"==typeof jQuery.migrateMute&&(jQuery.migrateMute=!0),function(a,b){"use strict";function c(c){var d=b.console;e[c]||(e[c]=!0,a.migrateWarnings.push(c),d&&d.warn&&!a.migrateMute&&(d.warn("JQMIGRATE: "+c),a.migrateTrace&&d.trace&&d.trace()))}function d(a,b,d,e){Object.defineProperty(a,b,{configurable:!0,enumerable:!0,get:function(){return c(e),d}})}a.migrateVersion="3.0.0",function(){var c=b.console&&b.console.log&&function(){b.console.log.apply(b.console,arguments)},d=/^[12]\./;c&&(a&&!d.test(a.fn.jquery)||c("JQMIGRATE: jQuery 3.0.0+ REQUIRED"),a.migrateWarnings&&c("JQMIGRATE: Migrate plugin loaded multiple times"),c("JQMIGRATE: Migrate is installed"+(a.migrateMute?"":" with logging active")+", version "+a.migrateVersion))}();var e={};a.migrateWarnings=[],void 0===a.migrateTrace&&(a.migrateTrace=!0),a.migrateReset=function(){e={},a.migrateWarnings.length=0},"BackCompat"===document.compatMode&&c("jQuery is not compatible with Quirks Mode");var f=a.fn.init,g=a.isNumeric,h=a.find,i=/\[(\s*[-\w]+\s*)([~|^$*]?=)\s*([-\w#]*?#[-\w#]*)\s*\]/,j=/\[(\s*[-\w]+\s*)([~|^$*]?=)\s*([-\w#]*?#[-\w#]*)\s*\]/g;a.fn.init=function(a){var b=Array.prototype.slice.call(arguments);return"string"==typeof a&&"#"===a&&(c("jQuery( '#' ) is not a valid selector"),b[0]=[]),f.apply(this,b)},a.fn.init.prototype=a.fn,a.find=function(a){var b=Array.prototype.slice.call(arguments);if("string"==typeof a&&i.test(a))try{document.querySelector(a)}catch(d){a=a.replace(j,function(a,b,c,d){return"["+b+c+'"'+d+'"]'});try{document.querySelector(a),c("Attribute selector with '#' must be quoted: "+b[0]),b[0]=a}catch(e){c("Attribute selector with '#' was not fixed: "+b[0])}}return h.apply(this,b)};var k;for(k in h)Object.prototype.hasOwnProperty.call(h,k)&&(a.find[k]=h[k]);a.fn.size=function(){return c("jQuery.fn.size() is deprecated; use the .length property"),this.length},a.parseJSON=function(){return c("jQuery.parseJSON is deprecated; use JSON.parse"),JSON.parse.apply(null,arguments)},a.isNumeric=function(b){function d(b){var c=b&&b.toString();return!a.isArray(b)&&c-parseFloat(c)+1>=0}var e=g(b),f=d(b);return e!==f&&c("jQuery.isNumeric() should not be called on constructed objects"),f},d(a,"unique",a.uniqueSort,"jQuery.unique is deprecated, use jQuery.uniqueSort"),d(a.expr,"filters",a.expr.pseudos,"jQuery.expr.filters is now jQuery.expr.pseudos"),d(a.expr,":",a.expr.pseudos,'jQuery.expr[":"] is now jQuery.expr.pseudos');var l=a.ajax;a.ajax=function(){var a=l.apply(this,arguments);return a.promise&&(d(a,"success",a.done,"jQXHR.success is deprecated and removed"),d(a,"error",a.fail,"jQXHR.error is deprecated and removed"),d(a,"complete",a.always,"jQXHR.complete is deprecated and removed")),a};var m=a.fn.removeAttr,n=a.fn.toggleClass,o=/\S+/g;a.fn.removeAttr=function(b){var d=this;return a.each(b.match(o),function(b,e){a.expr.match.bool.test(e)&&(c("jQuery.fn.removeAttr no longer sets boolean properties: "+e),d.prop(e,!1))}),m.apply(this,arguments)},a.fn.toggleClass=function(b){return void 0!==b&&"boolean"!=typeof b?n.apply(this,arguments):(c("jQuery.fn.toggleClass( boolean ) is deprecated"),this.each(function(){var c=this.getAttribute&&this.getAttribute("class")||"";c&&a.data(this,"__className__",c),this.setAttribute&&this.setAttribute("class",c||b===!1?"":a.data(this,"__className__")||"")}))};var p=!1;a.swap&&a.each(["height","width","reliableMarginRight"],function(b,c){var d=a.cssHooks[c]&&a.cssHooks[c].get;d&&(a.cssHooks[c].get=function(){var a;return p=!0,a=d.apply(this,arguments),p=!1,a})}),a.swap=function(a,b,d,e){var f,g,h={};p||c("jQuery.swap() is undocumented and deprecated");for(g in b)h[g]=a.style[g],a.style[g]=b[g];f=d.apply(a,e||[]);for(g in b)a.style[g]=h[g];return f};var q=a.data;a.data=function(b,d,e){var f;return d&&d!==a.camelCase(d)&&(f=a.hasData(b)&&q.call(this,b),f&&d in f)?(c("jQuery.data() always sets/gets camelCased names: "+d),arguments.length>2&&(f[d]=e),f[d]):q.apply(this,arguments)};var r=a.Tween.prototype.run;a.Tween.prototype.run=function(b){a.easing[this.easing].length>1&&(c('easing function "jQuery.easing.'+this.easing.toString()+'" should use only first argument'),a.easing[this.easing]=a.easing[this.easing].bind(a.easing,b,this.options.duration*b,0,1,this.options.duration)),r.apply(this,arguments)};var s=a.fn.load,t=a.event.fix;a.event.props=[],a.event.fixHooks={},a.event.fix=function(b){var d,e=b.type,f=this.fixHooks[e],g=a.event.props;if(g.length)for(c("jQuery.event.props are deprecated and removed: "+g.join());g.length;)a.event.addProp(g.pop());if(f&&!f._migrated_&&(f._migrated_=!0,c("jQuery.event.fixHooks are deprecated and removed: "+e),(g=f.props)&&g.length))for(;g.length;)a.event.addProp(g.pop());return d=t.call(this,b),f&&f.filter?f.filter(d,b):d},a.each(["load","unload","error"],function(b,d){a.fn[d]=function(){var a=Array.prototype.slice.call(arguments,0);return"load"===d&&"string"==typeof a[0]?s.apply(this,a):(c("jQuery.fn."+d+"() is deprecated"),a.splice(0,0,d),arguments.length?this.on.apply(this,a):(this.triggerHandler.apply(this,a),this))}}),a(function(){a(document).triggerHandler("ready")}),a.event.special.ready={setup:function(){this===document&&c("'ready' event is deprecated")}},a.fn.extend({bind:function(a,b,d){return c("jQuery.fn.bind() is deprecated"),this.on(a,null,b,d)},unbind:function(a,b){return c("jQuery.fn.unbind() is deprecated"),this.off(a,null,b)},delegate:function(a,b,d,e){return c("jQuery.fn.delegate() is deprecated"),this.on(b,a,d,e)},undelegate:function(a,b,d){return c("jQuery.fn.undelegate() is deprecated"),1===arguments.length?this.off(a,"**"):this.off(b,a||"**",d)}});var u=a.fn.offset;a.fn.offset=function(){var b,d=this[0],e={top:0,left:0};return d&&d.nodeType?(b=(d.ownerDocument||document).documentElement,a.contains(b,d)?u.apply(this,arguments):(c("jQuery.fn.offset() requires an element connected to a document"),e)):(c("jQuery.fn.offset() requires a valid DOM element"),e)};var v=a.param;a.param=function(b,d){var e=a.ajaxSettings&&a.ajaxSettings.traditional;return void 0===d&&e&&(c("jQuery.param() no longer uses jQuery.ajaxSettings.traditional"),d=e),v.call(this,b,d)};var w=a.fn.andSelf||a.fn.addBack;a.fn.andSelf=function(){return c("jQuery.fn.andSelf() replaced by jQuery.fn.addBack()"),w.apply(this,arguments)};var x=a.Deferred,y=[["resolve","done",a.Callbacks("once memory"),a.Callbacks("once memory"),"resolved"],["reject","fail",a.Callbacks("once memory"),a.Callbacks("once memory"),"rejected"],["notify","progress",a.Callbacks("memory"),a.Callbacks("memory")]];a.Deferred=function(b){var d=x(),e=d.promise();return d.pipe=e.pipe=function(){var b=arguments;return c("deferred.pipe() is deprecated"),a.Deferred(function(c){a.each(y,function(f,g){var h=a.isFunction(b[f])&&b[f];d[g[1]](function(){var b=h&&h.apply(this,arguments);b&&a.isFunction(b.promise)?b.promise().done(c.resolve).fail(c.reject).progress(c.notify):c[g[0]+"With"](this===e?c.promise():this,h?[b]:arguments)})}),b=null}).promise()},b&&b.call(d,d),d}}(jQuery,window);
 //! moment.js
-//! version : 2.14.1
+//! version : 2.15.0
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
 //! license : MIT
 //! momentjs.com
@@ -10104,7 +10104,9 @@ return jQuery;
     }
 
     function isObject(input) {
-        return Object.prototype.toString.call(input) === '[object Object]';
+        // IE8 will treat undefined and null as object if it wasn't for
+        // input != null
+        return input != null && Object.prototype.toString.call(input) === '[object Object]';
     }
 
     function isObjectEmpty(obj) {
@@ -10203,7 +10205,7 @@ return jQuery;
             var parsedParts = some.call(flags.parsedDateParts, function (i) {
                 return i != null;
             });
-            m._isValid = !isNaN(m._d.getTime()) &&
+            var isNowValid = !isNaN(m._d.getTime()) &&
                 flags.overflow < 0 &&
                 !flags.empty &&
                 !flags.invalidMonth &&
@@ -10214,10 +10216,17 @@ return jQuery;
                 (!flags.meridiem || (flags.meridiem && parsedParts));
 
             if (m._strict) {
-                m._isValid = m._isValid &&
+                isNowValid = isNowValid &&
                     flags.charsLeftOver === 0 &&
                     flags.unusedTokens.length === 0 &&
                     flags.bigHour === undefined;
+            }
+
+            if (Object.isFrozen == null || !Object.isFrozen(m)) {
+                m._isValid = isNowValid;
+            }
+            else {
+                return isNowValid;
             }
         }
         return m._isValid;
@@ -10359,7 +10368,22 @@ return jQuery;
                 utils_hooks__hooks.deprecationHandler(null, msg);
             }
             if (firstTime) {
-                warn(msg + '\nArguments: ' + Array.prototype.slice.call(arguments).join(', ') + '\n' + (new Error()).stack);
+                var args = [];
+                var arg;
+                for (var i = 0; i < arguments.length; i++) {
+                    arg = '';
+                    if (typeof arguments[i] === 'object') {
+                        arg += '\n[' + i + '] ';
+                        for (var key in arguments[0]) {
+                            arg += key + ': ' + arguments[0][key] + ', ';
+                        }
+                        arg = arg.slice(0, -2); // Remove trailing comma and space
+                    } else {
+                        arg = arguments[i];
+                    }
+                    args.push(arg);
+                }
+                warn(msg + '\nArguments: ' + Array.prototype.slice.call(args).join('') + '\n' + (new Error()).stack);
                 firstTime = false;
             }
             return fn.apply(this, arguments);
@@ -10886,12 +10910,18 @@ return jQuery;
     var MONTHS_IN_FORMAT = /D[oD]?(\[[^\[\]]*\]|\s+)+MMMM?/;
     var defaultLocaleMonths = 'January_February_March_April_May_June_July_August_September_October_November_December'.split('_');
     function localeMonths (m, format) {
+        if (!m) {
+            return this._months;
+        }
         return isArray(this._months) ? this._months[m.month()] :
             this._months[(this._months.isFormat || MONTHS_IN_FORMAT).test(format) ? 'format' : 'standalone'][m.month()];
     }
 
     var defaultLocaleMonthsShort = 'Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec'.split('_');
     function localeMonthsShort (m, format) {
+        if (!m) {
+            return this._monthsShort;
+        }
         return isArray(this._monthsShort) ? this._monthsShort[m.month()] :
             this._monthsShort[MONTHS_IN_FORMAT.test(format) ? 'format' : 'standalone'][m.month()];
     }
@@ -11388,18 +11418,21 @@ return jQuery;
 
     var defaultLocaleWeekdays = 'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split('_');
     function localeWeekdays (m, format) {
+        if (!m) {
+            return this._weekdays;
+        }
         return isArray(this._weekdays) ? this._weekdays[m.day()] :
             this._weekdays[this._weekdays.isFormat.test(format) ? 'format' : 'standalone'][m.day()];
     }
 
     var defaultLocaleWeekdaysShort = 'Sun_Mon_Tue_Wed_Thu_Fri_Sat'.split('_');
     function localeWeekdaysShort (m) {
-        return this._weekdaysShort[m.day()];
+        return (m) ? this._weekdaysShort[m.day()] : this._weekdaysShort;
     }
 
     var defaultLocaleWeekdaysMin = 'Su_Mo_Tu_We_Th_Fr_Sa'.split('_');
     function localeWeekdaysMin (m) {
-        return this._weekdaysMin[m.day()];
+        return (m) ? this._weekdaysMin[m.day()] : this._weekdaysMin;
     }
 
     function day_of_week__handleStrictParse(weekdayName, format, strict) {
@@ -11835,10 +11868,10 @@ return jQuery;
         var oldLocale = null;
         // TODO: Find a better way to register and load all the locales in Node
         if (!locales[name] && (typeof module !== 'undefined') &&
-                module && module.exports) {
+                module && module.require) {
             try {
                 oldLocale = globalLocale._abbr;
-                require('./locale/' + name);
+                module.require('./locale/' + name);
                 // because defineLocale currently also sets the global locale, we
                 // want to undo that for lazy loaded locales
                 locale_locales__getSetGlobalLocale(oldLocale);
@@ -12094,9 +12127,9 @@ return jQuery;
     }
 
     utils_hooks__hooks.createFromInputFallback = deprecate(
-        'moment construction falls back to js Date. This is ' +
-        'discouraged and will be removed in upcoming major ' +
-        'release. Please refer to ' +
+        'value provided is not in a recognized ISO format. moment construction falls back to js Date(), ' +
+        'which is not reliable across all browsers and versions. Non ISO date formats are ' +
+        'discouraged and will be removed in an upcoming major release. Please refer to ' +
         'http://momentjs.com/guides/#/warnings/js-date/ for more info.',
         function (config) {
             config._d = new Date(config._i + (config._useUTC ? ' UTC' : ''));
@@ -12595,6 +12628,14 @@ return jQuery;
         return obj instanceof Duration;
     }
 
+    function absRound (number) {
+        if (number < 0) {
+            return Math.round(-1 * number) * -1;
+        } else {
+            return Math.round(number);
+        }
+    }
+
     // FORMATTING
 
     function offset (token, separator) {
@@ -12745,7 +12786,13 @@ return jQuery;
         if (this._tzm) {
             this.utcOffset(this._tzm);
         } else if (typeof this._i === 'string') {
-            this.utcOffset(offsetFromString(matchOffset, this._i));
+            var tZone = offsetFromString(matchOffset, this._i);
+
+            if (tZone === 0) {
+                this.utcOffset(0, true);
+            } else {
+                this.utcOffset(offsetFromString(matchOffset, this._i));
+            }
         }
         return this;
     }
@@ -12800,7 +12847,7 @@ return jQuery;
     }
 
     // ASP.NET json date format regex
-    var aspNetRegex = /^(\-)?(?:(\d*)[. ])?(\d+)\:(\d+)(?:\:(\d+)\.?(\d{3})?\d*)?$/;
+    var aspNetRegex = /^(\-)?(?:(\d*)[. ])?(\d+)\:(\d+)(?:\:(\d+)(\.\d*)?)?$/;
 
     // from http://docs.closure-library.googlecode.com/git/closure_goog_date_date.js.source.html
     // somewhat more in line with 4.4.3.2 2004 spec, but allows decimal anywhere
@@ -12832,11 +12879,11 @@ return jQuery;
             sign = (match[1] === '-') ? -1 : 1;
             duration = {
                 y  : 0,
-                d  : toInt(match[DATE])        * sign,
-                h  : toInt(match[HOUR])        * sign,
-                m  : toInt(match[MINUTE])      * sign,
-                s  : toInt(match[SECOND])      * sign,
-                ms : toInt(match[MILLISECOND]) * sign
+                d  : toInt(match[DATE])                         * sign,
+                h  : toInt(match[HOUR])                         * sign,
+                m  : toInt(match[MINUTE])                       * sign,
+                s  : toInt(match[SECOND])                       * sign,
+                ms : toInt(absRound(match[MILLISECOND] * 1000)) * sign // the millisecond decimal point is included in the match
             };
         } else if (!!(match = isoRegex.exec(input))) {
             sign = (match[1] === '-') ? -1 : 1;
@@ -12909,14 +12956,6 @@ return jQuery;
         }
 
         return res;
-    }
-
-    function absRound (number) {
-        if (number < 0) {
-            return Math.round(-1 * number) * -1;
-        } else {
-            return Math.round(number);
-        }
     }
 
     // TODO: remove 'name' arg after deprecation is removed
@@ -14233,7 +14272,7 @@ return jQuery;
     // Side effect imports
 
 
-    utils_hooks__hooks.version = '2.14.1';
+    utils_hooks__hooks.version = '2.15.0';
 
     setHookCallback(local__createLocal);
 
@@ -44741,7 +44780,7 @@ $.extend(TRUE, QTIP.defaults, {
 	$.fn.rssReader = function (j) {
 	  var container = this;
 		var k = $.extend({
-			targeturl: "http://www.clashdesign.net/blog/index.php/feed/rss2",
+			targeturl: "http://eqdkp-plus.eu/share/news_de.xml",
 			items: 5,
 			Maxlength: 80,
 			background: '#fff',
@@ -44769,7 +44808,7 @@ $.extend(TRUE, QTIP.defaults, {
 			$(container).ajaxError(function () {
 				$(this).append("<strong>"+l.lang_errorpage+"</strong>")
 			});
-			
+
 			$.ajax({
 				type: "get",
 				url: l.targeturl,
@@ -44799,14 +44838,20 @@ $.extend(TRUE, QTIP.defaults, {
 						$('<a class="rss_readmore" href="' + c + '">' + l.lang_readmore + '</a><br />').appendTo(container);
 					})
 				}
-				
+
 				function atom(e){
 					$(f).find('entry').each(function (i) {
 						if (i > e - 1) return;
 						var a = $(this).find('title').text();
 						var b = $(this).find('published').text();
-						var mymo = moment(new Date(b)).utcOffset(mmocms_user_timezone);
-						b = mymo.format(df);
+						var u = $(this).find('updated').text();
+						if(b != ""){
+							var mymo = moment(new Date(b)).utcOffset(mmocms_user_timezone);
+							b = mymo.format(df);
+						} else if (u != ""){
+							var mymo = moment(new Date(u)).utcOffset(mmocms_user_timezone);
+							b = mymo.format(df);
+						}
 						var c = $(this).find('link').attr('href');
 						var d = $(this).find('summary').text();
 						$('<a href="' + c + '">' + a + '</a>').html(a).appendTo(container);
@@ -44816,7 +44861,7 @@ $.extend(TRUE, QTIP.defaults, {
 						$('<a class="rss_readmore" href="' + c + '">' + l.lang_readmore + '</a><br />').appendTo(container);
 					})
 				}
-				
+
 				if (jQuery('channel', f).length == 1) {
 					return h(g);
 				} else if (jQuery('feed', f).length == 1) {
@@ -44824,7 +44869,7 @@ $.extend(TRUE, QTIP.defaults, {
 				}
 			}
 			});
-			
+
 		} else {
 			var n = "xml";
 			$.ajax({
@@ -44864,14 +44909,20 @@ $.extend(TRUE, QTIP.defaults, {
 							$('<a class="rss_readmore" href="' + c + '">' + l.lang_readmore + '</a><br /><br />').appendTo(container);
 						})
 					}
-					
+
 					function atom(e){
 						$(f).find('entry').each(function (i) {
 							if (i > e - 1) return;
 							var a = $(this).find('title').text();
 							var b = $(this).find('published').text();
-							var mymo = moment(new Date(b)).utcOffset(mmocms_user_timezone);
-							b = mymo.format(df);
+							var u = $(this).find('updated').text();
+							if(b != ""){
+								var mymo = moment(new Date(b)).utcOffset(mmocms_user_timezone);
+								b = mymo.format(df);
+							} else if (u != ""){
+								var mymo = moment(new Date(u)).utcOffset(mmocms_user_timezone);
+								b = mymo.format(df);
+							} 
 							var c = $(this).find('link').attr('href');
 							var d = $(this).find('summary').text();
 							$('<a href="' + c + '">' + a + '</a>').html(a).appendTo(container);
@@ -44881,7 +44932,7 @@ $.extend(TRUE, QTIP.defaults, {
 							$('<a class="rss_readmore" href="' + c + '">' + l.lang_readmore + '</a><br />').appendTo(container);
 						})
 					}
-					
+
 					if (jQuery('channel', f).length == 1) {
 						return h(g);
 					} else if (jQuery('feed', f).length == 1) {
@@ -44901,6 +44952,7 @@ $.extend(TRUE, QTIP.defaults, {
 		return d
 	}
 })(jQuery);
+
 // Spectrum Colorpicker v1.8.0
 // https://github.com/bgrins/spectrum
 // Author: Brian Grinstead
@@ -47224,6 +47276,361 @@ $.extend(TRUE, QTIP.defaults, {
     });
 
 });
+
+;
+// jQuery toast plugin created by Kamran Ahmed copyright MIT license 2015
+if ( typeof Object.create !== 'function' ) {
+    Object.create = function( obj ) {
+        function F() {}
+        F.prototype = obj;
+        return new F();
+    };
+}
+
+(function( $, window, document, undefined ) {
+
+    "use strict";
+    
+    var Toast = {
+
+        _positionClasses : ['bottom-left', 'bottom-right', 'top-right', 'top-left', 'bottom-center', 'top-center', 'mid-center'],
+        _defaultIcons : ['success', 'error', 'info', 'warning'],
+
+        init: function (options, elem) {
+            this.prepareOptions(options, $.toast.options);
+            this.process();
+        },
+
+        prepareOptions: function(options, options_to_extend) {
+            var _options = {};
+            if ( ( typeof options === 'string' ) || ( options instanceof Array ) ) {
+                _options.text = options;
+            } else {
+                _options = options;
+            }
+            this.options = $.extend( {}, options_to_extend, _options );
+        },
+
+        process: function () {
+            this.setup();
+            this.addToDom();
+            this.position();
+            this.bindToast();
+            this.animate();
+        },
+
+        setup: function () {
+            
+            var _toastContent = '';
+            
+            this._toastEl = this._toastEl || $('<div></div>', {
+                class : 'jq-toast-single'
+            });
+
+            // For the loader on top
+            _toastContent += '<span class="jq-toast-loader"></span>';            
+
+            if ( this.options.allowToastClose ) {
+                _toastContent += '<span class="close-jq-toast-single">&times;</span>';
+            };
+
+            if ( this.options.text instanceof Array ) {
+
+                if ( this.options.heading ) {
+                    _toastContent +='<h2 class="jq-toast-heading">' + this.options.heading + '</h2>';
+                };
+
+                _toastContent += '<ul class="jq-toast-ul">';
+                for (var i = 0; i < this.options.text.length; i++) {
+                    _toastContent += '<li class="jq-toast-li" id="jq-toast-item-' + i + '">' + this.options.text[i] + '</li>';
+                }
+                _toastContent += '</ul>';
+
+            } else {
+                if ( this.options.heading ) {
+                    _toastContent +='<h2 class="jq-toast-heading">' + this.options.heading + '</h2>';
+                };
+                _toastContent += this.options.text;
+            }
+
+            this._toastEl.html( _toastContent );
+
+            if ( this.options.bgColor !== false ) {
+                this._toastEl.css("background-color", this.options.bgColor);
+            };
+
+            if ( this.options.textColor !== false ) {
+                this._toastEl.css("color", this.options.textColor);
+            };
+
+            if ( this.options.textAlign ) {
+                this._toastEl.css('text-align', this.options.textAlign);
+            }
+
+            if ( this.options.icon !== false ) {
+                this._toastEl.addClass('jq-has-icon');
+
+                if ( $.inArray(this.options.icon, this._defaultIcons) !== -1 ) {
+                    this._toastEl.addClass('jq-icon-' + this.options.icon);
+                };
+            };
+        },
+
+        position: function () {
+            if ( ( typeof this.options.position === 'string' ) && ( $.inArray( this.options.position, this._positionClasses) !== -1 ) ) {
+
+                if ( this.options.position === 'bottom-center' ) {
+                    this._container.css({
+                        left: ( $(window).outerWidth() / 2 ) - this._container.outerWidth()/2,
+                        bottom: 20
+                    });
+                } else if ( this.options.position === 'top-center' ) {
+                    this._container.css({
+                        left: ( $(window).outerWidth() / 2 ) - this._container.outerWidth()/2,
+                        top: 20
+                    });
+                } else if ( this.options.position === 'mid-center' ) {
+                    this._container.css({
+                        left: ( $(window).outerWidth() / 2 ) - this._container.outerWidth()/2,
+                        top: ( $(window).outerHeight() / 2 ) - this._container.outerHeight()/2
+                    });
+                } else {
+                    this._container.addClass( this.options.position );
+                }
+
+            } else if ( typeof this.options.position === 'object' ) {
+                this._container.css({
+                    top : this.options.position.top ? this.options.position.top : 'auto',
+                    bottom : this.options.position.bottom ? this.options.position.bottom : 'auto',
+                    left : this.options.position.left ? this.options.position.left : 'auto',
+                    right : this.options.position.right ? this.options.position.right : 'auto'
+                });
+            } else {
+                this._container.addClass( 'bottom-left' );
+            }
+        },
+
+        bindToast: function () {
+
+            var that = this;
+
+            this._toastEl.on('afterShown', function () {
+                that.processLoader();
+            });
+
+            this._toastEl.find('.close-jq-toast-single').on('click', function ( e ) {
+
+                e.preventDefault();
+
+                if( that.options.showHideTransition === 'fade') {
+                    that._toastEl.trigger('beforeHide');
+                    that._toastEl.fadeOut(function () {
+                        that._toastEl.trigger('afterHidden');
+                    });
+                } else if ( that.options.showHideTransition === 'slide' ) {
+                    that._toastEl.trigger('beforeHide');
+                    that._toastEl.slideUp(function () {
+                        that._toastEl.trigger('afterHidden');
+                    });
+                } else {
+                    that._toastEl.trigger('beforeHide');
+                    that._toastEl.hide(function () {
+                        that._toastEl.trigger('afterHidden');
+                    });
+                }
+            });
+
+            if ( typeof this.options.beforeShow == 'function' ) {
+                this._toastEl.on('beforeShow', function () {
+                    that.options.beforeShow();
+                });
+            };
+
+            if ( typeof this.options.afterShown == 'function' ) {
+                this._toastEl.on('afterShown', function () {
+                    that.options.afterShown();
+                });
+            };
+
+            if ( typeof this.options.beforeHide == 'function' ) {
+                this._toastEl.on('beforeHide', function () {
+                    that.options.beforeHide();
+                });
+            };
+
+            if ( typeof this.options.afterHidden == 'function' ) {
+                this._toastEl.on('afterHidden', function () {
+                    that.options.afterHidden();
+                });
+            };          
+        },
+
+        addToDom: function () {
+
+             var _container = $('.jq-toast-wrap');
+             
+             if ( _container.length === 0 ) {
+                
+                _container = $('<div></div>',{
+                    class: "jq-toast-wrap"
+                });
+
+                $('body').append( _container );
+
+             } else if ( !this.options.stack || isNaN( parseInt(this.options.stack, 10) ) ) {
+                _container.empty();
+             }
+
+             _container.find('.jq-toast-single:hidden').remove();
+
+             _container.append( this._toastEl );
+
+            if ( this.options.stack && !isNaN( parseInt( this.options.stack ), 10 ) ) {
+                
+                var _prevToastCount = _container.find('.jq-toast-single').length,
+                    _extToastCount = _prevToastCount - this.options.stack;
+
+                if ( _extToastCount > 0 ) {
+                    $('.jq-toast-wrap').find('.jq-toast-single').slice(0, _extToastCount).remove();
+                };
+
+            }
+
+            this._container = _container;
+        },
+
+        canAutoHide: function () {
+            return ( this.options.hideAfter !== false ) && !isNaN( parseInt( this.options.hideAfter, 10 ) );
+        },
+
+        processLoader: function () {
+            // Show the loader only, if auto-hide is on and loader is demanded
+            if (!this.canAutoHide() || this.options.loader === false) {
+                return false;
+            }
+
+            var loader = this._toastEl.find('.jq-toast-loader');
+
+            // 400 is the default time that jquery uses for fade/slide
+            // Divide by 1000 for milliseconds to seconds conversion
+            var transitionTime = (this.options.hideAfter - 400) / 1000 + 's';
+            var loaderBg = this.options.loaderBg;
+
+            var style = loader.attr('style') || '';
+            style = style.substring(0, style.indexOf('-webkit-transition')); // Remove the last transition definition
+
+            style += '-webkit-transition: width ' + transitionTime + ' ease-in; \
+                      -o-transition: width ' + transitionTime + ' ease-in; \
+                      transition: width ' + transitionTime + ' ease-in; \
+                      background-color: ' + loaderBg + ';';
+
+
+            loader.attr('style', style).addClass('jq-toast-loaded');
+        },
+
+        animate: function () {
+
+            var that = this;
+
+            this._toastEl.hide();
+
+            this._toastEl.trigger('beforeShow');
+
+            if ( this.options.showHideTransition.toLowerCase() === 'fade' ) {
+                this._toastEl.fadeIn(function ( ){
+                    that._toastEl.trigger('afterShown');
+                });
+            } else if ( this.options.showHideTransition.toLowerCase() === 'slide' ) {
+                this._toastEl.slideDown(function ( ){
+                    that._toastEl.trigger('afterShown');
+                });
+            } else {
+                this._toastEl.show(function ( ){
+                    that._toastEl.trigger('afterShown');
+                });
+            }
+
+            if (this.canAutoHide()) {
+
+                var that = this;
+
+                window.setTimeout(function(){
+                    
+                    if ( that.options.showHideTransition.toLowerCase() === 'fade' ) {
+                        that._toastEl.trigger('beforeHide');
+                        that._toastEl.fadeOut(function () {
+                            that._toastEl.trigger('afterHidden');
+                        });
+                    } else if ( that.options.showHideTransition.toLowerCase() === 'slide' ) {
+                        that._toastEl.trigger('beforeHide');
+                        that._toastEl.slideUp(function () {
+                            that._toastEl.trigger('afterHidden');
+                        });
+                    } else {
+                        that._toastEl.trigger('beforeHide');
+                        that._toastEl.hide(function () {
+                            that._toastEl.trigger('afterHidden');
+                        });
+                    }
+
+                }, this.options.hideAfter);
+            };
+        },
+
+        reset: function ( resetWhat ) {
+
+            if ( resetWhat === 'all' ) {
+                $('.jq-toast-wrap').remove();
+            } else {
+                this._toastEl.remove();
+            }
+
+        },
+
+        update: function(options) {
+            this.prepareOptions(options, this.options);
+            this.setup();
+            this.bindToast();
+        }
+    };
+    
+    $.toast = function(options) {
+        var toast = Object.create(Toast);
+        toast.init(options, this);
+
+        return {
+            
+            reset: function ( what ) {
+                toast.reset( what );
+            },
+
+            update: function( options ) {
+                toast.update( options );
+            }
+        }
+    };
+
+    $.toast.options = {
+        text: '',
+        heading: '',
+        showHideTransition: 'fade',
+        allowToastClose: true,
+        hideAfter: 3000,
+        loader: true,
+        loaderBg: '#9EC600',
+        stack: 5,
+        position: 'bottom-left',
+        bgColor: false,
+        textColor: false,
+        textAlign: 'left',
+        icon: false,
+        beforeShow: function () {},
+        afterShown: function () {},
+        beforeHide: function () {},
+        afterHidden: function () {}
+    };
+
+})( jQuery, window, document );
 
 /**
  * Toolbar.js
