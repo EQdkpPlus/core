@@ -166,11 +166,6 @@ class acl_manager extends gen_class {
 		
 	}
 
-	//Returns the permissions that are only for the superadmin
-	public function get_superadmin_only_permissions(){
-		return $this->superadmin_only_permissions;
-	}
-
 	public function get_permission_boxes(){
 		$group_permissions = array(
 				// Events
