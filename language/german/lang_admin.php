@@ -1821,6 +1821,9 @@ $lang = array(
 "bulk_user_activate_success" => "Die ausgewählten Benutzer und ihre E-Mail-Adressen wurden aktiviert.",
 "bulk_user_forceemailconfirm_success" => "Die ausgewählten Benutzer werden dazu gezwungen, ihre E-Mail-Adresse zu bestätigen.",
 "bulk_user_lock_success" => "Die ausgewählten Benutzer wurden gesperrt.",
-"bulk_user_unlock_success" => "Die ausgewählten Benutzer wurden entsperrt.",		
+"bulk_user_unlock_success" => "Die ausgewählten Benutzer wurden entsperrt.",
+"usergroup_edit_membership_info" => "Du bist Mitglied dieser Benutzergruppe. Änderungen an dieser Benutzergruppe haben direkten Einfluss auf deinen Benutzeraccount. Sei deshalb vorsichtig.",
+"user_resolve_perms" => "Berechtigungen verfolgen",
+"article_categories" => "Artikelkategorien",
 );
 ?>

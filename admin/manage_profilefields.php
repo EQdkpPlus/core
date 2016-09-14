@@ -27,7 +27,7 @@ include_once ($eqdkp_root_path . 'common.php');
 class ManageProfileFields extends page_generic {
 
 	public function __construct(){
-		$this->user->check_auth('a_config_man');
+		$this->user->check_auth('a_member_profilefields_man');
 		$handler = array(
 			'enable'	=> array('process' => 'enable', 'csrf'=>true),
 			'disable'	=> array('process' => 'disable', 'csrf'=>true),

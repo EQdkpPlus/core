@@ -12,6 +12,13 @@
 	<div class="contentHeader">
 		<h1 class="contentTitle">{L_manage_user_groups}: {GROUP_NAME}<input type="hidden" name="g" value="{GRP_ID}" /></h1>
 	</div>
+	
+	<!-- IF S_IS_IN_GROUP -->
+	<div class="infobox infobox-large infobox-blue clearfix">
+		<i class="fa fa-exclamation-triangle  fa-4x pull-left"></i> {L_usergroup_edit_membership_info}
+	</div>
+	<!-- ENDIF -->
+	
 	<div id="groups_tabs">
 		<ul>
 			<li><a href='#members'><span>{L_group_members}</span></a></li>
@@ -92,10 +99,16 @@
 		</div>
 		<!-- IF S_USERGROUP_ADMIN -->
 		<div id="permissions">
+			<div class="tableHeader floatRight">
+				<button class="mainoption" name="user_group_perms" type="button" id="user_group_perms" onclick="window.location='{SID}&user_group_perms&grp={GRP_ID}'"><i class="fa fa-list"></i>{L_user_resolve_perms}</button>
+			</div>
+			<div class="clear"></div>
+	
 			<div id="permission_tabs">
 				<ul>
 					<li><a href='#user_perms'><span>{L_user_permissions}</span></a></li>
 					<li><a href='#admin_perms'><span class="adminicon">{L_admin_permissions}</span></a></li>
+					<li><a href='#articles'>{L_article_categories}</a></li>
 				</ul>
 
 				<div id="user_perms">
@@ -111,6 +124,7 @@
 						</div>
 						<!-- END check_group -->
 					</fieldset>
+					<br />
 					<!-- END u_permissions_row -->
 				</div>
 
@@ -133,7 +147,36 @@
 						</div>
 						<!-- END check_group -->
 					</fieldset>
+					<br />
 					<!-- END a_permissions_row -->
+				</div>
+				
+				<div id="articles">
+					<table id="user_groups_table2" class="table fullwidth colorswitch hoverrows scrollable-x">
+						<!-- BEGIN articelcat_row -->
+						<tr>
+							<th>{articelcat_row.ICON} {articelcat_row.GROUP}</th>
+							<!-- BEGIN headline_row -->
+							<th>{articelcat_row.headline_row.GROUP}</th>
+							<!-- END headline_row -->
+						</tr>
+						<!-- BEGIN check_group -->
+						<tr>
+							<td>
+								<!-- IF articelcat_row.check_group.S_ADMIN -->
+								<span class="adminicon" title="{L_admin_right_icon_title}" style="background-position: 0 -2px;" />
+								<b>{articelcat_row.check_group.CBNAME}</b>
+								<!-- ELSE -->
+								{articelcat_row.check_group.CBNAME}
+								<!-- ENDIF -->
+							</td>
+							<!-- BEGIN group_row -->
+							<td>{articelcat_row.check_group.group_row.STATUS}</td>
+							<!-- END group_row -->
+						</tr>
+						<!-- END check_group -->
+						<!-- END articelcat_row -->
+					</table>
 				</div>
 
 			</div>

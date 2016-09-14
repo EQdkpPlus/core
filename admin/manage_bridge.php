@@ -28,7 +28,7 @@ class Manage_Bridge extends page_generic {
 	public static $shortcuts = array('crypt' => 'encrypt');
 
 	public function __construct(){
-		$this->user->check_auth('a_config_man');
+		$this->user->check_auth('a_bridge_man');
 		$handler = array(
 			'ajax' => array(
 				array('process' => 'ajax_load_prefix', 'value' => 'prefix'),

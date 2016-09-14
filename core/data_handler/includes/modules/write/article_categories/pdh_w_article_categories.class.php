@@ -209,6 +209,34 @@ if(!class_exists('pdh_w_article_categories')) {
 			return false;
 		}
 		
+		public function update_permission_for_group($intCategoryID, $intGroupID, $arrPermissions){
+			$arrOldData = array(
+				'permissions' => $this->pdh->get('article_categories', 'permissions', array($intCategoryID)),
+			);
+				
+			$arrNewPermissions = $arrOldData['permissions'];
+
+			foreach($arrPermissions as $key => $val){
+				$arrNewPermissions[$key][$intGroupID] = $val;
+			}
+			
+			$objQuery = $this->db->prepare("UPDATE __article_categories :p WHERE id=?")->set(array(
+					'permissions'		=> serialize($arrNewPermissions),
+			))->execute($intCategoryID);
+				
+			if ($objQuery){
+				$arrNewData = array(
+					'permissions' => $arrNewPermissions,
+				);
+				$log_action = $this->logs->diff($arrOldData, $arrNewData, $this->arrLogLang, array());
+				if ($log_action) $this->log_insert("action_articlecategory_updated", $log_action, $intCategoryID, $this->user->multilangValue($this->pdh->get('article_categories', 'name', array($intCategoryID)), 1, 'article'));
+			
+				$this->pdh->enqueue_hook('article_categories_update');
+				return $id;
+			}
+			return false;
+		}
+		
 		public function update_sortandpublished($id, $intSortID, $intPublished){
 			$arrOldData = array(
 				'published' => $this->pdh->get('article_categories', 'published', array($id)),

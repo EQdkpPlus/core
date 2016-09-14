@@ -1,0 +1,100 @@
+<div class="breadcrumb-container">
+	<ul class="breadcrumb">
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
+		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
+		<li><a href="{EQDKP_ROOT_PATH}admin/manage_users.php{SID}">{L_manage_users}</a></li>
+		<li class="current"><a>{L_user_resolve_perms}: {THIS_USERNAME}</a></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+<form method="post" action="{ACTION}" name="post">
+	<div class="contentHeader">
+		<h1 class="contentTitle">{L_user_resolve_perms}: {THIS_USERNAME}</h1>
+	</div>
+
+	<div id="permission_tabs">
+				<ul>
+					<li><a href='#user_perms'><span>{L_user_permissions}</span></a></li>
+					<li><a href='#admin_perms'><span class="adminicon">{L_admin_permissions}</span></a></li>
+					<li><a href='#articles'>{L_article_categories}</a></li>
+				</ul>
+
+				<div id="user_perms">
+					<!-- BEGIN u_permissions_row -->
+					<fieldset class="settings mediumsettings">
+						<legend>{u_permissions_row.ICON} {u_permissions_row.GROUP}</legend>
+						<!-- BEGIN check_group -->
+						<!-- IF not u_permissions_row.check_group.S_SUPERADMIN_PERM -->
+						<div class="permissions" style="margin-bottom:5px;">
+							<label title="{u_permissions_row.check_group.CBNAME}">
+								{u_permissions_row.check_group.STATUSICON} 
+								<span id="span_cb_{u_permissions_row.check_group.CBNAME}" class="perm_text {u_permissions_row.check_group.CLASS}">{u_permissions_row.check_group.TEXT}</span>
+								<!-- IF u_permissions_row.check_group.S_PERM -->
+									<!-- IF u_permissions_row.check_group.S_IS_GROUP -->
+									<i class="fa fa-users"></i>
+									<!-- ELSE -->
+									<i class="fa fa-user"></i>
+									<!-- ENDIF -->
+								<!-- ENDIF -->
+							</label>
+						</div>
+						<!-- ENDIF -->
+						<!-- END check_group -->
+					</fieldset>
+					<br />
+					<!-- END u_permissions_row -->
+				</div>
+
+				<div id="admin_perms">
+					<!-- BEGIN a_permissions_row -->
+					<fieldset class="settings mediumsettings">
+						<legend>{a_permissions_row.ICON} {a_permissions_row.GROUP}</legend>
+						<!-- BEGIN check_group -->
+						<div class="permissions" style="margin-bottom:5px;">
+							<label>
+								{a_permissions_row.check_group.STATUSICON} 
+								<span id="span_cb_{a_permissions_row.check_group.CBNAME}" class="perm_text {a_permissions_row.check_group.CLASS}">{a_permissions_row.check_group.TEXT}</span>
+								<!-- IF a_permissions_row.check_group.S_PERM -->
+									<!-- IF a_permissions_row.check_group.S_IS_GROUP -->
+									<i class="fa fa-users"></i>
+									<!-- ELSE -->
+									<i class="fa fa-user"></i>
+									<!-- ENDIF -->
+								<!-- ENDIF -->
+							</label>
+						</div>
+						<!-- END check_group -->
+					</fieldset>
+					<!-- END a_permissions_row -->
+				</div>
+				
+				<div id="articles">
+					<table id="user_groups_table2" class="table fullwidth colorswitch hoverrows scrollable-x">
+						<!-- BEGIN articelcat_row -->
+						<tr>
+							<th>{articelcat_row.ICON} {articelcat_row.GROUP}</th>
+							<!-- BEGIN headline_row -->
+							<th>{articelcat_row.headline_row.GROUP}</th>
+							<!-- END headline_row -->
+						</tr>
+						<!-- BEGIN check_group -->
+						<tr>
+							<td>
+								<!-- IF articelcat_row.check_group.S_ADMIN -->
+								<span class="adminicon" title="{L_admin_right_icon_title}" style="background-position: 0 -2px;" />
+								<b>{articelcat_row.check_group.CBNAME}</b>
+								<!-- ELSE -->
+								{articelcat_row.check_group.CBNAME}
+								<!-- ENDIF -->
+							</td>
+							<!-- BEGIN group_row -->
+							<td>{articelcat_row.check_group.group_row.STATUS}</td>
+							<!-- END group_row -->
+						</tr>
+						<!-- END check_group -->
+						<!-- END articelcat_row -->
+					</table>
+				</div>
+	</div>
+{CSRF_TOKEN}
+</form>

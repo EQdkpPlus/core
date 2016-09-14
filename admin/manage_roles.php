@@ -27,7 +27,7 @@ include_once($eqdkp_root_path . 'common.php');
 class Manage_Roles extends page_generic {
 
 	public function __construct(){
-		$this->user->check_auth('a_members_man');
+		$this->user->check_auth('a_roles_man');
 		$handler = array(
 			'editid'		=> array('process' => 'display_edit'),
 			'adddialog'		=> array('process' => 'display_edit'),

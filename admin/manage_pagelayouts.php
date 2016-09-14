@@ -30,7 +30,7 @@ class ManagePageLayouts extends page_generic {
 	private $multi_pools = array();
 
 	public function __construct(){
-		$this->user->check_auth('a_config_man');
+		$this->user->check_auth('a_tables_man');
 		$handler = array(
 			'save' => array('process' => 'save_layout', 'csrf'=>true),
 			'add_preset' => array('process' => 'add_preset', 'csrf'=>true),

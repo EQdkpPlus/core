@@ -1817,6 +1817,9 @@ $lang = array(
 		"bulk_user_forceemailconfirm_success" => "The selected users must confirm their email addresses.",
 		"bulk_user_lock_success" => "The selected users have been locked.",
 		"bulk_user_unlock_success" => "The selected user have been unlocked.",
+		"usergroup_edit_membership_info" => "You are member of this usergroup. Changes at this usergroup directly affect your account. Therefore, be careful.",
+		"user_resolve_perms" => "Resolve permissions",
+		"article_categories" => "Articlecategories",
 );
 
 ?>

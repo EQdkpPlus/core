@@ -42,7 +42,8 @@ class update_2308 extends sql_update_task {
 					3			=> 'Alter table adjustments',
 					4			=> 'Alter table members',
 					5			=> 'Alter table members',
-					6			=> 'Create table member_points'
+					6			=> 'Create table member_points',
+					7			=> 'Create table member_points',
 				),
 			'german' => array(
 				'update_2308'	=> 'EQdkp Plus 2.3.0.8 Update',
@@ -52,6 +53,7 @@ class update_2308 extends sql_update_task {
 					4			=> 'Erweitere Tabelle members',
 					5			=> 'Erweitere Tabelle members',
 					6			=> 'Erstelle Tabelle member_points',
+					7			=> 'Erstelle Tabelle member_points',
 			),
 		);
 
@@ -63,7 +65,7 @@ class update_2308 extends sql_update_task {
 			4	=> "ALTER TABLE `__members` ADD COLUMN `points` TEXT NULL COLLATE 'utf8_bin'",
 			5	=> "ALTER TABLE `__members` ADD COLUMN `points_apa` TEXT NULL COLLATE 'utf8_bin'",
 			6	=> "DROP TABLE IF EXISTS __member_points;",
-			6 => "CREATE TABLE `__member_points` (
+			7 => "CREATE TABLE `__member_points` (
 	`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`time` INT(11) UNSIGNED NOT NULL DEFAULT '0',
 	`member_id` INT(11) UNSIGNED NOT NULL DEFAULT '0',

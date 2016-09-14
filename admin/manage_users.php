@@ -38,6 +38,7 @@ class Manage_Users extends page_generic {
 				array('process' => 'unlock', 'value' => 'unlock', 'csrf' => true),
 				array('process' => 'lock', 'value' => 'lock', 'csrf' => true),
 				array('process' => 'overtake_permissions', 'value' => 'ovperms', 'csrf' => true),
+				array('process' => 'resolve_permissions', 'value' => 'resolveperms'),
 			),
 			'bulk_lock' =>	array('process' => 'bulk_lock', 'csrf' => true),
 			'bulk_unlock' => array('process' => 'bulk_unlock', 'csrf' => true),
@@ -178,6 +179,140 @@ class Manage_Users extends page_generic {
 		$this->pdh->process_hook_queue();
 		$this->display();
 	}
+	
+	
+	public function resolve_permissions(){
+		$intUserID = $this->in->get('u', 0);
+		$strUsername = $this->pdh->get('user', 'name', array($intUserID));
+		
+		// Build the user permissions
+		$user_permissions = $this->acl->get_permission_boxes();
+		// Add plugin checkboxes to our array
+		$this->pm->generate_permission_boxes($user_permissions);
+		
+		//Get group-memberships of the user
+		$defaultGroup = $this->pdh->get('user_groups', 'standard_group', array());
+		$memberships = $this->acl->get_user_group_memberships($intUserID);
+		
+		foreach ( $user_permissions as $group => $checks ){
+		
+			$this->tpl->assign_block_vars('permissions_row', array(
+					'GROUP' => $group,
+			));
+		
+			$icon = (isset($checks['icon'])) ? $this->core->icon_font($checks['icon']) : '';
+		
+			$a_set = $u_set = false;
+			foreach ( $checks as $data ){
+				if (!is_array($data)) continue;
+		
+				switch (substr($data['CBNAME'], 0, 2)){
+					case 'a_': if (!$a_set){
+						$this->tpl->assign_block_vars('a_permissions_row', array(
+								'GROUP' => $group,
+								'ICON'	=> $icon,
+						));
+						$a_set = true;
+					}
+					break;
+		
+					case 'u_': if (!$u_set){
+						$this->tpl->assign_block_vars('u_permissions_row', array(
+								'GROUP' => $group,
+								'ICON'	=> $icon,
+						));
+						$u_set = true;
+					}
+					break;
+		
+				}
+		
+		
+				if ($this->user->check_auth($data['CBNAME'], false, $intUserID, false)){
+					$perm = "user";
+				}elseif (!$this->user->check_auth($data['CBNAME'], false, $intUserID, false) && $this->user->check_auth($data['CBNAME'], false, $intUserID) == true){
+					$perm = "group";
+				}else{
+					$perm = false;
+				}
+		
+				$this->tpl->assign_block_vars(substr($data['CBNAME'], 0, 2).'permissions_row.check_group', array(
+						'CBNAME'			=> $data['CBNAME'],
+						'STATUSICON'		=> ( $perm != false ) ? ' <i class="fa fa-check positive fa-lg"></i> ' : '<i class="fa fa-times negative fa-lg"></i> ',
+						'S_IS_GROUP'		=> ( $perm == "group" ) ? true : false,
+						'CLASS'				=> ( $perm != false ) ? 'positive' : 'negative',
+						'S_PERM'			=> ( $perm != false ) ? true : false,
+						'TEXT'				=> $data['TEXT'],
+				));
+			}
+		}
+		
+		
+		$arrCategoryIDs = $this->pdh->sort($this->pdh->get('article_categories', 'id_list', array()), 'article_categories', 'sort_id', 'asc');
+		$arrCategories = array();
+		foreach($arrCategoryIDs as $caid){
+			$arrCategories[$caid] = $this->pdh->get('article_categories', 'name_prefix', array($caid)).$this->pdh->get('article_categories', 'name', array($caid));
+		}
+		
+		$this->tpl->assign_block_vars('articelcat_row', array(
+				'GROUP' => $this->user->lang('article'),
+				'ICON'	=> $this->core->icon_font('fa-file-text'))
+				);
+		
+		$grps = array('rea', 'cre', 'upd', 'del', 'chs');
+		
+		foreach($grps as $group_id){
+			$this->tpl->assign_block_vars('articelcat_row.headline_row', array(
+					'GROUP'	=> $this->user->lang('perm_'.$group_id),
+			));
+		}
+		
+		foreach($arrCategories as $intCategoryID => $strCategoryName){
+			$this->tpl->assign_block_vars('articelcat_row.check_group', array(
+					'CBNAME'		=> $strCategoryName,
+					'S_ADMIN'		=> false
+			));
+				
+			$arrPermissions = $this->pdh->get('article_categories', 'permissions', array($intCategoryID));
+			$intParent = $this->pdh->get('article_categories', 'parent', array($intCategoryID));
+			
+			$arrUserPermissions = $this->pdh->get('article_categories', 'user_permissions', array($intCategoryID, $intUserID));
+			foreach($grps as $group_id){
+				switch($group_id){
+					case 'rea': $strPerm = 'read';
+						break;
+					case 'cre': $strPerm = 'create';
+						break;
+					case 'upd': $strPerm = 'update';
+						break;
+					case 'del': $strPerm = 'delete';
+						break;
+					case 'chs': $strPerm = 'change_state';
+						break;
+				}
+				$blnResult = $arrUserPermissions[$strPerm];
+				$out = ($blnResult) ?  '<i class="fa fa-check positive fa-lg"></i>' : '<i class="fa fa-times negative fa-lg"></i>';
+		
+				$this->tpl->assign_block_vars('articelcat_row.check_group.group_row', array(
+						'STATUS'	=> $out,
+				));
+			}
+		}
+		
+		$this->tpl->assign_vars(array(
+			'THIS_USERNAME' => $strUsername,	
+		));
+		
+		$this->jquery->Tab_header('permission_tabs');
+		
+		$this->core->set_vars(array(
+			'page_title'		=> $this->user->lang('user_resolve_perms').': '.$strUsername,
+			'template_file'		=> 'admin/manage_users_resolveperms.html',
+			'display'			=> true)
+		);
+	}
+	
+	
 
 	public function overtake_permissions(){
 		if ($this->user->check_group(2, false) || ($this->user->check_auth('a_users_perms') && !$this->user->check_group(2, false, $this->in->get('u', 0)))){
@@ -550,6 +685,7 @@ class Manage_Users extends page_generic {
 				'U_MANAGE_USER'		=> 'manage_users.php'.$this->SID.'&amp;' . 'u' . '='.$user_id,
 				'U_OVERTAKE_PERMS'	=> 'manage_users.php'.$this->SID.'&amp;mode=ovperms&amp;' . 'u' . '='.$user_id.'&amp;link_hash='.$this->CSRFGetToken('mode'),
 				'U_DELETE'			=> 'manage_users.php'.$this->SID.'&amp;del=single&amp;user_id='.$user_id.'&amp;link_hash='.$this->CSRFGetToken('del'),
+				'U_RESOLVE_PERMS'	=> 'manage_users.php'.$this->SID.'&amp;mode=resolveperms&amp;' . 'u' . '='.$user_id,
 				'USER_ID'			=> $user_id,
 				'NAME_STYLE'		=> ( $this->user->check_auth('a_', false, $user_id) ) ? 'font-weight: bold' : 'font-weight: none',
 				'ADMIN_ICON'		=> ( $this->user->check_auth('a_', false, $user_id) ) ? '<span class="adminicon"></span> ' : '',
