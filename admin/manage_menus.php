@@ -29,7 +29,7 @@ include_once($eqdkp_root_path . 'common.php');
 class Manage_Menus extends page_generic {
 
 	public function __construct(){
-		$this->user->check_auth('a_config_man');
+		$this->user->check_auth('a_menues_man');
 		$handler = array(
 			'save' => array('process' => 'save','csrf'=>true),
 		);

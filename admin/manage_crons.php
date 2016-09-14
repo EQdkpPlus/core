@@ -29,7 +29,7 @@ class ManageCrons extends page_generic {
 	public $crons = array();
 	
 	public function __construct() {
-		$this->user->check_auth('a_config_man');
+		$this->user->check_auth('a_cronjobs_man');
 		$handler = array(
 			'mode' => array(
 				array('process' => 'run', 'value' => 'run', 'csrf'=>true),

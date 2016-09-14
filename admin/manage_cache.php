@@ -32,7 +32,7 @@ class manage_cache extends page_generic {
 	private $usable_cache_types = 	array('none', 'file');
 	
 	public function __construct() {
-		$this->user->check_auth('a_config_man'); 
+		$this->user->check_auth('a_cache_man'); 
 		$handler = array(
 			'cache_clear' => array('process' => 'clear_cache', 'csrf'=>true),
 			'cache_cleanup' => array('process' => 'cleanup_cache', 'csrf'=>true),

@@ -27,10 +27,10 @@ include_once($eqdkp_root_path.'common.php');
 class ManageNotifications extends page_generic {
 
 	public function __construct(){
-		$this->user->check_auth('a_config_man');
+		$this->user->check_auth('a_notifications_man');
 		
 		$handler = array(
-			'save'	=> array('process' => 'save', 'check' => 'a_raid_add', 'csrf'=>true),
+			'save'	=> array('process' => 'save', 'csrf'=>true),
 			'id'	=> array('process' => 'edit'),
 		);
 		parent::__construct(false, $handler, array('notification_types', 'id'), null, 'selected_ids[]');

@@ -178,7 +178,7 @@ class Manage_Article_Categories extends page_generic {
 			$this->tpl->assign_block_vars('group_row', array(
 				'ID' 		=> $gid,
 				'NAME' 		=> $this->pdh->get('user_groups', 'name', array($gid)),
-				'DD_CREATE' =>new hdropdown('perm[cre]['.$gid.']', array('options' => $arrPermissionDropdown, 'value' => (isset($arrPermissions['cre'][$gid]) ? $arrPermissions['cre'][$gid] : -1), 'js' => 'onchange="calculate_permission(\'cre\', '.$gid.', this)"')),
+				'DD_CREATE' => new hdropdown('perm[cre]['.$gid.']', array('options' => $arrPermissionDropdown, 'value' => (isset($arrPermissions['cre'][$gid]) ? $arrPermissions['cre'][$gid] : -1), 'js' => 'onchange="calculate_permission(\'cre\', '.$gid.', this)"')),
 				'DD_UPDATE' => new hdropdown('perm[upd]['.$gid.']', array('options' => $arrPermissionDropdown, 'value' => (isset($arrPermissions['upd'][$gid]) ? $arrPermissions['upd'][$gid] : -1), 'js' => 'onchange="calculate_permission(\'upd\', '.$gid.', this)"')),
 				'DD_DELETE' => new hdropdown('perm[del]['.$gid.']', array('options' => $arrPermissionDropdown, 'value' => (isset($arrPermissions['del'][$gid]) ? $arrPermissions['del'][$gid] : -1), 'js' => 'onchange="calculate_permission(\'del\', '.$gid.', this)"')),
 				'DD_READ' 	=> new hdropdown('perm[rea]['.$gid.']', array('options' => $arrPermissionDropdown, 'value' => (isset($arrPermissions['rea'][$gid]) ? $arrPermissions['rea'][$gid] : -1), 'js' => 'onchange="calculate_permission(\'rea\', '.$gid.', this)"')),

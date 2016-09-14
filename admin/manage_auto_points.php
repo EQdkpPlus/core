@@ -30,7 +30,7 @@ class ManageAutoPoints extends page_generic {
 	public static $shortcuts = array('apa' => 'auto_point_adjustments');
 	
 	public function __construct(){
-		$this->user->check_auth('a_config_man');
+		$this->user->check_auth('a_apa_man');
 		
 		$handler = array(
 			'recalc' => array('process' => 'recalculate'),

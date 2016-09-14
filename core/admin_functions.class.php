@@ -244,9 +244,9 @@ class admin_functions extends gen_class {
 				2		=> array('link' => 'admin/manage_items.php'.$this->SID,			'text' => $this->user->lang('manitems_title'),	'check' => 'a_item_',		'icon' => 'fa-gift fa-lg fa-fw'),
 				3		=> array('link' => 'admin/manage_adjustments.php'.$this->SID,		'text' => $this->user->lang('manadjs_title'),		'check' => 'a_indivadj_',	'icon' => 'fa-tag fa-lg fa-fw'),
 				4		=> array('link' => 'admin/manage_ranks.php'.$this->SID,			'text' => $this->user->lang('manrank_title'),		'check' => 'a_members_man',	'icon' => 'fa-flag fa-lg fa-fw'),
-				5		=> array('link' => 'admin/manage_profilefields.php'.$this->SID,	'text' => $this->user->lang('manage_pf_menue'),	'check' => 'a_config_man',	'icon' => 'fa-sitemap fa-lg fa-fw'),
-				6		=> array('link' => 'admin/manage_roles.php'.$this->SID,			'text' => $this->user->lang('rolemanager'),		'check' => 'a_config_man',	'icon' => 'fa-beer fa-lg fa-fw'),
-				7		=> array('link' => 'admin/manage_auto_points.php'.$this->SID,		'text' => $this->user->lang('manage_auto_points'),'check' => 'a_config_man',	'icon' => 'fa-magic fa-lg fa-fw'),
+				5		=> array('link' => 'admin/manage_profilefields.php'.$this->SID,	'text' => $this->user->lang('manage_pf_menue'),	'check' => 'a_member_profilefields_man',	'icon' => 'fa-sitemap fa-lg fa-fw'),
+				6		=> array('link' => 'admin/manage_roles.php'.$this->SID,			'text' => $this->user->lang('rolemanager'),		'check' => 'a_roles_man',	'icon' => 'fa-beer fa-lg fa-fw'),
+				7		=> array('link' => 'admin/manage_auto_points.php'.$this->SID,		'text' => $this->user->lang('manage_auto_points'),'check' => 'a_apa_man',	'icon' => 'fa-magic fa-lg fa-fw'),
 			),
 			'users' => array(
 				'icon'	=> 'fa-group fa-lg fa-fw',
@@ -267,9 +267,9 @@ class admin_functions extends gen_class {
 				'name'	=> $this->user->lang('portal'),
 				1		=> array('link' => 'admin/manage_portal.php'.$this->SID,			'text' => $this->user->lang('portalmanager'),		'check' => 'a_extensions_man',	'icon' => 'fa-columns fa-lg fa-fw'),
 				2		=> array('link' => 'admin/manage_article_categories.php'.$this->SID,'text' => $this->user->lang('manage_articles'),		'check' => array('OR', array('a_articles_man', 'a_article_categories_man')),	'icon' => 'fa-file-text fa-lg fa-fw'),
-				3		=> array('link' => 'admin/manage_pagelayouts.php'.$this->SID,		'text' => $this->user->lang('page_manager'),		'check' => 'a_config_man',	'icon' => 'fa-table fa-lg fa-fw'),
-				4		=> array('link' => 'admin/manage_menus.php'.$this->SID,				'text' => $this->user->lang('manage_menus'),		'check' => 'a_config_man',	'icon' => 'fa-list fa-lg fa-fw'),
-				5		=> array('link' => 'admin/manage_notifications.php'.$this->SID,		'text' => $this->user->lang('manage_notifications'),'check' => 'a_config_man',	'icon' => 'fa-bell fa-lg fa-fw'),
+				3		=> array('link' => 'admin/manage_pagelayouts.php'.$this->SID,		'text' => $this->user->lang('page_manager'),		'check' => 'a_tables_man',	'icon' => 'fa-table fa-lg fa-fw'),
+				4		=> array('link' => 'admin/manage_menus.php'.$this->SID,				'text' => $this->user->lang('manage_menus'),		'check' => 'a_menues_man',	'icon' => 'fa-list fa-lg fa-fw'),
+				5		=> array('link' => 'admin/manage_notifications.php'.$this->SID,		'text' => $this->user->lang('manage_notifications'),'check' => 'a_notifications_man',	'icon' => 'fa-bell fa-lg fa-fw'),
 			),
 			'raids'	=> array(
 				'icon'	=> 'fa-trophy fa-lg fa-fw',
@@ -293,8 +293,8 @@ class admin_functions extends gen_class {
 				1		=> array('link' => 'admin/manage_settings.php'.$this->SID,		'text' => $this->user->lang('configuration'),		'check' => 'a_config_man',	'icon' => 'fa-wrench fa-lg fa-fw'),
 				2		=> array('link' => 'admin/manage_logs.php'.$this->SID,			'text' => $this->user->lang('view_logs'),			'check' => 'a_logs_view',	'icon' => 'fa-book fa-lg fa-fw'),
 				3		=> array('link' => 'admin/manage_tasks.php'.$this->SID,			'text' => $this->user->lang('mantasks_title'),		'check' => array('OR', array('a_users_man', 'a_members_man')),	'icon' => 'fa-tasks fa-lg fa-fw'),
-				4		=> array('link' => 'admin/manage_bridge.php'.$this->SID,		'text' => $this->user->lang('manage_bridge'),	'check' => 'a_config_man',	'icon' => 'fa-link fa-lg fa-fw'),
-				5		=> array('link' => 'admin/manage_crons.php'.$this->SID,			'text' => $this->user->lang('manage_cronjobs'),		'check' => 'a_config_man',	'icon' => 'fa-clock-o fa-lg fa-fw'),
+				4		=> array('link' => 'admin/manage_bridge.php'.$this->SID,		'text' => $this->user->lang('manage_bridge'),		'check' => 'a_bridge_man',	'icon' => 'fa-link fa-lg fa-fw'),
+				5		=> array('link' => 'admin/manage_crons.php'.$this->SID,			'text' => $this->user->lang('manage_cronjobs'),		'check' => 'a_cronjobs_man',	'icon' => 'fa-clock-o fa-lg fa-fw'),
 				6		=> array('link' => 'admin/manage_media.php'.$this->SID,			'text' => $this->user->lang('manage_media'),		'check' => 'a_files_man',	'icon' => 'fa-picture-o fa-lg fa-fw'),
 			),
 			'maintenance' => array(
@@ -303,9 +303,9 @@ class admin_functions extends gen_class {
 				1		=> array('link' => 'maintenance/'.$this->SID,		'text' => $this->user->lang('maintenance'),		'check' => 'a_maintenance',	'icon' => 'fa-cog fa-lg fa-fw'),
 				2		=> array('link' => 'admin/manage_live_update.php'.$this->SID,		'text' => $this->user->lang('liveupdate'),		'check' => 'a_maintenance',	'icon' => 'fa fa-refresh fa-lg fa-fw'),
 				3		=> array('link' => 'admin/manage_backup.php'.$this->SID,			'text' => $this->user->lang('backup'),			'check' => 'a_backup',		'icon' => 'fa-floppy-o fa-lg fa-fw'),
-				4		=> array('link' => 'admin/manage_reset.php'.$this->SID,			'text' => $this->user->lang('reset'),				'check' => 'a_config_man',	'icon' => 'fa-retweet fa-lg fa-fw'),
-				5		=> array('link' => 'admin/manage_cache.php'.$this->SID,			'text' => $this->user->lang('pdc_manager'),		'check' => 'a_config_man',	'icon' => 'fa-briefcase fa-lg fa-fw'),
-				6		=> array('link' => 'admin/info_database.php'.$this->SID,			'text' => $this->user->lang('mysql_info'),		'check' => 'a_config_man',	'icon' => 'fa-database fa-lg fa-fw'),				
+				4		=> array('link' => 'admin/manage_reset.php'.$this->SID,				'text' => $this->user->lang('reset'),			'check' => 'a_reset',	'icon' => 'fa-retweet fa-lg fa-fw'),
+				5		=> array('link' => 'admin/manage_cache.php'.$this->SID,				'text' => $this->user->lang('pdc_manager'),		'check' => 'a_cache_man',	'icon' => 'fa-briefcase fa-lg fa-fw'),
+				6		=> array('link' => 'admin/info_database.php'.$this->SID,			'text' => $this->user->lang('mysql_info'),		'check' => 'a_maintenance',	'icon' => 'fa-database fa-lg fa-fw'),				
 			),
 		);
 
@@ -351,7 +351,7 @@ class admin_functions extends gen_class {
 				$admin_menu['favorits'][2] = array(
 					'link'	=> 'admin/manage_menus.php'.$this->SID.'&tab=1',
 					'text'	=> $this->user->lang('manage_menus'),
-					'check'	=> 'a_config_man',
+					'check'	=> 'a_menues_man',
 					'icon'	=> 'fa-list fa-lg fa-fw',
 				);
 			}

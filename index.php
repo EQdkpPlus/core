@@ -93,7 +93,7 @@ class controller extends gen_class {
 
 	private function filterPathArray($arrPath){
 		foreach($arrPath as $key => $val){
-			$arrPath[$key] = str_replace(array(".html", ".php"), "", utf8_strtolower($arrPath[$key]));
+			$arrPath[$key] = str_replace(array(".html", ".php", "?s=", "?"), "", utf8_strtolower($arrPath[$key]));
 		}
 
 		return $arrPath;
@@ -118,12 +118,13 @@ class controller extends gen_class {
 			$blnIsStartpage = true;
 			//Get Start Page
 			if ($this->config->get('start_page') != ""){
-				$strPath = $this->config->get('start_page');
+				$strPath = str_ireplace('index.php', '', $this->config->get('start_page'));
 			} else {
 				$strPath = "news";
 			}
 			$arrPath = array_filter(explode('/', $strPath));
 			$arrPath = array_reverse($arrPath);
+			$arrPath = $this->filterPathArray($arrPath);
 		}
 		registry::add_const('patharray', $arrPath);
 		$intArticleID = $intCategoryID = $strSpecificID = 0;

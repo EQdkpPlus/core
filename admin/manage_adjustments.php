@@ -30,7 +30,7 @@ class ManageAdjs extends page_generic {
 		$handler = array(
 			'save' => array('process' => 'save', 'check' => 'a_indivadj_add', 'csrf'=>true),
 			'upd'	=> array('process' => 'update', 'csrf'=>false),
-			'copy'		=> array('process' => 'copy', 'check' => 'a_raid_add'),
+			'copy'		=> array('process' => 'copy', 'check' => 'a_indivadj_add'),
 		);
 		parent::__construct('a_indivadj_', $handler, array('adjustment', 'reason'), null, 'selected_ids[]', 'a');
 		$this->process();

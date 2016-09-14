@@ -375,8 +375,9 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 					case 1: 
 							//Do we have a parent?
 							$result = $myPermission;
-							if ($intCategoryID == 0){
-								$result = $this->get_calculated_permissions($intParentID, $strPermission, $intUsergroupID, $myPermission,  false, $intCall+1);
+							if ($intCategoryID == 1){
+								//$result = $this->get_calculated_permissions($intParentID, $strPermission, $intUsergroupID, $myPermission,  false, $intCall+1);
+								return 1;
 							} else {
 								if ($intParentID !== false){
 									$result = $this->get_calculated_permissions($intParentID, $strPermission, $intUsergroupID, $myPermission,  false, $intCall+1);
@@ -404,8 +405,9 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 					case 1: return $myPermission;
 					case -1: //Do we have a parent?
 							$result = $myPermission;
-							if ($intCategoryID == 0){
-								$result = $this->get_calculated_permissions($intParentID, $strPermission, $intUsergroupID, $myPermission, false, $intCall+1);
+							if ($intCategoryID == 1){
+								//$result = $this->get_calculated_permissions($intParentID, $strPermission, $intUsergroupID, $myPermission, false, $intCall+1);
+								return 0;
 							} else {
 								if ($intParentID !== false){
 									$result = $this->get_calculated_permissions($intParentID, $strPermission, $intUsergroupID, $myPermission, false, $intCall+1);			

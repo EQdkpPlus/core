@@ -27,7 +27,7 @@ include_once($eqdkp_root_path . 'common.php');
 class MySQL_Info extends page_generic{
 
 	public function __construct(){
-		$this->user->check_auth('a_config_man');
+		$this->user->check_auth('a_maintenance');
 		$handler = array();
 		parent::__construct(false, $handler);
 		$this->process();

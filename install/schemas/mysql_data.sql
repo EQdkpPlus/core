@@ -37,6 +37,15 @@ INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_export_data','N
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_article_categories_man','N');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_users_perms','N');
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_users_profilefields','N');
+INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_roles_man','N');
+INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_member_profilefields_man','N');
+INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_apa_man','N');
+INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_tables_man','N');
+INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_notifications_man','N');
+INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_menues_man','N');
+INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_cronjobs_man','N');
+INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_bridge_man','N');
+INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_cache_man','N');
 
 ### User Permissions
 INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_member_man','Y');
