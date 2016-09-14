@@ -379,7 +379,7 @@ i.eqdkp-icon-online {
 	font-size: 12px;
 	border-radius: 50%;
 	box-shadow: inset -0.1em -0.1em 0.2em rgba(0,0,0,.5);
-	background: linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
+	background-image: linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
 }
 
 i.eqdkp-icon-offline {
@@ -390,7 +390,7 @@ i.eqdkp-icon-offline {
 	font-size: 12px;
 	border-radius: 50%;
 	box-shadow: inset -0.1em -0.1em 0.2em rgba(0,0,0,.5);
-	background: linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
+	background-image: linear-gradient(-45deg, rgba(255,255,220,.3) 0%, transparent 100%);
 }
 
 i.icon-color-green{
