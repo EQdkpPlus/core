@@ -1424,6 +1424,7 @@ class template extends gen_class {
 
 		$filename		= $this->cachedir . $handle_filename . '.php';
 		$data			= '<?php' . "\nif (\$this->security()) {\n" . $data . "\n}\n?".">";
+		$data 			= str_replace('</body>', '</body><!-- Cache File '.$handle_filename.' generated '.date("Y-m-d H:i").' ('.time().') -->', $data);
 
 		// save the file data
 		$this->pfh->putContent($filename, $data);
