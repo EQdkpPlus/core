@@ -287,11 +287,11 @@ class wrapper_pageobject extends pageobject {
 							var framepos = findPos(currentfr)[1];
 							scrollTo(0,elpos + framepos);
 						} else {
-							scrollTo(0,0);
+							//scrollTo(0,0);
 						}
 	
 					} else {
-						scrollTo(0,0);
+						//scrollTo(0,0);
 					}
 					
 				} catch (e) {
