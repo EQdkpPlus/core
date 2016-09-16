@@ -278,7 +278,7 @@ class Manage_Article_Categories extends page_generic {
 				});
 			", "docready");
 			
-			$this->jquery->qtip('.articles-link', $this->user->lang('link_to_articles'));
+			//$this->jquery->qtip('.articles-link', $this->user->lang('link_to_articles'));
 		
 			$view_list = $this->pdh->get('article_categories', 'id_list', array());
 			$hptt_page_settings = $this->pdh->get_page_settings('admin_manage_article_categories', 'hptt_admin_manage_article_categories_categorylist');
@@ -296,7 +296,7 @@ class Manage_Article_Categories extends page_generic {
 				'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count())
 			);
 		} else {
-			$this->jquery->qtip('.articles-link', $this->user->lang('link_to_articles'));
+			//$this->jquery->qtip('.articles-link', $this->user->lang('link_to_articles'));
 			
 			$view_list = $this->pdh->get('article_categories', 'id_list', array());
 			$hptt_page_settings = array(
@@ -312,8 +312,8 @@ class Manage_Article_Categories extends page_generic {
 				'table_sort_col'	=> 0,
 				'table_presets'		=> array(
 						array('name' => 'category_sortable',	'sort' => true, 'th_add' => 'width="20" class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
-						array('name' => 'category_article_count','sort' => true, 'th_add' => 'width="20" class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
 						array('name' => 'category_name',		'sort' => true, 'th_add' => '', 'td_add' => ''),
+						array('name' => 'category_article_count','sort' => true, 'th_add' => 'width="20" class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),	
 						array('name' => 'category_alias',		'sort' => true, 'th_add' => 'class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
 						array('name' => 'category_portallayout','sort' => true, 'th_add' => 'class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
 				),

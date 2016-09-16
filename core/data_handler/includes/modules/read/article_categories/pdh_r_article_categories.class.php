@@ -339,11 +339,23 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 		}
 		
 		public function get_html_article_count($intCategoryID){
-			return '<a href="'.$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$intCategoryID.'">'.$this->get_article_count($intCategoryID).'</a>';
+			return '<a class="bubble" href="'.$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$intCategoryID.'">'.$this->get_article_count($intCategoryID).'</a>';
 		}
 		
 		public function get_html_name($intCategoryID){
-			return $this->get_name_prefix($intCategoryID).'<a href="'.$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$intCategoryID.'" class="articles-link">'.$this->get_name($intCategoryID).'</a>';
+			$intArticles = $this->get_article_count($intCategoryID);
+			$filled = ($intArticles > 0) ? '' : '-o';
+			$icon = (count($this->get_childs($intCategoryID))) ? '<i class="fa fa-folder-open'.$filled.'"></i>' : '<i class="fa fa-folder'.$filled.'"></i>';
+			$startpage = ($this->get_is_startpage($intCategoryID)) ? ' <i class="fa fa-globe"></i>' : '';
+			
+			return $this->get_name_prefix($intCategoryID).' <a href="'.$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$intCategoryID.'" class="articles-link">'.$icon.' '.$this->get_name($intCategoryID).'</a>'.$startpage;
+		}
+		
+		public function get_is_startpage($intCategoryID){
+			$strStartPage = $this->config->get('start_page');
+			if($this->get_alias($intCategoryID) == $strStartPage) return true;
+			
+			return false;
 		}
 		
 		public function get_check_alias($strAlias, $blnCheckArticles=false){
@@ -571,7 +583,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 		public function get_childs($intCategoryID){
 			$arrChilds = array();
 			foreach($this->categories as $catID => $val){
-				if ($this->get_parent($catID) === $intCategoryID){
+				if ($this->get_parent($catID) == $intCategoryID){
 					$arrChilds[] = $catID;
 				}
 			}

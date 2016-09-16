@@ -75,7 +75,7 @@ class hradio extends html {
 			if(count($this->options) > 2) $radiobox .= '<br />';
 		}
 
-		return ($this->nodiv) ? $radiobox: '<div id="'.$this->id.'">'.$radiobox.'</div>';
+		return ($this->nodiv) ? $radiobox: '<div id="'.$this->id.'" class="radioContainer'.(($this->blnIsBoolean) ? 'Boolean' : '').'">'.$radiobox.'</div>';
 	}
 	
 	public function _inpval() {

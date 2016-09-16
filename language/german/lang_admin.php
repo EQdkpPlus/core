@@ -1402,7 +1402,6 @@ $lang = array(
 "lm_hptt_calendar_raidlist" => "Raidliste",
 "lm_hptt_admin_manage_adjustments_adjlist" => "Anpassungstabelle",
 "lm_hptt_admin_manage_raids_raidlist" => "Raid-Tabelle",
-"lm_hptt_admin_manage_news" => "News-Verwaltung",
 "lm_hptt_manage_characters" => "Charakterverwaltung",
 "lm_hptt_managelogs_actions" => "Log-Tabelle",
 "lm_hptt_manageroles_actions" => "Rollen-Tabelle",

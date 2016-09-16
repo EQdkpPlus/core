@@ -4014,10 +4014,10 @@ li.prio_2 {
 .bubble {
   background-color: @eqdkpContentHighlightColor;
   border-radius: 9px;
-  color: @eqdkpContentBackgroundColor;
+  color: @eqdkpContentBackgroundColor !important;
   display: inline-block;
-  font-size: .70rem;
-  padding: 1px 6px 1px;
+  font-size: .90rem;
+  padding: 1px 10px 1px;
   position: relative;
   text-shadow: none !important;
   vertical-align: middle;
@@ -4313,5 +4313,9 @@ label.isBoolean > input[type="radio"]:checked + span.red, label.isBoolean > span
 label.isBoolean > input[type="radio"]:checked + span.green, label.isBoolean > span.green:hover, label.isBoolean > span.green:active {
         background: @styleBooleanGreen !important;
         color: @eqdkpInputFontColor !important;
+}
+
+.radioContainerBoolean, .radioContainer {
+	display: inline-block;
 }
 /* End Boolean Boxes */

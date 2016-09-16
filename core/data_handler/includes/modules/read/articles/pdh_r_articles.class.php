@@ -177,7 +177,8 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 		}
 
 		public function get_html_title($intArticleID){
-			return '<a href="'.$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$this->get_category($intArticleID).'&a='.$intArticleID.'">'.$this->get_title($intArticleID).'</a>';
+			$startpage = ($this->get_is_startpage($intArticleID)) ? ' <i class="fa fa-globe"></i>' : '';
+			return '<a href="'.$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$this->get_category($intArticleID).'&a='.$intArticleID.'">'.$this->get_title($intArticleID).'</a>'.$startpage;
 		}
 
 		public function get_text($intArticleID){
@@ -603,6 +604,13 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			$intCategoryID = $this->get_category($intArticleID);
 			$arrCategoryPermissions = $this->pdh->get('article_categories', 'user_permissions', array($intCategoryID, $intUserID));
 			return $arrCategoryPermissions;
+		}
+		
+		public function get_is_startpage($intArticleID){
+			$strStartPage = $this->config->get('start_page');
+			if($this->get_alias($intArticleID) == $strStartPage) return true;
+				
+			return false;
 		}
 
 

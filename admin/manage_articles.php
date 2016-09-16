@@ -244,13 +244,13 @@ class Manage_Articles extends page_generic {
 				'ALIAS'	=> $this->pdh->get('articles', 'alias', array($id)),
 				'TAGS'	=> implode(', ', $this->pdh->get('articles', 'tags', array($id))),
 				'ML_TITLE' => new htextmultilang('title', array('value' => $this->pdh->get('articles', 'title', array($id, true)), 'required' => true, 'size' => 50)),
-				'DD_CATEGORY' => new hdropdown('category', array('options' => $arrCategories, 'value' => $this->pdh->get('articles', 'category', array($id)))),
+				'DD_CATEGORY' => new hsingleselect('category', array('options' => $arrCategories, 'filter' => true, 'value' => $this->pdh->get('articles', 'category', array($id)))),
 				'PUBLISHED_RADIO' => new hradio('published', array('value' => ($this->pdh->get('articles', 'published', array($id))))),
 				'FEATURED_RADIO' => new hradio('featured', array('value' => ($this->pdh->get('articles', 'featured', array($id))))),
 				'COMMENTS_RADIO' => new hradio('comments', array('value' => ($this->pdh->get('articles', 'comments', array($id))))),
 				'VOTES_RADIO' => new hradio('votes', array('value' => ($this->pdh->get('articles', 'votes', array($id))))),
 				'HIDE_HEADER_RADIO' => new hradio('hide_header', array('value' => ($this->pdh->get('articles', 'hide_header', array($id))))),
-				'DD_USER' 			=> new hdropdown('user_id', array('options' => $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list'))), 'value' => $this->pdh->get('articles', 'user_id', array($id)))),
+				'DD_USER' 			=> new hsingleselect('user_id', array('options' => $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list'))), 'filter' => true, 'value' => $this->pdh->get('articles', 'user_id', array($id)))),
 				'DATE_PICKER'		=> $this->jquery->Calendar('date', $this->time->user_date($this->pdh->get('articles', 'date', array($id)), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 				'DATE_TO_PICKER'	=> $this->jquery->Calendar('show_to', $this->time->user_date(((strlen($this->pdh->get('articles', 'show_to', array($id)))) ? $this->pdh->get('articles', 'show_to', array($id)) : 0), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 				'DATE_FROM_PICKER'	=> $this->jquery->Calendar('show_from', $this->time->user_date(((strlen($this->pdh->get('articles', 'show_from', array($id)))) ? $this->pdh->get('articles', 'show_from', array($id)) : 0), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
@@ -265,7 +265,7 @@ class Manage_Articles extends page_generic {
 		} else {
 
 			$this->tpl->assign_vars(array(
-				'DD_CATEGORY' => new hdropdown('category', array('options' => $arrCategories, 'value' => $cid)),
+				'DD_CATEGORY' => new hsingleselect('category', array('options' => $arrCategories, 'value' => $cid, 'filter' => true)),
 				'ML_TITLE' => new htextmultilang('title', array('value' => '', 'required' => true, 'size' => 50)),
 				'PUBLISHED_CHECKED'=> 'checked="checked"',
 				'COMMENTS_CHECKED' => 'checked="checked"',
@@ -274,7 +274,7 @@ class Manage_Articles extends page_generic {
 				'COMMENTS_RADIO' => new hradio('comments', array('value' => 1)),
 				'VOTES_RADIO' => new hradio('votes', array()),
 				'HIDE_HEADER_RADIO' => new hradio('hide_header', array()),
-				'DD_USER' 		   => new hdropdown('user_id', array('options' => $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list'))), 'value' => $this->user->id)),
+				'DD_USER' 		   => new hsingleselect('user_id', array('options' => $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list'))), 'value' => $this->user->id, 'filter' => true)),
 				'DATE_PICKER'		=> $this->jquery->Calendar('date', $this->time->user_date($this->time->time, true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 				'DATE_TO_PICKER'	=> $this->jquery->Calendar('show_to', $this->time->user_date(0, true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 				'DATE_FROM_PICKER'	=> $this->jquery->Calendar('show_from', $this->time->user_date(0, true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
@@ -356,7 +356,7 @@ class Manage_Articles extends page_generic {
 			),
 			3 => array(
 				'type'	=> 'select',
-				'icon'	=> 'fa-refresh',
+				'icon'	=> 'fa-share',
 				'text'	=> $this->user->lang('move_to_other_category').':',
 				'perm'	=> true,
 				'name'	=> 'change_category',
@@ -371,6 +371,7 @@ class Manage_Articles extends page_generic {
 			'PAGINATION' 		=> generate_pagination('manage_articles.php'.$sort_suffix, $raid_count, 25, $this->in->get('start', 0)),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
 			'CATEGORY_NAME' 	=> $this->pdh->get('article_categories', 'name', array($cid)),
+			'S_CATEGORY_PUBLISHED' => $this->pdh->get('article_categories', 'published', array($cid)) ? true : false,
 			'CID'				=> $cid,
 			'BUTTON_MENU'		=> $this->core->build_dropdown_menu($this->user->lang('selected_articles').'...', $arrMenuItems, '', 'manage_members_menu', array("input[name=\"selected_ids[]\"]")),
 		));
