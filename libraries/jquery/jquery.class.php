@@ -631,6 +631,54 @@ if (!class_exists("jquery")) {
 			return $acccode;
 		}
 
+		public function init_toast(){
+			$this->tpl->add_js("
+			function system_message(text, type='default', sticky=false){
+				switch (type) {
+					case 'error':
+						mssgheading = '{L_error}';
+						mssgicon = 'error';
+					break;
+					case 'success':
+						mssgheading = '{L_success}';
+						mssgicon = 'success';
+					break;
+					case 'warning':
+						mssgheading = '{L_warning}';
+						mssgicon = 'warning';
+					break;
+					case 'info':
+						mssgheading = '{L_information}';
+						mssgicon = ''info'';
+					break;
+					default:
+						mssgheading = false;
+						mssgicon = false;
+				}
+
+				custom_message(text, {headertxt:mssgheading, icon: mssgicon, sticky: sticky})
+			}
+
+			function custom_message(text, options){
+				if (options.hasOwnProperty('headertxt')) headertxt = options.headertxt; headertxt = false;
+				if (options.hasOwnProperty('icon')) mssgicon = options.icon; mssgicon = false;
+				if (options.hasOwnProperty('position')) mssgposition = options.position; mssgposition = 'top-right';
+				if (options.hasOwnProperty('stack')) mssgstack = options.stack; mssgstack = 5;
+				if (options.hasOwnProperty('closebutton')) mssgclosebutton = options.closebutton; mssgclosebutton = true;
+				if (options.hasOwnProperty('sticky')) mssgsticky = options.sticky; mssgsticky = 3000;
+
+				$.toast({
+					heading:			headertxt,
+					text:				text,
+					icon:				mssgicon,
+					position:			mssgposition,
+					stack:				mssgstack,
+					allowToastClose:	mssgclosebutton,
+					hideAfter:			mssgsticky
+				});
+			}");
+		}
+
 				/**
 		* notfication messages
 		*
