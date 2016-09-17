@@ -292,8 +292,10 @@ class Manage_Article_Categories extends page_generic {
 			$this->confirm_delete($this->user->lang('confirm_delete_article_category'));
 	
 			$this->tpl->assign_vars(array(
-				'CATEGORY_LIST'		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix,null,1,null,false, array('article_categories', 'checkbox_check')),
-				'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count())
+				'CATEGORY_LIST'		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix,null,1,null,true, array('article_categories', 'checkbox_check')),
+				'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
+				'ARTICLECAT_COUNT'	=> count($view_list),
+			)
 			);
 		} else {
 			//$this->jquery->qtip('.articles-link', $this->user->lang('link_to_articles'));
@@ -325,9 +327,10 @@ class Manage_Article_Categories extends page_generic {
 				
 			$item_count = count($view_list);
 			$this->tpl->assign_vars(array(
-					'CATEGORY_LIST'		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix,null,1,null,false, array('article_categories', 'checkbox_check')),
+					'CATEGORY_LIST'		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix,null,1,null,true, array('article_categories', 'checkbox_check')),
 					'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
 					'S_NO_PERMISSION'	=> true,
+					'ARTICLECAT_COUNT'	=> count($view_list),
 			)
 			);
 		}

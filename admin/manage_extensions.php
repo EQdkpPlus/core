@@ -444,12 +444,12 @@ class Manage_Extensions extends page_generic {
 		$plugins_array = $this->pm->get_plugins(PLUGIN_ALL);
 		//maybe plugins want to auto-install portalmodules
 		$this->portal->get_all_modules();
-		$plugin_count = count($plugins_array);
 		$db_plugins = $this->pdh->get('plugins', 'id_list');
+		$plugin_count = 0;
 
 		foreach ( $plugins_array as $plugin_code ) {
 			if ($plugin_code == 'pluskernel') continue;
-
+			
 			$contact			= $this->pm->get_data($plugin_code, 'contact');
 			$version			= $this->pm->get_data($plugin_code, 'version');
 			$description		= $this->pm->get_data($plugin_code, 'description');
@@ -511,7 +511,7 @@ class Manage_Extensions extends page_generic {
 				$link = ( $dep_all ) ? '<a href="manage_extensions.php' . $this->SID . '&amp;cat=1&amp;mode=install&amp;code=' . $plugin_code. '&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('install').'"><i class="fa fa-lg fa-toggle-off"></i></a>' : '<i class="fa fa-lg fa-exclamation-triangle" title="'.$this->user->lang('plug_dep_broken_deps').'"></i>';
 				$link .= '&nbsp;&nbsp;&nbsp;<a href="manage_extensions.php' . $this->SID . '&amp;cat=1&amp;mode=remove&amp;code=' . $plugin_code. '&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('delete').'"><i class="fa fa-lg fa-trash-o"></i></a>';
 			}
-
+			$plugin_count++;
 			$this->tpl->assign_block_vars('plugins_row_'.$row, array(
 				'NAME'				=> (isset($arrExtensionListNamed[1][$plugin_code])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[1][$plugin_code].')">'.$this->pm->get_data($plugin_code, 'name').'</a>' : $this->pm->get_data($plugin_code, 'name'),
 
@@ -542,6 +542,7 @@ class Manage_Extensions extends page_generic {
 		if (isset($arrExtensionList[1]) && is_array($arrExtensionList[1])){
 			foreach ($arrExtensionList[1] as $id => $extension){
 				if ($this->pm->search($extension['plugin']) || $extension['plugin'] == 'pluskernel') continue;
+				$plugin_count++;
 				$row = 'grey_repo';
 				$dep['plusv']	= (version_compare($extension['dep_coreversion'], $this->config->get('plus_version'), '<='));
 				$dep['games']	= 'skip';
@@ -578,8 +579,9 @@ class Manage_Extensions extends page_generic {
 		}
 
 		$this->tpl->assign_vars(array(
-			'DEP_COUNT'	=> 3,
-			'BADGE_1'	=> $badge,
+			'DEP_COUNT'		=> 3,
+			'BADGE_1'		=> $badge,
+			'PLUGIN_COUNT'	=> $plugin_count,
 		));
 
 		//=================================================================
@@ -590,6 +592,7 @@ class Manage_Extensions extends page_generic {
 		$arrLocalStyleUpdates = $this->objStyles->getLocalStyleUpdates();
 		$arrUninstalledStyles = $this->objStyles->getUninstalledStyles();
 		$arrStyles = array();
+		$intStyles = 0;
 
 		foreach($arrUninstalledStyles as $key => $install_xml){
 			$plugin_code = $key;
@@ -613,6 +616,7 @@ class Manage_Extensions extends page_generic {
 				$screenshot = $this->root_path.'templates/'.$plugin_code.'/screenshot.jpg';
 			}
 
+			$intStyles++;
 			$this->tpl->assign_block_vars('styles_row_'.$row, array(
 				'TT_CONTENT'	=> $screenshot,
 				'ROWNAME'		=> 'style_'.$row,
@@ -656,6 +660,7 @@ class Manage_Extensions extends page_generic {
 
 			$this->jquery->Dialog('style_preview', $this->user->lang('template_preview'), array('url'=>$this->server_path."".$this->SID."&style='+ styleid+'", 'width'=>'750', 'height'=>'520', 'modal'=>true, 'withid' => 'styleid'));
 
+			$intStyles++;
 			$this->tpl->assign_block_vars('styles_row_'.$rowname, array(
 				'ID'				=> $row['style_id'],
 				'ROWNAME'			=> 'style_'.$rowname,
@@ -690,6 +695,7 @@ class Manage_Extensions extends page_generic {
 				$row = 'grey';
 
 				$link = '<a href="javascript:repo_install('.$extension['plugin_id'].',2, \''.sanitize($extension['plugin']).'\');" ><i class="fa fa-toggle-off fa-lg" title="'.$this->user->lang('install').'"></i></a>';
+				$intStyles++;
 				$this->tpl->assign_block_vars('styles_row_'.$row, array(
 					'TT_NAME'			=> '<a href="javascript:repoinfo('.$id.')">'.$extension['name'].'</a>',
 					'VERSION'			=> sanitize($extension['version']),
@@ -719,13 +725,15 @@ class Manage_Extensions extends page_generic {
 		}
 
 		$this->tpl->assign_vars(array(
-			'BADGE_2'	=> $badge,
+			'BADGE_2'		=> $badge,
+			'STYLE_COUNT'	=> $intStyles,
 		));
 
 		//=================================================================
 		//Portal Modules
 		
 		$arrTmpModules = array();
+		$intPortalModules = 0;
 		
 		if (isset($arrExtensionList[3]) && is_array($arrExtensionList[3])){
 			foreach ($arrExtensionList[3] as $id => $extension){
@@ -761,6 +769,7 @@ class Manage_Extensions extends page_generic {
 				//Add Reinstall Link if no update available
 				$reinst_link = '<i class="fa fa-retweet fa-lg" title="'.$this->user->lang('reinstall').'" onclick="javascript:reinstall_portal(\''.$plugin_code.'\')" style="cursor:pointer;"></i>';
 
+				$intPortalModules++;
 				$this->tpl->assign_block_vars('pm_row_'.$row, array(
 					'NAME'				=> (isset($arrExtensionListNamed[3][$value['path']])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[3][$value['path']].')">'.$value['name'].'</a>' : $value['name'],
 					'VERSION'			=> sanitize($value['version']),
@@ -784,6 +793,7 @@ class Manage_Extensions extends page_generic {
 
 				if ((is_array(search_in_array($extension['plugin'], $arrModules, true, 'path')))) continue;
 				$row = 'grey';
+				$intPortalModules++;
 
 				$link = '<a href="javascript:repo_install('.$extension['plugin_id'].',3, \''.sanitize($extension['plugin']).'\');" title="'.$this->user->lang('install').'"><i class="fa fa-toggle-off fa-lg"></i></a>';
 				$this->tpl->assign_block_vars('pm_row_'.$row, array(
@@ -809,7 +819,8 @@ class Manage_Extensions extends page_generic {
 		}
 
 		$this->tpl->assign_vars(array(
-			'BADGE_3'	=> $badge,
+			'BADGE_3'		=> $badge,
+			'PORTAL_COUNT'	=> $intPortalModules,
 		));
 
 		//=================================================================
@@ -818,6 +829,7 @@ class Manage_Extensions extends page_generic {
 		$arrGameVersions = $this->game->get_versions();
 		$arrGameAuthors = $this->game->get_authors();
 		$arrTmpExtension = array();
+		$intGames = 0;
 		
 		if (isset($arrExtensionList[7]) && is_array($arrExtensionList[7])){
 			foreach ($arrExtensionList[7] as $id => $extension){
@@ -841,6 +853,7 @@ class Manage_Extensions extends page_generic {
 						$link = '';
 				}
 
+				$intGames++;
 				$this->tpl->assign_block_vars('games_row_'.$row, array(
 					'NAME'				=> (isset($arrExtensionListNamed[7][$plugin_code])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[7][$plugin_code].')">'.$this->game->game_name($plugin_code).'</a>' : $this->game->game_name($plugin_code),
 					'VERSION'			=> $arrGameVersions[$plugin_code],
@@ -860,6 +873,7 @@ class Manage_Extensions extends page_generic {
 			foreach ($arrExtensionList[7] as $id => $extension){
 				if (in_array($extension['plugin'], $arrGames)) continue;
 				$row = 'grey';
+				$intGames++;
 
 				$link = '<a href="javascript:repo_install('.$extension['plugin_id'].',7, \''.sanitize($extension['plugin']).'\');" title="'.$this->user->lang('install').'"><i class="fa fa-toggle-off fa-lg"></i></a>';
 				$this->tpl->assign_block_vars('games_row_'.$row, array(
@@ -885,12 +899,14 @@ class Manage_Extensions extends page_generic {
 
 		$this->tpl->assign_vars(array(
 			'BADGE_7'	=> $badge,
+			'GAME_COUNT'=> $intGames,
 		));
 		
 		//=================================================================
 		//Languages
 		
 		$arrLanguages = $arrLanguageVersions = array();
+		$intLanguages = 0;
 		// Build language array
 		if($dir = @opendir($this->core->root_path . 'language/')){
 			while ( $file = @readdir($dir) ){
@@ -919,6 +935,7 @@ class Manage_Extensions extends page_generic {
 						$link = '';
 				}
 
+				$intLanguages++;
 				$this->tpl->assign_block_vars('language_row_'.$row, array(
 					'NAME'				=> (isset($arrExtensionListNamed[11][$plugin_code])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[11][$plugin_code].')">'.$value.'</a>' : $value,
 					'VERSION'			=> $arrLanguageVersions[$plugin_code],
@@ -934,6 +951,7 @@ class Manage_Extensions extends page_generic {
 				if (isset($arrLanguages[$extension['plugin']])) continue;
 				$row = 'grey';
 
+				$intLanguages++;
 				$link = '<a href="javascript:repo_install('.$extension['plugin_id'].', 11, \''.sanitize($extension['plugin']).'\');" title="'.$this->user->lang('install').'"><i class="fa fa-toggle-off fa-lg"></i></a>';
 				$this->tpl->assign_block_vars('language_row_'.$row, array(
 					'NAME'				=> '<a href="javascript:repoinfo('.$id.')">'.$extension['name'].'</a>',
@@ -953,7 +971,8 @@ class Manage_Extensions extends page_generic {
 		}
 
 		$this->tpl->assign_vars(array(
-			'BADGE_11'	=> $badge,
+			'BADGE_11'		=> $badge,
+			'LANGUAGE_COUNT' => $intLanguages,
 		));
 
 		//=================================================================

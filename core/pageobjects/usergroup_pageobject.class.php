@@ -61,16 +61,16 @@ class usergroup_pageobject extends pageobject {
 		
 		//footer
 		$user_count			= count($view_list);
-		$footer_text		= sprintf($this->user->lang('listusers_footcount'), $user_count, $this->user->data['user_rlimit']);
 
 		
 		$this->tpl->add_meta('<link rel="canonical" href="'.$this->env->link.$this->routing->build('Usergroup', $this->pdh->get('user_groups', 'name', array($groupID)), $groupID, false, true).'" />');
 		
 		$this->tpl->assign_vars(array (
-			'PAGE_OUT'			=> $hptt->get_html_table($sort, $pagination_suffix, $start, $this->user->data['user_rlimit'], $footer_text),
+			'PAGE_OUT'			=> $hptt->get_html_table($sort, $pagination_suffix, $start, $this->user->data['user_rlimit'], false),
 			'USER_PAGINATION'	=> generate_pagination($this->strPath.$this->SID.$sort_suffix, $user_count, $this->user->data['user_rlimit'], $start),
 			'GROUPNAME'			=> $this->pdh->get('user_groups', 'name', array($groupID)),
 			'S_DISPLAY_GROUP'	=> true,
+			'USER_COUNT'		=> $user_count,
 		));
 		
 		
@@ -79,10 +79,10 @@ class usergroup_pageobject extends pageobject {
 		$hptt_grpleader->setPageRef($this->strPath);
 		//footer
 		$user_count			= count($view_list_grpleader);
-		$footer_text		= sprintf($this->user->lang('listusers_footcount'), $user_count, $this->user->data['user_rlimit']);
 
 		$this->tpl->assign_vars(array (
-			'PAGE_OUT_GRPLEADER'=> $hptt_grpleader->get_html_table($sort, $pagination_suffix),
+			'PAGE_OUT_GRPLEADER'=> $hptt_grpleader->get_html_table($sort, $pagination_suffix, null, null, false),
+			'GRPLEADER_COUNT' => $user_count,
 		));	
 
 		$this->jquery->Dialog('usermailer', $this->user->lang('adduser_send_mail'), array('url'=>$this->server_path."email.php".$this->SID."&user='+userid+'", 'width'=>'660', 'height'=>'450', 'withid'=>'userid'));

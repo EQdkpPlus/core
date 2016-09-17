@@ -217,6 +217,7 @@ class Manage_User_Groups extends page_generic {
 			'ID'		=> $new_id,
 			'KEY'		=> $key,
 			'S_USERGROUP_ADMIN' => $this->user->check_auth('a_usergroups_man', false),
+			'GROUP_COUNT' => count($grps),
 		));
 
 		$this->core->set_vars(array(

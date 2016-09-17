@@ -320,9 +320,6 @@ class Manage_Articles extends page_generic {
 		$page_suffix = '&amp;start='.$this->in->get('start', 0).'&c='.$cid;
 		$sort_suffix = '?sort='.$this->in->get('sort').'&c='.$cid;
 
-		//footer
-		$raid_count = count($view_list);
-		$footer_text = sprintf($this->user->lang('article_footcount'), $raid_count ,$this->user->data['user_nlimit']);
 
 		$arrCategoryIDs = $this->pdh->sort($this->pdh->get('article_categories', 'id_list', array()), 'article_categories', 'sort_id', 'asc');
 		$arrCategories = array();
@@ -367,9 +364,10 @@ class Manage_Articles extends page_generic {
 		$this->confirm_delete($this->user->lang('confirm_delete_articles'));
 
 		$this->tpl->assign_vars(array(
-			'ARTICLE_LIST' 		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), 25, $footer_text),
+			'ARTICLE_LIST' 		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), 25, false),
 			'PAGINATION' 		=> generate_pagination('manage_articles.php'.$sort_suffix, $raid_count, 25, $this->in->get('start', 0)),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
+			'ARTICLE_COUNT'		=> count($view_list),
 			'CATEGORY_NAME' 	=> $this->pdh->get('article_categories', 'name', array($cid)),
 			'S_CATEGORY_PUBLISHED' => $this->pdh->get('article_categories', 'published', array($cid)) ? true : false,
 			'CID'				=> $cid,

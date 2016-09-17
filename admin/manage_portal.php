@@ -604,8 +604,9 @@ $('.js_reload').change(reload_settings);", 'docready');
 		$this->confirm_delete($this->user->lang('confirm_delete_articles'));
 		
 		$this->tpl->assign_vars(array(
-				'LAYOUT_LIST' 		=> $hptt->get_html_table($this->in->get('sort'),false,null,1,null,false, array('portal_layouts', 'checkbox_check')),
+				'LAYOUT_LIST' 					=> $hptt->get_html_table($this->in->get('sort'),false,null,1,false,true, array('portal_layouts', 'checkbox_check')),
 				'HPTT_LAYOUT_LIST_COLUMN_COUNT'	=> $hptt->get_column_count(),
+				'LAYOUT_COUNT'					=> count($view_list),
 		));
 		
 		//Portal blocks
@@ -634,8 +635,9 @@ $('.js_reload').change(reload_settings);", 'docready');
 		$sort_suffix = '?sort='.$this->in->get('sort');
 		
 		$this->tpl->assign_vars(array(
-				'BLOCK_LIST' 					=> $hptt->get_html_table($this->in->get('sort')),
+				'BLOCK_LIST' 					=> $hptt->get_html_table($this->in->get('sort'),false,null,1,false),
 				'HPTT_BLOCK_LIST_COLUMN_COUNT'	=> $hptt->get_column_count(),
+				'BLOCK_COUNT'					=> count($view_list),
 		));
 		
 		$this->core->set_vars(array(

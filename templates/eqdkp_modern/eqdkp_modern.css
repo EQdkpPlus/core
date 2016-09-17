@@ -4025,6 +4025,11 @@ li.prio_2 {
   word-wrap: normal;
 }
 
+h1 .bubble, h2 .bubble, h3 .bubble {
+	padding: 4px 10px 4px;
+	font-weight: normal;
+}
+
 .notification_list li{
 	padding-bottom: 6px;
 	padding-top: 6px;

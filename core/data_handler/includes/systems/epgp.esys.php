@@ -576,8 +576,8 @@ $system_def = array(
 				'show_numbers'		=> false,
 				'show_select_boxes' => false,
 				'show_detail_twink' => false,
-				'table_sort_dir' => 'desc',
-				'table_sort_col' => 0,
+				'table_sort_dir' => 'asc',
+				'table_sort_col' => 2,
 				'table_presets' => array(
 					array('name' => 'eventedit', 'sort' => false, 'th_add' => '', 'td_add' => ''),
 					array('name' => 'eicon', 'sort' => true, 'th_add' => '', 'td_add' => ''),

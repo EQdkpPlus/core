@@ -58,14 +58,12 @@ class team_pageobject extends pageobject {
 					
 				$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => 'team.php', '%link_url_suffix%' => '', '%use_controller%' => true), 'g.'.$group.'.u'.$this->user->id);
 				$hptt->setPageRef($this->strPath);
-				
-				//footer
-				$footer_text		= sprintf($this->user->lang('user_group_footcount'), $user_count);
 
 				$this->tpl->assign_block_vars('group_row', array (
 						'NAME'				=> $this->pdh->get('user_groups', 'name', array($group)),
 						'ID'				=> $group,
-						'PAGE_OUT'			=> $hptt->get_html_table($sort, $pagination_suffix),
+						'PAGE_OUT'			=> $hptt->get_html_table($sort, $pagination_suffix, null, null, false),
+						'COUNT'				=> $user_count,
 				));
 				
 			}

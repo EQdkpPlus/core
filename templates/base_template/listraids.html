@@ -1,6 +1,6 @@
 <form method="post" action="{ACTION}" id="listraids_form">
 	<div class="contentHeader">
-		<h1 class="contentTitle">{L_listraids_title}</h1>
+		<h1 class="contentTitle">{L_listraids_title}  <span class="bubble">{RAID_COUNT}</span></h1>
 	</div>
 	<fieldset class="settings mediumsettings" id="toggleRaidsummary">
 		<legend>{L_create_raid_summary}<span class="toggle_button"></span></legend>
@@ -27,6 +27,8 @@
 	</div>
 {CSRF_TOKEN}
 
+<!-- IF S_RAIDSTATS -->
+<br />
 <!-- IF S_SHOW_TWINKS -->
 <div class="tableHeader">
 {L_filter}: <label><input type="checkbox" name="show_twinks" value="1" onchange="$('#raidSumformSubmitBtn').click()" {SHOW_TWINKS_CHECKED} /> {L_show_twinks}</label>
@@ -34,7 +36,6 @@
 </div>
 <!-- ENDIF -->
 
-<!-- IF S_RAIDSTATS -->
 <table class="table fullwidth hptt colorswitch scrollable-x">
 	{RAIDSTATS_OUT}
 </table>

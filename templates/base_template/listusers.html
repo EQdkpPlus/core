@@ -13,11 +13,11 @@
 <h1 class="pageTitle"><!-- IF S_DISPLAY_GROUP -->{GROUPNAME}<!-- ELSE -->{L_user_list}<!-- ENDIF --></h1>
 
 <!-- IF S_DISPLAY_GROUP -->
-<h3>{L_grpleaders}</h3>
+<h3>{L_grpleaders} <span class="bubble">{GRPLEADER_COUNT}</span></h3>
 <table class="table fullwidth hptt colorswitch scrollable-x">
 	{PAGE_OUT_GRPLEADER}
 </table>
-<h3>{L_group_members}</h3>
+<h3>{L_group_members} <span class="bubble">{USER_COUNT}</span></h3>
 <table class="table fullwidth hptt colorswitch scrollable-x">
 	{PAGE_OUT}
 </table>

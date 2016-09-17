@@ -117,8 +117,9 @@ class Manage_Itempools extends page_generic {
 		}
 
 		$this->tpl->assign_vars(array(
-			$red 			=> '_red',
-			'SID'			=> $this->SID,
+			$red 				=> '_red',
+			'SID'				=> $this->SID,
+			'ITEMPOOLS_COUNT'	=> count($itempool_ids),
 		));
 
 		$this->core->set_vars(array(

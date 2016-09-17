@@ -266,7 +266,7 @@ class Manage_Logs extends page_generic {
 			$this->tpl->assign_block_vars('errorlogs', array(
 					'TYPE' 			=> str_replace(".log", "", $logfile),
 					'PAGINATION'	=> generate_pagination('manage_logs.php'.$this->SID, $arrErrors['count'], 50, $start),
-					'FOOTCOUNT'		=> sprintf($this->user->lang('viewlogs_footcount'), $arrErrors['count'], 50),
+					'COUNT'			=> $arrErrors['count'],
 			));
 						
 			foreach($arrErrors['entries'] as $key => $entry) {
@@ -286,10 +286,9 @@ class Manage_Logs extends page_generic {
 		$actionlog_count	= count($view_list);
 		$hptt_psettings		= $this->pdh->get_page_settings('admin_manage_logs', 'hptt_managelogs_actions');
 		$hptt				= $this->get_hptt($hptt_psettings, $view_list, $view_list, array('%link_url%' => 'manage_logs.php', '%link_url_suffix%' => '', md5($strFilterSuffix)));
-		$footer_text		= sprintf($this->user->lang('viewlogs_footcount'), $actionlog_count, 100);
 		$page_suffix		= '&amp;start='.$this->in->get('start', 0).$strFilterSuffix;
 		$sort_suffix		= $this->SID.'&amp;sort='.$this->in->get('sort').$strFilterSuffix;
-		$logs_list = $hptt->get_html_table($this->in->get('sort',''), $page_suffix, $this->in->get('start', 0), 100, $footer_text);
+		$logs_list 			= $hptt->get_html_table($this->in->get('sort',''), $page_suffix, $this->in->get('start', 0), 100, false);
 		
 		$this->jquery->Dialog('delete_all_warning', '', array('url'=>'manage_logs.php'.$this->SID.'&reset=true&link_hash='.$this->CSRFGetToken('reset'), 'message'=>$this->user->lang('confirm_delete_logs')), 'confirm');
 		$this->confirm_delete($this->user->lang('confirm_delete_partial_logs'));
@@ -298,6 +297,7 @@ class Manage_Logs extends page_generic {
 		$this->jquery->Collapse('#toggleFilter', true);
 		$this->tpl->assign_vars(array(
 			'LOGS_LIST'				=> $logs_list,
+			'LOGS_COUNT'			=> $actionlog_count,
 			'LOGS_PAGINATION'		=> generate_pagination('manage_logs.php'.$sort_suffix.$strFilterSuffix, $actionlog_count, 100, $this->in->get('start', 0)),
 			'HPTT_LOGS_COUNT'		=> $hptt->get_column_count(),
 		));

@@ -166,7 +166,6 @@ class Manage_Roles extends page_generic {
 		$view_list			= $this->pdh->get('roles', 'id_list');
 		$hptt_psettings		= $this->pdh->get_page_settings('admin_manage_roles', 'hptt_manageroles_actions');
 		$hptt				= $this->get_hptt($hptt_psettings, $view_list, $view_list, array('%link_url%' => 'manage_roles.php'));
-		$footer_text		= sprintf($this->user->lang('rolemanager_footcount'), count($view_list));
 		$page_suffix		= '&amp;start='.$this->in->get('start', 0);
 		$sort_suffix		= '?sort='.$this->in->get('sort');
 
@@ -185,7 +184,8 @@ class Manage_Roles extends page_generic {
 
 		$this->jquery->tab_header('roles_tabs');
 		$this->tpl->assign_vars(array(
-			'ROLES'				=> $hptt->get_html_table($this->in->get('sort',''), $page_suffix, $this->in->get('start', 0), 40, $footer_text),
+			'ROLES'				=> $hptt->get_html_table($this->in->get('sort',''), $page_suffix, $this->in->get('start', 0), 40, false),
+			'ROLES_COUNT'		=> count($view_list),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
 		));
 

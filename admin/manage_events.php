@@ -172,13 +172,13 @@ class Manage_Events extends page_generic {
 
 		//footer
 		$event_count = count($event_ids);
-		$footer_text = sprintf($this->user->lang('listevents_footcount'), $event_count ,$this->user->data['user_elimit']);
 
 		$this->tpl->assign_vars(array(
 			'ACTION' 	=> 'manage_events.php'.$this->SID,
-			'EVENTS_LIST' => $hptt->get_html_table($this->in->get('sort',''), $pagination_suffix, $start, $this->user->data['user_elimit'], $footer_text),
+			'EVENTS_LIST' => $hptt->get_html_table($this->in->get('sort',''), $pagination_suffix, $start, $this->user->data['user_elimit'], false),
 			'EVENT_PAGINATION' => generate_pagination('manage_events.php'.$this->SID.$sort_suffix, $event_count, $this->user->data['user_elimit'], $start),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
+			'EVENT_COUNT' => $event_count,
 			)
 		);
 

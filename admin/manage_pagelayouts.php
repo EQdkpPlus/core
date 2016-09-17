@@ -225,7 +225,9 @@ class ManagePageLayouts extends page_generic {
 		}
 		$current_layout = $this->config->get('eqdkp_layout');
 		$this->pdh->auto_update_layout($current_layout);
+		$intLayouts = 0;
 		foreach($this->pdh->get_layout_list(true, false) as $layout){
+			$intLayouts++;
 			$this->tpl->assign_block_vars('layouts_row', array(
 				'NAME'     => $layout,
 				'DESC'    => $this->pdh->get_eqdkp_layout_description($layout),
@@ -234,6 +236,7 @@ class ManagePageLayouts extends page_generic {
 		}
 
 		foreach($this->pdh->get_layout_list(false, true) as $layout){
+			$intLayouts++;
 			$this->tpl->assign_block_vars('user_layouts_row', array(
 				'NAME'     => $layout,
 				'DESC'    => $this->pdh->get_eqdkp_layout_description($layout),
@@ -345,6 +348,8 @@ class ManagePageLayouts extends page_generic {
 			'PDH_R_DD'					=> new hdropdown('pdh_r_module', array('options' => $arrModuleDD, 'value' => $this->in->get('pdh_r_module'), 'js'=>'onchange="this.form.submit()"')),
 			'PDH_METHODS_DD'			=> new hdropdown('pdh_method', array('options' => $arrMethods, 'value' => $this->in->get('pdh_method'), 'js'=>'onchange="this.form.submit()"')),
 			'PDH_R_OLD'					=> new hhidden('pdh_r_old', array('value' => $this->in->get('pdh_r_module'))),
+			'LAYOUT_COUNT'				=> $intLayouts,
+			'USERPRESET_COUNT'			=> count($user_presets),
 		));
 
 		//$this->jquery->Tab_Select('lm_tabs', $tab);

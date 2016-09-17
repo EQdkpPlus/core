@@ -167,7 +167,7 @@ class ManageCrons extends page_generic {
 			} //close foreach	
 		} //close if array
 
-		$this->tpl->assign_var('FC_CRONJOBS', sprintf($this->user->lang('footcount_cronjobs'), $iActiveCrons, count($tmp_crons)));	
+		$this->tpl->assign_var('CRONJOB_COUNT', count($this->crons));	
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('manage_cronjobs'),
 			'template_file'		=> 'admin/manage_crons.html',

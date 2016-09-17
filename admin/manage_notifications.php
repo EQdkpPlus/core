@@ -133,6 +133,7 @@ class ManageNotifications extends page_generic {
 
 		$this->tpl->assign_vars(array(
 			'NOTIFICATION_LIST' => $hptt->get_html_table($this->in->get('sort'), $page_suffix),
+			'NOTIFICATION_COUNT'=> count($view_list),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count())
 		);
 
