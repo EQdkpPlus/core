@@ -54,14 +54,14 @@ class ManageCrons extends page_generic {
 	}
 
 	public function enable(){
-		$this->cronjobs->add_cron($this->in->get('cron'), array('active' => true), true);
-
+		$this->cronjobs->set_active($this->in->get('cron'));
+		$this->pdh->process_hook_queue();
 		$this->display();
 	}
 	
 	public function disable(){
-		$this->cronjobs->add_cron($this->in->get('cron'), array('active' => false), true);	
-		
+		$this->cronjobs->set_inactive($this->in->get('cron'));
+		$this->pdh->process_hook_queue();
 		$this->display();
 	}
 
