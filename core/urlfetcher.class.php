@@ -100,7 +100,7 @@ class urlfetcher  extends gen_class {
 			CURLOPT_HTTPAUTH		=> CURLAUTH_ANY,
 			CURLOPT_HTTPHEADER		=> ((is_array($header) && count($header) > 0) ? $header : array())
 		);
-		if (@ini_get('open_basedir') == '' && (!@ini_get('safe_mode') || ini_get('safe_mode') == 'Off')) {
+		if (@ini_get('open_basedir') == '')) {
 			$curlOptions[CURLOPT_FOLLOWLOCATION] = true;
 			
 			$curl = curl_init();
@@ -209,7 +209,7 @@ class urlfetcher  extends gen_class {
 			CURLOPT_POSTFIELDS		=> $data,
 			CURLOPT_FOLLOWLOCATION	=> true,
 		);
-		if (@ini_get('open_basedir') == '' && !@ini_get('safe_mode')) {
+		if (@ini_get('open_basedir') == '') {
 			$curlOptions[CURLOPT_FOLLOWLOCATION] = true;
 		}
 		$curl = curl_init();
