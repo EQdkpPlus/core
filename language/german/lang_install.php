@@ -41,7 +41,7 @@ $lang = array(
 	//Step-Names
 	'licence'				=> 'Lizenzbedingungen',
 	'php_check'				=> 'Voraussetzungen',
-	'ftp_access'			=> 'FTP-Einstellungen',
+	'file_permissions'		=> 'Datei- und Ordnerberechtigungen',
 	'encryptionkey'			=> 'Verschlüsselungs-Key',
 	'data_folder'			=> 'data-Ordner',
 	'db_access'				=> 'Datenbank Zugang',
@@ -120,10 +120,12 @@ $lang = array(
 	'plain_dataf_na'		=> 'Der Ordner <b>./data/</b> ist nicht vorhanden.<br />Bitte erstelle ihn. <b>mkdir data</b>.',
 	'plain_dataf_nwrite'	=> 'Der Ordner <b>./data/</b> ist nicht beschreibbar.<br />Bitte die Berechtigung richtig setzen. <b>chmod -R 0777 data</b>.',
 	'ftp_datawriteerror'	=> 'Der Data Ordner konnte nicht beschrieben werden. Ist der FTP Root path richtig?',
-	'ftp_info'				=> 'Anstatt bestimmten EQdkp Plus Dateiordnern Schreibrechte zu geben, kannst du einen FTP-Benutzer deines Servers benutzen, was die Sicherheit als auch die Funktionalität deines EQdkp Plus erhöht.',
+	'ftp_info'				=> 'Anstatt bestimmten EQdkp Plus Dateiordnern Schreibrechte zu geben, kannst du einen FTP-Benutzer deines Servers benutzen.',
 	'ftp_tmpinstallwriteerror' => 'Der Ordner <b>./data/97384261b8bbf966df16e5ad509922db/tmp/</b> ist nicht beschreibbar.<br />Damit die Konfigurations-Datei geschrieben werden kann, ist CHMOD 777 notwendig. Dieser Ordner wird nach der Installation entfernt.',
 	'ftp_tmpwriteerror' 	=> 'Der Ordner <b>./%stmp/</b> ist nicht beschreibbar.<br />Damit der FTP-Modus verwendet werden kann, ist CHMOD 777 für diesen Ordner notwendig. Dies ist der einzige Ordner, für den Schreibrechte benötigt werden.',
-
+	'fp_data_folder'		=> 'Ordner "data" vorhanden und beschreibbar',
+	'fp_config_file'		=> 'Datei "config.php" vorhanden und beschreibbar',
+	'fp_test_file' 			=> 'Testdatei geschrieben und abrufbar',
 
 
 	//Step: db_access

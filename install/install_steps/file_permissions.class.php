@@ -22,7 +22,7 @@
 if(!defined('EQDKP_INC')) {
 	header('HTTP/1.0 404 Not Found');exit;
 }
-class ftp_access extends install_generic {
+class file_permissions extends install_generic {
 	public static $shortcuts = array('pfh' => array('file_handler', array('installer')));
 	public static $before		= 'php_check';
 
@@ -40,38 +40,95 @@ class ftp_access extends install_generic {
 	}
 
 	public function get_output() {
-		$content = '
-		<div class="infobox infobox-large infobox-blue clearfix">
-			<i class="fa fa-info-circle fa-4x pull-left"></i>'.$this->lang['ftp_info'].'
-		</div>
+		if(!isset($this->data['file_step_count'])) $this->data['file_step_count'] = 0;
+		$this->data['file_step_count']++;		
 		
-		<br />
-		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="no-borders">
-			<tr>
-				<td align="right"><strong>'.$this->lang['ftphost'].': </strong></td>
-				<td><input type="text" name="ftphost" size="25" value="'.$this->ftphost.'" class="input" /></td>
-			</tr>
-			<tr>
-				<td align="right"><strong>'.$this->lang['ftpport'].': </strong></td>
-				<td><input type="text" name="ftpport" size="25" value="'.$this->ftpport.'" class="input" /></td>
-			</tr>
-			<tr>
-				<td align="right"><strong>'.$this->lang['ftpuser'].': </strong></td>
-				<td><input type="text" name="ftpuser" size="25" value="'.$this->ftpuser.'" class="input" /></td>
-			</tr>
-			<tr>
-				<td align="right"><strong>'.$this->lang['ftppass'].': </strong></td>
-				<td><input type="password" name="ftppass" size="25" value="" class="input" /></td>
-			</tr>
-			<tr>
-				<td align="right"><strong>'.$this->lang['ftproot'].': </strong><div class="subname">'.$this->lang['ftproot_sub'].'</div></td>
-				<td><input type="text" name="ftproot" size="25" value="'.$this->ftproot.'" class="input" /></td>
-			</tr>
-			<tr>
-				<td align="right"><strong>'.$this->lang['useftp'].': </strong><div class="subname">'.$this->lang['useftp_sub'].'</div></td>
-				<td><input type="checkbox" value="1" name="useftp" '.(($this->use_ftp == 1) ? 'checked="checked"' : '').' /></td>
-			</tr>
-		</table>';
+		$content = "";
+		
+			$phpwriteerror = false;
+			
+			$content = '<table class="colorswitch" style="border-collapse: collapse;" width="100%">
+			<tbody>';
+			
+			
+			// check if the config.php is available
+
+			
+			$content .= '<tr><td width="54%">'.$this->lang['fp_config_file'].'</td><td  width="13%">';
+				
+			if(!file_exists($this->root_path.'config.php')){
+				// try to create the file
+				$this->pfh->CheckCreateFile($this->root_path.'config.php');
+				if(!file_exists($this->root_path.'config.php')){
+					$this->pdl->log('install_error', $this->lang['plain_config_nofile']);
+					$phpwriteerror = true;
+					$content .= '<i class="fa fa-times-circle fa-2x negative"></i>';
+				} elseif(!$this->pfh->is_writable($this->root_path.'config.php', false)) {
+					$this->pdl->log('install_error', $this->lang['plain_config_nwrite']);
+					$phpwriteerror = true;
+					$content .= '<i class="fa fa-times-circle fa-2x negative"></i>';
+				} else {
+					$content .= '<i class="fa fa-check-circle fa-2x positive"></i>';
+				}
+				
+			} elseif(!$this->pfh->is_writable($this->root_path.'config.php', false)){
+				// check if the config.php is writable, attempt to create it
+				$this->pdl->log('install_error', $this->lang['plain_config_nwrite']);
+				$phpwriteerror = true;
+				$content .= '<i class="fa fa-times-circle fa-2x negative"></i>';
+			} else {
+				$content .= '<i class="fa fa-check-circle fa-2x positive"></i>';
+			}
+			
+			if(file_exists($this->root_path.'config.php')){
+				$filePermConfig = substr(sprintf('%o', fileperms($this->root_path.'config.php')), -4);
+			} else $filePermConfig = "";
+			
+			$content .= '</td><td>'.$filePermConfig.'</td></tr>';
+
+			
+			// check if the data folder is available
+			$content .= '<tr><td>'.$this->lang['fp_data_folder'].'</td><td  width="13%">';		
+			if(!$this->pfh->CheckCreateFolder($this->root_path.'data/')){
+				$this->pdl->log('install_error', $this->lang['plain_dataf_na']);
+				$phpwriteerror = true;
+				$content .= '<i class="fa fa-times-circle fa-2x negative"></i>';
+			} elseif(!$this->pfh->is_writable($this->root_path.'data/', true)){
+				$this->pdl->log('install_error', $this->lang['plain_dataf_nwrite']);
+				$phpwriteerror = true;
+				$content .= '<i class="fa fa-times-circle fa-2x negative"></i>';
+			} else {
+				$content .= '<i class="fa fa-check-circle fa-2x positive"></i>';
+			}
+			
+			if(is_dir($this->root_path.'data/')){
+				$filePermConfig = substr(sprintf('%o', fileperms($this->root_path.'data/')), -4);
+			} else $filePermConfig = "";
+				
+			$content .= '</td><td width="13%">'.$filePermConfig.'</td></tr>';
+			
+			//Check if file can be open in browser
+			$content .= '<tr><td width="54%">'.$this->lang['fp_test_file'].'</td><td  width="13%">';
+			$this->pfh->putContent($this->root_path.'data/'.md5('installer').'/tmp/test_file.php', 'test');
+			$objUrlfetcher = registry::register('urlfetcher');
+			$blnResult = $objUrlfetcher->fetch($this->get_my_url().'data/'.md5('installer').'/tmp/test_file.php');
+			if(!$blnResult || $blnResult != "test"){
+				$this->chmod = "0755";
+				$content .= '<i class="fa fa-times-circle fa-2x negative"></i>';
+			} else {
+				$content .= '<i class="fa fa-check-circle fa-2x positive"></i>';
+			}
+			$this->pfh->Delete($this->root_path.'data/'.md5('installer').'/tmp/test_file.php', 'test');
+			$content .= '</td><td></td></tr>';
+			
+			
+			$content .='</tbody>
+				</table>';
+			
+			if(ini_get('safe_mode') == '1' || $this->data['file_step_count'] > 2){
+				$content .= "<br />".$this->get_ftp_form();
+			}
+		
 		return $content;
 	}
 
@@ -108,6 +165,9 @@ class ftp_access extends install_generic {
 				if(!file_exists($this->root_path.'config.php')){
 					$this->pdl->log('install_error', $this->lang['plain_config_nofile']);
 					$phpwriteerror = true;
+				} elseif(!$this->pfh->is_writable($this->root_path.'config.php', false)) {
+					$this->pdl->log('install_error', $this->lang['plain_config_nwrite']);
+					$phpwriteerror = true;
 				}
 			} elseif(!$this->pfh->is_writable($this->root_path.'config.php', false)){
 				// check if the config.php is writable, attempt to create it
@@ -128,12 +188,10 @@ class ftp_access extends install_generic {
 			$this->pfh->putContent($this->root_path.'data/'.md5('installer').'/tmp/test_file.php', 'test');
 			$objUrlfetcher = registry::register('urlfetcher');
 			$blnResult = $objUrlfetcher->fetch($this->get_my_url().'data/'.md5('installer').'/tmp/test_file.php');
-			if(!$blnResult || $blnResult != "test" || true){
+			if(!$blnResult || $blnResult != "test"){
 				$this->chmod = "0755";
 			}
 			$this->pfh->Delete($this->root_path.'data/'.md5('installer').'/tmp/test_file.php', 'test');
-			
-			
 
 			// if one of this is not writeable, die, baby, die!
 			if($phpwriteerror) return false;
@@ -218,6 +276,42 @@ class ftp_access extends install_generic {
 		}
 		$this->configfile_content();
 		return true;
+	}
+	
+	private function get_ftp_form(){
+		$content = '
+		<div class="infobox infobox-large infobox-blue clearfix">
+			<i class="fa fa-info-circle fa-4x pull-left"></i>'.$this->lang['ftp_info'].'
+		</div>
+		
+		<br />
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="no-borders">
+			<tr>
+				<td align="right"><strong>'.$this->lang['ftphost'].': </strong></td>
+				<td><input type="text" name="ftphost" size="25" value="'.$this->ftphost.'" class="input" /></td>
+			</tr>
+			<tr>
+				<td align="right"><strong>'.$this->lang['ftpport'].': </strong></td>
+				<td><input type="text" name="ftpport" size="25" value="'.$this->ftpport.'" class="input" /></td>
+			</tr>
+			<tr>
+				<td align="right"><strong>'.$this->lang['ftpuser'].': </strong></td>
+				<td><input type="text" name="ftpuser" size="25" value="'.$this->ftpuser.'" class="input" /></td>
+			</tr>
+			<tr>
+				<td align="right"><strong>'.$this->lang['ftppass'].': </strong></td>
+				<td><input type="password" name="ftppass" size="25" value="" class="input" /></td>
+			</tr>
+			<tr>
+				<td align="right"><strong>'.$this->lang['ftproot'].': </strong><div class="subname">'.$this->lang['ftproot_sub'].'</div></td>
+				<td><input type="text" name="ftproot" size="25" value="'.$this->ftproot.'" class="input" /></td>
+			</tr>
+			<tr>
+				<td align="right"><strong>'.$this->lang['useftp'].': </strong><div class="subname">'.$this->lang['useftp_sub'].'</div></td>
+				<td><input type="checkbox" value="1" name="useftp" '.(($this->use_ftp == 1) ? 'checked="checked"' : '').' /></td>
+			</tr>
+		</table>';
+		return $content;
 	}
 
 	private function configfile_content() {
