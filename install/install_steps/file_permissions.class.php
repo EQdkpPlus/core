@@ -125,7 +125,7 @@ class file_permissions extends install_generic {
 			$content .='</tbody>
 				</table>';
 			
-			if(ini_get('safe_mode') == '1' || $this->data['file_step_count'] > 2){
+			if($this->data['file_step_count'] > 2){
 				$content .= "<br />".$this->get_ftp_form();
 			}
 		
@@ -148,12 +148,6 @@ class file_permissions extends install_generic {
 		$this->ftppass	= $this->in->get('ftppass');
 		$this->ftproot	= $this->in->get('ftproot');
 		$this->use_ftp	= $this->in->get('useftp', 0);
-
-		// If the safe mode is on and the ftp mode is off, kill the cat
-		if(ini_get('safe_mode') == '1' && $this->use_ftp != 1){ 
-			$this->pdl->log('install_error', $this->lang['safemode_ftpmustbeon']);
-			return false; 
-		}
 
 		// If the ftp mode is off, check if the data folder is readable
 		if($this->use_ftp == 0){

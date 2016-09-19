@@ -53,13 +53,6 @@ class php_check extends install_generic {
 				'installed'		=> (class_exists('ZipArchive')) ? $this->lang['yes'] : $this->lang['no'],
 				'passfail'		=> (class_exists('ZipArchive')) ? true : false
 			),
-			'safemode'	=> array(
-				'required'		=> $this->lang['no'],
-				'installed'		=> (ini_get('safe_mode') != '1') ? $this->lang['no'] : $this->lang['yes'],
-				'passfail'		=> true,
-				'adviced_fail'	=> (ini_get('safe_mode') == '1') ? true : false,
-				'ignore'		=> true,
-			),
 			'memory'	=> array(
 				'required'		=> REQ_PHP_MEMORY,
 				'installed'		=> (intval(ini_get('memory_limit')) == -1) ? "Unlimited" : ini_get('memory_limit'),

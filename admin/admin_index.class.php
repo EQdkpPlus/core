@@ -339,7 +339,6 @@ class admin_index extends gen_class {
 			'LOGS_TABLE'			=> $logs_table,
 
 			// Server Information
-			'SERVERINFO_SAFEMODE'	=> $this->get_php_setting('safe_mode',1,0),
 			'SERVERINFO_REGGLOBAL'	=> $this->get_php_setting('register_globals',1,0),
 			'SERVERINFO_CURL'		=> $this->get_curl_setting(1),
 			'SERVERINFO_FOPEN'		=> $this->check_PHP_Function('fopen',1),
