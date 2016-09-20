@@ -154,7 +154,7 @@ class Manage_Multidkp extends page_generic {
 		$this->tpl->assign_vars(array(
 			'SID'	=> $this->SID,
 			$red 	=> '_red',
-			'LISTMULTI_FOOTCOUNT'	=> sprintf($this->user->lang('multi_footcount'), count($sort_ids)),
+			'LISTMULTI_COUNT'	=> count($sort_ids),
 		));
 		
 		$this->tpl->add_js("

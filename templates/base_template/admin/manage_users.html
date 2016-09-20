@@ -9,7 +9,7 @@
 
 <form method="post" action="{ACTION}" name="post">
 <div class="contentHeader">
-	<h1 class="contentTitle">{L_manage_users}</h1>
+	<h1 class="contentTitle">{L_manage_users} <span class="bubble">{LISTUSERS_COUNT}</span></h1>
 </div>
 <div class="tableHeader floatRight">
 	<button class="mainoption" type="button" name="create" onclick="window.location.href='{U_MANAGE_USERS}u=0'"><i class="fa fa-plus"></i>{L_user_creation}</button>
@@ -99,11 +99,6 @@
 			<td style="width:60px" class="hiddenSmartphone center">{users_row.AWAY}</td>
 		</tr>
 		<!-- END users_row -->
-		<tr>
-			<th colspan="13" class="footer">
-				{LISTUSERS_FOOTCOUNT}
-			</th>
-		</tr>
 	</table>
 	<div class="center pagination_wrapper">
 			{USER_PAGINATION}

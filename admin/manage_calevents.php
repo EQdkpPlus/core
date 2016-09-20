@@ -49,14 +49,14 @@ class Manage_Calevents extends page_generic {
 		$view_list			= $this->pdh->get('calendar_events', 'id_list');
 		$hptt_psettings		= $this->pdh->get_page_settings('admin_manage_calevents', 'hptt_managecalevents_actions');
 		$hptt				= $this->get_hptt($hptt_psettings, $view_list, $view_list, array('%link_url%' => 'manage_calevents.php'));
-		$footer_text		= sprintf($this->user->lang('calevents_footcount'), count($view_list));
 		$page_suffix		= '&amp;start='.$this->in->get('start', 0);
 		$sort_suffix		= '?sort='.$this->in->get('sort');
 
 		$this->tpl->assign_vars(array(
-			'CALEVENTS'			=> $hptt->get_html_table($this->in->get('sort',''), $page_suffix, $this->in->get('start', 0), 40, $footer_text),
+			'CALEVENTS'			=> $hptt->get_html_table($this->in->get('sort',''), $page_suffix, $this->in->get('start', 0), 40, false),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
 			'PAGINATION' 		=> generate_pagination('manage_calevents.php'.$sort_suffix, count($view_list), 40, $this->in->get('start', 0)),
+			'EVENT_COUNT'		=> count($view_list),
 		));
 
 		$this->core->set_vars(array(

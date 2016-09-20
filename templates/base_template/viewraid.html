@@ -43,7 +43,7 @@
 
 <br />
 <div class="tableHeader">
-	<h2>{L_attendees}</h2>
+	<h2>{L_attendees} <span class="bubble">{ATTENDEES_COUNT}</span></h2>
 </div>
 <table class="table fullwidth">
   <!-- BEGIN attendees_row -->
@@ -60,20 +60,27 @@
     <!-- IF S_COLUMN9 --><td class="row1 nowrap" style="width: {COLUMN_WIDTH}%">{attendees_row.COLUMN9_NAME}</td><!-- ENDIF -->
   </tr>
   <!-- END attendees_row -->
-  <tr>
-    <th colspan="{COLSPAN}" class="footer">{ATTENDEES_FOOTCOUNT}</th>
-  </tr>
 </table>
 <br />
 
 <div class="tableHeader">
-	<h2>{L_items}</h2>
+	<h2>{L_items} <span class="bubble">{ITEM_COUNT}</span></h2>
 </div>
 <table class="table fullwidth hptt colorswitch scrollable-x">
 {ITEM_OUT}
 </table>
 
 <br />
+
+<!-- IF S_ADJUSTMENTS -->
+	<div class="tableHeader">
+		<h2>{L_tab_adjustments}  <span class="bubble">{ADJUSTMENT_COUNT}</span></h2>
+	</div>
+	<table class="table fullwidth hptt colorswitch scrollable-x">
+	{ADJUSTMENT_OUT}
+	</table>
+	<br />
+<!-- ENDIF -->
 
 <table class="table fullwidth">
   <tr>
@@ -109,15 +116,6 @@
 </table>
 <br/>
 
-<!-- IF S_ADJUSTMENTS -->
-	<div class="tableHeader">
-		<h2>{L_tab_adjustments}</h2>
-	</div>
-	<table class="table fullwidth hptt colorswitch scrollable-x">
-	{ADJUSTMENT_OUT}
-	</table>
-	<br />
-<!-- ENDIF -->
 
 <div class="contentFooter">
 	<button class="mainoption" type="button" onclick="window.location='{U_RAIDLIST}'"><i class="fa fa-chevron-left"></i>{L_back}</button>

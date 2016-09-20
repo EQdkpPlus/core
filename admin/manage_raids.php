@@ -354,16 +354,16 @@ class ManageRaids extends page_generic {
 
 		//footer
 		$raid_count = count($view_list);
-		$footer_text = sprintf($this->user->lang('listraids_footcount'), $raid_count ,$this->user->data['user_rlimit']);
 
 		$this->confirm_delete($this->user->lang('confirm_delete'));
 
 		$this->tpl->assign_vars(array(
-			'RAID_LIST' => $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_rlimit'], $footer_text),
+			'RAID_LIST' => $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_rlimit'], false),
 			'PAGINATION' => generate_pagination('manage_raids.php'.$sort_suffix, $raid_count, $this->user->data['user_rlimit'], $this->in->get('start', 0)),
 			'IMPORT_DKP' => ($this->pm->check('raidlogimport', PLUGIN_INSTALLED)) ? '<button onclick="window.location=\''.$this->root_path.'plugins/raidlogimport/admin/dkp.php'.$this->SID.'\'" type="button" class="mainoption"><i class="fa fa-upload"></i>'.$this->user->lang('raidlogimport_dkp').'</button>' : '',
-			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count())
-		);
+			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
+			'RAID_COUNT' => $raid_count,
+		));
 
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('manraid_title'),

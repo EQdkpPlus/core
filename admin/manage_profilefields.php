@@ -226,7 +226,7 @@ $("#type_dd").change(function(){
 
 		$this->jquery->selectall_checkbox('selall_pfields', 'del_ids[]');
 		$this->tpl->assign_vars(array (
-			'FC_PROFILEFIELDS'			=> sprintf($this->user->lang('profilefields_footcount'), count($fields)),
+			'PROFILEFIELDS_COUNT' => count($fields),
 		));
 
 		$this->core->set_vars(array (

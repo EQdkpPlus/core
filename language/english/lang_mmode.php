@@ -19,17 +19,17 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- 
+
 if (!defined('EQDKP_INC')) {
 	die('You cannot access this file directly.');
 }
 
-//Language: English	
+//Language: English
 //Created by EQdkp Plus Translation Tool on  2014-12-17 23:17
 //File: language/english/lang_mmode.php
 //Source-Language: german
 
-$lang = array( 
+$lang = array(
 	"click2show" => '(click to show)',
 	"maintenance_mode" => 'Maintenance Mode',
 	"task_manager" => 'Task-Manager',
@@ -72,8 +72,6 @@ $lang = array(
 	"stepend_info" => 'The task has been finished. The EQdkp Plus is still in maintenance mode so that you can test everything. Only after the maintenance mode has been closed, users will be able to log in again.',
 	"mmode_pfh_error" => 'Some errors occured. You need to correct these errors to close the maintenance mode.',
 	"lib_cache_notwriteable" => 'Unable to write in folder "data". Please set folder permissions to CHMOD 777!',
-	"pfh_safemode_error" => 'PHP Safe mode is on. EQDKP-PLUS won\'t work correctly in safe mode as the write options are not completely available.',
-	"spl_autoload_register_notavailable" => 'The PHP function "spl_autoload_register" could not be found. Most probably it\'s because you use a free hoster which doesn\'t provide this function.',
 	"fix" => 'Fix',
 	"update" => 'Update',
 	"import" => 'Import',

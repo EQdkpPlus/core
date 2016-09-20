@@ -102,6 +102,7 @@ class ManageTasks extends page_generic {
 
 						$this->tpl->assign_block_vars('task_row', array(
 							'HEADLINE'	=> $this->user->lang($arrTask['name']),
+							'COUNT'		=> count($arrContent),
 							'ID'		=> 't_'.md5($taskID),
 							'NAME'		=> $taskID,
 							'MENU'		=> $this->core->build_dropdown_menu($this->user->lang('selected_elements').'...', $arrMenuItems, '', 't_'.md5($taskID), array("input[name=\"cb_t_".md5($taskID)."[]\"]")),

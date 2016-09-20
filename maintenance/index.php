@@ -55,16 +55,6 @@ class task_manager_display extends gen_class {
 		$nec_types = $this->mmt->nec_types;
 		$necessary = $this->mmt->status;
 
-		// Check if Safe Mode
-		$pfh_error = false;
-		if(isset($this->pfh->safe_mode)) {
-			if($this->pfh->testWrite()){
-				$this->tpl->assign_block_vars('pfh_errors', array(
-					'PFH_ERROR' => $this->user->lang('pfh_safemode_error'),
-				));;
-				$pfh_error		= true;
-			}
-		}
 		// check if Data Folder is writable
 		$errors = $this->pfh->get_errors();
 		if(is_array($errors)){

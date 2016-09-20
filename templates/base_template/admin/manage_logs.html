@@ -19,7 +19,7 @@
 		<form method="post" action="{ACTION}" name="post">   
 		
 		<fieldset id="toggleFilter" class="settings mediumsettings">
-			<legend>{L_filter}<span class="toggle_button"></span></legend>
+			<legend>{L_filter} <span class="bubble">{LOGS_COUNT}</span> <span class="toggle_button"></span></legend>
 			<div class="toggle_container">
 				<dl>
 					<dt><label>{L_plugins}</label></dt>
@@ -124,7 +124,7 @@
 			</ul>
 			<!-- BEGIN errorlogs -->
 			<div id="el_{errorlogs.TYPE}">
-				<h2>{errorlogs.TYPE}</h2>
+				<h2>{errorlogs.TYPE} <span class="bubble">{errorlogs.COUNT}</span></h2>
 				<table  class="table fullwidth colorswitch">
 					<tr>
 						<th class="left" style="width:150px">{L_date}</th>
@@ -136,11 +136,6 @@
 						<td>{errorlogs.error_row.MESSAGE}</td>
 					</tr>
 					<!-- END error_row -->
-					<tr>
-						<th colspan="2" class="footer">
-							{errorlogs.FOOTCOUNT}
-						</th>
-					</tr>
 				</table>
 				<div class="center pagination_wrapper">
 					{errorlogs.PAGINATION}

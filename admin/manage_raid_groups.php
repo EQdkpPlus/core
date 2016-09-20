@@ -208,6 +208,7 @@ class Manage_Raid_Groups extends page_generic {
 			'ID'		=> $new_id,
 			'KEY'		=> $key,
 			'S_USERGROUP_ADMIN' => $this->user->check_auth('a_raidgroups_man', false),
+			'RAIDGROUP_COUNT' => count($grps),
 		));
 
 		$this->core->set_vars(array(

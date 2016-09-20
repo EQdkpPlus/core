@@ -496,13 +496,11 @@ class calendar_pageobject extends pageobject {
 				$hptt= $this->get_hptt($arrRaidstatsSettings, $arrMemberlist, $arrMemberlist, array('%link_url%' => $this->routing->simpleBuild('raids'), '%link_url_suffix%' => '', '%use_controller%' => true, '%from%'=> $date1, '%to%' => $date2, '%with_twink%' => !$show_twinks), md5($date1.'.'.$date2), 'statsort');
 				$hptt->setPageRef($this->strPath);
 
-				//footer
-				$footer_text	= sprintf($this->user->lang('listmembers_footcount'), count($arrMemberlist));
 				$sort = $this->in->get('statsort');
 				//$suffix = (strlen($sort))? '&amp;statsort='.$sort : '';
 
 				$this->tpl->assign_vars(array (
-					'RAIDSTATS_OUT' 		=> $hptt->get_html_table($sort, $statsuffix, null, null, $footer_text),
+					'RAIDSTATS_OUT' 		=> $hptt->get_html_table($sort, $statsuffix, null, null, null),
 					'S_RAIDSTATS'			=> true,
 				));
 		} else {

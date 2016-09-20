@@ -657,8 +657,9 @@ class admin_settings extends page_generic {
 			'portal'	=> array(
 				'portal'	=> array(
 					'start_page'	=> array(
-						'type'		=> 'dropdown',
+						'type'		=> 'singleselect',
 						'options'	=> $startpage_array,
+						'filter'	=> true,
 					),
 					'disable_xframe_header' => array(
 						'type'	=> 'radio',

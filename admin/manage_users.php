@@ -777,8 +777,8 @@ class Manage_Users extends page_generic {
 			'S_PERM_PERMISSION'		=> $this->user->check_auth('a_users_perms', false),
 
 			// Page vars
-			'U_MANAGE_USERS'		=> 'manage_users.php' . $this->SID . '&amp;start=' . $start . '&amp;',
-			'LISTUSERS_FOOTCOUNT'	=> sprintf($this->user->lang('listusers_footcount'), $total_users, 100),
+			'U_MANAGE_USERS'	=> 'manage_users.php' . $this->SID . '&amp;start=' . $start . '&amp;',
+			'LISTUSERS_COUNT'	=> $total_users,
 			'BUTTON_MENU'		=> $this->core->build_dropdown_menu($this->user->lang('selected_user').'...', $arrMenuItems, '', 'manage_users_menu', array("input[name=\"user_id[]\"]")),
 				
 			'USER_PAGINATION'		=> generate_pagination('manage_users.php'.$this->SID.'&amp;o='.$this->in->get('o'), $total_users, 100, $start))

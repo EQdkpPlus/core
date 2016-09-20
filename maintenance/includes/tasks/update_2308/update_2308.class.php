@@ -29,7 +29,7 @@ class update_2308 extends sql_update_task {
 	public $author			= 'GodMod';
 	public $version			= '2.3.0.8.0'; //new plus-version
 	public $ext_version		= '2.3.0.8'; //new plus-version
-	public $name			= 'Update 2.3.0.8';
+	public $name			= 'Tmp Update 2.3.0.8 (remove before release)';
 
 	public function __construct(){
 		parent::__construct();

@@ -339,7 +339,6 @@ class admin_index extends gen_class {
 			'LOGS_TABLE'			=> $logs_table,
 
 			// Server Information
-			'SERVERINFO_SAFEMODE'	=> $this->get_php_setting('safe_mode',1,0),
 			'SERVERINFO_REGGLOBAL'	=> $this->get_php_setting('register_globals',1,0),
 			'SERVERINFO_CURL'		=> $this->get_curl_setting(1),
 			'SERVERINFO_FOPEN'		=> $this->check_PHP_Function('fopen',1),
@@ -358,7 +357,8 @@ class admin_index extends gen_class {
 			'EQDKP_STARTED'			=> $this->time->user_date($this->config->get('eqdkp_start'), true),
 			'SHOW_BETA_WARNING'		=> VERSION_WIP,
 			'SHOW_PHP_WARNING'		=> (version_compare(PHP_VERSION, VERSION_PHP_REC, '<') && !defined('EQDKP_DISABLE_PHP_CHECK')) ? true : false,
-			'ONLINE_FOOTCOUNT'		=> sprintf($this->user->lang('online_footcount'), $online_count),
+			'ONLINE_COUNT'		=> $online_count,
+			'LOGS_COUNT'		=> count($logfiles),
 			'SHOW_LIMITED_FUNCS'	=> false,
 			'DATABASE_NAME'			=> $this->dbname,
 			'TABLE_PREFIX'			=> $this->table_prefix,

@@ -159,22 +159,21 @@ class mycharacters_pageobject extends pageobject {
 		$view_list			= $this->pdh->get('member', 'connection_id', array($this->user->data['user_id']));
 		$hptt_psettings		= $this->pdh->get_page_settings('manage_characters', 'hptt_manage_characters');
 		$hptt				= $this->get_hptt($hptt_psettings, $view_list, $view_list, array('%link_url%' => register('routing')->simpleBuild('character'), '%link_url_suffix%' => '&ref=mc', '%use_controller%' => true), $this->user->id);
-		$hptt->setPageRef($this->strPath);
-		$footer_text		= sprintf($this->user->lang('listmembers_footcount'), ((is_array($view_list)) ? count($view_list) : 0));
 		$page_suffix		= '&amp;start='.$this->in->get('start', 0);
 		$sort_suffix		= '&amp;sort='.$this->in->get('sort');
 
 		$this->tpl->assign_vars(array(
-			'CHAR_LIST'				=> $hptt->get_html_table($this->in->get('sort',''), $page_suffix, $this->in->get('start', 0), $this->user->data['user_climit'], $footer_text),
+			'CHAR_LIST'				=> $hptt->get_html_table($this->in->get('sort',''), $page_suffix, $this->in->get('start', 0), $this->user->data['user_climit'], false),
 			'CHAR_PAGINATION'		=> generate_pagination($this->SID.$sort_suffix, ((is_array($view_list)) ? count($view_list) : 0), $this->user->data['user_climit'], $this->in->get('start', 0)),
 			'NEW_CHARS'				=> $this->user->check_auth('u_member_add', false),
 			'CONNECT_CHARS'			=> $this->user->check_auth('u_member_conn', false),
 			'DELETE_CHARS'			=> $this->user->check_auth('u_member_del', false),
+			'CHAR_COUNT'			=> ((is_array($view_list)) ? count($view_list) : 0),
 
 			// JS Code
 			'JS_CONNECTIONS'		=> $this->jquery->MultiSelect('member_id', $mselect_list, $mselect_selected, array('width' => 350, 'height' => 180, 'filter'=>true)),
 			'ADD_MENU'				=> $this->core->build_dropdown_menu('<i class="fa fa-plus fa-lg"> </i> '.$this->user->lang('uc_add_char'), $cm_addmenu, 'floatRight'),
-
+		
 			'S_SHOW_NO_CONN_INFO'	=> $show_no_conn_info,
 		));
 

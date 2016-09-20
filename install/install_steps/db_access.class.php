@@ -24,7 +24,7 @@ if(!defined('EQDKP_INC')) {
 }
 class db_access extends install_generic {
 	public static $shortcuts = array('pfh' => array('file_handler', array('installer')));
-	public static $before 		= 'ftp_access';
+	public static $before 		= 'file_permissions';
 
 	public $next_button		= 'test_db';
 

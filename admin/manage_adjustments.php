@@ -172,15 +172,16 @@ class ManageAdjs extends page_generic {
 	
 		//footer
 		$adj_count = count($view_list);
-		$footer_text = sprintf($this->user->lang('listadj_footcount'), $adj_count, $this->user->data['user_alimit']);
 		
 		$this->confirm_delete($this->user->lang('confirm_delete_adjustments'));
 		
 		$this->tpl->assign_vars(array(
 			'SID'			=> $this->SID,
-			'ADJ_LIST'		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_alimit'], $footer_text),
+			'ADJ_LIST'		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_alimit'], false),
 			'PAGINATION' 	=> generate_pagination('manage_adjustments.php'.$sort_suffix, $adj_count, $this->user->data['user_alimit'], $this->in->get('start', 0)),
-			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count())
+			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
+			'ADJ_COUNT'		=> $adj_count,
+		)
 		);
 
 		$this->core->set_vars(array(

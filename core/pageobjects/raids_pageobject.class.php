@@ -199,7 +199,8 @@ class raids_pageobject extends pageobject {
 			$hptt				= $this->get_hptt($hptt_page_settings, $items, $items, array('%link_url%' => $this->routing->simpleBuild('items'), '%link_url_suffix%' => '', '%itt_lang%' => false, '%itt_direct%' => 0, '%onlyicon%' => 0, '%noicon%' => 0, '%raid_link_url%' => $this->routing->simpleBuild('raids'), '%raid_link_url_suffix%' => '', '%use_controller%' => true, '%member_link_url_suffix%' => '','%member_link_url%' => $this->routing->simpleBuild('character')), 'raid_'.$this->url_id, 'isort');
 			$hptt->setPageRef($this->strPath);
 			$this->tpl->assign_vars(array (
-					'ITEM_OUT'			=> $hptt->get_html_table($this->in->get('isort'), '', null, false, sprintf($this->user->lang('viewitem_footcount'), count($items))),
+					'ITEM_OUT'			=> $hptt->get_html_table($this->in->get('isort'), '', null, false, false),
+					'ITEM_COUNT'		=> count($items),
 			));
 	
 			//Adjustments
@@ -226,8 +227,9 @@ class raids_pageobject extends pageobject {
 				$hptt = $this->get_hptt($hptt_page_settings, $arrAdjustments, $arrAdjustments, array('%raid_link_url%' => $this->routing->simpleBuild('raids'), '%raid_link_url_suffix%' => '', '%use_controller%' => true), 'raid_'.$this->url_id, 'asort');
 				$hptt->setPageRef($this->strPath);
 				$this->tpl->assign_vars(array (
-						'ADJUSTMENT_OUT' 		=> $hptt->get_html_table($this->in->get('asort', ''),''),
-						'S_ADJUSTMENTS'			=> count($arrAdjustments),
+						'ADJUSTMENT_OUT' 		=> $hptt->get_html_table($this->in->get('asort', ''),'', null, false, false),
+						'S_ADJUSTMENTS'			=> (count($arrAdjustments)) ? true : false,
+						'ADJUSTMENT_COUNT'		=> count($arrAdjustments)
 				));
 			}
 	
@@ -260,8 +262,8 @@ class raids_pageobject extends pageobject {
 					'RAID_NOTE'				=> ( $this->pdh->get('raid', 'note', array($raid_id)) != '' ) ? sanitize($this->pdh->get('raid', 'note', array($raid_id))) : '&nbsp;',
 					'DKP_NAME'				=> $this->config->get('dkp_name'),
 					'RAID_VALUE'			=> $this->pdh->geth($vpre[0], $vpre[1], $vpre[2]),//runden($this->pdh->get('raid', 'value', array($raid_id))),
-					'ATTENDEES_FOOTCOUNT'	=> sprintf($this->user->lang('viewraid_attendees_footcount'), sizeof($attendees)),
-					'ITEM_FOOTCOUNT'		=> sprintf($this->user->lang('viewitem_footcount'), sizeof($items)),
+					'ATTENDEES_COUNT'		=> sizeof($attendees),
+					'ITEM_COUNT'			=> sizeof($items),
 					'CLASS_PERCENT_CHART'	=> $this->jquery->charts('pie', 'class_dist', $chartarray, $chartoptions),
 					'LOOT_PERCENT_CHART'	=> (count($loot_dist) > 0) ? $this->jquery->charts('pie', 'loot_dist', $loot_dist, $chartoptionsLootDistri) : '',
 					'RAID_DATE'				=> $this->time->user_date($this->pdh->get('raid', 'date', array($raid_id)), true, false, true),
@@ -334,13 +336,12 @@ class raids_pageobject extends pageobject {
 			$hptt= $this->get_hptt($arrRaidstatsSettings, $arrMemberlist, $arrMemberlist, array('%link_url%' => $this->routing->simpleBuild('raids'), '%link_url_suffix%' => '', '%use_controller%' => true, '%from%'=> $date1, '%to%' => $date2, '%with_twink%' => !$show_twinks), md5($date1.'.'.$date2.'.'.$show_twinks), 'statsort');
 			$hptt->setPageRef($this->strPath);
 			
-			//footer
-			$footer_text	= sprintf($this->user->lang('listmembers_footcount'), count($arrMemberlist));
 			//$sort = $this->in->get('statsort');
 			//$suffix = (strlen($sort))? '&amp;statsort='.$sort : '';
 			
 			$this->tpl->assign_vars(array (
-				'RAIDSTATS_OUT' 		=> $hptt->get_html_table($sort, $statsuffix, null, null, $footer_text),
+				'RAIDSTATS_OUT' 		=> $hptt->get_html_table($sort, $statsuffix, null, null, null),
+				'MEMBER_COUNT'			=> count($arrMemberlist),
 				'S_RAIDSTATS'			=> true,
 				'SHOW_TWINKS_CHECKED'	=> ($show_twinks)?'checked="checked"':'',
 				'S_SHOW_TWINKS'			=> !$this->config->get('show_twinks'),
@@ -367,11 +368,11 @@ class raids_pageobject extends pageobject {
 
 		//footer
 		$raid_count			= count($view_list);
-		$footer_text		= sprintf($this->user->lang('listraids_footcount'), $raid_count ,$this->user->data['user_rlimit']);
 
 		$this->tpl->assign_vars(array (
-			'PAGE_OUT'			=> $hptt->get_html_table($sort, $pagination_suffix.$date_suffix, $start, $this->user->data['user_rlimit'], $footer_text),
+			'PAGE_OUT'			=> $hptt->get_html_table($sort, $pagination_suffix.$date_suffix, $start, $this->user->data['user_rlimit'], false),
 			'RAID_PAGINATION'	=> generate_pagination($this->strPath.$this->SID.$sort_suffix.$date_suffix, $raid_count, $this->user->data['user_rlimit'], $start),
+			'RAID_COUNT'		=> $raid_count,
 
 			// Date Picker
 			'DATEPICK_DATE_FROM'		=> $this->jquery->Calendar('from', $this->time->user_date($date1, false, false, false, function_exists('date_create_from_format'))),

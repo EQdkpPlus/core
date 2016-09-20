@@ -109,6 +109,10 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 		public function get_column_count(){
 			return $this->column_count;
 		}
+		
+		public function get_row_count(){
+			return count($this->full_list);
+		}
 
 		public function setPageRef($strPageRef){
 			$this->settings['page_ref'] = $strPageRef;
@@ -157,7 +161,9 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 			$table	 = $this->get_html_super_header_row();
 			$table	 .= $this->get_html_header_row($url_suffix, $this->settings['show_select_boxes'], $this->settings['show_numbers']);
 			$table	 .= $this->get_html_table_body($arrCheckboxCheck);
-			if(!$no_footer) $table	 .= $this->get_html_footer_row($footer_text);
+			if(!count($this->view_list)) $table .= $this->get_html_empty_row();
+			
+			if(!$no_footer && $footer_text !== false) $table	 .= $this->get_html_footer_row($footer_text);
 			if($this->sub_array['%no_root%']) $table = str_replace('{ROOT_PATH}', $this->root_path, $table);
 			return $table;
 		}
@@ -391,6 +397,17 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 				$footer .= $footer_text;
 			}
 			$footer .= "</th>\n</tr>\n";
+			return $footer;
+		}
+		
+		public function get_html_empty_row(){
+			$rowCount = count($this->columns);
+			if($this->settings['show_select_boxes']) $rowCount++;
+			if($this->settings['show_numbers']) $rowCount++;
+				
+			$footer  = "<tr>\n\t<td colspan=\"".$rowCount."\" class=\"emptyTable\"><span style='font-style:italic;'>";
+			$footer .= $this->user->lang('hptt_empty_table');
+			$footer .= "</span></td>\n</tr>\n";
 			return $footer;
 		}
 

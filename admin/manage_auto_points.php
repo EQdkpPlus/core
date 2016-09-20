@@ -383,6 +383,8 @@ class ManageAutoPoints extends page_generic {
 		$this->tpl->assign_vars(array (
 			'L_APA_ADD'			=> sprintf($this->user->lang('apa_add'), ''),
 			'TYPE_DD'			=> new hdropdown('apa_type', array('options' => $type_dd)),
+			'APA_COUNT'			=> count($job_list),
+			'CALC_COUNT'		=> count($funcs),
 		));
 
 		$this->core->set_vars(array (

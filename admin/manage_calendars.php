@@ -123,6 +123,7 @@ class Manage_Calendars extends page_generic {
 			'KEY'		=> $key,
 			'TYPE'		=> new hdropdown('calendars['.$key.'][type]', array('options' => $types, 'value' => $this->pdh->get('calendars', 'type', array($id)), 'id' => 'calendars'.$key)),
 			'COLOR'		=> $this->jquery->colorpicker('cal_'.$key, '', 'calendars['.$key.'][color]'),
+			'CALENDAR_COUNT' => $ranks,
 		));
 
 		$this->core->set_vars(array(

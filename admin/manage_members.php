@@ -273,7 +273,6 @@ class Manage_Members extends page_generic {
 
 		//footer
 		$character_count	= count($view_list);
-		$footer_text		= sprintf($this->user->lang('listmembers_footcount'), $character_count);
 
 		$onclose_url = "window.location.href = '".$this->server_path."admin/manage_members.php".$this->SID."';";
 		$this->jquery->Dialog('EditChar', $this->user->lang('uc_edit_char'), array('withid'=>'editid', 'url'=> $this->controller_path.'AddCharacter/'.$this->SID."&adminmode=1&editid='+editid+'", 'width'=>'650', 'height'=>'520', 'onclosejs'=>$onclose_url));
@@ -318,9 +317,10 @@ class Manage_Members extends page_generic {
 
 		$this->tpl->assign_vars(array(
 			'SID'				=> $this->SID,
-			'MEMBER_LIST'		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_climit'], $footer_text),
+			'MEMBER_LIST'		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_climit'], false),
 			'PAGINATION'		=> generate_pagination('manage_members.php'.$sort_suffix, $character_count, $this->user->data['user_climit'], $this->in->get('start', 0)),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
+			'MEMBER_COUNT'		=> $character_count,
 			'BUTTON_MENU'		=> $this->core->build_dropdown_menu($this->user->lang('selected_chars').'...', $arrMenuItems, '', 'manage_members_menu', array("input[name=\"selected_ids[]\"]")),
 		));
 

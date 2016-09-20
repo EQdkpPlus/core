@@ -105,10 +105,6 @@
 			<dd>{SERVERINFO_PHP} <a href="info_php.php{SID}"><i class="fa fa-lg fa-question-circle"></i> {L_adminc_php_info}</a></dd>
 		</dl>
 		<dl>
-			<dt><label>PHP Safe Mode</label></dt>
-			<dd>{SERVERINFO_SAFEMODE}</dd>
-		</dl>
-		<dl>
 			<dt><label>Register Globals</label></dt>
 			<dd>{SERVERINFO_REGGLOBAL}</dd>
 		</dl>
@@ -272,7 +268,7 @@
 </div>
 <br/>
 <!-- IF S_WHO_IS_ONLINE -->
-<h2>{L_who_online}</h2>
+<h2>{L_who_online} <span class="bubble">{ONLINE_COUNT}</span></h2>
 <table  class="table fullwidth colorswitch">
     <tr>
       <th class="w20p left nowrap">{L_username}</th>
@@ -292,14 +288,11 @@
       <td class="hiddenSmartphone center">{online_row.BROWSER}</td>
     </tr>
     <!-- END online_row -->
-    <tr>
-      <th colspan="6" class="footer">{ONLINE_FOOTCOUNT}</th>
-    </tr>
   </table>
 <!-- ENDIF -->
 <!-- IF S_LOGS -->
 <br />
-<h2>{L_new_actions}</h2>
+<h2>{L_new_actions} <span class="bubble">{LOGS_COUNT}</span></h2>
 <table  class="table fullwidth colorswitch">
   {LOGS_TABLE}
 </table>

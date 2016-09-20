@@ -198,6 +198,7 @@ class Manage_Ranks extends page_generic {
 		$this->jquery->selectall_checkbox('selall_ranks', 'rank_ids[]');
 		$this->tpl->assign_vars(array(
 			'S_RANK_IMAGES' => $blnRankImages,
+			'RANK_COUNT'	=> count($ranks),
 		));
 
 		$this->core->set_vars(array(

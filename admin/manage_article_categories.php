@@ -278,7 +278,7 @@ class Manage_Article_Categories extends page_generic {
 				});
 			", "docready");
 			
-			$this->jquery->qtip('.articles-link', $this->user->lang('link_to_articles'));
+			//$this->jquery->qtip('.articles-link', $this->user->lang('link_to_articles'));
 		
 			$view_list = $this->pdh->get('article_categories', 'id_list', array());
 			$hptt_page_settings = $this->pdh->get_page_settings('admin_manage_article_categories', 'hptt_admin_manage_article_categories_categorylist');
@@ -292,11 +292,13 @@ class Manage_Article_Categories extends page_generic {
 			$this->confirm_delete($this->user->lang('confirm_delete_article_category'));
 	
 			$this->tpl->assign_vars(array(
-				'CATEGORY_LIST'		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix,null,1,null,false, array('article_categories', 'checkbox_check')),
-				'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count())
+				'CATEGORY_LIST'		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix,null,1,null,true, array('article_categories', 'checkbox_check')),
+				'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
+				'ARTICLECAT_COUNT'	=> count($view_list),
+			)
 			);
 		} else {
-			$this->jquery->qtip('.articles-link', $this->user->lang('link_to_articles'));
+			//$this->jquery->qtip('.articles-link', $this->user->lang('link_to_articles'));
 			
 			$view_list = $this->pdh->get('article_categories', 'id_list', array());
 			$hptt_page_settings = array(
@@ -312,8 +314,8 @@ class Manage_Article_Categories extends page_generic {
 				'table_sort_col'	=> 0,
 				'table_presets'		=> array(
 						array('name' => 'category_sortable',	'sort' => true, 'th_add' => 'width="20" class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
-						array('name' => 'category_article_count','sort' => true, 'th_add' => 'width="20" class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
 						array('name' => 'category_name',		'sort' => true, 'th_add' => '', 'td_add' => ''),
+						array('name' => 'category_article_count','sort' => true, 'th_add' => 'width="20" class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),	
 						array('name' => 'category_alias',		'sort' => true, 'th_add' => 'class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
 						array('name' => 'category_portallayout','sort' => true, 'th_add' => 'class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
 				),
@@ -325,9 +327,10 @@ class Manage_Article_Categories extends page_generic {
 				
 			$item_count = count($view_list);
 			$this->tpl->assign_vars(array(
-					'CATEGORY_LIST'		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix,null,1,null,false, array('article_categories', 'checkbox_check')),
+					'CATEGORY_LIST'		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix,null,1,null,true, array('article_categories', 'checkbox_check')),
 					'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
 					'S_NO_PERMISSION'	=> true,
+					'ARTICLECAT_COUNT'	=> count($view_list),
 			)
 			);
 		}

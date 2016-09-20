@@ -41,7 +41,7 @@ $lang = array(
 	//Step-Names
 	'licence'				=> 'Lizenzbedingungen',
 	'php_check'				=> 'Voraussetzungen',
-	'ftp_access'			=> 'FTP-Einstellungen',
+	'file_permissions'		=> 'Datei- und Ordnerberechtigungen',
 	'encryptionkey'			=> 'Verschlüsselungs-Key',
 	'data_folder'			=> 'data-Ordner',
 	'db_access'				=> 'Datenbank Zugang',
@@ -85,7 +85,6 @@ $lang = array(
 	'module_php'			=> 'PHP-Version',
 	'module_mysql'			=> 'MySQL Datenbank',
 	'module_zLib'			=> 'zLib PHP-Modul',
-	'module_safemode'		=> 'PHP Safe Mode',
 	'module_curl'			=> 'cURL PHP-Modul',
 	'module_fopen'			=> 'fopen PHP-Funktion',
 	'module_soap'			=> 'SOAP PHP-Modul',
@@ -97,12 +96,11 @@ $lang = array(
 	'module_pathinfo'		=> 'PathInfo-Unterstützung',
 	'module_ziparchive'		=> 'ZipArchive PHP-Modul',
 	'module_xml'			=> 'XML PHP-Modul',
-	'safemode_warning'		=> '<strong>ACHTUNG</strong><br/>Da der  PHP Safe Mode aktiv ist, musst du im nächsten Schritt den FTP-Modus nutzen, ansonsten kann EQdkp Plus nicht verwendet werden!',
 	'phpcheck_success'		=> 'Die Mindestanforderungen für die Installation von EQDKP-PLUS werden erfüllt. Die Installation kann fortgesetzt werden.',
 	'phpcheck_failed'		=> 'Die Mindestanforderungen für die Installation von EQDKP-PLUS werden leider nicht erfüllt.<br />Eine Auswahl von geeigneten Hostern findest Du auf unserer <a href="'.EQDKP_PROJECT_URL.'" target="_blank">Website</a>',
 	'do_match_opt_failed'	=> 'Es werden nicht alle Empfehlungen erfüllt. EQDKP-PLUS wird zwar auf diesem System funktionieren, jedoch eventuell mit Einschränkungen.',
 	'windows_apache_hint'	=> 'Du scheinst als Webserver Apache unter Windows zu verwenden. EQdkp Plus wird in diesem Fall nur funktionieren, wenn du die ThreadStackSize auf 8388608 in der Apache-Konfiguration erhöhst.',
-		
+
 	//Step: ftp access
 	'ftphost'				=> 'FTP-Host',
 	'ftpport'				=> 'FTP-Port',
@@ -112,7 +110,6 @@ $lang = array(
 	'ftproot_sub'			=> '(Pfad zum Wurzelverzeichnis (root) des FTP-Benutzers)',
 	'useftp'				=> 'FTP als Datei-Handler verwenden',
 	'useftp_sub'			=> '(Kann nachträglich über die config.php de-/aktiviert werden)',
-	'safemode_ftpmustbeon'	=> 'Da der PHP Safe Mode an ist, müssen die FTP Daten ausgefüllt werden um mit der Installation fortzufahren.',
 	'ftp_connectionerror'	=> 'Die FTP-Verbindung konnte nicht hergestellt werden. Bitte überprüfe den FTP-Host und FTP-Port.',
 	'ftp_loginerror'		=> 'Der FTP-Login war nicht erfolgreich. Bitte überprüfe den FTP-Benutzernamen und das FTP-Kennwort.',
 	'plain_config_nofile'	=> 'Die Datei <b>config.php</b> ist nicht vorhanden und das automatische Anlegen ist fehlgeschlagen.<br />Bitte erstelle eine leere Textdatei mit dem namen <b>config.php</b> mit chmod 777 und lade sie hoch.',
@@ -120,10 +117,12 @@ $lang = array(
 	'plain_dataf_na'		=> 'Der Ordner <b>./data/</b> ist nicht vorhanden.<br />Bitte erstelle ihn. <b>mkdir data</b>.',
 	'plain_dataf_nwrite'	=> 'Der Ordner <b>./data/</b> ist nicht beschreibbar.<br />Bitte die Berechtigung richtig setzen. <b>chmod -R 0777 data</b>.',
 	'ftp_datawriteerror'	=> 'Der Data Ordner konnte nicht beschrieben werden. Ist der FTP Root path richtig?',
-	'ftp_info'				=> 'Anstatt bestimmten EQdkp Plus Dateiordnern Schreibrechte zu geben, kannst du einen FTP-Benutzer deines Servers benutzen, was die Sicherheit als auch die Funktionalität deines EQdkp Plus erhöht.',
+	'ftp_info'				=> 'Anstatt bestimmten EQdkp Plus Dateiordnern Schreibrechte zu geben, kannst du einen FTP-Benutzer deines Servers benutzen.',
 	'ftp_tmpinstallwriteerror' => 'Der Ordner <b>./data/97384261b8bbf966df16e5ad509922db/tmp/</b> ist nicht beschreibbar.<br />Damit die Konfigurations-Datei geschrieben werden kann, ist CHMOD 777 notwendig. Dieser Ordner wird nach der Installation entfernt.',
 	'ftp_tmpwriteerror' 	=> 'Der Ordner <b>./%stmp/</b> ist nicht beschreibbar.<br />Damit der FTP-Modus verwendet werden kann, ist CHMOD 777 für diesen Ordner notwendig. Dies ist der einzige Ordner, für den Schreibrechte benötigt werden.',
-
+	'fp_data_folder'		=> 'Ordner "data" vorhanden und beschreibbar',
+	'fp_config_file'		=> 'Datei "config.php" vorhanden und beschreibbar',
+	'fp_test_file' 			=> 'Testdatei geschrieben und abrufbar',
 
 
 	//Step: db_access
@@ -239,7 +238,7 @@ $lang = array(
 	'auto_login'			=> 'Angemeldet bleiben',
 	'user_required'			=> 'Benutzername, E-mail und Passwort müssen ausgefüllt werden!',
 	'no_pw_match'			=> 'Die Passwörter stimmen nicht überein.',
-		
+
 	//Step: additional_keys
 	'additional_keys_info'	=> 'Wir nutzen Funktionen anderer Anbieter, um euch Funktionen wie Spamschutz oder das automatische Umwandeln von Links in Videos anbieten zu können. Hierfür benötigt ihr aber eigene Keys, die ihr euch auf den verlinkten Seiten holen und hier eintragen könnt.<br /><b>Natürlich könnt ihr diesen Schritt auch überspringen und die Keys später in den Einstellungen nachtragen.</b>',
 	'recaptcha_info' 		=> 'reCAPTCHA ist ein Verfahren, um Aktionen von Bots zu unterbinden, z.B. um Spam oder Registrierungen. Neue Keys kannst du auf folgender Seite anlegen: <br /> <a href="https://www.google.com/recaptcha/admin/create" target="_blank"><i class="fa fa-lg fa-external-link"></i> https://www.google.com/recaptcha/admin/create</a>',
@@ -247,18 +246,18 @@ $lang = array(
 	"recaptcha_pkey" 		=> "Privater Key von reCATPCHA",
 	'embedly_info'			=> 'Mit Hilfe von Embedly werden Links zu Bildern/Videos oder auch Tweets automatisch umgewandelt. Auch wird diese Funktion von Plugins wie dem MediaCenter zur Einbettung von Videos verwendet. Einen eigene API-Key kannst du auf folgender Seite anlegen: <br /> <a href="https://app.embed.ly/" target="_blank"><i class="fa fa-lg fa-external-link"></i> https://app.embed.ly/</a>',
 	'embedly_api_key'		=> 'Embedly API-Key',
-	
+
 	//Step: end
 	'install_end_text'		=> 'Die Installation kann nun erfolgreich abgeschlossen werden.',
 	'install_support_h1'	=> 'Unterstütze EQdkp Plus',
-	'install_support_text'	=> 'So ein Projekt wie EQdkp Plus kann natürlich nur existieren, wenn wir für die ganze Mühe, Zeit und Liebe, die wir in EQdkp Plus stecken, auch wieder etwas zurückbekommen. Dies ist auf vielfältige Weise möglich: 
+	'install_support_text'	=> 'So ein Projekt wie EQdkp Plus kann natürlich nur existieren, wenn wir für die ganze Mühe, Zeit und Liebe, die wir in EQdkp Plus stecken, auch wieder etwas zurückbekommen. Dies ist auf vielfältige Weise möglich:
 						<ul>
 							<li><i class="fa fa-puzzle-piece"></i> <a href="http://eqdkp-plus.eu/repository/">Veröffentliche ein Plugin oder Template, damit alle EQdkp Plus Benutzer was davon haben</a></li>
 							<li><i class="fa fa-comments"></i> <a href="http://eqdkp-plus.eu/forum/">Unterstütze uns in unserem Forum</a></li>
 							<li><i class="fa fa-cogs"></i> <a href="http://eqdkp-plus.eu/de/entwicklung.html">Beteilige dich aktiv an der Weiterentwicklung von EQdkp Plus</a></li>
 							<li><i class="fa fa-usd"></i> <a href="http://eqdkp-plus.eu/de/spenden.html">Unterstützte uns finanziell, damit wir euch weiterhin unsere Services anbieten können</a></li>
 						</ul>
-						
+
 						Also wenn ihr EQdkp Plus genauso liebt wie wir, denkt doch mal darüber nach, uns zu unterstützen!'
 
 );

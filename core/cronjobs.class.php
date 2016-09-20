@@ -30,19 +30,9 @@ class cronjobs extends gen_class {
 		include_once($this->root_path.'core/cronjobs/crontask.aclass.php');
 		$this->init_cronsystem();
 	}
-	
-	public $MAX_DATE			= 1577836800;	//mktime(0,0,0,1,1,2020);
-	public $MIN_DATE			= 315532800;	//mktime(0,0,0,1,1,1980);
-
-	public $SECOND				= 1;
-	public $MINUTE				= 60;
-	public $HOUR				= 3600;
-	public $DAY					= 86400;
-	public $WEEK				= 604800;
 
 	private $crontab			= array();
 	private $system_cron_dir	= '';
-	private $crontab_file		= "crontab.php";
 	private $crontask_defaults = array(
 		'repeat_interval'	=> 1,
 		'start_time'		=> null,
@@ -59,13 +49,14 @@ class cronjobs extends gen_class {
 		'description'		=> null
 	);
 
+	
 	private function init_cronsystem(){
 		$this->system_cron_dir = $this->root_path.'core/cronjobs/';
-		$this->crontab_file  = $this->pfh->FolderPath('timekeeper', 'eqdkp').'crontab.php';
 		$this->load_crontab();
 		$this->scan_system_crontasks();
 	}
 
+	
 	public function scan_system_crontasks(){
 		$dh = opendir($this->system_cron_dir);
 		while (false !== ($file = readdir($dh))) {
@@ -84,6 +75,24 @@ class cronjobs extends gen_class {
 		}
 	}
 
+	public function set_active($task_name, $intStartTime=null){
+		if($intStartTime === null) $intStartTime = $this->crontab[$task_name]['start_time'];
+		if(!$intStartTime) $intStartTime = $this->time->time;
+		
+		$this->pdh->put('cronjobs', 'setActive', array($task_name, array('start_time' => $intStartTime)));
+		$this->pdh->process_hook_queue();
+		//Reload Crontab
+		$this->load_crontab();
+	}
+	
+	public function set_inactive($task_name){
+		$this->pdh->put('cronjobs', 'setInactive', array($task_name));
+		$this->pdh->process_hook_queue();
+		//Reload Crontab
+		$this->load_crontab();
+	}
+	
+	
 	public function add_cron($task_name, $custom_params = array(), $is_update = false){
 		if(array_key_exists($task_name, $this->crontab) && $is_update == false)
 			return false;
@@ -103,6 +112,9 @@ class cronjobs extends gen_class {
 			if($params['description'] == null)
 				$params['description'] = $task_name;
 			$params['last_run'] = 0;
+			
+			$this->pdh->put('cronjobs', 'add', array($task_name, $params['start_time'], $params['repeat'], $params['repeat_type'], $params['repeat_interval'], $params['extern'], $params['ajax'],$params['delay'], $params['multiple'], $params['active'], $params['editable'], $params['path'], $params['params'], $params['description']));
+
 		}else{
 			$params = $this->crontab[$task_name];
 			if (!$params){
@@ -116,21 +128,28 @@ class cronjobs extends gen_class {
 					}
 				}
 			}
+			
+			$this->pdh->put('cronjobs', 'update', array($task_name, $params['start_time'], $params['repeat'], $params['repeat_type'], $params['repeat_interval'], $params['extern'], $params['ajax'],$params['delay'], $params['multiple'], $params['active'], $params['editable'], $params['path'], $params['params'], $params['description']));	
 		}
 
 		$params['next_run'] = $this->calculate_next_run($params['repeat_interval'], $params['repeat_type'], false, $params['start_time'], $params['start_time']);
+		
+		$this->pdh->put('cronjobs', 'setLastAndNextRun', array($task_name, $params['last_run'], $params['next_run']));
+		$this->pdh->process_hook_queue();
+		
 		$this->crontab[$task_name] = $params;
-		$this->save_crontab($this->crontab);
+
 		return true;
 	}
 
+	
 	public function del_cron($task_name){
 		if(isset($this->crontab[$task_name])){
-			unset($this->crontab[$task_name]);
-			$this->save_crontab($this->crontab);
+			$this->pdh->put('cronjobs', 'delete', array($task_name));
 		}
 	}
 
+	
 	public function run_cron($task_name, $force_run = false, $force_non_ajax=false){
 		if(!$force_run && !$this->cron_necessary($task_name)){
 			return false;
@@ -151,6 +170,7 @@ class cronjobs extends gen_class {
 		}
 	}
 
+	
 	public function execute_cron($task_name, $force_run = false){
 		define("IN_CRON", true);
 		
@@ -178,8 +198,8 @@ class cronjobs extends gen_class {
 			if(is_file($strLockFile)){
 				$strLockContent = file_get_contents($strLockFile);
 				if($strLockContent){
-					//Lock file was created more than 1 hour ago
-					if((intval($strLockContent)+3600) < time()){
+					//Lock file was created more than 0.5 hour ago, so delete it and try again
+					if((intval($strLockContent)+1800) < time()){
 						$this->pfh->Delete($strLockFile);
 					}
 				}
@@ -198,11 +218,15 @@ class cronjobs extends gen_class {
 			if (!$force_run){
 				$this->crontab[$task_name]['next_run'] = $this->calculate_next_run($this->crontab[$task_name]['repeat_interval'], $this->crontab[$task_name]['repeat_type'], $this->crontab[$task_name]['multiple'], $this->crontab[$task_name]['next_run'], $this->crontab[$task_name]['start_time']);
 			}
-			$this->save_crontab($this->crontab);
+			
+			//Save Last and Next Run
+			$this->pdh->put('cronjobs', 'setLastAndNextRun', array($task_name, $this->crontab[$task_name]['last_run'], $this->crontab[$task_name]['next_run']));
+			$this->pdh->process_hook_queue();
 			$this->pfh->Delete($strLockFile);
 		}
 	}
 
+	
 	public function cron_necessary($task_name){
 		//task active?
 		if($this->crontab[$task_name]['active'] == true){
@@ -222,6 +246,7 @@ class cronjobs extends gen_class {
 		return false;
 	}
 
+	
 	//Runs necessary Crons
 	public function handle_crons($extern = false){
 		$runcount = 0;
@@ -246,24 +271,18 @@ class cronjobs extends gen_class {
 		}
 	}
 
+	
 	public function list_crons($cron=''){
 		return isset($this->crontab[$cron]) ? $this->crontab[$cron] : $this->crontab;
 	}
 
+	
 	private function load_crontab(){
-		$result = @file_get_contents($this->crontab_file);
-		if($result !== false){
-			$this->crontab = unserialize($result);
-		}else{
-			$this->save_crontab(array());
-		}
+		$arrCrontab = $this->pdh->get('cronjobs', 'crontab', array());
+		$this->crontab = $arrCrontab;
 	}
 
-	private function save_crontab($crontab){
-		$this->pfh->putContent($this->crontab_file, serialize($crontab));
-		//file_put_contents($this->crontab_file, serialize($crontab));
-	}
-
+	
 	public function calculate_next_run($repeat_interval, $repeat_type = 'minutely', $multiple = false, $next_run_eta = false, $start_time = false){
 		if ($next_run_eta && $next_run_eta > 1){
 			$relative_time = $next_run_eta;

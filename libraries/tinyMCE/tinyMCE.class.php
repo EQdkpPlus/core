@@ -51,6 +51,8 @@ class tinyMCE extends gen_class {
 			
 			$arrHooks = (($this->hooks->isRegistered('tinymce_bbcode_setup')) ? $this->hooks->process('tinymce_bbcode_setup', array('js' => '', 'env' => $this->env), true): array());
 			$strHooks = isset($arrHooks['js']) ? $arrHooks['js'] : '';
+			$strHooksPlugin = isset($arrHooks['plugins']) ? $arrHooks['plugins'] : '';
+			$strHooksToolbar = isset($arrHooks['toolbar']) ? $arrHooks['toolbar'] : '';
 			$mention  = (isset($settings['mention']) && $settings['mention']) ? ' mention' : '';
 			
 			$this->tpl->add_js('
@@ -63,7 +65,7 @@ class tinyMCE extends gen_class {
 					plugins: [
 						"bbcode autolink link image charmap",
 						"searchreplace visualblocks code fullscreen",
-						"media textcolor'.$mention.'"
+						"media textcolor'.$mention.$strHooksPlugin.'"
 					],
 					language : "'.$this->language.'",
 					theme : "'.$this->theme.'",
@@ -105,7 +107,7 @@ class tinyMCE extends gen_class {
 					menubar: false,
 					relative_urls : false,
 					remove_script_host : false,
-					toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright |  bullist | fontsizeselect forecolor | blockquote image link",
+					toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright |  bullist | fontsizeselect forecolor | blockquote image link'.$strHooksToolbar.'",
 					statusbar : false,
 				});
 			}
@@ -166,6 +168,8 @@ class tinyMCE extends gen_class {
 
 			$arrHooks = (($this->hooks->isRegistered('tinymce_normal_setup')) ? $this->hooks->process('tinymce_normal_setup', array('js' => '', 'env' => $this->env), true): array());
 			$strHooks = isset($arrHooks['js']) ? $arrHooks['js'] : '';
+			$strHooksPlugin = isset($arrHooks['plugins']) ? $arrHooks['plugins'] : '';
+			$strHooksToolbar = isset($arrHooks['toolbar']) ? $arrHooks['toolbar'] : '';
 								
 			$this->tpl->add_js('
 				$(".mceEditor").tinymce({
@@ -176,12 +180,12 @@ class tinyMCE extends gen_class {
 					theme : "'.$this->theme.'",
 					skin : "'.$this->skin.'",
 					image_advtab: true,
-					toolbar: "insertfile undo redo | fullscreen | styleselect fontselect fontsizeselect bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist | link image media emoticons eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | eqdkp_item eqdkp_gallery eqdkp_raidloot eqdkp_chars | custom_buttons",
+					toolbar: "insertfile undo redo | fullscreen | styleselect fontselect fontsizeselect bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist | link image media emoticons eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | eqdkp_item eqdkp_gallery eqdkp_raidloot eqdkp_chars | custom_buttons '.$strHooksToolbar.'",
 					language : "'.$this->language.'",
 					plugins: [
 					 	"advlist autolink lists link image imagetools charmap preview anchor eqdkp_item eqdkp_lightbox eqdkp_filebrowser eqdkp_easyinsert",
 						"searchreplace visualblocks code fullscreen colorpicker",
-						"media table contextmenu paste textcolor emoticons'.$autoresize.$pageobjects.$readmore.$gallery.$raidloot.'"
+						"media table contextmenu paste textcolor emoticons'.$autoresize.$pageobjects.$readmore.$gallery.$raidloot.$strHooksPlugin.'"
 					],
 					images_upload_credentials: true,
 					images_upload_url: "'.$this->server_path.'libraries/tinyMCE/imageUploader.php'.$this->SID.'",
@@ -253,6 +257,8 @@ class tinyMCE extends gen_class {
 			//Hooks
 			$arrHooks = (($this->hooks->isRegistered('tinymce_inline_simple_setup')) ? $this->hooks->process('tinymce_inline_simple_setup', array('js' => '', 'selector' => $selector,  'env' => $this->env), true): array());
 			$strHooks = isset($arrHooks['js']) ? $arrHooks['js'] : '';
+			$strHooksPlugin = isset($arrHooks['plugins']) ? $arrHooks['plugins'] : '';
+			$strHooksToolbar = isset($arrHooks['toolbar']) ? $arrHooks['toolbar'] : '';
 			
 			$tinyid = md5($selector);
 			
@@ -268,9 +274,9 @@ class tinyMCE extends gen_class {
 						theme : "'.$this->theme.'",
 						skin : "'.$this->skin.'",
 						inline: true,
-						toolbar: "undo redo",
+						toolbar: "undo redo '.$strHooksToolbar.'",
 						menubar: false,
-						plugins: ["save"],
+						plugins: ["save '.$strHooksPlugin.'"],
 						setup: function(editor) {
 							'.$strSetup.$strHooks.'
 						},
@@ -342,6 +348,8 @@ class tinyMCE extends gen_class {
 			
 			$arrHooks = (($this->hooks->isRegistered('tinymce_inline_setup')) ? $this->hooks->process('tinymce_inline_setup', array('js' => '', 'selector' => $selector,  'env' => $this->env), true): array());
 			$strHooks = isset($arrHooks['js']) ? $arrHooks['js'] : '';
+			$strHooksPlugin = isset($arrHooks['plugins']) ? $arrHooks['plugins'] : '';
+			$strHooksToolbar = isset($arrHooks['toolbar']) ? $arrHooks['toolbar'] : '';
 			
 			$tinyid = md5($selector);
 				
@@ -356,12 +364,12 @@ class tinyMCE extends gen_class {
 					theme : "'.$this->theme.'",
 					skin : "'.$this->skin.'",
 					image_advtab: true,				
-					toolbar: "insertfile undo redo | fullscreen | styleselect fontselect fontsizeselect bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist | link image media emoticons eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | eqdkp_item eqdkp_gallery eqdkp_raidloot eqdkp_chars | custom_buttons",
+					toolbar: "insertfile undo redo | fullscreen | styleselect fontselect fontsizeselect bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist | link image media emoticons eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | eqdkp_item eqdkp_gallery eqdkp_raidloot eqdkp_chars | custom_buttons '.$strHooksToolbar.'",
 					language : "'.$this->language.'",
 					 plugins: [
 					 	"advlist autolink lists link image imagetools charmap preview anchor eqdkp_item eqdkp_lightbox eqdkp_filebrowser eqdkp_easyinsert",
 						"searchreplace visualblocks code fullscreen",
-						"save media table contextmenu paste textcolor emoticons'.$autoresize.$pageobjects.$readmore.$gallery.$raidloot.'"
+						"save media table contextmenu paste textcolor emoticons'.$autoresize.$pageobjects.$readmore.$gallery.$raidloot.$strHooksPlugin.'"
 					],
 					entity_encoding : "raw",
 					rel_list: [{value:"", text: "" }, {value:"lightbox", text: "Lightbox" }, {value:"nofollow", text: "nofollow" }],
