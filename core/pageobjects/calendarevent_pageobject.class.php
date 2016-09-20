@@ -655,7 +655,7 @@ class calendarevent_pageobject extends pageobject {
 					$role_class = (($eventdata['extension']['raidmode'] == 'role') ? (($charshasdeletedrole) ? '-9' : $attendeedata['member_role']) : $attclassid);
 
 					// we need a roleID or a classID. If not, the char is not shown but counted
-					if($role_class > 0 || $role_class == '-9'){
+					if($role_class >= 0 || $role_class == '-9'){
 						if($charshasdeletedrole){
 							$attendeedata['member_role']	= '-9';
 						}
