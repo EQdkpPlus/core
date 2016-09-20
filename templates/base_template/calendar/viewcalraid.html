@@ -171,7 +171,9 @@ $(function(){
 				isguest:		is_guest,
 				link_hash:		'{CSRF_DRAGNDROP_TOKEN}'
 			}, function(data){
-				// TODO: trigger success message some day
+				system_message('{L_raidevent_dragdrop_movesuccessmsg}', 'success');
+			}).fail(function() {
+				system_message('{L_raidevent_dragdrop_moveerrormsg}', 'error');
 			});
 
 			// count class attendees
