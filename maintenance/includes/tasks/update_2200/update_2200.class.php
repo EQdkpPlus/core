@@ -26,10 +26,10 @@ if ( !defined('EQDKP_INC') ){
 include_once(registry::get_const('root_path').'maintenance/includes/sql_update_task.class.php');
 
 // update_22100 added, update_22130 ignored because it is included in 2.3 as well.
-class update_2202 extends sql_update_task {
+class update_2200 extends sql_update_task {
 	public $author			= 'GodMod';
-	public $version			= '2.2.0.0'; //new plus-version
-	public $ext_version		= '2.2.0'; //new plus-version
+	public $version		= '2.2.0.0'; //new plus-version
+	public $ext_version	= '2.2.0'; //new plus-version
 	public $name			= '2.2.0';
 
 	public function __construct(){
