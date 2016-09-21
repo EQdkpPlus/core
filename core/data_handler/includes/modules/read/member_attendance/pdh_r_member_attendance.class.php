@@ -99,7 +99,26 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 
 			//create array with all first_raid dates
 			$first_raids = array();
-			$temp = $this->pdh->aget('member_dates', 'first_raid', 0, array($this->pdh->get('member', 'id_list'), $mdkp_id));
+			
+			$arrMemberIDs = $this->pdh->get('member', 'id_list');
+			foreach($arrMemberIDs as $intMemberID){
+				$intFirstRaid = $this->pdh->get('member_dates', 'first_raid', array($intMemberID, $mdkp_id));
+				if(!$intFirstRaid){					
+					$intCharCreated = $this->pdh->get('member', 'creation_date', array($intMemberID));
+					if(!$intCharCreated){
+						$intUser = $this->pdh->get('member', 'user', array($intMemberID));
+						if($intUser){
+							$intUserCreated = $this->pdh->get('user', 'regdate', array($intUser));
+							if($intUserCreated) $intFirstRaid = $intUserCreated;
+						}
+					} else {
+						$intFirstRaid = $intCharCreated;
+					}
+				}
+
+				$temp[$intMemberID] = ($intFirstRaid) ? $intFirstRaid : PHP_INT_MAX;
+			}
+			
 			$member_first_raid[$mdkp_id] = $temp;
 			if($time_period == 'LT') {
 				$temp_first_raids = array_flip($temp);
@@ -109,6 +128,7 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 			} else {
 				$first_raids[$first_date] = array($mdkp_id => 0);
 			}
+
 			unset($temp);
 			foreach($raid_ids as $raid_id){
 				//raid not relevant for this attendance calculation
@@ -154,6 +174,7 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 			}
 			//cache it and let it expire at midnight
 			$stm = 86400-($this->time->time)%86400;
+
 			$this->pdc->put('pdh_member_attendance_'.$time_period.'_'.$mdkp_id, $this->member_attendance[$time_period][$mdkp_id], $stm);
 		}
 
