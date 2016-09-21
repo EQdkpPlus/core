@@ -79,6 +79,9 @@ if (!class_exists("jquery")) {
 			// set the custom UI for jquery.ui
 			$this->CustomUI((isset($this->user->style['template_path'])) ? $this->user->style['template_path'] : 'eqdkp_modern');
 
+			// new toast notifications
+			$this->init_toast();
+
 			// set the static html for notification
 			$this->tpl->staticHTML('
 				<div id="notify_container">
@@ -241,6 +244,54 @@ if (!class_exists("jquery")) {
 				$this->tpl->js_file($this->path."js/gmaps/gmaps.min.js");
 				$this->inits['googlemaps']	= true;
 			}
+		}
+
+		public function init_toast(){
+			$this->tpl->add_js("
+			function system_message(text, type, sticky=3000){
+				switch (type) {
+					case 'error':
+						mssgheading = '".$this->user->lang('error')."';
+						mssgicon = 'error';
+					break;
+					case 'success':
+						mssgheading = '".$this->user->lang('success')."';
+						mssgicon = 'success';
+					break;
+					case 'warning':
+						mssgheading = '".$this->user->lang('warning')."';
+						mssgicon = 'warning';
+					break;
+					case 'info':
+						mssgheading = '".$this->user->lang('information')."';
+						mssgicon = 'info';
+					break;
+					default:
+						mssgheading = false;
+						mssgicon = false;
+				}
+
+				custom_message(text, {headertxt:mssgheading, icon: mssgicon, sticky: sticky})
+			}
+
+			function custom_message(text, options){
+				headertxt		= (options.hasOwnProperty('headertxt')) ? options.headertxt : false;
+				mssgicon		= (options.hasOwnProperty('icon')) ? options.icon : false;
+				mssgposition	= (options.hasOwnProperty('position')) ? options.position : 'top-right';
+				mssgstack		= (options.hasOwnProperty('stack')) ? options.stack : 5;
+				mssgclosebutton = (options.hasOwnProperty('closebutton')) ? options.closebutton : true;
+				mssgsticky		= (options.hasOwnProperty('sticky')) ? options.sticky : 3000;
+console.log('sticky: ' + mssgsticky)
+				$.toast({
+					heading:			headertxt,
+					text:				text,
+					icon:				mssgicon,
+					position:			mssgposition,
+					stack:				mssgstack,
+					allowToastClose:	mssgclosebutton,
+					hideAfter:			mssgsticky
+				});
+			}");
 		}
 
 		/**
@@ -629,54 +680,6 @@ if (!class_exists("jquery")) {
 			}
 			$acccode  .= '</div>';
 			return $acccode;
-		}
-
-		public function init_toast(){
-			$this->tpl->add_js("
-			function system_message(text, type='default', sticky=false){
-				switch (type) {
-					case 'error':
-						mssgheading = '{L_error}';
-						mssgicon = 'error';
-					break;
-					case 'success':
-						mssgheading = '{L_success}';
-						mssgicon = 'success';
-					break;
-					case 'warning':
-						mssgheading = '{L_warning}';
-						mssgicon = 'warning';
-					break;
-					case 'info':
-						mssgheading = '{L_information}';
-						mssgicon = ''info'';
-					break;
-					default:
-						mssgheading = false;
-						mssgicon = false;
-				}
-
-				custom_message(text, {headertxt:mssgheading, icon: mssgicon, sticky: sticky})
-			}
-
-			function custom_message(text, options){
-				if (options.hasOwnProperty('headertxt')) headertxt = options.headertxt; headertxt = false;
-				if (options.hasOwnProperty('icon')) mssgicon = options.icon; mssgicon = false;
-				if (options.hasOwnProperty('position')) mssgposition = options.position; mssgposition = 'top-right';
-				if (options.hasOwnProperty('stack')) mssgstack = options.stack; mssgstack = 5;
-				if (options.hasOwnProperty('closebutton')) mssgclosebutton = options.closebutton; mssgclosebutton = true;
-				if (options.hasOwnProperty('sticky')) mssgsticky = options.sticky; mssgsticky = 3000;
-
-				$.toast({
-					heading:			headertxt,
-					text:				text,
-					icon:				mssgicon,
-					position:			mssgposition,
-					stack:				mssgstack,
-					allowToastClose:	mssgclosebutton,
-					hideAfter:			mssgsticky
-				});
-			}");
 		}
 
 				/**

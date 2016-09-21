@@ -161,13 +161,6 @@ if(!class_exists('requirements')) {
 			</div>';
 			} else {
 
-				// show a message if safemode is on, as we can install eqdkp+ with ftp handler
-				if(!$phpcheckdata['safemode']['passfail']){
-					$content .='<div style="margin-top: 10px; padding: 0pt 0.7em;" class="ui-state-highlight ui-corner-all">
-							<p>'.$this->lang['safemode_warning'].'</p>
-						</div>';
-				}
-
 				// show a warning if one of the optional steps does not match
 				if($this->getCounts('optional') > 0){
 					$content .='<div class="infobox infobox-large infobox-orange clearfix">

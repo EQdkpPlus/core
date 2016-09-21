@@ -69,13 +69,10 @@ $lang = array(
 	'applicable_warning' => 'Diese Aufgabe ist nicht notwendig! Ein Ausführen kann Datenverlust zur Folge haben! Führe diese Aufgabe nur aus, wenn du dir absolut sicher bist!',
 	'executed_tasks'	=> 'Folgende Aktionen wurden für die Aufgabe "%s" ausgeführt',
 	'stepend_info'		=> 'Die Aufgabe wurde beendet. Das EQdkp Plus befindet sich aber noch im Wartungsmodus, damit du alles durchtesten kannst. Erst nachdem der Wartungsmodus beendet ist, können sich Benutzer wieder anmelden.',
-	
+
 	//pfh-errors
 	'mmode_pfh_error' => 'Es sind einige Fehler aufgetreten. Du musst die Fehler beheben, um den Maintenance-Mode zu deaktivieren.',
 	"lib_cache_notwriteable" => "In den Ordner \"data\" kann nicht geschrieben werden. Bitte gib ihm CHMOD 777!",
-	"pfh_safemode_error" => "PHP Safe Mode ist eingeschaltet. EQDKP-PLUS wird im Safe Mode nicht richtig funktionieren, da die Schreiboptionen nicht in vollem Umfang zur Verfügung stehen.",
-	"spl_autoload_register_notavailable" => "Die PHP-Funktion \"spl_autoload_register\" konnte nicht gefunden werden. Dies liegt vermutlich daran, dass du bei einem Freehoster bist, der diese Funktion nicht zur Verfügung stellt.",
-	
 
 	//Task types
 	'fix' => 'Fix',
@@ -94,7 +91,7 @@ $lang = array(
 	'start_update' => 'Führe alle notwendigen Updates aus!',
 	'only_this_update' => 'Führe nur dieses Update aus: ',
 	'start_single_update' => 'Update ausführen',
-	
+
 	//Splash
 	'splash_welcome'	=> 'Willkommen im Wartungsbereich deines EQdkp Plus-Systems!',
 	'splash_desc' 		=> 'Hier kannst du dein EQdkp aktualisieren, und ältere Versionen von EQdkp Plus importieren.',
@@ -103,7 +100,7 @@ $lang = array(
 	'jump_tour'			=> 'Tour überspringen',
 	'guild_import'		=> 'Gilde von externer Datenbank importieren',
 	'guild_import_info'	=> '* sofern vom Spiel unterstützt',
-		
+
 	//Backup
 	'backup'			=> 'Datenbank-Backup',
 	'backup_note'		=> 'Ein Datenbank-Backup wurde erfolgreich unter %s erstellt.',
