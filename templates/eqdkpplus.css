@@ -202,10 +202,6 @@ td.w10p, tr.w10p, th.w10p{
 	border: 0px !important;
 }
 
-#notify_container{
-	display:none;
-}
-
 /* Full Calendar Button Hack */
 .cal-button {
 	height: 24px;

@@ -93,7 +93,6 @@ class core extends gen_class {
 						$ktitle	= $title;
 				}
 				$this->tpl->add_js("custom_message(".$text.", {headertxt:'".$ktitle."',mssgicon:'".$kkind."', mssgsticky:".(($showalways) ? false : 3000).", parent:".$parent."})");
-				#$this->jquery->notify($text, array('header' => $title,'expires' => , 'custom'=>true,'theme'  => $kkind, 'parent' => $parent));
 			}
 		}
 
