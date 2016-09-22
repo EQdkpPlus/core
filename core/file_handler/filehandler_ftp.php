@@ -61,7 +61,7 @@ if (!class_exists("filehandler_ftp")) {
 					$this->ftp = false;
 					return false;
 				} else {
-					$this->ftp->setRootDir($this->ftproot);
+					$this->ftp->setRootDir($this->ftproot, $this->root_path);
 					
 					if($this->ftp->cd('data/')){
 						
@@ -230,12 +230,12 @@ if (!class_exists("filehandler_ftp")) {
 		* Get the filesize of a file
 		*/
 		public function FileSize($file, $plugin=false){
-			if (!$this->init_ftp()) return false;
-			$file = ($plugin === false) ? $file : $this->FilePath($file, $plugin);
-			$file = $this->remove_rootpath($file);
-			return $this->ftp->file_size($file);
+			if ($plugin === false){
+				return filesize($file);
+			} else {
+				return filesize($this->FilePath($file, $plugin));
+			}
 		}
-
 
 		/**
 		* Test if a file could be written

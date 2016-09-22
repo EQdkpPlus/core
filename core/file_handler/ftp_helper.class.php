@@ -26,7 +26,7 @@ class ftp_handler{
 	private $tmp_dir		= '';		// Temporary files directory
 	private $tmp_dir_plain	= '';		// Temporary files directory without root path
 	private $error			= '';		// Error Messages
-	private $host, $port, $user, $pass, $dir, $rootdir = '';
+	private $host, $port, $user, $pass, $dir, $rootdir, $eqdkp_root = '';
 
 	public function __construct($user="Anonymous", $pass="Email", $host="localhost", $port="21", $dologin=true){
 		if($host){
@@ -58,8 +58,9 @@ class ftp_handler{
 		$this->tmp_dir_plain	= $dir_plain;
 	}
 
-	public function setRootDir($dir){
+	public function setRootDir($dir, $eqdkp_root){
 		$this->root_dir	= $dir;
+		$this->eqdkp_root = $eqdkp_root;
 	}
 
 	public function showerror(){
@@ -193,13 +194,25 @@ class ftp_handler{
 	}
 
 	public function rename($old_file, $new_file, $tmpmove=false){
+		if($old_file == $new_file) return true;
+			
 		$this->login();
 		$this->cdToHome();
+		
+		if(defined('PHP_WINDOWS_VERSION_BUILD') && file_exists($this->eqdkp_root.$new_file)){
+			$this->delete($new_file);
+		}
+		
 		if($tmpmove){
-			return ftp_put($this->link_id,$old_file,$this->root_dir.$new_file,FTP_BINARY);
+			return $this->moveuploadedfile($old_file, $new_file, FTP_BINARY);
 		}else{
-			$blnResult = @ftp_rename($this->link_id, $this->root_dir.$old_file, $this->root_dir.$new_file);
-			$this->delete($old_file);
+			if(is_dir($this->eqdkp_root.$old_file)){
+				$blnResult = @ftp_rename($this->link_id, $this->root_dir.$old_file, $this->root_dir.$new_file);
+			} else {
+				$blnResult = $this->ftp_copy($old_file, $new_file);
+				$this->delete($old_file);
+			}
+
 			return $blnResult;
 		}
 	}
@@ -239,13 +252,9 @@ class ftp_handler{
 	}
 
 	public function moveuploadedfile($tmpfile, $newfile, $mode=FTP_BINARY){
-		$tmplfilename = $this->tmp_dir.md5($this->generateRandomBytes());
-		move_uploaded_file($tmpfile, $tmplfilename);
-		$this->login();
-		$this->cdToHome();
-		$result = ftp_put($this->link_id,$this->root_dir.$newfile,$tmplfilename,$mode);
+		$result = ftp_put($this->link_id,$this->root_dir.$newfile, $tmpfile, $mode);
+		@ftp_delete($this->link_id, $tmpfile);
 		if(!$this->on_iis()) @ftp_chmod($this->link_id, 0755, $this->root_dir.$newfile);
-		unlink($tmplfilename);
 		return $result;
 	}
 
@@ -279,22 +288,14 @@ class ftp_handler{
 	}
 
 	public function ftp_copy($from , $to){
-		$tmplfilename = $this->tmp_dir.md5($this->generateRandomBytes());
+		$result = ftp_put($this->link_id, $this->root_dir.$to, $this->root_dir.$from);
+		if(!$this->on_iis()) @ftp_chmod($this->link_id, 0755, $this->root_dir.$to);
 		
-		if($this->get($tmplfilename, $from)){
-			if($this->put_upload($to, $tmplfilename)){
-				unlink($tmplfilename);
-			} else{
-				return false;
-			}
-		}else{
-			return false;
-		}
-		return true;
+		return $result;
 	}
 
 	public function close(){
-		@ftp_quit($this->link_id);
+		@ftp_close($this->link_id);
 	}
 	
 	/**
