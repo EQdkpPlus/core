@@ -10076,7 +10076,7 @@ return jQuery;
 /*! jQuery Migrate v3.0.0 | (c) jQuery Foundation and other contributors | jquery.org/license */
 "undefined"==typeof jQuery.migrateMute&&(jQuery.migrateMute=!0),function(a,b){"use strict";function c(c){var d=b.console;e[c]||(e[c]=!0,a.migrateWarnings.push(c),d&&d.warn&&!a.migrateMute&&(d.warn("JQMIGRATE: "+c),a.migrateTrace&&d.trace&&d.trace()))}function d(a,b,d,e){Object.defineProperty(a,b,{configurable:!0,enumerable:!0,get:function(){return c(e),d}})}a.migrateVersion="3.0.0",function(){var c=b.console&&b.console.log&&function(){b.console.log.apply(b.console,arguments)},d=/^[12]\./;c&&(a&&!d.test(a.fn.jquery)||c("JQMIGRATE: jQuery 3.0.0+ REQUIRED"),a.migrateWarnings&&c("JQMIGRATE: Migrate plugin loaded multiple times"),c("JQMIGRATE: Migrate is installed"+(a.migrateMute?"":" with logging active")+", version "+a.migrateVersion))}();var e={};a.migrateWarnings=[],void 0===a.migrateTrace&&(a.migrateTrace=!0),a.migrateReset=function(){e={},a.migrateWarnings.length=0},"BackCompat"===document.compatMode&&c("jQuery is not compatible with Quirks Mode");var f=a.fn.init,g=a.isNumeric,h=a.find,i=/\[(\s*[-\w]+\s*)([~|^$*]?=)\s*([-\w#]*?#[-\w#]*)\s*\]/,j=/\[(\s*[-\w]+\s*)([~|^$*]?=)\s*([-\w#]*?#[-\w#]*)\s*\]/g;a.fn.init=function(a){var b=Array.prototype.slice.call(arguments);return"string"==typeof a&&"#"===a&&(c("jQuery( '#' ) is not a valid selector"),b[0]=[]),f.apply(this,b)},a.fn.init.prototype=a.fn,a.find=function(a){var b=Array.prototype.slice.call(arguments);if("string"==typeof a&&i.test(a))try{document.querySelector(a)}catch(d){a=a.replace(j,function(a,b,c,d){return"["+b+c+'"'+d+'"]'});try{document.querySelector(a),c("Attribute selector with '#' must be quoted: "+b[0]),b[0]=a}catch(e){c("Attribute selector with '#' was not fixed: "+b[0])}}return h.apply(this,b)};var k;for(k in h)Object.prototype.hasOwnProperty.call(h,k)&&(a.find[k]=h[k]);a.fn.size=function(){return c("jQuery.fn.size() is deprecated; use the .length property"),this.length},a.parseJSON=function(){return c("jQuery.parseJSON is deprecated; use JSON.parse"),JSON.parse.apply(null,arguments)},a.isNumeric=function(b){function d(b){var c=b&&b.toString();return!a.isArray(b)&&c-parseFloat(c)+1>=0}var e=g(b),f=d(b);return e!==f&&c("jQuery.isNumeric() should not be called on constructed objects"),f},d(a,"unique",a.uniqueSort,"jQuery.unique is deprecated, use jQuery.uniqueSort"),d(a.expr,"filters",a.expr.pseudos,"jQuery.expr.filters is now jQuery.expr.pseudos"),d(a.expr,":",a.expr.pseudos,'jQuery.expr[":"] is now jQuery.expr.pseudos');var l=a.ajax;a.ajax=function(){var a=l.apply(this,arguments);return a.promise&&(d(a,"success",a.done,"jQXHR.success is deprecated and removed"),d(a,"error",a.fail,"jQXHR.error is deprecated and removed"),d(a,"complete",a.always,"jQXHR.complete is deprecated and removed")),a};var m=a.fn.removeAttr,n=a.fn.toggleClass,o=/\S+/g;a.fn.removeAttr=function(b){var d=this;return a.each(b.match(o),function(b,e){a.expr.match.bool.test(e)&&(c("jQuery.fn.removeAttr no longer sets boolean properties: "+e),d.prop(e,!1))}),m.apply(this,arguments)},a.fn.toggleClass=function(b){return void 0!==b&&"boolean"!=typeof b?n.apply(this,arguments):(c("jQuery.fn.toggleClass( boolean ) is deprecated"),this.each(function(){var c=this.getAttribute&&this.getAttribute("class")||"";c&&a.data(this,"__className__",c),this.setAttribute&&this.setAttribute("class",c||b===!1?"":a.data(this,"__className__")||"")}))};var p=!1;a.swap&&a.each(["height","width","reliableMarginRight"],function(b,c){var d=a.cssHooks[c]&&a.cssHooks[c].get;d&&(a.cssHooks[c].get=function(){var a;return p=!0,a=d.apply(this,arguments),p=!1,a})}),a.swap=function(a,b,d,e){var f,g,h={};p||c("jQuery.swap() is undocumented and deprecated");for(g in b)h[g]=a.style[g],a.style[g]=b[g];f=d.apply(a,e||[]);for(g in b)a.style[g]=h[g];return f};var q=a.data;a.data=function(b,d,e){var f;return d&&d!==a.camelCase(d)&&(f=a.hasData(b)&&q.call(this,b),f&&d in f)?(c("jQuery.data() always sets/gets camelCased names: "+d),arguments.length>2&&(f[d]=e),f[d]):q.apply(this,arguments)};var r=a.Tween.prototype.run;a.Tween.prototype.run=function(b){a.easing[this.easing].length>1&&(c('easing function "jQuery.easing.'+this.easing.toString()+'" should use only first argument'),a.easing[this.easing]=a.easing[this.easing].bind(a.easing,b,this.options.duration*b,0,1,this.options.duration)),r.apply(this,arguments)};var s=a.fn.load,t=a.event.fix;a.event.props=[],a.event.fixHooks={},a.event.fix=function(b){var d,e=b.type,f=this.fixHooks[e],g=a.event.props;if(g.length)for(c("jQuery.event.props are deprecated and removed: "+g.join());g.length;)a.event.addProp(g.pop());if(f&&!f._migrated_&&(f._migrated_=!0,c("jQuery.event.fixHooks are deprecated and removed: "+e),(g=f.props)&&g.length))for(;g.length;)a.event.addProp(g.pop());return d=t.call(this,b),f&&f.filter?f.filter(d,b):d},a.each(["load","unload","error"],function(b,d){a.fn[d]=function(){var a=Array.prototype.slice.call(arguments,0);return"load"===d&&"string"==typeof a[0]?s.apply(this,a):(c("jQuery.fn."+d+"() is deprecated"),a.splice(0,0,d),arguments.length?this.on.apply(this,a):(this.triggerHandler.apply(this,a),this))}}),a(function(){a(document).triggerHandler("ready")}),a.event.special.ready={setup:function(){this===document&&c("'ready' event is deprecated")}},a.fn.extend({bind:function(a,b,d){return c("jQuery.fn.bind() is deprecated"),this.on(a,null,b,d)},unbind:function(a,b){return c("jQuery.fn.unbind() is deprecated"),this.off(a,null,b)},delegate:function(a,b,d,e){return c("jQuery.fn.delegate() is deprecated"),this.on(b,a,d,e)},undelegate:function(a,b,d){return c("jQuery.fn.undelegate() is deprecated"),1===arguments.length?this.off(a,"**"):this.off(b,a||"**",d)}});var u=a.fn.offset;a.fn.offset=function(){var b,d=this[0],e={top:0,left:0};return d&&d.nodeType?(b=(d.ownerDocument||document).documentElement,a.contains(b,d)?u.apply(this,arguments):(c("jQuery.fn.offset() requires an element connected to a document"),e)):(c("jQuery.fn.offset() requires a valid DOM element"),e)};var v=a.param;a.param=function(b,d){var e=a.ajaxSettings&&a.ajaxSettings.traditional;return void 0===d&&e&&(c("jQuery.param() no longer uses jQuery.ajaxSettings.traditional"),d=e),v.call(this,b,d)};var w=a.fn.andSelf||a.fn.addBack;a.fn.andSelf=function(){return c("jQuery.fn.andSelf() replaced by jQuery.fn.addBack()"),w.apply(this,arguments)};var x=a.Deferred,y=[["resolve","done",a.Callbacks("once memory"),a.Callbacks("once memory"),"resolved"],["reject","fail",a.Callbacks("once memory"),a.Callbacks("once memory"),"rejected"],["notify","progress",a.Callbacks("memory"),a.Callbacks("memory")]];a.Deferred=function(b){var d=x(),e=d.promise();return d.pipe=e.pipe=function(){var b=arguments;return c("deferred.pipe() is deprecated"),a.Deferred(function(c){a.each(y,function(f,g){var h=a.isFunction(b[f])&&b[f];d[g[1]](function(){var b=h&&h.apply(this,arguments);b&&a.isFunction(b.promise)?b.promise().done(c.resolve).fail(c.reject).progress(c.notify):c[g[0]+"With"](this===e?c.promise():this,h?[b]:arguments)})}),b=null}).promise()},b&&b.call(d,d),d}}(jQuery,window);
 //! moment.js
-//! version : 2.15.0
+//! version : 2.15.1
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
 //! license : MIT
 //! momentjs.com
@@ -11868,10 +11868,10 @@ return jQuery;
         var oldLocale = null;
         // TODO: Find a better way to register and load all the locales in Node
         if (!locales[name] && (typeof module !== 'undefined') &&
-                module && module.require) {
+                module && module.exports) {
             try {
                 oldLocale = globalLocale._abbr;
-                module.require('./locale/' + name);
+                require('./locale/' + name);
                 // because defineLocale currently also sets the global locale, we
                 // want to undo that for lazy loaded locales
                 locale_locales__getSetGlobalLocale(oldLocale);
@@ -14272,7 +14272,7 @@ return jQuery;
     // Side effect imports
 
 
-    utils_hooks__hooks.version = '2.15.0';
+    utils_hooks__hooks.version = '2.15.1';
 
     setHookCallback(local__createLocal);
 
@@ -39535,7 +39535,7 @@ function log() {
 
 /* jshint forin:true, noarg:true, noempty:true, eqeqeq:true, boss:true, undef:true, curly:true, browser:true, jquery:true */
 /*
- * jQuery MultiSelect UI Widget Filtering Plugin 1.15
+ * jQuery MultiSelect UI Widget Filtering Plugin 1.5
  * Copyright (c) 2012 Eric Hynds
  *
  * http://www.erichynds.com/jquery/jquery-ui-multiselect-widget/
@@ -39551,13 +39551,34 @@ function log() {
 (function($) {
   var rEscape = /[\-\[\]{}()*+?.,\\\^$|#\s]/g;
 
+  //Courtesy of underscore.js
+  function debounce(func, wait, immediate) {
+    var timeout;
+    return function() {
+      var context = this, args = arguments;
+      var later = function() {
+        timeout = null;
+        if (!immediate) {
+          func.apply(context, args);
+        }
+      };
+      var callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      if (callNow) {
+        func.apply(context, args);
+      }
+    };
+  }
+
   $.widget('ech.multiselectfilter', {
 
     options: {
       label: 'Filter:',
       width: null, /* override default width set in css file (px). null will inherit */
       placeholder: 'Enter keywords',
-      autoReset: false
+      autoReset: false,
+      debounceMS: 250
     },
 
     _create: function() {
@@ -39584,8 +39605,8 @@ function log() {
             e.preventDefault();
           }
         },
-        keyup: $.proxy(this._handler, this),
-        click: $.proxy(this._handler, this)
+        input: $.proxy(debounce(this._handler, opts.debounceMS), this),
+        search: $.proxy(this._handler, this)
       });
 
       // cache input values for searching
@@ -39608,13 +39629,14 @@ function log() {
         this.update();
 
         // gather an array of the values that actually changed
-        var values = $inputs.map(function() {
-          return this.value;
-        }).get();
+        var values = {};
+        $inputs.each(function() {
+          values[this.value] = true;
+        });
 
         // select option tags
         this.element.find('option').filter(function() {
-          if(!this.disabled && $.inArray(this.value, values) > -1) {
+          if(!this.disabled && values[this.value]) {
             _self._toggleState('selected', flag).call(this);
           }
         });
@@ -39710,7 +39732,7 @@ function log() {
 
 /* jshint forin:true, noarg:true, noempty:true, eqeqeq:true, boss:true, undef:true, curly:true, browser:true, jquery:true */
 /*
- * jQuery MultiSelect UI Widget 1.15
+ * jQuery MultiSelect UI Widget 1.16
  * Copyright (c) 2012 Eric Hynds
  *
  * http://www.erichynds.com/jquery/jquery-ui-multiselect-widget/
@@ -39746,13 +39768,15 @@ function log() {
       noneSelectedText: 'Select options',
       selectedText: '# selected',
       selectedList: 0,
+      closeIcon: 'ui-icon-circle-close',
       show: null,
       hide: null,
       autoOpen: false,
       multiple: true,
       position: {},
       appendTo: "body",
-      menuWidth:null
+      menuWidth:null,
+      selectedListSeparator: ', '
     },
 
     _create: function() {
@@ -39770,7 +39794,7 @@ function log() {
       var button = (this.button = $('<button type="button"><span class="ui-icon ui-icon-triangle-1-s"></span></button>'))
         .addClass('ui-multiselect ui-widget ui-state-default ui-corner-all')
         .addClass(o.classes)
-        .attr({ 'title':el.attr('title'), 'tabIndex':el.attr('tabIndex'), 'id': el.attr('id') + '_ms' })
+        .attr({ 'title':el.attr('title'), 'tabIndex':el.attr('tabIndex'), 'id': el.attr('id') ? el.attr('id')  + '_ms' : null })
         .prop('aria-haspopup', true)
         .insertAfter(el),
 
@@ -39798,7 +39822,7 @@ function log() {
               return '';
             }
           })
-          .append('<li class="ui-multiselect-close"><a href="#" class="ui-multiselect-close"><span class="ui-icon ui-icon-circle-close"></span></a></li>')
+          .append('<li class="ui-multiselect-close"><a href="#" class="ui-multiselect-close"><span class="ui-icon '+o.closeIcon+'"></span></a></li>')
           .appendTo(header),
 
         checkboxContainer = (this.checkboxContainer = $('<ul />'))
@@ -39837,13 +39861,59 @@ function log() {
     },
 
     refresh: function(init) {
+      var inputIdCounter = 0;
       var el = this.element;
       var o = this.options;
       var menu = this.menu;
       var checkboxContainer = this.checkboxContainer;
-      var optgroups = [];
       var html = "";
+      var $dropdown = $("<ul/>").addClass('ui-multiselect-checkboxes ui-helper-reset');
       var id = el.attr('id') || multiselectID++; // unique ID for the label & option tags
+
+      function makeItem(option, isInOptionGroup) {
+        var title = option.title ? option.title : null;
+        var value = option.value;
+        var inputID = 'ui-multiselect-' + multiselectID + '-' + (option.id || id + '-option-' + inputIdCounter++);
+        var isDisabled = option.disabled;
+        var isSelected = option.selected;
+        var labelClasses = [ 'ui-corner-all' ];
+        var liClasses = [];
+
+        if(isDisabled) {
+          liClasses.push('ui-multiselect-disabled');
+          labelClasses.push('ui-state-disabled');
+        }
+        if(option.className) {
+          liClasses.push(option.className);
+        }
+        if(isSelected && !o.multiple) {
+          labelClasses.push('ui-state-active');
+        }
+        if(isInOptionGroup) {
+          liClasses.push('ui-multiselect-optgrp-child');
+        }
+
+        var $item = $("<li/>").addClass(liClasses.join(' '));
+        var $label = $("<label/>").attr({
+          "for": inputID,
+          "title": title
+        }).addClass(labelClasses.join(' ')).appendTo($item);
+        var $input = $("<input/>").attr({
+          "name": "multiselect_" + id,
+          "type": o.multiple ? "checkbox" : "radio",
+          "value": value,
+          "title": title,
+          "id": inputID,
+          "checked": isSelected ? "checked" : null,
+          "aria-selected": isSelected ? "true" : null,
+          "disabled": isDisabled ? "disabled" : null,
+          "aria-disabled": isDisabled ? "true" : null
+        }).appendTo($label);
+
+        $("<span/>").text($(option).text()).appendTo($label);
+
+        return $item;
+      }//makeItem
 
       // update header link container visibility if needed
       if (this.options.header) {
@@ -39854,71 +39924,25 @@ function log() {
         }
       }
 
-      // build items
-      el.find('option').each(function(i) {
+      //Turn all the options and optiongroups into list items
+      el.children().each(function(i) {
         var $this = $(this);
-        var parent = this.parentNode;
-        var description = this.innerHTML;
-        var title = this.title === "" ? this.textContent : this.title;
-        var value = this.value;
-        var inputID = 'ui-multiselect-' + multiselectID + '-' + (this.id || id + '-option-' + i);
-        var isDisabled = this.disabled;
-        var isSelected = this.selected;
-        var labelClasses = [ 'ui-corner-all' ];
-        var liClasses = (isDisabled ? 'ui-multiselect-disabled ' : ' ') + this.className;
-        var optLabel;
 
-        // is this an optgroup?
-        if(parent.tagName === 'OPTGROUP') {
-          optLabel = parent.getAttribute('label');
+        if(this.tagName === 'OPTGROUP') {
+          var $groupLabel = $("<li/>").addClass('ui-multiselect-optgroup-label ' + this.className).appendTo($dropdown);
+          var $link = $("<a/>").attr("href", "#").text(this.getAttribute('label')).appendTo($groupLabel);
 
-          // has this optgroup been added already?
-          if($.inArray(optLabel, optgroups) === -1) {
-            var optLabelEscaped = optLabel.replace(/&/g, '&amp;')
-              .replace(/>/g, '&gt;')
-              .replace(/</g, '&lt;')
-              .replace(/'/g, '&#39;')
-              .replace(/\//g, '&#x2F;')
-              .replace(/"/g, '&quot;');
-            html += '<li class="ui-multiselect-optgroup-label ' + parent.className + '"><a href="#">' + optLabelEscaped + '</a></li>';
-            optgroups.push(optLabel);
-          }
+          $this.children().each(function() {
+            var $listItem = makeItem(this, true).appendTo($dropdown);
+          });
+        } else {
+          var $listItem = makeItem(this).appendTo($dropdown);
         }
 
-        if(isDisabled) {
-          labelClasses.push('ui-state-disabled');
-        }
-
-        // browsers automatically select the first option
-        // by default with single selects
-        if(isSelected && !o.multiple) {
-          labelClasses.push('ui-state-active');
-        }
-
-        html += '<li class="' + liClasses + '">';
-
-        // create the label
-        html += '<label for="' + inputID + '" title="' + title + '" class="' + labelClasses.join(' ') + '">';
-        html += '<input id="' + inputID + '" name="multiselect_' + id + '" type="' + (o.multiple ? "checkbox" : "radio") + '" value="' + value + '" title="' + title + '"';
-
-        // pre-selected?
-        if(isSelected) {
-          html += ' checked="checked"';
-          html += ' aria-selected="true"';
-        }
-
-        // disabled?
-        if(isDisabled) {
-          html += ' disabled="disabled"';
-          html += ' aria-disabled="true"';
-        }
-
-        // add the title and close everything off
-        html += ' /><span>' + description + '</span></label></li>';
       });
 
-      // insert into the DOM
-      checkboxContainer.html(html);
+      this.menu.find(".ui-multiselect-checkboxes").remove();
+      this.menu.append($dropdown);
 
       // cache some moar useful elements
       this.labels = menu.find('label');
@@ -39951,7 +39975,7 @@ function log() {
         if($.isFunction(o.selectedText)) {
           value = o.selectedText.call(this, numChecked, $inputs.length, $checked.get());
         } else if(/\d/.test(o.selectedList) && o.selectedList > 0 && numChecked <= o.selectedList) {
-          value = $checked.map(function() { return $(this).next().text(); }).get().join(', ');
+          value = $checked.map(function() { return $(this).next().text(); }).get().join(o.selectedListSeparator);
         } else {
           value = o.selectedText.replace('#', numChecked).replace('#', $inputs.length);
         }
@@ -40036,7 +40060,7 @@ function log() {
         e.preventDefault();
 
         var $this = $(this);
-        var $inputs = $this.parent().nextUntil('li.ui-multiselect-optgroup-label').find('input:visible:not(:disabled)');
+        var $inputs = $this.parent().nextUntil(':not(.ui-multiselect-optgrp-child)').find('input:visible:not(:disabled)');
         var nodes = $inputs.get();
         var label = $this.parent().text();
 
@@ -40085,11 +40109,12 @@ function log() {
       .delegate('input[type="checkbox"], input[type="radio"]', 'click.multiselect', function(e) {
         var $this = $(this);
         var val = this.value;
+        var optionText = $this.parent().find("span").text();
         var checked = this.checked;
         var tags = self.element.find('option');
 
         // bail if this input is disabled or the event is cancelled
-        if(this.disabled || self._trigger('click', e, { value: val, text: this.title, checked: checked }) === false) {
+        if(this.disabled || self._trigger('click', e, { value: val, text: optionText, checked: checked }) === false) {
           e.preventDefault();
           return;
         }
@@ -40149,16 +40174,33 @@ function log() {
         setTimeout($.proxy(self.refresh, self), 10);
       });
     },
-
+    _getMinWidth: function() {
+      var minVal = this.options.minWidth;
+      var width = 0;
+      switch (typeof minVal) {
+        case 'number':
+          width = minVal;
+          break;
+        case 'string':
+          var lastChar = minVal[ minVal.length -1 ];
+          width = minVal.match(/\d+/);
+          if(lastChar === '%') {
+            width = this.element.parent().outerWidth() * (width/100);
+          } else {
+            width = parseInt(minVal, 10);
+          }
+          break;
+      }
+      return width;
+    },
     // set button width
     _setButtonWidth: function() {
       var width = this.element.outerWidth();
-      var o = this.options;
+      var minVal = this._getMinWidth();
 
-      if(/\d/.test(o.minWidth) && width < o.minWidth) {
-        width = o.minWidth;
+      if(width < minVal) {
+        width = minVal;
       }
-
       // set widths
       this.button.outerWidth(width);
     },
@@ -40166,7 +40208,7 @@ function log() {
     // set menu width
     _setMenuWidth: function() {
       var m = this.menu;
-      var width = (this.button.outerWidth() <= 0) ? this.options.minWidth : this.button.outerWidth();
+      var width = (this.button.outerWidth() <= 0) ? this._getMinWidth() : this.button.outerWidth();
       m.outerWidth(this.options.menuWidth || width);
     },
 
@@ -40225,15 +40267,16 @@ function log() {
       this.update();
 
       // gather an array of the values that actually changed
-      var values = $inputs.map(function() {
-        return this.value;
-      }).get();
+      var values = {};
+      $inputs.each(function() {
+        values[this.value] = true;
+      });
 
       // toggle state on original option tags
       this.element
         .find('option')
         .each(function() {
-          if(!this.disabled && $.inArray(this.value, values) > -1) {
+          if(!this.disabled && values[this.value]) {
             self._toggleState('selected', flag).call(this);
           }
         });
@@ -40253,7 +40296,7 @@ function log() {
       if(flag) {
         // remember which elements this widget disabled (not pre-disabled)
         // elements, so that they can be restored if the widget is re-enabled.
-        inputs = inputs.filter(':enabled').data(key, true)
+        inputs = inputs.filter(':enabled').data(key, true);
       } else {
         inputs = inputs.filter(function() {
           return $.data(this, key) === true;
@@ -40440,7 +40483,7 @@ function log() {
           break;
         case 'minWidth':
         case 'menuWidth':
-          this.options[key] = parseInt(value, 10);
+          this.options[key] = value;
           this._setButtonWidth();
           this._setMenuWidth();
           break;
@@ -40461,166 +40504,14 @@ function log() {
           break;
         case 'position':
           this.position();
+          break;
+        case 'selectedListSeparator':
+          this.options[key] = value;
+          this.button[0].defaultValue = this.update();
+          break;
       }
 
       $.Widget.prototype._setOption.apply(this, arguments);
-    }
-  });
-
-})(jQuery);
-
-/* jQuery Notify UI Widget 1.5 by Eric Hynds
- * http://www.erichynds.com/jquery/a-jquery-ui-growl-ubuntu-notification-widget/
- *
- * Depends:
- *   - jQuery 1.4+
- *   - jQuery UI 1.8 widget factory
- *
- * Dual licensed under the MIT and GPL licenses:
- *   http://www.opensource.org/licenses/mit-license.php
- *   http://www.gnu.org/licenses/gpl.html
-*/
-(function($){
-
-  $.widget("ech.notify", {
-
-    options: {
-      speed: 500,
-      expires: 5000,
-      stack: "below",
-      custom: false,
-      queue: false
-    },
-
-    _create: function(){
-      var self = this;
-      this.templates = {};
-      this.keys = [];
-
-      // build and save templates
-      this.element.addClass("ui-notify").children().addClass("ui-notify-message ui-notify-message-style").each(function(i){
-        var key = this.id || i;
-        self.keys.push(key);
-        self.templates[key] = $(this).removeAttr("id").wrap("<div></div>").parent().html(); // because $(this).andSelf().html() no workie
-      }).end().empty().show();
-    },
-
-    create: function(template, msg, opts){
-      if(typeof template === "object"){
-        opts = msg;
-        msg = template;
-        template = null;
-      }
-
-      var tpl = this.templates[ template || this.keys[0]];
-
-      // remove default styling class if rolling w/ custom classes
-      if(opts && opts.custom){
-        tpl = $(tpl).removeClass("ui-notify-message-style").wrap("<div></div>").parent().html();
-      }
-
-      this.openNotifications = this.openNotifications || 0;
-
-      // return a new notification instance
-      return new $.ech.notify.instance(this)._create(msg, $.extend({}, this.options, opts), tpl);            
-    }
-  });
-
-  // instance constructor
-  $.extend($.ech.notify, {
-    instance: function(widget){
-      this.__super = widget;
-      this.isOpen = false;
-    }
-  });
-
-  // instance methods
-  $.extend($.ech.notify.instance.prototype, {
-
-    _create: function(params, options, template){
-      this.options = options;
-
-      var self = this,
-
-      // build html template
-      html = template.replace(/T(?:\{|%7B)(.*?)(?:\}|%7D)/g, function($1, $2){
-        return ($2 in params) ? params[$2] : '';
-      }),
-
-      // the actual message
-      m = (this.element = $(html)),
-
-      // close link
-      closelink = m.find(".ui-notify-close");
-
-      // clickable?
-      if(typeof this.options.click === "function"){
-        m.addClass("ui-notify-click").bind("click", function(e){
-          self._trigger("click", e, self);
-        });
-      }
-
-      // show close link?
-      if(closelink.length){
-        closelink.bind("click", function(){
-          self.close();
-          return false;
-        });
-      }
-
-      this.__super.element.queue("notify", function(){
-        self.open();
-
-        // auto expire?
-        if(typeof options.expires === "number" && options.expires > 0){
-          setTimeout($.proxy(self.close, self), options.expires);
-        }
-      });
-
-      if(!this.options.queue || this.__super.openNotifications <= this.options.queue - 1) {
-        this.__super.element.dequeue("notify");
-      }
-
-      return this;
-    },
-
-    close: function(){
-      var speed = this.options.speed;
-
-      this.element.fadeTo(speed, 0).slideUp(speed, $.proxy(function(){
-        this._trigger("close");
-        this.isOpen = false;
-        this.element.remove();
-        this.__super.openNotifications -= 1;
-        this.__super.element.dequeue("notify");
-      }, this));
-
-      return this;
-    },
-
-    open: function(){
-      if(this.isOpen || this._trigger("beforeopen") === false){
-        return this;
-      }
-
-      var self = this;
-
-      this.__super.openNotifications += 1;
-
-      this.element[this.options.stack === "above" ? "prependTo" : "appendTo"](this.__super.element).css({ display:"none", opacity:"" }).fadeIn(this.options.speed, function(){
-        self._trigger("open");
-        self.isOpen = true;
-      });
-
-      return this;
-    },
-
-    widget: function(){
-      return this.element;
-    },
-
-    _trigger: function(type, e, instance){
-      return this.__super._trigger.call( this, type, e, instance );
     }
   });
 
