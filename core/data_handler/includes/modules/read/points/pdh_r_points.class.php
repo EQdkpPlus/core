@@ -433,9 +433,9 @@ if ( !class_exists( "pdh_r_points" ) ) {
 				return $this->points[$memberid][$multidkpid]['multi'];
 			}
 			
-			if(!isset($this->arrCalculatedSingle[$memberid.'_'.$multidkp_id])){
+			if(!isset($this->arrCalculatedSingle[$memberid.'_'.$multidkpid])){
 				$this->calculate_single_points($memberid, $multidkpid);
-				$this->arrCalculatedSingle[$memberid.'_'.$multidkp_id] = 1;
+				$this->arrCalculatedSingle[$memberid.'_'.$multidkpid] = 1;
 			}
 
 			//twink stuff

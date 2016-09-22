@@ -48,19 +48,19 @@ class Manage_Members extends page_generic {
 		echo($this->user->lang('uc_savedmsg_roles'));
 		exit;
 	}
-	
+
 	public function process_set_active(){
 		$intMemberID = $this->in->get('setactive', 0);
 		$this->pdh->put('member', 'change_status', array($intMemberID, 1));
-		
+
 		$messages[] = array('title' => $this->user->lang('save_suc'), 'text' => $this->user->lang('mems_status_change').$this->pdh->get('member', 'name', array($intMemberID)), 'color' => 'green');
 		$this->display($messages);
 	}
-	
+
 	public function process_set_inactive(){
 		$intMemberID = $this->in->get('setinactive', 0);
 		$this->pdh->put('member', 'change_status', array($intMemberID, 0));
-		
+
 		$messages[] = array('title' => $this->user->lang('save_suc'), 'text' => $this->user->lang('mems_status_change').$this->pdh->get('member', 'name', array($intMemberID)), 'color' => 'green');
 		$this->display($messages);
 	}
@@ -283,7 +283,7 @@ class Manage_Members extends page_generic {
 			$('.cdefroledd').change( function(){
 				$.post('manage_members.php".$this->SID."&link_hash=".$this->CSRFGetToken('defrolechange')."', { defrolechange: $(this).val(), defrolechange_memberid: $(this).attr('name').replace('defaultrole_', '') },
 					function(data){
-						$('#notify_container').notify('create', 'success', {text: data,title: '',custom: true,},{expires: 3000, speed: 1000});
+						system_message(data, 'success');
 					});
 			});
 		", 'docready');

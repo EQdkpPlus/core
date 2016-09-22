@@ -82,40 +82,9 @@ if (!class_exists("jquery")) {
 			// new toast notifications
 			$this->init_toast();
 
-			// set the static html for notification
-			$this->tpl->staticHTML('
-				<div id="notify_container">
-					<div id="default"  class="notify_default">
-						<a class="ui-notify-close ui-notify-cross" href="#">x</a>
-						<h1>T{title}</h1>
-						<p>T{text}</p>
-					</div>
-
-					<div id="error" class="notify_error">
-						<a class="ui-notify-close ui-notify-cross" href="#">x</a>
-						<div style="float:left;margin:0 10px 0 0"><i class="fa fa-times fa-3x"></i></div>
-						<h1>T{title}</h1>
-						<p>T{text}</p>
-					</div>
-
-					<div id="success" class="notify_success">
-						<a class="ui-notify-close ui-notify-cross" href="#">x</a>
-						<div style="float:left;margin:0 10px 0 0"><i class="fa fa-check fa-3x"></i></div>
-						<h1>T{title}</h1>
-						<p>T{text}</p>
-					</div>
-
-					<div id="hint" class="notify_hint">
-						<a class="ui-notify-close ui-notify-cross" href="#">x</a>
-						<div style="float:left;margin:0 10px 0 0"><i class="fa fa-exclamation-triangle fa-3x"></i></div>
-						<h1>T{title}</h1>
-						<p>T{text}</p>
-					</div>
-				</div>');
-				$this->tpl->add_js('$("#notify_container").notify();', 'docready');
-				$this->tpl->add_js('$(".lightbox, a[rel=\'lightbox\']").colorbox({rel:"lightbox", transition:"none", maxWidth:"90%", maxHeight:"90%"});', 'docready');
-				$this->tpl->add_js('$("time.datetime").relativeTime();', 'docready');
-				$this->tpl->add_js('$(".equalto").change(function(){
+			$this->tpl->add_js('$(".lightbox, a[rel=\'lightbox\']").colorbox({rel:"lightbox", transition:"none", maxWidth:"90%", maxHeight:"90%"});', 'docready');
+			$this->tpl->add_js('$("time.datetime").relativeTime();', 'docready');
+			$this->tpl->add_js('$(".equalto").change(function(){
 					field1	= $("#" + $(this).data("equalto")).val();
 					field2	= $(this).val();
 					console.log($(this).next("span.errormessage"));
@@ -125,7 +94,7 @@ if (!class_exists("jquery")) {
 						$(this).next("span.errormessage").hide();
 					}
 				});', 'docready');
-				$this->tpl->add_js("function JQisLocalStorageNameSupported() {
+			$this->tpl->add_js("function JQisLocalStorageNameSupported() {
 					var testKey = 'test', storage = window.sessionStorage;
 					try {
 						storage.setItem(testKey, '1');
@@ -281,16 +250,29 @@ if (!class_exists("jquery")) {
 				mssgstack		= (options.hasOwnProperty('stack')) ? options.stack : 5;
 				mssgclosebutton = (options.hasOwnProperty('closebutton')) ? options.closebutton : true;
 				mssgsticky		= (options.hasOwnProperty('sticky')) ? options.sticky : 3000;
-console.log('sticky: ' + mssgsticky)
-				$.toast({
-					heading:			headertxt,
-					text:				text,
-					icon:				mssgicon,
-					position:			mssgposition,
-					stack:				mssgstack,
-					allowToastClose:	mssgclosebutton,
-					hideAfter:			mssgsticky
-				});
+				mssgparent		= (options.hasOwnProperty('parent')) ? true : false;
+
+				if(mssgparent){
+					$.toast({
+						heading:				headertxt,
+						text:					text,
+						icon:					mssgicon,
+						position:			mssgposition,
+						stack:				mssgstack,
+						allowToastClose:	mssgclosebutton,
+						hideAfter:			mssgsticky
+					}).parent();
+				}else{
+					$.toast({
+						heading:				headertxt,
+						text:					text,
+						icon:					mssgicon,
+						position:			mssgposition,
+						stack:				mssgstack,
+						allowToastClose:	mssgclosebutton,
+						hideAfter:			mssgsticky
+					});
+				}
 			}");
 		}
 
@@ -680,41 +662,6 @@ console.log('sticky: ' + mssgsticky)
 			}
 			$acccode  .= '</div>';
 			return $acccode;
-		}
-
-				/**
-		* notfication messages
-		*
-		* @param $msg		The Message to show
-		* @param $options	Option List: life,sticky,speed, header,theme
-		* @return CHAR
-		*/
-		public function notify($msg, $options){
-			$parenttag	=(isset($options['parent']) && $options['parent'] == true) ? 'parent.' : '';
-			$JSclick	= $JSoptions = array();
-
-			$JSclick[]		= "text: '".$this->sanitize($msg, true)."'";
-			if(is_array($options)){
-				if(isset($options['header']) && !empty($options['header'])){	$JSclick[]		= "title: '".$this->sanitize($options['header'])."'";}
-
-				// events (http://www.erichynds.com/blog/a-jquery-ui-growl-ubuntu-notification-widget)
-				if(isset($options['beforeopen'])){	$JSoptions[]	= "beforeopen: function(e,instance){ ".$options['beforeopen']."}";}
-				if(isset($options['open'])){		$JSoptions[]	= "open: function(e,instance){ ".$options['open']."}";}
-				if(isset($options['close'])){		$JSoptions[]	= "close: function(e,instance){ ".$options['close']."}";}
-				if(isset($options['click'])){		$JSoptions[]	= "click: function(e,instance){ ".$options['click']."}";}
-
-				// the options of the notify
-				if(isset($options['stack'])){	$JSoptions[]	= "stack: '".$options['stack']."'";}
-				if(isset($options['custom'])){	$JSoptions[]	= "custom: true";}
-			}
-
-			// some fix variables
-			$JSoptions[]	= 'expires: '.((isset($options['expires']) && (int)$options['expires'] > 0) ? $options['expires'] : 'false');
-			$JSoptions[]	= 'speed: '.((isset($options['speed'])) ? $options['speed'] : 1000);
-			$theme			= (isset($options['theme'])) ? $options['theme'] : 'default';
-
-			// generate the output
-			$this->tpl->add_js($parenttag.'$("#notify_container").notify("create", "'.$theme.'", '.$this->gen_options($JSclick).','.$this->gen_options($JSoptions).');', 'docready');
 		}
 
 		public function lightbox($id, $options){

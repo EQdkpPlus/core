@@ -67,13 +67,13 @@ function add_template(){
 					$('#delete_template_button').show();
 				}
 				console.log(mode);
-				$('#notify_container').notify('create', 'success', {text: {L_massmail_save_success|jsencode},title: '',custom: true,},{expires: 3000, speed: 1000});
+				system_message('{L_massmail_save_success|jsencode}', 'success');
 			} else {
-				$('#notify_container').notify('create', 'error', {text: {L_massmail_save_nosuccess|jsencode},title: '',custom: true,},{expires: 30000, speed: 1000});
+				system_message('{L_massmail_save_nosuccess|jsencode}', 'error');
 			}
 		})
 		.fail(function(data) {
-			$('#notify_container').notify('create', 'error', {text: {L_massmail_save_nosuccess|jsencode},title: '',custom: true,},{expires: 30000, speed: 1000});
+			system_message('{L_massmail_save_nosuccess|jsencode}', 'error');
 		});
 
 	}

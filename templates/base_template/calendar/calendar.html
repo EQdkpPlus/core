@@ -208,7 +208,7 @@
 						revertFunc();
 					},
 					success: function(msg){
-						$("#notify_container").notify("create", "success", {text: msg });
+						system_message(msg, 'success');
 					}
 				});
 			},
@@ -224,7 +224,7 @@
 						revertFunc();
 					},
 					success: function(msg){
-						$("#notify_container").notify("create", "success", {text: msg });
+						system_message(msg, 'success');
 					}
 				});
 			},

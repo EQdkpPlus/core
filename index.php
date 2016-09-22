@@ -403,8 +403,8 @@ class controller extends gen_class {
 					//Init Inline Editor
 					$editor->inline_editor_simple('.headline_inlineedit', array(
 							'setup' => 'editor.on("blur", function(e) {
-				            	save_inline_editor_simple(".headline_inlineedit", e);
-				        	});',
+								save_inline_editor_simple(".headline_inlineedit", e);
+							});',
 							'autofocus' => true,
 							'start_onload' => false,
 					));
@@ -421,7 +421,7 @@ class controller extends gen_class {
 					$.post( "'.$this->controller_path.'EditArticle/'.$this->SID.'&save_headline=1&aid='.$intArticleID.'&link_hash='.$csrf.'",
 					{ headline: newHeadline }, function( data ) {
 						if (data.status != undefined && data.status == true){
-							$("#notify_container").notify("create", "success", {text: '.$this->tpl->handleModifier($this->user->lang('success_create_article'), 'jsencode').',title: '.$this->tpl->handleModifier($this->user->lang('success'), 'jsencode').',custom: true,},{expires: 3000, speed: 1000});
+							system_message("'.$this->tpl->handleModifier($this->user->lang('success_create_article'), 'jsencode').'", "success");
 						}
 					}, "json");
 			}
@@ -449,7 +449,7 @@ class controller extends gen_class {
 					$.post( "'.$this->controller_path.'EditArticle/'.$this->SID.'&save_article=1&aid='.$intArticleID.'&link_hash='.$csrf_article.'",
 					{ text: newText }, function( data ) {
 						if (data.status != undefined && data.status == true){
-							$("#notify_container").notify("create", "success", {text: '.$this->tpl->handleModifier($this->user->lang('success_create_article'), 'jsencode').',title: '.$this->tpl->handleModifier($this->user->lang('success'), 'jsencode').',custom: true,},{expires: 3000, speed: 1000});
+							system_message('.$this->tpl->handleModifier($this->user->lang('success_create_article'), 'jsencode').', "success");
 						}
 					}, "json");
 			}

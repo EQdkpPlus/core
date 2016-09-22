@@ -126,7 +126,7 @@ class mycharacters_pageobject extends pageobject {
 				$.post('".$this->SID."&link_hash=".$this->CSRFGetToken('maincharchange')."', { maincharchange: $( \"input:radio[name=mainchar]:checked\" ).val() },
 					function(data){
 						$('#connection_submit').prop('disabled', false);
-						$('#notify_container').notify('create', 'success', {text: data,title: '',custom: true,},{expires: 3000, speed: 1000});
+						system_message(data, 'success');
 					});
 				});
 			$('.cdefroledd').change( function(){
@@ -134,7 +134,7 @@ class mycharacters_pageobject extends pageobject {
 				$.post('".$this->SID."&link_hash=".$this->CSRFGetToken('defrolechange')."', { defrolechange: $(this).val(), defrolechange_memberid: $(this).attr('name').replace('defaultrole_', '') },
 					function(data){
 						$('#connection_submit').prop('disabled', false);
-						$('#notify_container').notify('create', 'success', {text: data,title: '',custom: true,},{expires: 3000, speed: 1000});
+						system_message(data, 'success');
 					});
 			});
 		", 'docready');
@@ -173,7 +173,7 @@ class mycharacters_pageobject extends pageobject {
 			// JS Code
 			'JS_CONNECTIONS'		=> $this->jquery->MultiSelect('member_id', $mselect_list, $mselect_selected, array('width' => 350, 'height' => 180, 'filter'=>true)),
 			'ADD_MENU'				=> $this->core->build_dropdown_menu('<i class="fa fa-plus fa-lg"> </i> '.$this->user->lang('uc_add_char'), $cm_addmenu, 'floatRight'),
-		
+
 			'S_SHOW_NO_CONN_INFO'	=> $show_no_conn_info,
 		));
 
