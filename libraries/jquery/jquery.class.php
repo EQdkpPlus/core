@@ -281,16 +281,29 @@ if (!class_exists("jquery")) {
 				mssgstack		= (options.hasOwnProperty('stack')) ? options.stack : 5;
 				mssgclosebutton = (options.hasOwnProperty('closebutton')) ? options.closebutton : true;
 				mssgsticky		= (options.hasOwnProperty('sticky')) ? options.sticky : 3000;
-console.log('sticky: ' + mssgsticky)
-				$.toast({
-					heading:			headertxt,
-					text:				text,
-					icon:				mssgicon,
-					position:			mssgposition,
-					stack:				mssgstack,
-					allowToastClose:	mssgclosebutton,
-					hideAfter:			mssgsticky
-				});
+				mssgparent		= (options.hasOwnProperty('parent')) ? true : false;
+
+				if(mssgparent){
+					$.toast({
+						heading:				headertxt,
+						text:					text,
+						icon:					mssgicon,
+						position:			mssgposition,
+						stack:				mssgstack,
+						allowToastClose:	mssgclosebutton,
+						hideAfter:			mssgsticky
+					}).parent();
+				}else{
+					$.toast({
+						heading:				headertxt,
+						text:					text,
+						icon:					mssgicon,
+						position:			mssgposition,
+						stack:				mssgstack,
+						allowToastClose:	mssgclosebutton,
+						hideAfter:			mssgsticky
+					});
+				}
 			}");
 		}
 

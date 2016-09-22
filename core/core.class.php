@@ -73,18 +73,27 @@ class core extends gen_class {
 			if($showalways || (!$showalways && $this->header_format != 'simple')){
 				switch($kind){
 					case 'error':
-					case 'red': $kkind = 'error';
+					case 'red':
+						$kkind	= 'error';
+						$ktitle	= $this->user->lang('error');
 						break;
 					case 'hint':
-					case 'orange': $kkind = 'hint';
-							break;
+					case 'orange':
+						$kkind	= 'warning';
+						$ktitle	= $this->user->lang('warning');
+						break;
 					case 'success':
 					case 'ok':
-					case 'green': $kkind = 'success';
+					case 'green':
+						$kkind	= 'success';
+						$ktitle	= $this->user->lang('success');
 						break;
-					default: $kkind = 'default';
+					default:
+						$kkind	= false;
+						$ktitle	= $title;
 				}
-				$this->jquery->notify($text, array('header' => $title,'expires' => (($showalways) ? false : 3000), 'custom'=>true,'theme'  => $kkind, 'parent' => $parent));
+				$this->tpl->add_js("custom_message(".$text.", {headertxt:'".$ktitle."',mssgicon:'".$kkind."', mssgsticky:".(($showalways) ? false : 3000).", parent:".$parent."})");
+				#$this->jquery->notify($text, array('header' => $title,'expires' => , 'custom'=>true,'theme'  => $kkind, 'parent' => $parent));
 			}
 		}
 
@@ -186,7 +195,7 @@ class core extends gen_class {
 				}
 				$this->core->message($this->user->lang('email_must_confirm_note'), '', 'hint');
 			}
-			
+
 
 			// Check if gzip is enabled & send the HTTP headers
 			if ( $this->config->get('enable_gzip') == '1' ){
@@ -526,7 +535,7 @@ class core extends gen_class {
 
 		//Returns all possible Menu Items
 		public function menu_items($show_hidden = false){
-			if(isset($this->cache['menu_items'.(($show_hidden) ? '_h' : '')])) return $this->cache['menu_items'.(($show_hidden) ? '_h' : '')];	
+			if(isset($this->cache['menu_items'.(($show_hidden) ? '_h' : '')])) return $this->cache['menu_items'.(($show_hidden) ? '_h' : '')];
 			$arrItems = array(
 				array('link' => $this->controller_path_plain.$this->SID,				'text' => $this->user->lang('home'), 'static' => 1, 'default_hide' => 1, 'hidden' => 1),
 				array('link' => $this->controller_path_plain.'User'.$this->routing->getSeoExtension().$this->SID, 'text' => $this->user->lang('user_list'),'check' => 'u_userlist', 'static' => 1, 'default_hide' => 1, 'hidden' => 1),
