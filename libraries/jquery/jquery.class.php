@@ -55,7 +55,7 @@ if (!class_exists("jquery")) {
 
 			// Load the core css & js files
 			$minified_or_not	= (DEBUG) ? '' : '.min';
-			$this->tpl->css_file($this->path.'core/core'.$minified_or_not.'.css');
+			$this->tpl->css_file($this->path.'core/core.css');
 			$this->tpl->js_file($this->path.'core/core'.$minified_or_not.'.js', 'direct', -100);
 
 			// add a few variables to javascript (head tag)
