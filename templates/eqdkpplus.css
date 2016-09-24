@@ -154,15 +154,6 @@ td.w10p, tr.w10p, th.w10p{
 	vertical-align: middle;
 	margin-right: 3px;
 }
-
-.bi_persona{
-	background:url(../images/global/persona.png) no-repeat 2px center;
-	height: 16px;
-	width: 20px;
-	display: inline-block;
-	vertical-align: middle;
-	margin-right: 3px;
-}
 .bi_battlenet {
 	background:url(../images/global/bnet.png) no-repeat 2px center;
 	height: 16px;
@@ -203,15 +194,6 @@ td.w10p, tr.w10p, th.w10p{
 }
 
 /* Full Calendar Button Hack */
-.cal-button {
-	height: 24px;
-}
-
-.cal-button span {
-	position: relative;
-	top: -3px;
-}
-
 .calendar-filtertoolbar {
 	margin-bottom: 10px;
 }
