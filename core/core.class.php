@@ -1162,6 +1162,9 @@ class core extends gen_class {
 					$error_message[] = $this->user->lang($cacheerrors);
 				}
 			}
+			
+			//Check if EQdkp Plus was moved and data folder has changed
+			$this->pfh->check_cachefolder();
 
 			// check php-Version
 			if (phpversion() < VERSION_PHP_RQ){

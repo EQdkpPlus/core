@@ -266,6 +266,8 @@ class inst_settings extends install_generic {
 		$this->config_data['default_date_short'] = (isset($this->lang['date_short_format'])) ? $this->lang['date_short_format'] : 'm/d/Y';
 		$this->config_data['default_date_long'] = (isset($this->lang['date_long_format'])) ? $this->lang['date_long_format'] : 'F j, Y';
 		$this->config_data['eqdkp_layout']		= 'normal';
+		$this->config_data['data_folder']		= md5($this->table_prefix.$this->dbname);
+		
 		$this->config_data['pdc'] = array(
 			'mode' => 'file',
 			'prefix' => $this->table_prefix,

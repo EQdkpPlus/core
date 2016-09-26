@@ -58,6 +58,28 @@ if (!class_exists("filehandler_php")) {
 		public function get_cachefolder($blnPlain=false){
 			return (($blnPlain) ? $this->CacheFolderPlain : $this->CacheFolder);
 		}
+		
+		public function check_cachefolder(){
+			$strRecentCachefolder = md5($this->table_prefix.$this->dbname);
+			$strStoredCachefolder = $this->config->get('data_folder');
+			
+			if($strStoredCachefolder != ""){
+				if($strRecentCachefolder != $strStoredCachefolder){
+					//Try to rename the old one
+					$strOldFolder = $this->root_path.'data/'.$strStoredCachefolder.'/';
+					if(is_dir($strOldFolder)){
+						$this->Delete($this->CacheFolder);
+						$this->rename($strOldFolder, $this->CacheFolder);
+					}
+					
+					$this->config->set('data_folder', $strRecentCachefolder);
+				}
+			} else {
+				$this->config->set('data_folder', $strRecentCachefolder);
+			}
+			
+			return true;
+		}
 
 		//Creates an empty index.html to prevent directory-listening if .htaccess doesn't work
 		private function make_index($path, $plugin=false){

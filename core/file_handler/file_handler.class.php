@@ -181,6 +181,10 @@ if (!class_exists("file_handler")) {
 		public function get_cachefolder($blnPlain=false){
 			return $this->fhandler->get_cachefolder($blnPlain);
 		}
+		
+		public function check_cachefolder(){
+			return $this->fhandler->check_cachefolder();
+		}
 
 		/**
 		* Check if the cache is writable

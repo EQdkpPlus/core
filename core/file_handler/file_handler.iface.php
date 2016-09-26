@@ -44,6 +44,7 @@ if ( !interface_exists( "plus_filehandler" ) ){
 		public function is_writable($file, $testfile=false);
 		public function get_errors();
 		public function get_cachefolder($blnPlain=false);
+		public function check_cachefolder();
 	}//end interface
 }//end if
 ?>
