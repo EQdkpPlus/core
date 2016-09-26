@@ -155,7 +155,7 @@ class cronjobs extends gen_class {
 			return false;
 		}
 
-		if ($this->crontab[$task_name]['ajax'] === true && !$force_non_ajax){		
+		if ($this->crontab[$task_name]['ajax'] == true && !$force_non_ajax){		
 			if ($force_run){
 				$this->tpl->add_js('$.get("'.$this->server_path.'cronjob.php'.$this->SID.'&task='.$task_name.'&force=true", function( data ) {
 					if (typeof cronjob_admin_callback !== \'undefined\' && $.isFunction(cronjob_admin_callback)){
@@ -258,7 +258,7 @@ class cronjobs extends gen_class {
 				}
 			} elseif ($this->cron_necessary($task_name)) {
 				//Führ nur alle wichtigen aus und verzögere den Rest
-				if ($this->crontab[$task_name]['delay'] === false){
+				if ($this->crontab[$task_name]['delay'] == false){
 					$this->run_cron($task_name);
 					$runcount++;
 				} else {
