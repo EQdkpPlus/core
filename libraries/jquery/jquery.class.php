@@ -249,8 +249,8 @@ if (!class_exists("jquery")) {
 				mssgposition	= (options.hasOwnProperty('position')) ? options.position : 'top-right';
 				mssgstack		= (options.hasOwnProperty('stack')) ? options.stack : 5;
 				mssgclosebutton = (options.hasOwnProperty('closebutton')) ? options.closebutton : true;
-				mssgsticky		= (options.hasOwnProperty('sticky')) ? options.sticky : 3000;
-				mssgparent		= (options.hasOwnProperty('parent')) ? true : false;
+				mssgsticky		= (options.hasOwnProperty('sticky') && options.sticky) ? options.sticky : 3000;
+				mssgparent		= (options.hasOwnProperty('parent') && options.parent) ? true : false;
 
 				if(mssgparent){
 					$.toast({

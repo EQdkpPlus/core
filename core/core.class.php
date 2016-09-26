@@ -92,7 +92,7 @@ class core extends gen_class {
 						$kkind	= false;
 						$ktitle	= $title;
 				}
-				$this->tpl->add_js("custom_message(".$text.", {headertxt:'".$ktitle."',mssgicon:'".$kkind."', mssgsticky:".(($showalways) ? false : 3000).", parent:".$parent."})");
+				$this->tpl->add_js("custom_message('".$this->jquery->sanitize($text)."', {headertxt:'".$this->jquery->sanitize($ktitle)."',mssgicon:'".$kkind."', mssgsticky:".(($showalways) ? 'false' : 3000).", parent:".(($parent) ? 'true' : 'false')."})");
 			}
 		}
 
