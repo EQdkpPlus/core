@@ -623,6 +623,7 @@ $lang = array(
 	"requirements_modulename" => "Module name",
 	"requirements_required" => "Required Version",
 	"requirements_available" => "Available Version",
+	"requirements_warningmessage" => "There seems to be one or more requirements of Eqdkp-Plus not matched. Please check the admnin index for more information.",
 	"adminc_system" => 'System',
 	"adminc_support" => 'Support',
 	"adminc_php_info" => 'Detailed PHP Information',

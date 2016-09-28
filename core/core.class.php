@@ -78,6 +78,7 @@ class core extends gen_class {
 						$ktitle	= $this->user->lang('error');
 						break;
 					case 'hint':
+					case 'warning':
 					case 'orange':
 						$kkind	= 'warning';
 						$ktitle	= $this->user->lang('warning');
@@ -92,7 +93,7 @@ class core extends gen_class {
 						$kkind	= false;
 						$ktitle	= $title;
 				}
-				$this->tpl->add_js("custom_message('".$this->jquery->sanitize($text)."', {headertxt:'".$this->jquery->sanitize($ktitle)."',mssgicon:'".$kkind."', mssgsticky:".(($showalways) ? 'false' : 3000).", parent:".(($parent) ? 'true' : 'false')."})");
+				$this->tpl->add_js("custom_message('".$this->jquery->sanitize($text)."', {headertxt:'".$this->jquery->sanitize($ktitle)."',icon:'".$kkind."', sticky:".(($showalways) ? 'true' : 3000).", parent:".(($parent) ? 'true' : 'false')."})");
 			}
 		}
 
@@ -460,6 +461,13 @@ class core extends gen_class {
 					$message = '<a href="'.$this->routing->build('mycharacters').'">'.$this->user->lang('no_connected_char').'</a>';
 					$message .= '<br /><br /><a href="'.$this->routing->build('mycharacters').'&hide_info=true">'.$this->user->lang('no_connected_char_hide').'</a>';
 					$this->message($message);
+				}
+
+				// System Message for admins if a requirement was not met
+				if($this->user->check_auth('a_', false)){
+					if($this->requirements->getCounts() > 0){
+						$this->message('<a href="'.$this->server_path.'admin/index.php">'.$this->user->lang('requirements_warningmessage').'</a>', '', 'warning');
+					}
 				}
 			}
 			$this->tpl->add_js("var mmocms_header_type = '".$this->header_format."';", 'head_top');
@@ -1162,7 +1170,7 @@ class core extends gen_class {
 					$error_message[] = $this->user->lang($cacheerrors);
 				}
 			}
-			
+
 			//Check if EQdkp Plus was moved and data folder has changed
 			$this->pfh->check_cachefolder();
 
