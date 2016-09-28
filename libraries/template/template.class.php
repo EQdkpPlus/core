@@ -1728,6 +1728,7 @@ class template extends gen_class {
 			'eqdkpRootPath'						=> '"'.$root_path.'"',
 			'eqdkpImagePath'					=> '"'.$root_path.'images/"',
 			'eqdkpTemplateImagePath' 			=> '"'.$root_path.'templates/'.$stylepath.'/images/"',
+			'eqdkpImageURL'						=> '"'.$this->env->link.'templates/'.$stylepath.'/images/"',
 			'eqdkpTemplateBanner' 				=> '"'.$style['banner_img'].'"',
 			'eqdkpBannerImage' 					=> '"'.$style['banner_img'].'"',
 			'eqdkpTemplateBackground' 			=> '"'.$template_background_file.'"',
