@@ -444,7 +444,7 @@ $lang = array(
 "Multi_kontoname_short" => "Kontoname",
 "Jump_to" => "Zum Video auf ",
 "MM_User_Confirm" => "Achtung, soll wirklich DEIN Admin Account ausgewählt werden?? Achtung, wenn Du dir selber die Rechte für das Ändern von User-Berechtigungen nimmst, kann das später nur in der Datenbank wieder rückgängig gemacht werden!! Im Zweifelsfall Bitte abbrechen!",
-"beta_warning" => "ACHTUNG du nutzt eine Beta Version von Eqdkp-Plus! Diese Version ist NICHT für den produktiven Einsatz auf eurem Live-System gedacht. Diese Version wird mit dem Release einer Stable Version nur noch kurze Zeit laufen. Überprüfe <a href=\"".EQDKP_PROJECT_URL."\" >".EQDKP_PROJECT_URL."</a> ob eine Stable Version verfügbar ist!",
+"beta_warning" => "ACHTUNG du nutzt eine Beta Version von EQdkp-Plus! Diese Version ist NICHT für den produktiven Einsatz auf eurem Live-System gedacht. Diese Version wird mit dem Release einer Stable Version nur noch kurze Zeit laufen. Überprüfe <a href=\"".EQDKP_PROJECT_URL."\" >".EQDKP_PROJECT_URL."</a> ob eine Stable Version verfügbar ist!",
 "comment" => "Kommentar",
 "comments" => "Kommentare",
 "comments_write" => "Kommentare schreiben",

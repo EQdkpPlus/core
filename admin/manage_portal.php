@@ -438,7 +438,7 @@ $('.js_reload').change(reload_settings);", 'docready');
 			foreach($arrGroups as $intGroupID){
 				$arrGroupsOut[] = $filter_rights[$intGroupID];
 			}
-			if (count($arrGroupsOut) === 0) $arrGroupsOut[] = $filter_rights[0];
+			//if (count($arrGroupsOut) === 0) $arrGroupsOut[] = $filter_rights[0];
 			$data['perms'] = $arrGroupsOut;
 			
 			// start the description text
