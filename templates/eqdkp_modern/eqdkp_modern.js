@@ -103,7 +103,7 @@ $(function(){
 			}
 		});
 		//Periodic Update of Notifications
-		window.setTimeout(notification_update, 1000*60*5);
+		window.setTimeout("notification_update()", 300000);
 	}
 })
 
@@ -156,5 +156,5 @@ function notification_update(){
 	});
 
 	//5 Minute
-	window.setTimeout("notification_update()", 1000*60*5);
+	window.setTimeout("notification_update()", 300000);
 }
