@@ -270,7 +270,7 @@ if (!class_exists("bbcode")) {
 							$strThumbImage = $this->strImageThumbFolder.$strThumbFilename;
 						}
 
-						return '<a href="'.str_replace($this->root_path, $this->server_path, $strImageURL).'" class="lightbox"><img src="'.str_replace($this->root_path, $this->server_path, $strThumbURL).'" alt="image" /></a>';
+						return '<a href="'.str_replace($this->root_path, $this->server_path, $strImageURL).'" class="lightbox"><img src="'.str_replace($this->root_path, $this->server_path, $strImageURL).'" alt="image" /></a>';
 
 					} else {
 						//No Thumbnail required, return image
