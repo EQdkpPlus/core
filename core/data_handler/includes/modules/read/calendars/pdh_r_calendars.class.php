@@ -132,6 +132,17 @@ if ( !class_exists( "pdh_r_calendars" ) ) {
 		public function get_permissions($id){
 			return 	(isset($this->calendars[$id]['permissions'])) ? unserialize($this->calendars[$id]['permissions']) : 'all';
 		}
+
+		public function get_calendarids4userid($user_id){
+			$calendarids= array();
+			foreach($this->calendars as $calid=>$caldata){
+				$permissions	= $this->get_permissions($calid);
+				if($this->pdh->get('user_groups_users', 'is_in_group', array($user_id, $permissions))){
+					$calendarids[$calid] = $calid;
+				}
+			}
+			return $calendarids;
+		}
 	}//end class
 }//end if
 ?>
