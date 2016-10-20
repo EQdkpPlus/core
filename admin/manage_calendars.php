@@ -112,7 +112,7 @@ class Manage_Calendars extends page_generic {
 				'PRIVATE'		=> $this->pdh->get('calendars', 'private', array($id)),
 				'FEED'			=> $this->pdh->get('calendars', 'feed', array($id)),
 				'RESTRICTED'	=> new hradio('calendars['.$key.'][restricted]', array('value' => $this->pdh->get('calendars', 'restricted', array($id)))),
-				'PERMISSIONS'	=> new hmultiselect('calendars['.$key.'][permissions]', array('options' => $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list'))), 'value' => (($permissionvalue = 'all') ? $this->pdh->get('user_groups', 'id_list')) : $permissionvalue))),
+				'PERMISSIONS'	=> new hmultiselect('calendars['.$key.'][permissions]', array('options' => $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list'))), 'value' => (($permissionvalue = 'all') ? $this->pdh->get('user_groups', 'id_list') : $permissionvalue))),
 			));
 			$key++;
 			$new_id = ($new_id == $id) ? $id+1 : $new_id;
