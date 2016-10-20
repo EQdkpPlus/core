@@ -44,20 +44,21 @@ if ( !class_exists( "pdh_r_calendars" ) ) {
 			if($this->calendars !== NULL){
 				return true;
 			}
-			
+
 			$objQuery = $this->db->query("SELECT * FROM __calendars");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					$this->calendars[$row['id']] = array(
-						'id'				=> $row['id'],
+						'id'					=> $row['id'],
 						'name'				=> $row['name'],
 						'color'				=> $row['color'],
 						'private'			=> $row['private'],
 						'feed'				=> $row['feed'],
-						'system'			=> $row['system'],
+						'system'				=> $row['system'],
 						'type'				=> $row['type'],
 						'restricted'		=> $row['restricted'],
 						'affiliation'		=> $row['affiliation'],
+						'permissions'		=> $row['permissions'],
 					);
 				}
 				$this->pdc->put('pdh_calendars_table', $this->calendars, null);
@@ -126,6 +127,10 @@ if ( !class_exists( "pdh_r_calendars" ) ) {
 
 		public function get_type($id){
 			return (isset($this->calendars[$id])) ? $this->calendars[$id]['type'] : '';
+		}
+
+		public function get_permissions($id){
+			return 	(isset($this->calendars[$id]['permissions'])) ? unserialize($this->calendars[$id]['permissions']) : 'all';
 		}
 	}//end class
 }//end if

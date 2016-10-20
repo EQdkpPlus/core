@@ -34,14 +34,15 @@ if(!class_exists('pdh_w_calendars')) {
 			$this->pdh->enqueue_hook('calendar_update');
 		}
 
-		public function update_calendar($id, $name, $color, $feed, $private, $type, $restricted, $affiliation=false){
-			$old['name']		= $this->pdh->get('calendars', 'name', array($id));
-			$old['feed']		= $this->pdh->get('calendars', 'feed', array($id));
+		public function update_calendar($id, $name, $color, $feed, $private, $type, $restricted, $affiliation=false, $permissions='all'){
+			$old['name']			= $this->pdh->get('calendars', 'name', array($id));
+			$old['feed']			= $this->pdh->get('calendars', 'feed', array($id));
 			$old['private']		= $this->pdh->get('calendars', 'private', array($id));
-			$old['color']		= $this->pdh->get('calendars', 'color', array($id));
-			$old['type']		= $this->pdh->get('calendars', 'type', array($id));
+			$old['color']			= $this->pdh->get('calendars', 'color', array($id));
+			$old['type']			= $this->pdh->get('calendars', 'type', array($id));
 			$old['restricted']	= $this->pdh->get('calendars', 'restricted', array($id));
 			$old['affiliation']	= $this->pdh->get('calendars', 'affiliation', array($id));
+			$old['permissions']	= $this->pdh->get('calendars', 'permissions', array($id));
 			$changes		= false;
 			foreach($old as $varname => $value) {
 				if(${$varname} != $value) {
@@ -56,9 +57,10 @@ if(!class_exists('pdh_w_calendars')) {
 					'color'			=> $color,
 					'type'			=> $type,
 					'restricted'	=> ($restricted) ? 1 : 0,
-					'affiliation'	=> $affiliation
+					'affiliation'	=> $affiliation,
+					'permissions'	=> serialize($permissions),
 				))->execute($id);
-				
+
 				if(!$objQuery) {
 					return false;
 				}
@@ -67,18 +69,19 @@ if(!class_exists('pdh_w_calendars')) {
 			return true;
 		}
 
-		public function add_calendar($id, $name, $color, $feed, $private, $type, $restricted, $affiliation = 'user', $system=0){
+		public function add_calendar($id, $name, $color, $feed, $private, $type, $restricted, $affiliation = 'user', $system=0, $permissions='all'){
 			$objQuery = $this->db->prepare('INSERT INTO __calendars :p')->set(array(
 				'feed'			=> ($feed) ? $feed : '',
 				'name'			=> $name,
-				'system'		=> $system,
+				'system'			=> $system,
 				'color'			=> $color,
 				'private'		=> ($private) ? 1 : 0,
 				'type'			=> $type,
 				'restricted'	=> ($restricted) ? 1 : 0,
 				'affiliation'	=> $affiliation,
+				'permissions'	=> serialize($permissions),
 			))->execute();
-			
+
 			if($objQuery){
 				$id = $objQuery->insertId;
 				$this->pdh->enqueue_hook('calendar_update', array($id));
@@ -94,7 +97,7 @@ if(!class_exists('pdh_w_calendars')) {
 				return true;
 			}
 		}
-		
+
 		public function delete_calendar_byaffiliation($affiliation){
 			if($affiliation != 'core' && $affiliation != ''){
 				$objQuery = $this->db->prepare("DELETE FROM __calendars WHERE affiliation=?")->execute($affiliation);

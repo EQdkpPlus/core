@@ -34,7 +34,7 @@ class update_2300 extends sql_update_task {
 	public function __construct(){
 		parent::__construct();
 
-// combined update 2.3.0.1 to 2.3.0.10
+// combined update 2.3.0.1 to 2.3.0.11
 		$this->langs = array(
 			'english' => array(
 				'update_2300'	=> 'EQdkp Plus 2.3.0',
@@ -68,6 +68,7 @@ class update_2300 extends sql_update_task {
 				28	=> 'Add permission',
 				29	=> 'Add permission',
 				30	=> 'Add Cronjob Table',
+				31 => 'Add permissions field to calendar table',
 			),
 			'german' => array(
 				'update_2300'	=> 'EQdkp Plus 2.3.0',
@@ -100,7 +101,8 @@ class update_2300 extends sql_update_task {
 				27	=> 'Füge Berechtigung hinzu',
 				28	=> 'Füge Berechtigung hinzu',
 				29	=> 'Füge Berechtigung hinzu',
-				30	=> 'Add Cronjob Table',
+				30	=> 'Erstelle Cronjob Tabelle',
+				31 => 'Füge Berechtigungen Feld zu Kalendertabelle hinzu',
 			),
 		);
 
@@ -166,6 +168,8 @@ class update_2300 extends sql_update_task {
 				`next_run` INT(11) UNSIGNED NOT NULL DEFAULT '0',
 				PRIMARY KEY (`id`)
 			) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;",
+			31	=> "ALTER TABLE `__calendars` ADD `permissions` VARCHAR(255) COLLATE utf8_bin NOT NULL DEFAULT 'all' AFTER `affiliation`;",
+			32 => "UPDATE __calendars SET `permissions` = 'all';", 
 		);
 	}
 

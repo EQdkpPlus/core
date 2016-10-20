@@ -111,6 +111,7 @@ class Manage_Calendars extends page_generic {
 				'PRIVATE'		=> $this->pdh->get('calendars', 'private', array($id)),
 				'FEED'			=> $this->pdh->get('calendars', 'feed', array($id)),
 				'RESTRICTED'	=> new hradio('calendars['.$key.'][restricted]', array('value' => $this->pdh->get('calendars', 'restricted', array($id)))),
+				'PERMISSIONS'	=> new hmultiselect('calendars['.$key.'][permissions]', array('options' => $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list'))), 'value' => $this->pdh->get('calendars', 'permissions', array($id)))),
 			));
 			$key++;
 			$new_id = ($new_id == $id) ? $id+1 : $new_id;
@@ -147,7 +148,8 @@ class Manage_Calendars extends page_generic {
 						'color'			=> $this->in->get('calendars:'.$key.':color',''),
 						'private'		=> $this->in->get('calendars:'.$key.':suffix',0),
 						'type'			=> $this->in->get('calendars:'.$key.':type',0),
-						'restricted'	=> $this->in->get('calendars:'.$key.':restricted',0)
+						'restricted'	=> $this->in->get('calendars:'.$key.':restricted',0),
+						'permissions'	=> $this->in->get('calendars:'.$key.':permissions',0)
 					);
 				}
 			}
