@@ -1,4 +1,14 @@
 
+// jQuery Notify (toast-plugin)
+@jqueryNotifyFontColor: #d9d9d9;
+@jqueryNotifyFontColorHover: #fff;
+@jqueryNotifyDefaultBackground: rgba(0,0,0,.8);
+@jqueryNotifyInfoBackground: rgba(49, 112, 143, .9);
+@jqueryNotifyWarningBackground: rgba(138, 109, 59, .9);
+@jqueryNotifyErrorBackground: rgba(169, 68, 66, .9);
+@jqueryNotifySuccessBackground: rgba(60, 118, 61, .9);
+
+
 /* jQueryUI Themeroller */
 @jqueryUIFontFamily: Verdana,Arial,sans-serif;
 @jqueryUIFontSize: 1.1em;
@@ -1399,7 +1409,7 @@ a.ui-button:active,
 .ui-multiselect-menu .ui-icon:before,
 .ui-spinner .ui-icon:before{
 	text-decoration: inherit;
-	text-indent: 0 !important; 
+	text-indent: 0 !important;
 	speak: none;
 	font-size: 14px;
 }
@@ -1443,11 +1453,11 @@ a.ui-button:active,
 
 /* Shortened version style */
 .ui-timepicker-div.ui-timepicker-oneLine { padding-right: 2px; }
-.ui-timepicker-div.ui-timepicker-oneLine .ui_tpicker_time, 
+.ui-timepicker-div.ui-timepicker-oneLine .ui_tpicker_time,
 .ui-timepicker-div.ui-timepicker-oneLine dt { display: none; }
 .ui-timepicker-div.ui-timepicker-oneLine .ui_tpicker_time_label { display: block; padding-top: 2px; }
 .ui-timepicker-div.ui-timepicker-oneLine dl { text-align: right; }
-.ui-timepicker-div.ui-timepicker-oneLine dl dd, 
+.ui-timepicker-div.ui-timepicker-oneLine dl dd,
 .ui-timepicker-div.ui-timepicker-oneLine dl dd > div { display:inline-block; margin:0; }
 .ui-timepicker-div.ui-timepicker-oneLine dl dd.ui_tpicker_minute:before,
 .ui-timepicker-div.ui-timepicker-oneLine dl dd.ui_tpicker_second:before { content:':'; display:inline-block; }
@@ -1472,7 +1482,7 @@ a.ui-button:active,
 .cboxIframe{width:100%; height:100%; display:block; border:0; padding:0; margin:0;}
 #colorbox, #cboxContent, #cboxLoadedContent{box-sizing:content-box; -moz-box-sizing:content-box; -webkit-box-sizing:content-box;}
 
-/* 
+/*
     User Style:
     Change the following styles to modify the appearance of Colorbox.  They are
     ordered & tabbed in a way that represents the nesting of the generated HTML.
@@ -1592,7 +1602,7 @@ a.ui-button:active,
 
 
 @media print{
-    .ui-multiselect-menu {display: none;}   
+    .ui-multiselect-menu {display: none;}
     
 }
 
@@ -1605,7 +1615,7 @@ a.ui-button:active,
  * qTip2 - Pretty powerful tooltips - v3.0.3
  * http://qtip2.com
  *
- * Copyright (c) 2016 
+ * Copyright (c) 2016
  * Released under the MIT licenses
  * http://jquery.org/license
  *
@@ -2722,42 +2732,41 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
     background-image: url(data:image/gif;base64,R0lGODlhFAAUAPcAAAAAAJmZmZ2dnZ6enqKioqOjo6SkpKWlpaampqenp6ioqKmpqaqqqqurq/Hx8fLy8vT09PX19ff39/j4+Pn5+fr6+vv7+wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAP8ALAAAAAAUABQAAAihAP9FoPCvoMGDBy08+EdhQAIJCCMybCDAAYUEARBAlFiQQoMABQhKUJBxY0SPICEYHBnggEmDKAuoPMjS5cGYMxHW3IiT478JJA8M/CjTZ0GgLRekNGpwAsYABHIypcAgQMsITDtWJYBR6NSqMico9cqR6tKfY7GeBCuVwlipDNmefAtTrkSzB1RaIAoXodsABiZAEFB06gIBWC1mLVgBa0AAOw==);
 }
 
-/**
- * jQuery toast plugin created by Kamran Ahmed copyright MIT license 2014
- */
-.jq-toast-wrap { display: block; position: fixed; width: 250px;  pointer-events: none !important; margin: 0; padding: 0; letter-spacing: normal; z-index: 9000 !important; }
-.jq-toast-wrap * { margin: 0; padding: 0; }
 
-.jq-toast-wrap.bottom-left { bottom: 20px; left: 20px; }
-.jq-toast-wrap.bottom-right { bottom: 20px; right: 40px; }
-.jq-toast-wrap.top-left { top: 20px; left: 20px; }
-.jq-toast-wrap.top-right { top: 20px; right: 40px; }
+//-- jQuery Notify (toast)
+.jq-toast-wrap { width:350px; position:fixed; z-index:9000; pointer-events:none; }
+.jq-toast-wrap.top-left { top:10px; left:10px; }
+.jq-toast-wrap.top-right { top:10px; right:10px; }
+.jq-toast-wrap.bottom-left { bottom:10px; left:10px; }
+.jq-toast-wrap.bottom-right { bottom:10px; right:10px; }
 
-.jq-toast-single { display: block; width: 100%; padding: 10px; margin: 0px 0px 5px; border-radius: 4px; font-size: 12px; font-family: arial, sans-serif; line-height: 17px; position: relative;  pointer-events: all !important; background-color: #444444; color: white; }
+.jq-toast-single { min-height:30px; margin-bottom:10px; padding:10px; position:relative; color:@jqueryNotifyFontColor; background:@jqueryNotifyDefaultBackground; box-shadow:0 0 6px #000, 0 0 50px rgba(0,0,0,.4) inset; border-radius:8px;  pointer-events:all; }
+.jq-toast-single h2 { margin:-5px 0px 5px; padding:0; color:inherit; border:none; }
+.jq-toast-single {
+	a, a:link, a:active, a:visited { color:inherit; }
+	a:hover { color:@jqueryNotifyFontColorHover; }
+}
 
-.jq-toast-single h2 { font-family: arial, sans-serif; font-size: 14px; margin: 0px 0px 7px; background: none; color: inherit; line-height: inherit; letter-spacing: normal; }
-.jq-toast-single a { color: #eee; text-decoration: none; font-weight: bold; border-bottom: 1px solid white; padding-bottom: 3px; font-size: 12px; }
+.close-jq-toast-single { visibility:hidden; float:right; margin:-5px -10px; padding-left:5px; cursor:pointer; }
+.close-jq-toast-single:before { visibility:visible; font-family:'FontAwesome'; content:'\f00d'; color:darken(@jqueryNotifyFontColor, 18.5); }
+.close-jq-toast-single:hover:before { color:@jqueryNotifyFontColorHover; }
 
-.jq-toast-single ul { margin: 0px 0px 0px 15px; background: none; padding:0px; }
-.jq-toast-single ul li { list-style-type: disc !important; line-height: 17px; background: none; margin: 0; padding: 0; letter-spacing: normal; }
+.jq-toast-loader { display:block; position:absolute; top:0; height:2px; width:0%; left:5px; background:red; }
+.jq-toast-loaded { width:calc(~'100% - 10px'); }
 
-.close-jq-toast-single { position: absolute; top: 3px; right: 7px; font-size: 14px; cursor: pointer; }
+.jq-icon-info { background-color:@jqueryNotifyInfoBackground; }
+.jq-icon-info:before { content:'\f05a'; font-family:'FontAwesome'; font-size:30px; float:left; padding-right:10px; }
 
-.jq-toast-loader { display: block; position: absolute; top: -2px; height: 5px; width: 0%; left: 0; border-radius: 5px; background: red; }
-.jq-toast-loaded { width: 100%; }
-.jq-has-icon { padding: 10px 10px 10px 50px; }
+.jq-icon-warning { background-color:@jqueryNotifyWarningBackground; }
+.jq-icon-warning:before { content:'\f071'; font-family: 'FontAwesome'; font-size:30px; float:left; padding-right:10px; }
 
-.jq-icon-info { background-color: #31708f; color: #d9edf7; border-color: #bce8f1; }
-.jq-icon-info:before { content:'\f05a'; font-family: 'FontAwesome'; font-size: 30px; position: absolute; left: 10px; top: 20px; }
+.jq-icon-error { background-color:@jqueryNotifyErrorBackground; }
+.jq-icon-error:before { content:'\f06a'; font-family:'FontAwesome'; font-size:30px; float:left; padding-right:10px; }
 
-.jq-icon-warning { background-color: #8a6d3b; color: #fcf8e3; border-color: #faebcc; }
-.jq-icon-warning:before { content:'\f071'; font-family: 'FontAwesome'; font-size: 30px; position: absolute; left: 10px; top: 20px; }
+.jq-icon-success { background-color:@jqueryNotifySuccessBackground; }
+.jq-icon-success:before { content:'\f00c'; font-family:'FontAwesome'; font-size:30px; float:left; padding-right:10px; }
 
-.jq-icon-error { background-color: #a94442; color: #f2dede; border-color: #ebccd1; }
-.jq-icon-error:before { content:'\f06a'; font-family: 'FontAwesome'; font-size: 30px; position: absolute; left: 10px; top: 20px; }
 
-.jq-icon-success { color: #dff0d8; background-color: #3c763d; border-color: #d6e9c6; }
-.jq-icon-success:before { content:'\f00c'; font-family: 'FontAwesome'; font-size: 30px; position: absolute; left: 10px; top: 20px; }
 .btn-toolbar {
   background: #364347;
   width: 20px;
