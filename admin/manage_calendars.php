@@ -43,7 +43,7 @@ class Manage_Calendars extends page_generic {
 			$id_list = $this->pdh->get('calendars', 'idlist');
 			foreach($calendars as $calendar) {
 				$func = (in_array($calendar['id'], $id_list)) ? 'update_calendar' : 'add_calendar';
-				$retu[] = $this->pdh->put('calendars', $func, array($calendar['id'], $calendar['name'], $calendar['color'], $calendar['feed'], $calendar['private'], $calendar['type'], $calendar['restricted']));
+				$retu[] = $this->pdh->put('calendars', $func, array($calendar['id'], $calendar['name'], $calendar['color'], $calendar['feed'], $calendar['private'], $calendar['type'], $calendar['restricted'], 0, $calendar['permissions']));
 				$names[] = $calendar['name'];
 			}
 			if(in_array(false, $retu)) {
@@ -112,7 +112,7 @@ class Manage_Calendars extends page_generic {
 				'PRIVATE'		=> $this->pdh->get('calendars', 'private', array($id)),
 				'FEED'			=> $this->pdh->get('calendars', 'feed', array($id)),
 				'RESTRICTED'	=> new hradio('calendars['.$key.'][restricted]', array('value' => $this->pdh->get('calendars', 'restricted', array($id)))),
-				'PERMISSIONS'	=> new hmultiselect('calendars['.$key.'][permissions]', array('options' => $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list'))), 'value' => (($permissionvalue = 'all') ? $this->pdh->get('user_groups', 'id_list') : $permissionvalue))),
+				'PERMISSIONS'	=> new hmultiselect('calendars['.$key.'][permissions]', array('options' => $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list'))), 'value' => (($permissionvalue == 'all') ? $this->pdh->get('user_groups', 'id_list') : $permissionvalue))),
 			));
 			$key++;
 			$new_id = ($new_id == $id) ? $id+1 : $new_id;
@@ -127,7 +127,7 @@ class Manage_Calendars extends page_generic {
 			'TYPE'				=> new hdropdown('calendars['.$key.'][type]', array('options' => $types, 'value' => $this->pdh->get('calendars', 'type', array($id)), 'id' => 'calendars'.$key)),
 			'COLOR'				=> $this->jquery->colorpicker('cal_'.$key, '', 'calendars['.$key.'][color]'),
 			'CALENDAR_COUNT'	=> $ranks,
-			'PERMISSIONS'		=> new hmultiselect('calendars['.$key.'][permissions]', array('options' => $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list'))), 'value' => (($permissionvalue = 'all') ? $this->pdh->get('user_groups', 'id_list') : $permissionvalue))),
+			'PERMISSIONS'		=> new hmultiselect('calendars['.$key.'][permissions]', array('options' => $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list'))), 'value' => (($permissionvalue == 'all') ? $this->pdh->get('user_groups', 'id_list') : $permissionvalue))),
 		));
 
 		$this->core->set_vars(array(
@@ -152,7 +152,7 @@ class Manage_Calendars extends page_generic {
 						'private'		=> $this->in->get('calendars:'.$key.':suffix',0),
 						'type'			=> $this->in->get('calendars:'.$key.':type',0),
 						'restricted'	=> $this->in->get('calendars:'.$key.':restricted',0),
-						'permissions'	=> $this->in->get('calendars:'.$key.':permissions',0)
+						'permissions'	=> $this->in->getArray('calendars:'.$key.':permissions', 'int')
 					);
 				}
 			}
