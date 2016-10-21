@@ -126,7 +126,7 @@ class Manage_Calendars extends page_generic {
 			'KEY'					=> $key,
 			'TYPE'				=> new hdropdown('calendars['.$key.'][type]', array('options' => $types, 'value' => $this->pdh->get('calendars', 'type', array($id)), 'id' => 'calendars'.$key)),
 			'COLOR'				=> $this->jquery->colorpicker('cal_'.$key, '', 'calendars['.$key.'][color]'),
-			'CALENDAR_COUNT'	=> $ranks,
+			'CALENDAR_COUNT'	=> count($ranks),
 			'PERMISSIONS'		=> new hmultiselect('calendars['.$key.'][permissions]', array('options' => $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list'))), 'value' => (($permissionvalue == 'all') ? $this->pdh->get('user_groups', 'id_list') : $permissionvalue))),
 		));
 
