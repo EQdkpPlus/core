@@ -188,8 +188,14 @@ abstract class elFinderVolumeDriver {
 	 **/
 	protected $options = array(
 		'id'              => '',
+		// revision id of root directory that uses for caching control of root stat
+		'rootRev'         => '',
+		// driver type it uses volume root's CSS class name. e.g. 'group' -> Adds 'elfinder-group' to CSS class name.
+		'type'            => '',
 		// root directory path
 		'path'            => '',
+		// Folder hash value on elFinder to be the parent of this volume
+		'phash'           => '',
 		// open this path on initial request instead of root path
 		'startPath'       => '',
 		// how many subdirs levels return per request
@@ -885,10 +891,27 @@ abstract class elFinderVolumeDriver {
 		return $this->stat($path);
 	}
 	
-	
+	/**
+	 * Clear PHP stat cache & all of inner stat caches
+	 * 
+	 */
 	public function clearstatcache() {
 		clearstatcache();
 		$this->clearcache();
+	}
+	
+	/**
+	 * Clear inner stat caches for target hash
+	 * 
+	 * @param string $hash
+	 */
+	public function clearcaches($hash = null) {
+		if ($hash === null) {
+			$this->clearcache();
+		} else {
+			$path = $this->decode($hash);
+			unset($this->cache[$path], $this->dirsCache[$path], $this->subdirsCache[$path]);
+		}
 	}
 
 	/**
@@ -902,7 +925,9 @@ abstract class elFinderVolumeDriver {
 	 * @author Alexey Sukhotin
 	 */
 	public function mount(array $opts) {
-		if (!isset($opts['path']) || $opts['path'] === '') {
+		$this->options = array_merge($this->options, $opts);
+		
+		if (!isset($this->options['path']) || $this->options['path'] === '') {
 			return $this->setError('Path undefined.');
 		}
 		
@@ -913,7 +938,6 @@ abstract class elFinderVolumeDriver {
 			return $this->setError('Session wrapper instance must be "elFinderSessionInterface".');
 		}
 		
-		$this->options = array_merge($this->options, $opts);
 		$this->id = $this->driverId.(!empty($this->options['id']) ? $this->options['id'] : elFinder::$volumesCnt++).'_';
 		$this->root = $this->normpathCE($this->options['path']);
 		$this->separator = isset($this->options['separator']) ? $this->options['separator'] : DIRECTORY_SEPARATOR;
@@ -3285,6 +3309,7 @@ abstract class elFinderVolumeDriver {
 			}
 			register_shutdown_function(array($this, 'rmdirRecursive'), $dir);
 		}
+		elFinder::extendTimeLimit();
 		$res = true;
 		$files = array();
 		foreach ($hashes as $hash) {
@@ -3463,7 +3488,13 @@ abstract class elFinderVolumeDriver {
 				// need $path as key for netmount/netunmount
 				if (isset($this->sessionCache['rootstat'][$rootKey])) {
 					if ($ret = $this->sessionCache['rootstat'][$rootKey]) {
-						return $ret;
+						if ($this->options['rootRev'] === $ret['rootRev']) {
+							if (isset($this->options['phash'])) {
+								$ret['isroot'] = 1;
+								$ret['phash'] = $this->options['phash'];
+							}
+							return $ret;
+						}
 					}
 				}
 			}
@@ -3475,6 +3506,10 @@ abstract class elFinderVolumeDriver {
 			$this->rootModified = false;
 			$this->sessionCache['rootstat'][$rootKey] = $ret;
 			$this->session->set($this->id, $this->sessionCache);
+			if (isset($this->options['phash'])) {
+				$ret['isroot'] = 1;
+				$ret['phash'] = $this->options['phash'];
+			}
 		}
 		return $ret;
 	}
@@ -3490,6 +3525,7 @@ abstract class elFinderVolumeDriver {
 		if ($this->rootName) {
 			$stat['name'] = $this->rootName;
 		}
+		$stat['rootRev'] = $this->options['rootRev'];
 		$stat['options'] = $this->options(null);
 		return $stat;
 	}
@@ -3557,6 +3593,9 @@ abstract class elFinderVolumeDriver {
 		$stat['write'] = intval($this->attr($path, 'write', isset($stat['write']) ? !!$stat['write'] : null, $isDir));
 		if ($root) {
 			$stat['locked'] = 1;
+			if ($this->options['type'] !== '') {
+				$stat['type'] = $this->options['type'];
+			}
 		} else {
 			// lock when parent directory is not writable
 			if (!isset($stat['locked'])) {
@@ -4996,9 +5035,26 @@ abstract class elFinderVolumeDriver {
 	 * @author Alexey Sukhotin
 	 */
 	protected function procExec($command , array &$output = null, &$return_var = -1, array &$error_output = null) {
-
-		if (! function_exists('proc_open')) {
+		//Added by GodMod
+		return false;
+		static $allowed = null;
+		
+		if ($allowed === null) {
+			if ($allowed = function_exists('proc_open')) {
+				if ($disabled = ini_get('disable_functions')) {
+					$funcs = array_map('trim', explode(',', $disabled));
+					$allowed = ! in_array('proc_open', $funcs);
+				}
+			}
+		}
+		
+		if (! $allowed) {
 			$return_var = -1;
+			return $return_var;
+		}
+		
+		if (! $command) {
+			$return_var = 0;
 			return $return_var;
 		}
 		
@@ -5306,7 +5362,7 @@ abstract class elFinderVolumeDriver {
 			'extract' => array()
 		);
 		
-		if (function_exists('proc_open')) {
+		if ($this->procExec('') === 0) {
 		
 			$this->procExec('tar --version', $o, $ctar);
 			

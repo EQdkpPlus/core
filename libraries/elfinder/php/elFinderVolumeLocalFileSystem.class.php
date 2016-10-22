@@ -920,6 +920,25 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 
 		$meta = stream_get_meta_data($fp);
 		$uri = isset($meta['uri'])? $meta['uri'] : '';
+		if ($uri && ! preg_match('#^[a-zA-Z0-9]+://#', $uri)) {
+			fclose($fp);
+			$mtime = filemtime($uri);
+			$isCmdPaste = ($this->ARGS['cmd'] === 'paste');
+			$isCmdCopy = ($isCmdPaste && empty($this->ARGS['cut']));
+			if (($isCmdCopy || !rename($uri, $path)) && !copy($uri, $path)) {
+				return false;
+			}
+			// keep timestamp on upload
+			if ($mtime && $this->ARGS['cmd'] === 'upload' && isset($this->options['keepTimestamp']['upload'])) {
+				touch($path, $mtime);
+			}
+			// re-create the source file for remove processing of paste command
+			$isCmdPaste && !$isCmdCopy && touch($uri);
+		} else {
+			if (file_put_contents($path, $fp, LOCK_EX) === false) {
+				return false;
+			}
+		}
 		
 		if (is_link($path)) {
 			unlink($path);
