@@ -8,7 +8,7 @@
 			<!-- IF raidstatus.COUNT_GUESTS --><span class="state_guests">[{raidstatus.COUNT_GUESTS}]</span><!-- ENDIF -->
 		</h4>
 
-		<div class="class_table toggle_container">
+		<div class="class_table toggle_container <!-- IF COLORED_NAMESBYCLASS -->class_colorized<!-- ENDIF -->">
 			<!-- BEGIN classes -->
 			<!-- IF raidstatus.classes.SHOW -->
 			<div class="class_column<!-- IF RAIDMODE == 'role' AND raidstatus.classes.ID == -1 --> raidcal_warningbox<!-- ENDIF -->" data-status-id="{raidstatus.ID}" data-class-id="{raidstatus.classes.ID}" data-attendee-count="{raidstatus.classes.COUNT}" data-attendee-max="{raidstatus.classes.MAXCOUNT}" data-droppable="classrole_{raidstatus.classes.ID}">
