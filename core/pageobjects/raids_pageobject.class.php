@@ -26,15 +26,15 @@ class raids_pageobject extends pageobject {
 		parent::__construct(false, $handler, array());
 		$this->process();
 	}
-	
+
 	public function display_raid(){
 		infotooltip_js();
 		$raid_id = $this->in->get('r', 0);
-	
+
 		if ( $raid_id ){
 			if(!in_array($raid_id, $this->pdh->get('raid', 'id_list')))
 				message_die($this->user->lang('error_invalid_raid_provided'));
-	
+
 			// Attendees
 			$attendees_ids = $this->pdh->get('raid', 'raid_attendees', array($raid_id));
 			$attendee_copy = $attendees = array();
@@ -42,7 +42,7 @@ class raids_pageobject extends pageobject {
 				$attendees[$attendee_id] = sanitize(($this->pdh->get('member', 'name', array($attendee_id))));
 			}
 			$attendee_copy = $attendees;
-	
+
 			// Get each attendee's rank
 			foreach($attendees as $attendee_id => $attendee_name){
 				$ranks[ $attendee_name ] = array(
@@ -50,7 +50,7 @@ class raids_pageobject extends pageobject {
 						'suffix'	=> $this->pdh->get('rank', 'suffix', array($this->pdh->get('member', 'rankid', array($attendee_id)))),
 				);
 			}
-	
+
 			if ( count($attendees) > 0 ){
 				// First get rid of duplicates and resort them just in case,
 				// so we're sure they're displayed correctly
@@ -58,7 +58,7 @@ class raids_pageobject extends pageobject {
 				sort($attendees);
 				reset($attendees);
 				$rows = ceil(sizeof($attendees) / $this->user->style['attendees_columns']);
-	
+
 				// First loop: iterate through the rows
 				// Second loop: iterate through the columns as defined in template_config,
 				// then "add" an array to $block_vars that contains the column definitions,
@@ -70,18 +70,18 @@ class raids_pageobject extends pageobject {
 					for ( $j = 0; $j < $this->user->style['attendees_columns']; $j++ ){
 						$offset		= ($i + ($rows * $j));
 						$attendee	= ( isset($attendees_ids[$offset]) ) ? $attendees_ids[$offset] : '';
-	
+
 						if($attendee != ''){
 							$block_vars += array(
 									'COLUMN'.$j.'_NAME' => $this->pdh->get('member', 'html_memberlink', array($attendee, $this->routing->simpleBuild('character'), '', false, false, true, true))
 							);
-	
+
 						}else{
 							$block_vars += array(
 									'COLUMN'.$j.'_NAME' => ''
 							);
 						}
-	
+
 						// Are we showing this column?
 						$s_column = 's_column'.$j;
 						${$s_column} = true;
@@ -92,7 +92,7 @@ class raids_pageobject extends pageobject {
 			}else{
 				message_die('Could not get raid attendee information.','Critical Error');
 			}
-	
+
 			// Drops
 			$loot_dist	= array();
 			$items		= $this->pdh->get('item', 'itemsofraid', array($raid_id));
@@ -101,7 +101,7 @@ class raids_pageobject extends pageobject {
 				$buyer_id	= (int)$this->pdh->get('item', 'buyer', array($item_id));
 				$class_name	= $this->pdh->get('member', 'classname', array($buyer_id));
 				$class_id	= (int)$this->pdh->get('member', 'classid', array($buyer_id));
-	
+
 				if(isset($loot_dist[$class_id])){
 					$loot_dist[$class_id]['value']++;
 				}else{
@@ -109,7 +109,7 @@ class raids_pageobject extends pageobject {
 					$tmp_classcolor			= $this->game->get_class_color($class_id);
 					$chartcolorsLootdisti[$class_id] = ($tmp_classcolor != '') ? $tmp_classcolor : 'gray';
 				}
-	
+
 				$this->tpl->assign_block_vars('items_row', array(
 						'BUYER'			=> $this->pdh->get('member', 'html_memberlink', array($buyer_id, $this->routing->simpleBuild('character'), '', false, false, true, true)),
 						'ITEM'			=> $this->pdh->get('item', 'link_itt', array($item_id, $this->routing->simpleBuild('items'), '', false,false,false,false,false,true)),
@@ -118,7 +118,7 @@ class raids_pageobject extends pageobject {
 			}
 			ksort($loot_dist);
 			ksort($chartcolorsLootdisti);
-	
+
 			// Class distribution
 			$class_dist = array();
 			$total_attendee_count = sizeof($attendee_copy);
@@ -128,7 +128,7 @@ class raids_pageobject extends pageobject {
 				if($member_name != ''){
 					$html_prefix	= ( isset($ranks[$member_name]) ) ? $ranks[$member_name]['prefix'] : '';
 					$html_suffix	= ( isset($ranks[$member_name]) ) ? $ranks[$member_name]['suffix'] : '';
-	
+
 					if(isset($class_dist[$member_class_id]['names']) && isset($class_dist[$member_class_id]['count'])){
 						$class_dist[$member_class_id]['names'] .= ", " . $html_prefix . $member_name . $html_suffix ;
 						$class_dist[$member_class_id]['count']++;
@@ -140,9 +140,9 @@ class raids_pageobject extends pageobject {
 					}
 				}
 			}
-	
+
 			unset($ranks);
-	
+
 			#Class distribution
 			$chartarray = array();
 			$chartcolors = array();
@@ -151,20 +151,21 @@ class raids_pageobject extends pageobject {
 				$class			= $this->game->get_name('primary', $class_id);
 				$chartarray[]	= array('value' => $percentage, 'name' => (($class) ? $class : $this->user->lang('unknown'))." (".$class_dist[$class_id]['count']." - ".$percentage."%)");
 				$chartcolors[]	= (strlen($this->game->get_class_color($class_id))) ? $this->game->get_class_color($class_id) : "gray";
-	
+
 				$this->tpl->assign_block_vars('class_row', array(
 						'CLASS'			=> $this->game->decorate('primary', $class_id).' <span class="class_'.$class_id.'">'.(($class_id > 0) ? $class : $this->user->lang('unknown')).'</span>',
 						'BAR'			=> $this->jquery->progressbar('bar_'.md5($class), $percentage, array('text' => '%percentage%')),
 						'ATTENDEES'		=> $class_dist[$class_id]['names']
 				));
 			}
-	
+
 			$chartoptions	= array(
 					'border'		=> '0.0',
 					'piemargin'		=> 2,
 					'datalabels'	=> true,
 					'legend'		=> true,
-					'background'	=> 'rgba(255, 255, 255, 0.1)'
+					'background'	=> 'rgba(255, 255, 255, 0.1)',
+					'numberColumns'	=> 2,
 			);
 			$chartoptionsLootDistri = $chartoptions;
 			if ($this->game->get_class_color(1) != ''){
@@ -172,10 +173,10 @@ class raids_pageobject extends pageobject {
 				$chartoptionsLootDistri['color_array']	= $chartcolorsLootdisti;
 			}
 			unset($eq_classes);
-	
+
 			$vpre = $this->pdh->pre_process_preset('rvalue', array(), 0);
 			$vpre[2][0] = $raid_id;
-				
+
 			//Items
 			$arrItemListSettings = array(
 					'name' => 'hptt_viewmember_itemlist',
@@ -202,7 +203,7 @@ class raids_pageobject extends pageobject {
 					'ITEM_OUT'			=> $hptt->get_html_table($this->in->get('isort'), '', null, false, false),
 					'ITEM_COUNT'		=> count($items),
 			));
-	
+
 			//Adjustments
 			if (!$this->config->get('disable_points')){
 				$arrAdjListSettings = array(
@@ -232,16 +233,16 @@ class raids_pageobject extends pageobject {
 						'ADJUSTMENT_COUNT'		=> count($arrAdjustments)
 				));
 			}
-	
+
 			$this->tpl->assign_vars(array(
 					'L_MEMBERS_PRESENT_AT'	=> sprintf($this->user->lang('members_present_at'),
 							$this->time->user_date($this->pdh->get('raid', 'date', array($raid_id)), false, false, true),
 							$this->time->user_date($this->pdh->get('raid', 'date', array($raid_id)), false, true)
 					),
-	
+
 					'EVENT_ICON'			=> $this->game->decorate('events', $this->pdh->get('raid', 'event', array($raid_id)), array(), 40),
 					'EVENT_NAME'			=> stripslashes($this->pdh->get('raid', 'event_name', array($raid_id))),
-	
+
 					'S_COLUMN0'				=> ( isset($s_column0) ) ? true : false,
 					'S_COLUMN1'				=> ( isset($s_column1) ) ? true : false,
 					'S_COLUMN2'				=> ( isset($s_column2) ) ? true : false,
@@ -252,10 +253,10 @@ class raids_pageobject extends pageobject {
 					'S_COLUMN7'				=> ( isset($s_column7) ) ? true : false,
 					'S_COLUMN8'				=> ( isset($s_column8) ) ? true : false,
 					'S_COLUMN9'				=> ( isset($s_column9) ) ? true : false,
-	
+
 					'COLUMN_WIDTH'			=> ( isset($column_width) ) ? $column_width : 0,
 					'COLSPAN'				=> $this->user->style['attendees_columns'],
-	
+
 					'RAID_ADDED_BY'			=> ( $this->pdh->get('raid', 'added_by', array($raid_id)) != '' ) ? stripslashes($this->pdh->get('raid', 'added_by', array($raid_id))) : 'N/A',
 					'RAID_UPDATED_BY'		=> ( $this->pdh->get('raid', 'updated_by', array($raid_id)) != '' ) ? stripslashes($this->pdh->get('raid', 'updated_by', array($raid_id))) : 'N/A',
 					'S_RAID_UPDATED'		=> (strlen($this->pdh->get('raid', 'updated_by', array($raid_id)))),
@@ -278,7 +279,7 @@ class raids_pageobject extends pageobject {
 			}
 
 			chartooltip_js();
-				
+
 			$this->set_vars(array(
 					'page_title' 		=> $this->pdh->get('raid', 'event_name', array($raid_id)).', '.$this->time->user_date($this->pdh->get('raid', 'date', array($raid_id))),
 					'template_file'		=> 'viewraid.html',
@@ -302,8 +303,8 @@ class raids_pageobject extends pageobject {
 			$date_suffix	= '&amp;timestamps=1&amp;from='.$date1.'&amp;to='.$date2;
 			$view_list		= $this->pdh->get('raid', 'raididsindateinterval', array($date1, $date2));
 			$date2			-= 86400; // Shows THAT day
-			
-			
+
+
 			//Create a Summary
 			$arrRaidstatsSettings = array(
 					'name' => 'hptt_viewmember_itemlist',
@@ -323,7 +324,7 @@ class raids_pageobject extends pageobject {
 						array('name' => 'dattendance_fromto_all', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 					),
 			);
-			
+
 			$show_twinks = $this->config->get('show_twinks');
 			$statsuffix = $date_suffix;
 			if($this->in->exists('show_twinks')){
@@ -335,10 +336,10 @@ class raids_pageobject extends pageobject {
 
 			$hptt= $this->get_hptt($arrRaidstatsSettings, $arrMemberlist, $arrMemberlist, array('%link_url%' => $this->routing->simpleBuild('raids'), '%link_url_suffix%' => '', '%use_controller%' => true, '%from%'=> $date1, '%to%' => $date2, '%with_twink%' => !$show_twinks), md5($date1.'.'.$date2.'.'.$show_twinks), 'statsort');
 			$hptt->setPageRef($this->strPath);
-			
+
 			//$sort = $this->in->get('statsort');
 			//$suffix = (strlen($sort))? '&amp;statsort='.$sort : '';
-			
+
 			$this->tpl->assign_vars(array (
 				'RAIDSTATS_OUT' 		=> $hptt->get_html_table($sort, $statsuffix, null, null, null),
 				'MEMBER_COUNT'			=> count($arrMemberlist),
@@ -346,7 +347,7 @@ class raids_pageobject extends pageobject {
 				'SHOW_TWINKS_CHECKED'	=> ($show_twinks)?'checked="checked"':'',
 				'S_SHOW_TWINKS'			=> !$this->config->get('show_twinks'),
 			));
-			
+
 		}else{
 			$view_list		= $this->pdh->get('raid', 'id_list');
 			$date1			= time()-(30*86400);
@@ -378,7 +379,7 @@ class raids_pageobject extends pageobject {
 			'DATEPICK_DATE_FROM'		=> $this->jquery->Calendar('from', $this->time->user_date($date1, false, false, false, function_exists('date_create_from_format'))),
 			'DATEPICK_DATE_TO'			=> $this->jquery->Calendar('to', $this->time->user_date($date2, false, false, false, function_exists('date_create_from_format')))
 		));
-		
+
 		$this->jquery->Collapse('#toggleRaidsummary', true);
 
 		$this->set_vars(array(

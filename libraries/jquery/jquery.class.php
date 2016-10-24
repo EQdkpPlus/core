@@ -1117,7 +1117,7 @@ if (!class_exists("jquery")) {
 			$tmpopt[]	= "seriesDefaults:{renderer:$.jqplot.PieRenderer, rendererOptions:{
 				sliceMargin: ".((isset($options['piemargin']) && $options['piemargin'] > 0) ? $options['piemargin'] : 6).
 				((isset($options['datalabels'])) ? ", showDataLabels: true, dataLabelNudge: 80, dataLabels: 'label'" : '')."}}";
-			$tmpopt[]	= "legend:{show:".((isset($options['legend'])) ? 'true' : 'false').", escapeHtml:true}";
+			$tmpopt[]	= "legend:{show:".((isset($options['legend'])) ? 'true' : 'false').", escapeHtml:true, rendererOptions: {numberColumns: ".((isset($options['numberColumns'])) ? $options['numberColumns'] : '0')."}}";
 			if(isset($options['title'])){
 				$tmpopt[]	= "title: '".$options['title']."'";
 			}
