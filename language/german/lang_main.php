@@ -135,6 +135,7 @@ $lang = array(
 "permissions" => "Berechtigungen",
 "user_permissions" => "Benutzer-Berechtigungen",
 "admin_permissions" => "Administrator-Berechtigungen",
+"requirements_warningmessage" => "Scheinbar werden nicht alle Vorraussetzungen für den Betrieb von EQdkp-Plus erfüllt. Bitte prüfe, welche Vorraussetzung nicht erfüllt wird.",
 
 // User Settings
 "user_sett_tab_registration_info" => "Registrierungs-Details",

@@ -621,7 +621,6 @@ $lang = array(
 "requirements_modulename" => "Modulname",
 "requirements_required" => "Benötigte Version",
 "requirements_available" => "Verfügbare Version",
-"requirements_warningmessage" => "Scheinbar werden nicht alle Vorraussetzungen für den Betrieb von EQdkp-Plus erfüllt. Bitte prüfe, welche Vorraussetzung nicht erfüllt wird.",
 "adminc_support" => "Support",
 "adminc_phpvalue" => "Wert",
 "adminc_phpname" => "Name der PHP	Einstellung",

@@ -207,6 +207,7 @@ $lang = array(
 	"calendar_awaymode_enabled" => "Mode change of the away-mode",
 	"calendar_awaymode_startdate" => "Start day of abscence",
 	"calendar_awaymode_enddate" => "End day of abscence",
+	"requirements_warningmessage" => "There seems to be one or more requirements of EQdkp-Plus not matched. Please check the admin index for more information.",
 	"calendar_awaymode_note" => "Note",
 	"calendar_log_awaymode" => "Calendar Away-mode",
 	"user_sett_f_awaymode_startdate" => "Start absence",
