@@ -2651,15 +2651,6 @@ td.hiddenSmartphone, th.hiddenSmartphone {
 	display: table-cell;
 }
 
-.ui-notify h1 {
-	border: none;
-}
-
-.ui-notify a:hover {
-	color: #4E7FA8;
-	text-decoration: underline;
-}
-
 /* Social Bookmarks */
 .social-bookmarks {
 	list-style-type: none !important;
@@ -3672,10 +3663,6 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		width: 100%;
 	}
 
-	.responsive .ui-notify-close {
-		font-size: 20px;
-	}
-
 	.responsive #mainlogo {
 		max-height: 50px;
 	}
@@ -3727,10 +3714,6 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	  height: 0;
 	  margin: 10px 0;
 	  overflow: hidden;
-	}
-
-	.responsive .ui-notify {
-		max-width: 95%;
 	}
 
 	.responsive .langswitch-tooltip-trigger > span {
