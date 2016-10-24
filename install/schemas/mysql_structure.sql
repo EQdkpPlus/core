@@ -654,6 +654,7 @@ CREATE TABLE `__calendars` (
 	`type` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
 	`restricted` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
 	`affiliation` VARCHAR(30) COLLATE utf8_bin  NOT NULL DEFAULT 'user',
+	`permissions` VARCHAR(255) COLLATE utf8_bin NOT NULL DEFAULT 'all',
 	PRIMARY KEY (`id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 

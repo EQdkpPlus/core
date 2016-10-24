@@ -41,7 +41,7 @@ if ( !class_exists( "pdh_r_user_groups_users" ) ){
 
 		public function init(){
 			$this->user_groups_users = array();
-			
+
 			$objQuery = $this->db->query("SELECT gu.* FROM __groups_users gu, __users u WHERE u.user_id = gu.user_id ORDER BY u.username ASC");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
@@ -65,9 +65,20 @@ if ( !class_exists( "pdh_r_user_groups_users" ) ){
 				return (isset($this->user_groups_users[$group_id]) && is_array($this->user_groups_users[$group_id])) ? array_keys($this->user_groups_users[$group_id]) : array();
 			}
 		}
-		
+
 		public function get_is_grpleader($user_id, $group_id){
 			if (isset($this->user_memberships[$user_id][$group_id]) && $this->user_memberships[$user_id][$group_id] == 1) return true;
+			return false;
+		}
+
+		public function get_is_in_group($user_id, $group_id){
+			if(is_array($group_id)){
+				foreach($group_id as $groupid){
+					if (isset($this->user_memberships[$user_id][$groupid])) return true;
+				}
+			}else{
+				if (isset($this->user_memberships[$user_id][$group_id])) return true;
+			}
 			return false;
 		}
 

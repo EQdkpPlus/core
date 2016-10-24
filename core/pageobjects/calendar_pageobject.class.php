@@ -436,8 +436,7 @@ class calendar_pageobject extends pageobject {
 			'DD_STATUS'				=> new hdropdown('member_signupstatus', array('options' => $raidstatus)),
 			'DD_MULTIDEL'			=> new hdropdown('deleteall_selection', array('options' => $deleteall_drpdown)),
 			'TXT_NOTE'				=> new htext('member_note', array('size' => '20')),
-			'ADD_RAID'				=> $this->user->check_auth('u_cal_event_add', false),
-
+			'ADD_RAID'				=> $this->user->check_auth('u_cal_event_add', false) && ($this->pdh->get('calendars', 'calendarids4userid', array($this->user->data['user_id'])) > 0),
 			'CSRF_MOVE_TOKEN'		=> $this->CSRFGetToken('move'),
 			'CSRF_RESIZE_TOKEN' 	=> $this->CSRFGetToken('resize'),
 			'CSRF_DELETEID_TOKEN'	=> $this->CSRFGetToken('deleteid'),

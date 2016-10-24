@@ -22,6 +22,7 @@
 			<th>{L_calendars_feed}</th>
 			<th>{L_calendars_type}</th>
 			<th>{L_calendars_restricted}</th>
+			<th>{L_calendars_permissions}</th>
 		</tr>
 		<!-- BEGIN calendars -->
 		<tr>
@@ -36,6 +37,7 @@
 			<td><input type="text" name="calendars[{calendars.KEY}][feed]" size="50" maxlength="250" value="{calendars.FEED}" class="maininput" /></td>
 			<td>{calendars.TYPE}</td>
 			<td>{calendars.RESTRICTED}</td>
+			<td>{calendars.PERMISSIONS}</td>
 		</tr>
 		<!-- END calendars -->
 		<tr>
@@ -45,6 +47,7 @@
 			<td><input type="text" name="calendars[{KEY}][feed]" size="50" maxlength="250" value="" class="maininput" /></td>
 			<td>{TYPE}</td>
 			<td>{RESTRICTED}</td>
+			<td>{PERMISSIONS}</td>
 		</tr>
 	</table>
 	<div class="contentFooter">
@@ -52,6 +55,6 @@
 		<button class="liteoption" type="button" name="del" onclick="delete_warning();"><i class="fa fa-times"></i>{L_delete}</button>
 		<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
 	</div>
-	
-{CSRF_TOKEN}	
+
+{CSRF_TOKEN}
 </form>

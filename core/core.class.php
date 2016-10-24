@@ -108,7 +108,7 @@ class core extends gen_class {
 			foreach($messages as $message){
 				$name = (is_array($message)) ? 'message' : 'messages';
 				${$name}['showalways'] = (isset(${$name}['showalways'])) ? ${$name}['showalways'] : true;
-				${$name}['parent'] = (isset(${$name}['parent'])) ? ${$name}['parent'] : true;
+				${$name}['parent'] = (isset(${$name}['parent'])) ? ${$name}['parent'] : false;
 				$this->message(${$name}['text'], ${$name}['title'], ${$name}['color'], ${$name}['showalways'], ${$name}['parent']);
 				if(!is_array($message)){
 					break;

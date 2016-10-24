@@ -479,11 +479,13 @@ class editcalendarevent_pageobject extends pageobject {
 		}
 
 		// build json for calendar dropdown
-		$calendar_data	= $this->pdh->get('calendars', 'data', array());
-		$calendars		= array();
+		$calendar_data		= $this->pdh->get('calendars', 'data', array());
+		$user_calendars	= $this->pdh->get('calendars', 'calendarids4userid', array($this->user->data['user_id']));
+		$calendars			= array();
 		if(is_array($calendar_data)){
 			foreach($calendar_data as $calendar_id=>$calendar_value){
 				if($calendar_value['restricted'] == '1' && !$this->user->check_auth('a_cal_addrestricted', false)){ continue; }
+				if(!$this->values_available && !in_array($calendar_id, $user_calendars)){ continue; }
 				if($calendar_value['type'] != '3'){
 					$calendars[$calendar_id] = array(
 						'id'		=> $calendar_id,
@@ -516,7 +518,6 @@ class editcalendarevent_pageobject extends pageobject {
 			'IS_EDIT'			=> ($this->url_id > 0) ? true : false,
 			'IS_CLONED'			=> ((isset($eventdata['repeating']) && ($eventdata['repeating'] > 0 || ($eventdata['repeating'] == 'custom' && $dr_repeat_custom > 0))) ? true : false),
 			'DKP_ENABLED'		=> ($this->config->get('disable_points') == 0) ? true :false,
-			#'IS_OPERATOR'		=> $this->user->check_auth('a_cal_revent_conf', false),
 			'DR_CALENDAR_JSON'	=> json_encode($calendars),
 			'DR_CALENDAR_CID'	=> (isset($eventdata['calendar_id'])) ? $eventdata['calendar_id'] : 0,
 			'DR_REPEAT'			=> new hdropdown('repeat_dd', array('options' => $drpdwn_repeat, 'value' => ((isset($eventdata['repeating']) && (($eventdata['repeating'] == 'custom'  && $dr_repeat_custom > 0) || $eventdata['repeating'] > 0)) ? $eventdata['repeating'] : '0'))),
