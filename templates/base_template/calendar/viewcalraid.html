@@ -145,6 +145,7 @@ $(function(){
 		revert: true
 	});
 	$('.class_column').droppable({
+		tolerance: "touch",
 		accept: function (draggable) {
 			var item_wheretodrop, container;
 			item_wheretodrop = $(draggable).data("droppable-to");
@@ -153,9 +154,9 @@ $(function(){
 			return item_wheretodrop.indexOf(container) >= 0;
 		},
 		classes: {
-			"ui-droppable-active": "highlight-dropzone"
+			"ui-droppable-active": "highlight-dropzone",
+			"ui-droppable-hover": "hovering"
 		},
-		hoverClass: 'hovering',
 		drop: function(event, ui) {
 			$(ui.draggable).detach().css({top: 0,left: 0}).appendTo(this);
 
