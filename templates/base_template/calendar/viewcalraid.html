@@ -153,10 +153,6 @@ $(function(){
 			// console.log('test: '+item_wheretodrop+', container: '+container+', match: '+item_wheretodrop.indexOf(container))
 			return item_wheretodrop.indexOf(container) >= 0;
 		},
-		classes: {
-			"ui-droppable-active": "highlight-dropzone",
-			"ui-droppable-hover": "hovering"
-		},
 		drop: function(event, ui) {
 			$(ui.draggable).detach().css({top: 0,left: 0}).appendTo(this);
 
