@@ -137,10 +137,15 @@ $(function(){
 
 	// the drag and drop stuff
 	<!-- IF IS_OPERATOR -->
-	var dnd_start_container = { };
+	var dnd_start_container = { },
+		attendee_box_width	= $($('.guest_box, .attendee_box')[0]).width();
 	$('.guest_box, .attendee_box').draggable({
 		start: function(event, ui){
+			$(this).css('width', attendee_box_width+'px');
 			dnd_start_container = $(this).parent();
+		},
+		stop: function(event, ui){
+			$(this).removeAttr('style');
 		},
 		revert: true,
 		scope: "attendees"
@@ -156,7 +161,7 @@ $(function(){
 			return item_wheretodrop.indexOf(container) >= 0;
 		},
 		drop: function(event, ui) {
-			$(ui.draggable).detach().css({top: 0,left: 0}).appendTo(this);
+			$(ui.draggable).detach().appendTo(this);
 
 			// save the status to the database
 			var is_guest = ($(ui.draggable).data("is-guest") == true) ? true : false;
