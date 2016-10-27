@@ -142,10 +142,12 @@ $(function(){
 		start: function(event, ui){
 			dnd_start_container = $(this).parent();
 		},
-		revert: true
+		revert: true,
+		scope: "attendees"
 	});
 	$('.class_column').droppable({
 		tolerance: "touch",
+		scope: "attendees",
 		accept: function (draggable) {
 			var item_wheretodrop, container;
 			item_wheretodrop = $(draggable).data("droppable-to");
