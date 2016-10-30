@@ -2309,8 +2309,8 @@ fieldset.raidcal_infos dt, fieldset.moderation_panel dt {
 
 	/* drag & drop */
 	.ui-draggable			{ cursor:move; }
-	.ui-draggable-dragging	{ border:1px dotted @eqdkpContentPositiveColor; z-index:1; }
-	.highlight-dropzone		{ opacity:1 !important; min-height:60px; background:fadeout(@eqdkpContentHighlightColor,20%); }
+	.ui-draggable-dragging	{ position:absolute !important; border:1px dotted @eqdkpContentPositiveColor; z-index:1; }
+	.ui-droppable-active	{ opacity:1 !important; min-height:60px; background:fadeout(@eqdkpContentHighlightColor,20%); }
 }
 
 /* calendar: raidevent view - Not signed in Members Bar */

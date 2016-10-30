@@ -137,14 +137,22 @@ $(function(){
 
 	// the drag and drop stuff
 	<!-- IF IS_OPERATOR -->
-	var dnd_start_container = { };
+	var dnd_start_container = { },
+		attendee_box_width	= $($('.guest_box, .attendee_box')[0]).width();
 	$('.guest_box, .attendee_box').draggable({
 		start: function(event, ui){
+			$(this).css('width', attendee_box_width+'px');
 			dnd_start_container = $(this).parent();
 		},
-		revert: true
+		stop: function(event, ui){
+			$(this).removeAttr('style');
+		},
+		revert: true,
+		scope: "attendees"
 	});
 	$('.class_column').droppable({
+		tolerance: "touch",
+		scope: "attendees",
 		accept: function (draggable) {
 			var item_wheretodrop, container;
 			item_wheretodrop = $(draggable).data("droppable-to");
@@ -152,12 +160,8 @@ $(function(){
 			// console.log('test: '+item_wheretodrop+', container: '+container+', match: '+item_wheretodrop.indexOf(container))
 			return item_wheretodrop.indexOf(container) >= 0;
 		},
-		classes: {
-			"ui-droppable-active": "highlight-dropzone"
-		},
-		hoverClass: 'hovering',
 		drop: function(event, ui) {
-			$(ui.draggable).detach().css({top: 0,left: 0}).appendTo(this);
+			$(ui.draggable).detach().appendTo(this);
 
 			// save the status to the database
 			var is_guest = ($(ui.draggable).data("is-guest") == true) ? true : false;
