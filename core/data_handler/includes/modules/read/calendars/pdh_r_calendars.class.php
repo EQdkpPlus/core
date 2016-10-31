@@ -130,7 +130,7 @@ if ( !class_exists( "pdh_r_calendars" ) ) {
 		}
 
 		public function get_permissions($id){
-			return 	(isset($this->calendars[$id]['permissions'])) ? unserialize($this->calendars[$id]['permissions']) : 'all';
+			return 	(isset($this->calendars[$id]['permissions']) && $this->calendars[$id]['permissions'] != 'all') ? unserialize($this->calendars[$id]['permissions']) : 'all';
 		}
 
 		public function get_calendarids4userid($user_id){
