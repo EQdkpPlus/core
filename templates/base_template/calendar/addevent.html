@@ -24,14 +24,14 @@ $(function() {
 
 	}).trigger('change');
 
-	$("input[type='checkbox'][name='private']").change(function() {
+	/*$("input[type='checkbox'][name='private']").change(function() {
 		console.log($(this).prop('checked'));
 		if($(this).prop('checked') == true){
 			$("#invitefield").show();
 		}else{
 			$("#invitefield").hide();
 		}
-	});
+	});*/
 
 	$('#addtemplate-button').on('click', function(){
 		var templatename = $('#mytemplatename').val();
@@ -311,7 +311,7 @@ function attendeeCount(){
 			<dt><label>{L_calendar_event_private}:</label></dt>
 			<dd>{CB_PRIVATE}</dd>
 		</dl>
-		<dl id="invitefield" style="display:none;">
+		<dl id="invitefield">
 			<dt><label>{L_calendar_sharing_receipients}:</label></dt>
 			<dd>{DR_SHARE_USERS}</dd>
 		</dl>

@@ -1227,35 +1227,21 @@ class calendarevent_pageobject extends pageobject {
 		$userstatus		= array();
 		$statusofuser	= array();
 
-		// attendees
-		if($eventdata['private'] == 1){
-			// invited
-			$event_invited		= (isset($eventdata['extension']['invited']) && count($eventdata['extension']['invited']) > 0) ? $eventdata['extension']['invited'] : array();
-			if(count($event_invited) > 0){
-				foreach($event_invited as $inviteddata){
-					$userstatus['invited'][] = array(
-						'name'		=> $this->pdh->get('user', 'name', array($inviteddata)),
-						'icon'		=> $this->pdh->get('user', 'avatar_withtooltip', array($inviteddata)),
-						'joined'	=> $this->pdh->get('calendar_events', 'joined_invitation', array($this->url_id, $inviteddata)),
-					);
-				}
+		// invited attendees
+		$event_invited		= (isset($eventdata['extension']['invited']) && count($eventdata['extension']['invited']) > 0) ? $eventdata['extension']['invited'] : array();
+		if(count($event_invited) > 0){
+			foreach($event_invited as $inviteddata){
+				$userstatus['invited'][] = array(
+					'name'		=> $this->pdh->get('user', 'name', array($inviteddata)),
+					'icon'		=> $this->pdh->get('user', 'avatar_withtooltip', array($inviteddata)),
+					'joined'	=> $this->pdh->get('calendar_events', 'joined_invitation', array($this->url_id, $inviteddata)),
+				);
 			}
+		}
 
-			// attending users
-			$event_attendees		= (isset($eventdata['extension']['attendance']) && count($eventdata['extension']['attendance']) > 0) ? $eventdata['extension']['attendance'] : array();
-			if(count($event_attendees) > 0){
-				foreach($event_attendees as $attendeedata=>$status){
-					$statusofuser[$attendeedata]	= $status;
-					$attendancestatus				= $this->statusID2status($status);
-					$userstatus[$attendancestatus][] = array(
-						'name'		=> $this->pdh->get('user', 'name', array($attendeedata)),
-						'icon'		=> $this->pdh->get('user', 'avatar_withtooltip', array($attendeedata)),
-						'joined'	=> false,
-					);
-				}
-			}d($statusofuser);
-		}else{
-			$event_attendees		= (isset($eventdata['extension']['attendance']) && count($eventdata['extension']['attendance']) > 0) ? $eventdata['extension']['attendance'] : array();
+		// attending users
+		$event_attendees		= (isset($eventdata['extension']['attendance']) && count($eventdata['extension']['attendance']) > 0) ? $eventdata['extension']['attendance'] : array();
+		if(count($event_attendees) > 0){
 			foreach($event_attendees as $attuserid=>$attstatus){
 				$attendancestatus			= $this->statusID2status($attstatus);
 				$statusofuser[$attuserid]	= $attstatus;
