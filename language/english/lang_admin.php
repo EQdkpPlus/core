@@ -1780,7 +1780,7 @@ $lang = array(
 		'notification_prio_0' => 'Green',
 		'notification_prio_1' => 'Orange',
 		'notification_prio_2' => 'Red',
-
+		"add_portal_module" => "Add portal module",
 		"overwrite_gamedata" => "Overwrite Gamedata",
 		"overwrite_gamedata_info" => "Should your gamedata like Events or MultiDKP-Pools be overwritten on game- or gamelanguage-change by the default gamedata?",
 		"overwrite_gamedata_yes" => "Yes (own Events and MultiDKP-Pools will be deleted, standings might be change)",
