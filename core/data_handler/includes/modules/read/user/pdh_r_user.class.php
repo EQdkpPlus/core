@@ -152,6 +152,8 @@ if (!class_exists("pdh_r_user")){
 
 		public function get_userid_for_authaccount($strAuthAccount, $strMethod){
 			if ($strAuthAccount != ""){
+				if(!$this->blnDecryptedAll) $this->decrypt_data_all();
+				
 				$arrResult = search_in_array($strAuthAccount, $this->users, true, $strMethod);
 				if (is_array($arrResult)){
 					$arrResultKeys = array_keys($arrResult);

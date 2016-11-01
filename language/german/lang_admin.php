@@ -1149,6 +1149,9 @@ $lang = array(
 "core_sett_f_login_bnet_eqdkp_appid" => "EQdkp Plus App-ID",
 "core_sett_f_help_login_bnet_eqdkp_appid" => "Trage hier die App-ID der EQdkp Plus Repo App ein, die du im <a href=\"https://eqdkp-plus.eu/repository/MyApps/\" target=\"_blank\">EQdkp-Plus Repo</a> angelegt hast.",
 "core_sett_f_login_bnet_eqdkp_appsecret" => "EQdkp Plus App-Secret",
+		"core_sett_f_login_twitch_appid" => "Twitch Client-ID",
+		"core_sett_f_help_login_twitch_appid" => "Trage hier den Key deiner App bei <a href=\"https://www.twitch.tv/settings/connections\" target=\"_blank\">https://www.twitch.tv/settings/connections</a> ein. Als Redirect-URI verwende http://deinedomain.de/index.php/Login/?login&lmethod=twitch",
+		"core_sett_f_login_twitch_appsecret" => "Twitch Client Secret",
 
 "core_sett_f_enable_embedly" => "Automatisches Umwandeln von Links zu Videos/Bildern aktivieren",
 "core_sett_f_help_enable_embedly" => "Link zu Videos/Bildern, z.B. werden automatisch YouTube-Links zu den entsprechenden Videos umgewandelt",

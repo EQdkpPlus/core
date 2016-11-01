@@ -70,9 +70,11 @@ class login_battlenet extends gen_class {
 	
 	public function init_oauth(){
 		if (!$this->oauth_loaded){
-			require($this->root_path.'libraries/oauth/Client.php');
-			require($this->root_path.'libraries/oauth/GrantType/IGrantType.php');
-			require($this->root_path.'libraries/oauth/GrantType/AuthorizationCode.php');
+			if(!class_exists('OAuth2\\Exception')) {
+				require($this->root_path.'libraries/oauth/Client.php');
+				require($this->root_path.'libraries/oauth/GrantType/IGrantType.php');
+				require($this->root_path.'libraries/oauth/GrantType/AuthorizationCode.php');
+			}
 			
 			$this->appid = $this->config->get('login_bnet_appid');
 			$this->appsecret = $this->config->get('login_bnet_appsecret');

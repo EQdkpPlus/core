@@ -128,6 +128,8 @@ class login_pageobject extends pageobject {
 				}
 				redirect($redirect_url);
 			}
+		} elseif($this->in->exists('lmethod')) {
+			redirect($this->controller_path_plain.'Settings/?mode=addauthacc&lmethod='.$this->in->get('lmethod').'&code='.$this->in->get('code').'&token='.$this->in->get('token').'&error='.$this->in->get('error'));
 		} else {
 			redirect($this->controller_path_plain.$this->SID);
 		}
