@@ -1956,7 +1956,7 @@ ul.portal_block {
 	left: 0;
 	bottom: 0;
 	right: 0;
-	filter: brightness(.5);
+	filter: brightness(.7);
 	transition: .5s ease-in-out;
 	z-index: 0;
 	background-size: cover;
