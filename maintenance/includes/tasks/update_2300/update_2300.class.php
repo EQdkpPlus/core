@@ -69,6 +69,9 @@ class update_2300 extends sql_update_task {
 				29	=> 'Add permission',
 				30	=> 'Add Cronjob Table',
 				31 => 'Add permissions field to calendar table',
+				32 => 'Add permissions field to calendar table',
+				33 => 'Add Steam field',
+				34 => 'Add Discord Field',
 			),
 			'german' => array(
 				'update_2300'	=> 'EQdkp Plus 2.3.0',
@@ -103,6 +106,9 @@ class update_2300 extends sql_update_task {
 				29	=> 'Füge Berechtigung hinzu',
 				30	=> 'Erstelle Cronjob Tabelle',
 				31 => 'Füge Berechtigungen Feld zu Kalendertabelle hinzu',
+				32 => 'Füge Berechtigungen Feld zu Kalendertabelle hinzu',
+				33 => 'Füge Steam Benutzerprofilfeld hinzu',
+				34 => 'Füge Discord Benutzerprofilfeld hinzu',
 			),
 		);
 
@@ -169,7 +175,9 @@ class update_2300 extends sql_update_task {
 				PRIMARY KEY (`id`)
 			) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;",
 			31	=> "ALTER TABLE `__calendars` ADD `permissions` VARCHAR(255) COLLATE utf8_bin NOT NULL DEFAULT 'all' AFTER `affiliation`;",
-			32 => "UPDATE __calendars SET `permissions` = 'all';", 
+			32 => "UPDATE __calendars SET `permissions` = 'all';",
+			33 => "INSERT INTO `__user_profilefields` (`id`, `name`, `lang_var`, `type`, `length`, `minlength`, `validation`, `required`, `show_on_registration`, `enabled`, `sort_order`, `is_contact`, `contact_url`, `icon_or_image`, `bridge_field`, `options`, `editable`) VALUES (14, 'Steam', 'userpf_steam', 'text', 30, 2, '[\\w_]+', 0, 0, 1, 14, 1, 'https://steamcommunity.com/id/%s/', 'fa-steam-square', NULL, NULL, 1);",
+			34 => "INSERT INTO `__user_profilefields` (`id`, `name`, `lang_var`, `type`, `length`, `minlength`, `validation`, `required`, `show_on_registration`, `enabled`, `sort_order`, `is_contact`, `contact_url`, `icon_or_image`, `bridge_field`, `options`, `editable`) VALUES (15, 'Discord', '', 'text', 30, 2, '[\\w_]+#[0-9]{4}', 0, 0, 1, 15, 1, '', '', NULL, NULL, 1);",	
 		);
 	}
 

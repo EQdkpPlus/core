@@ -1004,6 +1004,7 @@ $lang = array(
 	"userpf_country" => 'County',
 	"userpf_name" => 'Name',
 	"userpf_lastname" => 'Lastname',
+	"userpf_steam" => 'Steam',
 	"fv_php_minlength_error" => 'The input in field \'%s\' was too short!',
 	"fv_php_maxlength_error" => 'The input in field \'%s\' was too long!',
 	"user_sett_f_priv_userprofile_age" => 'Age',

@@ -966,6 +966,7 @@ $lang = array(
 "userpf_country" => "Land",
 "userpf_name" => "Vorname",
 "userpf_lastname" => "Nachname",
+"userpf_steam" => 'Steam',		
 "fv_php_minlength_error" => 'Die Eingabe für das Feld \'%s\' war zu kurz!',
 "fv_php_maxlength_error" => 'Die Eingabe für das Feld \'%s\' war zu lang!',
 "user_sett_f_priv_userprofile_age" => "Alter",
