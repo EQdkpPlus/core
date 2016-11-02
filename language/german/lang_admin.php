@@ -1816,5 +1816,6 @@ $lang = array(
 "usergroup_edit_membership_info" => "Du bist Mitglied dieser Benutzergruppe. Änderungen an dieser Benutzergruppe haben direkten Einfluss auf deinen Benutzeraccount. Sei deshalb vorsichtig.",
 "user_resolve_perms" => "Berechtigungen verfolgen",
 "article_categories" => "Artikelkategorien",
+"amount" => "Anzahl",		
 );
 ?>

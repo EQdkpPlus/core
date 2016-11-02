@@ -129,7 +129,13 @@ class ManageRaids extends page_generic {
 			if(!empty($data['items']) && is_array($data['items'])) {
 				foreach($data['items'] as $ik => $item) {
 					if($item['group_key'] == 'new' OR empty($item['group_key'])) {
-						$item_upd[] = $this->pdh->put('item', 'add_item', array($item['name'], $item['members'], $data['raid']['id'], $item['item_id'], $item['value'], $item['itempool_id'], $data['raid']['date']+$ik));
+						$intAmount = (int)$item['amount'];						
+						if($intAmount > 0){
+							for($i=0; $i<$intAmount; $i++){
+								$item_upd[] = $this->pdh->put('item', 'add_item', array($item['name'], $item['members'], $data['raid']['id'], $item['item_id'], $item['value'], $item['itempool_id'], $data['raid']['date']+$ik));
+							}
+						}
+						
 					} else {
 						$item_upd[] = $this->pdh->put('item', 'update_item', array($item['group_key'], $item['name'], $item['members'], $data['raid']['id'], $item['item_id'], $item['value'], $item['itempool_id'], $data['raid']['date']+$ik));
 					}
@@ -496,6 +502,7 @@ class ManageRaids extends page_generic {
 					$data['items'][$key]['members'] = $this->in->getArray('items:'.$key.':members','int');
 					$data['items'][$key]['value'] = $this->in->get('items:'.$key.':value',0.0);
 					$data['items'][$key]['itempool_id'] = $this->in->get('items:'.$key.':itempool_id',0);
+					$data['items'][$key]['amount'] = $this->in->get('items:'.$key.':amount',0);
 				} else {
 					$ids2del = $this->pdh->get('item', 'ids_of_group_key', array($this->in->get('items:'.$key.':group_key','','hash')));
 					foreach($ids2del as $id) {

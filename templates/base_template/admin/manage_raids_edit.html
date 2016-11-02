@@ -209,6 +209,9 @@
 					<!-- IF not S_POINTS_DISABLED -->
 					<th style="width:120px">{L_value}</th>
 					<!-- ENDIF -->
+					<!-- IF not S_RAID_UPD -->
+					<th style="width:50px">{L_amount}</th>
+					<!-- ENDIF -->
 				</tr>
 			</thead>
 			<tbody class="add_item_container">
@@ -265,6 +268,9 @@
 		<td>{MEMBER_ITEM_DROPDOWN}</td>
 		<!-- IF not S_POINTS_DISABLED -->
 		<td><input type="text" name="items[KEY][value]" value="" class="input" /></td>
+		<!-- ENDIF -->
+		<!-- IF not S_RAID_UPD -->
+		<td><input type="text" name="items[KEY][amount]" value="1" class="input" size="3" /></td>
 		<!-- ENDIF -->
 	</tr>
 </table>
