@@ -101,7 +101,7 @@ class hsingleselect extends html {
 	}
 
 	public function _inpval() {
-		return $this->in->getArray($this->name, $this->datatype);
+		return $this->in->get($this->name, '', $this->datatype);
 	}
 }
 ?>
