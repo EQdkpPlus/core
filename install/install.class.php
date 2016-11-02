@@ -277,7 +277,6 @@ class install extends gen_class {
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 
-		<link rel="stylesheet" type="text/css" media="screen" href="../libraries/jquery/core/core.css" />
 		<script type="text/javascript" language="javascript" src="../libraries/jquery/core/core.min.js"></script>
 		<link href="../libraries/FontAwesome/font-awesome.min.css" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" media="screen" href="style/install.css" />
