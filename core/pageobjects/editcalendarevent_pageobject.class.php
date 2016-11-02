@@ -108,7 +108,7 @@ class editcalendarevent_pageobject extends pageobject {
 		if(is_array($a_users) && count($a_users) > 0){
 			foreach($a_users as $userid){
 				$strEventTitle	= $strEventName.$this->time->date_for_user($userid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true);
-				$this->ntfy->add('calendarevent_invitation', $eventID, $this->pdh->get('calendar_events', 'creator', array($eventID)), $this->routing->build('Calendar', false, false, true, true), $userid, $strEventTitle);
+				$this->ntfy->add('calendarevent_invitation', $eventID, $this->pdh->get('calendar_events', 'creator', array($eventID)), $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($eventID)), $eventID, true, true), $userid, $strEventTitle);
 			}
 		}
 	}
