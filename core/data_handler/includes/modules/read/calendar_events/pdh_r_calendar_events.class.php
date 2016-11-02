@@ -79,7 +79,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			$this->events_unique		= array();
 			$this->repeatable_events	= array();
 			$this->event_timestamps		= array();
-			
+
 			$objQuery = $this->db->query("SELECT * FROM __calendar_events ORDER BY id ASC");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
@@ -409,8 +409,13 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			return 	(isset($this->events[$id]['visible'])) ? $this->events[$id]['visible'] : 0;
 		}
 
-		public function get_extension($id){
-			return (isset($this->events[$id]['extension'])) ? 	$this->events[$id]['extension'] : array();
+		public function get_extension($id, $value=false){
+			if($value && isset($this->events[$id]['extension'][$value])){
+				return $this->events[$id]['extension'][$value];
+			}elseif(isset($this->events[$id]['extension'])){
+				return $this->events[$id]['extension'];
+			}
+			return array();
 		}
 
 		public function get_notes($id, $bbcode2html=false){

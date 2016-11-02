@@ -311,6 +311,7 @@ class editcalendarevent_pageobject extends pageobject {
 			));
 		}else{
 			$withtime		= ($this->in->get('allday') == '1') ? 0 : 1;
+			$invited_users	= $this->in->getArray('invited', 'int');
 			$this->pdh->put('calendar_events', 'update_cevents', array(
 				$this->url_id,
 				$this->in->get('calendar_id'),
@@ -322,10 +323,19 @@ class editcalendarevent_pageobject extends pageobject {
 				$this->in->get('note'),
 				$this->in->get('allday'),
 				array(
-					'invited'			=> $this->in->getArray('invited', 'int'),
+					'invited'			=> $invited,
 					'location'			=> $this->in->get('location')
 				)
 			));
+
+			// send notifications to newly invited users
+			$current_invited_users	= $this->pdh->get('calendar_events', 'extension', array($this->url_id, 'invited'));
+			if($current_invited_users !== $invited_users){
+				$invite_new_users	= array_diff($current_invited_users, $invited_users);
+				if(count($invite_new_users) > 0){
+					$this->notify_invitations($raidid, $invite_new_users);
+				}
+			}
 		}
 
 		//Flush Cache so the Cronjob can access the new data
