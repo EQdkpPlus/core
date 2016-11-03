@@ -217,7 +217,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 		}
 
 		public function get_data($id=''){
-			return 	($id) ? $this->events[$id] : $this->events;
+			return 	($id) ? ((isset($this->events[$id])) ? $this->events[$id] : array()) : $this->events;
 		}
 
 		public function get_template($id=0){
@@ -365,7 +365,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			$userid	= ($userid > 0) ? $userid : $this->user->data['user_id'];
 			$creator			= $this->pdh->get('calendar_events', 'creatorid', array($raidid));
 			$ev_ext				= $this->pdh->get('calendar_events', 'extension', array($raidid));
-			$raidleaders_chars	= ($ev_ext['raidleader'] > 0) ? $ev_ext['raidleader'] : array();
+			$raidleaders_chars	= (isset($ev_ext['raidleader']) && $ev_ext['raidleader'] > 0) ? $ev_ext['raidleader'] : array();
 			$raidleaders_users	= $this->pdh->get('member', 'userid', array($raidleaders_chars));
 			if (!is_array($raidleaders_users)) $raidleaders_users = array();
 			return (($creator == $userid) || in_array($userid, $raidleaders_users))  ? true : false;

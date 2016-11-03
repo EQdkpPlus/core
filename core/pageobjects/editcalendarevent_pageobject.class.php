@@ -101,7 +101,7 @@ class editcalendarevent_pageobject extends pageobject {
 
 	private function notify_invitations($eventID, $invited_users=false){
 		$eventextension	= $this->pdh->get('calendar_events', 'extension', array($eventID));
-		$strEventName = $this->pdh->get('event', 'name', array($eventextension['raid_eventid']));
+		$strEventName	= $this->pdh->get('calendar_events', 'name', array($eventID));
 		if($strEventName && $strEventName != "") $strEventName .= ', ';
 
 		$a_users = (isset($invited_users) && is_array($invited_users)) ? $invited_users : ((isset($eventextension['invited'])) ? $eventextension['invited'] : false);
@@ -230,14 +230,16 @@ class editcalendarevent_pageobject extends pageobject {
 				0,
 				$this->in->get('private', 0),
 			));
-			if($raidid > 0){
-				$this->notify_invitations($raidid, $invited_users);
-			}
 		}
 		if($this->in->get('repeating', 0) > 0){
 			$this->cronjobs->run_cron('calevents_repeatable', true);
 		}
 		$this->pdh->process_hook_queue();
+
+		// send the notification for a event invitiation
+		if($this->in->get('calendarmode') != 'raid' && $raidid > 0){
+			$this->notify_invitations($raidid, $invited_users);
+		}
 
 		// close the dialog
 		if($this->in->exists('simple_head')){
@@ -331,9 +333,9 @@ class editcalendarevent_pageobject extends pageobject {
 			// send notifications to newly invited users
 			$current_invited_users	= $this->pdh->get('calendar_events', 'extension', array($this->url_id, 'invited'));
 			if($current_invited_users !== $invited_users){
-				$invite_new_users	= array_diff($current_invited_users, $invited_users);
+				$invite_new_users	= array_diff($invited_users, $current_invited_users);
 				if(count($invite_new_users) > 0){
-					$this->notify_invitations($raidid, $invite_new_users);
+					$this->notify_invitations($this->url_id, $invite_new_users);
 				}
 			}
 		}

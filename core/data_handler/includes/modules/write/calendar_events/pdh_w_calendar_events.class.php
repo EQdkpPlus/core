@@ -70,7 +70,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 				}
 			}
 
-			if($old['private'] > 0 && $old['creator'] != $this->user->data['user_id']){
+			if(isset($old['private']) && $old['private'] > 0 && $old['creator'] != $this->user->data['user_id']){
 				return false;
 			}
 
@@ -175,7 +175,6 @@ if(!class_exists('pdh_w_calendar_events')) {
 					'notes'					=> $old['notes'],
 					'repeating'				=> '{L_calendar_log_repeat_'.$old['repeat'].'}',
 					'extension'				=> serialize($extdata),
-					'mode'					=> '{L_calendar_mode_'.$extdata['calendarmode'].'}',
 				);
 				$arrNew = array(
 					'calendar_id'			=> $this->pdh->get('calendars', 'name', array($cal_id)),
@@ -186,12 +185,16 @@ if(!class_exists('pdh_w_calendar_events')) {
 					'notes'					=> $notes,
 					'repeating'				=> '{L_calendar_log_repeat_'.$repeat.'}',
 					'extension'				=> serialize($extension),
-					'mode'					=> '{L_calendar_mode_'.$extension['calendarmode'].'}',
 				);
+
+				if(isset($extension['calendarmode'])){
+					$arrOld['mode'] = '{L_calendar_mode_'.$extdata['calendarmode'].'}';
+					$arrNew['mode'] = '{L_calendar_mode_'.$extension['calendarmode'].'}';
+				}
 
 				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
 
-				$this->log_insert('calendar_log_eventupdated', $log_action, $id, (($extension['raid_eventid'] > 0) ? $this->pdh->get('event', 'name', array($extension['raid_eventid'])) : $name), true, 'calendar');
+				$this->log_insert('calendar_log_eventupdated', $log_action, $id, ((isset($extension['raid_eventid']) && $extension['raid_eventid'] > 0) ? $this->pdh->get('event', 'name', array($extension['raid_eventid'])) : $name), true, 'calendar');
 			}
 
 			$this->pdh->enqueue_hook('calendar_events_update', array($id));
@@ -239,12 +242,14 @@ if(!class_exists('pdh_w_calendar_events')) {
 					'repeating'				=> '{L_calendar_log_repeat_'.$repeat.'}',
 					'extension'				=> (is_array($extension)) ? serialize($extension) : '',
 					'cloneid'				=> ($cloneid > 0) ? $cloneid : 0,
-					'mode'					=> '{L_calendar_mode_'.$extension['calendarmode'].'}',
 				);
+				if(isset($extension['calendarmode'])){
+					$arrNew['mode'] = '{L_calendar_mode_'.$extension['calendarmode'].'}';
+				}
 
 				$log_action = $this->logs->diff(false, $arrNew, $this->arrLogLang);
 
-				$this->log_insert('calendar_log_eventadded', $log_action, $id, (($extension['raid_eventid'] > 0) ? $this->pdh->get('event', 'name', array($extension['raid_eventid'])) : $name), true, 'calendar', ((defined("IN_CRON") && IN_CRON) ? CRONJOB : false));
+				$this->log_insert('calendar_log_eventadded', $log_action, $id, ((isset($extension['raid_eventid']) && $extension['raid_eventid'] > 0) ? $this->pdh->get('event', 'name', array($extension['raid_eventid'])) : $name), true, 'calendar', ((defined("IN_CRON") && IN_CRON) ? CRONJOB : false));
 			}
 
 			$this->pdh->enqueue_hook('calendar_events_update', array($id));
