@@ -230,7 +230,7 @@ class calendar_pageobject extends pageobject {
 						}
 
 						// build the event colours
-						$eventcolor		= $this->pdh->get('calendars', 'color', $feed);
+						$eventcolor		= $this->pdh->get('calendars', 'color', $calender_id);
 						$eventcolor_txt	= (get_brightness($eventcolor) > 130) ? 'black' : 'white';
 
 						$event_json[] = array(

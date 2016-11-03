@@ -102,19 +102,19 @@ if ( !class_exists( "pdh_r_calendars" ) ) {
 		}
 
 		public function get_name($id){
-			return 	$this->calendars[$id]['name'];
+			return (isset($this->calendars[$id]['name'])) ? $this->calendars[$id]['name'] : '';
 		}
 
 		public function get_color($id){
-			return 	$this->calendars[$id]['color'];
+			return isset($this->calendars[$id]['color']) ? $this->calendars[$id]['color'] : '';
 		}
 
 		public function get_private($id){
-			return 	$this->calendars[$id]['private'];
+			return (isset($this->calendars[$id]['private'])) ? $this->calendars[$id]['private'] : 0;
 		}
 
 		public function get_feed($id){
-			return 	$this->calendars[$id]['feed'];
+			return (isset($this->calendars[$id]['feed'])) ? $this->calendars[$id]['feed'] : '';
 		}
 
 		public function get_restricted($id){
