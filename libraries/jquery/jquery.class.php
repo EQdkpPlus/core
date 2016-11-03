@@ -285,7 +285,7 @@ if (!class_exists("jquery")) {
 		* @param $options	Array with options
 		* @return CHAR
 		*/
-		public function CodeEditor($id, $code, $type="html", $options=''){
+		public function CodeEditor($id, $code, $type="html", $options=array()){
 			// Check if the JS file is loaded..
 			if(!$this->ce_loaded){
 				$this->tpl->js_file($this->path.'js/syntax/codemirror.js');
@@ -642,7 +642,7 @@ if (!class_exists("jquery")) {
 		* @param $list		Content array in the format: title => content
 		* @return CHAR
 		*/
-		public function Accordion($name, $list, $options=''){
+		public function Accordion($name, $list, $options=array()){
 			$tmpopt = array();
 			$tmpopt[] = 'heightStyle: "content"';
 			if(isset($options['active'])){ $tmpopt[] = 'active: '.$options['active'];}
@@ -689,7 +689,7 @@ if (!class_exists("jquery")) {
 		* @param $options	Array with Options for calendar
 		* @return CHAR
 		*/
-		public function Calendar($name, $value, $jscode='', $options='', $returnJS=false){
+		public function Calendar($name, $value, $jscode='', $options=array(), $returnJS=false){
 			$mclass		= (isset($options['class'])) ? ' '.$options['class'] : '';
 			$itemid		= (isset($options['id'])) ? $options['id'] : 'cal_'.$name;
 			$myreadonly = (isset($options['readonly']) && $options['readonly']) ? ' readonly="readonly"' : '';
@@ -874,7 +874,7 @@ if (!class_exists("jquery")) {
 		* @param $options		Array with options [completed, total, text, txtalign, directout]
 		* @return CHAR
 		*/
-		public function progressbar($id, $value=0, $options=''){
+		public function progressbar($id, $value=0, $options=array()){
 			$html	= '';
 			// options
 			$value = (isset($options['completed']) && isset($options['total']) && $options['total'] >= $options['completed']) ? (($options['completed'] != 0) ? intval(($options['completed'] / $options['total']) * 100) : 0) : (($value >= 0 && $value <= 100) ? $value : '0');
@@ -935,7 +935,7 @@ if (!class_exists("jquery")) {
 		* @param $options		Options array
 		* @return CHAR
 		*/
-		public function starrating($name, $url, $options=''){
+		public function starrating($name, $url, $options=array()){
 			if(!$this->inits['starrating']){
 				$this->starrating_js();
 				$this->inits['starrating'] = true;
@@ -983,7 +983,7 @@ if (!class_exists("jquery")) {
 		* @param $options	Array with options [id, preview_num, no_animation, sel_text, header, multiple]
 		* @return CHAR
 		*/
-		public function MultiSelect($name, $list, $selected, $options='', $returnJS=false){
+		public function MultiSelect($name, $list, $selected, $options=array(), $returnJS=false){
 			$myID		= (isset($options['id'])) ? $options['id'] : "dw_".$name;
 			if(empty($options['height'])) $options['height'] = 200;
 			if(empty($options['width'])) $options['width'] = 200;
@@ -1089,7 +1089,7 @@ if (!class_exists("jquery")) {
 		* @param $options				The options array
 		* @return HTML Code
 		*/
-		public function charts($type, $id, $data, $options=''){
+		public function charts($type, $id, $data, $options=array()){
 			$this->init_jqplot();
 			switch($type){
 				case 'line':	return $this->charts_line($id, $data, $options);break;
@@ -1106,7 +1106,7 @@ if (!class_exists("jquery")) {
 		* @param $options			The options array
 		* @return TimePicker JS Code
 		*/
-		private function charts_pie($id, $data, $options=''){
+		private function charts_pie($id, $data, $options=array()){
 			$js_array		= $this->Array2jsArray($data);
 
 			$tmpopt		= array();
@@ -1139,7 +1139,7 @@ if (!class_exists("jquery")) {
 		* @param $options				The options array
 		* @return HTML Code
 		*/
-		private function charts_line($id, $data, $options=''){
+		private function charts_line($id, $data, $options=array()){
 			$js_array		= $this->Array2jsArray($data, false);
 
 			// switch the renderers
@@ -1174,7 +1174,7 @@ if (!class_exists("jquery")) {
 		 * @param $options				The options array
 		 * @return HTML Code
 		 */
-		private function charts_multiline($id, $data, $options=''){
+		private function charts_multiline($id, $data, $options=array()){
 			// switch the renderers
 			switch ($options['xrenderer']){
 				case 'date':	$renderer = 'renderer:$.jqplot.DateAxisRenderer';break;
@@ -1392,7 +1392,7 @@ if (!class_exists("jquery")) {
 		* @param $cstlst		Array of the binding dropbox
 		* @return dropdown options
 		*/
-		public function dd_create_ajax($cstlist, $options=''){
+		public function dd_create_ajax($cstlist, $options=array()){
 			$output = '';
 			if(is_array($cstlist)){
 				foreach ($cstlist as $uid => $uname){
@@ -1416,7 +1416,7 @@ if (!class_exists("jquery")) {
 		* @param $storageFolder		Storage folder
 		* @return void
 		*/
-		public function imageUploader($type, $inputid, $imgname, $imgpath, $options='', $storageFolder=false){
+		public function imageUploader($type, $inputid, $imgname, $imgpath, $options=array(), $storageFolder=false){
 			$this->fileBrowser($type, 'image', $storageFolder);
 
 			$default_img_svg	= str_replace('.png', '.svg', $options['noimgfile']);
