@@ -39,7 +39,7 @@ class template extends gen_class {
 	protected $root_dir				= '';
 	protected $template				= '';
 	protected $files				= array();
-	protected $filename				= '';
+	protected $filename				= array();
 	protected $error_message		= false;
 	protected $compiled_code		= array();
 	protected $uncompiled_code		= array();
