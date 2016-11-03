@@ -197,13 +197,13 @@ if (!class_exists("jquery")) {
 				if($returnJS){
 					$output	 = "<script type='text/javascript' src='https://maps.googleapis.com/maps/api/js?key=".$this->googleAPIkey."&sensor=true&libraries=places'></script>";
 					$output .= "<script type='text/javascript' src='".$this->env->buildlink()."/libraries/jquery/js/placepicker/jquery.placepicker.min.js'></script>";
+					return $output;
 				}else{
 					$this->tpl->js_file("https://maps.googleapis.com/maps/api/js?key=".$this->googleAPIkey."&sensor=true&libraries=places", 'direct');
 					$this->tpl->js_file($this->path."js/placepicker/jquery.placepicker.min.js");
 				}
 				$this->inits['placepicker']	= true;
 			}
-			return $output;
 		}
 
 		// https://github.com/hpneo/gmaps
