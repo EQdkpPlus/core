@@ -27,7 +27,6 @@ if (!class_exists("jquery")) {
 	class jquery extends gen_class {
 		public static $shortcuts = array('puf'=> 'urlfetcher');
 
-		private $tt_init				= '';
 		private $ce_loaded				= false;
 		private $language_set			= array();
 		private $dyndd_counter			= 0;
@@ -44,6 +43,7 @@ if (!class_exists("jquery")) {
 			'multilang'			=> false,
 			'placepicker'		=> false,
 			'googlemaps'		=> false,
+			'qtip'				=> array(),
 			'depr_suckerfish'	=> false,		// DEPRECATED
 		);
 
@@ -1219,7 +1219,8 @@ if (!class_exists("jquery")) {
 		* @return Tooltip
 		*/
 		public function qtip($name, $content, $options=array()){
-			if(!isset($this->tt_init[$name])){
+			$varname	= str_replace(".", "", $name);
+			if(!isset($this->inits['qtip'][$varname])){
 				$content			= (isset($options['contfunc'])) ? '{ text: function(api) { '.$content.' } }' : '"'.$content.'"';
 				$viewport		= (isset($options['custom_viewport'])) ? $options['custom_viewport'] : '$(window)';
 				$adjust_pos		= (isset($options['position_adjustment'])) ? $options['position_adjustment'] : 'shift none';
@@ -1247,7 +1248,7 @@ if (!class_exists("jquery")) {
 						widget: true
 					}
 				});', 'docready');
-				$this->tt_init[$name] = true;
+				$this->inits['qtip'][$varname] = true;
 			}
 		}
 
