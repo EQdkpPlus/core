@@ -323,7 +323,7 @@ class editcalendarevent_pageobject extends pageobject {
 				$this->in->get('note'),
 				$this->in->get('allday'),
 				array(
-					'invited'			=> $invited,
+					'invited'			=> $invited_users,
 					'location'			=> $this->in->get('location')
 				)
 			));
