@@ -120,7 +120,7 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 		}
 
 		public function get_fieldlist(){
-			return array_keys($this->profile_field_mapping);
+			return (isset($this->profile_field_mapping) && is_array($this->profile_field_mapping)) ? array_keys($this->profile_field_mapping) : array();
 		}
 
 		public function get_lang($name) {
