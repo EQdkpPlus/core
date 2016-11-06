@@ -1143,7 +1143,7 @@ class core extends gen_class {
 
 		public function Copyright(){
 			return '<div class="copyright">
-						<a href="'.EQDKP_ABOUT_URL.'" target="new">EQDKP-PLUS '.((DEBUG > 3) ? '[FILE: '.VERSION_INT.', DB: '.$this->config->get('plus_version').']' : VERSION_EXT).' &copy; '.$this->time->date('Y', $this->time->time).' by EQdkp-Plus Team</a>
+						'.((!defined('TMP_DISABLE_EQDKP_URL')) ? '<a href="'.EQDKP_ABOUT_URL.'" target="new">' : '').'EQDKP-PLUS '.((DEBUG > 3) ? '[FILE: '.VERSION_INT.', DB: '.$this->config->get('plus_version').']' : VERSION_EXT).' &copy; '.$this->time->date('Y', $this->time->time).' by EQdkp-Plus Team'.((!defined('TMP_DISABLE_EQDKP_URL')) ? '</a>' : '').'
 						<!-- Style '.$this->user->style['style_name'].' '.$this->user->style['style_version'].' -->
 					</div>';
 		}
