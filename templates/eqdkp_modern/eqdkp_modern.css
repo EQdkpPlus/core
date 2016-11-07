@@ -3584,7 +3584,6 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	}
 
 	.nav-mobile > i {
-		float: right;
 		background-color: #fff;
 		border-radius: 4px;
 		color: #000;
@@ -3609,11 +3608,11 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		.overlay-header .close		{ z-index:100; }
 		.mainmenu-mobile, .adminmenu-mobile {
 			&-wrapper				{ position:relative; left:0; transition:transform 0.24s cubic-bezier(0.25, 0.46, 0.45, 0.94); transition:transform 0.24s ease-in-out; }
-			&-wrapper .heading		{ padding:10px 15px; color:lighten(@eqdkpContentFontColor, 33.5); font-size:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+			&-wrapper .heading		{ padding:10px 15px; color:lighten(@eqdkpContentFontColor, 33.5); font-size:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:bold;}
 			&-wrapper.open .heading	{ display:none; }
 			
 			li:not(:last-child)		{ margin-bottom:1px; }
-			a						{ display: block; padding: 10px 30px; position: relative; font-size: 14px; font-weight:bold; color:@eqdkpContentLinkColor; background:lighten(@eqdkpContentBackgroundColor, 5); }
+			a						{ display: block; padding: 10px 30px; position: relative; font-size: 14px; color:@eqdkpContentLinkColor; background:lighten(@eqdkpContentBackgroundColor, 5); }
 			
 			.sub-menu-arrow:after	{ content:'\f105'; display:block; font-family:'FontAwesome'; font-size:18px; color:@eqdkpContentLinkColor; position:absolute; right:18px; top:50%; transform:translateY(-50%); }
 			.sub-menu				{ display:none; width:100%; position:absolute; top:0; left:100%; bottom:0; right:0; }
