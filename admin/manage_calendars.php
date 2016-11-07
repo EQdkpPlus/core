@@ -88,12 +88,6 @@ class Manage_Calendars extends page_generic {
 			3	=> $this->user->lang(array('calendars_types', 3)),
 		);
 
-		// usergroups without ID 1 (guests)
-		$usergroups = $this->pdh->get('user_groups', 'id_list');
-		if(($usergrpkey = array_search(1, $usergroups)) !== false) {
-			unset($usergroups[$usergrpkey]);
-		}
-
 		// ranks
 		$new_id = 0;
 		$order = $this->in->get('order','0.0');
@@ -108,7 +102,6 @@ class Manage_Calendars extends page_generic {
 		$new_id = 1;
 		ksort($ranks);
 		foreach($ranks as $id => $name) {
-			$permissionvalue = $this->pdh->get('calendars', 'permissions', array($id));
 			$this->tpl->assign_block_vars('calendars', array(
 				'KEY'				=> $key,
 				'DELETABLE'		=> $this->pdh->get('calendars', 'is_deletable', array($id)),
@@ -119,7 +112,7 @@ class Manage_Calendars extends page_generic {
 				'PRIVATE'		=> $this->pdh->get('calendars', 'private', array($id)),
 				'FEED'			=> $this->pdh->get('calendars', 'feed', array($id)),
 				'RESTRICTED'	=> new hradio('calendars['.$key.'][restricted]', array('value' => $this->pdh->get('calendars', 'restricted', array($id)))),
-				'PERMISSIONS'	=> new hmultiselect('calendars['.$key.'][permissions]', array('options' => $this->pdh->aget('user_groups', 'name', 0, array($usergroups)), 'value' => (($permissionvalue == 'all') ? $usergroups : $permissionvalue))),
+				'PERMISSIONS'	=> new hmultiselect('calendars['.$key.'][permissions]', array('options' => $this->pdh->aget('user_groups', 'name', 0, array($usergroups)), 'value' => $this->pdh->get('calendars', 'permissions', array($id)))),
 			));
 			$key++;
 			$new_id = ($new_id == $id) ? $id+1 : $new_id;

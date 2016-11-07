@@ -130,7 +130,16 @@ if ( !class_exists( "pdh_r_calendars" ) ) {
 		}
 
 		public function get_permissions($id){
-			return 	(isset($this->calendars[$id]['permissions']) && $this->calendars[$id]['permissions'] != 'all') ? unserialize($this->calendars[$id]['permissions']) : 'all';
+			if(isset($this->calendars[$id]['permissions']) && $this->calendars[$id]['permissions'] != 'all'){
+				return unserialize($this->calendars[$id]['permissions']);
+			}else{
+				// usergroups without ID 1 (guests)
+				$usergroups = $this->pdh->get('user_groups', 'id_list');
+				if(($usergrpkey = array_search(1, $usergroups)) !== false) {
+					unset($usergroups[$usergrpkey]);
+				}
+				return $usergroups;
+			}
 		}
 
 		public function get_calendarids4userid($user_id){

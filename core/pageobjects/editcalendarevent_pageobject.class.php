@@ -492,7 +492,7 @@ class editcalendarevent_pageobject extends pageobject {
 
 		// build json for calendar dropdown
 		$calendar_data		= $this->pdh->get('calendars', 'data', array());
-		$user_calendars	= $this->pdh->get('calendars', 'calendarids4userid', array($this->user->data['user_id']));
+		$user_calendars		= $this->pdh->get('calendars', 'calendarids4userid', array($this->user->data['user_id']));
 		$calendars			= array();
 		if(is_array($calendar_data)){
 			foreach($calendar_data as $calendar_id=>$calendar_value){
