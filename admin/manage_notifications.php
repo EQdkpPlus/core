@@ -28,7 +28,7 @@ class ManageNotifications extends page_generic {
 
 	public function __construct(){
 		$this->user->check_auth('a_notifications_man');
-		
+
 		$handler = array(
 			'save'	=> array('process' => 'save', 'csrf'=>true),
 			'id'	=> array('process' => 'edit'),
@@ -37,7 +37,7 @@ class ManageNotifications extends page_generic {
 		$this->process();
 
 	}
-	
+
 
 	public function save() {
 		$strNotificationID = $this->in->get('id');
@@ -47,9 +47,9 @@ class ManageNotifications extends page_generic {
 		$intGroupAt = $this->in->get('group_at', 0);
 		if($intGroupAt < 0) $intGroupAt = 0;
 		$strIcon = $this->in->get('icon');
-		
+
 		$blnResult = $this->pdh->put('notification_types', 'update', array($strNotificationID, $intPrio, $strDefault, $blnGroup, $intGroupAt, $strIcon));
-		
+
 		$blnOverwrite = $this->in->get('overwrite', 0);
 		if($blnOverwrite && $blnResult){
 			//Overwrite
@@ -63,28 +63,28 @@ class ManageNotifications extends page_generic {
 				}
 			}
 		}
-		
+
 		if($blnResult){
 			$message = array('title' => $this->user->lang('save_suc'), 'text' => $strNotificationID, 'color' => 'green');
 		} else {
 			$message = array('title' => $this->user->lang('save_nosuc'), 'text' => $strNotificationID, 'color' => 'red');
-			
+
 		}
 		$this->display($message);
 	}
-	
+
 	public function edit() {
 		$strNotificationID = $this->in->get('id');
-		
+
 		$arrData = $this->pdh->get('notification_types', 'data', array($strNotificationID));
 		if(!$arrData) {
 			$this->display();
 			return;
 		}
-		
+
 		$arrMethods = register('ntfy')->getAvailableNotificationMethods(true);
 		array_unshift($arrMethods, register('user')->lang('notification_type_none'), register('user')->lang('notification_type_eqdkp'));
-		
+
 		$this->tpl->assign_vars(array(
 			'NOTIFICATION_ID' 	=> $strNotificationID,
 			'DD_PRIORITY'		=> new hdropdown('priority', array('value' => $this->pdh->get('notification_types', 'prio', array($strNotificationID)), 'options' => array(0 => $this->user->lang('notification_prio_0'), 1 => $this->user->lang('notification_prio_1'), 2 => $this->user->lang('notification_prio_2')))),
@@ -94,7 +94,7 @@ class ManageNotifications extends page_generic {
 			'GROUP_AT_SPINNER'	=> new hspinner('group_at', array('value' => $this->pdh->get('notification_types', 'group_at', array($strNotificationID)), 'min' => 0)),
 			'OVERWRITE_RADIO'	=> new hradio('overwrite', array('value' => 0)),
 		));
-		
+
 		$this->core->set_vars(array(
 			'page_title'    => $this->user->lang('manage_notifications').': '.$strNotificationID,
 			'template_file' => 'admin/manage_notifications_edit.html',
@@ -132,7 +132,7 @@ class ManageNotifications extends page_generic {
 		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => 'manage_notifications.php', '%link_url_suffix%' => ''));
 
 		$this->tpl->assign_vars(array(
-			'NOTIFICATION_LIST' => $hptt->get_html_table($this->in->get('sort'), $page_suffix),
+			'NOTIFICATION_LIST' => $hptt->get_html_table($this->in->get('sort')),
 			'NOTIFICATION_COUNT'=> count($view_list),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count())
 		);
