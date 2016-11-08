@@ -51,6 +51,9 @@ class Manage_Extensions extends page_generic {
 		);
 		parent::__construct(false, $handler);
 		$this->code = $this->in->get('code', '');
+		
+		if(!$this->pdl->type_known("repository")) $this->pdl->register_type("repository", null, null, array(3,4), true);
+		
 		$this->process();
 	}
 	
@@ -199,10 +202,12 @@ class Manage_Extensions extends page_generic {
 	//Get Extension Download-Link
 	public function process_step1(){
 		$intExtensionID = $this->in->get('extid', 0);
+		$this->pdl->log('repository', '1. Get Download Link for Ext. '.$intExtensionID);
 		
 		//Check for Zip Extension
 		if (!class_exists("ZipArchive")){
 			echo $this->user->lang('repo_error_zip');
+			$this->pdl->log('repository', '1. Error: Zip not available, Ext. '.$intExtensionID);
 			return;
 		}
 		
@@ -215,6 +220,7 @@ class Manage_Extensions extends page_generic {
 				echo "true";
 			} else {
 				echo $this->user->lang('repo_step1_error_'.$downloadLink['error']);
+				$this->pdl->log('repository', '1. Error: No download link, Error Code '.$downloadLink['error'].', Ext. '.$this->code);
 			}
 
 		} else {
@@ -228,6 +234,7 @@ class Manage_Extensions extends page_generic {
 		if ($this->in->get('cat', 0) && strlen($this->code)){
 			@set_time_limit(0);
 			@ignore_user_abort(true);
+			$this->pdl->log('repository', '2. Download for Ext. '.$this->code);
 			
 			$downloadLink 		= $this->encrypt->decrypt($this->config->get(md5($this->in->get('cat', 0).$this->code).'_link', 'repository'));
 			$downloadHash 		= $this->encrypt->decrypt($this->config->get(md5($this->in->get('cat', 0).$this->code).'_hash', 'repository'));
@@ -242,6 +249,7 @@ class Manage_Extensions extends page_generic {
 				echo "true";		
 			} else {
 				echo $this->user->lang('repo_step2_error');
+				$this->pdl->log('repository', '2. Verification Error '.$this->code);
 			}
 
 		} else {
@@ -253,6 +261,8 @@ class Manage_Extensions extends page_generic {
 	//Unzip Package
 	public function process_step3(){
 		if ($this->in->get('cat', 0) && strlen($this->code)){
+			$this->pdl->log('repository', '3. Unzip Package '.$this->code);
+			
 			@set_time_limit(0);
 			@ignore_user_abort(true);
 			
@@ -265,6 +275,7 @@ class Manage_Extensions extends page_generic {
 			} else {
 				$this->pfh->Delete('', 'repository');
 				echo $this->user->lang('repo_step3_error');
+				$this->pdl->log('repository', '3. Unzip failed '.$this->code);
 			}
 
 		} else {
@@ -278,6 +289,7 @@ class Manage_Extensions extends page_generic {
 		if ($this->in->get('cat', 0) && strlen($this->code)){
 			@set_time_limit(0);
 			@ignore_user_abort(true);
+			$this->pdl->log('repository', '4. Copy files '.$this->code);
 			
 			$srcFolder = $this->pfh->FolderPath('tmp/'.md5($this->in->get('cat', 0).$this->code),'repository');
 			
@@ -306,13 +318,14 @@ class Manage_Extensions extends page_generic {
 				$this->pfh->Delete($srcFolder.'/custom.js');
 			}
 			
-
+			$this->pdl->log('repository', '4. Target for '.$this->code.' is '.$target);
 			if($target){
 				$result = $this->repo->full_copy($srcFolder, $target);
 				if ($result){
 					echo "true";
 				} else {
 					echo $this->user->lang('repo_step4_error');
+					$this->pdl->log('repository', '4. Fullcopy failed '.$this->code);
 				}
 			} else {
 				echo $this->user->lang('repo_unknown_error');

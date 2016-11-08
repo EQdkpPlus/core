@@ -100,7 +100,7 @@ class task_display extends gen_class {
 				'TIMER_OUT'				=> substr(($timer_end - $timer_start), 0, 5),
 				'L_APPLICABLE_WARNING'	=> $this->user->lang('applicable_warning'),
 				'S_APPLICABLE_WARNING'	=> ($task_obj->type == 'update' || $task_obj->type == 'plugin_update') && !$task_obj->a_is_necessary() && $this->in->get('single_update_code') == '' && $this->in->get('update_all') == '',
-				'L_STEPEND_INFO'		=> $this->user->lang('stepend_info'),
+				'L_STEPEND_INFO'		=> $this->user->lang('stepend_info').'<br /><br />'.$this->user->lang('support_eqdkplus'),
 			));
 		}
 

@@ -550,6 +550,7 @@ class Manage_Live_Update extends page_generic {
 			if(registry::register('config')->get('pk_maintenance_mode')){
 				redirect('maintenance/index.php'.$this->SID, false, false, false);
 			}
+			$this->tpl->assign_var('S_FINISHED', true);
 		}
 		
 		if ($this->getNewVersion()){

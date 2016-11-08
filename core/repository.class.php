@@ -78,6 +78,8 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 			if ($this->getChannel() != "stable"){
 				$this->cachetime = 3600 * 3; //3 hours
 			}
+			
+			if(!$this->pdl->type_known("repository")) $this->pdl->register_type("repository", null, null, array(3,4), true);
 		}
 		
 		public function getChannel(){
@@ -184,6 +186,8 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 					return true;
 				}
 			} else {
+				$this->pdl->log('repository', 'Could not fetch Extension List from EQdkp Server');
+				
 				//If EQdkp Plus Server could not be reached, try again next day
 				$this->pdh->put('repository', 'setUpdateTime', array($this->time->time));	
 				$plist = $this->pdh->get('repository', 'repository');
@@ -266,6 +270,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 					
 					//If hashes are eqal, it's a valid package
 					if ($blnVerified && ($strFileHash === $hash)) {
+						$this->pdl->log('repository', 'Verify Package: success');
 						return true;
 					}
 				}
@@ -280,6 +285,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 					return $blnResult;
 				}
 			}
+			$this->pdl->log('repository', 'Verify Package: failed');
 			return false;
 		}
 		
@@ -312,7 +318,6 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 		
 		//Download the Intermediate Cert from our server
 		private function loadIntermediateCert(){
-
 			$response = $this->puf->fetch($this->RepoEndpoint.'interm_cert', "", 5);
 			$arrJson = json_decode($response);
 
@@ -321,8 +326,10 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 				$this->pfh->CheckCreateFolder('certs', 'eqdkp');
 				$this->pfh->CheckCreateFile('eqdkp_interm_cert.crt', 'eqdkp/certs');
 				$this->pfh->putContent($this->pfh->FilePath('eqdkp_interm_cert.crt', 'eqdkp/certs'), (string)$arrJson->cert);
+				$this->pdl->log('repository', 'Load Intermediate Certificates: success');
 				return true;
 			} else {
+				$this->pdl->log('repository', 'Load Intermediate Certificates: failed');
 				return false;
 			}
 		}
@@ -337,8 +344,10 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 				$this->pfh->CheckCreateFolder('certs', 'eqdkp');
 				$this->pfh->CheckCreateFile('crl.txt', 'eqdkp/certs');
 				$this->pfh->putContent($this->pfh->FilePath('crl.txt', 'eqdkp/certs'), $response);
+				$this->pdl->log('repository', 'Load CRL: success');
 				return true;
 			} else {
+				$this->pdl->log('repository', 'Load CRL: failed');
 				return false;
 			}
 		}

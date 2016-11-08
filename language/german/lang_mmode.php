@@ -104,5 +104,15 @@ $lang = array(
 	//Backup
 	'backup'			=> 'Datenbank-Backup',
 	'backup_note'		=> 'Ein Datenbank-Backup wurde erfolgreich unter %s erstellt.',
+		
+	'support_eqdkplus'	=> 'So ein Projekt wie EQdkp Plus kann natürlich nur existieren, wenn wir für die ganze Mühe, Zeit und Liebe, die wir in EQdkp Plus stecken, auch wieder etwas zurückbekommen. Dies ist auf vielfältige Weise möglich:
+						<ul>
+							<li><i class="fa fa-puzzle-piece"></i> <a href="http://eqdkp-plus.eu/repository/">Veröffentliche ein Plugin oder Template, damit alle EQdkp Plus Benutzer was davon haben</a></li>
+							<li><i class="fa fa-comments"></i> <a href="http://eqdkp-plus.eu/forum/">Unterstütze uns in unserem Forum</a></li>
+							<li><i class="fa fa-cogs"></i> <a href="http://eqdkp-plus.eu/de/entwicklung.html">Beteilige dich aktiv an der Weiterentwicklung von EQdkp Plus</a></li>
+							<li><i class="fa fa-usd"></i> <a href="http://eqdkp-plus.eu/de/spenden.html">Unterstützte uns finanziell, damit wir euch weiterhin unsere Services anbieten können</a></li>
+						</ul>
+		
+						Also wenn ihr EQdkp Plus genauso liebt wie wir, denkt doch mal darüber nach, uns zu unterstützen!',
 );
 ?>

@@ -93,6 +93,14 @@ $lang = array(
 	"guild_import_info" => '* if supported by your game',
 	'backup'			=> 'Database-Backup',
 	'backup_note'		=> 'A database-backup was created at %s.',
+	'support_eqdkplus'	=> 'A project like EQdkp Plus can only exist, if we can get back some of the effort, time and love we invest in EQdkp Plus. You can give something back on the following ways:
+						<ul>
+							<li><i class="fa fa-puzzle-piece"></i> <a href="http://eqdkp-plus.eu/repository/">Publish a plugin or template, so every EQdkp Plus user can use it</a></li>
+							<li><i class="fa fa-comments"></i> <a href="http://eqdkp-plus.eu/forum/">Support us at our board</a></li>
+							<li><i class="fa fa-cogs"></i> <a href="http://eqdkp-plus.eu/en/development.html">Take part actively in the development of EQdkp Plus</a></li>
+							<li><i class="fa fa-usd"></i> <a href="http://eqdkp-plus.eu/en/donate.html">Support us financially so we can continue offering you our services</a></li>
+						</ul>
+						So if you love EQdkp Plus as much as we do, think about supporting us!',
 );
 
 ?>
