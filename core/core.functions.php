@@ -421,7 +421,7 @@ function infotooltip($name='', $game_id='', $lang=false, $direct=0, $onlyicon=0,
 
 		return $strLink;
 	} else {
-		if(empty($data['server'])) $data['server'] = registry::register('config')->get("servername");
+		if(!isset($data['server']) || empty($data['server'])) $data['server'] = registry::register('config')->get("servername");
 		$lang = ($lang) ? $lang : registry::fetch('user')->lang('XML_LANG');
 
 		$cachedname = register('infotooltip')->getcacheditem($name, $lang, $game_id, $onlyicon, $noicon, $data);

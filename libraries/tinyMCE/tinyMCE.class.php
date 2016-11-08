@@ -18,10 +18,10 @@
  *	You should have received a copy of the GNU Affero General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
-} 
+}
 
 class tinyMCE extends gen_class {
 
@@ -33,7 +33,7 @@ class tinyMCE extends gen_class {
 	);
 	protected $skin = 'lightgray';
 	protected $theme = 'modern';
-	
+
 	public function __construct($nojsinclude=false){
 		if(!$nojsinclude) $this->tpl->js_file($this->server_path.'libraries/tinyMCE/tinymce/jquery.tinymce.min.js');
 		$this->language	= $this->user->lang('XML_LANG');
@@ -42,19 +42,19 @@ class tinyMCE extends gen_class {
 
 	public function editor_bbcode($settings=false){
 		if(!$this->trigger['bbcode']){
-			
+
 			//Language
 			$lang = ( !isset($settings['language']) ) ? $this->language : $settings['language'];
 			if (is_file($this->root_path.'libraries/tinyMCE/tinymce/langs/'.$lang.'.js')){
 				$this->language	= ( !isset($settings['language']) ) ? $this->language : $settings['language'];
 			} else $this->language = 'en';
-			
+
 			$arrHooks = (($this->hooks->isRegistered('tinymce_bbcode_setup')) ? $this->hooks->process('tinymce_bbcode_setup', array('js' => '', 'env' => $this->env), true): array());
 			$strHooks = isset($arrHooks['js']) ? $arrHooks['js'] : '';
 			$strHooksPlugin = isset($arrHooks['plugins']) ? $arrHooks['plugins'] : '';
 			$strHooksToolbar = isset($arrHooks['toolbar']) ? $arrHooks['toolbar'] : '';
 			$mention  = (isset($settings['mention']) && $settings['mention']) ? ' mention' : '';
-			
+
 			$this->tpl->add_js('
 				function initialize_bbcode_editor(){
 				$(".mceEditor_bbcode").tinymce({
@@ -73,31 +73,31 @@ class tinyMCE extends gen_class {
 					mentions: {
 						source: function(query, process, delimiter){
 							$.getJSON("'.$this->server_path.'libraries/tinyMCE/tinymce/plugins/mention/users.php", function (data) {
-					          process(data);
-					       });
+								process(data);
+							});
 						},
 						insert: function(item) {
 						    return "@\'" + item.name + "\'";
 						}
 					},
-					
+
 					setup: function(editor){
-						editor.on("init", function(evt){					
-					        $(editor.getBody().parentNode).bind("dragover dragenter dragend drag drop", function(event){
-					            event.stopPropagation();
-					            event.preventDefault();
-					        });
-					        $(editor.getDoc()).bind("draggesture", function(event){
-					            event.stopPropagation();
-					            event.preventDefault();
-					        });
-					    });
-					
+						editor.on("init", function(evt){
+							$(editor.getBody().parentNode).bind("dragover dragenter dragend drag drop", function(event){
+								event.stopPropagation();
+								event.preventDefault();
+							});
+							$(editor.getDoc()).bind("draggesture", function(event){
+								event.stopPropagation();
+								event.preventDefault();
+							});
+						});
+
 						'.$strHooks.'
 					},
 
 					// Theme options
-					
+
 					entity_encoding : "raw",
 					add_unload_trigger : false,
 					remove_linebreaks : false,
@@ -120,9 +120,9 @@ class tinyMCE extends gen_class {
 	public function editor_normal($settings=false){
 		if(!$this->trigger['normal']){
 			//Language
-			$lang = ( !$settings['language'] ) ? $this->language : $settings['language'];
+			$lang = (!isset($settings['language']) || !$settings['language'] ) ? $this->language : $settings['language'];
 			if (is_file($this->root_path.'libraries/tinyMCE/tinymce/langs/'.$lang.'.js')){
-				$this->language	= ( !$settings['language'] ) ? $this->language : $settings['language'];
+				$this->language	= (!isset($settings['language']) || !$settings['language'] ) ? $this->language : $settings['language'];
 			} else $this->language = 'en';
 
 			$autoresize		= (isset($settings['autoresize']) && $settings['autoresize']) ? ' autoresize' : '';
@@ -133,14 +133,14 @@ class tinyMCE extends gen_class {
 			$relative_url	= (isset($settings['relative_urls']) && $settings['relative_urls'] == false) ? 'relative_urls : false,' : '';
 			$removeHost		= (isset($settings['remove_host']) && $settings['remove_host'] == false) ? 'remove_script_host : false,' : 'remove_script_host : true, convert_urls : true,';
 			$image_upload	= (isset($settings['image_upload']) && $settings['image_upload'] == true) ? 'paste_data_images: true, images_upload_credentials: true, images_upload_url: "'.$this->server_path.'libraries/tinyMCE/imageUploader.php'.$this->SID.'",' : '';
-			
+
 			$link_list = '';
 			if (isset($settings['link_list'])){
 				//Articles & Categories
 				$arrCategoryIDs = $this->pdh->sort($this->pdh->get('article_categories', 'id_list', array()), 'article_categories', 'sort_id', 'asc');
 				foreach($arrCategoryIDs as $cid){
 					if (!$this->pdh->get('article_categories', 'published', array($cid))) continue;
-					
+
 					if ($cid != 1) $arrCategories[] = array('text' => $this->pdh->get('article_categories', 'name', array($cid)), 'id' => $cid);
 					$arrArticles = $this->pdh->get('articles', 'id_list', array($cid));
 					foreach($arrArticles as $articleID){
@@ -158,7 +158,7 @@ class tinyMCE extends gen_class {
 							foreach($arrItems[$val['id']] as $value){
 								$link_list .= '{text: "'.$this->jquery->sanitize($value['text'], true).'", value: "{{article_url_plain::'.$value['id'].'}}"},';
 							}
-							
+
 						$link_list .= ']},';
 					}
 					//$link_list .= '{}';
@@ -170,7 +170,7 @@ class tinyMCE extends gen_class {
 			$strHooks = isset($arrHooks['js']) ? $arrHooks['js'] : '';
 			$strHooksPlugin = isset($arrHooks['plugins']) ? $arrHooks['plugins'] : '';
 			$strHooksToolbar = isset($arrHooks['toolbar']) ? $arrHooks['toolbar'] : '';
-								
+
 			$this->tpl->add_js('
 				$(".mceEditor").tinymce({
 					// Location of TinyMCE script
@@ -200,7 +200,7 @@ class tinyMCE extends gen_class {
 						var elfinder_url = "'.$this->env->link.'libraries/elfinder/elfinder.php'.$this->SID.'";    // use an absolute path!
 						var cmsURL = elfinder_url;    // script URL - use an absolute path!
 						var type = meta.filetype;
-					
+
 						if (cmsURL.indexOf("?") < 0) {
 							//add the type as the only query parameter
 							cmsURL = cmsURL + "?editor=tiny&type=" + type + "&field=_callback";
@@ -212,7 +212,7 @@ class tinyMCE extends gen_class {
 						}
 
 						var mycallback = callback;
-					
+
 						tinyMCE.activeEditor.windowManager.open({
 							file : cmsURL,
 							title : "File Browser",
@@ -224,24 +224,24 @@ class tinyMCE extends gen_class {
 							close_previous : "no"
 						}, {
 							oninsert: function (url, objVals) {
-						        callback(url, objVals);
-						    },
+								callback(url, objVals);
+							},
 							param_meta: meta,
 							param_value: value,
 						});
 						return false;
 					},
-					
+
 					'.$relative_url.$removeHost.$image_upload.'
 
 				});
-						
+
 			', 'docready');
 
 			$this->trigger['normal'] = true;
 		}
 	}
-	
+
 	public function inline_editor_simple($selector, $settings=array()){
 		if(!isset($this->trigger['inline_simple.'.$selector])){
 			//Language
@@ -249,26 +249,26 @@ class tinyMCE extends gen_class {
 			if (is_file($this->root_path.'libraries/tinyMCE/tinymce/langs/'.$lang.'.js')){
 				$this->language	= ( !isset($settings['language']) || (isset($settings['language']) && !$settings['language']) ) ? $this->language : $settings['language'];
 			} else $this->language = 'en';
-			
+
 			$strSetup = (isset($settings['setup'])) ? $settings['setup'] : '';
 			$strAutofocus = (isset($settings['autofocus']) && $settings['autofocus']) ? 'true' : 'false';
 			$blnStart = (isset($settings['start_onload'])) ? $settings['start_onload'] : true;
-			
+
 			//Hooks
 			$arrHooks = (($this->hooks->isRegistered('tinymce_inline_simple_setup')) ? $this->hooks->process('tinymce_inline_simple_setup', array('js' => '', 'selector' => $selector,  'env' => $this->env), true): array());
 			$strHooks = isset($arrHooks['js']) ? $arrHooks['js'] : '';
 			$strHooksPlugin = isset($arrHooks['plugins']) ? $arrHooks['plugins'] : '';
 			$strHooksToolbar = isset($arrHooks['toolbar']) ? $arrHooks['toolbar'] : '';
-			
+
 			$tinyid = md5($selector);
-			
+
 			$this->tpl->add_js('
 				function tinyinlinesimple_'.$tinyid.'() {
 					$("'.$selector.'").tinymce({
 						// Location of TinyMCE script
 						script_url : "'.$this->server_path.'libraries/tinyMCE/tinymce/tinymce.min.js",
 						document_base_url : "'.$this->env->link.'",
-						
+
 						// General options
 						language : "'.$this->language.'",
 						theme : "'.$this->theme.'",
@@ -288,11 +288,11 @@ class tinyMCE extends gen_class {
 				}
 				'.(($blnStart) ? 'tinyinlinesimple_'.$tinyid.'()' : '').'
 			', 'docready');
-		
+
 			$this->trigger['inline_simple.'.$selector] = true;
 		}
 	}
-	
+
 	public function inline_editor($selector, $settings=false, $blnStart=true){
 		if(!isset($this->trigger['inline.'.$selector])){
 			//Language
@@ -300,7 +300,7 @@ class tinyMCE extends gen_class {
 			if (is_file($this->root_path.'libraries/tinyMCE/tinymce/langs/'.$lang.'.js')){
 				$this->language	= ( !isset($settings['language']) || (isset($settings['language']) && !$settings['language']) ) ? $this->language : $settings['language'];
 			} else $this->language = 'en';
-			
+
 			$autoresize		= (isset($settings['autoresize']) && $settings['autoresize']) ? ' autoresize' : '';
 			$pageobjects	= (isset($settings['pageobjects']) && $settings['pageobjects']) ? ' eqdkp_pageobject' : '';
 			$readmore		= (isset($settings['readmore']) && !$settings['readmore']) ? '' : ' eqdkp_pagebreak_readmore';
@@ -309,18 +309,18 @@ class tinyMCE extends gen_class {
 			$relative_url	= (isset($settings['relative_urls']) && $settings['relative_urls'] == false) ? 'relative_urls : false,' : '';
 			$removeHost		= (isset($settings['remove_host']) && $settings['remove_host'] == false) ? 'remove_script_host : false,' : 'remove_script_host : true, convert_urls : true,';
 			$image_upload	= (isset($settings['image_upload']) && $settings['image_upload'] == true) ? 'paste_data_images: true, images_upload_credentials: true, images_upload_url: "'.$this->server_path.'libraries/tinyMCE/imageUploader.php'.$this->SID.'",' : '';
-				
+
 			$strSetup = (isset($settings['setup'])) ? $settings['setup'] : '';
 			$strAutofocus = (isset($settings['autofocus']) && $settings['autofocus']) ? 'true' : 'false';
 			$blnStart = (isset($settings['start_onload'])) ? $settings['start_onload'] : true;
-			
+
 			$link_list = '';
 			if (isset($settings['link_list'])){
 				//Articles & Categories
 				$arrCategoryIDs = $this->pdh->sort($this->pdh->get('article_categories', 'id_list', array()), 'article_categories', 'sort_id', 'asc');
 				foreach($arrCategoryIDs as $cid){
 					if (!$this->pdh->get('article_categories', 'published', array($cid))) continue;
-						
+
 					if ($cid != 1) $arrCategories[] = array('text' => $this->pdh->get('article_categories', 'name', array($cid)), 'id' => $cid);
 					$arrArticles = $this->pdh->get('articles', 'id_list', array($cid));
 					foreach($arrArticles as $articleID){
@@ -328,7 +328,7 @@ class tinyMCE extends gen_class {
 						$arrItems[$cid][] = array('text' => $this->pdh->get('articles', 'title', array( $articleID)), 'id' => $articleID);
 					}
 				}
-	
+
 				$link_list = '
 				link_list : [{text: "'.$this->user->lang('articles').'", value: "", menu: [';
 				foreach($arrCategories as $val){
@@ -345,16 +345,16 @@ class tinyMCE extends gen_class {
 				$link_list .= '
 				]}],';
 			}
-			
+
 			$arrHooks = (($this->hooks->isRegistered('tinymce_inline_setup')) ? $this->hooks->process('tinymce_inline_setup', array('js' => '', 'selector' => $selector,  'env' => $this->env), true): array());
 			$strHooks = isset($arrHooks['js']) ? $arrHooks['js'] : '';
 			$strHooksPlugin = isset($arrHooks['plugins']) ? $arrHooks['plugins'] : '';
 			$strHooksToolbar = isset($arrHooks['toolbar']) ? $arrHooks['toolbar'] : '';
-			
+
 			$tinyid = md5($selector);
-				
+
 			$this->tpl->add_js('
-				function tinyinline_'.$tinyid.'(){	
+				function tinyinline_'.$tinyid.'(){
 				$("'.$selector.'").tinymce({
 					// Location of TinyMCE script
 					script_url : "'.$this->server_path.'libraries/tinyMCE/tinymce/tinymce.min.js",
@@ -363,7 +363,7 @@ class tinyMCE extends gen_class {
 					inline: true,
 					theme : "'.$this->theme.'",
 					skin : "'.$this->skin.'",
-					image_advtab: true,				
+					image_advtab: true,
 					toolbar: "insertfile undo redo | fullscreen | styleselect fontselect fontsizeselect bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist | link image media emoticons eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | eqdkp_item eqdkp_gallery eqdkp_raidloot eqdkp_chars | custom_buttons '.$strHooksToolbar.'",
 					language : "'.$this->language.'",
 					 plugins: [
@@ -387,7 +387,7 @@ class tinyMCE extends gen_class {
 							// (PHP session ID is now included if there is one at all)
 							cmsURL = cmsURL + "&editor=tiny&type=" + type + "&field=_callback";
 						}
-	
+
 						tinyMCE.activeEditor.windowManager.open({
 							file : cmsURL,
 							title : "File Browser",
@@ -406,20 +406,20 @@ class tinyMCE extends gen_class {
 						});
 						return false;
 					},
-					setup: function(editor) {	
+					setup: function(editor) {
 						'.$strSetup.$strHooks.'
 					},
 					save_onsavecallback: function() {
 					},
 					auto_focus: '.$strAutofocus.',
-			
+
 					'.$relative_url.$removeHost.$image_upload.'
-	
+
 				});
 			}
 			'.(($blnStart) ? 'tinyinline_'.$tinyid.'()' : '').'
 			', 'docready');
-	
+
 			$this->trigger['inline.'.$selector] = true;
 		}
 	}

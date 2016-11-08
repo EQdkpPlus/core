@@ -56,13 +56,17 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 					'signup_status'			=> $signupstatus,
 				))->execute($signed_memberid, $eventid);
 			}else{
-				$rand_value = rand(1,100);
+				$rand_value		= rand(1,100);
+				$raidgroup_new	= 0;
+				if((int)$raidgroup > 0){
+					$raidgroup_new = array_shift($this->pdh->get('raid_groups_members', 'memberships', array($memberid)));
+				}
 				$objQuery = $this->db->prepare("INSERT INTO __calendar_raid_attendees :p")->set(array(
 					'note'					=> $note,
 					'member_id'				=> $memberid,
 					'calendar_events_id'	=> $eventid,
 					'timestamp_signup'		=> $this->time->time,
-					'raidgroup'				=> ((int)$raidgroup > 0) ? $raidgroup : (int)array_shift($this->pdh->get('raid_groups_members', 'memberships', array($memberid))),
+					'raidgroup'				=> ((int)$raidgroup > 0) ? $raidgroup : (int)$raidgroup_new,
 					'random_value'			=> $rand_value,
 					'member_role'			=> $memberrole,
 					'signup_status'			=> $signupstatus,
