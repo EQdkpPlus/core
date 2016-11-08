@@ -101,6 +101,12 @@ class Manage_Calendars extends page_generic {
 		$key = 0;
 		$new_id = 1;
 		ksort($ranks);
+
+		$usergroups = $this->pdh->get('user_groups', 'id_list');
+		if(($usergrpkey = array_search(1, $usergroups)) !== false) {
+			unset($usergroups[$usergrpkey]);
+		}
+
 		foreach($ranks as $id => $name) {
 			$this->tpl->assign_block_vars('calendars', array(
 				'KEY'				=> $key,

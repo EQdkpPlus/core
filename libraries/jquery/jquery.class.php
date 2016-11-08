@@ -1065,7 +1065,7 @@ if (!class_exists("jquery")) {
 		* @param $hourf			Format of the time: 24 or 12
 		* @return TimePicker	JS Code
 		*/
-		public function timePicker($id, $name='', $value='', $enablesecs=false, $hourf=24, $returnJS=false){
+		public function timePicker($id, $name='', $value=0, $enablesecs=false, $hourf=24, $returnJS=false){
 			if(!$name) $name = 'input_'.$id;
 			$tmpopt		= array();
 			$tmpopt[] = 'hour: "'.($value-$value%3600)/3600 .'"';

@@ -120,7 +120,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 							LEFT JOIN __member_user mu ON mu.member_id = m.member_id
 							WHERE (m.requested_del != '1' OR m.requested_del IS NULL)
 							ORDER BY m.member_main_id;");
-			
+
 			$this->member_connections = array(array());
 			$this->member_user = array();
 			if($objQuery){
@@ -129,7 +129,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 					$this->member_user[$drow['member_id']] = $drow['user_id'];
 				}
 			}
-			
+
 			// The free to take members..
 			$objQuery = $this->db->query("SELECT m.member_id, mu.user_id
 							FROM __members m
@@ -142,7 +142,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 					$this->member_connections[0][] = $drow['member_id'];
 					$this->member_user[$drow['member_id']] = 0;
 				}
-				
+
 				$this->pdc->put('pdh_member_connections_table',		$this->member_connections,	null);
 			}
 
@@ -164,10 +164,10 @@ if ( !class_exists( "pdh_r_member" ) ) {
 						points,
 						points_apa
 						FROM __members;";
-			
-			
+
+
 			$objQuery = $this->db->query($bmd_sql);
-			
+
 			if($objQuery){
 				while($bmd_row = $objQuery->fetchAssoc()){
 					if(!isset($this->data[$bmd_row['member_id']]['name'])){
@@ -258,25 +258,25 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_profile_field($member_id, $profile_field){
-			return $this->data[$member_id][$profile_field];
+			return (isset($this->data[$member_id][$profile_field])) ? $this->data[$member_id][$profile_field] : '';
 		}
-		
+
 		public function get_html_profile_field($member_id, $profile_field, $nameOnly=false){
 			$arrField = $this->pdh->get('profile_fields', 'fields', array($profile_field));
 			if (!$arrField) return '';
 
 			$strMemberValue = $this->get_profile_field($member_id, $profile_field);
 			$out = $strMemberValue;
-			
+
 			$arrField['options_language'] = str_replace(array("{VALUE}", "{CHARNAME}", "{SERVERLOC}", "{SERVERNAME}", "{CLASSID}"), array($strMemberValue, $this->get_name($member_id), $this->config->get('uc_server_loc'), $this->config->get('servername'), $this->get_classid($member_id)), $arrField['options_language']);
-			
+
 			if($arrField['image'] != "" && $out){
 				$strPlainImage = str_replace(array("{VALUE}", "{CHARNAME}", "{SERVERLOC}", "{SERVERNAME}", "{CLASSID}"), array($strMemberValue, $this->get_name($member_id), $this->config->get('uc_server_loc'), $this->config->get('servername'), $this->get_classid($member_id)), $arrField['image']);
 				if (is_file($this->root_path.$strPlainImage)){
 					$strImage =  $this->server_path.$strPlainImage;
 				}
 			} else $strImage = false;
-			
+
 			switch($arrField['type']){
 				case 'int':
 				case 'text': {
@@ -285,7 +285,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 					}
 				}
 				break;
-				
+
 				case 'radio':
 					if (!isset($arrField['data']['options'][$strMemberValue])) return '';
 					$out = "";
@@ -295,17 +295,17 @@ if ( !class_exists( "pdh_r_member" ) ) {
 							$arrGlang = $this->game->glang($arrSplitted[1]);
 							$arrLang = (isset($arrSplitted[2])) ? $arrGlang[$arrSplitted[2]] : $arrGlang;
 						} else $arrLang = $this->game->get($arrField['options_language']);
-						
+
 						if (isset($arrLang[$strMemberValue])) $out .= ' '.$arrLang[$strMemberValue];
-						
+
 					} else {
 						$strVal = $arrField['data']['options'][$strMemberValue];
 						$strGlang = $this->game->glang($strVal);
 						if ($strGlang) return $strGlang;
 						$out .= $strVal;
-						
+
 					}
-					
+
 					if ($strImage && !$nameOnly){
 						return '<img src="'.$strImage.'" alt="'.$strMemberValue.'" class="gameicon" /> '.$out;
 					} else {
@@ -313,7 +313,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 					}
 
 				break;
-				
+
 				case 'checkbox':
 					$arrOut = array();
 					if(!is_array($strMemberValue)) $strMemberValue = array($strMemberValue);
@@ -321,7 +321,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 						$out = "";
 						//Check if Value is in dropdown options
 						if (!in_array($strMemberVal, array_keys($arrField['data']['options']))) return '';
-						
+
 						//Image, because there are multiple checkboxes
 						$strImage = false;
 						if($arrField['image'] != "" && $strMemberVal){
@@ -330,7 +330,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 								$strImage =  $this->server_path.$strPlainImage;
 							}
 						}
-					
+
 						if ($strImage && !$nameOnly){
 							$out .= '<img src="'.$strImage.'" alt="'.$strMemberVal.'" title="'.$out.'" />';
 							if ($arrField['options_language'] != ""){
@@ -338,7 +338,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 									$arrSplitted = explode(':', $arrField['options_language']);
 									$arrGlang = $this->game->glang($arrSplitted[1]);
 									$arrLang = (isset($arrSplitted[2])) ? $arrGlang[$arrSplitted[2]] : $arrGlang;
-										
+
 								} else $arrLang = $this->game->get($arrField['options_language']);
 								if (isset($arrLang[$strMemberVal])) $out .= ' '.$arrLang[$strMemberVal];
 							}
@@ -348,24 +348,24 @@ if ( !class_exists( "pdh_r_member" ) ) {
 									$arrSplitted = explode(':', $arrField['options_language']);
 									$arrGlang = $this->game->glang($arrSplitted[1]);
 									$arrLang = (isset($arrSplitted[2])) ? $arrGlang[$arrSplitted[2]] : $arrGlang;
-										
+
 								} else $arrLang = $this->game->get($arrField['options_language']);
 								if (isset($arrLang[$strMemberVal])) $out .= $arrLang[$strMemberVal];
 							}
-					
+
 							$strType = $this->game->get_type_for_name($profile_field);
 							if ($strType){
 								$out .= ($nameOnly) ? $this->game->get_name($strType, (int)$strMemberVal) : $this->game->decorate($strType, $strMemberVal, $this->data[$member_id]);
 							} else {
 								$strVal = $arrField['data']['options'][$strMemberVal];
 								$strGlang = $this->game->glang($strVal);
-								
+
 								$out .= ($strGlang) ? $strGlang : $arrField['data']['options'][$strMemberVal];
 							}
 						}
 						if (strlen($out)) $arrOut[] = $out;
 					}
-						
+
 					$out = implode(', ', $arrOut);
 				break;
 
@@ -382,9 +382,9 @@ if ( !class_exists( "pdh_r_member" ) ) {
 
 				case 'dropdown':
 					//Check if Value is in dropdown options
-					
+
 					if (!in_array($strMemberValue, array_keys($arrField['data']['options']))) return '';
-				
+
 					if ($strImage && !$nameOnly){
 						$out = '<img src="'.$strImage.'" alt="'.$out.'" title="'.$out.'" />';
 						if ($arrField['options_language'] != ""){
@@ -392,7 +392,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 								$arrSplitted = explode(':', $arrField['options_language']);
 								$arrGlang = $this->game->glang($arrSplitted[1]);
 								$arrLang = (isset($arrSplitted[2])) ? $arrGlang[$arrSplitted[2]] : $arrGlang;
-								
+
 							} else $arrLang = $this->game->get($arrField['options_language']);
 							if (isset($arrLang[$strMemberValue])) $out .= ' '.$arrLang[$strMemberValue];
 						}
@@ -402,7 +402,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 								$arrSplitted = explode(':', $arrField['options_language']);
 								$arrGlang = $this->game->glang($arrSplitted[1]);
 								$arrLang = (isset($arrSplitted[2])) ? $arrGlang[$arrSplitted[2]] : $arrGlang;
-								
+
 							} else $arrLang = $this->game->get($arrField['options_language']);
 							if (isset($arrLang[$strMemberValue])) return $arrLang[$strMemberValue];
 						} else {
@@ -421,16 +421,16 @@ if ( !class_exists( "pdh_r_member" ) ) {
 						}
 					}
 				break;
-				
-				
+
+
 				case 'multiselect':
 					$arrOut = array();
-					
+
 					foreach($strMemberValue as $strMemberVal) {
 						$out = "";
 						//Check if Value is in dropdown options
 						if (!in_array($strMemberVal, array_keys($arrField['data']['options']))) return '';
-						
+
 						//Image, because there are multiple checkboxes
 						$strImage = false;
 						if($arrField['image'] != "" && $strMemberVal){
@@ -447,7 +447,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 									$arrSplitted = explode(':', $arrField['options_language']);
 									$arrGlang = $this->game->glang($arrSplitted[1]);
 									$arrLang = (isset($arrSplitted[2])) ? $arrGlang[$arrSplitted[2]] : $arrGlang;
-					
+
 								} else $arrLang = $this->game->get($arrField['options_language']);
 								if (isset($arrLang[$strMemberVal])) $out .= ' '.$arrLang[$strMemberVal];
 							}
@@ -457,32 +457,32 @@ if ( !class_exists( "pdh_r_member" ) ) {
 									$arrSplitted = explode(':', $arrField['options_language']);
 									$arrGlang = $this->game->glang($arrSplitted[1]);
 									$arrLang = (isset($arrSplitted[2])) ? $arrGlang[$arrSplitted[2]] : $arrGlang;
-					
+
 								} else $arrLang = $this->game->get($arrField['options_language']);
 								if (isset($arrLang[$strMemberVal])) $out .= $arrLang[$strMemberVal];
 							}
-								
+
 							$strType = $this->game->get_type_for_name($profile_field);
 							if ($strType){
 								$out .= ($nameOnly) ? $this->game->get_name($strType, (int)$strMemberVal) : $this->game->decorate($strType, $strMemberVal, $this->data[$member_id]);
 							} else {
 								$strVal = $arrField['data']['options'][$strMemberVal];
 								$strGlang = $this->game->glang($strVal);
-								
+
 								$out .= ($strGlang) ? $strGlang : $arrField['data']['options'][$strMemberVal];
 							}
 						}
 						if (strlen($out)) $arrOut[] = $out;
 					}
-					
+
 					$out = implode(', ', $arrOut);
-					
+
 					break;
-				
+
 			}
 			return $out;
 		}
-		
+
 		public function get_rankid($member_id){
 			return $this->data[$member_id]['rank_id'];
 		}
@@ -494,11 +494,11 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		public function get_html_rankname($member_id){
 			return $this->pdh->geth('rank', 'name', array($this->data[$member_id]['rank_id']));
 		}
-		
+
 		public function get_rankname_sortid($member_id){
 			return $this->get_rankname($member_id);
 		}
-		
+
 		public function comp_rankname_sortid($params1, $params2){
 			$val1 = $this->pdh->get('rank', 'sortid', array($this->get_rankid($params1[0])));
 			$val2 = $this->pdh->get('rank', 'sortid', array($this->get_rankid($params2[0])));
@@ -513,8 +513,8 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		public function get_rankimage($member_id){
 			return $this->pdh->get('rank', 'rank_image', array($this->data[$member_id]['rank_id']));
 		}
-		
-		
+
+
 		public function get_check_member_exists($strMembername, $arrProfileData){
 			$arrGameUniqueIDs = $this->game->get_char_unique_ids();
 			if (!$arrGameUniqueIDs || count($arrGameUniqueIDs)===0){
@@ -528,12 +528,12 @@ if ( !class_exists( "pdh_r_member" ) ) {
 				foreach($this->data as $mid => $detail){
 					$blnNameCheck = false;
 					$blnResultArray = array();
-					
+
 					//First, check Charname
 					if($detail['name'] === $strMembername){
 						$blnNameCheck = true;
 					}
-					
+
 					if ($blnNameCheck){
 						//Now check Profilefields
 						foreach($arrGameUniqueIDs as $profilekey){
@@ -541,14 +541,14 @@ if ( !class_exists( "pdh_r_member" ) ) {
 								$blnResultArray[] = true;
 							}
 						}
-						
+
 						//Check Count on Result Array;
 						$intTotalCount = count($arrGameUniqueIDs);
 						if (count($blnResultArray) === $intTotalCount) return true;
 					}
 				}
 			}
-			
+
 			//Char does not exist
 			return false;
 		}
@@ -574,7 +574,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			}
 		}
 
-		
+
 		//TODO: check occurence
 		public function get_id($strMembername, $arrProfileData=array()){
 			$arrGameUniqueIDs = $this->game->get_char_unique_ids();
@@ -590,33 +590,33 @@ if ( !class_exists( "pdh_r_member" ) ) {
 				foreach($this->data as $mid => $detail){
 					$blnNameCheck = false;
 					$blnResultArray = array();
-						
+
 					//First, check Charname
 					if(utf8_strtolower($detail['name']) === utf8_strtolower($strMembername)){
 						$blnNameCheck = true;
 						$intByName = $mid;
 					}
-					
+
 					if ($blnNameCheck){
 						//Now check Profilefields
 						foreach($arrGameUniqueIDs as $profilekey){
 							$strProfilevalue = (isset($arrProfileData[$profilekey]) && strlen($arrProfileData[$profilekey])) ? $arrProfileData[$profilekey] : $this->config->get($profilekey);
-							
+
 							if ($detail[$profilekey] === $strProfilevalue){
 								$blnResultArray[] = true;
 							}
 						}
-			
+
 						//Check Count on Result Array;
 						$intTotalCount = count($arrGameUniqueIDs);
 						if (count($blnResultArray) === $intTotalCount) return $mid;
 					}
 				}
-				
+
 				//We're still here, but havent found him yet. Lets just take the first one with the name
 				if ($intByName !== false && count($arrProfileData)===0) return $intByName;
 			}
-				
+
 			//Char does not exist
 			return false;
 		}
@@ -670,7 +670,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		public function get_last_update($member_id){
 			return $this->data[$member_id]['last_update'];
 		}
-		
+
 		public function get_html_last_update($member_id){
 			return $this->time->user_date($this->data[$member_id]['last_update'], true);
 		}
@@ -682,7 +682,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		public function get_picture($member_id){
 			return $this->data[$member_id]['picture'];
 		}
-		
+
 		public function get_html_picture($member_id){
 			$strPicture = $this->get_picture($member_id);
 			if (!strlen($strPicture)){
@@ -690,7 +690,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			} else {
 				$strImg = str_replace($this->root_path, $this->server_path, $strPicture);
 			}
-				
+
 			return '<img src="'.$strImg.'" class="member-charimage" alt="" />';
 		}
 
@@ -708,7 +708,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 				return ($defautrole_config > 0 && $classid > 0 && isset($defautrole_config[$classid])) ? $defautrole_config[$classid] : 0;
 			}
 		}
-		
+
 		public function get_html_defaultrole($member_id){
 			$intDefaultRole = $this->get_defaultrole($member_id);
 			return $this->pdh->get("roles", "name", array($intDefaultRole));
@@ -768,7 +768,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		public function get_memberlink_decorated($member_id, $base_url, $url_suffix = '', $blnUseController=false){
 			return '<a href="'.$this->get_memberlink($member_id, $base_url, $url_suffix, $blnUseController).'">'.$this->get_name_decorated($member_id).'</a>';
 		}
-		
+
 		public function comp_memberlink_decorated($params1, $params2){
 			// return ($this->pdh->get('member', 'name', array($params1[0])) < $this->pdh->get('member', 'name', array($params2[0]))) ? -1 : 1;
 			return ($this->data[$params1[0]]['name'] < $this->data[$params2[0]]['name']) ? -1 : 1;
@@ -911,11 +911,11 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		public function get_html_user($memberid){
 			return $this->pdh->get('user', 'name', array($this->get_user($memberid)));
 		}
-		
+
 		public function get_raidgroups($memberid){
 			return $this->pdh->get('raid_groups_members', 'memberships', array($memberid));
 		}
-		
+
 		public function get_html_raidgroups($memberid){
 			$arrOut = array();
 			$arrMemberships = $this->get_raidgroups($memberid);
@@ -924,11 +924,11 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			}
 			return implode(', ', $arrOut);
 		}
-		
+
 		public function comp_user($params1, $params2) {
 			return strcasecmp($this->pdh->get('user', 'name', array($this->get_user($params1[0]))), $this->pdh->get('user', 'name', array($this->get_user($params2[0]))));
 		}
-		
+
 		public function get_search($search_value) {
 			$arrSearchResults = array();
 			if (is_array($this->data)){
@@ -950,7 +950,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 
 		public function get_html_caption_profile_field($params){
 			$strKey = $this->pdh->get('profile_fields', 'lang', array($params));
-			
+
 			if ($this->user->lang($strKey)){
 				return $this->user->lang($strKey);
 			}elseif($this->game->glang($strKey)){
@@ -958,20 +958,20 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			}
 			return $this->pdh->get('profile_fields', 'lang', array($params));
 		}
-		
+
 		public function get_points($memberID, $mdkpID=false){
 			$strPoints = $this->data[$memberID]['points'];
 			if($strPoints != ""){
 				$arrPoints = unserialize($strPoints);
 				if(!$mdkpID) return $arrPoints;
-				
+
 				if(isset($arrPoints[$mdkpID])){
 					return $arrPoints[$mdkpID];
 				}
 			}
 			return false;
 		}
-		
+
 		public function get_apa_points($memberID, $apaID=false, $mdkpID=false, $blnWithTwink=false){
 			$strPoints = $this->data[$memberID]['apa_points'];
 			$strWithTwink = ($blnWithTwink) ? 'multi' : 'single';
@@ -984,8 +984,8 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			}
 			return false;
 		}
-		
-		
+
+
 	}//end class
 }//end if
 ?>

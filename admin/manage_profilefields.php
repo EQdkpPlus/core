@@ -205,7 +205,6 @@ $("#type_dd").change(function(){
 					'TYPE'			=> $value['type'],
 					'CATEGORY'		=> ($this->game->glang('uc_cat_'.$value['category'])) ?  $this->game->glang('uc_cat_'.$value['category']) : $this->user->lang('uc_cat_'.$value['category']),
 					'SIZE'			=> $value['size'],
-					'VISIBLE'		=> $value['visible'],
 					'NAME'			=> $value['lang'],
 					'ENABLED_ICON'	=> ($value['enabled'] == 1) ? 'eqdkp-icon-online' : 'eqdkp-icon-offline',
 					'ENABLE'		=> ($value['enabled'] == 1) ? 'fa-eye-slash grey' : 'fa-eye',
