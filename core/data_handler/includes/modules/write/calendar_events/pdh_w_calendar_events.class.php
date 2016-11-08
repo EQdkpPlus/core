@@ -229,7 +229,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 				$id = $objQuery->insertId;
 				$arrNew = array(
 					'calendar_id'			=> $this->pdh->get('calendars', 'name', array($cal_id)),
-					'name'					=> (($extension['raid_eventid'] > 0) ? $this->pdh->get('event', 'name', array($extension['raid_eventid'])) : $name),
+					'name'					=> ((isset($extension['raid_eventid']) && $extension['raid_eventid'] > 0) ? $this->pdh->get('event', 'name', array($extension['raid_eventid'])) : $name),
 					'creator'				=> $this->pdh->get('user', 'name', array($creator)),
 					'timezone'				=> $timezone_creator,
 					'timestamp_start'		=> "{D_".$startdate."}",
