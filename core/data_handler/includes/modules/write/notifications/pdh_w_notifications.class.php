@@ -49,7 +49,7 @@ if(!class_exists('pdh_w_notifications')) {
 			))->execute();
 
 			if($objQuery) {
-				$this->pdh->enqueue_hook('notifications_update', array());
+				$this->pdh->enqueue_hook('notifications_update', array($objQuery->insertId));
 				return $objQuery->insertId;
 			}
 			return false;			

@@ -457,7 +457,7 @@ if( !class_exists( "cachePagination" ) ) {
 		 */
 		public function reset($mixedIDs = false){
 			//Delete Everything
-			if ($mixedIDs === false) {
+			if ($mixedIDs === false || (is_array($mixedIDs) && count($mixedIDs) === 0)) {
 				$this->pdc->del_prefix('pdh_'.$this->strCacheKey);
 				return true;
 			}
