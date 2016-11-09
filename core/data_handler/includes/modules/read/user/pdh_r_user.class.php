@@ -481,6 +481,12 @@ if (!class_exists("pdh_r_user")){
 					$gravatar = registry::register('gravatar');
 					$result = $gravatar->getAvatar($this->get_name($user_id), (($fullSize) ? 400 : 68), true);
 					if ($result) return $result;
+				} else {
+					//EQdkp Plus Default Avatars
+					include_once $this->root_path.'core/avatar.class.php';
+					$avatar = registry::register('avatar');
+					$result = $avatar->getAvatar($user_id, $this->get_name($user_id), (($fullSize) ? 400 : 68));
+					if ($result) return $result;
 				}
 			} elseif($intAvatarType == 1){
 				//Gravatar

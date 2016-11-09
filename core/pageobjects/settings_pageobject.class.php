@@ -153,7 +153,14 @@ class settings_pageobject extends pageobject {
 
 		// Errors have been checked at this point, build the query
 		$query_ary = array();
-		if ( $change_username ) $query_ary['username'] = $values['username'];
+		if ( $change_username ) {
+			//Delete default avatar
+			include_once $this->root_path.'core/avatar.class.php';
+			$avatar = registry::register('avatar');
+			$avatar->deleteAvatar($this->user->id,  $this->pdh->get('user', 'name', array($this->user->id)), 68);
+			$avatar->deleteAvatar($this->user->id,  $this->pdh->get('user', 'name', array($this->user->id)), 400);
+			$query_ary['username'] = $values['username'];
+		}
 		if ( $change_password ) {
 			$new_salt = $this->user->generate_salt();
 			$query_ary['user_password'] = $this->user->encrypt_password($values['new_password'], $new_salt).':'.$new_salt;

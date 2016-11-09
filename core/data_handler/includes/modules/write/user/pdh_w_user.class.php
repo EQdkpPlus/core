@@ -336,6 +336,10 @@ if(!class_exists('pdh_w_user')) {
 				$gravatar->deleteAvatar($this->pdh->get('user', 'email', array($user_id)), 400);
 				$gravatar->deleteAvatar($this->pdh->get('user', 'email', array($user_id)), 68);
 			}
+			include_once $this->root_path.'core/avatar.class.php';
+			$avatar = registry::register('avatar');
+			$avatar->deleteAvatar($user_id,  $this->pdh->get('user', 'name', array($user_id)), 68);
+			$avatar->deleteAvatar($user_id,  $this->pdh->get('user', 'name', array($user_id)), 400);
 			
 			$strAvatar = $this->pdh->get('user', 'avatarimglink', array($user_id));
 			if (strlen($strAvatar)) $this->pfh->Delete($strAvatar);
