@@ -768,6 +768,15 @@ function utf8_strtoupper($string){
 	return $string;
 }
 
+function utf8_substr($str, $s=0, $l=1){
+	if(function_exists('mb_substr')){
+		return mb_substr($str, $s, $l, 'UTF-8');
+	} else {
+		return substr($str, $s, $l);
+	}	
+}
+
+
 function is_utf8($str){
 	if (function_exists("mb_detect_encoding")){
 		if(mb_detect_encoding($str, 'UTF-8, ISO-8859-1') === 'UTF-8'){

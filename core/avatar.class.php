@@ -121,15 +121,15 @@ class avatar extends gen_class {
 	public function getInitials($strName){
 		$strName = str_replace(array("\"",",",";",".",":","!","?", "&", "=", "/", "|", "#", "*", "+", "(", ")", "%", "$", "´", "„", "“", "‚", "‘", "`", "^", "[", "]", "-"), '', $strName);
 		$arrWords = explode(' ', $strName);
-
+		
 		if(count($arrWords) > 1){
 			$strInitial = "";
 			foreach($arrWords as $strWord){
-				$strInitial .= substr($strWord, 0, 1);
+				$strInitial .= utf8_substr($strWord, 0, 1);
 			}
-			$strInitial = substr($strInitial, 0, $this->defaults['chars']);		
+			$strInitial = utf8_substr($strInitial, 0, $this->defaults['chars']);		
 		} else {
-			$strInitial = substr($strName, 0, $this->defaults['chars']);
+			$strInitial = utf8_substr($strName, 0, $this->defaults['chars']);
 		}
 
 		return utf8_strtoupper($strInitial);
