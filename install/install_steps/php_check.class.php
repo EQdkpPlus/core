@@ -43,6 +43,13 @@ class php_check extends install_generic {
 				'installed'		=> (extension_loaded('mysqli') || extension_loaded('pdo_mysql')) ? $this->lang['yes'] : $this->lang['no'],
 				'passfail'		=> (extension_loaded('mysqli') || extension_loaded('pdo_mysql')) ? true : false
 			),
+			'memory'	=> array(
+					'required'		=> REQ_PHP_MEMORY,
+					'installed'		=> (intval(ini_get('memory_limit')) == -1) ? "Unlimited" : ini_get('memory_limit'),
+					'passfail'		=> $this->check_php_limit(REQ_PHP_MEMORY),
+					'adviced_fail'	=> ($this->check_php_limit(REQ_PHP_MEMORY_REC) ? false :true),
+					'recommended'	=> REQ_PHP_MEMORY_REC,
+			),
 			'zLib'		=> array(
 				'required'		=> $this->lang['yes'],
 				'installed'		=> (extension_loaded('zlib')) ? $this->lang['yes'] : $this->lang['no'],
@@ -52,13 +59,6 @@ class php_check extends install_generic {
 				'required'		=> $this->lang['yes'],
 				'installed'		=> (class_exists('ZipArchive')) ? $this->lang['yes'] : $this->lang['no'],
 				'passfail'		=> (class_exists('ZipArchive')) ? true : false
-			),
-			'memory'	=> array(
-				'required'		=> REQ_PHP_MEMORY,
-				'installed'		=> (intval(ini_get('memory_limit')) == -1) ? "Unlimited" : ini_get('memory_limit'),
-				'passfail'		=> $this->check_php_limit(REQ_PHP_MEMORY),
-				'adviced_fail'	=> ($this->check_php_limit(REQ_PHP_MEMORY_REC) ? false :true),
-				'recommended'	=> REQ_PHP_MEMORY_REC,
 			),
 			'curl'		=> array(
 				'required'		=> $this->lang['yes'],
@@ -96,6 +96,13 @@ class php_check extends install_generic {
 				'required'		=> $this->lang['yes'],
 				'installed'		=> (extension_loaded('gd') && function_exists('gd_info')) ? $this->lang['yes'] : $this->lang['no'],
 				'passfail'		=> (extension_loaded('gd') && function_exists('gd_info')) ? true : false
+			),
+			'mb'		=> array(
+				'required'		=> $this->lang['yes'],
+				'installed'		=> (function_exists('mb_strtolower')) ? $this->lang['yes'] : $this->lang['no'],
+				'passfail'		=> true,
+				'adviced_fail'	=> (!function_exists('mb_strtolower')) ? true : false,
+				'ignore'		=> true
 			),
 			//Check will be performed by javascript
 			'pathinfo'	=> array(
