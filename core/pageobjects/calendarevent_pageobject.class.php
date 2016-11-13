@@ -539,7 +539,7 @@ class calendarevent_pageobject extends pageobject {
 	// the main page display
 	public function display($mssg=false) {
 		// Show an error Message if no ID is set
-		if(!$this->url_id){
+		if(!$this->url_id || count($this->pdh->get('calendar_events', 'data', array($this->url_id))) == 0){
 			redirect($this->routing->build('calendar',false,false,true,true));
 			//message_die($this->user->lang('calendar_page_noid'));
 		}

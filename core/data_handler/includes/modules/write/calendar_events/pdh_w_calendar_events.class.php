@@ -308,6 +308,14 @@ if(!class_exists('pdh_w_calendar_events')) {
 					if(is_array($delete_events) && count($delete_events) > 0){
 						$this->db->prepare("DELETE FROM __calendar_events WHERE id :in")->in($delete_events)->execute();
 						$this->db->prepare("DELETE FROM __calendar_raid_attendees WHERE calendar_events_id :in")->in($delete_events)->execute();
+						
+						//delete notifications
+						foreach($delete_events as $delid){
+							$this->ntfy->deleteNotification('calenderevent_opened', $delid);
+							$this->ntfy->deleteNotification('calenderevent_closed', $delid);
+							$this->ntfy->deleteNotification('calenderevent_new', $delid);
+							$this->ntfy->deleteNotification('calenderevent_invitation', $delid);
+						}
 					}
 				}
 			} else {
@@ -323,7 +331,15 @@ if(!class_exists('pdh_w_calendar_events')) {
 			$log_action					= $this->logs->diff(false, $arrOld, $this->arrLogLang);
 			$eventname					=  (($extension['raid_eventid'] > 0) ? $this->pdh->get('event', 'name', array($extension['raid_eventid'])) : ((isset($arrOld['name'])) ? $arrOld['name'] : ""));
 			$this->log_insert('calendar_log_eventdeleted', $log_action, (is_array($id) ? $id[0] : $id), $eventname, true, 'calendar');
-
+			
+			//Delete notifications
+			foreach($field as $eventid){
+				$this->ntfy->deleteNotification('calenderevent_opened', $eventid);
+				$this->ntfy->deleteNotification('calenderevent_closed', $eventid);
+				$this->ntfy->deleteNotification('calenderevent_new', $eventid);
+				$this->ntfy->deleteNotification('calenderevent_invitation', $eventid);
+			}
+			
 			// perform the hooks
 			$this->pdh->enqueue_hook('calendar_raid_attendees_update');
 			$this->pdh->enqueue_hook('calendar_events_update', array( (is_array($id) ? $id[0] : $id)));

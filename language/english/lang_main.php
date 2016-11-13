@@ -1126,7 +1126,8 @@ $lang = array(
 	"email_confirm_note" => "Your new email address will get valid once you confirm it by using the link sent to your new email address.",
 	"error_account_locked" => "Your account was locked. A login is not possible. If you have questions, please contact the Administrator.",
 	"email_must_confirm_note" => "The Administrator has initiated an email address confirmation. You should have already received an email with a link to confirm your email address. Until you haven't confirmed, only this userprofile is accessible.",
-
+	"warning" => "Warning",
+	"information" => "Information",
 );
 
 ?>
