@@ -177,8 +177,8 @@ class ManageAdjs extends page_generic {
 		
 		$this->tpl->assign_vars(array(
 			'SID'			=> $this->SID,
-			'ADJ_LIST'		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_alimit'], false),
-			'PAGINATION' 	=> generate_pagination('manage_adjustments.php'.$sort_suffix, $adj_count, $this->user->data['user_alimit'], $this->in->get('start', 0)),
+			'ADJ_LIST'		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_rlimit'], false),
+			'PAGINATION' 	=> generate_pagination('manage_adjustments.php'.$sort_suffix, $adj_count, $this->user->data['user_rlimit'], $this->in->get('start', 0)),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
 			'ADJ_COUNT'		=> $adj_count,
 		)

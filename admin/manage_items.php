@@ -199,8 +199,8 @@ class ManageItems extends page_generic {
 
 		$this->tpl->assign_vars(array(
 			'SID'	=> $this->SID,
-			'ITEM_LIST' => $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_ilimit'], false),
-			'PAGINATION' => generate_pagination('manage_items.php'.$sort_suffix, $item_count, $this->user->data['user_ilimit'], $this->in->get('start', 0)),
+			'ITEM_LIST' => $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_rlimit'], false),
+			'PAGINATION' => generate_pagination('manage_items.php'.$sort_suffix, $item_count, $this->user->data['user_rlimit'], $this->in->get('start', 0)),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
 			'ITEM_COUNT' => $item_count,
 		));

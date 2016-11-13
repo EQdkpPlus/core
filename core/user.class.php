@@ -163,10 +163,6 @@ class user extends gen_class {
 		if(empty($this->data['user_timezone']) || $this->data['user_timezone'] == '') $this->data['user_timezone'] = $this->config->get('timezone');
 
 		if ($this->data['user_id'] == ANONYMOUS){
-			$this->data['user_alimit']			= $this->config->get('default_alimit');
-			$this->data['user_elimit']			= $this->config->get('default_elimit');
-			$this->data['user_ilimit']			= $this->config->get('default_ilimit');
-			$this->data['user_nlimit']			= $this->config->get('default_nlimit');
 			$this->data['user_rlimit']			= $this->config->get('default_rlimit');
 
 			$this->style['date_notime_long']	= ($this->config->get('default_date_long')) ? $this->config->get('default_date_long') : $this->lang('style_date_long');
@@ -617,61 +613,15 @@ class user extends gen_class {
 						'text2'		=> ' (<a href="javascript:template_preview()">'.register('user')->lang('preview').'</a>)',
 						'default'	=> register('config')->get('default_style'),
 					),
-					'user_alimit'	=> array(
-						'type'		=> 'spinner',
-						'lang'		=> 'adjustments_per_page',
-						'size'		=> 5,
-						'step'		=> 10,
-						'min'		=> 10,
-						'required'	=> true,
-						'default'	=> (register('config')->get('default_alimit')) ? register('config')->get('default_alimit') : 100,
-					),
-					'user_climit'	=> array(
-						'type'	=> 'spinner',
-						'lang'	=> 'characters_per_page',
-						'size'	=> 5,
-						'step' => 10,
-						'min'		=> 10,
-						'required'	=> true,
-						'default'	=> (register('config')->get('default_climit')) ? register('config')->get('default_climit') : 100,
-					),
-					'user_elimit'	=> array(
-						'type'	=> 'spinner',
-						'lang'	=> 'events_per_page',
-						'size'	=> 5,
-						'step' => 10,
-						'min'		=> 10,
-						'required'	=> true,
-						'default'	=> (register('config')->get('default_elimit')) ? register('config')->get('default_elimit') : 100,
-					),
-					'user_ilimit'	=> array(
-						'type'	=> 'spinner',
-						'lang'	=> 'items_per_page',
-						'size'	=> 5,
-						'step' => 10,
-						'min'		=> 10,
-						'required'	=> true,
-						'default'	=> (register('config')->get('default_ilimit')) ? register('config')->get('default_ilimit') : 100,
-					),
 					'user_rlimit'	=> array(
 						'type'	=> 'spinner',
-						'lang'	=> 'raids_per_page',
+						'lang'	=> 'tableentries_per_page',
 						'size'	=> 5,
 						'step' => 10,
 						'min'		=> 10,
 						'required'	=> true,
 						'default'	=> (register('config')->get('default_rlimit')) ? register('config')->get('default_rlimit') : 100,
 					),
-					/*
-					'user_nlimit'	=> array(
-						'type'	=> 'spinner',
-						'lang'	=> 'news_per_page',
-						'size'	=> 5,
-						'min'		=> 10,
-						'required'	=> true,
-						'default'	=> (register('config')->get('default_nlimit')) ? register('config')->get('default_nlimit') : 10,
-					),
-					*/
 					'user_date_time'	=> array(
 						'type'	=> 'text',
 						'size'	=> 40,

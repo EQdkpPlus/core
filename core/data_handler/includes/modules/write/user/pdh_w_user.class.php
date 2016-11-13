@@ -109,10 +109,6 @@ if(!class_exists('pdh_w_user')) {
 
 		public function set_defaults($arrData){
 			$arrDefaults = array(
-				'user_alimit'		=> $this->config->get('default_alimit'),
-				'user_elimit'		=> $this->config->get('default_elimit'),
-				'user_ilimit'		=> $this->config->get('default_ilimit'),
-				'user_nlimit'		=> $this->config->get('default_nlimit'),
 				'user_rlimit'		=> $this->config->get('default_rlimit'),
 				'user_style'		=> $this->config->get('default_style'),
 				'user_lang'			=> $this->config->get('default_lang'),

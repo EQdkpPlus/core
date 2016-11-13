@@ -37,7 +37,7 @@ class tag_pageobject extends pageobject {
 		$arrArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'date', 'desc');
 		
 		$intStart = $this->in->get('start', 0);
-		$arrLimitedIDs = $this->pdh->limit($arrArticleIDs, $intStart, $this->user->data['user_nlimit']);
+		$arrLimitedIDs = $this->pdh->limit($arrArticleIDs, $intStart, $this->user->data['user_rlimit']);
 		
 		//Articles to template
 		foreach($arrLimitedIDs as $intArticleID){
@@ -116,7 +116,7 @@ class tag_pageobject extends pageobject {
 		
 		$this->tpl->assign_vars(array(
 				'TAG'	=> sanitize($strTag),
-				'PAGINATION' => generate_pagination($this->strPath.$this->SID, count($arrArticleIDs), $this->user->data['user_nlimit'], $intStart, 'start'),
+				'PAGINATION' => generate_pagination($this->strPath.$this->SID, count($arrArticleIDs), $this->user->data['user_rlimit'], $intStart, 'start'),
 		));
 		
 		$this->tpl->add_meta('<link rel="canonical" href="'.$this->env->link.$this->routing->build('tag', $tag, false, false, true).'" />');

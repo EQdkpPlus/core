@@ -163,8 +163,8 @@ class mycharacters_pageobject extends pageobject {
 		$sort_suffix		= '&amp;sort='.$this->in->get('sort');
 
 		$this->tpl->assign_vars(array(
-			'CHAR_LIST'				=> $hptt->get_html_table($this->in->get('sort',''), $page_suffix, $this->in->get('start', 0), $this->user->data['user_climit'], false),
-			'CHAR_PAGINATION'		=> generate_pagination($this->SID.$sort_suffix, ((is_array($view_list)) ? count($view_list) : 0), $this->user->data['user_climit'], $this->in->get('start', 0)),
+			'CHAR_LIST'				=> $hptt->get_html_table($this->in->get('sort',''), $page_suffix, $this->in->get('start', 0), $this->user->data['user_rlimit'], false),
+			'CHAR_PAGINATION'		=> generate_pagination($this->SID.$sort_suffix, ((is_array($view_list)) ? count($view_list) : 0), $this->user->data['user_rlimit'], $this->in->get('start', 0)),
 			'NEW_CHARS'				=> $this->user->check_auth('u_member_add', false),
 			'CONNECT_CHARS'			=> $this->user->check_auth('u_member_conn', false),
 			'DELETE_CHARS'			=> $this->user->check_auth('u_member_del', false),

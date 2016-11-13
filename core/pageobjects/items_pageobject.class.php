@@ -163,8 +163,8 @@ class items_pageobject extends pageobject {
 		$hptt					= $this->get_hptt($hptt_page_settings, $view_list, $filtered_list, array('%link_url%' => $this->routing->simpleBuild('items') , '%link_url_suffix%' => '', '%raid_link_url%' => $this->routing->simpleBuild('raids'), '%raid_link_url_suffix%' => '', '%itt_lang%' => false, '%itt_direct%' => 0, '%onlyicon%' => 0, '%noicon%' => 0, '%use_controller%'=>true), md5($searchType.$mySearch));
 		$hptt->setPageRef($this->strPath);
 		$this->tpl->assign_vars(array(
-			'PAGE_OUT'			=> $hptt->get_html_table($sort, $pagination_suffix, $start, $this->user->data['user_ilimit'], false),
-			'ITEM_PAGINATION'	=> generate_pagination($this->strPath.$this->SID.$sort_suffix, $item_count, $this->user->data['user_ilimit'], $start),
+			'PAGE_OUT'			=> $hptt->get_html_table($sort, $pagination_suffix, $start, $this->user->data['user_rlimit'], false),
+			'ITEM_PAGINATION'	=> generate_pagination($this->strPath.$this->SID.$sort_suffix, $item_count, $this->user->data['user_rlimit'], $start),
 			'ITEM_COUNT'		=> $item_count,
 				
 		));

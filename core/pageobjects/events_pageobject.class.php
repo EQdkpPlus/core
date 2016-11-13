@@ -82,8 +82,8 @@ class events_pageobject extends pageobject {
 		$hptt->setPageRef($this->strPath);
 		
 		$this->tpl->assign_vars(array (
-			'EVENT_OUT'			=> $hptt->get_html_table($sort, $pagination_suffix, $start, $this->user->data['user_elimit'], $footer_text),
-			'EVENT_PAGINATION'	=> generate_pagination($this->strPath.$this->SID.$sort_suffix, $event_count, $this->user->data['user_elimit'], $start),
+			'EVENT_OUT'			=> $hptt->get_html_table($sort, $pagination_suffix, $start, $this->user->data['user_rlimit'], $footer_text),
+			'EVENT_PAGINATION'	=> generate_pagination($this->strPath.$this->SID.$sort_suffix, $event_count, $this->user->data['user_rlimit'], $start),
 			'EVENT_COUNT'		=> $event_count,
 			
 		));
