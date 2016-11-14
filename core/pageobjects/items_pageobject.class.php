@@ -98,6 +98,9 @@ class items_pageobject extends pageobject {
 			$arrItempools = $this->pdh->get('itempool', 'id_list');
 			foreach($arrItempools as $itempoolid){
 				$intDrops = (isset($arrPoolItems[$itempoolid])) ? intval($arrPoolItems[$itempoolid]) : 0;
+				//Dont show chart if there are no drops in this itempool
+				if($intDrops == 0) continue;
+				
 				$intTotalItems = count($this->pdh->get('item', 'item_ids_of_itempool', array($itempoolid)));
 				
 				$intDroprate = ($intTotalItems > 0) ? round(($intDrops / $intTotalItems) * 100) : 0;
