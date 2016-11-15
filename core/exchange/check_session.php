@@ -35,13 +35,14 @@ if (!class_exists('exchange_check_session')){
 				if ($result != ANONYMOUS){
 					$status = 1;
 					$arrUserdata = $this->pdh->get('user', 'data', array($result));
-					$arrUserdata['email'] = $this->pdh->get('user', 'email', array(1));
+					$arrUserdata['email'] = $this->pdh->get('user', 'email', array($result));
 					$hideArray = array('user_password', 'user_login_key', 'user_email','user_email_confirmkey', 'user_lastpage', 'privacy_settings', 'auth_account', 'notifications', 'user_temp_email', 'salt', 'password', 'exchange_key');
 					foreach($hideArray as $entry){
 						if(isset($arrUserdata[$entry])) unset($arrUserdata[$entry]);
 					}
 					$arrUserdata['custom_fields'] = unserialize($arrUserdata['custom_fields']);
 					$arrUserdata['plugin_settings'] = unserialize($arrUserdata['plugin_settings']);
+					$arrUserdata['usergroups'] = $this->pdh->get('user_groups_users', 'memberships', array($result));
 					$data = $arrUserdata;
 					
 				} else {
