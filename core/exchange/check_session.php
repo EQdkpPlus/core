@@ -29,16 +29,28 @@ if (!class_exists('exchange_check_session')){
 		public function post_check_session($params, $body){
 			$xml = simplexml_load_string($body);
 			$status = 0;
+			$data = array();
 			if ($xml && $xml->sid){
 				$result = $this->user->check_session($xml->sid);
 				if ($result != ANONYMOUS){
 					$status = 1;
+					$arrUserdata = $this->pdh->get('user', 'data', array($result));
+					$arrUserdata['email'] = $this->pdh->get('user', 'email', array(1));
+					$hideArray = array('user_password', 'user_login_key', 'user_email','user_email_confirmkey', 'user_lastpage', 'privacy_settings', 'auth_account', 'notifications', 'user_temp_email', 'salt', 'password', 'exchange_key');
+					foreach($hideArray as $entry){
+						if(isset($arrUserdata[$entry])) unset($arrUserdata[$entry]);
+					}
+					$arrUserdata['custom_fields'] = unserialize($arrUserdata['custom_fields']);
+					$arrUserdata['plugin_settings'] = unserialize($arrUserdata['plugin_settings']);
+					$data = $arrUserdata;
+					
 				} else {
 					$status = 0;
 				}
 			}
-			return array('valid' => $result);
+			return array('valid' => $result, 'data' =>$data);
 		}
+
 	}
 }
 ?>
