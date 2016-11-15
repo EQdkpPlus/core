@@ -113,6 +113,10 @@ class editcalendarevent_pageobject extends pageobject {
 		}
 	}
 
+	private function remove_invitation_notification($eventID, $userID){
+		$this->ntfy->deleteNotification('calenderevent_invitation', $eventID, $userID);
+	}
+
 	// save an event template in database
 	public function process_addtemplate(){
 		if($this->in->get('raidmode') == 'role'){
@@ -330,12 +334,19 @@ class editcalendarevent_pageobject extends pageobject {
 				)
 			));
 
-			// send notifications to newly invited users
+			// send notifications to newly invited users & remove notification for removed users
 			$current_invited_users	= $this->pdh->get('calendar_events', 'extension', array($this->url_id, 'invited'));
 			if($current_invited_users !== $invited_users){
+				// the new users
 				$invite_new_users	= array_diff($invited_users, $current_invited_users);
 				if(count($invite_new_users) > 0){
 					$this->notify_invitations($this->url_id, $invite_new_users);
+				}
+				
+				// someone removed?
+				$invite_removed_users	= array_diff($current_invited_users, $invited_users);
+				if(count($invite_removed_users) > 0){
+					$this->remove_invitation_notification($this->url_id, $invite_removed_users);
 				}
 			}
 		}

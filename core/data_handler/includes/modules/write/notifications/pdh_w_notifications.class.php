@@ -126,6 +126,15 @@ if(!class_exists('pdh_w_notifications')) {
 			return false;
 		}
 		
+		public function delete_by_type_and_recordset_for_user($strType, $strRecordsetID, $intUserID){
+			$objQuery = $this->db->prepare("DELETE FROM __notifications WHERE type = ? AND dataset_id=? AND user_id = ?")->execute($strType, $strRecordsetID, $intUserID);
+			if($objQuery) {
+				$this->pdh->enqueue_hook('notifications_update');
+				return true;
+			}
+			return false;
+		}
+		
 		public function delete_by_user($intUserID){
 			$objQuery = $this->db->prepare("DELETE FROM __notifications WHERE user_id = ?")->execute($intUserID);
 		

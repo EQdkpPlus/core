@@ -298,8 +298,12 @@ class notifications extends gen_class {
 		return $strLang;
 	}
 
-	public function deleteNotification($strType, $strDatasetID){
-		$this->pdh->put('notifications', 'delete_by_type_and_recordset', array($strType, $strDatasetID));
+	public function deleteNotification($strType, $strDatasetID, $intUserID=0){
+		if($intUserID > 0){
+			$this->pdh->put('notifications', 'delete_by_type_and_recordset_for_user', array($strType, $strDatasetID, $intUserID));
+		}else{
+			$this->pdh->put('notifications', 'delete_by_type_and_recordset', array($strType, $strDatasetID));
+		}
 		$this->pdh->process_hook_queue();
 	}
 	
