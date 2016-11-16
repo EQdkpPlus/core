@@ -56,7 +56,30 @@ class embedly extends gen_class {
 
 		$embedlyUrls = array();
 		//First, get the links
-		$arrLinks = array();
+		$arrLinks = $arrAreas = array();
+		
+		//Detect Areas
+		$intAreas = preg_match_all("/(.*)<!-- NO_EMBEDLY -->(.*)<!-- END_NO_EMBEDLY -->(.*)/misU", $string, $arrAreas);
+		$strIgnore = "";
+		if(isset($arrAreas[2]) && count($arrAreas[2])){
+			$strIgnore = implode(' ', $arrAreas[2]);
+		}
+
+		//Build Array for Links to ignore
+		$arrIgnoreLinksMatches = $arrIgnoreLinks = array();
+		if($strIgnore != ""){
+			$intIgnoreLinks = preg_match_all('@((("|:|])?)https?:\/\/([-\w\.]+)+(:\d+)?(\/([\w\/_\-\.]*(\?[^<\s]+)?)?)?)@', $strIgnore, $arrIgnoreLinksMatches);
+			if ($intIgnoreLinks){
+				foreach ($arrIgnoreLinksMatches[0] as $link){
+					$link = html_entity_decode($link);
+					$strFirstChar = substr($link, 0, 1);
+					if ($strFirstChar != '"' && $strFirstChar != ':' && $strFirstChar != ']') {
+						$arrIgnoreLinks[] = strip_tags($link);
+					}
+				}
+			}
+		}	
+		
 		$intLinks = preg_match_all('@((("|:|])?)https?:\/\/([-\w\.]+)+(:\d+)?(\/([\w\/_\-\.]*(\?[^<\s]+)?)?)?)@', $string, $arrLinks);
 		
 		$arrDecodedLinks = array();
@@ -65,14 +88,20 @@ class embedly extends gen_class {
 			foreach ($arrLinks[0] as $link){
 				$orig_link = $link;
 				$link = html_entity_decode($link);
-				if (substr($link, 0, 1) != '"' && substr($link, 0, 1) != ':' && substr($link, 0, 1) != ']') {
-					$embedlyUrls[$key] = strip_tags($link);
+				$strFirstChar = substr($link, 0, 1);
+				if ($strFirstChar != '"' && $strFirstChar != ':' && $strFirstChar != ']') {
+					$strMyLink = strip_tags($link);
+					if(in_array($strMyLink, $arrIgnoreLinks)) continue;
+					
+					$embedlyUrls[$key] = $strMyLink;
 					$arrDecodedLinks[$key] = $orig_link;
 					$key++;
 				}
 			}	
 		}
-
+		
+		d($embedlyUrls);
+		
 		//Now let's get the information from embedly
 		$config = array('urls' => $embedlyUrls, 'wmode' => 'transparent');
 		if ($maxwidth) $config['maxwidth'] = intval($maxwidth);
