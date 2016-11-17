@@ -217,7 +217,8 @@ if (!class_exists("jquery")) {
 
 		public function init_toast(){
 			$this->tpl->add_js("
-			function system_message(text, type, sticky=3000){
+			function system_message(text, type, sticky){
+				var sticky = sticky || 3000;
 				switch (type) {
 					case 'error':
 						mssgheading = '".$this->user->lang('error')."';

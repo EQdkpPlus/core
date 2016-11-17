@@ -501,7 +501,7 @@
 
 			$(function() {
 				$('.notification-mark-all-read').on('click', function() {
-				    $('.notification-content ul').html({L_notification_none|jsencode});
+					$('.notification-content ul').html({L_notification_none|jsencode});
 					$('.notification-bubble-red, .notification-bubble-yellow, .notification-bubble-green').hide();
 					notification_favicon(0, 0, 0);
 					$.get(mmocms_controller_path+"Notifications"+mmocms_seo_extension+mmocms_sid+"&markallread");
@@ -515,13 +515,13 @@
 				<!-- JS for simple header. Above is for normal header only -->
 			<!-- ENDIF -->
 
-		{JS_CODE_EOP}
+			{JS_CODE_EOP}
 
-		//Reset Favicon, for Bookmarks
-		$(window).on('unload', function() {
-            if (typeof favicon !== 'undefined'){ favicon.reset(); }
-   		 });
-   		 //]]>
+			//Reset Favicon, for Bookmarks
+			$(window).on('unload', function() {
+				if (typeof favicon !== 'undefined'){ favicon.reset(); }
+			});
+		//]]>
 	</script>
 	{FOOTER_CODE}
 	<!-- LISTENER body_bottom -->
