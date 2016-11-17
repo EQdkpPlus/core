@@ -33,7 +33,7 @@
 			header: {
 				left: 'prev,next today, icalexport',
 				center: 'title',
-				right: 'month,agendaWeek,agendaDay'
+				right: 'month,basicWeek,agendaDay,listMonth'
 			},
 			<!-- IF ADD_RAID -->
 			dayClick: function(date, jsEvent, view) {
@@ -144,7 +144,7 @@
 				}else{
 					tmpttcontent = '';
 					tmpttcontent += (event.raidleader) ? "<div class='calendartt_raidleader'>{L_raidevent_raidleader}: "+event.raidleader+"</div><br/>" : '';
-					tmpttcontent = "<div class='calendartt_start'>{L_calendar_startdate}: "+moment(event.start).format('{JS_DATEFORMAT}, {JS_TIMEFORMAT}')+"</div>";
+					tmpttcontent += "<div class='calendartt_start'>{L_calendar_startdate}: "+moment(event.start).format('{JS_DATEFORMAT}, {JS_TIMEFORMAT}')+"</div>";
 					tmpttcontent += "<div class='calendartt_end'>{L_calendar_enddate}: "+moment(event.end).format('{JS_DATEFORMAT}, {JS_TIMEFORMAT}')+"</div>";
 
 					tmpttcontent += (event.rstatusdata) ? "<br/><div class='calendartt_raidcount'>"+event.rstatusdata+"</div>" : '';
