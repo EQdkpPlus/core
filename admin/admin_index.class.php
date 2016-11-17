@@ -54,9 +54,9 @@ class admin_index extends gen_class {
 		if ($this->in->get('ip_resolve') != ""){
 			$return = $this->admin_functions->resolve_ip($this->in->get('ip_resolve'));
 			if ($return){
-				$out = ($return['city'] != "") ? $return['city'].'<br />' : '';
-				$out .= ($return['regionName'] != "") ? $return['regionName'].'<br />' : '';
-				$out .= ($return['countryName'] != "") ? $return['countryName'] : '';
+				$out	 = ($return['city'] != "") ? $return['city'].'<br />' : '';
+				$out	.= ($return['regionName'] != "") ? $return['regionName'].'<br />' : '';
+				$out	.= ($return['countryName'] != "") ? $return['countryName'] : '';
 
 				if (!strlen($out)) $out = "Could not resolve IP";
 			}
@@ -83,8 +83,8 @@ class admin_index extends gen_class {
 			'L_ADMINISTRATION'	=> $this->user->lang('administration'),
 			'L_ADMIN_INDEX'		=> $this->user->lang('admin_index'),
 			'L_EQDKP_INDEX'		=> $this->user->lang('eqdkp_index'),
-			'ADMIN_MENU'		=> $this->core->build_menu_ul($this->admin_menu, '', true, $this->root_path.'images/admin/', false),
-			'ADMIN_MENU_MOBILE' => $this->core->build_menu_ul($this->admin_functions->adminmenu(false, '', '', 'adminmenu-mobile'), 'adminmenu-mobile', true, $this->root_path.'images/admin/', false),
+			'ADMIN_MENU'			=> $this->core->build_menu_ul($this->admin_menu, '', true, $this->root_path.'images/admin/', false),
+			'ADMIN_MENU_MOBILE'	=> $this->core->build_menu_ul($this->admin_functions->adminmenu(false, '', '', 'adminmenu-mobile'), 'adminmenu-mobile', true, $this->root_path.'images/admin/', false),
 		));
 	}
 
@@ -108,10 +108,10 @@ class admin_index extends gen_class {
 			if ($objJSON) {
 
 				require_once($this->root_path.'core/feed.class.php');
-				$feed				= registry::register('feed');
-				$feed->title		= "EQdkp Plus Twitter";
+				$feed						= registry::register('feed');
+				$feed->title			= "EQdkp Plus Twitter";
 				$feed->description	= "EQdkp Plus Twitter";
-				$feed->published	= time();
+				$feed->published		= time();
 				$feed->language		= 'EN-EN';
 
 				if ($objJSON){
@@ -133,10 +133,9 @@ class admin_index extends gen_class {
 						$rssitem->title			= $truncated;
 						$rssitem->description	= $objEntry->text;
 						$rssitem->published		= $objEntry->created_at;
-						$rssitem->author		= 'EQdkp Plus';
-						$rssitem->link			= "https://twitter.com/EQdkpPlus/status/".$objEntry->id_str;
+						$rssitem->author			= 'EQdkp Plus';
+						$rssitem->link				= "https://twitter.com/EQdkpPlus/status/".$objEntry->id_str;
 						$feed->addItem($rssitem);
-
 					}
 
 				}
@@ -183,20 +182,20 @@ class admin_index extends gen_class {
 		/****************************************************************
 		* STATISTICS
 		****************************************************************/
-		$days					= (($this->time->time - $this->config->get('eqdkp_start')) / 86400);
+		$days							= (($this->time->time - $this->config->get('eqdkp_start')) / 86400);
 
 		$total_members_			= count($this->pdh->get('member', 'id_list'));
 		$total_members_active	= count($this->pdh->get('member', 'id_list', array(true)));
 		$total_members_inactive	= $total_members_ - $total_members_active;
 
-		$objTotalRaids			= $this->db->query('SELECT count(*) as count FROM __raids', true);
-		$total_raids			= $objTotalRaids['count'];
-		$raids_per_day			= sprintf("%.2f", ($total_raids / $days));
-		$objTotalItems			= $this->db->query('SELECT count(*) as count FROM __items', true);
-		$total_items			= $objTotalItems['count'];
-		$items_per_day			= sprintf("%.2f", ($total_items / $days));
-		$objTotalLogs			= $this->db->query('SELECT count(*) as count FROM __logs', true);
-		$total_logs				= $objTotalLogs['count'];
+		$objTotalRaids				= $this->db->query('SELECT count(*) as count FROM __raids', true);
+		$total_raids				= $objTotalRaids['count'];
+		$raids_per_day				= sprintf("%.2f", ($total_raids / $days));
+		$objTotalItems				= $this->db->query('SELECT count(*) as count FROM __items', true);
+		$total_items				= $objTotalItems['count'];
+		$items_per_day				= sprintf("%.2f", ($total_items / $days));
+		$objTotalLogs				= $this->db->query('SELECT count(*) as count FROM __logs', true);
+		$total_logs					= $objTotalLogs['count'];
 
 		if ( (float)$raids_per_day > (float)$total_raids ){
 			$raids_per_day = $total_raids;
@@ -293,7 +292,7 @@ class admin_index extends gen_class {
 					'NAME'			=> ($this->user->lang('requirements_'.$reqname) != '') ? $this->user->lang('requirements_'.$reqname) : $reqname,
 					'REQUIRED'		=> $reqrow['required'],
 					'AVAILABLE'		=> $reqrow['installed'],
-					'FA'			=> ($reqrow['passfail']) ? 'check-circle' : 'times-circle',
+					'FA'				=> ($reqrow['passfail']) ? 'check-circle' : 'times-circle',
 					'COLOR'			=> ($reqrow['passfail']) ? 'green' : 'red',
 			));
 		}
@@ -325,54 +324,54 @@ class admin_index extends gen_class {
 		$this->tpl->js_file($this->root_path.'libraries/jquery/js/circles/circles.min.js');
 
 		//Users
-		$intTotalUsers = count($this->pdh->get('user', 'id_list', array()));
-		$intActiveUsers = count($this->pdh->get('user', 'active_users', array()));
-		
+		$intTotalUsers			= count($this->pdh->get('user', 'id_list', array()));
+		$intActiveUsers		= count($this->pdh->get('user', 'active_users', array()));
+
 		//Adjustments
-		$total_adjustments  = count($this->pdh->get('adjustment', 'id_list', array()));
-		$total_dkp_items = $total_adjustments + $total_raids + $total_items;
-		$adjs_per_day	= sprintf("%.2f", ($total_adjustments / $days));
+		$total_adjustments	= count($this->pdh->get('adjustment', 'id_list', array()));
+		$total_dkp_items		= $total_adjustments + $total_raids + $total_items;
+		$adjs_per_day			= sprintf("%.2f", ($total_adjustments / $days));
 
 		$this->tpl->assign_vars(array(
 			//Logs
-			'S_LOGS'				=> $s_logs,
-			'LOGS_TABLE'			=> $logs_table,
+			'S_LOGS'						=> $s_logs,
+			'LOGS_TABLE'				=> $logs_table,
 
 			// Server Information
 			'SERVERINFO_REGGLOBAL'	=> $this->get_php_setting('register_globals',1,0),
-			'SERVERINFO_CURL'		=> $this->get_curl_setting(1),
+			'SERVERINFO_CURL'			=> $this->get_curl_setting(1),
 			'SERVERINFO_FOPEN'		=> $this->check_PHP_Function('fopen',1),
 			'SERVERINFO_MYSQL'		=> 'Client ('.$this->db->client_version.')<br/>Server ('.$this->db->server_version.')',
-			'SERVERINFO_PHP'		=> (((phpversion() >= VERSION_PHP_RQ) ? '<span class="positive">' : '<span class="negative">').phpversion().'</span>'),
+			'SERVERINFO_PHP'			=> (((phpversion() >= VERSION_PHP_RQ) ? '<span class="positive">' : '<span class="negative">').phpversion().'</span>'),
 
 			'NUMBER_OF_MEMBERS'		=> $total_members_,
-			'NUMBER_OF_RAIDS'		=> $total_raids,
-			'NUMBER_OF_ITEMS'		=> $total_items,
-			'NUMBER_OF_ADJUSTMENTS' => $total_adjustments,
+			'NUMBER_OF_RAIDS'			=> $total_raids,
+			'NUMBER_OF_ITEMS'			=> $total_items,
+			'NUMBER_OF_ADJUSTMENTS'	=> $total_adjustments,
 			'DATABASE_SIZE'			=> $dbsize,
-			'NUMBER_OF_LOGS'		=> $total_logs,
+			'NUMBER_OF_LOGS'			=> $total_logs,
 			'RAIDS_PER_DAY'			=> $raids_per_day,
 			'ITEMS_PER_DAY'			=> $items_per_day,
 			'ADJUSTMENTS_PER_DAY'	=> $adjs_per_day,
 			'EQDKP_STARTED'			=> $this->time->user_date($this->config->get('eqdkp_start'), true),
 			'SHOW_BETA_WARNING'		=> VERSION_WIP,
 			'SHOW_PHP_WARNING'		=> (version_compare(PHP_VERSION, VERSION_PHP_REC, '<') && !defined('EQDKP_DISABLE_PHP_CHECK')) ? true : false,
-			'ONLINE_COUNT'		=> $online_count,
-			'LOGS_COUNT'		=> count($logfiles),
-			'SHOW_LIMITED_FUNCS'	=> false,
+			'ONLINE_COUNT'				=> $online_count,
+			'LOGS_COUNT'				=> count($logfiles),
+			'SHOW_LIMITED_FUNCS'		=> false,
 			'DATABASE_NAME'			=> $this->dbname,
-			'TABLE_PREFIX'			=> $this->table_prefix,
-			'DATA_FOLDER'			=> md5($this->table_prefix.$this->dbname),
+			'TABLE_PREFIX'				=> $this->table_prefix,
+			'DATA_FOLDER'				=> md5($this->table_prefix.$this->dbname),
 			'EQDKP_VERSION'			=> 'FILE: '.VERSION_INT.', DB: '.$this->config->get('plus_version'),
 			'CIRCLE_USER_VALUE'		=> sprintf("%.2F", (($intTotalUsers - ($intTotalUsers-$intActiveUsers)) / $intTotalUsers) * 100),
 			'CIRCLE_MEMBER_VALUE'	=> sprintf("%.2F", (($total_members_ - $total_members_inactive) / $total_members_) * 100),
-			'TOTAL_USERS'			=> $intTotalUsers,
-			'CIRCLE_ITEMS'			=> sprintf("%.2F", ($total_items / $total_dkp_items)*100),
-			'CIRCLE_RAIDS'			=> sprintf("%.2F", ($total_raids / $total_dkp_items)*100),
-			'CIRCLE_ADJUSTMENTS'	=> sprintf("%.2F", ($total_adjustments / $total_dkp_items)*100),
-			'REQCOUNT'				=> $req_count,
+			'TOTAL_USERS'				=> $intTotalUsers,
+			'CIRCLE_ITEMS'				=> ($total_dkp_items > 0) ? sprintf("%.2F", ($total_items / $total_dkp_items)*100) : 0,
+			'CIRCLE_RAIDS'				=> ($total_dkp_items > 0) ? sprintf("%.2F", ($total_raids / $total_dkp_items)*100) : 0,
+			'CIRCLE_ADJUSTMENTS'		=> ($total_dkp_items > 0) ? sprintf("%.2F", ($total_adjustments / $total_dkp_items)*100) : 0,
+			'REQCOUNT'					=> $req_count,
 
-			'S_WHO_IS_ONLINE'		=> $this->user->check_group(2, false),
+			'S_WHO_IS_ONLINE'			=> $this->user->check_group(2, false),
 		));
 
 		//Check permissions of config.php

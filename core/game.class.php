@@ -106,7 +106,7 @@ class game extends gen_class {
 			// file for selected language not available, revert to default language
 			else $this->lang_name = $this->gameinfo()->langs[0];
 		}
-		
+
 		//Normal language
 		$arrNormalLanguage = $this->gameinfo()->getNormalLanguage($this->lang_name);
 		if(count($arrNormalLanguage)) $this->user->objLanguage->add_lang($this->lang_name, $arrNormalLanguage);
@@ -153,7 +153,7 @@ class game extends gen_class {
 	private function decorate_classes($class_id, $profile=array(), $size=16, $pathonly=false){
 		$strIconPathPrefix = $this->root_path.'games/'.$this->game.'/icons/classes/'.$class_id;
 		$strIconServerPathPrefix =  $this->server_path.'games/'.$this->game.'/icons/classes/'.$class_id;
-		
+
 		if(is_file($strIconPathPrefix.'.svg')){
 			$icon_path = $strIconServerPathPrefix.'.svg';
 			return ($pathonly) ? $icon_path : '<img src="'.$icon_path.'" height="'.$size.'"  alt="class '.$class_id.'" class="'.$this->game.'_classicon classicon'.'" title="'.$this->get_name('classes', $class_id).'" />';
@@ -222,7 +222,7 @@ class game extends gen_class {
 	private function decorate_talents($talent_id, $profile=array(), $size=16, $pathonly=false){
 		$strIconPathPrefix = $this->root_path.'games/'.$this->game.'/icons/talents/'.$talent_id;
 		$strIconServerPathPrefix =  $this->server_path.'games/'.$this->game.'/talents/races/'.$talent_id;
-		
+
 		if(is_file($strIconPathPrefix.'.svg')){
 			$icon_path = $strIconServerPathPrefix.'.svg';
 			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' alt='' class=\"".$this->game."_talenticon talenticon\" />";
@@ -230,7 +230,7 @@ class game extends gen_class {
 			$icon_path = $strIconServerPathPrefix.'.png';
 			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' alt='' class=\"".$this->game."_talenticon talenticon\" />";
 		}
-		
+
 		return false;
 	}
 
@@ -307,7 +307,7 @@ class game extends gen_class {
 	private function decorate_def_roles($role_id, $profile=array(), $size=20, $pathonly=false){
 		$strIconPathPrefix = $this->root_path.$this->deficon_path['roles'].$role_id;
 		$strIconServerPathPrefix =  $this->server_path.$this->deficon_path['roles'].$role_id;
-		
+
 		if(is_file($strIconPathPrefix.'.svg')){
 			$icon_path = $strIconServerPathPrefix.'.svg';
 			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' alt='' class=\"".$this->game."_roleicon roleicon\" />";
@@ -315,7 +315,7 @@ class game extends gen_class {
 			$icon_path = $strIconServerPathPrefix.'.png';
 			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' alt='' class=\"".$this->game."_roleicon roleicon\" />";
 		}
-		
+
 		return false;
 	}
 
@@ -330,15 +330,15 @@ class game extends gen_class {
 	private function decorate_generic($type, $id, $profile=array(), $size=16, $pathonly=false){
 		$strIconPathPrefix = $this->root_path.'games/'.$this->game.'/icons/'.$type.'/'.$id;
 		$strIconServerPathPrefix =  $this->server_path.'games/'.$this->game.'/icons/'.$type.'/'.$id;
-		
+
 		if(is_file($strIconPathPrefix.'.svg')){
 			$icon_path = $strIconServerPathPrefix.'.svg';
 			return ($pathonly) ? $icon_path : '<img src="'.$icon_path.'" height="'.$size.'"  alt="'.$type.' '.$id.'" class="'.$this->game.'_'.$type.'icon gameicon '.$type.'icon" title="'.$this->get_name($type, $id).'" />';
 		}elseif(is_file($strIconPathPrefix.'.png')){
 			$icon_path = $strIconServerPathPrefix.'.png';
-			return ($pathonly) ? $icon_path : '<img src="'.$icon_path.'" height="'.$size.'"  alt="'.$type.' '.$id.'" class="'.$this->game.'_'.$type.'icon gameicon '.$type.'icon" title="'.$this->get_name($type, $id).'" />';	
+			return ($pathonly) ? $icon_path : '<img src="'.$icon_path.'" height="'.$size.'"  alt="'.$type.' '.$id.'" class="'.$this->game.'_'.$type.'icon gameicon '.$type.'icon" title="'.$this->get_name($type, $id).'" />';
 		}
-		
+
 		return false;
 	}
 
@@ -702,10 +702,10 @@ class game extends gen_class {
 	 * @return 	string
 	 */
 	public function get_primary_classes($filter=array(), $lang=false) {
-		$admin_data = $this->get_admin_classdata(true);
-		$primary = $this->get_primary_class();
-		$todisplay = array_keys($admin_data);
-		$todisplay[] = $primary;
+		$admin_data		= $this->get_admin_classdata(true);
+		$primary			= $this->get_primary_class();
+		$todisplay		= array_keys($admin_data);
+		$todisplay[]	= $primary;
 
 		$ids = $this->get_assoc_classes($todisplay, $filter, $lang);
 		$ids = $ids['data'];
@@ -715,10 +715,11 @@ class game extends gen_class {
 			if(!isset($ids[$admin_data[$type]])) {
 				return $this->get($primary, $filter, $lang);
 			}
-			$ids = $ids[$admin_data[$type]];
-			$type = next($todisplay);
+			$ids	= $ids[$admin_data[$type]];
+			$type	= next($todisplay);
 		}
-		return $this->get($primary, array($ids), $lang);
+		$output	= $this->get($primary, array($ids), $lang);
+		return (is_array($output)) ? $output : array();
 	}
 
 	/**
@@ -849,7 +850,7 @@ class game extends gen_class {
 		if (count($relevant_deps) === 0 || !in_array($todisplay, $relevant_deps)){
 			return array(
 				'todisplay'	=> $todisplay,
-				'data'		=> array_keys($this->get($todisplay[0], $filter, $lang)),
+				'data'		=> (isset($todisplay[0])) ? array_keys($this->get($todisplay[0], $filter, $lang)) : '',
 			);
 		}
 
@@ -1729,7 +1730,7 @@ if(!class_exists('game_generic')) {
 			if($return_key) return $var;
 			return false;
 		}
-		
+
 		public function getNormalLanguage($lang=false){
 			if(!$lang) $lang = $this->lang;
 			if(!isset($this->glang[$lang])) {
@@ -1737,7 +1738,7 @@ if(!class_exists('game_generic')) {
 			}
 			return (isset($this->arrNormalLang[$lang])) ? $this->arrNormalLang[$lang] : array();
 		}
-		
+
 
 		/**
 		 * Default profilefields
