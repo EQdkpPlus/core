@@ -998,6 +998,14 @@ if (!class_exists("jquery")) {
 			if(isset($options['header'])){			$tmpopt[] = 'header: "'.$options['header'].'"';}
 			if(isset($options['withmax'])){			$tmpopt[] = 'selectedText: "'.$this->sanitize($this->user->lang('jquery_multiselect_selectedtxt')).'"';}
 			if(isset($options['selectedtext']) && !isset($options['withmax'])){	$tmpopt[] = 'selectedText: "'.$this->sanitize($options['selectedtext']).'"';}
+			if(!isset($options['clickfunc']) && isset($options['minselectvalue']) && $options['minselectvalue'] > 0){
+				$tmpopt[] = 'click: function(e){ 
+					if( $(this).multiselect("widget").find("input:checked").length < '.$options['minselectvalue'].' ){
+						return false;
+					}
+				 }';}
+			}
+			
 			$todisable = (isset($options['todisable'])) ? ((is_array($options['todisable'])) ? $options['todisable'] : array($options['todisable'])) : array();
 			$filterme = '';
 			if(isset($options['filter'])){
