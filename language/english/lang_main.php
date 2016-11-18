@@ -235,7 +235,6 @@ $lang = array(
 	"calendar_sortbutton_attendance" => "Attendance",
 	"calendar_filter_bycalendar" => "# of # calendars selected",
 
-
 	"calendars_continue_raid" => "Continue Raid",
 	"calendars_continue_raid_button" => "Continue raid",
 
