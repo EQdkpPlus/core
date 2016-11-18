@@ -42,6 +42,7 @@ $lang = array(
 'time_periods'		=> array("Sekunden", "Minuten", "Stunden", "Tagen", "Wochen", "Monaten", "Jahren", "Jahrzehnten"),
 'time_tense'		=> array("von jetzt an", "vor"),
 'nicetime_format'		=>  '%2$s %1$s',
+'jquery_multiselect_selectedtxt' => "# von # ausgewählt",
 
 "admin_title_prefix" => "%1\$s %2\$s Admin",
 "listitems_title" => "Item-Werte",
@@ -228,6 +229,7 @@ $lang = array(
 "calendar_sortbutton_past" => "Vergangene",
 "calendar_sortbutton_mine" => "Meine",
 "calendar_sortbutton_attendance" => "Teilnahme",
+"calendar_filter_bycalendar" => "# von # Kalender ausgewählt",
 
 "calendars_continue_raid" => "Raid fortsetzen",
 "calendars_continue_raid_button" => "Raid fortsetzen",

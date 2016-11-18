@@ -996,6 +996,8 @@ if (!class_exists("jquery")) {
 			if(isset($options['no_animation'])){	$tmpopt[] = 'show: "blind",hide: "blind"';}
 			if(isset($options['clickfunc'])){	$tmpopt[] = 'click: function(e){ '.$options['clickfunc'].' }';}
 			if(isset($options['header'])){			$tmpopt[] = 'header: "'.$options['header'].'"';}
+			if(isset($options['withmax'])){			$tmpopt[] = 'selectedText: "'.$this->sanitize($this->user->lang('jquery_multiselect_selectedtxt')).'"';}
+			if(isset($options['selectedtext']) && !isset($options['withmax'])){	$tmpopt[] = 'selectedText: "'.$this->sanitize($options['selectedtext']).'"';}
 			$todisable = (isset($options['todisable'])) ? ((is_array($options['todisable'])) ? $options['todisable'] : array($options['todisable'])) : array();
 			$filterme = '';
 			if(isset($options['filter'])){

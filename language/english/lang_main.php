@@ -100,6 +100,7 @@ $lang = array(
 	1 => 'ago',
 	),
 	"nicetime_format" => '%2$s %1$s',
+	"jquery_multiselect_selectedtxt" => "# of # selected",
 	"admin_title_prefix" => '%1$s %2$s Admin',
 	"listitems_title" => 'Item Values',
 	"listnews_title" => 'News Entries',
@@ -232,6 +233,7 @@ $lang = array(
 	"calendar_sortbutton_past" => "Past",
 	"calendar_sortbutton_mine" => "Mine",
 	"calendar_sortbutton_attendance" => "Attendance",
+	"calendar_filter_bycalendar" => "# of # calendars selected",
 
 
 	"calendars_continue_raid" => "Continue Raid",
