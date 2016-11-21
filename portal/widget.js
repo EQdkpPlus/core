@@ -29,6 +29,7 @@ var EQdkpPortal = new function(){
 	var position = "left";
 	var header = 1;
 	var random_value = false;
+	var context = new Array();
 	
 	
 	this.init = function(intModuleID, strRandomValue, eqdkp_url){
@@ -42,8 +43,8 @@ var EQdkpPortal = new function(){
 		
 		url = eqdkp_url || url;
 		if(!url) getURL();
-		
-		addResources();	
+		saveContext();
+		addResources(target);	
 	}
 	
 	this.setVar = function(varname, value){
@@ -59,6 +60,7 @@ var EQdkpPortal = new function(){
 		if(varname == "url"){
 			url = value;
 		}
+		saveContext();
 	}
 	
 	function getURL(){
@@ -75,7 +77,7 @@ var EQdkpPortal = new function(){
 		}
 	}
 	
-	function addResources(){
+	function addResources(localtarget){
 		var scripts = document.getElementsByTagName("script");
 		var loaded = false;
 		for(var i = 0; i< scripts.length; i++){
@@ -98,25 +100,32 @@ var EQdkpPortal = new function(){
 			ac.rel = 'stylesheet';
 			head.appendChild(ac);
 			
-			
 			//JQuery core
 			var aj = document.createElement("script");
 			aj.src = url  + "libraries/jquery/core/core.js";
 			aj.type = 'text/javascript';
-			aj.onload=scriptLoaded;
+			aj.onload=function(){scriptLoaded(localtarget)};
 			head.appendChild(aj);
 		} else {
-			getModule();
+			getModule(localtarget);
 		}
 	}
 
-	function scriptLoaded(){
+	function scriptLoaded(localtarget){
 		jQuery.noConflict();
-		getModule();
+		getModule(localtarget);
 	}
 
-	function getModule(){
+	function getModule(localtarget){
 		var xmlHttpObject = false;
+		var mycontext = context[localtarget];
+		console.log(mycontext);
+		if(typeof mycontext != "undefined"){
+			moduleID = mycontext[0];
+			position = mycontext[1];
+			header = mycontext[2];
+			wide = mycontext[3];
+		}
 
 		if (typeof XMLHttpRequest != 'undefined') {
 			xmlHttpObject = new XMLHttpRequest();
@@ -138,18 +147,18 @@ var EQdkpPortal = new function(){
 			query = xmlHttpObject;
 			if (query.readyState == 4 || query.readyState == 0) {
 				query.open("GET", url+'exchange.php?out=portal&id=' + moduleID+'&header='+header+'&position='+position+'&wide='+wide, true);
-				query.onreadystatechange = handleData; 
+				query.onreadystatechange = function(){handleData(localtarget)}; 
 				query.send(null);
 			}
 			
 		}		
 	}
 	
-	function handleData(){
+	function handleData(localtarget){
 		if (query.readyState == 4) {
 			result = query.responseText;
 			html = jQuery.parseHTML(result,document, true);
-			document.getElementById(target).innerHTML = html[1].innerHTML;
+			document.getElementById(localtarget).innerHTML = html[1].innerHTML;
 			jQuery('head').append(html[0].innerHTML);
 		}
 	}
@@ -160,5 +169,9 @@ var EQdkpPortal = new function(){
 		width = 0;
 		url = false;
 		random_value = false;
+	}
+	
+	function saveContext(){
+		context[target] = new Array(moduleID,position, header, wide, url, random_value);
 	}
 }
