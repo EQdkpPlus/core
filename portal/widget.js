@@ -42,8 +42,8 @@ var EQdkpPortal = new function(){
 		url = eqdkp_url || url;
 		if(!url) getURL();
 		saveContext();
-		resetValues();	
 		addResources(target);
+		resetValues();
 	}
 	
 	this.setVar = function(varname, value){
@@ -89,7 +89,13 @@ var EQdkpPortal = new function(){
 			}
 		}
 		
-		if (!loaded){	
+		if (!loaded){
+			var mycontext = context[localtarget];
+			if(typeof mycontext != "undefined"){
+				url = mycontext[4];
+			}
+			
+			
 			var head = document.getElementsByTagName("head")[0];
 			//Jquery CSS
 			
@@ -123,6 +129,7 @@ var EQdkpPortal = new function(){
 			position = mycontext[1];
 			header = mycontext[2];
 			wide = mycontext[3];
+			url = mycontext[4];
 		}
 
 		if (typeof XMLHttpRequest != 'undefined') {
@@ -145,20 +152,18 @@ var EQdkpPortal = new function(){
 			query = xmlHttpObject;
 			if (query.readyState == 4 || query.readyState == 0) {
 				query.open("GET", url+'exchange.php?out=portal&id=' + moduleID+'&header='+header+'&position='+position+'&wide='+wide, true);
-				query.onreadystatechange = function(){handleData(localtarget)}; 
+				query.onreadystatechange = function(){
+					if (this.readyState == 4) {
+						result = this.responseText;
+						html = jQuery.parseHTML(result,document, true);
+						document.getElementById(localtarget).innerHTML = html[1].innerHTML;
+						jQuery('head').append(html[0].innerHTML);
+					}
+				}; 
 				query.send(null);
 			}
 			
 		}		
-	}
-	
-	function handleData(localtarget){
-		if (query.readyState == 4) {
-			result = query.responseText;
-			html = jQuery.parseHTML(result,document, true);
-			document.getElementById(localtarget).innerHTML = html[1].innerHTML;
-			jQuery('head').append(html[0].innerHTML);
-		}
 	}
 	
 	function resetValues(){
@@ -172,6 +177,6 @@ var EQdkpPortal = new function(){
 	
 	function saveContext(){
 		if(target == false) return;
-		context[target] = new Array(moduleID,position, header, wide, url, random_value);
+		context[target] = new Array(moduleID, position, header, wide, url, random_value);
 	}
 }
