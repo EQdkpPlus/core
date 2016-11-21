@@ -33,8 +33,6 @@ var EQdkpPortal = new function(){
 	
 	
 	this.init = function(intModuleID, strRandomValue, eqdkp_url){
-		resetValues();
-		
 		moduleID = intModuleID;
 		
 		random_value = strRandomValue || "";
@@ -44,7 +42,8 @@ var EQdkpPortal = new function(){
 		url = eqdkp_url || url;
 		if(!url) getURL();
 		saveContext();
-		addResources(target);	
+		resetValues();	
+		addResources(target);
 	}
 	
 	this.setVar = function(varname, value){
@@ -119,7 +118,6 @@ var EQdkpPortal = new function(){
 	function getModule(localtarget){
 		var xmlHttpObject = false;
 		var mycontext = context[localtarget];
-		console.log(mycontext);
 		if(typeof mycontext != "undefined"){
 			moduleID = mycontext[0];
 			position = mycontext[1];
@@ -169,9 +167,11 @@ var EQdkpPortal = new function(){
 		width = 0;
 		url = false;
 		random_value = false;
+		target = false;
 	}
 	
 	function saveContext(){
+		if(target == false) return;
 		context[target] = new Array(moduleID,position, header, wide, url, random_value);
 	}
 }
