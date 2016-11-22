@@ -285,6 +285,52 @@ class wbb41_bridge extends bridge_generic {
 		setcookie($config['cookie_prefix'].'password', '', 0, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
 	}
 	
+	public function sync_fields(){
+		if(!$this->bridgedb) return array();
+	
+		$query = $this->bridgedb->prepare("SELECT * FROM ".$this->prefix."user_option")->execute();
+		$arrFields = array();
+		if ($query){
+			while($row = $query->fetchAssoc()){
+				if(strpos($row['categoryName'], 'profile') === false) continue;
+				$arrFields['userOption'.$row['optionID']] = $row['optionName'];
+			}
+		}
+		return $arrFields;
+	}
+	
+	public function sync($arrUserdata){
+		if ($this->config->get('cmsbridge_disable_sync') == '1'){
+			return false;
+		}
+		$sync_array = array();
+	
+		$user_id = $arrUserdata['userID'];
+	
+		$query = $this->bridgedb->prepare("SELECT * FROM ".$this->prefix."user_option_value WHERE userID=?")->execute($user_id);
+		if ($query){
+			$arrProfileData = $query->fetchAssoc();
+				
+			if (is_array($arrProfileData) && count($arrProfileData)){
+				foreach($arrProfileData as $key => $val){
+					$sync_array[$key] = $val;
+				}
+			}
+		}
+	
+		$sync_array['birthday'] = $this->_handle_birthday($arrProfileData['userOption2']);
+	
+		return $sync_array;
+	}
+	
+	private function _handle_birthday($date){
+		list($y, $m, $d) = explode('-', $date);
+		if ($y != '' && $y != 0 && $m != '' && $m != 0 && $d != '' && $d != 0){
+			return mktime(2, 1, 0, $m, $d, $y);
+		}
+		return 0;
+	}
+	
 	private function __checkPassword($username, $password, $hash) {
 		$isValid = false;
 		
