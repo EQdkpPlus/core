@@ -29,11 +29,10 @@ var EQdkpPortal = new function(){
 	var position = "left";
 	var header = 1;
 	var random_value = false;
+	var context = new Array();
 	
 	
 	this.init = function(intModuleID, strRandomValue, eqdkp_url){
-		resetValues();
-		
 		moduleID = intModuleID;
 		
 		random_value = strRandomValue || "";
@@ -42,8 +41,9 @@ var EQdkpPortal = new function(){
 		
 		url = eqdkp_url || url;
 		if(!url) getURL();
-		
-		addResources();	
+		saveContext();
+		addResources(target);
+		resetValues();
 	}
 	
 	this.setVar = function(varname, value){
@@ -59,6 +59,7 @@ var EQdkpPortal = new function(){
 		if(varname == "url"){
 			url = value;
 		}
+		saveContext();
 	}
 	
 	function getURL(){
@@ -75,7 +76,7 @@ var EQdkpPortal = new function(){
 		}
 	}
 	
-	function addResources(){
+	function addResources(localtarget){
 		var scripts = document.getElementsByTagName("script");
 		var loaded = false;
 		for(var i = 0; i< scripts.length; i++){
@@ -88,7 +89,13 @@ var EQdkpPortal = new function(){
 			}
 		}
 		
-		if (!loaded){	
+		if (!loaded){
+			var mycontext = context[localtarget];
+			if(typeof mycontext != "undefined"){
+				url = mycontext[4];
+			}
+			
+			
 			var head = document.getElementsByTagName("head")[0];
 			//Jquery CSS
 			
@@ -98,25 +105,32 @@ var EQdkpPortal = new function(){
 			ac.rel = 'stylesheet';
 			head.appendChild(ac);
 			
-			
 			//JQuery core
 			var aj = document.createElement("script");
 			aj.src = url  + "libraries/jquery/core/core.js";
 			aj.type = 'text/javascript';
-			aj.onload=scriptLoaded;
+			aj.onload=function(){scriptLoaded(localtarget)};
 			head.appendChild(aj);
 		} else {
-			getModule();
+			getModule(localtarget);
 		}
 	}
 
-	function scriptLoaded(){
+	function scriptLoaded(localtarget){
 		jQuery.noConflict();
-		getModule();
+		getModule(localtarget);
 	}
 
-	function getModule(){
+	function getModule(localtarget){
 		var xmlHttpObject = false;
+		var mycontext = context[localtarget];
+		if(typeof mycontext != "undefined"){
+			moduleID = mycontext[0];
+			position = mycontext[1];
+			header = mycontext[2];
+			wide = mycontext[3];
+			url = mycontext[4];
+		}
 
 		if (typeof XMLHttpRequest != 'undefined') {
 			xmlHttpObject = new XMLHttpRequest();
@@ -138,20 +152,18 @@ var EQdkpPortal = new function(){
 			query = xmlHttpObject;
 			if (query.readyState == 4 || query.readyState == 0) {
 				query.open("GET", url+'exchange.php?out=portal&id=' + moduleID+'&header='+header+'&position='+position+'&wide='+wide, true);
-				query.onreadystatechange = handleData; 
+				query.onreadystatechange = function(){
+					if (this.readyState == 4) {
+						result = this.responseText;
+						html = jQuery.parseHTML(result,document, true);
+						document.getElementById(localtarget).innerHTML = html[1].innerHTML;
+						jQuery('head').append(html[0].innerHTML);
+					}
+				}; 
 				query.send(null);
 			}
 			
 		}		
-	}
-	
-	function handleData(){
-		if (query.readyState == 4) {
-			result = query.responseText;
-			html = jQuery.parseHTML(result,document, true);
-			document.getElementById(target).innerHTML = html[1].innerHTML;
-			jQuery('head').append(html[0].innerHTML);
-		}
 	}
 	
 	function resetValues(){
@@ -160,5 +172,11 @@ var EQdkpPortal = new function(){
 		width = 0;
 		url = false;
 		random_value = false;
+		target = false;
+	}
+	
+	function saveContext(){
+		if(target == false) return;
+		context[target] = new Array(moduleID, position, header, wide, url, random_value);
 	}
 }

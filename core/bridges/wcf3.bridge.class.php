@@ -23,9 +23,9 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-class wbb41_bridge extends bridge_generic {
+class wcf3_bridge extends bridge_generic {
 	
-	public static $name = 'WBB 4.1';
+	public static $name = 'WCF 3';
 	
 	public $data = array(
 		//Data
@@ -130,7 +130,6 @@ class wbb41_bridge extends bridge_generic {
 			'lastActivityTime'			=> (int) $this->time->time,
 			'requestURI'				=> '',
 			'requestMethod'				=> 'GET',
-			'sessionVariables'			=> 'a:1:{s:16:"__SECURITY_TOKEN";s:40:".'.md5(generateRandomBytes()).'a7w8er45'.'.";}',
 		);
 		
 		$objQuery = $this->bridgedb->prepare("SELECT * FROM ".$this->prefix."session WHERE userID =?")->execute((int) $user_id);
@@ -154,6 +153,7 @@ class wbb41_bridge extends bridge_generic {
 							'ipAddress'			=> self::getIpAddress(),
 							'userAgent'			=> $this->env->useragent,
 							'lastActivityTime'	=> (int) $this->time->time,
+							'sessionVariables'	=> 'a:1:{s:16:"__SECURITY_TOKEN";s:40:".'.md5(generateRandomBytes()).'a7w8er45'.'.";}',
 						);
 						
 						//Is there an existing virtual Session?
@@ -169,6 +169,7 @@ class wbb41_bridge extends bridge_generic {
 					'ipAddress'			=> self::getIpAddress(),
 					'userAgent'			=> $this->env->useragent,
 					'lastActivityTime'	=> (int) $this->time->time,
+					'sessionVariables'	=> 'a:1:{s:16:"__SECURITY_TOKEN";s:40:".'.md5(generateRandomBytes()).'a7w8er45'.'.";}',
 				);
 				$this->bridgedb->prepare("INSERT INTO ".$this->prefix."session_virtual :p")->set($arrVirtualSet)->execute();
 			}

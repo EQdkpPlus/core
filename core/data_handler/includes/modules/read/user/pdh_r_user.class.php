@@ -145,6 +145,10 @@ if (!class_exists("pdh_r_user")){
 			$this->init_online_user();
 			return (in_array($user_id, $this->online_user)) ? true : false;
 		}
+		
+		public function get_is_user($user_id){
+			return (isset($this->users[$user_id])) ? true : false;
+		}
 
 		public function get_html_is_online($user_id){
 			return ($this->get_is_online($user_id)) ? '<i class="eqdkp-icon-online"></i>' : '<i class="eqdkp-icon-offline"></i>';
