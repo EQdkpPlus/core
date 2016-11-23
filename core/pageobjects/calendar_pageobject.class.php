@@ -512,7 +512,8 @@ class calendar_pageobject extends pageobject {
 		$calendar_idlist		= $this->pdh->aget('calendars', 'name', 0, array($this->pdh->get('calendars', 'idlist')));
 		$calendar_idlist[-2]	= $this->user->lang('user_sett_f_birthday');
 		$calendar_idlist[-3]	= $this->user->lang('calendar_others');
-		$todisable				= array(1,2);
+		#$todisable				= array(1,2);
+		$todisable				= array();
 
 		$this->tpl->assign_vars(array (
 			// Date Picker

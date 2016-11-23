@@ -234,6 +234,8 @@ $lang = array(
 	"calendar_sortbutton_mine" => "Mine",
 	"calendar_sortbutton_attendance" => "Attendance",
 	"calendar_filter_bycalendar" => "# of # calendars selected",
+	"calendar_filter_infotext" => "Filtering of the calendar is active. One or more calendars are excluded in the current view. There could be events not included in the current view.",
+	"calendar_filter_resetbutton" => "Reset filters",
 
 	"calendars_continue_raid" => "Continue Raid",
 	"calendars_continue_raid_button" => "Continue raid",
