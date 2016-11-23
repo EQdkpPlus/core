@@ -314,11 +314,21 @@
 				return this.value;
 			}).get();
 			cal_setStorage('calendar.calendar_filter', JSON.stringify(array_of_checked_values));
-		})
-
-		$("#calendarfilter").change(function() {
 			curSource = doFiltering(curSource);
-		});
+
+			calfilter_unchecked	= $("#calendarfilter").multiselect("getUnchecked").map(function(){
+				return this.value;
+			}).get().length;
+			calfilter_current	= array_of_checked_values.length;
+			calfilter_max = calfilter_unchecked+calfilter_current;
+
+			if(calfilter_current < calfilter_max){
+				$("#calendar_filtermessage").show();
+
+			}else{
+				$("#calendar_filtermessage").hide();
+			}
+		}).trigger('change');
 
 		$(".caleventfilter").click(function(){
 			var currid = $(this).attr('id');
@@ -330,6 +340,10 @@
 			//now, perform the filtering...
 			curSource = doFiltering(curSource);
 		});
+
+		$("#calendar_filterreset").click(function(){
+			$("#calendarfilter").multiselect("checkAll");
+		})
 	});
 
 	function doFiltering(curSource){
@@ -485,6 +499,11 @@ td.fc-day:hover:after {
 				<button type="button" class="ui-button ui-state-default ui-corner-right caleventfilter" id="calfilter_mine"><i class="fa fa-user"></i> {L_calendar_sortbutton_mine}</button>
 				<!-- ENDIF -->
 			</div>
+		</div>
+
+		<div class="infobox infobox-large infobox-blue clearfix" id="calendar_filtermessage">
+			<i class="fa fa-filter fa-4x pull-left"></i> <span id="calendar_filtermessage_text">{L_calendar_filter_infotext}</span>
+			<button type="button" class="mainoption" id="calendar_filterreset">{L_calendar_filter_resetbutton}</button>
 		</div>
 
 

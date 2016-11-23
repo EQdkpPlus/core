@@ -230,6 +230,8 @@ $lang = array(
 "calendar_sortbutton_mine" => "Meine",
 "calendar_sortbutton_attendance" => "Teilnahme",
 "calendar_filter_bycalendar" => "# von # Kalender ausgewählt",
+"calendar_filter_infotext" => "Der Kalenderfilter ist aktiv. Es wurde einer oder mehrere Kalender von der Anzeige ausgeschlossen. Es können daher Ereignisse im Kalender fehlen.",
+"calendar_filter_resetbutton" => "Filter zurücksetzen",
 
 "calendars_continue_raid" => "Raid fortsetzen",
 "calendars_continue_raid_button" => "Raid fortsetzen",
@@ -963,7 +965,7 @@ $lang = array(
 "userpf_country" => "Land",
 "userpf_name" => "Vorname",
 "userpf_lastname" => "Nachname",
-"userpf_steam" => 'Steam',		
+"userpf_steam" => 'Steam',
 "fv_php_minlength_error" => 'Die Eingabe für das Feld \'%s\' war zu kurz!',
 "fv_php_maxlength_error" => 'Die Eingabe für das Feld \'%s\' war zu lang!',
 "user_sett_f_priv_userprofile_age" => "Alter",
