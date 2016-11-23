@@ -999,13 +999,13 @@ if (!class_exists("jquery")) {
 			if(isset($options['withmax'])){			$tmpopt[] = 'selectedText: "'.$this->sanitize($this->user->lang('jquery_multiselect_selectedtxt')).'"';}
 			if(isset($options['selectedtext']) && !isset($options['withmax'])){	$tmpopt[] = 'selectedText: "'.$this->sanitize($options['selectedtext']).'"';}
 			if(!isset($options['clickfunc']) && isset($options['minselectvalue']) && $options['minselectvalue'] > 0){
-				$tmpopt[] = 'click: function(e){ 
+				$tmpopt[] = 'click: function(e){
 					if( $(this).multiselect("widget").find("input:checked").length < '.$options['minselectvalue'].' ){
 						return false;
 					}
-				 }';
+				}';
 			}
-			
+
 			$todisable = (isset($options['todisable'])) ? ((is_array($options['todisable'])) ? $options['todisable'] : array($options['todisable'])) : array();
 			$filterme = '';
 			if(isset($options['filter'])){
@@ -1014,6 +1014,16 @@ if (!class_exists("jquery")) {
 			$javascript = (isset($options['javascript'])) ? $options['javascript'] : '';
 
 			$this->returnJScache['multiselect'][$myID] = '$("#'.$myID.'").multiselect('.$this->gen_options($tmpopt).')'.$filterme.';';
+			if(!isset($options['clickfunc']) && isset($options['minselectvalue']) && $options['minselectvalue'] > 0){
+				$this->returnJScache['multiselect'][$myID] .= '
+					$("#'.$myID.'").on("multiselectuncheckall", function(event, ui) {
+						if( $(this).multiselect("widget").find("input:checked").length < '.$options['minselectvalue'].' ){
+							$(this).val("1");
+							$(this).multiselect("refresh");
+						}
+					});';
+			}
+
 			if(!$returnJS) {$this->tpl->add_js($this->returnJScache['multiselect'][$myID], 'docready'); }
 
 			$dropdown = "<select name='".$name."[]' id='".$myID."' multiple='multiple'".$javascript.">";
