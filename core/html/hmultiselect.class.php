@@ -64,7 +64,7 @@ class hmultiselect extends html {
 	public $text_before			= "";
 	public $returnJS			= false;
 
-	private $jq_options = array('height', 'width', 'preview_num', 'multiple', 'no_animation', 'header', 'filter', 'clickfunc');
+	private $jq_options = array('height', 'width', 'preview_num', 'multiple', 'no_animation', 'header', 'filter', 'clickfunc', 'selectedtext', 'withmax', 'minselectvalue');
 	private $out				= '';
 
 	public function _construct() {
