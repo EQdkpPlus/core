@@ -29,6 +29,8 @@ var EQdkpPortal = new function(){
 	var position = "left";
 	var header = 1;
 	var random_value = false;
+	var nojs = false; //global
+	var nocss = false; // global
 	var context = new Array();
 	
 	
@@ -58,6 +60,12 @@ var EQdkpPortal = new function(){
 		}
 		if(varname == "url"){
 			url = value;
+		}
+		if(varname == "nocss"){
+			nocss = value;
+		}
+		if(varname == "nojs"){
+			nojs = value;
 		}
 		saveContext();
 	}
@@ -98,19 +106,24 @@ var EQdkpPortal = new function(){
 			
 			var head = document.getElementsByTagName("head")[0];
 			//Jquery CSS
-			
-			var ac = document.createElement("link");
-			ac.href = url + "libraries/FontAwesome/font-awesome.min.css";
-			ac.type = 'text/css';
-			ac.rel = 'stylesheet';
-			head.appendChild(ac);
+			if (!nocss){
+				var ac = document.createElement("link");
+				ac.href = url + "libraries/FontAwesome/font-awesome.min.css";
+				ac.type = 'text/css';
+				ac.rel = 'stylesheet';
+				head.appendChild(ac);
+			}
 			
 			//JQuery core
-			var aj = document.createElement("script");
-			aj.src = url  + "libraries/jquery/core/core.js";
-			aj.type = 'text/javascript';
-			aj.onload=function(){scriptLoaded(localtarget)};
-			head.appendChild(aj);
+			if(!nojs){
+				var aj = document.createElement("script");
+				aj.src = url  + "libraries/jquery/core/core.js";
+				aj.type = 'text/javascript';
+				aj.onload=function(){scriptLoaded(localtarget)};
+				head.appendChild(aj);
+			} else {
+				getModule(localtarget);
+			}
 		} else {
 			getModule(localtarget);
 		}
@@ -151,13 +164,15 @@ var EQdkpPortal = new function(){
 		if (xmlHttpObject){
 			query = xmlHttpObject;
 			if (query.readyState == 4 || query.readyState == 0) {
-				query.open("GET", url+'exchange.php?out=portal&id=' + moduleID+'&header='+header+'&position='+position+'&wide='+wide, true);
+				query.open("GET", url+'exchange.php?out=portal&id=' + moduleID+'&header='+header+'&position='+position+'&wide='+wide+'&nocss='+nocss+'&nojs='+nojs, true);
 				query.onreadystatechange = function(){
 					if (this.readyState == 4) {
 						result = this.responseText;
-						html = jQuery.parseHTML(result,document, true);
-						document.getElementById(localtarget).innerHTML = html[1].innerHTML;
-						jQuery('head').append(html[0].innerHTML);
+						html = parseHTML(result, document);
+						var mycontent = html.querySelector('.external_module');
+						document.getElementById(localtarget).innerHTML = mycontent.innerHTML;
+						var myscript = html.querySelector('.module_script script');
+						document.getElementsByTagName('head')[0].appendChild( myscript );
 					}
 				}; 
 				query.send(null);
@@ -179,4 +194,72 @@ var EQdkpPortal = new function(){
 		if(target == false) return;
 		context[target] = new Array(moduleID, position, header, wide, url, random_value);
 	}
+	
+	/** 
+	 * jQuery 2.1.3's parseHTML (without scripts options).
+	 * Unlike jQuery, this returns a DocumentFragment, which is more convenient to insert into DOM.
+	 * MIT license.
+	 * 
+	 * If you only support Edge 13+ then try this:
+	    function parseHTML(html, context) {
+	        var t = (context || document).createElement('template');
+	            t.innerHTML = html;
+	        return t.content.cloneNode(true);
+	    }
+	 */
+	var parseHTML = (function() {
+	    var rxhtmlTag = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/gi,
+	        rtagName = /<([\w:]+)/,
+	        rhtml = /<|&#?\w+;/,
+	        // We have to close these tags to support XHTML (#13200)
+	        wrapMap = {
+	            // Support: IE9
+	            option: [1, "<select multiple='multiple'>", "</select>"],
+
+	            thead: [1, "<table>", "</table>"],
+	            col: [2, "<table><colgroup>", "</colgroup></table>"],
+	            tr: [2, "<table><tbody>", "</tbody></table>"],
+	            td: [3, "<table><tbody><tr>", "</tr></tbody></table>"],
+
+	            _default: [0, "", ""]
+	        };
+	        
+	    /**
+	     * @param {String} elem A string containing html
+	     * @param {Document} context
+	     */
+	    return function parseHTML(elem, context) {
+	        context = context || document;
+
+	        var tmp, tag, wrap, j,
+	            fragment = context.createDocumentFragment();
+
+	        if (!rhtml.test(elem)) {
+	            fragment.appendChild(context.createTextNode(elem));
+
+	            // Convert html into DOM nodes
+	        } else {
+	            tmp = fragment.appendChild(context.createElement("div"));
+
+	            // Deserialize a standard representation
+	            tag = (rtagName.exec(elem) || ["", ""])[1].toLowerCase();
+	            wrap = wrapMap[tag] || wrapMap._default;
+	            tmp.innerHTML = wrap[1] + elem.replace(rxhtmlTag, "<$1></$2>") + wrap[2];
+
+	            // Descend through wrappers to the right content
+	            j = wrap[0];
+	            while (j--) {
+	                tmp = tmp.lastChild;
+	            }
+
+	            // Remove wrappers and append created nodes to fragment
+	            fragment.removeChild(fragment.firstChild);
+	            while (tmp.firstChild) {
+	                fragment.appendChild(tmp.firstChild);
+	            }
+	        }
+
+	        return fragment;
+	    };
+	}());
 }
