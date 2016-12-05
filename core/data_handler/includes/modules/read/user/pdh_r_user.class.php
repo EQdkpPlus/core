@@ -472,7 +472,12 @@ if (!class_exists("pdh_r_user")){
 			$intAvatarType = intval($this->get_custom_fields($user_id, 'user_avatar_type'));
 
 			if ($intAvatarType == 0){
+				//Some own images
 				$avatarimg = $this->get_custom_fields($user_id, 'user_avatar');
+				//Hook for Useravatar (recursive)
+				if($this->hooks->isRegistered('user_avatarimg')){
+					return $this->hooks->process('user_avatarimg', array($user_id, $fullSize, $avatarimg, $intAvatarType), true);
+				}
 
 				if($avatarimg && strlen($avatarimg)){
 					$fullSizeImage = $this->pfh->FolderPath('users/'.$user_id,'files').$avatarimg;
