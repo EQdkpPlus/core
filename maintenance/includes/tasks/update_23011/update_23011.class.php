@@ -43,7 +43,7 @@ class update_23011 extends sql_update_task {
 			'german' => array(
 				'update_23011'	=> 'EQdkp Plus 2.3.0.11 Update',
 					1			=> 'Füge Berechtigungen Feld zu Kalendertabelle hinzu',
-					2			=> 'Setze Berehctigungen bei existierenden Raids auf Alle',
+					2			=> 'Setze Berechtigungen bei existierenden Raids auf Alle',
 			),
 		);
 		$this->sqls = array(
