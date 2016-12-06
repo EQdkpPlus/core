@@ -28,8 +28,10 @@ class ManageItems extends page_generic {
 
 	public function __construct(){
 		$handler = array(
+			'bulk_upd'	=> array('process' => 'bulk_update', 'csrf'=> true, 'check' => 'a_item_upd'),
 			'save' => array('process' => 'save', 'check' => 'a_item_add', 'csrf'=>true),
 			'upd'	=> array('process' => 'update', 'csrf'=>false),
+			'bulk'	=> array('process' => 'display_bulkedit', 'csrf'=>false, 'check' => 'a_item_upd'),
 			'copy' => array('process' => 'copy', 'check' => 'a_item_add'),
 		);
 		parent::__construct('a_item_', $handler, array('item', 'name'), null, 'selected_ids[]');
@@ -54,6 +56,52 @@ class ManageItems extends page_generic {
 			$message = array('title' => $this->user->lang('save_nosuc'), 'text' => $item['name'], 'color' => 'red');
 		}
 		$this->display($message);
+	}
+	
+	public function bulk_update(){
+		$strSelectedIDs = $this->in->get('selected_ids');
+		$arrSelected = explode('|', $strSelectedIDs);		
+		$arrBulk = $this->in->getArray('bulk', 'int');
+		
+		//Get new item information
+		$arrNewValues['buyer'] = $this->in->get('buyer', 0);
+		$arrNewValues['name'] = $this->in->get('name','');
+		$arrNewValues['value'] = $this->in->get('value',0.0);
+		$arrNewValues['date'] = $this->time->fromformat($this->in->get('date','1.1.1970 00:00'), 1);
+		$arrNewValues['raid_id'] = $this->in->get('raid_id',0);
+		$arrNewValues['item_id'] = $this->in->get('item_id','');
+		$arrNewValues['itempool_id'] = $this->in->get('itempool_id',0);
+		
+		$arrCheckboxes = array('name', 'item_id', 'raid_id', 'date', 'value', 'itempool_id', 'buyer');
+		//Für jedes Item
+		foreach($arrSelected as $itemID){
+			//Hole alte daten
+			$item['buyer'] = $this->pdh->get('item', 'buyer', array($itemID));
+			$item['name'] = $this->pdh->get('item', 'name', array($itemID));
+			$item['value'] = $this->pdh->get('item', 'value', array($itemID));
+			$item['date'] = $this->pdh->get('item', 'date', array($itemID));
+			$item['raid_id'] = $this->pdh->get('item', 'raid_id', array($itemID));
+			$item['item_id'] = $this->pdh->get('item', 'game_itemid', array($itemID));
+			$item['itempool_id'] = $this->pdh->get('item', 'itempool_id', array($itemID));
+			
+			$messages = array();
+			
+			foreach($arrBulk as $key => $val){
+				if(!in_array($key, $arrCheckboxes) || !$val) continue;
+				
+				$item[$key] = $arrNewValues[$key];
+				
+				$retu = $this->pdh->put('item', 'update_item', array($itemID, $item['name'], array($item['buyer']), $item['raid_id'], $item['item_id'], $item['value'], $item['itempool_id'], $item['date'], true));
+				
+				if(!$retu){
+					$messages[] = array('title' => $this->user->lang('save_nosuc'), 'text' => $item['name'], 'color' => 'red');
+				}
+			}
+			
+		}
+		$messages[] = array('title' => $this->user->lang('save_suc'), 'text' => $this->user->lang('bulkedit'), 'color' => 'green');
+		$this->pdh->process_hook_queue();
+		$this->display($messages);
 	}
 
 	public function delete() {
@@ -178,7 +226,7 @@ class ManageItems extends page_generic {
 	}
 
 	public function display($messages=false) {
-		if($messages){
+		if($messages && is_array($messages) && count($messages)){
 			$this->pdh->process_hook_queue();
 			$this->core->messages($messages);
 		}
@@ -196,6 +244,25 @@ class ManageItems extends page_generic {
 		$item_count = count($view_list);
 		
 		$this->confirm_delete($this->user->lang('confirm_delete_items'));
+		
+		$arrMenuItems = array(
+				0 => array(
+						'type'	=> 'javascript',
+						'icon'	=> 'fa-trash-o',
+						'text'	=> $this->user->lang('delete'),
+						'perm'	=> true,
+						'name'	=> 'mdel',
+						'js'	=> "$('#del_members').click();",
+						'append'=> '<input name="mdel" onclick="delete_warning();" id="del_members" class="mainoption bi_delete" type="button" style="display:none;" />',
+				),
+				1 => array(
+						'type'	=> 'button',
+						'icon'	=> 'fa-pencil',
+						'text'	=> $this->user->lang('edit'),
+						'perm'	=> true,
+						'name'	=> 'bulk',
+				),
+		);
 
 		$this->tpl->assign_vars(array(
 			'SID'	=> $this->SID,
@@ -203,12 +270,81 @@ class ManageItems extends page_generic {
 			'PAGINATION' => generate_pagination('manage_items.php'.$sort_suffix, $item_count, $this->user->data['user_rlimit'], $this->in->get('start', 0)),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
 			'ITEM_COUNT' => $item_count,
+			'BUTTON_MENU'=> $this->core->build_dropdown_menu($this->user->lang('selected_items').'...', $arrMenuItems, '', 'manage_members_menu', array("input[name=\"selected_ids[]\"]")),
+				
 		));
 
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('manitems_title'),
 			'template_file'		=> 'admin/manage_items.html',
 			'display'			=> true)
+		);
+	}
+	
+	public function display_bulkedit($messages=false) {
+		$arrItems = $this->in->getArray('selected_ids', 'int');
+		if(count($arrItems) === 0) $this->display();
+		
+		//fetch members for select
+		$members = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list', array(false,true,false)), 'member', 'name', 'asc')));
+		
+		//fetch raids for select
+		$raids = array();
+		$raidids = $this->pdh->sort($this->pdh->get('raid', 'id_list'), 'raid', 'date', 'desc');
+		foreach($raidids as $id)
+		{
+			$raids[$id] = '#ID:'.$id.' - '.$this->pdh->get('event', 'name', array($this->pdh->get('raid', 'event', array($id)))).' '.$this->time->user_date($this->pdh->get('raid', 'date', array($id)));
+		}
+		
+		//fetch itempools for select
+		$itempools = $this->pdh->aget('itempool', 'name', 0, array($this->pdh->get('itempool', 'id_list')));
+		
+		if($message){
+			$this->core->messages($message);
+			$item = $this->get_post(true);
+		}
+		
+		$item['date'] = $this->time->time;
+
+		$arrAutocomplete = array();
+		foreach($this->pdh->get('item', 'id_list') as $intItemID){
+			$arrAutocomplete[] = array(
+					'label'		=> 	$this->pdh->get('item', 'name', array($intItemID)).', '.$this->pdh->geth('item', 'date', array($intItemID)).(($this->config->get('enable_points')) ? ', '.runden($this->pdh->get('item', 'value', array($intItemID))).' '.$this->config->get('dkp_name') : '').' (#'.$intItemID.')',
+					'ivalue'		=>  runden($this->pdh->get('item', 'value', array($intItemID))),
+					'game_id'	=>	$this->pdh->get('item', 'game_itemid', array($intItemID)),
+					'iname'		=>	$this->pdh->get('item', 'name', array($intItemID)),
+					'itempool'	=>	$this->pdh->get('item', 'itempool_id', array($intItemID)),
+			);
+		}
+		
+		$this->jquery->AutocompleteMultiple("name", $arrAutocomplete, '
+			$("#item_value").val(ui.item.ivalue);
+			$("#item_id").val(ui.item.game_id);
+			$("#name").val(ui.item.iname);
+			$("#itempool_id").val(ui.item.itempool);
+			event.preventDefault();
+		');
+		
+		$item_names = $this->pdh->aget('item', 'name', 0, array($this->pdh->get('item', 'id_list')));
+		
+		
+		$this->confirm_delete($this->user->lang('confirm_delete_item')."<br />".((isset($item['name'])) ? $item['name'] : ''), '', true);
+		$this->tpl->assign_vars(array(
+				'GRP_KEY'		=> (isset($grp_key) && !$copy) ? $grp_key : '',
+				'NAME'			=> (isset($item['name'])) ? $item['name'] : '',
+				'RAID'			=> new hdropdown('raid_id', array('options' => $raids, 'value' => ((isset($item['raid_id'])) ? $item['raid_id'] : ''))),
+				'BUYERS'		=> new hsingleselect('buyer', array('options' => $members, 'value' => ((isset($item['buyer'])) ? $item['buyer'] : ''), 'width' => 350, 'filter' => true)),
+				'DATE'			=> $this->jquery->Calendar('date', $this->time->user_date($item['date'], true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
+				'VALUE'			=> (isset($item['value'])) ? $item['value'] : '',
+				'ITEM_ID'		=> (isset($item['item_id'])) ? $item['item_id'] : '',
+				'ITEMPOOLS'		=> new hdropdown('itempool_id', array('options' => $itempools, 'value' => ((isset($item['itempool_id'])) ? $item['itempool_id'] : ''))),
+				'BULK_ITEMS'	=> implode('|', $arrItems),
+		));
+	
+		$this->core->set_vars(array(
+				'page_title'		=> $this->user->lang('manitems_title').' - '.$this->user->lang('bulkedit'),
+				'template_file'		=> 'admin/manage_items_bulkedit.html',
+				'display'			=> true)
 		);
 	}
 

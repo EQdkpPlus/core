@@ -203,9 +203,6 @@ $lang = array(
 	"confirm_delete_item" => 'Are you sure you want to delete this item?',
 	"confirm_delete_items" => 'Are you sure, you want to delete the following items? %s',
 	"confirm_delete_members" => 'Are you sure you want to delete the following characters? %s',
-	"confirm_delete_news" => 'Are you sure you want to delete this news entry?',
-	"confirm_delete_newscat" => 'Are you sure you want to delete this news category?',
-	"confirm_delete_news_multi" => 'Are you sure, you want to delete the following news? %s',
 	"confirm_delete_raid" => 'Are you sure you want to delete this raid?',
 	"confirm_delete_style" => '<b>Are you sure you want to delete this style?</b> <br />All changes will be lost!',
 	"confirm_delete_user" => 'Are you sure that you want to delete this user\'s account? All connected characters will be deleted, too!',
@@ -1812,6 +1809,8 @@ $lang = array(
 		"user_resolve_perms" => "Resolve permissions",
 		"article_categories" => "Articlecategories",
 		"amount" => "Amount",
+		"bulkedit" => "Edit multiple",
+		"selected_items" => "selected Items",
 );
 
 ?>

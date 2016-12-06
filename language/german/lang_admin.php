@@ -197,11 +197,8 @@ $lang = array(
 "confirm_delete_calevents" => "Bist Du sicher, dass Du die Kalendereinträge %s löschen willst?",
 "confirm_delete_adjustments" => "Bist Du sicher, dass Du die individuellen Korrekturen %s löschen willst?",
 "confirm_delete_item" => "Bist Du sicher, dass Du dieses Item löschen willst?",
-"confirm_delete_items" => "Bist Du sicher, dass Du dies Items %s löschen willst?",
+"confirm_delete_items" => "Bist Du sicher, dass Du diese Items %s löschen willst?",
 "confirm_delete_members" => "Bist Du sicher, dass Du die Charaktere %s löschen willst?",
-"confirm_delete_news" => "Bist Du sicher, dass Du diesen Newsbeitrag löschen willst?",
-"confirm_delete_newscat" => "Bist Du sicher, dass Du diese Newskategorie löschen willst?",
-"confirm_delete_news_multi" => "Bist Du sicher, dass Du die Newsbeiträge %s löschen willst?",
 "confirm_delete_raid" => "Bist Du sicher, dass Du diesen Raid löschen willst?",
 "confirm_delete_style" => "<b>Bist Du sicher, dass Du diesen Style löschen willst?</b><br/>Alle gemachten Änderungen gehen verloren!",
 "confirm_delete_user" => "Bist Du sicher, dass Du diesen Benutzeraccount löschen willst? Alle verknüpften Charaktere werden dabei auch aus deinem System gelöscht!",
@@ -1816,6 +1813,8 @@ $lang = array(
 "usergroup_edit_membership_info" => "Du bist Mitglied dieser Benutzergruppe. Änderungen an dieser Benutzergruppe haben direkten Einfluss auf deinen Benutzeraccount. Sei deshalb vorsichtig.",
 "user_resolve_perms" => "Berechtigungen verfolgen",
 "article_categories" => "Artikelkategorien",
-"amount" => "Anzahl",		
+"amount" => "Anzahl",
+"bulkedit" => "Mehrere bearbeiten",
+"selected_items" => "ausgewählte Items",		
 );
 ?>
