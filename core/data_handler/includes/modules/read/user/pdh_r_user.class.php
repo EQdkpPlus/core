@@ -475,8 +475,8 @@ if (!class_exists("pdh_r_user")){
 				//Some own images
 				$avatarimg = $this->get_custom_fields($user_id, 'user_avatar');
 				//Hook for Useravatar (recursive)
-				if($this->hooks->isRegistered('user_avatarimg')){
-					return $this->hooks->process('user_avatarimg', array($user_id, $fullSize, $avatarimg, $intAvatarType), true);
+				if(register('hooks')->isRegistered('user_avatarimg')){
+					return register('hooks')->process('user_avatarimg', array($user_id, $fullSize, $avatarimg, $intAvatarType), true);
 				}
 
 				if($avatarimg && strlen($avatarimg)){
