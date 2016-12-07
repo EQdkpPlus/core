@@ -4028,6 +4028,13 @@ button.thirdpartylogin.openid {
 	border-color: transparent;
 }
 
+button.thirdpartylogin.discord {
+	background: #7289DA;
+	color: #fff;
+	border-radius: 3px;
+	border-color: transparent;
+}
+
 /* Leaderboard */
 .leaderboard {
 	display: flex;
