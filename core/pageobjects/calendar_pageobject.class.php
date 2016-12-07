@@ -378,7 +378,7 @@ class calendar_pageobject extends pageobject {
 
 	public function get_json(){
 		$tmp_calids		= explode('|', $this->in->get('calids', ''));
-		$calendar_ids	= (is_array($tmp_calids) && count($tmp_calids) > 0) ? array_merge(array(1,2), $tmp_calids) : array(1,2);
+		$calendar_ids	= (is_array($tmp_calids) && count($tmp_calids) > 0) ? $tmp_calids : array();
 		$filter			= ($this->in->exists('eventfilter', 'int')) ? $this->in->get('eventfilter', '') : 'all';
 
 		$event_json		= array();
