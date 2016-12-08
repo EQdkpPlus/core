@@ -1151,7 +1151,7 @@ $lang = array(
 "core_sett_f_login_twitch_appsecret" => "Twitch Client Secret",
 "core_sett_f_login_discord_appid" => "Discord Client-ID",
 "core_sett_f_help_login_discord_appid" => "Trage hier die Client-ID deiner App bei <a href=\"https://discordapp.com/developers/applications/me\" target=\"_blank\">https://discordapp.com/developers/applications/me</a> ein. Als Redirect-URI verwende http://deinedomain.de/index.php/Login/?login&lmethod=discord",
-"core_sett_f_login_twitch_appsecret" => "Discord App Secret",
+"core_sett_f_login_discord_appsecret" => "Discord App Secret",
 "core_sett_f_enable_embedly" => "Automatisches Umwandeln von Links zu Videos/Bildern aktivieren",
 "core_sett_f_help_enable_embedly" => "Link zu Videos/Bildern, z.B. werden automatisch YouTube-Links zu den entsprechenden Videos umgewandelt",
 "core_sett_tab_global" => "Global",
