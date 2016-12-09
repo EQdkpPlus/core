@@ -233,7 +233,6 @@ class login_google extends gen_class {
 				$this->core->message($arrJSON['errors'][0], 'Google Error', 'red');
 			}
 		}
-		d($arrJSON);
 		return false;
 	}
 }
