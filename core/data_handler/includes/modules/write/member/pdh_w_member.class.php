@@ -235,10 +235,10 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				// delete member snapshots
 				$this->db->prepare("DELETE FROM __member_points WHERE member_id = ?;")->execute($member_id);
 				$this->pdh->enqueue_hook('member_update', array($member_id), array('action' =>'delete', 'members' => array($member_id)));
-				$raids = $this->pdh->get('raid', 'raidids4memberid', array());
+				$raids = $this->pdh->get('raid', 'raidids4memberid', array($member_id));
 				$this->pdh->enqueue_hook('raid_update', $raids, array('action' => 'update', 'members' => array($member_id)));
 				// check for new mainchar
-				$twinks = $this->pdh->get('member', 'other_members', array());
+				$twinks = $this->pdh->get('member', 'other_members', array($member_id));
 				if(!empty($twinks)) {
 					$new_main = $twinks[0];
 					$this->change_mainid($twinks,$new_main);
