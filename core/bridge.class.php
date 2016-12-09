@@ -78,6 +78,10 @@ class bridge extends gen_class {
 				$this->bridgedb = $this->status = false;
 				$this->pdl->log('bridge', 'Connection error: '.$e->getMessage());
 			}
+			
+		} elseif ((int)$this->config->get('cmsbridge_notsamedb') == 2){
+			$this->bridgedb = $this->db;
+			$this->status = true;
 		} else {
 			try {
 				$this->bridgedb = dbal::factory(array('dbtype' => registry::get_const('dbtype'), 'open' => true, 'debug_prefix' => 'bridge_', 'table_prefix' => $this->prefix));
@@ -370,27 +374,33 @@ class bridge extends gen_class {
 			$strCleanUsername = utf8_strtolower($name);
 		}
 		
-		if ($this->check_query('user')){
-			$strQuery = str_replace("_USERNAME_", "?", $this->check_query('user'));
+		if ($this->check_function('user')){
+			$method_name = $this->objBridge->data['user']['FUNCTION'];
+			return $this->objBridge->$method_name($strCleanUsername);
 		} else {
-			//Check if there's a user table
-			$arrTables = $this->bridgedb->listTables();
-			if (!in_array($this->prefix.$this->objBridge->data['user']['table'], $arrTables)){
-				$this->deactivate_bridge();
-				return false;
-			}
-		
-			$salt = ($this->objBridge->data['user']['salt'] != '') ? ', '.$this->objBridge->data['user']['salt'].' as salt ': '';
-			$strQuery = "SELECT *, ".$this->objBridge->data['user']['id'].' as id, '.$this->objBridge->data['user']['name'].' as name, '.$this->objBridge->data['user']['password'].' as password, '.$this->objBridge->data['user']['email'].' as email'.$salt.'
-						FROM '.$this->prefix.$this->objBridge->data['user']['table'].' 
-						WHERE LOWER('.$this->objBridge->data['user']['where'].") = ?";
-		}
+			if ($this->check_query('user')){
+				$strQuery = str_replace("_USERNAME_", "?", $this->check_query('user'));
+			} else {
+				//Check if there's a user table
+				$arrTables = $this->bridgedb->listTables();
+				if (!in_array($this->prefix.$this->objBridge->data['user']['table'], $arrTables)){
+					$this->deactivate_bridge();
+					return false;
+				}
 
-		$objQuery = $this->bridgedb->prepare($strQuery)->execute($strCleanUsername);
-		if ($objQuery){
-			$arrResult = $objQuery->fetchAssoc();
-			if ($salt == '')  $arrResult['salt'] = '';
-			return $arrResult;
+				$salt = ($this->objBridge->data['user']['salt'] != '') ? ', '.$this->objBridge->data['user']['salt'].' as salt ': '';
+				$strQuery = "SELECT *, ".$this->objBridge->data['user']['id'].' as id, '.$this->objBridge->data['user']['name'].' as name, '.$this->objBridge->data['user']['password'].' as password, '.$this->objBridge->data['user']['email'].' as email'.$salt.'
+							FROM '.$this->prefix.$this->objBridge->data['user']['table'].' 
+							WHERE LOWER('.$this->objBridge->data['user']['where'].") = ?";
+			}
+
+			$objQuery = $this->bridgedb->prepare($strQuery)->execute($strCleanUsername);
+			if ($objQuery){
+				$arrResult = $objQuery->fetchAssoc();
+				if ($salt == '')  $arrResult['salt'] = '';
+				return $arrResult;
+			}
+			return false;
 		}
 		return false;
 	}
@@ -404,27 +414,34 @@ class bridge extends gen_class {
 	public function get_users(){
 		if (!$this->status || !$this->objBridge) return false;
 		
-		if ($this->check_query('user')) return false;
+		if ($this->check_query('user') && !$this->check_function('users')) return false;
 		
-		//Check if there's a user table
-		$arrTables = $this->bridgedb->listTables();
-		if (!in_array($this->prefix.$this->objBridge->data['user']['table'], $arrTables)){
-			//Disabled Bridge if there is no access to the User Table
-			$this->deactivate_bridge();
-			return false;
+		if ($this->check_function('users')){
+			$method_name = $this->objBridge->data['users']['FUNCTION'];
+			return $this->objBridge->$method_name();
+		} else {
+			//Check if there's a user table
+			$arrTables = $this->bridgedb->listTables();
+			if (!in_array($this->prefix.$this->objBridge->data['user']['table'], $arrTables)){
+				//Disabled Bridge if there is no access to the User Table
+				$this->deactivate_bridge();
+				return false;
+			}
+
+			$salt = ($this->objBridge->data['user']['salt'] != '') ? ', '.$this->objBridge->data['user']['salt'].' as salt ': '';
+
+			$strQuery = "SELECT ".$this->objBridge->data['user']['id'].' as id, '.$this->objBridge->data['user']['name'].' as name, '.$this->objBridge->data['user']['password'].' as password, '.$this->objBridge->data['user']['email'].' as email'.$salt.', LOWER('.$this->objBridge->data['user']['where'].') AS username_clean
+							FROM '.$this->prefix.$this->objBridge->data['user']['table'];
+			$objQuery = $this->bridgedb->query($strQuery);
+			$arrResult = false;
+			if ($objQuery){
+				$arrResult = $objQuery->fetchAllAssoc();
+			}
+
+			return $arrResult;
 		}
 		
-		$salt = ($this->objBridge->data['user']['salt'] != '') ? ', '.$this->objBridge->data['user']['salt'].' as salt ': '';
-		
-		$strQuery = "SELECT ".$this->objBridge->data['user']['id'].' as id, '.$this->objBridge->data['user']['name'].' as name, '.$this->objBridge->data['user']['password'].' as password, '.$this->objBridge->data['user']['email'].' as email'.$salt.', LOWER('.$this->objBridge->data['user']['where'].') AS username_clean
-						FROM '.$this->prefix.$this->objBridge->data['user']['table'];
-		$objQuery = $this->bridgedb->query($strQuery);
-		$arrResult = false;
-		if ($objQuery){
-			$arrResult = $objQuery->fetchAllAssoc();
-		}
-		
-		return $arrResult;
+		return false;
 	}
 	
 	/**
