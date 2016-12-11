@@ -194,7 +194,7 @@ class update_2300 extends sql_update_task {
 	public function update_function(){
 		//Set new configs
 		$this->config->set('avatar_default', 'eqdkp');
-		$this->config->set('avatar_allowed', 'gravatar');
+		$this->config->set('avatar_allowed', array('eqdkp', 'gravatar'));
 		
 		$crontab_file = $this->pfh->FolderPath('timekeeper', 'eqdkp').'crontab.php';
 		$result = @file_get_contents($crontab_file);
