@@ -73,6 +73,7 @@ class update_2300 extends sql_update_task {
 				33 => 'Add Steam field',
 				34 => 'Add Discord Field',
 				35 => 'Drop some unused columns',
+				'update_function' => 'Add Cronjobs to the Databse',
 			),
 			'german' => array(
 				'update_2300'	=> 'EQdkp Plus 2.3.0',
@@ -111,6 +112,7 @@ class update_2300 extends sql_update_task {
 				33 => 'Füge Steam Benutzerprofilfeld hinzu',
 				34 => 'Füge Discord Benutzerprofilfeld hinzu',
 				35 => 'Entferne nicht mehr genutzte Spalten',
+				'update_function' => 'Übertrage Cronjobs in die Datenbank',
 			),
 		);
 
