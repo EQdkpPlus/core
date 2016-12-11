@@ -1087,6 +1087,10 @@ if (!class_exists("jquery")) {
 		* @return TimePicker	JS Code
 		*/
 		public function timePicker($id, $name='', $value=0, $enablesecs=false, $hourf=24, $returnJS=false){
+			if(strlen($value) == 5){
+				$value = $this->time->fromformat($value, 'H:i');
+			}
+
 			if(!$name) $name = 'input_'.$id;
 			$tmpopt		= array();
 			$tmpopt[] = 'hour: "'.($value-$value%3600)/3600 .'"';

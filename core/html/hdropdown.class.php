@@ -83,7 +83,7 @@ class hdropdown extends html {
 					$dropdown .= "<optgroup label='".(($optgrp_language) ? $optgrp_language : $key)."'>";
 					foreach ($value as $key2 => $value2) {
 						if($this->no_key) $key2 = $value2;
-						$dep = $this->gen_form_change($this->dependency[$key2]);
+						$dep = (isset($this->dependency[$key2])) ? $this->gen_form_change($this->dependency[$key2]) : '';
 						$extra = (isset($this->opt_extra[$key2])) ? $this->opt_extra[$key2] : '';
 						if($this->tolang) $value2 = ($this->user->lang($value2, false, false)) ? $this->user->lang($value2) : (($this->game->glang($value2)) ? $this->game->glang($value2) : $value2);
 						if($this->format && function_exists($this->format)) $value2 = call_user_func($this->format, $value2);
@@ -94,7 +94,7 @@ class hdropdown extends html {
 					$dropdown .= "</optgroup>";
 				}else{
 					if($this->no_key) $key = $value;
-					$dep = $this->gen_form_change($this->dependency[$key]);
+					$dep = (isset($this->dependency[$key])) ? $this->gen_form_change($this->dependency[$key]) : '';
 					$extra = (isset($this->opt_extra[$key])) ? $this->opt_extra[$key] : '';
 					if($this->tolang) $value = ($this->user->lang($value, false, false)) ? $this->user->lang($value) : (($this->game->glang($value)) ? $this->game->glang($value) : $value);
 					if($this->format && function_exists($this->format)) $value = call_user_func($this->format, $value);
