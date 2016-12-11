@@ -271,14 +271,14 @@ if (!class_exists("comments")){
 			$html	.= '<div class="boxHeader"><h1>'.$this->user->lang('comments').'</h1></div>';
 			$html	.= '<div class="boxContent">';
 
-			$out = '';
+			$out = array();
 			if (is_array($comments)){
 				foreach($comments as $row){
 					// Avatar
 					$avatarimg = $this->pdh->get('user', 'avatarimglink', array($row['userid']));
 
 					// output
-					$out[] .= '<div class="comment '.(($i%2) ? 'rowcolor2' : 'rowcolor1').' clearfix" id="comment'.$row['id'].'">
+					$out[] .= '<div class="comment '.(($i % 2) ? 'rowcolor2' : 'rowcolor1').' clearfix" id="comment'.$row['id'].'">
 								<div class="comment_id" style="display:none;">'.$row['id'].'</div>
 								<div class="comment_avatar_container">
 									<div class="comment_avatar"><a href="'.$this->routing->build('user', $row['username'], 'u'.$row['userid']).'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $myrootpath.'images/global/avatar-default.svg').'" alt="Avatar" class="user-avatar"/></a></div>
