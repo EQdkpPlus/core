@@ -129,7 +129,7 @@ if (!class_exists("jquery")) {
 				}else{
 					$this->tpl->css_file($this->root_path.'templates/base_template/fullcalendar.min.css');
 				}
-				$this->tpl->css_file($this->root_path.'templates/fullcalendar.print.css', 'print');
+				$this->tpl->css_file($this->root_path.'templates/fullcalendar.print.min.css', 'print');
 
 				// now load the fullcalendar language file
 				$this->tpl->js_file($this->path."js/fullcalendar/locale-all.js");
