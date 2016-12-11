@@ -1648,7 +1648,7 @@ a.ui-button:active,
  * qTip2 - Pretty powerful tooltips - v3.0.3
  * http://qtip2.com
  *
- * Copyright (c) 2016 
+ * Copyright (c) 2016
  * Released under the MIT licenses
  * http://jquery.org/license
  *
@@ -1925,7 +1925,6 @@ a.ui-button:active,
 		padding: .75em;
 		font: 12px arial,sans-serif;
 
-		filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr=#4a4a4a,EndColorStr=#000000);
 		-ms-filter: "progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr=#4a4a4a,EndColorStr=#000000);";
 	}
 
@@ -1963,11 +1962,9 @@ a.ui-button:active,
 	/* IE Specific */
 	.qtip-jtools .qtip-titlebar{
 		background-color: transparent;
-		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#717171,endColorstr=#4A4A4A);
 		-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#717171,endColorstr=#4A4A4A)";
 	}
 	.qtip-jtools .qtip-content{
-		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#4A4A4A,endColorstr=#232323);
 		-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#4A4A4A,endColorstr=#232323)";
 	}
 
@@ -2073,7 +2070,6 @@ a.ui-button:active,
 		background-image: -moz-linear-gradient(top, #3A79B8, #2E629D);
 		background-image: -ms-linear-gradient(top, #3A79B8, #2E629D);
 		background-image: -o-linear-gradient(top, #3A79B8, #2E629D);
-		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#3A79B8,endColorstr=#2E629D);
 		-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#3A79B8,endColorstr=#2E629D)";
 	}
 
@@ -2269,8 +2265,8 @@ License: MIT
     top:0;
     left:0;
     display:inline-block;
-    *display: inline;
-    *zoom: 1;
+    display: inline;
+    zoom: 1;
     /* https://github.com/bgrins/spectrum/issues/40 */
     z-index: 9999994;
     overflow: hidden;
@@ -2282,9 +2278,7 @@ License: MIT
 /* Fix for * { box-sizing: border-box; } */
 .sp-container,
 .sp-container * {
-    -webkit-box-sizing: content-box;
-       -moz-box-sizing: content-box;
-            box-sizing: content-box;
+	box-sizing: content-box;
 }
 
 /* http://ansciath.tumblr.com/post/7347495869/css-aspect-ratio */
@@ -2410,32 +2404,13 @@ License: MIT
 
 /* Gradients for hue, saturation and value instead of images.  Not pretty... but it works */
 .sp-sat {
-    background-image: -webkit-gradient(linear,  0 0, 100% 0, from(#FFF), to(rgba(204, 154, 129, 0)));
-    background-image: -webkit-linear-gradient(left, #FFF, rgba(204, 154, 129, 0));
-    background-image: -moz-linear-gradient(left, #fff, rgba(204, 154, 129, 0));
-    background-image: -o-linear-gradient(left, #fff, rgba(204, 154, 129, 0));
-    background-image: -ms-linear-gradient(left, #fff, rgba(204, 154, 129, 0));
     background-image: linear-gradient(to right, #fff, rgba(204, 154, 129, 0));
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(GradientType = 1, startColorstr=#FFFFFFFF, endColorstr=#00CC9A81)";
-    filter : progid:DXImageTransform.Microsoft.gradient(GradientType = 1, startColorstr='#FFFFFFFF', endColorstr='#00CC9A81');
 }
 .sp-val {
-    background-image: -webkit-gradient(linear, 0 100%, 0 0, from(#000000), to(rgba(204, 154, 129, 0)));
-    background-image: -webkit-linear-gradient(bottom, #000000, rgba(204, 154, 129, 0));
-    background-image: -moz-linear-gradient(bottom, #000, rgba(204, 154, 129, 0));
-    background-image: -o-linear-gradient(bottom, #000, rgba(204, 154, 129, 0));
-    background-image: -ms-linear-gradient(bottom, #000, rgba(204, 154, 129, 0));
     background-image: linear-gradient(to top, #000, rgba(204, 154, 129, 0));
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#00CC9A81, endColorstr=#FF000000)";
-    filter : progid:DXImageTransform.Microsoft.gradient(startColorstr='#00CC9A81', endColorstr='#FF000000');
 }
 
 .sp-hue {
-    background: -moz-linear-gradient(top, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
-    background: -ms-linear-gradient(top, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
-    background: -o-linear-gradient(top, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
-    background: -webkit-gradient(linear, left top, left bottom, from(#ff0000), color-stop(0.17, #ffff00), color-stop(0.33, #00ff00), color-stop(0.5, #00ffff), color-stop(0.67, #0000ff), color-stop(0.83, #ff00ff), to(#ff0000));
-    background: -webkit-linear-gradient(top, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
     background: linear-gradient(to bottom, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
 }
 
@@ -2445,27 +2420,21 @@ License: MIT
  */
 .sp-1 {
     height:17%;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0000', endColorstr='#ffff00');
 }
 .sp-2 {
     height:16%;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffff00', endColorstr='#00ff00');
 }
 .sp-3 {
     height:17%;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ff00', endColorstr='#00ffff');
 }
 .sp-4 {
     height:17%;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffff', endColorstr='#0000ff');
 }
 .sp-5 {
     height:16%;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0000ff', endColorstr='#ff00ff');
 }
 .sp-6 {
     height:17%;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff00ff', endColorstr='#ff0000');
 }
 
 .sp-hidden {
@@ -2475,7 +2444,7 @@ License: MIT
 /* Clearfix hack */
 .sp-cf:before, .sp-cf:after { content: ""; display: table; }
 .sp-cf:after { clear: both; }
-.sp-cf { *zoom: 1; }
+.sp-cf { zoom: 1; }
 
 /* Mobile devices, make hue slider bigger so it is easier to slide */
 @media (max-device-width: 480px) {
@@ -2520,9 +2489,6 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 }
 .sp-container, .sp-container button, .sp-container input, .sp-color, .sp-hue, .sp-clear {
     font: normal 12px "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -ms-box-sizing: border-box;
     box-sizing: border-box;
 }
 .sp-top {
@@ -2627,8 +2593,8 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
     cursor:pointer;
     padding: 4px;
     display:inline-block;
-    *zoom: 1;
-    *display: inline;
+    zoom: 1;
+    display: inline;
     border: solid 1px #91765d;
     background: #eee;
     color: #333;
@@ -2661,7 +2627,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 }
 
 .sp-palette {
-    *width: 220px;
+    width: 220px;
     max-width: 220px;
 }
 .sp-palette .sp-thumb-el {
@@ -2679,10 +2645,6 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 /* Buttons: http://hellohappy.org/css3-buttons/ */
 .sp-container button {
   background-color: #eeeeee;
-  background-image: -webkit-linear-gradient(top, #eeeeee, #cccccc);
-  background-image: -moz-linear-gradient(top, #eeeeee, #cccccc);
-  background-image: -ms-linear-gradient(top, #eeeeee, #cccccc);
-  background-image: -o-linear-gradient(top, #eeeeee, #cccccc);
   background-image: linear-gradient(to bottom, #eeeeee, #cccccc);
   border: 1px solid #ccc;
   border-bottom: 1px solid #bbb;
@@ -2697,10 +2659,6 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 }
 .sp-container button:hover {
     background-color: #dddddd;
-    background-image: -webkit-linear-gradient(top, #dddddd, #bbbbbb);
-    background-image: -moz-linear-gradient(top, #dddddd, #bbbbbb);
-    background-image: -ms-linear-gradient(top, #dddddd, #bbbbbb);
-    background-image: -o-linear-gradient(top, #dddddd, #bbbbbb);
     background-image: linear-gradient(to bottom, #dddddd, #bbbbbb);
     border: 1px solid #bbb;
     border-bottom: 1px solid #999;
@@ -2710,10 +2668,6 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 .sp-container button:active {
     border: 1px solid #aaa;
     border-bottom: 1px solid #888;
-    -webkit-box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee;
-    -moz-box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee;
-    -ms-box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee;
-    -o-box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee;
     box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee;
 }
 .sp-cancel {

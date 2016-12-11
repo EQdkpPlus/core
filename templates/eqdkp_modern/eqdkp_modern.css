@@ -965,10 +965,10 @@ input[type=radio], input[type=checkbox]{
 }
 
 /* Buttons */
-.button, input[type="submit"], input[type="button"], input[type="reset"], button{
+.button, input[type="submit"], input[type="button"], input[type="reset"], button:not(class^="fc-"){
 	display: inline-block;
-	zoom: 1; /* zoom and *display = ie7 hack for display:inline-block */
-	*display: inline;
+	zoom: 1;
+	display: inline;
 	vertical-align: baseline;
 	margin: 0 2px;
 	outline: none;
