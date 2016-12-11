@@ -91,7 +91,7 @@ class discord_bridge extends bridge_generic {
 			$arrJSON = json_decode($result, true);
 
 			foreach($arrJSON as $val){
-				if ($val['id'] == $intUserID){
+				if ($val['user']['id'] == $intUserID){
 					$arrOut = $val['roles'];
 				}
 			}
@@ -123,7 +123,8 @@ class discord_bridge extends bridge_generic {
 		if($result){
 			$arrJSON = json_decode($result, true);
 			foreach($arrJSON as $val){
-				$arrOut[$val['id']] = $val['name'];
+				$user = $val['user'];
+				$arrOut[$user['id']] = $user['username'];
 			}
 		}
 		$this->arrUsers = $arrOut;
@@ -163,13 +164,6 @@ class discord_bridge extends bridge_generic {
 		);
 	}
 
-	/*
-	 public function get_check_user_group($intUserID, $arrAllowedGroups){
-		$arrGroups = $this->get_user_groups($intUserID);
-
-		//true/false
-		}
-		*/
 }
 
 ?>
