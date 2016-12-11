@@ -522,7 +522,7 @@ if (!class_exists("pdh_r_user")){
 			if(register('hooks')->isRegistered('user_avatarimg')){
 				$arrAvatarsFromProvidersRaw = register('hooks')->process('user_avatarimg', array('user_id' => $user_id, 'fullsize' => $fullSize, 'avatarimg' => $avatarimg, 'avatartype' => $strAvatarType, 'default' => true));
 				foreach($arrAvatarsFromProvidersRaw as $val){
-					$arrKeys = array_keys($vak);
+					$arrKeys = array_keys($val);
 					$arrAvatarsFromProviders[$arrKeys[0]] = $val[$arrKeys[0]];
 				}
 			}

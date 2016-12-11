@@ -99,9 +99,7 @@ class embedly extends gen_class {
 				}
 			}	
 		}
-		
-		d($embedlyUrls);
-		
+
 		//Now let's get the information from embedly
 		$config = array('urls' => $embedlyUrls, 'wmode' => 'transparent');
 		if ($maxwidth) $config['maxwidth'] = intval($maxwidth);
