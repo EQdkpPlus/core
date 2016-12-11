@@ -23,9 +23,9 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-class wcf3_bridge extends bridge_generic {
+class wsc3_bridge extends bridge_generic {
 	
-	public static $name = 'WCF 3';
+	public static $name = 'WSC 3.0';
 	
 	public $data = array(
 		//Data
