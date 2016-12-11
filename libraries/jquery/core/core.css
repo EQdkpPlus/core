@@ -2265,7 +2265,7 @@ License: MIT
     top:0;
     left:0;
     display:inline-block;
-    display: inline;
+    *display: inline;
     zoom: 1;
     /* https://github.com/bgrins/spectrum/issues/40 */
     z-index: 9999994;
@@ -2278,7 +2278,9 @@ License: MIT
 /* Fix for * { box-sizing: border-box; } */
 .sp-container,
 .sp-container * {
-	box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+       -moz-box-sizing: content-box;
+            box-sizing: content-box;
 }
 
 /* http://ansciath.tumblr.com/post/7347495869/css-aspect-ratio */
@@ -2489,6 +2491,9 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 }
 .sp-container, .sp-container button, .sp-container input, .sp-color, .sp-hue, .sp-clear {
     font: normal 12px "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
     box-sizing: border-box;
 }
 .sp-top {
@@ -2594,7 +2599,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
     padding: 4px;
     display:inline-block;
     zoom: 1;
-    display: inline;
+    *display: inline;
     border: solid 1px #91765d;
     background: #eee;
     color: #333;
