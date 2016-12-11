@@ -469,36 +469,23 @@ if (!class_exists("pdh_r_user")){
 		}
 
 		public function get_avatarimglink($user_id, $fullSize=false){
-			$intAvatarType = intval($this->get_custom_fields($user_id, 'user_avatar_type'));
-
-			if ($intAvatarType == 0){
-				//Some own images
+			$strAvatarType = $this->get_custom_fields($user_id, 'user_avatar_type');
+			$arrAllowedTypes = $this->config->get('avatar_allowed');	
+			
+			//Get the avatar by the user selected type
+			//If the type is allowed by admin
+			if($strAvatarType == 'eqdkp' && in_array('eqdkp', $arrAllowedTypes)){
+				//Own uploaded images
 				$avatarimg = $this->get_custom_fields($user_id, 'user_avatar');
-				//Hook for Useravatar (recursive)
-				if(register('hooks')->isRegistered('user_avatarimg')){
-					return register('hooks')->process('user_avatarimg', array($user_id, $fullSize, $avatarimg, $intAvatarType), true);
-				}
-
 				if($avatarimg && strlen($avatarimg)){
 					$fullSizeImage = $this->pfh->FolderPath('users/'.$user_id,'files').$avatarimg;
 					$thumbnail = $this->pfh->FolderPath('users/thumbs','files').'useravatar_'.$user_id.'_68.'.pathinfo($avatarimg, PATHINFO_EXTENSION);
 					if (!$fullSize && is_file($thumbnail)) return $thumbnail;
 					return $fullSizeImage;
-				} elseif($this->config->get('gravatar_defaultavatar')){
-					//Gravatar Default Avatars
-					include_once $this->root_path.'core/gravatar.class.php';
-					$gravatar = registry::register('gravatar');
-					$result = $gravatar->getAvatar($this->get_name($user_id), (($fullSize) ? 400 : 68), true);
-					if ($result) return $result;
-				} else {
-					//EQdkp Plus Default Avatars
-					include_once $this->root_path.'core/avatar.class.php';
-					$avatar = registry::register('avatar');
-					$result = $avatar->getAvatar($user_id, $this->get_name($user_id), (($fullSize) ? 400 : 68));
-					if ($result) return $result;
 				}
-			} elseif($intAvatarType == 1){
-				//Gravatar
+			}
+			
+			if($strAvatarType == 'gravatar' && in_array('gravatar', $arrAllowedTypes)){
 				include_once $this->root_path.'core/gravatar.class.php';
 				$gravatar = registry::register('gravatar');
 				$strEmail = $this->get_email($user_id);
@@ -506,10 +493,50 @@ if (!class_exists("pdh_r_user")){
 				if (strlen($strGravatarMail)) $strEmail = $strGravatarMail;
 				$result = $gravatar->getAvatar($strEmail, (($fullSize) ? 400 : 68));
 				if ($result) return $result;
-				//Disable
-				$this->pdh->put('user', 'disable_gravatar', array($user_id));
 			}
-
+			
+			//Handle other avatar providers
+			if(register('hooks')->isRegistered('user_avatarimg')){
+				$arrAvatarsFromProvidersRaw = register('hooks')->process('user_avatarimg', array('user_id' => $user_id, 'fullsize' => $fullSize, 'avatarimg' => $avatarimg, 'avatartype' => $strAvatarType, 'default' => false));
+				foreach($arrAvatarsFromProvidersRaw as $val){
+					$arrKeys = array_keys($val);
+					$arrAvatarsFromProviders[$arrKeys[0]] = $val[$arrKeys[0]];
+				}
+			}
+			
+			if(isset($arrAvatarsFromProviders[$strAvatarType]) && in_array($strAvatarType, $arrAllowedTypes)){
+				if($arrAvatarsFromProviders[$strAvatarType] && strlen($arrAvatarsFromProviders[$strAvatarType])) 
+					return $arrAvatarsFromProviders[$strAvatarType]; 
+			}
+			
+			//We are still here, therefore we need the default avatar by admin choose
+			$strDefaultType = $this->config->get('avatar_default');
+			
+			if($strDefaultType == 'gravatar'){
+				include_once $this->root_path.'core/gravatar.class.php';
+				$gravatar = registry::register('gravatar');
+				$result = $gravatar->getAvatar($this->get_name($user_id), (($fullSize) ? 400 : 68), true);
+				if ($result) return $result;
+			}
+			
+			if(register('hooks')->isRegistered('user_avatarimg')){
+				$arrAvatarsFromProvidersRaw = register('hooks')->process('user_avatarimg', array('user_id' => $user_id, 'fullsize' => $fullSize, 'avatarimg' => $avatarimg, 'avatartype' => $strAvatarType, 'default' => true));
+				foreach($arrAvatarsFromProvidersRaw as $val){
+					$arrKeys = array_keys($vak);
+					$arrAvatarsFromProviders[$arrKeys[0]] = $val[$arrKeys[0]];
+				}
+			}
+			
+			if(isset($arrAvatarsFromProviders[$strDefaultType]) && strlen($arrAvatarsFromProviders[$strDefaultType])){
+				return $arrAvatarsFromProviders[$strDefaultType];
+			}
+			
+			//EQdkp Plus Default Avatars as last fallback
+			include_once $this->root_path.'core/avatar.class.php';
+			$avatar = registry::register('avatar');
+			$result = $avatar->getAvatar($user_id, $this->get_name($user_id), (($fullSize) ? 400 : 68));
+			if ($result) return $result;
+			
 			return '';
 		}
 

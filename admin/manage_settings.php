@@ -513,10 +513,19 @@ class admin_settings extends page_generic {
 						'options'		=> $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list', array(false)))),
 						'datatype'		=> 'int'
 					),
-					'gravatar_defaultavatar'	=> array(
-							'type'		=> 'radio',
+				),
+				'avatar' => array(
+					'avatar_allowed' => array(
+						'type' => 'multiselect',
+						'default' => array('eqdkp'),
+						'options' => array(),
 					),
-				)
+					'avatar_default' => array(
+						'type' => 'radio',
+						'default' => 'eqdkp',
+						'options' => array(),
+					),
+				),
 			),
 			'chars'		=> array(
 				'chars'		=> array(
@@ -767,7 +776,14 @@ class admin_settings extends page_generic {
 		if($this->config->get('default_game') == 'dummy'){
 			$settingsdata['game']['game']['default_game']['text_after'] = '<button onclick="window.location=\'manage_extensions.php'.$this->SID.'#fragment-7\'" type="button"><i class="fa fa-lg fa-download"></i> '.$this->user->lang('install_other_games').'</button>';
 		}
-
+		
+		//Avatar Provider
+		$arrAllAvatarProviders = array();
+		foreach($this->user->getAvatarProviders() as $key => $val){
+			$arrAllAvatarProviders[$key] = $val['name'];
+		}
+		$settingsdata['user']['avatar']['avatar_allowed']['options'] = $arrAllAvatarProviders;
+		$settingsdata['user']['avatar']['avatar_default']['options'] = $arrAllAvatarProviders;
 		$this->form->add_tabs($settingsdata);
 
 		// add some additional fields

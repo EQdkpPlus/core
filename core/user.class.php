@@ -29,7 +29,7 @@ class user extends gen_class {
 	/**
 	 *	Field Definitions
 	 */
-	public static $customFields = array('user_avatar', 'user_gravatar_mail', 'user_avatar_type');
+	public static $customFields = array('user_avatar', 'user_avatar_type');
 
 	private $lang			= array();		// Loaded language pack
 	public $style			= array();		// Style data
@@ -529,20 +529,14 @@ class user extends gen_class {
 						'type'		=> 'radio',
 						'tolang'	=> true,
 						'options'	=> array(
-							'0'	=> 'user_avatar_type_own',
-							'1'	=> 'user_avatar_type_gravatar',
 						),
-						'default'	=> '0',
-						'dependency'=> array(1 => array('user_gravatar_mail')),
+						'default'	=> 'eqdkp',
+						//'dependency'=> array(1 => array('user_gravatar_mail')),
 					),
 					'user_avatar'	=> array(
 						'type'			=> 'imageuploader',
 						'imgpath'		=> register('pfh')->FolderPath('users/'.$user_id,'files'),
 						'returnFormat'	=> 'filename',
-					),
-					'user_gravatar_mail' => array(
-						'type'	=> 'text',
-						'size'	=> 40,
 					),
 				),
 			),
@@ -739,7 +733,25 @@ class user extends gen_class {
 				),
 			),
 		);
-
+		
+		//Avatar Providers
+		$arrAllowed = register('config')->get('avatar_allowed');
+		$arrAvatarProviders = register('user')->getAvatarProviders(true);
+		foreach ($arrAvatarProviders as $key => $val){
+			self::$customFields[] = $key;
+			if(!in_array($key, $arrAllowed)) continue;
+			$arrAvatarOptions[$key] = $val['name'];
+			if(isset($val['settings'])){
+				foreach($val['settings'] as $key2 => $val2){
+					$settingsdata['profile']['user_avatar'][$key2] = $val2;
+					$arrAvatarDependencies[$key][] = $key2;
+				}
+			}
+		}
+		
+		$settingsdata['profile']['user_avatar']['user_avatar_type']['options'] = $arrAvatarOptions;
+		$settingsdata['profile']['user_avatar']['user_avatar_type']['dependency'] = $arrAvatarDependencies;
+		
 		return $settingsdata;
 	}
 
@@ -783,6 +795,35 @@ class user extends gen_class {
 			return $arrValues[$strDefLang];
 		}
 		return "";
+	}
+	
+	/**
+	 * Returns all available Avatar Providers, including their Settings
+	 */
+	public function getAvatarProviders($blnForUsersettings=false){
+		$arrAvatarProviders = array(
+			'eqdkp' => array(
+				'name' => ($blnForUsersettings) ? $this->user->lang('user_avatar_type_own') : 'EQdkp Plus',	
+			),
+			'gravatar' => array(
+				'name' 		=> $this->user->lang('user_avatar_type_gravatar'),
+				'settings'	=> array(
+						'user_gravatar_mail' => array(
+								'type'	=> 'text',
+								'size'	=> 40,
+						),
+				),
+			),
+		);
+		
+		if($this->hooks->isRegistered('avatar_provider')){
+			$arrHookProviders = $this->hooks->process('avatar_provider', array('for_usersettings' => $blnForUsersettings), false);
+			foreach($arrHookProviders as $val){
+				if(is_array($val)) $arrAvatarProviders = array_merge($arrAvatarProviders, $val);	
+			}
+		}
+		
+		return $arrAvatarProviders;
 	}
 
 	public function __destruct() {

@@ -84,6 +84,8 @@ class inst_settings extends install_generic {
 		'enable_points'					=> 1,
 		'enable_embedly'				=> 1,
 		'enable_leaderboard'			=> 1,
+		'avatar_default'				=> 'eqdkp',
+		'avatar_allowed'				=> array('eqdkp', 'gravatar'),
 
 		// Calendar settings
 		'calendar_addevent_mode'		=> 'raid',
