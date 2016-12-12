@@ -965,7 +965,7 @@ input[type=radio], input[type=checkbox]{
 }
 
 /* Buttons */
-.button, input[type="submit"], input[type="button"], input[type="reset"], button:not(class^="fc-"){
+.button, input[type="submit"], input[type="button"], input[type="reset"], button:not([class^="fc-"]){
 	display: inline-block;
 	zoom: 1;
 	display: inline;
