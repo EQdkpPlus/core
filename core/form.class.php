@@ -458,6 +458,7 @@ class form extends gen_class {
 		var selected_values = [];
 		$.each($(this).find('option'), function(){
 			var selected = this.selected;
+			console.log($(this))
 			$.each($(this).data('form-change').split(','), function(index, value){
 				if(value){
 					if(selected){
