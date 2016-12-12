@@ -474,9 +474,9 @@ if (!class_exists("pdh_r_user")){
 			
 			//Get the avatar by the user selected type
 			//If the type is allowed by admin
+			$avatarimg = $this->get_custom_fields($user_id, 'user_avatar');
 			if($strAvatarType == 'eqdkp' && in_array('eqdkp', $arrAllowedTypes)){
 				//Own uploaded images
-				$avatarimg = $this->get_custom_fields($user_id, 'user_avatar');
 				if($avatarimg && strlen($avatarimg)){
 					$fullSizeImage = $this->pfh->FolderPath('users/'.$user_id,'files').$avatarimg;
 					$thumbnail = $this->pfh->FolderPath('users/thumbs','files').'useravatar_'.$user_id.'_68.'.pathinfo($avatarimg, PATHINFO_EXTENSION);

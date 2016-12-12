@@ -67,6 +67,8 @@ class auth extends user {
 
 		//Return, if we don't want a session
 		if (defined('NO_SESSION')) {
+			$this->sid = "";
+			registry::add_const('SID', '?s=');
 			return true;
 		}
 
