@@ -98,7 +98,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 				switch (REPO_CHANNEL){
 					case 'alpha': return "&channel=alpha";
 					case 'beta' : return "&channel=beta";
-					case 'beta' : return "&channel=dev";
+					case 'dev' : return "&channel=dev";
 				}
 			}
 			return "";
