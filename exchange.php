@@ -25,7 +25,7 @@ define('NO_MMODE_REDIRECT', true);
 
 //Create no session for external portal modules.
 //Using Get here is neccessary, because input class not loaded yet and not working with the user input
-if($_GET['out'] == 'portal'){
+if(isset($_GET['out']) && $_GET['out'] == 'portal'){
 	define('NO_SESSION', true);
 }
 
