@@ -611,12 +611,12 @@ if (!class_exists("time")){
 		}
 
 		public function RFC822($dtime){
-			$date	= new DateTimeLocale($this->helper_dtime($dtime), $this->userTimeZone, 'english');
+			$date	= new DateTime($this->helper_dtime($dtime), $this->userTimeZone);
 			return $date->format(DATE_RFC822);
 		}
 
 		public function DateRSS($dtime){
-			$date	= new DateTimeLocale($this->helper_dtime($dtime), $this->userTimeZone, 'english');
+			$date	= new DateTime($this->helper_dtime($dtime), $this->userTimeZone);
 			return $date->format(DATE_RSS);
 		}
 
