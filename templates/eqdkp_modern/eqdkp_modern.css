@@ -965,7 +965,7 @@ input[type=radio], input[type=checkbox]{
 }
 
 /* Buttons */
-.button, input[type="submit"], input[type="button"], input[type="reset"], button:not([class^="fc-"]){
+.button, input[type="submit"], input[type="button"], input[type="reset"], button{
 	display: inline-block;
 	zoom: 1;
 	display: inline;
@@ -2117,6 +2117,9 @@ ul.portal_block {
 }
 .fc button {
 	box-shadow: none;
+}
+.fc-button-group button {
+	border-radius: 0em;
 }
 
 /* add calendar event */
