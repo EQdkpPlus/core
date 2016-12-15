@@ -914,7 +914,11 @@ class core extends gen_class {
 		}
 
 		public function check_url_for_permission($arrLinkData){
-			if ( (empty($arrLinkData['check'])) || ($this->user->check_auth($arrLinkData['check'], false))) {
+			if(isset($arrLinkData['check'])){
+				$blnAuthCheck = (is_array($arrLinkData['check'])) ? $this->user->check_auths($arrLinkData['check'][1], $arrLinkData['check'][0], false) : $this->user->check_auth($arrLinkData['check'], false);
+			}
+			
+			if ( (empty($arrLinkData['check'])) || ($blnAuthCheck)) {
 				if (isset($arrLinkData['signedin'])){
 					$perm = true;
 					switch ($arrLinkData['signedin']){
