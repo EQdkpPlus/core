@@ -53,7 +53,7 @@ if (!class_exists("feed")) {
 			$xml .= '		<language>' . $this->language . '</language>' . "\n";
 			$xml .= '		<pubDate>' . $this->time->DateRSS($this->published) . '</pubDate>' . "\n";
 			$xml .= '		<generator>EQDKP-PLUS Gamer CMS</generator>' . "\n";
-			$xml .= '		<atom:link href="' . $this->specialchars($this->feedfile) . '" rel="self" type="application/rss+xml" />' . "\n";
+			$xml .= '		<atom:link href="' . $this->specialchars($this->feedfile) . '" type="application/rss+xml" />' . "\n";
 
 			foreach ($this->items as $items){
 				$xml .= '		<item>' . "\n";
