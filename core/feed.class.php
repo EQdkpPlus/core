@@ -51,16 +51,16 @@ if (!class_exists("feed")) {
 			$xml .= '		<description>' . $this->specialchars($this->description) . '</description>' . "\n";
 			$xml .= '		<link>' . $this->specialchars($this->link) . '</link>' . "\n";
 			$xml .= '		<language>' . $this->language . '</language>' . "\n";
-			$xml .= '		<pubDate>' . $this->time->date('r', $this->published) . '</pubDate>' . "\n";
+			$xml .= '		<pubDate>' . $this->time->RFC3339($this->published) . '</pubDate>' . "\n";
 			$xml .= '		<generator>EQDKP-PLUS Gamer CMS</generator>' . "\n";
 			$xml .= '		<atom:link href="' . $this->specialchars($this->feedfile) . '" rel="self" type="application/rss+xml" />' . "\n";
 
 			foreach ($this->items as $items){
 				$xml .= '		<item>' . "\n";
-				$xml .= '			<title>' . $this->specialchars($items->title) . '</title>' . "\n";
-				$xml .= '			<description><![CDATA[' . preg_replace('/[\n\r]+/', ' ', $items->description) . ']]></description>' . "\n";
+				$xml .= '			<title>' . $this->specialchars($items->title, true) . '</title>' . "\n";
+				$xml .= '			<description>' . $this->addCDATA(preg_replace('/[\n\r]+/', ' ', $items->description)) . '></description>' . "\n";
 				$xml .= '			<link>' . $this->specialchars($items->link) . '</link>' . "\n";
-				$xml .= '			<pubDate>' . $this->time->date('r', $items->published) . '</pubDate>' . "\n";
+				$xml .= '			<pubDate>' . $this->time->RFC3339($items->published) . '</pubDate>' . "\n";
 				$xml .= '			<guid>' . ($items->guid ? $items->guid : $this->specialchars($items->link)) . '</guid>' . "\n";
 				if(isset($items->author)){
 					$xml .= '			<author>' . $this->specialchars($items->author) . '</author>' . "\n";
@@ -85,10 +85,26 @@ if (!class_exists("feed")) {
 			return $xml;
 		}
 
-		private function specialchars($strString){
-			$arrFind = array('"', "'", '<', '>', '&');
-			$arrReplace = array('&#34;', '&#39;', '&lt;', '&gt;', '&amp;');
-			return str_replace($arrFind, $arrReplace, $strString);
+		private function addCDATA($text){
+			return $this->sanitizeCDATA("<![CDATA[".$text."]]>");
+		}
+
+		private function sanitizeCDATA($text){ 
+			$text = str_replace("]]>", "]]&gt;", $text); 
+			$text = str_replace("<![CDATA[", "&lt;![CDATA[", $text); 
+			return $text; 
+		}
+
+		private function specialchars($strString, $noHTML=false){
+			$arrFind		= array('"', "'", '<', '>', '&');
+			$arrReplace	= ($noHTML) ? array('&#34;', '&#39;', ' &#60;', '&#62;', '&#38;') : array('&#34;', '&#39;', '&lt;', '&gt;', '&amp;');
+			$sanitized_txt = str_replace($arrFind, $arrReplace, $strString);
+
+			// encode URL properly
+			if(filter_var($sanitized_txt, FILTER_VALIDATE_URL)){
+				return rawurlencode($sanitized_txt);
+			}
+			return $sanitized_txt;
 		}
 
 		public function show(){
