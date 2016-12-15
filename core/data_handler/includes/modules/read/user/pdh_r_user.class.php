@@ -496,6 +496,7 @@ if (!class_exists("pdh_r_user")){
 			}
 			
 			//Handle other avatar providers
+			$arrAvatarsFromProviders = array();
 			if(register('hooks')->isRegistered('user_avatarimg')){
 				$arrAvatarsFromProvidersRaw = register('hooks')->process('user_avatarimg', array('user_id' => $user_id, 'fullsize' => $fullSize, 'avatarimg' => $avatarimg, 'avatartype' => $strAvatarType, 'default' => false));
 				foreach($arrAvatarsFromProvidersRaw as $val){
