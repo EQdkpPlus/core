@@ -737,6 +737,7 @@ class user extends gen_class {
 		//Avatar Providers
 		$arrAllowed = register('config')->get('avatar_allowed');
 		$arrAvatarProviders = register('user')->getAvatarProviders(true);
+		$arrAvatarDependencies = $arrAvatarOptions = array();
 		foreach ($arrAvatarProviders as $key => $val){
 			self::$customFields[] = $key;
 			if(!in_array($key, $arrAllowed)) continue;
