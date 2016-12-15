@@ -90,17 +90,15 @@ if (!class_exists("feed")) {
 		}
 
 		private function specialchars($strString, $noHTML=false){
-			$arrFind		= array('"', "'", '<', '>', '&');
-			$arrReplace	= ($noHTML) ? array('&#34;', '&#39;', ' &#60;', '&#62;', '&#38;') : array('&#34;', '&#39;', '&lt;', '&gt;', '&amp;');
-			$sanitized_txt = str_replace($arrFind, $arrReplace, $strString);
-
 			// encode URL properly
 			if(filter_var($sanitized_txt, FILTER_VALIDATE_URL)){
 				$parsed_url	= parse_url($sanitized_txt);
-				return $parsed_url['scheme'].'://'.$parsed_url['host'].urlrawencode($parsed_url['path'].$parsed_url['query']);
+				return 'debug:'.$parsed_url['scheme'].'://'.$parsed_url['host'].urlrawencode($parsed_url['path'].$parsed_url['query']);
 				#return urlencode($sanitized_txt);
 			}
-			return $sanitized_txt;
+			$arrFind		= array('"', "'", '<', '>', '&');
+			$arrReplace	= ($noHTML) ? array('&#34;', '&#39;', ' &#60;', '&#62;', '&#38;') : array('&#34;', '&#39;', '&lt;', '&gt;', '&amp;');
+			return str_replace($arrFind, $arrReplace, $strString);
 		}
 
 		public function show(){
