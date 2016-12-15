@@ -615,6 +615,11 @@ if (!class_exists("time")){
 			return $date->format(DATE_RFC822);
 		}
 
+		public function DateRSS($dtime){
+			$date	= new DateTimeLocale($this->helper_dtime($dtime), $this->userTimeZone);
+			return $date->format(DATE_RSS);
+		}
+
 		/**
 		 * Return Date in RFC 3339 Compatible Output
 		 *

@@ -51,7 +51,7 @@ if (!class_exists("feed")) {
 			$xml .= '		<description>' . $this->specialchars($this->description) . '</description>' . "\n";
 			$xml .= '		<link>' . $this->specialchars($this->link) . '</link>' . "\n";
 			$xml .= '		<language>' . $this->language . '</language>' . "\n";
-			$xml .= '		<pubDate>' . $this->time->RFC822($this->published) . '</pubDate>' . "\n";
+			$xml .= '		<pubDate>' . $this->time->DateRSS($this->published) . '</pubDate>' . "\n";
 			$xml .= '		<generator>EQDKP-PLUS Gamer CMS</generator>' . "\n";
 			$xml .= '		<atom:link href="' . $this->specialchars($this->feedfile) . '" rel="self" type="application/rss+xml" />' . "\n";
 
@@ -60,7 +60,7 @@ if (!class_exists("feed")) {
 				$xml .= '			<title>' . $this->specialchars($items->title, true) . '</title>' . "\n";
 				$xml .= '			<description>' . $this->addCDATA(preg_replace('/[\n\r]+/', ' ', $items->description)) . '></description>' . "\n";
 				$xml .= '			<link>' . $this->specialchars($items->link) . '</link>' . "\n";
-				$xml .= '			<pubDate>' . $this->time->RFC822($items->published) . '</pubDate>' . "\n";
+				$xml .= '			<pubDate>' . $this->time->DateRSS($items->published) . '</pubDate>' . "\n";
 				$xml .= '			<guid>' . ($items->guid ? $items->guid : $this->specialchars($items->link)) . '</guid>' . "\n";
 				if(isset($items->author)){
 					$xml .= '			<author>' . $this->specialchars($items->author) . '</author>' . "\n";
@@ -96,7 +96,9 @@ if (!class_exists("feed")) {
 
 			// encode URL properly
 			if(filter_var($sanitized_txt, FILTER_VALIDATE_URL)){
-				return urlencode($sanitized_txt);
+				$parsed_url	= parse_url($sanitized_txt);
+				return $parsed_url['scheme'].'://'.$parsed_url['host'].urlrawencode($parsed_url['path'].$parsed_url['query']);
+				#return urlencode($sanitized_txt);
 			}
 			return $sanitized_txt;
 		}
