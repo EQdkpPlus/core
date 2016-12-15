@@ -76,7 +76,7 @@ class urlfetcher  extends gen_class {
 		$this->method = ($this->method) ? $this->method : 'fopen';
 		if (!$conn_timeout) $conn_timeout = $this->conn_timeout;
 		if (!$timeout) $timeout = $this->timeout;
-		$this->pdl->log('urlfetcher', 'post url: '.$geturl.' method: '.$this->method);
+		$this->pdl->log('urlfetcher', 'post url: '.$url.' method: '.$this->method);
 		return $this->{'post_'.$this->method}($url, $data, $content_type, $header, $conn_timeout, $timeout);
 	}
 
