@@ -610,6 +610,11 @@ if (!class_exists("time")){
 			return $date->format(DATE_RFC2822);
 		}
 
+		public function RFC822($dtime){
+			$date	= new DateTimeLocale($this->helper_dtime($dtime), $this->userTimeZone);
+			return $date->format(DATE_RFC822);
+		}
+
 		/**
 		 * Return Date in RFC 3339 Compatible Output
 		 *
