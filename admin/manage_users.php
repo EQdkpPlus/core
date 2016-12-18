@@ -428,12 +428,12 @@ class Manage_Users extends page_generic {
 					$privArray[$name] = $value;
 				}elseif(strpos($name, "ntfy_") === 0){
 					$notificationArray[$name] = $value;
-				} elseif(in_array($name, user::$customFields) || (strpos($name, "userprofile_") === 0)){
-					$customArray[$name] = $value;
 				} elseif(in_array($name, $plugin_settings)){
 					$pluginArray[$name] = $value;
-				} else {
+				} elseif(in_array($name, user::$normalUserTableFields)){
 					$query_ary[$name] = $value;
+				} else {
+					$customArray[$name] = $value;
 				}
 			}
 

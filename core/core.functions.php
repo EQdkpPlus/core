@@ -298,9 +298,9 @@ function generate_pagination($url, $items, $per_page, $start, $start_variable='s
 		$uri_symbol = ( strpos($url, '?') !== false) ? '&amp;' : '?';
 
 		//On what page we are?
-		$recent_page = (int)floor($start / $per_page) + 1;
+		$recent_page = ($start == 0) ? 1 : (int)floor($start / $per_page) + 1;
 		//Calculate total pages
-		$total_pages = ceil($items / $per_page);
+		$total_pages = ($items == 0) ? 1 : ceil($items / $per_page);
 		//Return if we don't have at least 2 Pages
 		if (!$items || $total_pages  < 2){
 			return '';

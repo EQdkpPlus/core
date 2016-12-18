@@ -29,7 +29,12 @@ class user extends gen_class {
 	/**
 	 *	Field Definitions
 	 */
-	public static $customFields = array('user_avatar', 'user_avatar_type');
+	//Without: auth_account, custom_fields, plugin_settings, privacy_settings, notifications
+	public static $normalUserTableFields = array('user_id', 'username', 'user_password', 'user_email', 'user_login_key', 'user_rlimit', 'user_date_time',
+			'user_date_short', 'user_date_long', 'user_style', 'user_lang', 'user_timezone', 'user_email_confirmkey', 'user_lastvisit', 'user_lastpage', 
+			'user_registered', 'user_active', 'user_email_confirmed', 'country', 'gender', 'birthday', 'rules', 'failed_login_attempts', 'exchange_key',
+			'hide_nochar_info', 'awaymode_enabled', 'awaymode_startdate', 'awaymode_enddate', 'awaymode_note', 'user_temp_email',
+	);
 
 	private $lang			= array();		// Loaded language pack
 	public $style			= array();		// Style data
@@ -739,7 +744,6 @@ class user extends gen_class {
 		$arrAvatarProviders = register('user')->getAvatarProviders(true);
 		$arrAvatarDependencies = $arrAvatarOptions = array();
 		foreach ($arrAvatarProviders as $key => $val){
-			self::$customFields[] = $key;
 			if(!in_array($key, $arrAllowed)) continue;
 			$arrAvatarOptions[$key] = $val['name'];
 			if(isset($val['settings'])){
