@@ -188,6 +188,27 @@ if (!class_exists("styles")){
 						} else {
 							$this->pdh->put('styles', 'update_version', array((string)$xml->version, $styleid));
 						}
+						
+						//Do some other update stuff
+						$update_file = $this->root_path."templates/".$style['template_path']."/update.xml";
+						if(file_exists($update_file)){
+							$update_xml = simplexml_load_file($update_file);
+							foreach($update_xml->styleupdate as $objUpdate){
+								$arrAttributes = $objUpdate->attributes();
+								$strUpdateVersion = $arrAttributes['styleversion'];
+									
+								if($data['style_version'] == $strUpdateVersion){
+									//Delete files, only in template folder
+									foreach($objUpdate->delete as $strDeleteFile){									
+										$strFolder = $this->root_path.'templates/'.$style['template_path'].'/';
+										if(isFilelinkInFolder(str_replace(registry::get_const('root_path'),"",$strFolder.$strDeleteFile), str_replace(registry::get_const('root_path'),"",$strFolder))){
+											$this->pfh->Delete($strFolder.$strDeleteFile);
+										}
+									}
+								}
+							}
+						}
+						
 					}
 
 					if (!$update){
