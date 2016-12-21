@@ -57,28 +57,31 @@ class Manage_Menus extends page_generic {
 		}
 		
 		//MENU
-		$json = $this->in->get('serialized', '', 'noencquotes');
+		$json = $this->in->get('serialized', '', 'noencquotes');	
 		$arrItems = $this->in->getArray('mainmenu', 'string');
 		
 		$decoded = json_decode($json, true);
+
 		$arrSorted = array();
 		if ($decoded){
 			$intFirstLevel = -1;
 			$intSecondLevel = -1;
 			foreach($decoded as $item){
-				if ((int)$item['item_id']){
-					$hash = $arrItems[$item['item_id']]['id'];
-					if ($arrItems[$item['item_id']]['type'] == 'pluslink'){
+				$item_id = (int)$item['id'];
+				if ($item_id){
+					$hash = $arrItems[$item_id]['id'];
+					if ($arrItems[$item_id]['type'] == 'pluslink'){
 						//New plus links
 						if ($hash == 'new'){
-							$data = $arrItems[$item['item_id']];
+							$data = $arrItems[$item_id];
 							$pid = $this->pdh->put('links', 'add', array($data['name'], $data['url'],$data['window'],$data['visibility'],$data['windowsize']));
 							if (!$pid) continue;
 							$link = $this->core->handle_link($data['url'],$data['name'], $data['window'], 'pluslink'.$pid);
 							$hash = $this->core->build_link_hash($link);
 						} else {
 							//Update existing plus link
-							$data = $arrItems[$item['item_id']];
+							echo "update";
+							$data = $arrItems[$item_id];
 							$pid = $this->pdh->put('links', 'update', array($data['specialid'], $data['name'], $data['url'],$data['window'],$data['visibility'],$data['windowsize']));
 							if (!$pid) continue;
 							$link = $this->core->handle_link($data['url'],$data['name'], $data['window'], 'pluslink'.$data['specialid']);
@@ -86,21 +89,22 @@ class Manage_Menus extends page_generic {
 						}
 					}
 					
-					$hidden = $arrItems[$item['item_id']]['hidden'];
+					$hidden = $arrItems[$item_id]['hidden'];
+
 					switch((int)$item['depth']){
-						case 1: 	$intFirstLevel++;
+						case 0: 	$intFirstLevel++;
 									$arrSorted[$intFirstLevel]['item'] = array('hash' => $hash, 'hidden' => $hidden);
 						break;
-						case 2:		$intSecondLevel++;
+						case 1:		$intSecondLevel++;
 									$arrSorted[$intFirstLevel]['_childs'][$intSecondLevel]['item'] = array('hash' => $hash, 'hidden' => $hidden);
 						break;
-						case 3:		$arrSorted[$intFirstLevel]['_childs'][$intSecondLevel]['_childs'][] = array('hash' => $hash, 'hidden' => $hidden);
+						case 2:		$arrSorted[$intFirstLevel]['_childs'][$intSecondLevel]['_childs'][] = array('hash' => $hash, 'hidden' => $hidden);
 						break;
 					}
 					
 				}
 			}
-
+			
 			$this->config->set('mainmenu', serialize($arrSorted));
 			$this->pdh->process_hook_queue();
 		}

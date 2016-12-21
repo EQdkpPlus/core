@@ -351,6 +351,9 @@ if (!class_exists("bbcode")) {
 								$this->username = (!$this->user->is_signedin()) ? $this->user->lang('guest') : $this->pdh->get('user', 'name', array($this->user->data['user_id']));
 								$arrCache[$strTag] = $this->username;
 								break;
+								
+							case 'id': $arrCache[$strTag] = $this->user->id;
+								break;
 						}
 						break;
 
