@@ -188,12 +188,14 @@ $lang = array(
 <p>Für weitere Hilfe steht dir unser <a href="'.EQDKP_BOARD_URL.'" target="_blank">Forum</a> zur Verfügung.</p>
 <p>Viel Spaß mit dem EQdkp-Plus wünscht das gesamte EQdkp-Plus-Team!</p>',
 	'feature_news_title'	=> 'Neue Funktionen von EQdkp Plus',
-	'feature_news'			=> '&lt;p&gt;Das EQdkp Plus 2.2 stellt wesentliche neue Funktionen zur Verfügung. Dieser Artikel dient dazu, diese Funktionen etwas näher kennenzulernen.&lt;/p&gt;
+	'feature_news'			=> '&lt;p&gt;Das EQdkp Plus 2.3 stellt wesentliche neue Funktionen zur Verfügung. Dieser Artikel dient dazu, diese Funktionen etwas näher kennenzulernen.&lt;/p&gt;
 &lt;h3&gt;Artikelsystem&lt;/h3&gt;
 &lt;p&gt;Anstatt der früheren News und Infoseiten basiert nun alles auf einem Artikelsystem. Jede News und jede Seite ist dabei ein Artikel. Über Artikelkategorien können diese leicht gruppiert werden. Auch kann man dadurch Blogs ermöglichen.&lt;/p&gt;
 &lt;p&gt;Die einzelnen Artikel können über einen Weiterlesen-Bereich und Seitenumbrüchen aufgeteilt werden. Auch besteht die Möglichkeit, über den Editor Bildergalerien, Items oder Raidloot in einen Artikel einzufügen.&lt;/p&gt;
 &lt;h3&gt;Medienverwaltung&lt;/h3&gt;
 &lt;p&gt;Durch die Medienverwaltung ist es nun ein leichtes, Medien in Artikel hinzuzufügen. Dateien können so zum Beispiel über Drag&amp;Drop einfach hochgeladen werden. Desweiteren können Bilder sogar im Medieneditor bearbeitet werden.&lt;/p&gt;
+&lt;h3&gt;Kalender&lt;/h3&gt;
+&lt;p&gt; Die Raidplanung wurde auf Drag&amp;Drop umgebaut und ist dadurch so einfach zu bedienen wie noch nie. Außerdem gibt es jetzt die Möglichkeit, öffentliche und private Termine zu erstellen, Leute dazu einzuladen und Zu- und Absagen zu erteilen.&lt;/p&gt;
 &lt;h3&gt;Menüverwaltung&lt;/h3&gt;
 &lt;p&gt;Eine weitere Neuerung ist, dass es nur noch ein zentrales Menü gibt, dass frei angepasst werden kann. Die einzelnen Einträge lassen sich mittels Drag&amp;Drop positieren, und dass sogar in bis zu 3 Ebenen, so dass Untermenüs enstehen. Wie von bisherigen EQdkp Plus Versionen gewohnt, lassen sich auch Links zu externen Seiten anlegen, alles zentral über den &quot;Link hinzufügen&quot;-Button, wo man auch die Verlinkung zu Artikel und -Kategorien vornimmt.&lt;/p&gt;
 &lt;h3&gt;Portalverwaltung&lt;/h3&gt;
