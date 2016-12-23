@@ -28,12 +28,58 @@ class ManageAdjs extends page_generic {
 
 	public function __construct(){
 		$handler = array(
+			'bulk_upd'	=> array('process' => 'bulk_update', 'csrf'=> true, 'check' => 'a_indivadj_upd'),
 			'save' => array('process' => 'save', 'check' => 'a_indivadj_add', 'csrf'=>true),
 			'upd'	=> array('process' => 'update', 'csrf'=>false),
-			'copy'		=> array('process' => 'copy', 'check' => 'a_indivadj_add'),
+			'copy'	=> array('process' => 'copy', 'check' => 'a_indivadj_add'),
+			'bulk'	=> array('process' => 'display_bulkedit', 'csrf'=> false, 'check' => 'a_indivadj_upd'),
 		);
 		parent::__construct('a_indivadj_', $handler, array('adjustment', 'reason'), null, 'selected_ids[]', 'a');
 		$this->process();
+	}
+	
+	public function bulk_update(){
+		$strSelectedIDs = $this->in->get('selected_ids');
+		$arrSelected = explode('|', $strSelectedIDs);
+		$arrBulk = $this->in->getArray('bulk', 'int');
+	
+		//Get new item information
+		$arrNewValues['member'] = $this->in->get('member', 0);
+		$arrNewValues['reason'] = $this->in->get('reason','');
+		$arrNewValues['value'] = $this->in->get('value',0.0);
+		$arrNewValues['date'] = $this->time->fromformat($this->in->get('date','1.1.1970 00:00'), 1);
+		$arrNewValues['raid_id'] = $this->in->get('raid_id',0);
+		$arrNewValues['event'] = $this->in->get('event',0);
+	
+		$arrCheckboxes = array('member', 'reason', 'value', 'date', 'raid_id', 'event');
+		//Für jedes Item
+		foreach($arrSelected as $adjID){
+			//Hole alte daten
+			$adj['member']	= $this->pdh->get('adjustment', 'member', array($adjID));
+			$adj['reason'] = $this->pdh->get('adjustment', 'reason', array($adjID));
+			$adj['value']	= $this->pdh->get('adjustment', 'value', array($adjID));
+			$adj['date']	= $this->pdh->get('adjustment', 'date', array($adjID));
+			$adj['raid_id'] = $this->pdh->get('adjustment', 'raid_id', array($adjID));
+			$adj['event']	= $this->pdh->get('adjustment', 'event', array($adjID));
+				
+			$messages = array();
+				
+			foreach($arrBulk as $key => $val){
+				if(!in_array($key, $arrCheckboxes) || !$val) continue;
+	
+				$adj[$key] = $arrNewValues[$key];
+
+				$retu = $this->pdh->put('adjustment', 'update_adjustment', array($adjID, $adj['value'], $adj['reason'], array($adj['member']), $adj['event'], $adj['raid_id'], $adj['date'], true));
+	
+				if(!$retu){
+					$messages[] = array('title' => $this->user->lang('save_nosuc'), 'text' => $adj['name'], 'color' => 'red');
+				}
+			}
+				
+		}
+		$messages[] = array('title' => $this->user->lang('save_suc'), 'text' => $this->user->lang('bulkedit'), 'color' => 'green');
+		$this->pdh->process_hook_queue();
+		$this->display($messages);
 	}
 	
 	public function copy(){
@@ -158,6 +204,57 @@ class ManageAdjs extends page_generic {
 		);
 	}
 
+	public function display_bulkedit($messages=false) {
+		$arrItems = $this->in->getArray('selected_ids', 'int');
+		//if(count($arrItems) === 0) $this->display();
+	
+		//fetch members for select
+		$members = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list', array(false,true,false)), 'member', 'name', 'asc')));
+		
+		//fetch raids for select
+		$raids = array(0 => '');
+		$raidids = $this->pdh->sort($this->pdh->get('raid', 'id_list'), 'raid', 'date', 'desc');
+		foreach($raidids as $id) {
+			$raids[$id] = '#ID:'.$id.' - '.$this->pdh->get('event', 'name', array($this->pdh->get('raid', 'event', array($id)))).' '.date('d.m.y', $this->pdh->get('raid', 'date', array($id)));
+		}
+		
+		//fetch events for select
+		$events = array();
+		$event_ids = $this->pdh->get('event', 'id_list');
+		foreach($event_ids as $id) {
+			$events[$id] = $this->pdh->get('event', 'name', array($id));
+		}
+		
+		if($message) {
+			$this->core->messages($message);
+			$adj = $this->get_post(true);
+			$adj['member'] = $this->in->get('member', 0);
+		}
+		
+		//fetch adjustment-reasons
+		$adjustment_reasons = $this->pdh->aget('adjustment', 'reason', 0, array($this->pdh->get('adjustment', 'id_list')));
+		$this->jquery->Autocomplete('reason', array_unique($adjustment_reasons));
+		$this->confirm_delete($this->user->lang('confirm_delete_adjustment')."<br />".((isset($adj['reason'])) ? $adj['reason'] : ''), '', true);
+		
+		$this->tpl->assign_vars(array(
+				'GRP_KEY'		=> (isset($grp_key) && !$copy) ? $grp_key : '',
+				'REASON'		=> (isset($adj['reason'])) ? $adj['reason'] : '',
+				'RAID'			=> new hdropdown('raid_id', array('options' => $raids, 'value' => ((isset($adj['raid_id'])) ? $adj['raid_id'] : ''))),
+				'MEMBERS'		=> new hsingleselect('member', array('options' => $members, 'value' => ((isset($adj['member'])) ? $adj['member'] : ''), 'width' => 350, 'filter' => true)),
+				'DATE'			=> $this->jquery->Calendar('date', $this->time->user_date(((isset($adj['date'])) ? $adj['date'] : $this->time->time), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
+				'VALUE'			=> (isset($adj['value'])) ? $adj['value'] : '',
+				'S_COPY'		=> ($copy) ? true : false,
+				'EVENT'			=> new hdropdown('event', array('options' => $events, 'value' => ((isset($adj['event'])) ? $adj['event'] : ''))),
+				'BULK_ITEMS'	=> implode('|', $arrItems),
+		));
+	
+		$this->core->set_vars(array(
+				'page_title'		=> $this->user->lang('manadjs_title').' - '.$this->user->lang('bulkedit'),
+				'template_file'		=> 'admin/manage_adjustments_bulkedit.html',
+				'display'			=> true)
+		);
+	}
+	
 	public function display($messages=false) {
 		if($messages) {
 			$this->pdh->process_hook_queue();
@@ -175,14 +272,32 @@ class ManageAdjs extends page_generic {
 		
 		$this->confirm_delete($this->user->lang('confirm_delete_adjustments'));
 		
-		$this->tpl->assign_vars(array(
-			'SID'			=> $this->SID,
-			'ADJ_LIST'		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_rlimit'], false),
-			'PAGINATION' 	=> generate_pagination('manage_adjustments.php'.$sort_suffix, $adj_count, $this->user->data['user_rlimit'], $this->in->get('start', 0)),
-			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
-			'ADJ_COUNT'		=> $adj_count,
-		)
+		$arrMenuItems = array(
+				0 => array(
+						'type'	=> 'javascript',
+						'icon'	=> 'fa-trash-o',
+						'text'	=> $this->user->lang('delete'),
+						'perm'	=> true,
+						'name'	=> 'mdel',
+						'js'	=> "$('#del_members').click();",
+						'append'=> '<input name="mdel" onclick="delete_warning();" id="del_members" class="mainoption bi_delete" type="button" style="display:none;" />',
+				),
+				1 => array(
+						'type'	=> 'button',
+						'icon'	=> 'fa-pencil',
+						'text'	=> $this->user->lang('edit'),
+						'perm'	=> true,
+						'name'	=> 'bulk',
+				),
 		);
+		
+		$this->tpl->assign_vars(array(
+			'ADJ_LIST'			=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_rlimit'], false),
+			'PAGINATION' 		=> generate_pagination('manage_adjustments.php'.$sort_suffix, $adj_count, $this->user->data['user_rlimit'], $this->in->get('start', 0)),
+			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
+			'ADJ_COUNT'			=> $adj_count,
+			'BUTTON_MENU'		=> $this->core->build_dropdown_menu($this->user->lang('selected_elements').'...', $arrMenuItems, '', 'manage_members_menu', array("input[name=\"selected_ids[]\"]")),	
+		));
 
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('manadjs_title'),

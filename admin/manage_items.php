@@ -265,12 +265,11 @@ class ManageItems extends page_generic {
 		);
 
 		$this->tpl->assign_vars(array(
-			'SID'	=> $this->SID,
-			'ITEM_LIST' => $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_rlimit'], false),
-			'PAGINATION' => generate_pagination('manage_items.php'.$sort_suffix, $item_count, $this->user->data['user_rlimit'], $this->in->get('start', 0)),
+			'ITEM_LIST' 		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_rlimit'], false),
+			'PAGINATION' 		=> generate_pagination('manage_items.php'.$sort_suffix, $item_count, $this->user->data['user_rlimit'], $this->in->get('start', 0)),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
-			'ITEM_COUNT' => $item_count,
-			'BUTTON_MENU'=> $this->core->build_dropdown_menu($this->user->lang('selected_items').'...', $arrMenuItems, '', 'manage_members_menu', array("input[name=\"selected_ids[]\"]")),
+			'ITEM_COUNT' 		=> $item_count,
+			'BUTTON_MENU'		=> $this->core->build_dropdown_menu($this->user->lang('selected_items').'...', $arrMenuItems, '', 'manage_members_menu', array("input[name=\"selected_ids[]\"]")),
 				
 		));
 
@@ -302,6 +301,7 @@ class ManageItems extends page_generic {
 		if($message){
 			$this->core->messages($message);
 			$item = $this->get_post(true);
+			$item['buyer'] = $this->in->get('buyer', 0);
 		}
 		
 		$item['date'] = $this->time->time;
@@ -326,9 +326,7 @@ class ManageItems extends page_generic {
 		');
 		
 		$item_names = $this->pdh->aget('item', 'name', 0, array($this->pdh->get('item', 'id_list')));
-		
-		
-		$this->confirm_delete($this->user->lang('confirm_delete_item')."<br />".((isset($item['name'])) ? $item['name'] : ''), '', true);
+
 		$this->tpl->assign_vars(array(
 				'GRP_KEY'		=> (isset($grp_key) && !$copy) ? $grp_key : '',
 				'NAME'			=> (isset($item['name'])) ? $item['name'] : '',

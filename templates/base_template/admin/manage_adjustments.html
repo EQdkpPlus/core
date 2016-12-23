@@ -24,8 +24,9 @@
 			{PAGINATION}
 	</div>
 	<div class="contentFooter">
-		<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="fa fa-times"></i>{L_delete_selected_adjs}</button>
+		{BUTTON_MENU}
 		<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
+		<div class="clear"></div>
 	</div>
 	{CSRF_TOKEN}
 </form>

@@ -1,0 +1,53 @@
+<!-- IF S_NORMAL_HEADER -->
+<div class="breadcrumb-container">
+	<ul class="breadcrumb">
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
+		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
+		<li><a href="{EQDKP_ROOT_PATH}admin/manage_adjustments.php{SID}">{L_manadjs_title}</a></li>
+		<li><a class="current">{L_bulkedit}</a></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+<!-- ENDIF -->
+<!-- IF not S_POINTS_DISABLED -->
+<form method="post" action="{ACTION}" name="post">
+<fieldset class="settings smallsettings">
+	<legend>{L_bulkedit}</legend>
+	<dl>
+		<dt><label><input type="checkbox" name="bulk[reason]" value="1"/>&nbsp;&nbsp;&nbsp;{L_reason}:</label></dt>
+		<dd><input type="text" name="reason" value="{REASON}" class="input" size='60' id="reason" /></dd>
+	</dl>
+	<dl>
+		<dt><label><input type="checkbox" name="bulk[value]" value="1"/>&nbsp;&nbsp;&nbsp;{L_value}:</label></dt>
+		<dd><input type="text" name="value" value="{VALUE}" class="input" size='60' id="value" /></dd>
+	</dl>
+	<dl>
+		<dt><label><input type="checkbox" name="bulk[raid_id]" value="1"/>&nbsp;&nbsp;&nbsp;{L_raid}:</label></dt>
+		<dd>{RAID}</dd>
+	</dl>
+	<dl>
+		<dt><label><input type="checkbox" name="bulk[event]" value="1"/>&nbsp;&nbsp;&nbsp;{L_event}:</label></dt>
+		<dd>{EVENT}</dd>
+	</dl>
+	<dl>
+		<dt><label><input type="checkbox" name="bulk[date]" value="1"/>&nbsp;&nbsp;&nbsp;{L_date}:</label></dt>
+		<dd>{DATE}</dd>
+	</dl>
+	<dl>
+		<dt><label><input type="checkbox" name="bulk[member]" value="1"/>&nbsp;&nbsp;&nbsp;{L_members}:</label></dt>
+		<dd>{MEMBERS}</dd>
+	</dl>
+
+</fieldset>
+<div class="contentFooter">
+	<button class="mainoption" type="submit" name="bulk_upd"><i class="fa fa-check"></i>{L_save}</button>
+	<button class="mainoption" type="button" name="" onclick="window.location.href='manage_adjustments.php{SID}'"><i class="fa fa-chevron-left"></i>{L_cancel}</button>
+	<input type="hidden" name="selected_ids" value="{BULK_ITEMS}" />
+</div>
+{CSRF_TOKEN}
+</form>
+<!-- ELSE -->
+<div class="infobox infobox-large infobox-red clearfix">
+	<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> {L_disabled_points_info}
+</div>
+<!-- ENDIF -->
