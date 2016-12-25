@@ -911,19 +911,18 @@ if (!class_exists("jquery")) {
 		public function init_formvalidation(){
 			if(!$this->inits['formvalidation']){
 				$this->tpl->add_js("
-				$('.fv_checkit input[required]').change(function(e) {
-					var forminputvalue=$.trim($(this).val());
-					//console.log('valid: '+$(this)[0].checkValidity());
+				$('.fv_checkit input[required]').on('blur keypress onblur', function(e) {
+					var forminputvalue= $.trim($(this).val());
 					if(forminputvalue.length == 0){
+						$(this).next('.fv_msg').show();
+						$(this).addClass('fv_inp_invalid');
+					} else {
+						$(this).next('.fv_msg:before').hide();
 						$(this).next('.fv_msg').hide();
 						$(this).removeClass('fv_inp_invalid');
-					}else{
-						if (!$(this)[0].checkValidity()) {
-							$(this).next('.fv_msg').show();
-							$(this).addClass('fv_inp_invalid');
-						}
 					}
-				}).trigger('change');", 'docready');
+				});
+				", 'docready');
 				$this->inits['formvalidation'] = true;
 			}
 		}

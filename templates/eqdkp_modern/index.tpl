@@ -401,7 +401,6 @@
 					<dd>
 						<div class="input-icon">
 							<i class="fa fa-user"></i><input type="text" name="username" size="30" maxlength="30" class="input username" id="username" placeholder="{L_username}" required />
-							<div class="fv_msg" data-errormessage="{L_fv_required_user}"></div>
 						</div>
 
 					</dd>
@@ -412,7 +411,6 @@
 						<div class="input-icon">
 							<i class="fa fa-key"></i>
 							<input type="password" name="password" pattern=".{3,}" size="30" maxlength="32" class="input password" id="password" placeholder="{L_password}" required />
-							<div class="fv_msg" data-errormessage="{L_fv_required_password_pattern}"></div>
 						</div>
 						<!-- IF S_SHOW_PWRESET_LINK -->
 						<br />{U_PWRESET_LINK}<br />

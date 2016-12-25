@@ -75,19 +75,19 @@ class core extends gen_class {
 					case 'error':
 					case 'red':
 						$kkind	= 'error';
-						$ktitle	= $this->user->lang('error');
+						$ktitle	= ($title != '') ? $title : $this->user->lang('error');
 						break;
 					case 'hint':
 					case 'warning':
 					case 'orange':
 						$kkind	= 'warning';
-						$ktitle	= $this->user->lang('warning');
+						$ktitle	= ($title != '') ? $title : $this->user->lang('warning');
 						break;
 					case 'success':
 					case 'ok':
 					case 'green':
 						$kkind	= 'success';
-						$ktitle	= $this->user->lang('success');
+						$ktitle	= ($title != '') ? $title : $this->user->lang('success');
 						break;
 					default:
 						$kkind	= false;

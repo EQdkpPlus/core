@@ -307,6 +307,7 @@ class settings_pageobject extends pageobject {
 		}
 
 		// Output
+		$this->form->validate = true;
 		$this->form->output($userdata);
 
 		$this->jquery->Tab_header('usersettings_tabs', true);

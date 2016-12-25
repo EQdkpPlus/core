@@ -56,7 +56,7 @@ class htimepicker extends html {
 		$this->jquery->timePicker($this->id, $this->name, $this->value, $this->enablesecs, $this->hourf, $this->returnJS);
 		$out .= ' />';
 		$jsout = ($this->returnJS) ? '<script>'.$this->jquery->get_jscode('timepicker', $this->id).'</script>' : '';
-		if($this->required) $out .= '<span class="fv_msg" data-errormessage="'.registry::fetch('user')->lang('fv_required').'"></span>';
+		if($this->required) $out .= '<span class="fv_msg" style="display:none;">'.registry::fetch('user')->lang('fv_required').'</span>';
 		$this->out = $jsout.$out;
 	}
 

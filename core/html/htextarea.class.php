@@ -69,7 +69,7 @@ class htextarea extends html {
 		if($this->required) $out .= 'required="required" ';
 		if(!empty($this->placeholder)) $out .= 'placeholder="'.$this->placeholder.'" ';
 		$out .= '>'.$this->value.'</textarea>';
-		if($this->required) $out .= '<span class="fv_msg" data-errormessage="'.registry::fetch('user')->lang('fv_required').'"></span>';
+		if($this->required) $out .= '<span class="fv_msg" style="display:none;">'.registry::fetch('user')->lang('fv_required').'</span>';
 		$this->out = $out;
 	}
 	

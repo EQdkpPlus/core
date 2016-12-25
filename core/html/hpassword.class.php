@@ -61,7 +61,7 @@ class hpassword extends html {
 		if(!empty($this->equalto)) $out .= 'data-equalto="'.$this->equalto.'" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
 		$out .= ' />';
-		if($this->required) $out .= '<span class="fv_msg" data-errormessage="'.registry::fetch('user')->lang('fv_required').'"></span>';
+		if($this->required) $out .= '<span class="fv_msg" style="display:none;">'.registry::fetch('user')->lang('fv_required').'</span>';
 		if(!empty($this->equalto)) $out .= '<span class="errormessage error-message-red" style="display:none;"><i class="fa fa-exclamation-triangle fa-lg"></i>'.registry::fetch('user')->lang('fv_required_password_repeat').'</span>';
 		return $out;
 	}
