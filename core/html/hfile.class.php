@@ -68,7 +68,7 @@ class hfile extends html {
 		if(!empty($this->js)) $out.= $this->js.' ';
 		if($this->preview) $out .= 'onchange="previewImage_'.$this->name.'(this);"';
 		$out .= ' />';
-		if($this->required) $out .= '<span class="fv_msg" style="display:none;">'.registry::fetch('user')->lang('fv_required').'</span>';
+		if($this->required) $out .= '<i class="fa fa-asterisk required small"></i> <span class="fv_msg" style="display:none;">'.registry::fetch('user')->lang('fv_required').'</span>';
 		if ($this->preview){
 			$out = '<img src="'.((isset($this->value) && $this->value) ? $this->value : registry::get_const('server_path').'images/global/default-image.svg').'" class="uploadPreview" style="max-height: 60px;"/>'.$out;
 

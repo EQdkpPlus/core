@@ -90,7 +90,7 @@ class htextareamultilang extends html {
 		}
 		
 		$this->out .= '</div>';
-		if($this->required) $this->out .= '<span class="fv_msg" style="display:none;">'.registry::fetch('user')->lang('fv_required').'</span>';
+		if($this->required) $this->out .= '<i class="fa fa-asterisk required small"></i> <span class="fv_msg" style="display:none;">'.registry::fetch('user')->lang('fv_required').'</span>';
 	}
 	
 	public function _toString() {

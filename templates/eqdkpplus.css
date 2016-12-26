@@ -392,6 +392,10 @@ i.icon-color-purple{
 i.icon-color-gray{
 	color: gray;
 }
+i.small {
+	font-size: 0.7em;
+}
+
 .nodisplay, .userpass{
 	display: none;
 }
@@ -418,7 +422,7 @@ i.icon-color-gray{
 	color: green;
 }
 
-.fv_checkit .fv_inp_invalid {
+.fv_checkit .fv_inp_invalid, .submitted input:invalid {
 	border: 1px solid rgba(204, 0, 1, 1) !important;
 	box-shadow: none;
 }

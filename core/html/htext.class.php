@@ -113,7 +113,7 @@ class htext extends html {
 		if(!empty($this->js)) $out.= $this->js.' ';
 		$out .= ' />';
 		if(!empty($this->pattern)) $out .= '<span class="fv_msg" style="display:none;">'.registry::fetch('user')->lang('fv_sample_pattern').'</span>';
-		elseif($this->required) $out .= '<span class="fv_msg" style="display:none;">'.registry::fetch('user')->lang('fv_required').'</span>';
+		elseif($this->required) $out .= '<i class="fa fa-asterisk required small"></i> <span class="fv_msg" style="display:none;">'.registry::fetch('user')->lang('fv_required').'</span>';
 		if(!empty($this->after_txt)) $out .= $this->after_txt;
 		$this->out = $out;
 	}

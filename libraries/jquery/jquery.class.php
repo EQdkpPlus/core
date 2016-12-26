@@ -87,7 +87,6 @@ if (!class_exists("jquery")) {
 			$this->tpl->add_js('$(".equalto").change(function(){
 					field1	= $("#" + $(this).data("equalto")).val();
 					field2	= $(this).val();
-					console.log($(this).next("span.errormessage"));
 					if(field1 != field2){
 						$(this).next("span.errormessage").show();
 					}else{
