@@ -38,6 +38,10 @@ class tinyMCE extends gen_class {
 		if(!$nojsinclude) $this->tpl->js_file($this->server_path.'libraries/tinyMCE/tinymce/jquery.tinymce.min.js');
 		$this->language	= $this->user->lang('XML_LANG');
 		$this->tpl->add_js('var tinymce_eqdkp_lightbox_thumbnailsize = '.(($this->config->get('thumbnail_defaultsize')) ? $this->config->get('thumbnail_defaultsize') : 400).';');
+		
+		if($this->user->style['editor_theme'] != ""){
+			$this->skin = $this->user->style['editor_theme'];
+		}
 	}
 
 	public function editor_bbcode($settings=false){
@@ -54,7 +58,7 @@ class tinyMCE extends gen_class {
 			$strHooksPlugin = isset($arrHooks['plugins']) ? $arrHooks['plugins'] : '';
 			$strHooksToolbar = isset($arrHooks['toolbar']) ? $arrHooks['toolbar'] : '';
 			$mention  = (isset($settings['mention']) && $settings['mention']) ? ' mention' : '';
-
+			
 			$this->tpl->add_js('
 				function initialize_bbcode_editor(){
 				$(".mceEditor_bbcode").tinymce({
@@ -438,6 +442,15 @@ class tinyMCE extends gen_class {
 
 	public function decode($input){
 		return html_entity_decode(stripslashes($input));
+	}
+	
+	public function getAvailableSkins(){
+		$arrSkins = sdir($this->root_path.'libraries/tinyMCE/tinymce/skins');
+		$arrOut = array();
+		foreach($arrSkins as $val){
+			$arrOut[$val] = ucfirst($val);
+		}
+		return $arrOut;
 	}
 }
 

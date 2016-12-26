@@ -73,6 +73,7 @@ class update_2300 extends sql_update_task {
 				33 => 'Add Steam field',
 				34 => 'Add Discord Field',
 				35 => 'Drop some unused columns',
+				36 => 'Alter Style Table',
 				'update_function' => 'Add Cronjobs to the Databse',
 			),
 			'german' => array(
@@ -112,6 +113,7 @@ class update_2300 extends sql_update_task {
 				33 => 'Füge Steam Benutzerprofilfeld hinzu',
 				34 => 'Füge Discord Benutzerprofilfeld hinzu',
 				35 => 'Entferne nicht mehr genutzte Spalten',
+				36 => 'Erweitere Style Tabelle',
 				'update_function' => 'Übertrage Cronjobs in die Datenbank',
 			),
 		);
@@ -188,6 +190,7 @@ class update_2300 extends sql_update_task {
 	DROP COLUMN `user_elimit`,
 	DROP COLUMN `user_ilimit`,
 	DROP COLUMN `user_nlimit`;",
+			36	=> "ALTER TABLE `__styles` ADD `editor_theme` VARCHAR(255) NULL DEFAULT 'lightgray';",
 		);
 	}
 

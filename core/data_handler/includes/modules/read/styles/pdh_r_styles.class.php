@@ -129,6 +129,7 @@ if ( !class_exists( "pdh_r_styles" ) ) {
 						'additional_less' 			=> $drow['additional_less'],
 						'users'						=> $this->pdh->get('user','stylecount', array($drow['style_id'])),
 						'additional_fields'			=> ($drow['additional_fields'] != "") ? unserialize($drow['additional_fields']) : array(),
+						'editor_theme'				=> $drow['editor_theme'],
 					);
 				}
 				

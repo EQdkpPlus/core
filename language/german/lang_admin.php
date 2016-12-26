@@ -1819,6 +1819,7 @@ $lang = array(
 "article_categories" => "Artikelkategorien",
 "amount" => "Anzahl",
 "bulkedit" => "Mehrere bearbeiten",
-"selected_items" => "ausgewählte Items",		
+"selected_items" => "ausgewählte Items",
+"editor_theme" => "Editor-Design",
 );
 ?>

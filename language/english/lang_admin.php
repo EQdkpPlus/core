@@ -1816,6 +1816,7 @@ $lang = array(
 		"amount" => "Amount",
 		"bulkedit" => "Edit multiple",
 		"selected_items" => "selected Items",
+		"editor_theme" => "Editor-Theme",
 );
 
 ?>

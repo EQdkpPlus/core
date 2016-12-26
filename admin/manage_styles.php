@@ -185,6 +185,7 @@ class Manage_Styles extends page_generic{
 			'background_type'		=> $this->in->get('background_type', 0),
 			'background_pos'		=> $this->in->get('background_pos'),
 			'background_img'		=> $this->in->get('background_img'),
+			'editor_theme'			=> $this->in->get('editor_theme'),
 			'portal_width'			=> $portal_width,
 			'column_left_width'		=> $column_left_width,
 			'column_right_width'	=> $column_right_width,
@@ -352,6 +353,7 @@ class Manage_Styles extends page_generic{
 			'STYLE_AUTHOR'			=> $this->style['style_author'],
 			'STYLE_CONTACT'			=> $this->style['style_contact'],
 			'STYLE_VERSION'			=> $this->style['style_version'],
+			'EDITOR_THEME'			=> new hdropdown('editor_theme', array('options' => register('tinyMCE')->getAvailableSkins(), 'value' => $this->style['editor_theme'])),
 			
 			'FAVICON_IMG'			=> $this->style['favicon_img'],
 			'BANNER_IMG'			=> $this->style['banner_img'],

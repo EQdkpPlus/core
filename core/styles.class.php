@@ -106,6 +106,7 @@ if (!class_exists("styles")){
 			'misc_text3',
 			'additional_less',
 			'additional_fields',
+			'editor_theme',
 		);
 
 		public $allowed_extensions = array(
