@@ -405,19 +405,10 @@ i.icon-color-gray{
 }
 
 .fv_checkit [required]:invalid ~ .fv_msg:after {
-	content: attr(data-errormessage);
 	color: red;
 }
 
 .fv_checkit [pattern]:invalid ~ .fv_msg:after {
-	content: attr(data-errormessage);
-	color: red;
-}
-
-.fv_checkit [pattern]:invalid ~ .fv_msg:before, [required]:invalid ~ .fv_msg:before {
-	font-family: FontAwesome;
-	content: "\f071";
-	margin-right: 6px;
 	color: red;
 }
 
@@ -428,7 +419,32 @@ i.icon-color-gray{
 }
 
 .fv_checkit .fv_inp_invalid {
-	border: 1px solid red!important;
+	border: 1px solid rgba(204, 0, 1, 1) !important;
+	box-shadow: none;
+}
+
+.errormessage, .fv_checkit [required]:invalid ~ .fv_msg {
+	background-color: #f2dede;
+    color: #a94442;
+    padding: 5px 10px;
+    position: relative;
+    border: 2px;
+    margin-left: 10px;
+}
+
+.errormessage::before, .fv_checkit [required]:invalid ~ .fv_msg:before {
+   right: 100%;
+	top: 50%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+	border-color: transparent;
+	border-right-color: #f2dede;
+	border-width: 6px;
+	margin-top: -6px;
 }
 
 /* 12 Column Grid */

@@ -911,7 +911,7 @@ if (!class_exists("jquery")) {
 		public function init_formvalidation(){
 			if(!$this->inits['formvalidation']){
 				$this->tpl->add_js("
-				$('.fv_checkit input[required]').on('blur keypress onblur', function(e) {
+				$('.fv_checkit input[required]').on('blur input onblur', function(e) {
 					var forminputvalue= $.trim($(this).val());
 					if(forminputvalue.length == 0){
 						$(this).next('.fv_msg').show();

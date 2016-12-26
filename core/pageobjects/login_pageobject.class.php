@@ -268,6 +268,17 @@ class login_pageobject extends pageobject {
 
 	public function display_new_password(){
 		$this->tpl->add_js('document.new_password.password1.focus();', 'docready');
+		
+		$this->tpl->add_js("
+			$('[data-equalto]').bind('input', function() {
+    var to_confirm = $(this);
+    var to_equal = $('#' + to_confirm.data('equalto'));
+						
+    if(to_confirm.val() != to_equal.val())
+        this.setCustomValidity(\"".$this->jquery->sanitize(registry::fetch('user')->lang('fv_required_password_repeat'))."\");
+    else
+        this.setCustomValidity('');
+});");
 
 		$this->tpl->assign_vars(array(
 			'KEY'	=> sanitize($this->in->get('key', '')),

@@ -97,7 +97,7 @@ if (!class_exists("recaptcha")) {
 							<label>'.register('user')->lang('lib_captcha_head').'</label>
 						</dt>
 						<dd>
-							'.$this->recaptcha_get_html(register('config')->get('lib_recaptcha_okey')).'
+							'.$this->get_html(register('config')->get('lib_recaptcha_okey')).'
 						</dd>
 					</dl>';
 			return $out;

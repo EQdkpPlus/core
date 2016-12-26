@@ -71,6 +71,7 @@ class form extends gen_class {
 	private $jq_dropdown 	= false;
 	private $jq_checkbox 	= false;
 	private $jq_radio 		= false;
+	private $jq_equalto		= false;
 
 	// error flag (to redisplay form in case of wrong input)
 	private $error			= false;
@@ -413,6 +414,8 @@ class form extends gen_class {
 
 		// dependency stuff - hide other elements depening on selection
 		if(!empty($options['dependency'])) $this->jq_dep_init($options['type']);
+		
+		if(!empty($options['equalto'])) $this->jq_dep_init('equalto');
 
 		// ajax-reload for dropdown-options
 		if(!empty($options['ajax_reload'])) {
@@ -452,6 +455,27 @@ class form extends gen_class {
 	private function jq_dep_init($type) {
 		if($this->{'jq_'.$type}) return;
 		switch($type) {
+			case 'equalto':
+				$js = "
+$('[data-equalto]').bind('input', function() {
+    var to_confirm = $(this);
+    var to_equal = $('#' + to_confirm.data('equalto'));				
+						
+    if(to_confirm.val() != to_equal.val()){
+			if(fieldtype == 'email'){
+				 this.setCustomValidity(\"".$this->jquery->sanitize(registry::fetch('user')->lang('fv_email_not_match'))."\");
+			}else if(fieldtype == 'password'){
+				 this.setCustomValidity(\"".$this->jquery->sanitize(registry::fetch('user')->lang('fv_required_password_repeat'))."\");
+			} else {
+				 this.setCustomValidity(\"".$this->jquery->sanitize(registry::fetch('user')->lang('fv_fields_not_match'))."\");
+			};	
+	}
+    else {
+        this.setCustomValidity('');
+	}
+});";
+				break;
+			
 			case 'dropdown':
 				$js = "
 	$('.form_change').change(function(){

@@ -487,6 +487,25 @@ class register_pageobject extends pageobject {
 			$form->output($this->userProfileData);
 		}
 		
+		$this->tpl->add_js("
+			$('[data-equalto]').bind('input', function() {
+    var to_confirm = $(this);
+    var to_equal = $('#' + to_confirm.data('equalto'));
+		
+    if(to_confirm.val() != to_equal.val()){
+		var fieldtype = $(this).attr('type');
+		if(fieldtype == 'email'){
+			 this.setCustomValidity(\"".$this->jquery->sanitize(registry::fetch('user')->lang('fv_email_not_match'))."\");
+		}else if(fieldtype == 'password'){
+			 this.setCustomValidity(\"".$this->jquery->sanitize(registry::fetch('user')->lang('fv_required_password_repeat'))."\");
+		} else {
+			 this.setCustomValidity(\"".$this->jquery->sanitize(registry::fetch('user')->lang('fv_fields_not_match'))."\");
+		};
+    } else {
+        this.setCustomValidity('');
+	}
+});");
+		
 
 		$this->tpl->assign_vars(array(
 			'S_CURRENT_PASSWORD'			=> false,
