@@ -200,14 +200,16 @@ if(!class_exists('pdh_r_raid')){
 
 
 		public function get_raidids4memberid($member_id){
-			$raids4member = array();
-			foreach($this->index as $raid_id){
-				$arrMembers = $this->get_raid_attendees($raid_id, false);
-				if(is_array($arrMembers) && in_array($member_id, $arrMembers)){
-					$raids4member[] = $raid_id;
+			$objQuery = $this->db->prepare("SELECT raid_id FROM __raid_attendees WHERE member_id=? ORDER BY raid_id DESC")->execute($member_id);
+			$arrRaids = array();
+			if ($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					if(!in_array((int)$row['raid_id'], $this->index)) continue;
+					$arrRaids[] = $row['raid_id'];
 				}
 			}
-			return $raids4member;
+			
+			return $arrRaids;
 		}
 
 		// get the raids of a member with certain item ids
