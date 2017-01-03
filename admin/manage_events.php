@@ -28,21 +28,42 @@ class Manage_Events extends page_generic {
 
 	public function __construct(){
 		$handler = array(
+			'itempools' => array('process' => 'ajax_itempools','check' => 'a_event_add'),
 			'save' => array('process' => 'save', 'check' => 'a_event_add', 'csrf' => true),
 			'upd'	=> array('process' => 'update', 'csrf'=>false),
 		);
 		parent::__construct('a_event_', $handler);
 		$this->process();
 	}
+	
+	public function ajax_itempools(){
+		$strPools = $this->in->get('pools', '', 'raw');
+		$arrPools = json_decode(urldecode($strPools));
+		$arrItempools = array();
+		foreach($arrPools as $strPoolID){
+			$intPoolID = intval($strPoolID);
+			$arrLocalItempools = $this->pdh->get('multidkp', 'itempool_ids', array($intPoolID));
+			if(is_array($arrLocalItempools)) $arrItempools = array_merge($arrItempools, $arrLocalItempools);
+		}
+		
+		$arrItempools = array_unique($arrItempools);
+		
+		$arrNamedItempools = $this->pdh->aget('itempool', 'name', 0, array($arrItempools));
+		
+		$intValue = ($this->in->get('eventid', 0)) ? $this->pdh->get('event', 'def_itempool', array($this->in->get('eventid', 0))) : 0;
+		header('content-type: text/html; charset=UTF-8');
+		echo new hdropdown('default_itempool', array('options' => $arrNamedItempools, 'value' => $intValue));
+		exit;
+	}
 
 	public function save() {
 		$event = $this->get_post();
 		if($event) {
 			if($event['id']) {
-				$retu = $this->pdh->put('event', 'update_event', array($event['id'], $event['name'], $event['value'], $event['icon']));
+				$retu = $this->pdh->put('event', 'update_event', array($event['id'], $event['name'], $event['value'], $event['icon'], $event['default_itempool']));
 				if($retu) $this->pdh->put('multidkp', 'add_multidkp2event', array($event['id'], $this->in->getArray('mdkp2event', 'int')));
 			} else {
-				$retu = $this->pdh->put('event', 'add_event', array($event['name'], $event['value'], $event['icon']));
+				$retu = $this->pdh->put('event', 'add_event', array($event['name'], $event['value'], $event['icon'], $event['default_itempool']));
 				if($retu > 0) $this->pdh->put('multidkp', 'add_multidkp2event', array($retu, $this->in->getArray('mdkp2event', 'int')));
 			}
 
@@ -77,15 +98,19 @@ class Manage_Events extends page_generic {
 	}
 
 	public function update($message=false) {
-		$event = array('id' => $this->in->get('event_id',0), 'value' => '0.00', 'mdkp2event' => array());
+		$event = array('id' => $this->in->get('event_id',0), 'value' => '0.00', 'mdkp2event' => array(), 'default_itempool' => 0);
 		if($message) {
 			$this->core->messages($message);
 			$event = $this->get_post(true);
+			$arrItempool = array();
 		} elseif($event['id']) {
 			$event['name'] = $this->pdh->get('event', 'name', array($event['id']));
 			$event['icon'] = $this->pdh->get('event', 'icon', array($event['id']));
 			$event['value'] = $this->pdh->get('event', 'value', array($event['id']));
 			$event['mdkp2event'] = $this->pdh->get('event', 'multidkppools', array($event['id']));
+			$event['default_itempool'] = $this->pdh->get('event', 'def_itempool', array($event['id']));
+			
+			$arrItempool = $this->pdh->aget('itempool', 'name', 0, array($this->pdh->get('event', 'itempools', array($event['id']))));
 		}
 
 		//Get Icons
@@ -139,6 +164,7 @@ class Manage_Events extends page_generic {
 			'NAME'			=> (isset($event['name'])) ? $event['name'] : '',
 			'VALUE'			=> $this->pdh->geth('event', 'value', array($event['id'])),
 			'MDKP2EVENT' 	=> $this->jquery->Multiselect('mdkp2event', $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), $event['mdkp2event']),
+			'DD_DEFAULT_ITEMPOOL' => new hdropdown('default_itempool', array('options' => $arrItempool, 'value' => $event['default_itempool'])),
 			'CALENDAR'		=> ($this->in->get('calendar') == 'true') ? '1' : '0'
 		));
 		$this->core->set_vars(array(
@@ -199,6 +225,7 @@ class Manage_Events extends page_generic {
 		$event['icon'] = $this->in->get('icon','');
 		$event['id'] = $this->in->get('event_id',0);
 		$event['mdkp2event'] = $this->in->getArray('mdkp2event', 'int');
+		$event['default_itempool'] = $this->in->get('default_itempool', 0);
 		return $event;
 	}
 }

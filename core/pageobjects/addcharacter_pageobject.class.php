@@ -130,6 +130,8 @@ class addcharacter_pageobject extends pageobject {
 			if($this->url_id > 0) {
 				$options['value'] = $this->pdh->get('member', 'profile_field', array($this->url_id, $this->in->get('child')));
 			}
+			header('content-type: text/html; charset=UTF-8');
+			
 			echo new hdropdown('dummy', $options);
 			exit;
 		}

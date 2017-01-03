@@ -30,14 +30,16 @@ if(!class_exists('pdh_w_event')) {
 			'event_name' 	=> "{L_NAME}",
 			'event_value'	=> "{L_VALUE}",
 			'event_icon'	=> "{L_ICON}",
+			'default_itempool' => "{L_ITEMPOOL}",
 		);
 
-		public function add_event($name, $value, $icon) {
+		public function add_event($name, $value, $icon, $itempool=0) {
 			$arrSet = array(
 				'event_name' 	=> $name,
 				'event_value'	=> $value,
 				'event_icon'	=> $icon,
 				'event_added_by'=> $this->admin_user,
+				'default_itempool'=> $itempool,
 			);
 			
 			$objQuery = $this->db->prepare("INSERT INTO __events :p")->set($arrSet)->execute();
@@ -48,6 +50,7 @@ if(!class_exists('pdh_w_event')) {
 					'{L_NAME}'		=> $name,
 					'{L_VALUE}'		=> $value,
 					'{L_ICON}'		=> $icon,
+					'{L_ITEMPOOL}'	=> $itempool,
 				);
 				$this->log_insert('action_event_added', $log_action, $id, $name);
 				$this->pdh->enqueue_hook('event_update', array($id));
@@ -56,16 +59,18 @@ if(!class_exists('pdh_w_event')) {
 			return false;
 		}
 
-		public function update_event($id, $name, $value, $icon) {
+		public function update_event($id, $name, $value, $icon, $itempool=0) {
 			$old['name']	= $this->pdh->get('event', 'name', array($id));
 			$old['value']	= $this->pdh->get('event', 'value', array($id));
 			$old['icon']	= $this->pdh->get('event', 'icon', array($id));
+			$old['default_itempool'] = $this->pdh->get('event', 'def_itempool', array($id));
 
 			$arrSet = array(
 				'event_name' 	=> $name,
 				'event_value'	=> $value,
 				'event_icon'	=> $icon,
 				'event_updated_by'=> $this->admin_user,
+				'default_itempool' => $itempool,
 			);
 			
 			$objQuery = $this->db->prepare("UPDATE __events :p WHERE event_id =?")->set($arrSet)->execute($id);
@@ -75,11 +80,13 @@ if(!class_exists('pdh_w_event')) {
 					'event_name' 	=> $old['name'],
 					'event_value'	=> $old['value'],
 					'event_icon'	=> $old['icon'],
+					'default_itempool' => $old['default_itempool'],
 				);
 				$arrNew = array(
 					'event_name' 	=> $name,
 					'event_value'	=> $value,
 					'event_icon'	=> $icon,
+					'default_itempool'=> $itempool,
 				);
 				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
 				if ($log_action) $this->log_insert('action_event_updated', $log_action, $id, $old['name']);
@@ -94,6 +101,7 @@ if(!class_exists('pdh_w_event')) {
 			$old['name'] = $this->pdh->get('event', 'name', array($id));
 			$old['value'] = $this->pdh->get('event', 'value', array($id));
 			$old['icon'] = $this->pdh->get('event', 'icon', array($id));
+			$old['default_itempool'] = $this->pdh->get('event', 'def_itempool', array($id));
 			
 			$this->db->beginTransaction();
 			
@@ -103,7 +111,8 @@ if(!class_exists('pdh_w_event')) {
 				$log_action = array(
 					'{L_NAME}'		=> $old['name'],
 					'{L_VALUE}'		=> $old['value'],
-					'{L_ICON}'		=> $old['icon']
+					'{L_ICON}'		=> $old['icon'],
+					'{L_ITEMPOOL}'	=> $old['default_itempool'],
 				);
 				$this->log_insert('action_event_deleted', $log_action, $id, $old['name']);
 

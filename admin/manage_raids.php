@@ -30,6 +30,7 @@ class ManageRaids extends page_generic {
 		$handler = array(
 			'bulk_upd'	=> array('process' => 'bulk_update', 'csrf'=> true, 'check' => 'a_raid_upd'),
 			'raidvalue' => array('process' => 'ajax_raidvalue', 'check' => false),
+			'defitempool' => array('process' => 'ajax_defitempool', 'check' => false),
 			'save' => array('process' => 'save', 'check' => 'a_raid_add', 'csrf'=>true),
 			'itemadj_del' => array('process' => 'update', 'check' => 'a_raid_del', 'csrf'=>true),
 			'copy'		=> array('process' => 'copy', 'check' => 'a_raid_add'),
@@ -42,9 +43,18 @@ class ManageRaids extends page_generic {
 
 	}
 
-	public function ajax_raidvalue(){
+	public function ajax_defitempool(){
 		header('content-type: text/html; charset=UTF-8');
 
+		$event_id = $this->in->get('event', 0);
+		$defItempool = $this->pdh->geth("event", "def_itempool", array($event_id));
+		echo $defItempool;
+		die();
+	}
+	
+	public function ajax_raidvalue(){
+		header('content-type: text/html; charset=UTF-8');
+	
 		$event_id = $this->in->get('event', 0);
 		$event_value = $this->pdh->geth("event", "value", array($event_id));
 		echo runden($event_value);

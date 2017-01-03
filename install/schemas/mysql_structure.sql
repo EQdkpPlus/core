@@ -161,6 +161,7 @@ CREATE TABLE `__events` (
 	`event_added_by` varchar(30) COLLATE utf8_bin NOT NULL,
 	`event_updated_by` varchar(30) COLLATE utf8_bin DEFAULT NULL,
 	`event_icon` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+	`default_itempool` INT(11) UNSIGNED NOT NULL DEFAULT '0',
 	PRIMARY KEY (`event_id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 

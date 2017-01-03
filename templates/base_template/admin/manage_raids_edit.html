@@ -14,6 +14,12 @@
 		$.get("manage_raids.php{SID}", { raidvalue: "1", event: event_id }, function(data){
 			$("#raid_value").val(data);
 		});
+		
+		//Get default itempool
+		$.get("manage_raids.php{SID}", { defitempool: "1", event: event_id }, function(data){
+			if(data != "0") new_itempool_option = data;
+		});
+		
 	}
 	<!-- IF S_EVENTVAL_ONLOAD -->
 	$(function(){

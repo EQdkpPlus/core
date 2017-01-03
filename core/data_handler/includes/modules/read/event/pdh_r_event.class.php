@@ -44,6 +44,7 @@ if(!class_exists('pdh_r_event')){
 			'eipools'	=> array('itempools',	array('%event_id%'), array()),
 			'evalue'	=> array('value', array('%event_id%'), array()),
 			'eventedit'	=> array('editicon', array('%event_id%', '%link_url%', '%link_url_suffix%'),	array()),
+			'edefitempool' => array('def_itempool', array('%event_id%'), array()),
 		);
 
 		public function reset(){
@@ -60,12 +61,13 @@ if(!class_exists('pdh_r_event')){
 
 			$this->events = array();
 
-			$objQuery = $this->db->query("SELECT event_id, event_name, event_value, event_icon FROM __events;");
+			$objQuery = $this->db->query("SELECT event_id, event_name, event_value, event_icon, default_itempool FROM __events;");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					$this->events[$row['event_id']]['name'] = $row['event_name'];
 					$this->events[$row['event_id']]['value'] = $row['event_value'];
 					$this->events[$row['event_id']]['icon'] = $row['event_icon'];
+					$this->events[$row['event_id']]['default_itempool'] = (int)$row['default_itempool'];
 				}
 				$this->pdc->put('pdh_events_table', $this->events, null);
 			}
@@ -93,6 +95,15 @@ if(!class_exists('pdh_r_event')){
 
 		public function get_value($event_id){
 			return $this->events[$event_id]['value'];
+		}
+		
+		public function get_def_itempool($event_id){
+			return $this->events[$event_id]['default_itempool'];
+		}
+		
+		public function get_html_def_itempool($event_id){
+			$ip_id = $this->get_def_itempool($event_id);
+			return $this->pdh->get('itempool', 'name', array($ip_id));
 		}
 
 		public function get_html_value($event_id){

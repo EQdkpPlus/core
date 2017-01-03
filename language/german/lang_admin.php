@@ -1821,5 +1821,6 @@ $lang = array(
 "bulkedit" => "Mehrere bearbeiten",
 "selected_items" => "ausgewählte Items",
 "editor_theme" => "Editor-Design",
+"default_itempool" => "Standard-Itempool",
 );
 ?>
