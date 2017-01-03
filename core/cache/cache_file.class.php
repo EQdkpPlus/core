@@ -37,6 +37,7 @@ if(!class_exists( "cache_file")){
 
 		public function put( $key, $data, $ttl, $global_prefix, $compress = false ) {
 			$key = md5($global_prefix.$key);
+			$this->pdl->log( 'pdc_query', '', $this->cache_folder.$key[0].DIRECTORY_SEPARATOR.$key.$this->file_extension.', size: '.human_filesize(sizeof($data)));
 			$this->pfh->FolderPath( 'data'.DIRECTORY_SEPARATOR.$key[0], 'cache' );
 			if( $compress ) {
 				$ret = $this->pfh->putContent($this->cache_folder.$key[0].DIRECTORY_SEPARATOR.$key.$this->file_extension, gzcompress( serialize( $data ), 9 ));
@@ -48,6 +49,7 @@ if(!class_exists( "cache_file")){
 		public function get( $key, $global_prefix, $uncompress = false ) {
 			$key = md5($global_prefix.$key);
 			$filename = $this->cache_folder.$key[0].DIRECTORY_SEPARATOR.$key.$this->file_extension;
+			$this->pdl->log( 'pdc_query', '', $filename.', size: '.human_filesize(filesize($filename)));
 			$result = false;
 			if(file_exists($filename)){
 				$result = file_get_contents($filename);

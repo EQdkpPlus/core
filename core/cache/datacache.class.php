@@ -67,8 +67,11 @@ if( !class_exists( "datacache" ) ) {
 			}
 				
 			//pdl fun
-			if( !$this->pdl->type_known( "pdc_query" ) )
-				$this->pdl->register_type( "pdc_query", null, array( $this, 'pdl_html_format_pdc_query' ), array( 2, 3, 4 ) );
+			if( !$this->pdl->type_known( "pdc_query" ) ){
+				$blnLogToFile = (defined('DEBUG') && DEBUG > 3) ? true : false;
+				$this->pdl->register_type( "pdc_query", null, array( $this, 'pdl_html_format_pdc_query' ), array( 2, 3, 4 ), $blnLogToFile, true);
+			}
+				
 		}
 
 		function save_expiry_dates(){
@@ -113,13 +116,15 @@ if( !class_exists( "datacache" ) ) {
 
 			if($ttl == null)
 				$ttl = $this->default_ttl;
+			
+			$this->pdl->log( 'pdc_query', 'PUT', $global_prefix.$key );
+				
 			$ret = $this->cache->put( $key, $data, $ttl, $global_prefix, $compress );
 
 			//write successful
 			if($ret !== false){
 				$this->expiry_dates[$global_prefix][$key] = time() + $ttl;
 				$this->save_expiry_dates();
-				$this->pdl->log( 'pdc_query', 'PUT', $global_prefix.$key );
 			}else{
 				$this->pdl->log( 'pdc_query', 'PUT ERROR', $global_prefix.$key );
 			}
