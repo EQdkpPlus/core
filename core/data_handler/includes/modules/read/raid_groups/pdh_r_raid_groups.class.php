@@ -41,7 +41,7 @@ if ( !class_exists( "pdh_r_raid_groups" ) ){
 
 		public function init(){
 			$this->raid_groups = array();
-			
+
 			$objQuery = $this->db->query("SELECT * FROM __groups_raid ORDER BY groups_raid_sortid ASC, groups_raid_id ASC;");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
@@ -52,7 +52,7 @@ if ( !class_exists( "pdh_r_raid_groups" ) ){
 					$this->raid_groups[$row['groups_raid_id']]['default']	= $row['groups_raid_default'];
 					$this->raid_groups[$row['groups_raid_id']]['sortid']	= $row['groups_raid_sortid'];
 					$this->raid_groups[$row['groups_raid_id']]['color']		= $row['groups_raid_color'];
-					
+
 					if ($row['groups_raid_default'] == 1){
 						$this->raid_standard_group = $row['groups_raid_id'];
 					}
@@ -73,7 +73,7 @@ if ( !class_exists( "pdh_r_raid_groups" ) ){
 		}
 
 		public function get_color($groups_raid_id){
-			return (isset($this->raid_groups[$groups_raid_id]['color'])) ? $this->raid_groups[$groups_raid_id]['color'] : '#000000';
+			return (isset($this->raid_groups[$groups_raid_id]['color'])) ? $this->raid_groups[$groups_raid_id]['color'] : false;
 		}
 
 		public function get_desc($groups_raid_id){

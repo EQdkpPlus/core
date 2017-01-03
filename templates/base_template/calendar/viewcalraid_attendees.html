@@ -30,7 +30,7 @@
 						{raidstatus.classes.status.NAME}
 						<!-- IF raidstatus.classes.status.EXTERNALAPPL --><!-- IF raidstatus.classes.status.TOBEAPPROVED --><i class="fa fa-external-link-square icon-color-red"><!-- ELSE --><i class="fa fa-check-square icon-color-green"><!-- ENDIF --></i><!-- ENDIF -->
 					</div>
-					
+
 					<div class="guest_info">
 						<i class="fa fa-info-circle fa-lg coretip-large" data-coretip='{raidstatus.classes.status.TOOLTIP}'></i>
 						<i class="fa fa-pencil fa-lg hand" onclick="EditGuest(11);"></i>
@@ -47,7 +47,7 @@
 
 					<div class="attendee_name">
 						<!-- IF RAIDMODE == 'role' and raidstatus.classes.status.CLASSICON -->{raidstatus.classes.status.CLASSICON}<!-- ENDIF -->
-						<a class="normal <!-- IF COLORED_NAMESBYCLASS -->class_{raidstatus.classes.status.CLASSID}<!-- ENDIF -->" href="{raidstatus.classes.status.MEMBERLINK}" target="_blank" style="color:{raidstatus.classes.status.GROUPCOLOR};">{raidstatus.classes.status.NAME}</a>
+						<a class="normal <!-- IF COLORED_NAMESBYCLASS -->class_{raidstatus.classes.status.CLASSID}<!-- ENDIF -->" href="{raidstatus.classes.status.MEMBERLINK}" target="_blank"<!-- IF raidstatus.classes.status.GROUPCOLOR --> style="color:{raidstatus.classes.status.GROUPCOLOR};"<!-- ENDIF -->>{raidstatus.classes.status.NAME}</a>
 						<!-- IF SHOW_RANDOMVALUE -->
 						<!-- IF raidstatus.classes.status.RANDOM gt 0 -->
 						[{raidstatus.classes.status.RANDOM}]
@@ -57,7 +57,7 @@
 
 					<div class="attendee_info">
 						<i class="fa fa-info-circle fa-lg coretip-large" data-coretip='{raidstatus.classes.status.TOOLTIP}'></i>
-						
+
 						<!-- IF NOTEPERMISSION -->
 						<!-- IF raidstatus.classes.status.NOTE_PUBLIC -->
 						<i class="fa <!-- IF raidstatus.classes.status.ADMINNOTE -->fa-user-secret<!-- ELSE -->fa-comment<!-- ENDIF --> fa-lg coretip<!-- IF IS_OPERATOR --> hand<!-- ENDIF -->" data-coretip="{raidstatus.classes.status.NOTE_TT}"></i>

@@ -2301,7 +2301,7 @@ fieldset.raidcal_infos dt, fieldset.moderation_panel dt {
 	.attendee_box.char_edit	{ border:1px solid #ff9d55; }
 	.attendee_select		{ flex:0 0 22px; }
 	.attendee_name			{ flex:2 1 100%; color: @eqdkpContentFontColor; overflow:hidden; text-overflow:ellipsis; }
-	.attendee_name a		{ color:@eqdkpContentFontColor; overflow:hidden; text-overflow:ellipsis; vertical-align:middle; }
+	.attendee_name a		{ color:inherit; overflow:hidden; text-overflow:ellipsis; vertical-align:middle; }
 	.attendee_info			{ flex:1 0 auto; padding-right:3px; }
 	.attendee_info .fa-info	{ padding-right:5px; }
 
