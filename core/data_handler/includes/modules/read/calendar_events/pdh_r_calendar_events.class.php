@@ -420,6 +420,13 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			return 	($bbcode2html) ?  $this->bbcode->toHTML($this->events[$id]['notes']) : $this->bbcode->remove_bbcode($this->events[$id]['notes']);
 		}
 
+		public function get_html_notes($id){
+			if($this->get_notes($id,true) != ''){
+				return 	'<span class="coretip-sticky" data-coretip="'.htmlspecialchars($this->get_notes($id,true)).'" data-coretiphead="Notiz"><i class="fa fa-comment fa-lg"></i></span>';
+			}
+			return 	'<span class="icon-grey"><i class="fa fa-comment fa-lg"></i></span>';
+		}
+
 		public function get_repeating($id){
 			return ($this->events[$id]['repeating']) ? $this->events[$id]['repeating'] : 0;
 		}

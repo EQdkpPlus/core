@@ -363,6 +363,7 @@ class core extends gen_class {
 
 			// global qtip
 			$this->jquery->qtip(".coretip", "return $(this).attr('data-coretip');", array('contfunc'=>true, 'width'=>200));
+			$this->jquery->qtip(".coretip-sticky", "return $(this).attr('data-coretip');", array('contfunc'=>true, 'width'=>200, 'sticky'=>true));
 			$this->jquery->qtip(".coretip-large", "return $(this).attr('data-coretip');", array('contfunc'=>true, 'width'=>400));
 			$this->jquery->qtip(".coretip-left", "return $(this).attr('data-coretip');", array('contfunc'=>true, 'width'=>280, 'my'	=> 'top right', 'at' => 'bottom right'));
 			$this->jquery->qtip(".coretip-right", "return $(this).attr('data-coretip');", array('contfunc'=>true, 'width'=>280, 'my'	=> 'top left', 'at' => 'bottom left'));
@@ -917,7 +918,7 @@ class core extends gen_class {
 			if(isset($arrLinkData['check'])){
 				$blnAuthCheck = (is_array($arrLinkData['check'])) ? $this->user->check_auths($arrLinkData['check'][1], $arrLinkData['check'][0], false) : $this->user->check_auth($arrLinkData['check'], false);
 			}
-			
+
 			if ( (empty($arrLinkData['check'])) || ($blnAuthCheck)) {
 				if (isset($arrLinkData['signedin'])){
 					$perm = true;
