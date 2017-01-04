@@ -73,8 +73,8 @@
 						}
 						tmpttcontent += "<div class='calendartt_allday'>{L_calendar_allday}</div>";
 					}else{
-						tmpttcontent = "<div class='calendartt_start'>{L_calendar_startdate}: "+moment(event.start).format('{JS_DATEFORMAT}, {JS_TIMEFORMAT}')+"</div>";
-						tmpttcontent += "<div class='calendartt_end'>{L_calendar_enddate}: "+moment(event.end).format('{JS_DATEFORMAT}, {JS_TIMEFORMAT}')+"</div>";
+						tmpttcontent = "<div class='calendartt_start'>{L_calendar_startdate}: "+moment(event.start).format('{JS_DATEFORMAT}, '+mmocms_user_timeformat)+"</div>";
+						tmpttcontent += "<div class='calendartt_end'>{L_calendar_enddate}: "+moment(event.end).format('{JS_DATEFORMAT}, '+mmocms_user_timeformat)+"</div>";
 					}
 					if(event.note){
 						tmpttcontent += "<div class='calendartt_note'>{L_note}: "+event.note+"</div>";
@@ -144,8 +144,8 @@
 				}else{
 					tmpttcontent = '';
 					tmpttcontent += (event.raidleader) ? "<div class='calendartt_raidleader'>{L_raidevent_raidleader}: "+event.raidleader+"</div><br/>" : '';
-					tmpttcontent += "<div class='calendartt_start'>{L_calendar_startdate}: "+moment(event.start).format('{JS_DATEFORMAT}, {JS_TIMEFORMAT}')+"</div>";
-					tmpttcontent += "<div class='calendartt_end'>{L_calendar_enddate}: "+moment(event.end).format('{JS_DATEFORMAT}, {JS_TIMEFORMAT}')+"</div>";
+					tmpttcontent += "<div class='calendartt_start'>{L_calendar_startdate}: "+moment(event.start).format('{JS_DATEFORMAT}, '+mmocms_user_timeformat)+"</div>";
+					tmpttcontent += "<div class='calendartt_end'>{L_calendar_enddate}: "+moment(event.end).format('{JS_DATEFORMAT}, '+mmocms_user_timeformat)+"</div>";
 
 					tmpttcontent += (event.rstatusdata) ? "<br/><div class='calendartt_raidcount'>"+event.rstatusdata+"</div>" : '';
 
