@@ -305,15 +305,18 @@ if(!class_exists('pdh_r_item')){
 		
 		public function get_itemids4userid($user_id){
 			$arrMemberList = $this->pdh->get('member', 'connection_id', array($user_id));
+			if(!$arrMemberList || count($arrMemberList) == 0) return array();
+			
+			$objQuery = $this->db->prepare("SELECT item_id FROM __items WHERE member_id :in")->in($arrMemberList)->execute();
+			
 			$items4member = array();
-			if (is_array($this->index)){
-				foreach($this->index as $item_id){
-					$buyer = $this->get_buyer($item_id);
-					if($buyer && in_array($buyer, $arrMemberList)){
-						$items4member[] = $item_id;
-					}
+			
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$items4member[] = (int)$row['item_id'];
 				}
 			}
+			
 			return $items4member;
 		}
 

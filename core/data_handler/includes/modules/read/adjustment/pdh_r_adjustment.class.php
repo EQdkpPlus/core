@@ -168,14 +168,15 @@ if(!class_exists('pdh_r_adjustment')){
 
 		public function get_adjsofuser($user_id){
 			$arrMemberList = $this->pdh->get('member', 'connection_id', array($user_id));
+			if(!$arrMemberList || count($arrMemberList) == 0) return array();
+			
+			$objQuery = $this->db->prepare("SELECT adjustment_id FROM __adjustments WHERE member_id :in")->in($arrMemberList)->execute();
+			
 			$adjustment_ids = array();
 			
-			if (is_array($this->index)){
-				foreach($this->index as $adj_id){
-					$intMember = $this->get_member($adj_id);
-					if(in_array($intMember, $arrMemberList)){
-						$adjustment_ids[] = $adj_id;
-					}
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$adjustment_ids[] = (int)$row['adjustment_id'];
 				}
 			}
 			

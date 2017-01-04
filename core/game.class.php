@@ -581,12 +581,14 @@ class game extends gen_class {
 			$classes = $this->get_primary_classes(array('id_0'));
 			if (count($this->class_colors[$style_id]) != count($classes)){
 				$arrGameColors = $this->gameinfo()->get_class_colors();
-				foreach($classes as $key => $val){
-					if (!isset($this->class_colors[$style_id][$key]) && isset($arrGameColors[$key])){
-						$this->pdh->put('class_colors', 'add_classcolor', array($style_id, $key, $arrGameColors[$key]));
+				if(!$arrGameColors){
+					foreach($classes as $key => $val){
+						if (!isset($this->class_colors[$style_id][$key]) && isset($arrGameColors[$key])){
+							$this->pdh->put('class_colors', 'add_classcolor', array($style_id, $key, $arrGameColors[$key]));
+						}
 					}
+					$this->pdh->process_hook_queue();
 				}
-				$this->pdh->process_hook_queue();
 			}
 
 			if(!is_array($this->class_colors[$style_id])) {

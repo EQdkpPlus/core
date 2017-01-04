@@ -76,6 +76,12 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			if($this->articles !== NULL && $this->categories !== NULL && $this->alias !== NULL && $this->pageobjects !== NULL && $this->tags !== NULL){
 				return true;
 			}
+			
+			$this->categories = array();
+			$this->articles = array();
+			$this->alias = array();
+			$this->pageobjects = array();
+			$this->tags = array();
 
 			$objQuery = $this->db->query("SELECT * FROM __articles ORDER BY category ASC, sort_id ASC");
 			if($objQuery){
