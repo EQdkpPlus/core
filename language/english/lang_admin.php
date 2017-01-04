@@ -632,7 +632,6 @@ $lang = array(
 	"adminc_support_tour" => 'You are new to EQdkp Plus? You never ever added a raid or gave dkp points? You are just curious?<br /><b><a href=\'?tour=start\'>Then NOW start your tour through EQdkp Plus</a></b>',
 	"title_manageusers" => 'Manage Users',
 	"title_mysqlinfo" => 'MySQL Info',
-	"title_resetdkp" => 'Reset',
 	"portal" => 'Portal',
 	"plug_dep_title" => 'Dependencies',
 	"plug_dep_plusv" => 'Plus version',
@@ -988,7 +987,6 @@ $lang = array(
 	"core_sett_f_help_sp_opengraph_tags" => 'Social Network can identify information more easier, e.g. when sharing News',
 	"core_sett_f_sp_whatsapp_share" => "Share in WhatsApp",
 	"core_sett_f_help_sp_whatsapp_share" => "The WhatsApp Share-Button will be visible on mobile devices only",
-	"reset_header" => 'Delete data from EQdkp',
 	"reset_infotext" => 'WARNING! Deletion can\'t be revoked. All inserted data will be lost forever! <br /> Before performing this deletion, make a backup!',
 	"reset_type" => 'Type of data',
 	"reset_sec" => 'Confirmation',
@@ -1818,6 +1816,13 @@ $lang = array(
 		"selected_items" => "selected Items",
 		"editor_theme" => "Editor-Theme",
 		"default_itempool" => "Default Itempool",
+		"consolidate" => "Consolidation",
+		"consolidate_reset" => "Consolidation & Reset",
+		"consolidate_error" => "An error occured while consolidating. No data has been deleted. Please check the created adjustments.",
+		"consolidate_success" => "The consolidation finished. Before the consolidation, a backup was created.",
+		"consolidate_info"	=> "A consolidation sums up all items, raids and adjustments of the selected event to one single adjustment for a characer. After that, all items, raids and adjustments for this event will get deleted.<br />This is usefull if you want to keep standings from an old MultiDKP Pool, but don't want to keep all the data.<br />Before the consolidation, a backup will be created.",
+		"consolidate_detele_warning" => "Are you sure you want to start the consolidation for the selected event?",
+		"consolidate_start"	=> "Sart consolidation",
 );
 
 ?>

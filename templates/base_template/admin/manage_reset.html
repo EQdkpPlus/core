@@ -2,37 +2,74 @@
 	<ul class="breadcrumb">
 		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
 		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
-		<li class="current"><a>{L_reset_header}</a></li>
+		<li class="current"><a>{L_consolidate_reset}</a></li>
 	</ul>
 	<div class="clear"></div>
 </div>
-<div class="contentHeader">
-	<h1 class="contentTitle">{L_reset_header}</h1>
-</div>	
-<form method="post" action="{ACTION}" name="post">
-	<div class="infobox infobox-large infobox-red clearfix">
-		<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> {L_reset_infotext}
-	</div>
 
-	<table class="table fullwidth colorswitch hoverrows">  
-		<tr>
-			<th style="width:10px" class="left"><input type="checkbox" id="reset_selectall" /></th>
-			<th class="left">{L_reset_type}</th>
-			<th class="left">{L_description}</th>
-		</tr>
-		<!-- BEGIN reset_row -->
-		<tr>
-			<td class="nowrap">
-				<input type="checkbox" name="selected[]" value="{reset_row.VAL_NAME}" id="cb_{reset_row.VAL_NAME}" class="cb_select_class" />
-			</td>
-			<td class="nowrap"><strong>{reset_row.TYPE}</strong></td>
-			<td >{reset_row.DISC}</td>
-		</tr>
-		<!-- END reset_row -->
-	</table>
-	<div class="contentFooter">
-		<button class="mainoption" name="del" type="button" onclick="delete_warning();" id="delete"><i class="fa fa-times"></i>{L_delete_selected}</button>
-		<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
+
+<div id="reset_tabs">
+<ul>
+		<li><a href='#consolidate'><span>{L_consolidate}</span></a></li>
+		<li><a href='#reset'><span>{L_reset}</span></a></li>
+</ul>
+<div id="consolidate">
+	<div class="contentHeader">
+		<h1 class="contentTitle">{L_consolidate}</h1>
 	</div>
-{CSRF_TOKEN}
-</form>
+	<div class="infobox infobox-large infobox-blue clearfix">
+			<i class="fa fa-info-circle fa-4x pull-left"></i> {L_consolidate_info}
+		</div>
+	
+	<form method="post" action="{ACTION}" name="post" id="consolidate_form" name="consolidate_form">
+		<fieldset class="settings">
+		<dl>
+			<dt><label>{L_event}</label></dt>
+			<dd>{DD_EVENT}</dd>
+		</dl>
+		</fieldset>
+	
+		<input type="hidden" name="event" value="1" />
+		<button class="mainoption" type="button" onclick="consolidate_warning();"><i class="fa fa-lg fa-retweet"></i> {L_consolidate_start}</button>
+	{CSRF_TOKEN}
+	</form>
+
+</div>
+<div id="reset">
+	<div class="contentHeader">
+		<h1 class="contentTitle">{L_reset}</h1>
+	</div>
+	<form method="post" action="{ACTION}" name="post">
+		<div class="infobox infobox-large infobox-red clearfix">
+			<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> {L_reset_infotext}
+		</div>
+	
+		<table class="table fullwidth colorswitch hoverrows">  
+			<tr>
+				<th style="width:10px" class="left"><input type="checkbox" id="reset_selectall" /></th>
+				<th class="left">{L_reset_type}</th>
+				<th class="left">{L_description}</th>
+			</tr>
+			<!-- BEGIN reset_row -->
+			<tr>
+				<td class="nowrap">
+					<input type="checkbox" name="selected[]" value="{reset_row.VAL_NAME}" id="cb_{reset_row.VAL_NAME}" class="cb_select_class" />
+				</td>
+				<td class="nowrap"><strong>{reset_row.TYPE}</strong></td>
+				<td >{reset_row.DISC}</td>
+			</tr>
+			<!-- END reset_row -->
+			<tr>
+				<th style="width:10px" class="left"><input type="checkbox" name="backup" checked value="1"/></th>
+				<th class="left"><i class="fa fa-floppy-o fa-lg"></i> {L_backup_database}</th>
+				<th class="left"></th>
+			</tr>
+		</table>
+		<div class="contentFooter">
+			<button class="mainoption" name="del" type="button" onclick="delete_warning();" id="delete"><i class="fa fa-times"></i>{L_delete_selected}</button>
+			<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
+		</div>
+	{CSRF_TOKEN}
+	</form>
+</div>
+</div>

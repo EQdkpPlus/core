@@ -47,13 +47,111 @@ class reset_eqdkp extends page_generic {
 
 	public function __construct(){
 		$this->user->check_auth('a_reset');
-		parent::__construct(false, false, 'plain', null, '_class_');
+		
+		$handler = array(
+			'event' => array('process' => 'consolidate_event'),	
+		);
+		
+		parent::__construct(false, $handler, 'plain', null, '_class_');
 		$this->process();
+	}
+	
+	public function consolidate_event(){
+		$intEventID = $this->in->get('eventid', 0);
+		$arrMembers = $this->pdh->get('member', 'id_list', array(false, false, false));
+		
+		$blnError = false;
+		
+		$arrRaidIDs = $this->pdh->get('raid', 'raidids4eventid', array($intEventID));
+		
+		//Create Backup
+		$arrTables = $this->db->listTables();
+		foreach($arrTables as $name){
+			if (!$this->db->isEQdkpTable($name) || $name == $this->table_prefix.'logs') continue;
+			$tables[$name] = $name;
+		}
+			
+		$strBackupFile = $this->backup->createDatabaseBackup('zip', true, $tables, true);
+		
+		
+		foreach($arrMembers as $intMemberID){
+			//Raids
+			$objRaids = $this->db->prepare("SELECT SUM(r.raid_value) as summe FROM __raids r, __raid_attendees ra WHERE ra.raid_id = r.raid_id AND ra.member_id = ? AND r.event_id=?")->execute($intMemberID, $intEventID);
+			if($objRaids){
+				$arrResult = $objRaids->fetchAssoc();
+				$fltRaidValue = (float)$arrResult['summe'];
+			} else {
+				$blnError = true;
+				break;
+			}
+			
+			//Items
+			if(count($arrRaidIDs)){
+				$objItems = $this->db->prepare("SELECT SUM(i.item_value) as summe FROM __items i WHERE i.member_id=? AND i.raid_id :in")->in($arrRaidIDs)->execute($intMemberID);
+				if($objItems){
+					$arrResult = $objItems->fetchAssoc();
+					$fltItemValue = (float)$arrResult['summe'];
+				} else {
+					$blnError = true;
+					break;
+				}
+			} else $fltItemValue = 0;
+			
+			//Adjustments
+			if(count($arrRaidIDs)){
+				$objAdjustments = $this->db->prepare("SELECT SUM(a.adjustment_value) AS summe FROM __adjustments a WHERE a.member_id = ? AND (a.event_id=? OR a.raid_id :in)")->in($arrRaidIDs)->execute($intMemberID, $intEventID);
+			} else {
+				$objAdjustments = $this->db->prepare("SELECT SUM(a.adjustment_value) AS summe FROM __adjustments a WHERE a.member_id = ? AND a.event_id=?")->execute($intMemberID, $intEventID);
+			}
+			if($objAdjustments){
+				$arrResult = $objAdjustments->fetchAssoc();
+				$fltAdjValue = (float)$arrResult['summe'];
+			}else {
+				$blnError = true;
+				break;
+			}
+			
+			//Create consolidation Adjustment
+			$fltSum = $fltRaidValue - $fltItemValue + $fltAdjValue;
+			
+			if($fltSum != 0){
+				$blnResult = $this->pdh->put('adjustment', 'add_adjustment', array($fltSum, $this->user->lang('consolidate').' '.$this->time->user_date($this->time->time), $intMemberID, $intEventID, 0, $this->time->time));
+				if(!$blnResult){
+					$blnError = true;
+					break;
+				}
+			}
+		}
+		
+		if($blnError){
+			//Error Message
+			$this->core->message($this->user->lang('consolidate_error'), '', 'red');
+			
+			$this->pdh->process_hook_queue();
+		} else {
+			//Delete the data
+			$this->pdh->put('raid', 'delete_raidsofevent', array($intEventID));
+			
+			$this->db->prepare("DELETE FROM __adjustments WHERE event_id=? AND adjustment_date < ?")->execute($intEventID, $this->time->time-300);
+			
+			$this->pdh->process_hook_queue();
+			
+			$this->core->message($this->user->lang('consolidate_success'), '', 'green');
+		}
+
 	}
 
 	public function delete(){
 		//Make a backup
-		$this->backup->createDatabaseBackup('zip',true,false,true);
+		if($this->in->get('backup', 0)){
+			$arrTables = $this->db->listTables();
+			foreach($arrTables as $name){
+				if (!$this->db->isEQdkpTable($name) || $name == $this->table_prefix.'logs') continue;
+				$tables[$name] = $name;
+			}
+				
+			$strBackupFile = $this->backup->createDatabaseBackup('zip', true, $tables, true);
+		}
 
 		$this->toreset = $this->in->getArray('selected', 'string');
 		$log_action = array('{L_entries_reset}' => '');
@@ -148,6 +246,9 @@ class reset_eqdkp extends page_generic {
 			$this->jquery->Dialog($key.'_warning', $this->user->lang('attention'), array('message'=> $this->user->lang('reset_'.$key.'_warning'), 'custom_js'	=> $custom_js, 'height' => 260), 'confirm');
 		}
 		$this->confirm_delete($this->user->lang('reset_confirm'));
+	
+		$this->jquery->Dialog('consolidate_warning', '', array('custom_js'=>"$(\"#consolidate_form\").submit();", 'message'=>$this->user->lang('consolidate_detele_warning')), 'confirm');
+		
 
 		$this->tpl->add_js('$("#reset_selectall").click(function(){
 					var checked_status = this.checked;
@@ -155,9 +256,18 @@ class reset_eqdkp extends page_generic {
 						this.checked = checked_status;
 					});
 				});', 'docready');
+		
+		$this->jquery->Tab_header('reset_tabs');
+		
+		$events = $this->pdh->aget('event', 'name', 0, array($this->pdh->get('event', 'id_list')));
+		asort($events);
+		
+		$this->tpl->assign_vars(array(
+			'DD_EVENT' => new hdropdown('eventid', array('options' => $events)),
+		));
 
 		$this->core->set_vars(array(
-			'page_title'		=> $this->user->lang('title_resetdkp'),
+			'page_title'		=> $this->user->lang('consolidate_reset'),
 			'template_file'		=> 'admin/manage_reset.html',
 			'display'			=> true
 		));

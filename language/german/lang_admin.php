@@ -628,7 +628,6 @@ $lang = array(
 "adminc_support_tour" => "Du bist neu bei EQDKP-PLUS? Du hast noch nie Raids eingetragen oder DKP-Punkte vergeben? Du bist einfach nur neugierig?<br /><b><a href='?tour=start'>Dann starte jetzt die Tour durch das EQdkp Plus</a></b>",
 "title_manageusers" => "Benutzer verwalten",
 "title_mysqlinfo" => "MySQL Info",
-"title_resetdkp" => "EQdkp Plus zurücksetzen",
 "portal" => "Portal",
 "plug_dep_title" => "Abhängigkeiten",
 "plug_dep_plusv" => "Plus Version",
@@ -991,7 +990,6 @@ $lang = array(
 "core_sett_f_sp_socialshareprivacy" => "2 Klick-Lösung verwenden",
 "core_sett_f_sp_whatsapp_share" => "In WhatsApp teilen",
 "core_sett_f_help_sp_whatsapp_share" => "Der WhatsApp Teilen-Button wird nur auf mobilen Geräten eingeblendet",
-"reset_header" => "EQdkp Daten löschen",
 "reset_infotext" => "ACHTUNG, das Löschen der Daten kann nicht rückgängig gemacht werden! Alle eingetragenen Daten werden unwiderbringlich gelöscht!<br /> Lege unbedingt ein Backup des EQdkps an.",
 "reset_type" => "Datentyp",
 "reset_sec" => "Bestätigung",
@@ -1822,5 +1820,12 @@ $lang = array(
 "selected_items" => "ausgewählte Items",
 "editor_theme" => "Editor-Design",
 "default_itempool" => "Standard-Itempool",
+"consolidate" => "Konsolidierung",
+"consolidate_reset" => "Konsolidierung & Zurücksetzen",
+"consolidate_error" => "Bei der Konsolidierung ist ein Fehler aufgetreten. Es wurden keine Daten entfernt. Überprüfe bitte die eventuell angelegten Korrekturen.",
+"consolidate_success" => "Die Konsolidierung wurde durchgeführt. Zur Sicherheit wurde vor der Konsolidierung ein Backup angelegt.",
+"consolidate_info"	=> "Bei einer Konsolidierung werden für das ausgewählte Event alle Items, Raids und Korrekturen zu einer einzelnen Korrektur für einen Charakter zusammengefasst und die einzelnen Items, Raids und Korrekturen anschließend gelöscht.<br />Dies kann dazu verwendet werden, die Stände eines nicht mehr benötigten MultiDKP-Pools zu erhalten und zugleich die Datenmenge schlank zu halten.<br />Vor der Konsolidierung wird automatisch ein Backup angelegt.",
+"consolidate_detele_warning" => "Bist du sicher, dass du die Konsolidierung für das ausgewählte Event durchführen willst?",		
+"consolidate_start"	=> "Konsolidierung starten",		
 );
 ?>
