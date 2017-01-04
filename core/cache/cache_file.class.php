@@ -77,6 +77,15 @@ if(!class_exists( "cache_file")){
 				$ret = true;
 			}
 		}
+		
+		public function get_cachesize($key, $global_prefix){
+			$key = md5($global_prefix.$key);
+			$filename = $this->cache_folder.$key[0].DIRECTORY_SEPARATOR.$key.$this->file_extension;
+			if(file_exists($filename)){
+				return filesize($filename);
+			}
+			return 0;
+		}
 	}//end class
 }//end if
 ?>

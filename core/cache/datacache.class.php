@@ -144,6 +144,11 @@ if( !class_exists( "datacache" ) ) {
 			}
 			return $this->cache->get( $key, $global_prefix, $uncompress );
 		}
+		
+		public function get_cachesize($key, $global_prefix = false){
+			$global_prefix = $this->check_global_prefix();
+			return $this->cache->get_cachesize( $key, $global_prefix);
+		}
 
 		public function del( $key, $global_prefix = false ) {
 			$global_prefix = $this->check_global_prefix();

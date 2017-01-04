@@ -57,6 +57,10 @@ if ( !class_exists( "cache_apc" ) ){
 		public function uncompress(&$data){
 			return unserialize(gzuncompress($data));
 		}
+		
+		public function get_cachesize($key, $global_prefix){
+			return 0;
+		}
 	}//end class
 }//end if
 ?>

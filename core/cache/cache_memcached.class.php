@@ -67,6 +67,10 @@ if ( !class_exists( "cache_memcached" ) ) {
 			$this->memcached->delete($key);
 			return true;
 		}
+		
+		public function get_cachesize($key, $global_prefix){
+			return 0;
+		}
 	}//end class
 }//end if
 ?>

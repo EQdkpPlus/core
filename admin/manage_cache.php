@@ -34,6 +34,7 @@ class manage_cache extends page_generic {
 	public function __construct() {
 		$this->user->check_auth('a_cache_man'); 
 		$handler = array(
+			'del_key' => array('process' => 'delete_key', 'csrf'=>true),
 			'cache_clear' => array('process' => 'clear_cache', 'csrf'=>true),
 			'cache_cleanup' => array('process' => 'cleanup_cache', 'csrf'=>true),
 			'cache_save' => array('process' => 'save_cache', 'csrf'=>true)
@@ -45,6 +46,13 @@ class manage_cache extends page_generic {
 		if(class_exists('Memcached')) $this->usable_cache_types[] = 'memcached';
 		$this->process();
 	}
+	
+	public function delete_key(){
+		$this->pdc->del($this->in->get('del_key'));
+		$this->core->message($this->user->lang('delete').': '.$this->in->get('del_key'), $this->user->lang('success'), 'green');
+		$this->display();
+	}
+	
 	
 	public function clear_cache() {
 		$this->pdc->flush();
@@ -136,13 +144,15 @@ class manage_cache extends page_generic {
 					'KEY'				=> $key,
 					'EXPIRED'			=> ($expiry_date < $ctime) ? '<span class="negative">'.$this->user->lang('pdc_entity_expired').'</span>':'<span class="positive">'.$this->user->lang('pdc_entity_valid').'</span>',
 					'EXPIRY_DATE'		=> $this->time->date("Y-m-d H:i:s", $expiry_date),
+					'SIZE'				=> human_filesize($this->pdc->get_cachesize($key)),
 				));
 			}
 		}
 
 		$this->tpl->assign_vars(array (
 			'L_CACHE_TABLE_INFO'		=> sprintf($this->user->lang('pdc_table_info'), $this->user->lang("pdc_cache_name_$current_cache")),
-			'PDC_CACHE_ENABLED'			=> ($current_cache == 'none') ? false : true,  
+			'PDC_CACHE_ENABLED'			=> ($current_cache == 'none') ? false : true,
+			'CSRF_DEL_TOKEN'			=> $this->CSRFGetToken('del_key'),
 		));
 
 

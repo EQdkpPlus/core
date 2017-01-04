@@ -28,6 +28,7 @@ if( !interface_exists( "plus_datacache" ) ) {
 		public function put( $key, $data, $ttl, $global_prefix, $compress = false );
 		public function get( $key, $global_prefix, $uncompress = false );
 		public function del( $key, $global_prefix );
+		public function get_cachesize( $key,  $global_prefix );
 	}//end interface
 }
 //end if

@@ -142,17 +142,20 @@
 	</div>
 	<table class="table fullwidth colorswitch hoverrows">
 		<tr>
-			<th>{L_pdc_globalprefix}</th>
+			<th colspan="2">{L_pdc_globalprefix}</th>
 			<th>{L_pdc_entity}</th>
 			<th>{L_pdc_status}</th>
 			<th>{L_pdc_expire_time}</th>
+			<th>{L_pdc_size}</th>
 		</tr>
 		<!-- BEGIN cache_entity_list_row -->
 		<tr>
+			<td><a href="manage_cache.php{SID}&del_key={cache_entity_list_row.KEY}&link_hash={CSRF_DEL_TOKEN}"><i class="fa fa-lg fa-trash-o" ></i></a></td>
 			<td>{cache_entity_list_row.GLOBAL_PREFIX}</td>
 			<td>{cache_entity_list_row.KEY}</td>
 			<td>{cache_entity_list_row.EXPIRED}</td>
 			<td>{cache_entity_list_row.EXPIRY_DATE}</td>
+			<td>{cache_entity_list_row.SIZE}</td>
 		</tr>
 		<!-- END cache_entity_list_row -->
 	</table>
