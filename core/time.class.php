@@ -515,13 +515,17 @@ if (!class_exists("time")){
 		 * @return string	moment.js Format
 		 */
 		public function translateformat2momentjs($format){
+			/* Because str_replace replaces from left to right, it will also replace the replaced strings before.
+			 * As D is a search character, some strings will be replaced through K, which will be replaced with D at the end.
+			 */
+			
 			//php => momentjs
 			$types = array(
-				'd'		=> 'DD',
-				'z'		=> 'DDD',
+				'd'		=> 'KK', //KK as placeholder for DD
+				'z'		=> 'KKK', //KKK as placeholder for DDD
 				'l'		=> 'dddd',
 				'D'		=> 'ddd',
-				'j'		=> 'D',
+				'j'		=> 'K',
 				'm'		=> 'MM',
 				'n'		=> 'm',
 				'F'		=> 'MMMM',
@@ -529,14 +533,15 @@ if (!class_exists("time")){
 				'y'		=> 'YY',
 				'a'		=> 'a',
 				'A'		=> 'A',
-				'tt'		=> 'a',
-				'TT'		=> 'A',
+				'tt'	=> 'a',
+				'TT'	=> 'A',
 				'h'		=> 'hh',
 				'H'		=> 'HH',
 				'g'		=> 'h',
 				'G'		=> 'H',
 				'i'		=> 'mm',
-				's'		=> 'ss'
+				's'		=> 'ss',
+				'K'		=> 'D', //Replace Placeholder
 			);
 			return str_replace(array_keys($types), array_values($types), $format);
 		}
