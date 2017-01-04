@@ -450,7 +450,15 @@ if (!class_exists("time")){
 		 */
 		public function fromformat($string, $format=0) {
 			if($format === 0) $format = $this->user->style['date_notime_short'];
-			if($format === 1) $format = $this->user->style['date_notime_short'].' '.$this->user->style['time'];
+			if($format === 1){
+				$format = $this->user->style['date_notime_short'].' '.$this->user->style['time'];
+				if(strtolower(substr($this->user->style['time'],-1)) == 'a'){
+					if(strtolower(substr($string, -1)) != 'm'){
+						$string = $string.'M';
+					}
+					
+				}
+			}
 			if(function_exists('date_create_from_format')) {
 				if(!$this->check_format($string, $format)) return $this->time;
 				$dateTime = DateTimeLocale::createFromFormat($format, $string, $this->userTimeZone);
