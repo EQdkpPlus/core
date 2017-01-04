@@ -202,9 +202,10 @@ if(!class_exists('pdh_r_raid')){
 		public function get_raidids4memberid($member_id){
 			$objQuery = $this->db->prepare("SELECT raid_id FROM __raid_attendees WHERE member_id=? ORDER BY raid_id DESC")->execute($member_id);
 			$arrRaids = array();
+			$arrIndexMap = array_flip($this->index);
 			if ($objQuery){
 				while($row = $objQuery->fetchAssoc()){
-					if(!in_array((int)$row['raid_id'], $this->index)) continue;
+					if(!isset($arrIndexMap[(int)$row['raid_id']])) continue;
 					$arrRaids[] = $row['raid_id'];
 				}
 			}

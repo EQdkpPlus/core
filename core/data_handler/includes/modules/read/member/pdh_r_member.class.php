@@ -30,6 +30,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		public $data			= array();
 		public $cmfields		= array();
 		public $preset_lang		= array();
+		public $otherChars;
 
 		public $hooks = array(
 			'adjustment_update',
@@ -91,8 +92,10 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		public function reset(){
 			$this->pdc->del('pdh_members_table');
 			$this->pdc->del('pdh_member_connections_table');
+			$this->pdc->del('pdh_members_table_other_chars');
 			$this->data = NULL;
 			$this->member_connections = NULL;
+			$this->otherChars = NULL;
 		}
 
 		public function init(){
@@ -110,7 +113,8 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			//cached data not outdated?
 			$this->data 				= $this->pdc->get('pdh_members_table');
 			$this->member_connections	= $this->pdc->get('pdh_member_connections_table');
-			if($this->data !== NULL && $this->member_connections !== NULL){
+			$this->otherChars			= $this->pdc->get('pdh_members_table_other_chars');
+			if($this->data !== NULL && $this->member_connections !== NULL && $this->otherChars !== NULL){
 				return true;
 			}
 
@@ -174,7 +178,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 						$this->data[$bmd_row['member_id']]['name']				= $bmd_row['name'];
 						$this->data[$bmd_row['member_id']]['rank_id']			= $bmd_row['rank_id'];
 						$this->data[$bmd_row['member_id']]['status']			= $bmd_row['status'];
-						$this->data[$bmd_row['member_id']]['main_id']			= ($bmd_row['main_id'] > 0)? $bmd_row['main_id'] : $bmd_row['member_id'];
+						$this->data[$bmd_row['member_id']]['main_id']			= ($bmd_row['main_id'] > 0) ? $bmd_row['main_id'] : $bmd_row['member_id'];
 						$this->data[$bmd_row['member_id']]['creation_date']		= $bmd_row['creation_date'];
 						$this->data[$bmd_row['member_id']]['picture']			= $bmd_row['picture'];
 						$this->data[$bmd_row['member_id']]['notes']				= $bmd_row['notes'];
@@ -192,9 +196,16 @@ if ( !class_exists( "pdh_r_member" ) ) {
 								$this->data[$bmd_row['member_id']][$mmdata] = (isset($my_data[$mmdata])) ? $my_data[$mmdata] : '';
 							}
 						}
+						
+						if((int)$bmd_row['member_id'] != intval($this->data[$bmd_row['member_id']]['main_id']) && $this->data[$bmd_row['member_id']]['requested_del'] != '1' && $this->data[$bmd_row['member_id']]['require_confirm'] != '1'){
+							$intMainChar = intval($this->data[$bmd_row['member_id']]['main_id']);
+							if(!isset($this->otherChars[$intMainChar])) $this->otherChars[$intMainChar] = array();
+							$this->otherChars[$intMainChar][] = (int)$bmd_row['member_id'];
+						}
 					}
 				}
 				$this->pdc->put('pdh_members_table', $this->data, null);
+				$this->pdc->put('pdh_members_table_other_chars', $this->otherChars, null);
 			}
 		}
 
@@ -800,12 +811,18 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_other_members($member_id){
-			$twinks = array();
-			foreach($this->data as $id => $details){
-			if($details['main_id'] == $this->get_mainid($member_id) && $id != $member_id && $details['requested_del'] != '1' && $details['require_confirm'] != '1')
-				$twinks[] = $id;
-			}
-			return $twinks;
+			$intMainID = $this->get_mainid($member_id);
+			if(!isset($this->otherChars[$intMainID])) return array();
+			
+			$arrOthers = $this->otherChars[$intMainID];
+			//Add Main Char
+			if($member_id != $intMainID) $arrOthers[] = $intMainID;
+			
+			//Remove myself from the array
+			$mixMyKey = array_search($member_id, $arrOthers);
+			if($mixMyKey !== false) unset($arrOthers[$mixMyKey]);
+
+			return $arrOthers;
 		}
 
 		public function get_mainchar_radio($member_id){
