@@ -529,6 +529,8 @@ if (!class_exists("time")){
 				'y'		=> 'YY',
 				'a'		=> 'a',
 				'A'		=> 'A',
+				'tt'		=> 'a',
+				'TT'		=> 'A',
 				'h'		=> 'hh',
 				'H'		=> 'HH',
 				'g'		=> 'h',
