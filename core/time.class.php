@@ -452,12 +452,18 @@ if (!class_exists("time")){
 			if($format === 0) $format = $this->user->style['date_notime_short'];
 			if($format === 1){
 				$format = $this->user->style['date_notime_short'].' '.$this->user->style['time'];
+
+				/***************************************************************************
+				 * This workaround is for a and P instead of AM and PM. This is allowed for
+				 * timepicker and momentJS, but not common in PHP and causes the convertion
+				 * to fail. A and P is extended by the M to AM and PM.
+				 ***************************************************************************/
 				if(strtolower(substr($this->user->style['time'],-1)) == 'a'){
-					if(strtolower(substr($string, -1)) != 'm'){
+					if(strtolower(substr($string, -1)) == 'a' || strtolower(substr($string, -1)) == 'p'){
 						$string = $string.'M';
 					}
-					
 				}
+				// end of workaround
 			}
 			if(function_exists('date_create_from_format')) {
 				if(!$this->check_format($string, $format)) return $this->time;
