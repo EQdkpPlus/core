@@ -23,9 +23,9 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-class wsc3_bridge extends bridge_generic {
+class wbb5_bridge extends bridge_generic {
 	
-	public static $name = 'WSC 3.0';
+	public static $name = 'WBB 5.0 (WSC 3.0)';
 	
 	public $data = array(
 		//Data
@@ -421,6 +421,7 @@ class wsc3_bridge extends bridge_generic {
 		'ipb2',		// Invision Power Board 2.x
 		'ipb3',		// Invision Power Board 3.x
 		'mybb1',	// MyBB 1.x
+		
 		'smf1',		// Simple Machines Forum 1.x
 		'smf2',		// Simple Machines Forum 2.x
 		'vb3',		// vBulletin 3.x
@@ -429,7 +430,16 @@ class wsc3_bridge extends bridge_generic {
 		'wbb2',		// WoltLab Burning Board 2.x
 		'wcf1',		// WoltLab Community Framework 1.x
 		'wcf2',		// WoltLab Community Framework 2.x
-		'xf1'		// XenForo 1.x
+		'xf1',		// XenForo 1.x
+				
+			'phpbb3',	// phpBB 3.x
+			'phpass',	// phpass Portable Hashes
+			'xf12',		// XenForo 1.2+
+			'joomla1',	// Joomla 1.x
+			'joomla2',	// Joomla 2.x
+			'joomla3',	// Joomla 3.x
+			'phpfox3',	// phpFox 3.x
+			'cryptMD5',
 	);
 	
 	/**
@@ -451,7 +461,15 @@ class wsc3_bridge extends bridge_generic {
 	 * @return	boolean
 	 */
 	public static function isSupported($type) {
-		return in_array($type, self::$supportedEncryptionTypes);
+		if (in_array($type, self::$supportedEncryptionTypes)){
+			return true;
+		}
+		
+		if (preg_match('~^wcf1e[cms][01][ab][01]$~', $type)) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -461,7 +479,7 @@ class wsc3_bridge extends bridge_generic {
 	 * @return	boolean
 	 */
 	public static function isBlowfish($hash) {
-		return (preg_match('#^\$2[afx]\$#', $hash) ? true : false);
+		return (preg_match('#^\$2[afxy]\$#', $hash) ? true : false);
 	}
 	
 	/**
@@ -501,14 +519,23 @@ class wsc3_bridge extends bridge_generic {
 		$dbHash = substr($dbHash, strlen($type));
 		
 		// check for salt
-		$salt = '';
-		if (($pos = strrpos($dbHash, ':')) !== false) {
-			$salt = substr(substr($dbHash, $pos), 1);
-			$dbHash = substr($dbHash, 1, ($pos - 1));
+		$parts = explode(':', $dbHash, 2);
+		if (count($parts) == 2) {
+			list($dbHash, $salt) = $parts;
+		}
+		else {
+			$dbHash = $parts[0];
+			$salt = '';
 		}
 		
 		// compare hash
-		return call_user_func('self::'.$type, $username, $password, $salt, $dbHash);
+		if (in_array($type, self::$supportedEncryptionTypes)) {
+			return call_user_func('\wcf\util\PasswordUtil::'.$type, $username, $password, $salt, $dbHash);
+		}
+		else {
+			// WCF 1.x with different encryption
+			return self::wcf1e($type, $password, $salt, $dbHash);
+		}
 	}
 	
 	/**
@@ -520,11 +547,11 @@ class wsc3_bridge extends bridge_generic {
 	public static function detectEncryption($hash) {
 		if (($pos = strpos($hash, ':')) !== false) {
 			$type = substr($hash, 0, $pos);
-			if (in_array($type, self::$supportedEncryptionTypes)) {
+			if (self::isSupported($type)) {
 				return $type;
 			}
 		}
-		
+	
 		return 'unknown';
 	}
 	
@@ -798,6 +825,215 @@ class wsc3_bridge extends bridge_generic {
 			return self::secureCompare($dbHash, hash('sha256', hash('sha256', $password) . $salt));
 		}
 		
+		return false;
+	}
+	
+	/**
+	 * Validates the password hash for phpBB 3.x (phpbb3).
+	 *
+	 * @param	string		$username
+	 * @param	string		$password
+	 * @param	string		$salt
+	 * @param	string		$dbHash
+	 * @return	boolean
+	 */
+	protected static function phpbb3($username, $password, $salt, $dbHash) {
+		return self::phpass($username, $password, $salt, $dbHash);
+	}
+	
+	/**
+	 * Validates the password hash for phpass portable hashes (phpass).
+	 *
+	 * @param	string		$username
+	 * @param	string		$password
+	 * @param	string		$salt
+	 * @param	string		$dbHash
+	 * @return	boolean
+	 */
+	protected static function phpass($username, $password, $salt, $dbHash) {
+		if (mb_strlen($dbHash) !== 34) {
+			return self::secureCompare(md5($password), $dbHash);
+		}
+	
+		$hash_crypt_private = function ($password, $setting) {
+			static $itoa64 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+				
+			$output = '*';
+				
+			// Check for correct hash
+			if (substr($setting, 0, 3) !== '$H$' && substr($setting, 0, 3) !== '$P$') {
+				return $output;
+			}
+				
+			$count_log2 = strpos($itoa64, $setting[3]);
+				
+			if ($count_log2 < 7 || $count_log2 > 30) {
+				return $output;
+			}
+				
+			$count = 1 << $count_log2;
+			$salt = substr($setting, 4, 8);
+				
+			if (strlen($salt) != 8) {
+				return $output;
+			}
+				
+			$hash = md5($salt . $password, true);
+			do {
+				$hash = md5($hash . $password, true);
+			}
+			while (--$count);
+				
+			$output = substr($setting, 0, 12);
+			$hash_encode64 = function ($input, $count, &$itoa64) {
+				$output = '';
+				$i = 0;
+	
+				do {
+					$value = ord($input[$i++]);
+					$output .= $itoa64[$value & 0x3f];
+						
+					if ($i < $count) {
+						$value |= ord($input[$i]) << 8;
+					}
+						
+					$output .= $itoa64[($value >> 6) & 0x3f];
+						
+					if ($i++ >= $count) {
+						break;
+					}
+						
+					if ($i < $count) {
+						$value |= ord($input[$i]) << 16;
+					}
+						
+					$output .= $itoa64[($value >> 12) & 0x3f];
+						
+					if ($i++ >= $count) {
+						break;
+					}
+						
+					$output .= $itoa64[($value >> 18) & 0x3f];
+				}
+				while ($i < $count);
+	
+				return $output;
+			};
+				
+			$output .= $hash_encode64($hash, 16, $itoa64);
+				
+			return $output;
+		};
+	
+		return self::secureCompare($hash_crypt_private($password, $dbHash), $dbHash);
+	}
+	
+	/**
+	 * Validates the password hash for XenForo 1.2+ (xf12).
+	 *
+	 * @param	string		$username
+	 * @param	string		$password
+	 * @param	string		$salt
+	 * @param	string		$dbHash
+	 * @return	boolean
+	 */
+	protected static function xf12($username, $password, $salt, $dbHash) {
+		if (self::secureCompare($dbHash, self::getSaltedHash($password, $dbHash))) {
+			return true;
+		}
+	
+		return false;
+	}
+	
+	/**
+	 * Validates the password hash for Joomla 1.x (kunea)
+	 *
+	 * @param	string		$username
+	 * @param	string		$password
+	 * @param	string		$salt
+	 * @param	string		$dbHash
+	 * @return	boolean
+	 */
+	protected static function joomla1($username, $password, $salt, $dbHash) {
+		if (self::secureCompare($dbHash, md5($password . $salt))) {
+			return true;
+		}
+	
+		return false;
+	}
+	
+	/**
+	 * Validates the password hash for Joomla 2.x (kunea)
+	 *
+	 * @param	string		$username
+	 * @param	string		$password
+	 * @param	string		$salt
+	 * @param	string		$dbHash
+	 * @return	boolean
+	 */
+	protected static function joomla2($username, $password, $salt, $dbHash) {
+		return self::joomla1($username, $password, $salt, $dbHash);
+	}
+	
+	/**
+	 * Validates the password hash for Joomla 3.x (kunea)
+	 *
+	 * @param	string		$username
+	 * @param	string		$password
+	 * @param	string		$salt
+	 * @param	string		$dbHash
+	 * @return	boolean
+	 */
+	protected static function joomla3($username, $password, $salt, $dbHash) {
+		return self::joomla1($username, $password, $salt, $dbHash);
+	}
+	
+	/**
+	 * Validates the password hash for phpFox 3.x
+	 * Merge phpfox_user.password and phpfox_user.password_salt with ':' before importing all data row values
+	 * See PasswordUtil::checkPassword() for more info
+	 *
+	 * @param	string		$username
+	 * @param	string		$password
+	 * @param	string		$salt
+	 * @param	string		$dbHash
+	 * @return	boolean
+	 */
+	protected static function phpfox3($username, $password, $salt, $dbHash) {
+		if (self::secureCompare($dbHash, md5(md5($password) . md5($salt)))) {
+			return true;
+		}
+			
+		return false;
+	}
+	
+	/**
+	 * Validates the password hash for MD5 mode of crypt()
+	 *
+	 * @param	string		$username
+	 * @param	string		$password
+	 * @param	string		$salt
+	 * @param	string		$dbHash
+	 * @return	boolean
+	 */
+	protected static function cryptMD5($username, $password, $salt, $dbHash) {
+		if (self::secureCompare($dbHash, self::getSaltedHash($password, $dbHash))) {
+			return true;
+		}
+	
+		return false;
+	}
+	
+	/**
+	 * Returns false.
+	 *
+	 * @param	string		$username
+	 * @param	string		$password
+	 * @param	string		$salt
+	 * @param	string		$dbHash
+	 * @return	boolean
+	 */
+	protected static function invalid($username, $password, $salt, $dbHash) {
 		return false;
 	}
 
