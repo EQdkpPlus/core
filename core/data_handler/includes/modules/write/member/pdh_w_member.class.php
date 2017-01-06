@@ -251,10 +251,14 @@ if ( !class_exists( "pdh_w_member" ) ) {
 		public function update_connection($member_id, $user_id=0){
 			$user_id	= ($user_id == 0) ? $this->user->data['user_id'] : $user_id;
 			$userchars = $this->pdh->get('member', 'connection_id', array($user_id));
+			$arrChangedMembers = array();
 			
 			//Change Mainid of all associated chars
-			foreach ($userchars as $charid){
-					$this->change_mainid((int)$charid, (int)$charid);
+			if($userchars && is_array($userchars)){
+				foreach ($userchars as $charid){
+						$this->change_mainid((int)$charid, (int)$charid);
+						$arrChangedMembers[] = $charid;
+				}
 			}
 		
 			// Users -> Members associations
@@ -268,13 +272,15 @@ if ( !class_exists( "pdh_w_member" ) ) {
 						'member_id' => $memberid,
 						'user_id'	=> $user_id,
 					);
+					
+					$arrChangedMembers[] = $memberid;
 				}
 				
 				$this->db->prepare("INSERT INTO __member_user :p")->set($query)->execute();
 
 				$myupdate	= true;
 				
-				$this->pdh->enqueue_hook('member_update', $member_id, array('action' => 'update'));
+				$this->pdh->enqueue_hook('member_update', $member_id, array('action' => 'update', 'members' => $member_id));
 				$this->pdh->process_hook_queue();
 	
 				//Change Mainids of associated chars
@@ -288,8 +294,12 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				
 			}else{
 				$myupdate	= false;
+				$arrChangedMembers[] = $member_id;
 			}
-			$this->pdh->enqueue_hook('update_connection', array($member_id), array('members' => array($member_id, $userchars, $mainchar), 'users' => array($user_id)));
+			
+			$arrChangedMembers[] = $mainchar;
+			
+			$this->pdh->enqueue_hook('update_connection', array($member_id), array('members' => $arrChangedMembers, 'users' => array($user_id)));
 			return $myupdate;
 		}
 
@@ -439,7 +449,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				'points' => serialize($arrCurrentPoints),
 			))->execute($memberID);
 			
-			$this->pdh->enqueue_hook('member_update', array($memberID), array('action' => 'update', 'members' => array($memberID)));
+			$this->pdh->enqueue_hook('member_update', array($memberID), array('action' => 'update_points', 'members' => array($memberID)));
 			return ($objQuery) ? true : false;
 		}
 		

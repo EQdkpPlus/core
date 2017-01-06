@@ -70,6 +70,8 @@ if ( !class_exists( "pdh_r_points" ) ) {
 			foreach($arrAdditionalData as $arrData){
 				if(isset($arrData['action'])){
 					$strAction = $arrData['action'];
+					if($strHook == 'member_update' && $strAction == 'update_points') return true;
+					
 					if((isset($arrData['apa']) && $arrData['apa']) || ($strAction == 'add' && ($strHook == 'itempool_update' || $strHook == 'multidkp_update' || $strHook == 'member_update'))){	
 						//Nothing to do with APA or member_cache
 					} else {
@@ -91,7 +93,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 				
 				}			
 			}
-			if((isset($arrData['apa']) && $arrData['apa']) || ($strAction == 'add' && ($strHook == 'itempool_update' || $strHook == 'multidkp_update' || $strHook == 'member_update'))){
+			if((isset($arrData['apa']) && $arrData['apa']) || ($strAction == 'add' && ($strHook == 'itempool_update' || $strHook == 'multidkp_update' || ($strHook == 'member_update'  && !is_array($affected_ids))))){
 				//Nothing to do with APA or member_cache
 			} elseif($strHook == 'member_update' && is_array($affected_ids) && count($affected_ids)) {
 				$apaAffectedIDs = array();
@@ -422,6 +424,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 				$this->get_add_snapshot($memberid, $multidkpid);
 			}
 			
+			$this->pdh->process_hook_queue();
 			
 			return $this->points[$memberid][$multidkpid]['single'];
 		}
