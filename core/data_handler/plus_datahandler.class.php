@@ -66,7 +66,7 @@ if( !class_exists( "plus_datahandler")){
 		//Constructor
 		public function __construct(){
 			if(!$this->pdl->type_known('pdh_error')) $this->pdl->register_type('pdh_error', null, array($this, 'html_format_errors'), array(3, 4));
-
+			if(!$this->pdl->type_known('pdh')) $this->pdl->register_type('pdh', null, array($this, 'html_format_errors'), array(3, 4));
 			$this->init_module_path();
 
 			require_once( $this->rm_path.'pdh_r_generic.class.php' );
@@ -139,6 +139,11 @@ if( !class_exists( "plus_datahandler")){
 		}
 
 		public function process_hook_queue(){
+			if(DEBUG > 2){
+				$data = debug_backtrace();
+				$this->pdl->log('pdh', $data[2]['file'], $data[2]['line'], 'Call process_hook_queue', array('module: '.$module_name, 'function: '.$data[1]['function']));
+			}
+			
 			foreach( $this->undone_hooks as $hook => $ids ) {
 				$this->timekeeper->put( 'pdh_hk_times', $hook, $this->time->time );
 			}
@@ -175,6 +180,11 @@ if( !class_exists( "plus_datahandler")){
 		}
 
 		public function enqueue_hook( $hook, $ids = array(), $arrAdditionalData = array()) {
+			if(DEBUG > 2){
+				$data = debug_backtrace();
+				$this->pdl->log('pdh', $data[2]['file'], $data[2]['line'], 'Enqueue Hook '.$hook, array('hook: '.$hook, 'ids: '.print_r($ids, true), 'additionalData: '.print_r($arrAdditionalData, true), 'function: '.$data[1]['function']));
+			}
+			
 			if(!is_array($ids) && !empty($ids)) $ids = array($ids);
 			if(!empty($ids) && isset($this->undone_hooks[$hook])) $ids = array_merge($this->undone_hooks[$hook], $ids);
 			$this->undone_hooks[$hook] = (!empty($ids)) ? $ids : array();
@@ -335,6 +345,15 @@ if( !class_exists( "plus_datahandler")){
 			$objModule = $this->rm($module);
 			
 			if( method_exists( $objModule, $method ) ) {
+				if(DEBUG > 3){
+					$data = debug_backtrace();
+					$extra = array('module: '.$module, 'tag: '.$tag, 'params: '.implode( ", ", $params ));
+					for($i=0;$i>0;$i++) {
+						if(isset($data[$i]['file']) && strpos($data[$i]['file'], 'plus_datahandler') === false) break;
+					}
+					$this->pdl->log('pdh', $data[$i]['file'], $data[$i]['line'], 'GET call ', $extra);
+				}
+				
 				if( !$this->read_modules[$module] ) $this->init_read_module( $module );
 				return call_user_func_array( array( $objModule, $method ), $params );
 			} else {
@@ -556,6 +575,15 @@ if( !class_exists( "plus_datahandler")){
 				);
 			}
 			if( $this->register_write_module( $module ) ) {
+				if(DEBUG > 3){
+					$data = debug_backtrace();
+					$extra = array('module: '.$module, 'function: '.$function, 'params: '.implode( ", ", $params ));
+					for($i=0;$i>0;$i++) {
+						if(isset($data[$i]['file']) && strpos($data[$i]['file'], 'plus_datahandler') === false) break;
+					}
+					$this->pdl->log('pdh', $data[$i]['file'], $data[$i]['line'], 'PUT call ', $extra);
+				}
+				
 				return call_user_func_array( array( $this->wm($module), $function ), $params );
 			} else {
 				$data = debug_backtrace();
