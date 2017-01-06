@@ -86,6 +86,7 @@ class inst_settings extends install_generic {
 		'enable_leaderboard'			=> 1,
 		'avatar_default'				=> 'eqdkp',
 		'avatar_allowed'				=> array('eqdkp', 'gravatar'),
+		'admin_favs'					=> 'a:2:{i:0;s:7:"raids|1";i:1;s:8:"portal|4";}',
 
 		// Calendar settings
 		'calendar_addevent_mode'		=> 'raid',
