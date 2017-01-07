@@ -537,6 +537,63 @@ class wbb5_bridge extends bridge_generic {
 			return self::wcf1e($type, $password, $salt, $dbHash);
 		}
 	}
+	
+	/**
+	 * Validates the password hash for WoltLab Community Framework 1.x with different encryption (wcf1e).
+	 *
+	 * @param	string		$type
+	 * @param	string		$password
+	 * @param	string		$salt
+	 * @param	string		$dbHash
+	 * @return	boolean
+	 */
+	protected static function wcf1e($type, $password, $salt, $dbHash) {
+		preg_match('~^wcf1e([cms])([01])([ab])([01])$~', $type, $matches);
+		$enableSalting = $matches[2];
+		$saltPosition = $matches[3];
+		$encryptBeforeSalting = $matches[4];
+	
+		$encryptionMethod = '';
+		switch ($matches[1]) {
+			case 'c':
+				$encryptionMethod = 'crc32';
+				break;
+					
+			case 'm':
+				$encryptionMethod = 'md5';
+				break;
+					
+			case 's':
+				$encryptionMethod = 'sha1';
+				break;
+		}
+	
+		$hash = '';
+		if ($enableSalting) {
+			if ($saltPosition == 'b') {
+				$hash .= $salt;
+			}
+				
+			if ($encryptBeforeSalting) {
+				$hash .= $encryptionMethod($password);
+			}
+			else {
+				$hash .= $password;
+			}
+				
+			if ($saltPosition == 'a') {
+				$hash .= $salt;
+			}
+				
+			$hash = $encryptionMethod($hash);
+		}
+		else {
+			$hash = $encryptionMethod($password);
+		}
+		$hash = $encryptionMethod($salt . $hash);
+	
+		return self::secureCompare($dbHash, $hash);
+	}
 
 	/**
 	 * Returns encryption type if possible.
