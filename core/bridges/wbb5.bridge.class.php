@@ -353,6 +353,10 @@ class wbb5_bridge extends bridge_generic {
 		return $isValid;
 	}
 	
+	//===============================================================================================
+	// The following methods have been taken from the Woltlab Community Suite, copyright WoltLab GmbH
+	// License: GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
+	
 	/**
 	 * Returns the ipv6 address of the client.
 	 * 
@@ -398,13 +402,11 @@ class wbb5_bridge extends bridge_generic {
 
 	/**
 	 * Provides functions to compute password hashes.
-	 * 
+	 *
 	 * @author	Alexander Ebert
-	 * @copyright	2001-2013 WoltLab GmbH
+	 * @copyright	2001-2016 WoltLab GmbH
 	 * @license	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
-	 * @package	com.woltlab.wcf
-	 * @subpackage	util
-	 * @category	Community Framework
+	 * @package	WoltLabSuite\Core\Util
 	 */
 
 	/**
