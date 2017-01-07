@@ -214,7 +214,7 @@ class controller extends gen_class {
 				}
 
 				//Suche in Artikeln mit nächstem Index, denn könnte ein dynamischer Systemartikel sein
-				if (!$intCategoryID && isset($arrPath[1])) {
+				if (!$intArticleID && !$intCategoryID && isset($arrPath[1])) {
 
 					$intArticleID = $this->pdh->get('articles', 'resolve_alias', array($arrPath[1]));
 					if ($intArticleID){
