@@ -94,13 +94,13 @@ if ( !class_exists( "pdh_r_suicide_kings_bottom" ) ) {
 				$sort_list_member = array('multi'=>array(), 'single'=>array());
 				
 				//---MULTI--------------------------------------------------------------------
-				foreach($member_hash['multi'] as $member_id){
+				foreach($member_hash['multi'] as $k => $member_id){
 					//Get latest item date
 					$latest_item = $this->pdh->get('member_dates', 'last_item_date', array($member_id, $mdkp_id, true));
 					$last_raid =  $this->pdh->get('member_dates', 'last_raid', array($member_id, $mdkp_id, true));
 
-					$sort_list_lastitemdate['multi'][$member_id] = ($latest_item) ? $this->pdh->get('member_dates', 'last_item_date', array($member_id, $mdkp_id, true)) : 0;
-					$sort_list_lastitemid['multi'][$member_id] = ($latest_item) ? $this->pdh->get('member_dates', 'last_item', array($member_id, $mdkp_id, true)) : 0;
+					$sort_list_lastitemdate['multi'][$member_id] = ($latest_item) ? $this->pdh->get('member_dates', 'last_item_date', array($member_id, $mdkp_id, true)) : $k;
+					$sort_list_lastitemid['multi'][$member_id] = ($latest_item) ? $this->pdh->get('member_dates', 'last_item', array($member_id, $mdkp_id, true)) : $k;
 					
 					$sort_list_member['multi'][] = $member_id;
 					unset($tmp_memberarray['multi'][$member_id]);
@@ -115,14 +115,14 @@ if ( !class_exists( "pdh_r_suicide_kings_bottom" ) ) {
 				}
 				
 				//---SINGLE--------------------------------------------------------------------
-				foreach($member_hash['single'] as $member_id){
+				foreach($member_hash['single'] as $k => $member_id){
 					//Get latest item date
 					$latest_item = $this->pdh->get('member_dates', 'last_item_date', array($member_id, $mdkp_id, false));
 					$last_raid =  $this->pdh->get('member_dates', 'last_raid', array($member_id, $mdkp_id, false));
 					
 
-					$sort_list_lastitemdate['single'][$member_id] = ($latest_item) ? $this->pdh->get('member_dates', 'last_item_date', array($member_id, $mdkp_id, false)): 0;
-					$sort_list_lastitemid['single'][$member_id] = ($latest_item) ? $this->pdh->get('member_dates', 'last_item', array($member_id, $mdkp_id, false)): 0;
+					$sort_list_lastitemdate['single'][$member_id] = ($latest_item) ? $this->pdh->get('member_dates', 'last_item_date', array($member_id, $mdkp_id, false)): $k;
+					$sort_list_lastitemid['single'][$member_id] = ($latest_item) ? $this->pdh->get('member_dates', 'last_item', array($member_id, $mdkp_id, false)): $k;
 					
 					$sort_list_member['single'][] = $member_id;
 					unset($tmp_memberarray['single'][$member_id]);

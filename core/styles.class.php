@@ -434,9 +434,9 @@ if (!class_exists("styles")){
 			$this->reset($styleid, $updateColors, $deleteChangedFiles, true);
 		}
 
-		public function delete_cache(){
+		public function delete_cache($blnShowMessage=true){
 			$this->helperDeleteCompleteCache();
-			$this->core->message($this->user->lang('delete_template_cache_success'), $this->user->lang('success'), 'green');
+			if($blnShowMessage) $this->core->message($this->user->lang('delete_template_cache_success'), $this->user->lang('success'), 'green');
 		}
 
 		public function getLocalStyleUpdates(){

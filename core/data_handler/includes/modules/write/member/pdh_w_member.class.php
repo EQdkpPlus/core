@@ -410,8 +410,11 @@ if ( !class_exists( "pdh_w_member" ) ) {
 						);
 						$this->log_insert('action_history_transfer', $log_action, $fromid, $this->pdh->get('member', 'name', array($fromid)));
 						$this->db->commitTransaction();
-						$this->pdh->enqueue_hook('item_udpate');
+						$this->pdh->enqueue_hook('item_update');
 						$this->pdh->enqueue_hook('adjustment_update');
+						$this->pdh->enqueue_hook('member_update');
+						$this->pdh->enqueue_hook('raid_update');
+						$this->pdh->enqueue_hook('user');
 						return true;
 					}
 				}

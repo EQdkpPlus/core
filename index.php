@@ -93,7 +93,7 @@ class controller extends gen_class {
 	
 	private function filterPathArray($arrPath){
 		foreach($arrPath as $key => $val){
-			$arrPath[$key] = str_replace(array(".html", ".php"), "", utf8_strtolower($arrPath[$key]));
+			$arrPath[$key] = str_replace(array(".html", ".php", "?s=", "?"), "", utf8_strtolower($arrPath[$key]));
 		}
 		
 		return $arrPath;
@@ -118,12 +118,13 @@ class controller extends gen_class {
 			$blnIsStartpage = true;
 			//Get Start Page
 			if ($this->config->get('start_page') != ""){
-				$strPath = $this->config->get('start_page');
+				$strPath = str_ireplace('index.php', '', $this->config->get('start_page'));
 			} else {
 				$strPath = "news";
 			}
 			$arrPath = array_filter(explode('/', $strPath));
 			$arrPath = array_reverse($arrPath);
+			$arrPath = $this->filterPathArray($arrPath);
 		}
 		registry::add_const('patharray', $arrPath);
 		$intArticleID = $intCategoryID = $strSpecificID = 0;
@@ -304,7 +305,8 @@ class controller extends gen_class {
 				$intCategoryID = $arrArticle['category'];
 				registry::add_const('categoryid', $intCategoryID);
 				$arrCategory = $this->pdh->get('article_categories', 'data', array($intCategoryID));
-					
+				$arrCategory['name'] = $this->user->multilangValue($arrCategory['name']);
+			
 				//Category Permissions
 				$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($arrArticle['category'], $this->user->id));
 				if (!$arrPermissions['read']) message_die($this->user->lang('article_noauth'), $this->user->lang('noauth_default_title'), 'access_denied', true);

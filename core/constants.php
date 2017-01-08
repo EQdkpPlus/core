@@ -28,8 +28,8 @@ if ( !defined('EQDKP_INC') ){
  * CORE VERSIONS
  * -------------------------------------------------------------------------
  */
-define('VERSION_INT',		'2.2.8.0');				// the internal version number for updates & update check
-define('VERSION_EXT',		'2.2.8');			// the external version number to be shown in the footer
+define('VERSION_INT',		'2.2.13.0');				// the internal version number for updates & update check
+define('VERSION_EXT',		'2.2.13');			// the external version number to be shown in the footer
 define('VERSION_WIP',		false);					// work in progress or stable?
 define('VERSION_PHP_RQ',	'5.5.0');				// required version of PHP
 define('VERSION_PHP_REC',	'5.6.0');				// recommended version of PHP
@@ -57,6 +57,9 @@ define('SQL_UNINSTALL',	2);
 
 //Max Images in Useravatar Folder
 define('MAX_FILES_USERFOLDER', 20);
+
+//Max concurrent sessions from one IP with the same Browser
+define('MAX_CONCURRENT_SESSIONS', 200);
 
 //URLs
 //-------------------------------------------------------------------------

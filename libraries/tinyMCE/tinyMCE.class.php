@@ -63,7 +63,7 @@ class tinyMCE extends gen_class {
 					plugins: [
 						"bbcode autolink link image charmap",
 						"searchreplace visualblocks code fullscreen",
-						"media paste textcolor'.$mention.'"
+						"media textcolor'.$mention.'"
 					],
 					language : "'.$this->language.'",
 					theme : "'.$this->theme.'",
@@ -80,6 +80,17 @@ class tinyMCE extends gen_class {
 					},
 					
 					setup: function(editor){
+						editor.on("init", function(evt){					
+					        $(editor.getBody().parentNode).bind("dragover dragenter dragend drag drop", function(event){
+					            event.stopPropagation();
+					            event.preventDefault();
+					        });
+					        $(editor.getDoc()).bind("draggesture", function(event){
+					            event.stopPropagation();
+					            event.preventDefault();
+					        });
+					    });
+					
 						'.$strHooks.'
 					},
 
@@ -94,8 +105,10 @@ class tinyMCE extends gen_class {
 					menubar: false,
 					relative_urls : false,
 					remove_script_host : false,
-					toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright |  bullist | fontsizeselect forecolor | blockquote image link",
+					toolbar: "code undo redo | bold italic underline | alignleft aligncenter alignright |  bullist | fontsizeselect forecolor | blockquote image link",
 					statusbar : false,
+					automatic_uploads: false,
+					
 				});
 			}
 			initialize_bbcode_editor();

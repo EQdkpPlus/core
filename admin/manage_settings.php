@@ -982,6 +982,8 @@ class admin_settings extends page_generic {
 			if($game_changed) {
 				$this->game->installGame($this->in->get('default_game'), $this->in->get('game_language'), $this->in->get('overwrite-game', 0));
 				$this->pdc->flush();
+				$objStyles = register('styles');
+				$objStyles->delete_cache(false);
 				$this->form->reset_fields();
 				$this->settings_saved = true;
 				$this->display();

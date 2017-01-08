@@ -69,8 +69,8 @@ class auth extends user {
 			return true;
 		}
 
-		// Remove old sessions and update user information if necessary.
-		if(($this->current_time - $this->session_length) > $this->config->get('session_last_cleanup')){
+		// Remove old sessions and update user information if necessary (every 5 minutes)
+		if(($this->current_time - 60*5) > $this->config->get('session_last_cleanup')){
 			$this->cleanup($this->current_time);
 		}
 		//Cookie-Data
@@ -210,7 +210,47 @@ class auth extends user {
 				'session_key'			=> $strSessionKey,
 				'session_type'			=> (defined('SESSION_TYPE')) ? SESSION_TYPE : '',
 		);
-		$this->db->prepare('INSERT INTO __sessions :p')->set($arrData)->execute();
+		
+		$blnIsBot = $this->env->is_bot($this->env->useragent);
+		//Select count of concurrent sessions - if guest
+		if($user_id === ANONYMOUS && !$blnIsBot){
+			//Guest
+			$blnCreateSession = false;
+			$objQuery = $this->db->prepare("SELECT count(*) as count FROM __sessions WHERE session_ip=? AND session_browser=?")->execute($this->env->ip, $this->env->useragent);
+			if($objQuery){
+				$arrQuery = $objQuery->fetchAssoc();
+				$intCount = $arrQuery['count'];
+				if($intCount > MAX_CONCURRENT_SESSIONS){
+					//Try to reuse a guest session
+					$objGuestQuerySession = $this->db->prepare("SELECT * FROM __sessions WHERE session_ip=? AND session_browser=? AND session_user_id=? ORDER BY session_current DESC LIMIT 1")->execute($this->env->ip, $this->env->useragent, ANONYMOUS);
+					if($objGuestQuerySession){
+						$arrGuestData = $objGuestQuerySession->fetchAssoc();
+						if($arrGuestData && $arrGuestData['session_id']){
+							$arrData['session_id'] = $arrGuestData['session_id'];
+							$this->sid = $arrData['session_id'];
+						} else {
+							//Don't create a new session
+							$arrData['session_id'] = "sharedguestsession";
+							$this->sid = "sharedguestsession";	
+						}
+					} else {
+						//Don't create a new session
+						$arrData['session_id'] = "sharedguestsession";
+						$this->sid = "sharedguestsession";
+					}
+				} else {
+					$this->db->prepare('INSERT INTO __sessions :p')->set($arrData)->execute();
+				}
+			}
+
+		} elseif($blnIsBot && $user_id === ANONYMOUS){
+			//Bot
+			$arrData['session_id'] = "sharedbotsession";
+			$this->sid = "sharedbotsession";
+		} else {
+			//Normal User
+			$this->db->prepare('INSERT INTO __sessions :p')->set($arrData)->execute();
+		}
 
 		//generate cookie-Data
 		$arrCookieData = array();
@@ -222,9 +262,7 @@ class auth extends user {
 				$this->updateAutologinKey($user_id, $strAutologinKey);
 			}
 			$arrCookieData['auto_login_id'] = $strAutologinKey;
-
 		}
-		
 		
 		// set the cookies
 		set_cookie('data', base64_encode(serialize($arrCookieData)), $this->current_time + 2592000); //30 days
@@ -309,27 +347,37 @@ class auth extends user {
 	* @return true
 	*/
 	public function cleanup($intTime){
+		//Delete all guest sessions
+		$this->db->prepare("DELETE FROM __sessions
+									WHERE session_user_id = ?
+									AND session_start < ?")->execute(ANONYMOUS, $this->time->time - $this->session_length);
 		
-		// Get expired sessions
-		$objQuery = $this->db->prepare("SELECT session_page, session_user_id,session_current FROM __sessions s1 
-				WHERE s1.session_start < ? AND session_current =
-				(SELECT MAX(session_current) FROM __sessions s2 WHERE s1.session_user_id = s2.session_user_id)
-		")->execute($this->time->time - ($this->session_length*2));
-
+		
+		// Get expired user sessions
+		$objQuery = $this->db->prepare("SELECT DISTINCT(session_user_id) FROM __sessions WHERE session_start < ?")
+						->execute($this->time->time - ($this->session_length*2));
+		
 		if ($objQuery){
 			while($row = $objQuery->fetchAssoc()){
-				if ( intval($row['session_user_id']) != ANONYMOUS ){
-					$this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
-						'user_lastvisit'	=> $row['recent_time'],
-						'user_lastpage'		=> $row['session_page'],
-					))->execute($row['session_user_id']);
+				$intUserID = intval($row['session_user_id']);
+				
+				if ($intUserID > 0 ){
+					$objQueryMaxSession = $this->db->prepare("SELECT MAX(session_current) as max_session_current FROM __sessions WHERE session_user_id=?")->execute($intUserID);
+					if($objQueryMaxSession){
+						$rowMaxSession = $objQueryMaxSession->fetchAssoc();
+						$this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
+								'user_lastvisit'	=> $rowMaxSession['max_session_current'],
+						))->execute($intUserID);
+					}
 				}
 				
+				//Delete user sessions
 				$this->db->prepare("DELETE FROM __sessions
 									WHERE session_user_id = ?
-									AND session_start < ?")->execute($row['session_user_id'], ($this->time->time - $this->session_length));
+									AND session_start < ?")->execute($intUserID, ($this->time->time - $this->session_length));
 			}
 		}
+		
 		$this->config->set('session_last_cleanup', $this->time->time);
 		return true;
 	}
