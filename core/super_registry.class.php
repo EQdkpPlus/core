@@ -98,7 +98,6 @@ abstract class super_registry {
 		'jquery'				=> 'libraries/jquery/',
 		'template'				=> 'libraries/template/',
 		'tinyMCE'				=> 'libraries/tinyMCE/',
-		'myemojione'			=> 'libraries/emojione/',
 		'mmtaskmanager'			=> 'maintenance/includes/',
 	);
 	public static $lite_igno = array('bridge');

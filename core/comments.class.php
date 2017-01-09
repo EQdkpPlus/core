@@ -293,9 +293,7 @@ if (!class_exists("comments")){
 						$out[] .= '<div style="display:none" class="comments_myrootpath">'.$myrootpath.'</div>';
 						$out[] .= '</div>';
 					}
-					//Emojis
-					$strText = register('myemojione')->shortcodeToImage($row['text']);
-					$out[] .= '<div class="comment_text">'.$this->bbcode->MyEmoticons($this->bbcode->toHTML($strText)).'</div><br/>
+					$out[] .= '<div class="comment_text">'.$this->bbcode->MyEmoticons($this->bbcode->toHTML($row['text'])).'</div><br/>
 								</div>';
 								
 								
