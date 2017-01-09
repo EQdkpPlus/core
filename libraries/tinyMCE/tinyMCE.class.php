@@ -69,11 +69,12 @@ class tinyMCE extends gen_class {
 					plugins: [
 						"bbcode autolink link image charmap",
 						"searchreplace visualblocks code fullscreen",
-						"media textcolor'.$mention.$strHooksPlugin.'"
+						"media textcolor paste'.$mention.$strHooksPlugin.'"
 					],
 					language : "'.$this->language.'",
 					theme : "'.$this->theme.'",
 					skin : "'.$this->skin.'",
+					paste_as_test: true,
 					mentions: {
 						source: function(query, process, delimiter){
 							$.getJSON("'.$this->server_path.'libraries/tinyMCE/tinymce/plugins/mention/users.php", function (data) {
