@@ -28,6 +28,9 @@ if(!class_exists('pdh_w_comment')) {
 
 		public function insert($attach_id, $user_id, $strComment, $page, $reply_to) {
 			if($this->config->get('enable_embedly')) $strComment = $this->embedly->parseString($strComment, 400, false);
+			
+			//EmojiOne
+			$strComment = register('myemojione')->textToShortcode($strComment);
 
 			$objQuery = $this->db->prepare("INSERT INTO __comments :p")->set(array(
 					'attach_id'		=> $attach_id,
@@ -48,6 +51,9 @@ if(!class_exists('pdh_w_comment')) {
 		
 		public function update($intCommentId, $strComment){
 			if($this->config->get('enable_embedly')) $strComment = $this->embedly->parseString($strComment, 400, false);
+			
+			//EmojiOne
+			$strComment = register('myemojione')->textToShortcode($strComment);
 			
 			$objQuery = $this->db->prepare("UPDATE __comments :p WHERE id=?")->set(array(
 					'text'			=> str_replace("\n", "[br]", $strComment),
