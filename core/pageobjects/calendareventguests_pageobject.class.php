@@ -44,7 +44,7 @@ class calendareventguests_pageobject extends pageobject {
 
 		// hide the role if null and such stuff
 		if($this->game->get_game_settings('calendar_hide_emptyroles')){
-			$eventdata = $this->pdh->get('calendar_events', 'data', array($this->url_id));
+			$eventdata = $this->pdh->get('calendar_events', 'data', array($this->in->get('eventid', 0)));
 			if($eventdata['extension']['raidmode'] == 'role'){
 				$raidcategories = $this->pdh->aget('roles', 'name', 0, array($this->pdh->get('roles', 'id_list')));
 				foreach ($raidcategories as $classid=>$classname){
