@@ -107,6 +107,7 @@ class register_pageobject extends pageobject {
 		
 		//Check User Profilefields
 		$arrUserProfileFields = $this->pdh->get('user_profilefields', 'registration_fields');
+		$form = false;
 		if (count($arrUserProfileFields)){
 			$form = register('form', array('register'));
 			$form->validate = true;
@@ -480,6 +481,7 @@ class register_pageobject extends pageobject {
 		
 		//User Profilefields
 		$arrUserProfileFields = $this->pdh->get('user_profilefields', 'registration_fields');
+		$form = false;
 		if (count($arrUserProfileFields)){
 			$form = register('form', array('register'));
 			$form->validate = true;

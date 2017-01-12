@@ -141,7 +141,7 @@ if( !class_exists( "plus_datahandler")){
 		public function process_hook_queue(){
 			if(DEBUG > 2){
 				$data = debug_backtrace();
-				$this->pdl->log('pdh', $data[2]['file'], $data[2]['line'], 'Call process_hook_queue', array('module: '.$module_name, 'function: '.$data[1]['function']));
+				$this->pdl->log('pdh', $data[1]['file'], $data[1]['line'], 'Call process_hook_queue', array('function: '.$data[1]['function']));
 			}
 			
 			foreach( $this->undone_hooks as $hook => $ids ) {
@@ -578,6 +578,11 @@ if( !class_exists( "plus_datahandler")){
 				if(DEBUG > 3){
 					$data = debug_backtrace();
 					$extra = array('module: '.$module, 'function: '.$function, 'params: '.implode( ", ", $params ));
+					
+					if(is_array($module) || is_array($function)){
+						debug_print_backtrace();
+					}
+					
 					for($i=0;$i>0;$i++) {
 						if(isset($data[$i]['file']) && strpos($data[$i]['file'], 'plus_datahandler') === false) break;
 					}
