@@ -204,7 +204,7 @@ class MyMailer extends PHPMailer {
 	*/
 	private function GenerateMail($subject, $templatename, $bodyvars, $from){
 		$this->From			= $this->adminmail;
-		$this->FromName		= $from;
+		$this->FromName		= ($this->config->get('lib_email_sender_name') && strlen($this->config->get('lib_email_sender_name'))) ? $this->config->get('lib_email_sender_name') : $from;
 		
 		$this->ClearReplyTos();
 		$this->addReplyTo($from, $from);
