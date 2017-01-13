@@ -91,9 +91,9 @@ if (!class_exists("feed")) {
 
 		private function specialchars($strString, $noHTML=false){
 			// encode URL properly
-			if(filter_var($sanitized_txt, FILTER_VALIDATE_URL)){
+			if(filter_var($strString, FILTER_VALIDATE_URL)){
 				$parsed_url	= parse_url($sanitized_txt);
-				return 'debug:'.$parsed_url['scheme'].'://'.$parsed_url['host'].urlrawencode($parsed_url['path'].$parsed_url['query']);
+				return $parsed_url['scheme'].'://'.$parsed_url['host'].urlrawencode($parsed_url['path'].$parsed_url['query']);
 				#return urlencode($sanitized_txt);
 			}
 			$arrFind		= array('"', "'", '<', '>', '&');
