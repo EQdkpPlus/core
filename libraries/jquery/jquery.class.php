@@ -575,7 +575,9 @@ if (!class_exists("jquery")) {
 		*/
 		public function Autocomplete($id, $myarray, $returnJS=false){
 			if(is_array($myarray) && count($myarray) > 0){
-				$myarray = str_replace('"', '', $myarray);	// clean the array, remove hyphens
+				foreach($myarray as $k => $v){
+					$myarray[$k] = $this->sanitize($v, true);
+				}
 				$js_array = $this->implode_wrapped('"','"', ",", $myarray);
 				if (is_array($id)){
 					$ids = implode(',#', $id);
