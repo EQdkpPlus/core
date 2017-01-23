@@ -265,7 +265,7 @@ class template extends gen_class {
 			return $combinedFile;
 		} else {
 			//Generate it
-			$strCSS = "";
+			$strCSS = "\r\n/*!\r\n* Built: ".date("d-m-Y H:i:s", $this->time->time)."\r\n*/ \r\n";
 
 			foreach($arrFiles as $key => $strFile){
 				$strOrigFile = $arrOrigFiles[$key];
@@ -421,7 +421,7 @@ class template extends gen_class {
 			return file_get_contents($combinedFile);
 		} else {
 			//Generate it
-			$strJS = "";
+			$strJS = "\r\n/*!\r\n* Built: ".date("d-m-Y H:i:s", $this->time->time)."\r\n*/ \r\n";
 			foreach($arrFiles as $strFile){
 				$strContent = file_get_contents($strFile);
 				$arrHash[] = md5($strContent);
