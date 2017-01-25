@@ -243,7 +243,7 @@ class user extends gen_class {
 		}
 
 		if(strpos($strAuthValue, 'po_') === 0){
-			$boolAuthResult = $this->check_pageobject(substr($strAuthValue, 3), $intUserID, false);
+			$boolAuthResult = $this->check_pageobject(substr($strAuthValue, 3), false, $intUserID);
 		} else {
 			$boolAuthResult = $this->acl->check_auth($strAuthValue, $intUserID, $boolGroups);
 		}
