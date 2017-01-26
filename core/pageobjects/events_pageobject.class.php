@@ -49,6 +49,8 @@ class events_pageobject extends pageobject {
 				'EVENT_NAME'	=> $this->pdh->get('event', 'name', array($this->url_id)),
 				'MDKPPOOLS'		=> $this->pdh->geth('event', 'multidkppools', array($this->url_id)),
 				'ITEMPOOLS'		=> $this->pdh->geth('event', 'itempools', array($this->url_id)),
+				'HPTT_ADMIN_LINK'	=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('viewevent').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,
+				
 		));
 	
 		$this->set_vars(array(
@@ -85,7 +87,7 @@ class events_pageobject extends pageobject {
 			'EVENT_OUT'			=> $hptt->get_html_table($sort, $pagination_suffix, $start, $this->user->data['user_rlimit'], $footer_text),
 			'EVENT_PAGINATION'	=> generate_pagination($this->strPath.$this->SID.$sort_suffix, $event_count, $this->user->data['user_rlimit'], $start),
 			'EVENT_COUNT'		=> $event_count,
-			
+			'HPTT_ADMIN_LINK'	=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('listevents').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,
 		));
 
 		$this->set_vars(array(

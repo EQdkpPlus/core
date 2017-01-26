@@ -1083,5 +1083,6 @@ $lang = array(
 "email_must_confirm_note" => "Der Administrator hat die Bestätigung deiner E-Mail-Adresse veranlasst. Eine E-Mail mit einem Link zur Bestätigung wurde an deine E-Mail-Adresse gesendet. Bis zur Bestätigung ist nur dein Benutzerprofil zugänglich.",
 "warning" => "Warnung",
 "information" => "Information",
+"edit_table" => "Tabelle bearbeiten",
 );
 ?>

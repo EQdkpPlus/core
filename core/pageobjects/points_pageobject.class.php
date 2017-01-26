@@ -52,9 +52,9 @@ class points_pageobject extends pageobject {
 		
 		//DKP Id
 		$mdkp_suffix = '';
-		$detail_settings = $this->pdh->get_page_settings('listmembers', 'hptt_listmembers_memberlist_detail');
-		if(!$this->in->exists('mdkpid') && isset($detail_settings['default_pool'])) {
-			$mdkpid = $detail_settings['default_pool'];
+		$arrOverviewSettings = $this->pdh->get_page_settings('listmembers', 'hptt_listmembers_memberlist_overview');
+		if(!$this->in->exists('mdkpid') && isset($arrOverviewSettings['default_pool'])) {
+			$mdkpid = $arrOverviewSettings['default_pool'];
 		} else {
 			$mdkpid = $this->in->get('mdkpid', 0);
 		}
@@ -76,10 +76,9 @@ class points_pageobject extends pageobject {
 		
 		if($mdkpid == 0){
 			$hptt_page_settings = $this->pdh->get_page_settings('listmembers', 'hptt_listmembers_memberlist_overview');
-			$defaultPoolOverview = (isset($detail_settings['default_pool_ov'])) ? $detail_settings['default_pool_ov'] : $multilist[0];
+			$defaultPoolOverview = (isset($arrOverviewSettings['default_pool_ov'])) ? $arrOverviewSettings['default_pool_ov'] : $multilist[0];
 		}else{
-			$hptt_page_settings = $detail_settings;
-			unset($detail_settings);
+			$hptt_page_settings = $this->pdh->get_page_settings('listmembers', 'hptt_listmembers_memberlist_detail');;
 			$mdkp_suffix = $mdkpid;
 		}
 
@@ -168,6 +167,7 @@ class points_pageobject extends pageobject {
 			'S_SHOW_TWINKS'				=> !$this->config->get('show_twinks'),
 			'MDKP_POOLNAME'				=> ($mdkpid > 0) ? $this->pdh->get('multidkp', 'name', array($mdkpid)) : '',
 			'LBC_VALUE'					=> ($this->in->get('lbc', 0)),
+			'HPTT_ADMIN_LINK'			=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('listmembers').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,
 		));
 
 		$this->set_vars(array(

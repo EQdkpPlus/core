@@ -71,6 +71,7 @@ class usergroup_pageobject extends pageobject {
 			'GROUPNAME'			=> $this->pdh->get('user_groups', 'name', array($groupID)),
 			'S_DISPLAY_GROUP'	=> true,
 			'USER_COUNT'		=> $user_count,
+			'HPTT_ADMIN_LINK'	=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('listusers').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,
 		));
 		
 		

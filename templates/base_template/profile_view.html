@@ -47,7 +47,7 @@
 
 <!-- IF MEMBER_POINTS -->
 <div class="tableHeader">
-	<h2>{L_DKP_NAME}</h2>
+	<h2>{L_DKP_NAME} {HPTT_ADMIN_LINK}</h2>
 </div>
 <input type="checkbox" onchange="window.location='{SID}&with_twinks='+ ((this.checked) ? 0 : 1)" name="with_twinks" value="1" <!-- IF not S_WITH_TWINK_DKP -->checked="checked"<!-- ENDIF -->/> {L_points_for_this_char}
 <br /><br />
@@ -71,7 +71,7 @@
 	<!-- RAIDS TABLE -->
 	<div id="fragment-2">
 		<div class="tableHeader">
-			<h2>{L_raid_attendance_history}</h2>
+			<h2>{L_raid_attendance_history} {HPTT_ADMIN_LINK}</h2>
 		</div>
 		<table class="table fullwidth hptt colorswitch scrollable-x">
 		{RAID_OUT}
@@ -84,7 +84,7 @@
 	<!-- ITEMS TABLE -->
 	<div id="fragment-3">
 		<div class="tableHeader">
-			<h2>{L_item_purchase_history}</h2>
+			<h2>{L_item_purchase_history} {HPTT_ADMIN_LINK}</h2>
 		</div>
 		<table class="table fullwidth hptt colorswitch scrollable-x">
 		{ITEM_OUT}
@@ -98,7 +98,7 @@
 	<!-- ADJUSTMENTS TABLE-->
 	<div id="fragment-4">
 		<div class="tableHeader">
-			<h2>{L_individual_adjustment_history}</h2>
+			<h2>{L_individual_adjustment_history} {HPTT_ADMIN_LINK}</h2>
 		</div>
 		<table class="table fullwidth hptt colorswitch scrollable-x">
 		{ADJUSTMENT_OUT}

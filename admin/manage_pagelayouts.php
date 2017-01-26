@@ -483,9 +483,9 @@ class ManagePageLayouts extends page_generic {
 		}
 
 		//iterate through all pages
-		foreach($pages as $page) {
+		foreach($pages as $page) {			
 			$this->tpl->assign_block_vars('page_list', array(
-				'ID' => $page_id,
+				'ID' => md5($page),
 				'NAME' => $this->user->lang('lm_page_'.$page, true),
 				'ADMIN' => (strpos($page, 'admin') !== false) ? true : false
 			));
@@ -499,7 +499,7 @@ class ManagePageLayouts extends page_generic {
 			}
 
 			$this->tpl->assign_block_vars('page_row', array(
-				'ID' => $page_id,
+				'ID' => md5($page),
 				'S_LEADERBORD'	=> ($page == 'listmembers') ? true : false,
 				'S_ROSTER'		=> ($page == 'roster') ? true : false,
 			));
@@ -575,7 +575,7 @@ class ManagePageLayouts extends page_generic {
 						unset($pps[$preset]);
 					}
 					if(!isset($options['table_sort_dir'])) $options['table_sort_dir'] = 'desc';
-					if(in_array('%dkp_id%', $options['table_subs']) && '%dkp_id%' != $options['table_main_sub']) {
+					if($page_object == 'hptt_listmembers_memberlist_overview') {	
 						$this->init_multipools();
 						if(!isset($options['default_pool'])) $options['default_pool'] = 0;
 						if(!isset($options['default_pool_ov'])) $options['default_pool_ov'] = 1;
@@ -621,7 +621,6 @@ class ManagePageLayouts extends page_generic {
 					$page_object_id++;
 				}
 			}
-			$page_id++;
 		}
 
 		$this->tpl->assign_vars(array (

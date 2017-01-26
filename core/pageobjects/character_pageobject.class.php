@@ -138,6 +138,8 @@ class character_pageobject extends pageobject {
 			'DATA_CLASSNAME'		=> $this->pdh->get('member', 'classname', array($this->url_id)),
 			'NOTES'					=> (isset($member['notes']) && $member['notes'] != '') ? $member['notes'] : $this->user->lang('no_notes'),
 			'S_WITH_TWINK_DKP'		=> ($withTwinksDKP) ? true : false,
+			'HPTT_ADMIN_LINK'		=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('viewmember').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,
+				
 
 			// images
 			'IMG_CLASSICON'			=> $this->game->decorate('primary', $member[$this->game->get_primary_class(true)], $this->pdh->get('member', 'profiledata', array($this->url_id))),

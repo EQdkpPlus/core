@@ -36,6 +36,7 @@ $module_lang = array(
 	"eventlink" => 'Event',
 	"icon" => 'Icon',
 	"editicon" => '',
+	'def_itempool'=> 'Default-Itempool',
 	);
 	$preset_lang = array(
 	"ename" => 'Event name',
@@ -45,6 +46,7 @@ $module_lang = array(
 	"emdkps" => 'Event MultiDKP-Pools',
 	"eipools" => 'Event Itempools',
 	"eventedit" => 'Event edit icon',
+	'edefitempool'=> 'Event default itempool',
 	);
 	
 

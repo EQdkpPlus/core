@@ -1122,6 +1122,7 @@ $lang = array(
 	"email_must_confirm_note" => "The Administrator has initiated an email address confirmation. You should have already received an email with a link to confirm your email address. Until you haven't confirmed, only this userprofile is accessible.",
 	"warning" => "Warning",
 	"information" => "Information",
+	"edit_table" => "Edit table",
 );
 
 ?>

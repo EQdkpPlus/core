@@ -64,7 +64,7 @@ define('SQL_UNINSTALL',	2);
 if(!defined('MAX_FILES_USERFOLDER')) define('MAX_FILES_USERFOLDER', 20);
 
 //Max concurrent sessions from one IP with the same Browser
-if(!defined('MAX_CONCURRENT_SESSIONS')) define('MAX_CONCURRENT_SESSIONS', 200);
+if(!defined('MAX_CONCURRENT_SESSIONS')) define('MAX_CONCURRENT_SESSIONS', 50);
 
 //Snapshot time - default: three weeks
 if(!defined('POINTS_SNAPSHOT_TIME')) define('POINTS_SNAPSHOT_TIME', 1814400);

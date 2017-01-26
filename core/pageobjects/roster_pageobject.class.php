@@ -152,6 +152,10 @@ class roster_pageobject extends pageobject {
 				$this->build_class_block($rosterClasses['data'], $rosterClasses['todisplay'], $arrRosterMembers);
 			}
 		}
+		
+		$this->tpl->assign_vars(array(
+				'HPTT_ADMIN_LINK'	=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('roster').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,
+		));
 
 		$this->set_vars(array(
 			'template_file'	=> ((is_file($rosterfolder.'roster_view.html')) ? $rosterfolder.'roster_view.html' : 'roster_view.html'),

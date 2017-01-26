@@ -31,6 +31,7 @@ $module_lang = array(
 	'eventlink' => 'Ereignis',
 	'icon'		=> 'Icon',
 	'editicon'	=> '',
+	'def_itempool'=> 'Standard-Itempool',
 );
 
 $preset_lang = array(
@@ -41,6 +42,7 @@ $preset_lang = array(
 	'emdkps'	=> 'Ereignis-MultiDKP-Pools',
 	'eipools'	=> 'Ereignis-Itempools',
 	'eventedit'	=> 'Ereignis-Bearbeiten-Icon',
+	'edefitempool'=> 'Ereignis-Standard-Itempool',
 );
 
 ?>

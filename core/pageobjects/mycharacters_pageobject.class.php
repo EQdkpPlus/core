@@ -175,6 +175,8 @@ class mycharacters_pageobject extends pageobject {
 			'ADD_MENU'				=> $this->core->build_dropdown_menu('<i class="fa fa-plus fa-lg"> </i> '.$this->user->lang('uc_add_char'), $cm_addmenu, 'floatRight'),
 
 			'S_SHOW_NO_CONN_INFO'	=> $show_no_conn_info,
+			'HPTT_ADMIN_LINK'		=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('manage_characters').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,
+					
 		));
 
 		$this->core->set_vars(array(
