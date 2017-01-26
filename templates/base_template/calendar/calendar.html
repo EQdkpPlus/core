@@ -209,6 +209,7 @@
 					},
 					success: function(msg){
 						system_message(msg, 'success');
+						$('#calendar').fullCalendar('refetchEvents');
 					}
 				});
 			},
@@ -225,6 +226,7 @@
 					},
 					success: function(msg){
 						system_message(msg, 'success');
+						$('#calendar').fullCalendar('refetchEvents');
 					}
 				});
 			},
