@@ -31,7 +31,7 @@ if (!class_exists('exchange_calevents_list')){
 		public function get_calevents_list($params, $body){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 
-			if ($this->user->check_auth('po_calendarevent', false) || $isAPITokenRequest){
+			if ($isAPITokenRequest || $this->user->check_auth('po_calendarevent', false)){
 
 				//Input-Vars:
 				// - raids_only 0/1(default: 1)

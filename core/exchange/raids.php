@@ -31,7 +31,7 @@ if (!class_exists('exchange_raids')) {
 		public function get_raids($params, $body) {
 		    $isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 		    
-		    if($this->user->check_pageobjects(array('raids'), 'AND', false) || $isAPITokenRequest){
+		    if($isAPITokenRequest ||  $this->user->check_pageobjects(array('raids'), 'AND', false)){
 		    	$raidlist = $this->pdh->get('raid', 'id_list');
 		    	$raidlist = $this->pdh->sort($raidlist, 'raid', 'date', 'desc');
 		    	$intNumber = (intval($params['get']['number']) > 0) ?  intval($params['get']['number']) : false;

@@ -31,7 +31,7 @@ if (!class_exists('exchange_points')){
 		public function get_points($params, $body){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 			
-			if($this->user->check_pageobjects(array('points'), 'AND', false) || $isAPITokenRequest)
+			if($isAPITokenRequest || $this->user->check_pageobjects(array('points'), 'AND', false))
 			{
 				include_once($this->root_path . 'core/data_export.class.php');
 				$myexp = new content_export();

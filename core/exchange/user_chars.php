@@ -31,7 +31,7 @@ if (!class_exists('exchange_user_chars')){
 		public function get_user_chars($params, $body){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 			
-			if ($this->user->check_auth('po_calendarevent', false) || $isAPITokenRequest){
+			if ($isAPITokenRequest || $this->user->check_auth('po_calendarevent', false)){
 				$userid = (intval($params['get']['userid']) > 0) ? intval($params['get']['userid']) : $this->user->id;
 				//UserChars
 				$user_chars = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'connection_id', array($userid))));

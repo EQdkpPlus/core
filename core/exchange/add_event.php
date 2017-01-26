@@ -37,7 +37,7 @@ if (!class_exists('exchange_add_event')){
 		public function post_add_event($params, $body){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 			
-			if ($this->user->check_auth('a_event_add', false) || $isAPITokenRequest){
+			if ($isAPITokenRequest ||  $this->user->check_auth('a_event_add', false)){
 				$blnTest = (isset($params['get']['test']) && $params['get']['test']) ? true : false;
 				
 				$xml = simplexml_load_string($body);

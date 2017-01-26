@@ -42,7 +42,7 @@ if (!class_exists('exchange_add_item')){
 		public function post_add_item($params, $body){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 			
-			if ($this->user->check_auth('a_item_add', false) || $isAPITokenRequest){
+			if ($isAPITokenRequest || $this->user->check_auth('a_item_add', false)){
 				$blnTest = (isset($params['get']['test']) && $params['get']['test']) ? true : false;
 				
 				$xml = simplexml_load_string($body);

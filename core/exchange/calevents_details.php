@@ -30,7 +30,7 @@ if (!class_exists('exchange_calevents_details')){
 		public function get_calevents_details($params, $body){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 
-			if ($this->user->check_auth('po_calendarevent', false) || $isAPITokenRequest){
+			if ($isAPITokenRequest || $this->user->check_auth('po_calendarevent', false)){
 				if ( intval($params['get']['eventid']) > 0){
 					$event_id = intval($params['get']['eventid']);
 					$eventdata	= $this->pdh->get('calendar_events', 'data', array($event_id));

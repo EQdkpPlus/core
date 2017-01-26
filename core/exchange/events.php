@@ -32,7 +32,7 @@ if (!class_exists('exchange_events')){
 		public function get_events($params, $body){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 
-			if($this->user->check_pageobjects(array('events'), 'AND', false) || $isAPITokenRequest){
+			if($isAPITokenRequest || $this->user->check_pageobjects(array('events'), 'AND', false)){
 				$arrEvents = $this->pdh->get('event', 'id_list');
 				$out = array();
 				foreach($arrEvents as $eventid){
