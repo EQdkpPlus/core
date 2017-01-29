@@ -371,6 +371,7 @@ class Manage_Articles extends page_generic {
 			'CATEGORY_NAME' 	=> $this->pdh->get('article_categories', 'name', array($cid)),
 			'S_CATEGORY_PUBLISHED' => $this->pdh->get('article_categories', 'published', array($cid)) ? true : false,
 			'CID'				=> $cid,
+			'HPTT_ADMIN_LINK'	=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('admin_manage_articles').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,	
 			'BUTTON_MENU'		=> $this->core->build_dropdown_menu($this->user->lang('selected_articles').'...', $arrMenuItems, '', 'manage_members_menu', array("input[name=\"selected_ids[]\"]")),
 		));
 

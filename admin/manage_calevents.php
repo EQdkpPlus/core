@@ -57,6 +57,7 @@ class Manage_Calevents extends page_generic {
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
 			'PAGINATION' 		=> generate_pagination('manage_calevents.php'.$sort_suffix, count($view_list), 40, $this->in->get('start', 0)),
 			'EVENT_COUNT'		=> count($view_list),
+			'HPTT_ADMIN_LINK'	=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('admin_manage_calevents').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,		
 		));
 
 		$this->core->set_vars(array(

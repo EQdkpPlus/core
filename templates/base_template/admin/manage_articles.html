@@ -51,7 +51,7 @@
 
 <form method="post" action="{ACTION}" name="post">
 	<div class="contentHeader">
-		<h1 class="contentTitle">{L_manage_articles}: {CATEGORY_NAME} <span class="bubble">{ARTICLE_COUNT}</span> <a href="{EQDKP_ROOT_PATH}admin/manage_article_categories.php{SID}&c={CID}"><i class="fa fa-pencil" title="{L_edit}" style="font-size:0.8em;"></i></a> <!-- IF S_CATEGORY_PUBLISHED --><div class="eye" style="cursor:auto;"></div><!-- ELSE --><div class="eye-gray" style="cursor:none;"></div><!-- ENDIF --></h1>
+		<h1 class="contentTitle">{L_manage_articles}: {CATEGORY_NAME} <span class="bubble">{ARTICLE_COUNT}</span> <a href="{EQDKP_ROOT_PATH}admin/manage_article_categories.php{SID}&c={CID}"><i class="fa fa-pencil" title="{L_edit}" style="font-size:0.8em;"></i></a> <!-- IF S_CATEGORY_PUBLISHED --><div class="eye" style="cursor:auto;"></div><!-- ELSE --><div class="eye-gray" style="cursor:none;"></div><!-- ENDIF -->{HPTT_ADMIN_LINK}</h1>
 	</div>
 	<div class="tableHeader floatRight">
 		<button class="mainoption" type="button" name="addadj" onclick="window.location='manage_articles.php{SID}&amp;a=0&amp;c={CID}'"><i class="fa fa-plus"></i>{L_add_new_article}</button>

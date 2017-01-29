@@ -205,6 +205,7 @@ class Manage_Events extends page_generic {
 			'EVENT_PAGINATION' => generate_pagination('manage_events.php'.$this->SID.$sort_suffix, $event_count, $this->user->data['user_rlimit'], $start),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
 			'EVENT_COUNT' => $event_count,
+			'HPTT_ADMIN_LINK'	=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('admin_manage_events').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,	
 			)
 		);
 

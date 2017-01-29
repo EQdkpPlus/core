@@ -269,6 +269,7 @@ class ManageItems extends page_generic {
 			'PAGINATION' 		=> generate_pagination('manage_items.php'.$sort_suffix, $item_count, $this->user->data['user_rlimit'], $this->in->get('start', 0)),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
 			'ITEM_COUNT' 		=> $item_count,
+			'HPTT_ADMIN_LINK'	=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('admin_manage_items').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,		
 			'BUTTON_MENU'		=> $this->core->build_dropdown_menu($this->user->lang('selected_items').'...', $arrMenuItems, '', 'manage_members_menu', array("input[name=\"selected_ids[]\"]")),
 				
 		));

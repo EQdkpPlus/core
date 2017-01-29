@@ -527,6 +527,7 @@ class ManageRaids extends page_generic {
 			'IMPORT_DKP' => ($this->pm->check('raidlogimport', PLUGIN_INSTALLED)) ? '<button onclick="window.location=\''.$this->root_path.'plugins/raidlogimport/admin/dkp.php'.$this->SID.'\'" type="button" class="mainoption"><i class="fa fa-upload"></i>'.$this->user->lang('raidlogimport_dkp').'</button>' : '',
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
 			'RAID_COUNT' => $raid_count,
+			'HPTT_ADMIN_LINK'	=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('admin_manage_raids').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,	
 			'BUTTON_MENU'=> $this->core->build_dropdown_menu($this->user->lang('selected_elements').'...', $arrMenuItems, '', 'manage_members_menu', array("input[name=\"selected_ids[]\"]")),
 		));
 
