@@ -144,8 +144,8 @@ $(function() {
 	});
 
 	// the manual form validation
-	$('#submittheform').click(function(){
-
+	$('#submittheform').click(function(e){
+		e.preventDefault();
 		if($('#selectmode').val() == 'raid'){
 			if(($('input[name="raid_attendees_count"]').val() < 1) || ($('input[name="raid_attendees_count"]').val() == '0')){
 				ModalAlert({L_raidevent_event_val_attnd|jsencode});
@@ -375,5 +375,5 @@ function attendeeCount(){
 					</dd>
 				</dl>
 			</fieldset>
-		<button type="button" id="addtemplate-button"><i class="fa fa-check"></i> {L_submit}</button>
+		<button type="button" id="addtemplate-button" name="addtemplate-button"><i class="fa fa-check"></i> {L_submit}</button>
 </div>
