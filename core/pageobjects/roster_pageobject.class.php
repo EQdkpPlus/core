@@ -82,6 +82,7 @@ class roster_pageobject extends pageobject {
 					$arrGroupMembers = $this->pdh->get('raid_groups_members', 'member_list', array($intRaidGroupID));
 							
 					$hptt = $this->get_hptt($this->hptt_page_settings, $arrGroupMembers, $arrGroupMembers, array('%link_url%' => $this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%with_twink%' => $this->skip_twinks, '%use_controller%' => true), 'raidgroup_'.$intRaidGroupID);
+					$hptt->setPageRef($this->strPath);
 					
 					$this->tpl->assign_block_vars('class_row', array(
 							'CLASS_NAME'	=> $this->pdh->get('raid_groups', 'name', array($intRaidGroupID)),
@@ -110,7 +111,8 @@ class roster_pageobject extends pageobject {
 					if(count($arrGroupMembers) === 0) continue;
 						
 					$hptt = $this->get_hptt($this->hptt_page_settings, $arrGroupMembers, $arrGroupMembers, array('%link_url%' => $this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%with_twink%' => $this->skip_twinks, '%use_controller%' => true), 'rank_'.$intRankID);
-				
+					$hptt->setPageRef($this->strPath);
+					
 					$this->tpl->assign_block_vars('class_row', array(
 							'CLASS_NAME'	=> $this->pdh->get('rank', 'name', array($intRankID)),
 							'CLASS_ICONS'	=> $this->game->decorate('ranks', $intRankID),
@@ -125,7 +127,8 @@ class roster_pageobject extends pageobject {
 					$arrMembers = $this->pdh->get('member', 'id_list', array($this->skip_inactive, $this->skip_hidden, true, $this->skip_twinks));
 				
 					$hptt = $this->get_hptt($this->hptt_page_settings, $arrMembers, $arrMembers, array('%link_url%' => $this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%with_twink%' => $this->skip_twinks, '%use_controller%' => true), 'none');
-				
+					$hptt->setPageRef($this->strPath);
+					
 					$this->tpl->assign_block_vars('class_row', array(
 							'CLASS_NAME'	=> '',
 							'CLASS_ICONS'	=> '',
