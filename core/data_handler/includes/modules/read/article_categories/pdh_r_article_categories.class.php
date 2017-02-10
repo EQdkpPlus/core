@@ -29,6 +29,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 		public $default_lang = 'english';
 		public $categories;
 		public $sortation;
+		public $alias;
 		private $arrTempPermissions = array();
 
 		public $hooks = array(
@@ -57,7 +58,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			$this->categories	= $this->pdc->get('pdh_article_categories_table');
 			$this->sortation	= $this->pdc->get('pdh_article_categories_sortation');
 			$this->alias		= $this->pdc->get('pdh_article_categories_alias');
-			if($this->categories !== NULL){
+			if($this->categories !== NULL && $this->sortation !== NULL && $this->alias !== NULL){
 				return true;
 			}
 			
