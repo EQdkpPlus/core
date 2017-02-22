@@ -693,7 +693,8 @@ if (!class_exists("pdh_r_user")){
 
 		public function get_auth_account($user_id){
 			$this->decrypt_data_single($user_id);
-			return $this->users[$user_id]['auth_account'];
+			$arrAuthAccounts = $this->users[$user_id]['auth_account'];
+			return ((is_array($arrAuthAccounts)) ? $arrAuthAccounts : array());
 		}
 
 		public function get_search($search_value) {

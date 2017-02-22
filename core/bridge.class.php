@@ -297,6 +297,14 @@ class bridge extends gen_class {
 			}
 		}
 		
+		//Gender is a user field
+		if (isset($sync_array['gender'])){
+			if ($save_array['gender'] != $sync_array['gender']){
+				$save_array['gender'] = $sync_array['gender'];
+				$save = true;
+			}
+		}
+		
 		if ($save){
 			$save_array['custom_fields'] = serialize($eqdkp_custom_fields);
 			$this->pdh->put('user', 'update_user', array($user_id, $save_array, false, false));
