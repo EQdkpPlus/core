@@ -184,8 +184,8 @@ class update_2300 extends sql_update_task {
 			) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;",
 			31	=> "ALTER TABLE `__calendars` ADD `permissions` VARCHAR(255) COLLATE utf8_bin NOT NULL DEFAULT 'all' AFTER `affiliation`;",
 			32 => "UPDATE __calendars SET `permissions` = 'all';",
-			33 => "INSERT INTO `__user_profilefields` (`id`, `name`, `lang_var`, `type`, `length`, `minlength`, `validation`, `required`, `show_on_registration`, `enabled`, `sort_order`, `is_contact`, `contact_url`, `icon_or_image`, `bridge_field`, `options`, `editable`) VALUES (14, 'Steam', 'userpf_steam', 'text', 30, 2, '[\\w_]+', 0, 0, 1, 14, 1, 'https://steamcommunity.com/id/%s/', 'fa-steam-square', NULL, NULL, 1);",
-			34 => "INSERT INTO `__user_profilefields` (`id`, `name`, `lang_var`, `type`, `length`, `minlength`, `validation`, `required`, `show_on_registration`, `enabled`, `sort_order`, `is_contact`, `contact_url`, `icon_or_image`, `bridge_field`, `options`, `editable`) VALUES (15, 'Discord', '', 'text', 30, 2, '[\\w_]+#[0-9]{4}', 0, 0, 1, 15, 1, '', '', NULL, NULL, 1);",
+			33 => "INSERT INTO `__user_profilefields` (`name`, `lang_var`, `type`, `length`, `minlength`, `validation`, `required`, `show_on_registration`, `enabled`, `sort_order`, `is_contact`, `contact_url`, `icon_or_image`, `bridge_field`, `options`, `editable`) VALUES ('Steam', 'userpf_steam', 'text', 30, 2, '[\\w_]+', 0, 0, 1, 14, 1, 'https://steamcommunity.com/id/%s/', 'fa-steam-square', NULL, NULL, 1);",
+			34 => "INSERT INTO `__user_profilefields` (`name`, `lang_var`, `type`, `length`, `minlength`, `validation`, `required`, `show_on_registration`, `enabled`, `sort_order`, `is_contact`, `contact_url`, `icon_or_image`, `bridge_field`, `options`, `editable`) VALUES ('Discord', '', 'text', 30, 2, '[\\w_]+#[0-9]{4}', 0, 0, 1, 15, 1, '', '', NULL, NULL, 1);",
 			35 => "ALTER TABLE `__users`
 	DROP COLUMN `user_alimit`,
 	DROP COLUMN `user_climit`,
