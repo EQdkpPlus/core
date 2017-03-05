@@ -177,6 +177,10 @@ class ManageUserProfileFields extends page_generic {
 						'type' 		=> 'text',
 						'size'		=> 30,
 				),
+				'example' => array(
+						'type' 		=> 'text',
+						'size'		=> 30,
+				),
 				'required' => array(
 						'type' => 'radio',
 				),

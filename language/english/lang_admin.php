@@ -1823,6 +1823,7 @@ $lang = array(
 		"consolidate_info"	=> "A consolidation sums up all items, raids and adjustments of the selected event to one single adjustment for a characer. After that, all items, raids and adjustments for this event will get deleted.<br />This is usefull if you want to keep standings from an old MultiDKP Pool, but don't want to keep all the data.<br />Before the consolidation, a backup will be created.",
 		"consolidate_detele_warning" => "Are you sure you want to start the consolidation for the selected event?",
 		"consolidate_start"	=> "Sart consolidation",
+		"userpf_sett_f_example" => "Input Example",
 );
 
 ?>

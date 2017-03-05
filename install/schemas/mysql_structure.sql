@@ -722,6 +722,7 @@ CREATE TABLE `__user_profilefields` (
 	`bridge_field` TEXT NULL COLLATE 'utf8_bin',
 	`options` TEXT NULL COLLATE 'utf8_bin',
 	`editable` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1',
+	`example` VARCHAR(255) NULL COLLATE 'utf8_bin',
 	PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 

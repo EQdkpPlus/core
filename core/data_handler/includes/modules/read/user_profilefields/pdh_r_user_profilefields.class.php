@@ -91,6 +91,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 						'options'				=> $drow['options'],
 						'lang_var'				=> $drow['lang_var'],
 						'editable'				=> (int)$drow['editable'],
+						'example'				=> $drow['example'],
 					);
 				}
 				$this->pdc->put('pdh_user_profilefields_table', $this->user_profilefields, null);
@@ -396,6 +397,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 				'lang'		=> $this->get_html_name($intFieldID),
 				'required'	=> ($this->get_required($intFieldID)) ? true : false,
 				'options'	=> $arrOptions,
+				'dir_help'	=> ($this->get_example($intFieldID)) ? $this->get_example($intFieldID) : '',
 			);
 
 			$strPattern = $this->get_validation($intFieldID);
@@ -415,6 +417,18 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 			}
 
 			return $myField;
+		}
+		
+		/**
+		 * Returns example for $intFieldID
+		 * @param integer $intFieldID
+		 * @return multitype example
+		 */
+		public function get_example($intFieldID){
+			if (isset($this->user_profilefields[$intFieldID])){
+				return $this->user_profilefields[$intFieldID]['example'];
+			}
+			return false;
 		}
 
 		public function get_bridge_mapping(){

@@ -1826,6 +1826,7 @@ $lang = array(
 "consolidate_success" => "Die Konsolidierung wurde durchgeführt. Zur Sicherheit wurde vor der Konsolidierung ein Backup angelegt.",
 "consolidate_info"	=> "Bei einer Konsolidierung werden für das ausgewählte Event alle Items, Raids und Korrekturen zu einer einzelnen Korrektur für einen Charakter zusammengefasst und die einzelnen Items, Raids und Korrekturen anschließend gelöscht.<br />Dies kann dazu verwendet werden, die Stände eines nicht mehr benötigten MultiDKP-Pools zu erhalten und zugleich die Datenmenge schlank zu halten.<br />Vor der Konsolidierung wird automatisch ein Backup angelegt.",
 "consolidate_detele_warning" => "Bist du sicher, dass du die Konsolidierung für das ausgewählte Event durchführen willst?",		
-"consolidate_start"	=> "Konsolidierung starten",		
+"consolidate_start"	=> "Konsolidierung starten",
+"userpf_sett_f_example" => "Eingabebeispiel",
 );
 ?>

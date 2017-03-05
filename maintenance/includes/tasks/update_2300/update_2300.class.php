@@ -76,6 +76,9 @@ class update_2300 extends sql_update_task {
 				36 => 'Alter Style Table',
 				37 => 'Alter Events Table',
 				'update_function' => 'Add Cronjobs to the Databse',
+				38 => "Alter user profilfeld table",
+				39 => 'Add Steam field',
+				40 => 'Add Discord Field',
 			),
 			'german' => array(
 				'update_2300'	=> 'EQdkp Plus 2.3.0',
@@ -111,12 +114,13 @@ class update_2300 extends sql_update_task {
 				30	=> 'Erstelle Cronjob Tabelle',
 				31 => 'Füge Berechtigungen Feld zu Kalendertabelle hinzu',
 				32 => 'Füge Berechtigungen Feld zu Kalendertabelle hinzu',
-				33 => 'Füge Steam Benutzerprofilfeld hinzu',
-				34 => 'Füge Discord Benutzerprofilfeld hinzu',
 				35 => 'Entferne nicht mehr genutzte Spalten',
 				36 => 'Erweitere Style Tabelle',
 				37 => 'Erweitere Events Tabelle',
 				'update_function' => 'Übertrage Cronjobs in die Datenbank',
+				38 => "Erweitere Benutzerprofilfeldtabelle",
+				39 => 'Füge Steam Benutzerprofilfeld hinzu',
+				40 => 'Füge Discord Benutzerprofilfeld hinzu',
 			),
 		);
 
@@ -184,8 +188,6 @@ class update_2300 extends sql_update_task {
 			) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;",
 			31	=> "ALTER TABLE `__calendars` ADD `permissions` VARCHAR(255) COLLATE utf8_bin NOT NULL DEFAULT 'all' AFTER `affiliation`;",
 			32 => "UPDATE __calendars SET `permissions` = 'all';",
-			33 => "INSERT INTO `__user_profilefields` (`name`, `lang_var`, `type`, `length`, `minlength`, `validation`, `required`, `show_on_registration`, `enabled`, `sort_order`, `is_contact`, `contact_url`, `icon_or_image`, `bridge_field`, `options`, `editable`) VALUES ('Steam', 'userpf_steam', 'text', 30, 2, '[\\w_]+', 0, 0, 1, 14, 1, 'https://steamcommunity.com/id/%s/', 'fa-steam-square', NULL, NULL, 1);",
-			34 => "INSERT INTO `__user_profilefields` (`name`, `lang_var`, `type`, `length`, `minlength`, `validation`, `required`, `show_on_registration`, `enabled`, `sort_order`, `is_contact`, `contact_url`, `icon_or_image`, `bridge_field`, `options`, `editable`) VALUES ('Discord', '', 'text', 30, 2, '[\\w_]+#[0-9]{4}', 0, 0, 1, 15, 1, '', '', NULL, NULL, 1);",
 			35 => "ALTER TABLE `__users`
 	DROP COLUMN `user_alimit`,
 	DROP COLUMN `user_climit`,
@@ -194,6 +196,9 @@ class update_2300 extends sql_update_task {
 	DROP COLUMN `user_nlimit`;",
 			36	=> "ALTER TABLE `__styles` ADD `editor_theme` VARCHAR(255) NULL DEFAULT 'lightgray';",
 			37 => "ALTER TABLE `__events` ADD COLUMN `default_itempool` INT(11) UNSIGNED NOT NULL DEFAULT '0';",
+			38 => "ALTER TABLE `__user_profilefields` ADD COLUMN `example` VARCHAR(255) NULL COLLATE 'utf8_bin'",
+			39 => "INSERT INTO `__user_profilefields` (`name`, `lang_var`, `type`, `length`, `minlength`, `validation`, `required`, `show_on_registration`, `enabled`, `sort_order`, `is_contact`, `contact_url`, `icon_or_image`, `bridge_field`, `options`, `editable`, `example`) VALUES ('Steam', 'userpf_steam', 'link', 30, 2, '[\\w_]+', 0, 0, 1, 14, 1, 'https://steamcommunity.com/id/%s/', 'fa-steam-square', NULL, NULL, 1, 'zaflu');",
+			40 => "INSERT INTO `__user_profilefields` (`name`, `lang_var`, `type`, `length`, `minlength`, `validation`, `required`, `show_on_registration`, `enabled`, `sort_order`, `is_contact`, `contact_url`, `icon_or_image`, `bridge_field`, `options`, `editable`, `example`) VALUES ('Discord', '', 'text', 30, 2, '[\\w_]+#[0-9]{4}', 0, 0, 1, 15, 1, '', '', NULL, NULL, 1, 'GodMod#1234');"
 		);
 	}
 

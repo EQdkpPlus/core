@@ -42,6 +42,7 @@ if(!class_exists('pdh_w_user_profilefields')) {
 					'contact_url' 			=> $arrValues['contact_url'],
 					'icon_or_image' 		=> $arrValues['icon_or_image'],
 					'bridge_field' 			=> $arrValues['bridge_field'],
+					'example' 				=> $arrValues['example'],
 					'options' 				=> serialize(array('options' => $arrOptions)),
 					'editable' 				=> 1,
 					'sort_order' 			=> 9999999,
@@ -73,6 +74,7 @@ if(!class_exists('pdh_w_user_profilefields')) {
 				'contact_url' => $arrValues['contact_url'],
 				'icon_or_image' => $arrValues['icon_or_image'],
 				'bridge_field' => $arrValues['bridge_field'],
+				'example' => $arrValues['example'],
 				'options' => serialize(array('options' => $arrOptions)),
 				'editable' => 1
 			);
