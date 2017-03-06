@@ -345,7 +345,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 				$userid		= ($userid > 0) ? $userid : $this->user->data['user_id'];
 				$owner		= $this->get_creatorid($id);
 				$extension	= $this->get_extension($id);
-				return ($owner ==  $userid || isset($extension['invited']) && in_array($userid, $extension['invited'])) ? true : false;
+				return ($owner ==  $userid || (isset($extension['invited']) && in_array($userid, $extension['invited']))) ? true : false;
 			}
 			return true;
 		}
