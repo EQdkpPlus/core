@@ -24,15 +24,6 @@ $(function() {
 
 	}).trigger('change');
 
-	/*$("input[type='checkbox'][name='private']").change(function() {
-		console.log($(this).prop('checked'));
-		if($(this).prop('checked') == true){
-			$("#invitefield").show();
-		}else{
-			$("#invitefield").hide();
-		}
-	});*/
-
 	$('#addtemplate-button').on('click', function(){
 		var templatename = $('#mytemplatename').val();
 		$( "#dialog-add-template" ).dialog( "close" );
@@ -89,9 +80,13 @@ $(function() {
 	$("input[type='checkbox'][name='allday']").change(function() {
 		if($('#selectmode').val() == 'event'){
 			if($(this).prop('checked') == true){
-				$('#cal_startdate, #cal_enddate').datetimepicker('disableTimepicker');
+				//$('#cal_startdate').datetimepicker('disableTimepicker');
+				//$('#cal_enddate').datetimepicker('disableTimepicker');
+				$('#cal_startdate, #cal_enddate').datetimepicker('option', 'showTimepicker', false);
 			}else{
-				$('#cal_enddate, #cal_startdate').datetimepicker('enableTimepicker');
+				//$('#cal_startdate').datetimepicker('enableTimepicker');
+				//$('#cal_enddate').datetimepicker('enableTimepicker');
+				$('#cal_startdate, #cal_enddate').datetimepicker('option', 'showTimepicker', true);
 			}
 		}
 	}).trigger('change');
