@@ -77,19 +77,21 @@ $(function() {
 		}
 	});
 
-	$("input[type='checkbox'][name='allday']").change(function() {
+	$("#cb_allday").change(function() {
 		if($('#selectmode').val() == 'event'){
-			if($(this).prop('checked') == true){
-				//$('#cal_startdate').datetimepicker('disableTimepicker');
-				//$('#cal_enddate').datetimepicker('disableTimepicker');
-				$('#cal_startdate, #cal_enddate').datetimepicker('option', 'showTimepicker', false);
+			if($(this).is(':checked')){
+				console.log('disable timepicker')
+				$('#cal_startdate, #cal_enddate').datetimepicker('refresh');
+				$('#cal_startdate, #cal_enddate').datetimepicker('disableTimepicker');
+				//$('#cal_startdate, #cal_enddate').datetimepicker('option', 'showTimepicker', false);
 			}else{
-				//$('#cal_startdate').datetimepicker('enableTimepicker');
-				//$('#cal_enddate').datetimepicker('enableTimepicker');
-				$('#cal_startdate, #cal_enddate').datetimepicker('option', 'showTimepicker', true);
+				console.log('enable timepicker')
+				$('#cal_startdate, #cal_enddate').datetimepicker('refresh');
+				$('#cal_startdate, #cal_enddate').datetimepicker('enableTimepicker');
+				//$('#cal_startdate, #cal_enddate').datetimepicker('option', 'showTimepicker', true);
 			}
 		}
-	}).trigger('change');
+	}).trigger('change')
 
 	// the onpageload state
 	if($('#selectmode').val() != ''){

@@ -36,20 +36,21 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 class hcheckbox extends html {
 
 	protected static $type = 'checkbox';
-	
+
 	public $name = '';
 	public $disabled = false;
 	public $class = '';
-	
+
 	protected function _toString() {
 		$out = '';
+
 		foreach ($this->options as $key => $opt) {
 			if(is_array($this->value)){
 				$selected_choice = (in_array((string)$key, $this->value)) ? ' checked="checked"' : '';
 			} else {
 				$selected_choice = ((string)$key == (string)$this->value) ? ' checked="checked"' : '';
 			}
-			
+
 			$disabled = ($this->disabled) ? ' disabled="disabled"' : '';
 			$out .= '<label';
 			$dep = '';
@@ -61,12 +62,12 @@ class hcheckbox extends html {
 			if(!empty($this->class)) $out .= ' class="'.$this->class.'"';
 			$out .= ' id="'.$this->id.'"';
 			if($this->tolang) $opt = ($this->user->lang($opt, false, false)) ? $this->user->lang($opt) : (($this->game->glang($opt)) ? $this->game->glang($opt) : $opt);
-			
-			$out .= '><input type="'.self::$type.'" name="'.$this->name.((count($this->options) > 1) ? '[]' : '').'" value="'.$key.'"'.$selected_choice.$disabled.$dep.'/>'.$opt.'</label><br />';
+			if(empty($this->inputid)) $this->inputid = $this->cleanid($this->name);
+			$out .= '><input type="'.self::$type.'" name="'.$this->name.((count($this->options) > 1) ? '[]' : '').'" value="'.$key.'"'.$selected_choice.$disabled.$dep.' id="'.$this->inputid.'" />'.$opt.'</label><br />';
 		}
 		return $out;
 	}
-	
+
 	public function _inpval() {
 		if(count($this->options) > 1){
 			return $this->in->getArray($this->name, 'string');
