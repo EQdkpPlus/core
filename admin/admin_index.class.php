@@ -362,6 +362,7 @@ class admin_index extends gen_class {
 			'DATABASE_NAME'			=> $this->dbname,
 			'TABLE_PREFIX'				=> $this->table_prefix,
 			'DATA_FOLDER'				=> md5($this->table_prefix.$this->dbname),
+			'S_DATA_FOLDER'				=> (defined('INSTALLED_VERSION')) ? false : true,
 			'EQDKP_VERSION'			=> 'FILE: '.VERSION_INT.', DB: '.$this->config->get('plus_version'),
 			'CIRCLE_USER_VALUE'		=> sprintf("%.2F", (($intTotalUsers - ($intTotalUsers-$intActiveUsers)) / $intTotalUsers) * 100),
 			'CIRCLE_MEMBER_VALUE'	=> sprintf("%.2F", (($total_members_ - $total_members_inactive) / $total_members_) * 100),
