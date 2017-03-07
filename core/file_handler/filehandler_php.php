@@ -35,10 +35,16 @@ if (!class_exists("filehandler_php")) {
 		* Initiate the cacheHandler
 		*/
 		public function __construct($globalcache){
-			$myDBName		= md5((($globalcache) ? $globalcache : $this->table_prefix.$this->dbname));
+			//Introduced with 2.3
+			if(defined('INSTALLED_VERSION')){
+				$myDBName		= ($globalcache) ? md5($globalcache).'/' : '';
+			} else {
+				$myDBName		= md5((($globalcache) ? $globalcache : $this->table_prefix.$this->dbname)).'/';
+			}
+			
 			if(is_writable($this->root_path.'data/')){
-				$this->CacheFolder			= $this->root_path.'data/'.$myDBName.'/';
-				$this->CacheFolderPlain 	= 'data/'.$myDBName.'/';
+				$this->CacheFolder			= $this->root_path.'data/'.$myDBName;
+				$this->CacheFolderPlain 	= 'data/'.$myDBName;
 				
 				//Create cache folder
 				$this->CheckCreateFolder($this->CacheFolder, false);

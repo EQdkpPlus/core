@@ -1480,7 +1480,7 @@ class template extends gen_class {
 	private function replace_paths_css($strCSS, $stylepath = false, $data = false, $path=false){
 		$style = ($data) ? $data : $this->user->style;
 		$stylepath = ($stylepath) ? $stylepath : $this->style_code;
-		$root_path = '../../../../../';
+		$root_path = defined('INSTALLED_VERSION') ?  '../../../../' : '../../../../../';
 
 		//Background Image
 		$template_background_file = "";
@@ -1686,7 +1686,7 @@ class template extends gen_class {
 	public function parseLess($strCSS, $strMapFile=false){
 		$style = $this->user->style;
 		$stylepath = $this->style_code;
-		$root_path = '../../../../../';
+		$root_path = defined('INSTALLED_VERSION') ?  '../../../../' : '../../../../../';
 
 		//Background Image
 		$template_background_file = "";

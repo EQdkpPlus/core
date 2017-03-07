@@ -40,9 +40,16 @@ if (!class_exists("filehandler_ftp")) {
 		*/
 		public function __construct($globalcache){
 			// init the ftp
-			$myDBName			= md5((($globalcache) ? $globalcache : $this->table_prefix.$this->dbname));
-			$this->CacheFolder		= $this->root_path.'data/'.$myDBName.'/';
-			$this->CacheFolderPlain = 'data/'.$myDBName.'/';
+			
+			//Introduced with 2.3
+			if(defined('INSTALLED_VERSION')){
+				$myDBName		= ($globalcache) ? md5($globalcache).'/' : '';
+			} else {
+				$myDBName		= md5((($globalcache) ? $globalcache : $this->table_prefix.$this->dbname)).'/';
+			}
+			
+			$this->CacheFolder		= $this->root_path.'data/'.$myDBName;
+			$this->CacheFolderPlain = 'data/'.$myDBName;
 			
 			//Correct ftproot-path
 			if ($this->ftproot == '/') $this->ftproot = '';

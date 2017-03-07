@@ -41,11 +41,11 @@ class encryptionkey extends install_generic {
 		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="no-borders">
 			<tr>
 				<td align="right"><strong>'.$this->lang['encryptkey'].': </strong><div class="subname">'.$this->lang['encryptkey_help'].'</div></td>
-				<td><input type="password" name="key1" size="25" value="" class="input" /></td>
+				<td><input type="password" name="key1" size="25" value="" class="input" autocomplete="off"/></td>
 			</tr>
 			<tr>
 				<td align="right"><strong>'.$this->lang['encryptkey_repeat'].': </strong></td>
-				<td><input type="password" name="key2" size="25" value="" class="input" /></td>
+				<td><input type="password" name="key2" size="25" value="" class="input" autocomplete="off"/></td>
 			</tr>
 		</table>';
 		return $content;

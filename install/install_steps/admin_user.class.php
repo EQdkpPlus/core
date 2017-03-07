@@ -39,11 +39,11 @@ class admin_user extends install_generic {
 		$content = '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="no-borders">
 						<tr>
 							<td align="right"><strong>'.$this->lang['username'].':</strong></td>
-							<td align="left"><input type="text" name="username" value="'.$this->username.'" class="input" /></td>
+							<td align="left"><input type="text" name="username" value="'.$this->username.'" class="input" autocomplete="off" /></td>
 						</tr>
 						<tr>
 							<td align="right"><strong>'.$this->lang['user_email'].':</strong></td>
-							<td align="left"><input type="text" name="user_email" value="'.$this->useremail.'" class="input" size="30"  /></td>
+							<td align="left"><input type="text" name="user_email" value="'.$this->useremail.'" class="input" size="30" autocomplete="off" /></td>
 						</tr>
 						<tr>
 							<td align="right"><strong>'.$this->lang['user_password'].':</strong></td>

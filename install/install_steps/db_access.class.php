@@ -67,11 +67,11 @@ class db_access extends install_generic {
 			</tr>
 			<tr>
 				<td align="right"><strong>'.$this->lang['dbuser'].': </strong></td>
-				<td><input type="text" name="dbuser" size="25" value="'.$this->dbuser.'" class="input" /></td>
+				<td><input type="text" name="dbuser" size="25" value="'.$this->dbuser.'" class="input" autocomplete="off"/></td>
 			</tr>
 			<tr>
 				<td align="right"><strong>'.$this->lang['dbpass'].': </strong></td>
-				<td><input type="password" name="dbpass" size="25" value="" class="input" /></td>
+				<td><input type="password" name="dbpass" size="25" value="" class="input" autocomplete="off"/></td>
 			</tr>
 			<tr>
 				<td align="right"><strong>'.$this->lang['table_prefix'].': </strong></td>
@@ -159,6 +159,7 @@ class db_access extends install_generic {
 		$content .= '$dbpass = \''.$this->dbpass.'\';'."\n";
 		$content .= '$dbpers = false;'."\n";
 		$content .= '$table_prefix = \''.$this->table_prefix.'\';'."\n\n";
+		$content .= 'define("INSTALLED_VERSION", "'.VERSION_INT.'");'."\n\n";
 		$content .= '?>';
 		$this->pfh->putContent($this->root_path.'config.php', $content);
 		
