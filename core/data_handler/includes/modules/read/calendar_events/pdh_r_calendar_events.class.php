@@ -182,7 +182,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 							}
 
 							// remove private events if no permission for it
-							if(!$this->private_userperm($row['id']){ continue; }
+							if(!$this->private_userperm($row['id'])){ continue; }
 							$ids[] = $row['id'];
 						}
 					}
