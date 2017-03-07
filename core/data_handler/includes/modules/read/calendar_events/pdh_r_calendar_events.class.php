@@ -182,7 +182,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 							}
 
 							// remove private events if no permission for it
-							if(!$this->private_userperm($row['id'])){ continue; }
+							if(!$this->get_private_userperm($row['id'])){ continue; }
 							$ids[] = $row['id'];
 						}
 					}
@@ -197,7 +197,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 						if(is_array($idfilter) && !in_array($this->get_calendar_id($id), $idfilter)) unset($ids[$key]);
 
 						// remove private events if no permission for it
-						if(!$this->private_userperm($id)) unset($ids[$key]);
+						if(!$this->get_private_userperm($id)) unset($ids[$key]);
 					}
 				}
 			}
