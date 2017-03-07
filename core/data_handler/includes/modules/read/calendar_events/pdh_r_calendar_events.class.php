@@ -180,6 +180,9 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 									continue;
 								}
 							}
+
+							// remove private events if no permission for it
+							if(!$this->private_userperm($row['id']){ continue; }
 							$ids[] = $row['id'];
 						}
 					}
@@ -190,8 +193,11 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 					foreach($ids as $key => $id) {
 						if($this->get_calendartype($id) != '1' || $this->events[$id]['timestamp_end'] < $this->time->time) unset($ids[$key]);
 
-						// us the claendarfilter
+						// us the calendarfilter
 						if(is_array($idfilter) && !in_array($this->get_calendar_id($id), $idfilter)) unset($ids[$key]);
+
+						// remove private events if no permission for it
+						if(!$this->private_userperm($id)) unset($ids[$key]);
 					}
 				}
 			}
