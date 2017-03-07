@@ -347,7 +347,11 @@ if( !class_exists( "plus_datahandler")){
 			if( method_exists( $objModule, $method ) ) {
 				if(DEBUG > 3){
 					$data = debug_backtrace();
-					$extra = array('module: '.$module, 'tag: '.$tag, 'params: '.implode( ", ", $params ));
+					if(!is_array($module) && !is_array($tag)) {
+						$extra = array('module: '.$module, 'tag: '.$tag, 'params: '.implode( ", ", $params ));
+					} else {
+						$extra = array('error: module or tag is an array instead of string');
+					}
 					for($i=0;$i>0;$i++) {
 						if(isset($data[$i]['file']) && strpos($data[$i]['file'], 'plus_datahandler') === false) break;
 					}
