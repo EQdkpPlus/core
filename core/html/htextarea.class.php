@@ -54,6 +54,9 @@ class htextarea extends html {
 	private $out = '';
 	
 	public function _construct() {
+	}
+	
+	public function _toString() {
 		$out = '<textarea name="'.$this->name.'" rows="'.$this->rows.'" cols="'.$this->cols.'" ';
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		$out .= 'id="'.$this->id.'" ';
@@ -70,11 +73,7 @@ class htextarea extends html {
 		if(!empty($this->placeholder)) $out .= 'placeholder="'.$this->placeholder.'" ';
 		$out .= '>'.$this->value.'</textarea>';
 		if($this->required) $out .= '<i class="fa fa-asterisk required small"></i> <span class="fv_msg" style="display:none;">'.registry::fetch('user')->lang('fv_required').'</span>';
-		$this->out = $out;
-	}
-	
-	public function _toString() {
-		return $this->out;
+		return $out;
 	}
 	
 	public function _inpval() {

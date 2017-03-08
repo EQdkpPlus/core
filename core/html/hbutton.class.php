@@ -53,6 +53,9 @@ class hbutton extends html {
 	private $out = '';
 	
 	public function _construct() {
+	}
+	
+	public function _toString() {
 		$return = false;
 		if($this->callback !== false) $return = call_user_func($this->callback, $this);
 		if($return !== false && $return !== NULL) {
@@ -69,11 +72,7 @@ class hbutton extends html {
 		$out .= 'value="'.strip_tags($value).'" ';
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
-		$this->out = $out.' >'.$value.'</button>';
-	}
-	
-	public function _toString() {
-		return $this->out;
+		return $out.' >'.$value.'</button>';
 	}
 	
 	public function _inpval() {

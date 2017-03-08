@@ -49,6 +49,10 @@ class htextareamultilang extends html {
 	private $out = '';
 	
 	public function _construct() {
+		}
+	
+	public function _toString() {
+		$this->out = '';
 		$arrLanguages = $this->user->getAvailableLanguages();
 		$strDefaultLanguage = $this->config->get('default_lang');
 		$this->jquery->init_multilang();
@@ -85,15 +89,13 @@ class htextareamultilang extends html {
 			$out .= '>';
 			if(isset($this->value) && isset($this->value[$strKey])) $out .= $this->value[$strKey];
 			$out .= '</textarea>';
-			
+				
 			$this->out .= $out;
 		}
 		
 		$this->out .= '</div>';
 		if($this->required) $this->out .= '<i class="fa fa-asterisk required small"></i> <span class="fv_msg" style="display:none;">'.registry::fetch('user')->lang('fv_required').'</span>';
-	}
-	
-	public function _toString() {
+		
 		return $this->out;
 	}
 	

@@ -53,6 +53,10 @@ class hdatepicker extends html {
 	private $all_options		= array('id', 'format', 'change_fields', 'cal_icons', 'show_buttons', 'number_months', 'year_range', 'other_months', 'timeformat', 'enablesecs', 'onselect', 'onclose', 'timepicker', 'return_function', 'returnJS');
 
 	protected function _construct() {
+		if(empty($this->id)) $this->id = $this->cleanid($this->name);
+	}
+
+	public function _toString() {
 		if(!($this->allow_empty && (empty($this->value) || $this->value == '0')) && is_numeric($this->value)) {
 			$this->value = $this->time->date($this->js_calendarformat(), $this->value);
 		}
@@ -65,23 +69,23 @@ class hdatepicker extends html {
 		if($this->readonly) $out .= 'readonly="readonly" ';
 		if($this->disabled) $out .= 'disabled="disabled" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
-
+		
 		if(isset($this->format)) {
 			$this->php_format = $this->format;
 			$this->format = $this->time->translateformat2js($this->format);
 		}
-
+		
 		if(isset($this->timeformat)) {
 			$this->php_timeformat = $this->timeformat;
 			$this->timeformat = $this->time->translateformat2js($this->timeformat);
 		}
-
+		
 		//copy options
 		$opts = array();
 		foreach($this->all_options as $opt) {
 			if(isset($this->$opt)) $opts[$opt] = $this->$opt;
 		}
-
+		
 		$jsout = '';
 		if (!$this->readonly){
 			$this->jquery->Calendar($this->name, $this->value, '', $opts);
@@ -89,12 +93,8 @@ class hdatepicker extends html {
 				$jsout = '<script>'.$this->jquery->get_jscode('calendar', $this->name).'</script>';
 			}
 		}
-
-		$this->out = $jsout.$out.' />'.((!$this->readonly) ? '<i class="fa fa-calendar" onclick="$( \'#'.$this->id.'\' ).datepicker( \'show\' );"></i>' : '<i class="fa fa-calendar"></i>').'</span>';
-	}
-
-	public function _toString() {
-		return $this->out;
+		
+		return $jsout.$out.' />'.((!$this->readonly) ? '<i class="fa fa-calendar" onclick="$( \'#'.$this->id.'\' ).datepicker( \'show\' );"></i>' : '<i class="fa fa-calendar"></i>').'</span>';
 	}
 
 	public function _inpval() {

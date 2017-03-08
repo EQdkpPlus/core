@@ -51,14 +51,15 @@ class haccordion extends html {
 	public function _construct() {
 		if(empty($this->name)) $this->name = unique_id();
 		if(empty($this->id)) $this->id = unique_id();
-		
-		$acc_opts = array();
-		foreach($this->accordion_opts as $opt) $acc_opts[$opt] = $this->$opt;
-
-		$this->out = $this->jquery->Accordion($this->name, $this->options, $acc_opts);
 	}
 	
 	public function _toString() {
+		$this->out = '';
+		$acc_opts = array();
+		foreach($this->accordion_opts as $opt) $acc_opts[$opt] = $this->$opt;
+		
+		$this->out = $this->jquery->Accordion($this->name, $this->options, $acc_opts);
+		
 		return $this->out;
 	}
 	

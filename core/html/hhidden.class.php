@@ -50,6 +50,10 @@ class hhidden extends html {
 	private $out = '';
 	
 	public function _construct() {
+		if(empty($this->id)) $this->id = $this->cleanid($this->name);
+	}
+	
+	public function _toString() {
 		$out = '<input type="'.self::$type.'" name="'.$this->name.'" ';
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		$out .= 'id="'.$this->id.'" ';
@@ -68,11 +72,7 @@ class hhidden extends html {
 			foreach($this->imgoptions as $opt) $imgopts[$opt] = $this->$opt;
 			$imgup = $this->jquery->imageUploader($this->imgup_type, $this->id, $this->value, $this->imgpath, $imgopts, $this->storageFolder);
 		}
-		$this->out = $out.' />'.$imgup;
-	}
-	
-	public function _toString() {
-		return $this->out;
+		return $out.' />'.$imgup;
 	}
 	
 	public function _inpval() {

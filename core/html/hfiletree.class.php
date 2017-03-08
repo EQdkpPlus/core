@@ -55,14 +55,14 @@ class hfiletree extends html {
 	private $out = '';
 
 	public function _construct() {
+	}
 
-		
-
+	public function _toString() {
 		$this->tpl->add_js('$(function() {
-
+		
 			// Hide all sub$folders at startup
 			$(".file-tree-'.$this->name.'").find("UL").hide();
-
+		
 			// Expand/collapse on click
 			$(".file-tree-'.$this->name.' .pft-directory a").click( function() {
 				$(this).parent().find("UL:first").slideToggle("medium");
@@ -73,27 +73,25 @@ class hfiletree extends html {
 				$(this).parent().parent().find("UL:first").slideToggle("medium");
 			});
 		});', 'docready');
-
-
+		
+		
 		$this->tpl->add_css('
 			.pft-directory ul {
 				margin-left: 10px;
 			}
-
+		
 			.file-tree-'.$this->name.' > ul {
 				margin-left: 10px;
 			}
-
+		
 			.file-tree-'.$this->name.' li {
 				padding: 3px;
 			}
 		');
-
+		
 		$this->out = "<ul class=\"file-tree-".$this->name."\"><li class=\"pft-root-directory\"><a href=\"javascript:void(0);\"><i class=\"fa fa-lg fa-folder\"></i> ".$this->folder.'</a></li>'.$this->file_tree($this->folder).'</ul>';
 		if (!$this->out) $this->out = "";
-	}
-
-	public function _toString() {
+		
 		return $this->out;
 	}
 

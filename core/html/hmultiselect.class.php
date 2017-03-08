@@ -68,7 +68,12 @@ class hmultiselect extends html {
 	private $out				= '';
 
 	public function _construct() {
+		if(empty($this->id)) $this->id = $this->cleanid($this->name);
+	}
+
+	public function _toString() {
 		$dropdown = "";
+		$this->out = '';
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		if(strlen($this->text_before)) $dropdown = $this->text_before;
 		$dropdown .= '<select name="'.$this->name.'[]" id="'.$this->id.'" multiple="multiple"';
@@ -90,14 +95,12 @@ class hmultiselect extends html {
 		$dropdown .= "</select>";
 		$options = array('id' => $this->id);
 		foreach($this->jq_options as $opt) $options[$opt] = $this->$opt;
-
+		
 		$this->jquery->MultiSelect('', array(), array(), $options, $this->returnJS);
 		$jsout = ($this->returnJS) ? '<script>'.$this->jquery->get_jscode('multiselect', $this->id).'</script>' : '';
 		if(strlen($this->text_after)) $dropdown .= $this->text_after;
 		$this->out = $jsout.$dropdown;
-	}
-
-	public function _toString() {
+		
 		return $this->out;
 	}
 

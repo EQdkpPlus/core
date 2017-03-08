@@ -50,6 +50,10 @@ class htextmultilang extends html {
 	private $out = '';
 	
 	public function _construct() {
+	}
+	
+	public function _toString() {
+		$this->out = '';
 		$arrLanguages = $this->user->getAvailableLanguages();
 		$strDefaultLanguage = $this->config->get('default_lang');
 		$this->jquery->init_multilang();
@@ -61,7 +65,7 @@ class htextmultilang extends html {
 			$this->value = array();
 			$this->value[$strDefaultLanguage] = $strValue;
 		}
-
+		
 		
 		$this->out = '<div class="input-multilang">
 			<div class="multilang-switcher-container hand"><div class="multilang-switcher"><span>'.$arrLanguages[$strDefaultLanguage].'</span> <i class="fa fa-caret-down fa-lg"></i></div>
@@ -90,7 +94,7 @@ class htextmultilang extends html {
 			if(!empty($this->placeholder)) $out .= 'placeholder="'.$this->placeholder.'" ';
 			if(!empty($this->js)) $out.= $this->js.' ';
 			if ($strKey != $strDefaultLanguage)  $out .= ' style="display:none;"';
-			
+				
 			$out .= ' />';
 			$this->out .= $out;
 		}
@@ -99,9 +103,7 @@ class htextmultilang extends html {
 		if(!empty($this->pattern)) $this->out .= '<span class="fv_msg" style="display:none;">'.registry::fetch('user')->lang('fv_sample_pattern').'</span>';
 		elseif($this->required) $this->out .= '<i class="fa fa-asterisk required small"></i> <span class="fv_msg" style="display:none;">'.registry::fetch('user')->lang('fv_required').'</span>';
 		if(!empty($this->after_txt)) $this->out .= $this->after_txt;
-	}
-	
-	public function _toString() {
+		
 		return $this->out;
 	}
 	

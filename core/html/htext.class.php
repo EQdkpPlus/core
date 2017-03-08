@@ -59,8 +59,12 @@ class htext extends html {
 	private $out = '';
 
 	public function _construct() {
-		$jsout	= '';
+		if(empty($this->id)) $this->id = $this->cleanid($this->name);
+	}
 
+	public function _toString() {
+		$this->out = "";
+		$jsout	= '';
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		if(!empty($this->autocomplete)) {
 			$this->jquery->Autocomplete($this->id, $this->autocomplete, $this->returnJS);
@@ -84,7 +88,7 @@ class htext extends html {
 						self.spinner({ min: min, max: max, step: step, });
 					</script>";
 		}
-
+		
 		// start the output
 		$out	 = $jsout.'<input type="'.self::$type.'" name="'.$this->name.'" ';
 		$out	.= 'id="'.$this->id.'" ';
@@ -116,9 +120,6 @@ class htext extends html {
 		elseif($this->required) $out .= '<i class="fa fa-asterisk required small"></i> <span class="fv_msg" style="display:none;">'.registry::fetch('user')->lang('fv_required').'</span>';
 		if(!empty($this->after_txt)) $out .= $this->after_txt;
 		$this->out = $out;
-	}
-
-	public function _toString() {
 		return $this->out;
 	}
 

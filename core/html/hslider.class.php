@@ -48,17 +48,16 @@ class hslider extends html {
 
 	protected function _construct() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
-		$options = array();
-		foreach($this->options as $opt) $options[$opt] = $this->$opt;
-
-		$out	= $this->jquery->Slider($this->id, $options, (($this->range) ? 'range' : 'normal'), $this->returnJS);
-		$jsout	= ($this->returnJS) ? '<script>'.$this->jquery->get_jscode('slider', $this->id).'</script>' : '';
-
-		$this->out = $jsout.$out;
 	}
 
 	public function _toString() {
-		return $this->out;
+		$options = array();
+		foreach($this->options as $opt) $options[$opt] = $this->$opt;
+		
+		$out	= $this->jquery->Slider($this->id, $options, (($this->range) ? 'range' : 'normal'), $this->returnJS);
+		$jsout	= ($this->returnJS) ? '<script>'.$this->jquery->get_jscode('slider', $this->id).'</script>' : '';
+		
+		return $jsout.$out;
 	}
 
 	public function _inpval() {

@@ -50,6 +50,7 @@ class htimepicker extends html {
 
 	public function _construct() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
+		
 		$out = '<input type="text" name="'.$this->name.'" id="'.$this->id.'" value="'.$this->time->date("H:i", $this->value).'"';
 		if(!empty($this->class)) $out .= ' class="'.$this->class.'"';
 		if($this->required) $out .= ' required="required"';
@@ -61,7 +62,14 @@ class htimepicker extends html {
 	}
 
 	public function _toString() {
-		return $this->out;
+		$out = '<input type="text" name="'.$this->name.'" id="'.$this->id.'" value="'.$this->time->date("H:i", $this->value).'"';
+		if(!empty($this->class)) $out .= ' class="'.$this->class.'"';
+		if($this->required) $out .= ' required="required"';
+		$this->jquery->timePicker($this->id, $this->name, $this->value, $this->enablesecs, $this->hourf, $this->returnJS);
+		$out .= ' />';
+		$jsout = ($this->returnJS) ? '<script>'.$this->jquery->get_jscode('timepicker', $this->id).'</script>' : '';
+		if($this->required) $out .= '<i class="fa fa-asterisk required small"></i> <span class="fv_msg" style="display:none;">'.registry::fetch('user')->lang('fv_required').'</span>';
+		return $jsout.$out;
 	}
 
 	/**

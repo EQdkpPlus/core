@@ -52,6 +52,10 @@ class htooltip extends html {
 		if(empty($this->name)) $this->name = unique_id();
 		if(empty($this->class)) $this->class = "";
 		if(empty($this->id)) $this->id = unique_id();
+	}
+	
+	public function _toString() {
+		$this->out = '';
 		$options = array();
 		foreach($this->all_opts as $opt) {
 			$options[$opt] = $this->$opt;
@@ -62,9 +66,6 @@ class htooltip extends html {
 		}else{
 			$this->out = '<span class="'.$this->name.' '.$this->class.'" id="'.$this->id.'"><span class="'.$this->name.'_c" style="display:none;">'.$this->content.'</span>'.$this->label.'</span>';
 		}
-	}
-	
-	public function _toString() {
 		return $this->out;
 	}
 	
