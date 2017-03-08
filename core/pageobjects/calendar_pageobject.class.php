@@ -317,8 +317,6 @@ class calendar_pageobject extends pageobject {
 								#'operator'		=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission($calid)) ? true : false
 							);
 						}else{
-							// check if the event is private
-							if(!$this->pdh->get('calendar_events', 'private_userperm', array($calid))){ continue; }
 							$alldayevents	= ($this->pdh->get('calendar_events', 'allday', array($calid)) > 0) ? true : false;
 							$event_json[] = array(
 								'type'			=> 'event',
