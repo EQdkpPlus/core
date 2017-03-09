@@ -26,7 +26,7 @@ include_once($eqdkp_root_path . 'common.php');
 
 class Manage_Massmail extends page_generic {
 	public static $shortcuts = array('email'=>'MyMailer', 'crypt'=>'encrypt');
-		
+
 	public function __construct(){
 		$this->user->check_auth('a_users_massmail');
 		$handler = array(
@@ -42,11 +42,11 @@ class Manage_Massmail extends page_generic {
 
 		$this->process();
 	}
-	
+
 	public function process_load_template(){
 		$strTemplatename = $this->in->get('template');
 		$strTemplatename = preg_replace("/[^a-zA-Z0-9_-]/", "", $strTemplatename);
-		
+
 		$strLanguageFile = $this->root_path.'language/'.$this->user->data['user_lang'].'/email/massmail_'.$strTemplatename.'.html';
 		$strDataFile =  $this->pfh->FolderPath('massmails', 'eqdkp').'massmail_'.$strTemplatename.'.html';
 		if(is_file($strDataFile)){
@@ -56,23 +56,23 @@ class Manage_Massmail extends page_generic {
 		} else {
 			$strContent = "";
 		}
-		
+
 		$body = is_utf8($strContent) ? $strContent : utf8_encode($strContent);
 		if (preg_match('#{SUBJECT}(.*?){/SUBJECT}#', $body, $matches)){
 			$subject = $matches[1];
 			$body = str_replace($matches[0], '', $body);
 		}
-		
+
 		header('Content-type: text/html; charset=utf-8');
 		echo 'ok|;|;|;'.$subject.'|;|;|;'.$body;
-		
+
 		exit;
 	}
-	
+
 	public function delete_template(){
 		$strTemplatename = $this->in->get('template');
 		$strTemplatename = preg_replace("/[^a-zA-Z0-9_-]/", "", $strTemplatename);
-		
+
 		$strDataFile =  $this->pfh->FolderPath('massmails', 'eqdkp').'massmail_'.$strTemplatename.'.html';
 		if(is_file($strDataFile)){
 			$this->pfh->Delete($strDataFile);
@@ -84,7 +84,7 @@ class Manage_Massmail extends page_generic {
 
 		$this->display(true);
 	}
-	
+
 	public function add_template(){
 		$strTemplatename = $this->in->get('templatename');
 		$strTemplatename = preg_replace("/[^a-zA-Z0-9_-]/", "", $strTemplatename);
@@ -94,10 +94,10 @@ class Manage_Massmail extends page_generic {
 		if($strSubject != ""){
 			$strOut = "{SUBJECT}".$strSubject."{/SUBJECT}".$strOut;
 		}
-		
+
 		$strFilename = $this->pfh->FolderPath('massmails', 'eqdkp').'massmail_'.$strTemplatename.'.html';
 		$this->pfh->putContent($strFilename, $strOut);
-		
+
 		//Get all Templates, create new Dropdown, select Template
 		$arrTemplates = sdir($this->root_path.'language/'.$this->user->data['user_lang'].'/email', 'massmail_*.html');
 		$arrTempl = array('' => $this->user->lang('massmail_select_template').'...');
@@ -108,7 +108,7 @@ class Manage_Massmail extends page_generic {
 				$arrTempl[$file] = $file;
 			}
 		}
-		
+
 		$arrTemplates = sdir($this->pfh->FolderPath('massmails', 'eqdkp'), 'massmail_*.html');
 		if (is_array($arrTemplates) && count($arrTemplates) > 0){
 			foreach($arrTemplates as $file){
@@ -117,15 +117,15 @@ class Manage_Massmail extends page_generic {
 				$arrTempl[$file] = $file;
 			}
 		}
-		
-		$dd = new hdropdown('template', array('options' => $arrTempl, 'value' => $strTemplatename, 'js' => 'onchange="load_template()"'));
-		
+
+		$dd = (new hdropdown('template', array('options' => $arrTempl, 'value' => $strTemplatename, 'js' => 'onchange="load_template()"')))->output();
+
 		header('Content-type: text/html; charset=utf-8');
 		echo 'ok||'.$strTemplatename.'||'.$dd;
-		
+
 		exit;
 	}
-	
+
 	public function save_template(){
 		$strTemplatename = $this->in->get('templatename');
 		$strTemplatename = preg_replace("/[^a-zA-Z0-9_]/", "", $strTemplatename);
@@ -135,13 +135,13 @@ class Manage_Massmail extends page_generic {
 		if($strSubject != ""){
 			$strOut = "{SUBJECT}".$strSubject."{/SUBJECT}".$strOut;
 		}
-	
+
 		$strFilename = $this->pfh->FolderPath('massmails', 'eqdkp').'massmail_'.$strTemplatename.'.html';
 		$this->pfh->putContent($strFilename, $strOut);
-	
+
 		header('Content-type: text/html; charset=utf-8');
 		echo "ok";
-	
+
 		exit;
 	}
 
@@ -153,9 +153,9 @@ class Manage_Massmail extends page_generic {
 		foreach($arrArticles as $intArticleID){
 			$strText = $this->pdh->get('articles',  'text', array($intArticleID));
 			$arrContent = preg_split('#<hr(.*)id="system-readmore"(.*)\/>#iU', xhtml_entity_decode($strText));
-			
+
 			$strText = $this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags($arrContent[0]));
-			
+
 			//Replace Image Gallery
 			$arrGalleryObjects = array();
 			preg_match_all('#<p(.*)class="system-gallery"(.*) data-sort="(.*)" data-folder="(.*)">(.*)</p>#iU', $strText, $arrGalleryObjects, PREG_PATTERN_ORDER);
@@ -164,7 +164,7 @@ class Manage_Massmail extends page_generic {
 					$strText = str_replace($arrGalleryObjects[0][$key], "", $strText);
 				}
 			}
-			
+
 			//Replace Raidloot
 			$arrRaidlootObjects = array();
 			preg_match_all('#<p(.*)class="system-raidloot"(.*) data-id="(.*)"(.*) data-chars="(.*)">(.*)</p>#iU', $strText, $arrRaidlootObjects, PREG_PATTERN_ORDER);
@@ -173,7 +173,7 @@ class Manage_Massmail extends page_generic {
 					$strText = str_replace($arrRaidlootObjects[0][$key], "", $strText);
 				}
 			}
-			
+
 			$arrNewsList[] = array(
 					'date'		=> $this->pdh->get('articles', 'html_date', array($intArticleID)),
 					'headline'	=> $this->pdh->get('articles', 'title', array($intArticleID)),
@@ -245,7 +245,7 @@ class Manage_Massmail extends page_generic {
 		}
 
 		$this->jquery->tab_header('massmail_content_tabs');
-		
+
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('massmail_send'),
 			'template_file'		=> 'admin/manage_massmail_data.html',
@@ -257,9 +257,9 @@ class Manage_Massmail extends page_generic {
 		$body = $this->crypt->decrypt($this->in->get('message'));
 		$subject = $this->crypt->decrypt($this->in->get('subject'));
 		$userid = $this->in->get('userid', 0);
-		
-		header('Content-type: application/json; charset=utf-8');	
-			
+
+		header('Content-type: application/json; charset=utf-8');
+
 		if($userid === 0){
 			echo json_encode(array('status' => 'end', 'name' => ''));
 			exit;
@@ -280,14 +280,14 @@ class Manage_Massmail extends page_generic {
 			$body = str_replace($arrSearch, $arrReplace, $body);
 			$subject = str_replace($arrSearch, $arrReplace, $subject);
 		}
-		
+
 		$result = $this->messenger->sendMessage($this->in->get('method', 'email'), $userid, $subject, $body);
-		
+
 		if($result){
 			echo json_encode(array('status' => 'ok', 'name' => $this->pdh->get('user', 'name', array($userid))));
 			exit;
 		}
-		
+
 		echo json_encode(array('status' => 'error', 'name' => $this->pdh->get('user', 'name', array($userid))));
 		exit;
 	}
@@ -323,11 +323,11 @@ class Manage_Massmail extends page_generic {
 						foreach($arrRaidgroups as $intRaidgroupID){
 							$arrMembers = array_merge($arrMembers, $this->pdh->get('calendar_raids_attendees', 'attendee_stats', array($eventid, $statusid, $intRaidgroupID)));
 						}
-						
+
 					} else {
 						$arrMembers = $this->pdh->get('calendar_raids_attendees', 'attendee_stats', array($eventid, $statusid));
 					}
-					
+
 					if (is_array($arrMembers)){
 						foreach ($arrMembers as $memberid){
 							$userID = (int)$this->pdh->get('member', 'userid', array($memberid));
@@ -337,7 +337,7 @@ class Manage_Massmail extends page_generic {
 				}
 			} elseif (count($this->in->getArray('raidgroups', 'int')) > 0 && $this->in->get('event_id', 0) > 0){
 				//Calenderevent Raidgroups for EventID
-				
+
 				$eventid = $this->in->get('event_id', 0);
 				$arrStatus = $this->user->lang('raidevent_raid_status');
 				foreach ($this->in->getArray('raidgroups', 'int') as $key => $intRaidgroupID){
@@ -354,8 +354,8 @@ class Manage_Massmail extends page_generic {
 					}
 				}
 			}
-			
-			
+
+
 
 			$arrRecipients = array_unique($arrRecipients);
 
@@ -402,7 +402,7 @@ class Manage_Massmail extends page_generic {
 			'template_file'		=> 'admin/manage_massmail_send.html',
 			'display'			=> true)
 		);
-		
+
 		return true;
 	}
 
@@ -418,17 +418,17 @@ class Manage_Massmail extends page_generic {
 			$this->tpl->assign_vars(array(
 				'DD_STATUS'		=> $this->jquery->MultiSelect('status', $this->user->lang('raidevent_raid_status'), $this->in->getArray('status', 'int'), array('width' => 400)),
 			));
-			
+
 			$arrRaidgroups = $this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list')));
 			if(count($arrRaidgroups) > 1){
 				$this->tpl->assign_vars(array(
 					'S_RAIDGROUPS'	=> true,
 					'DD_RAIDGROUPS'	=> $this->jquery->MultiSelect('raidgroups', $arrRaidgroups, $this->in->getArray('raidgroups', 'int'), array('width' => 400)),
 				));
-				
+
 			}
 		}
-		
+
 		//Only load the template file, if submit button is not pressed
 		if (!$blnIgnoreTemplate && $this->in->get('template') != "" && !$this->in->exists('submit') && !$this->in->exists('delete_template')){
 			$file = preg_replace('/[^a-zA-Z0-9_-]/', '', $this->in->get('template'));
@@ -449,7 +449,7 @@ class Manage_Massmail extends page_generic {
 			}
 
 		}
-		
+
 		$strTemplate = ($blnIgnoreTemplate) ? "" : $this->in->get('template');
 		$blnHaveTemplate = ($strTemplate != "") ? true : false;
 
@@ -479,19 +479,19 @@ class Manage_Massmail extends page_generic {
 		}
 
 		$this->tpl->assign_vars(array(
-			'DD_METHOD' => new hdropdown('method', array('options' => $this->messenger->getAvailableMessenger(), 'value' => $this->in->get('method', 'email'))),
-			'DD_GROUPS'	=> $this->jquery->MultiSelect('usergroups', $arrUserGroups, $this->in->getArray('usergroups', 'int'), array('width' => 400, 'filter' => true)),
-			'DD_USERS'	=> $this->jquery->MultiSelect('user', $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list'))), $this->in->getArray('user', 'int'),  array('width' => 400, 'filter' => true)),
-			'SUBJECT'	=> ($this->in->exists('subject')) ? $this->in->get('subject', '') : $subject,
-			'BODY'		=> ($this->in->exists('body')) ? $this->in->get('body', '', 'raw') : $body,
-			'EVENT_ID'	=> ($bnlEventId) ? '&amp;event_id='.$eventid : '',
-			'S_EVENT_ID'=> $bnlEventId,
-			'MM_TEMPLATE_NAME' => $strTemplate,
-			'NUM_EVENT_ID' => intval($eventid),
-			'S_IS_TEMPLATE' => $blnHaveTemplate,
+			'DD_METHOD' 				=> (new hdropdown('method', array('options' => $this->messenger->getAvailableMessenger(), 'value' => $this->in->get('method', 'email'))))->output(),
+			'DD_GROUPS'					=> $this->jquery->MultiSelect('usergroups', $arrUserGroups, $this->in->getArray('usergroups', 'int'), array('width' => 400, 'filter' => true)),
+			'DD_USERS'					=> $this->jquery->MultiSelect('user', $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list'))), $this->in->getArray('user', 'int'),  array('width' => 400, 'filter' => true)),
+			'SUBJECT'					=> ($this->in->exists('subject')) ? $this->in->get('subject', '') : $subject,
+			'BODY'						=> ($this->in->exists('body')) ? $this->in->get('body', '', 'raw') : $body,
+			'EVENT_ID'					=> ($bnlEventId) ? '&amp;event_id='.$eventid : '',
+			'S_EVENT_ID'				=> $bnlEventId,
+			'MM_TEMPLATE_NAME'			=> $strTemplate,
+			'NUM_EVENT_ID' 				=> intval($eventid),
+			'S_IS_TEMPLATE'				=> $blnHaveTemplate,
 			'CSRF_ADDTEMPLATE_TOKEN'	=> $this->CSRFGetToken('add_template'),
 			'CSRF_SAVETEMPLATE_TOKEN'	=> $this->CSRFGetToken('save_template'),
-			'DD_TEMPLATE' => new hdropdown('template', array('options' => $arrTempl, 'value' => $strTemplate, 'js' => 'onchange="load_template()"')),
+			'DD_TEMPLATE'				=> (new hdropdown('template', array('options' => $arrTempl, 'value' => $strTemplate, 'js' => 'onchange="load_template()"')))->output(),
 		));
 
 		$this->core->set_vars(array(

@@ -147,9 +147,9 @@ class ManageProfileFields extends page_generic {
 			'NAME_ID'					=> $field_data['name'],
 			'LANGUAGE'					=> $field_data['lang'],
 			'OPTIONS_LANGUAGE'			=> $field_data['options_language'],
-			'TYPE_DD'					=> new hdropdown('type', array('options' => $types, 'value' => $field_data['type'], 'id' => 'type_dd')),
+			'TYPE_DD'					=> (new hdropdown('type', array('options' => $types, 'value' => $field_data['type'], 'id' => 'type_dd')))->output(),
 
-			'CATEGORY_DD'				=> new hdropdown('category', array('options' => $categories, 'value' => $field_data['category'])),
+			'CATEGORY_DD'				=> (new hdropdown('category', array('options' => $categories, 'value' => $field_data['category'])))->output(),
 			'SIZE'						=> $field_data['size'],
 			'IMAGE'						=> $field_data['image'],
 			'S_SHOW_OPTIONS'			=> ($field_data['type'] == 'dropdown' || $field_data['type'] == 'multiselect' || $field_data['type'] == 'radio' || $field_data['type'] == 'checkbox') ? '' : 'style="display:none;"',

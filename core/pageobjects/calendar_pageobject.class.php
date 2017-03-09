@@ -150,11 +150,11 @@ class calendar_pageobject extends pageobject {
 	public function export_tooltip(){
 		// first, lets generate the link
 		$exportlink		= $this->env->link.'exchange.php?out=icalfeed&module=calendar&key='.$this->user->data['exchange_key'];
-		$exporttypes	= new hdropdown('type', array('options' => array(
+		$exporttypes	= (new hdropdown('type', array('options' => array(
 							'raids'			=> $this->user->lang(array('calendar_export_types', 0)),
 							'appointments'	=> $this->user->lang(array('calendar_export_types', 1)),
 							'all'			=> $this->user->lang(array('calendar_export_types', 2)),
-						)));
+						))))->output();
 
 		// build the output
 		echo '
@@ -430,9 +430,9 @@ class calendar_pageobject extends pageobject {
 			'RAID_LIST'				=> $hptt->get_html_table($this->in->get('sort'), '', 0, 100),
 			'DD_CHARS'				=> $memberrole[0],
 			'DD_ROLES'				=> $memberrole[1],
-			'DD_STATUS'				=> new hdropdown('member_signupstatus', array('options' => $raidstatus)),
-			'DD_MULTIDEL'			=> new hdropdown('deleteall_selection', array('options' => $deleteall_drpdown)),
-			'TXT_NOTE'				=> new htext('member_note', array('size' => '20')),
+			'DD_STATUS'				=> (new hdropdown('member_signupstatus', array('options' => $raidstatus)))->output(),
+			'DD_MULTIDEL'			=> (new hdropdown('deleteall_selection', array('options' => $deleteall_drpdown)))->output(),
+			'TXT_NOTE'				=> (new htext('member_note', array('size' => '20')))->output(),
 			'ADD_RAID'				=> $this->user->check_auth('u_cal_event_add', false) && ($this->pdh->get('calendars', 'calendarids4userid', array($this->user->data['user_id'])) > 0),
 			'CSRF_MOVE_TOKEN'		=> $this->CSRFGetToken('move'),
 			'CSRF_RESIZE_TOKEN' 	=> $this->CSRFGetToken('resize'),

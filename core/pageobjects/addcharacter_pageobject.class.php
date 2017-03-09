@@ -24,7 +24,7 @@ class addcharacter_pageobject extends pageobject {
 	private $data = array();
 	private $form_build = false;
 	private $adminmode = false;
-	
+
 	public static $shortcuts = array('form' => array('form', array('addchar')));
 
 	public function __construct() {
@@ -35,22 +35,22 @@ class addcharacter_pageobject extends pageobject {
 
 		// Permissions
 		$this->user->check_auths(array('u_member_man', 'u_member_add'), 'OR');
-		
+
 		// Check if the user is logged in
 		if (!$this->user->is_signedin()) {
 			message_die($this->user->lang('uc_not_loggedin'));
 		}
-		
+
 		//Check if Adminmode
 		$this->adminmode = ($this->in->get('adminmode', 0) && $this->user->check_auth('a_members_man', false)) ? true : false;
-		
+
 		//Default Rank
 		$this->data['rank_id'] = $this->pdh->get('rank', 'default', array());
-		
+
 		parent::__construct('u_member_', $handler, array(), null, '', 'editid');
 		$this->process();
 	}
-		
+
 	//Add a new character
 	public function add(){
 		$this->build_form();
@@ -59,9 +59,9 @@ class addcharacter_pageobject extends pageobject {
 
 		if (strlen($data['name'])){
 			$blnResult = $this->pdh->put('member', 'addorupdate_member', array($this->url_id, $data, $data['overtakechar']));
-		
+
 			$this->pdh->process_hook_queue();
-			
+
 			if ($blnResult){
 				$this->tpl->add_js('jQuery.FrameDialog.closeDialog();');
 				return true;
@@ -86,7 +86,7 @@ class addcharacter_pageobject extends pageobject {
 			unset($data['mainid']);
 			unset($data['rankid']);
 		}
-		
+
 		$id = $this->pdh->put('member', 'addorupdate_member', array($this->url_id, $data, $data['overtakechar']));
 
 		//Transfer character history
@@ -94,7 +94,7 @@ class addcharacter_pageobject extends pageobject {
 			$this->pdh->put('member', 'trans_member', array($this->url_id, $this->in->get('history_receiver', 0)));
 		}
 		$this->pdh->process_hook_queue();
-		
+
 		if ($id){
 			$this->tpl->add_js('jQuery.FrameDialog.closeDialog();');
 			return true;
@@ -103,7 +103,7 @@ class addcharacter_pageobject extends pageobject {
 			$this->display($data);
 		}
 	}
-	
+
 	public function display($member_data=array()) {
 		// Read the Data
 		if(empty($member_data)) {
@@ -121,7 +121,7 @@ class addcharacter_pageobject extends pageobject {
 		// test
 		if($this->in->get('ajax', false)) {
 			$requestID = ($this->in->exists('requestid') && strlen($this->in->get('requestid'))) ? $this->in->get('requestid') : $this->config->get($this->in->get('parent'));
-			
+
 			$data = $this->game->get_dep_classes($this->in->get('parent'), $this->in->get('child'), $requestID);
 			$options = array(
 				'options_only'	=> true,
@@ -131,13 +131,13 @@ class addcharacter_pageobject extends pageobject {
 				$options['value'] = $this->pdh->get('member', 'profile_field', array($this->url_id, $this->in->get('child')));
 			}
 			header('content-type: text/html; charset=UTF-8');
-			
-			echo new hdropdown('dummy', $options);
+
+			echo (new hdropdown('dummy', $options))->output();
 			exit;
 		}
-		
+
 		$this->build_form();
-				
+
 		// Fill fields with values
 		$this->form->output($member_data);
 
@@ -151,7 +151,7 @@ class addcharacter_pageobject extends pageobject {
 
 			// Data
 			'NOTES'					=> stripslashes(((isset($member_data['notes'])) ? $member_data['notes'] : '')),
-			'DD_HISTORY_RECEIVER'	=> new hdropdown('history_receiver', array('options' => $arrHistoryReceivers, 'value' => $this->url_id)),
+			'DD_HISTORY_RECEIVER'	=> (new hdropdown('history_receiver', array('options' => $arrHistoryReceivers, 'value' => $this->url_id)))->output(),
 		));
 
 		$this->core->set_vars(array(
@@ -161,7 +161,7 @@ class addcharacter_pageobject extends pageobject {
 			'display'			=> true)
 		);
 	}
-	
+
 	private function build_form() {
 		if($this->form_build) return true;
 		$this->form_build = true;
@@ -170,7 +170,7 @@ class addcharacter_pageobject extends pageobject {
 		$this->form->use_tabs = true;
 		$this->form->ajax_url = html_entity_decode($this->action);
 		$this->form->validate = true;
-		
+
 		// Static fields
 		$static_fields = array(
 			'name'	=> array(
@@ -207,7 +207,7 @@ class addcharacter_pageobject extends pageobject {
 			// is the char connected to the user?
 			if(!$static_fields['overtakechar']['disabled'] && !$this->adminmode) $static_fields['overtakechar']['value'] = 1;
 		}
-		
+
 		if($this->adminmode) {
 			$maincharsel = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'id_list', array(false,false,true,true))));
 			if (!$this->url_id){
@@ -238,10 +238,10 @@ class addcharacter_pageobject extends pageobject {
 		foreach($categorynames as $catname) {
 			$this->form->add_tab(array('name' => $catname, 'lang' => 'uc_cat_'.$catname));
 		}
-		
+
 		$arrGameUniqueIDs = $this->game->get_char_unique_ids();
 		if (!$arrGameUniqueIDs || !is_array($arrGameUniqueIDs)) $arrGameUniqueIDs = array();
-		
+
 		// Dynamic Fields
 		$profilefields = $this->pdh->get('profile_fields', 'fields');
 		foreach($profilefields as $fieldid => $fielddata) {
@@ -251,7 +251,7 @@ class addcharacter_pageobject extends pageobject {
 				$fielddata['required'] = true;
 				$fielddata['default'] = $this->config->get($fieldname);
 			}
-			
+
 			//Make Dropdowns etc. translatable
 			if(count($fielddata['options']) > 0 && $fielddata['options_language'] != ""){
 				if (strpos($fielddata['options_language'], 'lang:') === 0){
@@ -259,14 +259,14 @@ class addcharacter_pageobject extends pageobject {
 					$arrGlang = $this->game->glang($arrSplitted[1]);
 					$arrLang = (isset($arrSplitted[2])) ? $arrGlang[$arrSplitted[2]] : $arrGlang;
 				} else $arrLang = $this->game->get($fielddata['options_language']);
-				
+
 				foreach($fielddata['options'] as $key => $val){
 					if(isset($arrLang[$key])){
 						$fielddata['options'][$key] = $arrLang[$key];
 					}
 				}
 			}
-			
+
 			$fielddata['type'] = ($fielddata['type'] == 'link') ? 'text' : $fielddata['type'];
 			$tab = (!empty($fielddata['category']) && in_array($fielddata['category'], $categorynames)) ? $fielddata['category'] : 'character';
 			$fielddata['type'] = ($fielddata['type'] === 'link') ? 'text' : $fielddata['type'];

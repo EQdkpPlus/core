@@ -58,7 +58,7 @@ class admin_settings extends page_generic {
 			'options' 		=> sdir($this->root_path . 'games/'.$this->in->get('requestid').'/language/', '*.php', '.php'),
 			'value'			=> $this->config->get('game_language'),
 		);
-		echo new hdropdown('dummy', $options);
+		echo (new hdropdown('dummy', $options))->output();
 		exit;
 	}
 
@@ -776,7 +776,7 @@ class admin_settings extends page_generic {
 		if($this->config->get('default_game') == 'dummy'){
 			$settingsdata['game']['game']['default_game']['text_after'] = '<button onclick="window.location=\'manage_extensions.php'.$this->SID.'#fragment-7\'" type="button"><i class="fa fa-lg fa-download"></i> '.$this->user->lang('install_other_games').'</button>';
 		}
-		
+
 		//Avatar Provider
 		$arrAllAvatarProviders = array();
 		foreach($this->user->getAvatarProviders() as $key => $val){
@@ -890,7 +890,7 @@ class admin_settings extends page_generic {
 					}
 
 					// now, let us add the API-Key-Field to the last element of the array
-					$apikeyform			= new htext('game_importer_apikey', array('value' => $setting_apikey, 'size' => '30'));
+					$apikeyform			= (new htext('game_importer_apikey', array('value' => $setting_apikey, 'size' => '30')))->output();
 					end($appisetts);
 					$key				= key($appisetts);
 					reset($appisetts);

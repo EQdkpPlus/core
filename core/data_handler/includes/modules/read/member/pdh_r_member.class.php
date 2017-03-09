@@ -196,7 +196,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 								$this->data[$bmd_row['member_id']][$mmdata] = (isset($my_data[$mmdata])) ? $my_data[$mmdata] : '';
 							}
 						}
-						
+
 						if((int)$bmd_row['member_id'] != intval($this->data[$bmd_row['member_id']]['main_id']) && $this->data[$bmd_row['member_id']]['requested_del'] != '1' && $this->data[$bmd_row['member_id']]['require_confirm'] != '1'){
 							$intMainChar = intval($this->data[$bmd_row['member_id']]['main_id']);
 							if(!isset($this->otherChars[$intMainChar])) $this->otherChars[$intMainChar] = array();
@@ -813,11 +813,11 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		public function get_other_members($member_id){
 			$intMainID = $this->get_mainid($member_id);
 			if(!isset($this->otherChars[$intMainID])) return array();
-			
+
 			$arrOthers = $this->otherChars[$intMainID];
 			//Add Main Char
 			if($member_id != $intMainID) $arrOthers[] = $intMainID;
-			
+
 			//Remove myself from the array
 			$mixMyKey = array_search($member_id, $arrOthers);
 			if($mixMyKey !== false) unset($arrOthers[$mixMyKey]);
@@ -832,7 +832,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		public function get_char_defrole($member_id){
 			$defaultrole = $this->get_defaultrole($member_id);
 			$roles_array = $this->pdh->get('roles', 'memberroles', array($this->pdh->get('member', 'classid', array($member_id)), true));
-			return new hdropdown('defaultrole_'.$member_id, array('options' => $roles_array, 'value' => $defaultrole, 'class' => 'cdefroledd'));
+			return (new hdropdown('defaultrole_'.$member_id, array('options' => $roles_array, 'value' => $defaultrole, 'class' => 'cdefroledd')))->output();
 		}
 
 		public function get_twink($member_id){

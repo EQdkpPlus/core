@@ -35,7 +35,7 @@ class Manage_Events extends page_generic {
 		parent::__construct('a_event_', $handler);
 		$this->process();
 	}
-	
+
 	public function ajax_itempools(){
 		$strPools = $this->in->get('pools', '', 'raw');
 		$arrPools = json_decode(urldecode($strPools));
@@ -45,14 +45,14 @@ class Manage_Events extends page_generic {
 			$arrLocalItempools = $this->pdh->get('multidkp', 'itempool_ids', array($intPoolID));
 			if(is_array($arrLocalItempools)) $arrItempools = array_merge($arrItempools, $arrLocalItempools);
 		}
-		
+
 		$arrItempools = array_unique($arrItempools);
-		
+
 		$arrNamedItempools = $this->pdh->aget('itempool', 'name', 0, array($arrItempools));
-		
+
 		$intValue = ($this->in->get('eventid', 0)) ? $this->pdh->get('event', 'def_itempool', array($this->in->get('eventid', 0))) : 0;
 		header('content-type: text/html; charset=UTF-8');
-		echo new hdropdown('default_itempool', array('options' => $arrNamedItempools, 'value' => $intValue));
+		echo (new hdropdown('default_itempool', array('options' => $arrNamedItempools, 'value' => $intValue)))->output();
 		exit;
 	}
 
@@ -75,7 +75,7 @@ class Manage_Events extends page_generic {
 				$this->update();
 			}else{
 				// the message
-				if($retu) {				
+				if($retu) {
 					$message = array('title' => $this->user->lang('save_suc'), 'text' => $event['name'], 'color' => 'green');
 				} else {
 					$message = array('title' => $this->user->lang('save_nosuc'), 'text' => $event['name'], 'color' => 'red');
@@ -109,7 +109,7 @@ class Manage_Events extends page_generic {
 			$event['value'] = $this->pdh->get('event', 'value', array($event['id']));
 			$event['mdkp2event'] = $this->pdh->get('event', 'multidkppools', array($event['id']));
 			$event['default_itempool'] = $this->pdh->get('event', 'def_itempool', array($event['id']));
-			
+
 			$arrItempool = $this->pdh->aget('itempool', 'name', 0, array($this->pdh->get('event', 'itempools', array($event['id']))));
 		}
 
@@ -122,7 +122,7 @@ class Manage_Events extends page_generic {
 				if(!in_array($strExtension, $arrImages)) continue;
 			    $icons[] = $events_folder.'/'.$file;
 			}
-			
+
 			$events_folder = $this->root_path.'games/'.$this->config->get('default_game').'/icons/events';
 			if (is_dir($events_folder)){
 				$files = sdir($events_folder);
@@ -152,7 +152,7 @@ class Manage_Events extends page_generic {
 					);
 				}
 			}
-		
+
 		//Image Uploader
 		$this->jquery->fileBrowser('all', 'image', $this->pfh->FolderPath('event_icons','files', 'absolute'), array('title' => $this->user->lang('upload_eventicon'), 'onclosejs' => '$(\'#eventSubmBtn\').click();'));
 
@@ -164,7 +164,7 @@ class Manage_Events extends page_generic {
 			'NAME'			=> (isset($event['name'])) ? $event['name'] : '',
 			'VALUE'			=> $this->pdh->geth('event', 'value', array($event['id'])),
 			'MDKP2EVENT' 	=> $this->jquery->Multiselect('mdkp2event', $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), $event['mdkp2event']),
-			'DD_DEFAULT_ITEMPOOL' => new hdropdown('default_itempool', array('options' => $arrItempool, 'value' => $event['default_itempool'])),
+			'DD_DEFAULT_ITEMPOOL' => (new hdropdown('default_itempool', array('options' => $arrItempool, 'value' => $event['default_itempool'])))->output(),
 			'CALENDAR'		=> ($this->in->get('calendar') == 'true') ? '1' : '0'
 		));
 		$this->core->set_vars(array(
@@ -205,7 +205,7 @@ class Manage_Events extends page_generic {
 			'EVENT_PAGINATION' => generate_pagination('manage_events.php'.$this->SID.$sort_suffix, $event_count, $this->user->data['user_rlimit'], $start),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
 			'EVENT_COUNT' => $event_count,
-			'HPTT_ADMIN_LINK'	=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('admin_manage_events').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,	
+			'HPTT_ADMIN_LINK'	=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('admin_manage_events').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,
 			)
 		);
 

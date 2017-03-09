@@ -37,7 +37,7 @@ class ManageItems extends page_generic {
 		parent::__construct('a_item_', $handler, array('item', 'name'), null, 'selected_ids[]');
 		$this->process();
 	}
-	
+
 	public function copy(){
 		$this->core->message($this->user->lang('copy_info'), $this->user->lang('copy'));
 		$this->update(false, true);
@@ -57,12 +57,12 @@ class ManageItems extends page_generic {
 		}
 		$this->display($message);
 	}
-	
+
 	public function bulk_update(){
 		$strSelectedIDs = $this->in->get('selected_ids');
-		$arrSelected = explode('|', $strSelectedIDs);		
+		$arrSelected = explode('|', $strSelectedIDs);
 		$arrBulk = $this->in->getArray('bulk', 'int');
-		
+
 		//Get new item information
 		$arrNewValues['buyer'] = $this->in->get('buyer', 0);
 		$arrNewValues['name'] = $this->in->get('name','');
@@ -71,7 +71,7 @@ class ManageItems extends page_generic {
 		$arrNewValues['raid_id'] = $this->in->get('raid_id',0);
 		$arrNewValues['item_id'] = $this->in->get('item_id','');
 		$arrNewValues['itempool_id'] = $this->in->get('itempool_id',0);
-		
+
 		$arrCheckboxes = array('name', 'item_id', 'raid_id', 'date', 'value', 'itempool_id', 'buyer');
 		//Für jedes Item
 		foreach($arrSelected as $itemID){
@@ -83,21 +83,21 @@ class ManageItems extends page_generic {
 			$item['raid_id'] = $this->pdh->get('item', 'raid_id', array($itemID));
 			$item['item_id'] = $this->pdh->get('item', 'game_itemid', array($itemID));
 			$item['itempool_id'] = $this->pdh->get('item', 'itempool_id', array($itemID));
-			
+
 			$messages = array();
-			
+
 			foreach($arrBulk as $key => $val){
 				if(!in_array($key, $arrCheckboxes) || !$val) continue;
-				
+
 				$item[$key] = $arrNewValues[$key];
-				
+
 				$retu = $this->pdh->put('item', 'update_item', array($itemID, $item['name'], array($item['buyer']), $item['raid_id'], $item['item_id'], $item['value'], $item['itempool_id'], $item['date'], true));
-				
+
 				if(!$retu){
 					$messages[] = array('title' => $this->user->lang('save_nosuc'), 'text' => $item['name'], 'color' => 'red');
 				}
 			}
-			
+
 		}
 		$messages[] = array('title' => $this->user->lang('save_suc'), 'text' => $this->user->lang('bulkedit'), 'color' => 'green');
 		$this->pdh->process_hook_queue();
@@ -110,10 +110,10 @@ class ManageItems extends page_generic {
 			foreach($this->in->getArray('selected_ids','int') as $s_id) {
 					$new_ids = $this->pdh->get('item', 'ids_of_group_key', array($this->pdh->get('item', 'group_key', array($s_id))));
 					$ids = array_merge($ids, $new_ids);
-			}		
+			}
 		} else {
 			$ids = $this->pdh->get('item', 'ids_of_group_key', array($this->in->get('selected_ids','','hash')));
-		} 
+		}
 
 		$retu = array();
 		foreach($ids as $id) {
@@ -167,7 +167,7 @@ class ManageItems extends page_generic {
 			$item['raid_id'] = $this->pdh->get('item', 'raid_id', array($id));
 			$item['item_id'] = $this->pdh->get('item', 'game_itemid', array($id));
 			$item['itempool_id'] = $this->pdh->get('item', 'itempool_id', array($id));
-			
+
 			//Add additional members
 			if (count($item['buyers']) > 0){
 				$arrIDList = array_keys($members);
@@ -183,7 +183,7 @@ class ManageItems extends page_generic {
 		} else {
 			$item['date'] = $this->time->time;
 		}
-		
+
 		$arrAutocomplete = array();
 		foreach($this->pdh->get('item', 'id_list') as $intItemID){
 			$arrAutocomplete[] = array(
@@ -194,7 +194,7 @@ class ManageItems extends page_generic {
 				'itempool'	=>	$this->pdh->get('item', 'itempool_id', array($intItemID)),
 			);
 		}
-		
+
 		$this->jquery->AutocompleteMultiple("name", $arrAutocomplete, '
 			$("#item_value").val(ui.item.ivalue);
 			$("#item_id").val(ui.item.game_id);
@@ -202,20 +202,20 @@ class ManageItems extends page_generic {
 			$("#itempool_id").val(ui.item.itempool);
 			event.preventDefault();
 		');
-		
+
 		$item_names = $this->pdh->aget('item', 'name', 0, array($this->pdh->get('item', 'id_list')));
-		
+
 
 		$this->confirm_delete($this->user->lang('confirm_delete_item')."<br />".((isset($item['name'])) ? $item['name'] : ''), '', true);
 		$this->tpl->assign_vars(array(
 			'GRP_KEY'		=> (isset($grp_key) && !$copy) ? $grp_key : '',
 			'NAME'			=> (isset($item['name'])) ? $item['name'] : '',
-			'RAID'			=> new hdropdown('raid_id', array('options' => $raids, 'value' => ((isset($item['raid_id'])) ? $item['raid_id'] : ''))),
+			'RAID'			=> (new hdropdown('raid_id', array('options' => $raids, 'value' => ((isset($item['raid_id'])) ? $item['raid_id'] : ''))))->output(),
 			'BUYERS'		=> $this->jquery->MultiSelect('buyers', $members, ((isset($item['buyers'])) ? $item['buyers'] : ''), array('width' => 350, 'filter' => true)),
 			'DATE'			=> $this->jquery->Calendar('date', $this->time->user_date($item['date'], true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 			'VALUE'			=> (isset($item['value'])) ? $item['value'] : '',
 			'ITEM_ID'		=> (isset($item['item_id'])) ? $item['item_id'] : '',
-			'ITEMPOOLS'		=> new hdropdown('itempool_id', array('options' => $itempools, 'value' => ((isset($item['itempool_id'])) ? $item['itempool_id'] : ''))),
+			'ITEMPOOLS'		=> (new hdropdown('itempool_id', array('options' => $itempools, 'value' => ((isset($item['itempool_id'])) ? $item['itempool_id'] : ''))))->output(),
 		));
 
 		$this->core->set_vars(array(
@@ -242,9 +242,9 @@ class ManageItems extends page_generic {
 		$sort_suffix = '?sort='.$this->in->get('sort');
 
 		$item_count = count($view_list);
-		
+
 		$this->confirm_delete($this->user->lang('confirm_delete_items'));
-		
+
 		$arrMenuItems = array(
 				0 => array(
 						'type'	=> 'javascript',
@@ -269,9 +269,9 @@ class ManageItems extends page_generic {
 			'PAGINATION' 		=> generate_pagination('manage_items.php'.$sort_suffix, $item_count, $this->user->data['user_rlimit'], $this->in->get('start', 0)),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
 			'ITEM_COUNT' 		=> $item_count,
-			'HPTT_ADMIN_LINK'	=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('admin_manage_items').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,		
+			'HPTT_ADMIN_LINK'	=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('admin_manage_items').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,
 			'BUTTON_MENU'		=> $this->core->build_dropdown_menu($this->user->lang('selected_items').'...', $arrMenuItems, '', 'manage_members_menu', array("input[name=\"selected_ids[]\"]")),
-				
+
 		));
 
 		$this->core->set_vars(array(
@@ -280,14 +280,14 @@ class ManageItems extends page_generic {
 			'display'			=> true)
 		);
 	}
-	
+
 	public function display_bulkedit($messages=false) {
 		$arrItems = $this->in->getArray('selected_ids', 'int');
 		if(count($arrItems) === 0) $this->display();
-		
+
 		//fetch members for select
 		$members = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list', array(false,true,false)), 'member', 'name', 'asc')));
-		
+
 		//fetch raids for select
 		$raids = array();
 		$raidids = $this->pdh->sort($this->pdh->get('raid', 'id_list'), 'raid', 'date', 'desc');
@@ -295,16 +295,16 @@ class ManageItems extends page_generic {
 		{
 			$raids[$id] = '#ID:'.$id.' - '.$this->pdh->get('event', 'name', array($this->pdh->get('raid', 'event', array($id)))).' '.$this->time->user_date($this->pdh->get('raid', 'date', array($id)));
 		}
-		
+
 		//fetch itempools for select
 		$itempools = $this->pdh->aget('itempool', 'name', 0, array($this->pdh->get('itempool', 'id_list')));
-		
+
 		if($message){
 			$this->core->messages($message);
 			$item = $this->get_post(true);
 			$item['buyer'] = $this->in->get('buyer', 0);
 		}
-		
+
 		$item['date'] = $this->time->time;
 
 		$arrAutocomplete = array();
@@ -317,7 +317,7 @@ class ManageItems extends page_generic {
 					'itempool'	=>	$this->pdh->get('item', 'itempool_id', array($intItemID)),
 			);
 		}
-		
+
 		$this->jquery->AutocompleteMultiple("name", $arrAutocomplete, '
 			$("#item_value").val(ui.item.ivalue);
 			$("#item_id").val(ui.item.game_id);
@@ -325,21 +325,21 @@ class ManageItems extends page_generic {
 			$("#itempool_id").val(ui.item.itempool);
 			event.preventDefault();
 		');
-		
+
 		$item_names = $this->pdh->aget('item', 'name', 0, array($this->pdh->get('item', 'id_list')));
 
 		$this->tpl->assign_vars(array(
 				'GRP_KEY'		=> (isset($grp_key) && !$copy) ? $grp_key : '',
 				'NAME'			=> (isset($item['name'])) ? $item['name'] : '',
-				'RAID'			=> new hdropdown('raid_id', array('options' => $raids, 'value' => ((isset($item['raid_id'])) ? $item['raid_id'] : ''))),
-				'BUYERS'		=> new hsingleselect('buyer', array('options' => $members, 'value' => ((isset($item['buyer'])) ? $item['buyer'] : ''), 'width' => 350, 'filter' => true)),
+				'RAID'			=> (new hdropdown('raid_id', array('options' => $raids, 'value' => ((isset($item['raid_id'])) ? $item['raid_id'] : ''))))->output(),
+				'BUYERS'		=> (new hsingleselect('buyer', array('options' => $members, 'value' => ((isset($item['buyer'])) ? $item['buyer'] : ''), 'width' => 350, 'filter' => true)))->output(),
 				'DATE'			=> $this->jquery->Calendar('date', $this->time->user_date($item['date'], true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 				'VALUE'			=> (isset($item['value'])) ? $item['value'] : '',
 				'ITEM_ID'		=> (isset($item['item_id'])) ? $item['item_id'] : '',
-				'ITEMPOOLS'		=> new hdropdown('itempool_id', array('options' => $itempools, 'value' => ((isset($item['itempool_id'])) ? $item['itempool_id'] : ''))),
+				'ITEMPOOLS'		=> (new hdropdown('itempool_id', array('options' => $itempools, 'value' => ((isset($item['itempool_id'])) ? $item['itempool_id'] : ''))))->output(),
 				'BULK_ITEMS'	=> implode('|', $arrItems),
 		));
-	
+
 		$this->core->set_vars(array(
 				'page_title'		=> $this->user->lang('manitems_title').' - '.$this->user->lang('bulkedit'),
 				'template_file'		=> 'admin/manage_items_bulkedit.html',

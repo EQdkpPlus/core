@@ -55,11 +55,11 @@ class Manage_Bridge extends page_generic {
 
 	public function ajax_load_prefix(){
 		header('content-type: text/html; charset=UTF-8');
-		
+
 		$arrPrefix = $this->get_prefix($this->in->get('notsamedb', 0));
 		$arrPrefix = array_merge(array('' => ''), $arrPrefix );
 		$arrKeys = array_keys($arrPrefix);
-		$dropdown = new hdropdown('db_prefix', array('options' => $arrPrefix, 'value' => $arrKeys[1], 'js' => 'onchange="onchange_prefix()"'));
+		$dropdown = (new hdropdown('db_prefix', array('options' => $arrPrefix, 'value' => $arrKeys[1], 'js' => 'onchange="onchange_prefix()"')))->output();
 		$this->config->set('cmsbridge_notsamedb', $this->in->get('notsamedb', 0));
 
 		echo $dropdown;
@@ -91,7 +91,7 @@ class Manage_Bridge extends page_generic {
 
 	public function ajax_check_database(){
 		header('content-type: text/html; charset=UTF-8');
-		
+
 		if ($this->in->get('host') != '' && $this->in->get('user') != '' && $this->in->get('pw') != '' && $this->in->get('name') != ''){
 			$error = array();
 			try {
@@ -105,7 +105,7 @@ class Manage_Bridge extends page_generic {
 				$this->config->set('cmsbridge_notsamedb', 1);
 				echo "true";
 				exit;
-				
+
 			} catch(DBALException $e){
 				$this->config->del('cmsbridge_host');
 				$this->config->del('cmsbridge_user');
@@ -151,7 +151,7 @@ class Manage_Bridge extends page_generic {
 
 	public function ajax_check_userlogin(){
 		header('content-type: text/html; charset=UTF-8');
-		
+
 		$groups = $this->in->get('groups', '');
 		$groups = str_replace('|', ',', $groups);
 		if ($groups != ''){
@@ -175,7 +175,7 @@ class Manage_Bridge extends page_generic {
 		if (is_array($this->in->getArray('usergroups', 'string')) && count($this->in->getArray('usergroups', 'string')) > 0){
 			$groups = implode(',', $this->in->getArray('usergroups', 'string'));
 			$this->config->set('cmsbridge_groups', $groups);
-			
+
 			//Sync Usergroups
 			$groups = implode(',', $this->in->getArray('sync_usergroups', 'string'));
 			$this->config->set('cmsbridge_sync_groups', $groups);
@@ -188,13 +188,13 @@ class Manage_Bridge extends page_generic {
 			$this->config->set('cmsbridge_reg_url', $this->in->get('cms_reg_url'));
 			//Passwort Reset Page
 			$this->config->set('cmsbridge_pwreset_url', $this->in->get('cms_pwreset_url'));
-			
+
 			$this->config->set('cmsbridge_onlycmsuserlogin', $this->in->get('cms_onlycmsuserlogin', 0));
 
 			//Bridge Settings
 			$settings = $this->bridge->get_settings();
 			$form = register('form', array('bridge_settings'));
-			
+
 			if (is_array($settings)){
 				$form->add_fields($settings);
 				$arrValues = $form->return_values();
@@ -236,13 +236,13 @@ class Manage_Bridge extends page_generic {
 			$this->bridge->deactivate_bridge();
 			$this->core->message($this->user->lang('bridge_disabled_message'), $this->user->lang('error'), 'red');
 		}
-	
+
 		if ($this->config->get('cmsbridge_active') != 1){
 			$this->delete_settings();
 		}
 
 		registry::load("form");
-		
+
 		$arrPrefix = $this->get_prefix($this->config->get('cmsbridge_notsamedb'));
 		$arrPrefix = array_merge(array('' => ''), $arrPrefix );
 		$arrKeys = array_keys($arrPrefix);
@@ -264,7 +264,7 @@ class Manage_Bridge extends page_generic {
 		//Bridge Settings
 		$settings = $this->bridge->get_settings();
 		$form = register('form', array('bridge_settings'));
-		
+
 		if (is_array($settings)){
 			$form->add_fields($settings);
 			$arrValues = array();
@@ -276,7 +276,7 @@ class Manage_Bridge extends page_generic {
 		}
 		$arrBridges = $this->bridge->get_available_bridges();
 		ksort($arrBridges);
-		
+
 		$arrSyncFields = $this->bridge->get_available_sync_fields();
 
 		$this->tpl->assign_vars(array(
@@ -284,7 +284,7 @@ class Manage_Bridge extends page_generic {
 			'S_BRIDGE_ACTIVE'	=> ($this->config->get('cmsbridge_active') == 1) ? true : false,
 			'S_PROFILEFIELDS_INFO' => ($this->config->get('cmsbridge_active') == 1 && count($arrSyncFields)) ? true : false,
 			'S_BRIDGE_SETTINGS'	=> (is_array($settings) && count($settings) > 0) ? true : false,
-			'DD_SYSTEMS'		=> new hdropdown('cms_type', array('options' => $arrBridges, 'value' => $this->config->get('cmsbridge_type'), 'js' => 'onchange="onchange_type()"')),
+			'DD_SYSTEMS'		=> (new hdropdown('cms_type', array('options' => $arrBridges, 'value' => $this->config->get('cmsbridge_type'), 'js' => 'onchange="onchange_type()"')))->output(),
 			'S_SAMEDB'			=> ($this->config->get('cmsbridge_notsamedb') == '0' && $this->config->get('cmsbridge_active') == 1) ? true : false,
 			'S_NOTSAMEDB'		=> ($this->config->get('cmsbridge_notsamedb') == '1' && $this->config->get('cmsbridge_active') == 1) ? true : false,
 
@@ -292,10 +292,10 @@ class Manage_Bridge extends page_generic {
 			'DB_USER'			=> ($this->crypt->decrypt($this->config->get('cmsbridge_user')) == '') ? $this->dbuser : $this->crypt->decrypt($this->config->get('cmsbridge_user')),
 			'DB_PW'				=> ($this->crypt->decrypt($this->config->get('cmsbridge_password'))  == '') ? '' : $this->crypt->decrypt($this->config->get('cmsbridge_password')),
 			'DB_DATABASE'		=> $this->crypt->decrypt($this->config->get('cmsbridge_database')),
-			'DD_PREFIX'			=> new hdropdown('db_prefix', array('options' => $arrPrefix, 'value' => $this->config->get('cmsbridge_prefix'), 'js' => 'onchange="onchange_prefix()"')),
+			'DD_PREFIX'			=> (new hdropdown('db_prefix', array('options' => $arrPrefix, 'value' => $this->config->get('cmsbridge_prefix'), 'js' => 'onchange="onchange_prefix()"')))->output(),
 			'OWN_PREFIX'		=> (!in_array($this->config->get('cmsbridge_prefix'), $arrPrefix)) ? $this->config->get('cmsbridge_prefix') : '',
 			'S_ACTIVATE_MESSAGE'=> ($this->in->get('activate') == 'true') ? true : false,
-			'DD_EMBEDD_OPTIONS'	=> new hdropdown('cms_embedded', array('options' => $a_linkMode, 'value' => $this->config->get('cmsbridge_embedded'))),
+			'DD_EMBEDD_OPTIONS'	=> (new hdropdown('cms_embedded', array('options' => $a_linkMode, 'value' => $this->config->get('cmsbridge_embedded'))))->output(),
 			'CMS_URL'			=> $this->config->get('cmsbridge_url'),
 			'CMS_PWRESET_URL'	=> $this->config->get('cmsbridge_pwreset_url'),
 			'CMS_REG_URL'		=> $this->config->get('cmsbridge_reg_url'),

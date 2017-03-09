@@ -48,41 +48,41 @@ if ( !class_exists( "html_leaderboard" ) ) {
 
 			//system dependant output
 			$this->vpre = $this->pdh->pre_process_preset('current', array(), 0);
-			
+
 			//check if reset is necessary
 			$reset_time = $this->timekeeper->get('lb_reset_times', $this->mdkpid);
 			$needs_update = false;
 			$used_modules[] = $this->vpre[0];
 			$used_modules[] = 'member';
-			
+
 			foreach($used_modules as $module_name){
 				if($this->pdh->module_needs_update($module_name) || $this->pdh->get_module_update_time($module_name) >= $reset_time){
 					$needs_update = true;
 					break;
 				}
 			}
-			
+
 			if($needs_update) {
 				//reset
 				$this->pdc->del_prefix('lb_'.$this->mdkpid);
 				//put new update time
 				$this->timekeeper->put('lb_reset_times', $this->mdkpid, time(), true);
 			}
-			
+
 			$strCacheKey = md5('lb_'.$this->mdkpid.'_'.$column.'_'.$sort.'_'.$max_member);
 			$cachedViewList = $this->pdc->get('lb_'.$this->mdkpid.'_'.$strCacheKey);
 
 			$member_classes_mapping = $this->pdh->aget('member', $column, 0, array($view_list));
 
-			$mdkp_sel = new hdropdown('lb_mdkpid', array('options' => $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), 'js' => ' onchange="$(\'#lbc\').val(1); form.submit();"', 'value' => $this->mdkpid));
+			$mdkp_sel = (new hdropdown('lb_mdkpid', array('options' => $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), 'js' => ' onchange="$(\'#lbc\').val(1); form.submit();"', 'value' => $this->mdkpid)))->output();
 
 			$strAdminLink = ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('listmembers').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : '';
-			
+
 			$leaderboard = '<div id="toggleLeaderboard"><div class="tableHeader"><h2>'.$this->user->lang('leaderboard').$strAdminLink.'<span class="toggle_button"></span></h2></div><div class="toggle_container">'.$this->user->lang('select_leaderboard').': '.$mdkp_sel.'<div class="leaderboard">';
 			$colnr = 0;
-			
+
 			$with_twinks = ($with_twinks === false) ? (!intval($this->config->get('show_twinks'))) : $with_twinks;
-			
+
 			if($cachedViewList !== null){
 				$column_list = $cachedViewList;
 			} else {
@@ -94,21 +94,21 @@ if ( !class_exists( "html_leaderboard" ) ) {
 					$col = $member_classes_mapping[$member_id];
 					if(is_array($columns) && in_array($col, $columns) ){
 						$column_list[$col][] = $member_id;
-					}	
+					}
 				}
-				
+
 				//Put to Cache
 				$this->pdc->put('lb_'.$this->mdkpid.'_'.$strCacheKey, $column_list);
 			}
-			
+
 
 			if(count($column_list) < 1 || count(current($column_list)) < 1) return '';
 			$intWidth = (count($column_list) < $break) ? floor(100 / count($column_list)) : floor(100 / $break);
-			
-			
+
+
 			foreach($columns as $col) {
 				if(!isset($column_list[$col])) continue;
-				
+
 				$member_ids = $column_list[$col];
 
 				$leaderboard .= '<div class="floatLeft '.(($column == 'classid') ? 'leaderboard_class_'.$col : 'leaderboard_role_'.$col).'" style="width:'.$intWidth.'%"><div><table class="table fullwidth borderless nowrap colorswitch"><tr><th colspan="2">';

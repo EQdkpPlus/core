@@ -87,12 +87,12 @@ class ManageNotifications extends page_generic {
 
 		$this->tpl->assign_vars(array(
 			'NOTIFICATION_ID' 	=> $strNotificationID,
-			'DD_PRIORITY'		=> new hdropdown('priority', array('value' => $this->pdh->get('notification_types', 'prio', array($strNotificationID)), 'options' => array(0 => $this->user->lang('notification_prio_0'), 1 => $this->user->lang('notification_prio_1'), 2 => $this->user->lang('notification_prio_2')))),
+			'DD_PRIORITY'		=> (new hdropdown('priority', array('value' => $this->pdh->get('notification_types', 'prio', array($strNotificationID)), 'options' => array(0 => $this->user->lang('notification_prio_0'), 1 => $this->user->lang('notification_prio_1'), 2 => $this->user->lang('notification_prio_2')))))->output(),
 			'ICON'				=> $this->pdh->get('notification_types', 'icon', array($strNotificationID)),
-			'DD_DEFAULT'		=> new hdropdown('default', array('value' => (string)$this->pdh->get('notification_types', 'default', array($strNotificationID)), 'options' => $arrMethods)),
-			'GROUP_RADIO'		=> new hradio('group', array('value' => $this->pdh->get('notification_types', 'group', array($strNotificationID)))),
-			'GROUP_AT_SPINNER'	=> new hspinner('group_at', array('value' => $this->pdh->get('notification_types', 'group_at', array($strNotificationID)), 'min' => 0)),
-			'OVERWRITE_RADIO'	=> new hradio('overwrite', array('value' => 0)),
+			'DD_DEFAULT'		=> (new hdropdown('default', array('value' => (string)$this->pdh->get('notification_types', 'default', array($strNotificationID)), 'options' => $arrMethods)))->output(),
+			'GROUP_RADIO'		=> (new hradio('group', array('value' => $this->pdh->get('notification_types', 'group', array($strNotificationID)))))->output(),
+			'GROUP_AT_SPINNER'	=> (new hspinner('group_at', array('value' => $this->pdh->get('notification_types', 'group_at', array($strNotificationID)), 'min' => 0)))->output(),
+			'OVERWRITE_RADIO'	=> (new hradio('overwrite', array('value' => 0)))->output(),
 		));
 
 		$this->core->set_vars(array(

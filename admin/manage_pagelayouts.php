@@ -340,14 +340,14 @@ class ManagePageLayouts extends page_generic {
 
 		$this->tpl->assign_vars(array (
 			'NEW_PRESET_XML'			=> $readd_xml,
-			'LAYOUT_DROPDOWN'			=> new hdropdown('new_layout_source', array('options' => $layout_options, 'value' => $this->config->get('eqdkp_layout'))),
+			'LAYOUT_DROPDOWN'			=> (new hdropdown('new_layout_source', array('options' => $layout_options, 'value' => $this->config->get('eqdkp_layout'))))->output(),
 			'JS_LM_TABS'				=> $this->jquery->Tab_header('lm_tabs', true),
 			'CSRF_DEL_TOKEN'			=> $this->CSRFGetToken('del'),
 			'CSRF_DELPRESET_TOKEN'		=> $this->CSRFGetToken('del_pre'),
 
-			'PDH_R_DD'					=> new hdropdown('pdh_r_module', array('options' => $arrModuleDD, 'value' => $this->in->get('pdh_r_module'), 'js'=>'onchange="this.form.submit()"')),
-			'PDH_METHODS_DD'			=> new hdropdown('pdh_method', array('options' => $arrMethods, 'value' => $this->in->get('pdh_method'), 'js'=>'onchange="this.form.submit()"')),
-			'PDH_R_OLD'					=> new hhidden('pdh_r_old', array('value' => $this->in->get('pdh_r_module'))),
+			'PDH_R_DD'					=> (new hdropdown('pdh_r_module', array('options' => $arrModuleDD, 'value' => $this->in->get('pdh_r_module'), 'js'=>'onchange="this.form.submit()"')))->output(),
+			'PDH_METHODS_DD'			=> (new hdropdown('pdh_method', array('options' => $arrMethods, 'value' => $this->in->get('pdh_method'), 'js'=>'onchange="this.form.submit()"')))->output(),
+			'PDH_R_OLD'					=> (new hhidden('pdh_r_old', array('value' => $this->in->get('pdh_r_module'))))->output(),
 			'LAYOUT_COUNT'				=> $intLayouts,
 			'USERPRESET_COUNT'			=> count($user_presets),
 		));
@@ -483,7 +483,7 @@ class ManagePageLayouts extends page_generic {
 		}
 
 		//iterate through all pages
-		foreach($pages as $page) {			
+		foreach($pages as $page) {
 			$this->tpl->assign_block_vars('page_list', array(
 				'ID' => md5($page),
 				'NAME' => $this->user->lang('lm_page_'.$page, true),
@@ -510,9 +510,9 @@ class ManagePageLayouts extends page_generic {
 				$this->tpl->assign_vars(array(
 					'LB_MAXPERCOLUMN'	=> $page_settings['listmembers_leaderboard']['maxpercolumn'],
 					'LB_MAXPERROW'	=> $page_settings['listmembers_leaderboard']['maxperrow'],
-					'LB_SORTDIR'	=> new hdropdown('lb_sortdir', array('options' => $table_sort_dirs, 'value' => $page_settings['listmembers_leaderboard']['sort_direction'])),
-					'LB_COLUMN_DD'	=> new hdropdown('lb_columns', array('options' => array('classid' => $this->user->lang('class'), 'defaultrole' => $this->user->lang('role')), 'value' => $column_type)),
-					'LB_POOL_DD'	=> new hdropdown('lb_default_pool', array('options' => $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), 'value' => $page_settings['listmembers_leaderboard']['default_pool'])),
+					'LB_SORTDIR'	=> (new hdropdown('lb_sortdir', array('options' => $table_sort_dirs, 'value' => $page_settings['listmembers_leaderboard']['sort_direction'])))->output(),
+					'LB_COLUMN_DD'	=> (new hdropdown('lb_columns', array('options' => array('classid' => $this->user->lang('class'), 'defaultrole' => $this->user->lang('role')), 'value' => $column_type)))->output(),
+					'LB_POOL_DD'	=> (new hdropdown('lb_default_pool', array('options' => $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), 'value' => $page_settings['listmembers_leaderboard']['default_pool'])))->output(),
 					'CLASSDISPLAY'	=> ($column_type == 'classid') ? '' : 'style="display: none;"',
 					'ROLEDISPLAY'	=> ($column_type == 'defaultrole') ? '' : 'style="display: none;"',
 				));
@@ -575,29 +575,29 @@ class ManagePageLayouts extends page_generic {
 						unset($pps[$preset]);
 					}
 					if(!isset($options['table_sort_dir'])) $options['table_sort_dir'] = 'desc';
-					if($page_object == 'hptt_listmembers_memberlist_overview') {	
+					if($page_object == 'hptt_listmembers_memberlist_overview') {
 						$this->init_multipools();
 						if(!isset($options['default_pool'])) $options['default_pool'] = 0;
 						if(!isset($options['default_pool_ov'])) $options['default_pool_ov'] = 1;
 						$add_setts[] = array(
 							'LANG'	=> $this->user->lang('lm_default_pool'),
-							'FIELD'	=> new hdropdown($page.'['.$page_object.'][default_pool]', array('options' => $this->multi_pools, 'value' => $options['default_pool'])),
+							'FIELD'	=> (new hdropdown($page.'['.$page_object.'][default_pool]', array('options' => $this->multi_pools, 'value' => $options['default_pool'])))->output(),
 						);
 						$arrOvPools = $this->multi_pools;
 						unset($arrOvPools[0]);
 						$add_setts[] = array(
 							'LANG'	=> $this->user->lang('lm_default_pool_ov'),
-							'FIELD'	=> new hdropdown($page.'['.$page_object.'][default_pool_ov]', array('options' => $arrOvPools, 'value' => $options['default_pool_ov'])),
+							'FIELD'	=> (new hdropdown($page.'['.$page_object.'][default_pool_ov]', array('options' => $arrOvPools, 'value' => $options['default_pool_ov'])))->output(),
 						);
 					}
 					$this->tpl->assign_block_vars('page_row.page_object_row', array(
 						'TABLE_TITLE'		=> $this->user->lang('lm_'.$page_object),
 						'ID'				=> $page_object_id,
 						'NAME'				=> $page_object,
-						'DROPDOWN'			=> new hdropdown('dp'.$page_object_id, array('options' => $pps, 'id' => 'dp'.$page_object_id, 'disabled' => ((count($pps) == 0) ? true : false))),
+						'DROPDOWN'			=> (new hdropdown('dp'.$page_object_id, array('options' => $pps, 'id' => 'dp'.$page_object_id, 'disabled' => ((count($pps) == 0) ? true : false))))->output(),
 						'PREFIX'			=> $page.'['.$page_object.']',
-						'NUMBERS'			=> new hradio($page.'['.$page_object.'][numbers]', array('value' => $options['show_numbers'])),
-						'TABLE_SORT_DIR'	=> new hdropdown($page.'['.$page_object.'][table_sort_dir]', array('options' => $table_sort_dirs, 'value' => $options['table_sort_dir'], 'id' => $page.'_'.$page_object.'_sort_dir')),
+						'NUMBERS'			=> (new hradio($page.'['.$page_object.'][numbers]', array('value' => $options['show_numbers'])))->output(),
+						'TABLE_SORT_DIR'	=> (new hdropdown($page.'['.$page_object.'][table_sort_dir]', array('options' => $table_sort_dirs, 'value' => $options['table_sort_dir'], 'id' => $page.'_'.$page_object.'_sort_dir')))->output(),
 						'DISABLED'			=> (count($pps) == 0) ? 'disabled="disabled"' : '',
 						'S_ADD_SETTS'		=> (count($add_setts) > 0) ? true : false,
 					));
@@ -605,7 +605,7 @@ class ManagePageLayouts extends page_generic {
 						$preset = $column_options['name'];
 						$this->tpl->assign_block_vars('page_row.page_object_row.preset_row', array(
 							'NAME'			=> ($this->pdh->get_preset_description($preset)) ? $this->pdh->get_preset_description($preset, true) : $preset,
-							'SORTABLE'		=> new hradio($page.'['.$page_object.'][sortable]['.$preset.']', array('value' => $column_options['sort'], 'class' => 'sortable')),
+							'SORTABLE'		=> (new hradio($page.'['.$page_object.'][sortable]['.$preset.']', array('value' => $column_options['sort'], 'class' => 'sortable')))->output(),
 							'CODE'			=> $preset,
 							'DEFAULT_SORT'	=> (isset($options['table_sort_col']) && $options['table_sort_col'] == $column_id) ? 'checked="checked"' : '',
 							'TH_ADD'		=> sanitize($column_options['th_add']),

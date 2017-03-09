@@ -35,7 +35,7 @@ class Manage_Ranks extends page_generic {
 		parent::__construct(false, $handler, array('rank', 'name'), null, 'rank_ids[]');
 		$this->process();
 	}
-	
+
 	//Save or add rank on edit page
 	public function update(){
 		$strName = $this->in->get('name');
@@ -43,15 +43,15 @@ class Manage_Ranks extends page_generic {
 		$strSuffix = $this->in->get('suffix');
 		$intHidden = $this->in->get('hidden', 0);
 		$strIcon = $this->in->get('icon');
-		
+
 		$intRankID = $this->in->get('r', -1);
 		if ($intRankID >= 0){
 			//Update rank
 			$intSortID = $this->pdh->get('rank', 'sortid', array($intRankID));
 			$intDefault = $this->pdh->get('rank', 'default_value', array($intRankID));
-			
+
 			$result = $this->pdh->put('rank', 'update_rank', array($intRankID, $strName, $intHidden, $strPrefix, $strSuffix, $intSortID, $intDefault, $strIcon));
-			
+
 		} else {
 			//Add new rank
 			$id_list = $this->pdh->get('rank', 'id_list');
@@ -60,7 +60,7 @@ class Manage_Ranks extends page_generic {
 			$intRankID = max($id_list) + 1;
 			$result = $this->pdh->put('rank', 'add_rank', array($intRankID, $strName, $intHidden, $strPrefix, $strSuffix, $intSortID, $intDefault, $strIcon));
 		}
-		
+
 		if($result) {
 			$message = array('title' => $this->user->lang('save_suc'), 'text' => $this->user->lang('pk_succ_saved'), 'color' => 'green');
 		} else {
@@ -89,10 +89,10 @@ class Manage_Ranks extends page_generic {
 		}
 		$this->display($message);
 	}
-	
+
 	public function edit(){
 		$intRankID = $this->in->get('r', -1);
-		
+
 		$arrRankImagesDD = array('' => '');
 		$blnRankImages = $this->game->icon_exists('ranks');
 		if($blnRankImages){
@@ -102,28 +102,28 @@ class Manage_Ranks extends page_generic {
 			}
 		}
 		natcasesort($arrRankImagesDD);
-		
+
 		if($intRankID >= 0){
-			
-			
+
+
 			$this->tpl->assign_vars(array(
 					'NAME'				=> $this->pdh->get('rank', 'name', array($intRankID)),
-					'RANK_ICON_DD' 		=> new hdropdown('icon', array('options' => $arrRankImagesDD, 'value' => $this->pdh->get('rank', 'icon', array($intRankID)))),
+					'RANK_ICON_DD' 		=> (new hdropdown('icon', array('options' => $arrRankImagesDD, 'value' => $this->pdh->get('rank', 'icon', array($intRankID)))))->output(),
 					'HIDE'				=> ($this->pdh->get('rank', 'is_hidden', array($intRankID))) ? 'checked="checked"' : "",
 					'PREFIX' 			=> $this->pdh->get('rank', 'prefix', array($intRankID)),
 					'SUFFIX' 			=> $this->pdh->get('rank', 'suffix', array($intRankID)),
 			));
 		} else {
 			$this->tpl->assign_vars(array(
-					'RANK_ICON_DD' 		=> new hdropdown('icon', array('options' => $arrRankImagesDD)),
+					'RANK_ICON_DD' 		=> (new hdropdown('icon', array('options' => $arrRankImagesDD)))->output(),
 			));
 		}
-		
+
 		$this->tpl->assign_vars(array(
 				'RANK_ID' 		=> $intRankID,
 				'S_RANK_IMAGES' => $blnRankImages,
 		));
-		
+
 		$this->core->set_vars(array(
 				'page_title'		=> $this->user->lang('manrank_title'),
 				'template_file'		=> 'admin/manage_ranks_edit.html',
@@ -155,7 +155,7 @@ class Manage_Ranks extends page_generic {
 			$this->pdh->process_hook_queue();
 			$this->core->messages($messages);
 		}
-		
+
 		$this->tpl->add_js("
 			$(\"#rank_table tbody\").sortable({
 				cancel: '.not-sortable, input, select, th',
@@ -167,9 +167,9 @@ class Manage_Ranks extends page_generic {
 
 		$key = 0;
 		$new_id = 1;
-		
+
 		$default_rank = $this->pdh->get('rank', 'default');
-		
+
 		$arrRankImagesDD = array('' => '');
 		$blnRankImages = $this->game->icon_exists('ranks');
 		if($blnRankImages){
@@ -179,7 +179,7 @@ class Manage_Ranks extends page_generic {
 			}
 		}
 		natcasesort($arrRankImagesDD);
-		
+
 		foreach($ranks as $id => $name) {
 			$this->tpl->assign_block_vars('ranks', array(
 				'KEY'	=> $key,
@@ -214,7 +214,7 @@ class Manage_Ranks extends page_generic {
 		if($this->in->exists('ranks', 'string')) {
 			$sortid = 0;
 			$rank_default = $this->in->get('ranks_default', 0);
-			foreach($this->in->getArray('ranks', 'string') as $key => $id) {			
+			foreach($this->in->getArray('ranks', 'string') as $key => $id) {
 				$ranks[] = array(
 					'selected'	=> (in_array($id, $selected)) ? $id : false,
 					'id'		=> $id,

@@ -59,7 +59,7 @@ if(!function_exists('CSVexport')){
 			$("input[type=\'checkbox\'], #ip_seperator, #raidgroup").change(function (){
 				genOutput()
 			});
-			
+
 		', "docready");
 
 		registry::register('template')->add_js('
@@ -88,10 +88,10 @@ if(!function_exists('CSVexport')){
 						<input type='text' name='seperator' id='ip_seperator' value=',' size='4' />
 					</dd>
 				</dl><dl>";
-		
+
 		$text .= "<dt><label>".registry::fetch('user')->lang('raidevent_export_raidgroup')."</label></dt>
 					<dd>
-						".new hdropdown('raidgroup', array('options' => $raid_groups, 'value' => 0, 'id' => 'raidgroup'))."
+						".(new hdropdown('raidgroup', array('options' => $raid_groups, 'value' => 0, 'id' => 'raidgroup')))->output()."
 					</dd>
 				</dl><dl>";
 		$text .= "<input type='checkbox' checked='checked' name='confirmed' id='cb_confirmed' value='true'> ".registry::fetch('user')->lang(array('raidevent_raid_status', 0));

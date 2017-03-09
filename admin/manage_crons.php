@@ -27,7 +27,7 @@ include_once($eqdkp_root_path . 'common.php');
 class ManageCrons extends page_generic {
 
 	public $crons = array();
-	
+
 	public function __construct() {
 		$this->user->check_auth('a_cronjobs_man');
 		$handler = array(
@@ -39,7 +39,7 @@ class ManageCrons extends page_generic {
 			),
 		);
 		parent::__construct(false, $handler);
-		
+
 		// Variables
 		$this->crons = $this->cronjobs->list_crons();
 		$this->process();
@@ -48,7 +48,7 @@ class ManageCrons extends page_generic {
 	public function run() {
 		$this->cronjobs->run_cron($this->in->get('cron'), true);
 		$this->crons[$this->in->get('cron')]['last_run'] = time();
-		
+
 		$this->core->message(sprintf($this->user->lang('cron_run_success'), sanitize($this->in->get('cron'))), $this->user->lang('success'), 'green');
 		$this->display();
 	}
@@ -58,7 +58,7 @@ class ManageCrons extends page_generic {
 		$this->pdh->process_hook_queue();
 		$this->display();
 	}
-	
+
 	public function disable(){
 		$this->cronjobs->set_inactive($this->in->get('cron'));
 		$this->pdh->process_hook_queue();
@@ -70,32 +70,32 @@ class ManageCrons extends page_generic {
 		$arrOptions = $this->buildCrontaskOptions($strCronname);
 		$form = register('form', array('cronjob_settings'));
 		$form->add_fields($arrOptions);
-		
+
 		if ($this->crons[$strCronname]['editable']){
 			$options['description'] = $this->in->get('cron_desc');
 			$options['repeat'] = ($this->in->get('cron_repeat') == 1) ? true : false;
-			
+
 			$options['params'] = $form->return_values();
-			$options['params'] = is_array($options['params']) ? $options['params'] : array();	
-			
+			$options['params'] = is_array($options['params']) ? $options['params'] : array();
+
 			$options['repeat_interval'] = $this->in->get('repeat_value', 0);
 			$options['repeat_type'] =  $this->in->get('repeat_key', 'hourly');
-			
+
 			$options['start_time'] = $this->time->time;
 			if($this->in->exists('start_date')) $options['start_time'] = $this->time->fromformat($this->in->get('start_date', '0.0.0'), 1);
 			$this->cronjobs->add_cron($this->in->get('cron'), $options, true);
-		}		
+		}
 		$this->display();
 	}
-	
+
 	// ---------------------------------------------------------
 	// Display
 	// ---------------------------------------------------------
-	public function display(){	
+	public function display(){
 		if ($this->in->exists('mode')){
 			$this->crons = $this->cronjobs->list_crons();
 		}
-		
+
 		$this->tpl->add_js('
 		$( "#dialog-cronresult" ).dialog({
 			height: 200,
@@ -103,20 +103,20 @@ class ManageCrons extends page_generic {
 			modal: true,
 			autoOpen: false,
 		});
-				
+
 		var cronjob_admin_callback = function(data, cronname){
 			$( "#dialog-cronresult-content" ).html( data );
 			$( "#dialog-cronresult" ).dialog(\'option\', \'title\', cronname);
 			$( "#dialog-cronresult" ).dialog( "open" );
 		};');
-	
+
 		if (is_array($this->crons)){
 			foreach ($this->crons as $key=>$value){
 				$tmp_crons[$key] = $value['active'];
 			}
 			array_multisort($tmp_crons, SORT_DESC, SORT_REGULAR);
 			$iActiveCrons = 0;
-				
+
 			foreach ($tmp_crons as $key=>$value){
 				$value = $this->crons[$key];
 				if ($value['active']){
@@ -164,17 +164,17 @@ class ManageCrons extends page_generic {
 					'U_EDIT_CRON'	=> 'manage_crons.php'.$this->SID.'&amp;mode=edit&amp;cron='.$key.'&amp;link_hash='.$this->CSRFGetToken('mode'),
 					'U_ACTIVATE_CRON'	=> 'manage_crons.php'.$this->SID.'&amp;mode='.(($value['active']) ? 'disable' : 'enable').'&amp;cron='.$key.'&amp;link_hash='.$this->CSRFGetToken('mode'),
 				));
-			} //close foreach	
+			} //close foreach
 		} //close if array
 
-		$this->tpl->assign_var('CRONJOB_COUNT', count($this->crons));	
+		$this->tpl->assign_var('CRONJOB_COUNT', count($this->crons));
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('manage_cronjobs'),
 			'template_file'		=> 'admin/manage_crons.html',
 			'display'			=> true)
 		);
 	}
-	
+
 	private function buildCrontaskOptions($strCrontask){
 		$file_name = $strCrontask.'_crontask.class.php';
 		$file_path = $this->root_path.$this->crons[$strCrontask]['path'].$file_name;
@@ -184,41 +184,41 @@ class ManageCrons extends page_generic {
 			$cron_task = registry::register($class);
 			$options = $cron_task->options();
 		}
-		
+
 		return $options;
 	}
 
 	public function edit(){
 		$strCronname = $this->in->get('cron');
-		
+
 		if (!$this->crons[$strCronname] || $this->crons[$strCronname]['editable'] == false){
 			$this->display_list();
 		}
-		
+
 		$cron_data = $this->crons[$strCronname];
 
 		$file_name = $strCronname.'_crontask.class.php';
 		$file_path = $this->root_path.$this->crons[$strCronname]['path'].$file_name;
-		
+
 		if(file_exists($file_path)){
 			require_once($file_path);
 			$class = $strCronname.'_crontask';
 			$cron_task = registry::register($class);
 			$params = $this->crons[$strCronname]['params'];
 		}
-		
+
 		$arrOptions = $this->buildCrontaskOptions($strCronname);
 		$form = register('form', array('cronjob_settings'));
-		
+
 		if (is_array($arrOptions)){
 			foreach($arrOptions as $key => $val){
 				$form->add_fields($arrOptions);
 			}
-			
+
 			$form->output($params);
 		}
 
-		
+
 		$repeat_dd = array(
 			'minutely'		=> $this->user->lang('minutely'),
 			'hourly'		=> $this->user->lang('hourly'),
@@ -227,7 +227,7 @@ class ManageCrons extends page_generic {
 			'monthly'		=> $this->user->lang('monthly'),
 			'yearly'		=> $this->user->lang('yearly'),
 		);
-			
+
 		$this->tpl->assign_vars(array(
 			'S_PARAMS'				=> (count($arrOptions) > 0) ? true : false,
 			'CRON_NAME'				=> sanitize($strCronname),
@@ -235,9 +235,9 @@ class ManageCrons extends page_generic {
 			'CRON_REPEAT'			=> ($cron_data['repeat']) ? 'checked="checked"' : '',
 			'CRON_REPEAT_VALUE'		=> $cron_data['repeat_interval'],
 			'START_PICKER'			=> $this->jquery->Calendar('start_date', $this->time->user_date($cron_data['start_time'], true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
-			'REPEAT_DD'				=> new hdropdown('repeat_key', array('options' => $repeat_dd, 'value' => $cron_data['repeat_type'])),
+			'REPEAT_DD'				=> (new hdropdown('repeat_key', array('options' => $repeat_dd, 'value' => $cron_data['repeat_type'])))->output(),
 		));
-		
+
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('manage_cronjobs'),
 			'template_file'		=> 'admin/manage_crons_edit.html',

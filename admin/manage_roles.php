@@ -82,10 +82,10 @@ class Manage_Roles extends page_generic {
 		$arole_name		= stripslashes($this->in->get('role_name'));
 		$arole_classes	= implode("|",$this->in->getArray('role_classes', 'int'));
 		$arole_icon		= $this->in->get('icon');
-		
+
 		if($arole_name == "" || $arole_classes == ""){
 			$this->display_edit();
-		} else {		
+		} else {
 			// Perform the action
 			$this->pdh->put('roles', 'update_role', array($arole_id, $arole_name, $arole_classes, $arole_icon));
 			$this->pdh->process_hook_queue();
@@ -178,7 +178,7 @@ class Manage_Roles extends page_generic {
 			$this->tpl->assign_block_vars('defaultclasses', array(
 				'NAME'		=> $this->game->decorate('primary', $classid).' '.$this->game->get_name('primary', $classid),
 				'ID'		=> $classid,
-				'ROLES'		=> new hdropdown('defclassroles['.$classid.']', array('options' => $roles, 'value' => ((isset($defautrole_config[$classid])) ? $defautrole_config[$classid] : 1)))
+				'ROLES'		=> (new hdropdown('defclassroles['.$classid.']', array('options' => $roles, 'value' => ((isset($defautrole_config[$classid])) ? $defautrole_config[$classid] : 1))))->output()
 			));
 		}
 
@@ -187,7 +187,7 @@ class Manage_Roles extends page_generic {
 			'ROLES'				=> $hptt->get_html_table($this->in->get('sort',''), $page_suffix, $this->in->get('start', 0), 40, false),
 			'ROLES_COUNT'		=> count($view_list),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
-			'HPTT_ADMIN_LINK'	=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('admin_manage_roles').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,	
+			'HPTT_ADMIN_LINK'	=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('admin_manage_roles').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,
 		));
 
 		$this->core->set_vars(array(

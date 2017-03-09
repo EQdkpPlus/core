@@ -48,10 +48,10 @@ if(!function_exists('CSVpointexport')){
 
 		$attendees	= registry::register('plus_datahandler')->get('calendar_raids_attendees', 'attendees', array($raid_id));
 		$guests		= registry::register('plus_datahandler')->get('calendar_raids_guests', 'members', array($raid_id));
-		
+
 		$detail_settings = registry::register('plus_datahandler')->get_page_settings('listmembers', 'hptt_listmembers_memberlist_detail');
 		$intDefaultMDKP = $detail_settings['default_pool'];
-		
+
 		$eventId = registry::register('plus_datahandler')->get('calendar_events', 'raid_eventid', array($raid_id));
 		$arrMultiDkpIDs = registry::register('plus_datahandler')->get('event', 'multidkppools', array($eventId));
 		//Because the event can be with different MultiDKPIDs, take the first one
@@ -59,7 +59,7 @@ if(!function_exists('CSVpointexport')){
 
 		$a_json_d	= array();
 		$a_json_a	= array();
-		
+
 		$arrPoints = $arrMember = array();
 		foreach($attendees as $id_attendees=>$d_attendees){
 			$arrPoints[] = (isset($arrPresets['current'])) ? registry::register('plus_datahandler')->get($arrPresets['current'][0], $arrPresets['current'][1], $arrPresets['current'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $id_attendees, '%with_twink%' => (intval(registry::register('config')->get('show_twinks'))) ? 0 : 1)) : 0;
@@ -83,7 +83,7 @@ if(!function_exists('CSVpointexport')){
 				'group'		=> $arrData['group'],
 			);
 		}
-		
+
 		array_multisort($arrPoints, SORT_NUMERIC, SORT_ASC, $arrMember);
 		foreach($arrMember as $arrData){
 			$a_json_a[] = array(
@@ -155,7 +155,7 @@ if(!function_exists('CSVpointexport')){
 					</dl><dl>";
 			$text .= "<dt><label>".registry::fetch('user')->lang('raidevent_export_raidgroup')."</label></dt>
 						<dd>
-							".new hdropdown('raidgroup', array('options' => $raid_groups, 'value' => 0, 'id' => 'raidgroup'))."
+							".(new hdropdown('raidgroup', array('options' => $raid_groups, 'value' => 0, 'id' => 'raidgroup')))->output()."
 						</dd>
 					</dl><dl>";
 		$text .= "<input type='checkbox' checked='checked' name='confirmed' id='cb_confirmed' value='true'> ".registry::fetch('user')->lang(array('raidevent_raid_status', 0));

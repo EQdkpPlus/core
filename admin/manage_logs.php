@@ -38,14 +38,14 @@ class Manage_Logs extends page_generic {
 		if($this->url_id > 0) $this->view_log();
 		$this->process();
 	}
-	
+
 	public function delete(){
 		if(count($this->in->getArray('selected_ids', 'int')) > 0) {
 			$ret = $this->pdh->put('logs', 'delete_ids', array($this->in->getArray('selected_ids','int')));
 			$this->pdh->process_hook_queue();
 			$this->logs->add( 'action_logs_deleted', array('{L_NUMBER_OF_LOGS}' => count($this->in->getArray('selected_ids', 'int'))), '');
 			$this->display();
-		}	
+		}
 	}
 
 	public function reset_logs(){
@@ -72,7 +72,7 @@ class Manage_Logs extends page_generic {
 
 	public function view_log() {
 		$log_value = unserialize($this->pdh->get('logs', 'value', array($this->url_id)));
-		
+
 		$blnCompare = false;
 		if(is_array($log_value)) {
 			foreach ($log_value as $k => $v){
@@ -80,26 +80,26 @@ class Manage_Logs extends page_generic {
 					//Enable Compare view
 					if (is_array($v)){
 						$blnCompare = true;
-						
+
 						if ($v['flag'] == 1){
 							require_once($this->root_path.'libraries/diff/diff.php');
 							require_once($this->root_path.'libraries/diff/engine.php');
 							require_once($this->root_path.'libraries/diff/renderer.php');
 							$diff = new diff(xhtml_entity_decode($this->logs->lang_replace($v['old'])), xhtml_entity_decode($this->logs->lang_replace($v['new'])), true);
 							$renderer = new diff_renderer_inline();
-							
+
 							$new = $content = $renderer->get_diff_content($diff);
 						} else {
 							$new = nl2br($this->logs->lang_replace($v['new']));
 						}
-						
+
 						$this->tpl->assign_block_vars('log_compare_row', array(
 								'KEY'			=> $this->logs->lang_replace(stripslashes($k)).':',
 								'OLD'			=> nl2br($this->logs->lang_replace($v['old'])),
 								'NEW'			=> $new,
 								'FLAG'			=> $v['flag'],
 						));
-					} else {				
+					} else {
 						$this->tpl->assign_block_vars('log_row', array(
 							'KEY'			=> $this->logs->lang_replace(stripslashes($k)).':',
 							'VALUE'			=> $this->logs->lang_replace(stripslashes($v)))
@@ -134,7 +134,7 @@ class Manage_Logs extends page_generic {
 	}
 
 	public function display(){
-	
+
 		$plugin_list['']	= '';
 		$arrLogins = $this->pdh->get('logs', 'plugins');
 		if (is_array($arrLogins)){
@@ -145,27 +145,27 @@ class Manage_Logs extends page_generic {
 				}
 			}
 		}
-		
+
 		$user_list[-1]	= '';
 		$arrUsers = $this->pdh->get('logs', 'grouped_users', array());
 		foreach($arrUsers as $user_id){
 			$user_list[$user_id] = $this->pdh->get('user', 'name', array($user_id));
 		}
-		
+
 		$type_list['']	= '';
 		$arrTags = $this->pdh->get('logs', 'grouped_tags', array());
 		foreach($arrTags as $tag){
 			$type_list[$tag] = $this->user->lang($tag, true, false);
 		}
 		natcasesort($type_list);
-		
+
 		$result_list = array(
 			'-1' => '',
 			'0' => $this->user->lang('error'),
 			'1' => $this->user->lang('success'),
 		);
-	
-		
+
+
 		//Prepare Filter
 		$blnFilter = false;
 		$strFilterSuffix = "";
@@ -190,7 +190,7 @@ class Manage_Logs extends page_generic {
 				$blnFilter = true;
 				//Get filtered ID list
 				$view_list = $this->pdh->get('logs', 'filtered_id_list', array($plugin, $result, $ip, $sid, $tag, $user_id, $value, $date_from, $date_to, $recordid, $record));
-				
+
 				//Build GET-Params for Sorting and Pagination
 				$strFilterSuffix .= "&amp;filter=1";
 				if ($plugin !== false) $strFilterSuffix .= "&amp;filter_plugin=".$plugin;
@@ -209,35 +209,35 @@ class Manage_Logs extends page_generic {
 				$_date_to	= ($date_to !== false) ? $this->time->user_date($date_to , false, false, false, function_exists('date_create_from_format')) : '';
 				//Template Vars
 				$this->tpl->assign_vars(array(
-					'FILTER_PLUGINS' => new hdropdown('filter_plugin', array('options' => $plugin_list, 'value' => (($plugin !== false) ? $plugin : ''))),
-					'FILTER_USER'	 => new hdropdown('filter_user', array('options' => $user_list, 'value' => (($user_id !== false) ? $user_id : ''))),
-					'FILTER_TYPE'	 => new hdropdown('filter_type', array('options' => $type_list, 'value' => (($tag !== false) ? $tag : ''))),
-					'FILTER_RESULT'  => new hdropdown('filter_result', array('options' => $result_list, 'value' => (($result !== false) ? $result : -1))),
-					'FILTER_IP'		=> $ip,
-					'FILTER_SID'	=> $sid,
-					'FILTER_VALUE'	=> $value,
-					'FILTER_RECORD' => $record,
-					'FILTER_RECORDID' => $recordid,
-					'FILTER_DATE_FROM'		=> $this->jquery->Calendar('filter_date_from', $_date_from, '', array('change_year' => true,'change_month' => true,'other_months' => true, 'number_months' => 3, 'onclose' => ' $( "#filter_date_to" ).datepicker( "option", "minDate", selectedDate );')),
-					'FILTER_DATE_TO'		=> $this->jquery->Calendar('filter_date_to', $_date_to, '', array('change_year' => true,'change_month' => true,'other_months' => true, 'number_months' => 3,  'onclose' => ' $( "#filter_date_from" ).datepicker( "option", "maxDate", selectedDate );')),
+					'FILTER_PLUGINS' 	=> (new hdropdown('filter_plugin', array('options' => $plugin_list, 'value' => (($plugin !== false) ? $plugin : ''))))->output(),
+					'FILTER_USER'	 	=> (new hdropdown('filter_user', array('options' => $user_list, 'value' => (($user_id !== false) ? $user_id : ''))))->output(),
+					'FILTER_TYPE'	 	=> (new hdropdown('filter_type', array('options' => $type_list, 'value' => (($tag !== false) ? $tag : ''))))->output(),
+					'FILTER_RESULT'  	=> (new hdropdown('filter_result', array('options' => $result_list, 'value' => (($result !== false) ? $result : -1))))->output(),
+					'FILTER_IP'			=> $ip,
+					'FILTER_SID'		=> $sid,
+					'FILTER_VALUE'		=> $value,
+					'FILTER_RECORD' 	=> $record,
+					'FILTER_RECORDID' 	=> $recordid,
+					'FILTER_DATE_FROM'	=> $this->jquery->Calendar('filter_date_from', $_date_from, '', array('change_year' => true,'change_month' => true,'other_months' => true, 'number_months' => 3, 'onclose' => ' $( "#filter_date_to" ).datepicker( "option", "minDate", selectedDate );')),
+					'FILTER_DATE_TO'	=> $this->jquery->Calendar('filter_date_to', $_date_to, '', array('change_year' => true,'change_month' => true,'other_months' => true, 'number_months' => 3,  'onclose' => ' $( "#filter_date_from" ).datepicker( "option", "maxDate", selectedDate );')),
 				));
 			}
-			
+
 		}
-		
+
 		if (!$blnFilter){
 			//Common Filter Output
 			$this->tpl->assign_vars(array(
-				'FILTER_PLUGINS' => new hdropdown('filter_plugin', array('options' => $plugin_list)),
-				'FILTER_USER'	 => new hdropdown('filter_user', array('options' => $user_list)),
-				'FILTER_TYPE'	 => new hdropdown('filter_type', array('options' => $type_list)),
-				'FILTER_RESULT'  => new hdropdown('filter_result', array('options' => $result_list, 'value' => -1)),
-				'FILTER_DATE_FROM'		=> $this->jquery->Calendar('filter_date_from', '', '', array('change_year' => true,'change_month' => true, 'other_months' => true, 'number_months' => 3, 'onclose' => ' $( "#cal_filter_date_to" ).datepicker( "option", "minDate", selectedDate );')),
-				'FILTER_DATE_TO'		=> $this->jquery->Calendar('filter_date_to', '', '', array('change_year' => true,'change_month' => true,'other_months' => true, 'number_months' => 3,  'onclose' => ' $( "#cal_filter_date_from" ).datepicker( "option", "maxDate", selectedDate );')),		
+				'FILTER_PLUGINS' 	=> (new hdropdown('filter_plugin', array('options' => $plugin_list)))->output(),
+				'FILTER_USER'	 	=> (new hdropdown('filter_user', array('options' => $user_list)))->output(),
+				'FILTER_TYPE'	 	=> (new hdropdown('filter_type', array('options' => $type_list)))->output(),
+				'FILTER_RESULT'  	=> (new hdropdown('filter_result', array('options' => $result_list, 'value' => -1)))->output(),
+				'FILTER_DATE_FROM'	=> $this->jquery->Calendar('filter_date_from', '', '', array('change_year' => true,'change_month' => true, 'other_months' => true, 'number_months' => 3, 'onclose' => ' $( "#cal_filter_date_to" ).datepicker( "option", "minDate", selectedDate );')),
+				'FILTER_DATE_TO'	=> $this->jquery->Calendar('filter_date_to', '', '', array('change_year' => true,'change_month' => true,'other_months' => true, 'number_months' => 3,  'onclose' => ' $( "#cal_filter_date_from" ).datepicker( "option", "maxDate", selectedDate );')),
 			));
 			$view_list			= $this->pdh->get('logs', 'id_list', array());
 		}
-	
+
 		//
 		//ERRORS ================================================================================
 		//
@@ -254,26 +254,26 @@ class Manage_Logs extends page_generic {
 				));
 			}
 		}
-		
+
 		$start = $this->in->get('start', 0);
-		
+
 		$arrLogFiles = $this->pdl->get_logfiles();
-		
+
 		foreach($arrLogFiles as $logfile){
-			
+
 			$arrErrors = $this->pdl->get_file_log(str_replace(".log", "", $logfile), 50, $start);
-			
+
 			$this->tpl->assign_block_vars('errorlogs', array(
 					'TYPE' 			=> str_replace(".log", "", $logfile),
 					'PAGINATION'	=> generate_pagination('manage_logs.php'.$this->SID, $arrErrors['count'], 50, $start),
 					'COUNT'			=> $arrErrors['count'],
 			));
-						
+
 			foreach($arrErrors['entries'] as $key => $entry) {
 				if(($key % 2) === 1){
 					$strMessage = nl2br($arrErrors['entries'][$key-1]);
 					if($logfile == 'mail.log') $strMessage = '<iframe src="data:text/html;charset=utf-8,'.htmlentities($strMessage).'" style="border:0; width: 90%; heigth:200px;"></iframe>';
-					
+
 					$this->tpl->assign_block_vars('errorlogs.error_row', array(
 						'DATE'			=> $this->time->user_date($entry, true),
 						'MESSAGE'		=> $strMessage,
@@ -289,7 +289,7 @@ class Manage_Logs extends page_generic {
 		$page_suffix		= '&amp;start='.$this->in->get('start', 0).$strFilterSuffix;
 		$sort_suffix		= $this->SID.'&amp;sort='.$this->in->get('sort').$strFilterSuffix;
 		$logs_list 			= $hptt->get_html_table($this->in->get('sort',''), $page_suffix, $this->in->get('start', 0), 100, false);
-		
+
 		$this->jquery->Dialog('delete_all_warning', '', array('url'=>'manage_logs.php'.$this->SID.'&reset=true&link_hash='.$this->CSRFGetToken('reset'), 'message'=>$this->user->lang('confirm_delete_logs')), 'confirm');
 		$this->confirm_delete($this->user->lang('confirm_delete_partial_logs'));
 		$this->jquery->Tab_header('log_tabs', true);
@@ -300,9 +300,9 @@ class Manage_Logs extends page_generic {
 			'LOGS_COUNT'			=> $actionlog_count,
 			'LOGS_PAGINATION'		=> generate_pagination('manage_logs.php'.$sort_suffix.$strFilterSuffix, $actionlog_count, 100, $this->in->get('start', 0)),
 			'HPTT_LOGS_COUNT'		=> $hptt->get_column_count(),
-			'HPTT_ADMIN_LINK'	=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('admin_manage_logs').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,	
+			'HPTT_ADMIN_LINK'		=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('admin_manage_logs').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,
 		));
-		
+
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('viewlogs_title'),
 			'template_file'		=> 'admin/manage_logs.html',

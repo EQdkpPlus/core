@@ -27,7 +27,7 @@ include_once($eqdkp_root_path . 'common.php');
 
 class Manage_Live_Update extends page_generic {
 	public static $shortcuts = array('repo' => 'repository');
-	
+
 	public function __construct(){
 		$this->user->check_auth('a_maintenance');
 
@@ -188,7 +188,7 @@ class Manage_Live_Update extends page_generic {
 
 	//Download Package
 	public function process_step2(){
-		
+
 		$downloadLink = $this->encrypt->decrypt($this->config->get('download_link', 'live_update'));
 		$new_version = str_replace('.', '', $this->getNewVersion());
 
@@ -238,7 +238,7 @@ class Manage_Live_Update extends page_generic {
 		}
 
 		if (count($arrChanged) > 0){
-			
+
 			$this->config->set('conflicted_files', $this->encrypt->encrypt(serialize($arrChanged)), 'live_update');
 		}
 
@@ -251,7 +251,7 @@ class Manage_Live_Update extends page_generic {
 		$zipfile = $this->pfh->FolderPath('update_to_'.$new_version.'/','live_update').'conflicted_files.zip';
 		$archive = registry::register('zip', array($zipfile));
 
-		
+
 
 		//Conflicted Files
 		$arrConflictedFiles = unserialize($this->encrypt->decrypt($this->config->get('conflicted_files', 'live_update')));
@@ -283,16 +283,16 @@ class Manage_Live_Update extends page_generic {
 			return;
 		}
 
-		
+
 		$stop = false;
 
 		//Conflicted Files
 		$arrConflictedFiles = unserialize($this->encrypt->decrypt($this->config->get('conflicted_files', 'live_update')));
 		if ($arrConflictedFiles && is_array($arrConflictedFiles) && count($arrConflictedFiles) > 0){
 			$stop = true;
-			
+
 			$this->jquery->Dialog('liveupdate_diff', $this->user->lang('liveupdate_show_differences'), array('url'=>$this->root_path.'admin/manage_live_update.php'.$this->SID.'&diff=\'+file+\'', 'withid'=>'file', 'height'=> '700', 'width'=>'900'));
-			
+
 			$this->tpl->assign_vars(array(
 				'S_CONFLICTED_FILES'	=> true,
 			));
@@ -330,7 +330,7 @@ class Manage_Live_Update extends page_generic {
 			//Nothing to display, let's continue with next step
 			$this->bring_steps_to_template(6, true);
 		}
-		
+
 	}
 
 	//Backup files that will be replaced
@@ -361,24 +361,24 @@ class Manage_Live_Update extends page_generic {
 		$tmp_folder = $this->pfh->FolderPath('update_to_'.$new_version.'/tmp/','live_update');
 		$xmlfile = $tmp_folder.'package.xml';
 		$arrFiles = $this->repo->getFilelistFromPackageFile($xmlfile);
-		
+
 		$strLog = '';
 		foreach($arrFiles as $file){
-			
+
 			if (file_exists($this->root_path.$file['name'])){
 				$strLog .= 'Replaced File '.$file['name']."\r\n";
 			} else {
 				$strLog .= 'Added File '.$file['name']."\r\n";
 			}
-			
+
 			$this->pfh->copy($tmp_folder.$file['name'],$this->root_path.$file['name']);
 		}
-		
+
 		//Reset Opcache, for PHP7
 		if(function_exists('opcache_reset')){
 			opcache_reset();
 		}
-		
+
 		if ($strLog != "") register('logs')->add('liveupdate_copied_files', array('Copied Files' => $strLog));
 
 		echo "true";
@@ -389,7 +389,7 @@ class Manage_Live_Update extends page_generic {
 	//Check if all new files have been copied to the right place
 	public function process_step8(){
 		$new_version = $this->encrypt->decrypt($this->config->get('download_newversion', 'live_update'));
-		
+
 		$tmp_folder = $this->pfh->FolderPath('update_to_'.$new_version.'/tmp/','live_update');
 		$xmlfile = $tmp_folder.'package.xml';
 		$arrFiles = $this->repo->getFilelistFromPackageFile($xmlfile);
@@ -401,7 +401,7 @@ class Manage_Live_Update extends page_generic {
 				$arrMissingFiles[] = $file['name'];
 			}
 		}
-		
+
 		$this->config->set('missing_files', $this->encrypt->encrypt(serialize($arrMissingFiles)), 'live_update');
 
 		echo "true";
@@ -415,7 +415,7 @@ class Manage_Live_Update extends page_generic {
 		$archive = registry::register('zip', array($zipfile));
 
 		//Missing Files
-		
+
 		$arrConflictedFiles = unserialize($this->encrypt->decrypt($this->config->get('missing_files', 'live_update')));
 		foreach ($arrConflictedFiles as $file){
 			if (file_exists($tmp_folder.'tmp/'.$file)) {
@@ -445,7 +445,7 @@ class Manage_Live_Update extends page_generic {
 			$this->bring_steps_to_template(10, true);
 			return;
 		}
-		
+
 		$arrMissingFiles = unserialize($this->encrypt->decrypt($this->config->get('missing_files', 'live_update')));
 		if ($arrMissingFiles && count($arrMissingFiles) > 0){
 			$this->bring_steps_to_template(9, false, 8);
@@ -458,12 +458,12 @@ class Manage_Live_Update extends page_generic {
 					'FILENAME'	=> $file,
 				));
 			}
-			
+
 			if($intMyCookie > 4){
 				$this->jquery->Dialog('confirm_conflicted', '', array('url' => 'manage_live_update.php'.$this->SID.'&show=9&continue', 'message'=>$this->user->lang('liveupdate_skip_confirm')), 'confirm');
-				
+
 				$this->tpl->assign_vars(array(
-					'S_SHOW_CONTINUE_BTN' => true,	
+					'S_SHOW_CONTINUE_BTN' => true,
 				));
 			}
 
@@ -488,7 +488,7 @@ class Manage_Live_Update extends page_generic {
 					$strLog .= 'Deleted File '.$file['name']."\r\n";
 				}
 			}
-			
+
 			if ($strLog != "") register('logs')->add('liveupdate_deleted_files', $strLog);
 		}
 
@@ -502,19 +502,19 @@ class Manage_Live_Update extends page_generic {
 		$folder = $this->pfh->FolderPath('update_to_'.$new_version.'/','live_update');
 		$this->pfh->Delete('update_to_'.$new_version, 'live_update');
 		$this->config->del('live_update');
-		
+
 		//Delete Cookie
 		set_cookie('lu_step9', 0, time()-3600);
-		
+
 		//Reset Opcache, for PHP7
 		if(function_exists('opcache_reset')){
 			opcache_reset();
 		}
-		
+
 		//Reset Repository
 		$this->pdh->put('repository', 'reset', array());
 		$this->pdh->process_hook_queue();
-		
+
 		echo "true";
 		exit;
 	}
@@ -545,14 +545,14 @@ class Manage_Live_Update extends page_generic {
 
 	public function display(){
 		$updates = NULL;
-		
+
 		if($this->in->get('finished') == 'true'){
 			if(registry::register('config')->get('pk_maintenance_mode')){
 				redirect('maintenance/index.php'.$this->SID, false, false, false);
 			}
 			$this->tpl->assign_var('S_FINISHED', true);
 		}
-		
+
 		if ($this->getNewVersion()){
 			$updates = $this->getNewVersion(true);
 			$this->tpl->assign_vars(array(
@@ -563,7 +563,7 @@ class Manage_Live_Update extends page_generic {
 				'S_NO_UPDATE_PACKAGE' => ($updates['dep_php'] == '9.9') ? true : false,
 			));
 		}
-		
+
 		//Check some Requirements for LiveUpdate itself
 		$blnRequirements = true;
 		$strRequirementsNote = '<br />';
@@ -571,7 +571,7 @@ class Manage_Live_Update extends page_generic {
 			$blnRequirements = false;
 			$strRequirementsNote .= ' - ZipArchive-Class<br/>';
 		}
-		
+
 		//Check new Core Requirements
 		$mixResult = $this->repo->checkRequirementsForNewCore($updates['bugtracker_url'], $updates);
 		if($mixResult !== true && is_array($mixResult)){
@@ -580,8 +580,8 @@ class Manage_Live_Update extends page_generic {
 				$strRequirementsNote .= ' - '.$val.'<br />';
 			}
 		}
-		
-		
+
+
 		$this->tpl->assign_vars(array(
 			'S_START'			=> true,
 			'S_RELEASE_CHANNEL' => ($this->repo->getChannel() != 'stable') ? true : false,
@@ -598,14 +598,14 @@ class Manage_Live_Update extends page_generic {
 			'display'			=> true)
 		);
 	}
-	
+
 	public function show_diff(){
 		$strFilename = base64_decode($this->in->get('diff', ''));
 		if (!$strFilename) return;
 		$arrRenderer = array('side_by_side'=>'side_by_side', 'inline'=>'inline', 'unified'=>'unified', 'raw'=>'raw');
 		$content = '';
 		$blnRenderer = true;
-		
+
 		switch($this->in->get('type')){
 			//Show the given file
 			case 'showfile': {
@@ -614,19 +614,19 @@ class Manage_Live_Update extends page_generic {
 				$blnRenderer = false;
 			}
 			break;
-			
+
 			//Default: show diff
 			default: {
 				$strRenderer = $this->in->get('renderer', 'side_by_side');
 
 				if ($strFilename){
-				
+
 					require_once($this->root_path.'libraries/diff/diff.php');
 					require_once($this->root_path.'libraries/diff/engine.php');
 					require_once($this->root_path.'libraries/diff/renderer.php');
-					
+
 					$this->tpl->css_file($this->root_path.'libraries/diff/diff.css');
-					
+
 					$old_file = file_get_contents($this->root_path.$strFilename);
 					$new_version = str_replace('.', '', $this->getNewVersion());
 					$tmp_folder = $this->pfh->FolderPath('update_to_'.$new_version.'/tmp/','live_update');
@@ -638,23 +638,23 @@ class Manage_Live_Update extends page_generic {
 					} else {
 						$render_class = 'diff_renderer_side_by_side';
 					}
-					
+
 					$renderer = new $render_class();
-						
+
 					$content = $renderer->get_diff_content($diff);
-					
+
 				}
 			}
 		}
-		
+
 		$this->tpl->assign_vars(array(
 			'CONTENT'	=> $content,
 			'FILENAME'	=> $strFilename,
-			'RENDERER_DROPDOWN' => new hdropdown('renderer', array('options' => $arrRenderer, 'value' => $this->in->get('renderer', 'side_by_side'), 'js' => 'onchange="this.form.submit();"', 'tolang' => true)),
+			'RENDERER_DROPDOWN' => (new hdropdown('renderer', array('options' => $arrRenderer, 'value' => $this->in->get('renderer', 'side_by_side'), 'js' => 'onchange="this.form.submit();"', 'tolang' => true)))->output(),
 			'ENCODED_FILENAME' => $this->in->get('diff', ''),
 			'S_RENDERER' => $blnRenderer,
 		));
-	
+
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('liveupdate_show_differences'),
 			'template_file'		=> 'admin/diff_viewer.html',

@@ -252,7 +252,7 @@ class Manage_User_Groups extends page_generic {
 				}
 			}
 		}
-		
+
 		//Articlecategory permissions
 		if($this->user->check_auth("a_article_categories_man", false)){
 			$arrArticlecategoryPerms = $this->in->getArray('perm');
@@ -260,8 +260,8 @@ class Manage_User_Groups extends page_generic {
 				$this->pdh->put('article_categories', 'update_permission_for_group', array($intCategoryId, $intGroupID, $arrPerms));
 			}
 		}
-		
-		
+
+
 		if(count($arrChanged)) $this->logs->add('action_usergroups_changed_permissions', $arrChanged, $intGroupID, $this->pdh->get('user_groups', 'name', array($intGroupID)));
 		$message = array('title' => $this->user->lang('save_suc'), 'text' => $this->user->lang('admin_set_perms_success'), 'color' => 'green');
 		$this->edit($message);
@@ -390,49 +390,49 @@ class Manage_User_Groups extends page_generic {
 
 		}
 		unset($permission_boxes);
-		
+
 		$arrCategoryIDs = $this->pdh->sort($this->pdh->get('article_categories', 'id_list', array()), 'article_categories', 'sort_id', 'asc');
 		$arrCategories = array();
 		foreach($arrCategoryIDs as $caid){
 			$arrCategories[$caid] = $this->pdh->get('article_categories', 'name_prefix', array($caid)).$this->pdh->get('article_categories', 'name', array($caid));
 		}
-		
+
 		$this->tpl->assign_block_vars('articelcat_row', array(
 				'GROUP' => $this->user->lang('article'),
 				'ICON'	=> $this->core->icon_font('fa-file-text'))
 				);
-		
+
 		$grps = array('rea', 'cre', 'upd', 'del', 'chs');
-		
+
 		$arrPermissionDropdown = array(
 				-1 => $this->user->lang('inherited'),
 				1 => $this->user->lang('allowed'),
 				0 => $this->user->lang('disallowed')
 		);
-		
+
 		foreach($grps as $group_id){
 			$this->tpl->assign_block_vars('articelcat_row.headline_row', array(
 					'GROUP'	=> $this->user->lang('perm_'.$group_id),
 			));
 		}
-		
+
 		foreach($arrCategories as $intCategoryID => $strCategoryName){
 			$this->tpl->assign_block_vars('articelcat_row.check_group', array(
 					'CBNAME'		=> $strCategoryName,
 					'S_ADMIN'		=> false
 			));
-		
+
 			$arrPermissions = $this->pdh->get('article_categories', 'permissions', array($intCategoryID));
 
 			foreach($grps as $group_id){
 				$perm = (isset($arrPermissions[$group_id][$groupID])) ? $arrPermissions[$group_id][$groupID] : -1;
-		
+
 				$this->tpl->assign_block_vars('articelcat_row.check_group.group_row', array(
-						'STATUS'	=>  new hdropdown('perm['.$intCategoryID.']['.$group_id.']', array('options' => $arrPermissionDropdown, 'value' => $perm)),
+						'STATUS'	=>  (new hdropdown('perm['.$intCategoryID.']['.$group_id.']', array('options' => $arrPermissionDropdown, 'value' => $perm)))->output(),
 				));
 			}
 		}
-		
+
 		$this->jquery->Tab_header('groups_tabs');
 		$this->jquery->Tab_header('permission_tabs');
 
@@ -486,7 +486,7 @@ class Manage_User_Groups extends page_generic {
 		//Permissions
 		$permission_boxes = $this->acl->get_permission_boxes();
 		$this->pm->generate_permission_boxes($permission_boxes);
-		
+
 		if($this->in->get('grp', 0)){
 			$grps = array($this->in->get('grp', 0) => $this->pdh->get('user_groups', 'name', array($this->in->get('grp', 0))));
 		} else {
@@ -524,7 +524,7 @@ class Manage_User_Groups extends page_generic {
 			}
 		}
 		unset($permission_boxes);
-		
+
 		$arrCategoryIDs = $this->pdh->sort($this->pdh->get('article_categories', 'id_list', array()), 'article_categories', 'sort_id', 'asc');
 		$arrCategories = array();
 		foreach($arrCategoryIDs as $caid){
@@ -540,13 +540,13 @@ class Manage_User_Groups extends page_generic {
 					'GROUP'		=> $group,
 			));
 		}
-		
+
 		foreach($arrCategories as $intCategoryID => $strCategoryName){
 			$this->tpl->assign_block_vars('permissions_row.check_group', array(
 					'CBNAME'		=> $strCategoryName,
 					'S_ADMIN'		=> false
 			));
-			
+
 			$arrPermissions = $this->pdh->get('article_categories', 'permissions', array($intCategoryID));
 			$intParent = $this->pdh->get('article_categories', 'parent', array($intCategoryID));
 
@@ -554,10 +554,10 @@ class Manage_User_Groups extends page_generic {
 				$intCID = $intCategoryID;
 				$intGroupID = $group_id;
 				$intParentID = $intParent;
-				
+
 				$out = '';
 				$blnResult = $this->pdh->get('article_categories', 'calculated_permissions', array($intCID, 'cre', $intGroupID, isset($arrPermissions['cre'][$group_id]) ? $arrPermissions['cre'][$group_id] : -1, $intParentID));
-				$out .= ($blnResult) ?  '<i class="fa fa-check positive" title="'.$this->user->lang('perm_cre').'"></i> / ' : ' - / ';	
+				$out .= ($blnResult) ?  '<i class="fa fa-check positive" title="'.$this->user->lang('perm_cre').'"></i> / ' : ' - / ';
 				$blnResult = $this->pdh->get('article_categories', 'calculated_permissions', array($intCID, 'upd', $intGroupID, (isset($arrPermissions['upd'][$group_id]) ? $arrPermissions['upd'][$group_id] : -1), $intParentID));
 				$out .= ($blnResult) ?  '<i class="fa fa-check positive" title="'.$this->user->lang('perm_upd').'"></i> / ' : ' - / ';
 				$blnResult = $this->pdh->get('article_categories', 'calculated_permissions', array($intCID, 'del', $intGroupID, isset($arrPermissions['del'][$group_id]) ? $arrPermissions['del'][$group_id] : -1, $intParentID));
@@ -567,13 +567,13 @@ class Manage_User_Groups extends page_generic {
 				$blnResult = $this->pdh->get('article_categories', 'calculated_permissions', array($intCID, 'chs', $intGroupID, isset($arrPermissions['chs'][$group_id]) ? $arrPermissions['chs'][$group_id] : -1, $intParentID));
 				$out .= ($blnResult) ?  '<i class="fa fa-check positive" title="'.$this->user->lang('perm_chs').'"></i> / ' : ' - / ';
 				$out = substr($out, 0, -2);
-				
+
 				$this->tpl->assign_block_vars('permissions_row.check_group.group_row', array(
 						'STATUS'	=> $out,
 				));
 			}
 		}
-		
+
 
 		$this->core->set_vars(array(
 				'page_title'		=> $this->user->lang('user_group_permissions'),

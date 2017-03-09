@@ -41,25 +41,25 @@ class Manage_Menus extends page_generic {
 	// Process Save
 	// ---------------------------------------------------------
 	public function save() {
-	
+
 		//Plus links deletion
 		$strPlusDelete = $this->in->get('del_pluslinks');
 		if($strPlusDelete != "0"){
 			$arrPlusLinks = explode(',', $strPlusDelete);
 			$arrPlusLinks = array_unique($arrPlusLinks);
-			
+
 			foreach($arrPlusLinks as $pid){
 				$pid = intval($pid);
 				if($pid === 0) continue;
-				
+
 				$this->pdh->put('links', 'delete_link', array($pid));
 			}
 		}
-		
+
 		//MENU
-		$json = $this->in->get('serialized', '', 'noencquotes');	
+		$json = $this->in->get('serialized', '', 'noencquotes');
 		$arrItems = $this->in->getArray('mainmenu', 'string');
-		
+
 		$decoded = json_decode($json, true);
 
 		$arrSorted = array();
@@ -88,7 +88,7 @@ class Manage_Menus extends page_generic {
 							$hash = $this->core->build_link_hash($link);
 						}
 					}
-					
+
 					$hidden = $arrItems[$item_id]['hidden'];
 
 					switch((int)$item['depth']){
@@ -101,18 +101,18 @@ class Manage_Menus extends page_generic {
 						case 2:		$arrSorted[$intFirstLevel]['_childs'][$intSecondLevel]['_childs'][] = array('hash' => $hash, 'hidden' => $hidden);
 						break;
 					}
-					
+
 				}
 			}
-			
+
 			$this->config->set('mainmenu', serialize($arrSorted));
 			$this->pdh->process_hook_queue();
 		}
-				
+
 		//Admin Favs
 		$favs = ($this->in->getArray('fav', 'string'));
 		$this->config->set('admin_favs', serialize($favs));
-		
+
 		redirect('admin/manage_menus.php'.$this->SID.'&status=saved');
 	}
 
@@ -124,7 +124,7 @@ class Manage_Menus extends page_generic {
 			$this->pdh->process_hook_queue();
 			$this->core->messages($messages);
 		}
-		
+
 		if ($this->in->get('status') == 'saved'){
 			$this->core->message( $this->user->lang('pk_succ_saved'), $this->user->lang('save_suc'), 'green');
 		}
@@ -163,7 +163,7 @@ class Manage_Menus extends page_generic {
 
 					}
 			}).disableSelection();
-			
+
 		', 'docready');
 
 		$this->tpl->add_js('
@@ -183,7 +183,7 @@ class Manage_Menus extends page_generic {
 				document.getElementById("cb_"+test).checked = false;
 			}
 		');
-		
+
 		$a_linkMode= array(
 			'0'				=> $this->user->lang('pk_set_link_type_self'),
 			'1'				=> $this->user->lang('pk_set_link_type_link'),
@@ -191,18 +191,18 @@ class Manage_Menus extends page_generic {
 			'4'				=> $this->user->lang('pk_set_link_type_D_iframe_womenues'),
 			'5'				=> $this->user->lang('pk_set_link_type_D_iframe_woblocks'),
 		);
-					
+
 		$a_linkVis= array(
 			'0'				=> $this->user->lang('info_opt_vis_0'),
 			'1'				=> $this->user->lang('info_opt_vis_1'),
 			'2'				=> $this->user->lang('info_opt_vis_2'),
 			'3'				=> $this->user->lang('info_opt_vis_3'),
 		);
-	
+
 
 			$image_path = '../images/admin/';
 			include_once($this->root_path.'core/admin_functions.class.php');
-			
+
 			$admin_menu = register('admin_functions')->adminmenu(false);
 			unset($admin_menu['favorits']);
 			$compare_array = array();
@@ -233,7 +233,7 @@ class Manage_Menus extends page_generic {
 								$this->tpl->add_js('document.getElementById("cb_fav_'.$fav_key.'").checked = true;', 'docready');
 								$no_favs = false;
 							}
-								
+
 						}
 					}
 			}
@@ -248,7 +248,7 @@ class Manage_Menus extends page_generic {
 
 					// Restart next loop if the element isn't an array we can use
 					if ( !is_array($v) ){continue;}
-					
+
 					$ident = 'i'.md5($v['name']);
 					$this->jquery->Collapse('#container_'.$ident);
 
@@ -315,41 +315,41 @@ class Manage_Menus extends page_generic {
 					}
 				}
 		}
-		
+
 
 		$this->jquery->Tab_header('menu_tabs', true);
 		if ($this->in->exists('tab')){
 			$this->jquery->Tab_Select('menu_tabs', $this->in->get('tab',0));
 		}
-		
+
 		$drpdwn_rights = $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list')));
 		$drpdwn_rights[0] = $this->user->lang('cl_all');
 		ksort($drpdwn_rights);
-		
+
 		$arrLinkTypes = array('internal' => $this->user->lang('link_type_internal'), 'external' => $this->user->lang('link_type_external'));
-		
+
 		$arrLinkCategories = $this->build_link_categories();
 		if (count($arrLinkCategories)) $arrLinkTypes = array_merge($arrLinkTypes, $arrLinkCategories);
-		
+
 		$this->tpl->assign_vars(array(
 			'CSRF_MODE_TOKEN'		=> $this->CSRFGetToken('mode'),
 			'S_NO_FAVS'				=> (count($favs_array) > 0) ? false : true,
-			'DD_LINK_WINDOW'		=> new hdropdown('editlink-window', array('options' => $a_linkMode, 'class' => 'editlink-window')),
+			'DD_LINK_WINDOW'		=> (new hdropdown('editlink-window', array('options' => $a_linkMode, 'class' => 'editlink-window')))->output(),
 			'MS_LINK_VISIBILITY'	=> $this->jquery->MultiSelect("editlink-visibility", $drpdwn_rights, 0),
-			'DD_LINK_VISIBILITY'	=> new hdropdown('editlink-visibility', array('options' => $a_linkVis, 'class' => 'editlink-visibility')),
-			'DD_LINK_TYPE'			=> new hdropdown('link_type', array('options' => $arrLinkTypes, 'class' => 'link_type')),
+			'DD_LINK_VISIBILITY'	=> (new hdropdown('editlink-visibility', array('options' => $a_linkVis, 'class' => 'editlink-visibility')))->output(),
+			'DD_LINK_TYPE'			=> (new hdropdown('link_type', array('options' => $arrLinkTypes, 'class' => 'link_type')))->output(),
 			'MENU_OL'				=> $strMenuOl,
 			'NEW_ID'				=> ++$intMaxID,
-			'DD_ARTICLES'			=> new hdropdown('editlink-article', array('options' => $this->build_article_dropdown(), 'class' => 'editlink-article')),
+			'DD_ARTICLES'			=> (new hdropdown('editlink-article', array('options' => $this->build_article_dropdown(), 'class' => 'editlink-article')))->output(),
 		));
-				
+
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('manage_menus'),
 			'template_file'		=> 'admin/manage_menus.html',
 			'display'			=> true)
 		);
 	}
-	
+
 	private function build_article_dropdown(){
 		$arrItems = $this->core->build_menu_array(true, true);
 		$arrOut[''] = "";
@@ -368,12 +368,12 @@ class Manage_Menus extends page_generic {
 				if(!$this->check_for_hidden_article($v) && (isset($v['static']))){
 					$arrOut[$v['_hash']] = $v['text'];
 				}
-				
+
 			}
 		}
 		return $arrOut;
 	}
-	
+
 	private function build_menu_ol(){
 		$arrItems = $this->core->build_menu_array(true);
 		$html  = '<ol class="sortable">';
@@ -381,14 +381,14 @@ class Manage_Menus extends page_generic {
 		foreach($arrItems as $k => $v){
 			if ( !is_array($v) )continue;
 			$id++;
-			
+
 			if (!isset($v['childs'])){
 				if (!$this->check_for_hidden_article($v, $id)) continue;
 				$html .= '<li id="list_'.$id.'">'.$this->create_li($v, $id).'</li>';
-				
+
 			} else {
 				$html .= '<li id="list_'.$id.'">'.$this->create_li($v, $id).'<ol>';
-				
+
 				foreach($v['childs'] as $k2 => $v2){
 					$id++;
 					if (!isset($v2['childs'])){
@@ -396,39 +396,39 @@ class Manage_Menus extends page_generic {
 						$html .= '<li id="list_'.$id.'">'.$this->create_li($v2, $id).'</li>';
 					} else {
 						$html .= '<li id="list_'.$id.'">'.$this->create_li($v2, $id).'<ol>';
-						
+
 						foreach($v2['childs'] as $k3 => $v3){
 							$id++;
 							if (!$this->check_for_hidden_article($v3, $id)) continue;
 							$html .= '<li id="list_'.$id.'">'.$this->create_li($v3, $id).'</li>';
-							
+
 						}
-						
+
 						$html .= '</ol></li>';
 					}
-					
+
 				}
-				
+
 				$html .= '</ol></li>';
 			}
 		}
 
 		$html .= '</ol>';
-		
+
 		return array($html, $id);
 	}
-	
+
 	private function check_for_hidden_article($arrLink){
 		if ((int)$arrLink['hidden'] && (isset($arrLink['article']) || isset($arrLink['category']) || isset($arrLink['default_hide']) || isset($arrLink['static']))) return false;
 		return true;
 	}
-	
+
 	private function build_link_categories(){
 		$arrItems = $this->core->build_menu_array(true);
-		
+
 		$arrCategories = array();
 		$arrOptions = array();
-		
+
 		foreach($arrItems as $k => $v){
 			if (isset($v['link_category'])) {
 				if (!isset($arrCategories[md5($v['link_category'])])){
@@ -438,17 +438,17 @@ class Manage_Menus extends page_generic {
 				$arrOptions[md5($v['link_category'])][$strHash] =  $v['text'];
 			}
 		}
-		
+
 		foreach($arrCategories as $strCategoryID => $strCategoryName){
 			$this->tpl->assign_block_vars('link_type_row', array(
 					'ID'	=> $strCategoryID,
 					'NAME'	=> $strCategoryName,
-					'DD'	=> new hdropdown('links_'.$strCategoryID, array('options' => $arrOptions[$strCategoryID])),
+					'DD'	=> (new hdropdown('links_'.$strCategoryID, array('options' => $arrOptions[$strCategoryID])))->output(),
 			));
 		}
 		return $arrCategories;
 	}
-	
+
 	private function create_li($arrLink, $id){
 		$hash = $arrLink['_hash'];
 		$blnPluslink = (isset($arrLink['id']) && strpos($arrLink['id'], "pluslink") === 0);
