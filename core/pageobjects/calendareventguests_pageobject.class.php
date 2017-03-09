@@ -137,7 +137,7 @@ class calendareventguests_pageobject extends pageobject {
 			'EVENT_ID'				=> $this->in->get('eventid', 0),
 			'GUEST_ID'				=> $this->in->get('guestid', 0),
 			'ROLE_DD'				=> ($eventdata['extension']['raidmode'] == 'role') ? $classrole[1] : '',
-			'CLASS_DD'				=> ($eventdata['extension']['raidmode'] == 'role') ? $classrole[0] : new hdropdown('class', array('options' => $this->game->get_primary_classes(array('id_0')), 'value' => ((isset($guestdata['class'])) ? $guestdata['class'] : ''))),
+			'CLASS_DD'				=> ($eventdata['extension']['raidmode'] == 'role') ? $classrole[0] : (new hdropdown('class', array('options' => $this->game->get_primary_classes(array('id_0')), 'value' => ((isset($guestdata['class'])) ? $guestdata['class'] : ''))))->output(),
 
 			// captcha
 			'CEG_CAPTCHA'			=> $display_captcha,

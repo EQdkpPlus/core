@@ -162,11 +162,11 @@ class inst_settings extends install_generic {
 						</tr>
 						<tr>
 							<td align="right"><strong>'.$this->lang['default_lang'].':</strong></td>
-							<td>'.new hdropdown('default_lang', array('options' => $language_array, 'value' => $this->def_lang)).'</td>
+							<td>'.(new hdropdown('default_lang', array('options' => $language_array, 'value' => $this->def_lang)))->output().'</td>
 						</tr>
 						<tr>
 							<td align="right"><strong>'.$this->lang['default_locale'].':</strong></td>
-							<td>'.new hdropdown('default_locale', array('options' => $locale_array, 'value' => $this->def_locale)).'</td>
+							<td>'.(new hdropdown('default_locale', array('options' => $locale_array, 'value' => $this->def_locale)))->output().'</td>
 						</tr>
 						<tr>
 							<th class="" colspan="2">'.$this->lang['game_config'].'</th>
@@ -180,7 +180,7 @@ class inst_settings extends install_generic {
 						</tr>
 						<tr>
 							<td align="right"><strong>'.$this->lang['default_game'].':</strong></td>
-							<td>'.new hdropdown('game', array('options' => $games, 'value' => $this->def_game)).' <select name="game_lang" id="game_lang">'.self::ajax_out(false, $this->def_game).'</select></td>
+							<td>'.(new hdropdown('game', array('options' => $games, 'value' => $this->def_game)))->output().' <select name="game_lang" id="game_lang">'.self::ajax_out(false, $this->def_game).'</select></td>
 						</tr>
 						<tr>
 							<th class="" colspan="2">'.$this->lang['server_config'].'</th>
@@ -191,11 +191,11 @@ class inst_settings extends install_generic {
 						</tr>
 						<tr>
 							<td align="right"><strong>'.$this->lang['timezone'].':</strong></td>
-							<td>'.new hdropdown('timezone', array('options' => time::fetch_timezones(), 'value' => $this->def_timezone)).'</td>
+							<td>'.(new hdropdown('timezone', array('options' => time::fetch_timezones(), 'value' => $this->def_timezone)))->output().'</td>
 						</tr>
 						<tr>
 							<td align="right"><strong>'.$this->lang['startday'].':</strong></td>
-							<td>'.new hdropdown('startday', array('options' => $startdays, 'value' => $this->def_startday)).'</td>
+							<td>'.(new hdropdown('startday', array('options' => $startdays, 'value' => $this->def_startday)))->output().'</td>
 						</tr>
 					</table>';
 		return $content;
@@ -270,7 +270,7 @@ class inst_settings extends install_generic {
 		$this->config_data['default_date_long'] = (isset($this->lang['date_long_format'])) ? $this->lang['date_long_format'] : 'F j, Y';
 		$this->config_data['eqdkp_layout']		= 'normal';
 		$this->config_data['data_folder']		= md5($this->table_prefix.$this->dbname);
-		
+
 		$this->config_data['pdc'] = array(
 			'mode' => 'file',
 			'prefix' => $this->table_prefix,

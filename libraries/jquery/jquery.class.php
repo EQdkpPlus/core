@@ -1347,8 +1347,8 @@ if (!class_exists("jquery")) {
 			", 'docready');
 
 			$output	= array(
-				new hdropdown($id1, array('options' => $array1, 'value' => $selected1, 'id' => $id1.$this->dyndd_counter, 'class' => $id1.$this->dyndd_counter)),
-				new hdropdown($id2, array('options' => array(), 'id' => $id2.$this->dyndd_counter, 'class' => $id2.$this->dyndd_counter))
+				(new hdropdown($id1, array('options' => $array1, 'value' => $selected1, 'id' => $id1.$this->dyndd_counter, 'class' => $id1.$this->dyndd_counter)))->output(),
+				(new hdropdown($id2, array('options' => array(), 'id' => $id2.$this->dyndd_counter, 'class' => $id2.$this->dyndd_counter)))->output()
 			);
 
 			$this->dyndd_counter++;
@@ -1411,7 +1411,7 @@ if (!class_exists("jquery")) {
 			$jscode .= "});";
 			$this->tpl->add_js($jscode, 'docready');
 
-			$output[] = new hdropdown($id1, array('options' => $array1, 'value' => $selected1, 'id' => $id1.$this->dyndd_counter));
+			$output[] = (new hdropdown($id1, array('options' => $array1, 'value' => $selected1, 'id' => $id1.$this->dyndd_counter)))->output();
 			if(is_array($id2)){
 				$jscode2 = '';
 				$jscode2_p = '';
@@ -1419,7 +1419,7 @@ if (!class_exists("jquery")) {
 				foreach($id2 as $ids2){
 					$fieldname	= $ids2;
 					$ids2		= preg_replace("~[^A-Za-z0-9]~", "", $ids2);
-					$output[] = new hdropdown($fieldname, array('options' => $array2, 'id' => $ids2.$this->dyndd_counter));
+					$output[] = (new hdropdown($fieldname, array('options' => $array2, 'id' => $ids2.$this->dyndd_counter)))->output();
 
 					// Load the input of the selection
 					$jscode2	.= "$('#".$ids2.$this->dyndd_counter."').find('option').remove();";
@@ -1431,7 +1431,7 @@ if (!class_exists("jquery")) {
 				}
 				$jscode2	.= "$.post('".$url."', { requestid: $('#".$id1.$this->dyndd_counter."').val()".$add_posts." } , function(data){ ".$jscode2_p." });";
 			}else{
-				$output[] = new hdropdown($id2, array('options' => $array2, 'id' => $id2.$this->dyndd_counter));
+				$output[] = (new hdropdown($id2, array('options' => $array2, 'id' => $id2.$this->dyndd_counter)))->output();
 
 				$jscode2 = "$('#".$id2.$this->dyndd_counter."').find('option').remove();
 						$.post('".$url."', { requestid: $('#".$id1.$this->dyndd_counter."').val()".$add_posts." } , function(data){ $('#".$id2.$this->dyndd_counter."').append(data) });";

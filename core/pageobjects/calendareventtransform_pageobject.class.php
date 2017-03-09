@@ -94,7 +94,7 @@ class calendareventtransform_pageobject extends pageobject {
 		$this->tpl->assign_vars(array(
 			'EVENTID'		=> $this->in->get('eventid', 0),
 			'SHOW_GROUPS'	=> $this->pdh->get('raid_groups', 'groups_enabled'),
-			'DD_GROUPS'		=> new hdropdown('raidgroup', array('options' => $arrRaidgroups, 'value' => 0)),
+			'DD_GROUPS'		=> (new hdropdown('raidgroup', array('options' => $arrRaidgroups, 'value' => 0)))->output(),
 		));
 
 		$this->core->set_vars(array(

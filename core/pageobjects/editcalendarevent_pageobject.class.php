@@ -79,7 +79,7 @@ class editcalendarevent_pageobject extends pageobject {
 
 	// this function generates a dropdown with the events
 	public function ajax_dropdown(){
-		$output = new hdropdown('raid_eventid', array('options' => $this->pdh->aget('event', 'name', 0, array($this->pdh->get('event', 'id_list'))), 'value' => $this->in->get('raidevent_id', 0), 'id' => 'input_eventid', 'class' => 'resettemplate_input'));
+		$output = (new hdropdown('raid_eventid', array('options' => $this->pdh->aget('event', 'name', 0, array($this->pdh->get('event', 'id_list'))), 'value' => $this->in->get('raidevent_id', 0), 'id' => 'input_eventid', 'class' => 'resettemplate_input')))->output();
 		echo($output);
 		exit;
 	}

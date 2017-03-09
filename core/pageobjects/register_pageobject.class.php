@@ -86,7 +86,7 @@ class register_pageobject extends pageobject {
 		if((int)$this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))) {
 			redirect($this->config->get('cmsbridge_reg_url'),false,true);
 		}
-		
+
 		//Static input vars
 		$this->data = array(
 			'username'			=> $this->in->get('username'),
@@ -104,7 +104,7 @@ class register_pageobject extends pageobject {
 			$this->display();
 			return;
 		}
-		
+
 		//Check User Profilefields
 		$arrUserProfileFields = $this->pdh->get('user_profilefields', 'registration_fields');
 		$form = false;
@@ -115,7 +115,7 @@ class register_pageobject extends pageobject {
 			$arrFieldValues = $form->return_values();
 			$this->userProfileData = $arrFieldValues;
 		}
-		
+
 		//Check CAPTCHA
 		if ($this->config->get('enable_captcha') == 1 && $this->config->get('lib_recaptcha_pkey') && strlen($this->config->get('lib_recaptcha_pkey'))){
 			require($this->root_path.'libraries/recaptcha/recaptcha.class.php');
@@ -127,7 +127,7 @@ class register_pageobject extends pageobject {
 				return;
 			}
 		}
-		
+
 		//Check Password
 		if ($this->in->get('new_user_password1') !== $this->in->get('new_user_password2')){
 			$this->core->message($this->user->lang('password_not_match'), $this->user->lang('error'), 'red');
@@ -137,9 +137,9 @@ class register_pageobject extends pageobject {
 		if (strlen($this->in->get('new_user_password1')) > 64) {
 			$this->core->message($this->user->lang('password_too_long'), $this->user->lang('error'), 'red');
 			$this->display_form();
-			return;	
+			return;
 		}
-		
+
 		//Check Email
 		if ($this->pdh->get('user', 'check_email', array($this->in->get('user_email'))) == 'false'){
 			$this->core->message(str_replace("{0}", $this->in->get('user_email'), $this->user->lang('fv_email_alreadyuse')), $this->user->lang('error'), 'red');
@@ -157,7 +157,7 @@ class register_pageobject extends pageobject {
 			$this->display_form();
 			return;
 		}
-		
+
 		//Check User Profilefields - Part 2
 		if (is_object($form) && $form->error){
 			$this->display_form();
@@ -180,7 +180,7 @@ class register_pageobject extends pageobject {
 		//Insert the user into the DB
 		$user_id = $this->pdh->put('user', 'register_user', array($this->data, 1, $user_key, true, $this->in->get('lmethod'), $this->userProfileData, $intEmailConfirmed));
 		if(!$user_id) message_die('Error while saving the user.', $this->user->lang('error'));
-		
+
 		//Add auth-account
 		if ($this->in->exists('auth_account')){
 			$auth_account = $this->crypt->decrypt($this->in->get('auth_account'));
@@ -207,9 +207,9 @@ class register_pageobject extends pageobject {
 				}
 			}
 		}
-			
+
 		$title = '';
-		
+
 		if ($this->config->get('account_activation') == 1) {
 			$success_message	= sprintf($this->user->lang('register_activation_self'), $this->in->get('user_email'));
 			$email_template		= 'register_activation_self';
@@ -237,7 +237,7 @@ class register_pageobject extends pageobject {
 		);
 		if(!$this->email->SendMailFromAdmin($this->in->get('user_email'), $email_subject, $email_template.'.html', $bodyvars)){
 			$success_message = $this->user->lang('email_subject_send_error');
-			
+
 		}
 
 		// Now email the admin if we need to
@@ -252,10 +252,10 @@ class register_pageobject extends pageobject {
 				$title = '';
 			}
 		}
-		
+
 		//Notify Admins
 		$this->ntfy->add('eqdkp_user_new_registered', $user_id, $this->in->get('username'), $this->root_path.'admin/manage_users.php'.$this->SID.'&u='.$user_id, false, "", false, array("a_users_man"));
-		
+
 		message_die($success_message, $title);
 	}
 
@@ -284,7 +284,7 @@ class register_pageobject extends pageobject {
 
 		$username   = ( $this->in->exists('username') )   ? trim(strip_tags($this->in->get('username'))) : '';
 
-		// Look up record based on the username and e-mail		
+		// Look up record based on the username and e-mail
 		$objQuery = $this->db->prepare("SELECT user_id, username, user_email, user_active, user_lang, user_email_confirmed
 				FROM __users
 				WHERE LOWER(user_email) = ?
@@ -292,7 +292,7 @@ class register_pageobject extends pageobject {
 		if ($objQuery){
 			if ($objQuery->numRows){
 				$row = $objQuery->fetchAssoc();
-				
+
 				// Account's inactive, can't give them their password
 				if ( (int)$row['user_active'] || $this->config->get('account_activation') != 1 || ((int)$row['user_email_confirmed'] != -1)) {
 					message_die($this->user->lang('error_already_activated'));
@@ -314,9 +314,9 @@ class register_pageobject extends pageobject {
 					message_die($this->user->lang('error_email_send'), $this->user->lang('get_new_activation_mail'));
 				}
 			}
-			
+
 		}
-		
+
 		message_die($this->user->lang('password_resend_success'), $this->user->lang('get_new_activation_mail'));
 	}
 
@@ -327,22 +327,22 @@ class register_pageobject extends pageobject {
 	public function process_activate() {
 		$objQuery = $this->db->prepare("SELECT user_id, username, user_active, user_email_confirmed, user_email, user_lang, user_email_confirmkey, user_email_confirmed, user_temp_email
 				FROM __users
-				WHERE user_email_confirmkey=?")->execute($this->in->get('key'));	
+				WHERE user_email_confirmkey=?")->execute($this->in->get('key'));
 		if($objQuery){
 			if($objQuery->numRows){
 				$row = $objQuery->fetchAssoc();
-				
+
 				$intConfirmType = intval($row['user_email_confirmed']);
-				
+
 				// If they're already active, just bump them back
 				if (intval($row['user_active']) == 0 || ((intval($row['user_email_confirmed']) == 1) && ($row['user_email_confirmkey'] == '')) ) {
 					message_die($this->user->lang('error_already_activated'), $this->user->lang('error'), 'error');
 				} else {
 					//Activate User; Email is sent in activation method
 					$blnResult = $this->pdh->put('user', 'confirm_email', array($row['user_id'], 1));
-					
+
 					if ($blnResult) {
-						
+
 						//Registration
 						if($intConfirmType == -1){
 							// E-mail the user if this was activated by the admin
@@ -366,16 +366,16 @@ class register_pageobject extends pageobject {
 							$success_message = $this->user->lang('email_confirmed');
 							$this->tpl->add_meta('<meta http-equiv="refresh" content="3;'.$this->controller_path. $this->SID . '">');
 						}
-						
-						
-			
+
+
+
 					} else {
 						message_die($this->user->lang('email_subject_send_error'), $this->user->lang('success'), 'error');
 					}
-					
+
 					message_die($success_message, $this->user->lang('success'), 'ok');
 				}
-				
+
 			} else {
 				message_die($this->user->lang('error_invalid_key'), $this->user->lang('error'), 'error');
 			}
@@ -391,7 +391,7 @@ class register_pageobject extends pageobject {
 	public function display() {
 		$intGuildrulesArticleID = $this->pdh->get('articles', 'resolve_alias', array('guildrules'));
 		$blnGuildrules = ($intGuildrulesArticleID && $this->pdh->get('articles', 'published', array($intGuildrulesArticleID)));
-		
+
 		if ($blnGuildrules){
 			$this->display_guildrules();
 		} else {
@@ -441,7 +441,7 @@ class register_pageobject extends pageobject {
 		if((int)$this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))) {
 			redirect($this->config->get('cmsbridge_reg_url'),false,true);
 		}
-		
+
 		//Pre fill the form
 		$strMethod = $this->in->get('lmethod');
 		if ($strMethod != ""){
@@ -478,7 +478,7 @@ class register_pageobject extends pageobject {
 				}
 			}
 		}
-		
+
 		//User Profilefields
 		$arrUserProfileFields = $this->pdh->get('user_profilefields', 'registration_fields');
 		$form = false;
@@ -488,12 +488,12 @@ class register_pageobject extends pageobject {
 			$form->add_fields($arrUserProfileFields);
 			$form->output($this->userProfileData);
 		}
-		
+
 		$this->tpl->add_js("
 			$('[data-equalto]').bind('input', function() {
     var to_confirm = $(this);
     var to_equal = $('#' + to_confirm.data('equalto'));
-		
+
     if(to_confirm.val() != to_equal.val()){
 		var fieldtype = $(this).attr('type');
 		if(fieldtype == 'email'){
@@ -507,7 +507,7 @@ class register_pageobject extends pageobject {
         this.setCustomValidity('');
 	}
 });");
-		
+
 
 		$this->tpl->assign_vars(array(
 			'S_CURRENT_PASSWORD'			=> false,
@@ -521,8 +521,8 @@ class register_pageobject extends pageobject {
 
 			'REGISTER'						=> true,
 
-			'DD_LANGUAGE'					=> new hdropdown('user_lang', array('options' => $language_array, 'value' => $this->data['user_lang'])),
-			'DD_TIMEZONES'					=> new hdropdown('user_timezone', array('options' => $this->time->timezones, 'value' => $this->data['user_timezone'])),
+			'DD_LANGUAGE'					=> (new hdropdown('user_lang', array('options' => $language_array, 'value' => $this->data['user_lang'])))->output(),
+			'DD_TIMEZONES'					=> (new hdropdown('user_timezone', array('options' => $this->time->timezones, 'value' => $this->data['user_timezone'])))->output(),
 			'HIDDEN_FIELDS'					=> (isset($this->data['auth_account'])) ? new hhidden('lmethod', array('value' => $this->in->get('lmethod'))).new hhidden('auth_account', array('value' => $this->crypt->encrypt($this->data['auth_account']))) : '',
 
 			'USERNAME'						=> $this->data['username'],
