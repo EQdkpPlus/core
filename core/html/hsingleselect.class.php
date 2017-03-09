@@ -70,7 +70,7 @@ class hsingleselect extends html {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 	}
 
-	public function _toString() {
+	public function output() {
 		$dropdown = "";
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		

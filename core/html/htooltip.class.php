@@ -54,7 +54,7 @@ class htooltip extends html {
 		if(empty($this->id)) $this->id = unique_id();
 	}
 	
-	public function _toString() {
+	public function output() {
 		$this->out = '';
 		$options = array();
 		foreach($this->all_opts as $opt) {

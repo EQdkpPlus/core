@@ -52,7 +52,7 @@ class htextmultilang extends html {
 	public function _construct() {
 	}
 	
-	public function _toString() {
+	public function output() {
 		$this->out = '';
 		$arrLanguages = $this->user->getAvailableLanguages();
 		$strDefaultLanguage = $this->config->get('default_lang');

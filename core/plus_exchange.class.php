@@ -208,6 +208,15 @@ if( !class_exists( "plus_exchange" ) ) {
 				if($strTokenType === 'api'){
 					if($strToken === $this->config->get('api_key')){
 						$this->isCoreAPIToken = true;
+						//Try to get the first superadmin
+						$arrSuperAdmins = $this->pdh->get('user_groups_users', 'user_list', array(2));
+						reset($arrSuperAdmins);
+						$intKey = key($arrSuperAdmins);
+						$intSuperadminID = $arrSuperAdmins[$intKey];
+						if($intSuperadminID) {
+							$this->user->changeSessionUser($intSuperadminID);
+							return $intSuperadminID;
+						}
 					}
 				} else {
 					$intUserID = $this->user->getUserIDfromDerivedExchangekey($strToken, 'pex_api');

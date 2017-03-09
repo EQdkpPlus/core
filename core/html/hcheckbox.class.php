@@ -41,7 +41,7 @@ class hcheckbox extends html {
 	public $disabled = false;
 	public $class = '';
 
-	protected function _toString() {
+	protected function output() {
 		$out = '';
 
 		foreach ($this->options as $key => $opt) {

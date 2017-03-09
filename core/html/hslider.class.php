@@ -50,7 +50,7 @@ class hslider extends html {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 	}
 
-	public function _toString() {
+	public function output() {
 		$options = array();
 		foreach($this->options as $opt) $options[$opt] = $this->$opt;
 		

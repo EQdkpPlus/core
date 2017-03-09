@@ -279,8 +279,8 @@ class phpbb31_bridge extends bridge_generic {
 		
 		$ip = $this->get_ip();
 	
-		$userID = (int)$_COOKIE[$arrConfig['cookie_name'].'_u'];
-		$SID = $_COOKIE[$arrConfig['cookie_name'].'_sid'];
+		$userID = isset($_COOKIE[$arrConfig['cookie_name'].'_u']) ? (int)$_COOKIE[$arrConfig['cookie_name'].'_u'] : null;
+		$SID = isset($_COOKIE[$arrConfig['cookie_name'].'_sid']) ? $_COOKIE[$arrConfig['cookie_name'].'_sid'] : null;
 		
 		if ($SID == NULL || $SID == "") return false;
 	

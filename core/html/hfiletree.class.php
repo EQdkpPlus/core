@@ -57,7 +57,7 @@ class hfiletree extends html {
 	public function _construct() {
 	}
 
-	public function _toString() {
+	public function output() {
 		$this->tpl->add_js('$(function() {
 		
 			// Hide all sub$folders at startup
