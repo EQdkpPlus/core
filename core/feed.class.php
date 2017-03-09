@@ -101,7 +101,7 @@ if (!class_exists("feed")) {
 			return htmlspecialchars($strString, ENT_COMPAT);
 		}
 
-		private function specialchars2($strString, $noHTML=false){
+		/*private function specialchars2($strString, $noHTML=false){
 			// encode URL properly
 			if(filter_var($strString, FILTER_VALIDATE_URL)){
 				$parsed_url	= parse_url($strString);
@@ -111,7 +111,7 @@ if (!class_exists("feed")) {
 			$arrFind		= array('"', "'", '<', '>', '&');
 			$arrReplace	= ($noHTML) ? array('&#34;', '&#39;', ' &#60;', '&#62;', '&#38;') : array('&#34;', '&#39;', '&lt;', '&gt;', '&amp;');
 			return str_replace($arrFind, $arrReplace, $strString);
-		}
+		}*/
 
 		public function show(){
 			return $this->generate();
