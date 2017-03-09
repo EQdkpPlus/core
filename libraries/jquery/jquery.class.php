@@ -968,7 +968,7 @@ if (!class_exists("jquery")) {
 					}
 				});
 
-				return false; //is superfluous, but I put it here as a fallback
+				return;
 			});', 'docready');
 				$this->inits['formvalidation'] = true;
 			}
