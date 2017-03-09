@@ -309,7 +309,7 @@ class form extends gen_class {
 		// initialise form validate
 		if($this->validate) {
 			$this->jquery->init_formvalidation();
-			$this->form_class .= ' fv_checkit';
+			$this->form_class .= ' fv_checkit'.(($this->use_tabs) ? ' withtabs' : '');
 		}
 
 		if($this->assign2tpl)
