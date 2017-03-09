@@ -61,7 +61,15 @@ if (!class_exists("feed")) {
 				$xml .= '			<description>' . $this->addCDATA(preg_replace('/[\n\r]+/', ' ', $items->description)) . '></description>' . "\n";
 				$xml .= '			<link>' . $this->specialchars($items->link) . '</link>' . "\n";
 				$xml .= '			<pubDate>' . $this->time->DateRSS($items->published) . '</pubDate>' . "\n";
-				$xml .= '			<guid>' . ($items->guid ? $items->guid : $this->specialchars($items->link)) . '</guid>' . "\n";
+
+				// Add the guid
+				if($items->guid){
+					$xml .= '			<guid'.((strncmp($items->guid, 'http://', 7) !== 0 && strncmp($items->guid, 'https://', 8) !== 0) ? 'isPermaLink="false"' : '').'>'.$items->guid.'</guid>' . "\n";
+				}else{
+					$xml .= '<guid>'.specialchars($items->link).'</guid>' . "\n";
+				} 
+
+				// add the author
 				if(isset($items->author)){
 					$xml .= '			<author>' . $this->specialchars($items->author) . '</author>' . "\n";
 				}
@@ -93,7 +101,7 @@ if (!class_exists("feed")) {
 			// encode URL properly
 			if(filter_var($strString, FILTER_VALIDATE_URL)){
 				$parsed_url	= parse_url($strString);
-				return $parsed_url['scheme'].'://'.$parsed_url['host'].rawurlencode($parsed_url['path'].$parsed_url['query']);
+				return $parsed_url['scheme'].'://'.$parsed_url['host'].specialchars($parsed_url['path'].$parsed_url['query']);
 				#return urlencode($sanitized_txt);
 			}
 			$arrFind		= array('"', "'", '<', '>', '&');
