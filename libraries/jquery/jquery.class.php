@@ -968,7 +968,7 @@ if (!class_exists("jquery")) {
 					}
 				});
 
-				return;
+				return (($(".fv_checkit input[required]:invalid").length > 0) ? false : true);
 			});', 'docready');
 				$this->inits['formvalidation'] = true;
 			}
