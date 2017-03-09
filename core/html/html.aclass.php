@@ -75,6 +75,8 @@ abstract class html {
 	}
 	
 	public function __toString() {
+		$this->pdl->deprecated('__toString of HTML Objects. Use output() method instead');
+		
 		if(method_exists($this, '_toString')) return $this->_toString();
 		
 		return "";
