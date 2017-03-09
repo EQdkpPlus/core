@@ -67,7 +67,7 @@ if (!class_exists("feed")) {
 					$xml .= '			<guid'.((strncmp($items->guid, 'http://', 7) !== 0 && strncmp($items->guid, 'https://', 8) !== 0) ? 'isPermaLink="false"' : '').'>'.$items->guid.'</guid>' . "\n";
 				}else{
 					$xml .= '<guid>'.specialchars($items->link).'</guid>' . "\n";
-				} 
+				}
 
 				// add the author
 				if(isset($items->author)){
@@ -100,18 +100,6 @@ if (!class_exists("feed")) {
 		private function specialchars($strString){
 			return htmlspecialchars($strString, ENT_COMPAT);
 		}
-
-		/*private function specialchars2($strString, $noHTML=false){
-			// encode URL properly
-			if(filter_var($strString, FILTER_VALIDATE_URL)){
-				$parsed_url	= parse_url($strString);
-				return $parsed_url['scheme'].'://'.$parsed_url['host'].specialchars($parsed_url['path'].$parsed_url['query']);
-				#return urlencode($sanitized_txt);
-			}
-			$arrFind		= array('"', "'", '<', '>', '&');
-			$arrReplace	= ($noHTML) ? array('&#34;', '&#39;', ' &#60;', '&#62;', '&#38;') : array('&#34;', '&#39;', '&lt;', '&gt;', '&amp;');
-			return str_replace($arrFind, $arrReplace, $strString);
-		}*/
 
 		public function show(){
 			return $this->generate();
