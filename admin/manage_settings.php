@@ -58,7 +58,7 @@ class admin_settings extends page_generic {
 			'options' 		=> sdir($this->root_path . 'games/'.$this->in->get('requestid').'/language/', '*.php', '.php'),
 			'value'			=> $this->config->get('game_language'),
 		);
-		echo new hdropdown('dummy', $options);
+		echo (new hdropdown('dummy', $options))->output();
 		exit;
 	}
 
@@ -890,7 +890,7 @@ class admin_settings extends page_generic {
 					}
 
 					// now, let us add the API-Key-Field to the last element of the array
-					$apikeyform			= new htext('game_importer_apikey', array('value' => $setting_apikey, 'size' => '30'));
+					$apikeyform			= (new htext('game_importer_apikey', array('value' => $setting_apikey, 'size' => '30')))->output();
 					end($appisetts);
 					$key				= key($appisetts);
 					reset($appisetts);

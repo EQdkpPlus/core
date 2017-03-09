@@ -94,7 +94,8 @@ class form extends gen_class {
 		$field = (registry::class_exists('h'.$options['type'])) ?  new $field_class($name, $options) : '';
 		// add the correct id into the options-array
 		if(is_object($field)) $options['id'] = $field->id;
-		return $text.$field.$text2;
+		
+		return $text.($field->output()).$text2;
 	}
 
 	/**
