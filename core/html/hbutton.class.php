@@ -55,7 +55,7 @@ class hbutton extends html {
 	public function _construct() {
 	}
 	
-	public function _toString() {
+	public function output() {
 		$return = false;
 		if($this->callback !== false) $return = call_user_func($this->callback, $this);
 		if($return !== false && $return !== NULL) {

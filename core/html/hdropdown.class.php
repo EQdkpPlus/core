@@ -59,7 +59,7 @@ class hdropdown extends html {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 	}
 
-	public function _toString() {
+	public function output() {
 		$dropdown = "";
 		if(strlen($this->text_before)) $dropdown = $this->text_before;
 		$dropdown .= '<select size="1" name="'.$this->name.'"';

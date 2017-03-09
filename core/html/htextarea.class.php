@@ -56,7 +56,7 @@ class htextarea extends html {
 	public function _construct() {
 	}
 	
-	public function _toString() {
+	public function output() {
 		$out = '<textarea name="'.$this->name.'" rows="'.$this->rows.'" cols="'.$this->cols.'" ';
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		$out .= 'id="'.$this->id.'" ';

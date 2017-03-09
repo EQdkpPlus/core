@@ -56,7 +56,7 @@ class hdatepicker extends html {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 	}
 
-	public function _toString() {
+	public function output() {
 		if(!($this->allow_empty && (empty($this->value) || $this->value == '0')) && is_numeric($this->value)) {
 			$this->value = $this->time->date($this->js_calendarformat(), $this->value);
 		}

@@ -40,8 +40,6 @@ abstract class html {
 		if(method_exists($this, '_construct')) $this->_construct();
 	}
 	
-	abstract protected function _toString();
-	
 	public function inpval() {
 		$value = $this->_inpval();
 		$strfieldname = (isset($this->_lang)) ? $this->_lang : $this->name;
@@ -77,7 +75,9 @@ abstract class html {
 	}
 	
 	public function __toString() {
-		return $this->_toString();
+		if(method_exists($this, '_toString')) return $this->_toString();
+		
+		return "";
 	}
 	
 	protected function cleanid($input) {

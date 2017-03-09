@@ -48,7 +48,7 @@ class hpassword extends html {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 	}
 
-	public function _toString() {
+	public function output() {
 		$out = '<input type="'.self::$type.'" name="'.$this->name.'" id="'.$this->id.'" ';
 		if($this->set_value && !empty($this->value)) $out .= 'value="'.$this->value.'" ';
 		if(!empty($this->pattern)) $this->class .= ' fv_success';

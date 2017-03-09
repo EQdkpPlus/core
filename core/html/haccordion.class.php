@@ -53,7 +53,7 @@ class haccordion extends html {
 		if(empty($this->id)) $this->id = unique_id();
 	}
 	
-	public function _toString() {
+	public function output() {
 		$this->out = '';
 		$acc_opts = array();
 		foreach($this->accordion_opts as $opt) $acc_opts[$opt] = $this->$opt;

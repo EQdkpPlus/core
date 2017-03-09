@@ -62,7 +62,7 @@ class htext extends html {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 	}
 
-	public function _toString() {
+	public function output() {
 		$this->out = "";
 		$jsout	= '';
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);

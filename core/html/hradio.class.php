@@ -51,7 +51,7 @@ class hradio extends html {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 	}
 	
-	public function _toString() {
+	public function output() {
 		$radiobox  = '';
 		if(empty($this->options)){
 			$this->options = array (
