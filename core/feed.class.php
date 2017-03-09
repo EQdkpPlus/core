@@ -97,7 +97,11 @@ if (!class_exists("feed")) {
 			return "<![CDATA[".$text."]]>";
 		}
 
-		private function specialchars($strString, $noHTML=false){
+		private function specialchars($strString){
+			return htmlspecialchars($strString, ENT_COMPAT);
+		}
+
+		private function specialchars2($strString, $noHTML=false){
 			// encode URL properly
 			if(filter_var($strString, FILTER_VALIDATE_URL)){
 				$parsed_url	= parse_url($strString);
