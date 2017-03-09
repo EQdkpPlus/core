@@ -28,10 +28,10 @@ include_once ($eqdkp_root_path . 'common.php');
 
 class ManageAutoPoints extends page_generic {
 	public static $shortcuts = array('apa' => 'auto_point_adjustments');
-	
+
 	public function __construct(){
 		$this->user->check_auth('a_apa_man');
-		
+
 		$handler = array(
 			'recalc' => array('process' => 'recalculate'),
 			'edit_func' => array('process' => 'edit_function'),
@@ -82,12 +82,12 @@ class ManageAutoPoints extends page_generic {
 		$this->pdc->flush();
 		$this->display(array('text' => $this->user->lang('apa_recalc_suc'), 'title' => $this->user->lang('success'), 'color' => 'green'));
 	}
-	
+
 	public function delete_function() {
 		$this->apa->delete_calc_function($this->in->get('func'));
 		$this->display(array('text' => $this->user->lang('apa_func_del_suc'), 'title' => $this->user->lang('success'), 'color' => 'green'));
 	}
-	
+
 	public function save_function() {
 		$exprs = $this->in->getArray('exprs', 'raw');
 		foreach($exprs as $key => &$expr) {
@@ -148,7 +148,7 @@ class ManageAutoPoints extends page_generic {
 		$expr = preg_replace('~\s*\$(Var[0-9]+|'.implode('|', $this->apa->get_calc_args()).')\s*~', ' \1 ', $expr);
 		return trim($expr);
 	}
-	
+
 	public function edit_function($function='') {
 		if($this->in->get('func') && !$function) $function = $this->apa->get_calc_function($this->in->get('func'));
 		if($function) {
@@ -160,9 +160,9 @@ class ManageAutoPoints extends page_generic {
 					$this->tpl->assign_vars(array(
 						'POINT_EXPR' => $this->parse_expr_out($expr),
 					));
-				} else {			
+				} else {
 					$this->tpl->assign_block_vars('exprs', array(
-						'VAR'	=> 'Var'.$key, 
+						'VAR'	=> 'Var'.$key,
 						'EXPR'	=> $this->parse_expr_out($expr),
 						'EXPR_LAST' => ($key == $last_helpvar) ? 'expr_last' : ''
 					));
@@ -171,18 +171,18 @@ class ManageAutoPoints extends page_generic {
 		} else {
 			//$this->tpl->assign_block_vars('exprs', array('VAR' => 'Var0', 'EXPR' => '', 'NODEL' => true, 'EXPR_LAST' => ' expr_last'));
 		}
-		
+
 		$examples = array(
 			'no_sel'	=> $this->user->lang('apa_func_example_choose'),
 			1			=> $this->user->lang('apa_func_example_1'),
 			2			=> $this->user->lang('apa_func_example_2'),
 			3			=> $this->user->lang('apa_func_example_3'),
 		);
-		
+
 		$this->tpl->assign_vars(array(
 			'FUNC_NAME'			=> str_replace('func_','',$this->in->get('func')),
-			'EXAMPLE_FUNCS'		=> new hdropdown('func_example', array('options' => $examples, 'value' => 'no_sel')),
-			'AVAILABLE_ARGS'	=> new hdropdown('func_args', array('options' => $this->apa->get_calc_args(true), 'value' => 'no_sel')),
+			'EXAMPLE_FUNCS'		=> (new hdropdown('func_example', array('options' => $examples, 'value' => 'no_sel')))->output(),
+			'AVAILABLE_ARGS'	=> (new hdropdown('func_args', array('options' => $this->apa->get_calc_args(true), 'value' => 'no_sel')))->output(),
 			'VALID_SYMBOLS'		=> implode("&nbsp;&nbsp;", $this->apa->get_func_valid_symbols()),
 		));
 		$this->tpl->add_js("
@@ -190,8 +190,8 @@ class ManageAutoPoints extends page_generic {
 			func_examples['no_sel'] = '';
 			func_examples[1] = \"value * 0.95\";
 			func_examples[2] = \"value - 20\";
-			func_examples[3] = \"( value > 10000) ? 10000 : value\";	
-			
+			func_examples[3] = \"( value > 10000) ? 10000 : value\";
+
 			$('#add_expr').click(function(){
 				var row = $('#exprs_block > dl:last').clone();
 
@@ -205,7 +205,7 @@ class ManageAutoPoints extends page_generic {
 					$('#exprs_block > dl:last').after(row);
 				}
 			});
-			
+
 			$(document).on('focusout', '.expr_field', function(){
 				$('.expr_last').removeClass('expr_last');
 				$(this).addClass('expr_last');
@@ -213,15 +213,15 @@ class ManageAutoPoints extends page_generic {
 			$('#func_args').change(function(){
 				$('.expr_last').val($('.expr_last').val() + ' ' + $(this).val());
 			});
-			
+
 			$('#func_example').change(function(){
 				$('.points').val(func_examples[$(this).val()]);
 			});
-			
+
 			$(document).on('click', '.del_me', function(){
 				$(this).parent().remove();
 			});", 'docready');
-		
+
 		$this->core->set_vars(array (
 			'page_title'		=> $this->user->lang('apa_manager'),
 			'template_file'		=> 'admin/manage_auto_points_edit_function.html',
@@ -264,7 +264,7 @@ class ManageAutoPoints extends page_generic {
 			$lang = $help = '';
 		}
 		$job_list = $this->apa->list_apas();
-		
+
 		//Add function button
 		$beforeclose = "$('#calc_func').append('<option value=\"func_'+$('body').data('func_name')+'\">func_'+$('body').data('func_name')+'<option>');";
 		$this->jquery->dialog('edit_function', $this->user->lang('apa_edit_function'), array('url' => "manage_auto_points.php".$this->SID."&simple_head=true&edit_func=true", 'width' =>'650', 'height' =>'600', 'beforeclose' => $beforeclose));
@@ -280,7 +280,7 @@ class ManageAutoPoints extends page_generic {
 		//fetch mdkppools
 		$pool_dd = $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list')));
 		asort($pool_dd);
-		
+
 		$this->tpl->assign_vars(array(
 			'HEAD_TEXT'		=> ($this->in->exists('id')) ? sprintf($this->user->lang('apa_edit'), "'".$this->user->lang('apa_of_type')." ".$this->user->lang('apa_type_'.$type)."'") : sprintf($this->user->lang('apa_add'), "'".$this->user->lang('apa_type_'.$type)."'"),
 			'HIDDEN_NAME'	=> ($this->in->exists('id')) ? 'id' : 'type',
@@ -311,7 +311,7 @@ class ManageAutoPoints extends page_generic {
 				if(isset($details['calc_func'])) $used_funcs[$details['calc_func']][] = $details['name'];
 			}
 		}
-		
+
 		$funcs = $this->apa->get_calc_function();
 		if(is_array($funcs)){
 			foreach($funcs as $name) {
@@ -379,10 +379,10 @@ class ManageAutoPoints extends page_generic {
 			$('.func_del').click(function(){
 				delete_func($(this).attr('alt'));
 			});", 'docready');
-		
+
 		$this->tpl->assign_vars(array (
 			'L_APA_ADD'			=> sprintf($this->user->lang('apa_add'), ''),
-			'TYPE_DD'			=> new hdropdown('apa_type', array('options' => $type_dd)),
+			'TYPE_DD'			=> (new hdropdown('apa_type', array('options' => $type_dd)))->output(),
 			'APA_COUNT'			=> count($job_list),
 			'CALC_COUNT'		=> count($funcs),
 		));
@@ -394,7 +394,7 @@ class ManageAutoPoints extends page_generic {
 			'display'			=> true,
 		));
 	}
-	
+
 	public function output_deletion_text() {
 		header('content-type: text/html; charset=UTF-8');
 		if($this->in->exists('id')) echo $this->apa->get_data('name', $this->in->get('id'));

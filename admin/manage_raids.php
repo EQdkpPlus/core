@@ -51,10 +51,10 @@ class ManageRaids extends page_generic {
 		echo $defItempool;
 		die();
 	}
-	
+
 	public function ajax_raidvalue(){
 		header('content-type: text/html; charset=UTF-8');
-	
+
 		$event_id = $this->in->get('event', 0);
 		$event_value = $this->pdh->geth("event", "value", array($event_id));
 		echo runden($event_value);
@@ -65,19 +65,19 @@ class ManageRaids extends page_generic {
 		$this->core->message($this->user->lang('copy_info'), $this->user->lang('copy'));
 		$this->update(false, false, true);
 	}
-	
+
 	public function bulk_update(){
 		$strSelectedIDs = $this->in->get('selected_ids');
 		$arrSelected = explode('|', $strSelectedIDs);
 		$arrBulk = $this->in->getArray('bulk', 'int');
-	
+
 		$arrNewValues['note'] = $this->in->get('rnote','');
 		$arrNewValues['additonal_data'] = $this->in->get('additional_data','');
 		$arrNewValues['event'] = $this->in->get('event',0);
 		$arrNewValues['value'] = $this->in->get('value',0.0);
 		$arrNewValues['attendees'] = $this->in->getArray('raid_attendees','int');
 		$arrNewValues['date'] = $this->time->fromformat($this->in->get('date','1.1.1970 00:00'), 1);
-		
+
 		$arrCheckboxes = array('date', 'note', 'event', 'value', 'attendees');
 
 		//Für jedes Item
@@ -91,30 +91,30 @@ class ManageRaids extends page_generic {
 			$raid['attendees'] 		= $this->pdh->get('raid', 'raid_attendees', array($raidID, false));
 
 			$messages = array();
-				
+
 			foreach($arrBulk as $key => $val){
 				if(!in_array($key, $arrCheckboxes) || !$val) continue;
-	
+
 				$raid[$key] = $arrNewValues[$key];
 				if($key == 'note'){
 					$raid['additonal_data'] = $arrNewValues['additonal_data'];
 				}
-	
+
 				//update_raid($raid_id, $raid_date, $raid_attendees, $event_id, $raid_note, $raid_value, $additional_data='')
 				$retu = $this->pdh->put('raid', 'update_raid', array($raidID, $raid['date'], $raid['attendees'], $raid['event'], $raid['note'], $raid['value'], $raid['additonal_data']));
-	
+
 				if(!$retu){
 					$messages[] = array('title' => $this->user->lang('save_nosuc'), 'text' => $raid['name'], 'color' => 'red');
 				}
 			}
-				
+
 		}
 		$messages[] = array('title' => $this->user->lang('save_suc'), 'text' => $this->user->lang('bulkedit'), 'color' => 'green');
 		$this->pdh->process_hook_queue();
 		$this->display($messages);
 	}
-	
-	
+
+
 
 	public function delete() {
 		$ids = $pos = $neg = $messages = array();
@@ -191,13 +191,13 @@ class ManageRaids extends page_generic {
 			if(!empty($data['items']) && is_array($data['items'])) {
 				foreach($data['items'] as $ik => $item) {
 					if($item['group_key'] == 'new' OR empty($item['group_key'])) {
-						$intAmount = (int)$item['amount'];						
+						$intAmount = (int)$item['amount'];
 						if($intAmount > 0){
 							for($i=0; $i<$intAmount; $i++){
 								$item_upd[] = $this->pdh->put('item', 'add_item', array($item['name'], $item['members'], $data['raid']['id'], $item['item_id'], $item['value'], $item['itempool_id'], $data['raid']['date']+$ik));
 							}
 						}
-						
+
 					} else {
 						$item_upd[] = $this->pdh->put('item', 'update_item', array($item['group_key'], $item['name'], $item['members'], $data['raid']['id'], $item['item_id'], $item['value'], $item['itempool_id'], $data['raid']['date']+$ik));
 					}
@@ -322,7 +322,7 @@ class ManageRaids extends page_generic {
 					'GK'		=> ($copy) ? 'new' : $adj['group_key'],
 					'MEMBER'	=> $this->jquery->MultiSelect('adjs['.$key.'][members]', $members, $adj['members'], array('width' => 250, 'id'=>'adjs_'.$key.'_members', 'filter' => true)),
 					'REASON'	=> sanitize($adj['reason']),
-					'EVENT'		=> new hdropdown('adjs['.$key.'][event]', array('options' => $events, 'value' => $adj['event'], 'id' => 'event_'.$key)),
+					'EVENT'		=> (new hdropdown('adjs['.$key.'][event]', array('options' => $events, 'value' => $adj['event'], 'id' => 'event_'.$key)))->output(),
 					'VALUE'		=> $adj['value'])
 				);
 				$adjs_ids[] = 'adjs_'.$key;
@@ -342,7 +342,7 @@ class ManageRaids extends page_generic {
 					'ITEMID'	=> $item['item_id'],
 					'MEMBER'	=> $this->jquery->MultiSelect('items['.$key.'][members]', $members, $item['members'], array('width' => 250, 'id'=>'items_'.$key.'_members', 'filter' => true)),
 					'VALUE'		=> $item['value'],
-					'ITEMPOOL'	=> new hdropdown('items['.$key.'][itempool_id]', array('options' => $itempools, 'value' => $item['itempool_id'], 'id' => 'itempool_id_'.$key)),
+					'ITEMPOOL'	=> (new hdropdown('items['.$key.'][itempool_id]', array('options' => $itempools, 'value' => $item['itempool_id'], 'id' => 'itempool_id_'.$key)))->output(),
 				));
 				$item_ids[] = 'items_'.$key;
 				if($key > $intItemKey) $intItemKey = $key;
@@ -357,21 +357,21 @@ class ManageRaids extends page_generic {
 		$this->tpl->assign_vars(array(
 			'DATE'				=> $this->jquery->Calendar('date', (($this->in->get('dataimport', '') == 'true') ? $this->in->get('date', '') : $this->time->user_date($raid['date'], true, false, false, function_exists('date_create_from_format'))), '', array('timepicker' => true)),
 			'NOTE'				=> stripslashes((($this->in->get('dataimport', '') == 'true') ? $this->in->get('rnote', '') : $raid['note'])),
-			'EVENT'				=> new hdropdown('event', array('options' => $events, 'value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->get('event', 0) : $raid['event']), 'js' => 'onchange="loadEventValue($(this).val())"')),
+			'EVENT'				=> (new hdropdown('event', array('options' => $events, 'value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->get('event', 0) : $raid['event']), 'js' => 'onchange="loadEventValue($(this).val())"')))->output(),
 			'RAID_EVENT'		=> $this->pdh->get('event', 'name', array($raid['event'])),
 			'RAID_DATE'			=> $this->time->user_date($raid['date']),
 			'RAID_ID'			=> ($raid['id'] && !$copy) ? $raid['id'] : 0,
 			'VALUE'				=> runden((($this->in->get('dataimport', '') == 'true') ? $this->in->get('value', 0) : $raid['value'])),
 			'NEW_MEM_SEL'		=> $this->jquery->MultiSelect('raid_attendees', $members, (($this->in->get('dataimport', '') == 'true') ? $this->in->getArray('attendees', 'int') : $raid['attendees']), array('width' => 400, 'filter' => true)),
-			'RAID_DROPDOWN'		=> new hdropdown('draft', array('options' => $raids, 'value' => $this->in->get('draft', 0), 'js' => 'onchange="window.location=\'manage_raids.php'.$this->SID.'&amp;upd=true&amp;draft=\'+this.value"')),
+			'RAID_DROPDOWN'		=> (new hdropdown('draft', array('options' => $raids, 'value' => $this->in->get('draft', 0), 'js' => 'onchange="window.location=\'manage_raids.php'.$this->SID.'&amp;upd=true&amp;draft=\'+this.value"')))->output(),
 
 			'ADJ_KEY'			=> $intAdjKey+1,
 			'MEMBER_DROPDOWN'	=> $this->jquery->MultiSelect('adjs[KEY][members]', $members, array(), array('width' => 250, 'id'=>'adjs_KEY_members', 'filter' => true)),
 			'MEMBER_ITEM_DROPDOWN'	=> $this->jquery->MultiSelect('items[KEY][members]', $members, array(), array('width' => 250, 'id'=>'items_KEY_members', 'filter' => true)),
-			'EVENT_DROPDOWN'	=> new hdropdown('adjs[KEY][event]', array('options' => $events, 'value' => $adj['event'], 'id' => 'event_KEY')),
+			'EVENT_DROPDOWN'	=> (new hdropdown('adjs[KEY][event]', array('options' => $events, 'value' => $adj['event'], 'id' => 'event_KEY')))->output(),
 			'ADJ_REASON_AUTOCOMPLETE' => $this->jquery->Autocomplete('adjs_KEY', array_unique($adjustment_reasons)),
 			'ITEM_KEY'			=> $intItemKey+1,
-			'ITEMPOOL_DROPDOWN' => new hdropdown('items[KEY][itempool_id]', array('options' => $itempools, 'value' => $item['itempool_id'], 'id' => 'itempool_id_KEY')),
+			'ITEMPOOL_DROPDOWN' => (new hdropdown('items[KEY][itempool_id]', array('options' => $itempools, 'value' => $item['itempool_id'], 'id' => 'itempool_id_KEY')))->output(),
 			'ITEM_AUTOCOMPLETE' => $this->jquery->Autocomplete('item_KEY', array_unique($item_names)),
 			'EVENT_ITEMPOOL_MAPPING' => json_encode($arrEventItempoolMapping),
 			'FIRST_EVENT_ID'	=> isset($arrEventKeys[0]) ? $arrEventKeys[0] : 0,
@@ -382,7 +382,7 @@ class ManageRaids extends page_generic {
 			'S_RAID_UPD'		=> ($raid['id'] AND $raid['id'] != 'new' && !$copy) ? true : false,
 			'S_EVENTVAL_ONLOAD' => ($raid['id'] == 'new' && !$force_refresh && $this->in->get('dataimport', '') != 'true') ? true : false,
 			'S_CALDATAIMPORT'	=> ($this->in->get('dataimport', '') == 'true') ? $this->in->get('calevent_id', 0) : 0,
-			'ADDITIONAL_INFOS_EDITOR' => new hbbcodeeditor('additional_data', array('rows' => 10, 'value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->get('additional_data') : $raid['additional_data']))),
+			'ADDITIONAL_INFOS_EDITOR' => (new hbbcodeeditor('additional_data', array('rows' => 10, 'value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->get('additional_data') : $raid['additional_data']))))->output(),
 			'ADDITIONAL_INFOS'	=> ((isset($raid['additional_data']) AND strlen($raid['additional_data'])) || (($this->in->get('dataimport', '') == 'true') && strlen($this->in->get('additional_data')))) ? 'true' : 'false',
 		));
 
@@ -405,40 +405,40 @@ class ManageRaids extends page_generic {
 			'display'       => true)
 		);
 	}
-	
+
 	public function display_bulkedit($messages=false) {
 		$arrItems = $this->in->getArray('selected_ids', 'int');
 		if(count($arrItems) === 0) $this->display();
-		
-		
+
+
 		if($message) {
 			$this->core->messages($message);
 		}
-		
+
 		$data = array();
 		if($force_refresh){
 			$data = $this->get_post(true);
 			$this->pdh->process_hook_queue();
 		}
-		
+
 		//fetch members
 		$members = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list', array(false,true,false)), 'member', 'name', 'asc')));
-		
+
 		//fetch events
 		$events = $this->pdh->aget('event', 'name', 0, array($this->pdh->get('event', 'id_list')));
 		asort($events);
-		
+
 		//Event Itempool Mapping
 		$arrEventItempoolMapping = array();
 		foreach($this->pdh->get('event', 'id_list') as $eventID){
 			$arrEventItempools = $this->pdh->get('event', 'itempools', array($eventID));
 			$arrEventItempoolMapping[$eventID] = (isset($arrEventItempools[0])) ? $arrEventItempools[0] : 0;
 		}
-		
+
 		//fetch itempools
 		$itempools = $this->pdh->aget('itempool', 'name', 0, array($this->pdh->get('itempool', 'id_list')));
 		asort($itempools);
-		
+
 		//fetch Raids
 		$raidlist = $this->pdh->get('raid', 'id_list');
 		$raidlist = $this->pdh->sort($raidlist, 'raid', 'date', 'desc');
@@ -446,32 +446,32 @@ class ManageRaids extends page_generic {
 		foreach ($raidlist as $key => $row){
 			$raids[$row] = $this->time->user_date($this->pdh->get('raid', 'date', array($row))) . ' - ' . stripslashes($this->pdh->get('raid', 'event_name', array($row)));
 		}
-		
+
 		//fetch notes
 		$notes = $this->pdh->aget('raid', 'note', 0, array($this->pdh->get('raid', 'id_list')));
 		asort($notes);
 		$this->jquery->Autocomplete('note', array_unique($notes));
-		
+
 		$raid = array('id' => $this->url_id, 'date' => $this->time->time, 'note' => '', 'event' => 0, 'value' => 0.00, 'attendees' => array());
-		
+
 		$arrEventKeys = array_keys($events);
 		$this->tpl->assign_vars(array(
 				'DATE'				=> $this->jquery->Calendar('date', (($this->in->get('dataimport', '') == 'true') ? $this->in->get('date', '') : $this->time->user_date($raid['date'], true, false, false, function_exists('date_create_from_format'))), '', array('timepicker' => true)),
 				'NOTE'				=> stripslashes((($this->in->get('dataimport', '') == 'true') ? $this->in->get('rnote', '') : $raid['note'])),
-				'EVENT'				=> new hdropdown('event', array('options' => $events, 'value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->get('event', 0) : $raid['event']), 'js' => 'onchange="loadEventValue($(this).val())"')),
+				'EVENT'				=> (new hdropdown('event', array('options' => $events, 'value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->get('event', 0) : $raid['event']), 'js' => 'onchange="loadEventValue($(this).val())"')))->output(),
 				'RAID_EVENT'		=> $this->pdh->get('event', 'name', array($raid['event'])),
 				'RAID_DATE'			=> $this->time->user_date($raid['date']),
 				'RAID_ID'			=> ($raid['id'] && !$copy) ? $raid['id'] : 0,
 				'VALUE'				=> runden((($this->in->get('dataimport', '') == 'true') ? $this->in->get('value', 0) : $raid['value'])),
 				'NEW_MEM_SEL'		=> $this->jquery->MultiSelect('raid_attendees', $members, (($this->in->get('dataimport', '') == 'true') ? $this->in->getArray('attendees', 'int') : $raid['attendees']), array('width' => 400, 'filter' => true)),
-				'RAID_DROPDOWN'		=> new hdropdown('draft', array('options' => $raids, 'value' => $this->in->get('draft', 0), 'js' => 'onchange="window.location=\'manage_raids.php'.$this->SID.'&amp;upd=true&amp;draft=\'+this.value"')),
+				'RAID_DROPDOWN'		=> (new hdropdown('draft', array('options' => $raids, 'value' => $this->in->get('draft', 0), 'js' => 'onchange="window.location=\'manage_raids.php'.$this->SID.'&amp;upd=true&amp;draft=\'+this.value"')))->output(),
 				//language vars
 				'L_RAID_SAVE'		=> ($raid['id'] AND $raid['id'] != 'new' && !$copy) ? $this->user->lang('update_raid') : $this->user->lang('add_raid'),
 				//other needed vars
 				'S_RAID_UPD'		=> ($raid['id'] AND $raid['id'] != 'new' && !$copy) ? true : false,
 				'S_EVENTVAL_ONLOAD' => ($raid['id'] == 'new' && !$force_refresh && $this->in->get('dataimport', '') != 'true') ? true : false,
 				'S_CALDATAIMPORT'	=> ($this->in->get('dataimport', '') == 'true') ? $this->in->get('calevent_id', 0) : 0,
-				'ADDITIONAL_INFOS_EDITOR' => new hbbcodeeditor('additional_data', array('rows' => 10, 'value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->get('additional_data') : $raid['additional_data']))),
+				'ADDITIONAL_INFOS_EDITOR' => (new hbbcodeeditor('additional_data', array('rows' => 10, 'value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->get('additional_data') : $raid['additional_data']))))->output(),
 				'ADDITIONAL_INFOS'	=> ((isset($raid['additional_data']) AND strlen($raid['additional_data'])) || (($this->in->get('dataimport', '') == 'true') && strlen($this->in->get('additional_data')))) ? 'true' : 'false',
 				'BULK_ITEMS'	=> implode('|', $arrItems),
 		));
@@ -501,7 +501,7 @@ class ManageRaids extends page_generic {
 		$raid_count = count($view_list);
 
 		$this->confirm_delete($this->user->lang('confirm_delete'));
-		
+
 		$arrMenuItems = array(
 				0 => array(
 						'type'	=> 'javascript',
@@ -527,7 +527,7 @@ class ManageRaids extends page_generic {
 			'IMPORT_DKP' => ($this->pm->check('raidlogimport', PLUGIN_INSTALLED)) ? '<button onclick="window.location=\''.$this->root_path.'plugins/raidlogimport/admin/dkp.php'.$this->SID.'\'" type="button" class="mainoption"><i class="fa fa-upload"></i>'.$this->user->lang('raidlogimport_dkp').'</button>' : '',
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
 			'RAID_COUNT' => $raid_count,
-			'HPTT_ADMIN_LINK'	=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('admin_manage_raids').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,	
+			'HPTT_ADMIN_LINK'	=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('admin_manage_raids').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,
 			'BUTTON_MENU'=> $this->core->build_dropdown_menu($this->user->lang('selected_elements').'...', $arrMenuItems, '', 'manage_members_menu', array("input[name=\"selected_ids[]\"]")),
 		));
 

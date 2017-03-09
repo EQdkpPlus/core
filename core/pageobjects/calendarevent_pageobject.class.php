@@ -119,9 +119,10 @@ class calendarevent_pageobject extends pageobject {
 			'deadline'	=> $default_deadlineoffset,
 		);
 
+		// TODO Use hdatepicker
 		$this->tpl->assign_vars(array(
 			'EVENT_ID'			=> $this->url_id,
-			'BBCODE_NOTE'		=> new hbbcodeeditor('note', array('rows' => 3, 'value' => ((isset($eventdata['notes'])) ? $eventdata['notes'] : ''), 'id' => 'input_note')),
+			'BBCODE_NOTE'		=> (new hbbcodeeditor('note', array('rows' => 3, 'value' => ((isset($eventdata['notes'])) ? $eventdata['notes'] : ''), 'id' => 'input_note')))->output(),
 			'JQ_DATE_START'		=> $this->jquery->Calendar('startdate', $this->time->user_date($defdates['start'], true, false, false), '', array('timepicker' => true, 'onselect' => $startdate_onselect)),
 			'JQ_DATE_END'		=> $this->jquery->Calendar('enddate',$this->time->user_date($defdates['end'], true, false, false), '', array('timepicker' => true)),
 		));
@@ -863,7 +864,7 @@ class calendarevent_pageobject extends pageobject {
 							);
 						}else{
 							$charchangemenu = array(
-								'chars'	=> new hdropdown('charchange_char', array('options' => $drpdwn_twinks, 'value' => '0')),
+								'chars'	=> (new hdropdown('charchange_char', array('options' => $drpdwn_twinks, 'value' => '0')))->output(),
 								'roles'	=> ''
 							);
 						}
@@ -879,7 +880,7 @@ class calendarevent_pageobject extends pageobject {
 							'CLASSICON'			=> $this->game->decorate('primary', $this->pdh->get('member', 'classid', [$memberid])),
 							'NAME'				=> $this->pdh->get('member', 'name', array($memberid)),
 							'RANDOM'			=> $memberdata['random_value'],
-							'GROUPS'			=> new hdropdown('groupchange_group', array('options' => $this->raidgroup_dd, 'value' => $raidgroup)),
+							'GROUPS'			=> (new hdropdown('groupchange_group', array('options' => $this->raidgroup_dd, 'value' => $raidgroup)))->output(),
 							'TOOLTIP'			=> implode('<br />', $membertooltip),
 							'ADMINNOTE'			=> ($memberdata['signedbyadmin']) ? true : false,
 							'NOTE'				=> (trim($memberdata['note'])) ? $memberdata['note'] : false,
@@ -1134,11 +1135,11 @@ class calendarevent_pageobject extends pageobject {
 			'MENU_OPTIONS'			=> $this->core->build_dropdown_menu('<i class="fa fa-cog fa-lg"></i> '.$this->user->lang('raidevent_raid_settbutton'), $optionsmenu, 'floatRight'),
 			'DD_MYCHARS'			=> ($eventdata['extension']['raidmode'] == 'role') ? $memberrole[0] : new hdropdown('member_id', array('options' => $drpdwn_members, 'value' => $presel_charid)),
 			'DD_MYROLE'				=> ($eventdata['extension']['raidmode'] == 'role') ? $memberrole[1] : '',
-			'DD_SIGNUPSTATUS'		=> new hdropdown('signup_status', array('options' => $status_dropdown, 'value' => $this->mystatus['signup_status'])),
-			'DD_MODSIGNUPSTATUS'	=> new hdropdown('moderation_raidstatus', array('options' => $this->raidstatus_full, 'value' => '0')),
-			'DD_MODRAIDGROUPS'		=> new hdropdown('moderation_raidgroup', array('options' => $this->raidgroup_dd, 'value' => 0)),
-			'DD_RAIDGROUPS'			=> new hdropdown('raidgroup_filter', array('options' => $arrRaidgroups, 'value' => $this->in->get('raidgroup_filter', 0), 'js' => 'onchange="window.location=\''.$this->strPath.$this->SID.'&amp;raidgroup_filter=\'+this.value"')),
-			'DD_NOTSIGNEDINSTATUS'	=> new hdropdown('notsigned_raidstatus', array('options' => $this->raidstatus, 'value' => '0')),
+			'DD_SIGNUPSTATUS'		=> (new hdropdown('signup_status', array('options' => $status_dropdown, 'value' => $this->mystatus['signup_status'])))->output(),
+			'DD_MODSIGNUPSTATUS'	=> (new hdropdown('moderation_raidstatus', array('options' => $this->raidstatus_full, 'value' => '0')))->output(),
+			'DD_MODRAIDGROUPS'		=> (new hdropdown('moderation_raidgroup', array('options' => $this->raidgroup_dd, 'value' => 0)))->output(),
+			'DD_RAIDGROUPS'			=> (new hdropdown('raidgroup_filter', array('options' => $arrRaidgroups, 'value' => $this->in->get('raidgroup_filter', 0), 'js' => 'onchange="window.location=\''.$this->strPath.$this->SID.'&amp;raidgroup_filter=\'+this.value"')))->output(),
+			'DD_NOTSIGNEDINSTATUS'	=> (new hdropdown('notsigned_raidstatus', array('options' => $this->raidstatus, 'value' => '0')))->output(),
 
 			'SUBSCRIBED_MEMBER_ID'	=> $this->mystatus['member_id'],
 			'ATTENDEES_COLSPAN'		=> count($this->raidcategories),
