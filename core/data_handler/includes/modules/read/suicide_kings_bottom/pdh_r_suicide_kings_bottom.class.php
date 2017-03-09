@@ -60,7 +60,7 @@ if ( !class_exists( "pdh_r_suicide_kings_bottom" ) ) {
 			//base list for all mdkp pools
 			$member_hash = array();
 			$arrMembers = $this->pdh->sort($this->pdh->get('member', 'id_list', array(false, false)), 'member', 'creation_date', 'asc');
-			
+
 			//With Twinks (mainchar only)
 			foreach($this->pdh->get('multidkp',  'id_list', array()) as $mdkp_id){
 				// initialise list
@@ -69,7 +69,7 @@ if ( !class_exists( "pdh_r_suicide_kings_bottom" ) ) {
 					shuffle($arrMembers);
 					$this->config->set('sk_fix_startlist_'.$mdkp_id, serialize($arrMembers));
 				}
-				
+
 				foreach($startList as $intMemberID){
 					if (in_array($intMemberID, $arrMembers)){
 						$member_hash['single'][] = $intMemberID;
@@ -85,14 +85,14 @@ if ( !class_exists( "pdh_r_suicide_kings_bottom" ) ) {
 						if (!in_array($intMainID, $member_hash['multi'])) $member_hash['multi'][] = $intMainID;
 					}
 				}
-	
-				
+
+
 				$tmp_memberarray = array('multi'=>$member_hash['multi'], 'single'=>$member_hash['single']);
-				
+
 				$sort_list_lastitemdate = array('multi'=>array(), 'single'=>array());
 				$sort_list_lastitemid = array('multi'=>array(), 'single'=>array());
 				$sort_list_member = array('multi'=>array(), 'single'=>array());
-				
+
 				//---MULTI--------------------------------------------------------------------
 				foreach($member_hash['multi'] as $k => $member_id){
 					//Get latest item date
@@ -101,32 +101,32 @@ if ( !class_exists( "pdh_r_suicide_kings_bottom" ) ) {
 
 					$sort_list_lastitemdate['multi'][$member_id] = ($latest_item) ? $this->pdh->get('member_dates', 'last_item_date', array($member_id, $mdkp_id, true)) : $k;
 					$sort_list_lastitemid['multi'][$member_id] = ($latest_item) ? $this->pdh->get('member_dates', 'last_item', array($member_id, $mdkp_id, true)) : $k;
-					
+
 					$sort_list_member['multi'][] = $member_id;
 					unset($tmp_memberarray['multi'][$member_id]);
 				}
 
 				array_multisort($sort_list_lastitemdate['multi'], SORT_ASC, $sort_list_lastitemid['multi'], SORT_ASC, $sort_list_member['multi']);
-				
+
 				//Position for member with items
 				$i = 1;
 				foreach ($sort_list_member['multi'] as $member_id){
 					$this->sk_list['multi'][$mdkp_id][$member_id] = $i++;
 				}
-				
+
 				//---SINGLE--------------------------------------------------------------------
 				foreach($member_hash['single'] as $k => $member_id){
 					//Get latest item date
 					$latest_item = $this->pdh->get('member_dates', 'last_item_date', array($member_id, $mdkp_id, false));
 					$last_raid =  $this->pdh->get('member_dates', 'last_raid', array($member_id, $mdkp_id, false));
-					
+
 
 					$sort_list_lastitemdate['single'][$member_id] = ($latest_item) ? $this->pdh->get('member_dates', 'last_item_date', array($member_id, $mdkp_id, false)): $k;
 					$sort_list_lastitemid['single'][$member_id] = ($latest_item) ? $this->pdh->get('member_dates', 'last_item', array($member_id, $mdkp_id, false)): $k;
-					
+
 					$sort_list_member['single'][] = $member_id;
 					unset($tmp_memberarray['single'][$member_id]);
-					
+
 				}
 				array_multisort($sort_list_lastitemdate['single'], SORT_ASC, $sort_list_lastitemid['single'], SORT_ASC, $sort_list_member['single']);
 				//Position for member with items
@@ -166,7 +166,7 @@ if ( !class_exists( "pdh_r_suicide_kings_bottom" ) ) {
 				$tooltip = $this->user->lang('events').": <br />";
 				$events = $this->pdh->get('multidkp', 'event_ids', array($mdkpid));
 				if(is_array($events)) foreach($events as $event_id) $tooltip .= $this->pdh->get('event', 'name', array($event_id))."<br />";
-				$text = new htooltip('tt_event'.$event_id, array_merge(array('content' => $tooltip, 'label' => $text), $tt_options));
+				$text = (new htooltip('tt_event'.$event_id, array_merge(array('content' => $tooltip, 'label' => $text), $tt_options)))->output();
 			}
 			return $text;
 		}

@@ -26,7 +26,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_points" ) ) {
 	class pdh_r_points extends pdh_r_generic{
 		public static $shortcuts = array('apa' => 'auto_point_adjustments');
-		
+
 		public $default_lang = 'english';
 
 		private $cache;
@@ -37,7 +37,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 		private $arrCalculatedSingle = array();
 		private $arrCalculatedMulti = array();
 		private $arrSnapshotTime = array();
-		
+
 		public $hooks = array(
 			'adjustment_update',
 			'event_update',
@@ -65,22 +65,22 @@ if ( !class_exists( "pdh_r_points" ) ) {
 
 		public function reset($affected_ids=array(), $strHook='', $arrAdditionalData=array()){
 			$arrTotalAffected = array();
-			
+
 			//For Hooks with additional data
 			foreach($arrAdditionalData as $arrData){
 				if(isset($arrData['action'])){
 					$strAction = $arrData['action'];
 					if($strHook == 'member_update' && $strAction == 'update_points') return true;
-					
-					if((isset($arrData['apa']) && $arrData['apa']) || ($strAction == 'add' && ($strHook == 'itempool_update' || $strHook == 'multidkp_update' || $strHook == 'member_update'))){	
+
+					if((isset($arrData['apa']) && $arrData['apa']) || ($strAction == 'add' && ($strHook == 'itempool_update' || $strHook == 'multidkp_update' || $strHook == 'member_update'))){
 						//Nothing to do with APA or member_cache
 					} else {
 						$arrAffectedMembers = (isset($arrData['members']) && is_array($arrData['members'])) ? $arrData['members'] : $this->pdh->get('member', 'id_list');
 						$intAffectedTime = (isset($arrData['time'])) ? $arrData['time'] : 0;
-						
+
 						$arrTotalAffected = array_merge($arrTotalAffected, $arrAffectedMembers);
 						$this->get_delete_from_snapshot($intAffectedTime, $arrAffectedMembers);
-							
+
 						//Reset the APA Cache for the affected members
 						$apaAffectedIDs = array();
 						foreach($this->pdh->get('multidkp', 'id_list') as $mdkpid){
@@ -90,8 +90,8 @@ if ( !class_exists( "pdh_r_points" ) ) {
 						}
 						$this->apa->enqueue_update('current', $apaAffectedIDs);
 					}
-				
-				}			
+
+				}
 			}
 			if((isset($arrData['apa']) && $arrData['apa']) || ($strAction == 'add' && ($strHook == 'itempool_update' || $strHook == 'multidkp_update' || ($strHook == 'member_update'  && !is_array($affected_ids))))){
 				//Nothing to do with APA or member_cache
@@ -115,14 +115,14 @@ if ( !class_exists( "pdh_r_points" ) ) {
 				$this->apa->enqueue_update('current', $apaAffectedIDs);
 				$arrTotalAffected = false;
 			}
-						
+
 			$this->pdc->del('pdh_points_snapshot_mapping');
 			$this->pdc->del('pdh_points_table');
-			
+
 			//Reset the member point cache for affected members only
 			if(is_array($arrTotalAffected)) $arrTotalAffected = array_unique($arrTotalAffected);
 			$this->pdh->put('member', 'reset_points', array($arrTotalAffected));
-			
+
 			$this->arrCalculatedMulti = array();
 			$this->arrCalculatedSingle = array();
 			$this->points = NULL;
@@ -133,7 +133,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 			if($this->arrSnapshotTime === NULL){
 				$this->snapshot_mapping();
 			}
-			
+
 			//cached data not outdated?
 			$this->points = $this->pdc->get('pdh_points_table');
 
@@ -176,7 +176,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 								if(!isset($this->points[$member_id][$dkp_id])) $this->points[$member_id][$dkp_id] = array('single' => array('earned' => array(), 'spent' => array()));
 								$eventID = (isset($raid2event[$raid_id])) ? $raid2event[$raid_id] : 0;
 								if(!isset($this->points[$member_id][$dkp_id]['single']['spent'][$eventID])) $this->points[$member_id][$dkp_id]['single']['spent'][$eventID] = array();
-								
+
 								if(!isset($this->points[$member_id][$dkp_id]['single']['spent'][$eventID][$itempool_id]))
 									$this->points[$member_id][$dkp_id]['single']['spent'][$eventID][$itempool_id] = 0;
 								$this->points[$member_id][$dkp_id]['single']['spent'][$eventID][$itempool_id] += $value;
@@ -201,7 +201,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 			}
 			$this->pdc->put('pdh_points_table', $this->points, null);
 		}
-		
+
 		public function get_earned($member_id, $multidkp_id, $event_id=0, $with_twink=true){
 			if($with_twink){
 				if(!isset($this->arrCalculatedMulti[$member_id.'_'.$multidkp_id])){
@@ -216,7 +216,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 				}
 				$with_twink = 'single';
 			}
-			
+
 			if(!isset($this->points[$member_id][$multidkp_id][$with_twink]['earned'][$event_id])) return 0;
 			return $this->points[$member_id][$multidkp_id][$with_twink]['earned'][$event_id];
 		}
@@ -239,7 +239,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 				}
 				$with_twink = 'single';
 			}
-			
+
 			if(!isset($this->points[$member_id][$multidkp_id][$with_twink]['spent'][$event_id][$itempool_id])) return 0;
 			return $this->points[$member_id][$multidkp_id][$with_twink]['spent'][$event_id][$itempool_id];
 		}
@@ -262,7 +262,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 				}
 				$with_twink = 'single';
 			}
-			
+
 			if(!isset($this->points[$member_id][$multidkp_id][$with_twink]['adjustment'][$event_id])) return 0;
 			return $this->points[$member_id][$multidkp_id][$with_twink]['adjustment'][$event_id];
 		}
@@ -270,8 +270,8 @@ if ( !class_exists( "pdh_r_points" ) ) {
 		public function get_html_adjustment($member_id, $multidkp_id, $event_id=0, $with_twink=true){
 			return '<span class="'.color_item($this->get_adjustment($member_id, $multidkp_id, $event_id, $with_twink)).'">'.runden($this->get_adjustment($member_id, $multidkp_id, $event_id, $with_twink)).'</span>';
 		}
-		
-		
+
+
 		/**
 		 * Default without APA decay!
 		 */
@@ -289,19 +289,19 @@ if ( !class_exists( "pdh_r_points" ) ) {
 						'with_twink'	=> ($with_twink) ? true : false,
 						'date'			=> $to,
 				);
-				
+
 				$toPoints = $this->apa->get_value('current', $multidkp_id, $to, $data);
-				
+
 				if($from > 0) {
 					$fromPoints = $this->apa->get_value('current', $multidkp_id, $from, $data);
 					return $toPoints - $fromPoints;
 				} else {
 					return $toPoints;
 				}
-				
-			} else {			
+
+			} else {
 				$arrPoints = $this->pdh->get('points_history', 'points', array($member_id, $multidkp_id, $from, $to, $event_id, $itempool_id, $with_twink));
-				
+
 				$earned = (float)$arrPoints['earned'][$event_id];
 				$spent = (float)$arrPoints['spent'][$event_id][$itempool_id];
 				$adj = (float)$arrPoints['adjustment'][$event_id];
@@ -327,10 +327,10 @@ if ( !class_exists( "pdh_r_points" ) ) {
 					'date'			=> $this->time->time,
 				);
 				$value = $this->apa->get_value('current', $multidkp_id, $this->time->time, $data);
-			} else {			
+			} else {
 				$value = ($this->get_earned($member_id, $multidkp_id, $event_id, $with_twink) - $this->get_spent($member_id, $multidkp_id, $event_id, $itempool_id, $with_twink) + $this->get_adjustment($member_id, $multidkp_id, $event_id, $with_twink));
 			}
-			
+
 			if($with_apa && $this->hardcap[$multidkp_id]){
 				$data =  array(
 						'id'			=> $multidkp_id.'_'.$member_id,
@@ -358,7 +358,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 				$tooltip = $this->user->lang('events').": <br />";
 				$events = $this->pdh->get('multidkp', 'event_ids', array($mdkpid));
 				if(is_array($events)) foreach($events as $event_id) $tooltip .= $this->pdh->get('event', 'name', array($event_id))."<br />";
-				$text = new htooltip('tt_event'.(int)$mdkpid, array_merge(array('content' => $tooltip, 'label' => $text), $tt_options));
+				$text = (new htooltip('tt_event'.(int)$mdkpid, array_merge(array('content' => $tooltip, 'label' => $text), $tt_options)))->output();
 			}
 			return $text;
 		}
@@ -375,7 +375,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 
 				return $this->points[$memberid][$multidkpid]['single'];
 			}
-			
+
 			if(isset($this->points[$memberid][$multidkpid]['single']['earned'][0])){
 				return $this->points[$memberid][$multidkpid]['single'];
 			}
@@ -413,9 +413,9 @@ if ( !class_exists( "pdh_r_points" ) ) {
 			$arrToSave = array($this->points[$memberid][$multidkpid]['single']['earned'][0],
 					$this->points[$memberid][$multidkpid]['single']['spent'][0][0],
 					$this->points[$memberid][$multidkpid]['single']['adjustment'][0]);
-			
+
 			$this->pdh->put('member', 'points', array($memberid, $multidkpid, $arrToSave));
-			
+
 			//Think about a snapshot
 			if(isset($this->arrSnapshotTime[$memberid][$multidkpid])){
 				$intTime = $this->arrSnapshotTime[$memberid][$multidkpid];
@@ -423,9 +423,9 @@ if ( !class_exists( "pdh_r_points" ) ) {
 			} else {
 				$this->get_add_snapshot($memberid, $multidkpid);
 			}
-			
+
 			$this->pdh->process_hook_queue();
-			
+
 			return $this->points[$memberid][$multidkpid]['single'];
 		}
 
@@ -435,7 +435,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 			if(isset($this->points[$memberid][$multidkpid]['multi'])){
 				return $this->points[$memberid][$multidkpid]['multi'];
 			}
-			
+
 			if(!isset($this->arrCalculatedSingle[$memberid.'_'.$multidkpid])){
 				$this->calculate_single_points($memberid, $multidkpid);
 				$this->arrCalculatedSingle[$memberid.'_'.$multidkpid] = 1;
@@ -483,7 +483,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 				return $this->points[$memberid][$multidkpid]['multi'];
 			}
 		}
-		
+
 		public function get_add_snapshot($intMemberID, $intMdkpID){
 			$objQuery = $this->db->prepare("INSERT INTO __member_points :p")->set(array(
 				'time' 		=> time(),
@@ -498,22 +498,22 @@ if ( !class_exists( "pdh_r_points" ) ) {
 			))->execute();
 			$this->snapshot_mapping();
 		}
-		
+
 		public function get_latest_snapshot($intMemberID, $intMdkpID, $intTime=false){
 			if($intTime){
 				$objQuery = $this->db->prepare("SELECT * FROM __member_points WHERE member_id=? AND mdkp_id=? AND time < ? ORDER by time DESC LIMIT 1;")->execute($intMemberID, $intMdkpID, $intTime);
 			} else {
 				$objQuery = $this->db->prepare("SELECT * FROM __member_points WHERE member_id=? AND mdkp_id=? ORDER BY time DESC LIMIT 1")->execute($intMemberID, $intMdkpID);
 			}
-			
+
 			if($objQuery){
 				$arrSnapshop = $objQuery->fetchAssoc();
 				return $arrSnapshop;
 			}
-			
+
 			return false;
 		}
-		
+
 		private function snapshot_mapping(){
 			$this->arrSnapshotTime = array();
 			$objQuery = $this->db->prepare("SELECT MAX(time) as lastsnap, member_id, mdkp_id FROM __member_points GROUP BY member_id, mdkp_id DESC")->execute();
@@ -526,20 +526,20 @@ if ( !class_exists( "pdh_r_points" ) ) {
 			$this->pdc->put('pdh_points_snapshot_mapping', $this->arrSnapshotTime);
 			return $this->arrSnapshotTime;
 		}
-		
+
 		public function get_delete_from_snapshot($intTime, $arrMembers=false){
 			if($arrMembers && is_array($arrMembers)){
 				$objQuery = $this->db->prepare("DELETE FROM __member_points WHERE time > ? AND member_id :in")->in($arrMembers)->execute($intTime);
 			} else {
 				$objQuery = $this->db->prepare("DELETE FROM __member_points WHERE time > ?")->execute($intTime);
 			}
-			
-			
+
+
 			//Recalculate Mapping
 			$this->snapshot_mapping();
 			return ($objQuery) ? true : false;
 		}
-		
+
 	}//end class
 }//end if
 ?>

@@ -39,7 +39,7 @@ class Manage_Portal extends page_generic {
 			'b'	=> array('process' => 'edit_portalblock'),
 			'del_layouts' => array('process' => 'delete_portallayout',  'csrf'=>true),
 			'del_blocks' => array('process' => 'delete_portalblock',  'csrf'=>true),
-			
+
 		);
 		parent::__construct(false, $handler);
 
@@ -47,63 +47,63 @@ class Manage_Portal extends page_generic {
 		$this->user->check_auth('a_extensions_man');
 		$this->process();
 	}
-	
+
 	public function save_block(){
 		$intBlockID = $this->in->get('b', 0);
 		if ($this->in->get('name') == '') $this->edit_portalblock();
-		
+
 		if ($intBlockID){
 			$blnResult = $this->pdh->put('portal_blocks', 'update', array($intBlockID, $this->in->get('name'), $this->in->get('wide_content', 0)));
 		} else {
 			$blnResult = $this->pdh->put('portal_blocks', 'add', array($this->in->get('name'), $this->in->get('wide_content', 0)));
 		}
-		
+
 		if ($blnResult){
 			$this->core->message($this->user->lang('pk_succ_saved'), $this->user->lang('success'), 'green');
 			$this->pdh->process_hook_queue();
 			$this->display();
 		}
 	}
-	
+
 	public function delete_portallayout(){
 		$retu = array();
-	
+
 		if(count($this->in->getArray('selected_ids', 'int')) > 0) {
 			foreach($this->in->getArray('selected_ids','int') as $id) {
-	
+
 				$pos[] = stripslashes($this->pdh->get('portal_layouts', 'name', array($id)));
 				$retu[$id] = $this->pdh->put('portal_layouts', 'delete', array($id));
 			}
 		}
-	
+
 		if(!empty($pos)) {
 			$messages[] = array('title' => $this->user->lang('del_suc'), 'text' => implode(', ', $pos), 'color' => 'green');
 			$this->core->messages($messages);
 		}
-	
+
 		$this->pdh->process_hook_queue();
 	}
-	
+
 	public function delete_portalblock(){
 		$retu = array();
-	
+
 		if(count($this->in->getArray('selected_ids', 'int')) > 0) {
 			foreach($this->in->getArray('selected_ids','int') as $id) {
-	
+
 				$pos[] = stripslashes($this->pdh->get('portal_blocks', 'name', array($id)));
 				$retu[$id] = $this->pdh->put('portal_blocks', 'delete', array($id));
 			}
 		}
-	
+
 		if(!empty($pos)) {
 			$messages[] = array('title' => $this->user->lang('del_suc'), 'text' => implode(', ', $pos), 'color' => 'green');
 			$this->core->messages($messages);
 		}
-	
+
 		$this->pdh->process_hook_queue();
 	}
-	
-	
+
+
 	//Get Portal Module Settings
 	private function get_settings($id, $state='fetch_new') {
 		$module = $this->portal->get_module($id);
@@ -111,27 +111,27 @@ class Manage_Portal extends page_generic {
 		if(!empty($data)) {
 			$this->form->add_fields($data);
 		}
-		
+
 		//Custom Header title
 		$this->form->add_field('custom_header', array('type' => 'text', 'lang' => 'portal_customheader'));
-		
+
 		// Visibility - User groups
 		$drpdwn_rights = $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list')));
 		$drpdwn_rights[0] = $this->user->lang('cl_all');
 		ksort($drpdwn_rights);
 		$drpdwn_rights[PMOD_VIS_EXT] = $this->user->lang('viewing_wrapper');
-		
+
 		$visopts = array('type' => 'multiselect', 'options' => $drpdwn_rights, 'lang' => 'portalplugin_rights');
 		$portal_class = get_class($module);
 		if ($portal_class::get_data('reload_on_vis')){
 			$visopts['class'] = 'js_reload';
 		}
 		$this->form->add_field('visibility', $visopts);
-		
+
 		// Collapsable
 		$this->form->add_field('collapsable', array('type' => 'radio', 'lang' => 'portal_collapsable'));
 	}
-	
+
 	//Load Portal Module Settings
 	public function ajax_load_settings(){
 		$id = $this->in->get('id', 0);
@@ -169,21 +169,21 @@ class Manage_Portal extends page_generic {
 				}
 			}
 		}
-		
+
 		// build output array
 		$out = array();
 		// initialize form class
 		$portal_class = $this->pdh->get('portal', 'path', array($id)).'_portal';
 		$this->ajax_form->lang_prefix = $portal_class::get_data('lang_prefix');
 		$this->ajax_form->assign2tpl = false;
-			
+
 		$this->ajax_form->add_fields($data['new']);
 		$out['new'] = $this->ajax_form->output($this->config->get('pmod_'.$id));
 		$this->ajax_form->reset_fields();
 		$this->ajax_form->add_fields($data['changed']);
 		$out['changed'] = $this->ajax_form->output($this->config->get('pmod_'.$id));
 		$out['removed'] = $data['removed'];
-		
+
 		//search new settings for javascript, if there is some, force reload;
 		$arrForceReload = array('datepicker');
 		foreach ($new_settings as $key => $value){
@@ -193,7 +193,7 @@ class Manage_Portal extends page_generic {
 		echo json_encode($out);
 		exit;
 	}
-	
+
 	//Save Portal Module Settings
 	public function save_settings($displayPage = true) {
 		if($id = $this->in->get('id')){
@@ -209,14 +209,14 @@ class Manage_Portal extends page_generic {
 			$this->edit($id);
 		}
 	}
-	
+
 	// Duplicate Portal Module (create child)
 	public function duplicate(){
 		$id = $this->in->get('selected_id', 0);
 		$path = $this->pdh->get('portal', 'path', array($id));
 		$plugin = $this->pdh->get('portal', 'plugin', array($id));
 		$portal_class = $path.'_portal';
-			
+
 		// initialize form class
 		$this->portal->load_module($path, $plugin);
 
@@ -229,7 +229,7 @@ class Manage_Portal extends page_generic {
 		$this->portal->install($path, $plugin, true);
 		$this->edit_portallayout();
 	}
-	
+
 	// Delete Portal Module (child only)
 	public function delete() {
 		$id = $this->in->get('selected_id', 0);
@@ -240,23 +240,23 @@ class Manage_Portal extends page_generic {
 		$this->core->message(sprintf($this->user->lang('portal_delete_success'), $class_name::get_data('name')), $this->user->lang('success'), 'green');
 		$this->edit_portallayout();
 	}
-	
+
 	//Edit Portal Module
 	public function edit($id=false) {
 		if($id || $id = $this->in->get('id', 0)) {
 			$path = $this->pdh->get('portal', 'path', array($id));
 			$plugin = $this->pdh->get('portal', 'plugin', array($id));
 			$portal_class = $path.'_portal';
-			
+
 			// initialize form class
 			$this->portal->load_module($path, $plugin);
 			$this->form->lang_prefix = $portal_class::get_data('lang_prefix');
-				
+
 			$this->get_settings($id);
 
 			// Output the form, pass values in
 			$this->form->output($this->config->get_config('pmod_'.$id));
-			
+
 			// TODO: if an element is added, which has a js_reload, this doesnt work, some manual initializing needs to be added
 			// js for reload on input-change
 			$this->tpl->add_js("
@@ -275,7 +275,7 @@ function reload_settings(){
 					parent = $('#'+index).parent().parent().parent();
 				}
 				parent.remove();
-					
+
 				$('#visibility').parent().parent().before('<dl><dt><label>'+value.name+'</label><br /><span>'+help+'</span></dt><dd>'+value.field+'</dd></dl>');
 				if (value.type == 'multiselect'){
 					$('#'+index).multiselect({height: 200,minWidth: 200,selectedList: 5,multiple: true,});
@@ -296,7 +296,7 @@ function reload_settings(){
 				if (parenttag != 'DL'){
 					parent = $('#'+index).parent().parent().parent();
 				}
-			
+
 				parent.html('<dt><label>'+value.name+'</label><br /><span>'+help+'</span></dt><dd>'+value.field+'</dd>');
 				if (value.type == 'multiselect'){
 					$('#'+index).multiselect({height: 200,minWidth: 200,selectedList: 5,multiple: true,});
@@ -313,7 +313,7 @@ function reload_settings(){
 				if (parenttag != 'DL'){
 					parent = $('#'+index).parent().parent().parent();
 				}
-			
+
 				parent.remove();
 			});
 		}
@@ -329,14 +329,14 @@ $('.js_reload').change(reload_settings);", 'docready');
 			'display'			=> true
 		));
 	}
-	
+
 	//Save Portal Layout
 	public function save() {
 		$intLayoutID = $this->in->get('l', 0);
 		$strName = $this->in->get('name');
 		$arrBlocks = $this->in->getArray('portal_blocks', 'string');
 		$arrRoutes = $this->in->getArray('portal_routes', 'string');
-		
+
 		$arrBlockModules = array();
 
 		foreach($this->in->getArray('pos', 'string') as $intModuleID => $strBlock) {
@@ -349,26 +349,26 @@ $('.js_reload').change(reload_settings);", 'docready');
 		} else {
 			$blnResult = $this->pdh->put('portal_layouts', 'add', array($strName, $arrBlocks, $arrBlockModules, $arrRoutes));
 		}
-		
+
 		if($blnResult) {
 			$this->core->message($this->user->lang('portal_saved'), $this->user->lang('success'), 'green');
 		} else {
 			$this->core->message($this->user->lang('portal_not_saved'), $this->user->lang('error'), 'red');
 		}
-		
+
 		$this->pdh->process_hook_queue();
 		$this->edit_portallayout();
 	}
-	
+
 	//Edit Portal Layout
 	public function edit_portallayout() {
 		// Install the portal modules if required
 		$portal_module = $this->portal->get_all_modules();
-		
+
 		$intLayoutID = $this->in->get('l', 0);
 		$arrUsedBlocks = ($intLayoutID) ? $this->pdh->get('portal_layouts', 'blocks', array($intLayoutID)) : array('left', 'right', 'middle', 'bottom');
 		$arrUsedBlockModules = ($intLayoutID) ? $this->pdh->get('portal_layouts', 'modules', array($intLayoutID)) : array();
-		
+
 		$arrSortIDs = array();
 		foreach($arrUsedBlockModules as $strBlock => $arrModules){
 			foreach($arrModules as $sortID => $intModuleID){
@@ -378,7 +378,7 @@ $('.js_reload').change(reload_settings);", 'docready');
 		}
 
 		$arrBlocksIDList = $this->pdh->get('portal_blocks', 'id_list');
-		
+
 
 		$filter = array();
 		if($this->in->exists('fvisibility') && $this->in->get('fvisibility', 0) !== 0) $filter['visibility'] = $this->in->get('fvisibility', 0);
@@ -388,15 +388,15 @@ $('.js_reload').change(reload_settings);", 'docready');
 		foreach($arrModuleIDs as $intModuleID){
 			$arrSort[] = (isset($arrSortIDs[$intModuleID])) ? $arrSortIDs[$intModuleID] : PMOD_VIS_EXT;
 		}
-		
+
 		array_multisort($arrSort, SORT_ASC, SORT_NUMERIC, $arrModuleIDs);
-			
+
 		$modules = $this->pdh->aget('portal', 'path', 0, array($arrModuleIDs), true);
-		
+
 		$filter_rights = $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list')));
 		$filter_rights[0] = $this->user->lang('portalplugin_filter3_all');
 		ksort($filter_rights);
-		
+
 		$arrModulesForOwnBlocks = array();
 		foreach($modules as $id => $data) {
 			$path = $data['path'];
@@ -413,7 +413,7 @@ $('.js_reload').change(reload_settings);", 'docready');
 			$data['desc'] = ($this->user->lang($path.'_desc')) ? $this->user->lang($path.'_desc') : $portalinfos['description'];
 			$data['desc'] .= "<br />".$this->user->lang('portalplugin_version').": ".$portalinfos['version']."<br />".$this->user->lang('portalplugin_author').": ".$portalinfos['author'];
 			$pdata = $this->pdh->get('portal', 'portal', array($id));
-			
+
 			$data['tpl_posi'] = 'disabled';
 			if (isset($arrUsedModules[$id])){
 				if (in_array($arrUsedModules[$id], array('left', 'right', 'bottom', 'middle'))){
@@ -431,7 +431,7 @@ $('.js_reload').change(reload_settings);", 'docready');
 			}else{
 				$icon = 'fa-info-circle';
 			}
-			
+
 			// Build Permission Info
 			$arrGroups = $this->config->get('visibility', 'pmod_'.$id);
 			$arrGroupsOut = array();
@@ -440,9 +440,9 @@ $('.js_reload').change(reload_settings);", 'docready');
 			}
 			//if (count($arrGroupsOut) === 0) $arrGroupsOut[] = $filter_rights[0];
 			$data['perms'] = $arrGroupsOut;
-			
+
 			// start the description text
-			$data['desc']		= (string) new htooltip('mptt_'.$id, array('content' => $data['desc'], 'label' => $this->core->icon_font($icon, 'fa-lg')));
+			$data['desc']		= (string) (new htooltip('mptt_'.$id, array('content' => $data['desc'], 'label' => $this->core->icon_font($icon, 'fa-lg'))))->output();
 			$data['multiple']	= ($portalinfos['multiple'] && !$pdata['child']) ? true : false;
 			if ($portalinfos['multiple']) {
 				$portal_module[$id]->output();
@@ -483,18 +483,18 @@ $('.js_reload').change(reload_settings);", 'docready');
 				'S_CHILD'		=> $data['child'],
 				'PERMISSIONS'	=> implode('<br />', $data['perms'])
 			);
-			
+
 			if ($data['tpl_posi'] == 'later'){
 				$tpl_data['POS'] = $arrUsedModules[$id];
 				$arrModulesForOwnBlocks[$arrUsedModules[$id]][] = $tpl_data;
 			} else {
 				$this->tpl->assign_block_vars($data['tpl_posi'].'_row', $tpl_data);
 			}
-			
+
 		}
 		$this->portal->init_portalsettings();
 		$this->confirm_delete($this->user->lang('portal_delete_warn'), 'manage_portal.php'.$this->SID.'&del=true&l='.$intLayoutID, true, array('function' => 'delete_portal'));
-		
+
 		$arrBlockList = array(
 			'left'		=> $this->user->lang('portalplugin_left'),
 			'middle'	=> $this->user->lang('portalplugin_middle'),
@@ -504,7 +504,7 @@ $('.js_reload').change(reload_settings);", 'docready');
 		foreach($this->pdh->get('portal_blocks', 'id_list') as $intBlockID){
 			$arrBlockList['block'.$intBlockID] = $this->pdh->get('portal_blocks', 'name', array($intBlockID));
 		}
-		
+
 		$this->add_js(array_keys($arrBlockList));
 		//Bring Blocks to template
 		foreach($this->pdh->get('portal_blocks', 'id_list') as $intBlockID){
@@ -513,14 +513,14 @@ $('.js_reload').change(reload_settings);", 'docready');
 				'NAME'		=> $this->pdh->get('portal_blocks', 'name', array($intBlockID)),
 				'S_HIDDEN'	=> (!in_array('block'.$intBlockID, $arrUsedBlocks)),
 			));
-			
+
 			if (isset($arrModulesForOwnBlocks['block'.$intBlockID])){
 				foreach($arrModulesForOwnBlocks['block'.$intBlockID] as $tpl_data){
 					$this->tpl->assign_block_vars('block_row.module_row', $tpl_data);
 				}
 			}
 		}
-		
+
 		$arrAllRoutes = array_flip($this->routing->getRoutes());
 		$arrAllRoutes = array_merge($arrAllRoutes, array('startpage' => 'startpage'));
 		$mineRoutes = (($intLayoutID) ? $this->pdh->get('portal_layouts', 'routes', array($intLayoutID)) : array());
@@ -532,7 +532,7 @@ $('.js_reload').change(reload_settings);", 'docready');
 		foreach($mineRoutes as $key => $val){
 			$arrRoutes[$val] = $val;
 		}
-		
+
 		$this->tpl->assign_vars(array(
 				'NAME'				=> ($intLayoutID) ? $this->pdh->get('portal_layouts', 'name', array($intLayoutID)) : '',
 				'MS_PORTAL_BLOCKS'	=> $this->jquery->MultiSelect('portal_blocks', $arrBlockList, (($intLayoutID) ? $this->pdh->get('portal_layouts', 'blocks', array($intLayoutID)) : array('left', 'right', 'middle', 'bottom')), array('width' => 300)),
@@ -545,7 +545,7 @@ $('.js_reload').change(reload_settings);", 'docready');
 				'EMBEDD_URL'		=> $this->env->link,
 				'EMBEDD_RANDOM'		=> substr(md5($this->config->get('cookie_name')), 0, 6),
 		));
-		
+
 		$this->jquery->Dialog('portalsettings', $this->user->lang('portalplugin_winname'), array('url'=>$this->root_path."admin/manage_portal.php".$this->SID."&simple_head=true&reload=1&id='+moduleid+'", 'width'=>'660', 'height'=>'400', 'withid'=>'moduleid', 'onclosejs' => '$("#save").click();'));
 		$this->jquery->Dialog('add_portalmodule', $this->user->lang('add_portal_module'), array('url'=>$this->root_path."admin/manage_extensions.php".$this->SID."&simple_head=true&show_only=3", 'width'=>'750', 'height'=>'600', 'onclosejs' => '$("#save").click();'));
 		$this->tpl->add_css(".portal_disabled { float:left; margin-left: 4px; width:230px; min-height: 16px;}");
@@ -555,7 +555,7 @@ $('.js_reload').change(reload_settings);", 'docready');
 			'display'			=> true)
 		);
 	}
-	
+
 	public function edit_portalblock(){
 		$intBlockID = $this->in->get('b', 0);
 		if ($intBlockID){
@@ -572,14 +572,14 @@ $('.js_reload').change(reload_settings);", 'docready');
 				'display'			=> true)
 		);
 	}
-	
+
 	//Display Layout and Block List
 	public function display(){
 		$this->jquery->Tab_header('portal_tabs');
-		
+
 		//Portal Layouts
 		$view_list = $this->pdh->get('portal_layouts', 'id_list', array());
-		
+
 		$hptt_page_settings = array(
 				'name'				=> 'hptt_admin_manage_portal_layouts_list',
 				'table_main_sub'	=> '%layout_id%',
@@ -597,21 +597,21 @@ $('.js_reload').change(reload_settings);", 'docready');
 						array('name' => 'portal_layout_usedby',		'sort' => true, 'th_add' => ' class="hiddenSmartphone"', 'td_add' => ' class="hiddenSmartphone"'),
 				),
 		);
-		
+
 		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => 'manage_portal.php', '%link_url_suffix%' => '&amp;upd=true'));
 		$sort_suffix = '?sort='.$this->in->get('sort');
 
 		$this->confirm_delete($this->user->lang('confirm_delete_articles'));
-		
+
 		$this->tpl->assign_vars(array(
 				'LAYOUT_LIST' 					=> $hptt->get_html_table($this->in->get('sort'),false,null,1,false,true, array('portal_layouts', 'checkbox_check')),
 				'HPTT_LAYOUT_LIST_COLUMN_COUNT'	=> $hptt->get_column_count(),
 				'LAYOUT_COUNT'					=> count($view_list),
 		));
-		
+
 		//Portal blocks
 		$view_list = $this->pdh->get('portal_blocks', 'id_list', array());
-		
+
 		$hptt_page_settings = array(
 				'name'				=> 'hptt_admin_manage_portal_block_list',
 				'table_main_sub'	=> '%block_id%',
@@ -630,16 +630,16 @@ $('.js_reload').change(reload_settings);", 'docready');
 						array('name' => 'portal_block_usedby','sort' => true, 'th_add' => ' class="hiddenSmartphone"', 'td_add' => ' class="hiddenSmartphone"'),
 				),
 		);
-		
+
 		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => 'manage_portal.php', '%link_url_suffix%' => '&amp;upd=true'));
 		$sort_suffix = '?sort='.$this->in->get('sort');
-		
+
 		$this->tpl->assign_vars(array(
 				'BLOCK_LIST' 					=> $hptt->get_html_table($this->in->get('sort'),false,null,1,false),
 				'HPTT_BLOCK_LIST_COLUMN_COUNT'	=> $hptt->get_column_count(),
 				'BLOCK_COUNT'					=> count($view_list),
 		));
-		
+
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('portalplugin_management'),
 			'template_file'		=> 'admin/manage_portal.html',
@@ -657,7 +657,7 @@ $('.js_reload').change(reload_settings);", 'docready');
 					receive: function(event, ui){
 						var classI = $(ui.item).attr("class").toString();
 						var pos = $(ui.item).parents().attr("id");
-			
+
 						if (pos == "disabled"){$(ui.item).addClass("portal_disabled");}else{$(ui.item).removeClass("portal_disabled");};
 
 						var id = $(ui.item).attr("id");

@@ -31,7 +31,7 @@ class user extends gen_class {
 	 */
 	//Without: auth_account, custom_fields, plugin_settings, privacy_settings, notifications
 	public static $normalUserTableFields = array('user_id', 'username', 'user_password', 'user_email', 'user_login_key', 'user_rlimit', 'user_date_time',
-			'user_date_short', 'user_date_long', 'user_style', 'user_lang', 'user_timezone', 'user_email_confirmkey', 'user_lastvisit', 'user_lastpage', 
+			'user_date_short', 'user_date_long', 'user_style', 'user_lang', 'user_timezone', 'user_email_confirmkey', 'user_lastvisit', 'user_lastpage',
 			'user_registered', 'user_active', 'user_email_confirmed', 'country', 'gender', 'birthday', 'rules', 'failed_login_attempts', 'exchange_key',
 			'hide_nochar_info', 'awaymode_enabled', 'awaymode_startdate', 'awaymode_enddate', 'awaymode_note', 'user_temp_email',
 	);
@@ -374,7 +374,7 @@ class user extends gen_class {
 			unset($this->user->data['hooks']);
 		}
 	}
-	
+
 
 	public function updateAutologinKey($intUserID, $strAutologinKey){
 		$objQuery = $this->db->prepare('UPDATE __users :p WHERE user_id=?')->set(array(
@@ -695,7 +695,7 @@ class user extends gen_class {
 				$settingsdata['notifications']['notifications']['ntfy_'.$strNotificationType] = array(
 						'type'		=> 'dropdown',
 						'options'	=> $arrNotificationMethods,
-						'text_after'=> new hmultiselect('ntfy_comment_new_article_categories', array('options' => $arrCategories, 'default'	=> array_keys($arrCategories), 'value' => $arrNotificationSettings['ntfy_comment_new_article_categories'])).'<br />',
+						'text_after'=> (new hmultiselect('ntfy_comment_new_article_categories', array('options' => $arrCategories, 'default'	=> array_keys($arrCategories), 'value' => $arrNotificationSettings['ntfy_comment_new_article_categories'])))->output().'<br />',
 				);
 			} else {
 				$settingsdata['notifications']['notifications']['ntfy_'.$strNotificationType] = array(
@@ -738,7 +738,7 @@ class user extends gen_class {
 				),
 			),
 		);
-		
+
 		//Avatar Providers
 		$arrAllowed = register('config')->get('avatar_allowed');
 		$arrAvatarProviders = register('user')->getAvatarProviders(true);
@@ -753,10 +753,10 @@ class user extends gen_class {
 				}
 			}
 		}
-		
+
 		$settingsdata['profile']['user_avatar']['user_avatar_type']['options'] = $arrAvatarOptions;
 		$settingsdata['profile']['user_avatar']['user_avatar_type']['dependency'] = $arrAvatarDependencies;
-		
+
 		return $settingsdata;
 	}
 
@@ -801,14 +801,14 @@ class user extends gen_class {
 		}
 		return "";
 	}
-	
+
 	/**
 	 * Returns all available Avatar Providers, including their Settings
 	 */
 	public function getAvatarProviders($blnForUsersettings=false){
 		$arrAvatarProviders = array(
 			'eqdkp' => array(
-				'name' => ($blnForUsersettings) ? $this->user->lang('user_avatar_type_own') : 'EQdkp Plus',	
+				'name' => ($blnForUsersettings) ? $this->user->lang('user_avatar_type_own') : 'EQdkp Plus',
 			),
 			'gravatar' => array(
 				'name' 		=> $this->user->lang('user_avatar_type_gravatar'),
@@ -820,14 +820,14 @@ class user extends gen_class {
 				),
 			),
 		);
-		
+
 		if($this->hooks->isRegistered('avatar_provider')){
 			$arrHookProviders = $this->hooks->process('avatar_provider', array('for_usersettings' => $blnForUsersettings), false);
 			foreach($arrHookProviders as $val){
-				if(is_array($val)) $arrAvatarProviders = array_merge($arrAvatarProviders, $val);	
+				if(is_array($val)) $arrAvatarProviders = array_merge($arrAvatarProviders, $val);
 			}
 		}
-		
+
 		return $arrAvatarProviders;
 	}
 

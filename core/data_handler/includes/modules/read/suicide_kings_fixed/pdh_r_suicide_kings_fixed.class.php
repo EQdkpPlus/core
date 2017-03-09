@@ -43,7 +43,7 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 			'sk_fixed_position_all'	=> array('position', array('%member_id%', '%ALL_IDS%', '%with_twink%'), array('%ALL_IDS%', true, true)),
 			'sk_fixed_position'		=> array('position', array('%member_id%', '%dkp_id%', '%with_twink%'), array('%dkp_id%')),
 		);
-		
+
 		public $detail_twink = array(
 			'position' => 'summed_up',
 		);
@@ -64,15 +64,15 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 			$member_list = $this->pdh->get('member', 'id_list');
 			$member2main = $this->pdh->aget('member', 'mainid', 0, array($member_list));
 			$main2member = $this->pdh->aget('member', 'other_members', 0, array(array_unique($member2main)));
-			
+
 			$arrMembers = $this->pdh->sort($this->pdh->get('member', 'id_list', array(false, false)), 'member', 'creation_date', 'asc');
-			
+
 			// mdkp2event list
 			$mdkplist = $this->pdh->aget('multidkp', 'event_ids', 0, array($this->pdh->get('multidkp',  'id_list', array())));
 			// raid-event list sorted by date
 			$raid_ids = $this->pdh->sort($this->pdh->get('raid', 'id_list'), 'raid', 'date', 'asc');
 			$raidlist = $this->pdh->maget(array('raid', 'raid', 'item'), array('event', 'raid_attendees', 'itemsofraid'), 0, array($raid_ids));
-			
+
 			foreach($mdkplist as $mdkp_id => $events) {
 				$member_list = $main_list = array();
 				// initialise list
@@ -81,7 +81,7 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 					shuffle($arrMembers);
 					$this->config->set('sk_fix_startlist_'.$mdkp_id, $arrMembers);
 				}
-				
+
 				foreach($startList as $intMemberID){
 					if (in_array($intMemberID, $arrMembers)){
 						$member_list[] = $intMemberID;
@@ -99,9 +99,9 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 				}
 				$member_list = array_flip($member_list);
 				$main_list = array_flip($main_list);
-				
+
 				$arrItempools = $this->pdh->get('multidkp', 'itempool_ids', array($mdkp_id));
-				
+
 				if(!isset($this->sk_list['multi'][$mdkp_id])) $this->sk_list['multi'][$mdkp_id] = $main_list;
 				if(!isset($this->sk_list['single'][$mdkp_id])) $this->sk_list['single'][$mdkp_id] = $member_list;
 				// iterate through raids
@@ -139,7 +139,7 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 						//Ignore Items from different Itempool in this raid
 						$itempool_id = $this->pdh->get('item', 'itempool_id', array($itemid));
 						if(!in_array($itempool_id, $arrItempools)) continue;
-						
+
 						$key = array_search($memberid, $temp_list['single']);
 						unset($temp_list['single'][$key]);
 						$temp_list['single'][] = $memberid;
@@ -181,7 +181,7 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 				$tooltip = $this->user->lang('events').": <br />";
 				$events = $this->pdh->get('multidkp', 'event_ids', array($mdkpid));
 				if(is_array($events)) foreach($events as $event_id) $tooltip .= $this->pdh->get('event', 'name', array($event_id))."<br />";
-				$text = new htooltip('tt_event'.$event_id, array_merge(array('content' => $tooltip, 'label' => $text), $tt_options));
+				$text = (new htooltip('tt_event'.$event_id, array_merge(array('content' => $tooltip, 'label' => $text), $tt_options)))->output();
 			}
 			return $text;
 		}

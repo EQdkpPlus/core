@@ -26,7 +26,7 @@ if ( !defined('EQDKP_INC') ){
 if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 	class pdh_r_suicide_kings extends pdh_r_generic{
 		public static $shortcuts = array('apa' => 'auto_point_adjustments');
-		
+
 		public $default_lang = 'english';
 		public $sk_list;
 
@@ -49,8 +49,8 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 			$this->pdc->del('pdh_suicide_kings_table');
 			unset($this->sk_list);
 		}
-		
-		
+
+
 		public function init(){
 			//cached data not outdated?
 			$this->sk_list = $this->pdc->get('pdh_suicide_kings_table');
@@ -65,7 +65,7 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 					shuffle($arrMembers);
 					$this->config->set('sk_startlist_'.$mdkp_id, $arrMembers);
 				}
-				
+
 				foreach($startList as $intMemberID){
 					if (in_array($intMemberID, $arrMembers)){
 						$member_hash['single'][] = $intMemberID;
@@ -87,11 +87,11 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 					$this->sk_list['multi'][$mdkp_id][$member_id] = ++$pos;
 				}
 			}
-			
+
 			//now the fun begins
 			$item_list = $this->pdh->get('item', 'id_list');
 			usort($item_list, array(&$this, "sort_item_list"));
-			
+
 			foreach($item_list as $item_id){
 				$tmp_buyer = $this->pdh->get('item', 'buyer', array($item_id));
 				$buyer = $this->pdh->get('member', 'mainid', array($tmp_buyer));
@@ -100,19 +100,19 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 				foreach($tmp_raid_attendees as $key => $value){
 					$raid_attendees[] = $this->pdh->get('member', 'mainid', array($value));
 				}
-						
+
 				//this is really bad, because the buyer didn't attend the raid!
 				//shouldnt need to be in here
 				if(!in_array($buyer, $raid_attendees)){
 					$raid_attendees[] = $buyer;
 				}
 				$raid_attendees = array_unique($raid_attendees);
-		
+
 				$itempool_id = $this->pdh->get('item', 'itempool_id', array($item_id));
 				foreach($this->pdh->get('multidkp',  'mdkpids4itempoolid', array($itempool_id)) as $mdkp_id){
 					$buyer_pos = $this->sk_list['multi'][$mdkp_id][$buyer];
 					$last_pos = -1;
-		
+
 					//find buyer position and last position of raid attendee
 					$att_pos = array();
 					foreach($raid_attendees as $member_id){
@@ -122,7 +122,7 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 						}
 					}
 					asort($att_pos);
-		
+
 					$prev_it_pos = -1;
 					//now we need to reorganize our list.
 					foreach($att_pos as $member_id => $pos){
@@ -138,13 +138,13 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 							$prev_it_pos = $pos;
 						}
 					}
-		
+
 				}
 			}
-			
-			
+
+
 			//No twinks (all chars)
-		
+
 			foreach($this->pdh->get('multidkp',  'id_list', array()) as $mdkp_id){
 				foreach($member_hash['single'] as $pos => $member_id){
 					$this->sk_list['single'][$mdkp_id][$member_id] = ++$pos;
@@ -153,23 +153,23 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 			//now the fun begins
 			$item_list = $this->pdh->get('item', 'id_list');
 			usort($item_list, array(&$this, "sort_item_list"));
-			
+
 			foreach($item_list as $item_id){
 				$buyer = $this->pdh->get('item', 'buyer', array($item_id));
 				$raid_id = $this->pdh->get('item', 'raid_id', array($item_id));
 				$raid_attendees = $this->pdh->get('raid', 'raid_attendees', array($raid_id));
-		
+
 				//this is really bad, because the buyer didn't attend the raid!
 				//shouldnt need to be in here
 				if(!in_array($buyer, $raid_attendees)){
 					$raid_attendees[] = $buyer;
 				}
-		
+
 				$itempool_id = $this->pdh->get('item', 'itempool_id', array($item_id));
 				foreach($this->pdh->get('multidkp',  'mdkpids4itempoolid', array($itempool_id)) as $mdkp_id){
 					$buyer_pos = $this->sk_list['single'][$mdkp_id][$buyer];
 					$last_pos = -1;
-		
+
 					//find buyer position and last position of raid attendee
 					$att_pos = array();
 					foreach($raid_attendees as $member_id){
@@ -179,7 +179,7 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 						}
 					}
 					asort($att_pos);
-		
+
 					$prev_it_pos = -1;
 					//now we need to reorganize our list.
 					foreach($att_pos as $member_id => $pos){
@@ -195,7 +195,7 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 							$prev_it_pos = $pos;
 						}
 					}
-		
+
 				}
 			}
 
@@ -213,19 +213,19 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 			}
 			return $this->sk_list[$with_twink][$multidkp_id][$member_id];
 		}
-		
+
 		public function get_html_caption_position($mdkpid, $showname = false, $showtooltip = false, $tt_options = array()){
 			if($showname){
 				$text = $this->pdh->get('multidkp', 'name', array($mdkpid));
 			}else{
 				$text = $this->pdh->get_lang('points', 'current');
 			}
-	
+
 			if($showtooltip){
 				$tooltip = $this->user->lang('events').": <br />";
 				$events = $this->pdh->get('multidkp', 'event_ids', array($mdkpid));
 				if(is_array($events)) foreach($events as $event_id) $tooltip .= $this->pdh->get('event', 'name', array($event_id))."<br />";
-				$text = new htooltip('tt_event'.$event_id, array_merge(array('content' => $tooltip, 'label' => $text), $tt_options));
+				$text = (new htooltip('tt_event'.$event_id, array_merge(array('content' => $tooltip, 'label' => $text), $tt_options)))->output();
 			}
 			return $text;
 		}

@@ -51,10 +51,10 @@ class Manage_Users extends page_generic {
 		parent::__construct(false, $handler, array('user', 'name'), null, 'user_id[]');
 		$this->process();
 	}
-	
+
 	public function bulk_unlock(){
 		$user_ids = $this->in->getArray('user_id', 'int');
-		
+
 		foreach($user_ids as $intUserID){
 			$this->pdh->put('user', 'activate', array($intUserID, 1));
 		}
@@ -62,10 +62,10 @@ class Manage_Users extends page_generic {
 		$this->pdh->process_hook_queue();
 		$this->display();
 	}
-	
+
 	public function bulk_lock(){
 		$user_ids = $this->in->getArray('user_id', 'int');
-	
+
 		foreach($user_ids as $intUserID){
 			$this->pdh->put('user', 'activate', array($intUserID, 0));
 		}
@@ -73,30 +73,30 @@ class Manage_Users extends page_generic {
 		$this->pdh->process_hook_queue();
 		$this->display();
 	}
-	
+
 	public function bulk_activate(){
 		$user_ids = $this->in->getArray('user_id', 'int');
-		
+
 		foreach($user_ids as $intUserID){
 			$this->pdh->put('user', 'confirm_email', array($intUserID, 1));
 		}
 		$this->core->message($this->user->lang('bulk_user_activate_success'), $this->user->lang('success'), 'green');
-		
-		
+
+
 		$this->pdh->process_hook_queue();
 		$this->display();
 	}
-	
+
 	public function bulk_confirmemail(){
 		$user_ids = $this->in->getArray('user_id', 'int');
 		$email = registry::register('MyMailer');
-	
+
 		foreach($user_ids as $intUserID){
 			$this->pdh->put('user', 'confirm_email', array($intUserID, 0));
 			//Send the User an Email with activation link
 			$user_key = $this->pdh->put('user', 'create_new_activationkey', array($intUserID));
 			$username = $this->pdh->get('user', 'name', array($intUserID));
-				
+
 			// Email them their new key
 			$bodyvars = array(
 					'USERNAME'		=> $username,
@@ -108,7 +108,7 @@ class Manage_Users extends page_generic {
 		$this->pdh->process_hook_queue();
 		$this->display();
 	}
-	
+
 
 	public function send_new_pw(){
 		$pwkey = $this->pdh->put('user', 'create_new_activationkey', array($this->in->get('u')));
@@ -150,7 +150,7 @@ class Manage_Users extends page_generic {
 		$this->pdh->process_hook_queue();
 		$this->display();
 	}
-	
+
 	public function activate(){
 		$this->pdh->put('user', 'confirm_email', array($this->in->get('u'), 1));
 		$username = $this->pdh->get('user', 'name', array($this->in->get('u')));
@@ -158,14 +158,14 @@ class Manage_Users extends page_generic {
 		$this->pdh->process_hook_queue();
 		$this->display();
 	}
-	
+
 	public function force_email_confirm(){
 		$userid = $this->in->get('u', 0);
 		$this->pdh->put('user', 'confirm_email', array($userid, 0));
 		//Send the User an Email with activation link
 		$user_key = $this->pdh->put('user', 'create_new_activationkey', array($userid));
 		$username = $this->pdh->get('user', 'name', array($this->in->get('u')));
-		
+
 		// Email them their new key
 		$email = registry::register('MyMailer');
 		$bodyvars = array(
@@ -173,39 +173,39 @@ class Manage_Users extends page_generic {
 				'U_ACTIVATE'	=> $this->env->link.$this->controller_path_plain.'Register/Activate/?key=' . $user_key,
 		);
 		$email->SendMailFromAdmin($this->pdh->get('user', 'email', array($userid)), $this->user->lang('email_subject_email_confirm'), 'user_email_confirm.html', $bodyvars);
-			
-		
+
+
 		$this->core->message(sprintf($this->user->lang('user_force_emailconfirm_success'), sanitize($username)), $this->user->lang('success'), 'green');
 		$this->pdh->process_hook_queue();
 		$this->display();
 	}
-	
-	
+
+
 	public function resolve_permissions(){
 		$intUserID = $this->in->get('u', 0);
 		$strUsername = $this->pdh->get('user', 'name', array($intUserID));
-		
+
 		// Build the user permissions
 		$user_permissions = $this->acl->get_permission_boxes();
 		// Add plugin checkboxes to our array
 		$this->pm->generate_permission_boxes($user_permissions);
-		
+
 		//Get group-memberships of the user
 		$defaultGroup = $this->pdh->get('user_groups', 'standard_group', array());
 		$memberships = $this->acl->get_user_group_memberships($intUserID);
-		
+
 		foreach ( $user_permissions as $group => $checks ){
-		
+
 			$this->tpl->assign_block_vars('permissions_row', array(
 					'GROUP' => $group,
 			));
-		
+
 			$icon = (isset($checks['icon'])) ? $this->core->icon_font($checks['icon']) : '';
-		
+
 			$a_set = $u_set = false;
 			foreach ( $checks as $data ){
 				if (!is_array($data)) continue;
-		
+
 				switch (substr($data['CBNAME'], 0, 2)){
 					case 'a_': if (!$a_set){
 						$this->tpl->assign_block_vars('a_permissions_row', array(
@@ -215,7 +215,7 @@ class Manage_Users extends page_generic {
 						$a_set = true;
 					}
 					break;
-		
+
 					case 'u_': if (!$u_set){
 						$this->tpl->assign_block_vars('u_permissions_row', array(
 								'GROUP' => $group,
@@ -224,10 +224,10 @@ class Manage_Users extends page_generic {
 						$u_set = true;
 					}
 					break;
-		
+
 				}
-		
-		
+
+
 				if ($this->user->check_auth($data['CBNAME'], false, $intUserID, false)){
 					$perm = "user";
 				}elseif (!$this->user->check_auth($data['CBNAME'], false, $intUserID, false) && $this->user->check_auth($data['CBNAME'], false, $intUserID) == true){
@@ -235,7 +235,7 @@ class Manage_Users extends page_generic {
 				}else{
 					$perm = false;
 				}
-		
+
 				$this->tpl->assign_block_vars(substr($data['CBNAME'], 0, 2).'permissions_row.check_group', array(
 						'CBNAME'			=> $data['CBNAME'],
 						'STATUSICON'		=> ( $perm != false ) ? ' <i class="fa fa-check positive fa-lg"></i> ' : '<i class="fa fa-times negative fa-lg"></i> ',
@@ -246,36 +246,36 @@ class Manage_Users extends page_generic {
 				));
 			}
 		}
-		
-		
+
+
 		$arrCategoryIDs = $this->pdh->sort($this->pdh->get('article_categories', 'id_list', array()), 'article_categories', 'sort_id', 'asc');
 		$arrCategories = array();
 		foreach($arrCategoryIDs as $caid){
 			$arrCategories[$caid] = $this->pdh->get('article_categories', 'name_prefix', array($caid)).$this->pdh->get('article_categories', 'name', array($caid));
 		}
-		
+
 		$this->tpl->assign_block_vars('articelcat_row', array(
 				'GROUP' => $this->user->lang('article'),
 				'ICON'	=> $this->core->icon_font('fa-file-text'))
 				);
-		
+
 		$grps = array('rea', 'cre', 'upd', 'del', 'chs');
-		
+
 		foreach($grps as $group_id){
 			$this->tpl->assign_block_vars('articelcat_row.headline_row', array(
 					'GROUP'	=> $this->user->lang('perm_'.$group_id),
 			));
 		}
-		
+
 		foreach($arrCategories as $intCategoryID => $strCategoryName){
 			$this->tpl->assign_block_vars('articelcat_row.check_group', array(
 					'CBNAME'		=> $strCategoryName,
 					'S_ADMIN'		=> false
 			));
-				
+
 			$arrPermissions = $this->pdh->get('article_categories', 'permissions', array($intCategoryID));
 			$intParent = $this->pdh->get('article_categories', 'parent', array($intCategoryID));
-			
+
 			$arrUserPermissions = $this->pdh->get('article_categories', 'user_permissions', array($intCategoryID, $intUserID));
 			foreach($grps as $group_id){
 				switch($group_id){
@@ -292,27 +292,27 @@ class Manage_Users extends page_generic {
 				}
 				$blnResult = $arrUserPermissions[$strPerm];
 				$out = ($blnResult) ?  '<i class="fa fa-check positive fa-lg"></i>' : '<i class="fa fa-times negative fa-lg"></i>';
-		
+
 				$this->tpl->assign_block_vars('articelcat_row.check_group.group_row', array(
 						'STATUS'	=> $out,
 				));
 			}
 		}
-		
+
 		$this->tpl->assign_vars(array(
-			'THIS_USERNAME' => $strUsername,	
+			'THIS_USERNAME' => $strUsername,
 		));
-		
+
 		$this->jquery->Tab_header('permission_tabs');
-		
+
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('user_resolve_perms').': '.$strUsername,
 			'template_file'		=> 'admin/manage_users_resolveperms.html',
 			'display'			=> true)
 		);
 	}
-	
-	
+
+
 
 	public function overtake_permissions(){
 		if ($this->user->check_group(2, false) || ($this->user->check_auth('a_users_perms') && !$this->user->check_group(2, false, $this->in->get('u', 0)))){
@@ -484,7 +484,7 @@ class Manage_Users extends page_generic {
 			foreach($values as $name => $value) {
 				if(in_array($name, $ignore)) continue;
 				if (strpos($name, "auth_account_") === 0) continue;
-				
+
 				if(strpos($name, "priv_") === 0){
 					$privArray[$name] = $value;
 				}elseif(strpos($name, "ntfy_") === 0){
@@ -670,7 +670,7 @@ class Manage_Users extends page_generic {
 				$user_active = '<i class="eqdkp-icon-offline"></i>';
 				$activate_icon = '<a href="manage_users.php'.$this->SID.'&amp;mode=unlock&amp;u='.$user_id.'&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('unlock').'"><i class="fa fa-lock fa-lg icon-color-red"></i></a>';
 			}
-			
+
 			if($this->pdh->get('user', 'email_confirmed', array($user_id)) > 0) {
 				$user_mail_confirmed_icon = '<a href="manage_users.php'.$this->SID.'&amp;mode=forceemail&amp;u='.$user_id.'&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('confirm_email').'"><i class="fa fa-check-square-o fa-lg icon-color-green"></i></a>';
 			} else {
@@ -709,7 +709,7 @@ class Manage_Users extends page_generic {
 						'CLASS'			=> $this->jquery->sanitize($member['classid']),
 						'NAME'			=> $this->jquery->sanitize($member['name']),
 						'RANK'			=> $this->jquery->sanitize($member['rankname']),
-						'RADIO'			=> $this->jquery->sanitize(new hradio('mainchar_'.$user_id, array('options' => array($member_id=>''), 'value' => $this->pdh->get('member', 'mainid', array($member_id)), 'class' => 'cmainradio', 'nodiv' => true, 'js' => 'onchange="change_mainchar('.$user_id.', '.$member_id.')"'))),
+						'RADIO'			=> $this->jquery->sanitize((new hradio('mainchar_'.$user_id, array('options' => array($member_id=>''), 'value' => $this->pdh->get('member', 'mainid', array($member_id)), 'class' => 'cmainradio', 'nodiv' => true, 'js' => 'onchange="change_mainchar('.$user_id.', '.$member_id.')"')))->output()),
 					));
 				}
 			}
@@ -761,7 +761,7 @@ class Manage_Users extends page_generic {
 						'name'	=> 'bulk_confirmemail',
 				),
 		);
-		
+
 		$this->tpl->assign_vars(array(
 			// Sorting
 			'O_USERNAME'			=> ($this->in->get('o', '0.0') == '0.0') ? '0.1' : '0.0',
@@ -780,7 +780,7 @@ class Manage_Users extends page_generic {
 			'U_MANAGE_USERS'	=> 'manage_users.php' . $this->SID . '&amp;start=' . $start . '&amp;',
 			'LISTUSERS_COUNT'	=> $total_users,
 			'BUTTON_MENU'		=> $this->core->build_dropdown_menu($this->user->lang('selected_user').'...', $arrMenuItems, '', 'manage_users_menu', array("input[name=\"user_id[]\"]")),
-				
+
 			'USER_PAGINATION'		=> generate_pagination('manage_users.php'.$this->SID.'&amp;o='.$this->in->get('o'), $total_users, 100, $start))
 		);
 
@@ -955,7 +955,7 @@ class Manage_Users extends page_generic {
 
 			'USER_GROUP_SELECT'			=> $this->jquery->MultiSelect('user_groups', $usergroups, array_keys($memberships), array('width' => 400, 'height' => 250, 'filter' => true, 'todisable' => $todisable)),
 			'JS_CONNECTIONS'			=> $this->jquery->MultiSelect('member_id', $mselect_list, $mselect_selected, array('width' => 400, 'height' => 250, 'filter' => true)),
-			'ACTIVE_RADIO'				=> new hradio('user_active', array('value' => (($user_id) ? $user_data['user_active'] : true))),
+			'ACTIVE_RADIO'				=> (new hradio('user_active', array('value' => (($user_id) ? $user_data['user_active'] : true))))->output(),
 
 			// Validation
 			'VALIDTAELNK_PREFIX'		=> '../',

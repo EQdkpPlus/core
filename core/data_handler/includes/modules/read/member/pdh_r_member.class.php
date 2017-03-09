@@ -826,7 +826,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_mainchar_radio($member_id){
-			return new hradio('mainchar', array('options' => array($member_id=>''), 'value' => $this->get_mainid($member_id), 'class' => 'cmainradio'));
+			return (new hradio('mainchar', array('options' => array($member_id=>''), 'value' => $this->get_mainid($member_id), 'class' => 'cmainradio')))->output();
 		}
 
 		public function get_char_defrole($member_id){

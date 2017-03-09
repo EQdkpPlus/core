@@ -1133,7 +1133,7 @@ class calendarevent_pageobject extends pageobject {
 
 			//Data
 			'MENU_OPTIONS'			=> $this->core->build_dropdown_menu('<i class="fa fa-cog fa-lg"></i> '.$this->user->lang('raidevent_raid_settbutton'), $optionsmenu, 'floatRight'),
-			'DD_MYCHARS'			=> ($eventdata['extension']['raidmode'] == 'role') ? $memberrole[0] : new hdropdown('member_id', array('options' => $drpdwn_members, 'value' => $presel_charid)),
+			'DD_MYCHARS'			=> ($eventdata['extension']['raidmode'] == 'role') ? $memberrole[0] : (new hdropdown('member_id', array('options' => $drpdwn_members, 'value' => $presel_charid)))->output(),
 			'DD_MYROLE'				=> ($eventdata['extension']['raidmode'] == 'role') ? $memberrole[1] : '',
 			'DD_SIGNUPSTATUS'		=> (new hdropdown('signup_status', array('options' => $status_dropdown, 'value' => $this->mystatus['signup_status'])))->output(),
 			'DD_MODSIGNUPSTATUS'	=> (new hdropdown('moderation_raidstatus', array('options' => $this->raidstatus_full, 'value' => '0')))->output(),
