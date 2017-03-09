@@ -2829,7 +2829,6 @@ a.tool-item {
 	vertical-align: baseline;
 	white-space: nowrap;
 }
-
 .bubble-green{
 	background-color: #468847;
 	margin-right: 4px;
@@ -2845,6 +2844,8 @@ a.tool-item {
 	vertical-align: baseline;
 	white-space: nowrap;
 }
+
+/* Dropdown Menu */
 .dropdown-menu:after {
 	border-bottom: 6px solid #FFFFFF;
 	border-left: 6px solid transparent;
