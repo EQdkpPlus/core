@@ -164,8 +164,8 @@ class vbulletin51_bridge extends bridge_generic {
 		$strCookiepath = $config['cookiepath'];
 		$strCookieprefix = $this->config->get('cmsbridge_sso_cookieprefix');
 	
-		$userID = $_COOKIE[$strCookieprefix.'userid'];
-		$cookieHash = $_COOKIE[$strCookieprefix.'sessionhash'];
+		$userID = isset( $_COOKIE[$strCookieprefix.'userid']) ? $_COOKIE[$strCookieprefix.'userid'] : null;
+		$cookieHash = isset($_COOKIE[$strCookieprefix.'sessionhash']) ? $_COOKIE[$strCookieprefix.'sessionhash'] : null;
 	
 		if ($cookieHash == NULL || $cookieHash == "") return false;
 	

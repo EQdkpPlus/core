@@ -222,8 +222,8 @@ class wbb5_bridge extends bridge_generic {
 			}		
 		}
 		
-		$userID = $_COOKIE[$config['cookie_prefix'].'userID'];
-		$cookieHash = $_COOKIE[$config['cookie_prefix'].'cookieHash'];
+		$userID = isset($_COOKIE[$config['cookie_prefix'].'userID']) ? $_COOKIE[$config['cookie_prefix'].'userID'] : null;
+		$cookieHash = isset($_COOKIE[$config['cookie_prefix'].'cookieHash']) ? $_COOKIE[$config['cookie_prefix'].'cookieHash'] : null;
 		
 		if ($cookieHash == NULL || $cookieHash == "") return false;
 		
