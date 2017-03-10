@@ -61,9 +61,6 @@ class phpbb3_bridge extends bridge_generic {
 			'type'	=> 'radio',
 		),
 	);
-	
-	public $blnSyncBirthday = true;
-		
 
 	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = "", $arrUserdata=array()){
 		$itoa64 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';

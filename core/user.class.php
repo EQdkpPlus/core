@@ -32,7 +32,7 @@ class user extends gen_class {
 	//Without: auth_account, custom_fields, plugin_settings, privacy_settings, notifications
 	public static $normalUserTableFields = array('user_id', 'username', 'user_password', 'user_email', 'user_login_key', 'user_rlimit', 'user_date_time',
 			'user_date_short', 'user_date_long', 'user_style', 'user_lang', 'user_timezone', 'user_email_confirmkey', 'user_lastvisit', 'user_lastpage',
-			'user_registered', 'user_active', 'user_email_confirmed', 'country', 'gender', 'birthday', 'rules', 'failed_login_attempts', 'exchange_key',
+			'user_registered', 'user_active', 'user_email_confirmed', 'rules', 'failed_login_attempts', 'exchange_key',
 			'hide_nochar_info', 'awaymode_enabled', 'awaymode_startdate', 'awaymode_enddate', 'awaymode_note', 'user_temp_email',
 	);
 
@@ -441,12 +441,6 @@ class user extends gen_class {
 			'2'=> 'gender_f',
 		);
 
-		$root_path = registry::get_const('root_path');
-		$cfile = $root_path.'core/country_states.php';
-		if (file_exists($cfile)){
-			include($cfile);
-		}
-
 		// Build language array
 		if($dir = @opendir($root_path . 'language/')){
 			while ( $file = @readdir($dir) ){
@@ -463,11 +457,6 @@ class user extends gen_class {
 		foreach(register('pdh')->get('styles', 'styles', array(0, false)) as $styleid=>$row){
 			$style_array[$styleid] = $row['style_name'];
 		}
-
-		// hack the birthday format, to be sure there is a 4 digit year in it
-		$birthday_format = register('user')->style['date_notime_short'];
-		if(stripos($birthday_format, 'y') === false) $birthday_format .= 'Y';
-		$birthday_format = str_replace('y', 'Y', $birthday_format);
 
 		$settingsdata = array(
 			'registration_info'	=> array(
@@ -512,22 +501,6 @@ class user extends gen_class {
 			),
 			'profile'	=> array(
 				'profile'	=> array(
-					'gender' => array(
-						'type'		=> 'radio',
-						'tolang'	=> true,
-						'options'	=> $gender_array,
-					),
-					'country' => array(
-						'type'		=> 'dropdown',
-						'options'	=> $country_array,
-					),
-					'birthday'	=> array(
-						'type'			=> 'datepicker',
-						'allow_empty'	=> true,
-						'year_range'	=> '-80:+0',
-						'change_fields' => true,
-						'format'		=> $birthday_format
-					),
 				),
 				'user_avatar' => array(
 					'user_avatar_type' => array(
@@ -547,17 +520,7 @@ class user extends gen_class {
 			),
 			'privacy_options' => array(
 				'user_priv' => array(
-					'priv_bday'	=> array(
-						'type'		=> 'radio',
-						'default'	=> 0,
-					),
 					'priv_userprofile_age' => array(
-							'type'		=> 'dropdown',
-							'options'	=> $priv_set_array,
-							'tolang'	=> true,
-							'default'	=> 1,
-					),
-					'priv_userprofile_country' => array(
 							'type'		=> 'dropdown',
 							'options'	=> $priv_set_array,
 							'tolang'	=> true,

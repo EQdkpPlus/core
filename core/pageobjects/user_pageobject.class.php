@@ -43,11 +43,15 @@ class user_pageobject extends pageobject {
 
 		$arrUserCustomFieldsData = $this->pdh->get('user', 'custom_fields', array($user_id));
 		
+		$strGender = $this->pdh->get('user', 'gender', array($user_id));
+		
 		//Gender
-		switch($row['gender']){
-			case '1' : $strGender = $this->user->lang('gender_m').', ';
+		switch($strGender){
+			case 'f' : $strGender = $this->user->lang('gender_f').', ';
 			break;
-			case '2' : $strGender = $this->user->lang('gender_f').', ';
+			case 'm' : $strGender = $this->user->lang('gender_m').', ';
+			break;
+			case 'n' : $strGender = $this->user->lang('gender_n').', ';
 			break;
 			default: $strGender = "";
 		}
@@ -85,9 +89,10 @@ class user_pageobject extends pageobject {
 		$blnPersonal = $blnContact = false;
 		
 		if($this->pdh->get('user', 'check_privacy', array($user_id, 'priv_userprofile_age'))){
-			$age = ($this->time->age($row['birthday']) !== 0) ? $this->time->age($row['birthday']) : '';
+			$intBirthday = $this->pdh->get('user', 'birthday', array($user_id));
+			$age = ($this->time->age($intBirthday) !== 0) ? $this->time->age($intBirthday) : '';
 			if (strlen($age)) {
-				$val = ($this->pdh->get('user', 'check_privacy', array($user_id, 'priv_bday'))) ? $this->time->user_date($row['birthday']).' ('.$age.')': $age;
+				$val = ($this->pdh->get('user', 'check_privacy', array($user_id, 'priv_bday'))) ? $this->time->user_date($intBirthday).' ('.$age.')': $age;
 				$this->tpl->assign_block_vars('profile_personal_row', array(
 					'NAME' => $this->user->lang("user_sett_f_priv_userprofile_age"),
 					'TEXT' => $val,
@@ -98,9 +103,10 @@ class user_pageobject extends pageobject {
 		}
 		
 		if($this->pdh->get('user', 'check_privacy', array($user_id, 'priv_userprofile_country'))){
-
-			if (strlen($row['country'])) {
-				$val = '<img src="'.$this->server_path.'images/flags/'.strtolower($row['country']).'.svg" alt="'.$row['country'].'" /> '.sanitize(ucfirst(strtolower($country_array[$row['country']])));
+			$strCountry = $this->pdh->get('user', 'country', array($user_id));
+			
+			if (strlen($strCountry)) {
+				$val = '<img src="'.$this->server_path.'images/flags/'.strtolower($strCountry).'.svg" alt="'.$strCountry.'" /> '.sanitize(ucfirst(strtolower($country_array[$row['country']])));
 				$this->tpl->assign_block_vars('profile_personal_row', array(
 						'NAME' => $this->user->lang("user_sett_f_priv_userprofile_country"),
 						'TEXT' => $val,

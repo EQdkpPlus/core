@@ -113,7 +113,7 @@ class login_facebook extends gen_class {
 
 		// Request for user data
 		try {
-			$response = $this->objFacebook->get('/me?fields=id,name,birthday,email,first_name,gender,last_name,locale', $access_token);
+			$response = $this->objFacebook->get('/me?fields=id,name,birthday,email,first_name,last_name,locale', $access_token);
 			if($response){
 				$arrBody = $response->getDecodedBody();
 				return array(
@@ -247,12 +247,6 @@ class login_facebook extends gen_class {
 
 			if ($me){
 
-				switch($me['data']['gender']){
-					case 'male' : $gender = '1'; break;
-					case 'female' : $gender = '2'; break;
-					default: $gender = '0';
-				}
-
 				if ($me['data']['locale']){
 					list($locale1, $locale2) = explode('_', $me['data']['locale']);
 				}
@@ -262,8 +256,6 @@ class login_facebook extends gen_class {
 						'user_email'		=> $this->in->get('user_email', ($me['data']['email']  != null) ? $me['data']['email'] : ''),
 						'user_email2'		=> $this->in->get('user_email2', ($me['data']['email']  != null) ? $me['data']['email'] : ''),
 						'first_name'		=> $this->in->get('first_name', ($me['data']['first_name']  != null) ? $me['data']['first_name'] : ''),
-
-						'country'			=> $this->in->get('country', $locale2),
 						'user_lang'			=> $this->in->get('user_lang',	$this->config->get('default_lang')),
 						'user_timezone'		=> $this->in->get('user_timezone',	$this->config->get('timezone')),
 						'user_password1'	=> $this->in->get('new_user_password1'),
@@ -295,14 +287,6 @@ class login_facebook extends gen_class {
 			if ($token){
 				$me = $this->getMe($token);
 				if ($me){
-
-					//Gender
-					switch($me['data']['gender']){
-						case 'male' : $gender = '1'; break;
-						case 'female' : $gender = '2'; break;
-						default: $gender = '0';
-					}
-
 					//Check Email
 					if ($this->in->get('user_email') == $me['data']['email']){
 						$out['user_active'] = 1;

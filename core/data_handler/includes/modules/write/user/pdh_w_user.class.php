@@ -70,8 +70,6 @@ if(!class_exists('pdh_w_user')) {
 				'username' 				=> $arrData['username'],
 				'user_password'			=> $new_password,
 				'user_email'			=> $this->crypt->encrypt($arrData['user_email']),
-				'country'				=> (isset($arrData['country'])) ? $arrData['country'] : '',
-				'gender'				=> (isset($arrData['gender'])) ? $arrData['gender'] : '',
 				'user_lang'				=> $arrData['user_lang'],
 				'user_timezone'			=> $arrData['user_timezone'],
 				'user_email_confirmkey'	=> $user_key,

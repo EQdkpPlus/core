@@ -241,7 +241,21 @@ if (!class_exists("pdh_r_user")){
 		}
 
 		public function get_country($user_id) {
-			return $this->users[$user_id]['country'];
+			$intFieldID = $this->pdh->get('user_profilefields', 'by_type', array('country'));
+			if ($intFieldID){
+				return $this->get_profilefield($user_id, $intFieldID, true, true);
+			} else {
+				return '';
+			}
+		}
+		
+		public function get_gender($user_id) {
+			$intFieldID = $this->pdh->get('user_profilefields', 'by_type', array('gender'));
+			if ($intFieldID){
+				return $this->get_profilefield($user_id, $intFieldID, true, true);
+			} else {
+				return '';
+			}
 		}
 
 		public function get_html_country($user_id){
@@ -436,14 +450,20 @@ if (!class_exists("pdh_r_user")){
 		}
 
 		public function get_birthday($user_id){
-			return ($this->users[$user_id]['birthday'] > 0) ? $this->users[$user_id]['birthday'] : 0;
+			$intFieldID = $this->pdh->get('user_profilefields', 'by_type', array('birthday'));
+			if ($intFieldID){
+				return $this->get_profilefield($user_id, $intFieldID, true, true);
+			} else {
+				return 0;
+			}
 		}
 
 		public function get_birthday_list(){
 			$useroutput	= array();
-			foreach($this->users as $user_id=>$uderdata){
-				if($uderdata['birthday'] > 0){
-					$useroutput[$user_id]	= $uderdata['birthday'];
+			foreach($this->users as $user_id => $uderdata){
+				$intBirthday = $this->get_birthday($user_id);
+				if($intBirthday > 0){
+					$useroutput[$user_id] = $intBirthday;
 				}
 			}
 			return $useroutput;

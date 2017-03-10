@@ -62,8 +62,6 @@ class phpbb31_bridge extends bridge_generic {
 		),
 	);
 	
-	public $blnSyncBirthday = true;
-
 	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = "", $arrUserdata=array()){
 		if (strlen($hash) == 32){
 			
@@ -339,6 +337,8 @@ class phpbb31_bridge extends bridge_generic {
 				$arrFields['pf_'.$row['field_ident']] = $row['field_name'];
 			}
 		}
+		
+		$sync_array['birthday'] = 'Birthday';
 		
 		return $arrFields;
 	}

@@ -110,17 +110,11 @@ class login_google extends gen_class {
 			
 				if($arrGoogleUser){
 					$myGoogleID = $arrGoogleUser['id'];
-						
-					switch($arrGoogleUser['gender']){
-						case 'male' : $gender = '1'; break;
-						case 'female' : $gender = '2'; break;
-						default: $gender = '0';
-					}
+
 					$bla = array(
 							'username'			=> isset($arrGoogleUser['displayName']) ? $arrGoogleUser['displayName'] : '',
 							'user_email'		=> isset($arrGoogleUser['emails'][0]) ? $arrGoogleUser['emails'][0]['value'] : '',
 							'user_email2'		=> isset($arrGoogleUser['emails'][0]) ? $arrGoogleUser['emails'][0]['value'] : '',
-							'gender'			=> $gender,
 							//'country'			=> isset($me['contact/country/home']) ? $me['contact/country/home'] : '',
 							'auth_account'		=> $myGoogleID,
 							'user_timezone'		=> $this->in->get('user_timezone', $this->config->get('timezone')),
