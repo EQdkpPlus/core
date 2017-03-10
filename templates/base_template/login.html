@@ -1,22 +1,21 @@
 	<div class="contentHeader">
 		<h1 class="contentTitle">{L_login}</h1>
-	</div>	
-	
+	</div>
+
 	<!-- IF S_BRIDGE_INFO -->
 	<div class="infobox infobox-large infobox-blue clearfix">
 		<i class="fa fa-info-circle fa-4x pull-left"></i> {L_login_bridge_notice}
 	</div>
 	<!-- ENDIF -->
 	<form method="post" action="{EQDKP_CONTROLLER_PATH}Login{SEO_EXTENSION}{SID}" name="login" id="login" class="fv_checkit">
-	
+
 	<fieldset class="settings mediumsettings">
 			<div class="contentSideLeft floatLeft contentWidth60">
 				<dl>
 					<dt><label>{L_username}:</label></dt>
 					<dd>
 						<div class="input-icon"><i class="fa fa-user"></i>
-							<input type="text" name="username" size="30" maxlength="30" class="input username" id="username" required/>
-							<span class="fv_msg" style="display:none;">{L_fv_required_user}</span>
+							<input type="text" name="username" size="30" maxlength="30" class="input username" id="username" data-fv-message="{L_fv_required_user}" required/>
 						</div>
 					</dd>
 				</dl>
@@ -25,8 +24,7 @@
 					<dd>
 						<div class="input-icon">
 							<i class="fa fa-key"></i>
-							<input type="password" name="password" size="30" maxlength="32" class="input password" id="password" required/>
-							<span class="fv_msg" style="display:none;">{L_fv_required_password}</span>
+							<input type="password" name="password" size="30" maxlength="32" class="input password" id="password" data-fv-message="{L_fv_required_password}" required/>
 						</div>
 						<!-- IF S_SHOW_PWRESET_LINK -->
 						<br />{U_PWRESET_LINK}
@@ -35,8 +33,8 @@
 						<input type="text" name="{HONEYPOT_VALUE}" size="30" maxlength="30" class="userpass" />
 					</dd>
 				</dl>
-				
-				
+
+
 				<!-- IF S_DISPLAY_CATPCHA -->
 				<dl>
 					<dt>
@@ -48,7 +46,7 @@
 				</dl>
 				<!-- ENDIF -->
 			</div>
-			
+
 			<!-- IF not S_LOGGED_IN -->
 			<div class="contentSideRight contentWidth30 floatRight">
 				<!-- IF S_REGISTER -->
@@ -65,15 +63,15 @@
 			</div>
 			<!-- ENDIF -->
 	</fieldset>
-	
-	
+
+
 	<div class="clear"></div>
-	
+
 	<div class="contentFooter">
 		{REDIRECT}
 		<button type="submit" name="login" class="mainoption"><i class="fa fa-sign-in"></i>{L_login}</button>
 	</div>
-	
+
 	<!-- IF AUTH_LOGIN_BUTTON != "" -->
 	<br />
 	<fieldset class="settings mediumsettings">
@@ -81,7 +79,7 @@
 		{AUTH_LOGIN_BUTTON}
 	</fieldset>
 	<!-- ENDIF -->
-	
+
 	{CSRF_TOKEN}
 	</form>
 

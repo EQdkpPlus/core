@@ -425,6 +425,10 @@ i.small {
 	line-height: 20px;
 	color: transparent;
 }
+.fv_checkit .required:after {
+	content: " *";
+	color: red;
+}
 @supports (-webkit-appearance:none) {
 	.withtabs .ui-tabs .ui-tabs-panel[aria-hidden="true"] {
 		display:block !important;

@@ -949,11 +949,11 @@ if (!class_exists("jquery")) {
 				// the existing form validation
 				$(".fv_checkit input[required]:invalid").each(function( index, node ) {
 					if($(this).is(":invalid")){
-						$(this).next(".fv_msg").show();
+						$(this).after("<span class=\"fv_msg\">"+$(this).data("fv-message")+"</span>");
 						$(this).addClass("fv_inp_invalid");
 					} else {
-						$(this).next(".fv_msg:before").hide();
-						$(this).next(".fv_msg").hide();
+						$(this).next(".fv_msg:before").remove();
+						$(this).next(".fv_msg").remove();
 						$(this).removeClass("fv_inp_invalid");
 					}
 				});
@@ -962,8 +962,8 @@ if (!class_exists("jquery")) {
 				$(document).on("keyup", ".fv_checkit input[required]", function() {
 					var forminputvalue= $.trim($(this).val());
 					if(!$(this).is(":invalid") && forminputvalue.length > 0 && $(this).next(".fv_msg").is(":visible")){
-						$(this).next(".fv_msg:before").hide();
-						$(this).next(".fv_msg").hide();
+						$(this).next(".fv_msg:before").remove();
+						$(this).next(".fv_msg").remove();
 						$(this).removeClass("fv_inp_invalid");
 					}
 				});
