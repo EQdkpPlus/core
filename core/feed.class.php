@@ -66,7 +66,7 @@ if (!class_exists("feed")) {
 				if($items->guid){
 					$xml .= '			<guid'.((strncmp($items->guid, 'http://', 7) !== 0 && strncmp($items->guid, 'https://', 8) !== 0) ? 'isPermaLink="false"' : '').'>'.$items->guid.'</guid>' . "\n";
 				}else{
-					$xml .= '<guid>'.specialchars($items->link).'</guid>' . "\n";
+					$xml .= '<guid>'.$this->specialchars($items->link).'</guid>' . "\n";
 				}
 
 				// add the author
