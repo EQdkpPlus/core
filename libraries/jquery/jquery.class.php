@@ -949,7 +949,9 @@ if (!class_exists("jquery")) {
 				// the existing form validation
 				$(".fv_checkit input[required]:invalid").each(function( index, node ) {
 					if($(this).is(":invalid")){
-						$(this).after("<span class=\"fv_msg\">"+$(this).data("fv-message")+"</span>");
+						if(typeof $(this).data("fv-message") !== "undefined"){
+							$(this).after("<span class=\"fv_msg\">"+$(this).data("fv-message")+"</span>");
+						}
 						$(this).addClass("fv_inp_invalid");
 					} else {
 						$(this).next(".fv_msg:before").remove();
