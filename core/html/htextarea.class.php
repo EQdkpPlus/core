@@ -40,22 +40,23 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 class htextarea extends html {
 
 	protected static $type = 'textarea';
-	
-	public $name = '';
-	public $rows = 5;
-	public $cols = 10;
-	public $disabled = false;
-	public $codeinput = false;
-	public $bbcodeeditor = false;
-	public $required = false;
-	public $readonly = false;
-	public $style = "";
-	
-	private $out = '';
-	
+
+	public $name				= '';
+	public $rows				= 5;
+	public $cols				= 10;
+	public $disabled			= false;
+	public $codeinput			= false;
+	public $bbcodeeditor		= false;
+	public $required			= false;
+	public $fvmessage			= false;
+	public $readonly			= false;
+	public $style				= "";
+
+	private $out				= '';
+
 	public function _construct() {
 	}
-	
+
 	public function output() {
 		$out = '<textarea name="'.$this->name.'" rows="'.$this->rows.'" cols="'.$this->cols.'" ';
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
@@ -69,13 +70,13 @@ class htextarea extends html {
 		if($this->disabled) $out .= 'disabled="disabled" ';
 		if($this->readonly) $out .= 'readonly="readonly" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
-		if($this->required) $out .= 'required="required" ';
+		if($this->required) $out .= ' required="required" data-fv-message="'.(($this->fvmessage) ? $this->fvmessage : registry::fetch('user')->lang('fv_required')).'"';
 		if(!empty($this->placeholder)) $out .= 'placeholder="'.$this->placeholder.'" ';
 		$out .= '>'.$this->value.'</textarea>';
-		if($this->required) $out .= '<i class="fa fa-asterisk required small"></i> <span class="fv_msg" style="display:none;">'.registry::fetch('user')->lang('fv_required').'</span>';
+		if($this->required) $out .= '<i class="fa fa-asterisk required small"></i>';
 		return $out;
 	}
-	
+
 	public function _inpval() {
 		$value = $this->in->get($this->name, '', ($this->codeinput) ? 'raw' : '');
 		return $value;
