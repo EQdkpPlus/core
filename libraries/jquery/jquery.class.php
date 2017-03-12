@@ -912,12 +912,12 @@ if (!class_exists("jquery")) {
 		public function init_formvalidation(){
 			if(!$this->inits['formvalidation']){
 				$this->tpl->add_js('
-				var with_tabs = $(".fv_checkit").hasClass("withtabs");
-			$(".fv_checkit").each(function(){ this.noValidate = true; })
-
-			$(".fv_checkit").submit(function(e) {
+				$(".fv_checkit").each(function(){ this.noValidate = true; })
+				
+				$(".fv_checkit").submit(function(e) {
 				var self = this;
-				if(with_tabs){
+				$(this).addClass("fv_checked");
+				if( $(".fv_checkit").find(".ui-tabs").length ){
 					var tabhighlight = { };
 					$(".fv_checkit input[required]").each(function( index, node ) {
 						tabs = $(this).parentsUntil(".fv_checkit .ui-tabs");
@@ -927,49 +927,28 @@ if (!class_exists("jquery")) {
 						tabs = $(this).parentsUntil(".fv_checkit .ui-tabs");
 						tabhighlight[tabs.attr("id")] = "invalid";
 					});
+					$(this).find(".fv_hint_tab").each(function(){ $(this).remove(); });
 					for (var key in tabhighlight) {
 						if (tabhighlight.hasOwnProperty(key)) {
-							var val = tabhighlight[key];
+							var val = tabhighlight[key]
 							tabLI = $("li a[href=\"#"+key+"\"]").parents("li").find("a")
-							tabtext	= tabLI.find(".countlabel")
-							if(tabtext.text() == ""){
+							if(tabLI.find(".fv_hint_tab").text() == "" && val == "invalid"){
 								currenttxt = tabLI.text()
-								tabLI.html(currenttxt+"<span class=\"countlabel\"></span>")
-							}
-							if(val == "invalid"){
-								tabLI.find(".countlabel").addClass("bubble-red").text("!")
-							}else{
-								tabLI.find(".countlabel").removeClass("bubble-red").text("*")
+								tabLI.html(currenttxt+" <span class=\"fv_hint_tab bubble-red\">!</span>")
 							}
 						}
 					}
-					e.preventDefault();
 				}
-
+				
 				// the existing form validation
-				$(".fv_checkit input[required]:invalid").each(function( index, node ) {
+				$(".fv_checkit input[required]").each(function( index, node ) {
 					if($(this).is(":invalid")){
-						if(typeof $(this).data("fv-message") !== "undefined"){
+						if(typeof $(this).data("fv-message") !== "undefined" && !$(this).next(".fv_msg").length){
 							$(this).after("<span class=\"fv_msg\">"+$(this).data("fv-message")+"</span>");
 						}
-						$(this).addClass("fv_inp_invalid");
-					} else {
-						$(this).next(".fv_msg:before").remove();
-						$(this).next(".fv_msg").remove();
-						$(this).removeClass("fv_inp_invalid");
 					}
 				});
-
-				// hide the error message once the field is not longer empty
-				$(document).on("keyup", ".fv_checkit input[required]", function() {
-					var forminputvalue= $.trim($(this).val());
-					if(!$(this).is(":invalid") && forminputvalue.length > 0 && $(this).next(".fv_msg").is(":visible")){
-						$(this).next(".fv_msg:before").remove();
-						$(this).next(".fv_msg").remove();
-						$(this).removeClass("fv_inp_invalid");
-					}
-				});
-
+				
 				return (($(".fv_checkit input[required]:invalid").length > 0) ? false : true);
 			});', 'docready');
 				$this->inits['formvalidation'] = true;
