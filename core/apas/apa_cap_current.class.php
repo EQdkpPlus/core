@@ -116,7 +116,6 @@ if ( !class_exists( "apa_cap_current" ) ) {
 				echo "Pool ".$pool."<br/>";
 				//With Decay value
 				$points = $this->pdh->aget('points', 'current_history', 0, array($char_ids, $pool, 0, $next_run-1, 0, 0, !$this->apa->get_data('twinks', $apa_id), true));
-				d($points);
 
 				foreach($char_ids as $char_id) {
 					if($points[$char_id] > $this->apa->get_data('upper_cap', $apa_id)) {
