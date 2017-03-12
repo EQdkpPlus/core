@@ -82,6 +82,7 @@ if (!class_exists("recaptcha")) {
 		{
 			if ($pubkey == null || $pubkey == '') {
 				register('core')->message("To use reCAPTCHA you must get an API key from <a href='https://www.google.com/recaptcha/admin/create'>https://www.google.com/recaptcha/admin/create</a>", "Error", 'red');
+				return "";
 			}
 
 			$out = '<script src="https://www.google.com/recaptcha/api.js" async defer></script>';
