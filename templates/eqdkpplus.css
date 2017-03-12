@@ -377,71 +377,45 @@ i.small {
 }
 
 /* HTML5 form validation */
-.fv_msg {
-	padding: 0;
-	margin-top: 14px;
-	height: 0px;
-	line-height: 0;
-}
-.fv_checkit [required]:invalid ~ .fv_msg:after {
-	color: red;
-}
-.fv_checkit [pattern]:invalid ~ .fv_msg:after {
-	color: red;
-}
-.fv_checkit input.fv_success:valid ~ .fv_msg:before {
-	font-family: FontAwesome;
-	content: "\f058";
-	color: green;
-}
-.fv_checkit .fv_inp_invalid, .submitted input:invalid {
-	border: 1px solid rgba(204, 0, 1, 1) !important;
+.fv_checkit.fv_checked [required]:invalid {
+	border: 1px solid red !important;
 	box-shadow: none;
 }
-.errormessage, .fv_checkit [required]:invalid ~ .fv_msg {
+.fv_checkit [required] ~ .fv_msg {
+	display:none;
+}
+.fv_checkit [required]:invalid ~ .fv_msg, .errormessage {
+	display: inline-block;
+	position: relative;
+	margin-left: 10px;
+	padding: 5px 10px;
+	vertical-align: middle;
 	background-color: #f2dede;
 	color: #a94442;
-	padding: 5px 10px;
-	position: relative;
-	border: 2px;
-	margin-left: 10px;
+	white-space: nowrap;
 }
-.errormessage::before, .fv_checkit [required]:invalid ~ .fv_msg:before {
+.fv_checkit [required]:invalid ~ .fv_msg:before, .errormessage::before {
+	content: '';
+	position: absolute;
 	right: 100%;
 	top: 50%;
-	border: solid transparent;
-	content: " ";
+	margin-top: -6px;
 	height: 0;
 	width: 0;
-	position: absolute;
-	pointer-events: none;
-	border-color: transparent;
+	border: 6px solid transparent;
 	border-right-color: #f2dede;
-	border-width: 6px;
-	margin-top: -6px;
 }
-.countlabel{
-	margin-left: 8px;
-	line-height: 20px;
-	color: transparent;
+.fv_hint_tab {
+	margin-left: 4px;
 }
-.fv_checkit .required:after {
-	content: " *";
-	color: red;
-}
+
 @supports (-webkit-appearance:none) {
-	.withtabs .ui-tabs .ui-tabs-panel[aria-hidden="true"] {
-		display:block !important;
-		opacity:0;
-		z-index:-99999;
-		position:absolute;
-	}
-	.withtabs .ui-tabs .ui-tabs-panel[aria-hidden="true"] [required] {
-		position:absolute;
-		top:-15px;
-		left:25px;
-		height:0;
-		width:0;
+	.fv_checkit .ui-tabs .ui-tabs-panel[aria-hidden="true"] {
+		display: block !important;
+		opacity: 0;
+		z-index: -99999;
+		position: absolute;
+		pointer-events: none;
 	}
 }
 

@@ -101,7 +101,7 @@ class htextmultilang extends html {
 		}
 
 		$this->out .= '</div>';
-		if(!empty($this->pattern)) $this->out .= '<span class="fv_msg" style="display:none;">'.registry::fetch('user')->lang('fv_sample_pattern').'</span>';
+		if(!empty($this->pattern)) $this->out .= '<span class="fv_msg">'.registry::fetch('user')->lang('fv_sample_pattern').'</span>';
 		elseif($this->required) $this->out .= '<i class="fa fa-asterisk required small"></i>';
 		if(!empty($this->after_txt)) $this->out .= $this->after_txt;
 
