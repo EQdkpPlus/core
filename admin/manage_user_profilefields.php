@@ -115,7 +115,7 @@ class ManageUserProfileFields extends page_generic {
 		}
 		
 		$options = array();
-		if ($arrValues['type'] == 'dropdown' || $arrValues['type'] == 'multiselect'){
+		if ($arrValues['type'] == 'dropdown' || $arrValues['type'] == 'multiselect' || $arrValues['type'] == 'radio'  || $arrValues['type'] == 'gender'){
 			$in_options_id = $this->in->getArray('option_id', 'string');
 			$in_options_lang = $this->in->getArray('option_lang', 'string');
 			foreach ($in_options_id as $key=>$value){
@@ -155,11 +155,16 @@ class ManageUserProfileFields extends page_generic {
 				'type' => array(
 						'type'		=> 'dropdown',
 						'options'	=> array(
-								'text'		=> 'Text',
-								'int'		=> 'Integer',
-								'dropdown'	=> 'Dropdown',
-								'link'		=> 'Link',
-								'multiselect' => 'Multiselect',
+								'text'			=> 'Text',
+								'int'			=> 'Integer',
+								'dropdown'		=> 'Dropdown',
+								'link'			=> 'Link',
+								'multiselect'	=> 'Multiselect',
+								'datepicker'	=> 'Datepicker',
+								'country'		=> 'Countrylist',
+								'radio'			=> 'Radio',
+								'gender'		=> 'Gender',
+								'birthday'		=> 'Birthday',
 						),
 						'required'	=> true
 				),
@@ -242,10 +247,10 @@ class ManageUserProfileFields extends page_generic {
 		$this->tpl->assign_vars(array (
 			'ID'						=> $intFieldID,
 			'LANGUAGE'					=> $this->pdh->geth('user_profilefields', 'name', array($intFieldID)),
-			'S_SHOW_OPTIONS'			=> ($field_data['type'] == 'dropdown' || $field_data['type'] == 'multiselect') ? '' : 'style="display:none;"',
+			'S_SHOW_OPTIONS'			=> ($field_data['type'] == 'dropdown' || $field_data['type'] == 'multiselect' || $field_data['type'] == 'radio') ? '' : 'style="display:none;"',
 		));
 
-		if ($field_data['type'] == 'dropdown' || $field_data['type'] == 'multiselect'){
+		if ($field_data['type'] == 'dropdown' || $field_data['type'] == 'multiselect' || $field_data['type'] == 'radio' || $field_data['type'] == 'gender'){
 			foreach ($field_data['options'] as $key => $value){
 				$this->tpl->assign_block_vars('options_row', array(
 					'ID'		=> $key,
@@ -262,7 +267,8 @@ $("#addopt_icon").click(function(){
 	$("#new_options").append(fields);
 });
 $("#type").change(function(){
-	if($("#type").attr("value") == "dropdown" || $("#type").attr("value") == "multiselect") {
+				
+	if($("#type").val() == "dropdown" || $("#type").val() == "multiselect" || $("#type").val() == "radio" || $("#type").val() == "gender") {
 		$("#options_row").show();
 	} else {
 		$("#options_row").hide();

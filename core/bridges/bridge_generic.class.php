@@ -42,14 +42,6 @@ abstract class bridge_generic extends gen_class {
 	 * @var boolean Set true if email adress should be synced from CMS
 	 */
 	public $blnSyncEmail		= true;
-	/**
-	 * @var boolean Set true if Birthdy should be synced from CMS
-	 */
-	public $blnSyncBirthday		= false;
-	/**
-	 * @var boolean Set true if Country should be synced from CMS
-	 */
-	public $blnSyncCountry		= false;
 	
 	/**
 	 * @var object Database Connection to CMS

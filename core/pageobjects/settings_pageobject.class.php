@@ -351,10 +351,6 @@ class settings_pageobject extends pageobject {
 		if ($this->config->get('cmsbridge_active') == 1 && (int)$this->config->get('cmsbridge_disable_sync') != 1) {
 			$synced_fields = array('username', 'current_password', 'new_password', 'confirm_password');
 			
-			if($this->bridge->objBridge->blnSyncEmail) $synced_fields[] = 'user_email';
-			if($this->bridge->objBridge->blnSyncBirthday) $synced_fields[] = 'birthday';
-			if($this->bridge->objBridge->blnSyncCountry) $synced_fields[] = 'country';
-			
 			//Key: Bridge ID, Value: EQdkp Profilefield ID
 			$arrMapping = $this->pdh->get('user_profilefields', 'bridge_mapping');
 			foreach($arrMapping as $intBridgeFieldID => $strEQdkpFieldID){
@@ -377,7 +373,10 @@ class settings_pageobject extends pageobject {
 		
 		// add user-app-key 
 		$this->form->add_field('exchange_key', array('lang' => 'user_app_key', 'text' => $this->user->data['exchange_key']), 'registration_info', 'registration_info');
-		$this->form->add_field('api_key', array('lang' => 'user_api_key', 'text' => $this->user->deriveKeyFromExchangekey($this->user->id, 'pex_api')), 'registration_info', 'registration_info');
+		//$this->form->add_field('miau', array('lang' => 'user_api_key', 'text' => $this->user->deriveKeyFromExchangekey($this->user->id, 'pex_api')).'<br /> <img src="https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl='.urlencode($this->user->deriveKeyFromExchangekey($this->user->id, 'pex_api')).'" />', 'registration_info', 'registration_info');
+		$this->form->add_field('api_key', array('lang' => 'user_api_key', 'text' => 
+				'<a style="cursor: pointer;" onclick="$(\'.qr_api_code\').html(\'<img src=\\\'https://chart.googleapis.com/chart?chs=140x140&chld=S|0&cht=qr&chl=\'+$(this).data(\'api-key\')+\'\\\'>\')" data-api-key="'.$this->user->deriveKeyFromExchangekey($this->user->id, 'pex_api').'">'.$this->user->deriveKeyFromExchangekey($this->user->id, 'pex_api').'</a><div class="qr_api_code"></div>'
+		), 'registration_info', 'registration_info');
 		$this->form->add_field('regenerate_keys', array('lang' => 'user_create_new_appkey', 'text' => '<button class="" type="submit" name="newexchangekey"><i class="fa fa-refresh"></i>'.$this->user->lang('user_create_new_appkey').'</button>'), 'registration_info', 'registration_info');
 		// add various auth-accounts
 		$auth_options = $this->user->get_loginmethod_options();

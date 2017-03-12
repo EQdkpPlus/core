@@ -54,11 +54,20 @@ class hdatepicker extends html {
 
 	protected function _construct() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
+		
+		if(isset($this->format)) {
+			$this->php_format = $this->format;
+			$this->format = $this->time->translateformat2js($this->format);
+		}
+		if(isset($this->timeformat)) {
+			$this->php_timeformat = $this->timeformat;
+			$this->timeformat = $this->time->translateformat2js($this->timeformat);
+		}
 	}
 
 	public function output() {
 		if(!($this->allow_empty && (empty($this->value) || $this->value == '0')) && is_numeric($this->value)) {
-			$this->value = $this->time->date($this->js_calendarformat(), $this->value);
+			$this->value = $this->time->date($this->php_calendarformat(), $this->value);
 		}
 		$out = '<span class="input-icon-append"><input type="text" name="'.$this->name.'" ';
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
@@ -69,16 +78,6 @@ class hdatepicker extends html {
 		if($this->readonly) $out .= 'readonly="readonly" ';
 		if($this->disabled) $out .= 'disabled="disabled" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
-		
-		if(isset($this->format)) {
-			$this->php_format = $this->format;
-			$this->format = $this->time->translateformat2js($this->format);
-		}
-		
-		if(isset($this->timeformat)) {
-			$this->php_timeformat = $this->timeformat;
-			$this->timeformat = $this->time->translateformat2js($this->timeformat);
-		}
 		
 		//copy options
 		$opts = array();

@@ -280,31 +280,7 @@ class bridge extends gen_class {
 				}
 			}
 		}
-		
-		//Birthday is a user field
-		if (isset($sync_array['birthday'])){
-			if ($save_array['birthday'] != $sync_array['birthday']){
-				$save_array['birthday'] = $sync_array['birthday'];
-				$save = true;
-			}
-		}
-		
-		//Country is a user field
-		if (isset($sync_array['country'])){
-			if ($save_array['country'] != $sync_array['country']){
-				$save_array['country'] = $sync_array['country'];
-				$save = true;
-			}
-		}
-		
-		//Gender is a user field
-		if (isset($sync_array['gender'])){
-			if ($save_array['gender'] != $sync_array['gender']){
-				$save_array['gender'] = $sync_array['gender'];
-				$save = true;
-			}
-		}
-		
+				
 		if ($save){
 			$save_array['custom_fields'] = serialize($eqdkp_custom_fields);
 			$this->pdh->put('user', 'update_user', array($user_id, $save_array, false, false));

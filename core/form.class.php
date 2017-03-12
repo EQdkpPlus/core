@@ -92,10 +92,16 @@ class form extends gen_class {
 		$text = (empty($options['text'])) ? '' : $options['text'];
 		$text2 = (empty($options['text2'])) ? '' : $options['text2'];
 		$field = (registry::class_exists('h'.$options['type'])) ?  new $field_class($name, $options) : '';
-		// add the correct id into the options-array
-		if(is_object($field)) $options['id'] = $field->id;
 		
-		return $text.($field->output()).$text2;
+		// add the correct id into the options-array
+		if(is_object($field)) {
+			$options['id'] = $field->id;
+			$strField = $field->output();
+		} else {
+			$strField = "";
+		}
+		
+		return $text.$strField.$text2;
 	}
 
 	/**

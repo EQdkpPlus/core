@@ -71,7 +71,7 @@ class MyMailer extends PHPMailer {
 		// Language Vars
 		$this->nohtmlmssg	= $this->user->lang('error_nohtml');
 		
-		if(!$this->pdl->type_known('mail')) $this->pdl->register_type('mail', null, null, array(2,3,4), array(3,4));
+		if(!$this->pdl->type_known('mail')) $this->pdl->register_type('mail', null, null, array(2,3,4), ((DEBUG > 2) ? true : false));
 	}
 
 	/**

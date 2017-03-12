@@ -78,7 +78,10 @@ class update_2300 extends sql_update_task {
 				'update_function' => 'Add Cronjobs to the Databse',
 				38 => "Alter user profilfeld table",
 				39 => 'Add Steam field',
-				40 => 'Add Discord Field',
+				40 => 'Add Discord field',
+				41 => 'Add userprofile field',
+				42 => 'Add userprofile field',
+				43 => 'Add userprofile field',
 			),
 			'german' => array(
 				'update_2300'	=> 'EQdkp Plus 2.3.0',
@@ -121,6 +124,10 @@ class update_2300 extends sql_update_task {
 				38 => "Erweitere Benutzerprofilfeldtabelle",
 				39 => 'Füge Steam Benutzerprofilfeld hinzu',
 				40 => 'Füge Discord Benutzerprofilfeld hinzu',
+				41 => 'Füge Benutzerprofilfeld hinzu',
+				42 => 'Füge Benutzerprofilfeld hinzu',
+				43 => 'Füge Benutzerprofilfeld hinzu',
+					
 			),
 		);
 
@@ -193,12 +200,16 @@ class update_2300 extends sql_update_task {
 	DROP COLUMN `user_climit`,
 	DROP COLUMN `user_elimit`,
 	DROP COLUMN `user_ilimit`,
-	DROP COLUMN `user_nlimit`;",
+	DROP COLUMN `user_nlimit`,DROP COLUMN `country`,DROP COLUMN `birthday`,DROP COLUMN `gender`;",
 			36	=> "ALTER TABLE `__styles` ADD `editor_theme` VARCHAR(255) NULL DEFAULT 'lightgray';",
 			37 => "ALTER TABLE `__events` ADD COLUMN `default_itempool` INT(11) UNSIGNED NOT NULL DEFAULT '0';",
 			38 => "ALTER TABLE `__user_profilefields` ADD COLUMN `example` VARCHAR(255) NULL COLLATE 'utf8_bin'",
 			39 => "INSERT INTO `__user_profilefields` (`name`, `lang_var`, `type`, `length`, `minlength`, `validation`, `required`, `show_on_registration`, `enabled`, `sort_order`, `is_contact`, `contact_url`, `icon_or_image`, `bridge_field`, `options`, `editable`, `example`) VALUES ('Steam', 'userpf_steam', 'link', 30, 2, '[\\w_]+', 0, 0, 1, 14, 1, 'https://steamcommunity.com/id/%s/', 'fa-steam-square', NULL, NULL, 1, 'zaflu');",
-			40 => "INSERT INTO `__user_profilefields` (`name`, `lang_var`, `type`, `length`, `minlength`, `validation`, `required`, `show_on_registration`, `enabled`, `sort_order`, `is_contact`, `contact_url`, `icon_or_image`, `bridge_field`, `options`, `editable`, `example`) VALUES ('Discord', '', 'text', 30, 2, '[\\w_]+#[0-9]{4}', 0, 0, 1, 15, 1, '', '', NULL, NULL, 1, 'GodMod#1234');"
+			40 => "INSERT INTO `__user_profilefields` (`name`, `lang_var`, `type`, `length`, `minlength`, `validation`, `required`, `show_on_registration`, `enabled`, `sort_order`, `is_contact`, `contact_url`, `icon_or_image`, `bridge_field`, `options`, `editable`, `example`) VALUES ('Discord', '', 'text', 30, 2, '[\\w_]+#[0-9]{4}', 0, 0, 1, 15, 1, '', '', NULL, NULL, 1, 'GodMod#1234');",
+			41 => "INSERT INTO `__user_profilefields` (`name`, `lang_var`, `type`, `length`, `minlength`, `validation`, `required`, `show_on_registration`, `enabled`, `sort_order`, `is_contact`, `contact_url`, `icon_or_image`, `bridge_field`, `options`, `editable`, `example`) VALUES ('birthday', 'userpf_birthday', 'birthday', 50, 0, '', 0, 0, 1, 1, 0, NULL, NULL, NULL, NULL, 1, NULL);",
+			42 => "INSERT INTO `__user_profilefields` (`name`, `lang_var`, `type`, `length`, `minlength`, `validation`, `required`, `show_on_registration`, `enabled`, `sort_order`, `is_contact`, `contact_url`, `icon_or_image`, `bridge_field`, `options`, `editable`, `example`) VALUES ('country', 'userpf_country', 'country', 50, 0, '', 0, 0, 1, 1, 0, NULL, NULL, NULL, NULL, 1, NULL);",
+			43 => "INSERT INTO `__user_profilefields` (`name`, `lang_var`, `type`, `length`, `minlength`, `validation`, `required`, `show_on_registration`, `enabled`, `sort_order`, `is_contact`, `contact_url`, `icon_or_image`, `bridge_field`, `options`, `editable`, `example`) VALUES ('gender', 'userpf_gender', 'gender', 50, 0, '', 0, 0, 1, 1, 0, '', '', NULL, 'a:1:{s:7:\"options\";a:3:{s:1:\"m\";s:8:\"gender_m\";s:1:\"f\";s:8:\"gender_f\";s:1:\"n\";s:8:\"gender_n\";}}', 1, '');",
+				
 		);
 	}
 

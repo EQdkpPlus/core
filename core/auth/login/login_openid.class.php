@@ -93,8 +93,8 @@ class login_openid extends gen_class {
 				'namePerson/friendly',
 				'contact/email',
 				'namePerson',
-				'person/gender',
-				'contact/country/home',
+				//'person/gender',
+				//'contact/country/home',
 				);
 				$this->oid->identity = $this->in->get('openid');
 
@@ -105,17 +105,10 @@ class login_openid extends gen_class {
 				if ($this->oid->validate() ){
 					$me = $this->oid->getAttributes();
 
-					switch($me['person/gender']){
-						case 'M' : $gender = '1'; break;
-						case 'F' : $gender = '2'; break;
-						default: $gender = '0';
-					}
 					$bla = array(
 						'username'			=> isset($me['namePerson/friendly']) ? $me['namePerson/friendly'] : '',
 						'user_email'		=> isset($me['contact/email']) ? $me['contact/email'] : '',
 						'user_email2'		=> isset($me['contact/email']) ? $me['contact/email'] : '',
-						'gender'			=> $gender,
-						'country'			=> isset($me['contact/country/home']) ? $me['contact/country/home'] : '',
 						'auth_account'		=> $this->oid->identity,
 						'user_timezone'		=> $this->in->get('user_timezone', $this->config->get('timezone')),
 					);
