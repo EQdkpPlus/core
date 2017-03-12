@@ -466,7 +466,7 @@ class form extends gen_class {
 				$js = "
 $('[data-equalto]').bind('input', function() {
     var to_confirm = $(this);
-    var to_equal = $('#' + to_confirm.data('equalto'));				
+    var to_equal = $('#' + to_confirm.data('equalto'));
 						
     if(to_confirm.val() != to_equal.val()){
 			if(fieldtype == 'email'){
@@ -475,7 +475,7 @@ $('[data-equalto]').bind('input', function() {
 				 this.setCustomValidity(\"".$this->jquery->sanitize(registry::fetch('user')->lang('fv_required_password_repeat'))."\");
 			} else {
 				 this.setCustomValidity(\"".$this->jquery->sanitize(registry::fetch('user')->lang('fv_fields_not_match'))."\");
-			};	
+			};
 	}
     else {
         this.setCustomValidity('');

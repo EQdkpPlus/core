@@ -29,7 +29,7 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
  * available options
  * name			(string) 	name of the textarea
  * id			(string)	id of the field, defaults to a clean form of name if not set
- * value		
+ * value
  * class		(string)	class for the field
  * readonly		(boolean)	field readonly?
  * size			(int)		size of the field
@@ -39,25 +39,26 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 class htextmultilang extends html {
 
 	protected static $type = 'text';
-	
-	public $name = '';
-	public $readonly = false;
-	public $required = false;
-	public $autocomplete = array();
-	public $class = 'input';
-	public $inptype = 'string';
-	
-	private $out = '';
-	
+
+	public $name				= '';
+	public $readonly			= false;
+	public $required			= false;
+	public $fvmessage			= false;
+	public $autocomplete		= array();
+	public $class				= 'input';
+	public $inptype				= 'string';
+
+	private $out				= '';
+
 	public function _construct() {
 	}
-	
+
 	public function output() {
 		$this->out = '';
 		$arrLanguages = $this->user->getAvailableLanguages();
 		$strDefaultLanguage = $this->config->get('default_lang');
 		$this->jquery->init_multilang();
-		
+
 		if(is_serialized($this->value)) {
 			$this->value = @unserialize($this->value);
 		} elseif(!is_array($this->value) && $this->value != ""){
@@ -65,8 +66,8 @@ class htextmultilang extends html {
 			$this->value = array();
 			$this->value[$strDefaultLanguage] = $strValue;
 		}
-		
-		
+
+
 		$this->out = '<div class="input-multilang">
 			<div class="multilang-switcher-container hand"><div class="multilang-switcher"><span>'.$arrLanguages[$strDefaultLanguage].'</span> <i class="fa fa-caret-down fa-lg"></i></div>
 			<div class="multilang-dropdown"><ul>
@@ -88,25 +89,25 @@ class htextmultilang extends html {
 			if(!empty($this->class)) $out .= 'class="'.$class.'" ';
 			if(!empty($this->size)) $out .= 'size="'.$this->size.'" ';
 			if($this->readonly) $out .= 'readonly="readonly" ';
-			if($this->required && $strKey == $strDefaultLanguage) $out .= 'required="required" ';
+			if($this->required && $strKey == $strDefaultLanguage) $out .= ' required="required" data-fv-message="'.(($this->fvmessage) ? $this->fvmessage : registry::fetch('user')->lang('fv_required')).'"';
 			if(!empty($this->pattern)) $out .= 'pattern="'.$this->pattern($this->pattern).'" ';
 			if(!empty($this->euqalto)) $out .= 'data-equalto="'.$this->equalto.'" ';
 			if(!empty($this->placeholder)) $out .= 'placeholder="'.$this->placeholder.'" ';
 			if(!empty($this->js)) $out.= $this->js.' ';
 			if ($strKey != $strDefaultLanguage)  $out .= ' style="display:none;"';
-				
+
 			$out .= ' />';
 			$this->out .= $out;
 		}
-		
+
 		$this->out .= '</div>';
-		if(!empty($this->pattern)) $this->out .= '<span class="fv_msg" style="display:none;">'.registry::fetch('user')->lang('fv_sample_pattern').'</span>';
-		elseif($this->required) $this->out .= '<i class="fa fa-asterisk required small"></i> <span class="fv_msg" style="display:none;">'.registry::fetch('user')->lang('fv_required').'</span>';
+		if(!empty($this->pattern)) $this->out .= '<span class="fv_msg">'.registry::fetch('user')->lang('fv_sample_pattern').'</span>';
+		elseif($this->required) $this->out .= '<i class="fa fa-asterisk required small"></i>';
 		if(!empty($this->after_txt)) $this->out .= $this->after_txt;
-		
+
 		return $this->out;
 	}
-	
+
 	public function _inpval() {
 		$arrInput = $this->in->getArray($this->name, $this->inptype);
 		return serialize($arrInput);

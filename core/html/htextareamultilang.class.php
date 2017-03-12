@@ -39,24 +39,25 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 class htextareamultilang extends html {
 
 	protected static $type = 'textarea';
-	
-	public $name = '';
-	public $rows = 5;
-	public $cols = 10;
-	public $disabled = false;
-	public $required = false;
-	
-	private $out = '';
-	
+
+	public $name				= '';
+	public $rows				= 5;
+	public $cols				= 10;
+	public $disabled			= false;
+	public $required			= false;
+	public $fvmessage			= false;
+
+	private $out				= '';
+
 	public function _construct() {
 		}
-	
+
 	public function output() {
 		$this->out = '';
 		$arrLanguages = $this->user->getAvailableLanguages();
 		$strDefaultLanguage = $this->config->get('default_lang');
 		$this->jquery->init_multilang();
-		
+
 		if(is_serialized($this->value)) {
 			$this->value = @unserialize($this->value);
 		} elseif(!is_array($this->value) && $this->value != ""){
@@ -64,7 +65,7 @@ class htextareamultilang extends html {
 			$this->value = array();
 			$this->value[$strDefaultLanguage] = $strValue;
 		}
-		
+
 		$this->out = '<div class="input-multilang textarea">
 			<div class="multilang-switcher-container hand"><div class="multilang-switcher"><span>'.$arrLanguages[$strDefaultLanguage].'</span> <i class="fa fa-caret-down fa-lg"></i></div>
 			<div class="multilang-dropdown"><ul>
@@ -73,7 +74,7 @@ class htextareamultilang extends html {
 			$this->out .= '<li data-lang="'.$strLang.'" data-key="'.$strKey.'" class="'.(($strKey == $strDefaultLanguage) ? 'active' : '').'">'.$strLang.'</li>';
 		}
 		$this->out .= '</ul></div><br />';
-		
+
 		foreach($arrLanguages as $strKey => $strLang){
 			$out = '<textarea name="'.$this->name.'['.$strKey.']" rows="'.$this->rows.'" cols="'.$this->cols.'" ';
 			if(empty($this->id)) $this->id = $this->cleanid($this->name);
@@ -83,22 +84,22 @@ class htextareamultilang extends html {
 			$out .= 'class="'.$class.'" ';
 			if($this->disabled) $out .= 'disabled="disabled" ';
 			if(!empty($this->js)) $out.= $this->js.' ';
-			if($this->required && $strKey == $strDefaultLanguage) $out .= 'required="required" ';
+			if($this->required && $strKey == $strDefaultLanguage) $out .= ' required="required" data-fv-message="'.(($this->fvmessage) ? $this->fvmessage : registry::fetch('user')->lang('fv_required')).'"';
 			if(!empty($this->placeholder)) $out .= 'placeholder="'.$this->placeholder.'" ';
 			if ($strKey != $strDefaultLanguage)  $out .= ' style="display:none;"';
 			$out .= '>';
 			if(isset($this->value) && isset($this->value[$strKey])) $out .= $this->value[$strKey];
 			$out .= '</textarea>';
-				
+
 			$this->out .= $out;
 		}
-		
+
 		$this->out .= '</div>';
-		if($this->required) $this->out .= '<i class="fa fa-asterisk required small"></i> <span class="fv_msg" style="display:none;">'.registry::fetch('user')->lang('fv_required').'</span>';
-		
+		if($this->required) $this->out .= '<i class="fa fa-asterisk required small"></i>';
+
 		return $this->out;
 	}
-	
+
 	public function _inpval() {
 		$arrInput = $this->in->getArray($this->name, $this->inptype);
 		return serialize($arrInput);

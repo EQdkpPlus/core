@@ -1,23 +1,22 @@
 	<div class="contentHeader">
 		<h1 class="contentTitle">{L_login_twofactor}</h1>
-	</div>	
-	
+	</div>
+
 	<form method="post" action="{EQDKP_CONTROLLER_PATH}Login{SEO_EXTENSION}{SID}&amp;lmethod=twofactor" name="login" id="login" class="fv_checkit">
-	
+
 	<fieldset class="settings mediumsettings">
 			<div>
 				<dl>
-					<dt><label>{L_login_twofactor_code_init}:</label><br /><span>{L_login_twofactor_code_help}</span></dt>
+					<dt><label class="required">{L_login_twofactor_code_init}:</label><br /><span>{L_login_twofactor_code_help}</span></dt>
 					<dd><div class="input-icon">
 						<i class="fa fa-clock-o"></i>
-						<input type="text" name="twofactor_code" size="10" maxlength="10" class="input" required />
-						<span class="fv_msg" style="display:none;">{L_fv_required}</span>
+						<input type="text" name="twofactor_code" size="10" maxlength="10" class="input" data-fv-messsage="{L_fv_required}" required />
 					</div>
 					<br /><br /><label><input type="checkbox" name="twofactor_cookie" value="1" />{L_login_twofactor_remember}</label>
 					</dd>
 				</dl>
 			</div>
-			
+
 			<!-- IF S_DISPLAY_CATPCHA -->
 				<dl>
 					<dt>
@@ -28,16 +27,16 @@
 				</dl>
 				<!-- ENDIF -->
 	</fieldset>
-	
-	
+
+
 	<div class="clear"></div>
-	
+
 	<div class="contentFooter">
 		<input type="hidden" name="twofactor_data" value="{TWOFACTOR_DATA}" />
 		<input type="checkbox" name="auto_login" style="display:none;" {TWOFACTOR_AUTOLOGIN}>
 		<button type="submit" name="login" class="mainoption"><i class="fa fa-sign-in"></i>{L_login}</button>
 	</div>
-		
+
 	{CSRF_TOKEN}
 	</form>
 

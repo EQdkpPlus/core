@@ -911,19 +911,46 @@ if (!class_exists("jquery")) {
 		*/
 		public function init_formvalidation(){
 			if(!$this->inits['formvalidation']){
-				$this->tpl->add_js("
-				$('.fv_checkit input[required]').on('blur input onblur', function(e) {
-					var forminputvalue= $.trim($(this).val());
-					if(forminputvalue.length == 0){
-						$(this).next('.fv_msg').show();
-						$(this).addClass('fv_inp_invalid');
-					} else {
-						$(this).next('.fv_msg:before').hide();
-						$(this).next('.fv_msg').hide();
-						$(this).removeClass('fv_inp_invalid');
+				$this->tpl->add_js('
+				$(".fv_checkit").each(function(){ this.noValidate = true; })
+				
+				$(".fv_checkit").submit(function(e) {
+				var self = this;
+				$(this).addClass("fv_checked");
+				if( $(".fv_checkit").find(".ui-tabs").length ){
+					var tabhighlight = { };
+					$(".fv_checkit input[required]").each(function( index, node ) {
+						tabs = $(this).parentsUntil(".fv_checkit .ui-tabs");
+						tabhighlight[tabs.attr("id")] = "valid";
+					});
+					$(".fv_checkit input[required]:invalid").each(function( index, node ) {
+						tabs = $(this).parentsUntil(".fv_checkit .ui-tabs");
+						tabhighlight[tabs.attr("id")] = "invalid";
+					});
+					$(this).find(".fv_hint_tab").each(function(){ $(this).remove(); });
+					for (var key in tabhighlight) {
+						if (tabhighlight.hasOwnProperty(key)) {
+							var val = tabhighlight[key]
+							tabLI = $("li a[href=\"#"+key+"\"]").parents("li").find("a")
+							if(tabLI.find(".fv_hint_tab").text() == "" && val == "invalid"){
+								currenttxt = tabLI.text()
+								tabLI.html(currenttxt+" <span class=\"fv_hint_tab bubble-red\">!</span>")
+							}
+						}
+					}
+				}
+				
+				// the existing form validation
+				$(".fv_checkit input[required]").each(function( index, node ) {
+					if($(this).is(":invalid")){
+						if(typeof $(this).data("fv-message") !== "undefined" && !$(this).next(".fv_msg").length){
+							$(this).after("<span class=\"fv_msg\">"+$(this).data("fv-message")+"</span>");
+						}
 					}
 				});
-				", 'docready');
+				
+				return (($(self).find("input[required]:invalid").length > 0) ? false : true);
+			});', 'docready');
 				$this->inits['formvalidation'] = true;
 			}
 		}

@@ -18,7 +18,7 @@
 <!-- ELSE -->
 <script language="JavaScript" type="text/javascript">
 //<![CDATA[
-$(function() { 
+$(function() {
 	$('#username').change(function() {
 		var username = $(this).val();
 		if(username.length > 0){
@@ -61,7 +61,7 @@ $(function() {
 });
 //]]>
 </script>
-<form method="post" action="{ACTION}" name="register" id="register" class="{FORMCLASS}">
+<form method="post" action="{ACTION}" name="register" id="register" class="{FORMCLASS} fv_checkit">
 	<div class="content">
 
 		<input type="hidden" name="old_username" value="{USERNAME}" />
@@ -81,54 +81,49 @@ $(function() {
 
 				<dl>
 					<dt>
-						<label>{L_username}</label><br /><span>{L_register_help_username}</span>
+						<label class="required">{L_username}</label><br /><span>{L_register_help_username}</span>
 					</dt>
 					<dd>
-						<input type="text" name="username" id="username" size="40" maxlength="30" value="{USERNAME}" class="input required" required />
-						<i class="fa fa-asterisk required small"></i>
+						<input type="text" name="username" id="username" size="30" maxlength="30" value="{USERNAME}" class="input required" data-fv-message="{L_fv_required_user}" required />
 						<i class="fa fa-check fa-lg icon-color-green" id="tick_username" style="display:none;"></i>
 						<span id="error_username" class="error-message-red" style="display:none;"><i class="fa fa-exclamation-triangle fa-lg"></i> {L_fv_username_alreadyuse}</span>
 					</dd>
 				</dl>
 				<dl>
 					<dt>
-						<label>{L_email_address}</label><br /><span>{L_register_help_email}<br/>{VALID_EMAIL_INFO}</span>
+						<label class="required">{L_email_address}</label><br /><span>{L_register_help_email}<br/>{VALID_EMAIL_INFO}</span>
 					</dt>
 					<dd>
-						<input type="email" name="user_email" size="40" maxlength="100" value="{USER_EMAIL}" id="useremail" class="input" required />
-						<i class="fa fa-asterisk required small"></i>
+						<input type="email" name="user_email" size="30" maxlength="100" value="{USER_EMAIL}" id="useremail" class="input" data-fv-message="{L_fv_required}" required />
 						<i class="fa fa-check fa-lg icon-color-green" id="tick_mail" style="display:none;" ></i>
 						<span id="error_email" class="error-message-red" style="display:none;"><i class="fa fa-exclamation-triangle fa-lg"></i> {L_fv_email_alreadyuse}</span>
 					</dd>
 				</dl>
 				<dl>
 					<dt>
-						<label>{L_email_confirm}</label><br /><span>{L_register_help_email_confirm}</span>
+						<label class="required">{L_email_confirm}</label><br /><span>{L_register_help_email_confirm}</span>
 					</dt>
 					<dd>
-						<input name="user_email2" type="email" class="input equalto" id="user_email2" value="{USER_EMAIL2}" size="40" maxlength="100" data-equalto="useremail" required/>
-						<i class="fa fa-asterisk required small"></i>
+						<input name="user_email2" type="email" class="input equalto" id="user_email2" value="{USER_EMAIL2}" size="30" maxlength="100" data-equalto="useremail" data-fv-message="{L_fv_required}" required/>
 						<span class="errormessage error-message-red" style="display:none;"><i class="fa fa-exclamation-triangle fa-lg"></i> {L_fv_email_not_match}</span>
 					</dd>
 				</dl>
 				<dl>
 					<dt>
-						<label>{L_password}</label><br /><span></span>
+						<label class="required">{L_password}</label><br /><span></span>
 					</dt>
 					<dd>
-						<input type="password" id="password1" name="new_user_password1" size="40" maxlength="100" value="" class="input" required pattern=".{6,}"/>
-						<i class="fa fa-asterisk required small"></i>
+						<input type="password" id="password1" name="new_user_password1" size="30" maxlength="100" value="" class="input" required pattern=".{6,}" data-fv-message="{L_fv_required_password}" />
 					</dd>
 				</dl>
 				<dl>
 					<dt>
-						<label>{L_confirm_password}</label>
+						<label class="required">{L_confirm_password}</label>
 						<br />
 						<span>{L_confirm_password_repeat_note}</span>
 					</dt>
 					<dd>
-						<input type="password" id="password2" name="new_user_password2" size="40" maxlength="100" value="" class="input equalto" data-equalto="password1" required/>
-						<i class="fa fa-asterisk required small"></i>
+						<input type="password" id="password2" name="new_user_password2" size="30" maxlength="100" value="" class="input equalto" data-equalto="password1" data-fv-message="{L_fv_required_password}" required/>
 						<span class="errormessage error-message-red" style="display:none;"><i class="fa fa-exclamation-triangle fa-lg"></i> {L_fv_required_password_repeat}</span>
 					</dd>
 				</dl>
@@ -182,7 +177,7 @@ $(function() {
 	</div>
 	<!-- ENDIF -->
 		<div class="contentFooter">
-			<button class="" type="submit" name="submit" onclick="$('#register').addClass('submitted');"><i class="fa fa-check"></i>{L_submit}</button>
+			<button class="" type="submit" name="submit"><i class="fa fa-check"></i>{L_submit}</button>
 			<button class="" type="reset" name="reset"><i class="fa fa-trash-o" onclick="reset_validator_register();"></i>{L_reset}</button>
 		</div>
 	</div>
