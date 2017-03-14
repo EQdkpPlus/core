@@ -348,7 +348,7 @@ if( !class_exists( "plus_datahandler")){
 				if(DEBUG > 3){
 					$data = debug_backtrace();
 					if(!is_array($module) && !is_array($tag)) {
-						$extra = array('module: '.$module, 'tag: '.$tag, 'params: '.implode( ", ", $params ));
+						$extra = array('module: '.$module, 'tag: '.$tag, 'params: '.implode_r( ", ", $params ));
 					} else {
 						$extra = array('error: module or tag is an array instead of string');
 					}
@@ -362,7 +362,7 @@ if( !class_exists( "plus_datahandler")){
 				return call_user_func_array( array( $objModule, $method ), $params );
 			} else {
 				$data = debug_backtrace();
-				$extra = array('module: '.$module, 'tag: '.$tag, 'params: '.implode( ", ", $params ), 'sub_array: '.implode( ", ", $sub_arr ));
+				$extra = array('module: '.$module, 'tag: '.$tag, 'params: '.implode_r( ", ", $params ), 'sub_array: '.implode_r( ", ", $sub_arr ));
 				for($i=0;$i>0;$i++) {
 					if(isset($data[$i]['file']) && strpos($data[$i]['file'], 'plus_datahandler') === false) break;
 				}
