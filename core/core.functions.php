@@ -1361,6 +1361,15 @@ function is_serialized0($strValue){
 	}
 }
 
+function implode_r($glue, $pieces){ 
+	$out = ""; 
+	foreach ($pieces as $piece) { 
+		if (is_array ($piece)) $out .= implode_r ($glue, $piece); // recurse 
+		else $out .= $glue.$piece;
+	}	
+	return $out; 
+ } 
+
 /* Workarounds because php does not allow arrays in Constants < 5.6 */
 function get_attr_blacklist(){
 	global $ATTR_BLACKLIST;
