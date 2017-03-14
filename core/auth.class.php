@@ -155,15 +155,17 @@ class auth extends user {
 		//START Autologin
 		$boolSetAutoLogin = false;
 
-		//Loginmethod Autologin
-		$arrAuthObjects = $this->get_login_objects();
-		foreach($arrAuthObjects as $strMethods => $objMethod){
-			if (method_exists($objMethod, 'autologin')){
-				$arrAutologin = $objMethod->autologin($arrCookieData);
-				if ($arrAutologin){
-					$this->data = array_merge($this->data, $arrAutologin);
-					$boolSetAutoLogin = true;
-					break;
+		//Loginmethod Autologin (not if maintenance mode)
+		if($this->config->get('pk_maintenance_mode') != 1){
+			$arrAuthObjects = $this->get_login_objects();
+			foreach($arrAuthObjects as $strMethods => $objMethod){
+				if (method_exists($objMethod, 'autologin')){
+					$arrAutologin = $objMethod->autologin($arrCookieData);
+					if ($arrAutologin){
+						$this->data = array_merge($this->data, $arrAutologin);
+						$boolSetAutoLogin = true;
+						break;
+					}
 				}
 			}
 		}
