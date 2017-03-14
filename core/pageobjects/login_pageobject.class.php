@@ -112,9 +112,23 @@ class login_pageobject extends pageobject {
 				
 				$this->display();
 				
-			} else {
+			} else {				
 				//success
-				if ($this->in->exists('redirect')){
+				if($this->hooks->isRegistered('login_pageobject_successfull_login')){
+					if($this->in->exists('redirect')){
+						$redirect_url = preg_replace('#^.*?redirect=(.+?)&(.+?)$#', '\\1' . $this->SID . '&\\2', base64_decode($this->in->get('redirect')));
+						$redirect_url = $this->user->removeSIDfromString($redirect_url);
+						if (strpos($redirect_url, '?') === false) {
+							$redirect_url = $redirect_url.$this->SID;
+						} else {
+							$redirect_url = str_replace("?&", $this->SID.'&', $redirect_url);
+						}
+					} else {
+						$redirect_url = $this->controller_path_plain.$this->SID;
+					}
+					
+					$redirect_url = $this->hooks->process('login_pageobject_successfull_login', array('user_id' => $this->user->id, 'redirect_url' => $redirect_url), true);
+				} elseif ($this->in->exists('redirect')){
 					$redirect_url = preg_replace('#^.*?redirect=(.+?)&(.+?)$#', '\\1' . $this->SID . '&\\2', base64_decode($this->in->get('redirect')));
 					$redirect_url = $this->user->removeSIDfromString($redirect_url);
 					if (strpos($redirect_url, '?') === false) {
