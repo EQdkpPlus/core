@@ -65,8 +65,8 @@ if( !class_exists( "plus_datahandler")){
 
 		//Constructor
 		public function __construct(){
-			if(!$this->pdl->type_known('pdh_error')) $this->pdl->register_type('pdh_error', null, array($this, 'html_format_errors'), array(3, 4));
-			if(!$this->pdl->type_known('pdh')) $this->pdl->register_type('pdh', null, array($this, 'html_format_errors'), false);
+			if(!$this->pdl->type_known('pdh_error')) $this->pdl->register_type('pdh_error', null, array($this, 'html_format_errors'), array(3, 4), false);
+			if(!$this->pdl->type_known('pdh')) $this->pdl->register_type('pdh', null, array($this, 'html_format_errors'), array(3, 4), false);
 			$this->init_module_path();
 
 			require_once( $this->rm_path.'pdh_r_generic.class.php' );
