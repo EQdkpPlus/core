@@ -399,7 +399,7 @@ class Manage_Styles extends page_generic{
 				$field = "";
 
 				if($elem == 'color'){
-					$field = (new hcolorpicker($name, array('value' =>  $this->style[$name], 'id' => $name, 'disabled' => ((!in_array($name, $arrUsedVariables)) ? true : false), 'size' => 14, 'showAlpha' => true, 'format' => 'rgb', 'group' => 'editstyle')))->output(),
+					$field = (new hcolorpicker($name, array('value' =>  $this->style[$name], 'id' => $name, 'disabled' => ((!in_array($name, $arrUsedVariables)) ? true : false), 'size' => 14, 'showAlpha' => true, 'format' => 'rgb', 'group' => 'editstyle')))->output();
 				} elseif($elem == 'decoration'){
 					$field = (new hdropdown($name, array('options' => $text_decoration, 'value' => $this->style[$name], 'disabled' => ((!in_array($name, $arrUsedVariables)) ? true : false))))->output();
 				} elseif($elem == 'font-family'){
