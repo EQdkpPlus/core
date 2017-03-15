@@ -389,6 +389,9 @@ class login_facebook extends gen_class {
 	* @return bool
 	*/
 	public function autologin($arrCookieData){
+		if(!$this->config->get('login_fb_appid') || $this->config->get('login_fb_appid') == "") return false;
+		
+		
 		$this->init_fb();
 		if(!is_object($this->objFacebook)) return false;
 
