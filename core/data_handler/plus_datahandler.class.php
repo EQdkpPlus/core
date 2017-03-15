@@ -581,7 +581,7 @@ if( !class_exists( "plus_datahandler")){
 			if( $this->register_write_module( $module ) ) {
 				if(DEBUG > 3){
 					$data = debug_backtrace();
-					$extra = array('module: '.$module, 'function: '.$function, 'params: '.implode( ", ", $params ));
+					$extra = array('module: '.$module, 'function: '.$function, 'params: '.implode_r( ", ", $params ));
 					
 					if(is_array($module) || is_array($function)){
 						debug_print_backtrace();
