@@ -1828,5 +1828,14 @@ $lang = array(
 "consolidate_detele_warning" => "Bist du sicher, dass du die Konsolidierung für das ausgewählte Event durchführen willst?",		
 "consolidate_start"	=> "Konsolidierung starten",
 "userpf_sett_f_example" => "Eingabebeispiel",
+		
+
+
+//Multilang
+'core_sett_fs_multilang' => 'Mehrsprachigkeit',
+'core_sett_f_enable_multilang' => 'Mehrsprachigkeit aktivieren',
+'core_sett_f_multilang_hide_menuentries' => 'Menüeinträge ausblenden für nicht passende Sprachen',
+'core_sett_f_multilang_redirect_articles' => 'Benutzer bei Artikel direkt auf passende Sprache umleiten',
+'is_startpoint' => 'Startpunkt einer Sprache',
 );
 ?>
