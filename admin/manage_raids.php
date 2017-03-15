@@ -355,7 +355,7 @@ class ManageRaids extends page_generic {
 		if($raid['id'] AND $raid['id'] != 'new') $this->confirm_delete($this->user->lang('del_raid_with_itemadj')."<br />".$this->time->user_date($raid['date'])." ".$events[$raid['event']].": ".addslashes($raid['note']));
 		$arrEventKeys = array_keys($events);
 		$this->tpl->assign_vars(array(
-			'DATE'				=> $this->jquery->Calendar('date', (($this->in->get('dataimport', '') == 'true') ? $this->in->get('date', '') : $this->time->user_date($raid['date'], true, false, false, function_exists('date_create_from_format'))), '', array('timepicker' => true)),
+			'DATE'				=> (new hdatepicker('date', array('value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->get('date', '') : $this->time->user_date($raid['date'], true, false, false, function_exists('date_create_from_format'))), 'timepicker' => true)))->output(),
 			'NOTE'				=> stripslashes((($this->in->get('dataimport', '') == 'true') ? $this->in->get('rnote', '') : $raid['note'])),
 			'EVENT'				=> (new hdropdown('event', array('options' => $events, 'value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->get('event', 0) : $raid['event']), 'js' => 'onchange="loadEventValue($(this).val())"')))->output(),
 			'RAID_EVENT'		=> $this->pdh->get('event', 'name', array($raid['event'])),
@@ -456,7 +456,7 @@ class ManageRaids extends page_generic {
 
 		$arrEventKeys = array_keys($events);
 		$this->tpl->assign_vars(array(
-				'DATE'				=> $this->jquery->Calendar('date', (($this->in->get('dataimport', '') == 'true') ? $this->in->get('date', '') : $this->time->user_date($raid['date'], true, false, false, function_exists('date_create_from_format'))), '', array('timepicker' => true)),
+				'DATE'				=> (new hdatepicker('date', array('value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->get('date', '') : $this->time->user_date($raid['date'], true, false, false, function_exists('date_create_from_format'))), 'timepicker' => true)))->output(),
 				'NOTE'				=> stripslashes((($this->in->get('dataimport', '') == 'true') ? $this->in->get('rnote', '') : $raid['note'])),
 				'EVENT'				=> (new hdropdown('event', array('options' => $events, 'value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->get('event', 0) : $raid['event']), 'js' => 'onchange="loadEventValue($(this).val())"')))->output(),
 				'RAID_EVENT'		=> $this->pdh->get('event', 'name', array($raid['event'])),
@@ -473,7 +473,7 @@ class ManageRaids extends page_generic {
 				'S_CALDATAIMPORT'	=> ($this->in->get('dataimport', '') == 'true') ? $this->in->get('calevent_id', 0) : 0,
 				'ADDITIONAL_INFOS_EDITOR' => (new hbbcodeeditor('additional_data', array('rows' => 10, 'value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->get('additional_data') : $raid['additional_data']))))->output(),
 				'ADDITIONAL_INFOS'	=> ((isset($raid['additional_data']) AND strlen($raid['additional_data'])) || (($this->in->get('dataimport', '') == 'true') && strlen($this->in->get('additional_data')))) ? 'true' : 'false',
-				'BULK_ITEMS'	=> implode('|', $arrItems),
+				'BULK_ITEMS'		=> implode('|', $arrItems),
 		));
 
 		$this->core->set_vars(array(

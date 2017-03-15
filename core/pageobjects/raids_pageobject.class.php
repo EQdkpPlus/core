@@ -376,8 +376,8 @@ class raids_pageobject extends pageobject {
 			'RAID_COUNT'		=> $raid_count,
 			'HPTT_ADMIN_LINK'	=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('listraids').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,
 			// Date Picker
-			'DATEPICK_DATE_FROM'		=> $this->jquery->Calendar('from', $this->time->user_date($date1, false, false, false, function_exists('date_create_from_format'))),
-			'DATEPICK_DATE_TO'			=> $this->jquery->Calendar('to', $this->time->user_date($date2, false, false, false, function_exists('date_create_from_format')))
+			'DATEPICK_DATE_FROM'=> (new hdatepicker('from', array('value' =>$this->time->user_date($date1, false, false, false, function_exists('date_create_from_format')))))->output(),
+			'DATEPICK_DATE_TO'	=> (new hdatepicker('to', array('value' => $this->time->user_date($date2, false, false, false, function_exists('date_create_from_format')))))->output(),
 		));
 
 		$this->jquery->Collapse('#toggleRaidsummary', true);

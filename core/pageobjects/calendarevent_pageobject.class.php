@@ -123,8 +123,8 @@ class calendarevent_pageobject extends pageobject {
 		$this->tpl->assign_vars(array(
 			'EVENT_ID'			=> $this->url_id,
 			'BBCODE_NOTE'		=> (new hbbcodeeditor('note', array('rows' => 3, 'value' => ((isset($eventdata['notes'])) ? $eventdata['notes'] : ''), 'id' => 'input_note')))->output(),
-			'JQ_DATE_START'		=> $this->jquery->Calendar('startdate', $this->time->user_date($defdates['start'], true, false, false), '', array('timepicker' => true, 'onselect' => $startdate_onselect)),
-			'JQ_DATE_END'		=> $this->jquery->Calendar('enddate',$this->time->user_date($defdates['end'], true, false, false), '', array('timepicker' => true)),
+			'JQ_DATE_START'		=> (new hdatepicker('startdate', array('value' => $this->time->user_date($defdates['start'], true, false, false), 'timepicker' => true, 'onselect' => $startdate_onselect)))->output(),
+			'JQ_DATE_END'		=> (new hdatepicker('enddate', array('value' => $this->time->user_date($defdates['end'], true, false, false), 'timepicker' => true)))->output(),
 		));
 
 		$this->core->set_vars(array(

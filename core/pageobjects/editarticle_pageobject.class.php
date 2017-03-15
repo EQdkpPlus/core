@@ -236,10 +236,9 @@ class editarticle_pageobject extends pageobject {
 				'HIDE_HEADER_RADIO' => (new hradio('hide_header', array('value' => ($this->pdh->get('articles', 'hide_header', array($id))))))->output(),
 				'ML_TITLE'			=> (new htextmultilang('title', array('value' => $this->pdh->get('articles', 'title', array($id, true)), 'required' => true, 'size' => 50)))->output(),
 
-
-				'DATE_PICKER'		=> $this->jquery->Calendar('date', $this->time->user_date($this->pdh->get('articles', 'date', array($id)), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
-				'DATE_TO_PICKER'	=> $this->jquery->Calendar('show_to', $this->time->user_date(((strlen($this->pdh->get('articles', 'show_to', array($id)))) ? $this->pdh->get('articles', 'show_to', array($id)) : 0), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
-				'DATE_FROM_PICKER'	=> $this->jquery->Calendar('show_from', $this->time->user_date(((strlen($this->pdh->get('articles', 'show_from', array($id)))) ? $this->pdh->get('articles', 'show_from', array($id)) : 0), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
+				'DATE_PICKER'		=> (new hdatepicker('date', array('value' => $this->time->user_date($this->pdh->get('articles', 'date', array($id)), true, false, false, function_exists('date_create_from_format')), 'timepicker' => true)))->output(),
+				'DATE_TO_PICKER'	=> (new hdatepicker('show_to', array('value' => $this->time->user_date(((strlen($this->pdh->get('articles', 'show_to', array($id)))) ? $this->pdh->get('articles', 'show_to', array($id)) : 0), true, false, false, function_exists('date_create_from_format')), 'timepicker' => true)))->output(),
+				'DATE_FROM_PICKER'	=> (new hdatepicker('show_from', array('value' => $this->time->user_date(((strlen($this->pdh->get('articles', 'show_from', array($id)))) ? $this->pdh->get('articles', 'show_from', array($id)) : 0), true, false, false, function_exists('date_create_from_format')), 'timepicker' => true)))->output(),
 				'PREVIEW_IMAGE'		=> (new himageuploader('previewimage', array(
 						'imgpath'	=> $this->pfh->FolderPath('','files'),
 						'value'		=> $this->pdh->get('articles', 'previewimage', array($id)),
@@ -257,9 +256,9 @@ class editarticle_pageobject extends pageobject {
 				'COMMENTS_RADIO'	=> (new hradio('comments', array('value' => 1)))->output(),
 				'VOTES_RADIO'		=> (new hradio('votes', array()))->output(),
 				'HIDE_HEADER_RADIO' => (new hradio('hide_header', array()))->output(),
-				'DATE_PICKER'		=> $this->jquery->Calendar('date', $this->time->user_date($this->time->time, true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
-				'DATE_TO_PICKER'	=> $this->jquery->Calendar('show_to', $this->time->user_date(0, true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
-				'DATE_FROM_PICKER'	=> $this->jquery->Calendar('show_from', $this->time->user_date(0, true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
+				'DATE_PICKER'		=> (new hdatepicker('date', array('value' => $this->time->user_date($this->time->time, true, false, false, function_exists('date_create_from_format')), 'timepicker' => true)))->output(),
+				'DATE_TO_PICKER'	=> (new hdatepicker('show_to', array('value' => $this->time->user_date(0, true, false, false, function_exists('date_create_from_format')), 'timepicker' => true)))->output(),
+				'DATE_FROM_PICKER'	=> (new hdatepicker('show_from', array('value' => $this->time->user_date(0, true, false, false, function_exists('date_create_from_format')), 'timepicker' => true)))->output(),
 				'ML_TITLE'			=> (new htextmultilang('title', array('value' => '', 'required' => true, 'size' => 50)))->output(),
 				'PREVIEW_IMAGE'		=> (new himageuploader('previewimage', array(
 					'imgpath'		=> $this->pfh->FolderPath('logo','eqdkp'),
