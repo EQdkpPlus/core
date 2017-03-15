@@ -109,12 +109,12 @@ class Manage_Calendars extends page_generic {
 
 		foreach($ranks as $id => $name) {
 			$this->tpl->assign_block_vars('calendars', array(
-				'KEY'				=> $key,
+				'KEY'			=> $key,
 				'DELETABLE'		=> $this->pdh->get('calendars', 'is_deletable', array($id)),
-				'ID'				=> $id,
+				'ID'			=> $id,
 				'NAME'			=> $name,
 				'TYPE'			=> (new hdropdown('calendars['.$key.'][type]', array('options' => $types, 'value' => $this->pdh->get('calendars', 'type', array($id)), 'id' => 'calendars'.$key)))->output(),
-				'COLOR'			=> $this->jquery->colorpicker('cal_'.$key, $this->pdh->get('calendars', 'color', array($id)), 'calendars['.$key.'][color]'),
+				'COLOR'			=> (new hcolorpicker('calendars['.$key.'][color]', array('value' =>  $this->pdh->get('calendars', 'color', array($id)), 'id' => 'cal_'.$key)))->output(),
 				'PRIVATE'		=> $this->pdh->get('calendars', 'private', array($id)),
 				'FEED'			=> $this->pdh->get('calendars', 'feed', array($id)),
 				'RESTRICTED'	=> (new hradio('calendars['.$key.'][restricted]', array('value' => $this->pdh->get('calendars', 'restricted', array($id)))))->output(),
@@ -127,11 +127,11 @@ class Manage_Calendars extends page_generic {
 
 		$permissionvalue = $this->pdh->get('calendars', 'permissions', array($id));
 		$this->tpl->assign_vars(array(
-			'SID'					=> $this->SID,
-			'ID'					=> $new_id,
-			'KEY'					=> $key,
+			'SID'				=> $this->SID,
+			'ID'				=> $new_id,
+			'KEY'				=> $key,
 			'TYPE'				=> (new hdropdown('calendars['.$key.'][type]', array('options' => $types, 'value' => $this->pdh->get('calendars', 'type', array($id)), 'id' => 'calendars'.$key)))->output(),
-			'COLOR'				=> $this->jquery->colorpicker('cal_'.$key, '', 'calendars['.$key.'][color]'),
+			'COLOR'				=> (new hcolorpicker('calendars['.$key.'][color]', array('value' =>  '', 'id' => 'cal_'.$key)))->output(),
 			'CALENDAR_COUNT'	=> count($ranks),
 			'PERMISSIONS'		=> (new hmultiselect('calendars['.$key.'][permissions]', array('options' => $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list'))), 'value' => (($permissionvalue == 'all') ? $this->pdh->get('user_groups', 'id_list') : $permissionvalue))))->output(),
 		));
