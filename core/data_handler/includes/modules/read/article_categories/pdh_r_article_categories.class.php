@@ -87,6 +87,8 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 						'sortation_type'	=> intval($drow['sortation_type']),
 						'featured_ontop'	=> intval($drow['featured_ontop']),
 						'hide_on_rss'		=> intval($drow['hide_on_rss']),
+						'lang_startpoint'		=> intval($drow['lang_startpoint']),
+						'language'			=> $drow['language'],
 					);
 					$this->alias[utf8_strtolower($drow['alias'])] = intval($drow['id']);
 				}
@@ -254,6 +256,20 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			return false;
 		}
 		
+		public function get_lang_startpoint($intCategoryID){
+			if (isset($this->categories[$intCategoryID])){
+				return $this->categories[$intCategoryID]['lang_startpoint'];
+			}
+			return false;
+		}
+		
+		public function get_language($intCategoryID){
+			if (isset($this->categories[$intCategoryID])){
+				return $this->categories[$intCategoryID]['language'];
+			}
+			return false;
+		}
+		
 		public function get_html_portal_layout($intCategoryID){
 			if ($this->get_portal_layout($intCategoryID)) {
 				return $this->pdh->get('portal_layouts', 'name', array($this->get_portal_layout($intCategoryID)));
@@ -348,8 +364,19 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			$filled = ($intArticles > 0) ? '' : '-o';
 			$icon = (count($this->get_childs($intCategoryID))) ? '<i class="fa fa-folder-open'.$filled.'"></i>' : '<i class="fa fa-folder'.$filled.'"></i>';
 			$startpage = ($this->get_is_startpage($intCategoryID)) ? ' <i class="fa fa-globe"></i>' : '';
+			$startpoint = ($this->get_lang_startpoint($intCategoryID));
+			$startpointFlag = '';
+			if($startpoint){
+				list($pre, $post) = explode('_', $this->get_language($intCategoryID));
+				if($pre != "" && is_file($this->root_path.'images/flags/'.$pre.'.svg')){
+					$name = (($lang['ISO_LANG_NAME']) ? $lang['ISO_LANG_NAME'] : ucfirst($file));
+					$startpointFlag = ' <img src="'.registry::get_const('server_path').'images/flags/'.$pre.'.svg" class="icon icon-language absmiddle" alt="'.$name.'" title="'.$name.'"/>';
+				} else {
+					$startpointFlag = ' ('.$pre.')';
+				}
+			}
 			
-			return $this->get_name_prefix($intCategoryID).' <a href="'.$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$intCategoryID.'" class="articles-link">'.$icon.' '.$this->get_name($intCategoryID).'</a>'.$startpage;
+			return $this->get_name_prefix($intCategoryID).' <a href="'.$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$intCategoryID.'" class="articles-link">'.$icon.' '.$this->get_name($intCategoryID).'</a>'.$startpage.$startpointFlag;
 		}
 		
 		public function get_is_startpage($intCategoryID){

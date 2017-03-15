@@ -77,7 +77,7 @@ class Manage_Article_Categories extends page_generic {
 		$this->user->check_auth('a_article_categories_man');
 
 		$id = $this->in->get('c', 0);
-		$arrName = $this->in->getArray('name', 'string');
+		$strName = $this->in->get('name', '');
 		$strDescription = $this->in->get('description', '', 'raw');
 		$strAlias = $this->in->get('alias');
 		$intPublished = $this->in->get('published', 0);
@@ -96,21 +96,22 @@ class Manage_Article_Categories extends page_generic {
 		$intSortationType = $this->in->get('sortation_type', 0);
 		$intFeaturedOntop = $this->in->get('featured_ontop', 0);
 		$intHideOnRSS = $this->in->get('hide_on_rss', 0);
+		$intIsStartpoint = $this->in->get('lang_startpoint', 0);
+		$strLanguage = $this->in->get('language', 'english');
 
 		//Check Name
-		$strDefaultLanguage = $this->config->get('default_lang');
-		if(!isset($arrName[$strDefaultLanguage]) || $arrName[$strDefaultLanguage] == ""){
+		if($strName == ""){
 			$this->core->message($this->user->lang('name'), $this->user->lang('missing_values'), 'red');
 			$this->edit();
 			return;
 		}
 
-		$strName = serialize($arrName);
+		
 
 		if ($id){
-			$blnResult = $this->pdh->put('article_categories', 'update', array($id, $strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles, $intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS));
+			$blnResult = $this->pdh->put('article_categories', 'update', array($id, $strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles, $intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS, $intIsStartpoint, $strLanguage));
 		} else {
-			$blnResult = $this->pdh->put('article_categories', 'add', array($strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles, $intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS));
+			$blnResult = $this->pdh->put('article_categories', 'add', array($strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles, $intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS, $intIsStartpoint, $strLanguage));
 		}
 
 		if ($blnResult){
@@ -212,7 +213,7 @@ class Manage_Article_Categories extends page_generic {
 			$this->tpl->assign_vars(array(
 				'DESCRIPTION' 		=> $this->pdh->get('article_categories', 'description', array($id)),
 				'NAME' 				=> $this->pdh->get('article_categories', 'name', array($id)),
-				'ML_NAME'			=> (new htextmultilang('name', array( 'required' => true, 'size' => 50, 'value' => $this->pdh->get('article_categories', 'name', array($id, true)))))->output(),
+				'ML_NAME'			=> (new htext('name', array( 'required' => true, 'size' => 50, 'value' => $this->pdh->get('article_categories', 'name', array($id, true)))))->output(),
 				'ALIAS'				=> $this->pdh->get('article_categories', 'alias', array($id)),
 				'PER_PAGE'			=> $this->pdh->get('article_categories', 'per_page', array($id)),
 				'DD_PORTAL_LAYOUT'	=> (new hdropdown('portal_layout', array('options' => $arrPortalLayouts, 'value' => $this->pdh->get('article_categories', 'portal_layout', array($id)))))->output(),
@@ -231,13 +232,16 @@ class Manage_Article_Categories extends page_generic {
 
 				'R_PUBLISHED_STATE'	=> (new hradio('article_published_state', array('options' => array(0 => $this->user->lang('not_published'), 1 => $this->user->lang('published')), 'value' => $this->pdh->get('article_categories', 'article_published_state', array($id)))))->output(),
 				'DD_SORTATION_TYPE'	=> (new hdropdown('sortation_type', array('options' => $this->user->lang('sortation_types'), 'value' => $this->pdh->get('article_categories', 'sortation_type', array($id)))))->output(),
+				
+				'RADIO_STARTPOINT'	=> (new hradio('lang_startpoint', array('value' => $this->pdh->get('article_categories', 'lang_startpoint', array($id)))))->output(),
+				'DD_LANG'			=> (new hdropdown('language', array('options' => $arrLanguages = $this->user->getAvailableLanguages(false, false, true), 'value' => $this->pdh->get('article_categories', 'language', array($id)))))->output(),
 			));
 
 		} else {
 
 			$this->tpl->assign_vars(array(
 				'PER_PAGE'			=> 25,
-				'ML_NAME'			=> (new htextmultilang('name', array('value' => '', 'required' => true, 'size' => 50)))->output(),
+				'ML_NAME'			=> (new htext('name', array('value' => '', 'required' => true, 'size' => 50)))->output(),
 				'DD_PORTAL_LAYOUT'	=> (new hdropdown('portal_layout', array('options' => $arrPortalLayouts, 'value' => 1)))->output(),
 				'R_PUBLISHED'		=> (new hradio('published', array('value' => 1)))->output(),
 				'R_SHOW_CHILDS'		=> (new hradio('show_childs', array('value' => 1)))->output(),
@@ -252,10 +256,13 @@ class Manage_Article_Categories extends page_generic {
 				'R_HIDE_ON_RSS'		=> (new hradio('hide_on_rss', array('value' => 0)))->output(),
 				'R_NOTIFY_UNPUBLISHED' => (new hradio('notify_unpublished', array('value' => 0)))->output(),
 				'R_HIDE_HEADER'		=> (new hradio('hide_header', array('value' => 0)))->output(),
+				'RADIO_STARTPOINT'	=> (new hradio('lang_startpoint', array('value' => 0)))->output(),
+				'DD_LANG'			=> (new hdropdown('language', array('options' => $arrLanguages = $this->user->getAvailableLanguages())))->output(),
 			));
 		}
 		$this->tpl->assign_vars(array(
-			'CID' => $id,
+			'CID' 					=> $id,
+			'S_MULTILANG_ENABLED'	=> ($this->config->get('enable_multilang')) ? true : false,
 		));
 		$this->core->set_vars(array(
 			'page_title'		=> (($id) ? $this->user->lang('manage_article_categories').': '.$this->pdh->get('article_categories', 'name', array($id)) : $this->user->lang('add_article_category')),

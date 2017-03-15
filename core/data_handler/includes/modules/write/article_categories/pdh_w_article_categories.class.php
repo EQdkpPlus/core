@@ -48,6 +48,8 @@ if(!class_exists('pdh_w_article_categories')) {
 				'sortation_type'	=> "{L_SORTATION_TYPE}",
 				'featured_ontop'	=> "{L_FEATURED_ONTOP}",
 				'hide_on_rss'		=> "{L_HIDE_ON_RSS}",
+				'lang_startpoint'		=> "{L_lang_startpoint}",
+				'language'			=> "{L_LANGUAGE}",
 		);
 
 		public function delete($id) {
@@ -80,7 +82,7 @@ if(!class_exists('pdh_w_article_categories')) {
 		
 		
 		
-		public function add($strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles,$intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS){
+		public function add($strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles,$intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS, $intIsStartpoint=0, $strLanguage=''){
 			if ($strAlias == ""){
 				$arrName = unserialize($strName);
 				$strDefaultLanguage = $this->config->get('default_lang');
@@ -122,6 +124,8 @@ if(!class_exists('pdh_w_article_categories')) {
 				'sortation_type' => $intSortationType,
 				'featured_ontop' => $intFeaturedOntop,
 				'hide_on_rss'	=> $intHideOnRSS,
+				'language'		=> $strLanguage,
+				'lang_startpoint' => $intIsStartpoint,
 			);
 			
 			$objQuery = $this->db->prepare("INSERT INTO __article_categories :p")->set($arrQuery)->execute();
@@ -149,7 +153,7 @@ if(!class_exists('pdh_w_article_categories')) {
 			return false;
 		}
 		
-		public function update($id, $strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles,$intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS){			
+		public function update($id, $strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles,$intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS, $intIsStartpoint=0, $strLanguage=''){			
 			if ($strAlias == ""){
 				$arrName = unserialize($strName);
 				$strDefaultLanguage = $this->config->get('default_lang');
@@ -191,6 +195,8 @@ if(!class_exists('pdh_w_article_categories')) {
 				'sortation_type' => $intSortationType,
 				'featured_ontop' => $intFeaturedOntop,
 				'hide_on_rss'	=> $intHideOnRSS,
+				'language'		=> $strLanguage,
+				'lang_startpoint' => $intIsStartpoint,
 			);
 			
 			$arrOldData = $this->pdh->get('article_categories', 'data', array($id));

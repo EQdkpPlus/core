@@ -83,6 +83,20 @@ function renew_all_permissions(){
 				<dd><textarea name="description" id="description" class="mceEditor" rows="3" cols="60" style="width:95%;height:220px;">{DESCRIPTION}</textarea></dd>
 			</dl>
 			</fieldset>
+			
+			<!-- IF S_MULTILANG_ENABLED -->
+			<fieldset class="settings mediumsettings">
+			<legend>{L_core_sett_fs_multilang}</legend>
+			<dl>
+				<dt><label>{L_is_startpoint}</label></dt>
+				<dd>{RADIO_STARTPOINT}</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_language}</label></dt>
+				<dd>{DD_LANG}</dd>
+			</dl>
+			</fieldset>
+			<!-- ENDIF -->
 		</div>
 		<div id="settings">
 			<fieldset class="settings mediumsettings">
