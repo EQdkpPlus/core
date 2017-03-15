@@ -186,12 +186,11 @@ class ManageAdjs extends page_generic {
 		$this->jquery->Autocomplete('reason', array_unique($adjustment_reasons));
 		$this->confirm_delete($this->user->lang('confirm_delete_adjustment')."<br />".((isset($adj['reason'])) ? $adj['reason'] : ''), '', true);
 
-		// TODO use hdatepicker and hmultiselect
 		$this->tpl->assign_vars(array(
 			'GRP_KEY'		=> (isset($grp_key) && !$copy) ? $grp_key : '',
 			'REASON'		=> (isset($adj['reason'])) ? $adj['reason'] : '',
 			'RAID'			=> (new hdropdown('raid_id', array('options' => $raids, 'value' => ((isset($adj['raid_id'])) ? $adj['raid_id'] : ''))))->output(),
-			'MEMBERS'		=> $this->jquery->MultiSelect('members', $members, ((isset($adj['members'])) ? $adj['members'] : ''), array('width' => 350, 'filter' => true)),
+			'MEMBERS'		=> (new hmultiselect('members', array('options' => $members, 'value' => ((isset($adj['members'])) ? $adj['members'] : ''), 'width' => 350, 'filter' => true)))->output(),
 			'DATE'			=> (new hdatepicker('date', array('value' => $this->time->user_date(((isset($adj['date'])) ? $adj['date'] : $this->time->time), true, false, false, function_exists('date_create_from_format')), 'timepicker' => true)))->output(),
 			'VALUE'			=> (isset($adj['value'])) ? $adj['value'] : '',
 			'S_COPY'		=> ($copy) ? true : false,

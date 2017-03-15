@@ -119,7 +119,6 @@ class calendarevent_pageobject extends pageobject {
 			'deadline'	=> $default_deadlineoffset,
 		);
 
-		// TODO Use hdatepicker
 		$this->tpl->assign_vars(array(
 			'EVENT_ID'			=> $this->url_id,
 			'BBCODE_NOTE'		=> (new hbbcodeeditor('note', array('rows' => 3, 'value' => ((isset($eventdata['notes'])) ? $eventdata['notes'] : ''), 'id' => 'input_note')))->output(),

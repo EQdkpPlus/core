@@ -535,8 +535,8 @@ $('.js_reload').change(reload_settings);", 'docready');
 
 		$this->tpl->assign_vars(array(
 				'NAME'				=> ($intLayoutID) ? $this->pdh->get('portal_layouts', 'name', array($intLayoutID)) : '',
-				'MS_PORTAL_BLOCKS'	=> $this->jquery->MultiSelect('portal_blocks', $arrBlockList, (($intLayoutID) ? $this->pdh->get('portal_layouts', 'blocks', array($intLayoutID)) : array('left', 'right', 'middle', 'bottom')), array('width' => 300)),
-				'MS_PORTAL_ROUTES'	=> $this->jquery->MultiSelect('portal_routes', $arrRoutes, (($intLayoutID) ? $this->pdh->get('portal_layouts', 'routes', array($intLayoutID)) : array()), array('width' => 300)),
+				'MS_PORTAL_BLOCKS'	=> (new hmultiselect('portal_routes', array('options' => $arrBlockList, 'value' => (($intLayoutID) ? $this->pdh->get('portal_layouts', 'blocks', array($intLayoutID)) : array('left', 'right', 'middle', 'bottom')), 'width' => 300)))->output(),
+				'MS_PORTAL_ROUTES'	=> (new hmultiselect('portal_routes', array('options' => $arrRoutes, 'value' => (($intLayoutID) ? $this->pdh->get('portal_layouts', 'routes', array($intLayoutID)) : array()), 'width' => 300)))->output(),
 				'S_RIGHT_HIDDEN'	=> (!in_array('right', $arrUsedBlocks)),
 				'S_LEFT_HIDDEN'		=> (!in_array('left', $arrUsedBlocks)),
 				'S_MIDDLE_HIDDEN'	=> (!in_array('middle', $arrUsedBlocks)),

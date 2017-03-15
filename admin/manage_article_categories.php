@@ -220,7 +220,7 @@ class Manage_Article_Categories extends page_generic {
 				'DD_PARENT' 		=> (new hdropdown('parent', array('js' => 'onchange="renew_all_permissions();"', 'options' => $arrCategories, 'value' => $this->pdh->get('article_categories', 'parent', array($id)))))->output(),
 				'DD_LIST_TYPE' 		=> (new hdropdown('list_type', array('options' => array(1 => $this->user->lang('list_type_full'), 2 => $this->user->lang('list_type_headline'), 3 => $this->user->lang('list_type_teaser')), 'value' => $this->pdh->get('article_categories', 'list_type', array($id)))))->output(),
 				'R_SHOW_CHILDS'		=> (new hradio('show_childs', array('value' => ($this->pdh->get('article_categories', 'show_childs', array($id))))))->output(),
-				'MS_AGGREGATION'	=> $this->jquery->MultiSelect('aggregation', $arrAggregation, $this->pdh->get('article_categories', 'aggregation', array($id))),
+				'MS_AGGREGATION'	=> (new hmultiselect('aggregation', array('options' => $arrAggregation, 'value' => $this->pdh->get('article_categories', 'aggregation', array($id))))->output(),
 				'R_FEATURED_ONLY'	=> (new hradio('featured_only', array('value' => ($this->pdh->get('article_categories', 'featured_only', array($id))))))->output(),
 
 				'R_SHOW_SSB'		=> (new hradio('show_ssb', array('value' => ($this->pdh->get('article_categories', 'social_share_buttons', array($id))))))->output(),
@@ -243,7 +243,7 @@ class Manage_Article_Categories extends page_generic {
 				'R_SHOW_CHILDS'		=> (new hradio('show_childs', array('value' => 1)))->output(),
 				'DD_PARENT'			=> (new hdropdown('parent', array('js' => 'onchange="renew_all_permissions();"', 'options' => $arrCategories, 'value' => 0)))->output(),
 				'DD_LIST_TYPE'		=> (new hdropdown('list_type', array('options' => array(1 => $this->user->lang('list_type_full'), 2 => $this->user->lang('list_type_headline'), 3 => $this->user->lang('list_type_teaser')))))->output(),
-				'MS_AGGREGATION'	=> $this->jquery->MultiSelect('aggregation', $arrAggregation, array()),
+				'MS_AGGREGATION'	=> (new hmultiselect('aggregation', array('options' => $arrAggregation, 'value' => '')))->output(),
 				'R_PUBLISHED_STATE'	=> (new hradio('article_published_state', array('options' => array(0 => $this->user->lang('not_published'), 1 => $this->user->lang('published')), 'value' => 1)))->output(),
 				'DD_SORTATION_TYPE'	=> (new hdropdown('sortation_type', array('options' => array($this->user->lang('sortation_types')), 'value' => $this->pdh->get('article_categories', 'sortation_type', array($id)))))->output(),
 				'R_FEATURED_ONLY'	=> (new hradio('featured_only', array('value' => 0)))->output(),

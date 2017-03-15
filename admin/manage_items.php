@@ -211,7 +211,7 @@ class ManageItems extends page_generic {
 			'GRP_KEY'		=> (isset($grp_key) && !$copy) ? $grp_key : '',
 			'NAME'			=> (isset($item['name'])) ? $item['name'] : '',
 			'RAID'			=> (new hdropdown('raid_id', array('options' => $raids, 'value' => ((isset($item['raid_id'])) ? $item['raid_id'] : ''))))->output(),
-			'BUYERS'		=> $this->jquery->MultiSelect('buyers', $members, ((isset($item['buyers'])) ? $item['buyers'] : ''), array('width' => 350, 'filter' => true)),
+			'BUYERS'		=> (new hmultiselect('buyers', array('options' => $members, 'value' => ((isset($item['buyers'])) ? $item['buyers'] : ''), 'width' => 350, 'filter' => true)))->output(),
 			'DATE'			=> (new hdatepicker('date', array('value' => $this->time->user_date($item['date'], true, false, false, function_exists('date_create_from_format')), 'timepicker' => true)))->output(),
 			'VALUE'			=> (isset($item['value'])) ? $item['value'] : '',
 			'ITEM_ID'		=> (isset($item['item_id'])) ? $item['item_id'] : '',

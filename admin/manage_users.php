@@ -953,8 +953,8 @@ class Manage_Users extends page_generic {
 			'USERNAME'					=> $user_data['username'],
 			'S_PERM_PERMISSION'			=> $this->user->check_auth("a_users_perms", false),
 
-			'USER_GROUP_SELECT'			=> $this->jquery->MultiSelect('user_groups', $usergroups, array_keys($memberships), array('width' => 400, 'height' => 250, 'filter' => true, 'todisable' => $todisable)),
-			'JS_CONNECTIONS'			=> $this->jquery->MultiSelect('member_id', $mselect_list, $mselect_selected, array('width' => 400, 'height' => 250, 'filter' => true)),
+			'USER_GROUP_SELECT'			=> (new hmultiselect('user_groups', array('options' => $usergroups, 'value' => array_keys($memberships), 'width' => 400, 'filter' => true, 'height' => 250, 'todisable' => $todisable)))->output(),
+			'JS_CONNECTIONS'			=> (new hmultiselect('member_id', array('options' => $mselect_list, 'value' => $mselect_selected, 'width' => 400, 'height' => 250, 'filter' => true)))->output(),
 			'ACTIVE_RADIO'				=> (new hradio('user_active', array('value' => (($user_id) ? $user_data['user_active'] : true))))->output(),
 
 			// Validation

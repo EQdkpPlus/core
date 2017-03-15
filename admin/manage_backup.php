@@ -51,7 +51,7 @@ class EQDKPBackup extends page_generic{
 		//Read out all of our backups
 		$path = $this->pfh->FolderPath('backup', 'eqdkp');
 		$arrFiles = sdir($path);
-				
+
 		//Generate backup-array, list eqdkp-backups and .sql files
 		foreach ($arrFiles as $elem){
 			$strExtension = strtolower(pathinfo($elem, PATHINFO_EXTENSION));
@@ -63,14 +63,14 @@ class EQDKPBackup extends page_generic{
 				$backups[$elem] = filemtime($path.$elem);
 			}
 		}
-		
+
 		if (isset($backups) && is_array($backups)){
 			//Sort the arrays the get the newest ones on top
 			array_multisort($backups, SORT_DESC);
 		}
 
 		$js_output = '';
-		
+
 		//Brink the Backups to template
 		if (isset($backups) && is_array($backups)){
 			foreach ($backups as $key=>$elem){
@@ -126,7 +126,7 @@ class EQDKPBackup extends page_generic{
 		$this->tpl->assign_vars(array(
 			'NO_BACKUPS'				=> (!isset($backups) || count($backups) == 0) ? true : false,
 			'TABLE_PREFIX_WARNING'		=> $tp_warning,
-			'TABLE_SELECT'				=> $this->jquery->MultiSelect('tables', $tables, $tables, array('width' => 300, 'height' => 300)),
+			'TABLE_SELECT'				=> (new hmultiselect('tables', array('options' => $tables, 'value' => $tables,'width' => 300, 'height' => 300)))->output(),
 			'BACKUP_UPLOAD_INFO'		=> sprintf($this->user->lang('backup_upload_path'), $this->pfh->FolderPath('backup/', 'eqdkp')),
 		));
 
@@ -166,7 +166,7 @@ class EQDKPBackup extends page_generic{
 
 		$strFilename = $this->backup->createDatabaseBackup($strFormat, $blnCreateTable, $arrTables, (($strAction == 'store' || $strAction == 'both') ?  true : false));
 		$blnResult = ($strFilename && strlen($strFilename)) ? true : false;
-		
+
 		//Create Log entry
 		if ($strAction == 'store' || $strAction == 'both'){
 			if ($blnResult){
@@ -175,22 +175,22 @@ class EQDKPBackup extends page_generic{
 				);
 				$this->logs->add("action_backup_created", $log_action, $this->config->get('plus_version'), true);
 				$this->core->message($this->user->lang('backup_store_success'),$this->user->lang('backup'),'green');
-						
+
 			} else {
 				$this->core->message($this->user->lang('error'),$this->user->lang('backup'),'red');
 				$this->logs->add("action_backup_created", $log_action, $this->config->get('plus_version'), false);
 			}
 
 		}
-		
+
 		//Download the File
 		if ($strAction == 'download' || $strAction == 'both') {
 			if ($blnResult){
 				$name = pathinfo($strFilename, PATHINFO_FILENAME);
-				
+
 				switch ($strFormat){
 					case 'zip':
-		
+
 						@header('Pragma: no-cache');
 						@header("Content-Type: application/zip; name=\"$name.zip\"");
 						@header("Content-disposition: attachment; filename=$name.zip");
@@ -200,7 +200,7 @@ class EQDKPBackup extends page_generic{
 						}
 						exit;
 						break;
-		
+
 					default:
 						@header('Pragma: no-cache');
 						@header("Content-Type: text/x-sql; name=\"$name.sql\"");
@@ -212,11 +212,11 @@ class EQDKPBackup extends page_generic{
 						exit;
 				}
 			}
-		
+
 		}
-		
+
 	} //close process_backup
-	
+
 	public function process_delete(){
 		$file = $this->pfh->FolderPath('backup', 'eqdkp').$this->in->get('backups');
 		$metafile = $this->pfh->FolderPath('backup/meta/', 'eqdkp').str_replace(substr($this->in->get('backups'), strpos($this->in->get('backups'), '.')), "", $this->in->get('backups')).'.meta.php';
@@ -229,26 +229,26 @@ class EQDKPBackup extends page_generic{
 		}
 		$this->display('1');
 	}
-	
-	
+
+
 	public function process_download(){
 		$strFilename = $this->in->get('backups');
 		//Sanitize Filename a bit
 		$strFilename = preg_replace("/[^a-zA-Z0-9-_.]/", "", $strFilename);
-		
+
 		if ($strFilename != ""){
 			$strFilename = $this->pfh->FolderPath('backup', 'eqdkp').$strFilename;
 			$strFormat = pathinfo($strFilename, PATHINFO_EXTENSION);
 			$name = pathinfo($strFilename, PATHINFO_FILENAME);
-			
+
 			switch ($strFormat){
 				case 'zip':
-			
+
 					@header('Pragma: no-cache');
 					@header("Content-Type: application/zip; name=\"$name.zip\"");
 					@header("Content-disposition: attachment; filename=$name.zip");
 					@set_time_limit(0);
-					
+
 					$fp = @fopen($strFilename, 'rb');
 					if ($fp !== false){
 						while (!feof($fp)){
@@ -260,12 +260,12 @@ class EQDKPBackup extends page_generic{
 
 					exit;
 					break;
-			
+
 				default:
 					@header('Pragma: no-cache');
 					@header("Content-Type: text/x-sql; name=\"$name.sql\"");
 					@header("Content-disposition: attachment; filename=$name.sql");
-					
+
 					$fp = @fopen($strFilename, 'rb');
 					if ($fp !== false){
 						while (!feof($fp)){
@@ -288,7 +288,7 @@ class EQDKPBackup extends page_generic{
 		//Sanitize Filename a bit
 		$strFilename = preg_replace("/[^a-zA-Z0-9-_.]/", "", $strFilename);
 		$strPlainFilename = $strFilename;
-		
+
 		if ($strFilename != ""){
 			$strFilename = $this->pfh->FolderPath('backup', 'eqdkp').$strFilename;
 			$strFormat = pathinfo($strFilename, PATHINFO_EXTENSION);
@@ -296,18 +296,18 @@ class EQDKPBackup extends page_generic{
 
 			//Flush cache
 			$this->pdc->flush();
-			
+
 			if (preg_match('/eqdkp-(.?)backup_([0-9]{10})_(.*)\.(sql|zip)/', $strPlainFilename, $matches)){
 				$strTime = $matches[2]; //Save Time
 				$this->core->message(sprintf($this->user->lang('backup_restore_success'), $this->time->date("Y-m-d H:i", $strTime)),$this->user->lang('backup'),'green');
 			} else {
 				$this->core->message($this->user->lang('action_backup_restored'),$this->user->lang('backup'),'green');
 			}
-				
+
 			//Insert Log
 			$this->logs->add('action_backup_restored', array(), $this->time->date("Y-m-d H:i", $matches[1]), $strPlainFilename);
 		}
-		
+
 		$this->display('1');
 	}
 

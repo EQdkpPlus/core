@@ -416,14 +416,14 @@ class Manage_Massmail extends page_generic {
 		if ($bnlEventId){
 			$body .= '<p>&nbsp;</p><p><a href="'.$this->env->link.$this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($eventid)), $eventid, false, true).'">'.$this->pdh->get('calendar_events', 'html_date', array($eventid)).' '.$this->pdh->get('calendar_events', 'html_time_start', array($eventid)).': '.$this->pdh->get('calendar_events', 'name', array($eventid)).'</a></p>';
 			$this->tpl->assign_vars(array(
-				'DD_STATUS'		=> $this->jquery->MultiSelect('status', $this->user->lang('raidevent_raid_status'), $this->in->getArray('status', 'int'), array('width' => 400)),
+				'DD_STATUS'		=> (new hmultiselect('status', array('options' => $this->user->lang('raidevent_raid_status'), 'value' => $this->in->getArray('status', 'int'), 'width' => 400)))->output(),
 			));
 
 			$arrRaidgroups = $this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list')));
 			if(count($arrRaidgroups) > 1){
 				$this->tpl->assign_vars(array(
 					'S_RAIDGROUPS'	=> true,
-					'DD_RAIDGROUPS'	=> $this->jquery->MultiSelect('raidgroups', $arrRaidgroups, $this->in->getArray('raidgroups', 'int'), array('width' => 400)),
+					'DD_RAIDGROUPS'	=> (new hmultiselect('raidgroups', array('options' => $arrRaidgroups, 'value' => $this->in->getArray('raidgroups', 'int'), 'width' => 400)))->output(),
 				));
 
 			}
@@ -480,8 +480,8 @@ class Manage_Massmail extends page_generic {
 
 		$this->tpl->assign_vars(array(
 			'DD_METHOD' 				=> (new hdropdown('method', array('options' => $this->messenger->getAvailableMessenger(), 'value' => $this->in->get('method', 'email'))))->output(),
-			'DD_GROUPS'					=> $this->jquery->MultiSelect('usergroups', $arrUserGroups, $this->in->getArray('usergroups', 'int'), array('width' => 400, 'filter' => true)),
-			'DD_USERS'					=> $this->jquery->MultiSelect('user', $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list'))), $this->in->getArray('user', 'int'),  array('width' => 400, 'filter' => true)),
+			'DD_GROUPS'					=> (new hmultiselect('usergroups', array('options' => $arrUserGroups, 'value' => $this->in->getArray('usergroups', 'int'), 'width' => 400, 'filter' => true)))->output(),
+			'DD_USERS'					=> (new hmultiselect('user', array('options' => $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list'))), 'value' => $this->in->getArray('user', 'int'), 'width' => 400, 'filter' => true)))->output(),
 			'SUBJECT'					=> ($this->in->exists('subject')) ? $this->in->get('subject', '') : $subject,
 			'BODY'						=> ($this->in->exists('body')) ? $this->in->get('body', '', 'raw') : $body,
 			'EVENT_ID'					=> ($bnlEventId) ? '&amp;event_id='.$eventid : '',

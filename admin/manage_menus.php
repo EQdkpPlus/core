@@ -335,7 +335,7 @@ class Manage_Menus extends page_generic {
 			'CSRF_MODE_TOKEN'		=> $this->CSRFGetToken('mode'),
 			'S_NO_FAVS'				=> (count($favs_array) > 0) ? false : true,
 			'DD_LINK_WINDOW'		=> (new hdropdown('editlink-window', array('options' => $a_linkMode, 'class' => 'editlink-window')))->output(),
-			'MS_LINK_VISIBILITY'	=> $this->jquery->MultiSelect("editlink-visibility", $drpdwn_rights, 0),
+			'MS_LINK_VISIBILITY'	=> (new hmultiselect('editlink-visibility', array('options' => $drpdwn_rights, 'value' => 0)))->output(),
 			'DD_LINK_VISIBILITY'	=> (new hdropdown('editlink-visibility', array('options' => $a_linkVis, 'class' => 'editlink-visibility')))->output(),
 			'DD_LINK_TYPE'			=> (new hdropdown('link_type', array('options' => $arrLinkTypes, 'class' => 'link_type')))->output(),
 			'MENU_OL'				=> $strMenuOl,

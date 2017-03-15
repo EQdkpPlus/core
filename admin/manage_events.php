@@ -163,7 +163,7 @@ class Manage_Events extends page_generic {
 			'EVENT_ID'		=> $event['id'],
 			'NAME'			=> (isset($event['name'])) ? $event['name'] : '',
 			'VALUE'			=> $this->pdh->geth('event', 'value', array($event['id'])),
-			'MDKP2EVENT' 	=> $this->jquery->Multiselect('mdkp2event', $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), $event['mdkp2event']),
+			'MDKP2EVENT' 	=> (new hmultiselect('mdkp2event', array('options' => $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), 'value' => $event['mdkp2event'])))->output(),
 			'DD_DEFAULT_ITEMPOOL' => (new hdropdown('default_itempool', array('options' => $arrItempool, 'value' => $event['default_itempool'])))->output(),
 			'CALENDAR'		=> ($this->in->get('calendar') == 'true') ? '1' : '0'
 		));

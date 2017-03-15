@@ -53,13 +53,13 @@ class Manage_Multidkp extends page_generic {
 		}
 		$this->display($message);
 	}
-	
+
 	public function save_sort(){
 		$arrSort = $this->in->getArray("sort", "int");
-		
+
 		$this->pdh->put('multidkp', 'save_sort', array($arrSort));
-		
-		
+
+
 		$message = array('title' => $this->user->lang('success'),'text' => $this->user->lang('save_suc'), 'color' => 'green');
 		$this->display($message);
 	}
@@ -87,13 +87,13 @@ class Manage_Multidkp extends page_generic {
 		} else {
 			$mdkp['name'] = $this->pdh->get('multidkp', 'name', array($mdkp_id));
 			$mdkp['desc'] = $this->pdh->get('multidkp', 'desc', array($mdkp_id));
-			$mdkp['events'] = array_merge($this->pdh->get('multidkp', 'event_ids', array($mdkp_id, true)), $this->pdh->get('multidkp', 'event_ids', array($mdkp_id)));	
+			$mdkp['events'] = array_merge($this->pdh->get('multidkp', 'event_ids', array($mdkp_id, true)), $this->pdh->get('multidkp', 'event_ids', array($mdkp_id)));
 			$mdkp['itempools'] = $this->pdh->get('multidkp', 'itempool_ids', array($mdkp_id));
 			$mdkp['no_attendance'] = array_diff($this->pdh->get('multidkp', 'event_ids', array($mdkp_id)), $this->pdh->get('multidkp', 'event_ids', array($mdkp_id, true)));
 		}
 
 		//events
-		$events = $this->pdh->aget('event', 'name', 0, array($this->pdh->sort($this->pdh->get('event', 'id_list'), 'event', 'name')));		
+		$events = $this->pdh->aget('event', 'name', 0, array($this->pdh->sort($this->pdh->get('event', 'id_list'), 'event', 'name')));
 		$sel_events = $this->pdh->aget('event', 'name', 0, array($this->pdh->sort($mdkp['events'], 'event', 'name')));
 		
 		//itempools
@@ -103,9 +103,9 @@ class Manage_Multidkp extends page_generic {
 		$this->tpl->assign_vars(array(
 			'NAME'					=> $mdkp['name'],
 			'DESC'					=> $mdkp['desc'],
-			'EVENT_SEL'				=> $this->jquery->MultiSelect('events', $events, $mdkp['events'], array('width' => 300, 'filter' => true)),
-			'ITEMPOOL_SEL'			=> $this->jquery->MultiSelect('itempools', $itempools, $mdkp['itempools'], array('width' => 300)),
-			'NO_ATT_SEL'			=> $this->jquery->MultiSelect('no_atts', $sel_events, $mdkp['no_attendance'], array('width' => 300, 'filter' => true)),
+			'EVENT_SEL'				=> (new hmultiselect('events', array('options' => $events, 'value' => $mdkp['events'], 'width' => 300, 'filter' => true)))->output(),
+			'ITEMPOOL_SEL'			=> (new hmultiselect('itempools', array('options' => $itempools, 'value' => $mdkp['itempools'], 'width' => 300)))->output(),
+			'NO_ATT_SEL'			=> (new hmultiselect('no_atts', array('options' => $sel_events, 'value' => $mdkp['no_attendance'], 'width' => 300, 'filter' => true)))->output(),
 			'MDKP_ID'				=> $mdkp_id,
 		));
 
@@ -156,7 +156,7 @@ class Manage_Multidkp extends page_generic {
 			$red 	=> '_red',
 			'LISTMULTI_COUNT'	=> count($sort_ids),
 		));
-		
+
 		$this->tpl->add_js("
 			$(\"#multidkpsort tbody\").sortable({
 				cancel: '.not-sortable, input, tr th.footer, th',

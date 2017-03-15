@@ -320,7 +320,7 @@ class ManageRaids extends page_generic {
 				$this->tpl->assign_block_vars('adjs', array(
 					'KEY'		=> $key,
 					'GK'		=> ($copy) ? 'new' : $adj['group_key'],
-					'MEMBER'	=> $this->jquery->MultiSelect('adjs['.$key.'][members]', $members, $adj['members'], array('width' => 250, 'id'=>'adjs_'.$key.'_members', 'filter' => true)),
+					'MEMBER'	=> (new hmultiselect('adjs['.$key.'][members]', array('options' => $members, 'value' => $adj['members'], 'width' => 250, 'filter' => true, 'id'=>'adjs_'.$key.'_members')))->output(),
 					'REASON'	=> sanitize($adj['reason']),
 					'EVENT'		=> (new hdropdown('adjs['.$key.'][event]', array('options' => $events, 'value' => $adj['event'], 'id' => 'event_'.$key)))->output(),
 					'VALUE'		=> $adj['value'])
@@ -340,7 +340,7 @@ class ManageRaids extends page_generic {
 					'GK'		=> ($copy) ? 'new' : $item['group_key'],
 					'NAME'		=> stripslashes($item['name']),
 					'ITEMID'	=> $item['item_id'],
-					'MEMBER'	=> $this->jquery->MultiSelect('items['.$key.'][members]', $members, $item['members'], array('width' => 250, 'id'=>'items_'.$key.'_members', 'filter' => true)),
+					'MEMBER'	=> (new hmultiselect('items['.$key.'][members]', array('options' => $members, 'value' => $item['members'], 'width' => 250, 'filter' => true, 'id'=>'items_'.$key.'_members')))->output(),
 					'VALUE'		=> $item['value'],
 					'ITEMPOOL'	=> (new hdropdown('items['.$key.'][itempool_id]', array('options' => $itempools, 'value' => $item['itempool_id'], 'id' => 'itempool_id_'.$key)))->output(),
 				));
@@ -362,12 +362,12 @@ class ManageRaids extends page_generic {
 			'RAID_DATE'			=> $this->time->user_date($raid['date']),
 			'RAID_ID'			=> ($raid['id'] && !$copy) ? $raid['id'] : 0,
 			'VALUE'				=> runden((($this->in->get('dataimport', '') == 'true') ? $this->in->get('value', 0) : $raid['value'])),
-			'NEW_MEM_SEL'		=> $this->jquery->MultiSelect('raid_attendees', $members, (($this->in->get('dataimport', '') == 'true') ? $this->in->getArray('attendees', 'int') : $raid['attendees']), array('width' => 400, 'filter' => true)),
+			'NEW_MEM_SEL'		=> (new hmultiselect('raid_attendees', array('options' => $members, 'value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->getArray('attendees', 'int') : $raid['attendees']), 'width' => 400, 'filter' => true)))->output(),
 			'RAID_DROPDOWN'		=> (new hdropdown('draft', array('options' => $raids, 'value' => $this->in->get('draft', 0), 'js' => 'onchange="window.location=\'manage_raids.php'.$this->SID.'&amp;upd=true&amp;draft=\'+this.value"')))->output(),
 
 			'ADJ_KEY'			=> $intAdjKey+1,
-			'MEMBER_DROPDOWN'	=> $this->jquery->MultiSelect('adjs[KEY][members]', $members, array(), array('width' => 250, 'id'=>'adjs_KEY_members', 'filter' => true)),
-			'MEMBER_ITEM_DROPDOWN'	=> $this->jquery->MultiSelect('items[KEY][members]', $members, array(), array('width' => 250, 'id'=>'items_KEY_members', 'filter' => true)),
+			'MEMBER_DROPDOWN'	=> (new hmultiselect('adjs[KEY][members]', array('options' => $members, 'value' => '', 'width' => 250, 'filter' => true, 'id'=>'adjs_KEY_members')))->output(),
+			'MEMBER_ITEM_DROPDOWN'	=> (new hmultiselect('items[KEY][members]', array('options' => $members, 'value' => '', 'width' => 250, 'filter' => true, 'id'=>'items_KEY_members')))->output(),
 			'EVENT_DROPDOWN'	=> (new hdropdown('adjs[KEY][event]', array('options' => $events, 'value' => $adj['event'], 'id' => 'event_KEY')))->output(),
 			'ADJ_REASON_AUTOCOMPLETE' => $this->jquery->Autocomplete('adjs_KEY', array_unique($adjustment_reasons)),
 			'ITEM_KEY'			=> $intItemKey+1,
@@ -463,7 +463,7 @@ class ManageRaids extends page_generic {
 				'RAID_DATE'			=> $this->time->user_date($raid['date']),
 				'RAID_ID'			=> ($raid['id'] && !$copy) ? $raid['id'] : 0,
 				'VALUE'				=> runden((($this->in->get('dataimport', '') == 'true') ? $this->in->get('value', 0) : $raid['value'])),
-				'NEW_MEM_SEL'		=> $this->jquery->MultiSelect('raid_attendees', $members, (($this->in->get('dataimport', '') == 'true') ? $this->in->getArray('attendees', 'int') : $raid['attendees']), array('width' => 400, 'filter' => true)),
+				'NEW_MEM_SEL'		=> (new hmultiselect('raid_attendees', array('options' => $members, 'value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->getArray('attendees', 'int') : $raid['attendees']), 'width' => 400, 'filter' => true)))->output(),
 				'RAID_DROPDOWN'		=> (new hdropdown('draft', array('options' => $raids, 'value' => $this->in->get('draft', 0), 'js' => 'onchange="window.location=\'manage_raids.php'.$this->SID.'&amp;upd=true&amp;draft=\'+this.value"')))->output(),
 				//language vars
 				'L_RAID_SAVE'		=> ($raid['id'] AND $raid['id'] != 'new' && !$copy) ? $this->user->lang('update_raid') : $this->user->lang('add_raid'),

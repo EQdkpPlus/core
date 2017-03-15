@@ -280,7 +280,7 @@ class Manage_Bridge extends page_generic {
 		$arrSyncFields = $this->bridge->get_available_sync_fields();
 
 		$this->tpl->assign_vars(array(
-			'MS_USERGROUPS'		=> $this->jquery->MultiSelect('usergroups', $arrSelectedGroups, explode(',', $this->config->get('cmsbridge_groups')), array('height' => 170, 'width' => 300)),
+			'MS_USERGROUPS'		=> (new hmultiselect('usergroups', array('options' => $arrSelectedGroups, 'value' => explode(',', $this->config->get('cmsbridge_groups')), 'width' => 300, 'height' => 170)))->output(),
 			'S_BRIDGE_ACTIVE'	=> ($this->config->get('cmsbridge_active') == 1) ? true : false,
 			'S_PROFILEFIELDS_INFO' => ($this->config->get('cmsbridge_active') == 1 && count($arrSyncFields)) ? true : false,
 			'S_BRIDGE_SETTINGS'	=> (is_array($settings) && count($settings) > 0) ? true : false,
@@ -300,7 +300,7 @@ class Manage_Bridge extends page_generic {
 			'CMS_PWRESET_URL'	=> $this->config->get('cmsbridge_pwreset_url'),
 			'CMS_REG_URL'		=> $this->config->get('cmsbridge_reg_url'),
 			'S_ONLYCMSUSERLOGIN'=> ((int)$this->config->get('cmsbridge_onlycmsuserlogin')) ? true : false,
-			'MS_SYNC_USERGROUPS'=> $this->jquery->MultiSelect('sync_usergroups', $arrSelectedGroups, explode(',', $this->config->get('cmsbridge_sync_groups')), array('height' => 170, 'width' => 300)),
+			'MS_SYNC_USERGROUPS'=> (new hmultiselect('sync_usergroups', array('options' => $arrSelectedGroups, 'value' => explode(',', $this->config->get('cmsbridge_sync_groups')), 'width' => 300, 'height' => 170)))->output(),
 		));
 
 		$this->core->set_vars(array(
