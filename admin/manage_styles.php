@@ -254,7 +254,7 @@ class Manage_Styles extends page_generic{
 			$this->tpl->assign_block_vars('classes', array(
 				'NAME'		=> $class_name,
 				'ID'		=> $class_id,
-				'CPICKER'	=> $this->jquery->colorpicker('classc_'.$class_id, $this->game->get_class_color($class_id, $this->url_id)),
+				'CPICKER'	=> (new hcolorpicker('classc_'.$class_id, array('value' =>  $this->game->get_class_color($class_id, $this->url_id), 'id' => 'classc_'.$class_id)))->output(),
 			));
 		}
 
@@ -399,7 +399,7 @@ class Manage_Styles extends page_generic{
 				$field = "";
 
 				if($elem == 'color'){
-					$field = $this->jquery->colorpicker($name, $this->style[$name], false, 14, ((!in_array($name, $arrUsedVariables)) ? 'disabled="disabled"' : ''), array('showAlpha' => true, 'format' => 'rgb', 'group' => 'editstyle'));
+					$field = (new hcolorpicker($name, array('value' =>  $this->style[$name], 'id' => $name, 'disabled' => ((!in_array($name, $arrUsedVariables)) ? true : false), 'size' => 14, 'showAlpha' => true, 'format' => 'rgb', 'group' => 'editstyle')))->output(),
 				} elseif($elem == 'decoration'){
 					$field = (new hdropdown($name, array('options' => $text_decoration, 'value' => $this->style[$name], 'disabled' => ((!in_array($name, $arrUsedVariables)) ? true : false))))->output();
 				} elseif($elem == 'font-family'){
@@ -407,7 +407,6 @@ class Manage_Styles extends page_generic{
 				} elseif($elem == 'size'){
 					$field = (new htext($name, array('after_txt' => 'px', 'value' => $this->style[$name], 'size' => 3, 'disabled' => ((!in_array($name, $arrUsedVariables)) ? true : false))))->output();
 				}
-
 
 				$this->tpl->assign_block_vars('fieldset_row.option_row', array(
 					'NAME' => $this->user->lang('stylesettings_'.$name),

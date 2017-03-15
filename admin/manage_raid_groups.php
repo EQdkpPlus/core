@@ -191,7 +191,7 @@ class Manage_Raid_Groups extends page_generic {
 				'ID'				=> $id,
 				'NAME'				=> $name,
 				'DESC'				=> $this->pdh->get('raid_groups', 'desc', array($id)),
-				'COLOR'				=> $this->jquery->colorpicker('raidgroup_'.$key, $this->pdh->get('raid_groups', 'color', array($id)), 'raid_groups['.$key.'][color]'),
+				'COLOR'				=> (new hcolorpicker('raid_groups['.$key.'][color]', array('value' =>  $this->pdh->get('raid_groups', 'color', array($id)), 'id' => 'raidgroup_'.$key)))->output(),
 				'USER_COUNT'		=> $this->pdh->get('raid_groups_members', 'groupcount', array($id)),
 				'S_DELETABLE'		=> ($this->pdh->get('raid_groups', 'deletable', array($id))) ? true : false,
 				'STANDARD'			=> ($this->pdh->get('raid_groups', 'standard', array($id))) ? 'checked="checked"' : '',
