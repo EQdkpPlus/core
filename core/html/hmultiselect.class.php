@@ -63,18 +63,20 @@ class hmultiselect extends html {
 	public $text_after			= "";
 	public $text_before			= "";
 	public $returnJS			= false;
+	private $origID				= false;
 
 	private $jq_options = array('height', 'width', 'preview_num', 'multiple', 'no_animation', 'header', 'filter', 'clickfunc', 'selectedtext', 'withmax', 'minselectvalue');
 	private $out				= '';
 
 	public function _construct() {
+		if($this->id) $this->origID = $this->id;
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 	}
 
 	public function output() {
 		$dropdown = "";
 		$this->out = '';
-		if(empty($this->id)) $this->id = $this->cleanid($this->name);
+
 		if(strlen($this->text_before)) $dropdown = $this->text_before;
 		$dropdown .= '<select name="'.$this->name.'[]" id="'.$this->id.'" multiple="multiple"';
 		if(!empty($this->class)) $dropdown .= ' class="'.$this->class.'"';
@@ -93,14 +95,14 @@ class hmultiselect extends html {
 			$dropdown .= "<option value=''></option>";
 		}
 		$dropdown .= "</select>";
-		$options = array('id' => $this->id);
+		$options = array('id' => $this->origID);
 		foreach($this->jq_options as $opt) $options[$opt] = $this->$opt;
-		
-		$this->jquery->MultiSelect('', array(), array(), $options, $this->returnJS);
+
+		$this->jquery->MultiSelect($this->name, array(), array(), $options, $this->returnJS);
 		$jsout = ($this->returnJS) ? '<script>'.$this->jquery->get_jscode('multiselect', $this->id).'</script>' : '';
 		if(strlen($this->text_after)) $dropdown .= $this->text_after;
 		$this->out = $jsout.$dropdown;
-		
+
 		return $this->out;
 	}
 
