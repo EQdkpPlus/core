@@ -61,7 +61,7 @@ class Manage_Menus extends page_generic {
 		$arrItems = $this->in->getArray('mainmenu', 'string');
 
 		$decoded = json_decode($json, true);
-
+		
 		$arrSorted = array();
 		if ($decoded){
 			$intFirstLevel = -1;
@@ -74,15 +74,14 @@ class Manage_Menus extends page_generic {
 						//New plus links
 						if ($hash == 'new'){
 							$data = $arrItems[$item_id];
-							$pid = $this->pdh->put('links', 'add', array($data['name'], $data['url'],$data['window'],$data['visibility'],$data['windowsize']));
+							$pid = $this->pdh->put('links', 'add', array($data['name'], $data['url'],$data['window'],$data['visibility'],$data['windowsize'],$data['lang']));
 							if (!$pid) continue;
 							$link = $this->core->handle_link($data['url'],$data['name'], $data['window'], 'pluslink'.$pid);
 							$hash = $this->core->build_link_hash($link);
 						} else {
 							//Update existing plus link
-							echo "update";
 							$data = $arrItems[$item_id];
-							$pid = $this->pdh->put('links', 'update', array($data['specialid'], $data['name'], $data['url'],$data['window'],$data['visibility'],$data['windowsize']));
+							$pid = $this->pdh->put('links', 'update', array($data['specialid'], $data['name'], $data['url'],$data['window'],$data['visibility'],$data['windowsize'],$data['lang']));
 							if (!$pid) continue;
 							$link = $this->core->handle_link($data['url'],$data['name'], $data['window'], 'pluslink'.$data['specialid']);
 							$hash = $this->core->build_link_hash($link);
@@ -336,7 +335,7 @@ class Manage_Menus extends page_generic {
 			'S_NO_FAVS'				=> (count($favs_array) > 0) ? false : true,
 			'DD_LINK_WINDOW'		=> (new hdropdown('editlink-window', array('options' => $a_linkMode, 'class' => 'editlink-window')))->output(),
 			'MS_LINK_VISIBILITY'	=> (new hmultiselect('editlink-visibility', array('options' => $drpdwn_rights, 'value' => 0)))->output(),
-			'DD_LINK_VISIBILITY'	=> (new hdropdown('editlink-visibility', array('options' => $a_linkVis, 'class' => 'editlink-visibility')))->output(),
+			'MS_LANGUAGE'			=> (new hmultiselect('editlink-lang', array('options' => $this->user->getAvailableLanguages(false))))->output(),	
 			'DD_LINK_TYPE'			=> (new hdropdown('link_type', array('options' => $arrLinkTypes, 'class' => 'link_type')))->output(),
 			'MENU_OL'				=> $strMenuOl,
 			'NEW_ID'				=> ++$intMaxID,
@@ -467,6 +466,7 @@ class Manage_Menus extends page_generic {
 					<input type="hidden" value="'.$arrPluslinkData['window'].'"  name="mainmenu['.$id.'][window]" class="link-window">
 					<input type="hidden" value="'.$arrPluslinkData['height'].'"  name="mainmenu['.$id.'][windowsize]" class="link-windowsize">
 					<input type="hidden" value=\''.$arrPluslinkData['visibility'].'\'  name="mainmenu['.$id.'][visibility]" class="link-visibility">
+					<input type="hidden" value=\''.$arrPluslinkData['lang'].'\'  name="mainmenu['.$id.'][lang]" class="link-lang">
 					<input type="hidden" value="'.$plinkid.'"  name="mainmenu['.$id.'][specialid]" class="link-specialid">
 				';
 			} else {

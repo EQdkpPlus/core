@@ -26,7 +26,7 @@ if(!defined('EQDKP_INC')) {
 if(!class_exists('pdh_w_links')) {
 	class pdh_w_links extends pdh_w_generic {
 		
-		public function add($name, $url, $window=0, $visibility='[&#34;0&#34;]', $height=4024){
+		public function add($name, $url, $window=0, $visibility='[&#34;0&#34;]', $height=4024, $lang){
 			if (strlen($name)){
 				$objQuery = $this->db->prepare("INSERT INTO __links :p")->set(array(
 					'link_name'			=> $name,
@@ -34,6 +34,7 @@ if(!class_exists('pdh_w_links')) {
 					'link_window'		=> $window,
 					'link_visibility'	=> $visibility,
 					'link_height'		=> $height,
+					'link_lang'			=> $lang,
 				))->execute();
 				
 				if ($objQuery){
@@ -44,16 +45,17 @@ if(!class_exists('pdh_w_links')) {
 			return false;
 		}
 		
-		public function update($id, $name, $url, $window, $visibility, $height, $force = false){
+		public function update($id, $name, $url, $window, $visibility, $height=4024, $lang='', $force = false){
 			$data = $this->pdh->get('links', 'data', array($id));
 		
-			if ($force OR $data['name'] != $name OR $data['url'] != $url OR (int)$data['window'] != (int)$window OR $data['visibility'] != $visibility OR (int)$data['height'] != (int)$height){
+			if ($force OR $data['lang'] != $lang OR  $data['name'] != $name OR $data['url'] != $url OR (int)$data['window'] != (int)$window OR $data['visibility'] != $visibility OR (int)$data['height'] != (int)$height){
 				$objQuery = $this->db->prepare("UPDATE __links :p WHERE link_id=?")->set(array(
 					'link_name'			=> $name,
 					'link_url'			=> $url,
 					'link_window'		=> $window,
 					'link_visibility'	=> $visibility,
 					'link_height'		=> $height,
+					'link_lang'			=> $lang,
 				))->execute($id);
 				
 				$this->pdh->enqueue_hook('links');

@@ -1,7 +1,7 @@
 <script type="text/javascript">
 	$(function() {
 		$( "#dialog-edit-menuitem" ).dialog({
-			height: 380,
+			height: 420,
 			width: 500,
 			modal: true,
 			autoOpen: false,
@@ -57,6 +57,7 @@
 				var window = $(this).siblings('.link-window').val();
 				var windowsize = $(this).siblings('.link-windowsize').val();
 				var visibility = $(this).siblings('.link-visibility').val();
+				var langs = $(this).siblings('.link-lang').val();
 
 				$('#editlink-button').val(linkid);
 				$('.editlink-name').val(name);
@@ -71,6 +72,15 @@
 				} else {
 					$('#editlink-visibility').multiselect('uncheckAll');
 				}
+				
+				if (langs != ""){
+					var objVis = JSON.parse(langs);
+					$('#editlink-lang').val(objVis);
+					$('#editlink-lang').multiselect('refresh');
+				} else {
+					$('#editlink-lang').multiselect('uncheckAll');
+				}
+				
 				last_action = "edit";
 				$( "#dialog-edit-menuitem" ).dialog( "open" );
 			});
@@ -91,12 +101,16 @@
 
 				var selectedVis = $('#editlink-visibility').val();
 				var visibility = JSON.stringify(selectedVis);
+				
+				var selectedLang = $('#editlink-lang').val();
+				var lang = JSON.stringify(selectedLang);
 
 				container.find('.link-url').val(url);
 				container.find('.link-name').val(name);
 				container.find('.link-window').val(window);
 				container.find('.link-windowsize').val(windowsize);
 				container.find('.link-visibility').val(visibility);
+				container.find('.link-lang').val(lang);
 
 				container.find('.edit-menulink-trigger').html(name + ' ('+url+')');
 			} else {
@@ -184,6 +198,8 @@
 			$('.editlink-windowsize').val(4024);
 			$('#editlink-visibility').val(0);
 			$('#editlink-visibility').multiselect('refresh');
+			$('#editlink-lang').val(0);
+			$('#editlink-lang').multiselect('refresh');
 			last_action = "add";
 			$( "#dialog-edit-menuitem" ).dialog( "open" );
 
@@ -294,6 +310,10 @@
 						<dt><label>{L_info_opt_visibility}:</label></dt>
 						<dd>{MS_LINK_VISIBILITY}</dd>
 					</dl>
+					<dl>
+						<dt><label>{L_language}:</label></dt>
+						<dd>{MS_LANGUAGE}</dd>
+					</dl>
 				</div>
 
 				<!-- BEGIN link_type_row -->
@@ -338,6 +358,7 @@
 			<input type="hidden" value=""  name="mainmenu[KEY][window]" class="link-window">
 			<input type="hidden" value="4024"  name="mainmenu[KEY][windowsize]" class="link-windowsize">
 			<input type="hidden" value='["0"]'  name="mainmenu[KEY][visibility]" class="link-visibility">
+			<input type="hidden" value='[]'  name="mainmenu[KEY][lang]" class="link-lang">
 			<input type="hidden" value="KEY"  name="mainmenu[KEY][specialid]" class="link-specialid">
 
 			<input type="hidden" value="pluslink"  name="mainmenu[KEY][type]" class="link-type">

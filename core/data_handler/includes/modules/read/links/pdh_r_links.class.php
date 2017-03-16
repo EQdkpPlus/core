@@ -44,14 +44,7 @@ if ( !class_exists( "pdh_r_links" ) ){
 			}
 
 			$this->links = array();
-			$sql = "SELECT
-					link_id,
-					link_name,
-					link_url,
-					link_window,
-					link_menu,
-					link_visibility,
-					link_height
+			$sql = "SELECT *
 					FROM
 					__links
 					ORDER BY link_sortid;";
@@ -66,6 +59,7 @@ if ( !class_exists( "pdh_r_links" ) ){
 					$this->links[$row['link_id']]['menu']		= $row['link_menu'];
 					$this->links[$row['link_id']]['visibility']	= xhtml_entity_decode($row['link_visibility']);
 					$this->links[$row['link_id']]['height']		= $row['link_height'];
+					$this->links[$row['link_id']]['lang']		= $row['link_lang'];
 				}
 				$this->pdc->put('pdh_links_table', $this->links, NULL);
 			}
@@ -86,6 +80,10 @@ if ( !class_exists( "pdh_r_links" ) ){
 
 		public function get_height ($id){
 			return $this->links[$id]['height'];
+		}
+		
+		public function get_lang ($id){
+			return $this->links[$id]['lang'];
 		}
 
 		public function get_menu($show_hidden=false){
