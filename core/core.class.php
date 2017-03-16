@@ -522,6 +522,7 @@ class core extends gen_class {
 					'SEO_EXTENSION'				=> $this->routing->getSeoExtension(),
 					'USER_LANGUAGE'				=> $this->user->lang_name,
 					'USER_LANGUAGE_NAME'		=> $arrLanguages[$this->user->lang_name],
+					'S_MULTILANG_ENABLED'		=> ($this->config->get('enable_multilang') ? true : false),
 			));
 		}
 

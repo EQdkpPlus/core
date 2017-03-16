@@ -59,7 +59,7 @@ if ( !class_exists( "pdh_r_links" ) ){
 					$this->links[$row['link_id']]['menu']		= $row['link_menu'];
 					$this->links[$row['link_id']]['visibility']	= xhtml_entity_decode($row['link_visibility']);
 					$this->links[$row['link_id']]['height']		= $row['link_height'];
-					$this->links[$row['link_id']]['lang']		= $row['link_lang'];
+					$this->links[$row['link_id']]['lang']		= xhtml_entity_decode($row['link_lang']);
 				}
 				$this->pdc->put('pdh_links_table', $this->links, NULL);
 			}
@@ -91,7 +91,7 @@ if ( !class_exists( "pdh_r_links" ) ){
 
 			if (is_array($this->links)){
 				foreach ($this->links as $link){
-					if ($show_hidden || $this->handle_permission($link['visibility'])){
+					if ($show_hidden || $this->handle_permission($link['visibility'], $link['lang'])){
 						$target = '';
 						$extern = false;
 						$url = $this->parse_links($link['url']);
@@ -127,7 +127,17 @@ if ( !class_exists( "pdh_r_links" ) ){
 			}
 		}
 
-		private function handle_permission($visibility){
+		private function handle_permission($visibility, $lang){
+			//Check for language
+			if($this->config->get('enable_multilang') && $this->config->get('multilang_hide_menuentries')){
+				if($lang != ""){
+					$arrLangs = json_decode($lang, true);
+					if($arrLangs && is_array($arrLangs)){
+						if(!in_array($this->user->lang_name, $arrLangs)) return false;
+					}
+				}	
+			}
+			
 			if ($visibility == "") return false;
 			$arrJSON = json_decode($visibility, true);
 			if (!$arrJSON) return false;
