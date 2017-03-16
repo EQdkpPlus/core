@@ -1837,5 +1837,6 @@ $lang = array(
 'core_sett_f_multilang_hide_menuentries' => 'Menüeinträge ausblenden für nicht passende Sprachen',
 'core_sett_f_multilang_redirect_articles' => 'Benutzer bei Artikel direkt auf passende Sprache umleiten',
 'is_startpoint' => 'Startpunkt einer Sprache',
+'core_sett_f_multilang_hide_startpoints_breadcrumb' => 'Startpunkte der Sprachen in der Navigationsleiste ausblenden',
 );
 ?>

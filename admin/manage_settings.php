@@ -707,6 +707,9 @@ class admin_settings extends page_generic {
 					'multilang_redirect_articles' => array(
 						'type' => 'radio',
 					),
+					'multilang_hide_startpoints_breadcrumb' => array(
+							'type' => 'radio',
+					),
 				),
 					
 				'article'		=> array(

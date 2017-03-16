@@ -314,28 +314,38 @@ if (!class_exists("bbcode")) {
 				switch (strtolower($elements[0])) {
 				
 					case 'article_url':
-						$strPath = $this->controller_path.$this->pdh->get('articles', 'path', array($elements[1]));
+						$strPath = $this->controller_path.$this->pdh->get('articles', 'path', array((int)$elements[1]));
 						$arrCache[$strTag] = ($strPath) ? $strPath : '';
 						break;
 						
+					case 'article_title':
+							$strTitle = $this->pdh->get('articles', 'title', array((int)$elements[1]));
+							$arrCache[$strTag] = ($strTitle) ? $strTitle : '';
+							break;
+						
 					case 'article_url_plain':
-						$strPath = $this->controller_path_plain.$this->pdh->get('articles', 'path', array($elements[1]));
+						$strPath = $this->controller_path_plain.$this->pdh->get('articles', 'path', array((int)$elements[1]));
 						$arrCache[$strTag] = ($strPath) ? $strPath : '';
 						break;
 						
 					case 'category_url':
-						$strPath = $this->controller_path.$this->pdh->get('article_categories', 'path', array($elements[1]));
+						$strPath = $this->controller_path.$this->pdh->get('article_categories', 'path', array((int)$elements[1]));
 						$arrCache[$strTag] = ($strPath) ? $strPath : '';
 						break;
 						
 					case 'category_url_plain':
-						$strPath = $this->controller_path_plain.$this->pdh->get('article_categories', 'path', array($elements[1]));
+						$strPath = $this->controller_path_plain.$this->pdh->get('article_categories', 'path', array((int)$elements[1]));
 						$arrCache[$strTag] = ($strPath) ? $strPath : '';
 						break;
 						
+					case 'category_title':
+						$strTitle = $this->pdh->get('article_categories', 'name', array((int)$elements[1]));
+						$arrCache[$strTag] = ($strTitle) ? $strTitle : '';
+						break;
+						
 					case 'article':
-						$strText = $this->pdh->get('articles', 'text', array($elements[1]));
-						$intCategory = $this->pdh->get('articles', 'category', array($elements[1]));
+						$strText = $this->pdh->get('articles', 'text', array((int)$elements[1]));
+						$intCategory = $this->pdh->get('articles', 'category', array((int)$elements[1]));
 						//Check permission
 						$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($intCategory, $this->user->id));
 						if($strText && $arrPermissions['read']){
