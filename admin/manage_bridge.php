@@ -280,7 +280,7 @@ class Manage_Bridge extends page_generic {
 		$arrSyncFields = $this->bridge->get_available_sync_fields();
 
 		$this->tpl->assign_vars(array(
-			'MS_USERGROUPS'		=> (new hmultiselect('usergroups', array('options' => $arrSelectedGroups, 'value' => explode(',', $this->config->get('cmsbridge_groups')), 'width' => 300, 'height' => 170)))->output(),
+			'MS_USERGROUPS'		=> (new hmultiselect('usergroups', array('options' => $arrSelectedGroups, 'value' => explode(',', $this->config->get('cmsbridge_groups')), 'width' => 300, 'height' => 170, 'id' => 'dw_usergroups')))->output(),
 			'S_BRIDGE_ACTIVE'	=> ($this->config->get('cmsbridge_active') == 1) ? true : false,
 			'S_PROFILEFIELDS_INFO' => ($this->config->get('cmsbridge_active') == 1 && count($arrSyncFields)) ? true : false,
 			'S_BRIDGE_SETTINGS'	=> (is_array($settings) && count($settings) > 0) ? true : false,

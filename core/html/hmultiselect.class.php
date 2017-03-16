@@ -69,7 +69,6 @@ class hmultiselect extends html {
 	private $out				= '';
 
 	public function _construct() {
-		if($this->id) $this->origID = $this->id;
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 	}
 
@@ -95,7 +94,7 @@ class hmultiselect extends html {
 			$dropdown .= "<option value=''></option>";
 		}
 		$dropdown .= "</select>";
-		$options = array('id' => $this->origID);
+		$options = array('id' => $this->id);
 		foreach($this->jq_options as $opt) $options[$opt] = $this->$opt;
 
 		$this->jquery->MultiSelect($this->name, array(), array(), $options, $this->returnJS);

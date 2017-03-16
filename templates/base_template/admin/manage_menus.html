@@ -66,10 +66,10 @@
 
 				if (visibility != ""){
 					var objVis = JSON.parse(visibility);
-					$('#dw_editlink-visibility').val(objVis);
-					$('#dw_editlink-visibility').multiselect('refresh');
+					$('#editlink-visibility').val(objVis);
+					$('#editlink-visibility').multiselect('refresh');
 				} else {
-					$('#dw_editlink-visibility').multiselect('uncheckAll');
+					$('#editlink-visibility').multiselect('uncheckAll');
 				}
 				last_action = "edit";
 				$( "#dialog-edit-menuitem" ).dialog( "open" );
@@ -89,7 +89,7 @@
 				var window = $('.editlink-window').val();
 				var windowsize = $('.editlink-windowsize').val();
 
-				var selectedVis = $('#dw_editlink-visibility').val();
+				var selectedVis = $('#editlink-visibility').val();
 				var visibility = JSON.stringify(selectedVis);
 
 				container.find('.link-url').val(url);
@@ -182,8 +182,8 @@
 			$('.editlink-url').val('');
 			$('.editlink-window').val(0);
 			$('.editlink-windowsize').val(4024);
-			$('#dw_editlink-visibility').val(0);
-			$('#dw_editlink-visibility').multiselect('refresh');
+			$('#editlink-visibility').val(0);
+			$('#editlink-visibility').multiselect('refresh');
 			last_action = "add";
 			$( "#dialog-edit-menuitem" ).dialog( "open" );
 

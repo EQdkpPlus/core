@@ -36,7 +36,7 @@
 		<dt><label>{L_event_icon_header}:</label></dt>
 		<dd><button class="mainoption" type="button" id="iubuttonedit" onclick="elfinder_all();"><i class="fa fa-upload"></i> {L_upload_eventicon}</button></dd>
 	</dl>
-	
+
 	<table class="table fullwidth scrollable-x">
 	<!-- IF ICONS -->
 	<!-- BEGIN files_row -->
@@ -67,11 +67,11 @@
 
 <script>
 $(function(){
-	$("#dw_mdkp2event").multiselect().bind("multiselectclick multiselectcheckall multiselectuncheckall", function( event, ui ){
+	$("#mdkp2event").multiselect().bind("multiselectclick multiselectcheckall multiselectuncheckall", function( event, ui ){
 		var checkedValues = $.map($(this).multiselect("getChecked"), function( input ){
 			return input.value;
 		});
-		
+
 		$('#defaultItempoolContainer').html('<i class="fa fa-spin fa-spinner fa-lg"></i>');
 
 		$.post("manage_events.php{SID}", { itempools: "1", pools: JSON.stringify(checkedValues), eventid: '{EVENT_ID}'}, function(data){
