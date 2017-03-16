@@ -95,7 +95,7 @@ class hmultiselect extends html {
 			$dropdown .= "<option value=''></option>";
 		}
 		$dropdown .= "</select>";
-		$options = array('id' => $this->origID);
+		$options = array('id' => $this->origID);d($options);
 		foreach($this->jq_options as $opt) $options[$opt] = $this->$opt;
 
 		$this->jquery->MultiSelect($this->name, array(), array(), $options, $this->returnJS);
