@@ -58,7 +58,7 @@ $(function(){
 	<!-- BEGIN group_permissions -->
 	group_perms[{group_permissions.KEY}] = new Array(''<!-- BEGIN group_permission_row -->,'{group_permissions.group_permission_row.NAME}'<!-- END group_permission_row-->);
 	<!-- END group_permissions -->
-	$("#dw_user_groups")
+	$("#user_groups")
 		.multiselect()
 		.bind("multiselectclick multiselectcheckall multiselectuncheckall", function( event, ui ){
 			var checkedValues = $.map($(this).multiselect("getChecked"), function( input ){

@@ -69,7 +69,7 @@ class hmultiselect extends html {
 	private $out				= '';
 
 	public function _construct() {
-		if(empty($this->id)) $this->id = 'dw_'.$this->cleanid($this->name);
+		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 	}
 
 	public function output() {

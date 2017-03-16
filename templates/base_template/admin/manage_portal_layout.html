@@ -1,11 +1,11 @@
 <script type="text/javascript">
 $(function(){
-	$('#dw_portal_blocks').on('change', function(event){
+	$('#portal_blocks').on('change', function(event){
 		var checkedValues = $.map($(this).multiselect("getChecked"), function( input ){
 			return input.value;
 		});
 
-		var allValues = $.map($('#dw_portal_blocks option'), function(e) { return e.value; });
+		var allValues = $.map($('#portal_blocks option'), function(e) { return e.value; });
 
 		$.each(allValues, function(index, value) {
 			if ($.inArray(value, checkedValues) > -1){
