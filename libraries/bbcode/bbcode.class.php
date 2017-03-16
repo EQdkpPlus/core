@@ -293,7 +293,7 @@ if (!class_exists("bbcode")) {
 
 			$strBuffer = '';
 
-			for($rit = 0; $rit<(count($tags)); $rit=$rit+2) {
+			for($rit = 0, $_cnt=count($tags); $rit<$_cnt; $rit=$rit+2) {
 				$strBuffer .= $tags[$rit];
 				if (!isset($tags[$rit+1])) break;
 				$strTag = $tags[$rit+1];
@@ -331,6 +331,50 @@ if (!class_exists("bbcode")) {
 					case 'category_url_plain':
 						$strPath = $this->controller_path_plain.$this->pdh->get('article_categories', 'path', array($elements[1]));
 						$arrCache[$strTag] = ($strPath) ? $strPath : '';
+						break;
+						
+					case 'article':
+						$strText = $this->pdh->get('articles', 'text', array($elements[1]));
+						$intCategory = $this->pdh->get('articles', 'category', array($elements[1]));
+						//Check permission
+						$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($intCategory, $this->user->id));
+						if($strText && $arrPermissions['read']){
+							$arrCache[$strTag] = $this->parse_shorttags(ltrim(xhtml_entity_decode($strText)));
+						} else {
+							$arrCache[$strTag] = "";
+						}
+						break;
+						
+					case 'iflang':
+						if ($elements[1] != '' && $elements[1] != $this->user->lang_name)
+						{
+							for (; $rit<$_cnt; $rit+=2)
+							{
+								if ($tags[$rit+1] == 'iflang' || $tags[$rit+1] == 'iflang::' . $this->user->lang_name)
+								{
+									break;
+								}
+							}
+						}
+						
+						unset($arrCache[$strTag]);
+						break;
+					case 'ifnlang':
+						if ($elements[1] != '')
+						{
+							$langs = explode(',', $elements[1]);
+							if (in_array($this->user->lang_name, $langs))
+							{
+								for (; $rit<$_cnt; $rit+=2)
+								{
+									if ($tags[$rit+1] == 'ifnlang')
+									{
+										break;
+									}
+								}
+							}
+						}
+						unset($arrCache[$strTag]);
 						break;
 
 					case 'server':
