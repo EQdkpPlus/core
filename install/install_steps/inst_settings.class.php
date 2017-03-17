@@ -84,6 +84,7 @@ class inst_settings extends install_generic {
 		'enable_points'					=> 1,
 		'enable_embedly'				=> 1,
 		'enable_leaderboard'			=> 1,
+		'notify_updates_email'			=> 1,
 		'avatar_default'				=> 'eqdkp',
 		'avatar_allowed'				=> array('eqdkp', 'gravatar'),
 		'admin_favs'					=> 'a:2:{i:0;s:7:"raids|1";i:1;s:8:"portal|4";}',

@@ -289,6 +289,9 @@ class admin_settings extends page_generic {
 					'enable_comments'	=> array(
 						'type'		=> 'radio',
 					),
+					'notify_updates_email' => array(
+						'type'		=> 'radio',
+					),
 					'debug'	=> array(
 						'type'		=> 'dropdown',
 						'tolang'	=> true,

@@ -1828,7 +1828,7 @@ $lang = array(
 "consolidate_detele_warning" => "Bist du sicher, dass du die Konsolidierung für das ausgewählte Event durchführen willst?",		
 "consolidate_start"	=> "Konsolidierung starten",
 "userpf_sett_f_example" => "Eingabebeispiel",
-		
+"core_sett_f_notify_updates_email" => "Administrator per Email über Updates informieren",
 
 
 //Multilang

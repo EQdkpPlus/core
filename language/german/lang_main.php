@@ -1088,5 +1088,6 @@ $lang = array(
 "warning" => "Warnung",
 "information" => "Information",
 "edit_table" => "Tabelle bearbeiten",
+"new_coreupdate_subject" => "Aktualisierung des EQdkp Plus verfügbar",
 );
 ?>

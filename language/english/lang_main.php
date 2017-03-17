@@ -1127,6 +1127,7 @@ $lang = array(
 	"warning" => "Warning",
 	"information" => "Information",
 	"edit_table" => "Edit table",
+	"new_coreupdate_subject" => "New update of EQdkp Plus available",
 );
 
 ?>
