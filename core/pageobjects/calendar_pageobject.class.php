@@ -390,6 +390,7 @@ class calendar_pageobject extends pageobject {
 	public function display(){
 		// include the calendar js/css.. css is included in base template dir, but can be overwritten by adding to template
 		$this->jquery->fullcalendar();
+		$this->jquery->monthpicker();
 
 		//RSS-Feed for next Raids
 		$this->tpl->add_rssfeed($this->config->get('guildtag').' - Calendar Raids', 'calendar_raids.xml', array('po_calendarevent'));

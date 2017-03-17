@@ -42,6 +42,7 @@ if (!class_exists("jquery")) {
 			'spinner'			=> false,
 			'multilang'			=> false,
 			'placepicker'		=> false,
+			'monthpicker'		=> false,
 			'googlemaps'		=> false,
 			'qtip'				=> array(),
 			'depr_suckerfish'	=> false,		// DEPRECATED
@@ -140,6 +141,15 @@ if (!class_exists("jquery")) {
 				// now load the fullcalendar language file
 				$this->tpl->js_file($this->path."js/fullcalendar/locale-all.js");
 				$this->inits['fullcalendar']	= true;
+			}
+		}
+
+		public function monthpicker(){
+			// include the calendar js/css.. css is included in base template dir, but can be overwritten by adding to template
+			if(!$this->inits['monthpicker']){
+				$this->tpl->js_file($this->path."js/monthpicker/MonthPicker.min.js");
+				$this->tpl->css_file($this->path."js/monthpicker/MonthPicker.min.css");
+				$this->inits['monthpicker']	= true;
 			}
 		}
 
