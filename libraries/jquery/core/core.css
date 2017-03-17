@@ -1,5 +1,5 @@
 
-/* jQueryUI Themeroller */
+// jQueryUI Themeroller
 @jqueryUIFontFamily: Verdana,Arial,sans-serif;
 @jqueryUIFontSize: 1.1em;
 @jqueryUIFontWeight: normal;
@@ -939,7 +939,7 @@ body .ui-tooltip {
 
 
 /*!
- * jQuery UI CSS Framework 1.12.0
+ * jQuery UI CSS Framework 1.12.1
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -1141,14 +1141,10 @@ a.ui-button:active,
 .ui-widget-header .ui-icon {
 	background-image: url("../../../@{_path}images/ui-icons_@{jqueryUIHeaderIconColor}_256x240.png")
 }
-.ui-button .ui-icon {
-	background-image: url("../../../@{_path}images/ui-icons_@{jqueryUIStateDefaultIconColor}_256x240.png")
-}
 .ui-state-hover .ui-icon,
 .ui-state-focus .ui-icon,
 .ui-button:hover .ui-icon,
-.ui-button:focus .ui-icon,
-.ui-state-default .ui-icon {
+.ui-button:focus .ui-icon {
 	background-image: url("../../../@{_path}images/ui-icons_@{jqueryUIStateHoverIconColor}_256x240.png")
 }
 .ui-state-active .ui-icon,
@@ -1162,6 +1158,9 @@ a.ui-button:active,
 .ui-state-error .ui-icon,
 .ui-state-error-text .ui-icon {
 	background-image: url("../../../@{_path}images/ui-icons_@{jqueryUIErrorIconColor}_256x240.png")
+}
+.ui-button .ui-icon {
+	background-image: url("../../../@{_path}images/ui-icons_@{jqueryUIStateDefaultIconColor}_256x240.png")
 }
 
 /* positioning */
@@ -1375,8 +1374,8 @@ a.ui-button:active,
 /* Overlays */
 .ui-widget-overlay {
 	background: @jqueryUIOverlayBackground;
-	opacity: NaN;
-	filter: Alpha(Opacity=@jqueryUIOverlayOpacity); /* support: IE8 */
+	opacity: @jqueryUIOverlayOpacity;
+	filter: ~'Alpha(Opacity='@jqueryUIOverlayOpacity * 100~')'; /* support: IE8 */
 }
 .ui-widget-shadow {
 	-webkit-box-shadow: @jqueryUIShadowLeft @jqueryUIShadowTop @jqueryUIShadowThickness @jqueryUIShadowColor;
@@ -3204,6 +3203,39 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 }
 .hidden {
   display: none;
+}
+
+
+// own calender additions for monthpicker & prev,next button near month name
+#calendar .fc-prev-button {
+	margin:0;
+	border-top-right-radius:0;
+	border-bottom-right-radius:0;
+}
+#calendar .fc-next-button {
+	margin:0;
+	border-top-left-radius:0;
+	border-bottom-left-radius:0;
+}
+#calendar #fc-datepicker {
+	margin:0;
+	padding:0;
+}
+#calendar .fc-toolbar .fc-center h2 {
+	margin:0;
+	padding:.3em .5em 0;
+	height:1.4em;
+	font-size:1.5em;
+	box-sizing:border-box;
+	cursor:pointer;
+	background:@jqueryUIStateDefaultBackground;
+	border:1px solid @jqueryUIStateDefaultBorderColor;
+	color:@jqueryUIStateDefaultFontColor;
+}
+#calendar .fc-toolbar .fc-center h2:hover {
+	background: @jqueryUIStateHoverBackground;
+	border:1px solid @jqueryUIStateHoverBorderColor;
+	color:@jqueryUIStateHoverFontColor;
 }
 
 
