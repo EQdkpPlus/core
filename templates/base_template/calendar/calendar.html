@@ -246,53 +246,50 @@
 		});
 
 		// start the hack for the date picker
-		$(".fc-header-toolbar .fc-center h2").attr('id', 'fc-datepicker-header').before('<input size="1" style="height: 0px; width:0px; border: 0px;" id="fc-datepicker" value="" />');
-		var view = $('#calendar').fullCalendar('getView');
+		$(".fc-header-toolbar .fc-center h2").attr('id', 'fc-datepicker-header').before('<input size="1" style="height: 0px; width:0px; border: 0px;" id="fc-datepicker" value="" /><input size="1" style="height: 0px; width:0px; border: 0px;" id="fc-monthpicker" value="" />');
 
-		if(view.name == "month"){
-			$("#fc-datepicker").MonthPicker({
-				Button: false,
-				Position: {
-					my: 'center top+1',
-					at: 'center bottom',
-					collision: 'flip',
-					of: $('.fc-header-toolbar .fc-center')
-				},
-				OnAfterMenuClose: function() {
-					var d = $("#fc-datepicker").MonthPicker('Validate')
-					if (d !== null){
-						$('#calendar').fullCalendar('gotoDate', d);
-					}
+		$("#fc-monthpicker").MonthPicker({
+			Button: false,
+			Position: {
+				my: 'center top+1',
+				at: 'center bottom',
+				collision: 'flip',
+				of: $('.fc-header-toolbar .fc-center')
+			},
+			OnAfterMenuClose: function() {
+				var d = $("#fc-monthpicker").MonthPicker('Validate')
+				if (d !== null){
+					$('#calendar').fullCalendar('gotoDate', d);
 				}
-			});
-		}else{
-			$("#fc-datepicker").datepicker({
-				dateFormat: 'mm-yy',
-				changeMonth: true,
-				changeYear: true,
-				showButtonPanel: true,
-				beforeShow: function(input, inst) {
-	   setTimeout(function () {
-		   var offsets = $(".fc-header-toolbar .fc-center").offset();
-		   var top = offsets.top + 25;
-		   inst.dpDiv.css({
-			   top: top,
-			   left: offsets.left,
-		   });
-	   });
-   },
-				onClose: function(dateText, inst) {
-					var d = $("#fc-datepicker").datepicker("getDate");
-					if (d !== null){
-						$('#calendar').fullCalendar('gotoDate', d);
-					}
+			}
+		});
+
+		$("#fc-datepicker").datepicker({
+			dateFormat: 'mm-yy',
+			changeMonth: true,
+			changeYear: true,
+			showButtonPanel: true,
+			beforeShow: function(input, inst) {
+				setTimeout(function () {
+					var offsets = $(".fc-header-toolbar .fc-center").offset();
+					var top = offsets.top + 25;
+					inst.dpDiv.css({
+						top: top,
+						left: offsets.left,
+					});
+				});
+			},
+			onClose: function(dateText, inst) {
+				var d = $("#fc-datepicker").datepicker("getDate");
+				if (d !== null){
+					$('#calendar').fullCalendar('gotoDate', d);
 				}
-			});
-		}
+			}
+		});
 
 		$("#fc-datepicker-header").click(function() {
-			if(view.name == "month"){
-				$('#fc-datepicker').MonthPicker('Open')
+			if((cal_getStorage("calendar.viewname") || 'month') == "month"){
+				$('#fc-monthpicker').MonthPicker('Open')
 			}else{
 				$('#fc-datepicker').datepicker('show');
 			}
