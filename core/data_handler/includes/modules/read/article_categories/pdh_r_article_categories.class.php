@@ -30,6 +30,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 		public $categories;
 		public $sortation;
 		public $alias;
+		public $langStartpoints;
 		private $arrTempPermissions = array();
 
 		public $hooks = array(
@@ -52,12 +53,14 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			$this->categories = NULL;
 			$this->sortation = NULL;
 			$this->alias = NULL;
+			$this->langStartpoints = NULL;
 		}
 
 		public function init(){
 			$this->categories	= $this->pdc->get('pdh_article_categories_table');
 			$this->sortation	= $this->pdc->get('pdh_article_categories_sortation');
 			$this->alias		= $this->pdc->get('pdh_article_categories_alias');
+			$this->langStartpoints = $this->pdc->get('pdh_article_categories_startpoints');
 			if($this->categories !== NULL && $this->sortation !== NULL && $this->alias !== NULL){
 				return true;
 			}
@@ -91,6 +94,10 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 						'language'			=> $drow['language'],
 					);
 					$this->alias[utf8_strtolower($drow['alias'])] = intval($drow['id']);
+					
+					if(intval($drow['lang_startpoint'])){
+						$this->langStartpoints[$drow['language']] = intval($drow['id']);
+					}
 				}
 				
 				$this->sortation = $this->get_sortation();
@@ -98,6 +105,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 				$this->pdc->put('pdh_article_categories_table', $this->categories, null);
 				$this->pdc->put('pdh_article_categories_sortation', $this->sortation, null);
 				$this->pdc->put('pdh_article_categories_alias', $this->alias, null);
+				$this->pdc->put('pdh_article_categories_startpoints', $this->langStartpoints, null);
 			}
 	
 		}
@@ -266,6 +274,18 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 		public function get_language($intCategoryID){
 			if (isset($this->categories[$intCategoryID])){
 				return $this->categories[$intCategoryID]['language'];
+			}
+			return false;
+		}
+		
+		public function get_resolved_language($intCategoryID){
+			if($this->get_lang_startpoint($intCategoryID) && $this->get_language($intCategoryID)){
+				echo "b";
+				return $this->get_language($intCategoryID);
+			} elseif($arrParents = $this->get_parents($intCategoryID)){
+				foreach($this->langStartpoints as $key => $val){
+					if(in_array($val, $arrParents)) return $key;
+				}
 			}
 			return false;
 		}
@@ -510,6 +530,23 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 					$this->add_array($val, $arrOut, $arrChildArray);
 				}
 			}
+		}
+		
+		public function get_startpoints(){
+			return $this->langStartpoints;
+		}
+		
+		public function get_parents($intCategoryID){
+			$arrParents = array();
+			$intParent = $this->get_parent($intCategoryID);
+			if($intParent){
+				$arrParents[] = $intParent;
+				$arrParentsParents = $this->get_parents($intParent);
+				if($arrParentsParents) $arrParents = array_merge($arrParents, $arrParentsParents);
+			} else {
+				return false;
+			}
+			return array_unique($arrParents);
 		}
 		
 		public function get_parent_count($intCategoryID, $intCount=0){

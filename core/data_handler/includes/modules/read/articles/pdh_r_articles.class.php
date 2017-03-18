@@ -618,6 +618,14 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 				
 			return false;
 		}
+		
+		public function get_language($intArticleID){
+			$intCategoryID = $this->get_category($intArticleID);
+			$strLanguage = $this->pdh->get('article_categories', 'resolved_language', array($intCategoryID));
+			if($strLanguage) return $strLanguage;
+			
+			return false;
+		}
 
 
 	}//end class
