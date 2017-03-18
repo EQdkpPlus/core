@@ -60,7 +60,6 @@
 @jqueryCalenderAdditionsBorderColorHover: @jqueryUIStateHoverBorderColor;
 @jqueryCalenderAdditionsFontColorHover: @jqueryUIStateHoverFontColor;
 
-
 /*!
  * jQuery UI CSS Framework 1.12.0
  * http://jqueryui.com
@@ -1418,7 +1417,7 @@ a.ui-button:active,
 .ui-multiselect-menu .ui-icon:before,
 .ui-spinner .ui-icon:before{
 	text-decoration: inherit;
-	text-indent: 0 !important;
+	text-indent: 0 !important; 
 	speak: none;
 	font-size: 14px;
 }
@@ -1462,11 +1461,11 @@ a.ui-button:active,
 
 /* Shortened version style */
 .ui-timepicker-div.ui-timepicker-oneLine { padding-right: 2px; }
-.ui-timepicker-div.ui-timepicker-oneLine .ui_tpicker_time,
+.ui-timepicker-div.ui-timepicker-oneLine .ui_tpicker_time, 
 .ui-timepicker-div.ui-timepicker-oneLine dt { display: none; }
 .ui-timepicker-div.ui-timepicker-oneLine .ui_tpicker_time_label { display: block; padding-top: 2px; }
 .ui-timepicker-div.ui-timepicker-oneLine dl { text-align: right; }
-.ui-timepicker-div.ui-timepicker-oneLine dl dd,
+.ui-timepicker-div.ui-timepicker-oneLine dl dd, 
 .ui-timepicker-div.ui-timepicker-oneLine dl dd > div { display:inline-block; margin:0; }
 .ui-timepicker-div.ui-timepicker-oneLine dl dd.ui_tpicker_minute:before,
 .ui-timepicker-div.ui-timepicker-oneLine dl dd.ui_tpicker_second:before { content:':'; display:inline-block; }
@@ -1525,7 +1524,7 @@ a.ui-button:active,
 .cboxIframe{width:100%; height:100%; display:block; border:0; padding:0; margin:0;}
 #colorbox, #cboxContent, #cboxLoadedContent{box-sizing:content-box; -moz-box-sizing:content-box; -webkit-box-sizing:content-box;}
 
-/*
+/* 
     User Style:
     Change the following styles to modify the appearance of Colorbox.  They are
     ordered & tabbed in a way that represents the nesting of the generated HTML.
@@ -1645,7 +1644,7 @@ a.ui-button:active,
 
 
 @media print{
-    .ui-multiselect-menu {display: none;}
+    .ui-multiselect-menu {display: none;}   
     
 }
 
