@@ -111,8 +111,9 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 						'last_edited_user'	=> (int)$drow['last_edited_user'],
 						'page_objects'		=> $drow['page_objects'],
 						'hide_header'		=> (int)$drow['hide_header'],
-						'index'			=> (int)$drow['index'],
-						'undeletable'			=> (int)$drow['undeletable'],
+						'index'				=> (int)$drow['index'],
+						'undeletable'		=> (int)$drow['undeletable'],
+						'fallback'			=> (int)$drow['lang_fallback'],
 					);
 
 					if (!isset($this->categories[(int)$drow['category']])) $this->categories[(int)$drow['category']] = array();
@@ -335,6 +336,13 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			}
 			return false;
 		}
+		
+		public function get_fallback($intArticleID){
+			if (isset($this->articles[$intArticleID])){
+				return $this->articles[$intArticleID]['fallback'];
+			}
+			return false;
+		}
 
 		public function get_hits($intArticleID){
 			if (isset($this->articles[$intArticleID])){
@@ -426,7 +434,10 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 		}
 
 		public function get_editicon($intArticleID){
-			return '<a href="'.$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$this->get_category($intArticleID).'&a='.$intArticleID.'"><i class="fa fa-pencil fa-lg" title="'.$this->user->lang('edit').'"></i></a>';
+			$out = '<a href="'.$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$this->get_category($intArticleID).'&a='.$intArticleID.'"><i class="fa fa-pencil fa-lg" title="'.$this->user->lang('edit').'"></i></a>';
+			$out .= '&nbsp;&nbsp;&nbsp;<a href="'.$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$this->get_category($intArticleID).'&duplicate='.$intArticleID.'"><i class="fa fa-copy fa-lg" title="'.$this->user->lang('copy').'"></i></a>';
+			
+			return $out;
 		}
 
 		public function get_check_alias($strAlias, $blnCheckCategory=false){

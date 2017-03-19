@@ -131,11 +131,9 @@ if(!class_exists('pdh_w_articles')) {
 			$this->pdh->enqueue_hook('article_categories_update');
 		}
 		
-		public function add($strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader){
+		public function add($strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader, $intFallback){
 			if ($strAlias == ""){
-				$arrName = unserialize($strTitle);
-				$strDefaultLanguage = $this->config->get('default_lang');
-				$strAlias = $this->create_alias($arrName[$strDefaultLanguage]);
+				$strAlias = $this->create_alias($strTitle);
 			} else {
 				$strAlias = $this->create_alias($strAlias);
 			}
@@ -187,6 +185,7 @@ if(!class_exists('pdh_w_articles')) {
 				'last_edited_user'	=> $this->user->id,
 				'page_objects'		=> serialize($arrPageObjects),
 				'hide_header'		=> $intHideHeader,
+				'lang_fallback'		=> $intFallback,
 			))->execute();
 			
 			if ($objQuery){
@@ -222,6 +221,7 @@ if(!class_exists('pdh_w_articles')) {
 						'tags'				=> implode(", ", $arrTags),
 						'page_objects'		=> implode(", ", $arrPageObjects),
 						'hide_header'		=> $intHideHeader,	
+						'lang_fallback'		=> $intFallback,
 				);
 					
 				$arrChanges = $this->logs->diff(false, $arrNew, $this->arrLang);
@@ -239,15 +239,7 @@ if(!class_exists('pdh_w_articles')) {
 		
 		public function update_headline($id, $strTitle){
 			$arrOldData = $this->pdh->get('articles', 'data', array($id));
-			
-			$currentLanguage = $this->user->lang_name;
-			$defaultLanguage = $this->config->get('default_lang');
-			$arrOldTitles = (is_serialized($arrOldData["title"])) ? unserialize($arrOldData["title"]) : array($defaultLanguage => $arrOldData["title"]);
-			$arrOldTitles[$currentLanguage] = $strTitle;
-			if(!isset($arrOldTitles[$defaultLanguage])) $arrOldTitles[$defaultLanguage] = $strTitle;
-			
-			$strTitle = serialize($arrOldTitles);
-			
+
 			$objQuery = $this->db->prepare("UPDATE __articles :p WHERE id=?")->set(array(
 					'title' 			=> $strTitle,
 			))->execute($id);
@@ -338,11 +330,9 @@ if(!class_exists('pdh_w_articles')) {
 			
 		}
 		
-		public function update($id, $strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader){
+		public function update($id, $strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader, $intFallback){
 			if ($strAlias == ""){
-				$arrName = unserialize($strTitle);
-				$strDefaultLanguage = $this->config->get('default_lang');
-				$strAlias = $this->create_alias($arrName[$strDefaultLanguage]);
+				$strAlias = $this->create_alias($strTitle);
 			} elseif($strAlias != $this->pdh->get('articles', 'alias', array($id))) {
 				$strAlias = $this->create_alias($strAlias);
 			}
@@ -392,6 +382,7 @@ if(!class_exists('pdh_w_articles')) {
 				'last_edited_user'	=> $this->user->id,
 				'page_objects'		=> serialize($arrPageObjects),
 				'hide_header'		=> $intHideHeader,
+				'lang_fallback'		=> $intFallback,
 			);
 			
 			//if category changed, make sure that there is only one index article

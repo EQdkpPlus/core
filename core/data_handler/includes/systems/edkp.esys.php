@@ -711,7 +711,7 @@ $system_def = array(
 				'table_sort_col'	=> 0,
 				'table_presets'		=> array(
 					array('name' => 'category_sortable',	'sort' => true, 'th_add' => 'width="20" class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
-					array('name' => 'category_editicon',	'sort' => false, 'th_add' => 'width="20"', 'td_add' => ''),
+					array('name' => 'category_editicon',	'sort' => false, 'th_add' => 'width="20"', 'td_add' => 'class="nowrap"'),
 					array('name' => 'category_published',	'sort' => true, 'th_add' => 'width="20"', 'td_add' => ''),
 					array('name' => 'category_article_count','sort' => true, 'th_add' => 'width="20" class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
 					array('name' => 'category_name',		'sort' => true, 'th_add' => '', 'td_add' => ''),
@@ -736,7 +736,7 @@ $system_def = array(
 				'table_sort_col'	=> 7,
 				'table_presets'		=> array(
 
-					array('name' => 'article_editicon',	'sort' => false, 'th_add' => 'width="20"', 'td_add' => ''),
+					array('name' => 'article_editicon',	'sort' => false, 'th_add' => 'width="20"', 'td_add' => 'class="nowrap"'),
 					array('name' => 'article_published',	'sort' => true, 'th_add' => 'width="20"', 'td_add' => ''),
 					array('name' => 'article_featured', 'sort' => true, 'th_add' => 'width="20"', 'td_add' => ''),
 					array('name' => 'article_index_cb', 'sort' => true, 'th_add' => 'width="20"', 'td_add' => ''),

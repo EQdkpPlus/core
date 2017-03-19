@@ -271,6 +271,13 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			return false;
 		}
 		
+		public function get_lang_startpoints(){
+			if (isset($this->langStartpoints)){
+				return $this->langStartpoints;
+			}
+			return false;
+		}
+		
 		public function get_language($intCategoryID){
 			if (isset($this->categories[$intCategoryID])){
 				return $this->categories[$intCategoryID]['language'];
@@ -354,7 +361,10 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 		}
 				
 		public function get_editicon($intCategoryID){
-			return '<a href="'.$this->root_path.'admin/manage_article_categories.php'.$this->SID.'&c='.$intCategoryID.'"><i class="fa fa-pencil fa-lg" title="'.$this->user->lang('edit').'"></i></a>';
+			$out = '<a href="'.$this->root_path.'admin/manage_article_categories.php'.$this->SID.'&c='.$intCategoryID.'"><i class="fa fa-pencil fa-lg" title="'.$this->user->lang('edit').'"></i></a>';
+			$out .= '&nbsp;&nbsp;&nbsp;<a href="'.$this->root_path.'admin/manage_article_categories.php'.$this->SID.'&c=0&parent='.$intCategoryID.'"><i class="fa fa-plus fa-lg" title="'.$this->user->lang('add_article_category').'"></i></a>';
+			
+			return $out;
 		}
 		
 		public function get_html_published($intCategoryID){

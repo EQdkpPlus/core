@@ -245,7 +245,7 @@ class Manage_Article_Categories extends page_generic {
 				'DD_PORTAL_LAYOUT'	=> (new hdropdown('portal_layout', array('options' => $arrPortalLayouts, 'value' => 1)))->output(),
 				'R_PUBLISHED'		=> (new hradio('published', array('value' => 1)))->output(),
 				'R_SHOW_CHILDS'		=> (new hradio('show_childs', array('value' => 1)))->output(),
-				'DD_PARENT'			=> (new hdropdown('parent', array('js' => 'onchange="renew_all_permissions();"', 'options' => $arrCategories, 'value' => 0)))->output(),
+				'DD_PARENT'			=> (new hdropdown('parent', array('js' => 'onchange="renew_all_permissions();"', 'options' => $arrCategories, 'value' => $this->in->get('parent', 0))))->output(),
 				'DD_LIST_TYPE'		=> (new hdropdown('list_type', array('options' => array(1 => $this->user->lang('list_type_full'), 2 => $this->user->lang('list_type_headline'), 3 => $this->user->lang('list_type_teaser')))))->output(),
 				'MS_AGGREGATION'	=> (new hmultiselect('aggregation', array('options' => $arrAggregation, 'value' => '')))->output(),
 				'R_PUBLISHED_STATE'	=> (new hradio('article_published_state', array('options' => array(0 => $this->user->lang('not_published'), 1 => $this->user->lang('published')), 'value' => 1)))->output(),

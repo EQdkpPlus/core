@@ -18,7 +18,7 @@ class libEmbedly {
      *
      * @var string
      */
-    protected $hostname = 'api.embed.ly';
+    protected $hostname = 'https://api.embed.ly';
     
     /**
      *

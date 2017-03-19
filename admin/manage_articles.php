@@ -31,6 +31,7 @@ class Manage_Articles extends page_generic {
 		$handler = array(
 			'save' 		=> array('process' => 'save', 'csrf' => true),
 			'update'	=> array('process' => 'update', 'csrf' => true),
+			'duplicate'	=> array('process' => 'copy'),
 			'checkalias'=> array('process' => 'ajax_checkalias'),
 			'del_votes' => array('process' => 'delete_votes', 'csrf' => true),
 			'del_comments' => array('process' => 'delete_comments', 'csrf' => true),
@@ -42,6 +43,11 @@ class Manage_Articles extends page_generic {
 		);
 		parent::__construct(false, $handler, array('articles', 'title'), null, 'selected_ids[]');
 		$this->process();
+	}
+	
+	public function copy(){
+		$this->core->message($this->user->lang('copy_info'), $this->user->lang('copy'));
+		$this->edit($this->in->get('duplicate', 0), true);
 	}
 
 	public function delete_previewimage(){
@@ -127,7 +133,7 @@ class Manage_Articles extends page_generic {
 		$cid = $this->in->get('c', 0);
 		$id = $this->in->get('a', 0);
 
-		$arrTitle = $this->in->getArray('title', 'string');
+		$strTitle = $this->in->get('title');
 		$strText = $this->in->get('text', '', 'raw');
 		$strTags = $this->in->get('tags');
 		$strPreviewimage = $this->in->get('previewimage');
@@ -140,6 +146,7 @@ class Manage_Articles extends page_generic {
 		$intComments = $this->in->get('comments', 0);
 		$intVotes = $this->in->get('votes', 0);
 		$intHideHeader = $this->in->get('hide_header', 0);
+		$intFallback = $this->in->get('fallback_article', 0);
 
 		$schluesselwoerter = preg_split("/[\s,]+/", $strTags);
 		$arrTags = array();
@@ -154,18 +161,16 @@ class Manage_Articles extends page_generic {
 
 		//Check Name
 		$strDefaultLanguage = $this->config->get('default_lang');
-		if(!isset($arrTitle[$strDefaultLanguage]) || $arrTitle[$strDefaultLanguage] == ""){
+		if($strTitle == ""){
 			$this->core->message($this->user->lang('headline'), $this->user->lang('adduser_send_mail_error_fields'), 'red');
 			$this->edit();
 			return;
 		}
 
-		$strTitle = serialize($arrTitle);
-
 		if ($id){
-			$blnResult = $this->pdh->put('articles', 'update', array($id, $strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader));
+			$blnResult = $this->pdh->put('articles', 'update', array($id, $strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader, $intFallback));
 		} else {
-			$blnResult = $this->pdh->put('articles', 'add', array($strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader));
+			$blnResult = $this->pdh->put('articles', 'add', array($strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader, $intFallback));
 		}
 
 		if ($blnResult){
@@ -214,7 +219,7 @@ class Manage_Articles extends page_generic {
 		$this->pdh->process_hook_queue();
 	}
 
-	public function edit($aid=false){
+	public function edit($aid=false, $copy=false){
 		$id = ($aid === false) ? $this->in->get('a', 0) : $aid;
 		$cid = $this->in->get('c', 0);
 
@@ -236,14 +241,43 @@ class Manage_Articles extends page_generic {
 			$arrCategories[$caid] = $this->pdh->get('article_categories', 'name_prefix', array($caid)).$this->pdh->get('article_categories', 'name', array($caid));
 		}
 
+		//Fallback Articles
+		$strDefaultLang = $this->config->get('default_lang');
+		$arrStartpoints = $this->pdh->get('article_categories', 'lang_startpoints');
+		$intMyStartoint = 0;
+		if(is_array($arrStartpoints)){
+			foreach($arrStartpoints as $isoCode => $intStartpointCategoryID){
+				if($this->env->translate_iso_langcode($isoCode) == $strDefaultLang){
+					$intMyStartoint = $intStartpointCategoryID;
+					break;
+				}
+			}
+		}
+		$arrFallbackArticles = array(0 => "");
+		if($intMyStartoint){
+			$arrArticles = $this->pdh->get('articles', 'id_list', array($intMyStartoint));
+			foreach($arrArticles as $articleID){
+				$arrFallbackArticles[$articleID] = $this->pdh->get('article_categories', 'name_prefix', array($intMyStartoint)).$this->pdh->get('articles', 'title', array( $articleID)).' (#'.$articleID.')';
+			}
+			
+			$arrChilds = $this->pdh->get('article_categories', 'all_childs', array($intMyStartoint));
+
+			foreach($arrChilds as $intChildCategoryID){
+				$arrArticles = $this->pdh->get('articles', 'id_list', array($intChildCategoryID));
+				foreach($arrArticles as $articleID){
+					$arrFallbackArticles[$articleID] = $this->pdh->get('article_categories', 'name_prefix', array($intChildCategoryID)).$this->pdh->get('articles', 'title', array( $articleID)).' (#'.$articleID.')';
+				}
+			}
+		}
+		
 
 		if ($id){
 			$this->tpl->assign_vars(array(
 				'TITLE'				=> $this->pdh->get('articles', 'title', array($id)),
 				'TEXT'				=> $this->pdh->get('articles', 'text', array($id)),
-				'ALIAS'				=> $this->pdh->get('articles', 'alias', array($id)),
+				'ALIAS'				=> ($copy) ? '' : $this->pdh->get('articles', 'alias', array($id)),
 				'TAGS'				=> implode(', ', $this->pdh->get('articles', 'tags', array($id))),
-				'ML_TITLE'			=> (new htextmultilang('title', array('value' => $this->pdh->get('articles', 'title', array($id, true)), 'required' => true, 'size' => 50)))->output(),
+				'ML_TITLE'			=> (new htext('title', array('value' => $this->pdh->get('articles', 'title', array($id, true)), 'required' => true, 'size' => 50)))->output(),
 				'DD_CATEGORY'		=> (new hsingleselect('category', array('options' => $arrCategories, 'filter' => true, 'value' => $this->pdh->get('articles', 'category', array($id)))))->output(),
 				'PUBLISHED_RADIO'	=> (new hradio('published', array('value' => ($this->pdh->get('articles', 'published', array($id))))))->output(),
 				'FEATURED_RADIO'	=> (new hradio('featured', array('value' => ($this->pdh->get('articles', 'featured', array($id))))))->output(),
@@ -260,13 +294,14 @@ class Manage_Articles extends page_generic {
 						'noimgfile'	=> "images/global/default-image.svg",
 						'deletelink'=> 'manage_articles.php'.$this->SID.'&a='.$id.'&c='.$cid.'&delpreviewimage=true&link_hash='.$this->CSRFGetToken('delpreviewimage'),
 					)))->output(),
+				'DD_FALLBACK_ARTICLE' => (new hdropdown('fallback_article', array('options' => $arrFallbackArticles, 'value' => $this->pdh->get('articles', 'fallback', array($id)))))->output(),	
 			));
 
 		} else {
 
 			$this->tpl->assign_vars(array(
 				'DD_CATEGORY'		=> (new hsingleselect('category', array('options' => $arrCategories, 'value' => $cid, 'filter' => true)))->output(),
-				'ML_TITLE'			=> (new htextmultilang('title', array('value' => '', 'required' => true, 'size' => 50)))->output(),
+				'ML_TITLE'			=> (new htext('title', array('value' => '', 'required' => true, 'size' => 50)))->output(),
 				'PUBLISHED_CHECKED'	=> 'checked="checked"',
 				'COMMENTS_CHECKED'	=> 'checked="checked"',
 				'PUBLISHED_RADIO'	=> (new hradio('published', array('value' => 1)))->output(),
@@ -282,6 +317,7 @@ class Manage_Articles extends page_generic {
 						'imgpath'	=> $this->pfh->FolderPath('logo','eqdkp'),
 						'noimgfile'	=> "images/global/default-image.svg"
 					)))->output(),
+				'DD_FALLBACK_ARTICLE' => (new hdropdown('fallback_article', array('options' => $arrFallbackArticles)))->output(),
 			));
 		}
 
@@ -294,7 +330,7 @@ class Manage_Articles extends page_generic {
 
 		$this->tpl->assign_vars(array(
 			'CID' => $cid,
-			'AID' => $id,
+			'AID' => ($copy) ? 0 : $id,
 			'CATEGORY_NAME' => $this->pdh->get('article_categories', 'name', array($cid)),
 			'ARTICLE_NAME' => $this->pdh->get('articles', 'title', array($id)),
 		));
