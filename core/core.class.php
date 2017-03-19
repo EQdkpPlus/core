@@ -941,6 +941,23 @@ class core extends gen_class {
 					$arrPermission = $this->pdh->get('article_categories', 'user_permissions', array(intval($arrLinkData['id']), $this->user->id));
 					if (!$arrPermission['read']) return false;
 				}
+				
+				//Check language - articles
+				if(isset($arrLinkData['article'])  && $arrLinkData['article'] && $this->config->get('enable_multilang') && $this->config->get('multilang_hide_menuentries')){
+					$strLanguage = $this->pdh->get('articles', 'language', array(intval($arrLinkData['id'])));
+					if($strLanguage){
+						$strLongLang = $this->env->translate_iso_langcode($strLanguage);
+						if($strLongLang != $this->user->lang_name) return false;
+					}
+				}
+				//Check language - categories
+				if(isset($arrLinkData['category'])  && $arrLinkData['category'] && $this->config->get('enable_multilang') && $this->config->get('multilang_hide_menuentries')){
+					$strLanguage = $this->pdh->get('article_categories', 'resolved_language', array(intval($arrLinkData['id'])));
+					if($strLanguage){
+						$strLongLang = $this->env->translate_iso_langcode($strLanguage);
+						if($strLongLang != $this->user->lang_name) return false;
+					}
+				}
 
 				return true;
 			}

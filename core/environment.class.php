@@ -635,6 +635,9 @@ if (!class_exists("environment")) {
 		}
 		
 		public function translate_iso_langcode($isoCode){
+			if(strlen($isoCode) > 2){
+				$isoCode = substr($isoCode, 0, 2);
+			}
 			$language_codes = array(
 					'en' => 'English' ,
 					'aa' => 'Afar' ,
