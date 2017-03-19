@@ -44,6 +44,7 @@
 		<div class="news_author">
 			<div class="floatLeft">
 				<i class="fa fa-calendar-o"></i> {ARTICLE_TIMETAG} &bull; <i class="fa fa-user"></i> {ARTICLE_AUTHOR} <!-- IF S_COMMENTS --> &bull; <a href="#comments"><i class="fa fa-comments"></i>{COMMENTS_COUNTER}</a><!-- ENDIF -->
+				<!-- IF S_MULTILANG_ENABLED and ALT_LANGS != "" --> &bull; {ALT_LANGS} <!-- ENDIF -->
 			</div>
 			<div class="news_social floatRight">
 				{ARTICLE_SOCIAL_BUTTONS}

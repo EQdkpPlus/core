@@ -32,6 +32,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 		public $alias = NULL;
 		public $pageobjects = NULL;
 		public $tags = NULL;
+		public $altArticles = NULL;
 
 		public $hooks = array(
 			'articles_update',
@@ -58,12 +59,14 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			$this->pdc->del('pdh_articles_alias');
 			$this->pdc->del('pdh_articles_pageobjects');
 			$this->pdc->del('pdh_articles_tags');
+			$this->pdc->del('pdh_articles_alt_articles');
 
 			$this->articles = NULL;
 			$this->categories = NULL;
 			$this->alias = NULL;
 			$this->pageobjects = NULL;
 			$this->tags = NULL;
+			$this->altArticles = NULL;
 		}
 
 		public function init(){
@@ -72,8 +75,9 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			$this->alias = $this->pdc->get('pdh_articles_alias');
 			$this->pageobjects = $this->pdc->get('pdh_articles_pageobjects');
 			$this->tags = $this->pdc->get('pdh_articles_tags');
+			$this->altArticles = $this->pdc->get('pdh_articles_alt_articles');
 
-			if($this->articles !== NULL && $this->categories !== NULL && $this->alias !== NULL && $this->pageobjects !== NULL && $this->tags !== NULL){
+			if($this->articles !== NULL && $this->categories !== NULL && $this->alias !== NULL && $this->pageobjects !== NULL && $this->tags !== NULL && $this->altArticles !== NULL){
 				return true;
 			}
 			
@@ -82,6 +86,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			$this->alias = array();
 			$this->pageobjects = array();
 			$this->tags = array();
+			$this->altArticles = array();
 
 			$objQuery = $this->db->query("SELECT * FROM __articles ORDER BY category ASC, sort_id ASC");
 			if($objQuery){
@@ -120,6 +125,10 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 					$this->categories[(int)$drow['category']][] = (int)$drow['id'];
 
 					$this->alias[utf8_strtolower($drow['alias'])] = intval($drow['id']);
+					
+					if($this->articles[(int)$drow['id']]['fallback']){
+						$this->altArticles[$this->articles[(int)$drow['id']]['fallback']][] = intval($drow['id']);
+					}
 
 					if ($drow['page_objects'] != ''){
 						$arrObjects = unserialize($drow['page_objects']);
@@ -141,6 +150,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 				$this->pdc->put('pdh_articles_alias', $this->alias, null);
 				$this->pdc->put('pdh_articles_pageobjects', $this->pageobjects, null);
 				$this->pdc->put('pdh_articles_tags', $this->tags, null);
+				$this->pdc->put('pdh_articles_alt_articles', $this->altArticles, null);
 			}
 
 
@@ -639,6 +649,43 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			if($strLanguage) return $strLanguage;
 			
 			return false;
+		}
+		
+		public function get_alternate_langs($intArticleID){
+			 if($this->get_fallback($intArticleID)){
+			 	$intFallback = $this->get_fallback($intArticleID);
+			 	$arrOut[] = $intFallback;
+			 	if(isset($this->altArticles[$intFallback])){
+			 		$arrOut = array_merge($arrOut,$this->altArticles[$intFallback]);
+			 	}
+			 	
+			 	return $arrOut;
+			 } elseif(isset($this->altArticles[$intArticleID])) {
+			 	return $this->altArticles[$intArticleID];
+			 }
+			 return array();
+		}
+		
+		public function get_html_alternate_langs($intArticleID){
+			$arrAlternateLangArticles = $this->get_alternate_langs($intArticleID);
+			$out = "";
+			foreach($arrAlternateLangArticles as $intAltArticleID){
+				if($intAltArticleID == $intArticleID) continue;
+				$strPath = $this->controller_path.$this->get_path($intAltArticleID);
+				$strName = $this->get_title($intAltArticleID);
+				$strLang = $this->get_language($intAltArticleID);
+				
+				list($pre, $post) = explode('_', $strLang);
+				if($pre != "" && is_file($this->root_path.'images/flags/'.$pre.'.svg')){
+					$name = ucfirst($this->env->translate_iso_langcode($strLang));
+					$icon = '<img src="'.registry::get_const('server_path').'images/flags/'.$pre.'.svg" class="icon icon-language absmiddle" alt="'.$name.'" title="'.$strName.' ('.$name.')"/>';
+				} else {
+					$icon = ucfirst($this->env->translate_iso_langcode($strLang));
+				}
+				
+				$out .= '<a href="'.$strPath.'" title="'.$strName.'">'.$icon.'</a>&nbsp;';
+			}
+			return $out;
 		}
 
 

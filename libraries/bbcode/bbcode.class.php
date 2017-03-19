@@ -355,6 +355,11 @@ if (!class_exists("bbcode")) {
 						}
 						break;
 						
+					case 'altlangs':
+						$strAlternateLangs = $this->pdh->geth('articles', 'alternate_langs', array((int)$elements[1]));
+						$arrCache[$strTag] = $strAlternateLangs;
+						break;
+						
 					case 'iflang':
 						if ($elements[1] != '' && $elements[1] != $this->user->lang_name)
 						{

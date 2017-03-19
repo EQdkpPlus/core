@@ -172,6 +172,9 @@ class controller extends gen_class {
 		}
 
 		if ($strPageObject){
+			registry::add_const('page_type', 'pageobject');
+			registry::add_const('page_id', $strPageObject);
+			
 			$this->core->set_vars('portal_layout', 1);
 			$objPage = $this->routing->getPageObject($strPageObject);
 			if ($objPage){
@@ -275,6 +278,9 @@ class controller extends gen_class {
 
 			//Display Artikel
 			if ($intArticleID){
+				registry::add_const('page_type', 'article');
+				registry::add_const('page_id', $intArticleID);
+				
 				$arrArticle = $this->pdh->get('articles', 'data', array($intArticleID));
 
 				infotooltip_js();
@@ -305,7 +311,7 @@ class controller extends gen_class {
 				$intCategoryID = $arrArticle['category'];
 				registry::add_const('categoryid', $intCategoryID);
 				$arrCategory = $this->pdh->get('article_categories', 'data', array($intCategoryID));
-				$arrCategory['name'] = $this->user->multilangValue($arrCategory['name']);
+				$arrCategory['name'] = $this->bbcode->parse_shorttags(xhtml_entity_decode($arrCategory['name']));
 
 				//Category Permissions
 				$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($arrArticle['category'], $this->user->id));
@@ -327,7 +333,7 @@ class controller extends gen_class {
 				$arrPagebreaks = array();
 				preg_match_all('#<hr(.*)class="system-pagebreak"(.*)\/>#iU', $strText, $arrPagebreaks, PREG_PATTERN_ORDER);
 
-				$arrArticle['title'] = $this->user->multilangValue($arrArticle['title']);
+				$arrArticle['title'] = $this->bbcode->parse_shorttags(xhtml_entity_decode($arrArticle['title']));
 
 				if (count($arrPagebreaks[0])){
 					$arrTitles[1] = $arrArticle['title'];
@@ -642,6 +648,7 @@ class controller extends gen_class {
 						'S_COMMENTS'		=> ($arrArticle['comments']) ? true : false,
 						'S_HIDE_HEADER'		=> ($arrArticle['hide_header']),
 						'S_FEATURED'		=> ($this->pdh->get('articles',  'featured', array($intArticleID))),
+						'ALT_LANGS'			=> ($this->config->get('enable_multilang') && $this->config->get('multilang_redirect_articles')) ? '' : $this->pdh->geth('articles',  'alternate_langs', array($intArticleID)),
 				));
 
 				$strPreviewImage = ($this->pdh->get('articles',  'previewimage', array($intArticleID)) != "") ? $this->pdh->geth('articles', 'previewimage', array($intArticleID)) : '';
@@ -676,6 +683,9 @@ class controller extends gen_class {
 				);
 
 			} elseif ($intCategoryID){
+				registry::add_const('page_type', 'category');
+				registry::add_const('page_id', $intCategoryID);
+				
 				$arrCategory = $this->pdh->get('article_categories', 'data', array($intCategoryID));
 				//Check if Published
 				$intPublished = $arrCategory['published'];
@@ -711,7 +721,7 @@ class controller extends gen_class {
 				$strPath = $this->pdh->get('article_categories', 'path', array($intCategoryID));
 				registry::add_const('page_path', $this->user->removeSIDfromString($strPath));
 
-				$arrCategory['name'] = $this->user->multilangValue($arrCategory['name']);
+				$arrCategory['name'] = $this->bbcode->parse_shorttags(xhtml_entity_decode($arrCategory['name']));
 
 				infotooltip_js();
 
