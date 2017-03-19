@@ -282,6 +282,22 @@ class controller extends gen_class {
 				registry::add_const('page_id', $intArticleID);
 				
 				$arrArticle = $this->pdh->get('articles', 'data', array($intArticleID));
+				
+				//Redirect to article in right language
+				if($this->config->get('enable_multilang') && $this->config->get('multilang_redirect_articles')){
+					$strLang = $this->pdh->get('articles', 'language', array($intArticleID));
+					if($strLang){
+						$strLangLong = $this->env->translate_iso_langcode($strLang);
+						if($strLangLong != $this->user->lang_name){
+							$arrAlternateLangs = $this->pdh->get('articles', 'alternate_langs', array($intArticleID));
+							if(isset($arrAlternateLangs[$this->user->lang_name])){
+								$intNewArticle = $arrAlternateLangs[$this->user->lang_name];
+								$strPath = $this->pdh->get('articles', 'path', array($intNewArticle));
+								redirect($this->controller_path_plain.$strPath);
+							}
+						}
+					}
+				}
 
 				infotooltip_js();
 
@@ -978,7 +994,22 @@ class controller extends gen_class {
 				);
 			}
 		}
-
+		
+		//Still no article/category. Check if redirect to language startpoint
+		if($this->config->get('enable_multilang')){
+			$arrAvailableStartpoints = $this->pdh->get('article_categories', 'lang_startpoints');
+			if(is_array($arrAvailableStartpoints)){
+				foreach ($arrAvailableStartpoints as $isoCode => $intCategoryID){
+					$langName = $this->env->translate_iso_langcode($isoCode);
+					if($this->user->lang_name == $langName){
+						$strPath = $this->pdh->get('article_categories', 'path', array($intCategoryID));
+						redirect($this->controller_path_plain.$strPath);
+					}
+				}
+			}
+		}
+		
+		
 		if(!$this->env->is_ajax) message_die($this->user->lang('article_not_found'));
 	}
 

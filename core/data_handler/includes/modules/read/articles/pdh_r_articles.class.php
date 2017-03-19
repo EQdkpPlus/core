@@ -489,7 +489,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 				return $strPath;
 			}
 
-			$strPath .= ucfirst($this->get_alias($intArticleID));
+			$strPath .= $this->get_alias($intArticleID);
 			return $strPath;
 		}
 
@@ -497,14 +497,14 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			$strPath = "";
 			$strPath = $this->add_path($this->get_category($intArticleID));
 
-			$strAlias = ucfirst($this->get_alias($intArticleID));
+			$strAlias = $this->get_alias($intArticleID);
 			if ($this->get_index($intArticleID) && !$url_id){
 				$strPath .= ($this->SID == "?s=") ? '?' : $this->SID;
 				return $strPath;
 			} elseif($url_id){
-				$strPath .= ucfirst($arrPath[0]);
+				$strPath .= $arrPath[0];
 			} else {
-				$strPath .= ucfirst($this->get_alias($intArticleID));
+				$strPath .= $this->get_alias($intArticleID);
 			}
 
 			if(substr($strPath, -1) == "/") $strPath = substr($strPath, 0, -1);
@@ -514,7 +514,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 		}
 
 		private function add_path($intCategoryID, $strPath=''){
-			$strAlias = ucfirst($this->pdh->get('article_categories', 'alias', array($intCategoryID)));
+			$strAlias = $this->pdh->get('article_categories', 'alias', array($intCategoryID));
 			if ($strAlias != '' && $strAlias != 'system' && $strAlias != 'System'){
 				$strPath = $strAlias.'/'.$strPath;
 			}
@@ -526,7 +526,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 		}
 
 		public function get_breadcrumb($intArticleID, $strAdditionalString='', $url_id=false, $arrPath=array()){
-			$strAlias = ucfirst($this->get_alias($intArticleID));
+			$strAlias = $this->get_alias($intArticleID);
 			if ($this->get_index($intArticleID) && !$url_id){
 				$intCategoryID = $this->get_category($intArticleID);
 				return $this->pdh->get('article_categories', 'breadcrumb', array($intCategoryID));
@@ -651,7 +651,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			return false;
 		}
 		
-		public function get_alternate_langs($intArticleID){
+		public function get_alternate_articles($intArticleID){
 			 if($this->get_fallback($intArticleID)){
 			 	$intFallback = $this->get_fallback($intArticleID);
 			 	$arrOut[] = $intFallback;
@@ -667,7 +667,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 		}
 		
 		public function get_html_alternate_langs($intArticleID){
-			$arrAlternateLangArticles = $this->get_alternate_langs($intArticleID);
+			$arrAlternateLangArticles = $this->get_alternate_articles($intArticleID);
 			$out = "";
 			foreach($arrAlternateLangArticles as $intAltArticleID){
 				if($intAltArticleID == $intArticleID) continue;
@@ -687,7 +687,18 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			}
 			return $out;
 		}
-
+		
+		public function get_alternate_langs($intArticleID){
+			$arrAlternateLangArticles = $this->get_alternate_articles($intArticleID);
+			$out = array();
+			foreach($arrAlternateLangArticles as $intAltArticleID){
+				if($intAltArticleID == $intArticleID) continue;
+				$strLang = $this->get_language($intAltArticleID);
+				$strLangLong = $this->env->translate_iso_langcode($strLang);
+				$out[$strLangLong] = $intAltArticleID;
+			}
+			return $out;
+		}
 
 	}//end class
 }//end if

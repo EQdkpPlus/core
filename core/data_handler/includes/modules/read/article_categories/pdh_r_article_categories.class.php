@@ -597,7 +597,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 		}
 		
 		private function add_path($intCategoryID, $strPath=''){
-			$strAlias = ucfirst($this->get_alias($intCategoryID));
+			$strAlias = $this->get_alias($intCategoryID);
 			if ($strAlias != '' && $strAlias != 'system' && $strAlias != 'System'){
 				$strPath = $strAlias.'/'.$strPath;
 			}
