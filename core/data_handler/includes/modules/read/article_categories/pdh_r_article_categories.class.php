@@ -280,7 +280,6 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 		
 		public function get_resolved_language($intCategoryID){
 			if($this->get_lang_startpoint($intCategoryID) && $this->get_language($intCategoryID)){
-				echo "b";
 				return $this->get_language($intCategoryID);
 			} elseif($arrParents = $this->get_parents($intCategoryID)){
 				foreach($this->langStartpoints as $key => $val){
