@@ -169,8 +169,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 
 		public function get_name($intCategoryID, $blnPlain=false){
 			if (isset($this->categories[$intCategoryID])){
-				$strSerializedName = $this->categories[$intCategoryID]['name'];
-				return ($blnPlain) ? $this->categories[$intCategoryID]['name'] : $this->user->multilangValue($strSerializedName);
+				return $this->categories[$intCategoryID]['name'] ;
 			}
 			return false;
 		}
@@ -637,18 +636,25 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			if ($intCategoryID == 1) return "";
 			$strBreadcrumb = ($this->get_parent($intCategoryID)) ? $this->add_breadcrumb($this->get_parent($intCategoryID)) : '';
 
+			if($this->config->get('multilang_hide_startpoints_breadcrumb') && $this->get_lang_startpoint($intCategoryID)){
+				return $strBreadcrumb;
+			}
+			
 			$strBreadcrumb .=  '<li class="current"><a href="'.$this->controller_path.$this->get_path($intCategoryID).'">'.$this->get_name($intCategoryID).'</a></li>';
 			return $strBreadcrumb;
 		}
 		
 		private function add_breadcrumb($intCategoryID, $strBreadcrumb=''){
 			if ($intCategoryID == 1) return $strBreadcrumb;
-			$strName = $this->pdh->get('article_categories', 'name', array($intCategoryID));
-			$strPath = $this->pdh->get('article_categories', 'path', array($intCategoryID));
-			$strBreadcrumb = '<li><a href="'.$this->controller_path.$strPath.'">'.$strName.'</a></li>'.$strBreadcrumb;
+			$strName = $this->get_name($intCategoryID);
+			$strPath = $this->get_path($intCategoryID);
 			
-			if ($this->pdh->get('article_categories', 'parent', array($intCategoryID))){
-				$strBreadcrumb = $this->add_breadcrumb($this->pdh->get('article_categories', 'parent', array($intCategoryID)), $strBreadcrumb);
+			if(!($this->config->get('multilang_hide_startpoints_breadcrumb') && $this->get_lang_startpoint($intCategoryID))){
+				$strBreadcrumb = '<li><a href="'.$this->controller_path.$strPath.'">'.$strName.'</a></li>'.$strBreadcrumb;
+			}
+			
+			if ($this->get_parent($intCategoryID)){
+				$strBreadcrumb = $this->add_breadcrumb($this->get_parent($intCategoryID), $strBreadcrumb);
 			}
 			
 			return $strBreadcrumb;

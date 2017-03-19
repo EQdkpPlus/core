@@ -176,9 +176,9 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			return false;
 		}
 
-		public function get_title($intArticleID, $blnPlain=false){
+		public function get_title($intArticleID){
 			if (isset($this->articles[$intArticleID])){
-				return ($blnPlain) ? $this->articles[$intArticleID]['title'] : $this->user->multilangValue($this->articles[$intArticleID]['title']);
+				return $this->articles[$intArticleID]['title'];
 			}
 			return false;
 		}
@@ -531,7 +531,10 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			if ($intCategoryID == 1) return $strBreadcrumb;
 			$strName = $this->pdh->get('article_categories', 'name', array($intCategoryID));
 			$strPath = $this->pdh->get('article_categories', 'path', array($intCategoryID));
-			$strBreadcrumb = '<li><a href="'.$this->controller_path.$strPath.'">'.$strName.'</a></li>'.$strBreadcrumb;
+			
+			if(!($this->config->get('multilang_hide_startpoints_breadcrumb') &&  $this->pdh->get('article_categories', 'lang_startpoint', array($intCategoryID)))){
+				$strBreadcrumb = '<li><a href="'.$this->controller_path.$strPath.'">'.$strName.'</a></li>'.$strBreadcrumb;
+			}
 
 			if ($this->pdh->get('article_categories', 'parent', array($intCategoryID))){
 				$strBreadcrumb = $this->add_breadcrumb($this->pdh->get('article_categories', 'parent', array($intCategoryID)), $strBreadcrumb);
