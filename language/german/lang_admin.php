@@ -1832,12 +1832,10 @@ $lang = array(
 
 
 //Multilang
-'core_sett_fs_multilang' => 'Mehrsprachigkeit',
 'core_sett_f_enable_multilang' => 'Mehrsprachigkeit aktivieren',
 'core_sett_f_multilang_hide_menuentries' => 'Menüeinträge ausblenden für nicht passende Sprachen',
 'core_sett_f_multilang_redirect_articles' => 'Benutzer bei Artikel direkt auf passende Sprache umleiten',
 'is_startpoint' => 'Startpunkt einer Sprache',
 'core_sett_f_multilang_hide_startpoints_breadcrumb' => 'Startpunkte der Sprachen in der Navigationsleiste ausblenden',
-'fallback_article'	=> 'Fallback-Artikel',
 );
 ?>

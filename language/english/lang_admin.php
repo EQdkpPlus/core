@@ -1828,7 +1828,6 @@ $lang = array(
 		
 		
 		//Multilang
-		'core_sett_fs_multilang' => 'Multilanguage support',
 		'core_sett_f_enable_multilang' => 'Enable multilanguage support',
 		'core_sett_f_multilang_hide_menuentries' => 'Hide menuitems for differen languages',
 		'core_sett_f_multilang_redirect_articles' => 'Redirect user to articles in the matching language',

@@ -137,13 +137,14 @@ class editarticle_pageobject extends pageobject {
 		$cid = $this->in->get('cid', 0);
 		$id = $this->in->get('aid', 0);
 
-		$arrTitle = $this->in->getArray('title', 'string');
+		$strTitle = $this->in->get('title');
 		$strText = $this->in->get('text', '', 'raw');
 		$strTags = $this->in->get('tags');
 		$strPreviewimage = $this->in->get('previewimage');
 		if ($strPreviewimage != "") $strPreviewimage = str_replace(register('pfh')->FileLink('', 'files', 'absolute'), '', $strPreviewimage);
 		$strAlias = $this->in->get('alias');
 		$intPublished = $this->in->get('published', 0);
+		$intFallback = $this->in->get('fallback_article', 0);
 
 		//Get default published state
 		$intDefaultPublished = $this->pdh->get("article_categories", "article_published_state", array($cid));
@@ -170,21 +171,19 @@ class editarticle_pageobject extends pageobject {
 
 		//Check Name
 		$strDefaultLanguage = $this->config->get('default_lang');
-		if(!isset($arrTitle[$strDefaultLanguage]) || $arrTitle[$strDefaultLanguage] == ""){
+		if($strTitle == ""){
 			$this->core->message($this->user->lang('headline'), $this->user->lang('adduser_send_mail_error_fields'), 'red');
 			$this->edit();
 			return;
 		}
 
-		$strTitle = serialize($arrTitle);
-
 		if ($id){
 			//Update
 			if (!$this->arrPermissions['update']) message_die($this->user->lang('noauth'), $this->user->lang('noauth_default_title'), 'access_denied', true);
-			$blnResult = $this->pdh->put('articles', 'update', array($id, $strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader));
+			$blnResult = $this->pdh->put('articles', 'update', array($id, $strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader, $intFallback));
 		} else {
 			if (!$this->arrPermissions['create']) message_die($this->user->lang('noauth'), $this->user->lang('noauth_default_title'), 'access_denied', true);
-			$blnResult = $this->pdh->put('articles', 'add', array($strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader));
+			$blnResult = $this->pdh->put('articles', 'add', array($strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader, $intFallback));
 		}
 
 		if ($blnResult){
@@ -219,6 +218,35 @@ class editarticle_pageobject extends pageobject {
 			if (!$arrPerms['update'] || !$arrPerms['create']) continue;
 			$arrCategories[$caid] = $this->pdh->get('article_categories', 'name_prefix', array($caid)).$this->pdh->get('article_categories', 'name', array($caid));
 		}
+		
+		//Fallback Articles
+		$strDefaultLang = $this->config->get('default_lang');
+		$arrStartpoints = $this->pdh->get('article_categories', 'lang_startpoints');
+		$intMyStartoint = 0;
+		if(is_array($arrStartpoints)){
+			foreach($arrStartpoints as $isoCode => $intStartpointCategoryID){
+				if($this->env->translate_iso_langcode($isoCode) == $strDefaultLang){
+					$intMyStartoint = $intStartpointCategoryID;
+					break;
+				}
+			}
+		}
+		$arrFallbackArticles = array(0 => "");
+		if($intMyStartoint){
+			$arrArticles = $this->pdh->get('articles', 'id_list', array($intMyStartoint));
+			foreach($arrArticles as $articleID){
+				$arrFallbackArticles[$articleID] = $this->pdh->get('article_categories', 'name_prefix', array($intMyStartoint)).$this->pdh->get('articles', 'title', array( $articleID)).' (#'.$articleID.')';
+			}
+				
+			$arrChilds = $this->pdh->get('article_categories', 'all_childs', array($intMyStartoint));
+		
+			foreach($arrChilds as $intChildCategoryID){
+				$arrArticles = $this->pdh->get('articles', 'id_list', array($intChildCategoryID));
+				foreach($arrArticles as $articleID){
+					$arrFallbackArticles[$articleID] = $this->pdh->get('article_categories', 'name_prefix', array($intChildCategoryID)).$this->pdh->get('articles', 'title', array( $articleID)).' (#'.$articleID.')';
+				}
+			}
+		}
 
 		if ($id){
 			$cid = $this->pdh->get('articles', 'category', array($id));
@@ -234,7 +262,7 @@ class editarticle_pageobject extends pageobject {
 				'COMMENTS_RADIO'	=> (new hradio('comments', array('value' => ($this->pdh->get('articles', 'comments', array($id))))))->output(),
 				'VOTES_RADIO'		=> (new hradio('votes', array('value' => ($this->pdh->get('articles', 'votes', array($id))))))->output(),
 				'HIDE_HEADER_RADIO' => (new hradio('hide_header', array('value' => ($this->pdh->get('articles', 'hide_header', array($id))))))->output(),
-				'ML_TITLE'			=> (new htextmultilang('title', array('value' => $this->pdh->get('articles', 'title', array($id, true)), 'required' => true, 'size' => 50)))->output(),
+				'ML_TITLE'			=> (new htext('title', array('value' => $this->pdh->get('articles', 'title', array($id, true)), 'required' => true, 'size' => 50)))->output(),
 
 				'DATE_PICKER'		=> (new hdatepicker('date', array('value' => $this->time->user_date($this->pdh->get('articles', 'date', array($id)), true, false, false, function_exists('date_create_from_format')), 'timepicker' => true)))->output(),
 				'DATE_TO_PICKER'	=> (new hdatepicker('show_to', array('value' => $this->time->user_date(((strlen($this->pdh->get('articles', 'show_to', array($id)))) ? $this->pdh->get('articles', 'show_to', array($id)) : 0), true, false, false, function_exists('date_create_from_format')), 'timepicker' => true)))->output(),
@@ -245,6 +273,8 @@ class editarticle_pageobject extends pageobject {
 						'noimgfile'	=> "images/global/default-image.svg",
 						'deletelink'=> $this->SID.'&aid='.$id.'&cid='.$cid.'&delpreviewimage=true&link_hash='.$this->CSRFGetToken('delpreviewimage'),
 					)))->output(),
+				'DD_FALLBACK_ARTICLE' => (new hdropdown('fallback_article', array('options' => $arrFallbackArticles, 'value' => $this->pdh->get('articles', 'fallback', array($id)))))->output(),
+						
 			));
 
 		} else {
@@ -259,11 +289,12 @@ class editarticle_pageobject extends pageobject {
 				'DATE_PICKER'		=> (new hdatepicker('date', array('value' => $this->time->user_date($this->time->time, true, false, false, function_exists('date_create_from_format')), 'timepicker' => true)))->output(),
 				'DATE_TO_PICKER'	=> (new hdatepicker('show_to', array('value' => $this->time->user_date(0, true, false, false, function_exists('date_create_from_format')), 'timepicker' => true)))->output(),
 				'DATE_FROM_PICKER'	=> (new hdatepicker('show_from', array('value' => $this->time->user_date(0, true, false, false, function_exists('date_create_from_format')), 'timepicker' => true)))->output(),
-				'ML_TITLE'			=> (new htextmultilang('title', array('value' => '', 'required' => true, 'size' => 50)))->output(),
+				'ML_TITLE'			=> (new htext('title', array('value' => '', 'required' => true, 'size' => 50)))->output(),
 				'PREVIEW_IMAGE'		=> (new himageuploader('previewimage', array(
 					'imgpath'		=> $this->pfh->FolderPath('logo','eqdkp'),
 					'noimgfile'		=> "images/global/default-image.svg"
 				)))->output(),
+				'DD_FALLBACK_ARTICLE' => (new hdropdown('fallback_article', array('options' => $arrFallbackArticles)))->output(),
 			));
 		}
 

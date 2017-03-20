@@ -1089,5 +1089,7 @@ $lang = array(
 "information" => "Information",
 "edit_table" => "Tabelle bearbeiten",
 "new_coreupdate_subject" => "Aktualisierung des EQdkp Plus verfügbar",
+'core_sett_fs_multilang' => 'Mehrsprachigkeit',
+'fallback_article'	=> 'Fallback-Artikel',
 );
 ?>

@@ -131,7 +131,7 @@ if(!class_exists('pdh_w_articles')) {
 			$this->pdh->enqueue_hook('article_categories_update');
 		}
 		
-		public function add($strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader, $intFallback){
+		public function add($strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader, $intFallback=0){
 			if ($strAlias == ""){
 				$strAlias = $this->create_alias($strTitle);
 			} else {
@@ -330,7 +330,7 @@ if(!class_exists('pdh_w_articles')) {
 			
 		}
 		
-		public function update($id, $strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader, $intFallback){
+		public function update($id, $strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader, $intFallback=0){
 			if ($strAlias == ""){
 				$strAlias = $this->create_alias($strTitle);
 			} elseif($strAlias != $this->pdh->get('articles', 'alias', array($id))) {
