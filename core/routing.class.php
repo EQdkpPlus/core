@@ -77,20 +77,29 @@ if(!class_exists('routing')){
 				$this->_cache[$strPageObject] = $this->staticRoute($strPageObject, $blnWithAlias);
 				return $this->_cache[$strPageObject];
 			}
-			
+			$strDefaultLang = $this->config->get('default_lang');
+			$intDefault = 0;
 			$arrArticleIDs = $this->pdh->get('articles', 'articles_for_pageobject', array($strPageObject));
 			if ($arrArticleIDs && is_array($arrArticleIDs) && count($arrArticleIDs)){
 				foreach($arrArticleIDs as $intArticleID){
 					$intCategoryID = $this->pdh->get('articles', 'category', array($intArticleID));
 					$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($intCategoryID, $this->user->id));
+					$strLang = $this->pdh->get('articles', 'language', array($intArticleID));
+					$strLangLong = ($strLang) ? $this->env->translate_iso_langcode($strLang) : false;
+
 					if($arrPermissions && $arrPermissions['read']) {
-						$this->_cache[$strPageObject] = $this->pdh->get('articles', 'plain_path', array($intArticleID));
-						return $this->_cache[$strPageObject];
+						if($strLangLong && $strLangLong == $strDefaultLang){
+							$intDefault = $intArticleID;
+						}
+						if(!$strLangLong || ($this->user->lang_name == $strLangLong)){
+							$this->_cache[$strPageObject] = $this->pdh->get('articles', 'plain_path', array($intArticleID));
+							return $this->_cache[$strPageObject];
+						}
 					}
 				}
 				
 				//No Permission, get first one
-				$intArticleID = $arrArticleIDs[0];
+				$intArticleID = ($intDefault) ? $intDefault : $arrArticleIDs[0];
 				$intCategoryID = $this->pdh->get('articles', 'category', array($intArticleID));
 				$this->_cache[$strPageObject] = $this->pdh->get('articles', 'plain_path', array($intArticleID));
 				return $this->_cache[$strPageObject];
