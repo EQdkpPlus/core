@@ -1091,7 +1091,7 @@ class calendarevent_pageobject extends pageobject {
 
 		$arrRaidgroups = array(0=>$this->user->lang('raidevent_raid_all_raidgroups')) + $this->raidgroup_dd;
 
-		$intCategoryID = registry::get_const('categoryid');
+		$intCategoryID = registry::get_const('page_id');
 		$arrCategory = $this->pdh->get('article_categories', 'data', array($intCategoryID));
 
 		$strPageTitle = sprintf($this->pdh->get('event', 'name', array($eventdata['extension']['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->user_date($eventdata['timestamp_start']).' '.$this->time->user_date($eventdata['timestamp_start'], false, true);

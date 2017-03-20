@@ -98,6 +98,7 @@ class Manage_Article_Categories extends page_generic {
 		$intHideOnRSS = $this->in->get('hide_on_rss', 0);
 		$intIsStartpoint = $this->in->get('lang_startpoint', 0);
 		$strLanguage = $this->in->get('language', 'english');
+		$intFallback = $this->in->get('fallback_category', 0);
 
 		//Check Name
 		if($strName == ""){
@@ -106,12 +107,10 @@ class Manage_Article_Categories extends page_generic {
 			return;
 		}
 
-		
-
 		if ($id){
-			$blnResult = $this->pdh->put('article_categories', 'update', array($id, $strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles, $intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS, $intIsStartpoint, $strLanguage));
+			$blnResult = $this->pdh->put('article_categories', 'update', array($id, $strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles, $intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS, $intIsStartpoint, $strLanguage, $intFallback));
 		} else {
-			$blnResult = $this->pdh->put('article_categories', 'add', array($strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles, $intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS, $intIsStartpoint, $strLanguage));
+			$blnResult = $this->pdh->put('article_categories', 'add', array($strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles, $intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS, $intIsStartpoint, $strLanguage, $intFallback));
 		}
 
 		if ($blnResult){
@@ -172,6 +171,26 @@ class Manage_Article_Categories extends page_generic {
 		);
 
 		$arrPortalLayouts = $this->pdh->aget('portal_layouts', 'name', 0, array($this->pdh->get('portal_layouts', 'id_list')));
+		
+		//Fallback Categories
+		$strDefaultLang = $this->config->get('default_lang');
+		$arrStartpoints = $this->pdh->get('article_categories', 'lang_startpoints');
+		$intMyStartoint = 0;
+		if(is_array($arrStartpoints)){
+			foreach($arrStartpoints as $isoCode => $intStartpointCategoryID){
+				if($this->env->translate_iso_langcode($isoCode) == $strDefaultLang){
+					$intMyStartoint = $intStartpointCategoryID;
+					break;
+				}
+			}
+		}
+		$arrFallbackCategories = array(0 => "");
+		if($intMyStartoint){
+			$arrChilds = $this->pdh->get('article_categories', 'all_childs', array($intMyStartoint));
+			foreach($arrChilds as $intChildCategoryID){
+				$arrFallbackCategories[$intChildCategoryID] = $this->pdh->get('article_categories', 'name_prefix', array($intChildCategoryID)).$this->pdh->get('article_categories', 'name', array( $intChildCategoryID)).' (#'.$intChildCategoryID.')';
+			}
+		}
 
 		$arrGroups = $this->pdh->get('user_groups', 'id_list', array());
 		$arrPermissions = $this->pdh->get('article_categories', 'permissions', array($id));
@@ -235,6 +254,8 @@ class Manage_Article_Categories extends page_generic {
 				
 				'RADIO_STARTPOINT'	=> (new hradio('lang_startpoint', array('value' => $this->pdh->get('article_categories', 'lang_startpoint', array($id)))))->output(),
 				'DD_LANG'			=> (new hdropdown('language', array('options' => $arrLanguages = $this->user->getAvailableLanguages(false, false, true), 'value' => $this->pdh->get('article_categories', 'language', array($id)))))->output(),
+				'DD_FALLBACK_CATEGORY' => (new hdropdown('fallback_category', array('options' => $arrFallbackCategories, 'value' => $this->pdh->get('article_categories', 'fallback', array($id)))))->output(),
+						
 			));
 
 		} else {
@@ -258,6 +279,8 @@ class Manage_Article_Categories extends page_generic {
 				'R_HIDE_HEADER'		=> (new hradio('hide_header', array('value' => 0)))->output(),
 				'RADIO_STARTPOINT'	=> (new hradio('lang_startpoint', array('value' => 0)))->output(),
 				'DD_LANG'			=> (new hdropdown('language', array('options' => $arrLanguages = $this->user->getAvailableLanguages())))->output(),
+				'DD_FALLBACK_CATEGORY' => (new hdropdown('fallback_category', array('options' => $arrFallbackCategories, 'value' => 0)))->output(),
+
 			));
 		}
 		$this->tpl->assign_vars(array(

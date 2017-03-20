@@ -50,6 +50,7 @@ if(!class_exists('pdh_w_article_categories')) {
 				'hide_on_rss'		=> "{L_HIDE_ON_RSS}",
 				'lang_startpoint'		=> "{L_lang_startpoint}",
 				'language'			=> "{L_LANGUAGE}",
+				'fallback'			=> "{L_FALLBACK_CATEGORY}",
 		);
 
 		public function delete($id) {
@@ -82,7 +83,7 @@ if(!class_exists('pdh_w_article_categories')) {
 		
 		
 		
-		public function add($strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles,$intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS, $intIsStartpoint=0, $strLanguage=''){
+		public function add($strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles,$intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS, $intIsStartpoint=0, $strLanguage='', $intFallback=0){
 			if ($strAlias == ""){
 				$strAlias = $this->create_alias($strName);
 			} else {
@@ -124,6 +125,7 @@ if(!class_exists('pdh_w_article_categories')) {
 				'hide_on_rss'	=> $intHideOnRSS,
 				'language'		=> $strLanguage,
 				'lang_startpoint' => $intIsStartpoint,
+				'lang_fallback'	=> $intFallback,
 			);
 			
 			$objQuery = $this->db->prepare("INSERT INTO __article_categories :p")->set($arrQuery)->execute();
@@ -151,7 +153,7 @@ if(!class_exists('pdh_w_article_categories')) {
 			return false;
 		}
 		
-		public function update($id, $strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles,$intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS, $intIsStartpoint=0, $strLanguage=''){			
+		public function update($id, $strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles,$intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS, $intIsStartpoint=0, $strLanguage='', $intFallback=0){			
 			if ($strAlias == ""){
 				$strAlias = $this->create_alias($strName);
 			} elseif($strAlias != $this->pdh->get('article_categories', 'alias', array($id))) {
@@ -193,6 +195,7 @@ if(!class_exists('pdh_w_article_categories')) {
 				'hide_on_rss'	=> $intHideOnRSS,
 				'language'		=> $strLanguage,
 				'lang_startpoint' => $intIsStartpoint,
+				'lang_fallback'	=> $intFallback,
 			);
 			
 			$arrOldData = $this->pdh->get('article_categories', 'data', array($id));

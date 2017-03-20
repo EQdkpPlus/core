@@ -284,15 +284,19 @@ class controller extends gen_class {
 				$arrArticle = $this->pdh->get('articles', 'data', array($intArticleID));
 				
 				//Redirect to article in right language
-				if($this->config->get('enable_multilang') && $this->config->get('multilang_redirect_articles')){
+				if($this->config->get('enable_multilang') && ($this->config->get('multilang_redirect_articles') || $this->in->exists('lang'))){
 					$strLang = $this->pdh->get('articles', 'language', array($intArticleID));
 					if($strLang){
 						$strLangLong = $this->env->translate_iso_langcode($strLang);
 						if($strLangLong != $this->user->lang_name){
 							$arrAlternateLangs = $this->pdh->get('articles', 'alternate_langs', array($intArticleID));
+							$intFallbackID = $this->pdh->get('articles', 'fallback', array($intArticleID));
 							if(isset($arrAlternateLangs[$this->user->lang_name])){
 								$intNewArticle = $arrAlternateLangs[$this->user->lang_name];
 								$strPath = $this->pdh->get('articles', 'path', array($intNewArticle));
+								redirect($this->controller_path_plain.$strPath);
+							}elseif($intFallbackID){
+								$strPath = $this->pdh->get('articles', 'path', array($intFallbackID));
 								redirect($this->controller_path_plain.$strPath);
 							}
 						}
@@ -706,9 +710,27 @@ class controller extends gen_class {
 				//Check if Published
 				$intPublished = $arrCategory['published'];
 
-				if (!$intPublished) message_die($this->user->lang('category_unpublished'));
-
-				registry::add_const('categoryid', $intCategoryID);
+				if (!$intPublished) message_die($this->user->lang('category_unpublished'));		
+				
+				//Redirect to category in right language
+				if($this->config->get('enable_multilang') && ($this->config->get('multilang_redirect_articles') || $this->in->exists('lang'))){
+					$strLang = $this->pdh->get('article_categories', 'language', array($intCategoryID));
+					if($strLang){
+						$strLangLong = $this->env->translate_iso_langcode($strLang);
+						if($strLangLong != $this->user->lang_name){
+							$arrAlternateLangs = $this->pdh->get('article_categories', 'alternate_langs', array($intCategoryID));
+							$intFallbackID = $this->pdh->get('article_categories', 'fallback', array($intCategoryID));
+							if(isset($arrAlternateLangs[$this->user->lang_name])){
+								$intNewCategory = $arrAlternateLangs[$this->user->lang_name];
+								$strPath = $this->pdh->get('article_categories', 'path', array($intNewCategory));
+								redirect($this->controller_path_plain.$strPath);
+							}elseif($intFallbackID){
+								$strPath = $this->pdh->get('article_categories', 'path', array($intFallbackID));
+								redirect($this->controller_path_plain.$strPath);
+							}
+						}
+					}
+				}
 
 				//User Memberships
 				$arrUsergroupMemberships = $this->acl->get_user_group_memberships($this->user->id);

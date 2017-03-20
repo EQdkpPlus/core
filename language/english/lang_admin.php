@@ -1833,6 +1833,7 @@ $lang = array(
 		'core_sett_f_multilang_redirect_articles' => 'Redirect user to articles in the matching language',
 		'is_startpoint' => 'Startpoint of a language',
 		'core_sett_f_multilang_hide_startpoints_breadcrumb' => 'Hide startpoint of languages at breadcrumb navigation',
+		'fallback_category' => 'Fallback category',
 );
 
 ?>

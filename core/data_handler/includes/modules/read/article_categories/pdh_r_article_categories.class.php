@@ -32,6 +32,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 		public $alias;
 		public $langStartpoints;
 		private $arrTempPermissions = array();
+		public $altCategories;
 
 		public $hooks = array(
 			'article_categories_update',
@@ -50,10 +51,15 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 
 		public function reset(){
 			$this->pdc->del('pdh_article_categories_table');
+			$this->pdc->del('pdh_article_categories_sortation');
+			$this->pdc->del('pdh_article_categories_alias');
+			$this->pdc->del('pdh_article_categories_startpoints');
+			$this->pdc->del('pdh_article_categories_alt_categories');
 			$this->categories = NULL;
 			$this->sortation = NULL;
 			$this->alias = NULL;
 			$this->langStartpoints = NULL;
+			$this->altCategories = NULL;
 		}
 
 		public function init(){
@@ -61,9 +67,12 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			$this->sortation	= $this->pdc->get('pdh_article_categories_sortation');
 			$this->alias		= $this->pdc->get('pdh_article_categories_alias');
 			$this->langStartpoints = $this->pdc->get('pdh_article_categories_startpoints');
-			if($this->categories !== NULL && $this->sortation !== NULL && $this->alias !== NULL){
+			$this->altCategories = $this->pdc->get('pdh_article_categories_alt_categories');
+			if($this->categories !== NULL && $this->sortation !== NULL && $this->alias !== NULL && $this->langStartpoints != NULL && $this->altCategories != NULL){
 				return true;
 			}
+			
+			$this->categories = $this->sortation = $this->alias = $this->langStartpoints = $this->altCategories = array();
 			
 			$objQuery = $this->db->query("SELECT * FROM __article_categories ORDER BY sort_id ASC");
 			if($objQuery){
@@ -90,13 +99,18 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 						'sortation_type'	=> intval($drow['sortation_type']),
 						'featured_ontop'	=> intval($drow['featured_ontop']),
 						'hide_on_rss'		=> intval($drow['hide_on_rss']),
-						'lang_startpoint'		=> intval($drow['lang_startpoint']),
+						'lang_startpoint'	=> intval($drow['lang_startpoint']),
 						'language'			=> $drow['language'],
+						'fallback'			=> intval($drow['lang_fallback']),
 					);
 					$this->alias[utf8_strtolower($drow['alias'])] = intval($drow['id']);
 					
 					if(intval($drow['lang_startpoint'])){
 						$this->langStartpoints[$drow['language']] = intval($drow['id']);
+					}
+					
+					if($this->categories[intval($drow['id'])]['fallback']){
+						$this->altCategories[$this->categories[intval($drow['id'])]['fallback']][] = intval($drow['id']);
 					}
 				}
 				
@@ -106,6 +120,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 				$this->pdc->put('pdh_article_categories_sortation', $this->sortation, null);
 				$this->pdc->put('pdh_article_categories_alias', $this->alias, null);
 				$this->pdc->put('pdh_article_categories_startpoints', $this->langStartpoints, null);
+				$this->pdc->put('pdh_article_categories_alt_categories', $this->altCategories, null);
 			}
 	
 		}
@@ -273,6 +288,13 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 		public function get_lang_startpoints(){
 			if (isset($this->langStartpoints)){
 				return $this->langStartpoints;
+			}
+			return false;
+		}
+		
+		public function get_fallback($intCategoryID){
+			if (isset($this->categories[$intCategoryID])){
+				return $this->categories[$intCategoryID]['fallback'];
 			}
 			return false;
 		}
@@ -720,6 +742,56 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			}
 			return $arrSearchResults;
 		}
+		
+		public function get_alternate_categories($intCategoryID){
+			if($this->get_fallback($intCategoryID)){
+				$intFallback = $this->get_fallback($intCategoryID);
+				$arrOut[] = $intFallback;
+				if(isset($this->altCategories[$intFallback])){
+					$arrOut = array_merge($arrOut,$this->altCategories[$intFallback]);
+				}
+					
+				return $arrOut;
+			} elseif(isset($this->altCategories[$intCategoryID])) {
+				return $this->altCategories[$intCategoryID];
+			}
+			return array();
+		}
+		
+		public function get_html_alternate_langs($intCategoryID){
+			$arrAlternateLangCategories = $this->get_alternate_categories($intCategoryID);
+			$out = "";
+			foreach($arrAlternateLangCategories as $intAltCategoryID){
+				if($intAltCategoryID == $intCategoryID) continue;
+				$strPath = $this->controller_path.$this->get_path($intAltCategoryID);
+				$strName = $this->get_title($intAltCategoryID);
+				$strLang = $this->get_language($intAltCategoryID);
+		
+				list($pre, $post) = explode('_', $strLang);
+				if($pre != "" && is_file($this->root_path.'images/flags/'.$pre.'.svg')){
+					$name = ucfirst($this->env->translate_iso_langcode($strLang));
+					$icon = '<img src="'.registry::get_const('server_path').'images/flags/'.$pre.'.svg" class="icon icon-language absmiddle" alt="'.$name.'" title="'.$strName.' ('.$name.')"/>';
+				} else {
+					$icon = ucfirst($this->env->translate_iso_langcode($strLang));
+				}
+		
+				$out .= '<a href="'.$strPath.'" title="'.$strName.'">'.$icon.'</a>&nbsp;';
+			}
+			return $out;
+		}
+		
+		public function get_alternate_langs($intCategoryID){
+			$arrAlternateLangCategories = $this->get_alternate_categories($intCategoryID);
+			$out = array();
+			foreach($arrAlternateLangCategories as $intAltCategoryID){
+				if($intAltCategoryID == $intCategoryID) continue;
+				$strLang = $this->get_language($intAltCategoryID);
+				$strLangLong = $this->env->translate_iso_langcode($strLang);
+				$out[$strLangLong] = $intAltCategoryID;
+			}
+			return $out;
+		}
+		
 
 	}//end class
 }//end if
