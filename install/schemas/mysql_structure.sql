@@ -478,6 +478,7 @@ CREATE TABLE IF NOT EXISTS `__links` (
 	`link_sortid` int(11) NOT NULL DEFAULT '0',
 	`link_visibility` TEXT COLLATE 'utf8_bin' NOT NULL,
 	`link_height` int(12) NOT NULL DEFAULT '4024',
+	`link_lang` TEXT COLLATE 'utf8_bin' DEFAULT NULL,
 	PRIMARY KEY (`link_id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -558,6 +559,7 @@ CREATE TABLE `__articles` (
 	`hide_header` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
 	`index` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
 	`undeletable` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
+	`lang_fallback` INT(11) UNSIGNED NOT NULL DEFAULT '0',
 	PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -584,6 +586,9 @@ CREATE TABLE `__article_categories` (
 	`sortation_type` INT(3) UNSIGNED NOT NULL DEFAULT '1',
 	`featured_ontop` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
 	`hide_on_rss` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
+	`lang_fallback` INT(11) UNSIGNED NOT NULL DEFAULT '0',
+	`lang_startpoint` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
+	`language` VARCHAR(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 	PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
