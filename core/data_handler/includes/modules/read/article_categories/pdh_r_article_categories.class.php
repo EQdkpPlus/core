@@ -764,7 +764,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			foreach($arrAlternateLangCategories as $intAltCategoryID){
 				if($intAltCategoryID == $intCategoryID) continue;
 				$strPath = $this->controller_path.$this->get_path($intAltCategoryID);
-				$strName = $this->get_title($intAltCategoryID);
+				$strName = $this->get_name($intAltCategoryID);
 				$strLang = $this->get_language($intAltCategoryID);
 		
 				list($pre, $post) = explode('_', $strLang);

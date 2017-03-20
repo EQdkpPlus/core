@@ -993,6 +993,7 @@ class controller extends gen_class {
 						'LIST_TYPE'				=> $arrCategory['list_type'],
 						'S_HIDE_HEADER'			=> $arrCategory['hide_header'],
 						'CATEGORY_ID'			=> $intCategoryID,
+						'ALT_LANGS'				=> ($this->config->get('enable_multilang') && $this->config->get('multilang_redirect_articles')) ? '' : $this->pdh->geth('article_categories',  'alternate_langs', array($intCategoryID)),
 				));
 
 				$strPreviewImage = ($this->pdh->get('articles',  'previewimage', array($intArticleID)) != "") ? $this->pdh->geth('articles', 'previewimage', array($intArticleID)) : '';
