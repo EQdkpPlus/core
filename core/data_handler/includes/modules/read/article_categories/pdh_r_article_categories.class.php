@@ -138,11 +138,18 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 		}
 		
 		//Get all published article IDs
-		public function get_published_id_list($intCategoryID, $intUserID = false, $forRSS=false, $blnFeaturedOnly=NULL, $isAdmin=false){
+		public function get_published_id_list($intCategoryID, $intUserID = false, $forRSS=false, $blnFeaturedOnly=NULL, $isAdmin=false, $intMonthFilter=false){
 			if($blnFeaturedOnly === NULL) $blnFeaturedOnly = $this->get_featured_only($intCategoryID);
 			if (!$this->get_published($intCategoryID)) return array();
 			if ($intUserID === false) $intUserID = $this->user->id;
 			$arrOut = array();
+			//Month filter
+			$intYear = $intMonth = 0;
+			if($intMonthFilter && strlen($intMonthFilter) == 6){
+				$intYear = (int)substr($intMonthFilter, 0, 4);
+				$intMonth = (int)substr($intMonthFilter, 4);
+			}
+
 			//Get articles from all aggregation categorys
 			$arrAggregation = $this->get_aggregation($intCategoryID);
 			if (is_array($arrAggregation) && count($arrAggregation) > 0){
@@ -165,7 +172,13 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 						if ($blnFeaturedOnly && !$this->pdh->get('articles', 'featured', array($intArticleID))) continue;
 						//Check start from/to
 						if (($this->pdh->get('articles', 'show_from', array($intArticleID)) != "" && $this->pdh->get('articles', 'show_from', array($intArticleID)) > $this->time->time) || ($this->pdh->get('articles', 'show_to', array($intArticleID)) != "" && $this->pdh->get('articles', 'show_to', array($intArticleID)) < $this->time->time)) continue;
-						
+						//Check month filter
+						if($intMonthFilter && $intYear && $intMonth){
+							$intArticleDate		= $this->pdh->get('articles', 'date', [$intArticleID]);
+							$intArticleYear		= $this->time->date('Y', $intArticleDate);
+							$intArticleMonth	= $this->time->date('m', $intArticleDate);
+							if($intArticleYear != $intYear || $intArticleMonth != $intMonth) continue;
+						}
 						$arrOut[] = $intArticleID;
 					}	
 				}
