@@ -192,6 +192,7 @@ class ManageRaids extends page_generic {
 				foreach($data['items'] as $ik => $item) {
 					if($item['group_key'] == 'new' OR empty($item['group_key'])) {
 						$intAmount = (int)$item['amount'];
+						if($intAmout == 0 && $data['raid']['id']) $intAmount = 1;
 						if($intAmount > 0){
 							for($i=0; $i<$intAmount; $i++){
 								$item_upd[] = $this->pdh->put('item', 'add_item', array($item['name'], $item['members'], $data['raid']['id'], $item['item_id'], $item['value'], $item['itempool_id'], $data['raid']['date']+$ik));
