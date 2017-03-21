@@ -1033,7 +1033,16 @@ class controller extends gen_class {
 		}
 		
 		
-		if(!$this->env->is_ajax) message_die($this->user->lang('article_not_found'));
+		if(!$this->env->is_ajax) {
+			//Try to redirect to a 404 article			
+			$intArticleID = $this->pdh->get('articles', 'resolve_alias', array('404'));
+			if($intArticleID) {
+				$strPath = $this->pdh->get('articles', 'path', array($intArticleID));
+				redirect($this->controller_path_plain.$strPath);
+			}
+	
+			message_die($this->user->lang('article_not_found'));
+		}
 	}
 
 	protected function CSRFGetToken($strProcess){
