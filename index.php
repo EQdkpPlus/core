@@ -738,7 +738,13 @@ class controller extends gen_class {
 
 				if (!$arrPermissions['read']) message_die($this->user->lang('category_noauth'), $this->user->lang('noauth_default_title'), 'access_denied', true);
 
-				$arrArticleIDs = $this->pdh->get('article_categories', 'published_id_list', array($intCategoryID, false, false, NULL, (($arrPermissions['change_state']) ? true : false)));
+				//Handle filter
+				$strFilter = "";
+				if($this->in->get('month', 0)) $strFilter = '&month='.$this->in->get('month', 0);
+
+				$arrArticleIDs = $this->pdh->get('article_categories', 'published_id_list', array($intCategoryID, false, false, NULL, (($arrPermissions['change_state']) ? true : false), $this->in->get('month', 0)));
+
+
 				switch($arrCategory['sortation_type']){
 					case 2: $arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'date', 'asc');
 					break;
@@ -982,7 +988,7 @@ class controller extends gen_class {
 				}
 
 				$this->tpl->assign_vars(array(
-						'PAGINATION'			=> generate_pagination($this->controller_path.$strPath, count($arrSortedArticleIDs), $arrCategory['per_page'], $intStart, 'start'),
+						'PAGINATION'			=> generate_pagination($this->controller_path.$strPath.$strFilter, count($arrSortedArticleIDs), $arrCategory['per_page'], $intStart, 'start'),
 						'CATEGORY_DESCRIPTION'	=> $this->bbcode->parse_shorttags(xhtml_entity_decode($arrCategory['description'])),
 						'CATEGORY_NAME'			=> $arrCategory['name'],
 						'PERMALINK'				=> $this->pdh->get('article_categories', 'permalink', array($intCategoryID)),
