@@ -242,7 +242,7 @@
 				var date2save	= (view.name == 'month') ? $('#calendar').fullCalendar('getDate') : view.start;
 				cal_setStorage("calendar.currentdate", date2save.format());
 			},
-			eventSources: [curSource]
+			eventSources: curSource
 		});
 
 		// start the hack for the date picker
