@@ -586,6 +586,7 @@ class ManageRaids extends page_generic {
 
 	private function get_itemsofraid($raid_id) {
 		$item_ids = $this->pdh->get('item', 'itemsofraid', array($raid_id));
+		sort($item_ids, SORT_NUMERIC);
 		$ik = 0;
 		$items = array();
 		foreach($item_ids as $id) {
