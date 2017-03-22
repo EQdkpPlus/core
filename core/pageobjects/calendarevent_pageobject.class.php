@@ -1314,7 +1314,7 @@ class calendarevent_pageobject extends pageobject {
 			'CREATOR'			=> $this->pdh->get('user', 'name', array($eventdata['creator'])),
 			'NOTE'				=> ($eventdata['notes']) ? $this->bbcode->toHTML(nl2br($eventdata['notes'])) : '',
 			'CALENDAR'			=> $this->pdh->get('calendars', 'name', array($eventdata['calendar_id'])),
-			'MAPFRAME'			=> $this->jquery->googlemaps('eventdetailsmap'),
+			'MAPFRAME'			=> (isset($eventdata['extension']['location']) && !empty($eventdata['extension']['location'])) ? $this->jquery->googlemaps('eventdetailsmap') : '',
 			'HAS_INVITE'		=> ($eventdata['private'] == 1 || (isset($userstatus['invited']) && count($userstatus['invited']) > 0)) ? true : false,
 			'SHOW_ATTENDEES'	=> (($eventdata['private'] == 1 && isset($userstatus['invited']) && count($userstatus['invited']) > 0) || $eventdata['private'] == 0) ? true : false,
 			'NUMBER_INVITES'	=> (isset($userstatus['invited'])) ? count($userstatus['invited']) : 0,
