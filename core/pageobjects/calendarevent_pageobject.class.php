@@ -1310,7 +1310,7 @@ class calendarevent_pageobject extends pageobject {
 			'DATE_TIME'			=> ($eventdata['allday'] == 1) ? '' : $this->time->user_date($eventdata['timestamp_start'], false, true),
 			'MYSTATUS'			=> (isset($statusofuser[$this->user->data['user_id']]) && $statusofuser[$this->user->data['user_id']] > 0) ? $statusofuser[$this->user->data['user_id']] : 0,
 			'ALLDAY'			=> ($eventdata['allday'] == 1) ? true : false,
-			'LOCATION'			=> (isset($eventdata['extension']['location'])) ? $eventdata['extension']['location'] : false,
+			'LOCATION'			=> (isset($eventdata['extension']['location']) && !empty($eventdata['extension']['location'])) ? $eventdata['extension']['location'] : false,
 			'CREATOR'			=> $this->pdh->get('user', 'name', array($eventdata['creator'])),
 			'NOTE'				=> ($eventdata['notes']) ? $this->bbcode->toHTML(nl2br($eventdata['notes'])) : '',
 			'CALENDAR'			=> $this->pdh->get('calendars', 'name', array($eventdata['calendar_id'])),
