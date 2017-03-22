@@ -192,6 +192,7 @@ class ManageRaids extends page_generic {
 				foreach($data['items'] as $ik => $item) {
 					if($item['group_key'] == 'new' OR empty($item['group_key'])) {
 						$intAmount = (int)$item['amount'];
+						if($intAmout == 0 && $data['raid']['id']) $intAmount = 1;
 						if($intAmount > 0){
 							for($i=0; $i<$intAmount; $i++){
 								$item_upd[] = $this->pdh->put('item', 'add_item', array($item['name'], $item['members'], $data['raid']['id'], $item['item_id'], $item['value'], $item['itempool_id'], $data['raid']['date']+$ik));
@@ -585,6 +586,7 @@ class ManageRaids extends page_generic {
 
 	private function get_itemsofraid($raid_id) {
 		$item_ids = $this->pdh->get('item', 'itemsofraid', array($raid_id));
+		sort($item_ids, SORT_NUMERIC);
 		$ik = 0;
 		$items = array();
 		foreach($item_ids as $id) {
