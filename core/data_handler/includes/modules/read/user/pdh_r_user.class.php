@@ -65,10 +65,11 @@ if (!class_exists("pdh_r_user")){
 
 		public function reset(){
 			$this->users = NULL;
+			$this->arrUserdataDecrypted = array();
 		}
 
 		public function init(){
-			$this->users = array();
+			$this->users = $this->arrUserdataDecrypted = array();
 
 			$objQuery = $this->db->query("SELECT * FROM __users u ORDER BY username ASC;");
 			if($objQuery){
