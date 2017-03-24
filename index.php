@@ -175,21 +175,10 @@ class controller extends gen_class {
 			$this->core->set_vars('portal_layout', 1);
 			$objPage = $this->routing->getPageObject($strPageObject);
 			if ($objPage){
-
-				$classname = get_class($objPage);
-				$classname = str_replace("_pageobject", "", $classname);
-
-				$intPortallayout = $this->pdh->get('portal_layouts', 'layout_for_route', array($classname, true));
-				if($intPortallayout !== false){
-					$portal_layout = $intPortallayout;
-				} else $portal_layout = 1;
-
-
 				$arrVars = $objPage->get_vars();
 				$this->core->set_vars(array(
 						'page_title'		=> $arrVars['page_title'],
 						'template_file'		=> $arrVars['template_file'],
-						'portal_layout'		=> $portal_layout,
 						'display'			=> true)
 				);
 			} else {
