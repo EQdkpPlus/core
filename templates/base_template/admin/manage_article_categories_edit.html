@@ -87,10 +87,12 @@ function renew_all_permissions(){
 			<!-- IF S_MULTILANG_ENABLED -->
 			<fieldset class="settings mediumsettings">
 			<legend>{L_core_sett_fs_multilang}</legend>
+			<!-- IF not S_HIDE_STARTPOINTS -->
 			<dl>
 				<dt><label>{L_is_startpoint}</label></dt>
 				<dd>{RADIO_STARTPOINT}</dd>
 			</dl>
+			<!-- ENDIF -->
 			<dl>
 				<dt><label>{L_language}</label></dt>
 				<dd>{DD_LANG}</dd>

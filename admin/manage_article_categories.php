@@ -255,13 +255,14 @@ class Manage_Article_Categories extends page_generic {
 				'RADIO_STARTPOINT'	=> (new hradio('lang_startpoint', array('value' => $this->pdh->get('article_categories', 'lang_startpoint', array($id)))))->output(),
 				'DD_LANG'			=> (new hdropdown('language', array('options' => $arrLanguages = $this->user->getAvailableLanguages(false, false, true), 'value' => $this->pdh->get('article_categories', 'language', array($id)))))->output(),
 				'DD_FALLBACK_CATEGORY' => (new hdropdown('fallback_category', array('options' => $arrFallbackCategories, 'value' => $this->pdh->get('article_categories', 'fallback', array($id)))))->output(),
-						
+				'S_HIDE_STARTPOINTS'=> ($this->pdh->get('article_categories', 'resolved_language', array($id)) !== false) ? true : false,
 			));
 
 		} else {
 
 			$this->tpl->assign_vars(array(
 				'PER_PAGE'			=> 25,
+				'S_HIDE_STARTPOINTS'=> false,
 				'ML_NAME'			=> (new htext('name', array('value' => '', 'required' => true, 'size' => 50)))->output(),
 				'DD_PORTAL_LAYOUT'	=> (new hdropdown('portal_layout', array('options' => $arrPortalLayouts, 'value' => 1)))->output(),
 				'R_PUBLISHED'		=> (new hradio('published', array('value' => 1)))->output(),
