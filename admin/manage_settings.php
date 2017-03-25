@@ -702,7 +702,7 @@ class admin_settings extends page_generic {
 				'multilang' => array(
 					'enable_multilang' => array(
 						'type' => 'radio',
-						'dependency' => array(1 => array('multilang_hide_menuentries', 'multilang_redirect_articles')),
+						'dependency' => array(1 => array('multilang_hide_menuentries', 'multilang_redirect_articles', 'multilang_hide_startpoints_breadcrumb')),
 					),
 					'multilang_hide_menuentries' => array(
 						'type' => 'radio',
