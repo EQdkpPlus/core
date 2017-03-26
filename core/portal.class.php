@@ -58,6 +58,26 @@ class portal extends gen_class {
 
 	}
 
+	/**
+	 * Gets just the content of a module. Checks permissions.
+	 * 
+	 * @param integer $intModuleID
+	 */
+	public function get_module_content($intModuleID){
+		$perm = $this->check_visibility($intModuleID);
+		
+		if(!$perm || !$obj = $this->get_module($intModuleID, $posi, $wideContent)) return '';
+
+		$out = $this->handle_output($obj);
+		return '<div id="portalbox_content_'.$module_id.'" class="portalbox '.get_class($obj).'">'.$out.'</div>';
+	}
+	
+	/**
+	 * Module for external use, including javascript
+	 * 
+	 * @param integer $intModuleID
+	 * @return string
+	 */
 	public function get_module_external($intModuleID){
 
 		if(in_array(PMOD_VIS_EXT, $this->config->get('visibility', 'pmod_'.$intModuleID)) || in_array(0, $this->config->get('visibility', 'pmod_'.$intModuleID))) {
@@ -108,6 +128,11 @@ class portal extends gen_class {
 		}
 	}
 
+	/**
+	 * Complete output for all layout positions
+	 * 
+	 * @param integer $intPortalLayout
+	 */
 	public function module_output($intPortalLayout) {
 		//Get own Blocks
 		$arrBlocks 		= $this->pdh->get('portal_layouts', 'blocks', array($intPortalLayout));
@@ -130,7 +155,7 @@ class portal extends gen_class {
 					} elseif($strBlockID == 'middle' || $strBlockID == 'bottom'){
 						$blnWideContent = true;
 					}
-					$this->output[$strBlockID] .= $this->get_module_content($intModuleID, $strBlockID, $blnWideContent);
+					$this->output[$strBlockID] .= $this->_get_module_content($intModuleID, $strBlockID, $blnWideContent);
 				}
 			}
 		}
@@ -182,8 +207,15 @@ class portal extends gen_class {
 	}
 
 
-	// The Module Style
-	private function get_module_content($module_id, $posi, $wideContent = false) {
+	/**
+	 * Complete module string for portal output. Only used for portal.
+	 * 
+	 * @param integer $module_id
+	 * @param string $posi
+	 * @param boolean $wideContent
+	 * @return string
+	 */
+	private function _get_module_content($module_id, $posi, $wideContent = false) {
 		$perm = $this->check_visibility($module_id);
 
 		if(!$perm || !$obj = $this->get_module($module_id, $posi, $wideContent)) return '';

@@ -355,6 +355,11 @@ if (!class_exists("bbcode")) {
 						}
 						break;
 						
+					case 'module':
+						$intPortalModuleID = (int)$elements[1];
+						$arrCache[$strTag] = register('portal')->get_module_content($intPortalModuleID);
+						break;
+						
 					case 'article_langs':
 						$strAlternateLangs = $this->pdh->geth('articles', 'alternate_langs', array((int)$elements[1]));
 						$arrCache[$strTag] = $strAlternateLangs;
