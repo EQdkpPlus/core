@@ -469,6 +469,13 @@ if (!class_exists("bbcode")) {
 									$arrCache[$strTag] = $str;
 						break;
 
+						
+					default:	if($this->hooks->isRegistered('parse_shorttags')){
+									$strText = $this->hooks->process('parse_shorttags', array('tag'=> $elements[0], 'complete_tag' => $strTag, 'param' => $elements[1],'elements' => $elements), true);
+									if($strText !== false){
+										$arrCache[$strTag] = $strText;
+									}
+								}
 				}
 
 				$strBuffer .= $arrCache[$strTag];
