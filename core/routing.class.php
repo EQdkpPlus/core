@@ -180,6 +180,18 @@ if(!class_exists('routing')){
 			}
 			if (is_file($this->root_path.$strLocation.'/'.$strObjectName.'_pageobject.class.php')){
 				include_once($this->root_path.$strLocation.'/'.$strObjectName.'_pageobject.class.php');
+				
+				//Set Portal Layout
+				$intPortallayout = $this->pdh->get('portal_layouts', 'layout_for_route', array($strObjectName, true));
+				
+				if($intPortallayout !== false){
+					$portal_layout = $intPortallayout;
+				} else $portal_layout = 1;
+				
+				$this->core->set_vars(array(
+						'portal_layout'		=> $portal_layout,
+				));
+				
 				$objPage = registry::register($strObjectName.'_pageobject');
 				return $objPage;
 			}
