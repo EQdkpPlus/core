@@ -1631,15 +1631,31 @@ if (!class_exists("jquery")) {
 			return true;
 		}
 
-		public function googlemaps($id){
+		public function googlemaps($id, $markers=false){
 			$this->init_gmaps();
-			$this->tpl->add_js("
-				map = new GMaps({
-					el: '#".$id."_map',
-					lat: -12.043333,
-					lng: -77.028333
-				});
-				GMaps.geocode({
+			$jqcode = "map = new GMaps({
+				div: '#".$id."_map',
+				lat: -12.043333,
+				lng: -77.028333,
+				fitZoom: true
+			});";
+
+			if(is_array($markers)){
+				if(count($markers) > 0){
+					foreach($markers as $markerid=>$markercontent){
+						$jqcode .= "map.addMarker({
+							lat: ".$markercontent['lat'].",
+							lng: ".$markercontent['lng'].",
+							title: '".$markercontent['title']."',
+							infoWindow: {
+								content: '".$markercontent['tooltip']."'
+							}
+						});";
+					}
+					#$jqcode .= "map.fitZoom(true)";
+				}
+			}else{
+				$jqcode .= "GMaps.geocode({
 					address: $('#".$id."_address').text(),
 					callback: function(results, status) {
 						if (status == 'OK') {
@@ -1654,8 +1670,9 @@ if (!class_exists("jquery")) {
 							$('#mapframe_".$id."').hide();
 						}
 					}
-				});" ,
-			"docready");
+				});";
+			}
+			$this->tpl->add_js($jqcode, "docready");
 			return '<div class="map_frame" id="mapframe_'.$id.'"><div id="'.$id.'_map"></div></div>';
 		}
 
