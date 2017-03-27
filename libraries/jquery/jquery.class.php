@@ -1636,24 +1636,23 @@ if (!class_exists("jquery")) {
 			$jqcode = "map = new GMaps({
 				div: '#".$id."_map',
 				lat: -12.043333,
-				lng: -77.028333,
-				fitZoom: true
+				lng: -77.028333
 			});";
 
 			if(is_array($markers)){
 				if(count($markers) > 0){
 					foreach($markers as $markerid=>$markercontent){
 						$jqcode .= "map.addMarker({
-							lat: ".$markercontent['lat'].",
-							lng: ".$markercontent['lng'].",
+							lat: ".str_replace(',', '.', $markercontent['lat']).",
+							lng: ".str_replace(',', '.', $markercontent['lng']).",
 							title: '".$markercontent['title']."',
 							infoWindow: {
 								content: '".$markercontent['tooltip']."'
 							}
 						});";
 					}
-					#$jqcode .= "map.fitZoom(true)";
 				}
+				$jqcode .= "map.fitZoom();";
 			}else{
 				$jqcode .= "GMaps.geocode({
 					address: $('#".$id."_address').text(),
