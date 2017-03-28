@@ -420,6 +420,11 @@ class Manage_Users extends page_generic {
 			$pluginArray = array();
 			$notificationArray = array();
 
+			//Hook usersettings_update
+			if($this->hooks->isRegistered('usersettings_update')){
+				$values= $this->hooks->process('usersettings_update', array('settingsdata' => $values, 'admin' => true), true);
+			}
+			
 			foreach($values as $name => $value) {
 				if(in_array($name, $ignore)) continue;
 				if (strpos($name, "auth_account_") === 0) continue;
@@ -1001,6 +1006,11 @@ class Manage_Users extends page_generic {
 		// add deletelink for user-avatar
 		$settingsdata['profile']['user_avatar']['user_avatar']['deletelink'] = 'manage_users.php'.$this->SID.'&u='.$user_id.'&mode=deleteavatar';
 
+		//Hook usersettings_display
+		if($this->hooks->isRegistered('usersettings_display')){
+			$settingsdata = $this->hooks->process('usersettings_display', array('settingsdata' => $settingsdata, 'admin' => true), true);
+		}
+		
 		$this->form->add_tabs($settingsdata);
 		// add send-new-password-button (if editing user)
 		if($user_id > 0) {

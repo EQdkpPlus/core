@@ -227,6 +227,11 @@ class settings_pageobject extends pageobject {
 		$pluginArray = array();
 		$notificationArray = array();
 		$values['ntfy_comment_new_article_categories'] = $this->in->getArray('ntfy_comment_new_article_categories', 'int');
+		
+		//Hook usersettings_update
+		if($this->hooks->isRegistered('usersettings_update')){
+			$values= $this->hooks->process('usersettings_update', array('settingsdata' => $values), true);
+		}
 
 		foreach($values as $name => $value) {
 			if(in_array($name, $ignore)) continue;
@@ -367,6 +372,11 @@ class settings_pageobject extends pageobject {
 					}
 				}
 			}
+		}
+		
+		//Hook usersettings_display
+		if($this->hooks->isRegistered('usersettings_display')){
+			$settingsdata = $this->hooks->process('usersettings_display', array('settingsdata' => $settingsdata), true);
 		}
 		
 		$this->form->add_tabs($settingsdata);
