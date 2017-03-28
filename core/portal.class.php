@@ -175,7 +175,7 @@ class portal extends gen_class {
 			$arrHooks = $obj->get_hooks();
 			if (is_array($arrHooks) && count($arrHooks) > 0){
 				foreach($arrHooks as $arrHook){
-					$this->pgh->register($arrHook[0], $arrHook[1], $arrHook[0].'_hook', $cwd, array($module_id));
+					$this->hooks->register($arrHook[0], $arrHook[1], $arrHook[0].'_hook', $cwd, array($module_id));
 				}
 			}
 		}
