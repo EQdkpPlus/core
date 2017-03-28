@@ -252,10 +252,10 @@ class Manage_Article_Categories extends page_generic {
 				'R_PUBLISHED_STATE'	=> (new hradio('article_published_state', array('options' => array(0 => $this->user->lang('not_published'), 1 => $this->user->lang('published')), 'value' => $this->pdh->get('article_categories', 'article_published_state', array($id)))))->output(),
 				'DD_SORTATION_TYPE'	=> (new hdropdown('sortation_type', array('options' => $this->user->lang('sortation_types'), 'value' => $this->pdh->get('article_categories', 'sortation_type', array($id)))))->output(),
 				
-				'RADIO_STARTPOINT'	=> (new hradio('lang_startpoint', array('value' => $this->pdh->get('article_categories', 'lang_startpoint', array($id)))))->output(),
+					'RADIO_STARTPOINT'	=> (new hradio('lang_startpoint', array('value' => $this->pdh->get('article_categories', 'lang_startpoint', array($id)), 'js' => 'onchange="hide_lang()"')))->output(),
 				'DD_LANG'			=> (new hdropdown('language', array('options' => $arrLanguages = $this->user->getAvailableLanguages(false, false, true), 'value' => $this->pdh->get('article_categories', 'language', array($id)))))->output(),
 				'DD_FALLBACK_CATEGORY' => (new hdropdown('fallback_category', array('options' => $arrFallbackCategories, 'value' => $this->pdh->get('article_categories', 'fallback', array($id)))))->output(),
-					'S_HIDE_STARTPOINTS'=> ($this->pdh->get('article_categories', 'resolved_language', array($id)) !== false && !$this->pdh->get('article_categories', 'lang_startpoint', array($id))) ? true : false,
+				'S_HIDE_STARTPOINTS'=> ($this->pdh->get('article_categories', 'resolved_language', array($id)) !== false && !$this->pdh->get('article_categories', 'lang_startpoint', array($id))) ? true : false,
 			));
 
 		} else {
@@ -278,7 +278,7 @@ class Manage_Article_Categories extends page_generic {
 				'R_HIDE_ON_RSS'		=> (new hradio('hide_on_rss', array('value' => 0)))->output(),
 				'R_NOTIFY_UNPUBLISHED' => (new hradio('notify_unpublished', array('value' => 0)))->output(),
 				'R_HIDE_HEADER'		=> (new hradio('hide_header', array('value' => 0)))->output(),
-				'RADIO_STARTPOINT'	=> (new hradio('lang_startpoint', array('value' => 0)))->output(),
+				'RADIO_STARTPOINT'	=> (new hradio('lang_startpoint', array('value' => 0, 'js' => 'onchange="hide_lang()"')))->output(),
 				'DD_LANG'			=> (new hdropdown('language', array('options' => $arrLanguages = $this->user->getAvailableLanguages())))->output(),
 				'DD_FALLBACK_CATEGORY' => (new hdropdown('fallback_category', array('options' => $arrFallbackCategories, 'value' => 0)))->output(),
 

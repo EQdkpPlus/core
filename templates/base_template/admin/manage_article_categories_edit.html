@@ -2,7 +2,17 @@
 //<![CDATA[
 $(function(){
 	$('#alias').change(check_alias);
+	hide_lang();
 });
+
+function hide_lang(){
+	var myval = $('input[name=lang_startpoint]:checked').val();
+	if(myval == 1){
+		$('#multilang_language_container').show();
+	} else {
+		$('#multilang_language_container').hide();
+	}
+}
 
 function check_alias() {
 	var alias = $('#alias').val();
@@ -93,7 +103,7 @@ function renew_all_permissions(){
 				<dd>{RADIO_STARTPOINT}</dd>
 			</dl>
 			<!-- ENDIF -->
-			<dl>
+			<dl id="multilang_language_container">
 				<dt><label>{L_language}</label></dt>
 				<dd>{DD_LANG}</dd>
 			</dl>
