@@ -411,7 +411,7 @@ i.small {
 
 @supports (-webkit-appearance:none) {
 	.fv_checkit .ui-tabs .ui-tabs-panel[aria-hidden="true"] {
-		display: block !important;
+		/*display: block !important;*/
 		opacity: 0;
 		z-index: -99999;
 		position: absolute;
