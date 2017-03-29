@@ -95,13 +95,13 @@ class htextmultilang extends html {
 			if(!empty($this->placeholder)) $out .= 'placeholder="'.$this->placeholder.'" ';
 			if(!empty($this->js)) $out.= $this->js.' ';
 			if ($strKey != $strDefaultLanguage)  $out .= ' style="display:none;"';
+			if(!empty($this->pattern)) $out .= 'data-fv-message="'.registry::fetch('user')->lang('fv_sample_pattern').'"';
 
 			$out .= ' />';
 			$this->out .= $out;
 		}
 
 		$this->out .= '</div>';
-		if(!empty($this->pattern)) $this->out .= '<span class="fv_msg">'.registry::fetch('user')->lang('fv_sample_pattern').'</span>';
 		elseif($this->required) $this->out .= '<i class="fa fa-asterisk required small"></i>';
 		if(!empty($this->after_txt)) $this->out .= $this->after_txt;
 

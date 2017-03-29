@@ -114,10 +114,10 @@ class htext extends html {
 			$out .= (isset($this->max) && is_numeric($this->max)) ? 'data-max="'.$this->max.'"' : '';
 			$out .= (isset($this->step) && is_numeric($this->step)) ? 'data-step="'.$this->step.'"' : '';
 		}
+		if(!empty($this->pattern)) $out .= 'data-fv-message="'.registry::fetch('user')->lang('fv_sample_pattern').'"';
 		if(!empty($this->placeholder)) $out .= 'placeholder="'.$this->placeholder.'" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
 		$out .= ' />';
-		if(!empty($this->pattern)) $out .= '<span class="fv_msg">'.registry::fetch('user')->lang('fv_sample_pattern').'</span>';
 		elseif($this->required) $out .= '<i class="fa fa-asterisk required small"></i>';
 		if(!empty($this->after_txt)) $out .= $this->after_txt;
 		$this->out = $out;
