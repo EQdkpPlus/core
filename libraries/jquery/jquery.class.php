@@ -958,7 +958,7 @@ if (!class_exists("jquery")) {
 				}
 
 				// the existing form validation
-				$(".fv_checkit input[required]").each(function( index, node ) {
+				$(".fv_checkit input").each(function( index, node ) {
 					if($(this).is(":invalid")){
 						if(typeof $(this).data("fv-message") !== "undefined" && !$(this).next(".fv_msg").length){
 							$(this).after("<span class=\"fv_msg\">"+$(this).data("fv-message")+"</span>");
@@ -966,7 +966,7 @@ if (!class_exists("jquery")) {
 					}
 				});
 
-				return (($(self).find("input[required]:invalid").length > 0) ? false : true);
+				return (($(self).find("input:invalid").length > 0) ? false : true);
 			});', 'docready');
 				$this->inits['formvalidation'] = true;
 			}
