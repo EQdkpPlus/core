@@ -936,13 +936,13 @@ if (!class_exists("jquery")) {
 				$(this).addClass("fv_checked");
 				if( $(".fv_checkit").find(".ui-tabs").length ){
 					var tabhighlight = { };
-					$(".fv_checkit input[required]").each(function( index, node ) {
+					$(".fv_checkit input[required], .fv_checkit input[pattern]").each(function( index, node ) {
 						tabs = $(this).parentsUntil(".fv_checkit .ui-tabs");
-						tabhighlight[tabs.attr("id")] = "valid";
+						tabhighlight[$(tabs[(tabs.length - 1)]).attr("id")] = "valid";
 					});
-					$(".fv_checkit input[required]:invalid").each(function( index, node ) {
+					$(".fv_checkit input[required]:invalid, .fv_checkit input[pattern]:invalid").each(function( index, node ) {
 						tabs = $(this).parentsUntil(".fv_checkit .ui-tabs");
-						tabhighlight[tabs.attr("id")] = "invalid";
+						tabhighlight[$(tabs[(tabs.length - 1)]).attr("id")] = "invalid";
 					});
 					$(this).find(".fv_hint_tab").each(function(){ $(this).remove(); });
 					for (var key in tabhighlight) {
@@ -958,7 +958,7 @@ if (!class_exists("jquery")) {
 				}
 
 				// the existing form validation
-				$(".fv_checkit input").each(function( index, node ) {
+				$(".fv_checkit input[required], .fv_checkit input[pattern]").each(function( index, node ) {
 					if($(this).is(":invalid")){
 						if(typeof $(this).data("fv-message") !== "undefined" && !$(this).next(".fv_msg").length){
 							$(this).after("<span class=\"fv_msg\">"+$(this).data("fv-message")+"</span>");
