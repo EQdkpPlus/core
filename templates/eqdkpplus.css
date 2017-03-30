@@ -377,14 +377,18 @@ i.small {
 }
 
 /* HTML5 form validation */
-.fv_checkit.fv_checked [required]:invalid {
+.fv_checkit.fv_checked [required]:invalid,
+.fv_checkit.fv_checked [pattern]:invalid {
 	border: 1px solid red !important;
 	box-shadow: none;
 }
-.fv_checkit [required] ~ .fv_msg {
+.fv_checkit [required] ~ .fv_msg,
+.fv_checkit [pattern] ~ .fv_msg {
 	display:none;
 }
-.fv_checkit [required]:invalid ~ .fv_msg, .errormessage {
+.fv_checkit [required]:invalid ~ .fv_msg,
+.fv_checkit [pattern]:invalid ~ .fv_msg,
+.errormessage {
 	display: inline-block;
 	position: relative;
 	margin-left: 10px;
@@ -394,7 +398,9 @@ i.small {
 	color: #a94442;
 	white-space: nowrap;
 }
-.fv_checkit [required]:invalid ~ .fv_msg:before, .errormessage::before {
+.fv_checkit [required]:invalid ~ .fv_msg:before,
+.fv_checkit [pattern]:invalid ~ .fv_msg:before,
+.errormessage::before {
 	content: '';
 	position: absolute;
 	right: 100%;
@@ -411,7 +417,7 @@ i.small {
 
 @supports (-webkit-appearance:none) {
 	.fv_checkit .ui-tabs .ui-tabs-panel[aria-hidden="true"] {
-		/*display: block !important;*/
+		/*display: block !important;  -- use it, if a browser like 'chrome' can't trigger/detect hidden elements && fix wrong height-calculation with top:-999em; */
 		opacity: 0;
 		z-index: -99999;
 		position: absolute;
