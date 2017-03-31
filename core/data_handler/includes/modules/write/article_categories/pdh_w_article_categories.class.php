@@ -63,8 +63,8 @@ if(!class_exists('pdh_w_article_categories')) {
 				foreach($this->pdh->get('article_categories', 'childs', array($intCategoryID)) as $intChildID){
 					$this->delete_recursiv($intChildID);
 					$arrOldData = $this->pdh->get('article_categories', 'data', array($intChildID));
-
-					$this->db->prepare("DELETE FROM __articles WHERE category=?")->execute($intChildID);
+					
+					$this->pdh->put('articles', 'delete_category', array($intChildID));
 					
 					$log_action = $this->logs->diff(false, $arrOldData, $this->arrLogLang);
 					$this->log_insert("action_articlecategory_deleted", $log_action, $intChildID, $this->user->multilangValue($arrOldData['name']));
