@@ -67,9 +67,9 @@ if (!class_exists("jquery")) {
 			$this->tpl->add_js("var mmocms_sid = '".$this->SID."';", 'head_top');
 			$this->tpl->add_js("var mmocms_userid = ".$this->user->id.";", 'head_top');
 			$this->tpl->add_js("var mmocms_user_timezone = '".$this->time->date("P")."';", 'head_top');
-			$this->tpl->add_js("var mmocms_user_dateformat_long = '".$this->time->translateformat2momentjs((isset($this->user->style['date_notime_long'])) ? $this->user->style['date_notime_long'] : ($this->config->get('default_date_long')) ? $this->config->get('default_date_long') : $this->lang('style_date_long'))."';", 'head_top');
-			$this->tpl->add_js("var mmocms_user_dateformat_short = '".$this->time->translateformat2momentjs((isset($this->user->style['date_notime_short'])) ? $this->user->style['date_notime_short'] : ($this->config->get('default_date_short')) ? $this->config->get('default_date_short') : $this->lang('style_date_short'))."';", 'head_top');
-			$this->tpl->add_js("var mmocms_user_timeformat = '".$this->time->translateformat2momentjs((isset($this->user->style['time'])) ? $this->user->style['time'] : ($this->config->get('default_date_time')) ? $this->config->get('default_date_time') : $this->lang('style_time'))."';", 'head_top');
+			$this->tpl->add_js("var mmocms_user_dateformat_long = '".$this->time->translateformat2momentjs((isset($this->user->style['date_notime_long'])) ? $this->user->style['date_notime_long'] : ($this->config->get('default_date_long')) ? $this->config->get('default_date_long') : $this->user->lang('style_date_long'))."';", 'head_top');
+			$this->tpl->add_js("var mmocms_user_dateformat_short = '".$this->time->translateformat2momentjs((isset($this->user->style['date_notime_short'])) ? $this->user->style['date_notime_short'] : ($this->config->get('default_date_short')) ? $this->config->get('default_date_short') : $this->user->lang('style_date_short'))."';", 'head_top');
+			$this->tpl->add_js("var mmocms_user_timeformat = '".$this->time->translateformat2momentjs((isset($this->user->style['time'])) ? $this->user->style['time'] : ($this->config->get('default_date_time')) ? $this->config->get('default_date_time') : $this->user->lang('style_time'))."';", 'head_top');
 			$this->tpl->add_js("var mmocms_user_timestamp = '".$this->time->date("m/d/Y H:i:s")."';", 'head_top');
 			$this->tpl->add_js("var mmocms_user_timestamp_atom = '".$this->time->date(DATE_ATOM)."';", 'head_top');
 
@@ -106,12 +106,6 @@ if (!class_exists("jquery")) {
 				}", 'head');
 			$this->init_formvalidation();
 			$this->init_spinner();
-		}
-
-		public function date_getconfig($name){
-			return (isset($this->user->style['date_notime_long'])) ? $this->user->style['date_notime_long'] : ($this->config->get('default_date_long')) ? $this->config->get('default_date_long') : $this->lang('style_date_long');
-
-
 		}
 
 		public function langfile($file){
@@ -936,13 +930,13 @@ if (!class_exists("jquery")) {
 				$(this).addClass("fv_checked");
 				if( $(".fv_checkit").find(".ui-tabs").length ){
 					var tabhighlight = { };
-					$(".fv_checkit input[required]").each(function( index, node ) {
+					$(".fv_checkit input[required], .fv_checkit input[pattern]").each(function( index, node ) {
 						tabs = $(this).parentsUntil(".fv_checkit .ui-tabs");
-						tabhighlight[tabs.attr("id")] = "valid";
+						tabhighlight[$(tabs[(tabs.length - 1)]).attr("id")] = "valid";
 					});
-					$(".fv_checkit input[required]:invalid").each(function( index, node ) {
+					$(".fv_checkit input[required]:invalid, .fv_checkit input[pattern]:invalid").each(function( index, node ) {
 						tabs = $(this).parentsUntil(".fv_checkit .ui-tabs");
-						tabhighlight[tabs.attr("id")] = "invalid";
+						tabhighlight[$(tabs[(tabs.length - 1)]).attr("id")] = "invalid";
 					});
 					$(this).find(".fv_hint_tab").each(function(){ $(this).remove(); });
 					for (var key in tabhighlight) {
@@ -958,7 +952,7 @@ if (!class_exists("jquery")) {
 				}
 
 				// the existing form validation
-				$(".fv_checkit input[required]").each(function( index, node ) {
+				$(".fv_checkit input[required], .fv_checkit input[pattern]").each(function( index, node ) {
 					if($(this).is(":invalid")){
 						if(typeof $(this).data("fv-message") !== "undefined" && !$(this).next(".fv_msg").length){
 							$(this).after("<span class=\"fv_msg\">"+$(this).data("fv-message")+"</span>");
@@ -966,7 +960,7 @@ if (!class_exists("jquery")) {
 					}
 				});
 
-				return (($(self).find("input[required]:invalid").length > 0) ? false : true);
+				return (($(self).find("input:invalid").length > 0) ? false : true);
 			});', 'docready');
 				$this->inits['formvalidation'] = true;
 			}

@@ -95,6 +95,7 @@ if(!class_exists('pdh_w_articles')) {
 					//Move undeletable article to System category
 					$this->db->prepare("UPDATE __articles :p WHERE id=?")->set(array(
 							'category' => 1,
+							'index' => 0,
 					))->execute($intArticleID);
 				} else {
 				

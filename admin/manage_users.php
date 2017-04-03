@@ -993,6 +993,7 @@ class Manage_Users extends page_generic {
 		$this->form->lang_prefix = 'user_sett_';
 		$this->form->use_tabs = true;
 		$this->form->use_fieldsets = true;
+		$this->form->validate = true;
 
 		$settingsdata = user::get_settingsdata($user_id);
 

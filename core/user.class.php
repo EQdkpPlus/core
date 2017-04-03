@@ -421,7 +421,8 @@ class user extends gen_class {
 	 *	Generate User-Settings
 	 */
 	public static function get_settingsdata($user_id=-1) {
-		$settingsdata = array();
+		$settingsdata	= array();
+		$root_path		= registry::get_const('root_path');
 
 		$priv_wall_posts_read_array = array(
 			'0'=>'user_priv_all',

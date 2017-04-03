@@ -101,6 +101,7 @@ class htext extends html {
 		if(!empty($this->size)) $out .= 'size="'.$this->size.'" ';
 		if($this->readonly) $out .= 'readonly="readonly" ';
 		if($this->required) $out .= ' required="required" data-fv-message="'.(($this->fvmessage) ? $this->fvmessage : registry::fetch('user')->lang('fv_required')).'"';
+		if(!$this->required && !empty($this->pattern)) $out .= 'data-fv-message="'.registry::fetch('user')->lang('fv_sample_pattern').'"';
 		if($this->disabled) $out .= 'disabled="disabled" ';
 		if(is_array($this->attrdata) && count($this->attrdata) > 0){
 			foreach($this->attrdata as $attrdata_name=>$attrdata_value){
@@ -117,8 +118,7 @@ class htext extends html {
 		if(!empty($this->placeholder)) $out .= 'placeholder="'.$this->placeholder.'" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
 		$out .= ' />';
-		if(!empty($this->pattern)) $out .= '<span class="fv_msg">'.registry::fetch('user')->lang('fv_sample_pattern').'</span>';
-		elseif($this->required) $out .= '<i class="fa fa-asterisk required small"></i>';
+		if($this->required) $out .= '<i class="fa fa-asterisk required small"></i>';
 		if(!empty($this->after_txt)) $out .= $this->after_txt;
 		$this->out = $out;
 		return $this->out;
