@@ -56,6 +56,15 @@ if(!class_exists('routing')){
 			$this->arrStaticLocations[strtolower($strPageObject)] = $strPageObjectPath;
 		}
 		
+		public function scanCorePageobjects(){
+			$arrFiles = sdir($this->root_path.'core/pageobjects/', '*pageobject.class.php', '_pageobject.class.php');
+			foreach($arrFiles as $strPageobject){
+				if(!in_array($strPageobject, $this->arrStaticRoutes)){
+					$this->arrStaticRoutes[strtolower($strPageobject)] = $strPageobject;
+				}
+			}
+		}
+		
 		public function getRoutes(){
 			return $this->arrStaticRoutes;
 		}
