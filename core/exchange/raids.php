@@ -55,16 +55,16 @@ if (!class_exists('exchange_raids')) {
 					$raid_attendees = $this->pdh->get('raid', 'raid_attendees', array($raid_id));
 		    		
 		    		$out['raid:'.$raid_id] = array(
-		    				'id'				=> $raid_id,
-		    				'date'				=> $date_info,
+		    				'id'			=> $raid_id,
+		    				'date'			=> $date_info,
 		    				'date_timestamp'	=> $date_raw,
-		    				'note'				=> $raid_note,
-		    				'event_id'			=> $event_id,
+		    				'note'			=> $raid_note,
+		    				'event_id'		=> $event_id,
 		    				'event_name'		=> $event_name,
 		    				'added_by_id'		=> 0,
 		    				'added_by_name'		=> $added_by,
-		    				'value'				=> runden($raid_value),
-							'raid_attendees'	=> $raid_attendees
+		    				'value'			=> runden($raid_value),
+		    				'raid_attendees'	=> $raid_attendees
 		    		);
 		    	}
 		    	
