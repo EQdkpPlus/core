@@ -155,7 +155,7 @@ class MyMailer extends PHPMailer {
 			if(is_file(register('file_handler')->FolderPath('','files').register('config')->get('custom_logo'))){
 				$headerlogo	= register('file_handler')->FolderPath('','files').register('config')->get('custom_logo');
 			}else{
-				$headerlogo	= register('environment')->buildlink().'templates/eqdkp_modern/images/logo.svg';
+				$headerlogo	= $this->root_path.'templates/eqdkp_modern/images/logo.svg';
 			}
 			$this->AddEmbeddedImage($headerlogo, 'headerlogo');
 			
