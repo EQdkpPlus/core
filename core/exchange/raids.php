@@ -31,7 +31,7 @@ if (!class_exists('exchange_raids')) {
 		public function get_raids($params, $body) {
 		    $isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 		    
-		    if($isAPITokenRequest ||  $this->user->check_pageobjects(array('raids'), 'AND', false)){
+		    if($this->user->check_pageobjects(array('raids'), 'AND', false) || $isAPITokenRequest){
 		    	$raidlist = $this->pdh->get('raid', 'id_list');
 		    	$raidlist = $this->pdh->sort($raidlist, 'raid', 'date', 'desc');
 		    	$intNumber = (intval($params['get']['number']) > 0) ?  intval($params['get']['number']) : false;
@@ -52,6 +52,7 @@ if (!class_exists('exchange_raids')) {
 		    		$raid_note	= unsanitize($this->pdh->get('raid', 'note', array($raid_id)));
 		    		$added_by_name = unsanitize($this->pdh->get('user', 'name', array($added_by)));
 		    		$raid_value = $this->pdh->get('raid', 'value', array($raid_id));
+					$raid_attendees = $this->pdh->get('raid', 'raid_attendees', array($raid_id));
 		    		
 		    		$out['raid:'.$raid_id] = array(
 		    				'id'				=> $raid_id,
@@ -63,6 +64,7 @@ if (!class_exists('exchange_raids')) {
 		    				'added_by_id'		=> 0,
 		    				'added_by_name'		=> $added_by,
 		    				'value'				=> runden($raid_value),
+							'raid_attendees'	=> $raid_attendees
 		    		);
 		    	}
 		    	
