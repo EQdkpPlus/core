@@ -50,9 +50,9 @@ if (!class_exists('exchange_raids')) {
 		    		$event_name	= unsanitize($this->pdh->get('raid', 'event_name', array($raid_id)));
 		    		$event_id	= unsanitize($this->pdh->get('raid', 'event', array($raid_id)));
 		    		$raid_note	= unsanitize($this->pdh->get('raid', 'note', array($raid_id)));
-		    		$added_by_name = unsanitize($this->pdh->get('user', 'name', array($added_by)));
-		    		$raid_value = $this->pdh->get('raid', 'value', array($raid_id));
-				$raid_attendees = $this->pdh->get('raid', 'raid_attendees', array($raid_id));
+		    		$added_by_name	= unsanitize($this->pdh->get('user', 'name', array($added_by)));
+		    		$raid_value	= $this->pdh->get('raid', 'value', array($raid_id));
+				$raid_attendees	= $this->pdh->get('raid', 'raid_attendees', array($raid_id));
 		    		
 		    		$out['raid:'.$raid_id] = array(
 		    				'id'			=> $raid_id,
