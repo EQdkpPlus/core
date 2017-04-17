@@ -734,6 +734,7 @@ $lang = array(
 	"raidevent_guest_emailsubject" => 'Your raid participation request has been reviewed',
 	"raidevent_autogroups" => 'Automatic adding (Groups)',
 	"calendar_sharing_receipients" => 'Invite user',
+	"calendar_sharing_receipients_usergroup" => 'Invite usergroup',
 	"calendar_event_private" => 'Private event',
 	"raidevent_value" => 'Points for this raid',
 	"raidevent_template" => 'Saved templates',

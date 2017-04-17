@@ -216,8 +216,12 @@ class editcalendarevent_pageobject extends pageobject {
 				$this->notify_newraid($raidid);
 			}
 		}else{
-			$withtime		= ($this->in->get('allday') == '1') ? 0 : 1;
-			$invited_users	= $this->in->getArray('invited', 'int');
+			$withtime			= ($this->in->get('allday') == '1') ? 0 : 1;
+			$invited_users		= $this->in->getArray('invited', 'int');
+			$invited_usergroup	= $this->in->getArray('invited_usergroup', 'int');
+			if(is_array($invited_usergroup) && count($invited_usergroup) > 0){
+				$invited_users = $this->pdh->get('user_groups_users', 'user_list', array($invited_usergroup));
+			}
 			$raidid			= $this->pdh->put('calendar_events', 'add_cevent', array(
 				$this->in->get('calendar_id'),
 				$this->in->get('eventname'),
@@ -229,6 +233,7 @@ class editcalendarevent_pageobject extends pageobject {
 				$this->in->get('allday'),
 				array(
 					'invited'			=> $invited_users,
+					'invited_usergroup'	=> $invited_usergroup,
 					'location'			=> $this->in->get('location')
 				),
 				0,
@@ -316,8 +321,12 @@ class editcalendarevent_pageobject extends pageobject {
 				)
 			));
 		}else{
-			$withtime		= ($this->in->get('allday') == '1') ? 0 : 1;
-			$invited_users	= $this->in->getArray('invited', 'int');
+			$withtime			= ($this->in->get('allday') == '1') ? 0 : 1;
+			$invited_users		= $this->in->getArray('invited', 'int');
+			$invited_usergroup	= $this->in->getArray('invited_usergroup', 'int');
+			if(is_array($invited_usergroup) && count($invited_usergroup) > 0){
+				$invited_users = $this->pdh->get('user_groups_users', 'user_list', array($invited_usergroup));
+			}
 			$this->pdh->put('calendar_events', 'update_cevents', array(
 				$this->url_id,
 				$this->in->get('calendar_id'),
@@ -330,6 +339,7 @@ class editcalendarevent_pageobject extends pageobject {
 				$this->in->get('allday'),
 				array(
 					'invited'			=> $invited_users,
+					'invited_usergroup'	=> $invited_usergroup,
 					'location'			=> $this->in->get('location')
 				)
 			));
@@ -550,7 +560,8 @@ class editcalendarevent_pageobject extends pageobject {
 			'DR_RAIDMODE'		=> (new hdropdown('raidmode', array('options' => $raidmode_array, 'value' => ((isset($eventdata['extension']) && isset($eventdata['extension']['raidmode'])) ? $eventdata['extension']['raidmode'] : ''), 'id' => 'cal_raidmodeselect')))->output(),
 			'DR_RAIDLEADER'		=> (new hmultiselect('raidleader', array('options' => $raidleader_array, 'value' => ((isset($eventdata['extension']) && isset($eventdata['extension']['raidleader'])) ? $eventdata['extension']['raidleader'] : $this->pdh->get('member', 'mainchar', array($this->user->data['user_id']))), 'width' => 300, 'filter' => true)))->output(),
 			'DR_GROUPS'			=> (new hmultiselect('asi_group', array('options' => $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list'))), 'value' => $this->config->get('calendar_raid_autocaddchars'))))->output(),
-			'DR_SHARE_USERS'	=> (new hmultiselect('invited', array('options' => $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list'))), 'filter' => true, 'value' => ((isset($eventdata['extension']['invited']) && $eventdata['extension']['invited']) ? $eventdata['extension']['invited'] : array()))))->output(),
+			'DR_SHARE_USERS'	=> (new hmultiselect('invited', array('options' => $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list'))), 'filter' => true, 'clickfunc' => 'var arrInvitedUG = $("#invited").multiselect("getChecked").map(function(){ return this.value; }).get(); if(arrInvitedUG.length > 0){ $("#invited_usergroup").multiselect("disable"); }else{ $("#invited_usergroup").multiselect("enable"); }' , 'value' => ((isset($eventdata['extension']['invited']) && $eventdata['extension']['invited']) ? $eventdata['extension']['invited'] : array()))))->output(),
+			'DR_INVITED_UG'		=> (new hmultiselect('invited_usergroup', array('options' => $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list'))), 'clickfunc' => 'var arrInvitedUG = $("#invited_usergroup").multiselect("getChecked").map(function(){ return this.value; }).get(); if(arrInvitedUG.length > 0){ $("#invited").multiselect("disable"); }else{ $("#invited").multiselect("enable"); }' , 'value' => ((isset($eventdata['extension']['invited_usergroup']) && $eventdata['extension']['invited_usergroup']) ? $eventdata['extension']['invited_usergroup'] : array()))))->output(),
 			'DR_STATUS'			=> (new hdropdown('asi_status', array('options' => $raidstatus, 'value' => 0)))->output(),
 			'CB_ALLDAY'			=> (new hcheckbox('allday', array('options' => array(1=>''), 'value' => ((isset($eventdata['allday'])) ? $eventdata['allday'] : 0), 'class' => 'allday_cb', 'inputid' => 'cb_allday')))->output(),
 			'CB_PRIVATE'		=> (new hcheckbox('private', array('options' => array(1=>''), 'value' => ((isset($eventdata['private'])) ? $eventdata['private'] : 0))))->output(),

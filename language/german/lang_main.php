@@ -318,7 +318,7 @@ $lang = array(
 "add_itemvote_success" => "Deine Abstimmung zu dem Item wurde gespeichert.",
 "update_itemvote_success" => "Deine Abstimmung zu dem Item wurde aktualisiert.",
 "update_settings_success" => "Die Benutzereinstellungen wurden aktualisiert.",
-		
+
 "fv_invalid_email" => "Die E-Mail-Adresse scheint nicht gültig zu sein.",
 "fv_required" => "Bitte fülle das Eingabefeld aus.",
 "fv_php_required" => 'Das Feld \'%s\' ist notwendig!',
@@ -334,7 +334,7 @@ $lang = array(
 "fv_password_placeholder" => 'Länge > %d',
 "fv_form_error"	=> 'Fehler im Formular',
 "fv_fields_not_match" => "Die eingegebenen Daten stimmen nicht überein",
-		
+
 "template_preview" => "Templatevorschau",
 "anonymous" => "<em>Gast</em>",
 "added" => "Zugefügt",
@@ -690,6 +690,7 @@ $lang = array(
 "raidevent_guest_emailsubject" => 'Deine Anfrage auf Raidteilnahme wurde überprüft',
 "raidevent_autogroups" => "Autom. hinzufügen (Gruppe)",
 "calendar_sharing_receipients" => 'Benutzer einladen',
+"calendar_sharing_receipients_usergroup" => 'Benutzergruppe einladen',
 "calendar_event_private" => 'Privater Termin',
 "raidevent_value" => "Punkte für Raid",
 "raidevent_template" => "Gespeicherte Vorlagen",
