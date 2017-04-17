@@ -78,7 +78,8 @@ if ( !class_exists( "pdh_w_member" ) ) {
 
 				if($changes == false && json_encode($old['profiledata']) == $data['profiledata']) {
 					return true;
-				}
+				}else{ $data['lastupdate'] = time(); }
+								
 			//add new member
 			} else {
 				$data['mainid'] = ($takechar) ? $this->pdh->get('member','mainchar',array($this->user->data['user_id'])) : $data['mainid'];
