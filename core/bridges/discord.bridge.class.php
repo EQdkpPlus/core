@@ -147,14 +147,25 @@ class discord_bridge extends bridge_generic {
 			$result = register('urlfetcher')->fetch('https://discordapp.com/api/users/@me', array('Authorization: '.$token));
 			if($result){
 				$arrJSON = json_decode($result, true);
-				return array(
-						'status' 	=> true,
-						'id'		=> $arrJSON['id'],
-						'name'		=> $arrJSON['username'],
-						'password' 	=> $strPassword,
-						'email'		=> $strUsername,
-						'salt'		=> $strSalt,
-				);
+				if($arrJSON['id']){
+					if(!$arrJSON['username'] || $arrJSON['username'] == "") {
+						$arrMailParts = explode("@", $strUsername);
+						$arrJSON['username'] = $arrMailParts[0];
+						if($arrJSON['username'] == ""){						
+							return array(
+								'status' => false,
+							);
+						}
+					}
+					return array(
+							'status' 	=> true,
+							'id'		=> $arrJSON['id'],
+							'name'		=> $arrJSON['username'],
+							'password' 	=> $strPassword,
+							'email'		=> $strUsername,
+							'salt'		=> $strSalt,
+					);
+				}
 			}
 		}
 
