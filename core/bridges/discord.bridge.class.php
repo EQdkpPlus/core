@@ -75,9 +75,11 @@ class discord_bridge extends bridge_generic {
 		$result = register('urlfetcher')->fetch('https://discordapp.com/api/guilds/'.$this->guild.'/roles', array('Authorization: Bot '.$this->token));
 		if($result){
 			$arrJSON = json_decode($result, true);
-			foreach($arrJSON as $val){
-				if( $val['name'] == '@everyone') continue;
-				$arrOut[$val['id']] = $val['name'];
+			if($arrJSON && is_array($arrJSON)){
+				foreach($arrJSON as $val){
+					if( $val['name'] == '@everyone') continue;
+					$arrOut[$val['id']] = $val['name'];
+				}
 			}
 		}
 		$this->arrGroups = $arrOut;
@@ -89,10 +91,11 @@ class discord_bridge extends bridge_generic {
 		$result = register('urlfetcher')->fetch('https://discordapp.com/api/guilds/'.$this->guild.'/members', array('Authorization: Bot '.$this->token));
 		if($result){
 			$arrJSON = json_decode($result, true);
-
-			foreach($arrJSON as $val){
-				if ($val['user']['id'] == $intUserID){
-					$arrOut = $val['roles'];
+			if($arrJSON && is_array($arrJSON)){
+				foreach($arrJSON as $val){
+					if ($val['user']['id'] == $intUserID){
+						$arrOut = $val['roles'];
+					}
 				}
 			}
 		}
@@ -122,9 +125,11 @@ class discord_bridge extends bridge_generic {
 		$result = register('urlfetcher')->fetch('https://discordapp.com/api/guilds/'.$this->guild.'/members', array('Authorization: Bot '.$this->token));
 		if($result){
 			$arrJSON = json_decode($result, true);
-			foreach($arrJSON as $val){
-				$user = $val['user'];
-				$arrOut[$user['id']] = $user['username'];
+			if($arrJSON && is_array($arrJSON)){
+				foreach($arrJSON as $val){
+					$user = $val['user'];
+					$arrOut[$user['id']] = $user['username'];
+				}
 			}
 		}
 		$this->arrUsers = $arrOut;
@@ -142,29 +147,31 @@ class discord_bridge extends bridge_generic {
 		$result = register('urlfetcher')->post('https://discordapp.com/api/auth/login', json_encode($arrData), 'application/json; charset=utf-8');
 		if($result){
 			$arrJSON = json_decode($result, true);
-			$token = $arrJSON['token'];
+			if($arrJSON && is_array($arrJSON)){
+				$token = $arrJSON['token'];
 
-			$result = register('urlfetcher')->fetch('https://discordapp.com/api/users/@me', array('Authorization: '.$token));
-			if($result){
-				$arrJSON = json_decode($result, true);
-				if($arrJSON['id']){
-					if(!$arrJSON['username'] || $arrJSON['username'] == "") {
-						$arrMailParts = explode("@", $strUsername);
-						$arrJSON['username'] = $arrMailParts[0];
-						if($arrJSON['username'] == ""){						
-							return array(
-								'status' => false,
-							);
+				$result = register('urlfetcher')->fetch('https://discordapp.com/api/users/@me', array('Authorization: '.$token));
+				if($result){
+					$arrJSON = json_decode($result, true);
+					if($arrJSON['id']){
+						if(!$arrJSON['username'] || $arrJSON['username'] == "") {
+							$arrMailParts = explode("@", $strUsername);
+							$arrJSON['username'] = $arrMailParts[0];
+							if($arrJSON['username'] == ""){						
+								return array(
+									'status' => false,
+								);
+							}
 						}
+						return array(
+								'status' 	=> true,
+								'id'		=> $arrJSON['id'],
+								'name'		=> $arrJSON['username'],
+								'password' 	=> $strPassword,
+								'email'		=> $strUsername,
+								'salt'		=> $strSalt,
+						);
 					}
-					return array(
-							'status' 	=> true,
-							'id'		=> $arrJSON['id'],
-							'name'		=> $arrJSON['username'],
-							'password' 	=> $strPassword,
-							'email'		=> $strUsername,
-							'salt'		=> $strSalt,
-					);
 				}
 			}
 		}
