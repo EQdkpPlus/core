@@ -267,7 +267,7 @@ if (!class_exists("comments")){
 			$html	.= '<div class="boxHeader"><h1>'.$this->user->lang('comments').'</h1></div>';
 			$html	.= '<div class="boxContent">';
 
-			$out = '';
+			$out = array();
 			if (is_array($comments)){
 				foreach($comments as $row){
 					// Avatar
