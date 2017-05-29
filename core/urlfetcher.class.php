@@ -49,8 +49,8 @@ class urlfetcher  extends gen_class {
 				break;
 			}
 		}
-		
-		if(!$this->pdl->type_known('urlfetcher')) $this->pdl->register_type('urlfetcher', null, null, array(2,3,4));
+		$blnLogToFile = (defined('DEBUG') && DEBUG > 2) ? true : false;
+		if(!$this->pdl->type_known('urlfetcher')) $this->pdl->register_type('urlfetcher', null, null, array(2,3,4), $blnLogToFile);
 	}
 
 	/**
