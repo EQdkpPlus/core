@@ -112,7 +112,7 @@ class tinyMCE extends gen_class {
 					menubar: false,
 					relative_urls : false,
 					remove_script_host : false,
-					toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright |  bullist | fontsizeselect forecolor | blockquote image link'.$strHooksToolbar.'",
+					toolbar: "undo redo | bold italic underline | fontsizeselect forecolor | blockquote image link'.$strHooksToolbar.'",
 					statusbar : false,
 				});
 			}
