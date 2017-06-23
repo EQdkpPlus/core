@@ -228,11 +228,11 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				// delete calendar raid attendees
 				$this->pdh->put('calendar_raids_attendees', 'delete_attendees', array($member_id));
 				// delete raid_attendence
+				$raids = $this->pdh->get('raid', 'raidids4memberid', array($member_id));
 				$this->db->prepare("DELETE FROM __raid_attendees WHERE member_id = ?")->execute($member_id);
 				// delete member-user connection
 				$this->db->prepare("DELETE FROM __member_user WHERE member_id = ?;")->execute($member_id);
 				$this->pdh->enqueue_hook('member_update', array($member_id));
-				$raids = $this->pdh->get('raid', 'raidids4memberid', array());
 				$this->pdh->enqueue_hook('raid_update', $raids);
 				// check for new mainchar
 				$twinks = $this->pdh->get('member', 'other_members', array());
