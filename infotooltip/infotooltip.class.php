@@ -155,7 +155,7 @@ if(!class_exists('infotooltip')) {
 		public function changed_prio1($game, $parser) {
 			$arrParser = $this->load_parser($game, true);
 			$setts = array();
-			if(isset(arrParser[$parser]->settings)){
+			if(isset($arrParser[$parser]->settings)){
 				foreach($arrParser[$parser]->settings as $skey => $sval) {
 					$setts[$skey] = $sval['default'];
 				}
