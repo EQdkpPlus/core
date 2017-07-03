@@ -327,7 +327,7 @@ class calendar_pageobject extends pageobject {
 								'start'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_start', array($calid))),
 								'end'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_end', array($calid, $alldayevents))),
 								'allDay'		=> $alldayevents,
-								'note'			=> $this->pdh->get('calendar_events', 'notes', array($calid)),
+								'note'			=> $this->pdh->get('calendar_events', 'notes', array($calid, true)),
 								'color'			=> $eventcolor,
 								'textColor'		=> $eventcolor_txt,
 								'isowner'		=> $this->pdh->get('calendar_events', 'is_owner', array($calid)) || $this->user->check_auth('a_cal_revent_conf', false),
