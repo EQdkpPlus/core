@@ -341,7 +341,8 @@ class editcalendarevent_pageobject extends pageobject {
 					'invited'			=> $invited_users,
 					'invited_usergroup'	=> $invited_usergroup,
 					'location'			=> $this->in->get('location')
-				)
+				),
+				$this->in->get('private', 0),
 			));
 
 			// send notifications to newly invited users & remove notification for removed users
