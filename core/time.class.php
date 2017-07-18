@@ -671,9 +671,20 @@ if (!class_exists("time")){
 
 		public function newtime($timestamp, $newtime='now', $timeInUTC=true){
 			$newtime	= ($newtime=='now') ? (new DateTime())->format('H:i') : $newtime;
-			$a_times	= explode(':', $newtime);
-			$objDate	= new DateTime();
-			return ($timeInUTC) ? $objDate->setTimezone($this->userTimeZone)->setTimestamp($timestamp)->setTimezone($this->utcTimeZone)->setTime($a_times[0], $a_times[1])->setTimezone($this->userTimeZone)->format("U") : $objDate->setTimezone($this->userTimeZone)->setTimestamp($timestamp)->setTimezone($this->userTimeZone)->setTime($a_times[0], $a_times[1])->format("U");
+
+			// get the date
+			$objDate	= new DateTime('@'.$timestamp, $this->utcTimeZone);
+			$datewotime	= $objDate->format('Y-m-d');
+
+			// now, get the time in UTC
+			if($timeInUTC){
+				$objTime	= new DateTime($newtime, $this->utcTimeZone);
+				$newtime	= $objTime->setTimezone($this->userTimeZone)->format('H:i');
+			}
+
+			// generate the new timestamp
+			$out = new DateTime($datewotime. ' '.$newtime, $this->userTimeZone);
+			return $out->format('U');
 		}
 
 		public function dateDiff($ts1, $ts2, $out='sec', $pos_neg=false){
