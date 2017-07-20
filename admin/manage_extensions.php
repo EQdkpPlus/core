@@ -762,6 +762,11 @@ class Manage_Extensions extends page_generic {
 				$row = 'green';
 				$link = '';
 				$plugin_code = $value['path'];
+				if(!$plugin_code || $plugin_code == ""){
+					$this->core->message("Could not initiate module ID ".$id, "Error", 'red');
+					continue;
+				}
+				
 				$class_name = $plugin_code.'_portal';
 				$del_link = "";
 				//Ignore Plugin Moduls in terms of repo-updates
