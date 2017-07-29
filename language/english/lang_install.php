@@ -231,6 +231,8 @@ $lang = array(
 	"recaptcha_pkey" 		=> "Private Key of reCATPCHA",
 	'embedly_info'			=> 'Embedly convertes links of images or videos to their corresponding image or video. Also, it is used at plugins like MediaCenter to embedd Videos. You can create an own API-Key at the following page: <br /> <a href="https://app.embed.ly/" target="_blank"><i class="fa fa-lg fa-external-link"></i> https://app.embed.ly/</a>',
 	'embedly_api_key'		=> 'Embedly API-Key',
+	'delete_ownership_file' => 'For security reasons, please delete the file "database_ownership_file.txt" from the EQdkp Plus root folder to continue with your installation.',
+		
 );
 
 ?>

@@ -102,6 +102,22 @@ class db_access extends install_generic {
 			$this->pdl->log('install_error', $this->lang['prefix_error']);
 			return false;
 		}
+		
+		$arrLocalhost = array('localhost', '127.0.0.1', '127.0.1.1', '::1');
+		if(!in_array($this->dbhost, $arrLocalhost)){
+			$strOwnerShipFile = $this->root_path.'database_ownership_file.txt';
+			if(!file_exists($strOwnerShipCreatedFile)){
+				$this->pfh->putContent($strOwnerShipCreatedFile, 'created');
+				$this->pfh->putContent($strOwnerShipFile, 'created');
+			}
+			
+			if(file_exists($strOwnerShipCreatedFile) && !file_exists($strOwnerShipFile)){
+				//echo "all good";
+			} else {
+				$this->pdl->log('install_error', $this->lang['delete_ownership_file']);
+				return false;
+			}
+		}
 
 		$error = array();
 		include_once($this->root_path.'libraries/dbal/dbal.class.php');
@@ -140,6 +156,9 @@ class db_access extends install_generic {
 		$this->configfile_fill();
 		registry::$aliases['db'] = 'dbal_'.$this->dbtype;
 		include_once($this->root_path.'libraries/dbal/'.$this->dbtype.'.dbal.class.php');
+		
+		if(file_exists($this->root_path.'osfc.txt')) $this->pfh->Delete($this->root_path.'osfc.txt');
+
 		return true;
 
 		//maybe show version?
