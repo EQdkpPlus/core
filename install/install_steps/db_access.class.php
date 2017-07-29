@@ -105,6 +105,7 @@ class db_access extends install_generic {
 		
 		$arrLocalhost = array('localhost', '127.0.0.1', '127.0.1.1', '::1');
 		if(!in_array($this->dbhost, $arrLocalhost)){
+			$strOwnerShipCreatedFile  = $this->root_path.'osfc.txt';
 			$strOwnerShipFile = $this->root_path.'database_ownership_file.txt';
 			if(!file_exists($strOwnerShipCreatedFile)){
 				$this->pfh->putContent($strOwnerShipCreatedFile, 'created');
