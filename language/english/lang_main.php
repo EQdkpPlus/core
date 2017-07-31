@@ -1128,6 +1128,10 @@ $lang = array(
 	"warning" => "Warning",
 	"information" => "Information",
 	"edit_table" => "Edit table",
+	"user_sett_fs_private_keys" => "Private Keys",
+	"user_sett_fs_delete_account" => "Delete Account",
+	"user_delete_account" => "Delete account permanently",
+	"confirm_account_info" => "Do you really want to delete your user account? All associated data, like personal ones or media will get deleted immediately and permanently.<br /><br />If you want to continue, you have to confirm your account deletion with your current password.<br />",
 );
 
 ?>

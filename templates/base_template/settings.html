@@ -308,3 +308,31 @@ $(function(){
 	{CSRF_TOKEN}
 </form>
 <!-- IF S_SETTING_ADMIN -->{JS_TAB_SELECT}<!-- ENDIF -->
+
+<!-- IF not S_SETTING_ADMIN -->
+<script language="JavaScript" type="text/javascript">
+//<![CDATA[
+$(function(){
+	$( "#dialog-confirm_account_deletion" ).dialog({
+		height:300,
+		width: 450,
+		modal: true,
+		autoOpen: false,
+	});
+});
+function confirm_account_deletion(){
+	$( "#dialog-confirm_account_deletion" ).dialog('open');
+}
+</script>
+<div id="dialog-confirm_account_deletion" title="{L_user_sett_fs_delete_account}">
+	<form method="post" action="{ACTION}">
+		{L_confirm_account_info}<br />
+		<div class="input-icon">
+			<i class="fa fa-key"></i>
+			<input type="password" name="password" pattern=".{3,}" size="30" maxlength="32" class="input password" id="password" placeholder="{L_password}" required />
+		</div><br />
+		<button type="submit" name="delete_account" class="mainoption"><i class="fa fa-sign-in"></i> {L_user_delete_account}</button>
+		{CSRF_TOKEN}
+	</form>
+</div>
+<!-- ENDIF -->
