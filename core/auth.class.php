@@ -563,11 +563,13 @@ class auth extends user {
 			$this->bridge->logout();
 		}
 
-		//Loginmethod logout
-		$arrAuthObjects = $this->get_login_objects();
-		foreach($arrAuthObjects as $strMethods => $objMethod){
-			if (method_exists($objMethod, 'logout')){
-				$objMethod->logout();
+		if(!$this->lite_mode){
+			//Loginmethod logout
+			$arrAuthObjects = $this->get_login_objects();
+			foreach($arrAuthObjects as $strMethods => $objMethod){
+				if (method_exists($objMethod, 'logout')){
+					$objMethod->logout();
+				}
 			}
 		}
 
