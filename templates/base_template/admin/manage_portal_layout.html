@@ -26,7 +26,7 @@ $(function(){
 	});
 
 	$( "#dialog-embeddmodule" ).dialog({
-		height: 380,
+		height: 500,
 		width: 530,
 		modal: true,
 		autoOpen: false,
@@ -60,6 +60,26 @@ function createEmbeddLink(){
 	}
 	base = base.replace(/ADDITION/g, addition);
 	$("#embedd_html").html(base);
+	
+	//iframe
+	addition = "";
+	var base = $("#embedd_iframe_base").html();
+	base = base.replace(/ID/g, moduleid);
+	
+	if(!$("#embedd_show_header").is(":checked")){
+		addition = addition + "&header=0";
+	}
+	if($("input[name='embedd_position']:checked").val() != "left"){
+		addition = addition + "&position="+$("input[name='embedd_position']:checked").val();
+	}
+	if($("#embedd_wide_content").is(":checked")){
+		addition = addition + "&wide=1";
+	}
+	
+	
+	
+	base = base.replace(/ADDITION/g, addition);
+	$("#embedd_iframe").html(base);
 }
 
 
@@ -317,6 +337,9 @@ function createEmbeddLink(){
 				<dd><input name="" type="checkbox" id="embedd_wide_content" value="1" class="onchangeEmbedd" /></dd>
 			</dl>
 			<textarea style="width: 90%" rows="5" readonly="readonly" name="data" onclick="$(this).select()" id="embedd_html"></textarea>
+			
+			<textarea style="width: 90%" rows="5" readonly="readonly" name="data_iframe" onclick="$(this).select()" id="embedd_iframe"></textarea>
 		</fieldset>
 		<textarea style="display:none;" id="embedd_base"><script src="{EMBEDD_URL}portal/widget.js" type="text/javascript"></script><div id="eqdkp_portal_{EMBEDD_RANDOM}_ID" ></div><script type="text/javascript">ADDITIONEQdkpPortal.init(ID, '{EMBEDD_RANDOM}', '{EMBEDD_URL}');</script></textarea>
+		<textarea style="display:none;" id="embedd_iframe_base"><iframe src="{EMBEDD_URL}exchange.php?out=portal&id=ID&iframe=1ADDITION" allowtransparency="true" height="400" width="200" frameborder="0"></iframe></textarea>
 </div>
