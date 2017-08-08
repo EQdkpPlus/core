@@ -296,6 +296,18 @@ if ( !class_exists( "pdh_r_member" ) ) {
 					}
 				}
 				break;
+				
+				case 'hidden':
+					if ($arrField['options_language'] != ""){
+						if (strpos($arrField['options_language'], 'lang:') === 0){
+							$arrSplitted = explode(':', $arrField['options_language']);
+							$arrGlang = $this->game->glang($arrSplitted[1]);
+							$arrLang = (isset($arrSplitted[2])) ? $arrGlang[$arrSplitted[2]] : $arrGlang;
+							
+						} else $arrLang = $this->game->get($arrField['options_language']);
+						if (isset($arrLang[$strMemberValue])) return $arrLang[$strMemberValue];
+					}
+				break;
 
 				case 'radio':
 					if (!isset($arrField['data']['options'][$strMemberValue])) return '';
