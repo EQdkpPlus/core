@@ -4272,3 +4272,20 @@ label.isBoolean > input[type="radio"]:checked + span.green, label.isBoolean > sp
 	display: inline-block;
 }
 /* End Boolean Boxes */
+
+/* Iframe widget */
+body.module-iframe {
+	background: transparent;
+	margin: 0;
+}
+
+.module-iframe #contentBody, .module-iframe #contentBody2 {
+	background: transparent;
+	border: none;
+	padding: 0;
+	margin: 0;
+}
+
+.module-iframe #plus_debug_tabs {
+	display: none;
+}
