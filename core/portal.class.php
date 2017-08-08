@@ -68,18 +68,6 @@ class portal extends gen_class {
 
 			$moduleout = $obj->output();
 
-			$jsOut = '<div class="module_script"><script type="text/javascript">';
-			if(!$this->in->get('nojs', 0)){
-				$headerJS = $this->tpl->get_header_js();
-				$headerJS .= $this->tpl->get_footer_js();
-
-				$headerJS = "jQuery(function($) {".str_replace("$", "jQuery",  $headerJS).'});';
-
-			}
-
-			$jsOut .= $headerJS.'</script></div>';
-
-
 			$cssOut = '<div class="external_module"><style>';
 			if(!$this->in->get('nocss', 0)){
 				$cssFile = $this->tpl->get_combined_css();
@@ -87,7 +75,7 @@ class portal extends gen_class {
 			}
 			$cssOut .= '</style>';
 
-			$out = $jsOut.$cssOut.'<div id="portalbox'.$module_id.'" class="portalbox '.get_class($obj).'">'.(($this->in->get('header', 1)) ?
+			$out = $cssOut.'<div id="portalbox'.$module_id.'" class="portalbox '.get_class($obj).'">'.(($this->in->get('header', 1)) ?
 					'<div class="portalbox_head">
 						<span class="center" id="txt'.$module_id.'">'.$obj->get_header().'</span>
 					</div>' : ''
