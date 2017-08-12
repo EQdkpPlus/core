@@ -120,6 +120,7 @@ if ( !class_exists( "pdh_w_item" ) ) {
 					'itempool_id'		=> $itempool_id
 				))->execute($item_id);
 				
+				$updated_mems[] = $item_buyers[0];
 				if(!$objQuery) {
 					$retu[] = false;
 				}
@@ -180,6 +181,7 @@ if ( !class_exists( "pdh_w_item" ) ) {
 					}
 				}
 			}
+			
 			if(!in_array(false, $retu)) {
 				$old_names = $this->pdh->aget('member', 'name', '0', array($old['buyers']));
 				$new_name_string = get_coloured_names($updated_mems, $added_mems, $items2del);
@@ -203,8 +205,9 @@ if ( !class_exists( "pdh_w_item" ) ) {
 						'game_itemid'		=> $game_item_id,
 						'itempool'			=> $itempool_id
 				);
-				
+
 				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
+
 				$this->log_insert('action_item_updated', $log_action, $item_id, $old['name']);
 				$this->pdh->enqueue_hook('item_update', $hook_id, array('action' => 'update', 'time' => $time, 'members' => array_merge($updated_mems, $added_mems, $items2del)));
 				$this->db->commitTransaction();
