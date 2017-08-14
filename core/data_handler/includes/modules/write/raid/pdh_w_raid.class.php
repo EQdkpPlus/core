@@ -107,6 +107,11 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 					'raid_additional_data' => $additional_data
 			);
 			
+			
+			if($old['value'] != $raid_value){
+				$arrSet['raid_apa_value'] = "";
+			}
+			
 			$objQuery = $this->db->prepare("UPDATE __raids :p WHERE raid_id=?")->set($arrSet)->execute($raid_id);
 							
 			if($objQuery) {
@@ -145,7 +150,8 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
 				
 				$this->log_insert('action_raid_updated', $log_action, $raid_id, $this->pdh->get('event', 'name', array($old['event'])));
-				$this->pdh->enqueue_hook('raid_update', $raid_id, array('action' => 'update', 'time' => $raid_date, 'members' => array_merge($upd_atts, $add_atts, $del_atts)));
+				$this->pdh->enqueue_hook('raid_update', $raid_id, array('action' => 'update', 'time' => $raid_date, 'members' => array_merge($upd_atts, $add_atts, $del_atts)));				
+				
 				return true;
 			}
 			return false;
@@ -232,7 +238,7 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 			
 			$objQuery = $this->db->prepare("UPDATE __raids :p WHERE raid_id=?")->set(array(
 				'raid_apa_value' => serialize($arrCurrentApaValue),
-			))->execute($item_id);
+			))->execute($raid_id);
 		
 			$this->pdh->enqueue_hook('raid_update', array($raid_id), array('action' => 'update', 'apa' => true));
 		

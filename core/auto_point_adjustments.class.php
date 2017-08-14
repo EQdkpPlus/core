@@ -272,12 +272,12 @@ if ( !defined('EQDKP_INC') ){
 				$this->get_apa_type($this->apa_tab[$apa_id]['type'])->reset_cache($apa_id, $module, $data['id']);
 				if(!$blnRecursiv) $this->update_done($module, $data['id']);
 			} else {
-				if(isset($this->cached_data[$apa_id][$last_run][$data['id']])) return $this->cached_data[$apa_id][$last_run][$data['id']];
+				if(isset($this->cached_data[$apa_id][$last_run][$module.'_'.$data['id']])) return $this->cached_data[$apa_id][$last_run][$module.'_'.$data['id']];
 			}
 			
 			//$arrResult=0: value, 1: bln was new calculated
 			list($fltVal, $blnNewCalculated, $decay_adj) = $this->get_apa_type($this->apa_tab[$apa_id]['type'])->get_value($apa_id, $last_run, $module, $dkp_id, $data, $date);
-			$this->cached_data[$apa_id][$last_run][$data['id']] = $fltVal;
+			$this->cached_data[$apa_id][$last_run][$module.'_'.$data['id']] = $fltVal;
 			if(!$blnRecursiv && $blnNewCalculated){
 				$this->pdh->process_hook_queue();
 			}
