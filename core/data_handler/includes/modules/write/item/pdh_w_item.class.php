@@ -109,16 +109,24 @@ if ( !class_exists( "pdh_w_item" ) ) {
 			$this->db->beginTransaction();
 			
 			if($id || (count($item_buyers) == 1 && count($old['buyers']) == 1))	{
-				$objQuery = $this->db->prepare("UPDATE __items :p WHERE item_id=?;")->set(array(
-					'item_name'			=> $item_name,
-					'item_value'		=> $item_value,
-					'member_id'			=> $item_buyers[0],
-					'raid_id'			=> $raid_id,
-					'item_date'			=> $time,
-					'item_group_key'	=> $new_group_key,
-					'game_itemid'		=> $game_item_id,
-					'itempool_id'		=> $itempool_id
-				))->execute($item_id);
+				$arrSet = array(
+						'item_name'			=> $item_name,
+						'item_value'		=> $item_value,
+						'member_id'			=> $item_buyers[0],
+						'raid_id'			=> $raid_id,
+						'item_date'			=> $time,
+						'item_group_key'	=> $new_group_key,
+						'game_itemid'		=> $game_item_id,
+						'itempool_id'		=> $itempool_id
+				);
+				
+				//Reset APA cache if value or data changed
+				if($old['date'] != $time || $old['value'] != $item_value){
+					$arrSet['item_apa_value'] = '';
+				}
+				
+				
+				$objQuery = $this->db->prepare("UPDATE __items :p WHERE item_id=?;")->set($arrSet)->execute($item_id);
 				
 				$updated_mems[] = $item_buyers[0];
 				if(!$objQuery) {
@@ -133,17 +141,24 @@ if ( !class_exists( "pdh_w_item" ) ) {
 						$updated_mems[] = $member_id;
 						unset($items2del[$item_id]);
 						
-						$objQuery = $this->db->prepare("UPDATE __items :p WHERE item_id = ?;")->set(array(
-							'item_name'			=> $item_name,
-							'item_value'		=> $item_value,
-							'member_id'			=> $member_id,
-							'raid_id'			=> $raid_id,
-							'item_date'			=> $time,
-							'item_group_key'	=> $new_group_key,
-							'game_itemid'		=> $game_item_id,
-							'itempool_id'		=> $itempool_id,
-							'item_updated_by'	=> $this->admin_user
-						))->execute($item_id);
+						$arrSet = array(
+								'item_name'			=> $item_name,
+								'item_value'		=> $item_value,
+								'member_id'			=> $member_id,
+								'raid_id'			=> $raid_id,
+								'item_date'			=> $time,
+								'item_group_key'	=> $new_group_key,
+								'game_itemid'		=> $game_item_id,
+								'itempool_id'		=> $itempool_id,
+								'item_updated_by'	=> $this->admin_user
+						);
+						
+						//Reset APA cache if value or data changed
+						if($old['date'] != $time || $old['value'] != $item_value){
+							$arrSet['item_apa_value'] = '';
+						}
+						
+						$objQuery = $this->db->prepare("UPDATE __items :p WHERE item_id = ?;")->set($arrSet)->execute($item_id);
 	
 						if(!$objQuery) {
 							$retu[] = false;

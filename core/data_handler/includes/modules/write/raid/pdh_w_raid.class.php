@@ -107,8 +107,8 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 					'raid_additional_data' => $additional_data
 			);
 			
-			
-			if($old['value'] != $raid_value){
+			//Reset Apa Cache if value or date was changed		
+			if($old['value'] != $raid_value || $old['raid_date'] != $raid_date){
 				$arrSet['raid_apa_value'] = "";
 			}
 			

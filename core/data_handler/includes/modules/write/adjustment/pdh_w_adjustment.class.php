@@ -99,6 +99,7 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 			$old['value'] = $this->pdh->get('adjustment', 'value', array($adjustment_id));
 			$old['reason'] = $this->pdh->get('adjustment', 'reason', array($adjustment_id));
 			$old['event'] = $this->pdh->get('adjustment', 'event', array($adjustment_id));
+			$old['date'] = $this->pdh->get('adjustment', 'date', array($adjustment_id));
 
 			$retu = array(true);
 			$updated_mems = array();
@@ -120,8 +121,13 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 						'adjustment_date'		=> $time,
 						'adjustment_group_key'	=> $new_group_key,
 						'adjustment_updated_by' => $this->admin_user,
-						
 					);
+					
+					//Reset APA cache if value or data changed
+					if($old['value'] != $adj_value || $old['date'] != $time){
+						$arrSet['adjustment_apa_value'] = '';
+					}
+					
 					$objQuery = $this->db->prepare("UPDATE __adjustments :p WHERE adjustment_id = ?")->set($arrSet)->execute($adj_id);
 					if(!$objQuery){
 						$retu[] = false;
