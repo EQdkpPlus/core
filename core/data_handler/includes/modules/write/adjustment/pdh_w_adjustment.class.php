@@ -278,7 +278,7 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 		}
 		
 		public function update_apa_value($adj_id, $apa_id, $val){
-			$arrCurrentApaValue = $this->pdh->get('adjustment', 'apa_value', array($adj_id, $apa_id));
+			$arrCurrentApaValue = $this->pdh->get('adjustment', 'apa_value', array($adj_id));
 			if(!$arrCurrentApaValue || !is_array($arrCurrentApaValue)) $arrCurrentApaValue = array();
 			$arrCurrentApaValue[$apa_id] = $val;
 			

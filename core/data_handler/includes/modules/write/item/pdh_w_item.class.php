@@ -275,10 +275,10 @@ if ( !class_exists( "pdh_w_item" ) ) {
 		}
 		
 		public function update_apa_value($item_id, $apa_id, $val){
-			$arrCurrentApaValue = $this->pdh->get('item', 'apa_value', array($item_id, $apa_id));
+			$arrCurrentApaValue = $this->pdh->get('item', 'apa_value', array($item_id));
 			if(!$arrCurrentApaValue || !is_array($arrCurrentApaValue)) $arrCurrentApaValue = array();
 			$arrCurrentApaValue[$apa_id] = $val;
-				
+
 			$objQuery = $this->db->prepare("UPDATE __items :p WHERE item_id=?")->set(array(
 				'item_apa_value' => serialize($arrCurrentApaValue),
 			))->execute($item_id);

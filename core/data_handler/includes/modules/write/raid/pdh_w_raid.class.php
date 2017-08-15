@@ -232,7 +232,7 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 		}
 		
 		public function update_apa_value($raid_id, $apa_id, $val){
-			$arrCurrentApaValue = $this->pdh->get('raid', 'apa_value', array($raid_id, $apa_id));
+			$arrCurrentApaValue = $this->pdh->get('raid', 'apa_value', array($raid_id));
 			if(!$arrCurrentApaValue || !is_array($arrCurrentApaValue)) $arrCurrentApaValue = array();
 			$arrCurrentApaValue[$apa_id] = $val;
 			
