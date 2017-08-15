@@ -25,7 +25,7 @@ if ( !defined('EQDKP_INC') ){
 
 class wordpress_bridge extends bridge_generic {
 	
-	
+	//Tested with Wordpress 4.8.1
 	public static $name = 'Wordpress';
 	
 	public $data = array(

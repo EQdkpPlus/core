@@ -25,6 +25,7 @@ if ( !defined('EQDKP_INC') ){
 
 class mybb_bridge extends bridge_generic {
 
+	//Tested with MyBB 1.8.12
 	public static $name = 'MyBB';
 
 	public $data = array(

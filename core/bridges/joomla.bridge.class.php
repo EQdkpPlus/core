@@ -25,6 +25,7 @@ if ( !defined('EQDKP_INC') ){
 
 class joomla_bridge extends bridge_generic {
 	
+	//Tested with Joomla 3.7.4
 	public static $name = "Joomla";
 	
 	public $data = array(

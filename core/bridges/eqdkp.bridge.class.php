@@ -25,7 +25,8 @@ if ( !defined('EQDKP_INC') ){
 
 class eqdkp_bridge extends bridge_generic {
 	
-	public static $name = "EQdkp 2.0";
+	//Tested with EQdkp Plus 2.3
+	public static $name = "EQdkp 2.x";
 	
 	public $data = array(
 		'user'	=> array( //User
