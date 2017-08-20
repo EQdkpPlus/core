@@ -71,7 +71,7 @@ class portal extends gen_class {
 				$moduleout = $obj->output();
 	
 				$cssOut = '<div class="external_module"><style>';
-				if(!$this->in->get('nocss', 0) && !$this->in->get('iframe', 1)){
+				if(!$this->in->get('nocss', 0) && !$this->in->get('iframe', 0)){
 					$cssFile = $this->tpl->get_combined_css();
 					$cssOut .= " ".file_get_contents($cssFile);
 				}
@@ -98,7 +98,7 @@ class portal extends gen_class {
 		}
 		
 		
-		if($this->in->get('iframe', 1)){
+		if($this->in->get('iframe', 0)){
 			
 			$this->tpl->assign_vars(array(
 				'WIDGET' => $return
