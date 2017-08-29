@@ -106,6 +106,10 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 					case 'dev' : return "&channel=dev";
 				}
 			}
+			
+			if(defined('VERSION_WIP') && VERSION_WIP){
+				return "&channel=beta";
+			}
 			return "";
 		}
 		
