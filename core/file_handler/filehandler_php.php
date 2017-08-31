@@ -493,7 +493,7 @@ if (!class_exists("filehandler_php")) {
 		//Therefore they have been redeclared here.
 		
 		private function on_iis() {
-			$sSoftware = strtolower( $_SERVER["SERVER_SOFTWARE"] );
+			$sSoftware = (isset($_SERVER["SERVER_SOFTWARE"])) ? strtolower( $_SERVER["SERVER_SOFTWARE"] ) : '';
 			if ( strpos($sSoftware, "microsoft-iis") !== false )
 				return true;
 			else
