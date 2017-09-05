@@ -400,7 +400,7 @@
 					<dt><label>{L_username}:</label></dt>
 					<dd>
 						<div class="input-icon">
-							<i class="fa fa-user"></i><input type="text" name="username" size="30" maxlength="30" class="input username" id="username" placeholder="{L_username}" required autofocus/>
+							<i class="fa fa-user"></i><input type="text" name="username" size="30" maxlength="30" class="input username" id="username" placeholder="{L_username}" required/>
 						</div>
 
 					</dd>
