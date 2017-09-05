@@ -53,14 +53,6 @@ class additional_keys extends install_generic {
 						</tr>
 					</table>
 					<br />
-					<h2>Embedly</h2>
-					'.$this->lang['embedly_info'].'
-					<table width="100%" border="0" cellspacing="1" cellpadding="2" class="no-borders">
-						<tr>
-							<td align="right"><strong>'.$this->lang['embedly_api_key'].'</strong></td>
-							<td align="left"><input type="text" name="embedly_key" value="" class="input" size="30"  onchange="change_next_button()" /></td>
-						</tr>
-					</table>
 			';
 		return $content;
 	}
@@ -77,13 +69,6 @@ class additional_keys extends install_generic {
 			$this->config->set(array(
 				'lib_recaptcha_okey' => $strRecaptchaPub,
 				'lib_recaptcha_pkey' => $strRecaptchaPriv,
-			));
-		}
-		
-		$strEmbedlyKey = $this->in->get('embedly_key');
-		if($strEmbedlyKey != ""){
-			$this->config->set(array(
-				'embedly_key' => $strEmbedlyKey,
 			));
 		}
 	
