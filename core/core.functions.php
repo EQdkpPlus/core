@@ -150,7 +150,9 @@ function get_sortedids($tosort, $order, $sort_order){
  * @param		bool		$extern			Is it an external link (other server) or an internal link?
  * @return		mixed						null, else the parsed redirect url if return is true.
  */
-function redirect($url, $return=false, $extern=false, $blnShowPage=true){
+function redirect($url='', $return=false, $extern=false, $blnShowPage=true){
+	if($url == "") $url = registry::get_const('controller_path_plain');
+	
 	$out = (!$extern) ? registry::register('environment')->link.str_replace('&amp;', '&', $url) : registry::fetch('user')->removeSIDfromString($url);
 	if ($return){
 		return $out;
