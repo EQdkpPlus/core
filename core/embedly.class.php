@@ -74,6 +74,11 @@ class embedly extends gen_class {
 					'format'=> 'json',
 					'oembed'=> 'https://soundcloud.com/oembed.json?url=URL',
 				),
+				'spotify' => array(
+					'regex' =>["https://open\.spotify\.com/album/.*", "https://open\.spotify\.com/track/.*", "https://open\.spotify\.com/artist/.*"],
+					'format' => 'json',
+					'oembed' => 'https://open.spotify.com/oembed?url=URL',
+				),
 		);
 	
 	//Parse one single Link
