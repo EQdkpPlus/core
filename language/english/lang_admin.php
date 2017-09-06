@@ -579,7 +579,6 @@ $lang = array(
 	"core_sett_tab_user" => 'User',
 	"core_sett_tab_portal" => 'Portal',
 	"core_sett_tab_chars" => 'Characters',
-	"core_sett_f_embedly_key" => 'Embedly API-Key',
 	"core_sett_f_cookie_euhint_show" => 'Notice User on cookie usage',
 	"core_sett_f_help_cookie_euhint_show" => 'According to the EU directive 2009/136/EG websites are required to inform visitors on their cookie usage.',
 	"core_sett_fs_meta" => 'Meta-Information',
