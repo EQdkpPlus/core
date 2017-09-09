@@ -1857,7 +1857,6 @@ ul.breamcrumb .current::before {
 }
 .featured {
 	display: inline-block;
-	cursor: pointer;
 	margin-right: 5px;
 }
 .featured:before {
