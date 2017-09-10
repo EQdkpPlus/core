@@ -852,7 +852,7 @@ class game extends gen_class {
 		if (count($relevant_deps) === 0 || !in_array($todisplay, $relevant_deps)){
 			return array(
 				'todisplay'	=> $todisplay,
-				'data'		=> (isset($todisplay[0])) ? array_keys($this->get($todisplay[0], $filter, $lang)) : '',
+					'data'		=> (isset($todisplay[0])) ? (($this->get($todisplay[0], $filter, $lang)) ? array_keys($this->get($todisplay[0], $filter, $lang))  : array() ) : '',
 			);
 		}
 
