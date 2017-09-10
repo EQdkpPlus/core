@@ -206,6 +206,17 @@ if (!class_exists("styles")){
 											$this->pfh->Delete($strFolder.$strDeleteFile);
 										}
 									}
+									
+									//Add additional less
+									foreach($objUpdate->additional_less as $strAdditionalLess){
+										$arrOptions = $this->pdh->get('styles', 'styles', array($styleid));
+										$strMyLess = $arrOptions['additional_less'];
+										$strMyLess .= "\r\n".$strAdditionalLess;
+										$data['additional_less'] = $strMyLess;
+										$style_id	= $this->pdh->put('styles', 'update_style', array($styleid,$data));
+										$this->pdh->process_hook_queue();
+									}
+									
 								}
 							}
 						}
