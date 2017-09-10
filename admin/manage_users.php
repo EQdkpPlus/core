@@ -116,11 +116,20 @@ class Manage_Users extends page_generic {
 			$this->core->message($this->user->lang('error_set_new_pw'), $this->user->lang('error'), 'red');
 			$this->display();
 		}
+		
+		//Set a random password, as this method should be used if an account is compromised.
+		$user_salt = $this->user->generate_salt();
+		$user_password = random_string();
+		$arrSet = array(
+			'user_password' => $this->user->encrypt_password($user_password, $user_salt).':'.$user_salt,
+		);
+		
+		$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set($arrSet)->execute($this->in->get('u', 0));
 
 		// Email them their new password
 		$bodyvars = array(
 			'USERNAME'		=> $this->pdh->get('user', 'name', array($this->in->get('u', 0))),
-			'DATETIME'		=> $this->time->user_date(),
+			'DATETIME'		=> $this->time->user_date($this->time->time),
 			'U_ACTIVATE'	=> $this->env->link.$this->controller_path_plain.'/Login/NewPassword/?key=' . $pwkey,
 		);
 
