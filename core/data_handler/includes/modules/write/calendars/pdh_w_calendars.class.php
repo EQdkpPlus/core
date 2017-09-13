@@ -34,7 +34,7 @@ if(!class_exists('pdh_w_calendars')) {
 			$this->pdh->enqueue_hook('calendar_update');
 		}
 
-		public function update_calendar($id, $name, $color, $feed, $private, $type, $restricted, $affiliation=false, $system=0, $permissions='all'){
+		public function update_calendar($id, $name, $color, $feed, $private, $type, $restricted, $system=0, $permissions='all', $affiliation=false){
 			$old['name']			= $this->pdh->get('calendars', 'name', array($id));
 			$old['feed']			= $this->pdh->get('calendars', 'feed', array($id));
 			$old['private']		= $this->pdh->get('calendars', 'private', array($id));
@@ -69,7 +69,7 @@ if(!class_exists('pdh_w_calendars')) {
 			return true;
 		}
 
-		public function add_calendar($id, $name, $color, $feed, $private, $type, $restricted, $affiliation = 'user', $system=0, $permissions='all'){
+		public function add_calendar($id, $name, $color, $feed, $private, $type, $restricted, $system=0, $permissions='all', $affiliation = 'user'){
 			$objQuery = $this->db->prepare('INSERT INTO __calendars :p')->set(array(
 				'feed'			=> ($feed) ? $feed : '',
 				'name'			=> $name,
