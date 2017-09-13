@@ -67,6 +67,7 @@ class Manage_Live_Update extends page_generic {
 		$show = (int)$this->in->get('show', 0);
 		if (isset($this->steps[$show]) && $this->steps[$show]['show'] == true){
 			$function = $this->steps[$show]['function'];
+			@set_time_limit(0);
 			$this->$function();
 		}
 
