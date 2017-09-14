@@ -199,8 +199,8 @@ if ( !class_exists( "pdh_r_points" ) ) {
 					}
 				}
 			}
-			$this->pdc->put('pdh_points_table', $this->points, null);
 			$this->points = $arrLocalPoints;
+			$this->pdc->put('pdh_points_table', $this->points, null);
 		}
 
 		public function get_earned($member_id, $multidkp_id, $event_id=0, $with_twink=true){
