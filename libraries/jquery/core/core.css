@@ -1393,7 +1393,7 @@ a.ui-button:active,
 }
 
 
-.ui-dialog .ui-icon,
+.ui-dialog:not(.elfinder-dialog) .ui-icon,
 .ui-datepicker .ui-icon,
 .ui-multiselect .ui-icon,
 .ui-multiselect-menu .ui-icon,
@@ -1411,13 +1411,13 @@ a.ui-button:active,
 	display: inline !important;
 	font-size: 0;
 }
-.ui-dialog .ui-icon:before,
+.ui-dialog:not(.elfinder-dialog) .ui-icon:before,
 .ui-datepicker .ui-icon:before,
 .ui-multiselect .ui-icon:before,
 .ui-multiselect-menu .ui-icon:before,
 .ui-spinner .ui-icon:before{
 	text-decoration: inherit;
-	text-indent: 0 !important; 
+	text-indent: 0 !important;
 	speak: none;
 	font-size: 14px;
 }
@@ -1443,6 +1443,10 @@ a.ui-button:active,
 .ui-icon-check:before { content: '\f00c'; }
 .ui-icon-circle-close:before { content: '\f057'; }
 .ui-icon-closethick:before { content: '\f00d'; font-weight: bold; }
+
+.ui-datepicker .ui-icon-circle-triangle-w:before { content:'\f053'; }
+.ui-datepicker .ui-icon-circle-triangle-e:before { content:'\f054'; }
+
 .ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
 .ui-timepicker-div dl { text-align: left; }
 .ui-timepicker-div dl dt { float: left; clear:left; padding: 0 0 0 5px; }
@@ -3247,6 +3251,32 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 	background: @jqueryCalenderAdditionsBackgroundHover;
 	border:1px solid @jqueryCalenderAdditionsBorderColorHover;
 	color:@jqueryCalenderAdditionsFontColorHover;
+}
+
+
+#calendar .fc-prev-button .ui-icon,
+#calendar .fc-next-button .ui-icon,
+#MonthPicker_fc-monthpicker .month-picker-next .ui-icon,
+#MonthPicker_fc-monthpicker .month-picker-previous .ui-icon {
+	line-height: 1.2em;
+	font-family: 'Courier New', Courier, monospace;
+	background: none;
+	text-indent: 0;
+}
+#calendar .fc-prev-button .ui-icon:before,
+#calendar .fc-next-button .ui-icon:before,
+#MonthPicker_fc-monthpicker .month-picker-next .ui-icon:before,
+#MonthPicker_fc-monthpicker .month-picker-previous .ui-icon:before {
+	font-weight: 700;
+	font-size: 210%;
+}
+#calendar .fc-prev-button .ui-icon:before,
+#MonthPicker_fc-monthpicker .month-picker-previous .ui-icon:before {
+	content: '\02039';
+}
+#calendar .fc-next-button .ui-icon:before,
+#MonthPicker_fc-monthpicker .month-picker-next .ui-icon:before {
+	content: '\0203A';
 }
 
 
