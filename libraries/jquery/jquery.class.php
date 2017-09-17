@@ -1697,7 +1697,7 @@ if (!class_exists("jquery")) {
 		*/
 		private function setLanguage($name, $initname){
 			if(!isset($this->language_set[$name]) && !empty($name)){
-				$MyLanguage	= ($this->user->lang('XML_LANG') && count($this->user->lang('XML_LANG')) < 3) ? $this->user->lang('XML_LANG') : '';
+				$MyLanguage	= ($this->user->lang('XML_LANG') && strlen($this->user->lang('XML_LANG')) < 3) ? $this->user->lang('XML_LANG') : '';
 				$this->tpl->add_js(str_replace('{!language!}', $MyLanguage, $initname), 'docready');
 				$this->language_set[$name] = true;
 			}

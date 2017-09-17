@@ -413,7 +413,7 @@ if(!class_exists('infotooltip')) {
 			$lang = (!$lang || $lang == '') ? $this->config['game_language'] : $lang;
 			$this->init_cache();
 			$ext = '';
-			if(count($data) > 0) {
+			if(is_array($data) && count($data) > 0) {
 				$ext = '_'.base64_encode(serialize($data));
 			}
 
