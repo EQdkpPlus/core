@@ -40,7 +40,8 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			'raid_update',
 			'user',
 			'update_connection',
-			'roles_update'
+			'roles_update',
+			'member_update_points',
 		);
 
 		public $presets = array(
@@ -89,17 +90,25 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			}
 		}
 
-		public function reset(){
+		public function reset($affected_ids=array(), $strHook='', $arrAdditionalData=array()){
+			if($strHook === 'member_update_points'){
+				$this->pdc->del('pdh_members_table_points');
+				$this->data_points = NULL;
+				$this->init_points();
+				return true;
+			}
+			
 			$this->pdc->del('pdh_members_table');
 			$this->pdc->del('pdh_member_connections_table');
 			$this->pdc->del('pdh_members_table_other_chars');
+			$this->pdc->del('pdh_members_table_points');
 			$this->data = NULL;
 			$this->member_connections = NULL;
 			$this->otherChars = NULL;
+			$this->data_points = NULL;
 		}
 
 		public function init(){
-
 			// Check if a preset is loaded...
 			if(count($this->cmfields) < 1){
 				$this->cmfields = $this->pdh->get('profile_fields', 'fieldlist');
@@ -111,9 +120,11 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			}
 
 			//cached data not outdated?
+			$this->init_points();
 			$this->data 				= $this->pdc->get('pdh_members_table');
 			$this->member_connections	= $this->pdc->get('pdh_member_connections_table');
 			$this->otherChars			= $this->pdc->get('pdh_members_table_other_chars');
+
 			if($this->data !== NULL && $this->member_connections !== NULL && $this->otherChars !== NULL){
 				return true;
 			}
@@ -186,7 +197,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 						$this->data[$bmd_row['member_id']]['requested_del']		= $bmd_row['requested_del'];
 						$this->data[$bmd_row['member_id']]['require_confirm']	= $bmd_row['require_confirm'];
 						$this->data[$bmd_row['member_id']]['defaultrole']		= $bmd_row['defaultrole'];
-						$this->data[$bmd_row['member_id']]['points']			= $bmd_row['points'];
+						$this->data_points[$bmd_row['member_id']]['points']			= $bmd_row['points'];
 						$this->data[$bmd_row['member_id']]['apa_points']		= $bmd_row['points_apa'];
 						$this->data[$bmd_row['member_id']]['profiledata']		= json_decode($bmd_row['profiledata'], true);
 						$this->data[$bmd_row['member_id']]['user']				= isset($this->member_user[$bmd_row['member_id']]) ? $this->member_user[$bmd_row['member_id']] : 0;
@@ -206,7 +217,33 @@ if ( !class_exists( "pdh_r_member" ) ) {
 				}
 				$this->pdc->put('pdh_members_table', $this->data, null);
 				$this->pdc->put('pdh_members_table_other_chars', $this->otherChars, null);
+				
 			}
+		}
+		
+		public function init_points(){
+			$this->data_points	= $this->pdc->get('pdh_members_table_points');
+			if( $this->data_points !== NULL){
+				return true;
+			}
+			
+			// basic member data
+			$bmd_sql = "SELECT
+						member_id, points,
+						points_apa
+						FROM __members;";
+			
+			$objQuery = $this->db->query($bmd_sql);
+			
+			if($objQuery){
+				while($bmd_row = $objQuery->fetchAssoc()){
+						$this->data_points[$bmd_row['member_id']]['points']			= $bmd_row['points'];
+						$this->data_points[$bmd_row['member_id']]['apa_points']		= $bmd_row['points_apa'];
+				}		
+			}
+
+			d("init_points");
+			$this->pdc->put('pdh_members_table_points', $this->data_points, null);
 		}
 
 		public function get_id_list($skip_inactive=false, $skip_hidden=false, $skip_special = true, $skip_twinks=false){
@@ -989,7 +1026,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_points($memberID, $mdkpID=false){
-			$strPoints = $this->data[$memberID]['points'];
+			$strPoints = $this->data_points[$memberID]['points'];
 			if($strPoints != ""){
 				$arrPoints = unserialize($strPoints);
 				if(!$mdkpID) return $arrPoints;
@@ -1002,7 +1039,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_apa_points($memberID, $apaID=false, $mdkpID=false, $blnWithTwink=false){
-			$strPoints = $this->data[$memberID]['apa_points'];
+			$strPoints = $this->data_points[$memberID]['apa_points'];
 			$strWithTwink = ($blnWithTwink) ? 'multi' : 'single';
 			if($strPoints != ""){
 				$arrPoints = unserialize($strPoints);

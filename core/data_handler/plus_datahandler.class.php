@@ -165,6 +165,20 @@ if( !class_exists( "plus_datahandler")){
 			$this->undone_hooks = array( );
 			$this->arrAdditonalHookData = array();
 		}
+		
+		public function reset($hook, $ids = array(), $arrAdditionalData = array()){
+			if( is_array( $this->registered_hooks[$hook] ) ) {
+				foreach( $this->registered_hooks[$hook] as $module ) {
+					$this->rm($module)->reset($ids, $hook, (isset($arrAdditionalData) ? $arrAdditionalData : array()));
+					$this->read_modules[$module] = false;
+				}
+			}
+			if( isset( $this->hook_callbacks[$hook] ) && is_array( $this->hook_callbacks[$hook] ) ) {
+				foreach( $this->hook_callbacks[$hook] as $callback ) {
+					call_user_func( $callback );
+				}
+			}
+		}
 
 		public function register_hook_callback( $callback, $hooks ) {
 			if( is_array( $hooks ) ) {

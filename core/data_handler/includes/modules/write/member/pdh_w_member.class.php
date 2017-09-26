@@ -456,10 +456,10 @@ if ( !class_exists( "pdh_w_member" ) ) {
 		public function reset_points($arrMemberids=false){
 			if($arrMemberids === false){
 				$this->db->query("UPDATE __members SET points='';");
-				$this->pdh->enqueue_hook('member_update', array(), array('action' => 'update'));
+				$this->pdh->reset('member_update_points', array(), array('action' => 'update_points'));
 			}elseif(is_array($arrMemberids) && count($arrMemberids)){
 				$this->db->prepare("UPDATE __members SET points='' WHERE member_id :in")->in($arrMemberids)->execute();
-				$this->pdh->enqueue_hook('member_update', $arrMemberids, array('action' => 'update', 'members' => $arrMemberids));
+				$this->pdh->reset('member_update_points', $arrMemberids, array('action' => 'update_points', 'members' => $arrMemberids));
 			}
 		}
 		
