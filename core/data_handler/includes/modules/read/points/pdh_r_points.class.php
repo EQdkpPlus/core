@@ -138,6 +138,9 @@ if ( !class_exists( "pdh_r_points" ) ) {
 			$this->points = $this->pdc->get('pdh_points_table');
 
 			if($this->points !== NULL){
+				$this->arrCalculatedMulti = array();
+				$this->arrCalculatedSingle = array();
+				
 				return true;
 			}
 			$this->points = $arrLocalPoints = array();
