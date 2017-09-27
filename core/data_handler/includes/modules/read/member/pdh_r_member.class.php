@@ -242,7 +242,6 @@ if ( !class_exists( "pdh_r_member" ) ) {
 				}		
 			}
 
-			d("init_points");
 			$this->pdc->put('pdh_members_table_points', $this->data_points, null);
 		}
 
