@@ -241,7 +241,8 @@ class calendar_pageobject extends pageobject {
 							'allDay'		=> $allday,
 							'note'			=> $comp->getProperty('description', 1),
 							'color'			=> $eventcolor.' !important',
-							'textColor'		=> $eventcolor_txt.' !important'
+							'textColor'		=> $eventcolor_txt.' !important',
+							'className'		=> 'calendarevent_'.$calender_id,
 						);
 					}
 				}
@@ -314,7 +315,7 @@ class calendar_pageobject extends pageobject {
 								'rstatusdata'	=> $rstatusdata,
 								'color'			=> $eventcolor.' !important',
 								'textColor'		=> $eventcolor_txt.' !important',
-								#'operator'		=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission($calid)) ? true : false
+								'className'		=> 'calendarevent_'.$calender_id,
 							);
 						}else{
 							$alldayevents	= ($this->pdh->get('calendar_events', 'allday', array($calid)) > 0) ? true : false;
@@ -335,6 +336,7 @@ class calendar_pageobject extends pageobject {
 								'joinedevent'	=> $this->pdh->get('calendar_events', 'joined_invitation', array($calid)),
 								'author'		=> $this->pdh->get('calendar_events', 'creator', array($calid)),
 								'attendees'		=> $this->pdh->get('calendar_events', 'sharedevent_attendees', array($calid)),
+								'className'		=> 'calendarevent_'.$calender_id,
 							);
 						}
 					}
@@ -357,7 +359,8 @@ class calendar_pageobject extends pageobject {
 								'allDay'				=> true,
 								'textColor'				=> '#000000',
 								'backgroundColor'		=> '#E8E8E8',
-								'borderColor'			=> '#7F7F7F'
+								'borderColor'			=> '#7F7F7F',
+								'className'		=> 'calendarevent_'.$calender_id,
 							);
 						}
 					}
