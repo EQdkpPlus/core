@@ -121,7 +121,7 @@ class core extends gen_class {
 		@header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Datum in der Vergangenheit
 		$protocol = ($this->env->protocol == 'HTTP/1.1') ? "HTTP/1.1" : "HTTP/1.0";
 		//Send 503 for SEO if there is no redirect
-		if(!$blnHeadersSent) @header( "$protocol 503 Service Unavailable", true, 503 );
+		if(!$blnHeadersSent && !$this->user->is_signedin()) @header( "$protocol 503 Service Unavailable", true, 503 );
 		@header('Retry-After: 300');//300 seconds
 	
 		$this->header_inc = true;
