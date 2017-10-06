@@ -172,6 +172,7 @@ class controller extends gen_class {
 		}
 
 		if ($strPageObject){
+			registry::add_const('pageobject', $strPageObject);
 			$this->core->set_vars('portal_layout', 1);
 			$objPage = $this->routing->getPageObject($strPageObject);
 			if ($objPage){
@@ -306,6 +307,7 @@ class controller extends gen_class {
 				registry::add_const('page_path', $strPath);
 				$strPath = ucfirst($this->pdh->get('articles', 'path', array($intArticleID)));
 				registry::add_const('page', $this->user->removeSIDfromString($strPath));
+				registry::add_const('pageobject', 'article');
 
 				//User Memberships
 				$arrUsergroupMemberships = $this->acl->get_user_group_memberships($this->user->id);
@@ -699,6 +701,7 @@ class controller extends gen_class {
 				$arrLimitedIDs = $this->pdh->limit($arrSortedArticleIDs, $intStart, $arrCategory['per_page']);
 				$strPath = $this->pdh->get('article_categories', 'path', array($intCategoryID));
 				registry::add_const('page_path', $this->user->removeSIDfromString($strPath));
+				registry::add_const('pageobject', 'articlecategory');
 
 				$arrCategory['name'] = $this->user->multilangValue($arrCategory['name']);
 

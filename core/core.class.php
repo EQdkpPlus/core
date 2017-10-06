@@ -179,7 +179,7 @@ class core extends gen_class {
 
 		private function page_header(){
 			define('HEADER_INC', true);		// Define a variable so we know the header's been included
-
+			
 			//Redirect to Guildrules if user hasn't accepted them
 			$intGuildrulesArticleID = $this->pdh->get('articles', 'resolve_alias', array('guildrules'));
 			$blnGuildrules = ($intGuildrulesArticleID && $this->pdh->get('articles', 'published', array($intGuildrulesArticleID)));
@@ -426,7 +426,7 @@ class core extends gen_class {
 				'U_REGISTER'				=> $registerLink,
 				'MAIN_MENU'					=> $this->build_menu_ul($this->build_menu_array(false)),
 				'MAIN_MENU_MOBILE'			=> $this->build_menu_ul($this->build_menu_array(false), 'mainmenu-mobile'),
-				'PAGE_CLASS'				=> 'page-'.$this->clean_url($this->env->get_current_page(false)),
+				'PAGE_CLASS'				=> 'page-'.$this->clean_url($this->env->get_current_page(false)).' controller-'.registry::get_const('pageobject'),
 				'BODY_CLASS'				=> $this->body_class,
 				'TEMPLATE_CLASS'			=> str_replace(array('.html', '/'), array('', '_'), $this->template_path.$this->template_file),
 				'BROWSER_CLASS'				=> (!registry::get_const('mobile_view')) ? str_replace(" mobile", "", $this->env->agent->class) : $this->env->agent->class,
