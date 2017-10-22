@@ -43,8 +43,12 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 		public $presets = array(
 			'attendance_30' => array('attendance', array('%member_id%', '%dkp_id%', 30, '%with_twink%'), array(30)),
 			'attendance_60' => array('attendance', array('%member_id%', '%dkp_id%', 60, '%with_twink%'), array(60)),
-			'attendance_90' => array('attendance', array('%member_id%', '%dkp_id%', 90, '%with_twink%'), array(90)),
+			'attendance_90' => array('attendance', array('%member_id%', '%dkp_id%', 90, '%with_twink%'), array(90)),	
 			'attendance_lt' => array('attendance', array('%member_id%', '%dkp_id%', 'LT', '%with_twink%'), array('LT')),
+			'attendance_30_real' => array('attendance', array('%member_id%', '%dkp_id%', 30, '%with_twink%', false, true), array(30)),
+			'attendance_60_real' => array('attendance', array('%member_id%', '%dkp_id%', 60, '%with_twink%', false, true), array(60)),
+			'attendance_90_real' => array('attendance', array('%member_id%', '%dkp_id%', 90, '%with_twink%', false, true), array(90)),
+				
 			'attendance_30_all' => array('attendance_all', array('%member_id%', '%ALL_IDS%', 30, '%with_twink%'), array('%ALL_IDS%', 30)),
 			'attendance_60_all' => array('attendance_all', array('%member_id%', '%ALL_IDS%', 60, '%with_twink%'), array('%ALL_IDS%', 60)),
 			'attendance_90_all' => array('attendance_all', array('%member_id%', '%ALL_IDS%', 90, '%with_twink%'), array('%ALL_IDS%', 90)),
@@ -178,7 +182,7 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 			$this->pdc->put('pdh_member_attendance_'.$time_period.'_'.$mdkp_id, $this->member_attendance[$time_period][$mdkp_id], $stm);
 		}
 
-		public function get_attendance($member_id, $multidkp_id, $time_period, $with_twinks=true, $count=false){
+		public function get_attendance($member_id, $multidkp_id, $time_period, $with_twinks=true, $count=false, $real=false){
 			if(!isset($this->member_attendance[$time_period][$multidkp_id])){
 				$this->init_attendance($time_period, $multidkp_id);
 			}
@@ -191,6 +195,16 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 			}
 			$member_raidcount = $this->member_attendance[$time_period][$multidkp_id][$with_twinks][$member_id]['attended'];
 			$total_raidcount = $this->member_attendance[$time_period][$multidkp_id][$with_twinks][$member_id]['count'];
+			
+			if($real){
+				if(!isset($this->member_attendance['LT'][$multidkp_id])){
+					$this->init_attendance('LT', $multidkp_id);
+				}
+				
+				$lt_raidcount = $this->member_attendance['LT'][$multidkp_id][$with_twinks][$member_id]['count'];
+				if($total_raidcount> $lt_raidcount) $total_raidcount= $lt_raidcount;
+			}
+			
 			if ($count) {
 				$return['total_raidcount'] = $total_raidcount ;
 				$return['member_raidcount'] = $member_raidcount;
@@ -208,7 +222,7 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 			return $this->get_html_attendance($member_id, $multidkp_id, $time_period, $with_twinks, $count);
 		}
 
-		public function get_html_attendance($member_id, $multidkp_id, $time_period, $with_twinks=true){
+		public function get_html_attendance($member_id, $multidkp_id, $time_period, $with_twinks=true, $count=false, $real=false){
 			if(!isset($this->member_attendance[$time_period][$multidkp_id])){
 				$this->init_attendance($time_period, $multidkp_id);
 			}
@@ -222,6 +236,17 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 
 			$member_raidcount = $this->member_attendance[$time_period][$multidkp_id][$with_twinks][$member_id]['attended'];
 			$total_raidcount = $this->member_attendance[$time_period][$multidkp_id][$with_twinks][$member_id]['count'];
+			
+			if($real){
+				if(!isset($this->member_attendance['LT'][$multidkp_id])){
+					$this->init_attendance('LT', $multidkp_id);
+				}
+				
+				$lt_raidcount = $this->member_attendance['LT'][$multidkp_id][$with_twinks][$member_id]['count'];
+				if($total_raidcount> $lt_raidcount) $total_raidcount= $lt_raidcount;
+			}
+			
+			
 			$percentage = ( $total_raidcount > 0 ) ? round(($member_raidcount/$total_raidcount) * 100) : 0;
 
 			return '<span class="'.color_item($percentage, true).'">'.$percentage.'% ('.$member_raidcount.'/'.$total_raidcount.')</span>';
