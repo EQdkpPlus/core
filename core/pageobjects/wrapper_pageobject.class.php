@@ -329,11 +329,11 @@ class wrapper_pageobject extends pageobject {
 						
 						if( param == "" || param.indexOf("http") == 0 || param.indexOf("sftp") == 0) {
 							var newurl = updateQueryStringParameter(myurl, "p", "");
-							history.pushState(null, document.title, newurl);
+							history.pushState( { eqdkp: "wrapper", url:newurl }, document.title, newurl);
 							return;
 						}
 						var newurl = updateQueryStringParameter(myurl, "p", param);
-						history.pushState(null, document.title, newurl);
+						history.pushState( { eqdkp: "wrapper", newurl:newurl, }, document.title, newurl);
 					}
 	
 				} catch (e) {
@@ -480,6 +480,14 @@ class wrapper_pageobject extends pageobject {
 			init_wrapper();		
 					
 			var aktiv = window.setInterval(perodicIframeAdjustment, 1000*2); //2 Sekunden
+
+			window.onpopstate = function(event) {
+			    console.log("pop: " + event.state);
+				if(event.state.eqdkp){
+					var currentfr = document.getElementById(iframeid);
+					if(currentfr) currentfr.contentWindow.history.back(); 
+				}
+			};
 		';
 
 		 $this->tpl->add_js($out, 'docready');
