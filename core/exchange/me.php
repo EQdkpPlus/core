@@ -54,10 +54,8 @@ if (!class_exists('exchange_me')){
 				
 				return array('data' => $arrUserdata);
 			} else {
-				$this->pex->error('access denied');
+				return $this->pex->error('access denied');
 			}
-			
-			return array('valid' => $status, 'data' =>$data);
 		}
 
 	}
