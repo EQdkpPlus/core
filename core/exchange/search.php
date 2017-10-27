@@ -123,6 +123,7 @@ if (!class_exists('exchange_search')){
 									'classname'		=> $this->pdh->get('member', 'classname', array($intUserID)),
 									'roles'			=> $arrRoles,
 									'raidgroups'	=> $arrRaidgroups,
+									'profiledata'	=> $arrData,
 							);
 						} elseif(stripos($strUsername, $strSearchValue) !== false){
 							$out['relevant']['member:'.$intUserID] = array(
