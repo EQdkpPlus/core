@@ -235,7 +235,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				$this->pdh->enqueue_hook('member_update', array($member_id));
 				$this->pdh->enqueue_hook('raid_update', $raids);
 				// check for new mainchar
-				$twinks = $this->pdh->get('member', 'other_members', array());
+				$twinks = $this->pdh->get('member', 'other_members', array($member_id));
 				if(!empty($twinks)) {
 					$new_main = $twinks[0];
 					$this->change_mainid($twinks,$new_main);
