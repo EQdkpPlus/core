@@ -34,7 +34,7 @@ if (!class_exists('exchange_calevents_details')){
 				if ( intval($params['get']['eventid']) > 0){
 					$event_id = intval($params['get']['eventid']);
 					$eventdata	= $this->pdh->get('calendar_events', 'data', array($event_id));
-					$comments = $this->pdh->get('comment', 'filtered_list', array('viewcalraid', $event_id));
+					$comments = $this->pdh->get('comment', 'filtered_list', array('articles', '12_'.$event_id));
 					if (is_array($comments)){
 						foreach($comments as $key => $row){
 							$avatarimg = $this->pdh->get('user', 'avatarimglink', array($row['userid']));
@@ -212,8 +212,8 @@ if (!class_exists('exchange_calevents_details')){
 
 						$arrCommentsOut = array(
 							'count' => count($arrComments),
-							'page'	=> 'viewcalraid',
-							'attachid' => $event_id,
+							'page'	=> 'articles',
+							'attachid' => '12_'.$event_id,
 							'comments' => $arrComments,
 						);
 
