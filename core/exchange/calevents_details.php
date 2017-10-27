@@ -116,14 +116,17 @@ if (!class_exists('exchange_calevents_details')){
 								if(isset($this->attendees[$statuskey][$classid]) && is_array($this->attendees[$statuskey][$classid])){
 									foreach($this->attendees[$statuskey][$classid] as $memberid=>$memberdata){
 										//$shownotes_ugroups = $this->acl->get_groups_with_active_auth('u_calendar_raidnotes');
-
+										$arrData = $this->pdh->get('member', 'profiledata', array($memberid));
+										
 										$arrChars['char:'.$memberid] = array(
 											'id'			=> $memberid,
 											'name'			=> unsanitize($this->pdh->get('member', 'name', array($memberid))),
+											'name_export'	=> $this->game->handle_export_charnames($this->pdh->get('member', 'name', array($memberid)), $memberid),
 											'classid'		=> $this->pdh->get('member', 'classid', array($memberid)),
 											'signedbyadmin'	=> ($memberdata['signedbyadmin']) ? 1 : 0,
 											'note'			=> ((trim($memberdata['note']) && $this->user->check_group($shownotes_ugroups, false, $this->user->id)) ? $memberdata['note'] : ''),
 											'rank'			=> $this->pdh->get('member', 'rankname', array($memberid)),
+											'profiledata'	=> $arrData,
 										);
 
 									}
@@ -178,15 +181,19 @@ if (!class_exists('exchange_calevents_details')){
 										);
 									}
 								}
+								
+								$arrData = $this->pdh->get('member', 'profiledata', array($key));
 
 								$arrUserChars['char:'.$key] = array(
 									'id'		=> $key,
 									'name'		=> unsanitize($charname),
+									'name_export'=> $this->game->handle_export_charnames($charname, $key),
 									'signed_in'	=> ($this->mystatus['member_id'] == $key) ? 1 : 0,
 									'main'		=> ($key == $mainchar) ? 1 : 0,
 									'class'		=> $this->pdh->get('member', 'classid', array($key)),
 									'roles'		=> $arrRoles,
 									'raidgroup' => $this->pdh->get('calendar_raids_attendees', 'raidgroup', array($event_id, $key)),
+									'profiledata'=> $arrData,
 								);
 							}
 						}
