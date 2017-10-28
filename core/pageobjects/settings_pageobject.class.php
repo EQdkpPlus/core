@@ -300,7 +300,7 @@ class settings_pageobject extends pageobject {
 		//Create Thumbnail for User Avatar
 		if ($customArray['user_avatar'] != "" && $this->pdh->get('user', 'avatar', array($this->user->id)) != $customArray['user_avatar']){
 			$image = $this->pfh->FolderPath('users/'.$this->user->id,'files').$customArray['user_avatar'];
-			$this->pfh->thumbnail($image, $this->pfh->FolderPath('users/thumbs','files'), 'useravatar_'.$this->user->id.'_68.'.pathinfo($image, PATHINFO_EXTENSION), 68);
+			$this->pfh->thumbnail($image, $this->pfh->FolderPath('users/thumbs','files'), 'useravatar_'.$this->user->id.'_68.'.pathinfo($image, PATHINFO_EXTENSION), 68, 68);
 		}
 		
 		$query_ary['privacy_settings']		= serialize($privArray);
