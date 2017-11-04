@@ -3683,6 +3683,10 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		width: 100% !important;
 		height: auto !important;
 	}
+	
+	.responsive .article_content iframe {
+		max-width: 100%;
+	}
 
 	.responsive .embed-content div iframe {
 	    position: absolute;
