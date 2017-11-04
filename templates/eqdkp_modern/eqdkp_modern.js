@@ -1,17 +1,5 @@
 $(function(){
 	if(mmocms_header_type == 'full'){
-		/* Relocate portal modules on mobile */
-		if($('.reponsiveTestClass').css("text-align") == "center"){
-			var portal_left = $(".portal-left .columnInner").html();
-			$(".portal-left .columnInner").html("");
-			
-			if($( ".portal-right" ).length){
-				$(".portal-right .columnInner").prepend(portal_left);
-			} else {
-				$(".columnContainer").append(portal_left);
-			}
-		}
-		
 		/* My Chars Points */
 		$('.mychars-points-tooltip .char').on('click', function(){
 			$(this).parent().parent().children('tr').removeClass("active");
