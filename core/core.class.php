@@ -379,9 +379,9 @@ class core extends gen_class {
 			if ( ! $this->user->is_signedin() && intval($this->config->get('enable_registration'))){
 				//CMS register?
 				if ($this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))){
-					$registerLink = $this->createLink($this->handle_link($this->config->get('cmsbridge_reg_url'),$this->user->lang('menu_register'),$this->config->get('cmsbridge_embedded'),'BoardRegister', '', '', 'fa fa-check-square-o fa-lg'));
+					$registerLink = $this->createLink($this->handle_link($this->config->get('cmsbridge_reg_url'),$this->user->lang('menu_register'),$this->config->get('cmsbridge_embedded'),'BoardRegister', '', '', 'fa fa-user-plus fa-lg'));
 				} else {
-					$registerLink = $this->createLink(array('link' => $this->controller_path_plain.'Register' . $this->routing->getSeoExtension().$this->SID, 'text' => $this->user->lang('menu_register'), 'icon' => 'fa fa-check-square-o fa-lg'));
+					$registerLink = $this->createLink(array('link' => $this->controller_path_plain.'Register' . $this->routing->getSeoExtension().$this->SID, 'text' => $this->user->lang('menu_register'), 'icon' => 'fa fa-user-plus fa-lg'));
 				}
 			}
 
@@ -537,7 +537,7 @@ class core extends gen_class {
 			}
 			$icon = '';
 			if (isset($arrLinkData['icon']) && strlen($arrLinkData['icon'])){
-				$icon = '<i class="'.$arrLinkData['icon'].'"></i>';
+				$icon = '<i class="'.$arrLinkData['icon'].'"></i> ';
 			}
 			$strHref = ((isset($arrLinkData['plus_link']) && $arrLinkData['plus_link']==true && $arrLinkData['link']) ? $arrLinkData['link'] : $this->server_path . $arrLinkData['link']);
 			if ($strHref == $this->server_path.'#') $strHref = "#";
