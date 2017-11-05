@@ -277,6 +277,9 @@ class ManageRaids extends page_generic {
 		//Autocompletes
 		$adjustment_reasons = $this->pdh->aget('adjustment', 'reason', 0, array($this->pdh->get('adjustment', 'id_list')));
 		$item_names = $this->pdh->aget('item', 'name', 0, array($this->pdh->get('item', 'id_list')));
+		if($this->hooks->isRegistered('admin_manage_raids_items_autocomplete')){
+			$item_names = $this->hooks->process('admin_manage_raids_items_autocomplete', array('item_names' => $item_names), true);
+		}
 
 		$raid = array('id' => $this->url_id, 'date' => $this->time->time, 'note' => '', 'event' => 0, 'value' => 0.00, 'attendees' => array());
 		if($raid['id'])

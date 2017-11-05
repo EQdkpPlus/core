@@ -108,27 +108,34 @@ if (!class_exists('exchange_search')){
 								);
 							}
 						}
+						
+						//Profiledata
+						$arrData = $this->pdh->get('member', 'profiledata', array($intUserID));
 
 					
 						if($strUsername == $strSearchValue){
 							$out['direct']['member:'.$intUserID] = array(
 									'id' 			=> $intUserID,
 									'name'			=> $this->pdh->get('member', 'name', array($intUserID)),
+									'name_export'	=> $this->game->handle_export_charnames($this->pdh->get('member', 'name', array($intUserID)), $intUserID),
 									'main'			=> $this->pdh->get('member', 'is_main', array($intUserID)),
 									'class'			=> $this->pdh->get('member', 'classid', array($intUserID)),
 									'classname'		=> $this->pdh->get('member', 'classname', array($intUserID)),
 									'roles'			=> $arrRoles,
 									'raidgroups'	=> $arrRaidgroups,
+									'profiledata'	=> $arrData,
 							);
 						} elseif(stripos($strUsername, $strSearchValue) !== false){
 							$out['relevant']['member:'.$intUserID] = array(
 									'id' 			=> $intUserID,
 									'name'			=> $this->pdh->get('member', 'name', array($intUserID)),
+									'name_export'	=> $this->game->handle_export_charnames($this->pdh->get('member', 'name', array($intUserID)), $intUserID),
 									'main'			=> $this->pdh->get('member', 'is_main', array($intUserID)),
 									'class'			=> $this->pdh->get('member', 'classid', array($intUserID)),
 									'classname'		=> $this->pdh->get('member', 'classname', array($intUserID)),
 									'roles'			=> $arrRoles,
 									'raidgroups'	=> $arrRaidgroups,
+									'profiledata'	=> $arrData,
 							);
 						}
 					}
@@ -163,24 +170,29 @@ if (!class_exists('exchange_search')){
 								}
 						
 								$arrRaidgroups['raidgroup:'.$raidgroupid] = array(
-										'id'		=> $raidgroupid,
-										'name'		=> $raidgroupname,
-										'default'	=> ($this->pdh->get('raid_groups', 'standard', array($raidgroupid))) ? 1 : 0,
-										'color'		=> $this->pdh->get('raid_groups', 'color', array($raidgroupid)),
-										'status'	=> $status,
+										'id'			=> $raidgroupid,
+										'name'			=> $raidgroupname,
+										'default'		=> ($this->pdh->get('raid_groups', 'standard', array($raidgroupid))) ? 1 : 0,
+										'color'			=> $this->pdh->get('raid_groups', 'color', array($raidgroupid)),
+										'status'		=> $status,
+										'profiledata'	=> $arrData,
 								);
 							}
 						}
 						
+						//Profiledata
+						$arrData = $this->pdh->get('member', 'profiledata', array($intUserID));
 
 						$out['direct']['member:'.$intUserID] = array(
 								'id' 			=> $intUserID,
 								'name'			=> $this->pdh->get('member', 'name', array($intUserID)),
+								'name_export'	=> $this->game->handle_export_charnames($this->pdh->get('member', 'name', array($intUserID)), $intUserID),
 								'main'			=> $this->pdh->get('member', 'is_main', array($intUserID)),
 								'class'			=> $this->pdh->get('member', 'classid', array($intUserID)),
 								'classname'		=> $this->pdh->get('member', 'classname', array($intUserID)),
 								'roles'			=> $arrRoles,
 								'raidgroups'	=> $arrRaidgroups,
+								'profiledata'	=> $arrData,
 						);
 						
 					}

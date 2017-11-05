@@ -3446,7 +3446,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	.responsive .portal .second, .portal .first {
 		padding: 0px;
 	}
-
+	
 	.responsive:not(.simple-header) fieldset.settings dd {
 		border-left: none;
 		margin: 0px;
@@ -3683,6 +3683,10 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		width: 100% !important;
 		height: auto !important;
 	}
+	
+	.responsive .article_content iframe {
+		max-width: 100%;
+	}
 
 	.responsive .embed-content div iframe {
 	    position: absolute;
@@ -3731,6 +3735,13 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	#bottommenu_admin, #bottommenu_chars{
 		width: 90% !important;
 	}
+	
+	// relocate portal modules
+	.portal .columnContainer { display:flex; flex-flow:column nowrap; }
+	.portal .columnContainer .first.column { order:1; }
+	.portal .columnContainer .second.column { order:0; }
+	.portal .columnContainer .third.column { order:2; }
+	
 }
 
 @media all and (max-width: 590px) {

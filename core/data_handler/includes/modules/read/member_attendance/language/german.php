@@ -33,6 +33,9 @@ $preset_lang = array(
 	'attendance_30'	=> 'Raidteilnahme (30 Tage)',
 	'attendance_60'	=> 'Raidteilnahme (60 Tage)',
 	'attendance_90'	=> 'Raidteilnahme (90 Tage)',
+	'attendance_30_real'	=> 'Raidteilnahme (30 Tage, von Lebenszeit abh.)',
+	'attendance_60_real'	=> 'Raidteilnahme (60 Tage, von Lebenszeit abh.)',
+	'attendance_90_real'	=> 'Raidteilnahme (90 Tage, von Lebenszeit abh.)',
 	'attendance_lt'	=> 'Raidteilnahme (Lebenszeit)',
 	'attendance_fromto_all' => 'Raidteilnahme (def. Zeitraum)',
 );

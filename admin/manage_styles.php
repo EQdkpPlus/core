@@ -403,9 +403,9 @@ class Manage_Styles extends page_generic{
 				} elseif($elem == 'decoration'){
 					$field = (new hdropdown($name, array('options' => $text_decoration, 'value' => $this->style[$name], 'disabled' => ((!in_array($name, $arrUsedVariables)) ? true : false))))->output();
 				} elseif($elem == 'font-family'){
-					$field = (new htext($name, array('size' => 30, 'value' => $this->style[$name], 'disabled' => ((!in_array($name, $arrUsedVariables)) ? true : false))))->output();
+					$field = (new htext($name, array('size' => 30, 'value' => sanitize($this->style[$name]), 'disabled' => ((!in_array($name, $arrUsedVariables)) ? true : false))))->output();
 				} elseif($elem == 'size'){
-					$field = (new htext($name, array('after_txt' => 'px', 'value' => $this->style[$name], 'size' => 3, 'disabled' => ((!in_array($name, $arrUsedVariables)) ? true : false))))->output();
+					$field = (new htext($name, array('after_txt' => 'px', 'value' => sanitize($this->style[$name]), 'size' => 3, 'disabled' => ((!in_array($name, $arrUsedVariables)) ? true : false))))->output();
 				}
 
 				$this->tpl->assign_block_vars('fieldset_row.option_row', array(

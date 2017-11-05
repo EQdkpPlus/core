@@ -42,10 +42,10 @@
 	</fieldset>
 
 <br />
-<div class="tableHeader">
+<div class="tableHeader raid-attendees">
 	<h2>{L_attendees} <span class="bubble">{ATTENDEES_COUNT}</span></h2>
 </div>
-<table class="table fullwidth">
+<table class="table fullwidth  raid-attendees">
   <!-- BEGIN attendees_row -->
   <tr>
     <!-- IF S_COLUMN0 --><td class="row2 nowrap" style="width: {COLUMN_WIDTH}%">{attendees_row.COLUMN0_NAME}</td><!-- ENDIF -->
@@ -63,29 +63,29 @@
 </table>
 <br />
 
-<div class="tableHeader">
+<div class="tableHeader raid-items">
 	<h2>{L_items} <span class="bubble">{ITEM_COUNT}</span></h2>
 </div>
-<table class="table fullwidth hptt colorswitch scrollable-x">
+<table class="table fullwidth hptt colorswitch scrollable-x raid-items">
 {ITEM_OUT}
 </table>
 
 <br />
 
 <!-- IF S_ADJUSTMENTS -->
-	<div class="tableHeader">
+	<div class="tableHeader raid-adjustments">
 		<h2>{L_tab_adjustments}  <span class="bubble">{ADJUSTMENT_COUNT}</span></h2>
 	</div>
-	<table class="table fullwidth hptt colorswitch scrollable-x">
+	<table class="table fullwidth hptt colorswitch scrollable-x raid-adjustments">
 	{ADJUSTMENT_OUT}
 	</table>
 	<br />
 <!-- ENDIF -->
 
-<table class="table fullwidth">
+<table class="table fullwidth raid-distributions">
   <tr>
-    <th class="center">{L_class_distribution}</th>
-    <th class="center">{L_loot_distribution}</th>
+    <th class="center raid-class_distribution_chart">{L_class_distribution}</th>
+    <th class="center raid-loot_distribution_chart">{L_loot_distribution}</th>
   </tr>
  <tr>
  <td class="row2" class="center">
@@ -97,10 +97,10 @@
  </tr>
 </table>
 <br />
-<div class="tableHeader">
+<div class="tableHeader raid-class_distribution">
 	<h2>{L_class_distribution}</h2>
 </div>
-<table class="table fullwidth">
+<table class="table fullwidth raid-class_distribution">
   <tr>
     <th class="left" style="width:100px">{L_class}</th>
     <th class="w49p left">{L_percent}</th>

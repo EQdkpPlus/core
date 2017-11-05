@@ -262,7 +262,7 @@ class cronjobs extends gen_class {
 					$this->run_cron($task_name);
 					$runcount++;
 				} else {
-					if ($runcount < 3){
+					if ($runcount < 2){
 						$this->run_cron($task_name);
 						$runcount++;
 					}
