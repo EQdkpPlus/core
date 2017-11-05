@@ -285,8 +285,25 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			return (isset($this->attendees[$eventid][$memberid])) ? $this->attendees[$eventid][$memberid]['raidgroup'] : 0;
 		}
 
+		public function get_has_already_signedin($eventid, $memberid){
+			$userid		= $this->pdh->get('member', 'userid', array($memberid));
+			$arrChars	= $this->pdh->get('member', 'connection_id', array($userid));
+
+			foreach($arrChars as $tmpmemberid){
+				if(isset($this->attendees[$eventid][$tmpmemberid])){
+					if($memberid != $tmpmemberid){
+						return $tmpmemberid;
+					}
+				}
+			}
+			return 0;
+		}
+
 		public function get_in_db($eventid, $memberid){
-			return (isset($this->attendees[$eventid][$memberid])) ? true : false;
+			$userid		= $this->pdh->get('member', 'userid', array($memberid));
+			$arrChars	= $this->pdh->get('member', 'connection_id', array($userid));
+			$inDB		= $this->db->prepare('SELECT * FROM __calendar_raid_attendees WHERE calendar_events_id=? AND member_id :in')->in($arrChars)->execute($eventid);
+			return ($inDB->numRows > 0) ? true : false;
 		}
 
 		public function get_status_flag($status){

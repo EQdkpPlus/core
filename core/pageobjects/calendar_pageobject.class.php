@@ -360,7 +360,7 @@ class calendar_pageobject extends pageobject {
 								'textColor'				=> '#000000',
 								'backgroundColor'		=> '#E8E8E8',
 								'borderColor'			=> '#7F7F7F',
-								'className'		=> 'calendarevent_'.$calender_id,
+								'className'				=> 'calendarevent_'.$calender_id,
 							);
 						}
 					}
