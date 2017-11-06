@@ -358,6 +358,7 @@ class controller extends gen_class {
 		registry::add_const('page_path', $strPath);
 		$strPath = ucfirst($this->pdh->get('articles', 'path', array($intArticleID)));
 		registry::add_const('page', $this->user->removeSIDfromString($strPath));
+		registry::add_const('pageobject', 'article');
 		
 		//User Memberships
 		$arrUsergroupMemberships = $this->acl->get_user_group_memberships($this->user->id);
@@ -780,6 +781,7 @@ class controller extends gen_class {
 		$arrLimitedIDs = $this->pdh->limit($arrSortedArticleIDs, $intStart, $arrCategory['per_page']);
 		$strPath = $this->pdh->get('article_categories', 'path', array($intCategoryID));
 		registry::add_const('page_path', $this->user->removeSIDfromString($strPath));
+		registry::add_const('pageobject', 'articlecategory');
 		
 		$arrCategory['name'] = $this->bbcode->parse_shorttags(xhtml_entity_decode($arrCategory['name']));
 		
@@ -1042,6 +1044,7 @@ class controller extends gen_class {
 	private function displayPageobject($strPageObject){
 		registry::add_const('page_type', 'pageobject');
 		registry::add_const('page_id', $strPageObject);
+		registry::add_const('pageobject', $strPageObject);
 		
 		$this->core->set_vars('portal_layout', 1);
 		$objPage = $this->routing->getPageObject($strPageObject);

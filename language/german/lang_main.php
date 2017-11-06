@@ -318,7 +318,7 @@ $lang = array(
 "add_itemvote_success" => "Deine Abstimmung zu dem Item wurde gespeichert.",
 "update_itemvote_success" => "Deine Abstimmung zu dem Item wurde aktualisiert.",
 "update_settings_success" => "Die Benutzereinstellungen wurden aktualisiert.",
-		
+
 "fv_invalid_email" => "Die E-Mail-Adresse scheint nicht gültig zu sein.",
 "fv_required" => "Bitte fülle das Eingabefeld aus.",
 "fv_php_required" => 'Das Feld \'%s\' ist notwendig!',
@@ -334,7 +334,7 @@ $lang = array(
 "fv_password_placeholder" => 'Länge > %d',
 "fv_form_error"	=> 'Fehler im Formular',
 "fv_fields_not_match" => "Die eingegebenen Daten stimmen nicht überein",
-		
+
 "template_preview" => "Templatevorschau",
 "anonymous" => "<em>Gast</em>",
 "added" => "Zugefügt",
@@ -452,7 +452,7 @@ $lang = array(
 "news_permissions_member" => "Nur für Administratoren",
 "news_permissions_all" => "Für alle sichtbar",
 "news_readmore" => "Weiterlesen...",
-"login_bridge_notice" => "Da eine CMS-Bridge aktiv ist, musst Du dich mit den Login-Daten eures Forums/CMS anmelden.",
+"login_bridge_notice" => 'Da eine CMS-Bridge aktiv ist, musst Du dich mit den <a href="%s">Login-Daten eures Forums/CMS</a> anmelden.',
 "portalmanager" => "Portallayout verwalten",
 "more_plugins" => "Weitere Plugins findet ihr auf der Project Homepage unter <a href='".EQDKP_DOWNLOADS_URL."'>".EQDKP_PROJECT_URL."</a>.",
 "more_moduls" => "Weitere Module findet ihr auf der  Project Homepage unter <a href='".EQDKP_DOWNLOADS_URL."'>".EQDKP_PROJECT_URL."</a>.",
@@ -690,6 +690,7 @@ $lang = array(
 "raidevent_guest_emailsubject" => 'Deine Anfrage auf Raidteilnahme wurde überprüft',
 "raidevent_autogroups" => "Autom. hinzufügen (Gruppe)",
 "calendar_sharing_receipients" => 'Benutzer einladen',
+"calendar_sharing_receipients_usergroup" => 'Benutzergruppe einladen',
 "calendar_event_private" => 'Privater Termin',
 "raidevent_value" => "Punkte für Raid",
 "raidevent_template" => "Gespeicherte Vorlagen",
@@ -1088,8 +1089,12 @@ $lang = array(
 "warning" => "Warnung",
 "information" => "Information",
 "edit_table" => "Tabelle bearbeiten",
-"new_coreupdate_subject" => "Aktualisierung des EQdkp Plus verfügbar",
+"user_sett_fs_private_keys" => "Private Schlüssel",
+"user_sett_fs_delete_account" => "Account löschen",
+"user_delete_account" => "Benutzeraccount endgültig löschen",
+"confirm_account_info" => "Willst du deinen Bernuteraccount wirklich löschen? Alle damit verbundenen Daten, wie persönlichen Daten, Medien etc. werden vollständig aus dem System gelöscht und können nicht wiederhergestellt werden.<br /><br />Willst du diese Aktion wirklich durchführen, bestätige die Löschung deines Benutzeraccounts mit deinem aktuellen Benutzerpasswort.<br />",
 'core_sett_fs_multilang' => 'Mehrsprachigkeit',
 'fallback_article'	=> 'Fallback-Artikel',
+"new_coreupdate_subject" => "Aktualisierung des EQdkp Plus verfügbar",
 );
 ?>

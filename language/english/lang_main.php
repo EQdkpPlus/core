@@ -503,7 +503,7 @@ $lang = array(
 	"news_permissions_member" => 'Guest and characters (only Admin can see)',
 	"news_permissions_all" => 'Free for all',
 	"news_readmore" => 'Read more...',
-	"login_bridge_notice" => 'Login - CMS-Bridge is active. Use your CMS/Board Data to login.',
+	"login_bridge_notice" => 'Login - CMS-Bridge is active. Use your <a href="%s">CMS/Board Data</a> to login.',
 	"portalmanager" => 'Portalmodule Management',
 	"lib_pupd_nochangelog" => 'There is no changelog information available',
 	"cl_bttn_ok" => 'Ok',
@@ -734,6 +734,7 @@ $lang = array(
 	"raidevent_guest_emailsubject" => 'Your raid participation request has been reviewed',
 	"raidevent_autogroups" => 'Automatic adding (Groups)',
 	"calendar_sharing_receipients" => 'Invite user',
+	"calendar_sharing_receipients_usergroup" => 'Invite usergroup',
 	"calendar_event_private" => 'Private event',
 	"raidevent_value" => 'Points for this raid',
 	"raidevent_template" => 'Saved templates',
@@ -1127,10 +1128,13 @@ $lang = array(
 	"warning" => "Warning",
 	"information" => "Information",
 	"edit_table" => "Edit table",
-	"new_coreupdate_subject" => "New update of EQdkp Plus available",
 	'core_sett_fs_multilang' => 'Multilanguage support',
 	'fallback_article' => "Fallback article"
-		
+	"user_sett_fs_private_keys" => "Private Keys",
+	"user_sett_fs_delete_account" => "Delete Account",
+	"user_delete_account" => "Delete account permanently",
+	"new_coreupdate_subject" => "New EQdkp Plus update available",
+	"confirm_account_info" => "Do you really want to delete your user account? All associated data, like personal ones or media will get deleted immediately and permanently.<br /><br />If you want to continue, you have to confirm your account deletion with your current password.<br />",
 );
 
 ?>
