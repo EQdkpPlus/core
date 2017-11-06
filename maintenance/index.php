@@ -47,7 +47,7 @@ class task_manager_display extends gen_class {
 			));
 		}
 		if ($this->in->get('leave') != ""){
-			redirect('admin/index.php');
+			redirect('admin/index.php', false, false, false);
 		}
 		$this->mmt->init_tasks();
 		$task_data = $this->mmt->task_data;

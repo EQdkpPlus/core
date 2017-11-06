@@ -25,7 +25,7 @@ if ( !defined('EQDKP_INC') ){
 
 class tinyMCE extends gen_class {
 
-	protected $tinymce_version = '4.5.1';
+	protected $tinymce_version = '4.6.3';
 	protected $language	= 'en';
 	protected $trigger	= array(
 		'bbcode'	=> false,
@@ -112,7 +112,7 @@ class tinyMCE extends gen_class {
 					menubar: false,
 					relative_urls : false,
 					remove_script_host : false,
-					toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright |  bullist | fontsizeselect forecolor | blockquote image link'.$strHooksToolbar.'",
+					toolbar: "undo redo | bold italic underline | fontsizeselect forecolor | blockquote image link'.$strHooksToolbar.'",
 					statusbar : false,
 				});
 			}

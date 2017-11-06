@@ -62,10 +62,10 @@ if(!class_exists('infotooltip')) {
 		public function __construct($config=false) {
 			// pdl
 			$this->pdl->register_type('infotooltip', null, array($this, 'html_format_debug'), array(2,3));
-			
+
 			// set config
 			$this->copy_config($config);
-			
+
 			// scan available source-reader for default_game
 			$this->avail_parser = $this->get_parserlist();
 
@@ -97,9 +97,9 @@ if(!class_exists('infotooltip')) {
 
 		/**
 		 * Returns an Array with available Parser for a specific game
-		 * 
+		 *
 		 * @param string $game
-		 * @return multitype:string 
+		 * @return multitype:string
 		 */
 		public function get_parserlist($game=false) {
 			if (!$game) $game = $this->config['game'];
@@ -121,7 +121,7 @@ if(!class_exists('infotooltip')) {
 		/**
 		 * returns list with supported languages (dynamically created)
 		 * @param string $game
-		 * @return multitype:unknown 
+		 * @return multitype:unknown
 		 */
 		public function get_supported_languages($game=false) {
 			if (!$game) $game = $this->config['game'];
@@ -155,8 +155,10 @@ if(!class_exists('infotooltip')) {
 		public function changed_prio1($game, $parser) {
 			$arrParser = $this->load_parser($game, true);
 			$setts = array();
-			foreach($arrParser[$parser]->settings as $skey => $sval) {
-				$setts[$skey] = $sval['default'];
+			if(isset($arrParser[$parser]->settings)){
+				foreach($arrParser[$parser]->settings as $skey => $sval) {
+					$setts[$skey] = $sval['default'];
+				}
 			}
 			return $setts;
 		}
@@ -207,7 +209,7 @@ if(!class_exists('infotooltip')) {
 			include_once($this->root_path.'infotooltip/itt_parser.aclass.php');
 			$game = ($game) ? $game : $this->config['game'];
 			$arrAvailableParser = $this->get_parserlist($game);
-					
+
 			if($info) {
 				if(!isset($this->parser_info[$game])) {
 					foreach($arrAvailableParser as $parse) {
@@ -404,20 +406,20 @@ if(!class_exists('infotooltip')) {
 			$item = $this->update($item_name, $lang, $game_id, $data);
 			return $this->item_return($item);
 		}
-		
+
 		public function getcacheditem($item_name, $lang=false, $game_id=false, $onlyicon=false, $noicon=false, $data=array()){
 			$item_name = htmlspecialchars_decode($item_name, ENT_QUOTES);
 			$game = $this->config['game'];
 			$lang = (!$lang || $lang == '') ? $this->config['game_language'] : $lang;
 			$this->init_cache();
 			$ext = '';
-			if(count($data) > 0) {
+			if(is_array($data) && count($data) > 0) {
 				$ext = '_'.base64_encode(serialize($data));
 			}
-			
+
 			$cache_name = $game.'_'.$lang.'_'.($game_id ? $game_id : $item_name).$ext;
 			$cache_name = md5($cache_name).'.itt';
-			
+
 			if(in_array($cache_name, $this->cached)) {
 				$item = unserialize(file_get_contents($this->pfh->FilePath($cache_name, 'itt_cache')));
 				if($item && !isset($item['baditem'])){
@@ -425,7 +427,7 @@ if(!class_exists('infotooltip')) {
 					$iconpath				= (isset($item['params']) && isset($item['params']['path']) && !empty($item['params']['path'])) ? $item['params']['path'] : $this->config['icon_path'];
 					$iconext				= (isset($item['params']) && isset($item['params']['ext']) && !empty($item['params']['ext'])) ? $item['params']['ext'] : $this->config['icon_ext'];
 					$display_name			= (isset($item['name']) AND strlen($item['name']) > 1) ? $item['name'] : $data['name'];
-					
+
 					if(isset($item['icon']) && !$noicon) {
 						if($onlyicon > 0) {
 							$visible = '<img src="'.((stripos($item['icon'], 'http') === 0) ? $item['icon'] : $iconpath.$item['icon'].$iconext).'" width="'.$onlyicon.'" height="'.$onlyicon.'" style="margin-top: 1px;" alt="icon" class="itt-icon"/>';
@@ -435,7 +437,7 @@ if(!class_exists('infotooltip')) {
 					} else {
 						$visible = $display_name;
 					}
-					
+
 					if(isset($item['color']) && !$onlyicon) {
 						if (substr($item['color'], 0, 1) == "#"){
 							$visible = '<span style="color:'.$item['color'].'">'.$visible.'</span>';
@@ -443,11 +445,11 @@ if(!class_exists('infotooltip')) {
 							$visible = '<span class="'.$item['color'].'">'.$visible.'</span>';
 						}
 					}
-					
+
 					return $visible;
 				}
 			}
-			
+
 			return false;
 		}
 
@@ -463,23 +465,23 @@ if(!class_exists('infotooltip')) {
 			}
 			return $item;
 		}
-		
+
 		public function cors_headers(){
 			$strDomains = $this->config['access_control_header'];
 			$arrDomains = explode("\n", $strDomains);
-				
+
 			$arrAllowedDomains = array();
-				
+
 			foreach($arrDomains as $strDomain){
 				$strDomain = trim(htmlspecialchars_decode($strDomain, ENT_QUOTES));
 				if($strDomain === '*') {
 					header('Access-Control-Allow-Origin: *');
 					return;
 				}
-		
+
 				$arrAllowedDomains[] = $strDomain; // http://mydomain.com
 			}
-				
+
 			//Some generic domains
 			$strDomain = $this->httpHost();
 			$urlData = parse_url($strDomain);
@@ -488,7 +490,7 @@ if(!class_exists('infotooltip')) {
 			if(count($hostData) > 1) $strDomain = $hostData[1].'.'.$hostData[0];
 			else $strDomain = $hostData[0];
 			$arrAllowedDomains[] = $strDomain;
-				
+
 			$incomingOrigin = array_key_exists('HTTP_ORIGIN', $_SERVER) ? $_SERVER['HTTP_ORIGIN'] : NULL;
 			if($incomingOrigin === NULL) $incomingOrigin = array_key_exists('ORIGIN', $_SERVER) ? $_SERVER['ORIGIN'] : NULL;
 			if($incomingOrigin === NULL){
@@ -498,12 +500,12 @@ if(!class_exists('infotooltip')) {
 					$incomingOrigin = $arrRefererInfo['scheme'].'://'.$arrRefererInfo['host'];
 				}
 			}
-				
+
 			foreach($arrAllowedDomains as $strAllowedDomain){
 				$arrDomainParts = parse_url($strAllowedDomain);
 				if($arrDomainParts['host'] != ""){
 					$pattern = '/^http:\/\/([\w_-]+\.)*' . $arrDomainParts['host'] . '$/';
-						
+
 					$allow = preg_match($pattern, $incomingOrigin);
 					if ($allow){
 						header('Access-Control-Allow-Origin: '.filter_var($incomingOrigin, FILTER_SANITIZE_URL));
@@ -511,14 +513,14 @@ if(!class_exists('infotooltip')) {
 					}
 				}
 			}
-				
+
 		}
-		
+
 		protected function is_ssl(){
 			if(defined('NO_SSL') && NO_SSL) return false;
 			return ((isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1)) || isset($_SERVER['SSL_SESSION_ID']) || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' ));
 		}
-		
+
 		protected function httpHost(){
 			$protocol = ($this->is_ssl()) ? 'https://' : 'http://';
 			$xhost    = preg_replace('/[^A-Za-z0-9\.:-]/', '',(isset( $_SERVER['HTTP_X_FORWARDED_HOST']) ?  $_SERVER['HTTP_X_FORWARDED_HOST'] : ''));

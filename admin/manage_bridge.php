@@ -92,7 +92,7 @@ class Manage_Bridge extends page_generic {
 	public function ajax_check_database(){
 		header('content-type: text/html; charset=UTF-8');
 
-		if ($this->in->get('host') != '' && $this->in->get('user') != '' && $this->in->get('pw') != '' && $this->in->get('name') != ''){
+		if ($this->in->get('host') != '' && $this->in->get('user') != '' && $this->in->get('name') != ''){
 			$error = array();
 			try {
 				$db = dbal::factory(array('dbtype' => registry::get_const('dbtype')));

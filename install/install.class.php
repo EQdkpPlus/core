@@ -200,6 +200,9 @@ class install extends gen_class {
 		$pfh->putContent($this->root_path.'config.php', $config);
 		//delete temporary pfh folder
 		$pfh->Delete($this->root_path.'data/'.md5('installer'));
+		
+		$pdc = registry::register('datacache');
+		$pdc->flush();
 
 		//Secure tmp-Folder for logs and ftp
 		$pfh = registry::register('file_handler');

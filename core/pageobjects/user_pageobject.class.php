@@ -119,6 +119,9 @@ class user_pageobject extends pageobject {
 		
 		$arrProfileFields = $this->pdh->get('user_profilefields', 'usersettings_fields', array(true));
 		foreach($arrProfileFields as $intFieldID){
+			$strType = $this->pdh->geth('user_profilefields', 'type', array($intFieldID));
+			if(in_array($strType, array('birthday', 'country'))) continue;
+			
 			$blnPerm = $this->pdh->get('user', 'check_privacy', array($user_id, 'priv_userprofile_'.$intFieldID));
 			if (!$blnPerm) continue;
 			

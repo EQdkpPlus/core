@@ -2,7 +2,7 @@
 	<h1 class="contentTitle">{L_PURCHASE_HISTORY_FOR}</h1>
 </div>
 
-<table class="table fullwidth">
+<table class="table fullwidth item-itemstats">
 	<tr class="row1">
 		<!-- IF SHOW_ITEMSTATS -->
 		<td class="viewitem-itemstats center">{ITEM_STATS}</td>
@@ -14,11 +14,13 @@
 </table>
 
 <!-- BEGIN droprate -->
+<div class="item-droprates">
 <div class="floatLeft" style="width: 600px">
 	<h2>{L_droprate} {droprate.POOLNAME}</h2>
 	<div id="{droprate.CHART}"></div>
 </div>
 <!-- END droprate -->
+</div>
 <div class="clear"></div>
 <br />{HPTT_ADMIN_LINK}
 <table class="table fullwidth hptt colorswitch scrollable-x">

@@ -285,7 +285,7 @@ class Manage_Logs extends page_generic {
 
 		$actionlog_count	= count($view_list);
 		$hptt_psettings		= $this->pdh->get_page_settings('admin_manage_logs', 'hptt_managelogs_actions');
-		$hptt				= $this->get_hptt($hptt_psettings, $view_list, $view_list, array('%link_url%' => 'manage_logs.php', '%link_url_suffix%' => '', md5($strFilterSuffix)));
+		$hptt				= $this->get_hptt($hptt_psettings, $view_list, $view_list, array('%link_url%' => 'manage_logs.php', '%link_url_suffix%' => ''), md5($strFilterSuffix));
 		$page_suffix		= '&amp;start='.$this->in->get('start', 0).$strFilterSuffix;
 		$sort_suffix		= $this->SID.'&amp;sort='.$this->in->get('sort').$strFilterSuffix;
 		$logs_list 			= $hptt->get_html_table($this->in->get('sort',''), $page_suffix, $this->in->get('start', 0), 100, false);

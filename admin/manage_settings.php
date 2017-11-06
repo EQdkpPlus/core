@@ -718,11 +718,6 @@ class admin_settings extends page_generic {
 				'article'		=> array(
 					'enable_embedly'	=> array(
 						'type'	=> 'radio',
-						//'dependency' => array(1 => array('embedly_key')),
-					),
-					'embedly_key' => array(
-						'type'		=> 'text',
-						'size'		=> 35
 					),
 					'articleimage_size' => array(
 						'type'		=> 'spinner',

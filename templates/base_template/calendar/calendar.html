@@ -22,7 +22,7 @@
 			firstDay: {STARTDAY},
 
 			// The rest
-			theme: true,
+			themeSystem: 'jquery-ui',
 			locale: '{CALENDAR_LANG}',
 			eventLimit: true,
 			customButtons: {
@@ -242,9 +242,9 @@
 				var date2save	= (view.name == 'month') ? $('#calendar').fullCalendar('getDate') : view.start;
 				cal_setStorage("calendar.currentdate", date2save.format());
 			},
-			eventSources: curSource
+			//eventSources: curSource
 		});
-
+console.log(curSource);
 		// start the hack for the date picker
 		$(".fc-header-toolbar .fc-center h2").attr('id', 'fc-datepicker-header').before('<input size="1" style="height: 0px; width:0px; border: 0px;" id="fc-datepicker" value="" /><input size="1" style="height: 0px; width:0px; border: 0px;" id="fc-monthpicker" value="" />');
 

@@ -518,7 +518,7 @@ if (!class_exists("time")){
 			/* Because str_replace replaces from left to right, it will also replace the replaced strings before.
 			 * As D is a search character, some strings will be replaced through K, which will be replaced with D at the end.
 			 */
-			
+
 			//php => momentjs
 			$types = array(
 				'd'		=> 'KK', //KK as placeholder for DD
@@ -669,11 +669,22 @@ if (!class_exists("time")){
 			return $out;
 		}
 
-		public function newtime($timestamp, $newtime='now'){
+		public function newtime($timestamp, $newtime='now', $timeInUTC=true){
 			$newtime	= ($newtime=='now') ? (new DateTime())->format('H:i') : $newtime;
-			$a_times	= explode(':', $newtime);
-			$objDate	= (new DateTime())->setTimestamp($timestamp)->setTimezone(new DateTimeZone('UTC'))->setTime($a_times[0], $a_times[1])->setTimezone($this->userTimeZone);
-			return $objDate->format("U");
+
+			// get the date
+			$objDate	= new DateTime('@'.$timestamp, $this->utcTimeZone);
+			$datewotime	= $objDate->format('Y-m-d');
+
+			// now, get the time in UTC
+			if($timeInUTC){
+				$objTime	= new DateTime($newtime, $this->utcTimeZone);
+				$newtime	= $objTime->setTimezone($this->userTimeZone)->format('H:i');
+			}
+
+			// generate the new timestamp
+			$out = new DateTime($datewotime. ' '.$newtime, $this->userTimeZone);
+			return $out->format('U');
 		}
 
 		public function dateDiff($ts1, $ts2, $out='sec', $pos_neg=false){

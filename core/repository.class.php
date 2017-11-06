@@ -90,6 +90,11 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 					case 'dev' : return "dev";
 				}
 			}
+			
+			if(defined('VERSION_WIP') && VERSION_WIP){
+				return "beta";
+			}
+			
 			return "stable";
 		}
 		
@@ -100,6 +105,10 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 					case 'beta' : return "&channel=beta";
 					case 'dev' : return "&channel=dev";
 				}
+			}
+			
+			if(defined('VERSION_WIP') && VERSION_WIP){
+				return "&channel=beta";
 			}
 			return "";
 		}
@@ -206,7 +215,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 
 		// generate download link for extension
 		public function getExtensionDownloadLink($intExtensionID, $intCategory, $strExtensionName){
-			$response = $this->puf->fetch($this->RepoEndpoint.'downloadid_link&id='.$intExtensionID.'&core='.$this->plusversion.'&category='.intval($intCategory).'&name='.$strExtensionName, "", 30);
+			$response = $this->puf->fetch($this->RepoEndpoint.'downloadid_link&id='.$intExtensionID.'&core='.$this->plusversion.'&category='.intval($intCategory).'&name='.urlencode($strExtensionName), "", 30);
 			$arrJson = json_decode($response);
 			if(!$response || !$arrJson) return array('status' => 0, 'error' => 500);
 			

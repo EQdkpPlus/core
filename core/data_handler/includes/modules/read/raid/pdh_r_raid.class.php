@@ -129,7 +129,7 @@ if(!class_exists('pdh_r_raid')){
 			return '<span class="positive">' . runden($this->get_value($id, $dkp_id)) . '</span>';
 		}
 		
-		public function get_apa_value($raid_id, $apa_id){
+		public function get_apa_value($raid_id, $apa_id=false){
 			$strApaValue =  $this->objPagination->get($raid_id, 'raid_apa_value');
 			if($strApaValue != ""){
 				$arrApaValue = unserialize($strApaValue);

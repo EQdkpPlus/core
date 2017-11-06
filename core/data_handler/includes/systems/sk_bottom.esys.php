@@ -294,7 +294,7 @@ $system_def = array(
 				'show_numbers' => false,
 				'show_select_boxes' => false,
 				'show_detail_twink' => false,
-				'table_sort_col' => 3,
+				'table_sort_col' => 2,
 				'table_sort_dir' => 'asc',
 				'table_presets' => array(
 					array('name' => 'useronlinestatus', 'sort' => false, 'th_add' => '', 'td_add' => 'width="10" nowrap="nowrap"'),

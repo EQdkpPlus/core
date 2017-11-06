@@ -32,6 +32,7 @@ var EQdkpPortal = new function(){
 	var nojs = false; //global
 	var nocss = false; // global
 	var context = new Array();
+	var eqdkp_jquery = false;
 	
 	
 	this.init = function(intModuleID, strRandomValue, eqdkp_url){
@@ -64,9 +65,6 @@ var EQdkpPortal = new function(){
 		if(varname == "nocss"){
 			nocss = value;
 		}
-		if(varname == "nojs"){
-			nojs = value;
-		}
 		saveContext();
 	}
 	
@@ -85,13 +83,13 @@ var EQdkpPortal = new function(){
 	}
 	
 	function addResources(localtarget){
-		var scripts = document.getElementsByTagName("script");
+		var links = document.getElementsByTagName("link");
+		console.log(links);
 		var loaded = false;
-		for(var i = 0; i< scripts.length; i++){
-			if (scripts[i].src != undefined && scripts[i].src != ""){
-				var src = scripts[i].src;
-				
-				if (src.indexOf("/jquery/core/core.js") !=-1){
+		for(var i = 0; i< links.length; i++){
+			if (links[i].href != undefined && links[i].href != ""){
+				var href = links[i].href;
+				if (href.indexOf("/libraries/FontAwesome/font-awesome.min.css") !=-1){
 					loaded = true;
 				}
 			}
@@ -114,24 +112,11 @@ var EQdkpPortal = new function(){
 				head.appendChild(ac);
 			}
 			
-			//JQuery core
-			if(!nojs){
-				var aj = document.createElement("script");
-				aj.src = url  + "libraries/jquery/core/core.js";
-				aj.type = 'text/javascript';
-				aj.onload=function(){scriptLoaded(localtarget)};
-				head.appendChild(aj);
-			} else {
-				getModule(localtarget);
-			}
+			getModule(localtarget);
+
 		} else {
 			getModule(localtarget);
 		}
-	}
-
-	function scriptLoaded(localtarget){
-		jQuery.noConflict();
-		getModule(localtarget);
 	}
 
 	function getModule(localtarget){
@@ -164,15 +149,13 @@ var EQdkpPortal = new function(){
 		if (xmlHttpObject){
 			query = xmlHttpObject;
 			if (query.readyState == 4 || query.readyState == 0) {
-				query.open("GET", url+'exchange.php?out=portal&id=' + moduleID+'&header='+header+'&position='+position+'&wide='+wide+'&nocss='+nocss+'&nojs='+nojs, true);
+				query.open("GET", url+'exchange.php?out=portal&id=' + moduleID+'&header='+header+'&position='+position+'&wide='+wide+'&nocss='+nocss, true);
 				query.onreadystatechange = function(){
 					if (this.readyState == 4) {
 						result = this.responseText;
 						html = parseHTML(result, document);
 						var mycontent = html.querySelector('.external_module');
 						document.getElementById(localtarget).innerHTML = mycontent.innerHTML;
-						var myscript = html.querySelector('.module_script script');
-						document.getElementsByTagName('head')[0].appendChild( myscript );
 					}
 				}; 
 				query.send(null);

@@ -198,7 +198,10 @@ class login_pageobject extends pageobject {
 				if ($objQuery){
 					$this->core->message($this->user->lang('password_reset_success'), $this->user->lang('success'), 'green');
 					//Send Mail to the user
-					$bodyvars = array('USERNAME' => $row['username']);
+					$bodyvars = array(
+							'USERNAME' => $row['username'], 
+							'DATETIME'		=> $this->time->user_date($this->time->time, true)
+					);
 					$this->email->SendMailFromAdmin($this->crypt->decrypt($row['user_email']), $this->user->lang('email_subject_password_changed'), 'user_password_changed.html', $bodyvars);
 					
 					$this->display();

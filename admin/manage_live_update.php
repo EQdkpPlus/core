@@ -32,9 +32,9 @@ class Manage_Live_Update extends page_generic {
 		$this->user->check_auth('a_maintenance');
 
 		$handler = array(
+			'refresh'=> array('process' => 'process_refresh'),
 			'show' 	=> array('process' => 'handle_steps'),
 			'step'	=> array('process' => 'handle_ajax_steps', 'csrf'=>true),
-			'refresh'=> array('process' => 'process_refresh'),
 			'diff'	=> array('process' => 'show_diff'),
 		);
 		parent::__construct(false, $handler, array(), null, '');
@@ -67,6 +67,7 @@ class Manage_Live_Update extends page_generic {
 		$show = (int)$this->in->get('show', 0);
 		if (isset($this->steps[$show]) && $this->steps[$show]['show'] == true){
 			$function = $this->steps[$show]['function'];
+			@set_time_limit(0);
 			$this->$function();
 		}
 

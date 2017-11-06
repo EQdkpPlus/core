@@ -914,7 +914,6 @@ $lang = array(
 "core_sett_fs_calendar" => "Kalendereinstellungen",
 "core_sett_fs_raids" => "Einstellungen für Raids",
 "core_sett_fs_calendar_mails" => "E-Mail Benachrichtigungen",
-"core_sett_f_embedly_key" => "Embedly API-Key",
 "core_sett_f_calendar_raid_guests" => "Gästeteilnahme bei Raids",
 "core_sett_f_help_calendar_raid_guests" => "Gäste ohne eigenen Account und ohne Punktevergabe können entweder durch einen Admin/Raidleiter oder durch Selbstanmeldung zum Raid hinzugefügt werden.",
 

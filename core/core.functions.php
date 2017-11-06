@@ -150,7 +150,9 @@ function get_sortedids($tosort, $order, $sort_order){
  * @param		bool		$extern			Is it an external link (other server) or an internal link?
  * @return		mixed						null, else the parsed redirect url if return is true.
  */
-function redirect($url, $return=false, $extern=false, $blnShowPage=true){
+function redirect($url='', $return=false, $extern=false, $blnShowPage=true){
+	if($url == "") $url = registry::get_const('controller_path_plain');
+
 	$out = (!$extern) ? registry::register('environment')->link.str_replace('&amp;', '&', $url) : registry::fetch('user')->removeSIDfromString($url);
 	if ($return){
 		return $out;
@@ -414,7 +416,8 @@ function infotooltip_js() {
  * return @string
  */
 function infotooltip($name='', $game_id='', $lang=false, $direct=0, $onlyicon=0, $noicon=false, $data=array(), $in_span=false, $class_add=''){
-	$blnUseOwnTooltips = register('config')->get('infotooltip_own_enabled');
+	$blnUseOwnTooltips	= register('config')->get('infotooltip_own_enabled');
+	$data						= (is_array($data)) ? $data : array();
 	if($blnUseOwnTooltips){
 		$strLink = register('config')->get('infotooltip_own_link');
 		$strLink = str_replace(array('{ITEMID}', '{ITEMNAME}', '{ITEMLINK}'), array($game_id, $name, 'data-eqdkplink=""'), $strLink);
@@ -773,7 +776,7 @@ function utf8_substr($str, $s=0, $l=1){
 		return mb_substr($str, $s, $l, 'UTF-8');
 	} else {
 		return substr($str, $s, $l);
-	}	
+	}
 }
 
 
@@ -1361,14 +1364,14 @@ function is_serialized0($strValue){
 	}
 }
 
-function implode_r($glue, $pieces){ 
-	$out = ""; 
-	foreach ($pieces as $piece) { 
-		if (is_array ($piece)) $out .= implode_r ($glue, $piece); // recurse 
+function implode_r($glue, $pieces){
+	$out = "";
+	foreach ($pieces as $piece) {
+		if (is_array ($piece)) $out .= implode_r ($glue, $piece); // recurse
 		else $out .= $glue.$piece;
-	}	
-	return $out; 
- } 
+	}
+	return $out;
+ }
 
 /* Workarounds because php does not allow arrays in Constants < 5.6 */
 function get_attr_blacklist(){

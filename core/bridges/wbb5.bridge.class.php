@@ -327,7 +327,7 @@ class wbb5_bridge extends bridge_generic {
 	private function _handle_birthday($date){
 		list($y, $m, $d) = explode('-', $date);
 		if ($y != '' && $y != 0 && $m != '' && $m != 0 && $d != '' && $d != 0){
-			return mktime(2, 1, 0, $m, $d, $y);
+			return $this->time->mktime(2, 1, 0, $m, $d, $y);
 		}
 		return 0;
 	}

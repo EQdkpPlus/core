@@ -84,47 +84,57 @@ class portal extends gen_class {
 			$position = $this->in->get('position', 'left');
 			$wide = ($this->in->get('wide', 0));
 
-			if(!$obj = $this->get_module($intModuleID, $position, $wide)) return '';
+			if(!$obj = $this->get_module($intModuleID, $position, $wide)) {
+				$return = "";
+			} else {
 
-			$moduleout = $obj->output();
-
-			$jsOut = '<div class="module_script"><script type="text/javascript">';
-			if(!$this->in->get('nojs', 0)){
-				$headerJS = $this->tpl->get_header_js();
-				$headerJS .= $this->tpl->get_footer_js();
-
-				$headerJS = "jQuery(function($) {".str_replace("$", "jQuery",  $headerJS).'});';
-
+				$moduleout = $obj->output();
+	
+				$cssOut = '<div class="external_module"><style>';
+				if(!$this->in->get('nocss', 0) && !$this->in->get('iframe', 0)){
+					$cssFile = $this->tpl->get_combined_css();
+					$cssOut .= " ".file_get_contents($cssFile);
+				}
+				$cssOut .= '</style>';
+	
+				$out = $cssOut.'<div id="portalbox'.$module_id.'" class="portalbox '.get_class($obj).'">'.(($this->in->get('header', 1)) ?
+						'<div class="portalbox_head">
+							<span class="center" id="txt'.$module_id.'">'.$obj->get_header().'</span>
+						</div>' : ''
+						).'<div class="portalbox_content">
+							<div class="toggle_container">';
+	
+				$out .= preg_replace("/(\"|')(".preg_quote($this->server_path, "/").")/", "$1".$this->env->link, $moduleout);
+	
+				$out .='</div>
+						</div>
+					</div></div>';
+	
+	
+				$return = $out;
 			}
-
-			$jsOut .= $headerJS.'</script></div>';
-
-
-			$cssOut = '<div class="external_module"><style>';
-			if(!$this->in->get('nocss', 0)){
-				$cssFile = $this->tpl->get_combined_css();
-				$cssOut .= " ".file_get_contents($cssFile);
-			}
-			$cssOut .= '</style>';
-
-			$out = $jsOut.$cssOut.'<div id="portalbox'.$module_id.'" class="portalbox '.get_class($obj).'">'.(($this->in->get('header', 1)) ?
-					'<div class="portalbox_head">
-						<span class="center" id="txt'.$module_id.'">'.$obj->get_header().'</span>
-					</div>' : ''
-					).'<div class="portalbox_content">
-						<div class="toggle_container">';
-
-			$out .= preg_replace("/(\"|')(".preg_quote($this->server_path, "/").")/", "$1".$this->env->link, $moduleout);
-
-			$out .='</div>
-					</div>
-				</div></div>';
-
-
-			return $out;
-
 		} else {
-			return "You don't have the required permission to view this module.";
+			$return = "You don't have the required permission to view this module.";
+		}
+		
+		
+		if($this->in->get('iframe', 0)){
+			
+			$this->tpl->assign_vars(array(
+				'WIDGET' => $return
+			));
+			
+			$this->core->set_vars(array(
+					'header_format'		=> 'simple',
+					'template_file'		=> 'widget.html',
+					'portal_layout'		=> 0,
+					'body_class'		=> 'module-iframe',
+					'display'			=> true)
+			);
+			
+			
+		} else {
+			return $return;
 		}
 	}
 
@@ -229,6 +239,7 @@ class portal extends gen_class {
 			$this->init_portalsettings();
 		}
 		$out = $this->handle_output($obj);
+		
 		return
 '				<div id="portalbox'.$module_id.'" class="portalbox '.get_class($obj).'">
 					<div class="portalbox_head">'.(($this->config->get('collapsable', 'pmod_'.$module_id) == '1') ? '<span class="toggle_button">&nbsp;</span>' : '').'

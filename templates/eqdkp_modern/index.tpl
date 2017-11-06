@@ -37,7 +37,7 @@
 			//]]>
 		</script>
 	</head>
-	<body id="top" data-template="{TEMPLATE_CLASS}" class="<!-- IF S_REPONSIVE -->responsive <!-- ENDIF --><!-- IF not S_NORMAL_HEADER -->simple-header<!-- ENDIF --> {BROWSER_CLASS}<!-- IF T_PORTAL_WIDTH --> fixed_width<!-- ENDIF --><!-- IF S_IN_ADMIN --> admin<!-- ELSE --> frontend<!-- ENDIF -->">
+	<body id="top" data-template="{TEMPLATE_CLASS}" class="<!-- IF S_REPONSIVE -->responsive <!-- ENDIF --><!-- IF not S_NORMAL_HEADER -->simple-header<!-- ENDIF --> {BROWSER_CLASS}<!-- IF T_PORTAL_WIDTH --> fixed_width<!-- ENDIF --><!-- IF S_IN_ADMIN --> admin<!-- ELSE --> frontend<!-- ENDIF --> {BODY_CLASS}">
 		<!-- LISTENER body_top -->
 
 		{STATIC_HTMLCODE}
@@ -400,7 +400,7 @@
 					<dt><label>{L_username}:</label></dt>
 					<dd>
 						<div class="input-icon">
-							<i class="fa fa-user"></i><input type="text" name="username" size="30" maxlength="30" class="input username" id="username" placeholder="{L_username}" required />
+							<i class="fa fa-user"></i><input type="text" name="username" size="30" maxlength="30" class="input username" id="username" placeholder="{L_username}" required/>
 						</div>
 
 					</dd>

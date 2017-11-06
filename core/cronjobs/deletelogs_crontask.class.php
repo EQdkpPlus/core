@@ -30,7 +30,6 @@ if ( !class_exists( "deletelogs_crontask" ) ) {
 			$this->defaults['repeat']		= true;
 			$this->defaults['repeat_type']	= 'daily';
 			$this->defaults['editable']		= true;
-			$this->defaults['delay']		= false;
 			$this->defaults['ajax']			= true;
 			$this->defaults['description']	= 'Prune Logs';
 		}

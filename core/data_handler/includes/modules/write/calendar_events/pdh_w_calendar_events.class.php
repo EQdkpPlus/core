@@ -49,7 +49,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 			'mode'					=> "{L_CALENDAR_MODE}",
 		);
 
-		public function update_cevents($id, $cal_id, $name, $startdate, $enddate, $repeat, $editclones, $notes, $allday, $extension=false){
+		public function update_cevents($id, $cal_id, $name, $startdate, $enddate, $repeat, $editclones, $notes, $allday, $extension=false, $private=0){
 			$entered_notes			= $notes;
 			$old['cal_id']			= $this->pdh->get('calendar_events', 'calendar_id', array($id));
 			$old['name']			= ($name != false) ? $this->pdh->get('calendar_events', 'name', array($id)) : '';
@@ -58,6 +58,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 			$old['repeat']			= $this->pdh->get('calendar_events', 'repeating', array($id));
 			$old['notes']			= $this->pdh->get('calendar_events', 'notes', array($id, true));
 			$old['allday']			= $this->pdh->get('calendar_events', 'allday', array($id));
+			$old['private']			= $this->pdh->get('calendar_events', 'private', array($id));
 			$changes				= false;
 
 			foreach($old as $varname => $value) {
@@ -153,7 +154,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 						'timestamp_start'		=> $startdate,
 						'timestamp_end'			=> $enddate,
 						'allday'				=> $allday,
-						'private'				=> 0,
+						'private'				=> (int)$private,
 						'visible'				=> 1,
 						'notes'					=> $notes,
 						'repeating'				=> $repeat,
@@ -308,7 +309,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 					if(is_array($delete_events) && count($delete_events) > 0){
 						$this->db->prepare("DELETE FROM __calendar_events WHERE id :in")->in($delete_events)->execute();
 						$this->db->prepare("DELETE FROM __calendar_raid_attendees WHERE calendar_events_id :in")->in($delete_events)->execute();
-						
+
 						//delete notifications
 						foreach($delete_events as $delid){
 							$this->ntfy->deleteNotification('calenderevent_opened', $delid);
@@ -331,7 +332,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 			$log_action					= $this->logs->diff(false, $arrOld, $this->arrLogLang);
 			$eventname					=  (($extension['raid_eventid'] > 0) ? $this->pdh->get('event', 'name', array($extension['raid_eventid'])) : ((isset($arrOld['name'])) ? $arrOld['name'] : ""));
 			$this->log_insert('calendar_log_eventdeleted', $log_action, (is_array($id) ? $id[0] : $id), $eventname, true, 'calendar');
-			
+
 			//Delete notifications
 			foreach($field as $eventid){
 				$this->ntfy->deleteNotification('calenderevent_opened', $eventid);
@@ -339,7 +340,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 				$this->ntfy->deleteNotification('calenderevent_new', $eventid);
 				$this->ntfy->deleteNotification('calenderevent_invitation', $eventid);
 			}
-			
+
 			// perform the hooks
 			$this->pdh->enqueue_hook('calendar_raid_attendees_update');
 			$this->pdh->enqueue_hook('calendar_events_update', array( (is_array($id) ? $id[0] : $id)));

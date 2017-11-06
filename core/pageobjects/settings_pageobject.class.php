@@ -53,6 +53,7 @@ class settings_pageobject extends pageobject {
 		$handler = array(
 			'newexchangekey' => array('process' => 'renew_exchangekey', 'csrf' => true),
 			'submit' => array('process' => 'update', 'csrf' => true),
+			'delete_account'  => array('process' => 'delete_account', 'csrf' => true),
 			'mode' => array(
 				array('process' => 'delete_authaccount', 'value' => 'delauthacc', 'csrf' => true),
 				array('process' => 'add_authaccount', 'value' => 'addauthacc'),
@@ -63,6 +64,23 @@ class settings_pageobject extends pageobject {
 		parent::__construct(false, $handler);
 
 		$this->process();
+	}
+	
+	public function delete_account(){
+		$strPassword = $this->in->get('password');
+		
+		if (!$this->user->checkPassword($strPassword, $this->user->data['user_password'])){
+			$this->core->message($this->user->lang('incorrect_password'), $this->user->lang('error'), 'red');
+			$this->display();
+			return;
+		}
+		
+		//Password matches, so delete user
+		$this->pdh->put('user', 'delete_user', array($this->user->id, 0));
+		
+		//Logout
+		$this->user->logout();
+		redirect('', false, false, false);
 	}
 
 	public function renew_exchangekey(){
@@ -167,7 +185,10 @@ class settings_pageobject extends pageobject {
 			$query_ary['user_login_key'] = '';
 			
 			//Send Mail to the recent user's email address
-			$bodyvars = array('USERNAME' => $this->pdh->get('user', 'name', array($this->user->id)));
+			$bodyvars = array(
+					'USERNAME' => $this->pdh->get('user', 'name', array($this->user->id)),
+					'DATETIME'		=> $this->time->user_date($this->time->time, true),
+			);
 			$this->email->SendMailFromAdmin($this->pdh->get('user', 'email', array($this->user->id)), $this->user->lang('email_subject_password_changed'), 'user_password_changed.html', $bodyvars);
 		}
 		
@@ -279,7 +300,7 @@ class settings_pageobject extends pageobject {
 		//Create Thumbnail for User Avatar
 		if ($customArray['user_avatar'] != "" && $this->pdh->get('user', 'avatar', array($this->user->id)) != $customArray['user_avatar']){
 			$image = $this->pfh->FolderPath('users/'.$this->user->id,'files').$customArray['user_avatar'];
-			$this->pfh->thumbnail($image, $this->pfh->FolderPath('users/thumbs','files'), 'useravatar_'.$this->user->id.'_68.'.pathinfo($image, PATHINFO_EXTENSION), 68);
+			$this->pfh->thumbnail($image, $this->pfh->FolderPath('users/thumbs','files'), 'useravatar_'.$this->user->id.'_68.'.pathinfo($image, PATHINFO_EXTENSION), 68, 68);
 		}
 		
 		$query_ary['privacy_settings']		= serialize($privArray);
@@ -382,12 +403,12 @@ class settings_pageobject extends pageobject {
 		$this->form->add_tabs($settingsdata);
 		
 		// add user-app-key 
-		$this->form->add_field('exchange_key', array('lang' => 'user_app_key', 'text' => $this->user->data['exchange_key']), 'registration_info', 'registration_info');
+		$this->form->add_field('exchange_key', array('lang' => 'user_app_key', 'text' => $this->user->data['exchange_key']), 'private_keys', 'registration_info');
 		//$this->form->add_field('miau', array('lang' => 'user_api_key', 'text' => $this->user->deriveKeyFromExchangekey($this->user->id, 'pex_api')).'<br /> <img src="https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl='.urlencode($this->user->deriveKeyFromExchangekey($this->user->id, 'pex_api')).'" />', 'registration_info', 'registration_info');
 		$this->form->add_field('api_key', array('lang' => 'user_api_key', 'text' => 
 				'<a style="cursor: pointer;" onclick="$(\'.qr_api_code\').html(\'<img src=\\\'https://chart.googleapis.com/chart?chs=140x140&chld=S|0&cht=qr&chl=\'+$(this).data(\'api-key\')+\'\\\'>\')" data-api-key="'.$this->user->deriveKeyFromExchangekey($this->user->id, 'pex_api').'">'.$this->user->deriveKeyFromExchangekey($this->user->id, 'pex_api').'</a><div class="qr_api_code"></div>'
-		), 'registration_info', 'registration_info');
-		$this->form->add_field('regenerate_keys', array('lang' => 'user_create_new_appkey', 'text' => '<button class="" type="submit" name="newexchangekey"><i class="fa fa-refresh"></i>'.$this->user->lang('user_create_new_appkey').'</button>'), 'registration_info', 'registration_info');
+		), 'private_keys', 'registration_info');
+		$this->form->add_field('regenerate_keys', array('lang' => 'user_create_new_appkey', 'text' => '<button class="" type="submit" name="newexchangekey"><i class="fa fa-refresh"></i>'.$this->user->lang('user_create_new_appkey').'</button>'), 'private_keys', 'registration_info');
 		// add various auth-accounts
 		$auth_options = $this->user->get_loginmethod_options();
 		$auth_array = array();
@@ -413,6 +434,10 @@ class settings_pageobject extends pageobject {
 				$this->form->add_field('auth_account_'.$method, $field_opts, 'auth_accounts', 'registration_info');
 			}
 		}
+		
+		//Delete Account
+		$this->form->add_field('delete_account', array('lang' => 'user_delete_account', 'text' => '<button class="" type="button" name="newexchangekey" onclick="confirm_account_deletion()"><i class="fa fa-trash-o"></i>'.$this->user->lang('user_sett_fs_delete_account').'</button>'), 'delete_account', 'registration_info');
+		
 		
 		//Plugin Settings
 		if (is_array($this->pm->get_menus('settings'))){

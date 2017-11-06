@@ -14,7 +14,6 @@ if (!$blnIsUser) die('Access denied.');
 if (!$blnIsAdmin) $strType = 'image';
 
 ?>
-
 <!DOCTYPE html>
 <html>
 	<head>

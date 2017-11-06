@@ -177,7 +177,7 @@ class addcharacter_pageobject extends pageobject {
 				'type'		=> 'text',
 				'lang'		=> 'name',
 				'required'	=> true,
-				'pattern'	=> '.{3,}',
+				'pattern'	=> '.{1,}',
 				'readonly'	=> ($this->url_id > 0 && !$this->adminmode) ? true : false,
 				'size'		=> 20
 			),

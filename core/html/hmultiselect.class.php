@@ -87,7 +87,7 @@ class hmultiselect extends html {
 			foreach ($this->options as $key => $value) {
 				if($this->tolang) $value = ($this->user->lang($value, false, false)) ? $this->user->lang($value) : (($this->game->glang($value)) ? $this->game->glang($value) : $value);
 				$disabled = (($key === 0 && in_array($key, $this->todisable, true)) || ($key !== 0 && in_array($key, $this->todisable))) ? ' disabled="disabled"' : '';
-				$selected_choice = (!empty($this->value) && ($this->value == 'all' || in_array($key, $this->value))) ? 'selected="selected"' : '';
+				$selected_choice = (!empty($this->value) && ($this->value == 'all' || (is_array($this->value) && in_array($key, $this->value)))) ? 'selected="selected"' : '';
 				$dropdown .= "<option value='".$key."' ".$selected_choice.$disabled.">".$value."</option>";
 			}
 		} else {

@@ -29,6 +29,7 @@ class sql_update_task extends task {
 
 	public $sqls = array();
 	public $plugin_path = '';
+	public $game_path = '';
 
 	public function is_necessary() {
 		$version = $this->config->get('plus_version');
@@ -39,6 +40,8 @@ class sql_update_task extends task {
 				if($data['status'] != 1) return false;
 				$version = $data['version'];
 			} else $version = false;
+		}elseif($this->game_path){
+			$version = $this->config->get('game_version');
 		}
 		if(compareVersion($version, $this->version) == -1 AND $version) {
 			return true;

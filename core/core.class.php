@@ -31,6 +31,7 @@ class core extends gen_class {
 		public $template_path	= '';				// Path to template_file	@var template_path
 		public $description		= '';				// Description of the page, relevant for META-Tags
 		public $page_image		= '';				// Preview-Image, relevant for META-Tags
+		public $body_class		= '';
 		private $notifications	= false;			// Flag if notifications have been done
 		private $cache = array();
 		/**
@@ -178,7 +179,7 @@ class core extends gen_class {
 
 		private function page_header(){
 			define('HEADER_INC', true);		// Define a variable so we know the header's been included
-
+			
 			//Redirect to Guildrules if user hasn't accepted them
 			$intGuildrulesArticleID = $this->pdh->get('articles', 'resolve_alias', array('guildrules'));
 			$blnGuildrules = ($intGuildrulesArticleID && $this->pdh->get('articles', 'published', array($intGuildrulesArticleID)));
@@ -378,9 +379,9 @@ class core extends gen_class {
 			if ( ! $this->user->is_signedin() && intval($this->config->get('enable_registration'))){
 				//CMS register?
 				if ($this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))){
-					$registerLink = $this->createLink($this->handle_link($this->config->get('cmsbridge_reg_url'),$this->user->lang('menu_register'),$this->config->get('cmsbridge_embedded'),'BoardRegister', '', '', 'fa fa-check-square-o fa-lg'));
+					$registerLink = $this->createLink($this->handle_link($this->config->get('cmsbridge_reg_url'),$this->user->lang('menu_register'),$this->config->get('cmsbridge_embedded'),'BoardRegister', '', '', 'fa fa-user-plus fa-lg'));
 				} else {
-					$registerLink = $this->createLink(array('link' => $this->controller_path_plain.'Register' . $this->routing->getSeoExtension().$this->SID, 'text' => $this->user->lang('menu_register'), 'icon' => 'fa fa-check-square-o fa-lg'));
+					$registerLink = $this->createLink(array('link' => $this->controller_path_plain.'Register' . $this->routing->getSeoExtension().$this->SID, 'text' => $this->user->lang('menu_register'), 'icon' => 'fa fa-user-plus fa-lg'));
 				}
 			}
 
@@ -425,7 +426,8 @@ class core extends gen_class {
 				'U_REGISTER'				=> $registerLink,
 				'MAIN_MENU'					=> $this->build_menu_ul($this->build_menu_array(false)),
 				'MAIN_MENU_MOBILE'			=> $this->build_menu_ul($this->build_menu_array(false), 'mainmenu-mobile'),
-				'PAGE_CLASS'				=> 'page-'.$this->clean_url($this->env->get_current_page(false)),
+				'PAGE_CLASS'				=> 'page-'.$this->clean_url($this->env->get_current_page(false)).' controller-'.registry::get_const('pageobject'),
+				'BODY_CLASS'				=> $this->body_class,
 				'TEMPLATE_CLASS'			=> str_replace(array('.html', '/'), array('', '_'), $this->template_path.$this->template_file),
 				'BROWSER_CLASS'				=> (!registry::get_const('mobile_view')) ? str_replace(" mobile", "", $this->env->agent->class) : $this->env->agent->class,
 				'S_SHOW_PWRESET_LINK'		=> ($this->config->get('cmsbridge_active') == 1 && !strlen($this->config->get('cmsbridge_pwreset_url'))) ? false : true,
@@ -435,6 +437,7 @@ class core extends gen_class {
 				'HONEYPOT_VALUE'			=> $this->user->csrfGetToken("honeypot"),
 				'S_REPONSIVE'				=> registry::get_const('mobile_view'),
 				'CURRENT_PAGE'				=> sanitize($this->env->request),
+				'L_login_bridge_notice'		=> sprintf($this->user->lang('login_bridge_notice'), $this->config->get('cmsbridge_url')),
 				'S_STYLECHANGER'			=> (!intval($this->config->get('default_style_overwrite')) && count(register('pdh')->get('styles', 'styles', array(0, false))) > 1) ? true : false,
 				'USER_IS_AWAY'				=> ($this->user->data['user_id'] > 0) ? $this->pdh->get('calendar_raids_attendees', 'user_awaymode', array($this->user->data['user_id'])) : false,
 			));
@@ -535,7 +538,7 @@ class core extends gen_class {
 			}
 			$icon = '';
 			if (isset($arrLinkData['icon']) && strlen($arrLinkData['icon'])){
-				$icon = '<i class="'.$arrLinkData['icon'].'"></i>';
+				$icon = '<i class="'.$arrLinkData['icon'].'"></i> ';
 			}
 			$strHref = ((isset($arrLinkData['plus_link']) && $arrLinkData['plus_link']==true && $arrLinkData['link']) ? $arrLinkData['link'] : $this->server_path . $arrLinkData['link']);
 			if ($strHref == $this->server_path.'#') $strHref = "#";

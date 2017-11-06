@@ -117,6 +117,7 @@ class sql_update extends task {
 		$current			= registry::register($step);
 		$current->init_lang();
 		$this->plugin_path	= $current->plugin_path;
+		$this->game_path = $current->game_path;
 
 		// start the output table
 		$this->form .= '<h2>'.sprintf($this->user->lang('executed_tasks'), $current->name).'</h2>';
@@ -160,8 +161,12 @@ class sql_update extends task {
 			}
 			$this->form .=  $lang[$key].'</td></tr>';
 		}
+		
+
 		if($this->plugin_path) {
 			$this->db->prepare("UPDATE __plugins SET version = ? WHERE code = ?;")->execute($version, $this->plugin_path);
+		} elseif($this->game_path){
+			$this->config->set('game_version', $version);
 		} else {
 			$this->config->set('plus_version', $version);
 			//Reset Repo

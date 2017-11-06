@@ -238,9 +238,140 @@ class Less_Parser{
 			throw $exc;
 		}
 
-
-
 		return $css;
+	}
+
+	public function findValueOf($varName)
+	{
+		foreach($this->rules as $rule){
+			if(isset($rule->variable) && ($rule->variable == true) && (str_replace("@","",$rule->name) == $varName)){
+				return $this->getVariableValue($rule);
+			}
+		}
+		return null;
+	}
+
+	/**
+	 *
+	 * this function gets the private rules variable and returns an array of the found variables
+	 * it uses a helper method getVariableValue() that contains the logic ot fetch the value from the rule object
+	 *
+	 * @return array
+	 */
+	public function getVariables()
+	{
+		$variables = array();
+
+		$not_variable_type = array(
+			'Comment',   // this include less comments ( // ) and css comments (/* */)
+			'Import',    // do not search variables in included files @import
+			'Ruleset',   // selectors (.someclass, #someid, …)
+			'Operation', //
+		);
+
+		// @TODO run compilation if not runned yet
+		foreach ($this->rules as $key => $rule) {
+			if (in_array($rule->type, $not_variable_type)) {
+				continue;
+			}
+
+			// Note: it seems rule->type is always Rule when variable = true
+			if ($rule->type == 'Rule' && $rule->variable) {
+				$variables[$rule->name] = $this->getVariableValue($rule);
+			} else {
+				if ($rule->type == 'Comment') {
+					$variables[] = $this->getVariableValue($rule);
+				}
+			}
+		}
+		return $variables;
+	}
+
+	public function findVarByName($var_name)
+	{
+		foreach($this->rules as $rule){
+			if(isset($rule->variable) && ($rule->variable == true)){
+				if($rule->name == $var_name){
+					return $this->getVariableValue($rule);
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 *
+	 * This method gets the value of the less variable from the rules object.
+	 * Since the objects vary here we add the logic for extracting the css/less value.
+	 *
+	 * @param $var
+	 *
+	 * @return bool|string
+	 */
+	private function getVariableValue($var)
+	{
+		if (!is_a($var, 'Less_Tree')) {
+			throw new Exception('var is not a Less_Tree object');
+		}
+
+		switch ($var->type) {
+			case 'Color':
+				return $this->rgb2html($var->rgb);
+			case 'Unit':
+				return $var->value. $var->unit->numerator[0];
+			case 'Variable':
+				return $this->findVarByName($var->name);
+			case 'Keyword':
+				return $var->value;
+			case 'Rule':
+				return $this->getVariableValue($var->value);
+			case 'Value':
+				$value = '';
+				foreach ($var->value as $sub_value) {
+					$value .= $this->getVariableValue($sub_value).' ';
+				}
+				return $value;
+			case 'Quoted':
+				return $var->quote.$var->value.$var->quote;
+			case 'Dimension':
+				$value = $var->value;
+				if ($var->unit && $var->unit->numerator) {
+					$value .= $var->unit->numerator[0];
+				}
+				return $value;
+			case 'Expression':
+				$value = "";
+				foreach($var->value as $item) {
+					$value .= $this->getVariableValue($item)." ";
+				}
+				return $value;
+			case 'Operation':
+				throw new Exception('getVariables() require Less to be compiled. please use $parser->getCss() before calling getVariables()');
+			case 'Comment':
+			case 'Import':
+			case 'Ruleset':
+			default:
+				throw new Exception("type missing in switch/case getVariableValue for ".$var->type);
+		}
+		return false;
+	}
+
+	private function rgb2html($r, $g=-1, $b=-1)
+	{
+		if (is_array($r) && sizeof($r) == 3)
+			list($r, $g, $b) = $r;
+
+		$r = intval($r); $g = intval($g);
+		$b = intval($b);
+
+		$r = dechex($r<0?0:($r>255?255:$r));
+		$g = dechex($g<0?0:($g>255?255:$g));
+		$b = dechex($b<0?0:($b>255?255:$b));
+
+		$color = (strlen($r) < 2?'0':'').$r;
+		$color .= (strlen($g) < 2?'0':'').$g;
+		$color .= (strlen($b) < 2?'0':'').$b;
+		return '#'.$color;
 	}
 
 	/**
@@ -355,7 +486,7 @@ class Less_Parser{
 
 
 		if( $filename ){
-			$filename = self::WinPath(realpath($filename));
+			$filename = self::AbsPath($filename, true);
 		}
 		$uri_root = self::WinPath($uri_root);
 
@@ -531,14 +662,14 @@ class Less_Parser{
 							$this->UnsetInput();
 							return $cache;
 						}
-					break;
+						break;
 
 
-					// Using generated php code
+						// Using generated php code
 					case 'var_export':
 					case 'php':
-					$this->UnsetInput();
-					return include($cache_file);
+						$this->UnsetInput();
+						return include($cache_file);
 				}
 			}
 		}
@@ -567,14 +698,14 @@ class Less_Parser{
 				switch(Less_Parser::$options['cache_method']){
 					case 'serialize':
 						file_put_contents( $cache_file, serialize($rules) );
-					break;
+						break;
 					case 'php':
 						file_put_contents( $cache_file, ' return '.self::ArgString($rules).'; ?>' );
-					break;
+						break;
 					case 'var_export':
 						//Requires __set_state()
 						file_put_contents( $cache_file, ' return '.var_export($rules,true).'; ?>' );
-					break;
+						break;
 				}
 
 				Less_Cache::CleanCache();
@@ -667,7 +798,13 @@ class Less_Parser{
 		array_pop($this->saveStack);
 	}
 
-
+	/**
+	 * Determine if the character at the specified offset from the current position is a white space.
+	 *
+	 * @param int $offset
+	 *
+	 * @return bool
+	 */
 	private function isWhitespace($offset = 0) {
 		return strpos(" \t\n\r\v\f", $this->input[$this->pos + $offset]) !== false;
 	}
@@ -792,7 +929,7 @@ class Less_Parser{
 	public function expect($tok, $msg = NULL) {
 		$result = $this->match( array($tok) );
 		if (!$result) {
-			$this->Error( $msg	? "Expected '" . $tok . "' got '" . $this->input[$this->pos] . "'" : $msg );
+			$this->Error( !$msg	? "Expected '" . $tok . "' got '" . $this->input[$this->pos] . "'" : $msg );
 		} else {
 			return $result;
 		}
@@ -880,7 +1017,7 @@ class Less_Parser{
 				break;
 			}
 
-            if( $this->PeekChar('}') ){
+			if( $this->PeekChar('}') ){
 				break;
 			}
 		}
@@ -1746,7 +1883,7 @@ class Less_Parser{
 				$extendList = array_merge($extendList,$extend);
 			}else{
 				//if( count($extendList) ){
-					//error("Extend can only be used at the end of selector");
+				//error("Extend can only be used at the end of selector");
 				//}
 				if( $this->pos < $this->input_len ){
 					$c = $this->input[ $this->pos ];
@@ -2019,11 +2156,11 @@ class Less_Parser{
 					case "css":
 						$optionName = "less";
 						$value = false;
-					break;
+						break;
 					case "once":
 						$optionName = "multiple";
 						$value = false;
-					break;
+						break;
 				}
 				$options[$optionName] = $value;
 				if( !$this->MatchChar(',') ){ break; }
@@ -2661,6 +2798,18 @@ class Less_Parser{
 
 	public static function WinPath($path){
 		return str_replace('\\', '/', $path);
+	}
+
+	public static function AbsPath($path, $winPath = false){
+		if (strpos($path, '//') !== false && preg_match('_^(https?:)?//\\w+(\\.\\w+)+/\\w+_i', $path)) {
+			return $winPath ? '' : false;
+		} else {
+			$path = realpath($path);
+			if ($winPath) {
+				$path = self::WinPath($path);
+			}
+			return $path;
+		}
 	}
 
 	public function CacheEnabled(){
@@ -4789,10 +4938,10 @@ class Less_Tree_Attribute extends Less_Tree{
 class Less_Tree_Call extends Less_Tree{
     public $value;
 
-    protected $name;
-    protected $args;
-    protected $index;
-    protected $currentFileInfo;
+    public $name;
+    public $args;
+    public $index;
+    public $currentFileInfo;
     public $type = 'Call';
 
 	public function __construct($name, $args, $index, $currentFileInfo = null ){
@@ -6175,7 +6324,7 @@ class Less_Tree_Import extends Less_Tree{
 	 */
 	private function Skip($path, $env){
 
-		$path = Less_Parser::winPath(realpath($path));
+		$path = Less_Parser::AbsPath($path, true);
 
 		if( $path && Less_Parser::FileParsed($path) ){
 
@@ -9423,7 +9572,7 @@ class Less_Visitor_toCSS extends Less_VisitorReplacing{
 
 
 		// Compile rules and rulesets
-		$nodeRuleCnt = count($rulesetNode->rules);
+		$nodeRuleCnt = $rulesetNode->rules?count($rulesetNode->rules):0;
 		for( $i = 0; $i < $nodeRuleCnt; ){
 			$rule = $rulesetNode->rules[$i];
 
@@ -9603,132 +9752,7 @@ class Less_Visitor_toCSS extends Less_VisitorReplacing{
 	}
 }
 
-/* ./Exception/Parser.php */ 
 
-
-/**
- * Parser Exception
- *
- * @package Less
- * @subpackage exception
- */
-class Less_Exception_Parser extends Exception{
-
-	/**
-	 * The current file
-	 *
-	 * @var Less_ImportedFile
-	 */
-	public $currentFile;
-
-	/**
-	 * The current parser index
-	 *
-	 * @var integer
-	 */
-	public $index;
-
-	protected $input;
-
-	protected $details = array();
-
-
-	/**
-	 * Constructor
-	 *
-	 * @param string $message
-	 * @param Exception $previous Previous exception
-	 * @param integer $index The current parser index
-	 * @param Less_FileInfo|string $currentFile The file
-	 * @param integer $code The exception code
-	 */
-	public function __construct($message = null, Exception $previous = null, $index = null, $currentFile = null, $code = 0){
-
-		if (PHP_VERSION_ID < 50300) {
-			$this->previous = $previous;
-			parent::__construct($message, $code);
-		} else {
-			parent::__construct($message, $code, $previous);
-		}
-
-		$this->currentFile = $currentFile;
-		$this->index = $index;
-
-		$this->genMessage();
-	}
-
-
-	protected function getInput(){
-
-		if( !$this->input && $this->currentFile && $this->currentFile['filename'] && file_exists($this->currentFile['filename']) ){
-			$this->input = file_get_contents( $this->currentFile['filename'] );
-		}
-	}
-
-
-
-	/**
-	 * Converts the exception to string
-	 *
-	 * @return string
-	 */
-	public function genMessage(){
-
-		if( $this->currentFile && $this->currentFile['filename'] ){
-			$this->message .= ' in '.basename($this->currentFile['filename']);
-		}
-
-		if( $this->index !== null ){
-			$this->getInput();
-			if( $this->input ){
-				$line = self::getLineNumber();
-				$this->message .= ' on line '.$line.', column '.self::getColumn();
-
-				$lines = explode("\n",$this->input);
-
-				$count = count($lines);
-				$start_line = max(0, $line-3);
-				$last_line = min($count, $start_line+6);
-				$num_len = strlen($last_line);
-				for( $i = $start_line; $i < $last_line; $i++ ){
-					$this->message .= "\n".str_pad($i+1,$num_len,'0',STR_PAD_LEFT).'| '.$lines[$i];
-				}
-			}
-		}
-
-	}
-
-	/**
-	 * Returns the line number the error was encountered
-	 *
-	 * @return integer
-	 */
-	public function getLineNumber(){
-		if( $this->index ){
-			// https://bugs.php.net/bug.php?id=49790
-			if (ini_get("mbstring.func_overload")) {
-				return substr_count(substr($this->input, 0, $this->index), "\n") + 1;
-			} else {
-				return substr_count($this->input, "\n", 0, $this->index) + 1;
-			}
-		}
-		return 1;
-	}
-
-
-	/**
-	 * Returns the column the error was encountered
-	 *
-	 * @return integer
-	 */
-	public function getColumn(){
-
-		$part = substr($this->input, 0, $this->index);
-		$pos = strrpos($part,"\n");
-		return $this->index - $pos;
-	}
-
-}
 /* ./Exception//Chunk.php */ 
 
 
@@ -9947,6 +9971,129 @@ class Less_Exception_Compiler extends Less_Exception_Parser{
 }/* ./Exception//Parser.php */ 
 
 
+/**
+ * Parser Exception
+ *
+ * @package Less
+ * @subpackage exception
+ */
+class Less_Exception_Parser extends Exception{
+
+	/**
+	 * The current file
+	 *
+	 * @var Less_ImportedFile
+	 */
+	public $currentFile;
+
+	/**
+	 * The current parser index
+	 *
+	 * @var integer
+	 */
+	public $index;
+
+	protected $input;
+
+	protected $details = array();
+
+
+	/**
+	 * Constructor
+	 *
+	 * @param string $message
+	 * @param Exception $previous Previous exception
+	 * @param integer $index The current parser index
+	 * @param Less_FileInfo|string $currentFile The file
+	 * @param integer $code The exception code
+	 */
+	public function __construct($message = null, Exception $previous = null, $index = null, $currentFile = null, $code = 0){
+
+		if (PHP_VERSION_ID < 50300) {
+			$this->previous = $previous;
+			parent::__construct($message, $code);
+		} else {
+			parent::__construct($message, $code, $previous);
+		}
+
+		$this->currentFile = $currentFile;
+		$this->index = $index;
+
+		$this->genMessage();
+	}
+
+
+	protected function getInput(){
+
+		if( !$this->input && $this->currentFile && $this->currentFile['filename'] && file_exists($this->currentFile['filename']) ){
+			$this->input = file_get_contents( $this->currentFile['filename'] );
+		}
+	}
+
+
+
+	/**
+	 * Converts the exception to string
+	 *
+	 * @return string
+	 */
+	public function genMessage(){
+
+		if( $this->currentFile && $this->currentFile['filename'] ){
+			$this->message .= ' in '.basename($this->currentFile['filename']);
+		}
+
+		if( $this->index !== null ){
+			$this->getInput();
+			if( $this->input ){
+				$line = self::getLineNumber();
+				$this->message .= ' on line '.$line.', column '.self::getColumn();
+
+				$lines = explode("\n",$this->input);
+
+				$count = count($lines);
+				$start_line = max(0, $line-3);
+				$last_line = min($count, $start_line+6);
+				$num_len = strlen($last_line);
+				for( $i = $start_line; $i < $last_line; $i++ ){
+					$this->message .= "\n".str_pad($i+1,$num_len,'0',STR_PAD_LEFT).'| '.$lines[$i];
+				}
+			}
+		}
+
+	}
+
+	/**
+	 * Returns the line number the error was encountered
+	 *
+	 * @return integer
+	 */
+	public function getLineNumber(){
+		if( $this->index ){
+			// https://bugs.php.net/bug.php?id=49790
+			if (ini_get("mbstring.func_overload")) {
+				return substr_count(substr($this->input, 0, $this->index), "\n") + 1;
+			} else {
+				return substr_count($this->input, "\n", 0, $this->index) + 1;
+			}
+		}
+		return 1;
+	}
+
+
+	/**
+	 * Returns the column the error was encountered
+	 *
+	 * @return integer
+	 */
+	public function getColumn(){
+
+		$part = substr($this->input, 0, $this->index);
+		$pos = strrpos($part,"\n");
+		return $this->index - $pos;
+	}
+
+}
 /* ./Output/Mapped.php */ 
 
 

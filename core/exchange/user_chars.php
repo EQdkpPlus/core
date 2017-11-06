@@ -72,15 +72,19 @@ if (!class_exists('exchange_user_chars')){
 								);
 							}
 						}
+						
+						$arrProfileData = $this->pdh->get('member', 'profiledata', array($key));
 
 						$arrUserChars['char:'.$key] = array(
 							'id'			=> $key,
 							'name'			=> unsanitize($charname),
+							'name_export'	=> $this->game->handle_export_charnames($this->pdh->get('member', 'name', array($key)), $key),
 							'main'			=> ($key == $mainchar) ? 1 : 0,
 							'class'			=> $this->pdh->get('member', 'classid', array($key)),
 							'classname'		=> $this->pdh->get('member', 'classname', array($key)),
 							'roles'			=> $arrRoles,
 							'raidgroups'	=> $arrRaidgroups,
+							'profiledata'	=> $arrProfileData,
 						);
 					}
 				}

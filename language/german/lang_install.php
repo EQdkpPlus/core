@@ -138,7 +138,8 @@ $lang = array(
 	'INST_ERR_PREFIX'		=> 'Eine EQdkp Installation mit diesem Präfix existiert bereits. Lösche alle Tabellen mit diesem Präfix und wiederhole diesen Schritt. Alternativ kannst du ein anderes Präfix wählen, wenn du z.B. mehrere EQDKP Plus-Installation in einer Datenbank nutzen willst.',
 	'INST_ERR_PREFIX_INVALID'	=> 'Der angegebene Datenbank-Prefix ist für diesen Datenbanktyp nicht gültig. Bitte versuche einen anderen, entferne alle Zeichen wie Bindestriche, Apostrophe, Slashes oder Backslashes.',
 	'dbcheck_success'		=> 'Die Datenbank wurde überprüft. Es wurden keine Fehler oder Konflikte gefunden. Die Installation kann bedenkenlos fortgesetzt werden.',
-
+	'delete_ownership_file' => 'Bitte lösche aus Sicherheitsgründen die Datei "database_ownership_file.txt" aus dem Root-Ordner des EQdkp Plus, um mit der Installation fortzufahren.',
+		
 	//Step: encryptionkey
 	'encryptkey_info'		=> 'Der Verschlüsselungs-Key wird benötigt, um sensible Daten wie z.B. Email-Adressen verschlüsselt in der Datenbank abzulegen. Bitte bewahre eine Kopie des Schlüssels an einem sicheren Ort auf.',
 	'encryptkey'			=> 'Verschlüsselungs-Key',
@@ -247,8 +248,6 @@ $lang = array(
 	'recaptcha_info' 		=> 'reCAPTCHA ist ein Verfahren, um Aktionen von Bots zu unterbinden, z.B. um Spam oder Registrierungen. Neue Keys kannst du auf folgender Seite anlegen: <br /> <a href="https://www.google.com/recaptcha/admin/create" target="_blank"><i class="fa fa-lg fa-external-link"></i> https://www.google.com/recaptcha/admin/create</a>',
 	"recaptcha_okey" 		=> "Öffentlicher Key von reCATPCHA",
 	"recaptcha_pkey" 		=> "Privater Key von reCATPCHA",
-	'embedly_info'			=> 'Mit Hilfe von Embedly werden Links zu Bildern/Videos oder auch Tweets automatisch umgewandelt. Auch wird diese Funktion von Plugins wie dem MediaCenter zur Einbettung von Videos verwendet. Einen eigene API-Key kannst du auf folgender Seite anlegen: <br /> <a href="https://app.embed.ly/" target="_blank"><i class="fa fa-lg fa-external-link"></i> https://app.embed.ly/</a>',
-	'embedly_api_key'		=> 'Embedly API-Key',
 
 	//Step: end
 	'install_end_text'		=> 'Die Installation kann nun erfolgreich abgeschlossen werden.',
