@@ -753,15 +753,39 @@ if (!class_exists("time")){
 		 */
 		public function createRepeatableEvents($intUtcTimestamp, $intSecondsToAdd, $strEventTimezone=''){
 			$objTimeZone = ($strEventTimezone === '') ? $this->userTimeZone : new DateTimeZone($strEventTimezone);
-			$objTime = new DateTimeLocale($this->helper_dtime($intUtcTimestamp), $objTimeZone);
+			$objTime = new DateTimeLocale($this->helper_dtime($intUtcTimestamp), new DateTimeZone('UTC'));
 			$objTime->setTimezone($objTimeZone);
+			
+			$blnIsSummertimeBefore = $objTime->format("I");
+			$intTimestamp = $objTime->format("U");
 
+			$strHelper = $this->helper_repeatable_events($intUtcTimestamp, $intSecondsToAdd, $objTimeZone);
+			list($intNewEventTimestamp, $intIsSummertime) = explode(';', $strHelper);
+			
+			$diff = $intNewEventTimestamp - $intTimestamp;
+			//Workaround, as from Summer to Wintertime, no offset is created, only the other way...
+			if($blnIsSummertimeBefore && !$intIsSummertime && ($diff == $intSecondsToAdd)){
+				$intNewEventTimestamp += 3600;
+			}
+
+			return $intNewEventTimestamp;
+		}
+		
+		private function helper_repeatable_events($intUtcTimestamp, $intSecondsToAdd, $objTimeZone){
+			$objTime = new DateTimeLocale($this->helper_dtime($intUtcTimestamp), new DateTimeZone('UTC'));
+			$objTime->setTimezone($objTimeZone);
+			
+			$blnIsSummertimeBefore = $objTime->format("I");
+			
 			if($intSecondsToAdd > 0){
 				$objTime->add(new DateInterval("PT".$intSecondsToAdd."S"));
 			} else {
 				$objTime->sub(new DateInterval("PT".abs($intSecondsToAdd)."S"));
 			}
-			return $objTime->format("U");
+			
+			$blnIsSummertimeAfter = $objTime->format("I");
+			
+			return $objTime->format("U;I");
 		}
 
 		// HELPER FUNCTIONS
