@@ -309,7 +309,7 @@ class calendar_pageobject extends pageobject {
 								'end'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_end', array($calid))),
 								'closed'		=> ($this->pdh->get('calendar_events', 'raidstatus', array($calid)) == 1) ? true : false,
 								'flag'			=> $deadlineflag.$this->pdh->get('calendar_raids_attendees', 'html_status', array($calid, $this->user->data['user_id'])),
-								'icon'			=> ($eventextension['raid_eventid']) ? $this->pdh->get('event', 'icon', array($eventextension['raid_eventid'], true)) : '',
+								'icon'			=> $this->pdh->get('calendar_events', 'event_icon', array($calid)),
 								'note'			=> $this->pdh->get('calendar_events', 'notes', array($calid, true)),
 								'raidleader'	=> ($eventextension['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'name', 0, array($eventextension['raidleader']))) : '',
 								'rstatusdata'	=> $rstatusdata,
@@ -337,6 +337,7 @@ class calendar_pageobject extends pageobject {
 								'author'		=> $this->pdh->get('calendar_events', 'creator', array($calid)),
 								'attendees'		=> $this->pdh->get('calendar_events', 'sharedevent_attendees', array($calid)),
 								'className'		=> 'calendarevent_'.$calender_id,
+								'icon'			=> $this->pdh->get('calendar_events', 'event_icon', array($calid)),
 							);
 						}
 					}

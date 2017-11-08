@@ -40664,7 +40664,11 @@ var effectsEffectTransfer = effect;
         "aria-disabled": isDisabled ? "true" : null
       }).data($(option).data()).appendTo($label);
 
-      $("<span/>").text($(option).text()).appendTo($label);
+      var $span = $("<span/>").text($(option).text());
+      if($input.data("image-src")) {
+        $span.prepend($("<img/>").attr({"src": $input.data("image-src")}));
+      }
+      $span.appendTo($label);
 
       return $item;
     },

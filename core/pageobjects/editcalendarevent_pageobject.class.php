@@ -234,7 +234,8 @@ class editcalendarevent_pageobject extends pageobject {
 				array(
 					'invited'			=> $invited_users,
 					'invited_usergroup'	=> $invited_usergroup,
-					'location'			=> $this->in->get('location')
+					'location'			=> $this->in->get('location'),
+					'calevent_icon'	=> $this->in->get('calevent_icon'),
 				),
 				0,
 				$this->in->get('private', 0),
@@ -569,6 +570,7 @@ class editcalendarevent_pageobject extends pageobject {
 			'RADIO_EDITCLONES'	=> (new hradio('edit_clones', array('options' => $radio_repeat_array)))->output(),
 			'BBCODE_NOTE'		=> (new hbbcodeeditor('note', array('rows' => 3, 'value' => ((isset($eventdata['notes'])) ? $eventdata['notes'] : ''), 'id' => 'input_note')))->output(),
 			'LP_LOCATION'		=> (new hplacepicker('location', array('value' => ((isset($eventdata['extension']) && isset($eventdata['extension']['location'])) ? $eventdata['extension']['location'] : ''))))->output(),
+			'DR_ICONSELECT'		=> (new hiconselect('calevent_icon', array('value' => ((isset($eventdata['extension']['calevent_icon']) && $eventdata['extension']['calevent_icon']) ? $eventdata['extension']['calevent_icon'] : array())	)))->output(),
 
 			'JQ_DATE_START'		=> (new hdatepicker('startdate', array('value' => $this->time->user_date($defdates['start'], true, false, false), 'timepicker' => true, 'onselect' => $startdate_onselect, 'id' => 'cal_startdate')))->output(),
 			'JQ_DATE_END'		=> (new hdatepicker('enddate', array('value' => $this->time->user_date($defdates['end'], true, false, false), 'timepicker' => true, 'id' => 'cal_enddate')))->output(),
