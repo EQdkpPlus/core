@@ -57,6 +57,7 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 			if($this->sk_list !== null){
 				return true;
 			}
+			$arrSKList = array();
 			$arrMembers = $this->pdh->sort($this->pdh->get('member', 'id_list', array(false, false)), 'member', 'creation_date', 'asc');
 			$member_hash = array('single' => array(), 'multi' => array());
 			foreach($this->pdh->get('multidkp',  'id_list', array()) as $mdkp_id){
@@ -84,7 +85,7 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 
 				//With twinks (mainchar)
 				foreach($member_hash['multi'] as $pos => $member_id){
-					$this->sk_list['multi'][$mdkp_id][$member_id] = ++$pos;
+					$arrSKList['multi'][$mdkp_id][$member_id] = ++$pos;
 				}
 			}
 
@@ -110,15 +111,15 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 
 				$itempool_id = $this->pdh->get('item', 'itempool_id', array($item_id));
 				foreach($this->pdh->get('multidkp',  'mdkpids4itempoolid', array($itempool_id)) as $mdkp_id){
-					$buyer_pos = $this->sk_list['multi'][$mdkp_id][$buyer];
+					$buyer_pos = $arrSKList['multi'][$mdkp_id][$buyer];
 					$last_pos = -1;
 
 					//find buyer position and last position of raid attendee
 					$att_pos = array();
 					foreach($raid_attendees as $member_id){
-						$att_pos[$member_id] = $this->sk_list['multi'][$mdkp_id][$member_id];
-						if($this->sk_list['multi'][$mdkp_id][$member_id] > $last_pos){
-							$last_pos = $this->sk_list['multi'][$mdkp_id][$member_id];
+						$att_pos[$member_id] = $arrSKList['multi'][$mdkp_id][$member_id];
+						if($arrSKList['multi'][$mdkp_id][$member_id] > $last_pos){
+							$last_pos = $arrSKList['multi'][$mdkp_id][$member_id];
 						}
 					}
 					asort($att_pos);
@@ -130,11 +131,11 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 							continue;
 						}
 						if($pos == $buyer_pos){
-							$this->sk_list['multi'][$mdkp_id][$buyer] = $last_pos;
+							$arrSKList['multi'][$mdkp_id][$buyer] = $last_pos;
 							continue;
 						}
 						if($pos > $buyer_pos){
-							$this->sk_list['multi'][$mdkp_id][$member_id] = ($prev_it_pos < 0) ? $buyer_pos : $prev_it_pos;
+							$arrSKList['multi'][$mdkp_id][$member_id] = ($prev_it_pos < 0) ? $buyer_pos : $prev_it_pos;
 							$prev_it_pos = $pos;
 						}
 					}
@@ -147,7 +148,7 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 
 			foreach($this->pdh->get('multidkp',  'id_list', array()) as $mdkp_id){
 				foreach($member_hash['single'] as $pos => $member_id){
-					$this->sk_list['single'][$mdkp_id][$member_id] = ++$pos;
+					$arrSKList['single'][$mdkp_id][$member_id] = ++$pos;
 				}
 			}
 			//now the fun begins
@@ -167,15 +168,15 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 
 				$itempool_id = $this->pdh->get('item', 'itempool_id', array($item_id));
 				foreach($this->pdh->get('multidkp',  'mdkpids4itempoolid', array($itempool_id)) as $mdkp_id){
-					$buyer_pos = $this->sk_list['single'][$mdkp_id][$buyer];
+					$buyer_pos = $arrSKList['single'][$mdkp_id][$buyer];
 					$last_pos = -1;
 
 					//find buyer position and last position of raid attendee
 					$att_pos = array();
 					foreach($raid_attendees as $member_id){
-						$att_pos[$member_id] = $this->sk_list['single'][$mdkp_id][$member_id];
-						if($this->sk_list['single'][$mdkp_id][$member_id] > $last_pos){
-							$last_pos = $this->sk_list['single'][$mdkp_id][$member_id];
+						$att_pos[$member_id] = $arrSKList['single'][$mdkp_id][$member_id];
+						if($arrSKList['single'][$mdkp_id][$member_id] > $last_pos){
+							$last_pos = $arrSKList['single'][$mdkp_id][$member_id];
 						}
 					}
 					asort($att_pos);
@@ -187,11 +188,11 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 							continue;
 						}
 						if($pos == $buyer_pos){
-							$this->sk_list['single'][$mdkp_id][$buyer] = $last_pos;
+							$arrSKList['single'][$mdkp_id][$buyer] = $last_pos;
 							continue;
 						}
 						if($pos > $buyer_pos){
-							$this->sk_list['single'][$mdkp_id][$member_id] = ($prev_it_pos < 0) ? $buyer_pos : $prev_it_pos;
+							$arrSKList['single'][$mdkp_id][$member_id] = ($prev_it_pos < 0) ? $buyer_pos : $prev_it_pos;
 							$prev_it_pos = $pos;
 						}
 					}
@@ -199,7 +200,9 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 				}
 			}
 
-			$this->pdc->put('pdh_suicide_kings_table', $this->sk_list, null);
+			$this->sk_list = $arrSKList;
+			
+			$this->pdc->put('pdh_suicide_kings_table', $arrSKList, null);
 		}
 
 		public function sort_item_list($a, $b){

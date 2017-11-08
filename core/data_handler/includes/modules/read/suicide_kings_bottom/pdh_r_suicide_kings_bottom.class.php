@@ -58,7 +58,7 @@ if ( !class_exists( "pdh_r_suicide_kings_bottom" ) ) {
 			}
 
 			//base list for all mdkp pools
-			$member_hash = array();
+			$member_hash = $arrSKList = array();
 			$arrMembers = $this->pdh->sort($this->pdh->get('member', 'id_list', array(false, false)), 'member', 'creation_date', 'asc');
 
 			//With Twinks (mainchar only)
@@ -111,7 +111,7 @@ if ( !class_exists( "pdh_r_suicide_kings_bottom" ) ) {
 				//Position for member with items
 				$i = 1;
 				foreach ($sort_list_member['multi'] as $member_id){
-					$this->sk_list['multi'][$mdkp_id][$member_id] = $i++;
+					$arrSKList['multi'][$mdkp_id][$member_id] = $i++;
 				}
 
 				//---SINGLE--------------------------------------------------------------------
@@ -132,11 +132,12 @@ if ( !class_exists( "pdh_r_suicide_kings_bottom" ) ) {
 				//Position for member with items
 				$i = 1;
 				foreach ($sort_list_member['single'] as $member_id){
-					$this->sk_list['single'][$mdkp_id][$member_id] = $i++;
+					$arrSKList['single'][$mdkp_id][$member_id] = $i++;
 				}
 			}
 
-			$this->pdc->put('pdh_suicide_kings_bottom_table', $this->sk_list, null);
+			$this->pdc->put('pdh_suicide_kings_bottom_table', $arrSKList, null);
+			$this->sk_list = $arrSKList;
 		}
 
 		public function sort_item_list($a, $b){

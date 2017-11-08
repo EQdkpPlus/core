@@ -66,13 +66,15 @@ if ( !class_exists( "pdh_r_effective_dkp" ) ) {
 				return true;
 			}
 
-			$this->edkp[$period] = array();
+			$this->edkp[$period] = $arrEDKP = array();
+			$arrEDKP = array();
 			foreach($this->pdh->get('member', 'id_list', array(false, false)) as $member_id){
 				foreach($this->pdh->get('multidkp',  'id_list') as $mdkp_id){
-					$this->edkp[$period][$member_id][$mdkp_id] = $this->calculate_effective_dkp($member_id, $mdkp_id, $period, $with_twink);
+					$arrEDKP[$member_id][$mdkp_id] = $this->calculate_effective_dkp($member_id, $mdkp_id, $period, $with_twink);
 				}
 			}
 
+			$this->edkp[$period] = $arrEDKP;
 			//cache it and let it expire at midnight
 			$stm = 86400-((time()-mktime(0,0,0,1,1,1970))%86400);
 			$this->pdc->put('pdh_edkp_'.$period.$withTwinkSuffix, $this->edkp[$period], $stm);

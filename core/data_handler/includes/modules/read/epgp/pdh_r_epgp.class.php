@@ -62,16 +62,18 @@ if ( !class_exists( "pdh_r_epgp" ) ) {
 			if($this->epgp !== NULL){
 				return true;
 			}
-			$this->epgp = array();
+			$arrEPGP= array();
 			foreach($this->pdh->get('member', 'id_list', array(false, false)) as $member_id){
 				foreach($this->pdh->get('multidkp',  'id_list', array()) as $mdkp_id){
-					$this->epgp['multi'][$member_id][$mdkp_id]['ep'] = $this->calculate_ep($member_id, $mdkp_id, true);
-					$this->epgp['multi'][$member_id][$mdkp_id]['epgp'] = $this->calculate_epgp($member_id, $mdkp_id, true);
-					$this->epgp['single'][$member_id][$mdkp_id]['ep'] = $this->calculate_ep($member_id, $mdkp_id, false);
-					$this->epgp['single'][$member_id][$mdkp_id]['epgp'] = $this->calculate_epgp($member_id, $mdkp_id, false);
+					$arrEPGP['multi'][$member_id][$mdkp_id]['ep'] = $this->calculate_ep($member_id, $mdkp_id, true);
+					$arrEPGP['multi'][$member_id][$mdkp_id]['epgp'] = $this->calculate_epgp($member_id, $mdkp_id, true);
+					$arrEPGP['single'][$member_id][$mdkp_id]['ep'] = $this->calculate_ep($member_id, $mdkp_id, false);
+					$arrEPGP['single'][$member_id][$mdkp_id]['epgp'] = $this->calculate_epgp($member_id, $mdkp_id, false);
 				}
 			}
-			$this->pdc->put('pdh_epgp_table', $this->epgp, null);
+			$this->pdc->put('pdh_epgp_table', $arrEPGP, null);
+			
+			$this->epgp = $arrEPGP;
 		}
 		
 		public function calculate_epgp($member_id, $multidkp_id, $with_twink){

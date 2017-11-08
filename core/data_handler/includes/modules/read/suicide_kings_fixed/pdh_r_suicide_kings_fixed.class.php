@@ -59,6 +59,8 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 			if($this->sk_list !== null){
 				return true;
 			}
+			
+			$arrSKList = array();
 
 			//base list for all mdkp pools
 			$member_list = $this->pdh->get('member', 'id_list');
@@ -102,21 +104,21 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 
 				$arrItempools = $this->pdh->get('multidkp', 'itempool_ids', array($mdkp_id));
 
-				if(!isset($this->sk_list['multi'][$mdkp_id])) $this->sk_list['multi'][$mdkp_id] = $main_list;
-				if(!isset($this->sk_list['single'][$mdkp_id])) $this->sk_list['single'][$mdkp_id] = $member_list;
+				if(!isset($arrSKList['multi'][$mdkp_id])) $arrSKList['multi'][$mdkp_id] = $main_list;
+				if(!isset($arrSKList['single'][$mdkp_id])) $arrSKList['single'][$mdkp_id] = $member_list;
 				// iterate through raids
 				foreach($raidlist as $raid_id => $raid) {
 					if(!in_array($raid['event'], $events)) continue;
 					$temp_list = array();
 					$redistribute = array();
-					asort($this->sk_list['single'][$mdkp_id]);
-					foreach($this->sk_list['single'][$mdkp_id] as $member_id => $posi) {
+					asort($arrSKList['single'][$mdkp_id]);
+					foreach($arrSKList['single'][$mdkp_id] as $member_id => $posi) {
 						if(!in_array($member_id, $raid['raid_attendees'])) continue;
 						$temp_list['single'][] = $member_id;
 						$redistribute['single'][] = $posi;
 					}
-					asort($this->sk_list['multi'][$mdkp_id]);
-					foreach($this->sk_list['multi'][$mdkp_id] as $main_id => $posi) {
+					asort($arrSKList['multi'][$mdkp_id]);
+					foreach($arrSKList['multi'][$mdkp_id] as $main_id => $posi) {
 						if(!in_array($main_id, $raid['raid_attendees'])) {
 							$cont = true;
 							if(!empty($main2member[$main_id])) {
@@ -149,16 +151,17 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 					}
 					$temp_list['single'] = array_values($temp_list['single']);
 					foreach($temp_list['single'] as $key => $member_id) {
-						$this->sk_list['single'][$mdkp_id][$member_id] = $redistribute['single'][$key];
+						$arrSKList['single'][$mdkp_id][$member_id] = $redistribute['single'][$key];
 					}
 					$temp_list['multi'] = array_values($temp_list['multi']);
 					foreach($temp_list['multi'] as $key => $member_id) {
-						$this->sk_list['multi'][$mdkp_id][$member_id] = $redistribute['multi'][$key];
+						$arrSKList['multi'][$mdkp_id][$member_id] = $redistribute['multi'][$key];
 					}
 				}
 			}
 
-			$this->pdc->put('pdh_suicide_kings_fixed_table', $this->sk_list, null);
+			$this->pdc->put('pdh_suicide_kings_fixed_table', $arrSKList, null);
+			$this->sk_list = $arrSKList;
 		}
 
 		public function get_position($member_id, $multidkp_id, $with_twink = true){
