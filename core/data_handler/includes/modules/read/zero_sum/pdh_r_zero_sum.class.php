@@ -46,7 +46,7 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 			'zs_current'		=> array('zerosum', array('%member_id%', '%dkp_id%', 0, 0, '%with_twink%'), array('%dkp_id%')),
 			'zs_earned'			=> array('earned', array('%member_id%', '%dkp_id%', 0, '%with_twink%'), array()),
 			'zs_spent'			=> array('spent', array('%member_id%', '%dkp_id%', 0, 0, '%with_twink%'), array()),
-			'zs_rvalue'			=> array('raidval', array('%raid_id%'), array()),
+			'zs_rvalue'			=> array('raidval', array('%raid_id%'), array('%dkp_id%')),
 			'zs_rvalue_all'		=> array('raidval', array('%raid_id%', '%ALL_IDS%'), array('%ALL_IDS%', true, true)),
 		);
 
@@ -101,7 +101,7 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 			}
 			
 			$this->raid_vals = $arrRaids;
-			
+
 			$this->pdc->put('pdh_zero_sum_raids_table', $arrRaids, null);
 
 			//calculate points
@@ -152,94 +152,96 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 			//ok, that was the basic table, now we calculate the real values
 			foreach($this->pdh->get('member', 'id_list', array(false, false)) as $member_id){
 				foreach($this->pdh->get('multidkp',  'id_list', array()) as $mdkp_id){
-					$this->calculate_multi_points($member_id, $mdkp_id);
+					$arrPoints = $this->calculate_multi_points($arrPoints, $member_id, $mdkp_id);
 				}
 			}
+			
 			$this->pdc->put('pdh_zero_sum_points_table', $arrPoints, null);
 			$this->points = $arrPoints;
 		}
 
-		public function calculate_single_points($memberid, $multidkpid = 1){
+		public function calculate_single_points($arrPoints, $memberid, $multidkpid = 1){
 			//already cached?
-			if(isset($this->points[$memberid][$multidkpid]['single']['earned'][0])){
-				return $this->points[$memberid][$multidkpid]['single'];
+			if(isset($arrPoints[$memberid][$multidkpid]['single']['earned'][0])){
+				return $arrPoints[$memberid][$multidkpid]['single'];
 			}
-
+			
 			//init
-			$this->points[$memberid][$multidkpid]['single']['earned'][0] = 0;
-			$this->points[$memberid][$multidkpid]['single']['spent'][0] = 0;
-			$this->points[$memberid][$multidkpid]['single']['adjustment'][0] = 0;
-
+			$arrPoints[$memberid][$multidkpid]['single']['earned'][0] = 0;
+			$arrPoints[$memberid][$multidkpid]['single']['spent'][0] = 0;
+			$arrPoints[$memberid][$multidkpid]['single']['adjustment'][0] = 0;
+			
 			//calculate
-			if(is_array($this->points[$memberid][$multidkpid]['single']['earned'])){
-				foreach($this->points[$memberid][$multidkpid]['single']['earned'] as $event_id => $earned){
-					$this->points[$memberid][$multidkpid]['single']['earned'][0] += $earned;
+			if(is_array($arrPoints[$memberid][$multidkpid]['single']['earned'])){
+				foreach($arrPoints[$memberid][$multidkpid]['single']['earned'] as $event_id => $earned){
+					$arrPoints[$memberid][$multidkpid]['single']['earned'][0] += $earned;
 				}
 			}
-
-			if(is_array($this->points[$memberid][$multidkpid]['single']['spent'])){
-				foreach($this->points[$memberid][$multidkpid]['single']['spent'] as $itempool_id => $spent) {
-					if(!isset($this->points[$memberid][$multidkpid]['single']['spent'][0])) $this->points[$memberid][$multidkpid]['single']['spent'][0] = 0;
-					$this->points[$memberid][$multidkpid]['single']['spent'][0] += $spent;
+			
+			if(is_array($arrPoints[$memberid][$multidkpid]['single']['spent'])){
+				foreach($arrPoints[$memberid][$multidkpid]['single']['spent'] as $itempool_id => $spent) {
+					if(!isset($arrPoints[$memberid][$multidkpid]['single']['spent'][0])) $arrPoints[$memberid][$multidkpid]['single']['spent'][0] = 0;
+					$arrPoints[$memberid][$multidkpid]['single']['spent'][0] += $spent;
 				}
 			}
-
-
-			if(is_array($this->points[$memberid][$multidkpid]['single']['adjustment'])){
-				foreach($this->points[$memberid][$multidkpid]['single']['adjustment'] as $event_id => $adjustment){
-					$this->points[$memberid][$multidkpid]['single']['adjustment'][0] += $adjustment;
+			
+			
+			if(is_array($arrPoints[$memberid][$multidkpid]['single']['adjustment'])){
+				foreach($arrPoints[$memberid][$multidkpid]['single']['adjustment'] as $event_id => $adjustment){
+					$arrPoints[$memberid][$multidkpid]['single']['adjustment'][0] += $adjustment;
 				}
 			}
-			return $this->points[$memberid][$multidkpid]['single'];
+			return $arrPoints[$memberid][$multidkpid]['single'];
 		}
 
 
-		public function calculate_multi_points($memberid, $multidkpid = 1){
+		public function calculate_multi_points($arrPoints, $memberid, $multidkpid = 1){
 			//already cached?
-			if(isset($this->points[$memberid][$multidkpid]['multi'])){
-				return $this->points[$memberid][$multidkpid]['multi'];
+			if(isset($arrPoints[$memberid][$multidkpid]['multi'])){
+				return $arrPoints[$memberid][$multidkpid]['multi'];
 			}
-
+			
 			//twink stuff
 			if($this->pdh->get('member', 'is_main', array($memberid))){
 				$twinks = $this->pdh->get('member', 'other_members', $memberid);
-
+				
 				//main points
-				$points = $this->calculate_single_points($memberid, $multidkpid);
-				$this->points[$memberid][$multidkpid]['multi']['earned'][0] = $points['earned'][0];
-				$this->points[$memberid][$multidkpid]['multi']['spent'][0] = $points['spent'][0];
-				$this->points[$memberid][$multidkpid]['multi']['adjustment'][0] = $points['adjustment'][0];
-
+				$arrSinglePoints = $this->calculate_single_points($arrPoints, $memberid, $multidkpid);
+				$arrPoints[$memberid][$multidkpid]['single'] = $arrSinglePoints;
+				$arrPoints[$memberid][$multidkpid]['multi']['earned'][0] = $arrSinglePoints['earned'][0];
+				$arrPoints[$memberid][$multidkpid]['multi']['spent'][0] = $arrSinglePoints['spent'][0];
+				$arrPoints[$memberid][$multidkpid]['multi']['adjustment'][0] = $arrSinglePoints['adjustment'][0];
+				
 				//Accumulate points from twinks
 				if(!empty($twinks) && is_array($twinks)){
 					foreach($twinks as $twinkid){
-						$twinkpoints = $this->calculate_single_points($twinkid, $multidkpid);
-						$this->points[$memberid][$multidkpid]['multi']['earned'][0] += $twinkpoints['earned'][0];
-						$this->points[$memberid][$multidkpid]['multi']['adjustment'][0] += $twinkpoints['adjustment'][0];
+						$twinkpoints = $this->calculate_single_points($arrPoints, $twinkid, $multidkpid);
+						$arrPoints[$memberid][$multidkpid]['multi']['earned'][0] += $twinkpoints['earned'][0];
+						$arrPoints[$memberid][$multidkpid]['multi']['adjustment'][0] += $twinkpoints['adjustment'][0];
 						//calculate points of member+twinks per event / itempool
 						foreach(array('earned', 'adjustment') as $type) {
-							if(isset($this->points[$memberid][$multidkpid][$type]) && is_array($this->points[$memberid][$multidkpid][$type])) {
-								foreach($this->points[$memberid][$multidkpid][$type] as $id => $point) {
-									if(!isset($this->points[$memberid][$multidkpid]['multi'][$type][$id])) $this->points[$memberid][$multidkpid]['multi'][$type][$id] = 0;
-									$this->points[$memberid][$multidkpid]['multi'][$type][$id] += $this->points[$twinkid][$multidkpid]['single'][$type][$id];
+							if(isset($arrPoints[$memberid][$multidkpid][$type]) && is_array($arrPoints[$memberid][$multidkpid][$type])) {
+								foreach($arrPoints[$memberid][$multidkpid][$type] as $id => $point) {
+									if(!isset($arrPoints[$memberid][$multidkpid]['multi'][$type][$id])) $arrPoints[$memberid][$multidkpid]['multi'][$type][$id] = 0;
+									$arrPoints[$memberid][$multidkpid]['multi'][$type][$id] += $arrPoints[$twinkid][$multidkpid]['single'][$type][$id];
 								}
 							}
 						}
 						foreach($twinkpoints['spent'] as $event_id => $vals) {
 							foreach($vals as $ip_id => $val) {
-								if(!isset($this->points[$memberid][$multidkpid]['multi']['spent'][$event_id][$ip_id])) $this->points[$memberid][$multidkpid]['multi']['spent'][$event_id][$ip_id] = 0;
-								$this->points[$memberid][$multidkpid]['multi']['spent'][$event_id][$ip_id] += $val;
+								if(!isset($arrPoints[$memberid][$multidkpid]['multi']['spent'][$event_id][$ip_id])) $arrPoints[$memberid][$multidkpid]['multi']['spent'][$event_id][$ip_id] = 0;
+								$arrPoints[$memberid][$multidkpid]['multi']['spent'][$event_id][$ip_id] += $val;
 							}
 						}
 					}
 				} else {
-					$this->points[$memberid][$multidkpid]['multi'] = $this->points[$memberid][$multidkpid]['single'];
+					$arrPoints[$memberid][$multidkpid]['multi'] = $arrSinglePoints;
 				}
-				return $this->points[$memberid][$multidkpid]['multi'];
+				return $arrPoints;
 			} else {
 				$main_id = $this->pdh->get('member', 'mainid', array($memberid));
-				if($main_id) $this->points[$memberid][$multidkpid]['multi'] = $this->calculate_multi_points($main_id, $multidkpid);
-				return $this->points[$memberid][$multidkpid]['multi'];
+				if($main_id) $arrPoints[$memberid][$multidkpid]['multi'] = $this->calculate_multi_points($arrPoints, $main_id, $multidkpid);
+				return $arrPoints;
 			}
 		}
 
@@ -316,7 +318,7 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 		}
 
 
-		public function get_html_caption_raidval($mdkpid, $showname, $showtooltip){
+		public function get_html_caption_raidval($mdkpid, $showname=false, $showtooltip=false){
 			if($showname){
 				$text = $this->pdh->get('multidkp', 'name', array($mdkpid));
 			}else{
