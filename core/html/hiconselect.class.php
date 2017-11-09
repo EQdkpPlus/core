@@ -63,7 +63,7 @@ class hiconselect extends html {
 	public $text_after			= "";
 	public $text_before			= "";
 	public $returnJS			= false;
-	public $load_default		= true;
+	public $iconsource			= 'files';
 	private $origID				= false;
 
 	private $jq_options = array('height', 'width', 'preview_num', 'multiple', 'no_animation', 'header', 'filter', 'clickfunc', 'selectedtext', 'withmax', 'minselectvalue');
@@ -84,9 +84,9 @@ class hiconselect extends html {
 		if(!empty($this->js)) $dropdown.= ' '.$this->js;
 		$dropdown .= '>';
 		if(!is_array($this->todisable)) $this->todisable = array($this->todisable);
-		if($this->load_default){
-			$arrEvents = $this->pdh->get('event', 'events');
-			$arrIcons = array();
+		if($this->iconsource == 'eventicons'){
+			$arrEvents		= $this->pdh->get('event', 'events');
+			$arrIcons		= array();
 			$arrIcons[0] = array(
 				'name'	=> $this->user->lang('calendar_event_icon_none'),
 				'icon'	=> '',
@@ -96,6 +96,37 @@ class hiconselect extends html {
 					'name'	=> $eventdata['icon'],
 					'icon'	=> $this->game->decorate('events', $eventid, array(), 0, true),
 				);
+			}
+		}elseif($this->iconsource == 'files'){
+			$arrIcons		= array();
+			$arrIcons[0]	= array(
+				'name'	=> $this->user->lang('calendar_event_icon_none'),
+				'icon'	=> '',
+			);
+			$events_folder	= $this->pfh->FolderPath('event_icons', 'files');
+			$link_eventsicon= $this->pfh->FolderPath('event_icons', 'files', 'absolute');
+			$files			= sdir($events_folder);
+			$arrImages		= array('png', 'jpg', 'gif');
+			foreach($files as $file) {
+				$strExtension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+				if(!in_array($strExtension, $arrImages)) continue;
+				$arrIcons[$file] = array(
+					'name'	=> $file,
+					'icon'	=> $link_eventsicon.'/'.$file,
+				);
+			}
+
+			$events_folder = $this->root_path.'games/'.$this->config->get('default_game').'/icons/events';
+			if (is_dir($events_folder)){
+				$files = sdir($events_folder);
+				foreach($files as $file) {
+					$strExtension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+					if(!in_array($strExtension, $arrImages)) continue;
+					$arrIcons[$file] = array(
+						'name'	=> $file,
+						'icon'	=> $this->env->buildlink().'games/'.$this->config->get('default_game').'/icons/events/'.$file,
+					);
+				}
 			}
 		}else{
 			$arrIcons = $this->options;
