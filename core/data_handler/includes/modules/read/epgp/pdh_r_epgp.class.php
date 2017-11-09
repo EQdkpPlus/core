@@ -66,9 +66,9 @@ if ( !class_exists( "pdh_r_epgp" ) ) {
 			foreach($this->pdh->get('member', 'id_list', array(false, false)) as $member_id){
 				foreach($this->pdh->get('multidkp',  'id_list', array()) as $mdkp_id){
 					$arrEPGP['multi'][$member_id][$mdkp_id]['ep'] = $this->calculate_ep($member_id, $mdkp_id, true);
-					$arrEPGP['multi'][$member_id][$mdkp_id]['epgp'] = $this->calculate_epgp($member_id, $mdkp_id, true);
+					$arrEPGP['multi'][$member_id][$mdkp_id]['epgp'] = $this->calculate_epgp($member_id, $mdkp_id, true, $arrEPGP['multi'][$member_id][$mdkp_id]['ep']);
 					$arrEPGP['single'][$member_id][$mdkp_id]['ep'] = $this->calculate_ep($member_id, $mdkp_id, false);
-					$arrEPGP['single'][$member_id][$mdkp_id]['epgp'] = $this->calculate_epgp($member_id, $mdkp_id, false);
+					$arrEPGP['single'][$member_id][$mdkp_id]['epgp'] = $this->calculate_epgp($member_id, $mdkp_id, false, $arrEPGP['single'][$member_id][$mdkp_id]['epgp']);
 				}
 			}
 			$this->pdc->put('pdh_epgp_table', $arrEPGP, null);
@@ -76,9 +76,9 @@ if ( !class_exists( "pdh_r_epgp" ) ) {
 			$this->epgp = $arrEPGP;
 		}
 		
-		public function calculate_epgp($member_id, $multidkp_id, $with_twink){
-			$ep		= $this->get_ep($member_id, $multidkp_id, false, $with_twink);
-			$gp		= $this->get_gp($member_id, $multidkp_id, false, $with_twink);
+		public function calculate_epgp($member_id, $multidkp_id, $with_twink, $_ep=false){
+			$ep	= ($_ep !== false) ? $_ep : $this->get_ep($member_id, $multidkp_id, false, $with_twink);
+			$gp	= $this->get_gp($member_id, $multidkp_id, false, $with_twink);
 			$bp 	= intval($this->pdh->get_layout_config('base_points'));
 			$min_ep = intval($this->pdh->get_layout_config('min_ep'));
 			$epgp	= (($gp + $bp) == 0) ? $ep : ($ep/($gp + $bp));
