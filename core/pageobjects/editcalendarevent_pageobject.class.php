@@ -341,7 +341,8 @@ class editcalendarevent_pageobject extends pageobject {
 				array(
 					'invited'			=> $invited_users,
 					'invited_usergroup'	=> $invited_usergroup,
-					'location'			=> $this->in->get('location')
+					'location'			=> $this->in->get('location'),
+					'calevent_icon'		=> $this->in->get('calevent_icon'),
 				),
 				$this->in->get('private', 0),
 			));
