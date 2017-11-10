@@ -136,7 +136,7 @@ class hiconselect extends html {
 			foreach ($arrIcons as $key => $value) {
 				if($this->tolang) $value = ($this->user->lang($value['name'], false, false)) ? $this->user->lang($value['name']) : (($this->game->glang($value['name'])) ? $this->game->glang($value['name']) : $value['name']);
 				$disabled = (($key === 0 && in_array($key, $this->todisable, true)) || ($key !== 0 && in_array($key, $this->todisable))) ? ' disabled="disabled"' : '';
-				$selected_choice = (!empty($this->value) && ($this->value == 'all' || (is_array($this->value) && in_array($key, $this->value)))) ? 'selected="selected"' : '';
+				$selected_choice = (!empty($this->value) && ($this->value == 'all' || (is_array($this->value) && in_array($key, $this->value)) || (!is_array($this->value) && $this->value == $key))) ? 'selected="selected"' : '';
 				$dropdown .= "<option data-image-src='".$value['icon']."' value='".$key."' ".$selected_choice.$disabled.">  ".$value['name']."</option>";
 			}
 		} else {
