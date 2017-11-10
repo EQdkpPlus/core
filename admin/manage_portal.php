@@ -322,12 +322,12 @@ function reload_settings(){
 $('.js_reload').change(reload_settings);", 'docready');
 		}
 		$this->tpl->assign_var('ACTION', $this->env->phpself.$this->SID.'&amp;id='.$id.'&amp;simple_head=simple');
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('portalplugin_management'),
 			'template_file'		=> 'admin/manage_portal_moduleconfig.html',
 			'header_format'		=> $this->simple_head,
 			'display'			=> true
-		));
+		]);
 	}
 
 	//Save Portal Layout
@@ -533,8 +533,9 @@ $('.js_reload').change(reload_settings);", 'docready');
 			$arrRoutes[$val] = $val;
 		}
 
+		$strName = ($intLayoutID) ? $this->pdh->get('portal_layouts', 'name', array($intLayoutID)) : '';
 		$this->tpl->assign_vars(array(
-				'NAME'				=> ($intLayoutID) ? $this->pdh->get('portal_layouts', 'name', array($intLayoutID)) : '',
+				'NAME'				=> $strName,
 				'MS_PORTAL_BLOCKS'	=> (new hmultiselect('portal_blocks', array('options' => $arrBlockList, 'value' => (($intLayoutID) ? $this->pdh->get('portal_layouts', 'blocks', array($intLayoutID)) : array('left', 'right', 'middle', 'bottom')), 'width' => 300)))->output(),
 				'MS_PORTAL_ROUTES'	=> (new hmultiselect('portal_routes', array('options' => $arrRoutes, 'value' => (($intLayoutID) ? $this->pdh->get('portal_layouts', 'routes', array($intLayoutID)) : array()), 'width' => 300)))->output(),
 				'S_RIGHT_HIDDEN'	=> (!in_array('right', $arrUsedBlocks)),
@@ -549,28 +550,41 @@ $('.js_reload').change(reload_settings);", 'docready');
 		$this->jquery->Dialog('portalsettings', $this->user->lang('portalplugin_winname'), array('url'=>$this->root_path."admin/manage_portal.php".$this->SID."&simple_head=true&reload=1&id='+moduleid+'", 'width'=>'660', 'height'=>'400', 'withid'=>'moduleid', 'onclosejs' => '$("#save").click();'));
 		$this->jquery->Dialog('add_portalmodule', $this->user->lang('add_portal_module'), array('url'=>$this->root_path."admin/manage_extensions.php".$this->SID."&simple_head=true&show_only=3", 'width'=>'750', 'height'=>'600', 'onclosejs' => '$("#save").click();'));
 		$this->tpl->add_css(".portal_disabled { float:left; margin-left: 4px; width:230px; min-height: 16px;}");
-		$this->core->set_vars(array(
+		
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('portalplugin_management'),
 			'template_file'		=> 'admin/manage_portal_layout.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('portalmanager'), 'url'=>$this->root_path.'admin/manage_portal.php'.$this->SID],
+				['title'=>(($strName == '')?$this->user->lang('add_portal_layout'):$strName), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	public function edit_portalblock(){
-		$intBlockID = $this->in->get('b', 0);
-		if ($intBlockID){
-			$this->tpl->assign_vars(array(
-					'NAME'					=> $this->pdh->get('portal_blocks', 'name', array($intBlockID)),
+		$intBlockID	= $this->in->get('b', 0);
+		$strName	= ($intBlockID)? $this->pdh->get('portal_blocks', 'name', array($intBlockID)) : '';
+		if($intBlockID){
+			$this->tpl->assign_vars([
+					'NAME'					=> $strName,
 					'WIDE_CONTENT_CHECKED'	=> ($this->pdh->get('portal_blocks', 'wide_content', array($intBlockID))) ? 'checked="checked"' : '',
 					'BLOCKID'				=> $intBlockID,
-			));
+			]);
 		}
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 				'page_title'		=> $this->user->lang('edit_portal_block'),
 				'template_file'		=> 'admin/manage_portal_block.html',
-				'display'			=> true)
-		);
+				'page_path'			=> [
+					['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+					['title'=>$this->user->lang('portalmanager'), 'url'=>$this->root_path.'admin/manage_portal.php'.$this->SID],
+					['title'=>$this->user->lang('edit_portal_block'), 'url'=>$this->root_path.'admin/manage_portal.php#blocks'.$this->SID],
+					['title'=>(($strName == '')?$this->user->lang('add_portal_block'):$strName), 'url'=>' '],
+				],
+				'display'			=> true
+		]);
 	}
 
 	//Display Layout and Block List
@@ -640,11 +654,15 @@ $('.js_reload').change(reload_settings);", 'docready');
 				'BLOCK_COUNT'					=> count($view_list),
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('portalplugin_management'),
 			'template_file'		=> 'admin/manage_portal.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('portalmanager'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	private function add_js($arrBlocks) {

@@ -45,7 +45,7 @@ class login_pageobject extends pageobject {
 			if (strlen($this->in->get('password')) > 64) {
 				$this->core->message($this->user->lang('password_too_long'), $this->user->lang('error'), 'red');
 				$this->display();
-				return;	
+				return;
 			}
 			
 			//Check Honeypot
@@ -69,7 +69,7 @@ class login_pageobject extends pageobject {
 						if ($arrResult['failed_logins'] >= ((int)$this->config->get('failed_logins_inactivity') - 2)){
 							$blnShowCaptcha = true;
 						}
-					}		
+					}
 				}
 			}
 		
@@ -112,7 +112,7 @@ class login_pageobject extends pageobject {
 				
 				$this->display();
 				
-			} else {				
+			} else {
 				//success
 				if($this->hooks->isRegistered('login_pageobject_successfull_login')){
 					if($this->in->exists('redirect')){
@@ -199,7 +199,7 @@ class login_pageobject extends pageobject {
 					$this->core->message($this->user->lang('password_reset_success'), $this->user->lang('success'), 'green');
 					//Send Mail to the user
 					$bodyvars = array(
-							'USERNAME' => $row['username'], 
+							'USERNAME' => $row['username'],
 							'DATETIME'		=> $this->time->user_date($this->time->time, true)
 					);
 					$this->email->SendMailFromAdmin($this->crypt->decrypt($row['user_email']), $this->user->lang('email_subject_password_changed'), 'user_password_changed.html', $bodyvars);
@@ -301,11 +301,12 @@ class login_pageobject extends pageobject {
 			'KEY'	=> sanitize($this->in->get('key', '')),
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('create_new_password'),
 			'template_file'		=> 'new_password.html',
+			'page_path'			=> false,
 			'display'			=> true,
-		));
+		]);
 	}
 
 	public function display_lost_password(){
@@ -314,11 +315,12 @@ class login_pageobject extends pageobject {
 			'BUTTON_NAME'			=> 'lost_password',
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('get_new_password'),
 			'template_file'		=> 'lost_password.html',
+			'page_path'			=> false,
 			'display'			=> true,
-		));
+		]);
 	}
 
 	public function display(){
@@ -364,11 +366,12 @@ class login_pageobject extends pageobject {
 			'REDIRECT'				=> ( isset($redirect) ) ? '<input type="hidden" name="redirect" value="'.base64_decode($redirect).'" />' : '',
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('login'),
 			'template_file'		=> 'login.html',
+			'page_path'			=> false,
 			'display'			=> true,
-		));
+		]);
 
 	}
 

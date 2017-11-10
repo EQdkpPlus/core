@@ -275,11 +275,16 @@ $("#type").change(function(){
 	}
 });', 'docready');
 
-		$this->core->set_vars(array (
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manage_userpf_edit'),
 			'template_file'		=> 'admin/manage_user_profilefields_edit.html',
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manage_userpf'), 'url'=>$this->root_path.'admin/manage_user_profilefields.php'.$this->SID],
+				['title'=>(($intFieldID == '')?$this->user->lang('new_profilefield'):$this->pdh->geth('user_profilefields', 'name', [$intFieldID])), 'url'=>' '],
+			],
 			'display'			=> true
-		));
+		]);
 	}
 
 	public function display($message = false){
@@ -315,10 +320,10 @@ $("#type").change(function(){
 		}
 
 		$this->jquery->selectall_checkbox('selall_pfields', 'del_ids[]');
-		$this->tpl->assign_vars(array (
+		$this->tpl->assign_vars([
 			'PROFILEFIELDS_COUNT'	=> count($fields),
 			'S_BRIDGE_FIELD'		=> ((int)$this->config->get('cmsbridge_active') == 1) ? true : false,
-		));
+		]);
 		
 		$this->tpl->add_js("
 			$(\"#userprofilefield_table tbody\").sortable({
@@ -327,11 +332,15 @@ $("#type").change(function(){
 			});
 		", "docready");
 
-		$this->core->set_vars(array (
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manage_userpf'),
 			'template_file'		=> 'admin/manage_user_profilefields.html',
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manage_userpf'), 'url'=>' '],
+			],
 			'display'			=> true
-		));
+		]);
 	}
 }
 registry::register('ManageUserProfileFields');

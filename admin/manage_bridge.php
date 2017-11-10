@@ -303,11 +303,15 @@ class Manage_Bridge extends page_generic {
 			'MS_SYNC_USERGROUPS'=> (new hmultiselect('sync_usergroups', array('options' => $arrSelectedGroups, 'value' => explode(',', $this->config->get('cmsbridge_sync_groups')), 'width' => 300, 'height' => 170)))->output(),
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manage_bridge'),
 			'template_file'		=> 'admin/manage_bridge.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manage_bridge'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 }
 registry::register('Manage_Bridge');

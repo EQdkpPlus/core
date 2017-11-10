@@ -32,7 +32,7 @@ class manage_cache extends page_generic {
 	private $usable_cache_types = 	array('none', 'file');
 	
 	public function __construct() {
-		$this->user->check_auth('a_cache_man'); 
+		$this->user->check_auth('a_cache_man');
 		$handler = array(
 			'del_key' => array('process' => 'delete_key', 'csrf'=>true),
 			'cache_clear' => array('process' => 'clear_cache', 'csrf'=>true),
@@ -156,11 +156,15 @@ class manage_cache extends page_generic {
 		));
 
 
-		$this->core->set_vars(array (
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('pdc_manager'),
 			'template_file'		=> 'admin/manage_cache.html',
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('pdc_manager'), 'url'=>' '],
+			],
 			'display'			=> true
-		));
+		]);
 	}
 }
 registry::register('manage_cache');

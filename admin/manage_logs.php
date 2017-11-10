@@ -108,14 +108,17 @@ class Manage_Logs extends page_generic {
 				}
 			}
 		}
-		$plugin = $this->pdh->get('logs', 'plugin', array($this->url_id));
+		
+		$plugin		= $this->pdh->get('logs', 'plugin', array($this->url_id));
+		$log_action	= $this->pdh->geth('logs', 'tag', array($this->url_id));
+		$log_date	= $this->pdh->geth('logs', 'date', array($this->url_id, true));
 		$this->tpl->assign_vars(array(
 			'LOG_PLUGIN'		=> ($plugin != 'core') ? (($this->user->lang($plugin)) ? $this->user->lang($plugin) : ucfirst($plugin)) : '',
-			'LOG_DATE'			=> $this->pdh->geth('logs', 'date', array($this->url_id, true)),
+			'LOG_DATE'			=> $log_date,
 			'LOG_USERNAME'		=> $this->pdh->geth('logs', 'user', array($this->url_id)),
 			'LOG_IP_ADDRESS'	=> $this->pdh->geth('logs', 'ipaddress', array($this->url_id)),
 			'LOG_SESSION_ID'	=> $this->pdh->geth('logs', 'sid', array($this->url_id)),
-			'LOG_ACTION'		=> $this->pdh->geth('logs', 'tag', array($this->url_id)),
+			'LOG_ACTION'		=> $log_action,
 			'LOG_RECORD'		=> $this->pdh->geth('logs', 'record', array($this->url_id)),
 			'LOG_RECORD_ID'		=> $this->pdh->geth('logs', 'recordid', array($this->url_id)),
 			'S_COMPARE_VIEW'	=> $blnCompare,
@@ -126,11 +129,17 @@ class Manage_Logs extends page_generic {
 				window.location="manage_logs.php'.$this->SID.'";
 			});', 'docready');
 		$this->tpl->css_file($this->root_path.'libraries/diff/diff.css');
-		$this->core->set_vars(array(
+		
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('viewlogs_title'),
 			'template_file'		=> 'admin/manage_logs_view.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('viewlogs_title'), 'url'=>$this->root_path.'admin/manage_logs.php'.$this->SID],
+				['title'=>$log_action.', '.$log_date, 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	public function display(){
@@ -303,11 +312,15 @@ class Manage_Logs extends page_generic {
 			'HPTT_ADMIN_LINK'		=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('admin_manage_logs').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('viewlogs_title'),
 			'template_file'		=> 'admin/manage_logs.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('viewlogs_title'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 }
 registry::register('Manage_Logs');

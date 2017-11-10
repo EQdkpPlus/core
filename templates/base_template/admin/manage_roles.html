@@ -1,103 +1,96 @@
 <!-- IF S_ADD -->
-<form method="post" action="{ACTION}" name="editNote">
-	<input type="hidden" name="editid" value="{EDITID}" />
+	<form method="post" action="{ACTION}" name="editNote">
+		<input type="hidden" name="editid" value="{EDITID}" />
 
-	<fieldset class="settings">
-		<dl>
-			<dt>
-				<label>{L_name}</label><br />
-			</dt>
-			<dd>
-				<input type="text" name="role_name" size="20" value="{REALNAME}" class="input" />
-			</dd>
-		</dl>
-		<dl>
-			<dt>
-				<label>{L_role_classes}</label><br />
-			</dt>
-			<dd>
-				{MULTISELECT}
-			</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_role_icon_header}:</label></dt>
-			<dd><button class="mainoption" type="button" id="iubuttonedit" onclick="elfinder_all();"><i class="fa fa-upload"></i> {L_upload_roleicon}</button></dd>
-		</dl>
+		<fieldset class="settings">
+			<dl>
+				<dt>
+					<label>{L_name}</label><br />
+				</dt>
+				<dd>
+					<input type="text" name="role_name" size="20" value="{REALNAME}" class="input" />
+				</dd>
+			</dl>
+			<dl>
+				<dt>
+					<label>{L_role_classes}</label><br />
+				</dt>
+				<dd>
+					{MULTISELECT}
+				</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_role_icon_header}:</label></dt>
+				<dd><button class="mainoption" type="button" id="iubuttonedit" onclick="elfinder_all();"><i class="fa fa-upload"></i> {L_upload_roleicon}</button></dd>
+			</dl>
 
-		<table class="table fullwidth scrollable-x">
-		<!-- IF ICONS -->
-		<!-- BEGIN files_row -->
-		<tr class="colorswitch">
-			<!-- BEGIN fields -->
-			<td class="nowrap" style="width:16%">
-				<!-- IF files_row.fields.CHECKBOX -->
-				<label><input type="radio" name="icon" {files_row.fields.CHECKED} value="{files_row.fields.NAME}" />
-				{files_row.fields.IMAGE}</label>
-				<!-- ENDIF -->
-			</td>
-			<!-- END fields -->
-		</tr>
-		<!-- END files_row -->
-		<!-- ENDIF -->
-	</table>
-	</fieldset>
-	<button class="mainoption" type="submit" name="{BUTTON_NAME}" id="roleSubmBtn"><i class="fa fa-check"></i>{L_save}</button>
-{CSRF_TOKEN}
-</form>
+			<table class="table fullwidth scrollable-x">
+			<!-- IF ICONS -->
+			<!-- BEGIN files_row -->
+			<tr class="colorswitch">
+				<!-- BEGIN fields -->
+				<td class="nowrap" style="width:16%">
+					<!-- IF files_row.fields.CHECKBOX -->
+					<label><input type="radio" name="icon" {files_row.fields.CHECKED} value="{files_row.fields.NAME}" />
+					{files_row.fields.IMAGE}</label>
+					<!-- ENDIF -->
+				</td>
+				<!-- END fields -->
+			</tr>
+			<!-- END files_row -->
+			<!-- ENDIF -->
+		</table>
+		</fieldset>
+		<button class="mainoption" type="submit" name="{BUTTON_NAME}" id="roleSubmBtn"><i class="fa fa-check"></i>{L_save}</button>
+		{CSRF_TOKEN}
+	</form>
+
 <!-- ELSE -->
-<div class="breadcrumb-container">
-	<ul class="breadcrumb">
-		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
-		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
-		<li class="current"><a>{L_rolemanager}</a></li>
-	</ul>
-	<div class="clear"></div>
-</div>
 
-<div id="roles_tabs">
-	<ul>
-		<li><a href='#roles'>{L_rolemanager}</a></li>
-		<li><a href='#defaultroles'>{L_classes_defaultroles}</a></li>
-	</ul>
-	<div id="roles">
-		<form method="post" action="{ACTION}" name="managerole">
-			<div class="contentHeader">
-				<h1 class="contentTitle">{L_rolemanager} <span class="bubble">{ROLES_COUNT}</span>{HPTT_ADMIN_LINK}</h1>
-			</div>
-			<div class="tableHeader floatRight">
-				<button class="mainoption" name="newRoleManager" type="button" onclick="newRole()"><i class="fa fa-plus"></i>{L_add_role}</button>
-				<button class="mainoption" type="button" name="ResetRoles3" onclick="ResetRoles();"><i class="fa fa-refresh"></i>{L_reset_roles}</button>
-			</div>
-			<div class="clear"></div>
-			<table  class="table fullwidth colorswitch">
-				{ROLES}
-			</table>
-			<div class="contentFooter">
-				<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
-				<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="fa fa-times"></i>{L_delete_selected}</button>
-			</div>
-			{CSRF_TOKEN}
-		</form>
+	<div id="roles_tabs">
+		<ul>
+			<li><a href='#roles'>{L_rolemanager}</a></li>
+			<li><a href='#defaultroles'>{L_classes_defaultroles}</a></li>
+		</ul>
+		<div id="roles">
+			<form method="post" action="{ACTION}" name="managerole">
+				<div class="contentHeader">
+					<h1 class="contentTitle">{L_rolemanager} <span class="bubble">{ROLES_COUNT}</span>{HPTT_ADMIN_LINK}</h1>
+				</div>
+				<div class="tableHeader floatRight">
+					<button class="mainoption" name="newRoleManager" type="button" onclick="newRole()"><i class="fa fa-plus"></i>{L_add_role}</button>
+					<button class="mainoption" type="button" name="ResetRoles3" onclick="ResetRoles();"><i class="fa fa-refresh"></i>{L_reset_roles}</button>
+				</div>
+				<div class="clear"></div>
+				<table  class="table fullwidth colorswitch">
+					{ROLES}
+				</table>
+				<div class="contentFooter">
+					<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
+					<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="fa fa-times"></i>{L_delete_selected}</button>
+				</div>
+				{CSRF_TOKEN}
+			</form>
+		</div>
+		<div id="defaultroles">
+			<form method="post" action="{ACTION}" name="defaultroles_form">
+				<div class="contentHeader">
+					<h1 class="contentTitle">{L_classes_defaultroles}</h1>
+				</div>
+				<div class="clear"></div>
+				<table  class="table fullwidth colorswitch">
+					<!-- BEGIN defaultclasses -->
+					<tr>
+						<td>{defaultclasses.NAME}</td>
+						<td>{defaultclasses.ROLES}</td>
+					</tr>
+					<!-- END defaultclasses -->
+				</table>
+				<div class="contentFooter">
+					<button class="mainoption" type="submit" name="defaultroles" ><i class="fa fa-save"></i>{L_save}</button>
+				</div>
+				{CSRF_TOKEN}
+			</form>
+		</div>
 	</div>
-	<div id="defaultroles">
-		<form method="post" action="{ACTION}" name="defaultroles_form">
-			<div class="contentHeader">
-				<h1 class="contentTitle">{L_classes_defaultroles}</h1>
-			</div>
-			<div class="clear"></div>
-			<table  class="table fullwidth colorswitch">
-				<!-- BEGIN defaultclasses -->
-				<tr>
-					<td>{defaultclasses.NAME}</td>
-					<td>{defaultclasses.ROLES}</td>
-				</tr>
-				<!-- END defaultclasses -->
-			</table>
-			<div class="contentFooter">
-				<button class="mainoption" type="submit" name="defaultroles" ><i class="fa fa-save"></i>{L_save}</button>
-			</div>
-			{CSRF_TOKEN}
-		</form>
-	</div>
-</div>
 <!-- ENDIF -->

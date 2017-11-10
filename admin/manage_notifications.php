@@ -95,11 +95,16 @@ class ManageNotifications extends page_generic {
 			'OVERWRITE_RADIO'	=> (new hradio('overwrite', array('value' => 0)))->output(),
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'    => $this->user->lang('manage_notifications').': '.$strNotificationID,
 			'template_file' => 'admin/manage_notifications_edit.html',
-			'display'       => true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manage_notifications'), 'url'=>$this->root_path.'admin/manage_notifications.php'.$this->SID],
+				['title'=>$strNotificationID, 'url'=>' '],
+			],
+			'display'       => true
+		]);
 	}
 
 	public function display($messages=false) {
@@ -137,11 +142,15 @@ class ManageNotifications extends page_generic {
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count())
 		);
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manage_notifications'),
 			'template_file'		=> 'admin/manage_notifications.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manage_notifications'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 }
