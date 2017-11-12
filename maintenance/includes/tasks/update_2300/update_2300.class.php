@@ -218,6 +218,8 @@ class update_2300 extends sql_update_task {
 		$this->config->set('avatar_default', 'eqdkp');
 		$this->config->set('avatar_allowed', array('eqdkp', 'gravatar'));
 		
+		$this->config->set('build_pointcache', 'true');
+		
 		$crontab_file = $this->pfh->FolderPath('timekeeper', 'eqdkp').'crontab.php';
 		$result = @file_get_contents($crontab_file);
 		if($result !== false){

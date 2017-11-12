@@ -76,6 +76,7 @@ $lang = array(
 	"update" => 'Update',
 	"import" => 'Import',
 	"plugin_update" => 'Plugin update',
+	"worker" => "Worker",
 	"unknown_task_warning" => 'Unknown task!',
 	"application_warning" => 'Could not process task due to an application error!',
 	"dependency_warning" => 'This task is dependent from others. Please process them first!',
