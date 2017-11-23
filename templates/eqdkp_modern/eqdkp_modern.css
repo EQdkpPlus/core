@@ -799,8 +799,9 @@ ul.adminmenu ul.sub-menu li:hover > .sub-menu-arrow:after {
 	display: none;
 	padding: 3px;
 	position: absolute;
-	top: -1.5px;
+	top: 50%;
 	left: 100%;
+	transform: translateY(-50%);
 	background: linear-gradient(to bottom, #fff 0%, #ededed 100%);
 	border: 1px solid #b7b7b7;
 	border-radius: 3px;
