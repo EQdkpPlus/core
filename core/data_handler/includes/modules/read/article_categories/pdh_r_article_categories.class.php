@@ -142,7 +142,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 						if (($this->pdh->get('articles', 'show_from', array($intArticleID)) != "" && $this->pdh->get('articles', 'show_from', array($intArticleID)) > $this->time->time) || ($this->pdh->get('articles', 'show_to', array($intArticleID)) != "" && $this->pdh->get('articles', 'show_to', array($intArticleID)) < $this->time->time)) continue;
 						
 						$arrOut[] = $intArticleID;
-					}	
+					}
 				}
 			}
 			$arrOut = array_unique($arrOut);
@@ -385,7 +385,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			if ($strPermission == 'rea'){
 				switch($myPermission){
 					case -1:
-					case 1: 
+					case 1:
 							//Do we have a parent?
 							$result = $myPermission;
 							if ($intCategoryID == 1){
@@ -423,7 +423,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 								return 0;
 							} else {
 								if ($intParentID !== false){
-									$result = $this->get_calculated_permissions($intParentID, $strPermission, $intUsergroupID, $myPermission, false, $intCall+1);			
+									$result = $this->get_calculated_permissions($intParentID, $strPermission, $intUsergroupID, $myPermission, false, $intCall+1);
 								} else {
 									if ($this->get_parent($intCategoryID)) $result = $this->get_calculated_permissions($this->get_parent($intCategoryID), $strPermission, $intUsergroupID, $myPermission, false, $intCall+1);
 								}
@@ -470,7 +470,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 				} elseif ($blnStart){
 					if ($myPreset === $this->get_name_prefix($catid)) break;
 					$arrOut[] = $catid;
-				}				
+				}
 			}
 			
 			return $arrOut;
@@ -510,7 +510,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			return false;
 		}
 		
-		public function get_path($intCategoryID){			
+		public function get_path($intCategoryID){
 			$strPath = "";
 			$strPath = $this->add_path($intCategoryID);
 			
@@ -541,7 +541,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			
 			if (isset($this->arrTempPermissions[$intCategoryID]) && isset($this->arrTempPermissions[$intCategoryID][$intUserID])){
 				return $this->arrTempPermissions[$intCategoryID][$intUserID];
-			} else {			
+			} else {
 				$arrPermissions = array('read' => false, 'create' => false, 'delete' => false, 'update' => false, 'change_state' => false);
 				foreach($arrUsergroupMemberships as $intGroupID => $intStatus){
 					$blnReadPerm = $this->pdh->get('article_categories', 'calculated_permissions', array($intCategoryID, 'rea', $intGroupID));
@@ -553,7 +553,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 					$blnDeletePerm = $this->pdh->get('article_categories', 'calculated_permissions', array($intCategoryID, 'del', $intGroupID));
 					if ($blnDeletePerm) $arrPermissions['delete'] = true;
 					$blnChangeStatePerm = $this->pdh->get('article_categories', 'calculated_permissions', array($intCategoryID, 'chs', $intGroupID));
-					if ($blnChangeStatePerm) $arrPermissions['change_state'] = true;		
+					if ($blnChangeStatePerm) $arrPermissions['change_state'] = true;
 				}
 				$this->arrTempPermissions[$intCategoryID][$intUserID] = $arrPermissions;
 				return $arrPermissions;
@@ -561,24 +561,30 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 		}
 		
 		public function get_breadcrumb($intCategoryID){
-			if ($intCategoryID == 1) return "";
-			$strBreadcrumb = ($this->get_parent($intCategoryID)) ? $this->add_breadcrumb($this->get_parent($intCategoryID)) : '';
+			if($intCategoryID == 1) return [];
+			$arrBreadcrumb = ($this->get_parent($intCategoryID)) ? $this->add_breadcrumb($this->get_parent($intCategoryID)) : [];
 
-			$strBreadcrumb .=  '<li class="current"><a href="'.$this->controller_path.$this->get_path($intCategoryID).'">'.$this->get_name($intCategoryID).'</a></li>';
-			return $strBreadcrumb;
+			$arrBreadcrumb[] = [
+				'title'	=> $this->get_name($intCategoryID),
+				'url'	=> $this->controller_path.$this->get_path($intCategoryID),
+			];
+			return $arrBreadcrumb;
 		}
 		
-		private function add_breadcrumb($intCategoryID, $strBreadcrumb=''){
-			if ($intCategoryID == 1) return $strBreadcrumb;
-			$strName = $this->pdh->get('article_categories', 'name', array($intCategoryID));
-			$strPath = $this->pdh->get('article_categories', 'path', array($intCategoryID));
-			$strBreadcrumb = '<li><a href="'.$this->controller_path.$strPath.'">'.$strName.'</a></li>'.$strBreadcrumb;
+		private function add_breadcrumb($intCategoryID, $arrBreadcrumb=[]){
+			if($intCategoryID == 1) return $arrBreadcrumb;
+			$strName = $this->pdh->get('article_categories', 'name', [$intCategoryID]);
+			$strPath = $this->pdh->get('article_categories', 'path', [$intCategoryID]);
+			$arrBreadcrumb = array_merge([[
+				'title'	=> $strName,
+				'url'	=> $this->controller_path.$strPath,
+			]], $arrBreadcrumb);
 			
-			if ($this->pdh->get('article_categories', 'parent', array($intCategoryID))){
-				$strBreadcrumb = $this->add_breadcrumb($this->pdh->get('article_categories', 'parent', array($intCategoryID)), $strBreadcrumb);
+			if($this->pdh->get('article_categories', 'parent', array($intCategoryID))){
+				$arrBreadcrumb = $this->add_breadcrumb($this->pdh->get('article_categories', 'parent', [$intCategoryID]), $arrBreadcrumb);
 			}
 			
-			return $strBreadcrumb;
+			return $arrBreadcrumb;
 		}
 		
 		public function get_childs($intCategoryID){
@@ -625,7 +631,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			$arrSearchResults = array();
 			if (is_array($this->categories)){
 				foreach($this->categories as $id => $value) {
-					if (!$this->get_published($id)) continue;			
+					if (!$this->get_published($id)) continue;
 					$arrPermissions = $this->get_user_permissions($id, $this->user->id);
 					if(!$arrPermissions['read']) continue;
 				

@@ -371,7 +371,7 @@ class admin_index extends gen_class {
 			'CIRCLE_RAIDS'			=> ($total_dkp_items > 0) ? sprintf("%.2F", ($total_raids / $total_dkp_items)*100) : 0,
 			'CIRCLE_ADJUSTMENTS'	=> ($total_dkp_items > 0) ? sprintf("%.2F", ($total_adjustments / $total_dkp_items)*100) : 0,
 			'REQCOUNT'				=> $req_count,
-			'HPTT_ADMIN_LINK'		=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('admin_index').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,	
+			'HPTT_ADMIN_LINK'		=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('admin_index').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,
 
 			'S_WHO_IS_ONLINE'		=> $this->user->check_group(2, false),
 		));
@@ -393,11 +393,14 @@ class admin_index extends gen_class {
 			));
 		}
 
-		$this->core->set_vars(array(
-		'page_title'	=> $this->user->lang('admin_index_title'),
-		'template_file'	=> 'admin/admin_index.html',
-		'display'		=> true)
-		);
+		$this->core->set_vars([
+			'page_title'	=> $this->user->lang('admin_index_title'),
+			'template_file'	=> 'admin/admin_index.html',
+			'page_path'		=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+			],
+			'display'		=> true
+		]);
 	}
 
 	// Helper Functions

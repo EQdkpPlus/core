@@ -73,11 +73,15 @@ class MySQL_Info extends page_generic{
 			'DB_VERSION'		=> 'Client ('.$this->db->client_version.')<br/>Server ('.$this->db->server_version.')',
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('title_mysqlinfo'),
 			'template_file'		=> 'admin/info_database.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('mysql_info'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	// ---------------------------------------------------------

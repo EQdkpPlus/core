@@ -292,17 +292,26 @@ class Manage_Articles extends page_generic {
 			'var pageobjects = '.json_encode($arrPageObjects).';'
 		);
 
+		$strArticleName		= $this->pdh->get('articles', 'title', array($id));
+		$strCategoryName	= $this->pdh->get('article_categories', 'name', array($cid));
 		$this->tpl->assign_vars(array(
 			'CID' => $cid,
 			'AID' => $id,
-			'CATEGORY_NAME' => $this->pdh->get('article_categories', 'name', array($cid)),
-			'ARTICLE_NAME' => $this->pdh->get('articles', 'title', array($id)),
+			'CATEGORY_NAME' => $strCategoryName,
+			'ARTICLE_NAME' => $strArticleName,
 		));
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> (($id) ? $this->user->lang('manage_articles').': '.$this->pdh->get('articles', 'title', array($id)) : $this->user->lang('add_new_article')),
 			'template_file'		=> 'admin/manage_articles_edit.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manage_article_categories'), 'url'=>$this->root_path.'admin/manage_article_categories.php'.$this->SID],
+				['title'=>$strCategoryName, 'url'=>$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$cid],
+				['title'=>$this->user->lang('manage_articles'), 'url'=>$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$cid],
+				['title'=>$strArticleName, 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	// ---------------------------------------------------------
@@ -363,23 +372,29 @@ class Manage_Articles extends page_generic {
 
 		$this->confirm_delete($this->user->lang('confirm_delete_articles'));
 
+		$strName = $this->pdh->get('article_categories', 'name', array($cid));
 		$this->tpl->assign_vars(array(
 			'ARTICLE_LIST' 		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), 25, false),
 			'PAGINATION' 		=> generate_pagination('manage_articles.php'.$sort_suffix, $raid_count, 25, $this->in->get('start', 0)),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
 			'ARTICLE_COUNT'		=> count($view_list),
-			'CATEGORY_NAME' 	=> $this->pdh->get('article_categories', 'name', array($cid)),
+			'CATEGORY_NAME' 	=> $strName,
 			'S_CATEGORY_PUBLISHED' => $this->pdh->get('article_categories', 'published', array($cid)) ? true : false,
 			'CID'				=> $cid,
 			'HPTT_ADMIN_LINK'	=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('admin_manage_articles').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,
 			'BUTTON_MENU'		=> $this->core->build_dropdown_menu($this->user->lang('selected_articles').'...', $arrMenuItems, '', 'manage_members_menu', array("input[name=\"selected_ids[]\"]")),
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manage_articles'),
 			'template_file'		=> 'admin/manage_articles.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manage_article_categories'), 'url'=>$this->root_path.'admin/manage_article_categories.php'.$this->SID],
+				['title'=>$strName, 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 }

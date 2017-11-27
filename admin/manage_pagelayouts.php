@@ -354,11 +354,15 @@ class ManagePageLayouts extends page_generic {
 
 		//$this->jquery->Tab_Select('lm_tabs', $tab);
 
-		$this->core->set_vars(array (
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('lm_title'),
 			'template_file'		=> 'admin/manage_pagelayouts.html',
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('page_manager'), 'url'=>' '],
+			],
 			'display'			=> true
-		));
+		]);
 	}
 
 	public function edit($messages = false, $name = false){
@@ -628,11 +632,17 @@ class ManagePageLayouts extends page_generic {
 			'DESCRIPTION'			=> $this->pdh->get_eqdkp_layout_description($layout_name),
 		));
 
-		$this->core->set_vars(array (
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('lm_title'),
 			'template_file'		=> 'admin/manage_pagelayouts_edit.html',
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('page_manager'), 'url'=>$this->root_path.'admin/manage_pagelayouts.php'.$this->SID],
+				['title'=>$this->user->lang('lm_title'), 'url'=>$this->root_path.'admin/manage_pagelayouts.php'.$this->SID],
+				['title'=>$layout_name, 'url'=>' '],
+			],
 			'display'			=> true
-		));
+		]);
 	}
 
 	private function init_multipools() {

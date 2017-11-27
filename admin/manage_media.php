@@ -19,7 +19,7 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//tbody not allowed withoud thead, 
+//tbody not allowed withoud thead,
 
 define('EQDKP_INC', true);
 define('IN_ADMIN', true);
@@ -35,11 +35,15 @@ class Manage_Media extends page_generic {
 	}
 
 	public function display(){
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manage_media'),
 			'template_file'		=> 'admin/manage_media.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manage_media'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 }
 registry::register('Manage_Media');

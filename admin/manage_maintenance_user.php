@@ -169,11 +169,15 @@ class maintenance_user extends page_generic {
 			'USER_ACTIVE'			=> $user_active,
 			'USER_DATA'				=> $this->user->lang('username').": ".((isset($user_data['username'])) ? $user_data['username'] : '')."\n".$this->user->lang('password').": ".((isset($muser['password'])) ? $muser['password'] : '')."\n".$this->user->lang('maintenanceuser_valid_until').": ".((isset($muser['valid_until'])) ? date($this->user->style['date_time'], $muser['valid_until']) : '')."\n".$this->user->lang('pk_set_linkurl').": ".$this->env->link,
 		));
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('maintenanceuser_user'),
 			'template_file'		=> 'admin/manage_maintenance_user.html',
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('maintenanceuser_user'), 'url'=>' '],
+			],
 			'display'			=> true
-		));
+		]);
 	}
 } //close class
 registry::register('maintenance_user');

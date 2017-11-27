@@ -222,12 +222,16 @@ class ManageAutoPoints extends page_generic {
 				$(this).parent().remove();
 			});", 'docready');
 
-		$this->core->set_vars(array (
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('apa_manager'),
 			'template_file'		=> 'admin/manage_auto_points_edit_function.html',
 			'header_format'		=> $this->simple_head,
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('apa_manager'), 'url'=>' '],
+			],
 			'display'			=> true,
-		));
+		]);
 	}
 
 	//reminder: prohibit apas using different type but same pool AND module
@@ -286,12 +290,16 @@ class ManageAutoPoints extends page_generic {
 			'HIDDEN_NAME'	=> ($this->in->exists('id')) ? 'id' : 'type',
 			'HIDDEN_VAL'	=> ($this->in->exists('id')) ? $this->in->get('id') : $type,
 		));
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('apa_manager'),
 			'template_file'		=> 'admin/manage_auto_points_edit.html',
 			'header_format'		=> $this->simple_head,
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('apa_manager'), 'url'=>' '],
+			],
 			'display'			=> true,
-		));
+		]);
 	}
 
 	public function display($messages = false){
@@ -387,12 +395,16 @@ class ManageAutoPoints extends page_generic {
 			'CALC_COUNT'		=> count($funcs),
 		));
 
-		$this->core->set_vars(array (
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('apa_manager'),
 			'template_file'		=> 'admin/manage_auto_points.html',
 			'header_format'		=> $this->simple_head,
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('apa_manager'), 'url'=>' '],
+			],
 			'display'			=> true,
-		));
+		]);
 	}
 
 	public function output_deletion_text() {

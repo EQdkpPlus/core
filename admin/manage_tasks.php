@@ -147,11 +147,15 @@ class ManageTasks extends page_generic {
 		}
 
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'	=> $this->user->lang('uc_delete_manager'),
 			'template_file'	=> 'admin/manage_tasks.html',
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('uc_delete_manager'), 'url'=>' '],
+			],
 			'display'		=> true
-		));
+		]);
 	}
 
 }

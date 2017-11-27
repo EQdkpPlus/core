@@ -136,11 +136,15 @@ class Manage_Calendars extends page_generic {
 			'PERMISSIONS'		=> (new hmultiselect('calendars['.$key.'][permissions]', array('options' => $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list'))), 'value' => (($permissionvalue == 'all') ? $this->pdh->get('user_groups', 'id_list') : $permissionvalue))))->output(),
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manage_calendars'),
 			'template_file'		=> 'admin/manage_calendars.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manage_calendars'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	private function get_post() {

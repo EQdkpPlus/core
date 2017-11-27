@@ -623,7 +623,6 @@ class controller extends gen_class {
 						'S_PAGINATION'		=> ($pageCount > 1) ? true : false,
 						'ARTICLE_SOCIAL_BUTTONS'  => ($arrCategory['social_share_buttons']) ? $this->social->createSocialButtons($this->env->link.$this->controller_path_plain.$strPath, strip_tags($arrArticle['title'])) : '',
 						'PERMALINK'			=> $this->pdh->get('articles', 'permalink', array($intArticleID)),
-						'BREADCRUMB'		=> $this->pdh->get('articles', 'breadcrumb', array($intArticleID, $strAdditionalTitles, registry::get_const('url_id'), $arrPath)),
 						'ARTICLE_RATING'	=> ($arrArticle['votes']) ? $this->jquery->starrating($intArticleID, $this->controller_path.$strPath.'&savevote&link_hash='.$this->CSRFGetToken('savevote'), array('score' => (($arrArticle['votes_count']) ? round($arrArticle['votes_sum'] / $arrArticle['votes_count']): 0), 'number' => 10)) : '',
 						//'ARTICLE_RATING'  => ($arrArticle['votes']) ? $this->jquery->StarRating('article_vote', $myRatings,$this->server_path.$strPath,(($arrArticle['votes_count']) ? round($arrArticle['votes_sum'] / $arrArticle['votes_count']): 0), $blnUserHasVoted) : '',
 						'ARTICLE_TOOLBAR'	=> $jqToolbar['id'],
@@ -660,6 +659,7 @@ class controller extends gen_class {
 				$this->core->set_vars(array(
 						'page_title'		=> $arrArticle['title'].$strAdditionalTitles,
 						'description'		=> truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrContent[$intPageID])))), 600, '...', false, true),
+						'page_path'			=> $this->pdh->get('articles', 'breadcrumb', array($intArticleID, $strAdditionalTitles, registry::get_const('url_id'), $arrPath)),
 						'image'				=> $strPreviewImage,
 						'template_file'		=> 'article.html',
 						'portal_layout'		=> $intPortallayout,
@@ -931,7 +931,6 @@ class controller extends gen_class {
 						'CATEGORY_NAME'			=> $arrCategory['name'],
 						'PERMALINK'				=> $this->pdh->get('article_categories', 'permalink', array($intCategoryID)),
 						'RSSLINK'				=> $this->controller_path.'RSS/'.$this->routing->clean($arrCategory['name']).'-c'.$intCategoryID.'/'.(($this->user->is_signedin()) ? '?key='.$this->user->data['exchange_key'] : ''),
-						'BREADCRUMB'			=> ($this->pdh->get('article_categories', 'parent', array($intCategoryID)) > 1) ? $this->pdh->get('article_categories', 'breadcrumb', array($intCategoryID)) : '',
 						'ARTICLE_TOOLBAR'		=> $jqToolbar['id'],
 						'S_TOOLBAR'				=> ($arrPermissions['create'] || $arrPermissions['update'] || $arrPermissions['delete'] || $arrPermissions['change_state']),
 						'LIST_TYPE'				=> $arrCategory['list_type'],
@@ -953,6 +952,7 @@ class controller extends gen_class {
 				$this->core->set_vars(array(
 						'page_title'		=> $arrCategory['name'],
 						'description'		=> truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrCategory['description'])))), 600, '...', false, true),
+						'page_path'			=> ($this->pdh->get('article_categories', 'parent', array($intCategoryID)) > 1) ? $this->pdh->get('article_categories', 'breadcrumb', array($intCategoryID)) : [],
 						'image'				=> $strPreviewImage,
 						'template_file'		=> 'category.html',
 						'portal_layout'		=> $intPortallayout,

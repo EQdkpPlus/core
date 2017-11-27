@@ -1,21 +1,11 @@
-<!-- IF S_NORMAL_HEADER -->
-<div class="breadcrumb-container">
-	<ul class="breadcrumb">
-		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
-		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
-		<li><a href="{EQDKP_ROOT_PATH}admin/manage_raids.php{SID}">{L_manraid_title}</a>
-		<li class="current"><a>{L_bulkedit}</a></li>
-	</ul>
-	<div class="clear"></div>
-</div>
-<!-- ENDIF -->
+
 <script type="text/javascript">
 	function loadEventValue(event_id){
 		$.get("manage_raids.php{SID}", { raidvalue: "1", event: event_id }, function(data){
 			$("#raid_value").val(data);
 		});
 	}
-</script>	
+</script>
 <form action='{ACTION}' method='post' name='post'>
 <div id="toggleRaidInfos">
 	<fieldset class="settings smallsettings">

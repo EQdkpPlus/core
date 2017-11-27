@@ -343,11 +343,15 @@ class Manage_Menus extends page_generic {
 			'DD_ARTICLES'			=> (new hdropdown('editlink-article', array('options' => $this->build_article_dropdown(), 'class' => 'editlink-article')))->output(),
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manage_menus'),
 			'template_file'		=> 'admin/manage_menus.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manage_menus'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	private function build_article_dropdown(){

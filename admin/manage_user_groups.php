@@ -220,11 +220,15 @@ class Manage_User_Groups extends page_generic {
 			'GROUP_COUNT' => count($grps),
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manage_user_groups'),
 			'template_file'		=> 'admin/manage_user_groups.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manage_user_groups'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 
@@ -474,11 +478,16 @@ class Manage_User_Groups extends page_generic {
 			'S_IS_IN_GROUP'			=> (isset($memberships[$groupID])) ? true : false,
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manage_user_group').': '.sanitize($group_name),
 			'template_file'		=> 'admin/manage_user_groups_users.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manage_user_groups'), 'url'=>$this->root_path.'admin/manage_user_groups.php'.$this->SID],
+				['title'=>sanitize($group_name), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	public function display_grouppermlist(){
@@ -575,11 +584,16 @@ class Manage_User_Groups extends page_generic {
 		}
 
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 				'page_title'		=> $this->user->lang('user_group_permissions'),
 				'template_file'		=> 'admin/manage_user_groups_permlist.html',
-				'display'			=> true)
-		);
+				'page_path'			=> [
+					['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+					['title'=>$this->user->lang('manage_user_groups'), 'url'=>$this->root_path.'admin/manage_user_groups.php'.$this->SID],
+					['title'=>$this->user->lang('user_group_permissions'), 'url'=>' '],
+				],
+				'display'			=> true
+		]);
 
 	}
 

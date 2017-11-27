@@ -1,50 +1,51 @@
+
 <!-- IF S_USERGROUP_ADMIN -->
+	<script type="text/javascript">
+		$(function() {
 
-<script type="text/javascript">
-	$(function() {
+			$( "#dialog-add-raidgroup" ).dialog({
+				height: 240,
+				width: 500,
+				modal: true,
+				autoOpen: false,
+			});
 
-		$( "#dialog-add-raidgroup" ).dialog({
-			height: 240,
-			width: 500,
-			modal: true,
-			autoOpen: false,
+			$('.add_raid_group_trigger').on('click', function(event){
+				$('.addgroup-name').val('');
+				$('.addgroup-desc').val('');
+				$('.addgroup-hidden').prop("checked", false);
+
+				$( "#dialog-add-raidgroup" ).dialog( "open" );
+			});
+
+			var newid = {ID};
+			var newkey = {KEY};
+
+			$('#addgroup-button').on('click', function(event){
+				var name = $('.addgroup-name').val();
+				var desc = $('.addgroup-desc').val();
+				var hidden = $('.addgroup-hidden').prop("checked");
+				var strHidden = (hidden) ? 'checked="checked"' : "";
+
+				var new_row = $('#raidgroup_template>tbody').html()+"";
+				new_row = new_row.replace(/KEY/g, newkey);
+				new_row = new_row.replace(/ID/g, newid);
+				new_row = new_row.replace(/NAME/g, name);
+				new_row = new_row.replace(/DESC/g, desc);
+				new_row = new_row.replace(/checked="checked"/g, strHidden);
+				newkey++;
+				newid++;
+
+				$('.add_container').append(new_row);
+
+				$( "#dialog-add-raidgroup" ).dialog( "close" );
+			});
+
 		});
-
-		$('.add_raid_group_trigger').on('click', function(event){
-			$('.addgroup-name').val('');
-			$('.addgroup-desc').val('');
-			$('.addgroup-hidden').prop("checked", false);
-
-			$( "#dialog-add-raidgroup" ).dialog( "open" );
-		});
-
-		var newid = {ID};
-		var newkey = {KEY};
-
-		$('#addgroup-button').on('click', function(event){
-			var name = $('.addgroup-name').val();
-			var desc = $('.addgroup-desc').val();
-			var hidden = $('.addgroup-hidden').prop("checked");
-			var strHidden = (hidden) ? 'checked="checked"' : "";
-
-			var new_row = $('#raidgroup_template>tbody').html()+"";
-			new_row = new_row.replace(/KEY/g, newkey);
-			new_row = new_row.replace(/ID/g, newid);
-			new_row = new_row.replace(/NAME/g, name);
-			new_row = new_row.replace(/DESC/g, desc);
-			new_row = new_row.replace(/checked="checked"/g, strHidden);
-			newkey++;
-			newid++;
-
-			$('.add_container').append(new_row);
-
-			$( "#dialog-add-raidgroup" ).dialog( "close" );
-		});
-
-	});
-</script>
-
-<div id="dialog-add-raidgroup" title="{L_add_raid_group}">
+	</script>
+	
+	
+	<div id="dialog-add-raidgroup" title="{L_add_raid_group}">
 		<fieldset class="settings mediumsettings">
 			<dl>
 				<dt><label>{L_name}:</label></dt>
@@ -59,66 +60,59 @@
 			</dl>
 		</fieldset>
 		<button type="button" id="addgroup-button"><i class="fa fa-check"></i> {L_submit}</button>
-</div>
-
-<div class="breadcrumb-container">
-	<ul class="breadcrumb">
-		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
-		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
-		<li class="current"><a>{L_manage_raid_groups}</a></li>
-	</ul>
-	<div class="clear"></div>
-</div>
-<form method="post" action="{ACTION}" name="post">
-	<div class="contentHeader">
-		<h1 class="contentTitle">{L_manage_raid_groups} <span class="bubble">{RAIDGROUP_COUNT}</span></h1>
 	</div>
-	<div class="tableHeader floatRight">
-		<button class="mainoption add_raid_group_trigger" type="button"><i class="fa fa-plus"></i>{L_add_raid_group}</button>
+	
+	
+	<form method="post" action="{ACTION}" name="post">
+		<div class="contentHeader">
+			<h1 class="contentTitle">{L_manage_raid_groups} <span class="bubble">{RAIDGROUP_COUNT}</span></h1>
+		</div>
+		<div class="tableHeader floatRight">
+			<button class="mainoption add_raid_group_trigger" type="button"><i class="fa fa-plus"></i>{L_add_raid_group}</button>
 
-	</div>
-	<div class="clear"></div>
-	<table id="raid_groups_table" class="table fullwidth colorswitch">
-		<thead>
-		<tr class="not-sortable">
-			<th style="width:20px"></th>
-			<th style="width:20px"><input type="checkbox" name="selectall" id="selall_groups" />&nbsp;</th>
-			<th colspan="2" style="width:20px" class="nowrap">{L_action}</th>
-			<th>{L_name}</th>
-			<th>{L_description}</th>
-			<th>{L_groupcolor}</th>
-			<th style="width:50px" class="hiddenSmartphone">{L_group_members}</th>
-			<th>{L_default_group}</th>
-		</tr>
-		</thead>
-		<tbody class="add_container">
-		<!-- BEGIN raid_groups -->
-		<tr>
-			<td><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"></span></td>
-			<td class="center"><!-- IF raid_groups.S_DELETABLE --><input type="checkbox" name="raid_group_ids[]" value="{raid_groups.ID}" /><!-- ENDIF --><input type="hidden" name="raid_groups[{raid_groups.KEY}][id]" value="{raid_groups.ID}" /></td>
-			<td class="center" style="width:20px"><a href="manage_raid_groups.php{SID}&amp;g={raid_groups.ID}&amp;edit=true" title="{L_manage_raid_group}"><i class="fa fa-pencil fa-lg"></i></a></td>
-			<td class="center" style="width:20px">
-				<!-- IF raid_groups.S_DELETABLE -->
-				<a href="javascript:delete_single_warning({raid_groups.ID});" title="{L_delete}"><i class="fa fa-trash-o fa-lg" title="{L_delete}"></i></a>
-				<!-- ENDIF -->
-			</td>
-			<td><input type="text" name="raid_groups[{raid_groups.KEY}][name]" size="40" maxlength="50" value="{raid_groups.NAME}" class="maininput" style="width:95%" /></td>
-			<td><input type="text" name="raid_groups[{raid_groups.KEY}][desc]" size="50" maxlength="75" value="{raid_groups.DESC}" class="maininput" style="width:95%" /></td>
-			<td>{raid_groups.COLOR}</td>
-			<td class="hiddenSmartphone">{raid_groups.USER_COUNT}</td>
-			<td style="width:50px" class="nowrap"><input type="radio" value="{raid_groups.ID}" name="raid_groups_standard" {raid_groups.STANDARD} /></td>
-		</tr>
-		<!-- END raid_groups -->
-		</tbody>
-	</table>
-	<div class="contentFooter">
-		<button class="mainoption" type="submit" name="save"><i class="fa fa-check"></i>{L_save}</button>
-		<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="fa fa-times" ></i>{L_delete_selected_group}</button>
-		<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
-	</div>
+		</div>
+		<div class="clear"></div>
+		<table id="raid_groups_table" class="table fullwidth colorswitch">
+			<thead>
+			<tr class="not-sortable">
+				<th style="width:20px"></th>
+				<th style="width:20px"><input type="checkbox" name="selectall" id="selall_groups" />&nbsp;</th>
+				<th colspan="2" style="width:20px" class="nowrap">{L_action}</th>
+				<th>{L_name}</th>
+				<th>{L_description}</th>
+				<th>{L_groupcolor}</th>
+				<th style="width:50px" class="hiddenSmartphone">{L_group_members}</th>
+				<th>{L_default_group}</th>
+			</tr>
+			</thead>
+			<tbody class="add_container">
+			<!-- BEGIN raid_groups -->
+			<tr>
+				<td><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"></span></td>
+				<td class="center"><!-- IF raid_groups.S_DELETABLE --><input type="checkbox" name="raid_group_ids[]" value="{raid_groups.ID}" /><!-- ENDIF --><input type="hidden" name="raid_groups[{raid_groups.KEY}][id]" value="{raid_groups.ID}" /></td>
+				<td class="center" style="width:20px"><a href="manage_raid_groups.php{SID}&amp;g={raid_groups.ID}&amp;edit=true" title="{L_manage_raid_group}"><i class="fa fa-pencil fa-lg"></i></a></td>
+				<td class="center" style="width:20px">
+					<!-- IF raid_groups.S_DELETABLE -->
+					<a href="javascript:delete_single_warning({raid_groups.ID});" title="{L_delete}"><i class="fa fa-trash-o fa-lg" title="{L_delete}"></i></a>
+					<!-- ENDIF -->
+				</td>
+				<td><input type="text" name="raid_groups[{raid_groups.KEY}][name]" size="40" maxlength="50" value="{raid_groups.NAME}" class="maininput" style="width:95%" /></td>
+				<td><input type="text" name="raid_groups[{raid_groups.KEY}][desc]" size="50" maxlength="75" value="{raid_groups.DESC}" class="maininput" style="width:95%" /></td>
+				<td>{raid_groups.COLOR}</td>
+				<td class="hiddenSmartphone">{raid_groups.USER_COUNT}</td>
+				<td style="width:50px" class="nowrap"><input type="radio" value="{raid_groups.ID}" name="raid_groups_standard" {raid_groups.STANDARD} /></td>
+			</tr>
+			<!-- END raid_groups -->
+			</tbody>
+		</table>
+		<div class="contentFooter">
+			<button class="mainoption" type="submit" name="save"><i class="fa fa-check"></i>{L_save}</button>
+			<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="fa fa-times" ></i>{L_delete_selected_group}</button>
+			<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
+		</div>
 
-{CSRF_TOKEN}
-</form>
+	{CSRF_TOKEN}
+	</form>
 	<table id="raidgroup_template" style="visibility:hidden;">
 		<tr>
 			<td><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"></span></td>
@@ -133,18 +127,10 @@
 	</table>
 
 <!-- ELSE -->
-<div class="breadcrumb-container">
-	<ul class="breadcrumb">
-		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
-		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
-		<li class="current"><a>{L_manage_raid_groups}</a></li>
-	</ul>
-	<div class="clear"></div>
-</div>
-<div class="contentHeader">
-	<h1 class="contentTitle">{L_manage_raid_groups}</h1>
-</div>
-<table id="raid_groups_table" class="table fullwidth colorswitch">
+	<div class="contentHeader">
+		<h1 class="contentTitle">{L_manage_raid_groups}</h1>
+	</div>
+	<table id="raid_groups_table" class="table fullwidth colorswitch">
 		<tr>
 			<th style="width:20px" class="nowrap">{L_action}</th>
 			<th>

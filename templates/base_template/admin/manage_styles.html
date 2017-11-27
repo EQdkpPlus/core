@@ -1,242 +1,220 @@
+
 <!-- IF S_LOCAL_UPDATE -->
-<div class="breadcrumb-container">
-	<ul class="breadcrumb">
-		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
-		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
-		<li><a href="{EQDKP_ROOT_PATH}admin/manage_extensions.php{SID}">{L_extension_repo}</a>
-		<li class="current"><a>{L_style_localupdate}</a></li>
-	</ul>
-	<div class="clear"></div>
-</div>
 
-<form method="post" action="{ACTION}&amp;cat=2&amp;code={TEMPLATE_ID}&amp;mode=process_update" name="post">
-	<fieldset class="settings">
-		<legend>{L_style_localupdate}</legend>
-		<dl>
-			<dt><label>{L_template_files}</label></dt>
-			<dd><label><input type="radio" name="template" value="1" checked="checked" />{L_style_localupdate_overwrite} <em>({L_recommended})</em></label>
-				<label><!-- IF S_CHANGED_FILES --><input type="radio" name="template" value="0" />{L_style_localupdate_dontoverwrite}<!-- ENDIF --></label>
+	<form method="post" action="{ACTION}&amp;cat=2&amp;code={TEMPLATE_ID}&amp;mode=process_update" name="post">
+		<fieldset class="settings">
+			<legend>{L_style_localupdate}</legend>
+			<dl>
+				<dt><label>{L_template_files}</label></dt>
+				<dd><label><input type="radio" name="template" value="1" checked="checked" />{L_style_localupdate_overwrite} <em>({L_recommended})</em></label>
+					<label><!-- IF S_CHANGED_FILES --><input type="radio" name="template" value="0" />{L_style_localupdate_dontoverwrite}<!-- ENDIF --></label>
+				</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_color_settings}</label></dt>
+				<dd><label><input type="radio" name="colors" value="1" checked="checked" />{L_style_localupdate_overwrite} <em>({L_recommended})</em></label>
+					<label><input type="radio" name="colors" value="0" />{L_style_localupdate_dontoverwrite}</label>
+				</dd>
+			</dl>
+		</fieldset>
+		<!-- IF S_CHANGED_FILES -->
+		<fieldset class="settings">
+			<legend>{L_style_localupdate_changedfiles}</legend>
+			<!-- BEGIN changed_files_row -->
+			<dl>
+			<dt><label>{changed_files_row.FILE}</label></dt>
+			<dd>
+				<a href="javascript:diffviewer('{changed_files_row.ENCODED_FILENAME}');">{L_liveupdate_show_differences}</a>
 			</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_color_settings}</label></dt>
-			<dd><label><input type="radio" name="colors" value="1" checked="checked" />{L_style_localupdate_overwrite} <em>({L_recommended})</em></label>
-				<label><input type="radio" name="colors" value="0" />{L_style_localupdate_dontoverwrite}</label>
-			</dd>
-		</dl>
-	</fieldset>
-	<!-- IF S_CHANGED_FILES -->
-	<fieldset class="settings">
-		<legend>{L_style_localupdate_changedfiles}</legend>
-		<!-- BEGIN changed_files_row -->
-		<dl>
-		<dt><label>{changed_files_row.FILE}</label></dt>
-		<dd>
-			<a href="javascript:diffviewer('{changed_files_row.ENCODED_FILENAME}');">{L_liveupdate_show_differences}</a>
-		</dd>
-		</dl>
-		<!-- END changed_files_row -->
-	</fieldset>
-	<!-- ENDIF -->
+			</dl>
+			<!-- END changed_files_row -->
+		</fieldset>
+		<!-- ENDIF -->
 
-	<button type="submit" name="process_update" class="mainoption"><i class="fa fa-check"></i>{L_bridge_continue}</button> <!-- IF S_CHANGED_FILES --><button type="button" class="mainoption" onclick="window.location='manage_styles.php{SID}&export_changed_files=true&styleid={TEMPLATE_ID}'"><i class="fa fa-download"></i>{L_style_localupdate_dlchangedfiles}</button><!-- ENDIF -->
-{CSRF_TOKEN}
+		<button type="submit" name="process_update" class="mainoption"><i class="fa fa-check"></i>{L_bridge_continue}</button> <!-- IF S_CHANGED_FILES --><button type="button" class="mainoption" onclick="window.location='manage_styles.php{SID}&export_changed_files=true&styleid={TEMPLATE_ID}'"><i class="fa fa-download"></i>{L_style_localupdate_dlchangedfiles}</button><!-- ENDIF -->
+		{CSRF_TOKEN}
 	</form>
 <!-- ELSE -->
-<div class="breadcrumb-container">
-	<ul class="breadcrumb">
-		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
-		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
-		<li><a href="{EQDKP_ROOT_PATH}admin/manage_extensions.php{SID}">{L_extension_repo}</a>
-		<li><a href="{EQDKP_ROOT_PATH}admin/manage_extensions.php{SID}&amp;tab=1">{L_styles_title}</a>
-		<li class="current"><a>{STYLE_NAME}</a></li>
-	</ul>
-	<div class="clear"></div>
-</div>
 
-<script>
+	<script>
+		$(function(){
+			$('input[name="background_type"]').on('change', function(){
+				if($(this).val() == "2"){
+					$("#background_image").prop("disabled", false);
+				} else {
+					$("#background_image").prop("disabled", true);
+				}
+			})
+			var recent = $('input[name="background_type"]:checked').val();
+			if(recent == "2"){
+				$("#background_image").prop("disabled", false);
+			} else {
+				$("#background_image").prop("disabled", true);
+			}
+		})
+	</script>
 
-$(function(){
-	$('input[name="background_type"]').on('change', function(){
-		if($(this).val() == "2"){
-			$("#background_image").prop("disabled", false);
-		} else {
-			$("#background_image").prop("disabled", true);
-		}
-	})
-	var recent = $('input[name="background_type"]:checked').val();
-	if(recent == "2"){
-		$("#background_image").prop("disabled", false);
-	} else {
-		$("#background_image").prop("disabled", true);
-	}
-})
-</script>
+	<form method="post" action="{F_ADD_STYLE}" name="post">
+		<div id="style_tabs">
+			<ul>
+				<li><a href="#settings">{L_style_settings}</a></li>
+				<li><a href="#colors">{L_color_settings}</a></li>
+				<li><a href="#class_colors">{L_core_sett_f_class_colors}</a></li>
+				<li><a href="#templates">{L_edit_templates}</a></li>
+			</ul>
+			
+			<input type="hidden" name="styleid" value="{STYLE_ID}" />
+			
+			<div id="settings">
+				<fieldset class="settings">
+					<legend>{L_style_settings}</legend>
+					<dl>
+						<dt><label>{L_style_name}:</label></dt>
+						<dd><input type="text" name="style_name" size="35" maxlength="100" value="{STYLE_NAME}" class="input" required/></dd>
+					</dl>
+					<dl>
+						<dt><label>{L_style_version}:</label></dt>
+						<dd><input type="text" name="style_version" size="35" maxlength="100" value="{STYLE_VERSION}" class="input" required/></dd>
+					</dl>
+					<dl>
+						<dt><label>{L_attendees_columns}</label><br /><span>{L_attendees_columns_note}</span></dt>
+						<dd>{DD_ATTENDEE_COLUMNS}</dd>
+					</dl>
+					<dl>
+						<dt><label>{L_logo_position}</label></dt>
+						<dd>{DD_LOGO_POSITION}</dd>
+					</dl>
+					<dl>
+						<dt><label>{L_favicon_image}</label><br /><span>{L_favicon_image_note}</span></dt>
+						<dd>
+						<div class="input-icon-append">
+						<input id="favicon_image" type="text" name="favicon_img" size="25" maxlength="255" value="{FAVICON_IMG}" class="input" />
+						<i class="fa fa-lg fa-folder-open hand" onclick="elfinder_all('favicon_image');"></i>
+						</div>
+						</dd>
+					</dl>
+					<dl>
+						<dt><label>{L_banner_image}</label><br /><span>{L_banner_image_note}</span></dt>
+						<dd>
+						<div class="input-icon-append">
+						<input id="banner_image" type="text" name="banner_img" size="25" maxlength="255" value="{BANNER_IMG}" class="input" />
+						<i class="fa fa-lg fa-folder-open hand" onclick="elfinder_all('banner_image');"></i>
+						</div>
+						</dd>
+					</dl>
+					<dl>
+						<dt><label>{L_editor_theme}</label></dt>
+						<dd>
+						{EDITOR_THEME}
+						</dd>
+					</dl>
+				</fieldset>
+				
+				<fieldset class="settings">
+					<legend>{L_background_image}</legend>
+					<dl>
+						<dt><label>{L_background_image_type}</label><br /><span>{L_background_image_type_help}</span></dt>
+						<dd>{RADIO_BACKGROUND_IMAGE_TYPE}</dd>
+					</dl>
+					<dl>
+						<dt><label>{L_background_image}</label><br /><span>{L_background_image_note}<br />@eqdkpBackgroundImage</span></dt>
+						<dd>
+						<div class="input-icon-append">
+						<input id="background_image" type="text" name="background_img" size="25" maxlength="255" value="{BACKGROUND_IMG}" class="input" {BACKGROUND_IMG_DISABLED}/>
+						<i class="fa fa-lg fa-folder-open hand" onclick="elfinder_all('background_image');"></i>
+						</div>
+						</dd>
+					</dl>
+					<dl>
+						<dt><label>{L_background_position}</label><br /><span>@eqdkpBackgroundImagePosition</span></dt>
+						<dd>{RADIO_BACKGROUND_POSITION}</dd>
+					</dl>
+				</fieldset>
 
-<form method="post" action="{F_ADD_STYLE}" name="post">
-<div id="style_tabs">
-<ul>
-<li><a href="#settings">{L_style_settings}</a></li>
-<li><a href="#colors">{L_color_settings}</a></li>
-<li><a href="#class_colors">{L_core_sett_f_class_colors}</a></li>
-<li><a href="#templates">{L_edit_templates}</a></li>
-</ul>
-
-<input type="hidden" name="styleid" value="{STYLE_ID}" />
-
-<div id="settings">
-	<fieldset class="settings">
-		<legend>{L_style_settings}</legend>
-		<dl>
-			<dt><label>{L_style_name}:</label></dt>
-			<dd><input type="text" name="style_name" size="35" maxlength="100" value="{STYLE_NAME}" class="input" required/></dd>
-		</dl>
-		<dl>
-			<dt><label>{L_style_version}:</label></dt>
-			<dd><input type="text" name="style_version" size="35" maxlength="100" value="{STYLE_VERSION}" class="input" required/></dd>
-		</dl>
-		<dl>
-			<dt><label>{L_attendees_columns}</label><br /><span>{L_attendees_columns_note}</span></dt>
-			<dd>{DD_ATTENDEE_COLUMNS}</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_logo_position}</label></dt>
-			<dd>{DD_LOGO_POSITION}</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_favicon_image}</label><br /><span>{L_favicon_image_note}</span></dt>
-			<dd>
-			<div class="input-icon-append">
-			<input id="favicon_image" type="text" name="favicon_img" size="25" maxlength="255" value="{FAVICON_IMG}" class="input" />
-			<i class="fa fa-lg fa-folder-open hand" onclick="elfinder_all('favicon_image');"></i>
+				<fieldset class="settings">
+					<legend>{L_pk_set_portal_head}</legend>
+					<dl>
+						<dt><label>{L_style_portal_width}</label><br /><span>@eqdkpPortalWidth</span></dt>
+						<dd><input type="text" name="portal_width" size="5" maxlength="5" value="{STYLE_PORTAL_WIDTH}" class="input" {STYLE_PORTAL_WIDTH_DISABLED}/> {DD_PORTAL_WIDTH}</dd>
+					</dl>
+					<dl>
+						<dt><label>{L_style_column_left_width}</label><br /><span>@eqdkpPortalColumnLeftWidth</span></dt>
+						<dd><input type="text" name="column_left_width" size="5" maxlength="5" value="{STYLE_COLUMN_LEFT_WIDTH}" class="input" {STYLE_COLUMN_LEFT_DISABLED}/> {DD_COLUMN_LEFT_WIDTH}</dd>
+					</dl>
+					<dl>
+						<dt><label>{L_style_column_right_width}</label><br /><span>@eqdkpPortalColumnRightWidth</span></dt>
+						<dd><input type="text" name="column_right_width" size="5" maxlength="5" value="{STYLE_COLUMN_RIGHT_WIDTH}" class="input" {STYLE_COLUMN_RIGHT_DISABLED}/> {DD_COLUMN_RIGHT_WIDTH}</dd>
+					</dl>
+				</fieldset>
 			</div>
-			</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_banner_image}</label><br /><span>{L_banner_image_note}</span></dt>
-			<dd>
-			<div class="input-icon-append">
-			<input id="banner_image" type="text" name="banner_img" size="25" maxlength="255" value="{BANNER_IMG}" class="input" />
-			<i class="fa fa-lg fa-folder-open hand" onclick="elfinder_all('banner_image');"></i>
+
+			<div id="colors">
+				<div class="infobox infobox-large infobox-blue clearfix">
+					<i class="fa fa-info-circle fa-4x pull-left"></i> {L_style_settings_info}
+				</div>
+				<!-- BEGIN fieldset_row -->
+				<fieldset class="settings" id="toggleColorsettings{fieldset_row.KEY}">
+					<legend>{fieldset_row.LEGEND}<span class="toggle_button"></span></legend>
+					<div class="toggle_container">
+					<!-- BEGIN option_row -->
+					<dl>
+						<dt><label>{fieldset_row.option_row.NAME}</label><br /><span>{fieldset_row.option_row.HELP}</span></dt>
+						<dd>{fieldset_row.option_row.FIELD}</dd>
+					</dl>
+					<!-- END option_row -->
+					</div>
+				</fieldset>
+				<!-- END fieldset_row -->
+
+				<fieldset class="settings" id="toggleColorsettingsadditional_less">
+						<legend>{L_stylesettings_additional_less}<span class="toggle_button"></span></legend>
+						<div class="toggle_container">
+						<dl>
+							<dt><label>{L_stylesettings_additional_less}</label></dt>
+							<dd><textarea rows="" cols="" style="width: 95%; height: 300px;" name="additional_less">{ADDITIONAL_LESS}</textarea></dd>
+						</dl>
+						</div>
+					</fieldset>
 			</div>
-			</dd>
-		</dl>
-		
-		<dl>
-			<dt><label>{L_editor_theme}</label></dt>
-			<dd>
-			{EDITOR_THEME}
-			</dd>
-		</dl>
-		
-	</fieldset>
-	<fieldset class="settings">
-		<legend>{L_background_image}</legend>
-		<dl>
-			<dt><label>{L_background_image_type}</label><br /><span>{L_background_image_type_help}</span></dt>
-			<dd>{RADIO_BACKGROUND_IMAGE_TYPE}</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_background_image}</label><br /><span>{L_background_image_note}<br />@eqdkpBackgroundImage</span></dt>
-			<dd>
-			<div class="input-icon-append">
-			<input id="background_image" type="text" name="background_img" size="25" maxlength="255" value="{BACKGROUND_IMG}" class="input" {BACKGROUND_IMG_DISABLED}/>
-			<i class="fa fa-lg fa-folder-open hand" onclick="elfinder_all('background_image');"></i>
+
+
+			<div id="class_colors">
+				<fieldset class="settings">
+					<legend>{L_core_sett_f_class_colors}</legend>
+					<!-- BEGIN classes -->
+					<dl>
+						<dt><label>{classes.NAME}</label><br /><span>@eqdkpClasscolor{classes.ID}</span></dt>
+						<dd>{classes.CPICKER}</dd>
+					</dl>
+					<!-- END classes -->
+				</fieldset>
 			</div>
-			</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_background_position}</label><br /><span>@eqdkpBackgroundImagePosition</span></dt>
-			<dd>{RADIO_BACKGROUND_POSITION}</dd>
-		</dl>
-	</fieldset>
 
-	<fieldset class="settings">
-		<legend>{L_pk_set_portal_head}</legend>
-		<dl>
-			<dt><label>{L_style_portal_width}</label><br /><span>@eqdkpPortalWidth</span></dt>
-			<dd><input type="text" name="portal_width" size="5" maxlength="5" value="{STYLE_PORTAL_WIDTH}" class="input" {STYLE_PORTAL_WIDTH_DISABLED}/> {DD_PORTAL_WIDTH}</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_style_column_left_width}</label><br /><span>@eqdkpPortalColumnLeftWidth</span></dt>
-			<dd><input type="text" name="column_left_width" size="5" maxlength="5" value="{STYLE_COLUMN_LEFT_WIDTH}" class="input" {STYLE_COLUMN_LEFT_DISABLED}/> {DD_COLUMN_LEFT_WIDTH}</dd>
-		</dl>
-		<dl>
-			<dt><label>{L_style_column_right_width}</label><br /><span>@eqdkpPortalColumnRightWidth</span></dt>
-			<dd><input type="text" name="column_right_width" size="5" maxlength="5" value="{STYLE_COLUMN_RIGHT_WIDTH}" class="input" {STYLE_COLUMN_RIGHT_DISABLED}/> {DD_COLUMN_RIGHT_WIDTH}</dd>
-		</dl>
-	</fieldset>
+			<div id="templates">
+				<fieldset class="settings smallsettings">
+					<legend>{L_edit_templates}</legend>
+					<div class="infobox infobox-large infobox-red clearfix">
+						<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> {L_TEMPLATE_WARNING}
+					</div>
 
+					<dl>
+						<dt><label>{L_select_template}:</label></dt>
+						<dd>{DD_EDIT_TEMPLTES}</dd>
+					</dl>
 
-</div>
+					<input type="hidden" name="template" />{TEMPLATE_CONTENT}
+				</fieldset>
+				<button name="template_edit_button" type="submit" class="mainoption" id="template_edit_button"><i class="fa fa-check"></i>{L_save}</button>
+				<button name="template_reset_button" type="submit" class="mainoption" id="template_reset_buttonn"><i class="fa fa-trash-o"></i>{L_reset}</button>
+			</div>
 
-<div id="colors">
-<div class="infobox infobox-large infobox-blue clearfix">
-	<i class="fa fa-info-circle fa-4x pull-left"></i> {L_style_settings_info}
-</div>
-	<!-- BEGIN fieldset_row -->
-	<fieldset class="settings" id="toggleColorsettings{fieldset_row.KEY}">
-		<legend>{fieldset_row.LEGEND}<span class="toggle_button"></span></legend>
-		<div class="toggle_container">
-		<!-- BEGIN option_row -->
-		<dl>
-			<dt><label>{fieldset_row.option_row.NAME}</label><br /><span>{fieldset_row.option_row.HELP}</span></dt>
-			<dd>{fieldset_row.option_row.FIELD}</dd>
-		</dl>
-		<!-- END option_row -->
 		</div>
-	</fieldset>
-	<!-- END fieldset_row -->
 
-	<fieldset class="settings" id="toggleColorsettingsadditional_less">
-			<legend>{L_stylesettings_additional_less}<span class="toggle_button"></span></legend>
-			<div class="toggle_container">
-			<dl>
-				<dt><label>{L_stylesettings_additional_less}</label></dt>
-				<dd><textarea rows="" cols="" style="width: 95%; height: 300px;" name="additional_less">{ADDITIONAL_LESS}</textarea></dd>
-			</dl>
-			</div>
-		</fieldset>
-</div>
-
-
-<div id="class_colors">
-	<fieldset class="settings">
-		<legend>{L_core_sett_f_class_colors}</legend>
-		<!-- BEGIN classes -->
-		<dl>
-			<dt><label>{classes.NAME}</label><br /><span>@eqdkpClasscolor{classes.ID}</span></dt>
-			<dd>{classes.CPICKER}</dd>
-		</dl>
-		<!-- END classes -->
-	</fieldset>
-</div>
-
-<div id="templates">
-	<fieldset class="settings smallsettings">
-		<legend>{L_edit_templates}</legend>
-		<div class="infobox infobox-large infobox-red clearfix">
-			<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> {L_TEMPLATE_WARNING}
+		<div class="contentFooter">
+			<button type="submit" name="update" class="mainoption"><i class="fa fa-check"></i>{L_update_style}</button>
+			<button type="submit" name="" class="liteoption"><i class="fa fa-chevron-left"></i>{L_cancel}</button>
+			<button type="button" name="del" class="liteoption" onclick="delete_warning();"><i class="fa fa-times"></i>{L_delete_style}</button>
 		</div>
-
-		<dl>
-			<dt><label>{L_select_template}:</label></dt>
-			<dd>{DD_EDIT_TEMPLTES}</dd>
-		</dl>
-
-		<input type="hidden" name="template" />{TEMPLATE_CONTENT}
-	</fieldset>
-	<button name="template_edit_button" type="submit" class="mainoption" id="template_edit_button"><i class="fa fa-check"></i>{L_save}</button>
-	<button name="template_reset_button" type="submit" class="mainoption" id="template_reset_buttonn"><i class="fa fa-trash-o"></i>{L_reset}</button>
-</div>
-
-</div>
-
-<div class="contentFooter">
-	<button type="submit" name="update" class="mainoption"><i class="fa fa-check"></i>{L_update_style}</button>
-	<button type="submit" name="" class="liteoption"><i class="fa fa-chevron-left"></i>{L_cancel}</button>
-	<button type="button" name="del" class="liteoption" onclick="delete_warning();"><i class="fa fa-times"></i>{L_delete_style}</button>
-</div>
-{CSRF_TOKEN}
-</form>
+		{CSRF_TOKEN}
+	</form>
 <!-- ENDIF -->

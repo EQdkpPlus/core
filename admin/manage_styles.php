@@ -128,12 +128,12 @@ class Manage_Styles extends page_generic{
 			'S_RENDERER' => $blnRenderer,
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('liveupdate_show_differences'),
 			'template_file'		=> 'admin/diff_viewer.html',
 			'header_format'		=> 'simple',
-			'display'			=> true)
-		);
+			'display'			=> true
+		]);
 	}
 
 	public function edit_template(){
@@ -444,11 +444,16 @@ class Manage_Styles extends page_generic{
 
 		$this->jquery->Collapse('#toggleColorsettingsadditional_less', true);
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('styles_title'),
 			'template_file'		=> 'admin/manage_styles.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('extension_repo'), 'url'=>$this->root_path.'admin/manage_extensions.php'.$this->SID],
+				['title'=>$this->user->lang('style_localupdate'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	public function display(){

@@ -158,21 +158,27 @@ class Manage_Events extends page_generic {
 
 		$this->confirm_delete(sprintf($this->user->lang('confirm_delete_event'), ((isset($event['name'])) ? $event['name'] : ''), count($this->pdh->get('raid', 'raidids4eventid', array($event['id'])))), 'manage_events.php'.$this->SID.'&event_id='.$event['id'], false, array('height' => 220));
 
+		if(!isset($event['name'])) $event['name'] = '';
 		$this->tpl->assign_vars(array(
 			'S_UPD'			=> ($event['id']) ? TRUE : FALSE,
 			'EVENT_ID'		=> $event['id'],
-			'NAME'			=> (isset($event['name'])) ? $event['name'] : '',
+			'NAME'			=> $event['name'],
 			'VALUE'			=> $this->pdh->geth('event', 'value', array($event['id'])),
 			'MDKP2EVENT' 	=> (new hmultiselect('mdkp2event', array('options' => $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), 'value' => $event['mdkp2event'])))->output(),
 			'DD_DEFAULT_ITEMPOOL' => (new hdropdown('default_itempool', array('options' => $arrItempool, 'value' => $event['default_itempool'])))->output(),
 			'CALENDAR'		=> ($this->in->get('calendar') == 'true') ? '1' : '0'
 		));
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('addevent_title'),
 			'template_file'		=> 'admin/manage_events_add.html',
 			'header_format'		=> $this->simple_head,
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manevents_title'), 'url'=>$this->root_path.'admin/manage_events.php'.$this->SID],
+				['title'=>(($event['id'])?$event['name']:$this->user->lang('addevent_title')), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	public function display($messages=false) {
@@ -209,12 +215,16 @@ class Manage_Events extends page_generic {
 			)
 		);
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manevents_title'),
 			'template_file'		=> 'admin/manage_events.html',
 			'header_format'		=> $this->simple_head,
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manevents_title'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	private function get_post($norefresh=false) {

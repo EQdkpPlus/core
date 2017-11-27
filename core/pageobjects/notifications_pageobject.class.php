@@ -146,7 +146,7 @@ class notifications_pageobject extends pageobject {
 		
 		//Bring Notifications to Template
 		
-		foreach($arrDays as $strDay => $arrKeys){		
+		foreach($arrDays as $strDay => $arrKeys){
 			$this->tpl->assign_block_vars('day_row', array(
 				'DAY'	=> $strDay,
 			));
@@ -163,7 +163,7 @@ class notifications_pageobject extends pageobject {
 					'CLASS' => ($arrNotification['read']) ? 'read' : 'unread',
 					'LINK'	=> (!$arrNotification['read']) ? $this->routing->build('Notifications').'&redirect='.$arrNotification['id'] : $this->server_path.$arrNotification['link'],
 				));
-			}	
+			}
 		}
 		
 		$this->tpl->assign_vars(array(
@@ -171,11 +171,14 @@ class notifications_pageobject extends pageobject {
 			'S_PERSISTENT' => (count($arrPersistent)) ? true : false,
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('notifications'),
 			'template_file'		=> 'notifications.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('notifications'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 }

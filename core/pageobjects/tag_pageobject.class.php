@@ -121,11 +121,14 @@ class tag_pageobject extends pageobject {
 		
 		$this->tpl->add_meta('<link rel="canonical" href="'.$this->env->link.$this->routing->build('tag', $tag, false, false, true).'" />');
 		
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 				'page_title' 		=> $this->user->lang("tag").': '.sanitize($strTag),
 				'template_file'		=> 'tag.html',
-				'display'			=> true)
-		);
+				'page_path'			=> [
+					['title'=>$this->user->lang('tag'), 'url'=>' '],
+				],
+				'display'			=> true
+		]);
 	}
 }
 ?>

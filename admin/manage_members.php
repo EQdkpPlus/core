@@ -231,12 +231,17 @@ class Manage_Members extends page_generic {
 				'MEMBER_ID'		=> $intMemberID,
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 				'page_title'		=> $this->user->lang('manage_members_title').': '.$strMembername,
 				'template_file'		=> 'admin/manage_members_history.html',
 				'header_format'		=> $this->simple_head,
+				'page_path'			=> [
+					['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+					['title'=>$this->user->lang('manage_members'), 'url'=>$this->root_path.'admin/manage_members.php'.$this->SID],
+					['title'=>$strMembername, 'url'=>' '],
+				],
 				'display'			=> true
-		));
+		]);
 	}
 
 	//Url building
@@ -325,12 +330,16 @@ class Manage_Members extends page_generic {
 			'BUTTON_MENU'		=> $this->core->build_dropdown_menu($this->user->lang('selected_chars').'...', $arrMenuItems, '', 'manage_members_menu', array("input[name=\"selected_ids[]\"]")),
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manage_members_title'),
 			'template_file'		=> 'admin/manage_members.html',
 			'header_format'		=> $this->simple_head,
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manage_members'), 'url'=>' '],
+			],
 			'display'			=> true
-		));
+		]);
 	}
 }
 registry::register('Manage_Members');

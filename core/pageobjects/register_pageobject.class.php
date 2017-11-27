@@ -266,11 +266,12 @@ class register_pageobject extends pageobject {
 			'S_RESEND_ACTIVATION'	=> true,
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('get_new_activation_mail'),
 			'template_file'		=> 'lost_password.html',
+			'page_path'			=> false,
 			'display'			=> true,
-		));
+		]);
 
 	}
 
@@ -412,11 +413,12 @@ class register_pageobject extends pageobject {
 			'S_LICENCE'		=> true,
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('register_title'),
 			'template_file'		=> 'register.html',
-			'display'			=> true)
-		);
+			'page_path'			=> false,
+			'display'			=> true
+		]);
 	}
 
 	public function process_deny() {
@@ -530,11 +532,12 @@ class register_pageobject extends pageobject {
 			'USER_EMAIL2'					=> $this->data['user_email2'],
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('register_title'),
 			'template_file'		=> 'register.html',
-			'display'			=> true)
-		);
+			'page_path'			=> false,
+			'display'			=> true
+		]);
 	}
 }
 ?>
