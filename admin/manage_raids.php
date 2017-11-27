@@ -362,8 +362,9 @@ class ManageRaids extends page_generic {
 		
 		if($raid['id'] AND $raid['id'] != 'new') $this->confirm_delete($this->user->lang('del_raid_with_itemadj')."<br />".$strRaidUserDate." ".$events[$raid['event']].": ".addslashes($raid['note']));
 		$arrEventKeys = array_keys($events);
+		
 		$this->tpl->assign_vars(array(
-			'DATE'				=> (new hdatepicker('date', array('value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->get('date', '') : $strRaidUserDate, true, false, false, function_exists('date_create_from_format'))), 'timepicker' => true)))->output(),
+			'DATE'				=> (new hdatepicker('date', array('value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->get('date', '') : $this->time->user_date($raid['date'], true, false, false, function_exists('date_create_from_format'))), 'timepicker' => true)))->output(),
 			'NOTE'				=> stripslashes((($this->in->get('dataimport', '') == 'true') ? $this->in->get('rnote', '') : $raid['note'])),
 			'EVENT'				=> (new hdropdown('event', array('options' => $events, 'value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->get('event', 0) : $raid['event']), 'js' => 'onchange="loadEventValue($(this).val())"')))->output(),
 			'RAID_EVENT'		=> $strRaidEvent,
