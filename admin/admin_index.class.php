@@ -256,6 +256,7 @@ class admin_index extends gen_class {
 							ORDER BY u.username, s.session_current DESC';
 		$result = $this->db->prepare($sql)->execute($this->time->time-600);
 		$arrOnlineUsers = $arrBots = $arrDone = array();
+		$online_count = 0;
 		if ($result){
 			while ($row = $result->fetchAssoc()){
 				$isBot = $this->env->is_bot($row['session_browser']) ? true : false;
@@ -264,10 +265,11 @@ class admin_index extends gen_class {
 					if($isBot) $arrBots[] = $this->env->is_bot($row['session_browser']);
 				}
 			}
-			$online_count = count($arrOnlineUsers);
-		} else $online_count = 0;
+			
+		}
 
-		if($online_count){
+
+		if(count($arrOnlineUsers)){
 			foreach($arrOnlineUsers as $row){
 				$strDoneFlag = ( !empty($row['username']) ) ? 'u_'.$row['session_user_id'] : 'ip_'.md5($row['session_ip']);
 				if(isset($arrDone[$strDoneFlag])) continue;
@@ -281,6 +283,7 @@ class admin_index extends gen_class {
 						'IP_ADDRESS'	=> sanitize($row['session_ip']))
 				);
 				$arrDone[$strDoneFlag] = 1;
+				$online_count++;
 			}
 		}
 
