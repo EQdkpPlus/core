@@ -1218,7 +1218,6 @@ function d($content="-" ){
 		var_dump($content);
 		echo "</pre>";
 	}
-
 	if (is_bool($content)) {
 		if($content == true){
 			$content = "Bool - True";
@@ -1226,17 +1225,21 @@ function d($content="-" ){
 			$content = "Bool - false";
 		}
 	}
-
 	if (strlen($content) ==0) {
 		$content = "String Length=0";
 	}
-
 	echo "<table border=0>\n";
 	echo "<tr>\n";
 	echo "<td bgcolor='#0080C0'>";
 	echo "<B>" . $content . "</B>";
 	echo "</td>\n";
 	echo "</tr>\n";
+
+	$arrBacktrace = debug_backtrace();
+	if($arrBacktrace && isset($arrBacktrace[1])){
+		echo "<tr><td>Debug called in ".$arrBacktrace[1]['file']." line ".$arrBacktrace[1]['line']."</td></tr>";
+	}
+
 	echo "</table>\n";
 }
 
