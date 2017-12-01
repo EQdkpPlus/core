@@ -1828,6 +1828,9 @@ $lang = array(
 		"consolidate_detele_warning" => "Are you sure you want to start the consolidation for the selected event?",
 		"consolidate_start"	=> "Sart consolidation",
 		"userpf_sett_f_example" => "Input Example",
+		"core_sett_f_auto_set_active" => "Activate characters after raid attendance",
+		"core_sett_f_help_auto_set_active" => "Characters will get automatically activated if they attend at a raid. If set, the inactivity period will be considered.",
+		
 );
 
 ?>

@@ -52,6 +52,7 @@ class inst_settings extends install_generic {
 		'dkp_name'						=> 'DKP',
 		'hide_inactive'					=> '0',
 		'inactive_period'				=> '0',
+		'auto_set_active'				=> '1',
 		'active_point_adj'				=> '0.00',
 		'inactive_point_adj'			=> '0.00',
 		'start_page'					=> 'news',

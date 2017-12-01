@@ -550,6 +550,10 @@ class admin_settings extends page_generic {
 						'type'		=> 'text',
 						'size'		=> 5,
 						'default'	=> 0
+					),
+					'auto_set_active' => array(
+						'type'		=> 'radio',
+						'default'	=> 1,
 					)
 				)
 			),
