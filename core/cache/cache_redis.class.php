@@ -52,7 +52,7 @@ if ( !class_exists( "cache_redis" ) ) {
 			$key = $global_prefix.$key;
 
 			
-			return $this->redis->set($key, serialize($data), $ttl);
+			return $this->redis->setex($key, $ttl, serialize($data));
 		}
 
 		public function get( $key, $global_prefix, $uncompress = false ) {

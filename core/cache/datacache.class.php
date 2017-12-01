@@ -128,6 +128,7 @@ if( !class_exists( "datacache" ) ) {
 			}else{
 				$this->pdl->log( 'pdc_query', 'PUT ERROR', $global_prefix.$key );
 			}
+			return $ret;
 		}
 
 		public function get( $key, $global_prefix = false, $uncompress = false, $ignoreExpired = false) {
