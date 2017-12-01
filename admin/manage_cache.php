@@ -44,6 +44,8 @@ class manage_cache extends page_generic {
 		if(function_exists('xcache_set') && function_exists('xcache_get') && function_exists('xcache_unset')) $this->usable_cache_types[] = 'xcache';
 		if(class_exists('Memcache')) $this->usable_cache_types[] = 'memcache';
 		if(class_exists('Memcached')) $this->usable_cache_types[] = 'memcached';
+		if(class_exists('Redis')) $this->usable_cache_types[] = 'redis';
+		
 		$this->process();
 	}
 	

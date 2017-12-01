@@ -107,8 +107,30 @@
 			<dd><label><input type='text' name='cache_memcached[server]' size='32' value="{V_CACHE_MEMCACHED_SERVER}" class='input' /></label></dd>
 		</dl>
 		<dl>
-			<dt><label>{L_pdc_memcache_port_text}</label><br /><span>{pdc_memcache_port_help}</span></dt>
+			<dt><label>{L_pdc_memcache_port_text}</label><br /><span>{L_pdc_memcache_port_help}</span></dt>
 			<dd><label><input type='text' name='cache_memcached[port]' size='32' value="{V_CACHE_MEMCACHED_PORT}" class='input' /></label></dd>
+		</dl>
+	</div>
+	<div id="div_cache_redis" style="display:{DIV_CACHE_REDIS_VISIBLE}">
+		<div class="infobox infobox-large infobox-blue clearfix">
+			<i class="fa fa-info-circle fa-4x pull-left"></i> {L_pdc_cache_info_memcache}
+		</div>
+		<br />
+		<dl>
+			<dt><label>{L_pdc_dttl_text}</label><br /><span>{L_pdc_dttl_help}</span></dt>
+			<dd><label><input type='text' name='cache_redis[dttl]' size='32' value="{V_CACHE_REDIS_DTTL}" class='input' /></label></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_pdc_globalprefix}</label><br /><span>{L_pdc_globalprefix_help}</span></dt>
+			<dd><label><input type='text' name='cache_redis[prefix]' size='32' value="{V_CACHE_REDIS_PREFIX}" class='input' /></label></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_pdc_redis_server_text}</label><br /><span>{L_pdc_redis_server_help}</span></dt>
+			<dd><label><input type='text' name='cache_redis[server]' size='32' value="{V_CACHE_REDIS_SERVER}" class='input' /></label></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_pdc_redis_port_text}</label><br /><span>{L_pdc_redis_port_help}</span></dt>
+			<dd><label><input type='text' name='cache_redis[port]' size='32' value="{V_CACHE_REDIS_PORT}" class='input' placeholder='6379'/></label></dd>
 		</dl>
 	</div>
 	</div>
