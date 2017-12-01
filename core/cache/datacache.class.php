@@ -58,7 +58,7 @@ if( !class_exists( "datacache" ) ) {
 				$this->cache = registry::register($cache_type);
 			} catch (Exception $e){
 				//Fallback: load file cache
-				$cache_type = 'file';
+				$cache_type = 'cache_file';
 				require_once( $this->root_path.'core/cache/cache.iface.php' );
 				require_once( $this->root_path.'core/cache/'.$cache_type.'.class.php' );
 				$this->cache = registry::register($cache_type);
@@ -237,6 +237,7 @@ if( !class_exists( "datacache" ) ) {
 				'none',
 				'file',
 				'xcache',
+				'redis',
 			);
 		}
 	}//end interface

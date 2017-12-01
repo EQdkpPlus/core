@@ -1236,8 +1236,8 @@ function d($content="-" ){
 	echo "</tr>\n";
 
 	$arrBacktrace = debug_backtrace();
-	if($arrBacktrace && isset($arrBacktrace[1])){
-		echo "<tr><td>Debug called in ".$arrBacktrace[1]['file']." line ".$arrBacktrace[1]['line']."</td></tr>";
+	if($arrBacktrace && isset($arrBacktrace[0])){
+		echo "<tr><td  bgcolor='#efefef'>Debug called in ".$arrBacktrace[0]['file']." line ".$arrBacktrace[0]['line']."</td></tr>";
 	}
 
 	echo "</table>\n";

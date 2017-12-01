@@ -28,7 +28,7 @@ include_once ($eqdkp_root_path . 'common.php');
 
 class manage_cache extends page_generic {
 
-	private $pdc_cache_types =		array('none', 'file', 'xcache', 'memcache', 'memcached', 'apc');
+	private $pdc_cache_types =		array('none', 'file', 'xcache', 'memcache', 'memcached', 'apc', 'redis');
 	private $usable_cache_types = 	array('none', 'file');
 	
 	public function __construct() {
@@ -120,6 +120,16 @@ class manage_cache extends page_generic {
 					$this->tpl->assign_var('V_CACHE_'.strtoupper($cache_type).'_PORT', $this->config->get('port', 'pdc'));
 				}else{
 					$this->tpl->assign_var('V_CACHE_'.strtoupper($cache_type).'_PORT', '11211');
+				}
+			}elseif($cache_type == 'redis'){
+				if($this->config->get('server', 'pdc')){
+					$this->tpl->assign_var('V_CACHE_'.strtoupper($cache_type).'_SERVER', $this->config->get('server', 'pdc'));
+				}else{
+					$this->tpl->assign_var('V_CACHE_'.strtoupper($cache_type).'_SERVER', '127.0.0.1');
+				}
+				
+				if($this->config->get('port', 'pdc')){
+					$this->tpl->assign_var('V_CACHE_'.strtoupper($cache_type).'_PORT', $this->config->get('port', 'pdc'));
 				}
 			}
 		}
