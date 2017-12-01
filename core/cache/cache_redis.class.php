@@ -45,7 +45,11 @@ if ( !class_exists( "cache_redis" ) ) {
 			$blnConnectionResult = $this->redis->connect($this->config->get('server', 'pdc'), $intPort);
 			if(!$blnConnectionResult){
 				throw new Exception('No connection to redis server');
-			}			
+			}
+			
+			$strPrefix = substr(md5(registry::get_const('dbname')), 0, 8);
+			
+			$this->redis->setOption(\Redis::OPT_PREFIX, $strPrefix.':');
 		}
 
 		public function put( $key, $data, $ttl, $global_prefix, $compress = false ) {
