@@ -217,6 +217,7 @@ class update_2300 extends sql_update_task {
 		//Set new configs
 		$this->config->set('avatar_default', 'eqdkp');
 		$this->config->set('avatar_allowed', array('eqdkp', 'gravatar'));
+		$this->config->set('auto_set_active', 1);
 		
 		$this->config->set('build_pointcache', 'true');
 		
