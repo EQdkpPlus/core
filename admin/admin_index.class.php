@@ -280,8 +280,9 @@ class admin_index extends gen_class {
 						'LAST_UPDATE'	=> $this->time->createTimeTag($row['session_current'], $this->time->user_date($row['session_current'], true)),
 						'LOCATION'		=> $this->admin_functions->resolve_eqdkp_page($row['session_page']),
 						'BROWSER'		=> $this->admin_functions->resolve_browser($row['session_browser']),
-						'IP_ADDRESS'	=> sanitize($row['session_ip']))
-				);
+						'IP_ADDRESS'	=> sanitize($row['session_ip']),
+						'IP_HOSTNAME'	=> @gethostbyaddr($row['session_ip']),
+				));
 				$arrDone[$strDoneFlag] = 1;
 				$online_count++;
 			}
