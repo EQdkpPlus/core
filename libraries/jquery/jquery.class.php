@@ -1635,9 +1635,9 @@ if (!class_exists("jquery")) {
 					$markersJS .= 'map.addMarker({
 						lat: '.$markerdata['lat'].',
 						lng: '.$markerdata['lng'].',
-						title: "'.$markerdata['title'].'",
+						title: "'.$this->sanitize($markerdata['title']).'",
 						infoWindow: {
-							content: "'.$markerdata['tooltip'].'"
+							content: "'.$this->sanitize($markerdata['tooltip']).'"
 						}
 					});';
 
