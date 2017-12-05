@@ -73,11 +73,10 @@ class login_pageobject extends pageobject {
 				}
 			}
 		
-			if ($blnShowCaptcha && $this->config->get('lib_recaptcha_pkey') && strlen($this->config->get('lib_recaptcha_pkey'))){
-				require($this->root_path.'libraries/recaptcha/recaptcha.class.php');
-				$captcha = new recaptcha;
-				$response = $captcha->check_answer ($this->config->get('lib_recaptcha_pkey'), $this->env->ip, $this->in->get('g-recaptcha-response'));
-				if (!$response->is_valid) {
+			if ($blnShowCaptcha){
+				$captcha = register('captcha');
+				$response = $captcha->verify();
+				if (!$response) {
 					$this->core->message($this->user->lang('lib_captcha_wrong'), $this->user->lang('error'), 'red');
 					$this->display();
 					return;
@@ -349,11 +348,10 @@ class login_pageobject extends pageobject {
 		}
 
 		//Captcha
-		if ($blnShowCaptcha && $this->config->get('lib_recaptcha_pkey') && strlen($this->config->get('lib_recaptcha_pkey'))){
-			require($this->root_path.'libraries/recaptcha/recaptcha.class.php');
-			$captcha = new recaptcha;
+		if ($blnShowCaptcha){
+			$captcha = register('captcha');
 			$this->tpl->assign_vars(array(
-				'CAPTCHA'				=> $captcha->get_html($this->config->get('lib_recaptcha_okey')),
+				'CAPTCHA'				=> $captcha->get(),
 				'S_DISPLAY_CATPCHA'		=> true,
 			));
 		}

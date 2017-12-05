@@ -110,10 +110,10 @@ class login_twofactor extends gen_class {
 
 					//Captcha
 					if ($blnShowCaptcha){
-						require($this->root_path.'libraries/recaptcha/recaptcha.class.php');
-						$captcha = new recaptcha;
+						$captcha = register('captcha');
+
 						$this->tpl->assign_vars(array(
-								'CAPTCHA'				=> $captcha->get_html($this->config->get('lib_recaptcha_okey')),
+								'CAPTCHA'				=> $captcha->get(),
 								'S_DISPLAY_CATPCHA'		=> true,
 						));
 					}

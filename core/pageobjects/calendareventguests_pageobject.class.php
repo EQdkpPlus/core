@@ -75,11 +75,10 @@ class calendareventguests_pageobject extends pageobject {
 			}
 
 		}else{
-			if (!$this->user->is_signedin() && $this->config->get('enable_captcha') == 1 && $this->config->get('lib_recaptcha_pkey') && strlen($this->config->get('lib_recaptcha_pkey'))){
-				require($this->root_path.'libraries/recaptcha/recaptcha.class.php');
-				$captcha = new recaptcha;
-				$response = $captcha->check_answer ($this->config->get('lib_recaptcha_pkey'), $this->env->ip, $this->in->get('g-recaptcha-response'));
-				if (!$response->is_valid) {
+			if (!$this->user->is_signedin() && $this->config->get('enable_captcha') == 1){
+				$captcha = register('captcha');
+				$response = $captcha->verify();
+				if (!$response) {
 					$this->core->message($this->user->lang('lib_captcha_wrong'), $this->user->lang('error'), 'red');
 					return;
 				}
@@ -118,9 +117,8 @@ class calendareventguests_pageobject extends pageobject {
 
 		$display_captcha = false;
 		if (!$this->user->is_signedin() && $this->config->get('enable_captcha') == 1){
-			require($this->root_path.'libraries/recaptcha/recaptcha.class.php');
-			$captcha = new recaptcha;
-			$display_captcha = $captcha->get_html($this->config->get('lib_recaptcha_okey'));
+			$captcha = register('captcha');
+			$display_captcha = $captcha->get();
 		}
 
 		$is_roleraid	= false;
