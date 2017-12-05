@@ -47,6 +47,7 @@ class captcha extends gen_class {
 			</dt>
 			<dd>';
 			
+			$strOut .= $recaptcha->get_html($this->config->get('lib_recaptcha_okey'));
 	
 			$strOut .= '</dd>
 			</dl>';

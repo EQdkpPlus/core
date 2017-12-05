@@ -90,19 +90,7 @@ if (!class_exists("recaptcha")) {
 			
 			return $out;
 		}
-		
-		// ReCaptcha Output
-		public function get_html_for_form(){
-			$out = '<dl>
-						<dt>
-							<label>'.register('user')->lang('lib_captcha_head').'</label>
-						</dt>
-						<dd>
-							'.$this->get_html(register('config')->get('lib_recaptcha_okey')).'
-						</dd>
-					</dl>';
-			return $out;
-		}
+
 	}
 }
 ?>
