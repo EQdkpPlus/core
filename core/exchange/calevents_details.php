@@ -35,8 +35,29 @@ if (!class_exists('exchange_calevents_details')){
 					$event_id = intval($params['get']['eventid']);
 					$eventdata	= $this->pdh->get('calendar_events', 'data', array($event_id));
 					$comments = $this->pdh->get('comment', 'filtered_list', array('articles', '12_'.$event_id));
+
+					$intComments = 0;
 					if (is_array($comments)){
 						foreach($comments as $key => $row){
+							
+							$arrReplies = array();
+							if(count($row['replies'])){
+								foreach($row['replies'] as $com){
+									$avatarimg = $this->pdh->get('user', 'avatarimglink', array($com['userid']));
+									$arrReplies['comment:'.$com['id']] = array(
+											'username'			=> unsanitize($com['username']),
+											'user_avatar'		=> $this->pfh->FileLink((($avatarimg != "") ? $avatarimg : 'images/global/avatar-default.svg'), false, 'absolute'),
+											'date'				=> $this->time->date('Y-m-d H:i', $com['date']),
+											'date_timestamp'	=> $com['date'],
+											'message'			=> $this->bbcode->toHTML($com['text']),
+											'comment_id'		=> $com['id'],
+											'reply_to'			=> $key,
+									);
+									$intComments++;
+								}
+							}
+							
+							
 							$avatarimg = $this->pdh->get('user', 'avatarimglink', array($row['userid']));
 							$arrComments['comment:'.$key] = array(
 								'username'			=> $row['username'],
@@ -44,7 +65,10 @@ if (!class_exists('exchange_calevents_details')){
 								'date'				=> $this->time->date('Y-m-d H:i', $row['date']),
 								'date_timestamp'	=> $row['date'],
 								'message'			=> $this->bbcode->toHTML($row['text']),
+								'comment_id'		=> $key,
+								'replies'			=> $arrReplies,
 							);
+							$intComments++;
 						}
 					}
 
@@ -211,7 +235,7 @@ if (!class_exists('exchange_calevents_details')){
 						}
 
 						$arrCommentsOut = array(
-							'count' => count($arrComments),
+							'count' => $intComments,
 							'page'	=> 'articles',
 							'attachid' => '12_'.$event_id,
 							'comments' => $arrComments,
