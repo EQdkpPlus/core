@@ -28,7 +28,7 @@ if (!class_exists('exchange_data')){
 		public static $shortcuts = array('pex'=>'plus_exchange');
 		public $options		= array();
 
-		public function get_data($params, $body){
+		public function get_data($params, $arrBody){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 			
 			$out['eqdkp'] = array(

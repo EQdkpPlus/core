@@ -128,6 +128,21 @@ if( !class_exists( "plus_exchange" ) ) {
 			$request_body = file_get_contents("php://input");
 			parse_str($request_body, $request_args['put']);
 			parse_str($request_body, $request_args['delete']);
+			$arrBody = array();
+			
+			if(strlen($request_body)){
+				$xml = simplexml_load_string($request_body, "SimpleXMLElement", LIBXML_NOCDATA);
+				if($xml){
+					$json = json_encode($xml);
+					$arrBody = json_decode($json,TRUE);
+				} else {
+					$json = json_decode($request_body, true);
+					if($json){
+						$arrBody = $json;
+					}
+				}
+				
+			}
 			
 			$this->authenticateUser();
 
@@ -141,7 +156,7 @@ if( !class_exists( "plus_exchange" ) ) {
 				$method = strtolower($request_method).'_'.$function;
 
 				if (method_exists($class, $method)){
-					$out = $class->$method($request_args, $request_body);
+					$out = $class->$method($request_args, $arrBody);
 				} else {
 					$out = $this->error('function not found');
 				}

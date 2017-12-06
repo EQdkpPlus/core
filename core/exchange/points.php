@@ -28,7 +28,7 @@ if (!class_exists('exchange_points')){
 		public static $shortcuts = array('pex'=>'plus_exchange');
 		public $options		= array();
 
-		public function get_points($params, $body){
+		public function get_points($params, $arrBody){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 			
 			if($isAPITokenRequest || $this->user->check_pageobjects(array('points'), 'AND', false))

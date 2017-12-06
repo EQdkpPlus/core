@@ -28,7 +28,7 @@ if (!class_exists('exchange_search')){
 		public static $shortcuts = array('pex'=>'plus_exchange');
 		public $options		= array();
 
-		public function get_search($params, $body){
+		public function get_search($params, $arrBody){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 			$out = array();
 			

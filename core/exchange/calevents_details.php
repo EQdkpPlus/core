@@ -27,7 +27,7 @@ if (!class_exists('exchange_calevents_details')){
 	class exchange_calevents_details extends gen_class {
 		public static $shortcuts = array('pex'=>'plus_exchange');
 
-		public function get_calevents_details($params, $body){
+		public function get_calevents_details($params, $arrBody){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 
 			if ($isAPITokenRequest || $this->user->check_auth('po_calendarevent', false)){

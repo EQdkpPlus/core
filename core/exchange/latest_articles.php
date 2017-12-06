@@ -28,7 +28,7 @@ if (!class_exists('exchange_latest_articles')){
 		public static $shortcuts = array('pex'=>'plus_exchange');
 		public $options		= array();
 
-		public function get_latest_articles($params, $body){
+		public function get_latest_articles($params, $arrBody){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 			
 				//Get Number; default: 10

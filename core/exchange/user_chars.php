@@ -28,7 +28,7 @@ if (!class_exists('exchange_user_chars')){
 		public static $shortcuts = array('pex'=>'plus_exchange');
 		public $options		= array();
 
-		public function get_user_chars($params, $body){
+		public function get_user_chars($params, $arrBody){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 			
 			if ($isAPITokenRequest || $this->user->check_auth('po_calendarevent', false)){

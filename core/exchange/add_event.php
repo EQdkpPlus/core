@@ -34,33 +34,34 @@ if (!class_exists('exchange_add_event')){
 		*
 		* Returns: Status 0 on error, Status 1 and inserted Event-ID on succes
 		*/
-		public function post_add_event($params, $body){
+		public function post_add_event($params, $arrBody){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 			
 			if ($isAPITokenRequest ||  $this->user->check_auth('a_event_add', false)){
 				$blnTest = (isset($params['get']['test']) && $params['get']['test']) ? true : false;
-				
-				$xml = simplexml_load_string($body);
-				if ($xml){
+
+				if (count($arrBody)){
 					//Check required values
-					if (!isset($xml->event_name) && !strlen($xml->event_name)) return $this->pex->error('required data missing');
-					if (!isset($xml->event_value) && !strlen($xml->event_value)) return $this->pex->error('required data missing');
+					if (!isset($arrBody['event_name']) || !strlen($arrBody['event_name'])) return $this->pex->error('required data missing');
+					if (!isset($arrBody['event_value']) || !strlen($arrBody['event_value'])) return $this->pex->error('required data missing');
 										
 					//Event Value
-					$fltEventValue = (float)$xml->event_value;
+					$fltEventValue = (float)$arrBody['event_value'];
 					
 					//Item Name
-					$strEventName = filter_var((string)$xml->event_name, FILTER_SANITIZE_STRING);	
+					$strEventName = filter_var((string)$arrBody['event_name'], FILTER_SANITIZE_STRING);	
 					
 					if($blnTest) return array('test' => 'success');
 					
-					$mixEventID = $this->pdh->put('event', 'add_event', array($strEventName, $fltEventValue, ''));
+					$intDefaultItempool = (isset($arrBody['event_default_itempool'])) ? (int)$arrBody['event_default_itempool'] : 0;
+					
+					$mixEventID = $this->pdh->put('event', 'add_event', array($strEventName, $fltEventValue, '', $intDefaultItempool));
 					if (!$mixEventID) return $this->pex->error('an error occured');
 					$this->pdh->process_hook_queue();
 					
 					return array('event_id' => $mixEventID);
 				}
-				return $this->pex->error('malformed xml');
+				return $this->pex->error('malformed input');
 			} else {
 				return $this->pex->error('access denied');
 			}

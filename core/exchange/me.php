@@ -27,7 +27,7 @@ if (!class_exists('exchange_me')){
 	class exchange_me extends gen_class {
 		public static $shortcuts = array('pex'=>'plus_exchange');
 		
-		public function get_me($params, $body){
+		public function get_me($params, $arrBody){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 			
 			if($isAPITokenRequest) {

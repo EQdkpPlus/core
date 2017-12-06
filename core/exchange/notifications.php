@@ -27,7 +27,7 @@ if (!class_exists('exchange_notifications')){
 	class exchange_notifications extends gen_class {
 		public static $shortcuts = array('pex'=>'plus_exchange');
 
-		public function get_notifications($params, $body){
+		public function get_notifications($params, $arrBody){
 			if($this->user->is_signedin()){
 				$intUserID = $this->user->id;
 

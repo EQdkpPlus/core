@@ -37,34 +37,33 @@ if (!class_exists('exchange_add_raid')){
 		*
 		* Returns: Status 0 on error, Status 1 and inserted Raid-ID on succes
 		*/
-		public function post_add_raid($params, $body){
+		public function post_add_raid($params, $arrBody){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 			if ($isAPITokenRequest ||  $this->user->check_auth('a_raid_add', false)){
 				$blnTest = (isset($params['get']['test']) && $params['get']['test']) ? true : false;
 				
-				$xml = simplexml_load_string($body);
-				if ($xml){
+				if (count($arrBody)){
 					//Check required values
-					if (!isset($xml->raid_date) && !strlen($xml->raid_date)) return $this->pex->error('required data missing');
-					if (!isset($xml->raid_attendees) && !is_object($xml->raid_attendees->member)) return $this->pex->error('required data missing');
-					if (!isset($xml->raid_value) && !strlen($xml->raid_value)) return $this->pex->error('required data missing');
-					if (!isset($xml->raid_event_id) && !strlen($xml->raid_event_id)) return $this->pex->error('required data missing');
+					if (!isset($arrBody['raid_date']) || !strlen($arrBody['raid_date'])) return $this->pex->error('required data missing');
+					if (!isset($arrBody['raid_attendees']) || !count($arrBody['raid_attendees']['member'])) return $this->pex->error('required data missing');
+					if (!isset($arrBody['raid_value']) || !strlen($arrBody['raid_value'])) return $this->pex->error('required data missing');
+					if (!isset($arrBody['raid_event_id']) || !strlen($arrBody['raid_event_id'])) return $this->pex->error('required data missing');
 					
-					$intRaidDate = $this->time->fromformat($xml->raid_date, "Y-m-d H:i");
+					$intRaidDate = $this->time->fromformat($arrBody['raid_date'], "Y-m-d H:i");
 					$arrRaidAttendees = array();
 					
 					$arrMemberIDList = $this->pdh->get('member', 'id_list', array());
-					foreach($xml->raid_attendees->member as $objMemberID){
+					foreach($arrBody['raid_attendees']['member'] as $objMemberID){
 						if (in_array(intval($objMemberID), $arrMemberIDList)) $arrRaidAttendees[] = intval($objMemberID);
 					}
 					if(count($arrRaidAttendees) == 0) return $this->pex->error('required data missing');
 					
-					$fltRaidValue = (float)$xml->raid_value;
+					$fltRaidValue = (float)$arrBody['raid_value'];
 					$arrEventIDList = $this->pdh->get('event', 'id_list');
-					$intRaidEventID = intval($xml->raid_event_id);
+					$intRaidEventID = intval($arrBody['raid_event_id']);
 					if (!in_array($intRaidEventID, $arrEventIDList)) return $this->pex->error('required data missing');
 					
-					$strRaidNote = filter_var((string)$xml->raid_note, FILTER_SANITIZE_STRING);				
+					$strRaidNote = filter_var((string)$arrBody['raid_note'], FILTER_SANITIZE_STRING);				
 				
 					if($blnTest) return array('test' => 'success');
 					
@@ -74,7 +73,7 @@ if (!class_exists('exchange_add_raid')){
 					
 					return array('raid_id' => $raid_upd);
 				}
-				return $this->pex->error('malformed xml');
+				return $this->pex->error('malformed input');
 			} else {
 				return $this->pex->error('access denied');
 			}
