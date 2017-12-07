@@ -185,7 +185,7 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 		}
 
 		public function get_group($id){
-			return $this->guests[$id]['group'];
+			return $this->guests[$id]['raidgroup'];
 		}
 
 		public function get_count($raidid, $status=0){

@@ -56,8 +56,8 @@ if (!class_exists('exchange_points')){
 				}
 				
 				//IncludeHTML
-				$blnIncludeHTML = (isset($params['get']['include_html']) && $params['get']['include_html'] == 'true') ? true : false;
-				
+				$blnIncludeHTML = (isset($params['get']['include_html']) && (int)$params['get']['include_html']) ? true : false;
+
 				//Filter
 				$filter = $filterid = false;
 				if (isset($params['get']['filter']) && in_array($params['get']['filter'], array('user', 'character')) && isset($params['get']['filterid'])){
