@@ -439,7 +439,6 @@ class core extends gen_class {
 				'HONEYPOT_VALUE'			=> $this->user->csrfGetToken("honeypot"),
 				'S_REPONSIVE'				=> registry::get_const('mobile_view'),
 				'CURRENT_PAGE'				=> sanitize($this->env->request),
-				'L_login_bridge_notice'		=> sprintf($this->user->lang('login_bridge_notice'), $this->config->get('cmsbridge_url')),
 				'S_STYLECHANGER'			=> (!intval($this->config->get('default_style_overwrite')) && count(register('pdh')->get('styles', 'styles', array(0, false))) > 1) ? true : false,
 				'USER_IS_AWAY'				=> ($this->user->data['user_id'] > 0) ? $this->pdh->get('calendar_raids_attendees', 'user_awaymode', array($this->user->data['user_id'])) : false,
 			));
