@@ -503,7 +503,7 @@ $lang = array(
 	"news_permissions_member" => 'Guest and characters (only Admin can see)',
 	"news_permissions_all" => 'Free for all',
 	"news_readmore" => 'Read more...',
-	"login_bridge_notice" => 'Login - CMS-Bridge is active. Use your <a href="%s">CMS/Board Data</a> to login.',
+	"login_bridge_notice" => 'Login - CMS-Bridge is active. Use your CMS/Board Data to login.',
 	"portalmanager" => 'Portalmodule Management',
 	"lib_pupd_nochangelog" => 'There is no changelog information available',
 	"cl_bttn_ok" => 'Ok',

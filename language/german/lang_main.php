@@ -452,7 +452,7 @@ $lang = array(
 "news_permissions_member" => "Nur für Administratoren",
 "news_permissions_all" => "Für alle sichtbar",
 "news_readmore" => "Weiterlesen...",
-"login_bridge_notice" => 'Da eine CMS-Bridge aktiv ist, musst Du dich mit den <a href="%s">Login-Daten eures Forums/CMS</a> anmelden.',
+"login_bridge_notice" => 'Da eine CMS-Bridge aktiv ist, musst Du dich mit den Login-Daten eures Forums/CMS anmelden.',
 "portalmanager" => "Portallayout verwalten",
 "more_plugins" => "Weitere Plugins findet ihr auf der Project Homepage unter <a href='".EQDKP_DOWNLOADS_URL."'>".EQDKP_PROJECT_URL."</a>.",
 "more_moduls" => "Weitere Module findet ihr auf der  Project Homepage unter <a href='".EQDKP_DOWNLOADS_URL."'>".EQDKP_PROJECT_URL."</a>.",

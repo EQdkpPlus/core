@@ -316,7 +316,6 @@ $lang = array(
 	"totals" => 'Totals',
 	"who_online" => 'Who\'s Online',
 	"lim_func_fromformat" => 'The function date_create_from_format() isn\'t available. You have to use the format \'YYYY-MM-DD HH:MM\' (eg. 2011-03-14 23:02) for all dates. date_create_from_format will be available with php-version 5.3.',
-	"config_writable" => 'The config file (config.php) can be modified by everybody. It is recommended to change the permissions to 644 or at 640 (if webuser is file-owner) (e.g. <a href="http://en.wikipedia.org/wiki/Chmod" target="_blank">chmod</a> 644 config.php)',
 	"style_settings" => 'Style Settings',
 	"style_name" => 'Style Name',
 	"style_version" => 'Style-version',

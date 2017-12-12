@@ -312,7 +312,6 @@ $lang = array(
 "totals" => "Gesamtsumme",
 "who_online" => "Wer ist online?",
 "lim_func_fromformat" => "Die Funktion date_create_from_format() ist nicht verfügbar. Sämtliche Datumsangaben müssen im Format 'YYYY-MM-DD HH:MM' (z.B. 2011-03-14 23:02) gemacht werden. date_create_from_format ist ab PHP-Version 5.3 verfügbar.",
-"config_writable" => "Deine Konfigurations-Datei (config.php) ist derzeit von jedermann beschreibbar. Es wird dringend empfohlen, die Berechtigungen auf 644 oder auf 640 (wenn der Webuser gleich dem Datei-Eigentümer ist) zu setzen (z. B.: <a href=\"http://de.wikipedia.org/wiki/Chmod\" target=\"_blank\">chmod</a> 644 config.php).",
 "style_settings" => "Style Einstellungen",
 "style_name" => "Style Name",
 "style_version" => "Style-Version",
