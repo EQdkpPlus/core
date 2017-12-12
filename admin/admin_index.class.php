@@ -380,16 +380,6 @@ class admin_index extends gen_class {
 			'S_WHO_IS_ONLINE'		=> $this->user->check_group(2, false),
 		));
 
-		//Check permissions of config.php
-		if (!defined('EQDKP_DISABLE_CONFIG_CHECK') && file_exists($this->root_path.'config.php')){
-			if ((int)substr(decoct(fileperms($this->root_path.'config.php')),3) > 644){
-				$this->tpl->assign_var('SHOW_LIMITED_FUNCS', true);
-				$this->tpl->assign_block_vars('lim_funcs', array(
-					'TEXT'		=> $this->user->lang('config_writable'),
-				));
-			}
-		}
-
 		if(!function_exists('date_create_from_format')) {
 			$this->tpl->assign_var('SHOW_LIMITED_FUNCS', true);
 			$this->tpl->assign_block_vars('lim_funcs', array(
