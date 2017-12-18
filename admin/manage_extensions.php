@@ -51,6 +51,7 @@ class Manage_Extensions extends page_generic {
 		);
 		parent::__construct(false, $handler);
 		$this->code = $this->in->get('code', '');
+		$this->code = preg_replace("/[^a-z0-9\.\_\-]/", "", strtolower($this->code));
 		
 		if(!$this->pdl->type_known("repository")) $this->pdl->register_type("repository", null, null, array(3,4), true);
 		
@@ -144,6 +145,7 @@ class Manage_Extensions extends page_generic {
 	
 					if ($xml && $xml->folder != ''){
 						$extension_name = $xml->folder;
+						$extension_name = preg_replace("/[^a-z0-9\.\_\-]/", "", strtolower($extension_name));
 						
 						//Subfolder detection
 						$src_path = $this->pfh->FolderPath('tmp/'.$upload_id, 'repository');
@@ -173,8 +175,16 @@ class Manage_Extensions extends page_generic {
 							$this->pfh->Delete($src_path.'/custom.css');
 							$this->pfh->Delete($src_path.'/custom.js');
 						}
+						
+						if($target){
 	
-						$blnResult = $this->repo->full_copy($src_path, $target.'/'.$extension_name);
+							$blnResult = $this->repo->full_copy($src_path, $target.'/'.$extension_name);
+							
+							//Copy package.xml file
+							$this->pfh->copy($this->pfh->FolderPath('tmp/'.$upload_id, 'repository').'package.xml', $target.'/'.$extension_name.'/package.xml');
+							
+							$this->pfh->FolderPath('tmp/'.$upload_id, 'repository').'package.xml';
+							}
 						
 						if (!$blnResult){
 							$this->core->message($this->user->lang('plugin_package_error3'), $this->user->lang('error'), 'red');
@@ -291,7 +301,7 @@ class Manage_Extensions extends page_generic {
 			@ignore_user_abort(true);
 			$this->pdl->log('repository', '4. Copy files '.$this->code);
 			
-			$srcFolder = $this->pfh->FolderPath('tmp/'.md5($this->in->get('cat', 0).$this->code),'repository');
+			$srcFolder = $origSrcFolder = $this->pfh->FolderPath('tmp/'.md5($this->in->get('cat', 0).$this->code),'repository');
 			
 			//Subfolder detection
 			$arrSubfolder = scandir($srcFolder);
@@ -321,6 +331,12 @@ class Manage_Extensions extends page_generic {
 			$this->pdl->log('repository', '4. Target for '.$this->code.' is '.$target);
 			if($target){
 				$result = $this->repo->full_copy($srcFolder, $target);
+				
+				if((int)$this->in->get('cat', 0) === 2){
+					//Copy package.xml file
+					$this->pfh->copy($origSrcFolder.'/package.xml', $target.'/package.xml');
+				}
+				
 				if ($result){
 					echo "true";
 				} else {

@@ -607,7 +607,7 @@ class diff_renderer_side_by_side extends diff_renderer
 		// Is the diff empty?
 		if (!sizeof($this->lines))
 		{
-			$output .= '<tr><th colspan="2">' . $user->lang['NO_VISIBLE_CHANGES'] . '</th></tr>';
+			$output .= '<tr><th colspan="2">' . register('user')->lang['NO_VISIBLE_CHANGES'] . '</th></tr>';
 		}
 		else
 		{
