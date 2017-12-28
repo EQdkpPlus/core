@@ -73,7 +73,7 @@ class auth extends user {
 		}
 
 		// Remove old sessions and update user information if necessary (every 5 minutes)
-		if(($this->current_time - 60*5) > $this->config->get('session_last_cleanup')){
+		if(($this->current_time - 60*5) > (int)$this->config->get('session_last_cleanup')){
 			$this->cleanup($this->current_time);
 		}
 		//Cookie-Data
@@ -314,23 +314,69 @@ class auth extends user {
 		$this->sid = '';
 		return true;
 	}
-
+	
 	/**
-	* Destroys a specific Session
-	*
-	* @var string $strSID Session-ID
-	* @var int $intUserID User-ID
-	* @return true
-	*/
-	public function destroy_session($strSID, $intUserID = false){
-		if ($intUserID){
-			$this->db->prepare("DELETE FROM __sessions WHERE session_id=? AND session_user_id=?")->execute($strSID, $intUserID);
-		} else {
-			$this->db->prepare("DELETE FROM __sessions WHERE session_id=?")->execute($strSID);
-		}
-
+	 * Destroys a specific Session
+	 *
+	 * @var string $strSID Session-ID
+	 * @return true
+	 */
+	public function destroy_session($strSID){
+		$this->db->prepare("DELETE FROM __sessions WHERE session_id=?")->execute($strSID);
+		
 		return true;
 	}
+	
+	
+	/**
+	 * Destroys all sessions of given UserID
+	 * 
+	 * @param integer $intUserID
+	 * @return boolean
+	 */
+	public function destroyUserSessions($intUserID){
+		$this->db->prepare("DELETE FROM __sessions WHERE session_user_id=?")->execute($intUserID);
+		
+		return true;
+	}
+	
+
+	/**
+	 * Destroys all other sessions but the current one of a given user
+	 * 
+	 * @param integer $intUserID
+	 */
+	public function destroyOtherSessions($intUserID = false){
+		if($intUserID === false) $intUserID = $this->id;
+		
+		if(!$intUserID) return false;
+		
+		if($this->sid){
+			$this->db->prepare("DELETE FROM __sessions WHERE session_user_id=? AND session_id!=?")->execute($intUserID, $this->sid);
+		} else {
+			$this->destroyUserSessions($intUserID);
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * Get all running sessions of a given user
+	 * 
+	 * @param integer $intUserID
+	 */
+	public function getAllUserSessions($intUserID = false){
+		if($intUserID === false) $intUserID = $this->id;
+		
+		if(!$intUserID) return array();
+
+		$objQuery = $this->db->prepare("SELECT * FROM __sessions WHERE session_user_id=?")->execute($intUserID);
+		if($objQuery){
+			$arrQuery = $objQuery->fetchAllAssoc();
+			return $arrQuery;
+		}
+	}
+	
 
 	/**
 	 * Changes User of the current Session

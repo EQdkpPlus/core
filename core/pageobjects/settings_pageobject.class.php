@@ -187,9 +187,12 @@ class settings_pageobject extends pageobject {
 			//Send Mail to the recent user's email address
 			$bodyvars = array(
 					'USERNAME' => $this->pdh->get('user', 'name', array($this->user->id)),
-					'DATETIME'		=> $this->time->user_date($this->time->time, true),
+					'DATETIME'	=> $this->time->user_date($this->time->time, true),
 			);
 			$this->email->SendMailFromAdmin($this->pdh->get('user', 'email', array($this->user->id)), $this->user->lang('email_subject_password_changed'), 'user_password_changed.html', $bodyvars);
+		
+			//Destroy other sessions
+			$this->user->destroyOtherSessions();
 		}
 		
 		//Send email to confirm new email address

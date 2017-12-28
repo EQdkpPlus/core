@@ -410,6 +410,9 @@ class Manage_Users extends page_generic {
 				$new_salt = $this->user->generate_salt();
 				$query_ary['user_password'] = $this->user->encrypt_password($values['new_password'], $new_salt).':'.$new_salt;
 				$query_ary['user_login_key'] = '';
+				
+				//Destroy other sessions
+				$this->user->destroyOtherSessions();
 			}
 
 			$query_ary['user_email']	= $this->encrypt->encrypt($values['user_email']);
