@@ -413,9 +413,10 @@ function infotooltip_js() {
  * @int $direct: 0: tooltip as tooltip, 1: direct display of tooltip, 2: direct display + force update
  * @int $onlyicon: >0: icon-size and only icon is displayed
  * @string $in_span: if you like to display something else, except itemname before loading tooltip
+ * @int $
  * return @string
  */
-function infotooltip($name='', $game_id='', $lang=false, $direct=0, $onlyicon=0, $noicon=false, $data=array(), $in_span=false, $class_add=''){
+function infotooltip($name='', $game_id='', $lang=false, $direct=0, $onlyicon=0, $noicon=false, $data=array(), $in_span=false, $class_add='', $withColorForIconOnly=false){
 	$blnUseOwnTooltips	= register('config')->get('infotooltip_own_enabled');
 	$data						= (is_array($data)) ? $data : array();
 	if($blnUseOwnTooltips){
@@ -426,7 +427,9 @@ function infotooltip($name='', $game_id='', $lang=false, $direct=0, $onlyicon=0,
 	} else {
 		if(!isset($data['server']) || empty($data['server'])) $data['server'] = registry::register('config')->get("servername");
 		$lang = ($lang) ? $lang : registry::fetch('user')->lang('XML_LANG');
-
+		
+		if($withColorForIconOnly) $data['withcolorforicon'] = true;
+		
 		$cachedname = register('infotooltip')->getcacheditem($name, $lang, $game_id, $onlyicon, $noicon, $data);
 		$id = unique_id();
 		$data = array('name' => $name, 'game_id' => $game_id, 'onlyicon' => $onlyicon, 'noicon' => $noicon, 'lang' => $lang, 'data' => $data);

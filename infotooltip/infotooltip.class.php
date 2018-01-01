@@ -270,9 +270,12 @@ if(!class_exists('infotooltip')) {
 				}
 			}
 			$this->pdl->log('infotooltip', $item['name'].' added to cache in lang '.$item['lang'].'.');
+			
 			if(!empty($item['name'])) $this->pfh->putContent($this->pfh->FilePath(md5($this->config['game'].'_'.$item['lang'].'_'.$item['name'].$ext).'.itt', 'itt_cache'), $data);
 			if(!empty($name2search)) $this->pfh->putContent($this->pfh->FilePath(md5($this->config['game'].'_'.$item['lang'].'_'.$name2search.$ext).'.itt', 'itt_cache'), $data);
 			if(!empty($item['id'])) $this->pfh->putContent($this->pfh->FilePath(md5($this->config['game'].'_'.$item['lang'].'_'.$item['id'].$ext).'.itt', 'itt_cache'), $data);
+			if(!empty($item['origid'])) $this->pfh->putContent($this->pfh->FilePath(md5($this->config['game'].'_'.$item['lang'].'_'.$item['origid'].$ext).'.itt', 'itt_cache'), $data);
+			
 			return true;
 		}
 
@@ -350,7 +353,7 @@ if(!class_exists('infotooltip')) {
 		 * @bool	$forceupdate
 		 * return @array
 		 */
-		public function getitem($item_name, $lang=false, $game_id=false, $forceupdate=false, $data=array()) {
+		public function getitem($item_name, $lang=false, $game_id=false, $forceupdate=false, $data=array(), $withColorForIconOnly=false) {
 			$item_name = htmlspecialchars_decode($item_name, ENT_QUOTES);
 			$game = $this->config['game'];
 			$this->pdl->log('infotooltip', 'getitem called: item_name: '.$item_name.', lang: '.$lang.', game_id: '.$game_id.', forceupdate: '.(($forceupdate) ? 'true' : 'false') .', data: '.implode(', ', $data));
@@ -363,8 +366,10 @@ if(!class_exists('infotooltip')) {
 
 			if(!$forceupdate) {
 				$cache_name = $this->config['game'].'_'.$lang.'_'.($game_id ? $game_id : $item_name).$ext;
+
 				$this->pdl->log('infotooltip', 'Search in cache: '.$cache_name);
 				$cache_name = md5($cache_name).'.itt';
+
 				if(in_array($cache_name, $this->cached)) {
 					$item = unserialize(file_get_contents($this->pfh->FilePath($cache_name, 'itt_cache')));
 					if(isset($item['baditem'])){
@@ -375,6 +380,7 @@ if(!class_exists('infotooltip')) {
 						return $this->item_return($item);
 					}
 				} else { //check for language
+
 					$this->pdl->log('infotooltip', 'Item not found. Check if language '.$lang.' is available.');
 					$this->load_parser(false, true);
 					$new_lang_set = false;
@@ -419,7 +425,7 @@ if(!class_exists('infotooltip')) {
 
 			$cache_name = $game.'_'.$lang.'_'.($game_id ? $game_id : $item_name).$ext;
 			$cache_name = md5($cache_name).'.itt';
-
+			
 			if(in_array($cache_name, $this->cached)) {
 				$item = unserialize(file_get_contents($this->pfh->FilePath($cache_name, 'itt_cache')));
 				if($item && !isset($item['baditem'])){
@@ -427,7 +433,7 @@ if(!class_exists('infotooltip')) {
 					$iconpath				= (isset($item['params']) && isset($item['params']['path']) && !empty($item['params']['path'])) ? $item['params']['path'] : $this->config['icon_path'];
 					$iconext				= (isset($item['params']) && isset($item['params']['ext']) && !empty($item['params']['ext'])) ? $item['params']['ext'] : $this->config['icon_ext'];
 					$display_name			= (isset($item['name']) AND strlen($item['name']) > 1) ? $item['name'] : $data['name'];
-
+					
 					if(isset($item['icon']) && !$noicon) {
 						if($onlyicon > 0) {
 							$visible = '<img src="'.((stripos($item['icon'], 'http') === 0) ? $item['icon'] : $iconpath.$item['icon'].$iconext).'" width="'.$onlyicon.'" height="'.$onlyicon.'" style="margin-top: 1px;" alt="icon" class="itt-icon"/>';
@@ -438,14 +444,15 @@ if(!class_exists('infotooltip')) {
 						$visible = $display_name;
 					}
 
-					if(isset($item['color']) && !$onlyicon) {
+					if(isset($item['color']) && (!$onlyicon || $data['withcolorforicon'])) {
+
 						if (substr($item['color'], 0, 1) == "#"){
 							$visible = '<span style="color:'.$item['color'].'">'.$visible.'</span>';
 						} else {
 							$visible = '<span class="'.$item['color'].'">'.$visible.'</span>';
 						}
 					}
-
+					
 					return $visible;
 				}
 			}
