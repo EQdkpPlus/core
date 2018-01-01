@@ -274,7 +274,7 @@ if(!class_exists('infotooltip')) {
 			if(!empty($item['name'])) $this->pfh->putContent($this->pfh->FilePath(md5($this->config['game'].'_'.$item['lang'].'_'.$item['name'].$ext).'.itt', 'itt_cache'), $data);
 			if(!empty($name2search)) $this->pfh->putContent($this->pfh->FilePath(md5($this->config['game'].'_'.$item['lang'].'_'.$name2search.$ext).'.itt', 'itt_cache'), $data);
 			if(!empty($item['id'])) $this->pfh->putContent($this->pfh->FilePath(md5($this->config['game'].'_'.$item['lang'].'_'.$item['id'].$ext).'.itt', 'itt_cache'), $data);
-			if(!empty($item['origid'])) $this->pfh->putContent($this->pfh->FilePath(md5($this->config['game'].'_'.$item['lang'].'_'.$item['origid'].$ext).'.itt', 'itt_cache'), $data);
+			if(!empty($game_id)) $this->pfh->putContent($this->pfh->FilePath(md5($this->config['game'].'_'.$item['lang'].'_'.$game_id.$ext).'.itt', 'itt_cache'), $data);
 			
 			return true;
 		}
@@ -353,7 +353,7 @@ if(!class_exists('infotooltip')) {
 		 * @bool	$forceupdate
 		 * return @array
 		 */
-		public function getitem($item_name, $lang=false, $game_id=false, $forceupdate=false, $data=array(), $withColorForIconOnly=false) {
+		public function getitem($item_name, $lang=false, $game_id=false, $forceupdate=false, $data=array()) {
 			$item_name = htmlspecialchars_decode($item_name, ENT_QUOTES);
 			$game = $this->config['game'];
 			$this->pdl->log('infotooltip', 'getitem called: item_name: '.$item_name.', lang: '.$lang.', game_id: '.$game_id.', forceupdate: '.(($forceupdate) ? 'true' : 'false') .', data: '.implode(', ', $data));
@@ -429,6 +429,7 @@ if(!class_exists('infotooltip')) {
 			if(in_array($cache_name, $this->cached)) {
 				$item = unserialize(file_get_contents($this->pfh->FilePath($cache_name, 'itt_cache')));
 				if($item && !isset($item['baditem'])){
+
 					//We found it in Cache
 					$iconpath				= (isset($item['params']) && isset($item['params']['path']) && !empty($item['params']['path'])) ? $item['params']['path'] : $this->config['icon_path'];
 					$iconext				= (isset($item['params']) && isset($item['params']['ext']) && !empty($item['params']['ext'])) ? $item['params']['ext'] : $this->config['icon_ext'];

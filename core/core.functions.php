@@ -436,7 +436,7 @@ function infotooltip($name='', $game_id='', $lang=false, $direct=0, $onlyicon=0,
 		if($direct > 1) $data['update'] = true;
 		$data = serialize($data);
 		$direct = ($direct) ? 1 : 0;
-		if($cachedname && !$direct){
+		if($cachedname && $cachedname != "" && !$direct){
 			$str = '<span class="infotooltip-tt '.$class_add.'" id="span_'.$id.'" title="'.$direct.urlencode(base64_encode($data)).'">'.$cachedname;
 			return $str.'</span>';
 		} else {
