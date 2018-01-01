@@ -271,6 +271,7 @@ if(!class_exists('infotooltip')) {
 			if(!empty($item['name'])) $this->pfh->putContent($this->pfh->FilePath(md5($this->config['game'].'_'.$item['lang'].'_'.$item['name'].$ext).'.itt', 'itt_cache'), $data);
 			if(!empty($name2search)) $this->pfh->putContent($this->pfh->FilePath(md5($this->config['game'].'_'.$item['lang'].'_'.$name2search.$ext).'.itt', 'itt_cache'), $data);
 			if(!empty($item['id'])) $this->pfh->putContent($this->pfh->FilePath(md5($this->config['game'].'_'.$item['lang'].'_'.$item['id'].$ext).'.itt', 'itt_cache'), $data);
+			if(!empty($game_id)) $this->pfh->putContent($this->pfh->FilePath(md5($this->config['game'].'_'.$item['lang'].'_'.$game_id.$ext).'.itt', 'itt_cache'), $data);
 			return true;
 		}
 
