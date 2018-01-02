@@ -532,7 +532,7 @@ $lang = array(
 		"pdc_redis_server_text" => "Redis Server Adresse",
 		"pdc_redis_server_help" => "Adresse des Redis Servers (z.B. 127.0.0.1 für den localhost) oder Socket",
 		"pdc_redis_port_text" => "Redis Server Port",
-		"pdc_redis_port_help" => "Port auf dem der Redis Server erreichbar ist (Standard: 6973)",
+		"pdc_redis_port_help" => "Port auf dem der Redis Server erreichbar ist (Standard: 6379)",
 "pdc_memcache_server_text" => "Memcache Server Adresse",
 "pdc_memcache_server_help" => "Adresse des Memcache Servers (z.B. 127.0.0.1 für den localhost)",
 "pdc_memcache_port_text" => "Memcache Server Port",
@@ -542,6 +542,9 @@ $lang = array(
 "pdc_cache_info_xcache" => "XCache Caching System. Siehe <a href=\"http://xcache.lighttpd.net\">hier</a> für mehr Informationen.",
 "pdc_cache_info_apc" => "Alternativer PHP Cache (APC). Siehe <a href=\"http://de.php.net/apc\">hier</a> für mehr Informationen.",
 "pdc_cache_info_memcache" => "Memcache. Siehe <a href=\"http://de.php.net/memcache\">hier</a> für mehr Informationen.",
+"pdc_cache_info_memcached" => "Memcached. Siehe <a href=\"https://memcached.org/\">hier</a> für mehr Informationen.",
+"pdc_cache_info_redis" => "Redis In-Memory Cache. Siehe <a href=\"https://redis.io/\">hier</a> für mehr Informationen.",
+    
 "pdc_expire_time" => "Ablaufdatum",
 "pluskernel" => "EQDKP-PLUS Core",
 "attention" => "Achtung",
