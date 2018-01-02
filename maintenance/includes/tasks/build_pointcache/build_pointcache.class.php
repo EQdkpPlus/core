@@ -20,7 +20,7 @@
  */
 
 if ( !defined('EQDKP_INC') ){
-  header('HTTP/1.0 404 Not Found');exit;
+	header('HTTP/1.0 404 Not Found');exit;
 }
 
 class build_pointcache extends task {
@@ -29,7 +29,7 @@ class build_pointcache extends task {
 	public $form_method = 'post';
 	public $name = 'Build Pointcache';
 	public $type = 'worker';
-
+	
 	public function is_applicable() {
 		return true;
 	}
@@ -94,14 +94,14 @@ class build_pointcache extends task {
 				echo "raid ";
 			} elseif($strType == 'item'){
 				$this->pdh->get('item', 'value', array($intPrimary, $intSecondary));
-				echo "item ";	
+				echo "item ";
 			} elseif($strType == 'adjustment'){
 				$arrMultidkpPools = $this->pdh->get('multidkp', 'id_list');
 				foreach($arrMemberIDs as $intPoolID){
 					$this->pdh->get('adjustment', 'value', array($intPrimary, $intPoolID));
 				}
 				
-				echo "adjustment ";	
+				echo "adjustment ";
 			}
 			
 			echo sanitize($this->in->get('primaryID'));
@@ -125,34 +125,55 @@ class build_pointcache extends task {
 		
 		//Javascript for XHTML Requests
 		$out = $this->lang['build_pointcache_info']."<br /><br />".sprintf($this->lang['execute_step'], "<span id='stepnumber'>0</span>", count($arrTasks))."
-
-
-
-		<script> 
+				
+				
+<br /><br />
+		<div id=\"progressbar\">
+		  <div id='progressbar-inner'></div>
+		</div>
+				
+		<style>
+			#progressbar {
+  background-color: #ddd;
+  border-radius: 2px; /* (height of inner div) / 2 + padding */
+  padding: 3px;
+}
+				
+#progressbar > div {
+   background-color: green;
+   width: 0%; /* Adjust with JavaScript */
+   height: 20px;
+   border-radius: 2px;
+}
+		</style>
+				
+		<script>
 		var tasks = ".json_encode($arrTasks).";
-
+				
 		var firstElement = tasks[0];
-
+				
 		var current_item = 0;
 		var max_item = tasks.length-1;
-
-		do_request();
-
+		if(tasks.length == 0){
+			document.getElementById('progressbar-inner').style.width = 100+'%';
+		} else {
+			do_request();
+		}
 				
 		function do_request(){
 			if(current_item > max_item) {
 				console.log('finished');
 				return;
 			}
-
+				
 			document.getElementById('stepnumber').innerHTML = current_item+1;
-
+				
 			var arrElement = tasks[current_item];
-
+				
 			var primary = arrElement[0];
 			var secondary = arrElement[1];
 			var type = arrElement[2];
-			
+				
 			var xhttp = new XMLHttpRequest();
 			  xhttp.onreadystatechange = function() {
 			    if (this.readyState == 4 && this.status == 200) {
@@ -167,28 +188,9 @@ class build_pointcache extends task {
 			  xhttp.open('GET', 'task.php".$this->SID."&task=build_pointcache&primaryID='+primary+'&secondaryID='+secondary+'&type='+type, true);
 			  xhttp.send();
 		}
-		
+			  		
 		</script>
-<br /><br />
-		<div id=\"progressbar\">
-		  <div id='progressbar-inner'></div>
-		</div>
-
-		<style>
-			#progressbar {
-  background-color: #ddd;
-  border-radius: 2px; /* (height of inner div) / 2 + padding */
-  padding: 3px;
-}
-
-#progressbar > div {
-   background-color: green;
-   width: 0%; /* Adjust with JavaScript */
-   height: 20px;
-   border-radius: 2px;
-}
-		</style>
-
+			  		
 		<br /><a href='".$this->root_path."maintenance/".$this->SID."'><button type=\"button\"><i class=\"fa fa-chevron-right\"></i> ".$this->user->lang('task_manager')."</button></a>
 		";
 		
