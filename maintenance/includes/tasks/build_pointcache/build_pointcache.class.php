@@ -44,10 +44,11 @@ class build_pointcache extends task {
 		
 		//Raids
 		$arrRaids = $this->pdh->get('raid', 'id_list');
+		
 		foreach($arrRaids as $intRaidID){
 			$intEventID = $this->pdh->get('raid', 'event', array($intRaidID));
 			$arrMultiPools = $this->pdh->get('event', 'multidkppools', array($intEventID));
-			foreach($arrMultidkpPools as $intPools){
+			foreach($arrMultiPools as $intPools){
 				$arrTasks[] = array($intRaidID, $intPools, 'raid');
 			}
 		}
@@ -97,7 +98,7 @@ class build_pointcache extends task {
 				echo "item ";
 			} elseif($strType == 'adjustment'){
 				$arrMultidkpPools = $this->pdh->get('multidkp', 'id_list');
-				foreach($arrMemberIDs as $intPoolID){
+				foreach($arrMultidkpPools as $intPoolID){
 					$this->pdh->get('adjustment', 'value', array($intPrimary, $intPoolID));
 				}
 				
