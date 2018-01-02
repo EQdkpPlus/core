@@ -5,10 +5,13 @@
 		<title>{SUBJECT}</title>
 	</head>
 	<body style="font-size: 13px;font-family: Tahoma, Arial, Verdana, sans-serif;color: #000;padding: 0;margin: 0;height: 100%">
-		<div id="header" style="padding: 15px 30px;; background: #2e78b0;">
-			<div id="innerHeader" style="font-family: &quot;Trebuchet MS&quot;, Arial, sans-serif;vertical-align: middle;height: 120px;margin: 0 auto">
-				<img src="cid:headerlogo" id="logo" style="max-height: 100px;margin-left: 15px;float: left" />
-				<div style="float:left;font-size: 40px;font-weight: bold;text-shadow: 1px 1px 2px #fff;color:#fff; margin-top: 30px;">{GUILDTAG}</div></div>
+		<div id="header" style="padding: 15px 30px; background: #2e78b0;">
+			<div id="innerHeader" style="font-family: &quot;Trebuchet MS&quot;, Arial, sans-serif;vertical-align: middle;height: 70px;margin: 0 auto">
+				<a href="{PLUSLINK}">
+				<img src="cid:headerlogo" id="logo" style="max-height: 60px;margin-left: 15px;float: left" />
+				<div style="margin-left: 10px; float:left;font-size: 40px;font-weight: bold;color:#fff; margin-top: 10px;text-decoration:none;">{GUILDTAG}</div>
+				</a>
+				</div>
 		</div>
 		
 		<div id="main" style="overflow: auto;margin: 0 auto; padding: 15px 30px;">
