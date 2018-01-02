@@ -183,6 +183,9 @@ class MyMailer extends PHPMailer {
 			$body	= str_replace('{SUBJECT}', $this->Subject, $body);
 			$body	= str_replace('{PLUSLINK}', register('environment')->buildlink(), $body);
 			$body	= str_replace('{SIGNATURE}', nl2br($this->Signature), $body);
+			$body	= str_replace('{GUILDTAG}', $this->config->get('guildtag'), $body);
+			$body	= str_replace('{EQDKP_ABOUT_URL}', EQDKP_ABOUT_URL, $body);
+
 		} else $body = $content.nl2br($this->Signature);
 	
 		$body	= str_replace("[\]",'',$body );
