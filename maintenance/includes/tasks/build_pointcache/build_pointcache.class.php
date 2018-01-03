@@ -164,6 +164,7 @@ class build_pointcache extends task {
 		function do_request(){
 			if(current_item > max_item) {
 				console.log('finished');
+                alert('All tasks finished.');
 				return;
 			}
 				
