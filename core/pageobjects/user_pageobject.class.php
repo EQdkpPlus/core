@@ -35,8 +35,12 @@ class user_pageobject extends pageobject {
 		include_once($this->root_path.'core/country_states.php');
 
 		$user_id 	= $this->in->get('u');
+		
+		$special_user = $this->config->get('special_user');
+		$special_user = (!$special_user) ? array() : $special_user;
+		
 		$row		= $this->pdh->get('user', 'data', array($user_id));
-		if (!$row){
+		if (!$row || in_array($user_id, $special_user)){
 			$this->display();
 			return;
 		}
