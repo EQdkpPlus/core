@@ -183,7 +183,7 @@ class Manage_Bridge extends page_generic {
 			//Forum Integration
 			$this->config->set('cmsbridge_url', $this->in->get('cms_url'));
 			$this->config->set('cmsbridge_embedded', $this->in->get('cms_embedded'));
-
+			$this->config->set('cmsbridge_framework_url', $this->in->get('cms_framework_url'));
 			//Registration
 			$this->config->set('cmsbridge_reg_url', $this->in->get('cms_reg_url'));
 			//Passwort Reset Page
@@ -299,6 +299,7 @@ class Manage_Bridge extends page_generic {
 			'CMS_URL'			=> $this->config->get('cmsbridge_url'),
 			'CMS_PWRESET_URL'	=> $this->config->get('cmsbridge_pwreset_url'),
 			'CMS_REG_URL'		=> $this->config->get('cmsbridge_reg_url'),
+			'CMS_FRAMEWORK_URL'	=> $this->config->get('cmsbridge_framework_url'),
 			'S_ONLYCMSUSERLOGIN'=> ((int)$this->config->get('cmsbridge_onlycmsuserlogin')) ? true : false,
 			'MS_SYNC_USERGROUPS'=> (new hmultiselect('sync_usergroups', array('options' => $arrSelectedGroups, 'value' => explode(',', $this->config->get('cmsbridge_sync_groups')), 'width' => 300, 'height' => 170)))->output(),
 		));
