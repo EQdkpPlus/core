@@ -590,10 +590,22 @@ class wbb41_bridge extends bridge_generic {
 		$type = 0;
 		for ($i = 0; $i < $length; $i++) {
 			$type = ($i % 4 == 0) ? 0 : ($type + 1);
-			$password .= substr($availableCharacters[$type], MathUtil::getRandomValue(0, strlen($availableCharacters[$type]) - 1), 1);
+			$password .= substr($availableCharacters[$type], $this->getRandomValue(0, strlen($availableCharacters[$type]) - 1), 1);
 		}
 		
 		return str_shuffle($password);
+	}
+	
+	/**
+	 * Generates a random value.
+	 *
+	 * @param	integer		$min
+	 * @param	integer		$max
+	 * @return	integer
+	 */
+	public static function getRandomValue($min = null, $max = null) {
+	    // generate random value
+	    return (($min !== null && $max !== null) ? mt_rand($min, $max) : mt_rand());
 	}
 	
 	/**
@@ -625,7 +637,7 @@ class wbb41_bridge extends bridge_generic {
 	 * @return	string
 	 */
 	protected static function getSalt($salt) {
-		$salt = StringUtil::substring($salt, 0, 22);
+		$salt = substr($salt, 0, 22);
 		
 		return '$' . self::BCRYPT_TYPE . '$' . self::BCRYPT_COST . '$' . $salt;
 	}
@@ -679,7 +691,7 @@ class wbb41_bridge extends bridge_generic {
 	 * @return	boolean
 	 */
 	protected static function smf1($username, $password, $salt, $dbHash) {
-		return self::secureCompare($dbHash, sha1(StringUtil::toLowerCase($username) . $password));
+		return self::secureCompare($dbHash, sha1(utf8_strtolower($username) . $password));
 	}
 	
 	/**

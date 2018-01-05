@@ -180,11 +180,14 @@ class mycharacters_pageobject extends pageobject {
 
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manage_members_titl'),
 			'template_file'		=> 'mycharacters.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('manage_members_titl'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 }
 ?>

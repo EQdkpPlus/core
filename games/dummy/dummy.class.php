@@ -28,7 +28,7 @@ if(!class_exists('dummy')) {
 		protected static $apiLevel	= 20;
 		public $version				= '0.1.0';
 		protected $this_game		= 'dummy';
-		protected $types			= array();						// which information are stored?
+		protected $types			= array('classes');						// which information are stored?
 		protected $classes			= array();
 		protected $roles			= array();						// for each type there must be the according var
 		protected $factions			= array();						// and the according function: load_$type
@@ -37,7 +37,19 @@ if(!class_exists('dummy')) {
 		protected $professions		= array();
 		public $langs				= array('english', 'german');	// in which languages do we have information?
 
-		protected $class_dependencies = array();
+		protected $class_dependencies = array(
+				array(
+						'name'		=> 'class',
+						'type'		=> 'classes',
+						'admin' 	=> false,
+						'decorate'	=> false,
+						'roster' 	=> true,
+						'parent'	=> false,
+						'primary'	=> true,
+						'colorize'	=> false,
+						'recruitment' => true,
+				),
+		);
 		public $default_roles		= array();
 		protected $class_colors		= array();
 

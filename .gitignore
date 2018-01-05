@@ -20,6 +20,7 @@ templates/eqdkp_neon
 templates/eqdkp_bf
 templates/eqdkp_wod
 templates/eqdkp_pure
+templates/eqdkp_bs
 games/lotro
 portal/articleslider
 portal/birthday

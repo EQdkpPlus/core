@@ -35,8 +35,12 @@ class user_pageobject extends pageobject {
 		include_once($this->root_path.'core/country_states.php');
 
 		$user_id 	= $this->in->get('u');
+		
+		$special_user = $this->config->get('special_user');
+		$special_user = (!$special_user) ? array() : $special_user;
+		
 		$row		= $this->pdh->get('user', 'data', array($user_id));
-		if (!$row){
+		if (!$row || in_array($user_id, $special_user)){
 			$this->display();
 			return;
 		}
@@ -142,7 +146,7 @@ class user_pageobject extends pageobject {
 		//Contact Information
 		if ($this->pdh->get('user', 'check_privacy', array($user_id, 'priv_userprofile_email'))){
 			$strEmail = $this->pdh->geth('user', 'email', array($user_id, true));
-			if ($strEmail != ""){	
+			if ($strEmail != ""){
 				$this->tpl->assign_block_vars('profile_contact_row', array(
 						'NAME' => $this->user->lang("email_address"),
 						'TEXT' => $strEmail,
@@ -200,7 +204,7 @@ class user_pageobject extends pageobject {
 				$this->tpl->assign_block_vars('custom_tabs', array(
 					'ID'		=> $id,
 					'NAME'		=> $title,
-					'CONTENT'	=> $content,	
+					'CONTENT'	=> $content,
 				));
 			}
 		}
@@ -332,11 +336,15 @@ class user_pageobject extends pageobject {
 	
 		
 		$this->tpl->add_meta('<link rel="canonical" href="'.$this->env->link.$this->routing->build('User', $row['username'], 'u'.$row['user_id'], false, true).'" />');
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('user').': '.sanitize($row['username']),
 			'template_file'		=> 'userprofile.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('user_list'), 'url'=>$this->controller_path.'User/'.$this->SID],
+				['title'=>$this->user->lang('user').': '.sanitize($row['username']), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	public function display(){
@@ -366,11 +374,14 @@ class user_pageobject extends pageobject {
 
 		$this->jquery->Dialog('usermailer', $this->user->lang('adduser_send_mail'), array('url'=>$this->server_path."email.php".$this->SID."&user='+userid+'", 'width'=>'660', 'height'=>'450', 'withid'=>'userid'));
 		$this->tpl->add_meta('<link rel="canonical" href="'.$this->env->link.$this->routing->build('User', false, false, false, true).'" />');
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('user_list'),
 			'template_file'		=> 'listusers.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('user_list'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 	
 		//Url building

@@ -147,11 +147,14 @@ class search_pageobject extends pageobject {
 			'L_NO_RESULTS'		=> sprintf($this->user->lang('search_no_results'), $this->in->get('svalue', '')),
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('search'),
 			'template_file'		=> 'search.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('search'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 }

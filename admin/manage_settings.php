@@ -553,6 +553,10 @@ class admin_settings extends page_generic {
 						'type'		=> 'text',
 						'size'		=> 5,
 						'default'	=> 0
+					),
+					'auto_set_active' => array(
+						'type'		=> 'radio',
+						'default'	=> 1,
 					)
 				)
 			),
@@ -1035,11 +1039,15 @@ class admin_settings extends page_generic {
 			'SET_GAME_LANG'	=> $this->config->get('game_language'),
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('config_title'),
 			'template_file'		=> 'admin/manage_settings.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('config_title'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 }
 registry::register('admin_settings');

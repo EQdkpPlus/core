@@ -154,7 +154,7 @@ class FilterInput
 
 		if (empty(self::$instances[$sig]))
 		{
-			self::$instances[$sig] = new JFilterInput($tagsArray, $attrArray, $tagsMethod, $attrMethod, $xssAuto);
+		    self::$instances[$sig] = new FilterInput($tagsArray, $attrArray, $tagsMethod, $attrMethod, $xssAuto);
 		}
 
 		return self::$instances[$sig];

@@ -62,7 +62,15 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 					'member_id' => $member_id
 				);
 				
-				if(!$member['active'] && ($this->time->time - $this->config->get('inactive_period')*24*3600) < $raid_date) $this->pdh->put('member', 'change_status', array($member_id, 1));
+				$intInactiveDays = (int)$this->config->get('inactive_period');
+				if(!$member['active'] && (int)$this->config->get('auto_set_active')){
+					if($intInactiveDays == 0){
+						$this->pdh->put('member', 'change_status', array($member_id, 1));
+					} elseif(($this->time->time - $intInactiveDays*24*3600) < $raid_date){
+						$this->pdh->put('member', 'change_status', array($member_id, 1));
+					}
+				}
+
 				$attendee_names[] = $member['name'];
 			}
 			

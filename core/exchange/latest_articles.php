@@ -28,7 +28,7 @@ if (!class_exists('exchange_latest_articles')){
 		public static $shortcuts = array('pex'=>'plus_exchange');
 		public $options		= array();
 
-		public function get_latest_articles($params, $body){
+		public function get_latest_articles($params, $arrBody){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 			
 				//Get Number; default: 10
@@ -96,22 +96,47 @@ if (!class_exists('exchange_latest_articles')){
 						
 						$comments = $this->pdh->get('comment', 'filtered_list', array('articles', $intArticleID));
 						$arrComments = array();
+						$intComments = 0;
+
 						if (is_array($comments)){
 							foreach($comments as $key => $row){
+
+								$arrReplies = array();
+								if(count($row['replies'])){
+									foreach($row['replies'] as $com){
+										$avatarimg = $this->pdh->get('user', 'avatarimglink', array($com['userid']));
+										$arrReplies['comment:'.$com['id']] = array(
+												'username'			=> unsanitize($com['username']),
+												'user_avatar'		=> $this->pfh->FileLink((($avatarimg != "") ? $avatarimg : 'images/global/avatar-default.svg'), false, 'absolute'),
+												'date'				=> $this->time->date('Y-m-d H:i', $com['date']),
+												'date_timestamp'	=> $com['date'],
+												'message'			=> $this->bbcode->toHTML($com['text']),
+												'comment_id'		=> $com['id'],		
+												'reply_to'			=> $key,
+										);
+										
+										$intComments++;
+									}
+								}
+								
 								$avatarimg = $this->pdh->get('user', 'avatarimglink', array($row['userid']));
-						
+								
 								$arrComments['comment:'.$key] = array(
 										'username'			=> unsanitize($row['username']),
 										'user_avatar'		=> $this->pfh->FileLink((($avatarimg != "") ? $avatarimg : 'images/global/avatar-default.svg'), false, 'absolute'),
 										'date'				=> $this->time->date('Y-m-d H:i', $row['date']),
 										'date_timestamp'	=> $row['date'],
 										'message'			=> $this->bbcode->toHTML($row['text']),
+										'comment_id'		=> $key,
+										'replies'			=> $arrReplies,
 								);
+								
+								$intComments++;
 							}
 						}
 						
 						$arrCommentsOut = array(
-								'count'		=> count($arrComments),
+								'count'		=> $intComments,
 								'page'		=> 'articles',
 								'attachid'	=> $intArticleID,
 								'comments'	=> $arrComments,

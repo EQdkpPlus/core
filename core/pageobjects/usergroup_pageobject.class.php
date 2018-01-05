@@ -84,15 +84,19 @@ class usergroup_pageobject extends pageobject {
 		$this->tpl->assign_vars(array (
 			'PAGE_OUT_GRPLEADER'=> $hptt_grpleader->get_html_table($sort, $pagination_suffix, null, null, false),
 			'GRPLEADER_COUNT' => $user_count,
-		));	
+		));
 
 		$this->jquery->Dialog('usermailer', $this->user->lang('adduser_send_mail'), array('url'=>$this->server_path."email.php".$this->SID."&user='+userid+'", 'width'=>'660', 'height'=>'450', 'withid'=>'userid'));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('user_list'),
 			'template_file'		=> 'listusers.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('user_list'), 'url'=>$this->controller_path.'User/'.$this->SID],
+				['title'=>$this->user->lang('usergroup').': '.$this->pdh->get('user_groups', 'name', [$groupID]), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 }
 ?>

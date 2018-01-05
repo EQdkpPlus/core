@@ -60,11 +60,15 @@ class php_info extends page_generic {
 			'PHP_INFO'			=> $output,
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> 'PHP-Info',
 			'template_file'		=> 'admin/info_php.html',
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('adminc_server'), 'url'=>' '],
+			],
 			'display'			=> true
-		));
+		]);
 	}
 }
 registry::register('php_info');

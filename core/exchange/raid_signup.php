@@ -28,13 +28,15 @@ if (!class_exists('exchange_raid_signup')){
 		public static $shortcuts = array('pex'=>'plus_exchange');
 		public $options		= array();
 
-		public function post_raid_signup($params, $body){
+		public function post_raid_signup($params, $arrBody){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 			
 			if ($this->user->check_auth('po_calendarevent', false)){
-				$xml = simplexml_load_string($body);
-				if ($xml && intval($xml->eventid) > 0){
-					$eventid = intval($xml->eventid);
+				
+				
+
+				if (count($arrBody) && intval($arrBody['eventid']) > 0){
+					$eventid = intval($arrBody['eventid']);
 					$eventdata = $this->pdh->get('calendar_events', 'data', array($eventid));
 					if ($eventdata && ((int)$this->pdh->get('calendar_events', 'calendartype', array($eventid)) == 1)){
 					
@@ -54,18 +56,18 @@ if (!class_exists('exchange_raid_signup')){
 						}
 
 						$mychars = $this->pdh->get('member', 'connection_id', array($this->user->id));
-						$memberid = intval($xml->memberid);
+						$memberid = intval($arrBody['memberid']);
 						
 						if (intval($memberid) > 0 && in_array($memberid, $mychars)){
 							// auto confirm if enabled
 							$usergroups		= $this->config->get('calendar_raid_autoconfirm');
-							$signupstatus	= ($xml->status && intval($xml->status) < 5 && intval($xml->status) >0) ? intval($xml->status) : 4;
+							$signupstatus	= (isset($arrBody['status']) && intval($arrBody['status']) < 5 && intval($arrBody['status']) >0) ? intval($arrBody['status']) : 4;
 							if(is_array($usergroups) && count($usergroups) > 0 && $signupstatus == 1){
 								if($this->user->check_group($usergroups, false)){
 									$signupstatus = 0;
 								}
 							}
-							$myrole = (intval($xml->role) > 0) ? intval($xml->role) : $this->pdh->get('member', 'defaultrole', array($memberid));
+							$myrole = (intval($arrBody['role']) > 0) ? intval($arrBody['role']) : $this->pdh->get('member', 'defaultrole', array($memberid));
 							if ($eventdata['extension']['raidmode'] == 'role' && (int)$myrole == 0){
 								return $this->pex->error('no roleid given');
 							}
@@ -75,9 +77,9 @@ if (!class_exists('exchange_raid_signup')){
 								$memberid,
 								$myrole,
 								$signupstatus,
-								($xml->raidgroup) ? intval($xml->raidgroup) : 0,
+								(isset($arrBody['raidgroup'])) ? intval($arrBody['raidgroup']) : 0,
 								$mystatus['member_id'],
-								($xml->note) ? filter_var((string)$xml->note, FILTER_SANITIZE_STRING) : '',
+								(isset($arrBody['note'])) ? filter_var((string)$arrBody['note'], FILTER_SANITIZE_STRING) : '',
 							));
 							
 							//Send Notification to Raidlead, Creator and Admins

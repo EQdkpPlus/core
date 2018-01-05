@@ -28,7 +28,7 @@ if (!class_exists('exchange_calevents_list')){
 		public static $shortcuts = array('pex'=>'plus_exchange');
 		public $options		= array();
 
-		public function get_calevents_list($params, $body){
+		public function get_calevents_list($params, $arrBody){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 
 			if ($isAPITokenRequest || $this->user->check_auth('po_calendarevent', false)){

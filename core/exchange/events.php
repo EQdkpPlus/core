@@ -29,7 +29,7 @@ if (!class_exists('exchange_events')){
 		public $options		= array();
 		
 
-		public function get_events($params, $body){
+		public function get_events($params, $arrBody){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 
 			if($isAPITokenRequest || $this->user->check_pageobjects(array('events'), 'AND', false)){

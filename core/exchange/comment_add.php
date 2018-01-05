@@ -28,18 +28,18 @@ if (!class_exists('exchange_comment_add')){
 		public static $shortcuts = array('pex'=>'plus_exchange');
 		public $options		= array();
 
-		public function post_comment_add($params, $body){
+		public function post_comment_add($params, $arrBody){
 			
 			 // be sure user is logged in
 			if ($this->user->is_signedin()){
-				 $xml = simplexml_load_string($body);
-				 if ($xml && strlen($xml->comment)){
+
+				if (count($arrBody) && strlen($arrBody['comment'])){
 					//Check for page and attachid
-					if (!$xml->page || !$xml->attachid) return $this->pex->error('page or attachid is missing');
+					if (!$arrBody['page'] || !$arrBody['attachid']) return $this->pex->error('page or attachid is missing');
 					
-					$intReplyTo = ((int)$xml->reply_to) ? (int)$xml->reply_to : 0;
+					$intReplyTo = ((int)$arrBody['reply_to']) ? (int)$arrBody['reply_to'] : 0;
 					
-					$this->pdh->put('comment', 'insert', array((string)$xml->attachid, $this->user->id, (string)strip_tags($xml->comment), (string)$xml->page, $intReplyTo));
+					$this->pdh->put('comment', 'insert', array((string)$arrBody['attachid'], $this->user->id, (string)strip_tags($arrBody['comment']), (string)$arrBody['page'], $intReplyTo));
 					
 					$this->pdh->process_hook_queue();
 					return array('status'	=> 1);

@@ -76,11 +76,15 @@ class Manage_Live_Update extends page_generic {
 			'S_SHOW_'.strtoupper($show)	=> true,
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('liveupdate'),
 			'template_file'		=> 'admin/manage_live_update.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('liveupdate'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 
 	}
 
@@ -139,11 +143,15 @@ class Manage_Live_Update extends page_generic {
 				'S_SHOW'	=> false,
 			));
 
-			$this->core->set_vars(array(
+			$this->core->set_vars([
 				'page_title'		=> $this->user->lang('liveupdate'),
 				'template_file'		=> 'admin/manage_live_update.html',
-				'display'			=> true)
-			);
+				'page_path'			=> [
+					['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+					['title'=>$this->user->lang('liveupdate'), 'url'=>' '],
+				],
+				'display'			=> true
+			]);
 		} else {
 			$this->tpl->add_js('
 			set_progress_bar_value('.($start-1).', "'.$this->steps[$start]['label'].'...");
@@ -593,11 +601,15 @@ class Manage_Live_Update extends page_generic {
 			'REQUIREMENTS_NOTE'	=> $strRequirementsNote,
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('liveupdate'),
 			'template_file'		=> 'admin/manage_live_update.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('liveupdate'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	public function show_diff(){
@@ -656,12 +668,12 @@ class Manage_Live_Update extends page_generic {
 			'S_RENDERER' => $blnRenderer,
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('liveupdate_show_differences'),
 			'template_file'		=> 'admin/diff_viewer.html',
 			'header_format'		=> 'simple',
-			'display'			=> true)
-		);
+			'display'			=> true
+		]);
 	}
 }
 registry::register('Manage_Live_Update');

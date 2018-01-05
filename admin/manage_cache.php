@@ -28,11 +28,11 @@ include_once ($eqdkp_root_path . 'common.php');
 
 class manage_cache extends page_generic {
 
-	private $pdc_cache_types =		array('none', 'file', 'xcache', 'memcache', 'memcached', 'apc');
+	private $pdc_cache_types =		array('none', 'file', 'xcache', 'memcache', 'memcached', 'apc', 'redis');
 	private $usable_cache_types = 	array('none', 'file');
 	
 	public function __construct() {
-		$this->user->check_auth('a_cache_man'); 
+		$this->user->check_auth('a_cache_man');
 		$handler = array(
 			'del_key' => array('process' => 'delete_key', 'csrf'=>true),
 			'cache_clear' => array('process' => 'clear_cache', 'csrf'=>true),
@@ -44,6 +44,8 @@ class manage_cache extends page_generic {
 		if(function_exists('xcache_set') && function_exists('xcache_get') && function_exists('xcache_unset')) $this->usable_cache_types[] = 'xcache';
 		if(class_exists('Memcache')) $this->usable_cache_types[] = 'memcache';
 		if(class_exists('Memcached')) $this->usable_cache_types[] = 'memcached';
+		if(class_exists('Redis')) $this->usable_cache_types[] = 'redis';
+		
 		$this->process();
 	}
 	
@@ -121,6 +123,16 @@ class manage_cache extends page_generic {
 				}else{
 					$this->tpl->assign_var('V_CACHE_'.strtoupper($cache_type).'_PORT', '11211');
 				}
+			}elseif($cache_type == 'redis'){
+				if($this->config->get('server', 'pdc')){
+					$this->tpl->assign_var('V_CACHE_'.strtoupper($cache_type).'_SERVER', $this->config->get('server', 'pdc'));
+				}else{
+					$this->tpl->assign_var('V_CACHE_'.strtoupper($cache_type).'_SERVER', '127.0.0.1');
+				}
+				
+				if($this->config->get('port', 'pdc')){
+					$this->tpl->assign_var('V_CACHE_'.strtoupper($cache_type).'_PORT', $this->config->get('port', 'pdc'));
+				}
 			}
 		}
 		
@@ -156,11 +168,15 @@ class manage_cache extends page_generic {
 		));
 
 
-		$this->core->set_vars(array (
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('pdc_manager'),
 			'template_file'		=> 'admin/manage_cache.html',
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('pdc_manager'), 'url'=>' '],
+			],
 			'display'			=> true
-		));
+		]);
 	}
 }
 registry::register('manage_cache');

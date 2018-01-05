@@ -109,11 +109,16 @@ class Manage_Multidkp extends page_generic {
 			'MDKP_ID'				=> $mdkp_id,
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manmdkp_title'),
 			'template_file'		=> 'admin/manage_multidkp_add.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manmdkp_title'), 'url'=>$this->root_path.'admin/manage_multidkp.php'.$this->SID],
+				['title'=>(($mdkp_id)?$mdkp['name']:$this->user->lang('Multi_addkonto')), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	public function display($messages=false) {
@@ -164,11 +169,15 @@ class Manage_Multidkp extends page_generic {
 			});
 		", "docready");
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manmdkp_title'),
 			'template_file'		=> 'admin/manage_multidkp.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manmdkp_title'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	private function get_post($norefresh=false) {

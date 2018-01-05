@@ -104,8 +104,6 @@ class Manage_Ranks extends page_generic {
 		natcasesort($arrRankImagesDD);
 
 		if($intRankID >= 0){
-
-
 			$this->tpl->assign_vars(array(
 					'NAME'				=> $this->pdh->get('rank', 'name', array($intRankID)),
 					'RANK_ICON_DD' 		=> (new hdropdown('icon', array('options' => $arrRankImagesDD, 'value' => $this->pdh->get('rank', 'icon', array($intRankID)))))->output(),
@@ -124,11 +122,16 @@ class Manage_Ranks extends page_generic {
 				'S_RANK_IMAGES' => $blnRankImages,
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 				'page_title'		=> $this->user->lang('manrank_title'),
 				'template_file'		=> 'admin/manage_ranks_edit.html',
-				'display'			=> true)
-		);
+				'page_path'			=> [
+					['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+					['title'=>$this->user->lang('manrank_title'), 'url'=>$this->root_path.'admin/manage_ranks.php'.$this->SID],
+					['title'=>(($intRankID == -1)?$this->user->lang('add_rank'):$this->pdh->get('rank', 'name', [$intRankID])), 'url'=>' '],
+				],
+				'display'			=> true
+		]);
 	}
 
 	public function delete() {
@@ -201,11 +204,15 @@ class Manage_Ranks extends page_generic {
 			'RANK_COUNT'	=> count($ranks),
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manrank_title'),
 			'template_file'		=> 'admin/manage_ranks.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manrank_title'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	private function get_post() {

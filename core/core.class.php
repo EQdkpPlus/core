@@ -30,6 +30,7 @@ class core extends gen_class {
 		public $template_file	= '';				// Template file to parse	@var template_file
 		public $template_path	= '';				// Path to template_file	@var template_path
 		public $description		= '';				// Description of the page, relevant for META-Tags
+		public $page_path		= [];				// Page path, relevant for breadcrumb
 		public $page_image		= '';				// Preview-Image, relevant for META-Tags
 		public $body_class		= '';
 		private $notifications	= false;			// Flag if notifications have been done
@@ -148,9 +149,9 @@ class core extends gen_class {
 					$this->set_vars($d_var, $d_val);
 				}
 			}else{
-				if (empty($val) ){
-					return false;
-				}
+				if($val === false) $this->$var = false;
+				if(empty($val)) return false;
+				
 				if (($var == 'display') && ($val === true)){
 					$this->generate_page();
 				}else{
@@ -426,6 +427,7 @@ class core extends gen_class {
 				'U_REGISTER'				=> $registerLink,
 				'MAIN_MENU'					=> $this->build_menu_ul($this->build_menu_array(false)),
 				'MAIN_MENU_MOBILE'			=> $this->build_menu_ul($this->build_menu_array(false), 'mainmenu-mobile'),
+				'BREADCRUMB'				=> $this->build_breadcrumb(),
 				'PAGE_CLASS'				=> 'page-'.$this->clean_url($this->env->get_current_page(false)).' controller-'.registry::get_const('pageobject'),
 				'BODY_CLASS'				=> $this->body_class,
 				'TEMPLATE_CLASS'			=> str_replace(array('.html', '/'), array('', '_'), $this->template_path.$this->template_file),
@@ -437,7 +439,6 @@ class core extends gen_class {
 				'HONEYPOT_VALUE'			=> $this->user->csrfGetToken("honeypot"),
 				'S_REPONSIVE'				=> registry::get_const('mobile_view'),
 				'CURRENT_PAGE'				=> sanitize($this->env->request),
-				'L_login_bridge_notice'		=> sprintf($this->user->lang('login_bridge_notice'), $this->config->get('cmsbridge_url')),
 				'S_STYLECHANGER'			=> (!intval($this->config->get('default_style_overwrite')) && count(register('pdh')->get('styles', 'styles', array(0, false))) > 1) ? true : false,
 				'USER_IS_AWAY'				=> ($this->user->data['user_id'] > 0) ? $this->pdh->get('calendar_raids_attendees', 'user_awaymode', array($this->user->data['user_id'])) : false,
 			));
@@ -836,6 +837,26 @@ class core extends gen_class {
 		}
 
 		/**
+		 * Build the Breadcrumb
+		 */
+		public function build_breadcrumb(){
+			if($this->page_path === false) return '';
+			if(is_string($this->page_path)) return $this->page_path;
+			if($this->page_path == [[]]) $this->page_path = [];
+			
+			$arrBreadcrumb = array_merge([[
+				'title'	=> '<i class="fa fa-home"></i>',
+				'url'	=> $this->controller_path.$this->SID,
+			]], $this->page_path);
+			
+			$html = '<ul class="breadcrumb">';
+			foreach($arrBreadcrumb as $arrItem){
+				$html .= '<li><a href="'.$arrItem['url'].'">'.$arrItem['title'].'</a></li>';
+			}
+			return $html.'</ul>';
+		}
+
+		/**
 		 * Build a ButtonDropDown Menu
 		 *
 		 * Use in your $arrMenuItems var everytime ['type','text','perm'] for button, select, javascript,.. output text & permissions
@@ -905,13 +926,6 @@ class core extends gen_class {
 					", 'docready');
 				}
 			}
-
-			$this->tpl->add_js("
-				$('.btn-ddm li[data-type=\"select\"]').hover(function(){
-					var middle = -($(' > ul', this).outerHeight() / 2) + ($(this).height() / 2);
-					$(' > ul', this).css('top', middle +'px');
-				});
-			", 'docready');
 
 			return str_replace("<ul></ul>", "", $html);
 		}

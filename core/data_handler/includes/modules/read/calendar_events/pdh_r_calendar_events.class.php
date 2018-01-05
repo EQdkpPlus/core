@@ -457,6 +457,20 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			return $this->pdh->geth('event', 'icon', array($this->events[$id]['extension']['raid_eventid'])).' '.$raideventname;
 		}
 
+		public function get_event_icon($id){
+			$eventextension	= $this->events[$id]['extension'];
+			if(isset($eventextension['raid_eventid']) && $eventextension['raid_eventid']){
+				return ($eventextension['raid_eventid']) ? $this->pdh->get('event', 'icon', array($eventextension['raid_eventid'], true)) : '';
+			}elseif(isset($eventextension['calevent_icon']) && !empty($eventextension['calevent_icon']) && $eventextension['calevent_icon'] != '0'){
+				if(is_file($this->pfh->FolderPath("event_icons", "files").$eventextension['calevent_icon'])){
+					return $this->pfh->FolderPath("event_icons", "files", "absolute").$eventextension['calevent_icon'];
+				}elseif(is_file($this->root_path.'games/'.$this->game->get_game().'/icons/events/'.$eventextension['calevent_icon'])){
+					return $this->env->buildlink().'games/'.$this->game->get_game().'/icons/events/'.$eventextension['calevent_icon'];
+				}
+			}
+			return '';
+		}
+
 		public function get_raid_eventid($id){
 			if(!isset($this->events[$id]['extension']['raid_eventid'])) return false;
 			return $this->events[$id]['extension']['raid_eventid'];

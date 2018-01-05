@@ -1,53 +1,46 @@
-<div class="breadcrumb-container">
-	<ul class="breadcrumb">
-		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
-		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
-		<li class="current"><a>{L_portalmanager}</a></li>
+
+<div id="portal_tabs">
+	<ul>
+		<li><a href='#layouts'>{L_portal_layouts}</a></li>
+		<li><a href='#blocks'>{L_portal_blocks}</a></li>
 	</ul>
-	<div class="clear"></div>
-</div>
-	<div id="portal_tabs">
-		<ul>
-			<li><a href='#layouts'>{L_portal_layouts}</a></li>
-			<li><a href='#blocks'>{L_portal_blocks}</a></li>
-		</ul>
-		<div id="layouts">
-			<div class="contentHeader">
-				<h1 class="contentTitle">{L_portal_layouts} <span class="bubble">{LAYOUT_COUNT}</span></h1>
-			</div>
-			<div class="infobox infobox-large infobox-blue clearfix">
-				<i class="fa fa-info-circle fa-4x pull-left"></i> {L_portal_layout_info}
-			</div>
-			<div class="tableHeader floatRight">
-				<button class="mainoption" type="button" name="addadj" onclick="window.location='manage_portal.php{SID}&amp;l=0'"><i class="fa fa-plus"></i>{L_add_portal_layout}</button>
-			</div>
-			<div class="clear"></div>
-			<form method="post" action="{ACTION}" name="post">
-				<table class="table fullwidth colorswitch" id="layout-table">
-					{LAYOUT_LIST}
-				</table>
-				<button class="mainoption" type="submit" name="del_layouts" id="del_layouts"><i class="fa fa-times"></i>{L_delete_selected_entries}</button>
-				{CSRF_TOKEN}
-			</form>
+	<div id="layouts">
+		<div class="contentHeader">
+			<h1 class="contentTitle">{L_portal_layouts} <span class="bubble">{LAYOUT_COUNT}</span></h1>
 		</div>
-		<div id="blocks">
-			<div class="contentHeader">
-				<h1 class="contentTitle">{L_portal_blocks} <span class="bubble">{BLOCK_COUNT}</span></h1>
-			</div>
-			<div class="infobox infobox-large infobox-blue clearfix">
-				<i class="fa fa-info-circle fa-4x pull-left"></i> {L_portal_block_info}
-			</div>
-			
-			<div class="tableHeader floatRight">
-				<button class="mainoption" type="button" name="addadj" onclick="window.location='manage_portal.php{SID}&amp;b=0'"><i class="fa fa-plus"></i>{L_add_portal_block}</button>
-			</div>
-			<div class="clear"></div>
-			<form method="post" action="{ACTION}" name="post">
-				<table class="table fullwidth colorswitch" id="block-table">
-					{BLOCK_LIST}
-				</table>
-				<button class="mainoption" type="submit" name="del_blocks" id="del_blocks"><i class="fa fa-times"></i>{L_delete_selected_entries}</button>
-				{CSRF_TOKEN}
-			</form>
+		<div class="infobox infobox-large infobox-blue clearfix">
+			<i class="fa fa-info-circle fa-4x pull-left"></i> {L_portal_layout_info}
 		</div>
+		<div class="tableHeader floatRight">
+			<button class="mainoption" type="button" name="addadj" onclick="window.location='manage_portal.php{SID}&amp;l=0'"><i class="fa fa-plus"></i>{L_add_portal_layout}</button>
+		</div>
+		<div class="clear"></div>
+		<form method="post" action="{ACTION}" name="post">
+			<table class="table fullwidth colorswitch" id="layout-table">
+				{LAYOUT_LIST}
+			</table>
+			<button class="mainoption" type="submit" name="del_layouts" id="del_layouts"><i class="fa fa-times"></i>{L_delete_selected_entries}</button>
+			{CSRF_TOKEN}
+		</form>
 	</div>
+	<div id="blocks">
+		<div class="contentHeader">
+			<h1 class="contentTitle">{L_portal_blocks} <span class="bubble">{BLOCK_COUNT}</span></h1>
+		</div>
+		<div class="infobox infobox-large infobox-blue clearfix">
+			<i class="fa fa-info-circle fa-4x pull-left"></i> {L_portal_block_info}
+		</div>
+		
+		<div class="tableHeader floatRight">
+			<button class="mainoption" type="button" name="addadj" onclick="window.location='manage_portal.php{SID}&amp;b=0'"><i class="fa fa-plus"></i>{L_add_portal_block}</button>
+		</div>
+		<div class="clear"></div>
+		<form method="post" action="{ACTION}" name="post">
+			<table class="table fullwidth colorswitch" id="block-table">
+				{BLOCK_LIST}
+			</table>
+			<button class="mainoption" type="submit" name="del_blocks" id="del_blocks"><i class="fa fa-times"></i>{L_delete_selected_entries}</button>
+			{CSRF_TOKEN}
+		</form>
+	</div>
+</div>

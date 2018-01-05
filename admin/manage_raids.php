@@ -356,14 +356,19 @@ class ManageRaids extends page_generic {
 			}
 		}
 
-		if($raid['id'] AND $raid['id'] != 'new') $this->confirm_delete($this->user->lang('del_raid_with_itemadj')."<br />".$this->time->user_date($raid['date'])." ".$events[$raid['event']].": ".addslashes($raid['note']));
+		$blnRaidUpdate		= ($raid['id'] AND $raid['id'] != 'new' && !$copy);
+		$strRaidEvent		= $this->pdh->get('event', 'name', array($raid['event']));
+		$strRaidUserDate	= $this->time->user_date($raid['date']);
+		
+		if($raid['id'] AND $raid['id'] != 'new') $this->confirm_delete($this->user->lang('del_raid_with_itemadj')."<br />".$strRaidUserDate." ".$events[$raid['event']].": ".addslashes($raid['note']));
 		$arrEventKeys = array_keys($events);
+		
 		$this->tpl->assign_vars(array(
 			'DATE'				=> (new hdatepicker('date', array('value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->get('date', '') : $this->time->user_date($raid['date'], true, false, false, function_exists('date_create_from_format'))), 'timepicker' => true)))->output(),
 			'NOTE'				=> stripslashes((($this->in->get('dataimport', '') == 'true') ? $this->in->get('rnote', '') : $raid['note'])),
 			'EVENT'				=> (new hdropdown('event', array('options' => $events, 'value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->get('event', 0) : $raid['event']), 'js' => 'onchange="loadEventValue($(this).val())"')))->output(),
-			'RAID_EVENT'		=> $this->pdh->get('event', 'name', array($raid['event'])),
-			'RAID_DATE'			=> $this->time->user_date($raid['date']),
+			'RAID_EVENT'		=> $strRaidEvent,
+			'RAID_DATE'			=> $strRaidUserDate,
 			'RAID_ID'			=> ($raid['id'] && !$copy) ? $raid['id'] : 0,
 			'VALUE'				=> runden((($this->in->get('dataimport', '') == 'true') ? $this->in->get('value', 0) : $raid['value'])),
 			'NEW_MEM_SEL'		=> (new hmultiselect('raid_attendees', array('options' => $members, 'value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->getArray('attendees', 'int') : $raid['attendees']), 'width' => 400, 'filter' => true)))->output(),
@@ -381,9 +386,9 @@ class ManageRaids extends page_generic {
 			'FIRST_EVENT_ID'	=> isset($arrEventKeys[0]) ? $arrEventKeys[0] : 0,
 
 			//language vars
-			'L_RAID_SAVE'		=> ($raid['id'] AND $raid['id'] != 'new' && !$copy) ? $this->user->lang('update_raid') : $this->user->lang('add_raid'),
+			'L_RAID_SAVE'		=> ($blnRaidUpdate) ? $this->user->lang('update_raid') : $this->user->lang('add_raid'),
 			//other needed vars
-			'S_RAID_UPD'		=> ($raid['id'] AND $raid['id'] != 'new' && !$copy) ? true : false,
+			'S_RAID_UPD'		=> $blnRaidUpdate,
 			'S_EVENTVAL_ONLOAD' => ($raid['id'] == 'new' && !$force_refresh && $this->in->get('dataimport', '') != 'true') ? true : false,
 			'S_CALDATAIMPORT'	=> ($this->in->get('dataimport', '') == 'true') ? $this->in->get('calevent_id', 0) : 0,
 			'ADDITIONAL_INFOS_EDITOR' => (new hbbcodeeditor('additional_data', array('rows' => 10, 'value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->get('additional_data') : $raid['additional_data']))))->output(),
@@ -403,11 +408,16 @@ class ManageRaids extends page_generic {
 		$this->jquery->Collapse('#toggleItems');
 		$this->jquery->Collapse('#toggleRaidInfos');
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'    => $this->user->lang('manraid_title'),
 			'template_file' => 'admin/manage_raids_edit.html',
-			'display'       => true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manraid_title'), 'url'=>$this->root_path.'admin/manage_raids.php'.$this->SID],
+				['title'=>(($blnRaidUpdate)?$strRaidEvent.', '.$strRaidUserDate:$this->user->lang('addraid_title')), 'url'=>' '],
+			],
+			'display'       => true
+		]);
 	}
 
 	public function display_bulkedit($messages=false) {
@@ -480,11 +490,16 @@ class ManageRaids extends page_generic {
 				'BULK_ITEMS'		=> implode('|', $arrItems),
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 				'page_title'    => $this->user->lang('manraid_title').' - '.$this->user->lang('bulkedit'),
 				'template_file' => 'admin/manage_raids_bulkedit.html',
-				'display'       => true)
-		);
+				'page_path'			=> [
+					['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+					['title'=>$this->user->lang('manraid_title'), 'url'=>$this->root_path.'admin/manage_raids.php'.$this->SID],
+					['title'=>$this->user->lang('bulkedit'), 'url'=>' '],
+				],
+				'display'       => true
+		]);
 	}
 
 	public function display($messages=false) {
@@ -535,11 +550,15 @@ class ManageRaids extends page_generic {
 			'BUTTON_MENU'=> $this->core->build_dropdown_menu($this->user->lang('selected_elements').'...', $arrMenuItems, '', 'manage_members_menu', array("input[name=\"selected_ids[]\"]")),
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manraid_title'),
 			'template_file'		=> 'admin/manage_raids.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manraid_title'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	private function get_raiddata($raid_id, $attendees=false) {

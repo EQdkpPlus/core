@@ -57,6 +57,7 @@ abstract class super_registry {
 		'article'				=> 'core/',
 		'backup'				=> 'core/',
 		'bridge'				=> 'core/',
+		'captcha'				=> 'core/',
 		'comments'				=> 'core/',
 		'config'				=> 'core/',
 		'core'					=> 'core/',

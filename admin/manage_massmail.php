@@ -246,11 +246,15 @@ class Manage_Massmail extends page_generic {
 
 		$this->jquery->tab_header('massmail_content_tabs');
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('massmail_send'),
 			'template_file'		=> 'admin/manage_massmail_data.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('massmail'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	public function process_send(){
@@ -295,11 +299,16 @@ class Manage_Massmail extends page_generic {
 	public function submit(){
 		if ($this->in->get('body', '', 'raw') != ""){
 			$arrRecipients = array();
+			
+			$arrAllUsers = $this->pdh->get('user', 'id_list');
+			
 			//Usergroups
 			if (count($this->in->getArray('usergroups', 'int')) > 0){
 				foreach ($this->in->getArray('usergroups', 'int') as $key => $groupid){
 					$arrGroupMembers = $this->pdh->get('user_groups_users', 'user_list', array($groupid));
 					foreach($arrGroupMembers as $userid){
+						if(!in_array((int)$userid, $arrAllUsers)) continue;
+						
 						$arrRecipients[] = (int)$userid;
 					}
 				}
@@ -308,6 +317,8 @@ class Manage_Massmail extends page_generic {
 			//Normal User IDs
 			if (count($this->in->getArray('user', 'int')) > 0){
 				foreach ($this->in->getArray('user', 'int') as $key => $userid){
+					if(!in_array((int)$userid, $arrAllUsers)) continue;
+					
 					$arrRecipients[] = (int)$userid;
 				}
 			}
@@ -331,6 +342,8 @@ class Manage_Massmail extends page_generic {
 					if (is_array($arrMembers)){
 						foreach ($arrMembers as $memberid){
 							$userID = (int)$this->pdh->get('member', 'userid', array($memberid));
+							if(!in_array($userID, $arrAllUsers)) continue;
+							
 							if ($userID != 0) $arrRecipients[] = (int)$this->pdh->get('member', 'userid', array($memberid));
 						}
 					}
@@ -349,6 +362,8 @@ class Manage_Massmail extends page_generic {
 					if (is_array($arrMembers)){
 						foreach ($arrMembers as $memberid){
 							$userID = (int)$this->pdh->get('member', 'userid', array($memberid));
+							if(!in_array($userID, $arrAllUsers)) continue;
+							
 							if ($userID != 0) $arrRecipients[] = (int)$this->pdh->get('member', 'userid', array($memberid));
 						}
 					}
@@ -390,6 +405,7 @@ class Manage_Massmail extends page_generic {
 
 			} else {
 				$this->core->message($this->user->lang('massmail_norecipients'), $this->user->lang('error'), 'red');
+				$this->display();
 			}
 
 		} else {
@@ -397,11 +413,15 @@ class Manage_Massmail extends page_generic {
 			$this->display();
 		}
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('massmail_send'),
 			'template_file'		=> 'admin/manage_massmail_send.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('massmail'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 
 		return true;
 	}
@@ -494,11 +514,15 @@ class Manage_Massmail extends page_generic {
 			'DD_TEMPLATE'				=> (new hdropdown('template', array('options' => $arrTempl, 'value' => $strTemplate, 'js' => 'onchange="load_template()"')))->output(),
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('massmail_send'),
 			'template_file'		=> 'admin/manage_massmail.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('massmail'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 }
 registry::register('Manage_massmail');

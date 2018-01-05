@@ -266,11 +266,15 @@ class reset_eqdkp extends page_generic {
 			'DD_EVENT' => (new hdropdown('eventid', array('options' => $events)))->output(),
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('consolidate_reset'),
 			'template_file'		=> 'admin/manage_reset.html',
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('consolidate_reset'), 'url'=>' '],
+			],
 			'display'			=> true
-		));
+		]);
 	}
 }
 registry::register('reset_eqdkp');

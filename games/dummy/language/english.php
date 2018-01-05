@@ -30,7 +30,7 @@ if (!defined('EQDKP_INC')) {
 
 $english_array = array( 
 	"classes" => array(
-	0 => 'Default',
+	1 => 'Default',
 	),
 	"races" => array(
 	0 => 'Default',

@@ -28,7 +28,7 @@ if (!class_exists('exchange_points')){
 		public static $shortcuts = array('pex'=>'plus_exchange');
 		public $options		= array();
 
-		public function get_points($params, $body){
+		public function get_points($params, $arrBody){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 			
 			if($isAPITokenRequest || $this->user->check_pageobjects(array('points'), 'AND', false))
@@ -56,8 +56,8 @@ if (!class_exists('exchange_points')){
 				}
 				
 				//IncludeHTML
-				$blnIncludeHTML = (isset($params['get']['include_html']) && $params['get']['include_html'] == 'true') ? true : false;
-				
+				$blnIncludeHTML = (isset($params['get']['include_html']) && (int)$params['get']['include_html']) ? true : false;
+
 				//Filter
 				$filter = $filterid = false;
 				if (isset($params['get']['filter']) && in_array($params['get']['filter'], array('user', 'character')) && isset($params['get']['filterid'])){

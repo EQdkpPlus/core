@@ -1625,31 +1625,59 @@ if (!class_exists("jquery")) {
 			return true;
 		}
 
-		public function googlemaps($id){
+		public function googlemaps($id, $arrMarkers=array()){
 			$this->init_gmaps();
-			$this->tpl->add_js("
-				map = new GMaps({
-					el: '#".$id."_map',
-					lat: -12.043333,
-					lng: -77.028333
-				});
-				GMaps.geocode({
-					address: $('#".$id."_address').text(),
-					callback: function(results, status) {
-						if (status == 'OK') {
-							$('#mapframe_".$id."').show();
-							var latlng = results[0].geometry.location;
-							map.setCenter(latlng.lat(), latlng.lng());
-							map.addMarker({
-								lat: latlng.lat(),
-								lng: latlng.lng()
-							});
-						}else{
-							$('#mapframe_".$id."').hide();
+
+			// We use markers, build a custom map used in usermaps plugin
+			if(is_array($arrMarkers) && count($arrMarkers) > 0){
+				$markersJS = '';
+				foreach($arrMarkers as $markerUserID=>$markerdata){
+					$markersJS .= 'map.addMarker({
+						lat: '.$markerdata['lat'].',
+						lng: '.$markerdata['lng'].',
+						title: "'.$this->sanitize($markerdata['title']).'",
+						infoWindow: {
+							content: "'.$this->sanitize($markerdata['tooltip']).'"
 						}
-					}
-				});" ,
-			"docready");
+					});';
+
+					$this->tpl->add_js("
+						map = new GMaps({
+							el: '#".$id."_map',
+							lat: -12.043333,
+							lng: -77.028333
+						});".
+						$markersJS.
+						'map.fitZoom();' ,
+					"docready");
+				}
+
+			// we will use the address field as used in the calendar events
+			}else{
+				$this->tpl->add_js("
+					map = new GMaps({
+						el: '#".$id."_map',
+						lat: -12.043333,
+						lng: -77.028333
+					});
+					GMaps.geocode({
+						address: $('#".$id."_address').text(),
+						callback: function(results, status) {
+							if (status == 'OK') {
+								$('#mapframe_".$id."').show();
+								var latlng = results[0].geometry.location;
+								map.setCenter(latlng.lat(), latlng.lng());
+								map.addMarker({
+									lat: latlng.lat(),
+									lng: latlng.lng()
+								});
+							}else{
+								$('#mapframe_".$id."').hide();
+							}
+						}
+					});" ,
+				"docready");
+			}
 			return '<div class="map_frame" id="mapframe_'.$id.'"><div id="'.$id.'_map"></div></div>';
 		}
 

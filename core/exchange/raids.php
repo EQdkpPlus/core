@@ -28,7 +28,7 @@ if (!class_exists('exchange_raids')) {
         public static $shortcuts = array('user', 'config', 'pex'=>'plus_exchange', 'pdh', 'time', 'env' => 'environment');
         public $options		= array();
 
-		public function get_raids($params, $body) {
+        public function get_raids($params, $arrBody) {
 		    $isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 		    
 		    if($isAPITokenRequest || $this->user->check_pageobjects(array('raids'), 'AND', false)){

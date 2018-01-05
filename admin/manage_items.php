@@ -205,11 +205,11 @@ class ManageItems extends page_generic {
 
 		$item_names = $this->pdh->aget('item', 'name', 0, array($this->pdh->get('item', 'id_list')));
 
-
-		$this->confirm_delete($this->user->lang('confirm_delete_item')."<br />".((isset($item['name'])) ? $item['name'] : ''), '', true);
+		if(!isset($item['name'])) $item['name'] = '';
+		$this->confirm_delete($this->user->lang('confirm_delete_item')."<br />".$item['name'], '', true);
 		$this->tpl->assign_vars(array(
 			'GRP_KEY'		=> (isset($grp_key) && !$copy) ? $grp_key : '',
-			'NAME'			=> (isset($item['name'])) ? $item['name'] : '',
+			'NAME'			=> $item['name'],
 			'RAID'			=> (new hdropdown('raid_id', array('options' => $raids, 'value' => ((isset($item['raid_id'])) ? $item['raid_id'] : ''))))->output(),
 			'BUYERS'		=> (new hmultiselect('buyers', array('options' => $members, 'value' => ((isset($item['buyers'])) ? $item['buyers'] : ''), 'width' => 350, 'filter' => true)))->output(),
 			'DATE'			=> (new hdatepicker('date', array('value' => $this->time->user_date($item['date'], true, false, false, function_exists('date_create_from_format')), 'timepicker' => true)))->output(),
@@ -218,11 +218,16 @@ class ManageItems extends page_generic {
 			'ITEMPOOLS'		=> (new hdropdown('itempool_id', array('options' => $itempools, 'value' => ((isset($item['itempool_id'])) ? $item['itempool_id'] : ''))))->output(),
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manitems_title'),
 			'template_file'		=> 'admin/manage_items_edit.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manitems_title'), 'url'=>$this->root_path.'admin/manage_items.php'.$this->SID],
+				['title'=>(($item['name'] == '')?$this->user->lang('add_item'):$item['name']), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	public function display($messages=false) {
@@ -274,11 +279,15 @@ class ManageItems extends page_generic {
 
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manitems_title'),
 			'template_file'		=> 'admin/manage_items.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manitems_title'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	public function display_bulkedit($messages=false) {
@@ -340,11 +349,16 @@ class ManageItems extends page_generic {
 				'BULK_ITEMS'	=> implode('|', $arrItems),
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 				'page_title'		=> $this->user->lang('manitems_title').' - '.$this->user->lang('bulkedit'),
 				'template_file'		=> 'admin/manage_items_bulkedit.html',
-				'display'			=> true)
-		);
+				'page_path'			=> [
+					['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+					['title'=>$this->user->lang('manitems_title'), 'url'=>$this->root_path.'admin/manage_items.php'.$this->SID],
+					['title'=>$this->user->lang('bulkedit'), 'url'=>' '],
+				],
+				'display'			=> true
+		]);
 	}
 
 	private function get_post($norefresh=false) {

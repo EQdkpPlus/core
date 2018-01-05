@@ -66,6 +66,7 @@ if (!class_exists("pdh_r_user")){
 		public function reset(){
 			$this->users = NULL;
 			$this->arrUserdataDecrypted = array();
+			$this->blnDecryptedAll = false;
 		}
 
 		public function init(){
@@ -201,7 +202,7 @@ if (!class_exists("pdh_r_user")){
 		public function get_email($user_id, $checkForIgnoreMailsFlag = false){
 			if ($checkForIgnoreMailsFlag){
 				$arrPriv = $this->get_privacy_settings($user_id);
-				if (isset($arrPriv['priv_no_boardemails']) &&  !$arrPriv['priv_no_boardemails']) {
+				if ((isset($arrPriv['priv_no_boardemails']) &&  !$arrPriv['priv_no_boardemails']) || !isset($arrPriv['priv_no_boardemails'])) {
 					$this->decrypt_data_single($user_id);
 					return $this->users[$user_id]['user_email'];
 				}

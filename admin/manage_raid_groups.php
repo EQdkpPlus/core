@@ -211,11 +211,15 @@ class Manage_Raid_Groups extends page_generic {
 			'RAIDGROUP_COUNT' => count($grps),
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manage_raid_groups'),
 			'template_file'		=> 'admin/manage_raid_groups.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manage_raid_groups'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	// ---------------------------------------------------------
@@ -301,11 +305,16 @@ class Manage_Raid_Groups extends page_generic {
 			'S_USERGROUP_ADMIN' 	=> $this->user->check_auth('a_raidgroups_man', false),
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manage_raid_group').': '.sanitize($group_name),
 			'template_file'		=> 'admin/manage_raid_groups_chars.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manage_raid_groups'), 'url'=>$this->root_path.'admin/manage_raid_groups.php'.$this->SID],
+				['title'=>sanitize($group_name), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	private function get_post() {

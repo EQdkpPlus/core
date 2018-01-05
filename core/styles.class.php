@@ -368,6 +368,8 @@ if (!class_exists("styles")){
 				unset($data['users']);
 
 				foreach ($data as $key=>$value){
+					if(is_array($value)) $value = serialize($value);
+					
 					$fot .= "	<$key>$value</$key>\n";
 				}
 
@@ -466,7 +468,7 @@ if (!class_exists("styles")){
 		public function process_update($styleid){
 			$updateColors = ((int)$this->in->get('colors', 0) == 1);
 			$deleteChangedFiles = ((int)$this->in->get('template', 0) == 1);
-
+			
 			$this->reset($styleid, $updateColors, $deleteChangedFiles, true);
 		}
 

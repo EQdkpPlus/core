@@ -413,9 +413,10 @@ function infotooltip_js() {
  * @int $direct: 0: tooltip as tooltip, 1: direct display of tooltip, 2: direct display + force update
  * @int $onlyicon: >0: icon-size and only icon is displayed
  * @string $in_span: if you like to display something else, except itemname before loading tooltip
+ * @int $
  * return @string
  */
-function infotooltip($name='', $game_id='', $lang=false, $direct=0, $onlyicon=0, $noicon=false, $data=array(), $in_span=false, $class_add=''){
+function infotooltip($name='', $game_id='', $lang=false, $direct=0, $onlyicon=0, $noicon=false, $data=array(), $in_span=false, $class_add='', $withColorForIconOnly=false){
 	$blnUseOwnTooltips	= register('config')->get('infotooltip_own_enabled');
 	$data						= (is_array($data)) ? $data : array();
 	if($blnUseOwnTooltips){
@@ -426,14 +427,16 @@ function infotooltip($name='', $game_id='', $lang=false, $direct=0, $onlyicon=0,
 	} else {
 		if(!isset($data['server']) || empty($data['server'])) $data['server'] = registry::register('config')->get("servername");
 		$lang = ($lang) ? $lang : registry::fetch('user')->lang('XML_LANG');
-
+		
+		if($withColorForIconOnly) $data['withcolorforicon'] = true;
+		
 		$cachedname = register('infotooltip')->getcacheditem($name, $lang, $game_id, $onlyicon, $noicon, $data);
 		$id = unique_id();
 		$data = array('name' => $name, 'game_id' => $game_id, 'onlyicon' => $onlyicon, 'noicon' => $noicon, 'lang' => $lang, 'data' => $data);
 		if($direct > 1) $data['update'] = true;
 		$data = serialize($data);
 		$direct = ($direct) ? 1 : 0;
-		if($cachedname && !$direct){
+		if($cachedname && $cachedname != "" && !$direct){
 			$str = '<span class="infotooltip-tt '.$class_add.'" id="span_'.$id.'" title="'.$direct.urlencode(base64_encode($data)).'">'.$cachedname;
 			return $str.'</span>';
 		} else {
@@ -1218,7 +1221,6 @@ function d($content="-" ){
 		var_dump($content);
 		echo "</pre>";
 	}
-
 	if (is_bool($content)) {
 		if($content == true){
 			$content = "Bool - True";
@@ -1226,17 +1228,21 @@ function d($content="-" ){
 			$content = "Bool - false";
 		}
 	}
-
 	if (strlen($content) ==0) {
 		$content = "String Length=0";
 	}
-
 	echo "<table border=0>\n";
 	echo "<tr>\n";
 	echo "<td bgcolor='#0080C0'>";
 	echo "<B>" . $content . "</B>";
 	echo "</td>\n";
 	echo "</tr>\n";
+
+	$arrBacktrace = debug_backtrace();
+	if($arrBacktrace && isset($arrBacktrace[0])){
+		echo "<tr><td  bgcolor='#efefef'>Debug called in ".$arrBacktrace[0]['file']." line ".$arrBacktrace[0]['line']."</td></tr>";
+	}
+
 	echo "</table>\n";
 }
 

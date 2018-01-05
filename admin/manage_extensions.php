@@ -51,6 +51,7 @@ class Manage_Extensions extends page_generic {
 		);
 		parent::__construct(false, $handler);
 		$this->code = $this->in->get('code', '');
+		$this->code = preg_replace("/[^a-z0-9\.\_\-]/", "", strtolower($this->code));
 		
 		if(!$this->pdl->type_known("repository")) $this->pdl->register_type("repository", null, null, array(3,4), true);
 		
@@ -75,12 +76,12 @@ class Manage_Extensions extends page_generic {
 			'RATING'			=> $this->jquery->starrating('extension_'.md5($extension['plugin']), $this->env->phpself, array('score' => $extension['rating'], 'readonly' => true)),
 		));
 		
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> 'Repo Info',
 			'template_file'		=> 'admin/manage_extensions_repoinfo.html',
 			'header_format'		=> 'simple',
 			'display'			=> true
-		));
+		]);
 	}
 
 	//Hide Confirm Dialog before starting Update
@@ -144,6 +145,7 @@ class Manage_Extensions extends page_generic {
 	
 					if ($xml && $xml->folder != ''){
 						$extension_name = $xml->folder;
+						$extension_name = preg_replace("/[^a-z0-9\.\_\-]/", "", strtolower($extension_name));
 						
 						//Subfolder detection
 						$src_path = $this->pfh->FolderPath('tmp/'.$upload_id, 'repository');
@@ -173,8 +175,16 @@ class Manage_Extensions extends page_generic {
 							$this->pfh->Delete($src_path.'/custom.css');
 							$this->pfh->Delete($src_path.'/custom.js');
 						}
+						
+						if($target){
 	
-						$blnResult = $this->repo->full_copy($src_path, $target.'/'.$extension_name);
+							$blnResult = $this->repo->full_copy($src_path, $target.'/'.$extension_name);
+							
+							//Copy package.xml file
+							$this->pfh->copy($this->pfh->FolderPath('tmp/'.$upload_id, 'repository').'package.xml', $target.'/'.$extension_name.'/package.xml');
+							
+							$this->pfh->FolderPath('tmp/'.$upload_id, 'repository').'package.xml';
+							}
 						
 						if (!$blnResult){
 							$this->core->message($this->user->lang('plugin_package_error3'), $this->user->lang('error'), 'red');
@@ -246,7 +256,7 @@ class Manage_Extensions extends page_generic {
 			$this->repo->downloadPackage($downloadLink, $destFolder, $filename);
 
 			if ($this->repo->verifyPackage($destFolder.$filename, $downloadHash, $downloadSignature, 'packages')){
-				echo "true";		
+				echo "true";
 			} else {
 				echo $this->user->lang('repo_step2_error');
 				$this->pdl->log('repository', '2. Verification Error '.$this->code);
@@ -291,7 +301,7 @@ class Manage_Extensions extends page_generic {
 			@ignore_user_abort(true);
 			$this->pdl->log('repository', '4. Copy files '.$this->code);
 			
-			$srcFolder = $this->pfh->FolderPath('tmp/'.md5($this->in->get('cat', 0).$this->code),'repository');
+			$srcFolder = $origSrcFolder = $this->pfh->FolderPath('tmp/'.md5($this->in->get('cat', 0).$this->code),'repository');
 			
 			//Subfolder detection
 			$arrSubfolder = scandir($srcFolder);
@@ -321,6 +331,12 @@ class Manage_Extensions extends page_generic {
 			$this->pdl->log('repository', '4. Target for '.$this->code.' is '.$target);
 			if($target){
 				$result = $this->repo->full_copy($srcFolder, $target);
+				
+				if((int)$this->in->get('cat', 0) === 2){
+					//Copy package.xml file
+					$this->pfh->copy($origSrcFolder.'/package.xml', $target.'/package.xml');
+				}
+				
 				if ($result){
 					echo "true";
 				} else {
@@ -822,7 +838,7 @@ class Manage_Extensions extends page_generic {
 					'DESCRIPTION'		=> '<a href="javascript:repoinfo('.$id.')">'.sanitize(cut_text($extension['description'])).'</a>',
 					'ACTION_LINK'		=> $link,
 					'RATING'			=> $this->jquery->starrating('extension_'.md5($extension['plugin']), $this->env->phpself , array('score' => $extension['rating'], 'readonly' => true)),
-					'BUGTRACKER_URL'	=> sanitize($extension['bugtracker_url']),		
+					'BUGTRACKER_URL'	=> sanitize($extension['bugtracker_url']),
 				));
 
 			}
@@ -881,7 +897,7 @@ class Manage_Extensions extends page_generic {
 					'RATING'			=> (isset($arrTmpExtension[$plugin_code])) ? $this->jquery->starrating('extension_'.md5($arrTmpExtension[$plugin_code]['plugin']), $this->env->phpself , array('score' => $arrTmpExtension[$plugin_code]['rating'], 'readonly' => true)) : '',
 					'ACTION_LINK'		=> $link,
 					'DELETE_LINK'		=> ($plugin_code != $this->config->get('default_game')) ? '<a href="manage_extensions.php' . $this->SID . '&amp;cat=7&amp;mode=remove&amp;code=' . $plugin_code. '&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('delete').'"><i class="fa fa-lg fa-trash-o"></i></a>' : '',
-					'BUGTRACKER_URL'	=> (isset($arrExtensionListNamed[7][$plugin_code])) ? sanitize($this->pdh->get('repository', 'bugtracker_url', array(7, $arrExtensionListNamed[7][$plugin_code]))) : '',		
+					'BUGTRACKER_URL'	=> (isset($arrExtensionListNamed[7][$plugin_code])) ? sanitize($this->pdh->get('repository', 'bugtracker_url', array(7, $arrExtensionListNamed[7][$plugin_code]))) : '',
 				));
 			}
 		}
@@ -958,7 +974,7 @@ class Manage_Extensions extends page_generic {
 					'NAME'				=> (isset($arrExtensionListNamed[11][$plugin_code])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[11][$plugin_code].')">'.$value.'</a>' : $value,
 					'VERSION'			=> $arrLanguageVersions[$plugin_code],
 					'ACTION_LINK'		=> $link,
-					'BUGTRACKER_URL'	=> (isset($arrExtensionListNamed[11][$plugin_code])) ? sanitize($this->pdh->get('repository', 'bugtracker_url', array(11, $arrExtensionListNamed[11][$plugin_code]))) : '',	
+					'BUGTRACKER_URL'	=> (isset($arrExtensionListNamed[11][$plugin_code])) ? sanitize($this->pdh->get('repository', 'bugtracker_url', array(11, $arrExtensionListNamed[11][$plugin_code]))) : '',
 				));
 			}
 		}
@@ -1031,11 +1047,15 @@ class Manage_Extensions extends page_generic {
 			.nl_progressbar_label { position: absolute; width: 90%; text-align: center; line-height: 30px; left:5%; right:5%;}
 		');
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('extensions'),
 			'template_file'		=> 'admin/manage_extensions.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('extension_repo'), 'url'=>$this->root_path.'admin/manage_extensions.php'.$this->SID],
+			],
+			'display'			=> true
+		]);
 	}
 }
 registry::register('Manage_Extensions');

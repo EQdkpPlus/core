@@ -39,51 +39,50 @@ if (!class_exists('exchange_add_item')){
 		*
 		* Returns: Status 0 on error, Status 1 and inserted Item-ID on succes
 		*/
-		public function post_add_item($params, $body){
+		public function post_add_item($params, $arrBody){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 			
 			if ($isAPITokenRequest || $this->user->check_auth('a_item_add', false)){
 				$blnTest = (isset($params['get']['test']) && $params['get']['test']) ? true : false;
-				
-				$xml = simplexml_load_string($body);
-				if ($xml){
+
+				if (count($arrBody)){
 					//Check required values
-					if (!isset($xml->item_date) && !strlen($xml->item_date)) return $this->pex->error('required data missing');
-					if (!isset($xml->item_name) && !strlen($xml->item_name)) return $this->pex->error('required data missing');
-					if (!isset($xml->item_buyers) && !is_object($xml->item_buyers->member)) return $this->pex->error('required data missing');
-					if (!isset($xml->item_raid_id) && !strlen($xml->item_raid_id)) return $this->pex->error('required data missing');
-					if (!isset($xml->item_value) && !strlen($xml->item_value)) return $this->pex->error('required data missing');
-					if (!isset($xml->item_itempool_id) && !strlen($xml->item_itempool_id)) return $this->pex->error('required data missing');
+					if (!isset($arrBody['item_date']) || !strlen($arrBody['item_date'])) return $this->pex->error('required data missing');
+					if (!isset($arrBody['item_name']) || !strlen($arrBody['item_name'])) return $this->pex->error('required data missing');
+					if (!isset($arrBody['item_buyers']) || !count($arrBody['item_buyers']['member'])) return $this->pex->error('required data missing');
+					if (!isset($arrBody['item_raid_id']) || !strlen($arrBody['item_raid_id'])) return $this->pex->error('required data missing');
+					if (!isset($arrBody['item_value']) || !strlen($arrBody['item_value'])) return $this->pex->error('required data missing');
+					if (!isset($arrBody['item_itempool_id']) || !strlen($arrBody['item_itempool_id'])) return $this->pex->error('required data missing');
 					
 					//Item Date
-					$intItemDate = $this->time->fromformat($xml->item_date, "Y-m-d H:i");
+					$intItemDate = $this->time->fromformat($arrBody['item_date'], "Y-m-d H:i");
 					
 					//Item Buyers
 					$arrItemBuyers = array();
 					$arrMemberIDList = $this->pdh->get('member', 'id_list', array());
-					foreach($xml->item_buyers->member as $objMemberID){
+					foreach($arrBody['item_buyers']['member'] as $objMemberID){
 						if (in_array(intval($objMemberID), $arrMemberIDList)) $arrItemBuyers[] = intval($objMemberID);
 					}
 					if(count($arrItemBuyers) == 0) return $this->pex->error('required data missing');
 					
 					//Item Value
-					$fltItemValue = (float)$xml->item_value;
+					$fltItemValue = (float)$arrBody['item_value'];
 					
 					//Item Name
-					$strItemName = filter_var((string)$xml->item_name, FILTER_SANITIZE_STRING);	
+					$strItemName = filter_var((string)$arrBody['item_name'], FILTER_SANITIZE_STRING);	
 					
 					//Item Raid ID
 					$arrRaidIDList = $this->pdh->get('raid', 'id_list');
-					$intRaidID = intval($xml->item_raid_id);
+					$intRaidID = intval($arrBody['item_raid_id']);
 					if (!in_array($intRaidID, $arrRaidIDList)) return $this->pex->error('required data missing');
 					
 					//Item Itempool ID
 					$arrItempoolIDList =  $this->pdh->get('itempool', 'id_list');
-					$intItempoolID = intval($xml->item_itempool_id);
+					$intItempoolID = intval($arrBody['item_itempool_id']);
 					if (!in_array($intItempoolID, $arrItempoolIDList)) return $this->pex->error('required data missing');
 					
 					//Item Ingame ID
-					$intIngameID = (isset($xml->item_game_id)) ? filter_var((string)$xml->item_game_id, FILTER_SANITIZE_STRING) : '';	
+					$intIngameID = (isset($arrBody['item_game_id'])) ? filter_var((string)$arrBody['item_game_id'], FILTER_SANITIZE_STRING) : '';	
 					
 					if($blnTest) return array('test' => 'success');
 					
@@ -93,7 +92,7 @@ if (!class_exists('exchange_add_item')){
 					
 					return array('item_id' => $mixItemID);
 				}
-				return $this->pex->error('malformed xml');
+				return $this->pex->error('malformed input');
 			} else {
 				return $this->pex->error('access denied');
 			}

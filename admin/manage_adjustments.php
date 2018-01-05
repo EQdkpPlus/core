@@ -186,9 +186,10 @@ class ManageAdjs extends page_generic {
 		$this->jquery->Autocomplete('reason', array_unique($adjustment_reasons));
 		$this->confirm_delete($this->user->lang('confirm_delete_adjustment')."<br />".((isset($adj['reason'])) ? $adj['reason'] : ''), '', true);
 
+		if(!isset($adj['reason'])) $adj['reason'] = '';
 		$this->tpl->assign_vars(array(
 			'GRP_KEY'		=> (isset($grp_key) && !$copy) ? $grp_key : '',
-			'REASON'		=> (isset($adj['reason'])) ? $adj['reason'] : '',
+			'REASON'		=> $adj['reason'],
 			'RAID'			=> (new hdropdown('raid_id', array('options' => $raids, 'value' => ((isset($adj['raid_id'])) ? $adj['raid_id'] : ''))))->output(),
 			'MEMBERS'		=> (new hmultiselect('members', array('options' => $members, 'value' => ((isset($adj['members'])) ? $adj['members'] : ''), 'width' => 350, 'filter' => true)))->output(),
 			'DATE'			=> (new hdatepicker('date', array('value' => $this->time->user_date(((isset($adj['date'])) ? $adj['date'] : $this->time->time), true, false, false, function_exists('date_create_from_format')), 'timepicker' => true)))->output(),
@@ -197,11 +198,16 @@ class ManageAdjs extends page_generic {
 			'EVENT'			=> (new hdropdown('event', array('options' => $events, 'value' => ((isset($adj['event'])) ? $adj['event'] : ''))))->output(),
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manadjs_title'),
 			'template_file'		=> 'admin/manage_adjustments_edit.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manadjs_title'), 'url'=>$this->root_path.'admin/manage_adjustments.php'.$this->SID],
+				['title'=>$this->user->lang((($adj['reason'] == '')?'add_adjustment':'editing_adj')), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	public function display_bulkedit($messages=false) {
@@ -248,11 +254,16 @@ class ManageAdjs extends page_generic {
 				'BULK_ITEMS'	=> implode('|', $arrItems),
 		));
 
-		$this->core->set_vars(array(
-				'page_title'		=> $this->user->lang('manadjs_title').' - '.$this->user->lang('bulkedit'),
-				'template_file'		=> 'admin/manage_adjustments_bulkedit.html',
-				'display'			=> true)
-		);
+		$this->core->set_vars([
+			'page_title'		=> $this->user->lang('manadjs_title').' - '.$this->user->lang('bulkedit'),
+			'template_file'		=> 'admin/manage_adjustments_bulkedit.html',
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manadjs_title'), 'url'=>$this->root_path.'admin/manage_adjustments.php'.$this->SID],
+				['title'=>$this->user->lang('bulkedit'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	public function display($messages=false) {
@@ -300,11 +311,15 @@ class ManageAdjs extends page_generic {
 			'BUTTON_MENU'		=> $this->core->build_dropdown_menu($this->user->lang('selected_elements').'...', $arrMenuItems, '', 'manage_members_menu', array("input[name=\"selected_ids[]\"]")),
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manadjs_title'),
 			'template_file'		=> 'admin/manage_adjustments.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manadjs_title'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	private function get_post($norefresh=false) {

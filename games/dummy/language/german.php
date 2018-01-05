@@ -24,7 +24,7 @@ if ( !defined('EQDKP_INC') ){
 }
 $german_array = array(
 	'classes' => array(
-		0	=> 'Standard',
+		1	=> 'Standard',
 	),
 	'races' => array(
 		'Standard',

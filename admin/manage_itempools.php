@@ -85,11 +85,16 @@ class Manage_Itempools extends page_generic {
 			'IID'					=> $iid,
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manitempool_title'),
 			'template_file'		=> 'admin/manage_itempools_edit.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('menu_itempools'), 'url'=>$this->root_path.'admin/manage_itempools.php'.$this->SID],
+				['title'=>(($iid)?$this->user->lang('add_itempool'):$itemp['name']), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	public function display($messages=false) {
@@ -122,11 +127,15 @@ class Manage_Itempools extends page_generic {
 			'ITEMPOOLS_COUNT'	=> count($itempool_ids),
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manitempool_title'),
 			'template_file'		=> 'admin/manage_itempools.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('menu_itempools'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	private function get_post($norefresh=false) {

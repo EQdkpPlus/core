@@ -79,6 +79,7 @@ $lang = array(
 	'update' => 'Update',
 	'import' => 'Import',
 	'plugin_update' => 'Plugin-Update',
+	'worker' => 'Worker',
 
 	//Task page
 	'unknown_task_warning' => 'Unbekannter Task!',

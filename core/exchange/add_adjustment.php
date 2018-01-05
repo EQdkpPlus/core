@@ -38,44 +38,43 @@ if (!class_exists('exchange_add_adjustment')){
 		*
 		* Returns: Status 0 on error, Status 1 and inserted adjustment-ID on succes
 		*/
-		public function post_add_adjustment($params, $body){
+		public function post_add_adjustment($params, $arrBody){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 			
 			if ($isAPITokenRequest || $this->user->check_auth('a_indivadj_add', false)){
 				$blnTest = (isset($params['get']['test']) && $params['get']['test']) ? true : false;
-				
-				$xml = simplexml_load_string($body);
-				if ($xml){
+
+				if (count($arrBody)){
 					//Check required values
-					if (!isset($xml->adjustment_date) && !strlen($xml->adjustment_date)) return $this->pex->error('required data missing');
-					if (!isset($xml->adjustment_value) && !strlen($xml->adjustment_value)) return $this->pex->error('required data missing');
-					if (!isset($xml->adjustment_reason) && !strlen($xml->adjustment_reason)) return $this->pex->error('required data missing');
-					if (!isset($xml->adjustment_members) && !is_object($xml->adjustment_members->member)) return $this->pex->error('required data missing');
+					if (!isset($arrBody['adjustment_date']) || !strlen($arrBody['adjustment_date'])) return $this->pex->error('required data missing');
+					if (!isset($arrBody['adjustment_value']) || !strlen($arrBody['adjustment_value'])) return $this->pex->error('required data missing');
+					if (!isset($arrBody['adjustment_reason']) || !strlen($arrBody['adjustment_reason'])) return $this->pex->error('required data missing');
+					if (!isset($arrBody['adjustment_members']) || !count($arrBody['adjustment_members']['member'])) return $this->pex->error('required data missing');
 					
 					//Adjustment Date
-					$intAdjDate = $this->time->fromformat($xml->adjustment_date, "Y-m-d H:i");
+					$intAdjDate = $this->time->fromformat($arrBody['adjustment_date'], "Y-m-d H:i");
 					
 					//Adjustment Members
 					$arrAdjMembers = array();
 					$arrMemberIDList = $this->pdh->get('member', 'id_list', array());
-					foreach($xml->adjustment_members->member as $objMemberID){
+					foreach($arrBody['adjustment_members']['member'] as $objMemberID){
 						if (in_array(intval($objMemberID), $arrMemberIDList)) $arrAdjMembers[] = intval($objMemberID);
 					}
 					if(count($arrAdjMembers) == 0) return $this->pex->error('required data missing');
 					
 					//Adjustment Value
-					$fltAdjValue = (float)$xml->adjustment_value;
+					$fltAdjValue = (float)$arrBody['adjustment_value'];
 					
 					//Adjustment Reason
-					$strAdjReason = filter_var((string)$xml->adjustment_reason, FILTER_SANITIZE_STRING);
+					$strAdjReason = filter_var((string)$arrBody['adjustment_reason'], FILTER_SANITIZE_STRING);
 					
 					//Adjustment Event ID
 					$arrEventIDList = $this->pdh->get('event', 'id_list');
-					$intAdjEventID = (isset($xml->adjustment_event_id) && in_array(intval($xml->adjustment_event_id), $arrEventIDList)) ? intval($xml->adjustment_event_id) : 0;
+					$intAdjEventID = (isset($arrBody['adjustment_event_id']) && in_array(intval($arrBody['adjustment_event_id']), $arrEventIDList)) ? intval($arrBody['adjustment_event_id']) : 0;
 					
 					//Adjustment Raid ID
 					$arrRaidIDList = $this->pdh->get('raid', 'id_list');
-					$intAdjRaidID = (isset($xml->adjustment_raid_id) && in_array(intval($xml->adjustment_raid_id), $arrRaidIDList)) ? intval($xml->adjustment_raid_id) : 0;
+					$intAdjRaidID = (isset($arrBody['adjustment_raid_id']) && in_array(intval($arrBody['adjustment_raid_id']), $arrRaidIDList)) ? intval($arrBody['adjustment_raid_id']) : 0;
 					
 					if($blnTest) return array('test' => 'success');
 					
@@ -86,7 +85,7 @@ if (!class_exists('exchange_add_adjustment')){
 					
 					return array('adjustment_id' => $mixAdjID);
 				}
-				return $this->pex->error('malformed xml');
+				return $this->pex->error('malformed input');
 			} else {
 				return $this->pex->error('access denied');
 			}

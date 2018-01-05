@@ -19,7 +19,7 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-if ( !defined('EQDKP_INC') ){
+if ( !defined('EQDKP_INC') ) {
 	die('Do not access this file directly.');
 }
 
@@ -27,23 +27,49 @@ if ( !interface_exists( "plus_datacache" ) ) {
 	require_once($eqdkp_root_path . 'core/cache/cache.iface.php');
 }
 
-if ( !class_exists( "cache_xcache" ) ) {
-	class cache_xcache extends gen_class implements plus_datacache{
+if ( !class_exists( "cache_redis" ) ) {
+	class cache_redis extends gen_class implements plus_datacache{
+
+		public $server = 'localhost';
+		public $redis;
+
+		public function __construct(){
+			if(!class_exists('Redis')){
+				throw new Exception('No Redis available');
+			}
+			
+			$this->redis = new Redis();
+			
+			$intPort = ($this->config->get('port', 'pdc') === false) ? 6379 : $this->config->get('port', 'pdc');
+			
+			$blnConnectionResult = $this->redis->connect($this->config->get('server', 'pdc'), $intPort);
+			if(!$blnConnectionResult){
+				throw new Exception('No connection to redis server');
+			}
+			
+			$strPrefix = substr(md5(registry::get_const('dbname')), 0, 8);
+			
+			$this->redis->setOption(\Redis::OPT_PREFIX, $strPrefix.':');
+		}
 
 		public function put( $key, $data, $ttl, $global_prefix, $compress = false ) {
 			$key = $global_prefix.$key;
-			$ret = xcache_set($key, $data, $ttl);
-			return $ret;
+
+			
+			return $this->redis->setex($key, $ttl, serialize($data));
 		}
 
 		public function get( $key, $global_prefix, $uncompress = false ) {
 			$key = $global_prefix.$key;
-			return xcache_get($key);
+
+			
+			$retval = $this->redis->get($key);
+			return ($retval === false) ? null : @unserialize($retval);
 		}
 
 		public function del( $key, $global_prefix ) {
-			$key = $global_prefix.$key;
-			xcache_unset($key);
+			$key = $global_prefix.$key;	
+			$this->redis->del($key);
 			return true;
 		}
 		

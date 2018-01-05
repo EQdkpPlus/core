@@ -187,9 +187,12 @@ class settings_pageobject extends pageobject {
 			//Send Mail to the recent user's email address
 			$bodyvars = array(
 					'USERNAME' => $this->pdh->get('user', 'name', array($this->user->id)),
-					'DATETIME'		=> $this->time->user_date($this->time->time, true),
+					'DATETIME'	=> $this->time->user_date($this->time->time, true),
 			);
 			$this->email->SendMailFromAdmin($this->pdh->get('user', 'email', array($this->user->id)), $this->user->lang('email_subject_password_changed'), 'user_password_changed.html', $bodyvars);
+		
+			//Destroy other sessions
+			$this->user->destroyOtherSessions();
 		}
 		
 		//Send email to confirm new email address
@@ -374,13 +377,17 @@ class settings_pageobject extends pageobject {
 		$settingsdata['profile']['user_avatar']['user_avatar']['imgup_type'] = 'user';
 		$settingsdata['profile']['user_avatar']['user_avatar']['deletelink'] = $this->server_path.$this->controller_path_plain.'Settings/'. $this->SID.'&mode=deleteavatar&link_hash='.$this->CSRFGetToken('mode');
 		//Deactivate Profilefields synced by Bridge
-		if ($this->config->get('cmsbridge_active') == 1 && (int)$this->config->get('cmsbridge_disable_sync') != 1) {
+		
+		if ($this->config->get('cmsbridge_active') == 1){
 			$synced_fields = array('username', 'current_password', 'new_password', 'confirm_password');
 			
-			//Key: Bridge ID, Value: EQdkp Profilefield ID
-			$arrMapping = $this->pdh->get('user_profilefields', 'bridge_mapping');
-			foreach($arrMapping as $intBridgeFieldID => $strEQdkpFieldID){
-				$synced_fields[] = 'userprofile_'.$strEQdkpFieldID;
+			if((int)$this->config->get('cmsbridge_disable_sync') != 1){
+				//Key: Bridge ID, Value: EQdkp Profilefield ID
+				$arrMapping = $this->pdh->get('user_profilefields', 'bridge_mapping');
+				foreach($arrMapping as $intBridgeFieldID => $strEQdkpFieldID){
+					$synced_fields[] = 'userprofile_'.$strEQdkpFieldID;
+				}
+				
 			}
 			
 			foreach($synced_fields as $sync_field) {

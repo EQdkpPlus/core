@@ -256,6 +256,7 @@ class admin_index extends gen_class {
 							ORDER BY u.username, s.session_current DESC';
 		$result = $this->db->prepare($sql)->execute($this->time->time-600);
 		$arrOnlineUsers = $arrBots = $arrDone = array();
+		$online_count = 0;
 		if ($result){
 			while ($row = $result->fetchAssoc()){
 				$isBot = $this->env->is_bot($row['session_browser']) ? true : false;
@@ -264,10 +265,11 @@ class admin_index extends gen_class {
 					if($isBot) $arrBots[] = $this->env->is_bot($row['session_browser']);
 				}
 			}
-			$online_count = count($arrOnlineUsers);
-		} else $online_count = 0;
+			
+		}
 
-		if($online_count){
+
+		if(count($arrOnlineUsers)){
 			foreach($arrOnlineUsers as $row){
 				$strDoneFlag = ( !empty($row['username']) ) ? 'u_'.$row['session_user_id'] : 'ip_'.md5($row['session_ip']);
 				if(isset($arrDone[$strDoneFlag])) continue;
@@ -278,9 +280,11 @@ class admin_index extends gen_class {
 						'LAST_UPDATE'	=> $this->time->createTimeTag($row['session_current'], $this->time->user_date($row['session_current'], true)),
 						'LOCATION'		=> $this->admin_functions->resolve_eqdkp_page($row['session_page']),
 						'BROWSER'		=> $this->admin_functions->resolve_browser($row['session_browser']),
-						'IP_ADDRESS'	=> sanitize($row['session_ip']))
-				);
+						'IP_ADDRESS'	=> sanitize($row['session_ip']),
+						'IP_HOSTNAME'	=> @gethostbyaddr($row['session_ip']),
+				));
 				$arrDone[$strDoneFlag] = 1;
+				$online_count++;
 			}
 		}
 
@@ -371,20 +375,10 @@ class admin_index extends gen_class {
 			'CIRCLE_RAIDS'			=> ($total_dkp_items > 0) ? sprintf("%.2F", ($total_raids / $total_dkp_items)*100) : 0,
 			'CIRCLE_ADJUSTMENTS'	=> ($total_dkp_items > 0) ? sprintf("%.2F", ($total_adjustments / $total_dkp_items)*100) : 0,
 			'REQCOUNT'				=> $req_count,
-			'HPTT_ADMIN_LINK'		=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('admin_index').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,	
+			'HPTT_ADMIN_LINK'		=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('admin_index').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,
 
 			'S_WHO_IS_ONLINE'		=> $this->user->check_group(2, false),
 		));
-
-		//Check permissions of config.php
-		if (!defined('EQDKP_DISABLE_CONFIG_CHECK') && file_exists($this->root_path.'config.php')){
-			if ((int)substr(decoct(fileperms($this->root_path.'config.php')),3) > 644){
-				$this->tpl->assign_var('SHOW_LIMITED_FUNCS', true);
-				$this->tpl->assign_block_vars('lim_funcs', array(
-					'TEXT'		=> $this->user->lang('config_writable'),
-				));
-			}
-		}
 
 		if(!function_exists('date_create_from_format')) {
 			$this->tpl->assign_var('SHOW_LIMITED_FUNCS', true);
@@ -393,11 +387,14 @@ class admin_index extends gen_class {
 			));
 		}
 
-		$this->core->set_vars(array(
-		'page_title'	=> $this->user->lang('admin_index_title'),
-		'template_file'	=> 'admin/admin_index.html',
-		'display'		=> true)
-		);
+		$this->core->set_vars([
+			'page_title'	=> $this->user->lang('admin_index_title'),
+			'template_file'	=> 'admin/admin_index.html',
+			'page_path'		=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+			],
+			'display'		=> true
+		]);
 	}
 
 	// Helper Functions

@@ -314,11 +314,16 @@ class Manage_Users extends page_generic {
 
 		$this->jquery->Tab_header('permission_tabs');
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('user_resolve_perms').': '.$strUsername,
 			'template_file'		=> 'admin/manage_users_resolveperms.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manage_users'), 'url'=>$this->root_path.'admin/manage_users.php'.$this->SID],
+				['title'=>$this->user->lang('user_resolve_perms').': '.$strUsername, 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 
@@ -405,6 +410,9 @@ class Manage_Users extends page_generic {
 				$new_salt = $this->user->generate_salt();
 				$query_ary['user_password'] = $this->user->encrypt_password($values['new_password'], $new_salt).':'.$new_salt;
 				$query_ary['user_login_key'] = '';
+				
+				//Destroy other sessions
+				$this->user->destroyOtherSessions();
 			}
 
 			$query_ary['user_email']	= $this->encrypt->encrypt($values['user_email']);
@@ -798,11 +806,15 @@ class Manage_Users extends page_generic {
 			'USER_PAGINATION'		=> generate_pagination('manage_users.php'.$this->SID.'&amp;o='.$this->in->get('o'), $total_users, 100, $start))
 		);
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manage_users_title'),
 			'template_file'		=> 'admin/manage_users.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manage_users'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	public function delete_authaccount() {
@@ -990,11 +1002,16 @@ class Manage_Users extends page_generic {
 
 		$this->tpl->assign_var('JS_TAB_SELECT', $this->jquery->Tab_Select('usersettings_tabs', (($user_id) ? 5+count($this->pm->get_menus('settings')) : 0)));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> ($user_id) ? $this->user->lang('manage_users').': '.sanitize($user_data['username']) : $this->user->lang('user_creation'),
 			'template_file'		=> 'settings.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manage_users'), 'url'=>$this->root_path.'admin/manage_users.php'.$this->SID],
+				['title'=>sanitize($user_data['username']), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	private function create_form($user_id) {

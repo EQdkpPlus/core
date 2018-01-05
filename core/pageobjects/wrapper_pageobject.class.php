@@ -113,7 +113,7 @@ class wrapper_pageobject extends pageobject {
 				if (isset($arrParts['query'])) $direktLink .= '?'.$arrParts['query'];
 				if (!filter_var($direktLink, FILTER_VALIDATE_URL)){
 					$this->data['url'] = $this->data['url'].$direktLink;
-				}		
+				}
 			}
 			$output = '<div id="wrapper">';
 			$this->CreateDynamicIframeJS();
@@ -136,12 +136,16 @@ class wrapper_pageobject extends pageobject {
 			default: $page_body = '';
 		}
 		
-		$this->core->set_vars(array(
-			'page_title'		=> isset($this->data['title']) ? $this->data['title'] : 'Wrapper',
+		$page_title = (isset($this->data['title']))? $this->data['title'] : 'Wrapper';
+		$this->core->set_vars([
+			'page_title'		=> $page_title,
 			'page_body'			=> $page_body,
 			'template_file'		=> 'wrapper.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$page_title, 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 
 	}
 
@@ -211,8 +215,8 @@ class wrapper_pageobject extends pageobject {
 			}
 					
 					
-			//Resizes the Iframe		
-			function resizeIframe(height, width){					
+			//Resizes the Iframe
+			function resizeIframe(height, width){
 				var currentfr = document.getElementById(iframeid);
 	
 				if (currentfr){
@@ -237,7 +241,7 @@ class wrapper_pageobject extends pageobject {
 		
 								if (scrollwidth >  myscrollwidth+5){
 									currentfr.width = scrollwidth;
-								}	
+								}
 							}
 						} else {
 							var myscrollwidth = currentfr.scrollWidth;
@@ -251,7 +255,7 @@ class wrapper_pageobject extends pageobject {
 						sendMessagesToIframe();
 						
 						if($("#"+iframeid).data("message") == "false") currentfr.height = wrapper_default_height;
-					}	
+					}
 				}
 			}
 
@@ -296,7 +300,7 @@ class wrapper_pageobject extends pageobject {
 					
 				} catch (e) {
 					console.log(e);
-				}			
+				}
 			}
 
 			function findPos(obj) {
@@ -338,7 +342,7 @@ class wrapper_pageobject extends pageobject {
 	
 				} catch (e) {
 					console.log(e);
-				}		
+				}
 			}
 				
 			function updateQueryStringParameter(uri, key, value) {
@@ -418,8 +422,8 @@ class wrapper_pageobject extends pageobject {
 					}
 				} catch (e) {
 					console.log(e);
-				}		
-			}		
+				}
+			}
 					
 			function registerIframeEvents(){
 				try {
@@ -430,11 +434,11 @@ class wrapper_pageobject extends pageobject {
 						} else if (currentfr.attachEvent){
 							currentfr.detachEvent("onload", onloadIframeAdjustments); // Bug fix line
 							currentfr.attachEvent("onload", onloadIframeAdjustments);
-						}					
+						}
 					}
 				} catch (e) {
 					
-				}	
+				}
 			}
 					
 			function sendMessagesToIframe(){
@@ -447,7 +451,7 @@ class wrapper_pageobject extends pageobject {
 					}
 				} catch (e) {
 					
-				}	
+				}
 			}
 					
 			function messageEventhandler(event){
@@ -477,7 +481,7 @@ class wrapper_pageobject extends pageobject {
 				}
 			}
 
-			init_wrapper();		
+			init_wrapper();
 					
 			var aktiv = window.setInterval(perodicIframeAdjustment, 1000*2); //2 Sekunden
 
@@ -485,7 +489,7 @@ class wrapper_pageobject extends pageobject {
 			    console.log("pop: " + event.state);
 				if(event.state.eqdkp){
 					var currentfr = document.getElementById(iframeid);
-					if(currentfr) currentfr.contentWindow.history.back(); 
+					if(currentfr) currentfr.contentWindow.history.back();
 				}
 			};
 		';

@@ -176,6 +176,8 @@ class MyMailer extends PHPMailer {
 			#$this->AddEmbeddedImage($this->root_path.'templates/eqdkp_modern/images/background-head.png', 'backgroundimage_fallback');
 
 			// replace the stuff
+			$strMaintitle = $this->config->get('main_title');
+			$strTitle = ($strMaintitle && strlen($strMaintitle)) ? $strMaintitle : ($this->config->get('guildtag').' '.$this->config->get('dkp_name'));
 			$body	= $this->getFile($this->root_path.'templates/'.$strTemplatePath.'/email.tpl');
 			$body	= str_replace('{CONTENT}', $content, $body);
 			$body	= str_replace('{LOGO}', $headerlogo, $body);
@@ -183,6 +185,9 @@ class MyMailer extends PHPMailer {
 			$body	= str_replace('{SUBJECT}', $this->Subject, $body);
 			$body	= str_replace('{PLUSLINK}', register('environment')->buildlink(), $body);
 			$body	= str_replace('{SIGNATURE}', nl2br($this->Signature), $body);
+			$body	= str_replace('{GUILDTAG}', $strTitle, $body);
+			$body	= str_replace('{EQDKP_ABOUT_URL}', EQDKP_ABOUT_URL, $body);
+
 		} else $body = $content.nl2br($this->Signature);
 	
 		$body	= str_replace("[\]",'',$body );

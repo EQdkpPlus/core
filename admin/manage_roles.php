@@ -147,12 +147,12 @@ class Manage_Roles extends page_generic {
 		));
 
 		$this->jquery->fileBrowser('all', 'image', $this->pfh->FolderPath('role_icons','files', 'absolute'), array('title' => $this->user->lang('upload_roleicon'), 'onclosejs' => '$(\'#roleSubmBtn\').click();'));
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('rolemanager'),
 			'template_file'		=> 'admin/manage_roles.html',
 			'header_format'		=> 'simple',
-			'display'			=> true)
-		);
+			'display'			=> true
+		]);
 	}
 
 	public function display(){
@@ -190,11 +190,15 @@ class Manage_Roles extends page_generic {
 			'HPTT_ADMIN_LINK'	=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('admin_manage_roles').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('rolemanager'),
 			'template_file'		=> 'admin/manage_roles.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('rolemanager'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 }
 registry::register('Manage_Roles');

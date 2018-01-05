@@ -303,6 +303,9 @@
 							<div id="contentBody" class="{PAGE_CLASS}<!-- IF not S_NORMAL_HEADER --> simple-header <!-- ENDIF --><!-- IF not S_NORMAL_FOOTER --> simple-footer <!-- ENDIF -->">
 								<div id="contentBody2">
 									<!-- LISTENER content_body_top -->
+									<!-- IF S_NORMAL_HEADER -->
+									<div class="breadcrumb-container">{BREADCRUMB}</div>
+									<!-- ENDIF -->
 									{GBL_CONTENT_BODY}
 									<!-- LISTENER content_body_bottom -->
 								</div>

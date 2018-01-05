@@ -143,7 +143,7 @@ class ManageProfileFields extends page_generic {
 		$this->tpl->assign_vars(array (
 			'L_IMAGE_NOTE'				=> sprintf($this->user->lang('profilefield_image_note'), $this->game->get_game()),
 			'F_PAGE_MANAGER'			=> 'manage_profilefields.php'.$this->SID,
-			'ID'						=> $this->in->get('edit'),
+			'ID'						=> $intProfilefieldID,
 			'NAME_ID'					=> $field_data['name'],
 			'LANGUAGE'					=> $field_data['lang'],
 			'OPTIONS_LANGUAGE'			=> $field_data['options_language'],
@@ -179,11 +179,16 @@ $("#type_dd").change(function(){
 	}
 });', 'docready');
 
-		$this->core->set_vars(array (
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manage_profilefields'),
 			'template_file'		=> 'admin/manage_profilefields_edit.html',
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manage_profilefields'), 'url'=>$this->root_path.'admin/manage_profilefields.php'.$this->SID],
+				['title'=>(($intProfilefieldID)?$field_data['name']:$this->user->lang('new_profilefield')), 'url'=>' '],
+			],
 			'display'			=> true
-		));
+		]);
 	}
 
 	public function display($message = false){
@@ -228,11 +233,15 @@ $("#type_dd").change(function(){
 			'PROFILEFIELDS_COUNT' => count($fields),
 		));
 
-		$this->core->set_vars(array (
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manage_profilefields'),
 			'template_file'		=> 'admin/manage_profilefields.html',
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manage_profilefields'), 'url'=>' '],
+			],
 			'display'			=> true
-		));
+		]);
 	}
 }
 registry::register('ManageProfileFields');

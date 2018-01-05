@@ -168,11 +168,15 @@ class ManageCrons extends page_generic {
 		} //close if array
 
 		$this->tpl->assign_var('CRONJOB_COUNT', count($this->crons));
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manage_cronjobs'),
 			'template_file'		=> 'admin/manage_crons.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manage_cronjobs'), 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 	private function buildCrontaskOptions($strCrontask){
@@ -228,21 +232,27 @@ class ManageCrons extends page_generic {
 			'yearly'		=> $this->user->lang('yearly'),
 		);
 
+		$strCronDesc = sanitize($cron_data['description']);
 		$this->tpl->assign_vars(array(
 			'S_PARAMS'				=> (count($arrOptions) > 0) ? true : false,
 			'CRON_NAME'				=> sanitize($strCronname),
-			'CRON_DESC'				=> sanitize($cron_data['description']),
+			'CRON_DESC'				=> $strCronDesc,
 			'CRON_REPEAT'			=> ($cron_data['repeat']) ? 'checked="checked"' : '',
 			'CRON_REPEAT_VALUE'		=> $cron_data['repeat_interval'],
 			'START_PICKER'			=> (new hdatepicker('start_date', array('value' => $this->time->user_date($cron_data['start_time'], true, false, false, function_exists('date_create_from_format')), 'timepicker' => true)))->output(),
 			'REPEAT_DD'				=> (new hdropdown('repeat_key', array('options' => $repeat_dd, 'value' => $cron_data['repeat_type'])))->output(),
 		));
 
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manage_cronjobs'),
 			'template_file'		=> 'admin/manage_crons_edit.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('manage_cronjobs'), 'url'=>$this->root_path.'admin/manage_crons.php'.$this->SID],
+				['title'=>$strCronDesc, 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 }
 registry::register('ManageCrons');
