@@ -291,6 +291,11 @@ class Manage_Article_Categories extends page_generic {
 		$this->core->set_vars(array(
 			'page_title'		=> (($id) ? $this->user->lang('manage_article_categories').': '.$this->pdh->get('article_categories', 'name', array($id)) : $this->user->lang('add_article_category')),
 			'template_file'		=> 'admin/manage_article_categories_edit.html',
+				'page_path'			=> [
+						['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+						['title'=>$this->user->lang('manage_article_categories'), 'url'=>$this->root_path.'admin/manage_article_categories.php'.$this->SID],
+						['title'=>(($strName != '')?$strName:$this->user->lang('add_article_category')), 'url'=>' '],
+				],
 			'display'			=> true)
 		);
 	}
@@ -369,6 +374,10 @@ class Manage_Article_Categories extends page_generic {
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('manage_article_categories'),
 			'template_file'		=> 'admin/manage_article_categories.html',
+				'page_path'			=> [
+						['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+						['title'=>$this->user->lang('manage_article_categories'), 'url'=>' '],
+				],
 			'display'			=> true)
 		);
 	}

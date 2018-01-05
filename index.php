@@ -712,6 +712,7 @@ class controller extends gen_class {
 		$this->core->set_vars(array(
 				'page_title'		=> $arrArticle['title'].$strAdditionalTitles,
 				'description'		=> truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrContent[$intPageID])))), 600, '...', false, true),
+				'page_path'			=> $this->pdh->get('articles', 'breadcrumb', array($intArticleID, $strAdditionalTitles, registry::get_const('url_id'), $arrPath)),
 				'image'				=> $strPreviewImage,
 				'template_file'		=> 'article.html',
 				'portal_layout'		=> $intPortallayout,
@@ -1034,6 +1035,7 @@ class controller extends gen_class {
 		$this->core->set_vars(array(
 				'page_title'		=> $arrCategory['name'],
 				'description'		=> truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrCategory['description'])))), 600, '...', false, true),
+				'page_path'			=> ($this->pdh->get('article_categories', 'parent', array($intCategoryID)) > 1) ? $this->pdh->get('article_categories', 'breadcrumb', array($intCategoryID)) : [],	
 				'image'				=> $strPreviewImage,
 				'template_file'		=> 'category.html',
 				'portal_layout'		=> $intPortallayout,

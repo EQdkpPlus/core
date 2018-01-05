@@ -526,31 +526,39 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 		}
 
 		public function get_breadcrumb($intArticleID, $strAdditionalString='', $url_id=false, $arrPath=array()){
-			$strAlias = $this->get_alias($intArticleID);
+			$strAlias = ucfirst($this->get_alias($intArticleID));
 			if ($this->get_index($intArticleID) && !$url_id){
 				$intCategoryID = $this->get_category($intArticleID);
 				return $this->pdh->get('article_categories', 'breadcrumb', array($intCategoryID));
 			}
 
-			$strBreadcrumb = $this->add_breadcrumb($this->get_category($intArticleID));
-			$strBreadcrumb .=  '<li class="current"><a href="'.$this->controller_path.$this->get_path($intArticleID, $url_id, $arrPath).'">'.$this->get_title($intArticleID).$strAdditionalString.'</a></li>';
-			return $strBreadcrumb;
+			$arrBreadcrumb = $this->add_breadcrumb($this->get_category($intArticleID));
+			$arrBreadcrumb[] = [
+					'title'	=> $this->get_title($intArticleID).$strAdditionalString,
+					'url'	=> $this->controller_path.$this->get_path($intArticleID, $url_id, $arrPath),
+			];
+			return $arrBreadcrumb;
 		}
 
-		private function add_breadcrumb($intCategoryID, $strBreadcrumb=''){
-			if ($intCategoryID == 1) return $strBreadcrumb;
+		private function add_breadcrumb($intCategoryID,  $arrBreadcrumb=[]){
+			if ($intCategoryID == 1) return $arrBreadcrumb;
 			$strName = $this->pdh->get('article_categories', 'name', array($intCategoryID));
 			$strPath = $this->pdh->get('article_categories', 'path', array($intCategoryID));
 			
 			if(!($this->config->get('multilang_hide_startpoints_breadcrumb') &&  $this->pdh->get('article_categories', 'lang_startpoint', array($intCategoryID)))){
-				$strBreadcrumb = '<li><a href="'.$this->controller_path.$strPath.'">'.$strName.'</a></li>'.$strBreadcrumb;
+				$arrBreadcrumb = array_merge([[
+						'title'	=> $strName,
+						'url'	=> $this->controller_path.$strPath,
+				]], $arrBreadcrumb);
 			}
-
-			if ($this->pdh->get('article_categories', 'parent', array($intCategoryID))){
-				$strBreadcrumb = $this->add_breadcrumb($this->pdh->get('article_categories', 'parent', array($intCategoryID)), $strBreadcrumb);
+			
+			if($this->pdh->get('article_categories', 'parent', [$intCategoryID])){
+				$arrBreadcrumb = $this->add_breadcrumb($this->pdh->get('article_categories', 'parent', [$intCategoryID]), $arrBreadcrumb);
 			}
-
-			return $strBreadcrumb;
+			
+			return $arrBreadcrumb;
+			
+			
 		}
 
 		public function get_search($search_value) {

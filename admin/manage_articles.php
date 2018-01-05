@@ -337,6 +337,13 @@ class Manage_Articles extends page_generic {
 		$this->core->set_vars(array(
 			'page_title'		=> (($id) ? $this->user->lang('manage_articles').': '.$this->pdh->get('articles', 'title', array($id)) : $this->user->lang('add_new_article')),
 			'template_file'		=> 'admin/manage_articles_edit.html',
+			'page_path'			=> [
+					['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+					['title'=>$this->user->lang('manage_article_categories'), 'url'=>$this->root_path.'admin/manage_article_categories.php'.$this->SID],
+					['title'=>$strCategoryName, 'url'=>$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$cid],
+					['title'=>$this->user->lang('manage_articles'), 'url'=>$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$cid],
+					['title'=>$strArticleName, 'url'=>' '],
+			],
 			'display'			=> true)
 		);
 	}
@@ -414,6 +421,11 @@ class Manage_Articles extends page_generic {
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('manage_articles'),
 			'template_file'		=> 'admin/manage_articles.html',
+				'page_path'			=> [
+						['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+						['title'=>$this->user->lang('manage_article_categories'), 'url'=>$this->root_path.'admin/manage_article_categories.php'.$this->SID],
+						['title'=>$this->pdh->get('article_categories', 'name', array($cid)), 'url'=>' '],
+				],
 			'display'			=> true)
 		);
 	}
