@@ -196,7 +196,8 @@ class tinyMCE extends gen_class {
 					images_upload_url: "'.$this->server_path.'libraries/tinyMCE/imageUploader.php'.$this->SID.'",
 					entity_encoding : "raw",
 					rel_list: [{value:"", text: "" }, {value:"lightbox", text: "Lightbox" }, {value:"nofollow", text: "nofollow" }],
-					extended_valid_elements: "p[class|id|style|data-sort|data-folder|data-id|title],script[type|lang|src]",
+					extended_valid_elements: "p[class|id|style|data-sort|data-folder|data-id|title],script[type|lang|src],i/italic[class|style]",
+					verify_html: false,
 					setup: function(editor){
 						'.$strHooks.'
 					},

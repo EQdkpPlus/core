@@ -233,6 +233,7 @@ class Manage_Articles extends page_generic {
 			'gallery'		=> true,
 			'raidloot'		=> true,
 			'autoresize'	=> true,
+			'image_upload'	=> true,
 		));
 
 		$arrCategoryIDs = $this->pdh->sort($this->pdh->get('article_categories', 'id_list', array()), 'article_categories', 'sort_id', 'asc');
@@ -340,7 +341,7 @@ class Manage_Articles extends page_generic {
 			'page_path'			=> [
 					['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
 					['title'=>$this->user->lang('manage_article_categories'), 'url'=>$this->root_path.'admin/manage_article_categories.php'.$this->SID],
-					['title'=>$strCategoryName, 'url'=>$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$cid],
+					['title'=>$this->pdh->get('article_categories', 'name', array($cid)), 'url'=>$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$cid],
 					['title'=>$this->user->lang('manage_articles'), 'url'=>$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$cid],
 					['title'=>$strArticleName, 'url'=>' '],
 			],
