@@ -228,6 +228,7 @@ class Manage_Articles extends page_generic {
 			'gallery'		=> true,
 			'raidloot'		=> true,
 			'autoresize'	=> true,
+			'image_upload'	=> true,
 		));
 
 		$arrCategoryIDs = $this->pdh->sort($this->pdh->get('article_categories', 'id_list', array()), 'article_categories', 'sort_id', 'asc');
