@@ -1083,6 +1083,7 @@ class core extends gen_class {
 			//Language Switcher
 			$arrLanguages = $this->user->getAvailableLanguages(false, true);
 			$url = (preg_replace('#\&lang\=([a-zA-Z]*)#', "", $this->env->request));
+
 			foreach($arrLanguages as $strKey => $strLangname){
 				$this->tpl->assign_block_vars('languageswitcher_row', array(
 						'LANGNAME'	=> $strLangname,

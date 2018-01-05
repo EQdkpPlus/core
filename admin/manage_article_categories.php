@@ -279,7 +279,7 @@ class Manage_Article_Categories extends page_generic {
 				'R_NOTIFY_UNPUBLISHED' => (new hradio('notify_unpublished', array('value' => 0)))->output(),
 				'R_HIDE_HEADER'		=> (new hradio('hide_header', array('value' => 0)))->output(),
 				'RADIO_STARTPOINT'	=> (new hradio('lang_startpoint', array('value' => 0, 'js' => 'onchange="hide_lang()"')))->output(),
-				'DD_LANG'			=> (new hdropdown('language', array('options' => $arrLanguages = $this->user->getAvailableLanguages())))->output(),
+				'DD_LANG'			=> (new hdropdown('language', array('options' => $arrLanguages = $this->user->getAvailableLanguages(false, false, true))))->output(),
 				'DD_FALLBACK_CATEGORY' => (new hdropdown('fallback_category', array('options' => $arrFallbackCategories, 'value' => 0)))->output(),
 
 			));

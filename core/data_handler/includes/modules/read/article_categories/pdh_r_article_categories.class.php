@@ -770,7 +770,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 					$arrOut = array_merge($arrOut,$this->altCategories[$intFallback]);
 				}
 					
-				return $arrOut;
+				return array_unique($arrOut);
 			} elseif(isset($this->altCategories[$intCategoryID])) {
 				return $this->altCategories[$intCategoryID];
 			}
@@ -780,6 +780,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 		public function get_html_alternate_langs($intCategoryID){
 			$arrAlternateLangCategories = $this->get_alternate_categories($intCategoryID);
 			$out = "";
+
 			foreach($arrAlternateLangCategories as $intAltCategoryID){
 				if($intAltCategoryID == $intCategoryID) continue;
 				$strPath = $this->controller_path.$this->get_path($intAltCategoryID);
@@ -805,6 +806,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			foreach($arrAlternateLangCategories as $intAltCategoryID){
 				if($intAltCategoryID == $intCategoryID) continue;
 				$strLang = $this->get_language($intAltCategoryID);
+				
 				$strLangLong = $this->env->translate_iso_langcode($strLang);
 				$out[$strLangLong] = $intAltCategoryID;
 			}

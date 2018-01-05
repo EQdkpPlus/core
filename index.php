@@ -252,9 +252,9 @@ class controller extends gen_class {
 
 			//Display Artikel
 			if ($intArticleID){
-				$this->displayArticle($intArticleID);
+				$this->displayArticle($intArticleID, $strSpecificID, $blnIsStartpage);
 			} elseif ($intCategoryID){
-				$this->displayCategory($intCategoryID);
+				$this->displayCategory($intCategoryID, $strSpecificID, $blnIsStartpage);
 			}
 		}
 		
@@ -292,7 +292,7 @@ class controller extends gen_class {
 		}
 	}
 	
-	private function displayArticle($intArticleID){
+	private function displayArticle($intArticleID, $strSpecificID, $blnIsStartpage){
 		registry::add_const('page_type', 'article');
 		registry::add_const('page_id', $intArticleID);
 		
@@ -720,7 +720,7 @@ class controller extends gen_class {
 		);
 	}
 	
-	private function displayCategory($intCategoryID){
+	private function displayCategory($intCategoryID, $strSpecificID, $blnIsStartpage){
 		registry::add_const('page_type', 'category');
 		registry::add_const('page_id', $intCategoryID);
 		
