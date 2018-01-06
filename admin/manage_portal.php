@@ -472,26 +472,52 @@ $('.js_reload').change(reload_settings);", 'docready');
 			}
 			return ($a['name'] < $b['name']) ? -1 : 1;
 		}
+		
+		//Do it twice, to make sure the disabled modules are sorted by name
+		$orig_modules = $modules;
 		uasort($modules, 'my_sort');
 		foreach($modules as $id => $data) {
+			if($data['tpl_posi'] != 'disabled') continue;
+			
 			$tpl_data = array(
-				'NAME'			=> $data['name'].$data['header'],
-				'ID'			=> $id,
-				'POS'			=> $data['tpl_posi'],
-				'INFO'			=> $data['desc'],
-				'S_MULTIPLE'	=> $data['multiple'],
-				'S_CHILD'		=> $data['child'],
-				'PERMISSIONS'	=> implode('<br />', $data['perms'])
+					'NAME'			=> $data['name'].$data['header'],
+					'ID'			=> $id,
+					'POS'			=> $data['tpl_posi'],
+					'INFO'			=> $data['desc'],
+					'S_MULTIPLE'	=> $data['multiple'],
+					'S_CHILD'		=> $data['child'],
+					'PERMISSIONS'	=> implode('<br />', $data['perms'])
 			);
-
+			
 			if ($data['tpl_posi'] == 'later'){
 				$tpl_data['POS'] = $arrUsedModules[$id];
 				$arrModulesForOwnBlocks[$arrUsedModules[$id]][] = $tpl_data;
 			} else {
 				$this->tpl->assign_block_vars($data['tpl_posi'].'_row', $tpl_data);
 			}
-
 		}
+		$modules = $orig_modules;
+		foreach($modules as $id => $data) {
+			if($data['tpl_posi'] == 'disabled') continue;
+			
+			$tpl_data = array(
+					'NAME'			=> $data['name'].$data['header'],
+					'ID'			=> $id,
+					'POS'			=> $data['tpl_posi'],
+					'INFO'			=> $data['desc'],
+					'S_MULTIPLE'	=> $data['multiple'],
+					'S_CHILD'		=> $data['child'],
+					'PERMISSIONS'	=> implode('<br />', $data['perms'])
+			);
+			
+			if ($data['tpl_posi'] == 'later'){
+				$tpl_data['POS'] = $arrUsedModules[$id];
+				$arrModulesForOwnBlocks[$arrUsedModules[$id]][] = $tpl_data;
+			} else {
+				$this->tpl->assign_block_vars($data['tpl_posi'].'_row', $tpl_data);
+			}
+		}
+		
 		$this->portal->init_portalsettings();
 		$this->confirm_delete($this->user->lang('portal_delete_warn'), 'manage_portal.php'.$this->SID.'&del=true&l='.$intLayoutID, true, array('function' => 'delete_portal'));
 
