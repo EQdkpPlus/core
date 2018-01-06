@@ -720,7 +720,7 @@ abstract class DatabaseStatement {
 	
 				foreach ($arrParams as $k=>$v)
 				{
-					$arrSet[] = '`'.$k . '`=' . $v;
+					$arrSet[] = $k . '=' . $v;
 				}
 	
 				$strQuery = 'SET ' . str_replace('%', '%%', implode(', ', $arrSet));

@@ -413,6 +413,21 @@ if (!class_exists("bbcode")) {
 								break;
 						}
 						break;
+						
+					case 'env':
+						switch($elements[1]){
+							case 'controller_path':
+								$arrCache[$strTag] = $this->controller_path;
+								break;
+								
+							case 'controller_path_plain':
+								$arrCache[$strTag] = $this->controller_path_plain;
+								break;
+							case 'server_path':
+								$arrCache[$strTag] = $this->server_path;
+								break;
+						}
+						break;
 
 					case 'user':
 						switch($elements[1]){

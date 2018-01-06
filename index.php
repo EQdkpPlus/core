@@ -690,7 +690,7 @@ class controller extends gen_class {
 		$strPreviewImage = ($this->pdh->get('articles',  'previewimage', array($intArticleID)) != "") ? $this->pdh->geth('articles', 'previewimage', array($intArticleID)) : '';
 		
 		if(!strlen($strPreviewImage)) $strPreviewImage = $this->social->getFirstImage($strContent);
-		$this->social->callSocialPlugins($arrTitles[$intPageID], strip_tags(xhtml_entity_decode($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(truncate($strContent, 600, '...', false, true))))), $strPreviewImage);
+		$this->social->callSocialPlugins($arrTitles[$intPageID], strip_tags(xhtml_entity_decode($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(truncate($strContent, 200, '...', false, true))))), $strPreviewImage);
 		
 		
 		$this->tpl->add_meta('<link rel="canonical" href="'.$this->pdh->get('articles', 'permalink', array($intArticleID)).'" />');
@@ -711,7 +711,7 @@ class controller extends gen_class {
 		
 		$this->core->set_vars(array(
 				'page_title'		=> $arrArticle['title'].$strAdditionalTitles,
-				'description'		=> truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrContent[$intPageID])))), 600, '...', false, true),
+				'description'		=> truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrContent[$intPageID])))), 200, '...', false, true),
 				'page_path'			=> $this->pdh->get('articles', 'breadcrumb', array($intArticleID, $strAdditionalTitles, registry::get_const('url_id'), $arrPath)),
 				'image'				=> $strPreviewImage,
 				'template_file'		=> 'article.html',
@@ -795,7 +795,7 @@ class controller extends gen_class {
 			//Content dependet from list_type
 			//1 = until readmore
 			//2 = Headlines only
-			//3 = only first 600 characters
+			//3 = only first 200 characters
 			$strText = $this->pdh->get('articles',  'text', array($intArticleID));
 			
 			//Page divisions
@@ -929,8 +929,8 @@ class controller extends gen_class {
 					'PERMALINK'				=> $this->pdh->get('articles', 'permalink', array($intArticleID)),
 					'S_TOOLBAR'				=> ($arrPermissions['create'] || $arrPermissions['update'] || $arrPermissions['delete'] || $arrPermissions['change_state']),
 					'S_TAGS'				=> (count($arrTags)  && $arrTags[0] != "") ? true : false,
-					'ARTICLE_CUTTED_CONTENT'=> truncate($strText, 600, '...', false, true),
-					'S_ARTICLE_CUTTED'		=> (strlen($strText) > 600) ? true : false,
+					'ARTICLE_CUTTED_CONTENT'=> truncate($strText, 200, '...', false, true),
+					'S_ARTICLE_CUTTED'		=> (strlen($strText) > 200) ? true : false,
 					'S_READMORE'			=> (isset($arrContent[1])) ? true : false,
 					'COMMENTS_COUNTER'		=> ($intCommentsCount == 1 ) ? $intCommentsCount.' '.$this->user->lang('comment') : $intCommentsCount.' '.$this->user->lang('comments'),
 					'S_COMMENTS'			=> ($this->pdh->get('articles',  'comments', array($intArticleID))) ? true : false,
@@ -1024,7 +1024,7 @@ class controller extends gen_class {
 		$strPreviewImage = ($this->pdh->get('articles',  'previewimage', array($intArticleID)) != "") ? $this->pdh->geth('articles', 'previewimage', array($intArticleID)) : '';
 		if(!strlen($strPreviewImage) && isset($strContent)) $strPreviewImage = $this->social->getFirstImage($strContent);
 		
-		$this->social->callSocialPlugins($arrCategory['name'], strip_tags(xhtml_entity_decode($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(truncate($arrCategory['description'], 600, '...', false, true))))), $strPreviewImage);
+		$this->social->callSocialPlugins($arrCategory['name'], strip_tags(xhtml_entity_decode($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(truncate($arrCategory['description'], 200, '...', false, true))))), $strPreviewImage);
 		
 		$this->tpl->add_rssfeed($arrCategory['name'], $this->controller_path.'RSS/'.$this->routing->clean($arrCategory['name']).'-c'.$intCategoryID.'/'.(($this->user->is_signedin()) ? '?key='.$this->user->data['exchange_key'] : ''));
 		$this->tpl->add_meta('<link rel="canonical" href="'.$this->pdh->get('article_categories', 'permalink', array($intCategoryID)).'" />');
@@ -1034,7 +1034,7 @@ class controller extends gen_class {
 		
 		$this->core->set_vars(array(
 				'page_title'		=> $arrCategory['name'],
-				'description'		=> truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrCategory['description'])))), 600, '...', false, true),
+				'description'		=> truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrCategory['description'])))), 200, '...', false, true),
 				'page_path'			=> ($this->pdh->get('article_categories', 'parent', array($intCategoryID)) > 1) ? $this->pdh->get('article_categories', 'breadcrumb', array($intCategoryID)) : [],	
 				'image'				=> $strPreviewImage,
 				'template_file'		=> 'category.html',
