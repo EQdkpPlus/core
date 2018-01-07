@@ -69,18 +69,22 @@ if (!class_exists("bbcode")) {
 			);
 
 			$out = array(
-				'<img alt=":)" src="'.$this->smiliepath.'/smile.svg" class="smilies" />',
-				'<img alt=":)" src="'.$this->smiliepath.'/smile.svg" class="smilies" />',
-				'<img alt=":D" src="'.$this->smiliepath.'/happy.svg" class="smilies" />',
-				'<img alt=":o" src="'.$this->smiliepath.'/surprised.svg" class="smilies" />',
-				'<img alt=":p" src="'.$this->smiliepath.'/tongue.svg" class="smilies" />',
-				'<img alt=":(" src="'.$this->smiliepath.'/unhappy.svg" class="smilies" />',
-				'<img alt=";)" src="'.$this->smiliepath.'/wink.svg" class="smilies" />',
-				'<img alt=";)" src="'.$this->smiliepath.'/wink.svg" class="smilies" />'
+				' <img alt=":)" src="'.$this->smiliepath.'/smile.svg" class="smilies" />',
+				' <img alt=":)" src="'.$this->smiliepath.'/smile.svg" class="smilies" />',
+				' <img alt=":D" src="'.$this->smiliepath.'/happy.svg" class="smilies" />',
+				' <img alt=":o" src="'.$this->smiliepath.'/surprised.svg" class="smilies" />',
+				' <img alt=":p" src="'.$this->smiliepath.'/tongue.svg" class="smilies" />',
+				' <img alt=":(" src="'.$this->smiliepath.'/unhappy.svg" class="smilies" />',
+				' <img alt=";)" src="'.$this->smiliepath.'/wink.svg" class="smilies" />',
+				' <img alt=";)" src="'.$this->smiliepath.'/wink.svg" class="smilies" />'
 			);
-
+			
 			$text = preg_replace('/<img(.*?)alt=\"(.*?)\" src=\"(.*?)\" class=\"smilies\" \/>/Ui' , '$2' , $text);
-			$text = str_replace($in, $out, $text);
+			
+			foreach($in as $key => $val){
+				$text = preg_replace('/(^'.preg_quote($val, '/').'|\s'.preg_quote($val, '/').')/', $out[$key], $text);
+			}
+
 			return $text;
 		}
 
