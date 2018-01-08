@@ -278,9 +278,9 @@ if(!class_exists('pdh_w_article_categories')) {
 		}
 		
 		private function create_alias($strName){
-			$strAlias = utf8_strtolower($strName);
+			$strAlias = utf8_strtolower(unsanitize($strTitle));
 			$strAlias = str_replace(' ', '-', $strAlias);
-			$a_satzzeichen = array("\"",",",";",".",":","!","?", "&", "=", "/", "|", "#", "*", "+", "(", ")", "%", "$");
+			$a_satzzeichen = array("'",'"',"\"",",",";",".",":","!","?", "&", "=", "/", "|", "#", "*", "+", "(", ")", "%", "$", "´", "„", "“", "‚", "‘", "`", "^");
 			$strAlias = str_replace($a_satzzeichen, "", $strAlias);
 			return $strAlias;
 		}
