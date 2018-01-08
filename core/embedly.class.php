@@ -30,9 +30,9 @@ class embedly extends gen_class {
 					'oembed'=> 'http://www.youtube.com/oembed?url=URL',
 				),
 				'twitch' => array(
-					'regex' => ["https?://clips\.twitch\.tv/.*","https?://clips\.twitch\.tv/.*","https?://www\.twitch\.tv/.*","https?://www\.twitch\.tv/.*","https?://twitch\.tv/.*","https?://twitch\.tv/.*"],
+					'regex' => ["https?://clips\.twitch\.tv/.*","https?://www\.twitch\.tv/.*","https?://twitch\.tv/.*"],
 					'format' => 'json',
-					'oembed' => 'https://api.twitch.tv/v4/oembed?url=URL',
+					'oembed' => 'https://api.twitch.tv/v5/oembed?url=URL',
 				),
 				'vidme' => array(
 					'regex' => ['https://vidd\.me/.*', 'https?://vid\.me/.*'],
