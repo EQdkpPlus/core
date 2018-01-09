@@ -799,9 +799,9 @@ if ( !defined('EQDKP_INC') ){
 							}
 						}
 					} else {
-						$strLogFolder = ($this->table_prefix != "" && $this->dbname != "") ? md5($this->table_prefix.$this->dbname) : '<HASH>';
+						$strLogFolder = ($this->table_prefix != "" && $this->dbname != "") ? ((defined('INSTALLED_VERSION')) ? '' : md5($this->table_prefix.$this->dbname)) : '<HASH>/';
 						$output .= 'Please forward the above error code to the site administrator.<br /><br /> The error code can be used by an administrator to lookup the full error message in the Administration Control Panel via <span class="inlineCode">Logs >> Errors</span>.
-								In addition, the error has been written to the log file located at <span class="inlineCode">*/data/'.$strLogFolder.'/tmp/'.$this->date.'-fatal_error.log</span> and can be accessed with a FTP program or similar.';
+								In addition, the error has been written to the log file located at <span class="inlineCode">*/data/'.$strLogFolder.'tmp/'.$this->date.'-fatal_error.log</span> and can be accessed with a FTP program or similar.';
 					}
 					$output .= $this->error_message_footer();
 					echo $output;
@@ -836,9 +836,9 @@ if ( !defined('EQDKP_INC') ){
 
 				$output .= $strErrorMessage.'<br /><br />';
 			} else {
-				$strLogFolder = ($this->table_prefix != "" && $this->dbname != "") ? md5($this->table_prefix.$this->dbname) : '<HASH>';
+				$strLogFolder = ($this->table_prefix != "" && $this->dbname != "") ? ((defined('INSTALLED_VERSION')) ? '' : md5($this->table_prefix.$this->dbname)) : '<HASH>/';
 				$output .= 'Please forward the above error code to the site administrator.<br /><br /> The error code can be used by an administrator to lookup the full error message in the Administration Control Panel via <span class="inlineCode">Logs >> Errors</span>.
-								In addition, the error has been written to the log file located at <span class="inlineCode">*/data/'.$strLogFolder.'/tmp/'.$this->date.'-fatal_error.log</span> and can be accessed with a FTP program or similar.<br />Notice: The error code was randomly generated and has no use beyond looking up the full message.';
+								In addition, the error has been written to the log file located at <span class="inlineCode">*/data/'.$strLogFolder.'tmp/'.$this->date.'-fatal_error.log</span> and can be accessed with a FTP program or similar.<br />Notice: The error code was randomly generated and has no use beyond looking up the full message.';
 			}
 
 			$output .= $this->error_message_footer(false);
@@ -867,9 +867,9 @@ if ( !defined('EQDKP_INC') ){
 				}
 				$output .= $error_message;
 			} else {
-				$strLogFolder = ($this->table_prefix != "" && $this->dbname != "") ? md5($this->table_prefix.$this->dbname) : '<HASH>';
+				$strLogFolder = ($this->table_prefix != "" && $this->dbname != "") ? ((defined('INSTALLED_VERSION')) ? '' : md5($this->table_prefix.$this->dbname)) : '<HASH>/';
 				$output .= 'Please forward the above error code to the site administrator.<br /><br /> The error code can be used by an administrator to lookup the full error message in the Administration Control Panel via <span class="inlineCode">Logs >> Errors</span>.
-								In addition, the error has been written to the log file located at <span class="inlineCode">*/data/'.$strLogFolder.'/tmp/'.$this->date.'-fatal_error.log</span> and can be accessed with a FTP program or similar.<br />Notice: The error code was randomly generated and has no use beyond looking up the full message.';
+								In addition, the error has been written to the log file located at <span class="inlineCode">*/data/'.$strLogFolder.'tmp/'.$this->date.'-fatal_error.log</span> and can be accessed with a FTP program or similar.<br />Notice: The error code was randomly generated and has no use beyond looking up the full message.';
 
 			}
 			echo $output.$this->error_message_footer();
@@ -901,9 +901,9 @@ if ( !defined('EQDKP_INC') ){
 				}
 				$output .= $error_message;
 			} else {
-				$strLogFolder = ($this->table_prefix != "" && $this->dbname != "") ? md5($this->table_prefix.$this->dbname) : '<HASH>';
+				$strLogFolder = ($this->table_prefix != "" && $this->dbname != "") ? ((defined('INSTALLED_VERSION')) ? '' : md5($this->table_prefix.$this->dbname)) : '<HASH>/';
 				$output .= 'Please forward the above error code to the site administrator.<br /><br /> The error code can be used by an administrator to lookup the full error message in the Administration Control Panel via <span class="inlineCode">Logs >> Errors</span>.
-								In addition, the error has been written to the log file located at <span class="inlineCode">*/data/'.$strLogFolder.'/tmp/'.$this->date.'-fatal_error.log</span> and can be accessed with a FTP program or similar.';
+								In addition, the error has been written to the log file located at <span class="inlineCode">*/data/'.$strLogFolder.'tmp/'.$this->date.'-fatal_error.log</span> and can be accessed with a FTP program or similar.';
 			}
 			echo $output.$this->error_message_footer();
 			//Die, otherwise the next fatal error will occure
