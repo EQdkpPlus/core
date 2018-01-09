@@ -426,7 +426,10 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 		}
 
 		public function get_editicon($intArticleID){
-			return '<a href="'.$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$this->get_category($intArticleID).'&a='.$intArticleID.'"><i class="fa fa-pencil fa-lg" title="'.$this->user->lang('edit').'"></i></a>';
+			$out = '<a href="'.$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$this->get_category($intArticleID).'&a='.$intArticleID.'"><i class="fa fa-pencil fa-lg" title="'.$this->user->lang('edit').'"></i></a>';
+			$out .= '&nbsp;&nbsp;&nbsp;<a href="'.$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$this->get_category($intArticleID).'&duplicate='.$intArticleID.'"><i class="fa fa-copy fa-lg" title="'.$this->user->lang('copy').'"></i></a>';
+			
+			return $out;
 		}
 
 		public function get_check_alias($strAlias, $blnCheckCategory=false){

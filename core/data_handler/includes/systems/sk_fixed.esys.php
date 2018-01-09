@@ -719,7 +719,7 @@ $system_def = array(
 				'table_sort_col'	=> 7,
 				'table_presets'		=> array(
 
-					array('name' => 'article_editicon',	'sort' => false, 'th_add' => 'width="20"', 'td_add' => ''),
+					array('name' => 'article_editicon',	'sort' => false, 'th_add' => 'width="20"', 'td_add' => 'class="nowrap"'),
 					array('name' => 'article_published',	'sort' => true, 'th_add' => 'width="20"', 'td_add' => ''),
 					array('name' => 'article_featured', 'sort' => true, 'th_add' => 'width="20"', 'td_add' => ''),
 					array('name' => 'article_index_cb', 'sort' => true, 'th_add' => 'width="20"', 'td_add' => ''),

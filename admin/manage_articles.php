@@ -31,6 +31,7 @@ class Manage_Articles extends page_generic {
 		$handler = array(
 			'save' 		=> array('process' => 'save', 'csrf' => true),
 			'update'	=> array('process' => 'update', 'csrf' => true),
+			'duplicate'	=> array('process' => 'copy'),
 			'checkalias'=> array('process' => 'ajax_checkalias'),
 			'del_votes' => array('process' => 'delete_votes', 'csrf' => true),
 			'del_comments' => array('process' => 'delete_comments', 'csrf' => true),
@@ -42,6 +43,11 @@ class Manage_Articles extends page_generic {
 		);
 		parent::__construct(false, $handler, array('articles', 'title'), null, 'selected_ids[]');
 		$this->process();
+	}
+	
+	public function copy(){
+		$this->core->message($this->user->lang('copy_info'), $this->user->lang('copy'));
+		$this->edit($this->in->get('duplicate', 0), true);
 	}
 
 	public function delete_previewimage(){
@@ -214,7 +220,7 @@ class Manage_Articles extends page_generic {
 		$this->pdh->process_hook_queue();
 	}
 
-	public function edit($aid=false){
+	public function edit($aid=false, $copy=false){
 		$id = ($aid === false) ? $this->in->get('a', 0) : $aid;
 		$cid = $this->in->get('c', 0);
 
@@ -242,7 +248,7 @@ class Manage_Articles extends page_generic {
 			$this->tpl->assign_vars(array(
 				'TITLE'				=> $this->pdh->get('articles', 'title', array($id)),
 				'TEXT'				=> $this->pdh->get('articles', 'text', array($id)),
-				'ALIAS'				=> $this->pdh->get('articles', 'alias', array($id)),
+				'ALIAS'				=> ($copy) ? '' : $this->pdh->get('articles', 'alias', array($id)),
 				'TAGS'				=> implode(', ', $this->pdh->get('articles', 'tags', array($id))),
 				'ML_TITLE'			=> (new htextmultilang('title', array('value' => $this->pdh->get('articles', 'title', array($id, true)), 'required' => true, 'size' => 50)))->output(),
 				'DD_CATEGORY'		=> (new hsingleselect('category', array('options' => $arrCategories, 'filter' => true, 'value' => $this->pdh->get('articles', 'category', array($id)))))->output(),
@@ -297,7 +303,7 @@ class Manage_Articles extends page_generic {
 		$strCategoryName	= $this->pdh->get('article_categories', 'name', array($cid));
 		$this->tpl->assign_vars(array(
 			'CID' => $cid,
-			'AID' => $id,
+			'AID' => ($copy) ? 0 : $id,
 			'CATEGORY_NAME' => $strCategoryName,
 			'ARTICLE_NAME' => $strArticleName,
 		));
