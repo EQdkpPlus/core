@@ -47,10 +47,12 @@ class htextarea extends html {
 	public $disabled			= false;
 	public $codeinput			= false;
 	public $bbcodeeditor		= false;
+	public $htmleditor			= false;
 	public $required			= false;
 	public $fvmessage			= false;
 	public $readonly			= false;
 	public $style				= "";
+	public $textarea_height		= "350px";
 
 	private $out				= '';
 
@@ -64,6 +66,10 @@ class htextarea extends html {
 		if($this->bbcodeeditor) {
 			$this->class = (empty($this->class)) ? 'mceEditor_bbcode' : $this->class.' mceEditor_bbcode';
 			$this->tinyMCE->editor_bbcode();
+		}
+		if($this->htmleditor){
+			$this->class = (empty($this->class)) ? $this->id : $this->class.' '.$this->id;
+			$this->jquery->CodeEditor($this->id, "", "html", array('textarea_height' => $this->textarea_height));
 		}
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
 		if(!empty($this->style)) $out .= 'style="'.$this->style.'" ';
