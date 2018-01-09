@@ -222,12 +222,16 @@
 			<header>
 				<nav id="nav">
 					<div id="mainmenu">
+						<!-- LISTENER mainmenu -->
 						<div class="hiddenSmartphone">
+							<!-- LISTENER menu_before -->
 							{MAIN_MENU}
+							<!-- LISTENER menu_after -->
 							<div class="clear noheight">&nbsp;</div>
 						</div>
 						<div class="hiddenDesktop nav-mobile">
 							<i class="fa fa-list hand" onclick="$('.nav-mobile .mobile-overlay').toggle();"></i>
+							<!-- LISTENER nav-mobile -->
 							<div class="mobile-overlay">
 								<div class="overlay-header">
 									<a class="title" href="{EQDKP_CONTROLLER_PATH}{SID}">
