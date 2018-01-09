@@ -337,6 +337,10 @@ class core extends gen_class {
 						});
 					});
 
+					$('.clickToReveal > a').on('click', function(){
+						$(this).hide();
+						 $(this).parent().find('div').show();
+					});
 					", 'docready');
 
 

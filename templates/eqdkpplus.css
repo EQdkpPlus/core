@@ -468,3 +468,12 @@ i.small {
 
 /* Emojione */
 .emojione{font-size:inherit;height:3ex;width:3.1ex;min-height:20px;min-width:20px;display:inline-block;margin:-.2ex .15em .2ex;line-height:normal;vertical-align:middle}img.emojione{width:auto}
+
+.clickToReveal div {
+	display: none;
+}
+.clickToReveal > a {
+	cursor: pointer;
+	font-size: 1.4em;
+	font-weight: bold;
+}

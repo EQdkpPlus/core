@@ -148,6 +148,8 @@ $lang = array(
 "user_sett_f_confirm_password" => "Neues Passwort bestätigen",
 "user_sett_f_help_confirm_password" => "Du musst Dein Passwort nur bestätigen, wenn Du es oben geändert hast.",
 "user_app_key"	=> "Privater Austauschlüssel",
+"user_help_app_key" => "Dieser private Schlüssel wird beispielsweise für den Zugriff auf geschützte RSS-Feeds verwendet.",
+"user_help_api_key" => "Dieser private Schlüssel wird von Applikationen für den Zugriff auf die API verwendet.",
 "user_create_new_appkey" => "Neue private Schlüssel generieren",
 "user_create_new_appkey_success" => "Es wurde neue private Schlüssel erstellt. Deine alten URLs sind nun nicht mehr gültig.",
 "user_sett_fs_auth_accounts" => "Verknüpfte Konten",
@@ -1095,5 +1097,7 @@ $lang = array(
 "user_sett_fs_delete_account" => "Account löschen",
 "user_delete_account" => "Benutzeraccount endgültig löschen",
 "confirm_account_info" => "Willst du deinen Bernuteraccount wirklich löschen? Alle damit verbundenen Daten, wie persönlichen Daten, Medien etc. werden vollständig aus dem System gelöscht und können nicht wiederhergestellt werden.<br /><br />Willst du diese Aktion wirklich durchführen, bestätige die Löschung deines Benutzeraccounts mit deinem aktuellen Benutzerpasswort.<br />",
+"click_to_reveal" => "Klicken, um diese Informationen anzuzeigen",
+		
 );
 ?>

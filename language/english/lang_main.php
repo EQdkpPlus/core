@@ -241,6 +241,8 @@ $lang = array(
 	"calendars_continue_raid_button" => "Continue raid",
 
 	"user_app_key" => 'Private Exchangekey',
+	"user_help_app_key" => "This private key is used for the access of protected data, like personal RSS feeds.",
+	"user_help_api_key" => "This private key is used by applications for API access.",
 	"user_create_new_appkey" => 'Generate new private keys',
 	"user_create_new_appkey_success" => 'New private Keys have been created. Your old URLs are not longer valid.',
 	"user_sett_fs_auth_accounts" => 'Connected accounts',
@@ -1134,6 +1136,7 @@ $lang = array(
 	"user_sett_fs_delete_account" => "Delete Account",
 	"user_delete_account" => "Delete account permanently",
 	"confirm_account_info" => "Do you really want to delete your user account? All associated data, like personal ones or media will get deleted immediately and permanently.<br /><br />If you want to continue, you have to confirm your account deletion with your current password.<br />",
-);
+	"click_to_reveal" => "Click to reveal this information",
+	);
 
 ?>

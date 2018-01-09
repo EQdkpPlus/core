@@ -64,8 +64,9 @@ class login_twofactor extends gen_class {
 	
 	public function display_account($arrOptions){
 		$data = unserialize(register('encrypt')->decrypt($arrOptions[0]));
-		$out = '<span style="font-weight:bold;">'.$this->user->lang("login_twofactor_key").'</span>: '.$data['secret'].'<br />';
-		$out .= '<span style="font-weight:bold;">'.$this->user->lang("login_twofactor_emergency_token").'</span>: '.$data['emergency_token'].'<br />';
+		$out = '<div class="clickToReveal" title="'.$this->user->lang('click_to_reveal').'"><a>**********</a>
+					<div><span style="font-weight:bold;">'.$this->user->lang("login_twofactor_key").'</span>: '.$data['secret'].'<br />';
+		$out .= '<span style="font-weight:bold;">'.$this->user->lang("login_twofactor_emergency_token").'</span>: '.$data['emergency_token'].'</div></div>';
 		return $out;
 	}
 	
