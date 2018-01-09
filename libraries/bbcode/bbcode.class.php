@@ -321,6 +321,11 @@ if (!class_exists("bbcode")) {
 						$strPath = $this->controller_path.$this->pdh->get('articles', 'path', array($elements[1]));
 						$arrCache[$strTag] = ($strPath) ? $strPath : '';
 						break;
+					
+					case 'article_title':
+						$strTitle = $this->pdh->get('articles', 'title', array((int)$elements[1]));
+						$arrCache[$strTag] = ($strTitle) ? $strTitle : '';
+						break;
 						
 					case 'article_url_plain':
 						$strPath = $this->controller_path_plain.$this->pdh->get('articles', 'path', array($elements[1]));
@@ -330,6 +335,11 @@ if (!class_exists("bbcode")) {
 					case 'category_url':
 						$strPath = $this->controller_path.$this->pdh->get('article_categories', 'path', array($elements[1]));
 						$arrCache[$strTag] = ($strPath) ? $strPath : '';
+						break;
+						
+					case 'category_title':
+						$strTitle = $this->pdh->get('article_categories', 'name', array((int)$elements[1]));
+						$arrCache[$strTag] = ($strTitle) ? $strTitle : '';
 						break;
 						
 					case 'category_url_plain':
@@ -402,6 +412,54 @@ if (!class_exists("bbcode")) {
 									$objArticleHelper = registry::register('article');
 									$str = $objArticleHelper->buildCalendarevent($intEventID);
 									$arrCache[$strTag] = $str;
+						break;
+						
+						
+					case 'iflang':
+						if ($elements[1] != '' && $elements[1] != $this->user->lang_name)
+						{
+							for (; $rit<$_cnt; $rit+=2)
+							{
+								if ($tags[$rit+1] == 'iflang' || $tags[$rit+1] == 'iflang::' . $this->user->lang_name)
+								{
+									break;
+								}
+							}
+						}
+						
+						unset($arrCache[$strTag]);
+						break;
+					case 'ifnlang':
+						if ($elements[1] != '')
+						{
+							$langs = explode(',', $elements[1]);
+							if (in_array($this->user->lang_name, $langs))
+							{
+								for (; $rit<$_cnt; $rit+=2)
+								{
+									if ($tags[$rit+1] == 'ifnlang')
+									{
+										break;
+									}
+								}
+							}
+						}
+						unset($arrCache[$strTag]);
+						break;
+						
+					case 'env':
+						switch($elements[1]){
+							case 'controller_path':
+								$arrCache[$strTag] = $this->controller_path;
+								break;
+								
+							case 'controller_path_plain':
+								$arrCache[$strTag] = $this->controller_path_plain;
+								break;
+							case 'server_path':
+								$arrCache[$strTag] = $this->server_path;
+								break;
+						}
 						break;
 
 						
