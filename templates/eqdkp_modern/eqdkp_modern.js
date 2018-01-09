@@ -182,3 +182,26 @@ function notification_update(){
 	//5 Minute
 	window.setTimeout("notification_update()", 300000);
 }
+
+$(function() {      
+
+	if($( window ).width() < 900) {
+	    //Enable swiping...
+	    $("body").swipe( {
+	      //Single swipe handler for left swipes
+	      swipeRight:function(event, direction, distance, duration, fingerCount) {
+	    	  $('.nav-mobile .mobile-overlay').show();
+	      },
+	      excludedElements: "label, button, input, select, textarea", // Here your list of excluded elements ...
+		  threshold:130
+	    });
+	    
+	    $(".nav-mobile .mobile-overlay").swipe( {
+		//Single swipe handler for left swipes
+		swipeLeft:function(event, direction, distance, duration, fingerCount) {
+	      	  $('.nav-mobile .mobile-overlay').hide();
+		},
+		//Default is 75px, set to 0 for demo so any distance triggers swipe
+	      });
+	}
+});
