@@ -270,6 +270,10 @@ if (!class_exists("comments")){
 			$html	.= '<div class="contentBox">';
 			$html	.= '<div class="boxHeader"><h1>'.$this->user->lang('comments').'</h1></div>';
 			$html	.= '<div class="boxContent">';
+			
+			if(($this->user->is_signedin() && $this->userPerm) || ($this->showFormForGuests && !$this->user->is_signedin())){
+				if(count($comments) > 5) $html .= '<div><a href="#comment_data'.$this->id.'" class="button floatRight" style="margin-bottom: 5px;"><i class="fa fa-comment"></i> '.$this->user->lang('comment_write').'</a><br /><br /><div class="clear"></div></div>';
+			}
 
 			$out = array();
 			if (is_array($comments)){

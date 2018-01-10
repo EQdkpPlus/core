@@ -444,6 +444,7 @@ $lang = array(
 "comment" => "Kommentar",
 "comments" => "Kommentare",
 "comments_write" => "Kommentare schreiben",
+"comment_write" => "Kommentar schreiben",
 "comments_send_bttn" => "Kommentar speichern",
 "comments_savewait" => "Bitte warten, Kommentar wird gespeichert.",
 "comments_empty" => "Keine Kommentare vorhanden",
