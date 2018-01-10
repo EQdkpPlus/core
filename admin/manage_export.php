@@ -77,7 +77,7 @@ class Manage_Export extends page_generic {
 		
 		$this->tpl->assign_vars(array(
 			'EXPORT_DATA'	=> $this->returnLua($arrData),
-			'API_KEY'		=> $strApiKey,
+				'API_KEY'		=> '<div class="clickToReveal" title="'.$this->user->lang('click_to_reveal').'"><a>**********</a><div>'.$strApiKey.'</div></div>',
 			'S_SHOW_APIKEY' => $this->user->check_group(2, false),
 		));
 				
