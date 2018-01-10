@@ -41,7 +41,7 @@ class himageuploader extends hhidden {
 			
 			case 'in_data': return str_replace($this->pfh->FileLink('', 'files', 'absolute'), '', urldecode($this->in->get($this->name, '')));
 			
-			case 'filename': return  pathinfo(urldecode($this->in->get($this->name, '')), PATHINFO_BASENAME);
+			case 'filename': return  filter_var(pathinfo(urldecode($this->in->get($this->name, '')), PATHINFO_BASENAME), FILTER_SANITIZE_STRING);
 			
 			case 'absolute':
 			default: return urldecode($this->in->get($this->name, ''));
