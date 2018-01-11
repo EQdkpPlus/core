@@ -985,7 +985,6 @@ $lang = array(
 	"extensions" => 'Extensions',
 	"points_for_this_char" => 'Show the points information for this Char only',
 	"success_create_article" => 'Article has been saved succesfully',
-	"cookie_usage_hint" => 'This site uses cookies. By continuing to browse this site, you are agreeing to our use of cookies. <a href="{COOKIE_LINK}">More details</a>',
 	"team" => 'Team-Members',
 	"addchar_f_picture" => 'Characterimage',
 	"other_items" => 'Other Items',

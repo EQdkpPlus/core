@@ -481,17 +481,6 @@ class core extends gen_class {
 			}
 			$this->tpl->add_js("var mmocms_header_type = '".$this->header_format."';", 'head_top');
 
-			//EU Cookie Usage Hint
-			if ((int)$this->config->get('cookie_euhint_show') && $this->user->blnFirstVisit){
-				$intArticleID = $this->pdh->get('articles', 'resolve_alias', array('PrivacyPolicy'));
-				if ($intArticleID) $url = $this->controller_path.$this->pdh->get('articles', 'path', array($intArticleID));
-
-				$this->tpl->assign_vars(array(
-					'S_SHOW_COOKIE_HINT'	=> true,
-					'COOKIE_HINT'			=> str_replace("{COOKIE_LINK}", $url.'#Cookies', $this->user->lang('cookie_usage_hint')),
-				));
-			}
-
 			//Template Vars for Group Memberships
 			$arrGroupmemberships = $this->acl->get_user_group_memberships($this->user->id);
 			foreach($arrGroupmemberships as $groupID => $status){

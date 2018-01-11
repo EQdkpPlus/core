@@ -944,7 +944,6 @@ $lang = array(
 "confirm_password" => "Passwort wiederholen",
 "points_for_this_char" => "Zeige die Punkte-Informationen nur für diesen Charakter an",
 "success_create_article" => "Der Artikel wurde erfolgreich gespeichert",
-"cookie_usage_hint" => "Diese Seite verwendet Cookies. Durch die Nutzung unserer Seite erklärst du dich damit einverstanden, dass wir Cookies setzen. <a href=\"{COOKIE_LINK}\">Weitere Informationen</a>",
 "team" => "Team-Mitglieder",
 "addchar_f_picture" => "Charakterbild",
 "other_items" => "Andere Items",

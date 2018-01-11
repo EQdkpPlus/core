@@ -363,9 +363,6 @@ class admin_settings extends page_generic {
 						'type'		=> 'text',
 						'size'		=> 25,
 					),
-					'cookie_euhint_show'	=> array(
-						'type'		=> 'radio',
-					),
 				),
 				'email'				=> array(
 					'lib_email_method'	=> array(

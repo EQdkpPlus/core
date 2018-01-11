@@ -281,13 +281,6 @@
 						<div class="columnInner">
 							<!-- LISTENER content_middle_top -->
 
-							<!-- IF S_SHOW_COOKIE_HINT -->
-							<div class="infobox infobox-large infobox-blue clearfix">
-								<i class="fa-info-circle fa pull-left fa-2x"></i> {COOKIE_HINT}
-								<i class="fa-times fa pull-right hand" onclick="$(this).parent().hide()"></i>
-							</div>
-							<!-- ENDIF -->
-
 							<!-- BEGIN global_warnings -->
 							<header>
 								<div class="infobox infobox-large infobox-{global_warnings.CLASS} clearfix">
