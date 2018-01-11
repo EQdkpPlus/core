@@ -43,7 +43,7 @@ class htextarea extends html {
 
 	public $name				= '';
 	public $rows				= 5;
-	public $cols				= 10;
+	public $cols				= 60;
 	public $disabled			= false;
 	public $codeinput			= false;
 	public $bbcodeeditor		= false;
