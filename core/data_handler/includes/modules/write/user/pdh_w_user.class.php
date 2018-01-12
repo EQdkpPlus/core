@@ -355,6 +355,9 @@ if(!class_exists('pdh_w_user')) {
 			$this->db->prepare("DELETE FROM __auth_users WHERE user_id=?")->execute($user_id);
 			$this->db->prepare("DELETE FROM __groups_users WHERE user_id=?")->execute($user_id);
 			$this->db->prepare("DELETE FROM __comments WHERE userid=?")->execute($user_id);
+			$this->db->prepare("DELETE FROM __sessions WHERE session_user_id=?")->execute($user_id);
+			
+			
 			
 			$this->pdh->put('member', 'update_connection', array(array(), $user_id));
 			$this->pdh->put('notifications', 'delete_by_user', array($user_id));
