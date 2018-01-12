@@ -172,6 +172,8 @@ class Manage_Styles extends page_generic{
 		$this->objStyles->deleteStyleCache($this->style['template_path']);
 
 		$this->core->message( $this->user->lang('admin_update_style_success'), $this->user->lang('success'), 'green');
+		
+		$this->edit();
 	}
 
 	private function get_data() {
