@@ -1,13 +1,13 @@
 
 <section data-article-id="{ARTICLE_ID}" data-article-category-id="{ARTICLE_REAL_CATEGORY}" class="article_detail_container <!-- IF S_FEATURED -->featured<!-- ENDIF -->">
 	<!-- IF not S_HIDE_HEADER -->
-	<nav>
+	<nav class="nextAndPrevArticles">
 		<!-- IF S_PREV_ARTICLE -->
-		<a href="{U_PREV_ARTICLE}" title="{PREV_TITLE}"><i class="fa fa-chevron-left"></i> {PREV_TITLE}</a>
+		<a href="{U_PREV_ARTICLE}" title="{PREV_TITLE}" class="prevArticle"><i class="fa fa-chevron-left"></i> {PREV_TITLE}</a>
 		<!-- ENDIF -->
 
 		<!-- IF S_NEXT_ARTICLE -->
-		<a href="{U_NEXT_ARTICLE}" title="{NEXT_TITLE}" class="floatRight">{NEXT_TITLE} <i class="fa fa-chevron-right"></i></a>
+		<a href="{U_NEXT_ARTICLE}" title="{NEXT_TITLE}" class="nextArticle floatRight">{NEXT_TITLE} <i class="fa fa-chevron-right"></i></a>
 		<!-- ENDIF -->
 		<div class="clear"></div>
 		<br />

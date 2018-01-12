@@ -412,15 +412,15 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 <!-- ENDIF -->
 
 <!-- IF S_NEXTPREV_RAIDEVENT -->
-<div>
+<div class="nextAndPrevEvents">
 	<!-- IF S_PREV_RAID_EVENT -->
-	<div class="floatLeft">
+	<div class="floatLeft prevEvent">
 		<a href="{U_PREV_RAID_EVENT}"><i class="fa fa-chevron-left"></i> {PREV_RAID_EVENTNAME}</a>
 	</div>
 	<!-- ENDIF -->
 
 	<!-- IF S_NEXT_RAID_EVENT -->
-	<div class="floatRight">
+	<div class="floatRight nextEvent">
 		<a href="{U_NEXT_RAID_EVENT}">{NEXT_RAID_EVENTNAME} <i class="fa fa-chevron-right"></i></a>
 	</div>
 	<!-- ENDIF -->
