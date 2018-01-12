@@ -543,6 +543,11 @@ class controller extends gen_class {
 						if (!is_file($this->root_path.'core/pageobjects/'.$val.'_pageobject.class.php')) continue;
 						include_once($this->root_path.'core/pageobjects/'.$val.'_pageobject.class.php');
 						$objPage = registry::register($val.'_pageobject');
+						
+						//Reset pageobject var
+						$strPageObjectVar = registry::get_const('pageobject');
+						registry::add_const('pageobject', $strPageObjectVar.' pageobject-'.$val);
+						
 						$arrCoreVars = $objPage->get_vars();
 						if ($arrCoreVars['template_file'] != '' ) {
 							$strContent = str_replace($strHaystack, '<!-- INCLUDE '.$arrCoreVars['template_file'].' --><br />', $strContent);
