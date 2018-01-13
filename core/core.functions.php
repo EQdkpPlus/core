@@ -102,6 +102,7 @@ function runden($value){
 		$ret_val = number_format($ret_val, $precision, '.', '');
 	} else {
 		$ret_val = round($value, 5);
+		$ret_val = number_format($ret_val, 5, '.', '');
 	}
 	return $ret_val;
 }
