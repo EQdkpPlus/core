@@ -952,7 +952,13 @@ class core extends gen_class {
 		private function pagetitle($title = ''){
 			$pt_prefix		= (defined('IN_ADMIN')) ? $this->user->lang('admin_title_prefix') : $this->user->lang('title_prefix');
 			$dkp_name 		= '';
-			$main_title		= sprintf($pt_prefix, $this->config->get('guildtag'), $dkp_name);
+			
+			if($this->config->get('main_title')){
+				$main_title	= $this->config->get('main_title');
+			}else {
+				$main_title = sprintf($pt_prefix, $this->config->get('guildtag'), $dkp_name);
+			}
+			
 			return sanitize((( $title != '' ) ? $title.' - ' : '').$main_title);
 		}
 
