@@ -58,7 +58,7 @@ if (!class_exists("jquery")) {
 
 			// add a few variables to javascript (head tag)
 			$this->tpl->add_js("var mmocms_root_path = '".$this->server_path."';", 'head_top');
-			$this->tpl->add_js("var mmocms_page = '".$this->env->current_page."';", 'head_top');
+			$this->tpl->add_js("var mmocms_page = '".sanitize($this->env->current_page)."';", 'head_top');
 			$this->tpl->add_js("var mmocms_controller_path = '".$this->controller_path."';", 'head_top');
 			$this->tpl->add_js("var mmocms_seo_extension = '".$this->routing->getSeoExtension()."';", 'head_top');
 			$this->tpl->add_js("var mmocms_sid = '".$this->SID."';", 'head_top');
