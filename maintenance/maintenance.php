@@ -54,7 +54,7 @@ class maintenance_display extends gen_class {
 					} else {
 						$redirect_url = str_replace("?&", $this->SID.'&', $redirect_url);
 					}
-					redirect($redirect_url);
+					redirect($redirect_url, false, false, false);
 				}
 
 			}elseif ( $this->user->is_signedin() ){
@@ -63,12 +63,18 @@ class maintenance_display extends gen_class {
 
 			if($this->in->get('splash')) {
 				$pfh->secure_folder('', 'tmp');
-				redirect('maintenance/'.$this->SID.'&splash=true');
+				redirect('maintenance/'.$this->SID.'&splash=true', false, false, false);
 			}
 		}
 
 		// Login form
 		if(!$this->user->check_auth('a_maintenance', false)){
+			
+			//Redirect to start page if maintenance mode is not active
+			if($this->config->get('pk_maintenance_mode') == 0){
+				redirect('', false, false, false);
+			}
+			
 			$this->tpl->assign_vars(array(
 				'S_LOGIN'					=> true,
 
@@ -90,7 +96,7 @@ class maintenance_display extends gen_class {
 		}else{
 			if($this->in->get('splash')) {
 				$pfh->secure_folder('', 'tmp');
-				redirect('maintenance/'.$this->SID.'&splash=true');
+				redirect('maintenance/'.$this->SID.'&splash=true', false, false, false);
 			}
 			$redirect_url = ( $this->in->exists('redirect') ) ? preg_replace('#^.*?redirect=(.+?)&(.+?)$#', '\\1' . $this->SID . '&\\2', $this->in->get('redirect')) : 'index.php'.$this->SID;
 			redirect($redirect_url, false, false, false);

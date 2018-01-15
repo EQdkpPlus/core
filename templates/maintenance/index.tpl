@@ -6,6 +6,7 @@
   <title>EQdkp Plus {L_MMODE}</title>
   <link rel='stylesheet' href='{ROOT_PATH}templates/maintenance/css/maintenance.css' type='text/css' media='screen' />
   <link rel='stylesheet' href='{ROOT_PATH}libraries/FontAwesome/font-awesome.min.css' type='text/css' media='screen' />
+  <link rel="icon" href="{ROOT_PATH}templates/maintenance/favicon.png" type="image/png" />
   
   <style type="text/css">
   		.debug_show {
@@ -38,12 +39,15 @@
 </head>
 
 <body>
+	<div id="holder">
 	<div class="wrapper">
 		<div class="header">
-			<img src="../templates/maintenance/images/logo.svg" alt="EQdkp Plus" class="absmiddle" /> {L_MMODE}
+			<div class="headerInner">
+				<img src="../templates/maintenance/images/logo.svg" alt="EQdkp Plus" class="absmiddle" /> {L_MMODE}
+			</div>
 		</div>
 		
-		<div class="innerWrapper">
+		<div class="navigation">
 			<!-- IF S_IS_ADMIN -->
 			<div class="breadcrumbContainer">
 				<ul class="breadcrumb">
@@ -57,7 +61,9 @@
 				<div class="clear"></div>
 			</div>
 			<!-- ENDIF -->		
-			
+		</div>
+		
+		<div class="innerWrapper">	
 			<!-- IF not S_MMODE_ACTIVE -->
 			<div id="layer">
 			</div>
@@ -119,11 +125,15 @@
 			{GBL_CONTENT_BODY}
 			</div>
 			
-			<!-- IF not S_HIDE_DEBUG -->
-			<div class="debug">
-				<br />
-				<h2>Debug</h2>
+		</div>
+
+	</div>
+
+	<div class="footer">
+		<!-- IF not S_HIDE_DEBUG -->
+		<div class="debug">
 				<ul class="nav nav-tabs">
+					<li><span>Debug:</span></li>
 					<!-- BEGIN debug_types -->
 					<li><a href="javascript:debug_show_me('{debug_types.ID}')">{debug_types.TYPE} {L_CLICK}</a></li>
 					<!-- END debug_types -->
@@ -131,7 +141,7 @@
 
 				<!-- BEGIN debug_types -->
 				<div id='debug_{debug_types.ID}' class='debug_hide'>
-					<table border='1' cellspacing='0' cellpadding='1' class="task_table">
+					<table border='1' cellspacing='0' cellpadding='1' class="task_table colorswitch">
 						<tr>
 							<th>{debug_types.TYPE}</th>
 						</tr>
@@ -143,20 +153,18 @@
 					</table>
 				</div>
 				<!-- END debug_types -->
-			</div>
-			<!-- ENDIF -->
-			
 		</div>
-	</div>
-
-	<div class="footer">
+		<!-- ENDIF -->
+	
+		<div class="copyright">
 		 <!--
 		  If you use this software and find it to be useful, we ask that you
 		  retain the copyright notice below.  While not required for free use,
 		  it will help build interest in the EQdkp-Plus project.
 		//-->
 		<a href="http://www.eqdkp-plus.eu" target="_new">EQdkp Plus</a> &copy; 2006 - {TYEAR} by EQdkp Plus Developer Team
+		</div>
 	</div>
-
+</div>
 </body>
 </html>
