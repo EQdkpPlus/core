@@ -272,7 +272,7 @@ if (!class_exists("comments")){
 			$html	.= '<div class="boxContent">';
 			
 			if(($this->user->is_signedin() && $this->userPerm) || ($this->showFormForGuests && !$this->user->is_signedin())){
-				if(count($comments) > 5) $html .= '<div><a href="#comment_data'.$this->id.'" class="button floatRight" style="margin-bottom: 5px;"><i class="fa fa-comment"></i> '.$this->user->lang('comment_write').'</a><br /><br /><div class="clear"></div></div>';
+				if(count($comments) > 5) $html .= '<div><a href="javascript:tinyMCE.get(\'comment_textarea_'.$this->id.'\').focus();"  #comment_data'.$this->id.'" class="button floatRight" style="margin-bottom: 5px;"><i class="fa fa-comment"></i> '.$this->user->lang('comment_write').'</a><br /><br /><div class="clear"></div></div>';
 			}
 
 			$out = array();
@@ -388,7 +388,7 @@ if (!class_exists("comments")){
 								<div class="comment_avatar"><a href="'.$this->routing->build('user', $this->user->data['username'], 'u'.$this->user->id).'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $this->server_path.'images/global/avatar-default.svg').'" alt="Avatar" class="user-avatar"/></a></div>
 							</div>
 							<div class="comment_write_container">
-								<textarea name="comment" rows="5" cols="80" class="mceEditor_bbcode" style="width:100%;"></textarea>
+								<textarea name="comment" id="comment_textarea_'.$this->id.'" rows="5" cols="80" class="mceEditor_bbcode" style="width:100%;"></textarea>
 							</div>
 						</div>
 						<span id="comment_button'.$this->id.'"><input type="submit" value="'.$this->user->lang('comments_send_bttn').'" class="input"/></span>
