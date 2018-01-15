@@ -384,9 +384,9 @@ class core extends gen_class {
 			if ( ! $this->user->is_signedin() && intval($this->config->get('enable_registration'))){
 				//CMS register?
 				if ($this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))){
-					$registerLink = $this->createLink($this->handle_link($this->config->get('cmsbridge_reg_url'),$this->user->lang('menu_register'),$this->config->get('cmsbridge_embedded'),'BoardRegister', '', '', 'fa fa-user-plus fa-lg'));
+					$registerLink = $this->createLink($this->handle_link($this->config->get('cmsbridge_reg_url'),$this->user->lang('menu_register'),$this->config->get('cmsbridge_embedded'),'BoardRegister', '', '', 'fa fa-user-plus fa-lg', ''), 'register');
 				} else {
-					$registerLink = $this->createLink(array('link' => $this->controller_path_plain.'Register' . $this->routing->getSeoExtension().$this->SID, 'text' => $this->user->lang('menu_register'), 'icon' => 'fa fa-user-plus fa-lg'));
+					$registerLink = $this->createLink(array('link' => $this->controller_path_plain.'Register' . $this->routing->getSeoExtension().$this->SID, 'text' => $this->user->lang('menu_register'), 'icon' => 'fa fa-user-plus fa-lg'), 'register');
 				}
 			}
 
@@ -425,7 +425,7 @@ class core extends gen_class {
 				'T_LOGO_POSITION'			=> $this->user->style['logo_position'],
 				'T_BACKGROUND_TYPE'			=> $this->user->style['background_type'],
 				'T_BACKGROUND_POSITION'		=> ($this->user->style['background_pos'] == 'normal') ? 'scroll' : 'fixed',
-					'T_MENU_BACKGROUND_COLOR'=> $this->user->style['menu_background_color'],
+				'T_MENU_BACKGROUND_COLOR'=> $this->user->style['menu_background_color'],
 				'S_REGISTER'				=> (int)$this->config->get('enable_registration'),
 				'U_LOGOUT'					=> $this->controller_path.'Login/Logout'.$this->routing->getSeoExtension().$this->SID.'&amp;link_hash='.$this->user->csrfGetToken("login_pageobjectlogout"),
 				'U_CHARACTERS'				=> ($this->user->is_signedin() && $this->user->check_auths(array('u_member_man', 'u_member_add', 'u_member_conn', 'u_member_del'), 'OR', false)) ? $this->controller_path.'MyCharacters' . $this->routing->getSeoExtension().$this->SID : '',
