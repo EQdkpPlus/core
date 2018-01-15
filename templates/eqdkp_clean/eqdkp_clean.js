@@ -49,7 +49,7 @@ $(function() {
 	    		  open = "none";
 	    	  }
 	      },
-	      excludedElements: "label, button, input, select, textarea", // Here your list of excluded elements ...
+	      excludedElements: "label, button, input, select, textarea, table", // Here your list of excluded elements ...
 		  threshold:130
 	    });
 	}
