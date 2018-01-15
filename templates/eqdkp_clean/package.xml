@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install type="template" version="2.3.0.23">
+	<name>EQdkp Clean</name>
+	<author>GodMod</author>
+	<authorEmail></authorEmail>
+	<authorUrl>http://eqdkp-plus.eu</authorUrl>
+	<creationDate>2018-01-15T16:48:02+00:00</creationDate>
+	<copyright>GodMod</copyright>
+	<license>CC</license>
+	<version>2.3.1</version>
+	<description></description>
+	<folder>eqdkp_clean</folder>
+</install>
