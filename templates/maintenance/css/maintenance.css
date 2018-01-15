@@ -191,12 +191,7 @@ ul.breadcrumb li:first-child a i {
 	margin-left:0.5em;
 }
 
-ul.breadcrumb a:hover:before {
-	border-bottom-color: #fff;
-}
-
-ul.breadcrumb a::after,
-ul.breadcrumb a::before {
+ul.breadcrumb a::after {
 	content: "";
 	position: absolute;
 	right: -1em;
@@ -206,7 +201,7 @@ ul.breadcrumb a::after{
 	z-index: 2;
 }
 
-ul.breadcrumb a:before{
+ul.breadcrumb li:not(:last-child) a:after {
 	right: -2em;
 	z-index: 1;
 	content: '\f054';
@@ -227,8 +222,7 @@ ul.breadcrumb .current:hover{
 	background: none;
 }
 
-ul.breadcrumb .current ::after,
-ul.breadcrumb .current ::before{
+ul.breadcrumb .current ::after{
 	content: normal;
 }
 
@@ -964,4 +958,47 @@ fieldset.settings dt span {
 
 .footer .nav {
 	padding-left: 20px;
+}
+
+@media all and (max-width: 899px) {
+	.innerWrapper {
+		margin: 0;
+	}
+	
+	#inner_layer {
+		max-width: 95%;
+	}
+}
+
+@media all and (max-width: 599px) {
+	.headerInner img {
+		display: none;
+	}
+	
+	.headerInner {
+		padding-bottom: 30px;
+	}
+	
+	.debug {
+		display:  none;
+	}
+	
+	#inner_layer {
+		width: 84%;
+		left: 0;
+		right: 0;
+		height: auto;
+		margin: 0;
+		top: 100px;
+	}
+	
+	table.scrollable-x {
+		table-layout: fixed;
+	}
+
+	table.scrollable-x tbody {
+		display: block;
+		overflow-x: auto;
+	}
+	
 }
