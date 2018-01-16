@@ -1137,6 +1137,7 @@ $lang = array(
 	"user_delete_account" => "Delete account permanently",
 	"confirm_account_info" => "Do you really want to delete your user account? All associated data, like personal ones or media will get deleted immediately and permanently.<br /><br />If you want to continue, you have to confirm your account deletion with your current password.<br />",
 	"click_to_reveal" => "Click to reveal this information",
+	"new_coreupdate_subject" => "New EQdkp Plus update available",
 	);
 
 ?>
