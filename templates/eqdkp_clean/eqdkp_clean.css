@@ -285,7 +285,6 @@ h3 {
 	width: 100%;
 }
 .columnContainer {
-	display: table-row;
 	border: none;
 }
 
@@ -3448,7 +3447,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 
 .reponsiveTestClass {text-align:right;}
 
-@media all and (max-width: 899px) {
+@media all and (max-width: 1024px) {
 	body.responsive, html , .responsive #personalArea{
 		font-size: 13px;
 		line-height: 14px;
@@ -4597,4 +4596,18 @@ html, body {
 	flex: 0 0 auto;
 }
 
+#contentContainer {
+	display: flex;
+}
 
+.columnContainer {
+	flex: 1 0 auto;	
+}
+
+@media screen and (min-width: 1025px) {
+	.second {
+	    flex: 1 1 0px;
+	    flex-basis: calc(100%);
+	    max-width: calc(100%);
+    }
+}
