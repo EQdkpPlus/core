@@ -589,7 +589,7 @@ div .contentFooter {background-color: @eqdkpContentBackgroundColor;padding: 3px 
 	top: 0;
 	left: 0;
 	width: 100%;
-	z-index: 3;
+	z-index: 300;
  }
 ul.mainmenu { 
 	padding-left: 40px;
@@ -3809,7 +3809,8 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	}
 
 	.responsive .first.column, .responsive .third.column, {
-		flex: 0 0 auto;
+		flex: 0 0 auto !important;
+		padding: 0;
 	}
 
 	.responsive .bigDateTd {
@@ -3876,6 +3877,10 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	.responsive .portal .columnContainer .first.column { order:1; }
 	.responsive .portal .columnContainer .second.column { order:0; }
 	.responsive .portal .columnContainer .third.column { order:2; }
+	
+	.responsive .article-container > .table > .tr, .responsive .article-container > .table > .tr > .td:not(.bigDateTd) {
+		display: block;
+	}
 }
 
 @media all and (max-width: 590px) {
