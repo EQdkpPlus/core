@@ -3,7 +3,7 @@ $(function() {
 	$(window).on('scroll', function() {
 		var topMenu = $('#nav');
 		
-		if($(document).scrollTop() > $("#banner").height()){
+		if($(document).scrollTop() > ($("#banner").outerHeight() + $("#personalArea").outerHeight())){
 			if(!topMenu.hasClass("jsFixed")){
 				topMenu.addClass('jsFixed');
 			}
