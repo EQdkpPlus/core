@@ -281,15 +281,12 @@ h3 {
 
 .portal {
 	border-collapse: collapse;
-	display: table;
-	width: 100%;
 }
 .columnContainer {
 	border: none;
 }
 
 .column {
-	display: table-cell;
 	margin: 0;
 	padding: 0;
 }
@@ -306,7 +303,7 @@ h3 {
 }
 .portal .second {
 	padding:10px;
-	width:100%;
+	flex-basis: max-content;
 }
 
 .fixed_width #wrapper {
@@ -3812,8 +3809,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	}
 
 	.responsive .first.column, .responsive .third.column, {
-		min-width: 1% !important;
-		max-width: 100% !important;
+		flex: 0 0 auto;
 	}
 
 	.responsive .bigDateTd {
@@ -4596,18 +4592,17 @@ html, body {
 	flex: 0 0 auto;
 }
 
-#contentContainer {
+.columnContainer {
 	display: flex;
 }
 
-.columnContainer {
-	flex: 1 0 auto;	
-}
 
 @media screen and (min-width: 1025px) {
 	.second {
 	    flex: 1 1 0px;
-	    flex-basis: calc(100%);
-	    max-width: calc(100%);
     }
+}
+
+.settings textarea {
+	max-width: 95%;
 }

@@ -346,7 +346,7 @@
 				<!-- LISTENER portal_top -->
 				<div class="columnContainer">
 					<!-- IF S_PORTAL_LEFT -->
-					<aside class="first column portal-left" style="<!-- IF T_COLUMN_LEFT_WIDTH -->min-width:{T_COLUMN_LEFT_WIDTH};max-width:{T_COLUMN_LEFT_WIDTH};<!-- ELSE -->min-width: 260px;<!-- ENDIF -->">
+					<aside class="first column portal-left" style="flex: 0 0 <!-- IF T_COLUMN_LEFT_WIDTH -->{T_COLUMN_LEFT_WIDTH}<!-- ELSE -->260px;<!-- ENDIF -->">
 						<div class="columnInner">
 							<!-- LISTENER portal_left_top -->
 							{PORTAL_LEFT}
@@ -411,7 +411,7 @@
 					</article><!-- close second column -->
 
 					<!-- IF S_PORTAL_RIGHT -->
-					<aside class="third column portal-right" style="<!-- IF T_COLUMN_RIGHT_WIDTH -->min-width:{T_COLUMN_RIGHT_WIDTH};max-width:{T_COLUMN_RIGHT_WIDTH}<!-- ELSE -->min-width: 260px;<!-- ENDIF -->">
+					<aside class="third column portal-right" style="flex: 0 0 <!-- IF T_COLUMN_RIGHT_WIDTH -->{T_COLUMN_RIGHT_WIDTH}<!-- ELSE -->260px;<!-- ENDIF -->">
 						<div class="columnInner">
 							<!-- LISTENER portal-right-top -->
 							{PORTAL_RIGHT}
@@ -471,6 +471,49 @@
 		</form>
 	</div>
 	<!-- ENDIF -->
+
+			<footer id="contentFooter">
+				<!-- LISTENER content-footer-top -->
+				<div class="floatLeft">
+					<!-- IF S_REPONSIVE -->
+					<div class="hiddenDesktop toggleResponsive"><a href="{SID}&toggleResponsive=desktop"><i class="fa fa-lg fa-desktop"></i> {L_desktop_version}</a></div>
+					<!-- ELSE -->
+					<div class="toggleResponsive"><a href="{SID}&toggleResponsive=mobile"><a href="{SID}&toggleResponsive=mobile"><i class="fa fa-lg fa-mobile-phone"></i> {L_mobile_version}</a></div>
+					<!-- ENDIF -->
+
+					<!-- LISTENER content-footer-left -->
+				</div>
+				<div class="floatRight">
+					<!-- LISTENER content-footer-right -->
+
+					<!-- IF not S_LOGGED_IN and S_STYLECHANGER -->
+					<a href="javascript:change_style();"><i class="fa fa-paint-brush"></i> {L_change_style}</a>
+					<!-- ENDIF -->
+
+					<!-- IF S_GLOBAL_RSSFEEDS -->
+					<div class="rss-tooltip-container">
+						<a class="rss-tooltip-trigger tooltip-trigger" data-tooltip="rss-tooltip"><i class="fa hand fa-rss fa-lg"></i></a>
+						<ul class="dropdown-menu right-bottom rss-tooltip" role="menu" id="rss-tooltip">
+							<!-- BEGIN global_rss_row -->
+							<li><a href="{global_rss_row.LINK}"><i class="fa hand fa-rss fa-lg"></i> {global_rss_row.NAME}</a></li>
+							<!-- END global_rss_row -->
+						</ul>
+					</div>
+					<!-- ENDIF -->
+				</div>
+				<div class="clear noheight"></div>	
+					<!-- LISTENER footer_top -->
+					<div class="portal_block2">{PORTAL_BLOCK2}</div>
+					
+					<!-- LISTENER footer_bottom -->{EQDKP_PLUS_COPYRIGHT}
+				<!-- close footer -->
+				<!-- ELSE -->
+				<!-- IF S_SHOW_QUERIES --><br />{DEBUG_TABS}<!-- ENDIF -->
+				<!-- LISTENER debug -->
+				<!-- ENDIF -->
+			</footer>
+	
+	</div> <!-- close #pageBody -->
 	
 	<div class="reponsiveTestClass" style="display:none;"><!-- This div is for testing the responsiveness --></div>
 	<script type="text/javascript">
@@ -563,49 +606,6 @@
 	</script>
 	
 	{FOOTER_CODE}
-	
-			<footer id="contentFooter">
-				<!-- LISTENER content-footer-top -->
-				<div class="floatLeft">
-					<!-- IF S_REPONSIVE -->
-					<div class="hiddenDesktop toggleResponsive"><a href="{SID}&toggleResponsive=desktop"><i class="fa fa-lg fa-desktop"></i> {L_desktop_version}</a></div>
-					<!-- ELSE -->
-					<div class="toggleResponsive"><a href="{SID}&toggleResponsive=mobile"><a href="{SID}&toggleResponsive=mobile"><i class="fa fa-lg fa-mobile-phone"></i> {L_mobile_version}</a></div>
-					<!-- ENDIF -->
-
-					<!-- LISTENER content-footer-left -->
-				</div>
-				<div class="floatRight">
-					<!-- LISTENER content-footer-right -->
-
-					<!-- IF not S_LOGGED_IN and S_STYLECHANGER -->
-					<a href="javascript:change_style();"><i class="fa fa-paint-brush"></i> {L_change_style}</a>
-					<!-- ENDIF -->
-
-					<!-- IF S_GLOBAL_RSSFEEDS -->
-					<div class="rss-tooltip-container">
-						<a class="rss-tooltip-trigger tooltip-trigger" data-tooltip="rss-tooltip"><i class="fa hand fa-rss fa-lg"></i></a>
-						<ul class="dropdown-menu right-bottom rss-tooltip" role="menu" id="rss-tooltip">
-							<!-- BEGIN global_rss_row -->
-							<li><a href="{global_rss_row.LINK}"><i class="fa hand fa-rss fa-lg"></i> {global_rss_row.NAME}</a></li>
-							<!-- END global_rss_row -->
-						</ul>
-					</div>
-					<!-- ENDIF -->
-				</div>
-				<div class="clear noheight"></div>	
-					<!-- LISTENER footer_top -->
-					<div class="portal_block2">{PORTAL_BLOCK2}</div>
-					
-					<!-- LISTENER footer_bottom -->{EQDKP_PLUS_COPYRIGHT}
-				<!-- close footer -->
-				<!-- ELSE -->
-				<!-- IF S_SHOW_QUERIES --><br />{DEBUG_TABS}<!-- ENDIF -->
-				<!-- LISTENER debug -->
-				<!-- ENDIF -->
-			</footer>
-	
-	</div> <!-- close #pageBody -->
 	<!-- LISTENER body_bottom -->
 	<a id="bottom"></a>
 	<div class="toTopContainer" style=""><div><a href="javascript:onclick=window.scrollTo(0,0)"><i class="fa-angle-up fa fa-lg"></i></a></div></div>
