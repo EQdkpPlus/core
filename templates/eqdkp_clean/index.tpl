@@ -45,6 +45,7 @@
 	</head>
 	<body id="top" data-template="{TEMPLATE_CLASS}" class="<!-- IF S_REPONSIVE -->responsive <!-- ENDIF --><!-- IF not S_NORMAL_HEADER -->simple-header<!-- ENDIF --> {BROWSER_CLASS}<!-- IF T_PORTAL_WIDTH --> fixed_width<!-- ENDIF --><!-- IF S_IN_ADMIN --> admin<!-- ELSE --> frontend<!-- ENDIF -->  {BODY_CLASS}">
 		<!-- LISTENER body_top -->
+		<div id="pageBody">
 		
 		{STATIC_HTMLCODE}
 		<!-- IF S_NORMAL_HEADER -->
@@ -420,47 +421,6 @@
 					<!-- ENDIF -->
 				</div>
 			</div>
-
-			<footer id="contentFooter">
-				<!-- LISTENER content-footer-top -->
-				<div class="floatLeft">
-					<!-- IF S_REPONSIVE -->
-					<div class="hiddenDesktop toggleResponsive"><a href="{SID}&toggleResponsive=desktop"><i class="fa fa-lg fa-desktop"></i> {L_desktop_version}</a></div>
-					<!-- ELSE -->
-					<div class="toggleResponsive"><a href="{SID}&toggleResponsive=mobile"><a href="{SID}&toggleResponsive=mobile"><i class="fa fa-lg fa-mobile-phone"></i> {L_mobile_version}</a></div>
-					<!-- ENDIF -->
-
-					<!-- LISTENER content-footer-left -->
-				</div>
-				<div class="floatRight">
-					<!-- LISTENER content-footer-right -->
-
-					<!-- IF not S_LOGGED_IN and S_STYLECHANGER -->
-					<a href="javascript:change_style();"><i class="fa fa-paint-brush"></i> {L_change_style}</a>
-					<!-- ENDIF -->
-
-					<!-- IF S_GLOBAL_RSSFEEDS -->
-					<div class="rss-tooltip-container">
-						<a class="rss-tooltip-trigger tooltip-trigger" data-tooltip="rss-tooltip"><i class="fa hand fa-rss fa-lg"></i></a>
-						<ul class="dropdown-menu right-bottom rss-tooltip" role="menu" id="rss-tooltip">
-							<!-- BEGIN global_rss_row -->
-							<li><a href="{global_rss_row.LINK}"><i class="fa hand fa-rss fa-lg"></i> {global_rss_row.NAME}</a></li>
-							<!-- END global_rss_row -->
-						</ul>
-					</div>
-					<!-- ENDIF -->
-				</div>
-				<div class="clear noheight"></div>	
-					<!-- LISTENER footer_top -->
-					<div class="portal_block2">{PORTAL_BLOCK2}</div>
-					
-					<!-- LISTENER footer_bottom -->{EQDKP_PLUS_COPYRIGHT}
-				<!-- close footer -->
-				<!-- ELSE -->
-				<!-- IF S_SHOW_QUERIES --><br />{DEBUG_TABS}<!-- ENDIF -->
-				<!-- LISTENER debug -->
-				<!-- ENDIF -->
-			</footer>
 		</section>
 
 	</div><!-- close wrapper -->
@@ -604,9 +564,51 @@
 	
 	{FOOTER_CODE}
 	
+			<footer id="contentFooter">
+				<!-- LISTENER content-footer-top -->
+				<div class="floatLeft">
+					<!-- IF S_REPONSIVE -->
+					<div class="hiddenDesktop toggleResponsive"><a href="{SID}&toggleResponsive=desktop"><i class="fa fa-lg fa-desktop"></i> {L_desktop_version}</a></div>
+					<!-- ELSE -->
+					<div class="toggleResponsive"><a href="{SID}&toggleResponsive=mobile"><a href="{SID}&toggleResponsive=mobile"><i class="fa fa-lg fa-mobile-phone"></i> {L_mobile_version}</a></div>
+					<!-- ENDIF -->
+
+					<!-- LISTENER content-footer-left -->
+				</div>
+				<div class="floatRight">
+					<!-- LISTENER content-footer-right -->
+
+					<!-- IF not S_LOGGED_IN and S_STYLECHANGER -->
+					<a href="javascript:change_style();"><i class="fa fa-paint-brush"></i> {L_change_style}</a>
+					<!-- ENDIF -->
+
+					<!-- IF S_GLOBAL_RSSFEEDS -->
+					<div class="rss-tooltip-container">
+						<a class="rss-tooltip-trigger tooltip-trigger" data-tooltip="rss-tooltip"><i class="fa hand fa-rss fa-lg"></i></a>
+						<ul class="dropdown-menu right-bottom rss-tooltip" role="menu" id="rss-tooltip">
+							<!-- BEGIN global_rss_row -->
+							<li><a href="{global_rss_row.LINK}"><i class="fa hand fa-rss fa-lg"></i> {global_rss_row.NAME}</a></li>
+							<!-- END global_rss_row -->
+						</ul>
+					</div>
+					<!-- ENDIF -->
+				</div>
+				<div class="clear noheight"></div>	
+					<!-- LISTENER footer_top -->
+					<div class="portal_block2">{PORTAL_BLOCK2}</div>
+					
+					<!-- LISTENER footer_bottom -->{EQDKP_PLUS_COPYRIGHT}
+				<!-- close footer -->
+				<!-- ELSE -->
+				<!-- IF S_SHOW_QUERIES --><br />{DEBUG_TABS}<!-- ENDIF -->
+				<!-- LISTENER debug -->
+				<!-- ENDIF -->
+			</footer>
+	
+	</div> <!-- close #pageBody -->
 	<!-- LISTENER body_bottom -->
 	<a id="bottom"></a>
 	<div class="toTopContainer" style=""><div><a href="javascript:onclick=window.scrollTo(0,0)"><i class="fa-angle-up fa fa-lg"></i></a></div></div>
-		</body>
+	</body>
 </html>
 <!-- ENDIF -->

@@ -160,10 +160,13 @@ h3 {
 	min-height: 39px;
 	color: @eqdkpUserareaFontColor;
 	font-size: 13px;
-	padding-left: 40px;
-	padding-right: 40px;
 	text-align:left;
 	z-index:99;
+	width: 100%;
+}
+#personalAreaInner {
+	padding-left: 40px;
+	padding-right: 40px;
 }
 
 #personalArea a {
@@ -476,7 +479,6 @@ div .contentFooter {background-color: @eqdkpContentBackgroundColor;padding: 3px 
 	padding-left: 5px;
 	min-height: 140px;
 	position: relative;
-	margin-bottom: -2px;
 }
 
 #contentFooter a, #contentFooter a:visited, #contentFooter a:hover{
@@ -3495,7 +3497,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		vertical-align: middle;
 	}
 
-	.responsive #personalArea, .responsive #header, .responsive #footer {
+	.responsive #personalAreaInner, .responsive #header, .responsive #footer {
 		padding-right: 10px;
 		padding-left: 10px;
 	}
@@ -4576,3 +4578,23 @@ button > i, .button > i {
 .btn-ddm button {
 	margin-bottom: 0;
 }
+
+html, body {
+	height: 100%;
+}
+
+#pageBody {
+	display: flex;
+    height: 100%;
+    flex-direction: column;
+}
+
+#wrapper {
+	flex: 1 0 auto;
+}
+
+#contentFooter {
+	flex: 0 0 auto;
+}
+
+
