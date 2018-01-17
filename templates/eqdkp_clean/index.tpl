@@ -507,11 +507,15 @@
 					
 					<!-- LISTENER footer_bottom -->{EQDKP_PLUS_COPYRIGHT}
 				<!-- close footer -->
+				</footer>
+				
 				<!-- ELSE -->
+				<div class="">
 				<!-- IF S_SHOW_QUERIES --><br />{DEBUG_TABS}<!-- ENDIF -->
+				</div>
 				<!-- LISTENER debug -->
 				<!-- ENDIF -->
-			</footer>
+			
 	
 	</div> <!-- close #pageBody -->
 	

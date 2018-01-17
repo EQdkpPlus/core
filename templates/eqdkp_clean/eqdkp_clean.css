@@ -4611,3 +4611,12 @@ html, body {
 .settings textarea {
 	max-width: 95%;
 }
+
+.embed-content, .embed-content div, .embed-content iframe {
+	max-width: 100%;
+}
+
+.simple-header #pageBody {
+	height: auto;
+	display: block;
+}
