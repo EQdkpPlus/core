@@ -2,13 +2,16 @@ $(function() {
 	//Fixed Menu
 	$(window).on('scroll', function() {
 		var topMenu = $('#nav');
+		var topBody = $('body');
 		
 		if($(document).scrollTop() > ($("#banner").outerHeight() + $("#personalArea").outerHeight())){
 			if(!topMenu.hasClass("jsFixed")){
 				topMenu.addClass('jsFixed');
+				topBody.addClass('jsFixedBody');
 			}
 		} else {
 			topMenu.removeClass('jsFixed');
+			topBody.removeClass('jsFixedBody');
 		}
 		
 		//ScrollToTop

@@ -4620,3 +4620,7 @@ html, body {
 	height: auto;
 	display: block;
 }
+
+.jsFixedBody .portal {
+	margin-top: 47px;
+}
