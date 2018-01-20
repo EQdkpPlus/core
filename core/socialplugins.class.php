@@ -29,7 +29,7 @@ if (!class_exists("socialplugins")) {
 		
 		
 		private $plugins = array('opengraph_tags');
-		private $buttons = array('facebook_share', 'twitter_share', 'google_plusone', 'facebook_like', 'whatsapp_share');
+		private $buttons = array('facebook_share', 'twitter_share', 'google_plusone',  'whatsapp_share', 'facebook_like');
 		private $js_included = false;
 		private $intCacheTime = 10;
 		private $cache = -1;
@@ -154,7 +154,7 @@ if (!class_exists("socialplugins")) {
 		}
 		
 		private function whatsapp_share($urlToShare, $text, $height){
-			$html = '<a class="social-bookmarks-nocount whatsapp" href="whatsapp://send?text='.rawurlencode($text).' '.rawurlencode($urlToShare).'"><i class="fa fa-whatsapp"></i> '.$this->user->lang('sp_btn_facebook_share').'</a>';
+			$html = '<a class="social-bookmarks-nocount whatsapp" href="whatsapp://send?text='.rawurlencode($text).' '.rawurlencode($urlToShare).'"><i class="fa fa-whatsapp"></i> <span class="share-text">'.$this->user->lang('sp_btn_facebook_share').'</span></a>';
 			return $html;
 		}
 
