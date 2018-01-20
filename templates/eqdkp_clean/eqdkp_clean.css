@@ -4621,6 +4621,10 @@ html, body {
 	display: block;
 }
 
+.admin.jsFixedBody .portal{
+	margin-top: 85px;
+}
+
 .jsFixedBody .portal {
 	margin-top: 47px;
 }
