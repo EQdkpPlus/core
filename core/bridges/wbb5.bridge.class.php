@@ -64,6 +64,9 @@ class wbb5_bridge extends bridge_generic {
 		'cmsbridge_sso_cookiepath' => array(
 			'type'	=> 'text',
 		),
+		'cmsbridge_framework_url' => array(
+			'type' => 'text',	
+		),
 	);
 	
 	//Needed function
