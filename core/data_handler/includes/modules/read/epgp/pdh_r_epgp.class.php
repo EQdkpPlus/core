@@ -68,7 +68,7 @@ if ( !class_exists( "pdh_r_epgp" ) ) {
 					$arrEPGP['multi'][$member_id][$mdkp_id]['ep'] = $this->calculate_ep($member_id, $mdkp_id, true);
 					$arrEPGP['multi'][$member_id][$mdkp_id]['epgp'] = $this->calculate_epgp($member_id, $mdkp_id, true, $arrEPGP['multi'][$member_id][$mdkp_id]['ep']);
 					$arrEPGP['single'][$member_id][$mdkp_id]['ep'] = $this->calculate_ep($member_id, $mdkp_id, false);
-					$arrEPGP['single'][$member_id][$mdkp_id]['epgp'] = $this->calculate_epgp($member_id, $mdkp_id, false, $arrEPGP['single'][$member_id][$mdkp_id]['epgp']);
+					$arrEPGP['single'][$member_id][$mdkp_id]['epgp'] = $this->calculate_epgp($member_id, $mdkp_id, false, $arrEPGP['single'][$member_id][$mdkp_id]['ep']);
 				}
 			}
 			$this->pdc->put('pdh_epgp_table', $arrEPGP, null);
@@ -104,9 +104,19 @@ if ( !class_exists( "pdh_r_epgp" ) ) {
 			$gp = $this->pdh->get('points', 'spent', array($member_id, $multidkp_id, 0, 0, $with_twink));
 			return ($round == true) ? runden($gp) : $gp;
 		}
+		
+		public function get_gpwithbp($member_id, $multidkp_id, $round = true, $with_twink=true){
+			$gp 	= $this->get_gp($member_id, $multidkp_id, $round, $with_twink);
+			$bp 	= intval($this->pdh->get_layout_config('base_points'));
+			if($bp > 0) $gp = $gp + $bp;
+			return ($round == true) ? runden($gp) : $gp;
+		}
 
 		public function get_html_gp($member_id, $multidkp_id, $round = true, $with_twink=true){
-			return '<span class="negative">'.$this->get_gp($member_id, $multidkp_id, $round, $with_twink).'</span>';
+			$bp 	= intval($this->pdh->get_layout_config('base_points'));
+			$gp		= $this->get_gp($member_id, $multidkp_id, $round, $with_twink);
+			if($bp > 0) $gp = $gp + $bp;
+			return '<span class="negative">'.$gp.'</span>';
 		}
 
 		public function get_epgp($member_id, $multidkp_id, $round = true, $with_twink=true){
