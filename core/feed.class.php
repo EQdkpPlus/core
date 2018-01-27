@@ -102,11 +102,19 @@ if (!class_exists("feed")) {
 		}
 
 		public function show(){
-			return $this->generate();
+			$out = $this->generate();
+			$this->reset();
+			return $out;
 		}
 
 		public function save($path){
 			$this->pfh->putContent($path, $this->generate());
+			$this->reset();
+		}
+		
+		private function reset(){
+			$this->items = array();
+			$this->data = array();
 		}
 	}
 

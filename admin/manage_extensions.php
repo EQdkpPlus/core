@@ -151,7 +151,7 @@ class Manage_Extensions extends page_generic {
 						$src_path = $this->pfh->FolderPath('tmp/'.$upload_id, 'repository');
 						$arrSubfolder = scandir($src_path);
 							
-						$arrIgnore = array(".", "..", "package.xml", "index.html");
+						$arrIgnore = array(".", "..", "package.xml", "settings.xml", "index.html");
 						$arrDiff = array_diff($arrSubfolder, $arrIgnore);
 						if(is_array($arrDiff) && count($arrDiff) === 1){
 							foreach($arrDiff as $strSubfolder){

@@ -32,6 +32,7 @@ class Manage_Styles extends page_generic{
 	public function __construct(){
 		$this->user->check_auth('a_extensions_man');
 		$handler = array(
+			'cancel'	=> array('process' => 'display'),
 			'version_update' => array('process' => 'version_update'),
 			'template_edit_button' => array('process' => 'edit_template', 'csrf'=>true),
 			'template_reset_button' => array('process' => 'reset_template', 'csrf'=>true),
@@ -171,7 +172,7 @@ class Manage_Styles extends page_generic{
 		//Delete Template Cache
 		$this->objStyles->deleteStyleCache($this->style['template_path']);
 
-		$this->core->message( $this->user->lang('admin_update_style_success'), $this->user->lang('success'), 'green');
+		redirect('admin/manage_styles.php'.$this->SID.'&edit=true&styleid='.$this->url_id.'&save=success');
 	}
 
 	private function get_data() {
@@ -209,6 +210,10 @@ class Manage_Styles extends page_generic{
 	}
 
 	public function edit(){
+		if($this->in->get('save') == 'success')
+			$this->core->message( $this->user->lang('admin_update_style_success'), $this->user->lang('success'), 'green');
+		
+		
 		$text_decoration = array(
 			'none'			=> 'none',
 			'underline'		=> 'underline',

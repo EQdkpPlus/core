@@ -306,12 +306,18 @@ class install extends gen_class {
 	</head>
 
 	<body>
+		<div id="handler">
 		<form action="index.php" method="post" id="form_install">
 		<div id="outerWrapper">
 			<div id="header">
-				<img src="style/logo.svg" id="logo" />
-				<div id="languageselect"><i class="fa fa-globe"></i> '.$this->lang['language'].': '.$this->lang_drop().'</div>
-				<div id="logotext">Installation '.VERSION_EXT.'</div>
+				<div id="headerInner">
+					<div class="logoContainer">
+						<img src="style/logo.svg" id="logo" />
+						<div id="languageselect"><i class="fa fa-globe"></i> '.$this->lang['language'].': '.$this->lang_drop().'</div>
+						<div id="logotext">Installation '.VERSION_EXT.'</div>
+						<div class="clear"></div>
+					</div>
+				</div>
 			</div>
 
 		<div id="installer">
@@ -349,11 +355,13 @@ class install extends gen_class {
 				</div>
 			</div>
 		</div>
-		<div id="footer">
-			<a href="http://eqdkp-plus.eu">EQDKP Plus '.VERSION_EXT.' © 2006 - '.date('Y', time()).' by EQDKP Plus Development-Team</a>
-		</div>
 		</div>
 		</form>
+
+		<div id="footer">
+			<div><a href="http://eqdkp-plus.eu">EQDKP Plus '.VERSION_EXT.' © 2006 - '.date('Y', time()).' by EQDKP Plus Development-Team</a></div>
+		</div>
+		</div>
 	</body>
 </html>';
 		echo $content;

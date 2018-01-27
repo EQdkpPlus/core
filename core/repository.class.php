@@ -25,7 +25,7 @@ if ( !defined('EQDKP_INC') ){
 
 if (!class_exists("repository")) {
 	class repository extends gen_class {
-		public static $shortcuts = array('puf'	=> 'urlfetcher', 'objStyles'=> 'styles');
+		public static $shortcuts = array('puf'	=> 'urlfetcher', 'objStyles'=> 'styles', 'email'=>'MyMailer');
 		
 		//Dummy URL, should be a secure connection
 		private $RepoEndpoint	= "";
@@ -442,9 +442,15 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 		}
 
 		// check if there are updates available
+		// check if there are updates available
 		public function UpdatesAvailable($pcore=false){
 			if($pcore){
-				return (isset($this->updates['pluskernel'])) ? true : false;
+				if(isset($this->updates['pluskernel'])){
+					$this->notifyAdminForUpdate($this->updates['pluskernel']);
+					return true;
+				} else {
+					return false;
+				}
 			}else{
 				return ($this->UpdateCount() > 0) ? true : false;
 			}
@@ -777,6 +783,40 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 			&& $bytes *= pow( 1024, $pos )
 			;
 			return round( $bytes );
+		}
+		
+		public function notifyAdminForUpdate($arrPluginDetails){
+			$blnSendMail = false;
+			if($this->config->get('notify_updates_email')){
+				$arrAlreadySaved = $this->config->get('notified_updates');
+				if(!$arrAlreadySaved){
+					$blnSendMail = true;
+				} else {
+					$strVersion = $arrAlreadySaved['version'];
+					$intDate = $arrAlreadySaved['date'];
+					
+					if($strVersion != $arrPluginDetails['version_int'] || ((intval($intDate) + 86400*14) < $this->time->time) ){
+						$blnSendMail = true;
+					}
+					
+				}
+				
+				if($blnSendMail){
+					$bodyvars = array(
+							'VERSION_RECENT'=> VERSION_EXT,
+							'VERSION_NEW'	=> $arrPluginDetails['version'],
+							'RELEASE'		=> $arrPluginDetails['release'],
+							'EQDKP_URL'		=> $this->env->link,
+							'GUILD'			=> $this->config->get('guildtag'),
+					);
+					
+					$adminmail	= register('encrypt')->decrypt($this->config->get('admin_email'));
+					
+					$this->email->SendMailFromAdmin($adminmail, $this->user->lang('new_coreupdate_subject'), 'new_coreupdate.html', $bodyvars, $this->config->get('lib_email_method'));
+					
+					$this->config->set('notified_updates', array('version' => $arrPluginDetails['version_int'], 'date' => $this->time->time));
+				}
+			}
 		}
 	}
 	

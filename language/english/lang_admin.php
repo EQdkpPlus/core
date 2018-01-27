@@ -567,8 +567,6 @@ $lang = array(
 	"core_sett_tab_user" => 'User',
 	"core_sett_tab_portal" => 'Portal',
 	"core_sett_tab_chars" => 'Characters',
-	"core_sett_f_cookie_euhint_show" => 'Notice User on cookie usage',
-	"core_sett_f_help_cookie_euhint_show" => 'According to the EU directive 2009/136/EG websites are required to inform visitors on their cookie usage.',
 	"core_sett_fs_meta" => 'Meta-Information',
 	"core_sett_f_meta_keywords" => 'Meta-Keywords',
 	"core_sett_f_help_meta_keywords" => 'Keywords are used for search engine optimazation.',
@@ -1291,12 +1289,12 @@ $lang = array(
 	"bridge_onlycmsuserlogin_help" => 'User with EQdkp Plus Account but with not CMS Account are not allowed to log into EQdkp Plus',
 	"bridge_sync_usergroups" => 'Sync Group-Memberships for selected CMS/Forum-usergroups',
 	"bridge_sync_usergroups_help" => 'During login process, the user\'s CMS/Forum Group-Memberships of the selected Groups will be overtaken into EQdkp Plus',
-	"bridge_framework_url" => "URL to the CMS/Forum Framework",
-	"bridge_framework_url_help" => "Enter the URL to the framework URL of your CMS/Forum, where the userprofiles and private conversations can be found.",
+	"f_cmsbridge_framework_url" => "URL to the CMS/Forum Framework",
+	"f_help_cmsbridge_framework_url" => "Enter the URL to the framework URL of your CMS/Forum, where the userprofiles and private conversations can be found.",
 	"f_cmsbridge_disable_sso" => 'Disable single sign-on',
-	"f_cmsbridge_disable_sso_help" => 'The user is not automatically logged in in the CMS/Forum, when he logs into EQdkp Plus.',
+	"f_help_cmsbridge_disable_sso" => 'The user is not automatically logged in in the CMS/Forum, when he logs into EQdkp Plus.',
 	"f_cmsbridge_disable_sync" => 'Deactivate synchronisation of userdata',
-	"f_cmsbridge_disable_sync_help" => 'Prohibits the synchronisation of profile fields from CMS/Forum to EQdkp Plus.',
+	"f_help_cmsbridge_disable_sync" => 'Prohibits the synchronisation of profile fields from CMS/Forum to EQdkp Plus.',
 	"f_cmsbridge_sso_cookiename" => 'Cookie-name of the CMS/Forum',
 	"f_cmsbridge_sso_cookiedomain" => 'Cookie-domain of the CMS/Forum',
 	"f_cmsbridge_sso_cookiepath" => 'Cookie-path of the CMS/Forum',
@@ -1833,7 +1831,7 @@ $lang = array(
 		"userpf_sett_f_example" => "Input Example",
 		"core_sett_f_auto_set_active" => "Activate characters after raid attendance",
 		"core_sett_f_help_auto_set_active" => "Characters will get automatically activated if they attend at a raid. If set, the inactivity period will be considered.",
-		
+		"core_sett_f_notify_updates_email" => "Notify admin via mail about updates",
 );
 
 ?>

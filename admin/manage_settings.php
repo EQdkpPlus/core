@@ -289,6 +289,9 @@ class admin_settings extends page_generic {
 					'enable_comments'	=> array(
 						'type'		=> 'radio',
 					),
+					'notify_updates_email' => array(
+							'type'		=> 'radio',
+					),
 					'debug'	=> array(
 						'type'		=> 'dropdown',
 						'tolang'	=> true,
@@ -362,9 +365,6 @@ class admin_settings extends page_generic {
 					'cookie_path'	=> array(
 						'type'		=> 'text',
 						'size'		=> 25,
-					),
-					'cookie_euhint_show'	=> array(
-						'type'		=> 'radio',
 					),
 				),
 				'email'				=> array(

@@ -944,7 +944,6 @@ $lang = array(
 "confirm_password" => "Passwort wiederholen",
 "points_for_this_char" => "Zeige die Punkte-Informationen nur für diesen Charakter an",
 "success_create_article" => "Der Artikel wurde erfolgreich gespeichert",
-"cookie_usage_hint" => "Diese Seite verwendet Cookies. Durch die Nutzung unserer Seite erklärst du dich damit einverstanden, dass wir Cookies setzen. <a href=\"{COOKIE_LINK}\">Weitere Informationen</a>",
 "team" => "Team-Mitglieder",
 "addchar_f_picture" => "Charakterbild",
 "other_items" => "Andere Items",
@@ -1099,6 +1098,6 @@ $lang = array(
 "user_delete_account" => "Benutzeraccount endgültig löschen",
 "confirm_account_info" => "Willst du deinen Bernuteraccount wirklich löschen? Alle damit verbundenen Daten, wie persönlichen Daten, Medien etc. werden vollständig aus dem System gelöscht und können nicht wiederhergestellt werden.<br /><br />Willst du diese Aktion wirklich durchführen, bestätige die Löschung deines Benutzeraccounts mit deinem aktuellen Benutzerpasswort.<br />",
 "click_to_reveal" => "Klicken, um diese Informationen anzuzeigen",
-		
+"new_coreupdate_subject" => "Neues EQdkp Plus Update verfügbar",		
 );
 ?>

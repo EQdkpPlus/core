@@ -6,12 +6,13 @@
 </div>
 <br />
 <!-- ENDIF -->
-
+<div class="nav-tabs-container">
 <ul class="nav nav-tabs">
 	<!-- BEGIN task_types -->
 	<li {task_types.ACTIVE}><a href="index.php{SID}&amp;type={task_types.TYPE}">{task_types.L_TYPE}</a></li>
 	<!-- END task_types -->
   </ul>
+  </div>
 <br />
 <div class="contentWrapper">
 <!-- IF S_PFH_ERROR -->
@@ -43,7 +44,7 @@
  <!-- BEGIN tasks_list -->
 <h1>{tasks_list.L_TASKS}</h1>
 
-<table width='100%' border='1' cellpadding="2" cellspacing="1" class="task_table colorswitch hoverrows">
+<table width='100%' border='1' cellpadding="2" cellspacing="1" class="task_table colorswitch hoverrows scrollable-x">
   <tr>
   	<th width='20'>&nbsp;</th>
     <th width='25%'>{L_NAME}</th>

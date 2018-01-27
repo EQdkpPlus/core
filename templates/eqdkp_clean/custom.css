@@ -1,0 +1,146 @@
+/* Game Background 
+*	
+* If you want to have the game specific background image, please uncomment the following block
+*/
+/*
+body {
+	background:#000000 url('TEMPLATE_BACKGROUND') no-repeat center top;
+	background-attachment: T_BACKGROUND_POSITION;
+}
+
+#wrapper header {
+	background: none !important;
+}
+
+*/
+
+/*============================================================================================*/
+
+/* Fixed personal area 
+*	
+* If you want the personal area to have a fixed position, please uncomment the following block
+*/
+
+/*
+
+#header {
+	margin-top: 60px;
+}
+
+#personalArea {
+	position:fixed;
+	padding-left: 0px;
+	padding-right: 0px;
+	width:100%;
+	z-index: 999;
+}
+#personalArea #personalAreaUser {
+	padding-left: 40px;
+}
+#personalArea #personalAreaTime {
+	padding-right: 40px;
+}
+*/
+
+/*============================================================================================*/
+
+/* Hide Portal Modules on Smartphones
+*
+* If you want to hide portal modules on Smartphone, get the CSS-Class for the module from the source text in your browser, uncomment the following block and add the CSS Class
+*/
+/*
+@media all and (max-width: 480px) {
+	.offi_conf_portal, .birthday_portal {
+		display: none;
+	}
+}
+*/
+
+/*============================================================================================*/
+
+/* Give Article Headlines of some categories (here: Category #2) a special color */
+
+/*
+.article-container[data-article-category-id="2"] h2 a, .article_detail_container[data-article-category-id="2"] h1{
+	color: #efefef;
+}
+*/
+
+/* Make the Ribbons to the same color */
+/*
+.article-container[data-article-category-id="2"] .ribbon > span {
+	background: linear-gradient(lighten(#efefef,20%) 0%, #efefef 100%);
+	color: #000;
+}
+*/
+
+/*============================================================================================*/
+
+/* If you want to embedd EQdkp Plus, give the body the class "embedded" and remove the reponsive Block from the body class. */
+
+/*
+body.embedded {
+	background: transparent;
+}
+
+.embedded #header, .embedded .personalAreaTime {
+	display: none;
+}
+
+.embedded #contentContainer {
+	background: transparent;
+	margin:0;
+	box-shadow: none;
+	border: none; 
+}
+
+.embedded #personalArea {
+	padding-right: 20px;
+	padding-left: 20px;
+	margin-bottom: 0;
+	box-shadow: none;
+}
+
+.embedded #contentBody, .embedded #contentBody2 {
+	background: transparent;
+	border: none;
+}
+
+.embedded #footer, .embedded .copyright, .embedded #footer a, .embedded #copyright a {
+	color: inherit;
+}
+*/
+/*============================================================================================*/
+/*
+*If u want to show Portalmodules in a row. Please uncomment the following block.
+*/
+
+/*
+#portal-middle, #portal-footer{
+display:flex;
+justify-content:space-around;
+align-items:stretch;
+
+	.portalbox{
+		flex:1 1 auto;
+		display: flex;
+		flex-direction: column;
+	}
+	.portalbox_content{
+		display:flex;
+		justify-content: space-around;
+		flex: 1 1 auto;
+	}
+	.colorswitch{	
+	background-color: none;
+	display: flex;
+	align-items: flex-end;
+	text-align: center;
+	flex-wrap: wrap;
+	justify-content: center;
+	
+		div{
+			background-color: transparent;}
+	}
+}
+*/

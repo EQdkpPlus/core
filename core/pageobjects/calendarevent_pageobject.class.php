@@ -81,16 +81,19 @@ class calendarevent_pageobject extends pageobject {
 						array('name' => 'loguser',		'sort' => true, 'th_add' => 'width="100" class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
 				),
 		);
-		$hptt				= $this->get_hptt($hptt_psettings, $view_list, $view_list, array('%link_url%' => 'manage_logs.php', '%link_url_suffix%' => '', md5($strFilterSuffix)));
+		$hptt				= $this->get_hptt($hptt_psettings, $view_list, $view_list, array('%link_url%' => $this->root_path.'manage_logs.php', '%link_url_suffix%' => '', md5($strFilterSuffix)));
 
 		$page_suffix		= '&amp;start='.$this->in->get('start', 0).'&logs&eventid='.$this->url_id.'&simple_head=true';
 		$sort_suffix		= $this->SID.'&amp;sort='.$this->in->get('sort');
+		$hptt->setPageRef($this->strPath);
 		$logs_list 			= $hptt->get_html_table($this->in->get('sort',''), $page_suffix);
+		
+		
 		$this->tpl->assign_vars(array(
 			'LOGS_LIST'				=> $logs_list,
-			'LOGS_PAGINATION'		=> generate_pagination('manage_logs.php'.$sort_suffix.$strFilterSuffix, $actionlog_count, 100, $this->in->get('start', 0)),
+			'LOGS_PAGINATION'		=> generate_pagination($this->strPath.$this->SID.$sort_suffix.$strFilterSuffix, $actionlog_count, 100, $this->in->get('start', 0)),
 			'HPTT_LOGS_COUNT'		=> $hptt->get_column_count(),
-			'S_COMMENTS'				=> false,
+			'S_COMMENTS'			=> false,
 		));
 
 		$this->core->set_vars(array(

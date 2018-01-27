@@ -248,7 +248,7 @@ class portal extends gen_class {
 	public function init_portalsettings() {
 		if(!isset($this->portal_settings)) {
 			$this->portal_settings = true;
-			$this->jquery->Dialog('fe_portalsettings', $this->user->lang('portalplugin_winname'), array('url'=>$this->server_path."admin/manage_portal.php".$this->SID."&simple_head=true&id='+moduleid+'", 'width'=>'660', 'height'=>'400', 'withid'=>'moduleid', 'onclosejs'=> 'location.reload(true);'));
+			$this->jquery->Dialog('fe_portalsettings', $this->user->lang('portalplugin_winname'), array('url'=>$this->server_path."admin/manage_portal.php".$this->SID."&simple_head=true&id='+moduleid+'", 'width'=>'800', 'height'=>'600', 'withid'=>'moduleid', 'onclosejs'=> 'location.reload(true);'));
 		}
 	}
 

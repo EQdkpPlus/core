@@ -80,7 +80,6 @@ class inst_settings extends install_generic {
 		'round_precision'				=> 2,
 		'custom_logo'					=> 'logo.svg',
 		'mainmenu'						=> 'a:8:{i:0;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"d41d8cd98f00b204e9800998ecf8427e";s:6:"hidden";s:1:"0";}}i:1;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"e2672c7758bc5f8bb38ddb4b60fa530c";s:6:"hidden";s:1:"0";}}i:2;a:2:{s:4:"item";a:2:{s:4:"hash";s:32:"92f04bcfb72b27949ee68f52a412acac";s:6:"hidden";s:1:"0";}s:7:"_childs";a:1:{i:0;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"7809b1008f1d915120b3b549ca033e1f";s:6:"hidden";s:1:"0";}}}}i:3;a:2:{s:4:"item";a:2:{s:4:"hash";s:32:"ca65b9cf176197c365f17035270cc9f1";s:6:"hidden";s:1:"0";}s:7:"_childs";a:4:{i:1;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"0e6acee4fa4635f2c25acbf0bad6c445";s:6:"hidden";s:1:"0";}}i:2;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"53433bf03b32b055f789428e95454cec";s:6:"hidden";s:1:"0";}}i:3;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"c1ec6e24e3276e17e3edcb08655d9181";s:6:"hidden";s:1:"0";}}i:4;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"65d93e089c21a737b601f81e70921b8b";s:6:"hidden";s:1:"0";}}}}i:4;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"8f9bfe9d1345237cb3b2b205864da075";s:6:"hidden";s:1:"0";}}i:5;a:2:{s:4:"item";a:2:{s:4:"hash";s:32:"ebc90e9afa50f8383d4f93ce9944b8dd";s:6:"hidden";s:1:"0";}s:7:"_childs";a:2:{i:5;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"276753faf0f1a394d24bea5fa54a4e6b";s:6:"hidden";s:1:"0";}}i:6;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"cd5f542b7201c8d9b8f697f97a2dcc52";s:6:"hidden";s:1:"0";}}}}i:6;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"292299380781735bd110e74fe0ada4ac";s:6:"hidden";s:1:"0";}}i:7;a:1:{s:4:"item";a:2:{s:4:"hash";s:32:"2a91cf06beec2894ebd9266c884558c3";s:6:"hidden";s:1:"0";}}}',
-		'cookie_euhint_show'			=> 1,
 		'enable_registration'			=> 1,
 		'enable_points'					=> 1,
 		'enable_embedly'				=> 1,
@@ -346,19 +345,7 @@ class inst_settings extends install_generic {
 		$this->do_sql("UPDATE __articles SET title=".$this->db->escapeString($this->lang['article12'])." WHERE id=12;");
 		$this->do_sql("UPDATE __articles SET title=".$this->db->escapeString($this->lang['article13'])." WHERE id=13;");
 		$this->do_sql("UPDATE __articles SET title=".$this->db->escapeString($this->lang['article14'])." WHERE id=14;");
-		$this->do_sql("UPDATE __articles SET title=".$this->db->escapeString($this->lang['article15'])." WHERE id=15;");
-		$this->do_sql("UPDATE __articles SET title=".$this->db->escapeString($this->lang['article16'])." WHERE id=16;");
 
-
-		//Disclaimer & Privacy Policy
-		if (is_file($this->root_path.'language/'.$this->langcode.'/disclaimer.php')){
-			include_once($this->root_path.'language/'.$this->langcode.'/disclaimer.php');
-			$this->do_sql("UPDATE __articles SET text=".$this->db->escapeString($privacy)." WHERE id=15;");
-			$this->do_sql("UPDATE __articles SET text=".$this->db->escapeString($disclaimer)." WHERE id=16;");
-		} else {
-			$this->do_sql("DELETE FROM __articles WHERE id=15;");
-			$this->do_sql("DELETE FROM __articles WHERE id=16;");
-		}
 
 		//Startnews
 		$this->do_sql("INSERT INTO `__articles` (`id`, `title`, `text`, `category`, `featured`, `comments`, `votes`, `published`, `show_from`, `show_to`, `user_id`, `date`, `previewimage`, `alias`, `hits`, `sort_id`, `tags`, `votes_count`, `votes_sum`, `votes_users`, `last_edited`, `last_edited_user`) VALUES

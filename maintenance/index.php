@@ -193,7 +193,7 @@ class task_manager_display extends gen_class {
 		$this->tpl->assign_block_vars('task_types', array(
 			'TYPE'			=> 'home',
 			'ACTIVE'		=> ($this->in->get('type', 'home') == 'home') ? 'class="active"' : '',
-			'L_TYPE'		=> $this->user->lang('home'),
+			'L_TYPE'		=> '<i class="fa fa-lg fa-home"></i> '.$this->user->lang('home'),
 		));
 		foreach($types as $type => $unused) {
 			$this->tpl->assign_block_vars('task_types', array(

@@ -1730,10 +1730,10 @@ class template extends gen_class {
 			'eqdkpImageURL'						=> '"'.$this->env->link.'images/"',
 			'eqdkpTemplateImagePath' 			=> '"'.$root_path.'templates/'.$stylepath.'/images/"',
 			'eqdkpTemplateImageURL'				=> '"'.$this->env->link.'templates/'.$stylepath.'/images/"',
-			'eqdkpTemplateBanner' 				=> '"'.$style['banner_img'].'"',
-			'eqdkpBannerImage' 					=> '"'.$style['banner_img'].'"',
-			'eqdkpTemplateBackground' 			=> '"'.$template_background_file.'"',
-			'eqdkpBackgroundImage' 				=> '"'.$template_background_file.'"',
+			'eqdkpTemplateBanner' 				=> '"'.$this->replaceSomePathVariables($style['banner_img'], $root_path, $stylepath).'"',
+			'eqdkpBannerImage' 					=> '"'.$this->replaceSomePathVariables($style['banner_img'], $root_path, $stylepath).'"',
+			'eqdkpTemplateBackground' 			=> '"'.$this->replaceSomePathVariables($template_background_file, $root_path, $stylepath).'"',
+			'eqdkpBackgroundImage' 				=> '"'.$this->replaceSomePathVariables($template_background_file, $root_path, $stylepath).'"',
 			'eqdkpBackgroundImagePosition'		=> (($style['background_pos'] == 'normal') ? 'scroll' : 'fixed'),
 			'eqdkpPortalWidth' 					=> ($style['portal_width'] != "") ? $style['portal_width'] : '900px',
 			'eqdkpColumnLeftWidth' 				=> ($style['column_left_width'] != "") ? $style['column_left_width'] : '200px',
@@ -1750,7 +1750,7 @@ class template extends gen_class {
 					$lessVars[register('styles')->convertNameToLessVar($name)] = (isset($style[$name]) && strlen($style[$name])) ? $style[$name].'px' : '13px';
 					continue;
 				}
-				$lessVars[register('styles')->convertNameToLessVar($name)] = (isset($style[$name]) && strlen($style[$name])) ? $style[$name] : ((stripos($name, 'color')) ? '#000' : '""');
+				$lessVars[register('styles')->convertNameToLessVar($name)] = (isset($style[$name]) && strlen($style[$name])) ? $this->replaceSomePathVariables($style[$name], $root_path, $stylepath) : ((stripos($name, 'color')) ? '#000' : '""');
 			}
 		}
 
@@ -1769,7 +1769,7 @@ class template extends gen_class {
 
 		//Add Additional LESS
 		$strCSS .= $style['additional_less'];
-
+		
 		try {
 			require_once $this->root_path.'libraries/less/Less.php';
 
@@ -1785,6 +1785,17 @@ class template extends gen_class {
 
 		return $strCSS;
 	}
+	
+	
+	private function replaceSomePathVariables($in, $root_path, $stylepath) {
+		$arrSearch = array('@eqdkpURL', '@eqdkpServerPath', '@eqdkpRootPath', '@eqdkpImagePath', '@eqdkpTemplateImagePath');
+		
+		$arrReplace = array($this->env->link, $this->server_path, $root_path, $root_path.'images/', $root_path.'templates/'.$stylepath.'/images/');
+		
+		$in = str_replace($arrSearch, $arrReplace, $in);
+		return $in;
+	}
+	
 
 
 	public function __destruct() {

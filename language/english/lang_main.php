@@ -985,7 +985,6 @@ $lang = array(
 	"extensions" => 'Extensions',
 	"points_for_this_char" => 'Show the points information for this Char only',
 	"success_create_article" => 'Article has been saved succesfully',
-	"cookie_usage_hint" => 'This site uses cookies. By continuing to browse this site, you are agreeing to our use of cookies. <a href="{COOKIE_LINK}">More details</a>',
 	"team" => 'Team-Members',
 	"addchar_f_picture" => 'Characterimage',
 	"other_items" => 'Other Items',
@@ -1138,6 +1137,7 @@ $lang = array(
 	"user_delete_account" => "Delete account permanently",
 	"confirm_account_info" => "Do you really want to delete your user account? All associated data, like personal ones or media will get deleted immediately and permanently.<br /><br />If you want to continue, you have to confirm your account deletion with your current password.<br />",
 	"click_to_reveal" => "Click to reveal this information",
+	"new_coreupdate_subject" => "New EQdkp Plus update available",
 	);
 
 ?>

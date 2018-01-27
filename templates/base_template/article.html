@@ -1,13 +1,13 @@
 
 <section data-article-id="{ARTICLE_ID}" data-article-category-id="{ARTICLE_REAL_CATEGORY}" class="article_detail_container <!-- IF S_FEATURED -->featured<!-- ENDIF -->">
 	<!-- IF not S_HIDE_HEADER -->
-	<nav>
+	<nav class="nextAndPrevArticles">
 		<!-- IF S_PREV_ARTICLE -->
-		<a href="{U_PREV_ARTICLE}" title="{PREV_TITLE}"><i class="fa fa-chevron-left"></i> {PREV_TITLE}</a>
+		<a href="{U_PREV_ARTICLE}" title="{PREV_TITLE}" class="prevArticle"><i class="fa fa-chevron-left"></i> {PREV_TITLE}</a>
 		<!-- ENDIF -->
 
 		<!-- IF S_NEXT_ARTICLE -->
-		<a href="{U_NEXT_ARTICLE}" title="{NEXT_TITLE}" class="floatRight">{NEXT_TITLE} <i class="fa fa-chevron-right"></i></a>
+		<a href="{U_NEXT_ARTICLE}" title="{NEXT_TITLE}" class="nextArticle floatRight">{NEXT_TITLE} <i class="fa fa-chevron-right"></i></a>
 		<!-- ENDIF -->
 		<div class="clear"></div>
 		<br />
@@ -29,16 +29,13 @@
 				</div>
 				<!-- ENDIF -->
 				<div class="floatRight">
-					<a href="{PERMALINK}" title="{L_permalink}"><i class="fa fa-link"></i></a>
+					<a href="{PERMALINK}" title="{L_permalink}" class="permalink"><i class="fa fa-link"></i></a>
 				</div>
 			</h1>
 		</div>
 		<div class="news_author">
 			<div class="floatLeft">
-				<i class="fa fa-calendar-o"></i> {ARTICLE_TIMETAG} &bull; <i class="fa fa-user"></i> {ARTICLE_AUTHOR} <!-- IF S_COMMENTS --> &bull; <a href="#comments"><i class="fa fa-comments"></i>{COMMENTS_COUNTER}</a><!-- ENDIF -->
-			</div>
-			<div class="news_social floatRight">
-				{ARTICLE_SOCIAL_BUTTONS}
+				<span class="news_author_date"><i class="fa fa-calendar-o"></i> {ARTICLE_TIMETAG} &bull; </span><span class="news_author_category" style="display:none;">{ARTICLE_REAL_CATEGORY_NAME} &bull;</span> <span class="news_author_user"><i class="fa fa-user"></i> {ARTICLE_AUTHOR}</span> <!-- IF S_COMMENTS --><span class="news_author_comments"> &bull; <a href="#comments"><i class="fa fa-comments"></i> {COMMENTS_COUNTER}</a></span><!-- ENDIF -->
 			</div>
 			<div class="clear"></div>
 		</div>
@@ -73,6 +70,12 @@
 	</article>
 	<div class="clear"></div>
 	{PAGINATION}
+
+	<!-- IF not S_HIDE_HEADER -->
+	<div class="news_social">
+		{ARTICLE_SOCIAL_BUTTONS}
+	</div>
+	<!-- ENDIF -->
 
 	<footer class="tags-container">
 		<!-- IF S_TAGS -->

@@ -101,7 +101,7 @@ function runden($value){
 		$ret_val = round($value,$precision)	;
 		$ret_val = number_format($ret_val, $precision, '.', '');
 	} else {
-		$ret_val = round($value, 5);
+		$ret_val = number_format(round($value, 5), $precision, '.', '');
 	}
 	return $ret_val;
 }
