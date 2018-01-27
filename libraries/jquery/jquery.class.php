@@ -84,7 +84,7 @@ if (!class_exists("jquery")) {
 			$this->init_toast();
 
 			$this->tpl->add_js('$(".lightbox, a[rel=\'lightbox\']").colorbox({rel:"lightbox", transition:"none", maxWidth:"90%", maxHeight:"90%"});', 'docready');
-			$this->tpl->add_js('$("time.datetime").relativeTime({"debug":1});', 'docready');
+			$this->tpl->add_js('$("time.datetime").relativeTime();', 'docready');
 			$this->tpl->add_js('$(".equalto").change(function(){
 					field1	= $("#" + $(this).data("equalto")).val();
 					field2	= $(this).val();
