@@ -258,37 +258,6 @@ class admin_settings extends page_generic {
 						'type'		=> 'text',
 						'size'		=> 40
 					),
-					'enable_points'=> array(
-						'type'		=> 'radio',
-					),
-					'dkp_name'		=> array(
-						'type'		=> 'text',
-						'size'		=> 5,
-					),
-
-					'round_activate'	=> array(
-						'type'		=> 'radio',
-						'default'	=> 0,
-						'dependency' => array(1=>array('round_precision')),
-					),
-					'round_precision'	=> array(
-						'type'		=> 'text',
-						'size'		=> 2,
-						'default'	=> 0
-					),
-					'enable_leaderboard'=> array(
-						'type'		=> 'radio',
-					),
-					'color_items'	=> array(
-						'type'		=> 'slider',
-						'label'		=> $this->user->lang('core_sett_f_color_items'),
-						'min'		=> 0,
-						'max'		=> 100,
-						'width'		=> '300px'
-					),
-					'enable_comments'	=> array(
-						'type'		=> 'radio',
-					),
 					'notify_updates_email' => array(
 							'type'		=> 'radio',
 					),
@@ -344,13 +313,6 @@ class admin_settings extends page_generic {
 						'options'	=> $this->user->get_available_authmethods(),
 						'default'	=> 'db',
 
-					),
-				),
-				'login'			=> array(
-					'login_method'	=> array(
-						'type'		=> 'multiselect',
-						'options'	=> $this->user->get_available_loginmethods(),
-						'tolang'	=> true,
 					),
 				),
 				'cookie'			=> array(
@@ -514,6 +476,13 @@ class admin_settings extends page_generic {
 						'datatype'		=> 'int'
 					),
 				),
+					'login'			=> array(
+							'login_method'	=> array(
+									'type'		=> 'multiselect',
+									'options'	=> $this->user->get_available_loginmethods(),
+									'tolang'	=> true,
+							),
+					),
 				'avatar' => array(
 					'avatar_allowed' => array(
 						'type' => 'multiselect',
@@ -525,6 +494,38 @@ class admin_settings extends page_generic {
 						'default' => 'eqdkp',
 						'options' => array(),
 					),
+				),
+			),
+			'points' => array(
+				'points' => array(
+						'enable_points'=> array(
+								'type'		=> 'radio',
+						),
+						'dkp_name'		=> array(
+								'type'		=> 'text',
+								'size'		=> 5,
+						),
+						
+						'round_activate'	=> array(
+								'type'		=> 'radio',
+								'default'	=> 0,
+								'dependency' => array(1=>array('round_precision')),
+						),
+						'round_precision'	=> array(
+								'type'		=> 'text',
+								'size'		=> 2,
+								'default'	=> 0
+						),
+						'enable_leaderboard'=> array(
+								'type'		=> 'radio',
+						),
+						'color_items'	=> array(
+								'type'		=> 'slider',
+								'label'		=> $this->user->lang('core_sett_f_color_items'),
+								'min'		=> 0,
+								'max'		=> 100,
+								'width'		=> '300px'
+						),
 				),
 			),
 			'chars'		=> array(
@@ -681,6 +682,9 @@ class admin_settings extends page_generic {
 						'type'	=> 'textarea',
 						'cols'	=> 80,
 						'rows'	=> 5,
+					),
+					'enable_comments'	=> array(
+							'type'		=> 'radio',
 					),
 				),
 				'mobile' => array(
