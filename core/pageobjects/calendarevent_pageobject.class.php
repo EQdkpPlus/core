@@ -215,7 +215,7 @@ class calendarevent_pageobject extends pageobject {
 
 			// check if another char is used
 			$signedin_memberid = $this->pdh->get('calendar_raids_attendees', 'has_already_signedin', array($this->url_id, $this->in->get('member_id', 0)));
-			var_dump($signedin_memberid);
+
 			if($signedin_memberid > 0){
 				return false;
 			}
