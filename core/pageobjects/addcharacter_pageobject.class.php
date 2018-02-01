@@ -251,6 +251,11 @@ class addcharacter_pageobject extends pageobject {
 				$fielddata['required'] = true;
 				$fielddata['default'] = $this->config->get($fieldname);
 			}
+			
+			if($fielddata['type'] == 'imageuploader'){
+				$fielddata['returnFormat'] = 'relative';
+				$fielddata['imgup_type']	= 'user';	
+			}
 
 			//Make Dropdowns etc. translatable
 			if(count($fielddata['options']) > 0 && $fielddata['options_language'] != ""){

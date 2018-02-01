@@ -3881,6 +3881,10 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	.responsive .article-container > .table > .tr, .responsive .article-container > .table > .tr > .td:not(.bigDateTd) {
 		display: block;
 	}
+	
+	.responsive .settings input {
+		max-width: 95%;
+	}
 }
 
 @media all and (max-width: 590px) {

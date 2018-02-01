@@ -323,7 +323,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 					$strImage =  $this->server_path.$strPlainImage;
 				}
 			} else $strImage = false;
-
+			
 			switch($arrField['type']){
 				case 'int':
 				case 'text': {
@@ -331,6 +331,15 @@ if ( !class_exists( "pdh_r_member" ) ) {
 						$out = '<img src="'.$strImage.'" alt="'.$out.'" class="gameicon" /> '.$out;
 					}
 				}
+				break;
+				
+				case 'imageuploader':
+					if (strlen($out)){
+						$out = str_replace($this->root_path, $this->server_path, $out);
+					}
+					
+					return '<img src="'.$out.'" class="member-profilefield-'.$profile_field.' member-additional-image gameicon" alt="" />';
+					
 				break;
 				
 				case 'hidden':

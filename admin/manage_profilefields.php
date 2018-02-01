@@ -130,6 +130,7 @@ class ManageProfileFields extends page_generic {
 			'checkbox'		=> 'Checkbox',
 			'radio'			=> 'Radio',
 			'datepicker'	=> 'Datepicker',
+			'imageuploader' => 'Image',
 		);
 
 		$categories = array(

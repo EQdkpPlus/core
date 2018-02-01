@@ -36,7 +36,7 @@ class ManageUserProfileFields extends page_generic {
 			'disable'	=> array('process' => 'disable', 'csrf'=>true),
 			'new'		=> array('process' => 'edit'),
 		);
-		parent::__construct(false, $handler, array('user_profilefields', 'name'), null, 'del_ids[]');
+		parent::__construct(false, $handler, array('user_profilefields', 'html_name'), null, 'del_ids[]');
 		$this->process();
 	}
 	
@@ -165,6 +165,7 @@ class ManageUserProfileFields extends page_generic {
 								'radio'			=> 'Radio',
 								'gender'		=> 'Gender',
 								'birthday'		=> 'Birthday',
+								'imageuploader' => 'Image',
 						),
 						'required'	=> true
 				),

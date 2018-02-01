@@ -115,8 +115,8 @@ class mycharacters_pageobject extends pageobject {
 
 		// Jquery stuff
 		$this->jquery->Dialog('DeleteChar', '', array('message'=> $this->user->lang('uc_del_warning'), 'custom_js'=> "$('#delete_id').val(editid);$('#charactersform').submit();", 'withid'=>"editid"), 'confirm');
-		$this->jquery->Dialog('AddChar', $this->user->lang('uc_add_char'), array('url'=> $this->controller_path.'AddCharacter/'.$this->SID, 'width'=>'640', 'height'=>'600', 'onclose'=> $this->env->link.$this->controller_path_plain.'MyCharacters/'.$this->SID));
-		$this->jquery->Dialog('EditChar', $this->user->lang('uc_edit_char'), array('withid'=>'editid', 'url'=> $this->controller_path.'AddCharacter/'.$this->SID."&editid='+editid+'", 'width'=>'640', 'height'=>'600', 'onclose'=>$this->env->link.$this->controller_path_plain.'MyCharacters/'.$this->SID));
+		$this->jquery->Dialog('AddChar', $this->user->lang('uc_add_char'), array('url'=> $this->controller_path.'AddCharacter/'.$this->SID, 'width'=>'900', 'height'=>'700', 'onclose'=> $this->env->link.$this->controller_path_plain.'MyCharacters/'.$this->SID));
+		$this->jquery->Dialog('EditChar', $this->user->lang('uc_edit_char'), array('withid'=>'editid', 'url'=> $this->controller_path.'AddCharacter/'.$this->SID."&editid='+editid+'", 'width'=>'900', 'height'=>'700', 'onclose'=>$this->env->link.$this->controller_path_plain.'MyCharacters/'.$this->SID));
 
 		// The javascript for the mainchar change
 		$this->tpl->add_js("

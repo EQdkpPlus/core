@@ -432,6 +432,11 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 				$myField['type'] = 'radio';
 				$myField['tolang'] = true;
 			}
+			
+			if($strType == 'imageuploader'){
+				$myField['returnFormat'] = 'relative';
+				$myField['imgup_type']	= 'user';	
+			}
 
 			return $myField;
 		}
@@ -488,7 +493,8 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 					case 'link':
 					case 'country':
 					case 'datepicker':
-					case 'birthday':	
+					case 'birthday':
+					case 'imageuploader':
 						return $strUserValue;
 					case 'dropdown':
 					case 'radio':
@@ -535,6 +541,13 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 				case 'text':
 				case 'int':
 					return $strIcon.$strUserValue;
+				case 'imageuploader':
+					if (strlen($strUserValue)){
+						$out = str_replace($this->root_path, $this->server_path, $strUserValue);
+					}
+					
+					return '<img src="'.$out.'" style="max-width:95%;" class="user-profilefield-'.$intFieldID.' user-additional-image" alt="" />';
+					
 				case 'link':
 					return '<a href="'.$strFormattedString.'" rel="nofollow">'.$strIcon.$strUserValue.'</a>';
 				case 'country':
