@@ -47,12 +47,19 @@ if (!class_exists('exchange_add_item')){
 
 				if (count($arrBody)){
 					//Check required values
-					if (!isset($arrBody['item_date']) || !strlen($arrBody['item_date'])) return $this->pex->error('required data missing');
-					if (!isset($arrBody['item_name']) || !strlen($arrBody['item_name'])) return $this->pex->error('required data missing');
-					if (!isset($arrBody['item_buyers']) || !count($arrBody['item_buyers']['member'])) return $this->pex->error('required data missing');
-					if (!isset($arrBody['item_raid_id']) || !strlen($arrBody['item_raid_id'])) return $this->pex->error('required data missing');
-					if (!isset($arrBody['item_value']) || !strlen($arrBody['item_value'])) return $this->pex->error('required data missing');
-					if (!isset($arrBody['item_itempool_id']) || !strlen($arrBody['item_itempool_id'])) return $this->pex->error('required data missing');
+					if (!isset($arrBody['item_date']) || !strlen($arrBody['item_date'])) return $this->pex->error('required data missing', 'item_date');
+					if (!isset($arrBody['item_name']) || !strlen($arrBody['item_name'])) return $this->pex->error('required data missing', 'item_name');
+					if (!isset($arrBody['item_buyers']) || !count($arrBody['item_buyers']['member'])) return $this->pex->error('required data missing', 'item_buyers');
+					if (!isset($arrBody['item_raid_id']) || !strlen($arrBody['item_raid_id'])) return $this->pex->error('required data missing', 'item_raid_id');
+					if (!isset($arrBody['item_value']) || !strlen($arrBody['item_value'])) return $this->pex->error('required data missing', 'item_value');
+					if (!isset($arrBody['item_itempool_id']) || !strlen($arrBody['item_itempool_id'])) {
+						$arrItempoolIDList =  $this->pdh->get('itempool', 'id_list');
+						if(count($arrItempoolIDList) > 1){
+							return $this->pex->error('required data missing', 'item_itempool_id');
+						} else {
+							$arrBody['item_itempool_id'] = $arrItempoolIDList[0];
+						}
+					}
 					
 					//Item Date
 					$intItemDate = $this->time->fromformat($arrBody['item_date'], "Y-m-d H:i");
@@ -63,7 +70,7 @@ if (!class_exists('exchange_add_item')){
 					foreach($arrBody['item_buyers']['member'] as $objMemberID){
 						if (in_array(intval($objMemberID), $arrMemberIDList)) $arrItemBuyers[] = intval($objMemberID);
 					}
-					if(count($arrItemBuyers) == 0) return $this->pex->error('required data missing');
+					if(count($arrItemBuyers) == 0) return $this->pex->error('required data missing', 'no member found');
 					
 					//Item Value
 					$fltItemValue = (float)$arrBody['item_value'];
@@ -74,12 +81,12 @@ if (!class_exists('exchange_add_item')){
 					//Item Raid ID
 					$arrRaidIDList = $this->pdh->get('raid', 'id_list');
 					$intRaidID = intval($arrBody['item_raid_id']);
-					if (!in_array($intRaidID, $arrRaidIDList)) return $this->pex->error('required data missing');
+					if (!in_array($intRaidID, $arrRaidIDList)) return $this->pex->error('required data missing', 'raid does not exist');
 					
 					//Item Itempool ID
 					$arrItempoolIDList =  $this->pdh->get('itempool', 'id_list');
 					$intItempoolID = intval($arrBody['item_itempool_id']);
-					if (!in_array($intItempoolID, $arrItempoolIDList)) return $this->pex->error('required data missing');
+					if (!in_array($intItempoolID, $arrItempoolIDList)) return $this->pex->error('required data missing', 'itempool does not exist');
 					
 					//Item Ingame ID
 					$intIngameID = (isset($arrBody['item_game_id'])) ? filter_var((string)$arrBody['item_game_id'], FILTER_SANITIZE_STRING) : '';	

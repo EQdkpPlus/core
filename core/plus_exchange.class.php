@@ -174,11 +174,16 @@ if( !class_exists( "plus_exchange" ) ) {
 
 		}
 		
-		public function error($strErrorMessage){
-			return array(
+		public function error($strErrorMessage, $arrInfo=array()){
+			$out = array(
 				'status'	=> 0,
 				'error'		=> $strErrorMessage,
 			);
+			if(count($arrInfo)){
+				$out['info'] = $arrInfo;
+			}
+			
+			return $out;
 		}
 		
 		private function returnJSON($arrData){

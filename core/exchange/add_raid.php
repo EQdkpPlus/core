@@ -44,10 +44,10 @@ if (!class_exists('exchange_add_raid')){
 				
 				if (count($arrBody)){
 					//Check required values
-					if (!isset($arrBody['raid_date']) || !strlen($arrBody['raid_date'])) return $this->pex->error('required data missing');
-					if (!isset($arrBody['raid_attendees']) || !count($arrBody['raid_attendees']['member'])) return $this->pex->error('required data missing');
-					if (!isset($arrBody['raid_value']) || !strlen($arrBody['raid_value'])) return $this->pex->error('required data missing');
-					if (!isset($arrBody['raid_event_id']) || !strlen($arrBody['raid_event_id'])) return $this->pex->error('required data missing');
+					if (!isset($arrBody['raid_date']) || !strlen($arrBody['raid_date'])) return $this->pex->error('required data missing', 'raid_date');
+					if (!isset($arrBody['raid_attendees']) || !count($arrBody['raid_attendees']['member'])) return $this->pex->error('required data missing', 'raid_attendees');
+					if (!isset($arrBody['raid_value']) || !strlen($arrBody['raid_value'])) return $this->pex->error('required data missing', 'raid_value');
+					if (!isset($arrBody['raid_event_id']) || !strlen($arrBody['raid_event_id'])) return $this->pex->error('required data missing', 'raid_event_id');
 					
 					$intRaidDate = $this->time->fromformat($arrBody['raid_date'], "Y-m-d H:i");
 					$arrRaidAttendees = array();
@@ -56,12 +56,12 @@ if (!class_exists('exchange_add_raid')){
 					foreach($arrBody['raid_attendees']['member'] as $objMemberID){
 						if (in_array(intval($objMemberID), $arrMemberIDList)) $arrRaidAttendees[] = intval($objMemberID);
 					}
-					if(count($arrRaidAttendees) == 0) return $this->pex->error('required data missing');
+					if(count($arrRaidAttendees) == 0) return $this->pex->error('required data missing', 'no member found');
 					
 					$fltRaidValue = (float)$arrBody['raid_value'];
 					$arrEventIDList = $this->pdh->get('event', 'id_list');
 					$intRaidEventID = intval($arrBody['raid_event_id']);
-					if (!in_array($intRaidEventID, $arrEventIDList)) return $this->pex->error('required data missing');
+					if (!in_array($intRaidEventID, $arrEventIDList)) return $this->pex->error('required data missing', 'event not found');
 					
 					$strRaidNote = filter_var((string)$arrBody['raid_note'], FILTER_SANITIZE_STRING);				
 				

@@ -42,8 +42,8 @@ if (!class_exists('exchange_add_event')){
 
 				if (count($arrBody)){
 					//Check required values
-					if (!isset($arrBody['event_name']) || !strlen($arrBody['event_name'])) return $this->pex->error('required data missing');
-					if (!isset($arrBody['event_value']) || !strlen($arrBody['event_value'])) return $this->pex->error('required data missing');
+					if (!isset($arrBody['event_name']) || !strlen($arrBody['event_name'])) return $this->pex->error('required data missing', 'event_name');
+					if (!isset($arrBody['event_value']) || !strlen($arrBody['event_value'])) return $this->pex->error('required data missing', 'event_value');
 										
 					//Event Value
 					$fltEventValue = (float)$arrBody['event_value'];

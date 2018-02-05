@@ -33,8 +33,6 @@ if (!class_exists('exchange_raid_signup')){
 			
 			if ($this->user->check_auth('po_calendarevent', false)){
 				
-				
-
 				if (count($arrBody) && intval($arrBody['eventid']) > 0){
 					$eventid = intval($arrBody['eventid']);
 					$eventdata = $this->pdh->get('calendar_events', 'data', array($eventid));
@@ -69,7 +67,7 @@ if (!class_exists('exchange_raid_signup')){
 							}
 							$myrole = (intval($arrBody['role']) > 0) ? intval($arrBody['role']) : $this->pdh->get('member', 'defaultrole', array($memberid));
 							if ($eventdata['extension']['raidmode'] == 'role' && (int)$myrole == 0){
-								return $this->pex->error('no roleid given');
+								return $this->pex->error('required data missing', 'roleid');
 							}
 
 							$this->pdh->put('calendar_raids_attendees', 'update_status', array(
@@ -96,13 +94,13 @@ if (!class_exists('exchange_raid_signup')){
 							
 							return array('status'	=> 1);
 						} else {
-							return $this->pex->error('no memberid given');
+							return $this->pex->error('required data missing', 'memberid');
 						}
 					} else {
-						return $this->pex->error('unknown eventid');
+						return $this->pex->error('required data missing', 'eventid not found');
 					}
 				}
-				return $this->pex->error('no eventid given');
+				return $this->pex->error('required data missing', 'eventid');
 			} else {
 				return $this->pex->error('access denied');
 			}

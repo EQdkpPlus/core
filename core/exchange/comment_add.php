@@ -35,7 +35,7 @@ if (!class_exists('exchange_comment_add')){
 
 				if (count($arrBody) && strlen($arrBody['comment'])){
 					//Check for page and attachid
-					if (!$arrBody['page'] || !$arrBody['attachid']) return $this->pex->error('page or attachid is missing');
+					if (!$arrBody['page'] || !$arrBody['attachid']) return $this->pex->error('required data missing', 'page or attachid required');
 					
 					$intReplyTo = ((int)$arrBody['reply_to']) ? (int)$arrBody['reply_to'] : 0;
 					
@@ -44,7 +44,7 @@ if (!class_exists('exchange_comment_add')){
 					$this->pdh->process_hook_queue();
 					return array('status'	=> 1);
 				 } else {
-					return $this->pex->error('comment is missing');
+					return $this->pex->error('required data missing', 'comment');
 				 }
 			
 			} else {

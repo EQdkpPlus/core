@@ -46,10 +46,10 @@ if (!class_exists('exchange_add_adjustment')){
 
 				if (count($arrBody)){
 					//Check required values
-					if (!isset($arrBody['adjustment_date']) || !strlen($arrBody['adjustment_date'])) return $this->pex->error('required data missing');
-					if (!isset($arrBody['adjustment_value']) || !strlen($arrBody['adjustment_value'])) return $this->pex->error('required data missing');
-					if (!isset($arrBody['adjustment_reason']) || !strlen($arrBody['adjustment_reason'])) return $this->pex->error('required data missing');
-					if (!isset($arrBody['adjustment_members']) || !count($arrBody['adjustment_members']['member'])) return $this->pex->error('required data missing');
+					if (!isset($arrBody['adjustment_date']) || !strlen($arrBody['adjustment_date'])) return $this->pex->error('required data missing', 'adjustment_date');
+					if (!isset($arrBody['adjustment_value']) || !strlen($arrBody['adjustment_value'])) return $this->pex->error('required data missing', 'adjustment_value');
+					if (!isset($arrBody['adjustment_reason']) || !strlen($arrBody['adjustment_reason'])) return $this->pex->error('required data missing', 'adjustment_reason');
+					if (!isset($arrBody['adjustment_members']) || !count($arrBody['adjustment_members']['member'])) return $this->pex->error('required data missing', 'adjustment_members');
 					
 					//Adjustment Date
 					$intAdjDate = $this->time->fromformat($arrBody['adjustment_date'], "Y-m-d H:i");
@@ -60,7 +60,7 @@ if (!class_exists('exchange_add_adjustment')){
 					foreach($arrBody['adjustment_members']['member'] as $objMemberID){
 						if (in_array(intval($objMemberID), $arrMemberIDList)) $arrAdjMembers[] = intval($objMemberID);
 					}
-					if(count($arrAdjMembers) == 0) return $this->pex->error('required data missing');
+					if(count($arrAdjMembers) == 0) return $this->pex->error('required data missing', 'no member found');
 					
 					//Adjustment Value
 					$fltAdjValue = (float)$arrBody['adjustment_value'];
