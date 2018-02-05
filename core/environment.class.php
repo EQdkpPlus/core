@@ -554,6 +554,14 @@ if (!class_exists("environment")) {
 						'bot_agent' => 'baidu.com/',
 						'bot_name' => 'Baidu.com [Bot]',
 				),
+				array(
+						'bot_agent' => 'facebook',
+						'bot_name' => 'Facebook [Bot]',
+				),
+				array(
+						'bot_agent' => 'bubing',
+						'bot_name' => 'BUbiNG [Bot]',
+				),
 			);
 			
 			foreach ($arrBots as $row){
