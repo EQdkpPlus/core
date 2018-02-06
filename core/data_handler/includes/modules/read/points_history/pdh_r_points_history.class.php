@@ -192,9 +192,9 @@ if ( !class_exists( "pdh_r_points_history" ) ) {
 
 				//main points
 				$points = $this->calculate_single_points($memberid, $multidkpid, $from, $to);
-				$arrPoints['earned'][0] = $points['earned'][0];
-				$arrPoints['spent'][0] = $points['spent'][0];
-				$arrPoints['adjustment'][0] = $points['adjustment'][0];
+				$arrPoints['earned'][0] = (isset($points['earned'][0])) ? $points['earned'][0] : 0;
+				$arrPoints['spent'][0] = (isset($points['spent'][0])) ? $points['spent'][0] : 0;
+				$arrPoints['adjustment'][0] = (isset($points['adjustment'][0])) ? $points['adjustment'][0] : 0;
 
 				//Accumulate points from twinks
 				if(!empty($twinks) && is_array($twinks)){

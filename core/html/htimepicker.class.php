@@ -46,6 +46,7 @@ class htimepicker extends html {
 	public $required			= false;
 	public $fvmessage			= false;
 	public $returnJS			= false;
+	public $returnDatetime		= true;
 
 	private $out				= '';
 
@@ -72,7 +73,7 @@ class htimepicker extends html {
 	public function _inpval() {
 		$strTimeInUserTime = $this->in->get($this->name, '');
 		$intTimestamp = $this->time->convert_usertimestring_to_utc($strTimeInUserTime);
-		return date("H:i", $intTimestamp);
+		return ($returnDatetime) ? date("H:i", $intTimestamp) : $intTimestamp;
 	}
 }
 ?>
