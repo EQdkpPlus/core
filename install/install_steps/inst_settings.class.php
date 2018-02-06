@@ -73,7 +73,7 @@ class inst_settings extends install_generic {
 		'itemhistory_dia' 				=> '1',
 		'color_items' 					=> array(34, 67),
 		'auth_method'					=> 'db',
-		'failed_logins_inactivity'		=> 5,
+		'failed_logins_inactivity'		=> 10,
 		'thumbnail_defaultsize'			=> 500,
 		'seo_extension'					=> 1,
 		'round_activate'				=> 1,
