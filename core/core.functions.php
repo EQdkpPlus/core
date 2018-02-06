@@ -1379,6 +1379,50 @@ function implode_r($glue, $pieces){
 	return $out;
  }
 
+ 
+ function hyphenize($string) {
+ 	$dict = array(
+ 			"I'm"      => "I am",
+ 			"thier"    => "their",
+ 			// Add your own replacements here
+ 	);
+ 	return strtolower(
+ 			preg_replace(
+ 					array( '#[\\s-]+#', '#[^A-Za-z0-9\. -]+#' ),
+ 					array( '-', '' ),
+ 					// the full cleanString() can be downloaded from http://www.unexpectedit.com/php/php-clean-string-of-utf8-chars-convert-to-similar-ascii-char
+ 					cleanString(urldecode($string))
+ 					)
+ 			);
+ }
+ 
+ function cleanString($text) {
+ 	$utf8 = array(
+ 			'/[áàâãªä]/u'   =>   'a',
+ 			'/[ÁÀÂÃÄ]/u'    =>   'A',
+ 			'/[ÍÌÎÏ]/u'     =>   'I',
+ 			'/[íìîï]/u'     =>   'i',
+ 			'/[éèêë]/u'     =>   'e',
+ 			'/[ÉÈÊË]/u'     =>   'E',
+ 			'/[óòôõºö]/u'   =>   'o',
+ 			'/[ÓÒÔÕÖ]/u'    =>   'O',
+ 			'/[úùûü]/u'     =>   'u',
+ 			'/[ÚÙÛÜ]/u'     =>   'U',
+ 			'/ç/'           =>   'c',
+ 			'/Ç/'           =>   'C',
+ 			'/ñ/'           =>   'n',
+ 			'/Ñ/'           =>   'N',
+ 			'/–/'           =>   '-', // UTF-8 hyphen to "normal" hyphen
+ 			'/[’‘‹›‚]/u'    =>   ' ', // Literally a single quote
+ 			'/[“”«»„]/u'    =>   ' ', // Double quote
+ 			'/ /'           =>   ' ', // nonbreaking space (equiv. to 0x160)
+ 	);
+ 	return preg_replace(array_keys($utf8), array_values($utf8), $text);
+ }
+ 
+ 
+ 
+ 
 /* Workarounds because php does not allow arrays in Constants < 5.6 */
 function get_attr_blacklist(){
 	global $ATTR_BLACKLIST;
