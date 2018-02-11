@@ -103,7 +103,7 @@ class admin_settings extends page_generic {
 			'1'				=> 'core_sett_f_debug_type1',
 			'2'				=> 'core_sett_f_debug_type2',
 			'3'				=> 'core_sett_f_debug_type3',
-			//'4'			=> 'pk_set_debug_type4',
+			'4'				=> 'core_sett_f_debug_type4',
 		);
 
 		$a_modelviewer = array(

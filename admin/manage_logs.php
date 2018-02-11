@@ -31,6 +31,7 @@ class Manage_Logs extends page_generic {
 
 		$handler = array(
 			'reset'			=> array('process' => 'reset_logs',			'check' => 'a_logs_del', 'csrf'=>true),
+			'export'		=> array('process' => 'export_logs',		'check' => 'a_logs_view', 'csrf'=>true),
 			'del_errors'	=> array('process' => 'delete_errors',		'check' => 'a_logs_del', 'csrf'=>true),
 			'dellogdays'	=> array('process' => 'delete_log_days',	'check' => 'a_logs_del', 'csrf'=>true)
 		);
@@ -53,6 +54,32 @@ class Manage_Logs extends page_generic {
 		$this->pdh->process_hook_queue();
 		$this->logs->add( 'action_logs_deleted', array('{L_NUMBER_OF_LOGS}' => $ret), '');
 		$this->display();
+	}
+	
+	public function export_logs(){
+		$arrLogFiles = $this->pdl->get_logfiles(true);
+		
+		$strTempLocation = $this->pfh->FilePath('tmp', '');
+		
+		$file = $strTempLocation.'/logs.zip';
+		$archive = registry::register('zip', array($file));
+		
+		foreach($arrLogFiles as $strFile){
+			if($strFile == 'logs.zip') continue;
+			$archive->add($strTempLocation.'/'.$strFile, $strTempLocation);
+		}
+		
+		$result = $archive->create();
+		
+		if (file_exists($file)){
+			header('Content-Type: application/octet-stream');
+			header('Content-Length: '.$this->pfh->FileSize($file));
+			header('Content-Disposition: attachment; filename="'.sanitize('logs.zip').'"');
+			header('Content-Transfer-Encoding: binary');
+			readfile($file);
+			$this->pfh->Delete($file);
+			exit;
+		}
 	}
 
 	public function delete_errors(){

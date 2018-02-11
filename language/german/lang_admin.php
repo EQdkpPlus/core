@@ -46,6 +46,7 @@ $lang = array(
 "clear_last_logs" => "Logs älter als",
 "filter_reset" => "Alle Filter löschen",
 "filter_type" => "Nach Typ filtern",
+"export_logs" => "Logs exportieren",
 "days" => "Tage",
 "add_aadjustment" => "eine Korrektur hinzufügen",
 "add_adjustment" => "Korrektur zufügen",
