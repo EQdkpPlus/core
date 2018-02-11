@@ -110,7 +110,36 @@ class php_check extends install_generic {
 				'installed'		=> $this->lang['yes'],
 				'passfail'		=> true
 			),
+			'externalconnection' => array(
+				'required'		=> $this->lang['yes'],
+				'installed'		=> ($this->check_external_connection()) ? $this->lang['yes']: $this->lang['no'],
+				'ignore'		=> true,
+				'passfail'		=> true,
+				'adviced_fail'	=> (!$this->check_external_connection()),
+			)
 		);
+	}
+	
+	private $checkStatus = null;
+	
+	private function check_external_connection(){
+		$strCheckURL = EQDKP_CONNECTION_CHECK_URL;
+
+		if($this->checkStatus == NULL){
+			$objUrlfetcher = registry::register('urlfetcher');
+			$mixResult = $objUrlfetcher->fetch($strCheckURL);
+			
+			if($mixResult == "ok"){
+				$this->checkStatus = true;
+			} else {
+				$this->checkStatus = false;
+			}
+			
+			return $this->checkStatus;
+			
+		} else {
+			return $this->checkStatus;
+		}
 	}
 
 	private function check_php_limit($needed){

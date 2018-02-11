@@ -81,6 +81,7 @@ define('EQDKP_BOARD_URL',			"http://eqdkp-plus.eu/forum");
 define('EQDKP_CRL_URL',				"https://raw.githubusercontent.com/EQdkpPlus/misc-crl/master/crl.txt");
 define('EQDKP_WIKI_URL',			"http://eqdkp-plus.eu/wiki/");
 define('EQDKP_BUGTRACKER_URL',		"http://eqdkp-plus.eu/bugtracker/");
+define('EQDKP_CONNECTION_CHECK_URL', 'https://raw.githubusercontent.com/EQdkpPlus/misc-connectioncheck/master/status.txt');
 
 //Tag Blacklist for filtering article content
 $TAG_BLACKLIST = array(

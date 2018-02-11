@@ -230,7 +230,7 @@ $lang = array(
 	"recaptcha_okey" 		=> "Public Key of reCATPCHA",
 	"recaptcha_pkey" 		=> "Private Key of reCATPCHA",
 	'delete_ownership_file' => 'For security reasons, please delete the file "database_ownership_file.txt" from the EQdkp Plus root folder to continue with your installation.',
-		
+	'module_externalconnection'	=> 'External connections',
 );
 
 ?>
