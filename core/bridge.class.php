@@ -280,6 +280,8 @@ class bridge extends gen_class {
 				}
 			}
 		}
+		
+		if ($this->objBridge->blnSyncEmail) $save_array['user_email'] = $this->crypt->encrypt($arrUserdata['email']);
 				
 		if ($save){
 			$save_array['custom_fields'] = serialize($eqdkp_custom_fields);
