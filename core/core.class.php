@@ -538,6 +538,7 @@ class core extends gen_class {
 			if ($strHref == $this->server_path.'#') $strHref = "#";
 			
 			if ($blnHrefOnly) return $strHref;
+			
 			return '<a href="' . $strHref . '"'.$target.' class="'.$strCssClass.'" itemprop="url">' . $icon . '<span itemprop="name">'.$arrLinkData['text'] . '</span></a>';
 		}
 
@@ -837,14 +838,16 @@ class core extends gen_class {
 			if(is_string($this->page_path)) return $this->page_path;
 			if($this->page_path == [[]]) $this->page_path = [];
 			
-			$arrBreadcrumb = array_merge([[
-					'title'	=> '<i class="fa fa-home"></i>',
-					'url'	=> $this->controller_path.$this->SID,
-			]], $this->page_path);
+			$arrBreadcrumb = $this->page_path;
 			
 			$html = '<ul class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">';
-			foreach($arrBreadcrumb as $arrItem){
-				$html .= '<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="'.$arrItem['url'].'" itemscope itemtype="http://schema.org/Thing" itempop="item"><span itemprop="name">'.$arrItem['title'].'</span></a></li>';
+			
+			$html .= '<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="'.$this->controller_path.$this->SID.'" itemscope itemtype="http://schema.org/Thing" itemprop="item"><i class="fa fa-home"></i><span itemprop="name" style="display:none;">Home</span></a>
+					<meta itemprop="position" content="1" /></li>';
+			
+			foreach($arrBreadcrumb as $key => $arrItem){
+				$html .= '<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="'.$arrItem['url'].'" itemscope itemtype="http://schema.org/Thing" itemprop="item"><span itemprop="name">'.$arrItem['title'].'</span></a>
+				<meta itemprop="position" content="'.($key+2).'" /></li>';
 			}
 			return $html.'</ul>';
 		}
