@@ -369,6 +369,7 @@ class login_pageobject extends pageobject {
 
 		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('login'),
+			'description'		=> $this->user->lang('login'),
 			'template_file'		=> 'login.html',
 			'page_path'			=> false,
 			'display'			=> true,

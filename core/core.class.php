@@ -1051,7 +1051,10 @@ class core extends gen_class {
 			);
 
 			// Hiding the normal-footer-stuff, but show debug-info, since in normal usage debug mode is turned off, and for developing purposes debug-tabs help alot info if header is set to none..
+			$commonDescription = ($this->config->get('meta_description') && strlen($this->config->get('meta_description'))) ? $this->config->get('meta_description') : $this->config->get('guildtag');
+			
 			$this->tpl->assign_vars(array(
+				'META_DESCRIPTION'			=> (strlen($this->description)) ? $this->description : $commonDescription,
 				'S_NORMAL_FOOTER' 			=> ($this->header_format != 'simple') ? true : false,
 				'EQDKP_PLUS_COPYRIGHT'		=> $this->Copyright())
 			);

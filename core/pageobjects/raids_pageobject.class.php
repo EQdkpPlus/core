@@ -282,6 +282,7 @@ class raids_pageobject extends pageobject {
 
 			$this->set_vars(array(
 					'page_title' 		=> $this->pdh->get('raid', 'event_name', array($raid_id)).', '.$this->time->user_date($this->pdh->get('raid', 'date', array($raid_id))),
+					'description' 		=> $this->pdh->get('raid', 'event_name', array($raid_id)).', '.$this->time->user_date($this->pdh->get('raid', 'date', array($raid_id))),
 					'template_file'		=> 'viewraid.html',
 					'display'			=> true)
 			);

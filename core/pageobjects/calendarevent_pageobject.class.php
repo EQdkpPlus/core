@@ -1193,6 +1193,7 @@ class calendarevent_pageobject extends pageobject {
 
 		$this->set_vars(array(
 			'page_title'		=> $strPageTitle,
+			'description'		=> $strPageTitle,
 			'template_file'		=> 'calendar/viewcalraid.html',
 			'header_format'		=> $this->simple_head,
 			'display'			=> true

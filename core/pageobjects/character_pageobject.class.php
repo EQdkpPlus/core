@@ -212,6 +212,7 @@ class character_pageobject extends pageobject {
 
 		$this->set_vars(array(
 			'page_title'		=> $member_name,
+			'description'		=> $member_name.', '.$this->pdh->get('member', 'classname', array($this->url_id)),
 			'template_file'		=> 'viewcharacter.html',
 			'display'			=> true
 		));

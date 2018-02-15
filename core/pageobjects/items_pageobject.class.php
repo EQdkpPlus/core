@@ -136,6 +136,7 @@ class items_pageobject extends pageobject {
 
 		$this->set_vars(array(
 				'page_title'		=> $item_name,
+				'description'		=> $item_name,
 				'template_file'		=> 'viewitem.html',
 				'display'			=> true)
 		);

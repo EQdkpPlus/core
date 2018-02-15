@@ -155,7 +155,8 @@ class addcharacter_pageobject extends pageobject {
 		));
 
 		$this->core->set_vars(array(
-			'page_title'		=> '',
+			'page_title'		=> $this->user->lang('uc_add_char'),
+			'description'		=> $this->user->lang('uc_add_char'),
 			'template_file'		=> 'addcharacter.html',
 			'header_format'		=> 'simple',
 			'display'			=> true)

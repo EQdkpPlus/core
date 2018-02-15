@@ -180,6 +180,7 @@ class controller extends gen_class {
 				$this->core->set_vars(array(
 						'page_title'		=> $arrVars['page_title'],
 						'template_file'		=> $arrVars['template_file'],
+						'description'		=> $arrVars['description'],
 						'display'			=> true)
 				);
 			} else {
@@ -663,7 +664,7 @@ class controller extends gen_class {
 
 				$this->core->set_vars(array(
 						'page_title'		=> $arrArticle['title'].$strAdditionalTitles,
-						'description'		=> truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrContent[$intPageID])))), 600, '...', false, true),
+						'description'		=> ($arrCoreVars['description']) ? $arrCoreVars['description'] : truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrContent[$intPageID])))), 600, '...', false, true),
 						'page_path'			=> $this->pdh->get('articles', 'breadcrumb', array($intArticleID, $strAdditionalTitles, registry::get_const('url_id'), $arrPath)),
 						'image'				=> $strPreviewImage,
 						'template_file'		=> 'article.html',

@@ -55,6 +55,7 @@ class events_pageobject extends pageobject {
 	
 		$this->set_vars(array(
 				'page_title'	=> $this->pdh->get('event', 'name', array($this->url_id)),
+				'description'	=> $this->pdh->get('event', 'name', array($this->url_id)),
 				'template_file'	=> 'viewevent.html',
 				'display'		=> true)
 		);
