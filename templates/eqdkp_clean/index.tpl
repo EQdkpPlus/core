@@ -227,7 +227,7 @@
 
 			<!-- LISTENER content_container_top -->
 			<header>
-				<nav id="nav">
+				<nav id="nav" itemscope itemtype="http://schema.org/SiteNavigationElement">
 					<div id="mainmenu">
 						<!-- LISTENER mainmenu -->
 						<div class="hiddenSmartphone">

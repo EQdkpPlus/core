@@ -536,9 +536,9 @@ class core extends gen_class {
 			}
 			$strHref = ((isset($arrLinkData['plus_link']) && $arrLinkData['plus_link']==true && $arrLinkData['link']) ? $arrLinkData['link'] : $this->server_path . $arrLinkData['link']);
 			if ($strHref == $this->server_path.'#') $strHref = "#";
-
+			
 			if ($blnHrefOnly) return $strHref;
-			return '<a href="' . $strHref . '"'.$target.' class="'.$strCssClass.'">' . $icon . $arrLinkData['text'] . '</a>';
+			return '<a href="' . $strHref . '"'.$target.' class="'.$strCssClass.'" itemprop="url">' . $icon . '<span itemprop="name">'.$arrLinkData['text'] . '</span></a>';
 		}
 
 		//Returns all possible Menu Items
@@ -838,13 +838,13 @@ class core extends gen_class {
 			if($this->page_path == [[]]) $this->page_path = [];
 			
 			$arrBreadcrumb = array_merge([[
-				'title'	=> '<i class="fa fa-home"></i>',
-				'url'	=> $this->controller_path.$this->SID,
+					'title'	=> '<i class="fa fa-home"></i>',
+					'url'	=> $this->controller_path.$this->SID,
 			]], $this->page_path);
 			
-			$html = '<ul class="breadcrumb">';
+			$html = '<ul class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">';
 			foreach($arrBreadcrumb as $arrItem){
-				$html .= '<li><a href="'.$arrItem['url'].'">'.$arrItem['title'].'</a></li>';
+				$html .= '<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="'.$arrItem['url'].'" itemscope itemtype="http://schema.org/Thing" itempop="item"><span itemprop="name">'.$arrItem['title'].'</span></a></li>';
 			}
 			return $html.'</ul>';
 		}
