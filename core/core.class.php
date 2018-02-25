@@ -396,9 +396,9 @@ class core extends gen_class {
 
 			// the logo...
 			if(is_file($this->pfh->FolderPath('','files').$this->config->get('custom_logo'))){
-				$headerlogo	= $this->pfh->FolderPath('','files', 'serverpath').$this->config->get('custom_logo');
+				$headerlogo	= $this->pfh->FolderPath('','files', 'absolute').$this->config->get('custom_logo');
 			} else if(file_exists($this->root_path.$strHeaderLogoPath.'logo.svg')){
-				$headerlogo	= $this->server_path.$strHeaderLogoPath.'logo.svg';
+				$headerlogo	= $this->env->link.$this->controller_path_plain.$strHeaderLogoPath.'logo.svg';
 			} else $headerlogo = "";
 
 			// Load the jQuery stuff
