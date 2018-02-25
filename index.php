@@ -639,7 +639,7 @@ class controller extends gen_class {
 						'S_COMMENTS'		=> ($arrArticle['comments']) ? true : false,
 						'S_HIDE_HEADER'		=> ($arrArticle['hide_header']),
 						'S_FEATURED'		=> ($this->pdh->get('articles',  'featured', array($intArticleID))),
-						'ARTICLE_LINK'		=> $this->env->link.$this->controller_path_plain$this->pdh->get('articles', 'path', array($intArticleID)),
+						'ARTICLE_LINK'		=> $this->env->link.$this->controller_path_plain.$this->pdh->get('articles', 'path', array($intArticleID)),
 				));
 
 				$strPreviewImage = ($this->pdh->get('articles',  'previewimage', array($intArticleID)) != "") ? $this->pdh->geth('articles', 'previewimage', array($intArticleID)) : '';
