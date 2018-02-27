@@ -281,11 +281,12 @@ class calendarevent_pageobject extends pageobject {
 			#return false;
 		}
 
-		// check if another char is used
-		$signedin_memberid = $this->pdh->get('calendar_raids_attendees', 'has_already_signedin', array($this->url_id, $this->in->get('member_id', 0)));
 		
-		if($do_updatestatuschange){			
-			$this->pdh->put('calendar_raids_attendees', 'update_status', array(
+		if($do_updatestatuschange){
+			// check if another char is used
+			$arrAttendeeIDs = $this->pdh->get('calendar_raids_attendees', 'other_user_attendees', array($this->url_id, $this->in->get('member_id', 0)));
+			
+			$intAffectedID = $this->pdh->put('calendar_raids_attendees', 'update_status', array(
 				$this->url_id,
 				$this->in->get('member_id', 0),
 				$myrole,
@@ -295,10 +296,14 @@ class calendarevent_pageobject extends pageobject {
 				$this->in->get('signupnote'),
 			));
 			
-			//Delete other users attendees
-			if($signedin_memberid != $this->in->get('member_id', 0)){
-				$arrAttendeeIDs = $this->pdh->get('calendar_raids_attendees', 'other_user_attendees', array($this->url_id, $this->in->get('member_id', 0)));
-				if(count($arrAttendeeIDs)) $this->pdh->put('calendar_raids_attendees', 'delete_attendeeid', array($arrAttendeeIDs));
+			//A new row was inserted, otherwise $intAffectedID = false
+			if($intAffectedID){
+				//There are other user attendees
+				if(count($arrAttendeeIDs)){
+					//Delete the new added row
+					$this->pdh->put('calendar_raids_attendees', 'delete_attendeeid', array($intAffectedID));
+				}
+				
 			}
 
 			//Send Notification to Raidlead, Creator and Admins

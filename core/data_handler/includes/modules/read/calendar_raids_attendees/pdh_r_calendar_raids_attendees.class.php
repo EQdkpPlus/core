@@ -314,7 +314,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			if($objQuery){
 				while($arrRow = $objQuery->fetchAssoc()){
 					if((int)$arrRow['member_id'] == $memberid) continue;
-					$arrOut[] = (int)$arrRow['id'];
+					$arrOut[(int)$arrRow['id']] = (int)$arrRow['id'];
 				}
 			}
 				

@@ -55,6 +55,8 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 					'member_role'			=> $memberrole,
 					'signup_status'			=> $signupstatus,
 				))->execute($signed_memberid, $eventid);
+				
+				$affectedID	= false;
 			}else{
 				$rand_value		= rand(1,100);
 				$raidgroup_new	= 0;
@@ -72,6 +74,8 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 					'signup_status'			=> $signupstatus,
 					'signedbyadmin'			=> $signedbyadmin
 				))->execute();
+				
+				$affectedID	= $objQuery->insertId;
 
 				// old & new array for comparison
 				$arrNew = array(
@@ -95,6 +99,8 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 
 			$this->log_insert('calendar_log_charchanged', $log_action, $eventid, $this->pdh->get('calendar_events', 'name', array($eventid)), true, 'calendar');
 			$this->pdh->enqueue_hook('calendar_raid_attendees_update', array($eventid));
+			
+			return $affectedID;
 		}
 
 		public function moderate_status($eventid, $status, $memberids){
