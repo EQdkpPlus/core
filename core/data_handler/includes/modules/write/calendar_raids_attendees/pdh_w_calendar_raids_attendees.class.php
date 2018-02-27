@@ -247,6 +247,12 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 			$objQuery = $this->db->prepare("DELETE FROM __calendar_raid_attendees WHERE member_id :in")->in($memberids)->execute();
 			$this->pdh->enqueue_hook('calendar_raid_attendees_update');
 		}
+		
+		public function delete_attendeeid($mixAttendeeIDs){
+			$mixAttendeeIDs = (is_array($mixAttendeeIDs)) ? $mixAttendeeIDs : array($mixAttendeeIDs);
+			$objQuery = $this->db->prepare("DELETE FROM __calendar_raid_attendees WHERE id :in")->in($mixAttendeeIDs)->execute();
+			$this->pdh->enqueue_hook('calendar_raid_attendees_update');
+		}
 	}
 }
 ?>

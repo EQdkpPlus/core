@@ -305,6 +305,21 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			$inDB		= $this->db->prepare('SELECT * FROM __calendar_raid_attendees WHERE calendar_events_id=? AND member_id :in')->in($arrChars)->execute($eventid);
 			return ($inDB->numRows > 0) ? true : false;
 		}
+		
+		public function get_other_user_attendees($eventid, $memberid){
+			$userid		= $this->pdh->get('member', 'userid', array($memberid));
+			$arrChars	= $this->pdh->get('member', 'connection_id', array($userid));
+			$objQuery	= $this->db->prepare('SELECT * FROM __calendar_raid_attendees WHERE calendar_events_id=? AND member_id :in')->in($arrChars)->execute($eventid);
+			$arrOut = array();
+			if($objQuery){
+				while($arrRow = $objQuery->fetchAssoc()){
+					if((int)$arrRow['member_id'] == $memberid) continue;
+					$arrOut[] = (int)$arrRow['id'];
+				}
+			}
+				
+			return $arrOut;
+		}
 
 		public function get_status_flag($status){
 			switch($status){
