@@ -362,6 +362,7 @@ class calendar_pageobject extends pageobject {
 								'backgroundColor'		=> '#E8E8E8',
 								'borderColor'			=> '#7F7F7F',
 								'className'				=> 'calendarevent_'.$calender_id,
+								'url'					=> $this->routing->build('user', $this->pdh->get('user',  'name', array($birthday_uid)), 'u'.$birthday_uid),
 							);
 						}
 					}
@@ -385,7 +386,7 @@ class calendar_pageobject extends pageobject {
 
 		$event_json		= array();
 		foreach($calendar_ids as $id){
-			$event_json = array_merge($event_json, $this->get_json_helper($id, $filter));
+			$event_json = array_merge($event_json, $this->get_json_helper((int)$id, $filter));
 		}
 		echo json_encode($event_json);exit;
 	}
