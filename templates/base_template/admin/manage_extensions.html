@@ -922,7 +922,7 @@ $(function(){
 					<dd><input type="file" name="extension" class="input" style="width:90%" /></dd>
 				</dl>
 			</fieldset>
-			<button type="submit" name="upload" class="mainoption bi_ok"><i class="fa fa-upload"></i> {L_pi_upload_button}</button>
+			<button type="submit" name="upload" class="mainoption bi_ok" <!-- IF notS_MANUAL_UPLOAD -->disabled<!-- ENDIF -->><i class="fa fa-upload"></i> {L_pi_upload_button}</button>
 			{CSRF_TOKEN}
 		  </form>
 	</div>

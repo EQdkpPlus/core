@@ -1016,7 +1016,7 @@ input[type=radio], input[type=checkbox]{
 	vertical-align: baseline;
 	margin: 0 2px;
 	outline: none;
-	cursor: pointer !important;
+	cursor: pointer;
 	text-align: center;
 	text-decoration: none;
 	font-size: 14px;
@@ -1050,7 +1050,7 @@ button[disabled], button[disabled]:hover, input[type=submit][disabled], input[ty
 	background: linear-gradient(to bottom, #fff, #ededed);
 	text-shadow: none;
 	box-shadow: none;
-	cursor: default;
+	cursor: not-allowed;
 }
 
 select[disabled], textarea[disabled], input[type="text"][disabled], input[type="password"][disabled], input[type="datetime"][disabled], input[type="datetime-local"][disabled], input[type="date"][disabled], input[type="month"][disabled], input[type="time"][disabled], input[type="week"][disabled], input[type="number"][disabled], input[type="email"][disabled], input[type="url"][disabled], input[type="search"][disabled], input[type="tel"][disabled], input[type="color"][disabled],
