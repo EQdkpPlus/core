@@ -225,7 +225,7 @@ $lang = array(
 						So if you love EQdkp Plus as much as we do, think about supporting us!',
 	'additional_keys'		=> 'Additional Features',
 	//Step: additional_keys
-	'additional_keys_info'	=> 'We use features from other providers, like spam protection or converting links to videos or images. In order to use this features, you need own Keys for this features. Therefore you can create your own keys at the following pages.<br /><b>Of course you can skip this step, and insert the keys at any time at the EQdkp Plus Settings.</b>',
+	'additional_keys_info'	=> 'We use features from other providers, like spam protection. In order to use this features, you need own Keys for this features. Therefore you can create your own keys at the following pages.<br /><b>Of course you can skip this step, and insert the keys at any time at the EQdkp Plus Settings.</b>',
 	'recaptcha_info' 		=> 'reCATPCHA is a spam protection method. Enabling this method reduces spam and increases the security of your EQdkp Plus. You can create your own keys at this page: <br /> <a href="https://www.google.com/recaptcha/admin/create" target="_blank"><i class="fa fa-lg fa-external-link"></i> https://www.google.com/recaptcha/admin/create</a>',
 	"recaptcha_okey" 		=> "Public Key of reCATPCHA",
 	"recaptcha_pkey" 		=> "Private Key of reCATPCHA",
