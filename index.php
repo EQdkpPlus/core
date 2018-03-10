@@ -946,8 +946,7 @@ class controller extends gen_class {
 						'CATEGORY_ID'			=> $intCategoryID,
 				));
 
-				$strPreviewImage = ($this->pdh->get('articles',  'previewimage', array($intArticleID)) != "") ? $this->pdh->geth('articles', 'previewimage', array($intArticleID)) : '';
-				if(!strlen($strPreviewImage) && isset($strContent)) $strPreviewImage = $this->social->getFirstImage($strContent);
+				$strPreviewImage = $this->social->getFirstImage(xhtml_entity_decode($arrCategory['description']));
 
 				$this->social->callSocialPlugins($arrCategory['name'], strip_tags(xhtml_entity_decode($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(truncate($arrCategory['description'], 600, '...', false, true))))), $strPreviewImage);
 
