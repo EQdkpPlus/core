@@ -1039,6 +1039,7 @@ class Manage_Extensions extends page_generic {
 			'AUTOUPD_TRY'				=> $this->in->get('try', 0),
 			'S_SHOW_CAT_UPLOAD'			=> ((!$intShowOnly || $intShowOnly == 'update') ? true : false),
 			'S_SHOW_TABS'				=> (!$intShowOnly),
+			'S_MANUAL_UPLOAD'			=> (class_exists("ZipArchive")) ? true : false,
 			'ME_URL_SUFFIX'				=> (($this->in->get('simple_head') != "") ? '&simple_head='.$this->in->get('simple_head') : '').(($this->in->get('show_only') != "") ? '&show_only='.$this->in->get('show_only') : '')
 		));
 
