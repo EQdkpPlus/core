@@ -88,18 +88,18 @@ class avatar extends gen_class {
 
 	public function cacheImage($strHash, $strName, $intSize=64){
 		$strInitials = $this->getInitials($strName);
+		
 		$strBackground = $this->getRandomBackground();
 		$intFontSize = ($intSize/100) * $this->defaults['fontSize'];
-
+		
 		$image = imagecreatetruecolor ( $intSize , $intSize );	
 		$arrColor = $this->hex2rgb($strBackground);
 		$backgroundColor = imagecolorallocate($image, $arrColor[0], $arrColor[1], $arrColor[2]);
 		imagefill($image, 0, 0, $backgroundColor);
 		$fontColor = $this->hex2rgb($this->defaults['foreground']);
 		$fontColorRes = ImageColorAllocate($image, $fontColor[0], $fontColor[1], $fontColor[2]);
+		$fontfile = realpath(__DIR__.'/../libraries/opensans/opensans-bold.ttf');
 
-		$fontfile = $this->root_path.'libraries/opensans/opensans-bold.ttf';
-		
 		$bbox = imagettfbbox($intFontSize, 0, $fontfile, $strInitials);
 		$center1 = (imagesx($image) / 2) - (($bbox[2] - $bbox[0]) / 2)-$bbox[0];
 		$y = ($intSize - ($bbox[1] - $bbox[7])) / 2; 
