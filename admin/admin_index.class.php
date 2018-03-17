@@ -304,6 +304,7 @@ class admin_index extends gen_class {
 
 		// Log Actions
 		$s_logs = false;
+		$logfiles = array();
 		$logs_table = '';
 		if ($this->user->check_auth('a_logs_view', false)) {
 			$logfiles = $this->pdh->get('logs', 'lastxlogs', array(10));
