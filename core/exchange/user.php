@@ -74,6 +74,8 @@ if (!class_exists('exchange_user')){
 				
 				$intUserId = $this->pdh->put('user', 'insert_user_bridge', array($strUsername, $strPassword, $strEmail, $intRules));
 				
+				$this->pdh->process_hook_queue();
+				
 				if($intUserId){
 					return array('user_id' => $intUserId);
 				} else {
