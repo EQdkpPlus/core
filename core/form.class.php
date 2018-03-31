@@ -431,11 +431,13 @@ class form extends gen_class {
 			} else {
 				$ajax_reload = array($options['ajax_reload']);
 			}
+			
 			foreach($ajax_reload as $ajre) {
 				if(strpos($ajre[1], '%URL%') !== false) {
 					$ajre[1] = str_replace('%URL%', $this->ajax_url, $ajre[1]);
 				}
-				$this->jquery->js_dd_ajax($options['id'], $ajre[0], $ajre[1], (isset($ajre[2]) ? $ajre[2] : ''));
+				
+				$this->jquery->js_dd_ajax($options['id'], $ajre[0], $ajre[1], (isset($ajre[2]) ? $ajre[2] : ''), $options['_parents']);
 			}
 		}
 

@@ -1078,11 +1078,12 @@ class game extends gen_class {
 		}
 
 		// build an array with parent-name , child-name => child-type
-		$class_deps = array();
+		$class_deps = $child_to_parents = array();
 		foreach($class_data as $class) {
 			if(!is_array($class['parent'])) continue;
 			foreach($class['parent'] as $parent => $ids) {
 				$class_deps[$parent][$class['name']] = $class['type'];
+				$child_to_parents[$class['name']][] = $parent;
 			}
 		}
 		$z = 0;
@@ -1114,11 +1115,15 @@ class game extends gen_class {
 				);
 			}
 			$z++;
+			
 			if(isset($class_deps[$class['name']])) {
 				foreach($class_deps[$class['name']] as $child => $type) {
 					$field['ajax_reload']['multiple'][] = array(array($child), '%URL%&ajax=true&child='.$child.'&parent='.$class['name']);
 				}
 			}
+			
+			$field['_parents'] = $child_to_parents;
+			
 			foreach($class_data as $iclass) {
 				if($iclass['name'] == $class['name'])
 					$field['options'] = $this->get($iclass['type']);
@@ -1147,12 +1152,15 @@ class game extends gen_class {
 		$class_data = $this->gameinfo()->get_class_dependencies();
 		// build an array with parent-name , child-name => child-type
 		$class_deps = array();
+		$child_to_parents = array(); // array, to get all parents of a child
 		foreach($class_data as $class) {
 			if(!is_array($class['parent'])) continue;
 			foreach($class['parent'] as $parent => $ids) {
 				$class_deps[$parent][$class['name']] = $class['type'];
+				$child_to_parents[$class['name']][] = $parent;
 			}
 		}
+		
 		$z = 0;
 		foreach($class_data as $class) {
 			if($class['admin']) {
@@ -1180,11 +1188,15 @@ class game extends gen_class {
 					'options_lang'	=> $class['type'],
 				);
 			}
+			
 			if(isset($class_deps[$class['name']])) {
 				foreach($class_deps[$class['name']] as $child => $type) {
 					$field['ajax_reload']['multiple'][] = array(array($child), '%URL%&ajax=true&child='.$child.'&parent='.$class['name']);
 				}
 			}
+			
+			$field['_parents'] = $child_to_parents;
+			
 			foreach($class_data as $iclass) {
 				if($iclass['name'] == $class['name'])
 					$field['options'] = $this->get($iclass['type']);
