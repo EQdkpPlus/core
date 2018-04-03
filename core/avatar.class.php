@@ -98,7 +98,7 @@ class avatar extends gen_class {
 		imagefill($image, 0, 0, $backgroundColor);
 		$fontColor = $this->hex2rgb($this->defaults['foreground']);
 		$fontColorRes = ImageColorAllocate($image, $fontColor[0], $fontColor[1], $fontColor[2]);
-		$fontfile = realpath(__DIR__.'/../libraries/opensans/opensans-bold.ttf');
+		$fontfile = realpath($this->root_path.'libraries/opensans/opensans-bold.ttf');
 
 		$bbox = imagettfbbox($intFontSize, 0, $fontfile, $strInitials);
 		$center1 = (imagesx($image) / 2) - (($bbox[2] - $bbox[0]) / 2)-$bbox[0];
