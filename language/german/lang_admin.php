@@ -1840,5 +1840,7 @@ $lang = array(
 "consolidate_start"	=> "Konsolidierung starten",
 "userpf_sett_f_example" => "Eingabebeispiel",
 "core_sett_f_notify_updates_email" => "Administrator per Email über Updates informieren",
+"create_style" => "Neuen Style erstellen",
+"style_parent" => "Vorlage auswählen",
 );
 ?>

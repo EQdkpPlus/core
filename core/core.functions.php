@@ -1370,6 +1370,33 @@ function is_serialized0($strValue){
 	}
 }
 
+function full_copy($source, $target){
+	if (is_dir($source)){
+		register('pfh')->CheckCreateFolder($target);
+		$d = dir($source);
+		
+		while (FALSE !== ($entry = $d->read())){
+			if ($entry == '.' || $entry == '..'){
+				continue;
+			}
+			
+			$Entry = $source . '/' . $entry;
+			if (is_dir( $Entry )){
+				full_copy($Entry, $target . '/' . $entry);
+				continue;
+			}
+			register('pfh')->copy($Entry, $target . '/' . $entry);
+			if (!is_file($target . '/' . $entry)) return false;
+		}
+		$d->close();
+	} else {
+		register('pfh')->copy($source, $target);
+		if (!is_file($target)) return false;
+	}
+	
+	return true;
+}
+
 function implode_r($glue, $pieces){
 	$out = "";
 	foreach ($pieces as $piece) {

@@ -1835,6 +1835,8 @@ $lang = array(
 		"core_sett_f_auto_set_active" => "Activate characters after raid attendance",
 		"core_sett_f_help_auto_set_active" => "Characters will get automatically activated if they attend at a raid. If set, the inactivity period will be considered.",
 		"core_sett_f_notify_updates_email" => "Notify admin via mail about updates",
+		"create_style" => "Create new style",
+		"style_parent" => "Select template",
 );
 
 ?>
