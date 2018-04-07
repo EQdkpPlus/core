@@ -303,10 +303,10 @@ $(function(){
 			<th class="left" style="width:20px">&nbsp;</th>
 			<th class="left" style="width:16px">{L_action}</th>
 			<th class="left">{L_name}</th>
-			<th colspan="{DEP_COUNT}" class="hiddenSmartphone left">{L_plug_dep_title}</th>
-			<th class="left">{L_version}</th>
-			<th class="hiddenSmartphone left">{L_portalplugin_author}</th>
 			<th class="hiddenSmartphone left">{L_description}</th>
+			<th class="left">{L_version}</th>
+			<th class="hiddenSmartphone left">{L_plug_dep_title}</th>
+			<th class="hiddenSmartphone left">{L_portalplugin_author}</th>
 			<th class="hiddenSmartphone left">{L_infos}</th>
 		</tr>
 		<!-- BEGIN plugins_row_red -->
@@ -314,18 +314,11 @@ $(function(){
 			<td style="width:20px" class="center"><i class="fa fa-puzzle-piece fa-lg icon-color-red"></i></td>
 			<td class="nowrap desktopOnly">{plugins_row_red.ACTION_LINK}</td>
 			<td>{plugins_row_red.NAME}</td>
-			<!-- BEGIN dep_row -->
-			<td class="hiddenSmartphone">
-				<span class="coretip" data-coretip="{plugins_row_red.dep_row.DEPENDENCY_TT}">
-					<i class="{plugins_row_red.dep_row.ICON}"></i> {plugins_row_red.dep_row.DEPENDENCY_NAME}
-				</span>
-			</td>
-			<!-- END dep_row -->
-			<td>{plugins_row_red.VERSION}</td>
-			<td class="hiddenSmartphone">{plugins_row_red.CONTACT}</td>
 			<td class="hiddenSmartphone">{plugins_row_red.DESCRIPTION}</td>
+			<td>{plugins_row_red.VERSION}</td>
+			<td>{plugins_row_red.DEPENDENCIES}</td>
+			<td class="hiddenSmartphone">{plugins_row_red.CONTACT}</td>
 			<td class="hiddenSmartphone">
-				<i class="coretip fa fa-info-circle fa-lg" data-coretip="{plugins_row_red.DESCRIPTION}"></i>
 				<!-- IF plugins_row_red.HOMEPAGE_LINK -->
 				<span class="coretip" data-coretip="{plugins_row_red.HOMEPAGE}"><a href="{plugins_row_red.HOMEPAGE_LINK}" target="_blank" rel="nofollow"><i class="fa fa-globe fa-lg"></i></a></span>
 				<!-- ENDIF -->
@@ -343,18 +336,11 @@ $(function(){
 			<td style="width:20px" class="center"><i class="fa fa-puzzle-piece fa-lg icon-color-yellow"></i></td>
 			<td class="nowrap desktopOnly">{plugins_row_yellow.ACTION_LINK}</td>
 			<td>{plugins_row_yellow.NAME}</td>
-			<!-- BEGIN dep_row -->
-			<td class="hiddenSmartphone">
-				<span class="coretip" data-coretip="{plugins_row_yellow.dep_row.DEPENDENCY_TT}">
-					<i class="{plugins_row_yellow.dep_row.ICON}"></i> {plugins_row_yellow.dep_row.DEPENDENCY_NAME}
-				</span>
-			</td>
-			<!-- END dep_row -->
-			<td>{plugins_row_yellow.VERSION}</td>
-			<td class="hiddenSmartphone">{plugins_row_yellow.CONTACT}</td>
 			<td class="hiddenSmartphone">{plugins_row_yellow.DESCRIPTION}</td>
+			<td>{plugins_row_yellow.VERSION}</td>
+			<td>{plugins_row_yellow.DEPENDENCIES}</td>
+			<td class="hiddenSmartphone">{plugins_row_yellow.CONTACT}</td>
 			<td class="hiddenSmartphone">
-				<i class="coretip fa fa-info-circle fa-lg" data-coretip="{plugins_row_yellow.DESCRIPTION}"></i>
 				<!-- IF plugins_row_yellow.HOMEPAGE_LINK -->
 				<span class="coretip" data-coretip="{plugins_row_yellow.HOMEPAGE}"><a href="{plugins_row_yellow.HOMEPAGE_LINK}" target="_blank" rel="nofollow"><i class="fa fa-globe fa-lg"></i></a></span>
 				<!-- ENDIF -->
@@ -372,18 +358,11 @@ $(function(){
 			<td style="width:20px" class="center"><i class="fa fa-puzzle-piece fa-lg icon-color-green"></i></td>
 			<td class="nowrap desktopOnly">{plugins_row_green.ACTION_LINK}</td>
 			<td>{plugins_row_green.NAME}</td>
-			<!-- BEGIN dep_row -->
-			<td class="hiddenSmartphone">
-				<span class="coretip" data-coretip="{plugins_row_green.dep_row.DEPENDENCY_TT}">
-					<i class="{plugins_row_green.dep_row.ICON}"></i> {plugins_row_green.dep_row.DEPENDENCY_NAME}
-				</span>
-			</td>
-			<!-- END dep_row -->
-			<td>{plugins_row_green.VERSION}</td>
-			<td class="hiddenSmartphone">{plugins_row_green.CONTACT}</td>
 			<td class="hiddenSmartphone">{plugins_row_green.DESCRIPTION}</td>
+			<td>{plugins_row_green.VERSION}</td>
+			<td>{plugins_row_green.DEPENDENCIES}</td>
+			<td class="hiddenSmartphone">{plugins_row_green.CONTACT}</td>
 			<td class="hiddenSmartphone">
-				<i class="coretip fa fa-info-circle fa-lg" data-coretip="{plugins_row_green.DESCRIPTION}"></i>
 				<!-- IF plugins_row_green.HOMEPAGE_LINK -->
 				<span class="coretip" data-coretip="{plugins_row_green.HOMEPAGE}"><a href="{plugins_row_green.HOMEPAGE_LINK}" target="_blank" rel="nofollow"><i class="fa fa-globe fa-lg"></i></a></span>
 				<!-- ENDIF -->
@@ -401,18 +380,11 @@ $(function(){
 			<td style="width:20px" class="center"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
 			<td class="nowrap desktopOnly">{plugins_row_grey.ACTION_LINK}</td>
 			<td>{plugins_row_grey.NAME}</td>
-			<!-- BEGIN dep_row -->
-			<td class="hiddenSmartphone">
-				<span class="coretip" data-coretip="{plugins_row_grey.dep_row.DEPENDENCY_TT}">
-					<i class="{plugins_row_grey.dep_row.ICON}"></i> {plugins_row_grey.dep_row.DEPENDENCY_NAME}
-				</span>
-			</td>
-			<!-- END dep_row -->
-			<td>{plugins_row_grey.VERSION}</td>
-			<td class="hiddenSmartphone">{plugins_row_grey.CONTACT}</td>
 			<td class="hiddenSmartphone">{plugins_row_grey.DESCRIPTION}</td>
+			<td>{plugins_row_grey.VERSION}</td>
+			<td class="hiddenSmartphone">{plugins_row_grey.DEPENDENCIES}</td>
+			<td class="hiddenSmartphone">{plugins_row_grey.CONTACT}</td>
 			<td class="hiddenSmartphone">
-				<i class="coretip fa fa-info-circle fa-lg" data-coretip="{plugins_row_grey.DESCRIPTION}"></i>
 				<!-- IF plugins_row_grey.HOMEPAGE_LINK -->
 				<span class="coretip" data-coretip="{plugins_row_grey.HOMEPAGE}"><a href="{plugins_row_grey.HOMEPAGE_LINK}" target="_blank" rel="nofollow"><i class="fa fa-globe fa-lg"></i></a></span>
 				<!-- ENDIF -->
@@ -430,18 +402,11 @@ $(function(){
 			<td style="width:20px" class="center"><i class="fa fa-puzzle-piece fa-lg icon-color-gray"></i></td>
 			<td class="nowrap desktopOnly">{plugins_row_grey_repo.ACTION_LINK}</td>
 			<td>{plugins_row_grey_repo.NAME}</td>
-			<!-- BEGIN dep_row -->
-			<td class="hiddenSmartphone">
-				<span class="coretip" data-coretip="{plugins_row_grey_repo.dep_row.DEPENDENCY_TT}">
-					<i class="{plugins_row_grey_repo.dep_row.ICON}"></i> {plugins_row_grey_repo.dep_row.DEPENDENCY_NAME}
-				</span>
-			</td>
-			<!-- END dep_row -->
-			<td>{plugins_row_grey_repo.VERSION}</td>
-			<td class="hiddenSmartphone">{plugins_row_grey_repo.CONTACT}</td>
 			<td class="hiddenSmartphone">{plugins_row_grey_repo.DESCRIPTION}</td>
+			<td>{plugins_row_grey_repo.VERSION}</td>
+			<td class="hiddenSmartphone">{plugins_row_grey_repo.DEPENDENCIES}</td>
+			<td class="hiddenSmartphone">{plugins_row_grey_repo.CONTACT}</td>
 			<td class="hiddenSmartphone">
-				<i class="coretip fa fa-info-circle fa-lg" data-coretip="{plugins_row_grey_repo.DESCRIPTION}"></i>
 				<!-- IF plugins_row_grey_repo.HOMEPAGE_LINK -->
 				<span class="coretip" data-coretip="{plugins_row_grey_repo.HOMEPAGE}"><a href="{plugins_row_grey_repo.HOMEPAGE_LINK}" target="_blank" rel="nofollow"><i class="fa fa-globe fa-lg"></i></a></span>
 				<!-- ENDIF -->
@@ -458,7 +423,7 @@ $(function(){
 		<tr>
 			 <td style="width:20px" class="center"></td>
 			<td><!-- IF plugins_row_broken.DELETE --><a href="{plugins_row_broken.DEL_LINK}" title="{L_delete_plugin}"><i class="fa fa-exclamation-triangle fa-fw"></i>&nbsp;{L_delete}</a><!-- ENDIF -->&nbsp;</td>
-			<td colspan="20">{plugins_row_broken.NAME}: {L_broken_plugin}</td>
+			<td colspan="8">{plugins_row_broken.NAME}: {L_broken_plugin}</td>
 		</tr>
 		<!-- END plugins_row_broken -->
 		</table>
@@ -670,10 +635,9 @@ $(function(){
 			<th class="left" style="width:20px">&nbsp;</th>
 			<th class="left" style="width:16px" colspan="3">{L_action}</th>
 			<th class="left">{L_name}</th>
-			<th class="left">{L_version}</th>
-			<th class="hiddenSmartphone left">{L_contact}</th>
 			<th class="hiddenSmartphone left">{L_description}</th>
-			<th style="width: 90px" class="hiddenSmartphone left">{L_pi_rating}</th>
+			<th class="left">{L_version}</th>
+			<th class="hiddenSmartphone left">{L_portalplugin_author}</th>
 			<th class="hiddenSmartphone left">{L_infos}</th>
 		  </tr>
 		  <!-- BEGIN pm_row_red -->
@@ -683,10 +647,9 @@ $(function(){
 			<td class="nowrap desktopOnly">{pm_row_red.REINSTALL_LINK}</td>
 			<td class="nowrap desktopOnly">{pm_row_red.DELETE_LINK}</td>
 			<td>{pm_row_red.NAME}</td>
+			<td class="hiddenSmartphone">{pm_row_red.DESCRIPTION}</td>
 			<td>{pm_row_red.VERSION}</td>
 			<td class="hiddenSmartphone">{pm_row_red.CONTACT}</td>
-			<td class="hiddenSmartphone">{pm_row_red.DESCRIPTION}</td>
-			<td class="hiddenSmartphone">{pm_row_red.RATING}</td>
 			<td class="hiddenSmartphone">
 				<!-- IF pm_row_red.BUGTRACKER_URL != "" -->
 				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{pm_row_red.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
@@ -701,10 +664,9 @@ $(function(){
 			<td class="nowrap desktopOnly">{pm_row_yellow.REINSTALL_LINK}</td>
 			<td class="nowrap desktopOnly">{pm_row_yellow.DELETE_LINK}</td>
 			<td>{pm_row_yellow.NAME}</td>
+			<td class="hiddenSmartphone">{pm_row_yellow.DESCRIPTION}</td>
 			<td>{pm_row_yellow.VERSION}</td>
 			<td class="hiddenSmartphone">{pm_row_yellow.CONTACT}</td>
-			<td class="hiddenSmartphone">{pm_row_yellow.DESCRIPTION}</td>
-			<td class="hiddenSmartphone">{pm_row_yellow.RATING}</td>
 			<td class="hiddenSmartphone">
 				<!-- IF pm_row_yellow.BUGTRACKER_URL != "" -->
 				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{pm_row_yellow.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
@@ -719,10 +681,9 @@ $(function(){
 			<td class="nowrap desktopOnly">{pm_row_green.REINSTALL_LINK}</td>
 			<td class="nowrap desktopOnly">{pm_row_green.DELETE_LINK}</td>
 			<td>{pm_row_green.NAME}</td>
+			<td class="hiddenSmartphone">{pm_row_green.DESCRIPTION}</td>
 			<td>{pm_row_green.VERSION}</td>
 			<td class="hiddenSmartphone">{pm_row_green.CONTACT}</td>
-			<td class="hiddenSmartphone">{pm_row_green.DESCRIPTION}</td>
-			<td class="hiddenSmartphone">{pm_row_green.RATING}</td>
 			<td class="hiddenSmartphone">
 				<!-- IF pm_row_green.BUGTRACKER_URL != "" -->
 				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{pm_row_green.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
@@ -737,10 +698,9 @@ $(function(){
 			<td class="nowrap desktopOnly">{pm_row_grey.REINSTALL_LINK}</td>
 			<td class="nowrap desktopOnly">{pm_row_grey.DELETE_LINK}</td>
 			<td>{pm_row_grey.NAME}</td>
+			<td class="hiddenSmartphone">{pm_row_grey.DESCRIPTION}</td>
 			<td>{pm_row_grey.VERSION}</td>
 			<td class="hiddenSmartphone">{pm_row_grey.CONTACT}</td>
-			<td class="hiddenSmartphone">{pm_row_grey.DESCRIPTION}</td>
-			<td class="hiddenSmartphone">{pm_row_grey.RATING}</td>
 			<td class="hiddenSmartphone">
 				<!-- IF pm_row_grey.BUGTRACKER_URL != "" -->
 				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{pm_row_grey.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
@@ -765,10 +725,9 @@ $(function(){
 			<th class="left" style="width:20px">&nbsp;</th>
 			<th class="left" style="width:16px" colspan="2">{L_action}</th>
 			<th class="left">{L_name}</th>
-			<th class="left">{L_version}</th>
-			<th class="hiddenSmartphone left">{L_contact}</th>
 			<th class="hiddenSmartphone left">{L_description}</th>
-			<th style="width: 90px" class="hiddenSmartphone left">{L_pi_rating}</th>
+			<th class="left">{L_version}</th>
+			<th class="hiddenSmartphone left">{L_portalplugin_author}</th>
 			<th class="hiddenSmartphone left">{L_infos}</th>
 		  </tr>
 		  <!-- BEGIN games_row_red -->
@@ -777,10 +736,9 @@ $(function(){
 			<td class="nowrap desktopOnly">{games_row_red.ACTION_LINK}</td>
 			<td class="nowrap desktopOnly">{games_row_red.DELETE_LINK}</td>
 			<td>{games_row_red.NAME}</td>
+			<td class="hiddenSmartphone">{games_row_red.DESCRIPTION}</td>
 			<td>{games_row_red.VERSION}</td>
 			<td class="hiddenSmartphone">{games_row_red.CONTACT}</td>
-			<td class="hiddenSmartphone">{games_row_red.DESCRIPTION}</td>
-			<td class="hiddenSmartphone">{games_row_red.RATING}</td>
 			<td class="hiddenSmartphone">
 				<!-- IF games_row_red.BUGTRACKER_URL != "" -->
 				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{games_row_red.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
@@ -794,10 +752,9 @@ $(function(){
 			<td class="nowrap desktopOnly">{games_row_yellow.ACTION_LINK}</td>
 			<td class="nowrap desktopOnly">{games_row_yellow.DELETE_LINK}</td>
 			<td>{games_row_yellow.NAME}</td>
+			<td class="hiddenSmartphone">{games_row_yellow.DESCRIPTION}</td>
 			<td>{games_row_yellow.VERSION}</td>
 			<td class="hiddenSmartphone">{games_row_yellow.CONTACT}</td>
-			<td class="hiddenSmartphone">{games_row_yellow.DESCRIPTION}</td>
-			<td class="hiddenSmartphone">{games_row_yellow.RATING}</td>
 			<td class="hiddenSmartphone">
 				<!-- IF games_row_yellow.BUGTRACKER_URL != "" -->
 				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{games_row_yellow.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
@@ -811,10 +768,9 @@ $(function(){
 			<td class="nowrap desktopOnly">{games_row_green.ACTION_LINK}</td>
 			<td class="nowrap desktopOnly">{games_row_green.DELETE_LINK}</td>
 			<td>{games_row_green.NAME}</td>
+			<td class="hiddenSmartphone">{games_row_green.DESCRIPTION}</td>
 			<td>{games_row_green.VERSION}</td>
 			<td class="hiddenSmartphone">{games_row_green.CONTACT}</td>
-			<td class="hiddenSmartphone">{games_row_green.DESCRIPTION}</td>
-			<td class="hiddenSmartphone">{games_row_green.RATING}</td>
 			<td class="hiddenSmartphone">
 				<!-- IF games_row_green.BUGTRACKER_URL != "" -->
 				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{games_row_green.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
@@ -828,10 +784,9 @@ $(function(){
 			<td class="nowrap desktopOnly">{games_row_grey.ACTION_LINK}</td>
 			<td class="nowrap desktopOnly">{games_row_grey.DELETE_LINK}</td>
 			<td>{games_row_grey.NAME}</td>
+			<td class="hiddenSmartphone">{games_row_grey.DESCRIPTION}</td>
 			<td>{games_row_grey.VERSION}</td>
 			<td class="hiddenSmartphone">{games_row_grey.CONTACT}</td>
-			<td class="hiddenSmartphone">{games_row_grey.DESCRIPTION}</td>
-			<td class="hiddenSmartphone">{games_row_grey.RATING}</td>
 			<td class="hiddenSmartphone">
 				<!-- IF games_row_grey.BUGTRACKER_URL != "" -->
 				<span class="coretip" data-coretip="{L_bugtracker}"><a href="{games_row_grey.BUGTRACKER_URL}" target="_blank" rel="nofollow"><i class="fa fa-bug fa-lg"></i></a></span>
