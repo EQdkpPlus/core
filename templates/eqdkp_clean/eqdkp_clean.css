@@ -342,7 +342,7 @@ h3 {
 }
 
 /* Header and Site-Titles */
-#banner {
+div#banner {
 	background: url('@{eqdkpBannerImage}'), linear-gradient(to bottom, @styleBannerBackgroundColorFrom 0%, @styleBannerBackgroundColorTo 100%);
 	background-repeat: no-repeat;
 	background-position: center top;
