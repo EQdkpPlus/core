@@ -423,6 +423,8 @@ class QuickStartWizard extends page_generic {
 	}
 	
 	public function process_step6(){
+		if(!$this->checkCSRF('process')) return false;
+		
 		$strPointLayout = $this->in->get("pointlayout");
 		$this->config->set('eqdkp_layout', $strPointLayout);
 		

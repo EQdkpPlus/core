@@ -178,7 +178,7 @@ function step1(){
 	$('#submitButton').attr('disabled', true);
 	
 	if($('input[name=style]:checked').data('localid') != undefined){
-		var url = 'wizard.php{SID}&show=3&process&local='+$('input[name=style]:checked').data('localid');
+		var url = 'wizard.php{SID}&show=3&link_hash={LINK_HASH}&process&local='+$('input[name=style]:checked').data('localid');
 		window.location=url;
 		
 		
