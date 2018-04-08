@@ -283,6 +283,8 @@ class portal extends gen_class {
 				if(!empty($sett['default'])) $this->config->set($name, $sett['default'], 'pmod_'.$id);
 			}
 		}
+		
+		return $id;
 	}
 
 	public function uninstall($path, $plugin='') {

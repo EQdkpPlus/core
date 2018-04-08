@@ -634,6 +634,7 @@ $lang = array(
 	"adminc_support_bugtracker" => 'You encountered a bug? Help us by first searching in the bugtracker, open a new report if nessessary<br><a href=\'http://eqdkp-plus.eu/bugtracker/\' target=\'blank\'>To the Bugtracker</a>',
 	"adminc_support_forums" => 'You\'ve got Questions? Need Help? Searched the WIKI without any answer? Then visit the official Forums for help!<br><a href=\'http://eqdkp-plus.eu/forum\' target=\'blank\'>To the Forums</a>',
 	"adminc_support_tour" => 'You are new to EQdkp Plus? You never ever added a raid or gave dkp points? You are just curious?<br /><b><a href=\'?tour=start\'>Then NOW start your tour through EQdkp Plus</a></b>',
+	"adminc_magic" => "You want to start with EQdkp Plus fast, without setting a lot of options?<br/><a href='wizard.php'>The Quickstart-Assistant will let you use your EQdkp Plus in less than 5 minutes.</a>",
 	"title_manageusers" => 'Manage Users',
 	"title_mysqlinfo" => 'MySQL Info',
 	"portal" => 'Portal',
@@ -1837,6 +1838,26 @@ $lang = array(
 		"core_sett_f_notify_updates_email" => "Notify admin via mail about updates",
 		"create_style" => "Create new style",
 		"style_parent" => "Select template",
+		
+		//Quickstart Wizard
+		'wizard' => "Quickstart-Assistant",
+		'wizard_step0'=> "Select game",
+		'wizard_step0_info' => "The Quickstart-Assistant guides you through the most important settings. Of course you can edit all made changes at any time later.<br /><br />Now, select the game you are playing. If your game is not listed here, you can build it with our <a href='https://eqdkp-plus.eu/repository/gamebuilder'>Gamebuilder</a>. After you have imported your created game, you can start the Quickstart-Assistant again.",
+		'wizard_step1'=> "Settings",
+		'wizard_step1_info' => "Make the most important settings for your Guild. Insert your Guildname, upload a logo and setup your game. All settings can be changed later at 'Administration >> Settings'.",
+		'wizard_step2'=> "Import guild",
+		'wizard_step2_info'=> "You game supports an automatic guild import. Use the import Button below to import your guild, and the update button to update the profileinformation of the imported characters. When finished, click on the continue button to go to the next quickstart step.",
+		'wizard_step3'=> "Select style",
+		'wizard_step3_info'=> "Wähle hier das Aussehen deines EQdkp Plus aus. Du kannst die Farben und Templates auch noch später nachbearbeiten, in dem du in die Erweiterungsverwaltung gehst, und deinen Style einfach anklickst.",
+		'wizard_step4'=> "Install plugins",
+		'wizard_step4_info'=> "Plugins are extensions that make additional features available. For example, with MediaCenter you can upload videos, photos and files, using RaidLogImport helps you importing Logs, and we offer you a Chat system. Just go through the list and install plugins you like. Of course you can add plugins using the Extension-Management later.",
+		'wizard_step5'=> "Install portalmodules",
+		'wizard_step5_info'=> "Portalmodules are some small widgets, display at the portal around your content. We offer a lot of modules, like displaying the current wheater, the next raids or the latest tweets of an account. Of course you can add portalmodules using the Extension-Management later.",
+		'wizard_step6'=> "Select pointsystem",
+		'wizard_step6_info'=> "Here you can select which pointsystem you want to user. If you don't know which one you are going to use, keep the 'normal' one. If you don't need points, select the 'nopoint' pointsystem. You can change your pointsystem later, using the 'Table- & Pointmanagement'.",
+		'wizard_step7'=> "Quickstart-Assitant finished",
+		'wizard_step7_info'=> "You are now done with the Quickstart-Assistant. Have fun with your EQdkp Plus!",
+		
 );
 
 ?>

@@ -632,6 +632,7 @@ $lang = array(
 "adminc_support_bugtracker" => "Du hast einen Bug gefunden? Dann hilf uns: Durchsuche zuerst den Bugtracker, und melde nicht vorhandene Fehler.<br /><b><a href='".EQDKP_BUGTRACKER_URL."' target='blank'>Zum Bugtracker</a></b>",
 "adminc_support_forums" => "Du hast Fragen rund um das EQDKP-PLUS? Benötigst Hilfe und das WIKI hat dir nicht weitergeholfen? Besuche das offizielle Forum!<br />Damit dir möglichst schnell geholfen werden kann, halte dich bitte an die Forumsregeln und fülle dein Forums-Profil aus!<br /><b><a href='".EQDKP_BOARD_URL."' target='blank'>Zum Forum</a></b>",
 "adminc_support_tour" => "Du bist neu bei EQDKP-PLUS? Du hast noch nie Raids eingetragen oder DKP-Punkte vergeben? Du bist einfach nur neugierig?<br /><b><a href='?tour=start'>Dann starte jetzt die Tour durch das EQdkp Plus</a></b>",
+"adminc_magic" => "Du willst schnell mit dem EQdkp Plus loslegen, ohne erst alles umständlich einzustellen?<br/><a href='wizard.php'>Lege mit dem Schnellstart-Assistenten innerhalb von 5 Minuten los.</a>",
 "title_manageusers" => "Benutzer verwalten",
 "title_mysqlinfo" => "MySQL Info",
 "portal" => "Portal",
@@ -1842,5 +1843,25 @@ $lang = array(
 "core_sett_f_notify_updates_email" => "Administrator per Email über Updates informieren",
 "create_style" => "Neuen Style erstellen",
 "style_parent" => "Vorlage auswählen",
+		
+//Quickstart Wizard
+'wizard' => "Schnellstart-Assistent",
+'wizard_step0'=> "Spiel auswählen",
+'wizard_step0_info' => "Der Schnelleinrichtungs-Assistent führt dich durch die wichtigsten Einstellungen. Natürlich kannst du alle getätigten Einstellungen später jederzeit ändern oder rückgängig machen.<br /><br />Wähle nun das Spiel aus, mit dem du EQdkp Plus verwenden willst. Ist dein Spiel nicht dabei, kannst du über unseren <a href='https://eqdkp-plus.eu/repository/gamebuilder'>Gamebuilder</a> dein Spiel erstellen. Nachdem du das erstelle Spiel importiert hast, kannst du den Schnellstart-Assistenten erneut aufrufen.",
+'wizard_step1'=> "Einstellungen vornehmen",
+'wizard_step1_info' => "Nehme hier die wichtigsten Einstellungen vor. Trage deinen Gildennamen ein, lade ein Logo hoch, und stelle dein Spiel ein. Alle Einstellungen kannst du später unter 'Administration >> Einstellungen' ändern.",
+'wizard_step2'=> "Gilde importieren",
+'wizard_step2_info'=> "Dein Spiel unterstützt den automatischen Import deiner Gildenmitglieder. Klicke auf einen der unten stehenden Buttons, um deine Gilde zu importieren, bzw. deren Charakter zu aktualisieren. Bist du damit fertig, fahre mit dem nächsten Schritt des Assistenten fort.",
+'wizard_step3'=> "Style auswählen",
+'wizard_step3_info'=> "Wähle hier das Aussehen deines EQdkp Plus aus. Du kannst die Farben und Templates auch noch später nachbearbeiten, in dem du in die Erweiterungsverwaltung gehst, und deinen Style einfach anklickst.",
+'wizard_step4'=> "Plugins installieren",
+'wizard_step4_info'=> "Plugins sind Erweiterungen, die dir zusätzliche Funktionen im EQdkp Plus bereitstellen. Dies geht über ein MediaCenter, mit dem du Bilder, Dateien und Videos hochladen kannst, über den RaidLogImport für das importieren von Logs, bis zu einem kompletten Chat-System. Stöber einfach mal durch die Liste und klicke Plugins an, die du installieren möchtest. Du kannst später über die Erweiterungsverwaltung jederzeit Plugins de- und installieren.",
+'wizard_step5'=> "Portalmodule installieren",
+'wizard_step5_info'=> "Portalmodule werden im Portal rund um den eigentlichen Inhalt angezeigt. So gibt es Portalmodule, die dir die nächste Raids, das aktuelle Wetter oder die letzten Tweets von einem Account anzeigen. Wähle einfach die gewünschten Portalmodule aus, die du haben möchtest. Natürlich kannst du über die Erweiterungsverwaltung später Portalmodule installieren.",
+'wizard_step6'=> "Punktesystem auswählen",
+'wizard_step6_info'=> "Hier kannst du das Punktesystem auswählen, welches du verwenden willst. Solltest du noch nicht wissen, welches du verwenden willst, belasse es einfach bei 'normal'. Wenn du überhaupt keine Punkte brauchst, wähle 'nopoints' aus. Du kannst das Punktesystem auch später über die 'Tabellen- & Punkteverwaltung' später jederzeit ändern.",
+'wizard_step7'=> "Schnellstart-Assistent beendet",
+'wizard_step7_info'=> "Du hast nun die wichtigsten Einstellungen erledigt. Viel Spaß mit EQdkp Plus!",
+
 );
 ?>
