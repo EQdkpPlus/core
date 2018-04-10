@@ -1402,17 +1402,28 @@ if (!class_exists("jquery")) {
 		 * @string 			$url		The URL to the ajax call, see "dd_create_ajax"
 		 * @string			$add_posts	additional post-variables to pass to the url
 		 */
-		public function js_dd_ajax($id1, $id2, $url, $add_posts='') {
+		public function js_dd_ajax($id1, $id2, $url, $add_posts='', $add_ids=array()) {
 			$change_js = "$('#".$id1."').change(function() {";
 			$js = '';
 			$child_js = '';
 			// if we only have one child, put it in array for convenience
 			if(!is_array($id2)) $id2 = array($id2);
+			$arrAdditionalValues = array();
 			foreach($id2 as $key => $id) {
+				if(isset($add_ids[$id])) $arrAdditionalValues = array_merge($arrAdditionalValues, $add_ids[$id]);
 				$child_js .= "$('#".$id."').find('option').remove();";
 				$child_js .= "$('#".$id."').append(data).trigger('change');";
 			}
-			$js .= "$.post('".$url."',{requestid:$('#".$id1."').val()".$add_posts."},function(data){".$child_js."});";
+			
+			$addValues = "";
+			if(count($arrAdditionalValues)){
+				$addValues .= ', parents: '.json_encode($arrAdditionalValues);
+				foreach($arrAdditionalValues as $myid){
+					$addValues .= ', '.$myid.": $('#".$myid."').val()";
+				}
+			}
+			
+			$js .= "$.post('".$url."',{requestid:$('#".$id1."').val()".$addValues.$add_posts."},function(data){".$child_js."});";
 			// initialize on page-load
 			$this->tpl->add_js($js, 'docready');
 			// update on selection change
