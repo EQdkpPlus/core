@@ -104,13 +104,7 @@ if (!class_exists("environment")) {
 				$arrIps = explode(',', $ips);
 				if (strlen(trim($arrIps[0]))){
 					$ip = $arrIps[0];
-					if(strpos($ip, '.') !== false){
-						//IPv4 address
-						return preg_replace('/(\:[0-9]*)/', '', trim($ip));
-					} else {
-						//IPv6 address
-						return preg_replace('/(\[|(\]\:[0-9]*))/', '', trim($ip));
-					}
+					return trim($ip);
 
 				} else {
 					return $_SERVER['REMOTE_ADDR'];
