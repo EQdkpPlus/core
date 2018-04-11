@@ -337,6 +337,7 @@ abstract class super_registry {
 		'facebook'	=> 'Facebook',
 		'oauth'		=> 'OAuth2',
 		'phpseclib'	=> 'phpseclib',
+		'JShrink'	=> 'JShrink',
 	);
 
 	public static function autoload_libraries($strClassname){
