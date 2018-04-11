@@ -25,7 +25,7 @@ if ( !defined('EQDKP_INC') ){
 
 class tinyMCE extends gen_class {
 
-	protected $tinymce_version = '4.7.5';
+	protected $tinymce_version = '4.7.11';
 	protected $language	= 'en';
 	protected $trigger	= array(
 		'bbcode'	=> false,
@@ -72,6 +72,7 @@ class tinyMCE extends gen_class {
 						"media textcolor '.$mention.$strHooksPlugin.'"
 					],
 					language : "'.$this->language.'",
+					branding: false,
 					theme : "'.$this->theme.'",
 					skin : "'.$this->skin.'",
 					paste_as_text: true,
@@ -186,6 +187,7 @@ class tinyMCE extends gen_class {
 					skin : "'.$this->skin.'",
 					image_advtab: true,
 					verify_html: false,
+					branding: false,
 					toolbar: "insertfile undo redo | fullscreen | styleselect fontselect fontsizeselect bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist | link image media emoticons eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | eqdkp_item eqdkp_gallery eqdkp_raidloot eqdkp_chars | custom_buttons '.$strHooksToolbar.'",
 					language : "'.$this->language.'",
 					plugins: [
