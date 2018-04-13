@@ -1002,6 +1002,7 @@ class admin_settings extends page_generic {
 				$objStyles->delete_cache(false);
 				$this->form->reset_fields();
 				$this->settings_saved = true;
+				$this->config->set($this->itt->changed_prio1($this->in->get('default_game'), $this->in->get('itt_prio1')));
 				$this->display();
 				redirect('admin/manage_settings.php'.$this->SID);		// we need to reload cause of the per-game settings
 			}
