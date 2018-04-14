@@ -1156,7 +1156,7 @@ if (!class_exists("jquery")) {
 		* @param $options	Array with options [id, preview_num, no_animation, sel_text, header, multiple]
 		* @return CHAR
 		*/
-		public function MultiSelect($name, $list, $selected, $options=''){
+		public function MultiSelect($name, $list, $selected, $options=array()){
 			$myID		= (isset($options['id'])) ? $options['id'] : "dw_".$name;
 			if(empty($options['height'])) $options['height'] = 200;
 			if(empty($options['width'])) $options['width'] = 200;
