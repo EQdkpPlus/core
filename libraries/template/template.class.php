@@ -430,6 +430,12 @@ class template extends gen_class {
 					$strPathDir = "EQDKP_ROOT_PATH".substr($strPathDir, 2);
 				}
 				$strContent = str_replace(array('(./', '("./', "('./"), array('('.$strPathDir, '("'.$strPathDir, "('".$strPathDir),$strContent);
+				
+				try {
+					$strContent = \JShrink\Minifier::minify($strContent);
+				} catch(Exception $e){
+				}
+				
 				$data[] = array('content' => "\r\n/* ".$strFile."*/ \r\n".$strContent, 'path' => $strPathDir);
 			}
 
@@ -438,8 +444,6 @@ class template extends gen_class {
 			}
 
 			$strJS .= "\n /* static code*/ \n".$imploded_jscodeeop;
-			
-			$strJS = \JShrink\Minifier::minify($strJS);
 
 			$this->pfh->putContent($combinedFile, $strJS);
 			$this->timekeeper->put('tpl_cache_'.$this->style_code, 'combined.js');
@@ -1431,7 +1435,7 @@ class template extends gen_class {
 		}
 
 		$filename		= $this->cachedir . $handle_filename . '.php';
-		$data			= '<?php' . "\nif (\$this->security()) {\n" . $data . "\n}\n?".">";
+		$data			= '<?php' . "\nif ( !defined('EQDKP_INC') ){\nheader('HTTP/1.0 404 Not Found');exit;\n}\nif (\$this->security()) {\n" . $data . "\n}\n?".">";
 		$data 			= str_replace('</body>', '</body><!-- Cache File '.$handle_filename.' generated '.date("Y-m-d H:i").' ('.time().') -->', $data);
 
 		// save the file data
