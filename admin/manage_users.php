@@ -684,7 +684,8 @@ class Manage_Users extends page_generic {
 				continue;
 			}
 			if($k >= ($start+100)) break;
-			$user_online = (in_array($user_id, $online_users)) ? '<i class="eqdkp-icon-online"></i>' : '<i class="eqdkp-icon-offline"></i>';
+			
+			$user_avatar = $this->pdh->geth('user', 'avatarimglink', array($user_id));
 			if($this->pdh->get('user', 'active', array($user_id))) {
 				$user_active = '<i class="eqdkp-icon-online"></i>';
 				$activate_icon = '<a href="manage_users.php'.$this->SID.'&amp;mode=lock&amp;u='.$user_id.'&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('lock').'"><i class="fa fa-unlock fa-lg icon-color-green"></i></a>';
@@ -711,7 +712,7 @@ class Manage_Users extends page_generic {
 				'USER_ID'			=> $user_id,
 				'NAME_STYLE'		=> ( $this->user->check_auth('a_', false, $user_id) ) ? 'font-weight: bold' : 'font-weight: none',
 				'ADMIN_ICON'		=> ( $this->user->check_auth('a_', false, $user_id) ) ? '<span class="adminicon"></span> ' : '',
-				'USERNAME'			=> $this->pdh->get('user', 'name', array($user_id)),
+				'USERNAME'			=> $user_avatar.' '.$this->pdh->get('user', 'name', array($user_id)),
 				'EMAIL'				=> $this->pdh->get('user', 'email', array($user_id)),
 				'LAST_VISIT'		=> ($this->pdh->get('user', 'last_visit', array($user_id))) ? $this->time->user_date($this->pdh->get('user', 'last_visit', array($user_id)), true) : '',
 				'REG_DATE'			=> ($this->pdh->get('user', 'regdate', array($user_id))) ? $this->time->user_date($this->pdh->get('user', 'regdate', array($user_id)), true) : '',

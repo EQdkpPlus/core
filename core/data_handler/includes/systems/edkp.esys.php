@@ -308,10 +308,9 @@ $system_def = array(
 				'show_numbers' => false,
 				'show_select_boxes' => false,
 				'show_detail_twink' => false,
-				'table_sort_col' => 2,
+				'table_sort_col' => 1,
 				'table_sort_dir' => 'asc',
 				'table_presets' => array(
-					array('name' => 'useronlinestatus', 'sort' => false, 'th_add' => '', 'td_add' => 'width="10" nowrap="nowrap"'),
 					array('name' => 'useravatar', 'sort' => false, 'th_add' => '', 'td_add' => 'nowrap="nowrap"'),
 					array('name' => 'username', 'sort' => true, 'th_add' => '', 'td_add' => 'nowrap="nowrap"'),
 					array('name' => 'useremail', 'sort' => true, 'th_add' => '', 'td_add' => ''),

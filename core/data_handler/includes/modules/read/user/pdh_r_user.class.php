@@ -564,18 +564,22 @@ if (!class_exists("pdh_r_user")){
 			return '';
 		}
 
-		public function get_html_avatarimglink($user_id, $fullSize=false){
+		public function get_html_avatarimglink($user_id, $fullSize=false, $withOnlineBadge=true){
 			$strImg = $this->get_avatarimglink($user_id, $fullSize);
 			if (!strlen($strImg)){
 				$strImg = $this->server_path.'images/global/avatar-default.svg';
 			} else {
 				$strImg = $this->pfh->FileLink($strImg, false, 'absolute');
 			}
+			
+			$class = ($fullSize) ? 'big' : 'small';
+			
+			$onlineBadge = ($this->get_is_online($user_id)) ? '<i class="eqdkp-icon-online"></i>' : '';
 
-			return '<div class="user-tooltip-avatar"><img src="'.$strImg.'" class="user-avatar" alt="" /></div>';
+			return '<div class="user-avatar-container"><img src="'.$strImg.'" class="user-avatar '.$class.'" alt="'.$this->get_name($user_id).'" />'.$onlineBadge.'</div>';
 		}
 
-		public function get_avatar_withtooltip($user_id, $tt_extension=false){
+		public function get_avatar_withtooltip($user_id, $tt_extension=false, $withOnlineBadge=true){
 			$strImg = $this->get_avatarimglink($user_id, false);
 			if (!strlen($strImg)){
 				$strImg = $this->server_path.'images/global/avatar-default.svg';
@@ -583,15 +587,20 @@ if (!class_exists("pdh_r_user")){
 				$strImg = $this->pfh->FileLink($strImg, false, 'absolute');
 			}
 
+			$class = ($fullSize) ? 'big' : 'small';
+			
 			$usertooltip[]	= '<div class="tooltiprow"><i class="fa fa-user fa-lg"></i> '.$this->get_name($user_id).' ('.$this->get_charnumber($user_id).')  '.$this->get_html_country($user_id).'</div>';
 			//is_away, is_online,
 			$usertooltip[]	= '<div class="tooltiprow">'.$this->get_html_groups($user_id).'</div>';
-			$usertooltip[]	= '<div class="tooltiprow"><i class="fa fa-clock-o fa-lg"></i> '.$this->get_html_last_visit($user_id).'</div>';
+			//$usertooltip[]	= '<div class="tooltiprow"><i class="fa fa-clock-o fa-lg"></i> '.$this->get_html_last_visit($user_id).'</div>';
 
 			if(is_array($tt_extension) && count($tt_extension) > 0){
 				$usertooltip = $usertooltip + $tt_extension;
 			}
-			return '<div class="user-tooltip-avatar coretip" data-coretip="'.htmlspecialchars(implode('', $usertooltip)).'"><img src="'.$strImg.'" class="user-avatar" alt="" /></div>';
+			
+			$onlineBadge = ($this->get_is_online($user_id)) ? '<i class="eqdkp-icon-online"></i>' : '';
+			
+			return '<div class="user-avatar-container user-avatar-tooltip coretip" data-coretip="'.htmlspecialchars(implode('', $usertooltip)).'"><img src="'.$strImg.'" class="user-avatar" alt="'.$this->get_name($user_id).'" />'.$onlineBadge.'</div>';
 		}
 
 		public function get_privacy_settings($user_id) {

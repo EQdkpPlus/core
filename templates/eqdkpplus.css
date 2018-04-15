@@ -477,3 +477,13 @@ i.small {
 	font-size: 1.4em;
 	font-weight: bold;
 }
+
+.user-avatar-container {
+	position: relative;
+	display: inline-block;
+}
+.user-avatar-container .eqdkp-icon-online {
+	position: absolute;
+    right: 0;
+    bottom: 0;
+}

@@ -2623,12 +2623,6 @@ article .article_content form {
 	text-align:center;
 }
 
-.comment_avatar img{
-	max-width: 100px;
-	height: 70px;
-	border: 1px solid #ccc;
-	border-radius: @styleAvatarBorderRadius;
-}
 
 .comment_avatar_container {
 	float: left;
@@ -2852,11 +2846,20 @@ td.hiddenSmartphone, th.hiddenSmartphone {
 	width: 0;
 	z-index: 1;
 }
-.user-avatar {
-	max-height: 70px;
+
+.user-avatar-container {
+	position: relative;
+	display: inline-block;
 }
 
-.user-avatar-small, .user-avatar-small img {
+img.user-avatar, .user-avatar img {
+	max-height: 70px;
+	border: 1px solid #CCCCCC;
+	border-radius: @styleAvatarBorderRadius;
+	background-color: #FFFFFF;
+}
+
+.user-avatar-small, .user-avatar-small, .user-avatar.small {
 	max-height: 32px;
 }
 
@@ -2864,11 +2867,6 @@ td.hiddenSmartphone, th.hiddenSmartphone {
 	max-height: 24px;
 }
 
-.user-avatar-border img {
-	border: 1px solid #CCCCCC;
-	border-radius: @styleAvatarBorderRadius;
-	background-color: #FFFFFF;
-}
 .awaytt_row{
 	margin: 8px 0px;
 }
@@ -3049,14 +3047,13 @@ ul#mychars-points-tooltip.dropdown-menu li table tbody tr td a {
 .user-tooltip-avatar {
 	float:left;
 	margin-right: 4px;
+	position: relative;
 }
 .user-tooltip-avatar img {
 	height: 40px;
 	max-width: 60px;
-	border: 1px solid #CCCCCC;
-	border-radius: @styleAvatarBorderRadius;
-	background-color: #FFFFFF;
 }
+
 .user-tooltip-name {
 	padding-right: 40px;
 }
@@ -4631,4 +4628,13 @@ html, body {
 
 .jsFixedBody .portal {
 	margin-top: 47px;
+}
+
+
+.user-avatar-container .eqdkp-icon-online {
+	position: absolute;
+    right: 0;
+    bottom: 0;
+    box-shadow: none;
+    border: 1px solid #fff;
 }

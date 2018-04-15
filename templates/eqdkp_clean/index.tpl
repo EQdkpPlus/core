@@ -83,7 +83,7 @@
 									<li>
 										<a href="{U_USER_PROFILE}">
 											<div class="user-tooltip-avatar">
-												<img src="{USER_AVATAR}" alt="{USER_NAME}"/>
+												<img src="{USER_AVATAR}" alt="{USER_NAME}" class="user-avatar"/>
 											</div>
 											<div class="user-tooltip-name">
 												<span class="bold">{USER_NAME}</span><br />

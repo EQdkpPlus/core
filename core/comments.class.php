@@ -279,13 +279,13 @@ if (!class_exists("comments")){
 			if (is_array($comments)){
 				foreach($comments as $row){
 					// Avatar
-					$avatarimg = $this->pdh->get('user', 'avatarimglink', array($row['userid']));
+					$avatar = $this->pdh->get('user', 'avatar_withtooltip', array($row['userid']));
 
 					// output
 					$out[] .= '<div class="comment '.(($i % 2) ? 'rowcolor2' : 'rowcolor1').' clearfix" id="comment'.$row['id'].'">
 								<div class="comment_id" style="display:none;">'.$row['id'].'</div>
 								<div class="comment_avatar_container">
-									<div class="comment_avatar"><a href="'.$this->routing->build('user', $row['username'], 'u'.$row['userid']).'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $myrootpath.'images/global/avatar-default.svg').'" alt="Avatar" class="user-avatar"/></a></div>
+									<div class="comment_avatar"><a href="'.$this->routing->build('user', $row['username'], 'u'.$row['userid']).'">'.$avatar.'</a></div>
 								</div>
 								<div class="comment_container">
 									<div class="comment_author"><a href="'.$this->routing->build('user', $row['username'], 'u'.$row['userid']).'">'.sanitize($row['username']).'</a>, '.$this->time->createTimeTag($row['date'], $this->time->user_date($row['date'], true)).'</div>';
@@ -310,13 +310,13 @@ if (!class_exists("comments")){
 						$j=0;
 						foreach($row['replies'] as $com){
 							// Avatar
-							$avatarimg = $this->pdh->get('user', 'avatarimglink', array($com['userid']));
+							$avatar = $this->pdh->get('user', 'avatar_withtooltip', array($com['userid']));
 
 							// output
 							$out[] .= '<div class="clear"></div><br/><div class="comment-reply '.(($j%2) ? 'rowcolor2' : 'rowcolor1').' clearfix" id="comment'.$row['id'].'">
 										<div class="comment_id" style="display:none;">'.$com['id'].'</div>
 										<div class="comment_avatar_container">
-											<div class="comment_avatar"><a href="'.$this->routing->build('user', $com['username'], 'u'.$com['userid']).'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $myrootpath.'images/global/avatar-default.svg').'" alt="Avatar" class="user-avatar"/></a></div>
+											<div class="comment_avatar"><a href="'.$this->routing->build('user', $com['username'], 'u'.$com['userid']).'">'.$avatar.'</a></div>
 										</div>
 										<div class="comment_container">
 											<div class="comment_author"><a href="'.$this->routing->build('user', $com['username'], 'u'.$com['userid']).'">'.sanitize($com['username']).'</a>, '.$this->time->createTimeTag($com['date'], $this->time->user_date($com['date'], true)).'</div>';
