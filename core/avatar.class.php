@@ -54,7 +54,7 @@ class avatar extends gen_class {
 		$strCachedImage = $this->getCachedImage($strHash, $intSize);
 		if (!$strCachedImage){
 			//Create
-			$result = $this->cacheImage($strHash, $strName, $intSize);
+			$result = $this->cacheImage($intUserID, $strHash, $strName, $intSize);
 			return $result;
 		}
 		return $strCachedImage;
@@ -86,10 +86,10 @@ class avatar extends gen_class {
 
 
 
-	public function cacheImage($strHash, $strName, $intSize=64){
+	public function cacheImage($intUserID, $strHash, $strName, $intSize=64){
 		$strInitials = $this->getInitials($strName);
 		
-		$strBackground = $this->getRandomBackground();
+		$strBackground = $this->getBackground($intUserID);
 		$intFontSize = ($intSize/100) * $this->defaults['fontSize'];
 		
 		$image = imagecreatetruecolor ( $intSize , $intSize );	
@@ -135,10 +135,10 @@ class avatar extends gen_class {
 		return utf8_strtoupper($strInitial);
 	}
 
-	public function getRandomBackground(){
+	public function getBackground($intUserID){
 		$arrBackgrounds = $this->defaults['backgrounds'];
-		$randKey = array_rand($arrBackgrounds);
-		return $arrBackgrounds[$randKey];
+		$intKey = $intUserID % count($arrBackgrounds);
+		return $arrBackgrounds[$intKey];
 	}
 
 	public function hex2rgb($hex) {

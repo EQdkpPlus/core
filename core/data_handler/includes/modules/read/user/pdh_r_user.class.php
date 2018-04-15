@@ -221,7 +221,7 @@ if (!class_exists("pdh_r_user")){
 		public function get_html_email($user_id, $checkForIgnoreMailsFlag = false){
 			if ($this->get_check_privacy($user_id, 'userprofile_email') && strlen($this->get_email($user_id, $checkForIgnoreMailsFlag))) {
 				if ($this->user->is_signedin()) {
-					return '<a href="javascript:usermailer('.$user_id.');"><i class="fa fa-envelope fa-lg"></i>'.$this->user->lang('adduser_send_mail').'</a>';
+					return '<a href="javascript:usermailer('.$user_id.');"><i class="fa fa-envelope fa-lg"></i> '.$this->user->lang('adduser_send_mail').'</a>';
 				} else {
 					return '<i class="fa fa-envelope fa-lg"></i> '.$this->get_email($user_id);
 				}
