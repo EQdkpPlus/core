@@ -431,11 +431,6 @@ class template extends gen_class {
 				}
 				$strContent = str_replace(array('(./', '("./', "('./"), array('('.$strPathDir, '("'.$strPathDir, "('".$strPathDir),$strContent);
 				
-				try {
-					$strContent = \JShrink\Minifier::minify($strContent);
-				} catch(Exception $e){
-				}
-				
 				$data[] = array('content' => "\r\n/* ".$strFile."*/ \r\n".$strContent, 'path' => $strPathDir);
 			}
 
