@@ -65,7 +65,7 @@ $(function(){
 		$('#defaultItempoolContainer').html('<i class="fa fa-spin fa-spinner fa-lg"></i>');
 
 		$.post("manage_events.php{SID}", { itempools: "1", pools: JSON.stringify(checkedValues), eventid: '{EVENT_ID}'}, function(data){
-			$('#defaultItempoolContainer').html(data);
+			$('#defaultItempoolContainer').html($.trim(data));
 		});
 	});
 });

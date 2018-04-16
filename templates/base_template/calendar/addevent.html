@@ -135,7 +135,7 @@ $(function() {
 		if ($("#cal_raidtemplate").val().match("^t_")) {
 			$.get('{EQDKP_CONTROLLER_PATH}editcalendarevent{SEO_EXTENSION}{SID}&link_hash={CSRF_DELETETEMPLATE}&deletetemplate='+$("#cal_raidtemplate").val().slice(2), function(data) {
 				$('#cal_raidtemplate').children().remove("optgroup");
-				$('#cal_raidtemplate').append(data);
+				$('#cal_raidtemplate').append($.trim(data));
 			});
 		}
 	});

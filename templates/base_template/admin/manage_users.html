@@ -133,7 +133,7 @@ function delete_single(id){
 function change_mainchar(userid, memberid){
 	$.post('{SID}&link_hash={CSRF_MAINCHARCHANGE}', { maincharchange: memberid, user: userid },
 		function(data){
-			system_message(data, 'success');
+			system_message($.trim(data), 'success');
 		}
 	);
 }

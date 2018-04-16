@@ -46,7 +46,7 @@ function ajax_reload_export(){
 	var format = $('input[name=format]:checked').val();
 
 	$.get('manage_export.php{SID}&ajax_export=1&format='+format+'&memberitems='+memberitems+'&memberadjs='+memberadjs, function(data) {
-		$('#export_data').val(data);
+		$('#export_data').val($.trim(data));
 		document.getElementById("export_data").focus();
 		document.getElementById("export_data").select();
 	});

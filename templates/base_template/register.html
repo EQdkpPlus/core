@@ -23,7 +23,7 @@ $(function() {
 		var username = $(this).val();
 		if(username.length > 0){
 			$.post("{EQDKP_CONTROLLER_PATH}Register/{SID}&ajax=1{AJAXEXTENSION_USER}", { username: username }, function(result){
-				if(result == 'true'){
+				if($.trim(result) == 'true'){
 					$("#error_username").hide();
 					$("#tick_username").show();
 				}else{
@@ -43,7 +43,7 @@ $(function() {
 		var user_email = $(this).val();
 		if(user_email.length > 0){
 			$.post("{EQDKP_CONTROLLER_PATH}Register/{SID}&ajax=1{AJAXEXTENSION_USER}", { user_email: user_email }, function(result){
-				if(result == 'true'){
+				if($.trim(result) == 'true'){
 					$("#error_email").hide();
 					$("#tick_mail").show();
 				}else{
