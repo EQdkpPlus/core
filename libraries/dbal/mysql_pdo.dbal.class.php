@@ -396,35 +396,82 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
 		$this->strQuery  = preg_replace("/([^\w]|^)__(\w)/", '$1'.$this->strTablePrefix.'$2', $this->strQuery);
 
 		//Bring params to the correct order
-		$arrParams = array();
-		foreach($this->arrParamsList as $key => $val){
-			if($val == '?') $arrParams[] = array_shift($this->arrParams['execute']);
-			if($val == ':in') {
-				foreach($this->arrParams['in'] as $v){
-					$arrParams[] = $v;
-				}
+		if(isset($this->arrParams['multiple'])){
+			//First, bind the query
+			try {
+				$objStatement = $this->resConnection->prepare($this->strQuery);
+			}catch(PDOException $e){
+				$strError =  $e->getMessage();
+				throw new DBALQueryException($strError);
 			}
-			if($val == ':p') {
-				foreach($this->arrParams['set'] as $v){
-					$arrParams[] = $v;
-				}
-			}
-		}
-		
-		// Log the Query
-		$this->objLogger->log($this->strDebugPrefix . 'sql_query', $this->strQuery, $arrParams);
 
-		try {
-			$objStatement = $this->resConnection->prepare($this->strQuery);
-			$objStatement->execute($arrParams);
-		}catch(PDOException $e){
-			$strError =  $e->getMessage();
-			throw new DBALQueryException($strError);
+			
+			foreach($this->arrParams['multiple'] as $arrSetParams){
+				$arrParams = array();
+				foreach($this->arrParamsList as $key => $val){
+					if($val == '?') $arrParams[] = array_shift($this->arrParams['execute']);
+					
+					if($val == ':in') {
+						foreach($this->arrParams['in'] as $v){
+							$arrParams[] = $v;
+						}
+					}
+					if($val == ':p') {
+						foreach($arrSetParams as $v){
+							$arrParams[] = $v;
+						}
+					}
+				}
+				
+				// Log the Query
+				$this->objLogger->log($this->strDebugPrefix . 'sql_query', $this->strQuery, $arrParams);
+				
+				//Now Execute
+				try {
+					$objStatement->execute($arrParams);
+				}catch(PDOException $e){
+					$strError =  $e->getMessage();
+					throw new DBALQueryException($strError);
+				}
+				
+				//Now Return
+				if (is_object($objStatement)) $this->resConnection->affectedRows = $objStatement->rowCount();
+				if (is_object($objStatement) && $objStatement->columnCount() === 0) return true;
+				return $objStatement;
+			}
+			
+		} else {
+			$arrParams = array();
+			foreach($this->arrParamsList as $key => $val){
+				if($val == '?') $arrParams[] = array_shift($this->arrParams['execute']);
+				if($val == ':in') {
+					foreach($this->arrParams['in'] as $v){
+						$arrParams[] = $v;
+					}
+				}
+				if($val == ':p') {
+					foreach($this->arrParams['set'] as $v){
+						$arrParams[] = $v;
+					}
+				}
+			}
+			
+			// Log the Query
+			$this->objLogger->log($this->strDebugPrefix . 'sql_query', $this->strQuery, $arrParams);
+			
+			try {
+				$objStatement = $this->resConnection->prepare($this->strQuery);
+				$objStatement->execute($arrParams);
+			}catch(PDOException $e){
+				$strError =  $e->getMessage();
+				throw new DBALQueryException($strError);
+			}
+			
+			if (is_object($objStatement)) $this->resConnection->affectedRows = $objStatement->rowCount();
+			if (is_object($objStatement) && $objStatement->columnCount() === 0) return true;
+			return $objStatement;
 		}
 		
-		if (is_object($objStatement)) $this->resConnection->affectedRows = $objStatement->rowCount();
-		if (is_object($objStatement) && $objStatement->columnCount() === 0) return true;
-		return $objStatement;
 	}
 	
 	/**
@@ -473,7 +520,26 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
 		$arrKeys = array_keys($arrParams);
 		
 		if (isset($arrKeys[0]) && is_array($arrParams[$arrKeys[0]])){
-			throw new Exception('As we use prepared statements, only one value inserting per query');
+			$arrParamsArray = $arrParams;
+			
+			if (strncasecmp($this->strQuery, 'INSERT', 6) === 0 || (strncasecmp($this->strQuery, 'REPLACE', 7) === 0))
+			{
+				$arrQuestions = array_fill(0, count($arrParams[$arrKeys[0]]), '?');
+				$strQuery = sprintf('(%s) VALUES (%s)',
+						implode(', ', array_keys($arrParams[$arrKeys[0]])),
+						implode(', ', $arrQuestions));
+			}
+
+			foreach($arrParamsArray as $arrParams){
+				//$arrParams = $this->escapeParams($arrParams);
+				
+				// INSERT / REPLACE
+				if (strncasecmp($this->strQuery, 'INSERT', 6) === 0 || (strncasecmp($this->strQuery, 'REPLACE', 7) === 0))
+				{
+					$this->arrParams['multiple'][] = $arrParams;
+				}
+			}
+
 		} else {
 			//$arrParams = $this->escapeParams($arrParams);
 			
