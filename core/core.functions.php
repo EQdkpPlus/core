@@ -150,23 +150,31 @@ function get_sortedids($tosort, $order, $sort_order){
  * @param		bool		$extern			Is it an external link (other server) or an internal link?
  * @return		mixed						null, else the parsed redirect url if return is true.
  */
-function redirect($url='', $return=false, $extern=false, $blnShowPage=true){
+function redirect($url='', $return=false, $extern=false, $blnShowPage=true, $strContent=""){
 	if($url == "") $url = registry::get_const('controller_path_plain');
 
-	$out = (!$extern) ? registry::register('environment')->link.str_replace('&amp;', '&', $url) : registry::fetch('user')->removeSIDfromString($url);
+	$outurl = (registry::fetch('user')->removeSIDfromString($url));
+	$out = (!$extern) ? registry::register('environment')->link.str_replace('&amp;', '&', $url) : registry::register('environment')->link.'derefer.php?url='.urlencode($outurl).'&key='.substr(sha1(registry::get_const('encryptionKey').'|'.$outurl), 0, 12);
+
 	if ($return){
 		return $out;
 	}else{
-		header('Location: ' . $out);
+		
+		if($strContent && $strContent != ""){
+			$intRedirectTime = 5;
+		} else {
+			header('Location: ' . $out);
+			$intRedirectTime = 3;
+		}
 
 		if(defined('USER_INITIALIZED') && $blnShowPage) {
-			registry::register('template')->add_meta('<meta http-equiv="refresh" content="3;URL='.$out.'" />');
+			registry::register('template')->add_meta('<meta http-equiv="refresh" content="'.$intRedirectTime.';URL='.$out.'" />');
 
 			registry::register('template')->assign_vars(array(
 				'MSG_CLASS'		=> 'blue',
 				'MSG_ICON'		=> 'fa-refresh',
 				'MSG_TITLE'		=> registry::register('user')->lang('redirection'),
-				'MSG_TEXT'		=> '<br/><a href="'.$out.'">'.registry::register('user')->lang('redirection_info')."</a>",
+				'MSG_TEXT'		=> '<br/><a href="'.$out.'">'.registry::register('user')->lang('redirection_info')."</a>".$strContent,
 				'S_MESSAGE'		=> true,
 			));
 
