@@ -85,6 +85,7 @@ class login_pageobject extends pageobject {
 		
 			$blnAutoLogin = ( $this->in->exists('auto_login') ) ? true : false;
 			//Login
+			//if(false){
 			if ( !$this->user->login($this->in->get('username'), $this->in->get('password'), $blnAutoLogin) ){
 				//error
 				$strErrorCode = $this->user->error;
@@ -112,6 +113,8 @@ class login_pageobject extends pageobject {
 				$this->display();
 				
 			} else {
+				$strContent = "";
+				
 				//success
 				if($this->hooks->isRegistered('login_pageobject_successfull_login')){
 					if($this->in->exists('redirect')){
@@ -126,7 +129,9 @@ class login_pageobject extends pageobject {
 						$redirect_url = $this->controller_path_plain.$this->SID;
 					}
 					
-					$redirect_url = $this->hooks->process('login_pageobject_successfull_login', array('user_id' => $this->user->id, 'redirect_url' => $redirect_url), true);
+					$arrHookData = $this->hooks->process('login_pageobject_successfull_login', array('user_id' => $this->user->id, 'redirect_url' => $redirect_url, 'content' => ''), true);
+					$redirect_url = $arrHookData['redirect_url'];
+					$strContent = $arrHookData['content'];
 				} elseif ($this->in->exists('redirect')){
 					$redirect_url = preg_replace('#^.*?redirect=(.+?)&(.+?)$#', '\\1' . $this->SID . '&\\2', base64_decode($this->in->get('redirect')));
 					$redirect_url = $this->user->removeSIDfromString($redirect_url);
@@ -139,7 +144,8 @@ class login_pageobject extends pageobject {
 				} else {
 					$redirect_url = $this->controller_path_plain.$this->SID;
 				}
-				redirect($redirect_url);
+
+				redirect($redirect_url, false, false, true, $strContent);
 			}
 		} elseif($this->in->exists('lmethod')) {
 			redirect($this->controller_path_plain.'Settings/?mode=addauthacc&lmethod='.$this->in->get('lmethod').'&code='.$this->in->get('code').'&token='.$this->in->get('token').'&error='.$this->in->get('error'));
