@@ -25,10 +25,11 @@ if ( !defined('EQDKP_INC') ){
 if (!class_exists("environment")) {
 	class environment extends gen_class {
 
-		public $protocol, $ip, $useragent, $request, $request_page, $request_query, $ssl, $current_page, $server_name, $server_path, $httpHost, $phpself, $link, $agent, $path, $is_ajax, $referer;
+		public $protocol, $ip, $ip_anomized, $useragent, $request, $request_page, $request_query, $ssl, $current_page, $server_name, $server_path, $httpHost, $phpself, $link, $agent, $path, $is_ajax, $referer;
 
 		public function __construct() {
 			$this->ip 				= $this->get_ipaddress();
+			$this->ip_anomized		= $this->get_anonymized_ipaddress();
 			$this->useragent 		= $this->get_useragent();
 			$this->request 			= $this->get_request();
 			$this->request_page 	= $this->get_request_page();
@@ -104,13 +105,78 @@ if (!class_exists("environment")) {
 				$arrIps = explode(',', $ips);
 				if (strlen(trim($arrIps[0]))){
 					$ip = $arrIps[0];
-					return trim($ip);
+					$ipAddr = trim($ip);
 
 				} else {
-					return $_SERVER['REMOTE_ADDR'];
+					$ipAddr = $_SERVER['REMOTE_ADDR'];
 				}
 			} else {
-				return $_SERVER['REMOTE_ADDR'];
+				$ipAddr = $_SERVER['REMOTE_ADDR'];
+			}
+			
+			//Remove Ports
+			if(substr_count($ipAddr, ":") > 1){
+				//ipv6
+				$ipAddr = preg_replace("/\[(.*)\]\:([0-9]*)/", "$1", $ipAddr);
+				
+			} else {
+				//ipv4
+				$ipAddr = preg_replace("/(\:([0-9]*))/", "", $ipAddr);
+			}
+			
+			return $ipAddr;
+		}
+		
+		private function get_anonymized_ipaddress(){
+			$ip = $this->get_ipaddress();
+		
+			$byteCount = 1;
+			
+			$binaryIp = @inet_pton($ip);
+			
+			$strlen = function_exists('mb_orig_strlen') ? 'mb_orig_strlen' : 'strlen';
+			if($strlen($binaryIp) == 4){
+				//ipv4
+				$i = strlen($binaryIp);
+				if ($byteCount > $i) {
+					$byteCount = $i;
+				}
+				
+				while ($byteCount-- > 0) {
+					$binaryIp[--$i] = chr(0);
+				}
+				
+				$ipStr = @inet_ntop($binaryIp);
+				
+				return $ipStr;
+			} else {
+				//ipv6
+				if (substr_compare($binaryIp, "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff", 0, 12) === 0
+						|| substr_compare($binaryIp, "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00", 0, 12) === 0) {
+					
+					$i = strlen($binaryIp);
+					if ($byteCount > $i) {
+						$byteCount = $i;
+					}
+					
+					while ($byteCount-- > 0) {
+						$binaryIp[--$i] = chr(0);
+					}
+					
+					return @inet_ntop($binaryIp);
+				}
+				
+				$masks = array(
+						'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff',
+						'ffff:ffff:ffff:ffff::',
+						'ffff:ffff:ffff:0000::',
+						'ffff:ff00:0000:0000::'
+				);
+				
+				$binaryIp = $binaryIp & pack('a16', inet_pton($masks[$byteCount]));
+				$ipStr = @inet_ntop($binaryIp);
+				
+				return $ipStr;
 			}
 		}
 
