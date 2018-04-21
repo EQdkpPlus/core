@@ -68,7 +68,6 @@ if(!class_exists('pdh_w_logs')) {
 				'log_result'		=> $result,
 				'log_tag'			=> $tag,
 				'log_date'			=> time(),
-				'log_ipaddress'		=> $this->env->ip_anomized,
 				'log_sid'			=> $this->user->sid,
 				'user_id'			=> $userid,
 				'username'			=> $this->pdh->get('user', 'name', array($userid)),

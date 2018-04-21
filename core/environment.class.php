@@ -25,11 +25,11 @@ if ( !defined('EQDKP_INC') ){
 if (!class_exists("environment")) {
 	class environment extends gen_class {
 
-		public $protocol, $ip, $ip_anomized, $useragent, $request, $request_page, $request_query, $ssl, $current_page, $server_name, $server_path, $httpHost, $phpself, $link, $agent, $path, $is_ajax, $referer;
+		public $protocol, $ip, $ip_anonymized, $useragent, $request, $request_page, $request_query, $ssl, $current_page, $server_name, $server_path, $httpHost, $phpself, $link, $agent, $path, $is_ajax, $referer;
 
 		public function __construct() {
 			$this->ip 				= $this->get_ipaddress();
-			$this->ip_anomized		= $this->get_anonymized_ipaddress();
+			$this->ip_anonymized	= $this->get_anonymized_ipaddress();
 			$this->useragent 		= $this->get_useragent();
 			$this->request 			= $this->get_request();
 			$this->request_page 	= $this->get_request_page();
@@ -133,6 +133,7 @@ if (!class_exists("environment")) {
 			$byteCount = 1;
 			
 			$binaryIp = @inet_pton($ip);
+			if(!$binaryIp) $binaryIp = "\x00\x00\x00\x00";
 			
 			$strlen = function_exists('mb_orig_strlen') ? 'mb_orig_strlen' : 'strlen';
 			if($strlen($binaryIp) == 4){
@@ -147,7 +148,7 @@ if (!class_exists("environment")) {
 				}
 				
 				$ipStr = @inet_ntop($binaryIp);
-				
+				if(!$ipStr) $ipStr = "0.0.0.0";
 				return $ipStr;
 			} else {
 				//ipv6
@@ -163,7 +164,9 @@ if (!class_exists("environment")) {
 						$binaryIp[--$i] = chr(0);
 					}
 					
-					return @inet_ntop($binaryIp);
+					$ipStr = @inet_ntop($binaryIp);
+					if(!$ipStr) $ipStr = "0.0.0.0";
+					return $ipStr;
 				}
 				
 				$masks = array(
@@ -175,7 +178,7 @@ if (!class_exists("environment")) {
 				
 				$binaryIp = $binaryIp & pack('a16', inet_pton($masks[$byteCount]));
 				$ipStr = @inet_ntop($binaryIp);
-				
+				if(!$ipStr) $ipStr = "0.0.0.0";
 				return $ipStr;
 			}
 		}
