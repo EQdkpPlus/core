@@ -129,7 +129,7 @@ class Manage_Logs extends page_generic {
 					} else {
 						$this->tpl->assign_block_vars('log_row', array(
 							'KEY'			=> $this->logs->lang_replace(stripslashes($k)).':',
-							'VALUE'			=> $this->logs->lang_replace(stripslashes($v)))
+							'VALUE'			=> nl2br($this->logs->lang_replace(stripslashes($v))))
 						);
 					}
 				}
