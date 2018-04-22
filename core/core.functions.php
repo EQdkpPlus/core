@@ -92,16 +92,15 @@ function includeLibraries($path, $mask){
 function runden($value){
 	$ret_val		= $value;
 	$precision	= (int)registry::register('config')->get('round_precision');
+	
+	if($precision < 0) $precision = 0;
+	if($precision > 5) $precision = 5;
 
-	if (($precision < 0) or ($precision > 5) ){
-		$precision = 2;
-	}
-
-	if (registry::register('config')->get('round_activate') == "1"){
+	if ((int)registry::register('config')->get('round_activate')){
 		$ret_val = round($value,$precision)	;
 		$ret_val = number_format($ret_val, $precision, '.', '');
 	} else {
-		$ret_val = number_format(round($value, 5), $precision, '.', '');
+		$ret_val = number_format(round($value, 2), 2, '.', '');
 	}
 	return $ret_val;
 }
