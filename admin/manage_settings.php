@@ -475,6 +475,16 @@ class admin_settings extends page_generic {
 						'options'		=> $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list', array(false)))),
 						'datatype'		=> 'int'
 					),
+					'password_length' => array(
+						'default'	=> 8,
+						'type'		=> 'spinner',
+						'min'		=> 6,
+					),
+					'banned_emails' => array(
+						'type'			=> 'textarea',
+						'cols'			=> 80,
+						'rows'			=> 5,
+					),
 				),
 					'login'			=> array(
 							'login_method'	=> array(
