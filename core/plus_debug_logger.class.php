@@ -379,7 +379,7 @@ if ( !defined('EQDKP_INC') ){
 		}
 
 		public function search_fatal_error_id($strErrorID){
-			$arrLogFiles = $this->get_logfiles();
+			$arrLogFiles = $this->get_logfiles(true);
 			$arrMatches = array();
 			$exception = array();
 			$blnRecord=false;

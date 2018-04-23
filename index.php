@@ -42,6 +42,8 @@ class controller extends gen_class {
 		if ($this->in->exists('savevote')){
 			$this->saveRating();
 		}
+		
+		asdasd();
 
 		$this->display();
 	}
