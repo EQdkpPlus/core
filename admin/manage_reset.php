@@ -78,9 +78,10 @@ class reset_eqdkp extends page_generic {
 
 		$this->db->beginTransaction();
 
-		$arrLastValues = array();
+		$arrGlobalLastValues = array();
 		
 		foreach($arrMembers as $intMemberID){
+			$arrLastValues = array();
 			//Raids
 			$objRaids = $this->db->prepare("SELECT SUM(r.raid_value) as summe, MAX(r.raid_date) as max_date FROM __raids r, __raid_attendees ra WHERE ra.raid_id = r.raid_id AND ra.member_id = ? AND r.event_id=?")->execute($intMemberID, $intEventID);
 			if($objRaids){
@@ -126,6 +127,7 @@ class reset_eqdkp extends page_generic {
 			if($fltSum != 0){
 				
 				$intLastTime = (count($arrLastValues)) ? max($arrLastValues) : $this->time->time;
+				$arrGlobalLastValues[] = $intLastTime;
 				
 				$blnResult = $this->pdh->put('adjustment', 'add_adjustment', array($fltSum, $this->user->lang('consolidate').' '.$this->time->user_date($this->time->time), $intMemberID, $intEventID, 0, $intLastTime));
 				if(!$blnResult){
@@ -148,7 +150,7 @@ class reset_eqdkp extends page_generic {
 			//Delete the data
 			$this->pdh->put('raid', 'delete_raidsofevent', array($intEventID));
 
-			$this->db->prepare("DELETE FROM __adjustments WHERE event_id=? AND adjustment_date < ?")->execute($intEventID, $this->time->time-300);
+			$this->db->prepare("DELETE FROM __adjustments WHERE event_id=? AND adjustment_date < ?")->execute($intEventID, min($arrGlobalLastValues)-300);
 
 			$this->pdh->enqueue_hook('adjustment_update');
 			$this->pdh->process_hook_queue();
