@@ -57,6 +57,9 @@ class reset_eqdkp extends page_generic {
 	}
 
 	public function consolidate_event(){
+		@set_time_limit(0);
+		@ignore_user_abort(true);
+		
 		$intEventID = $this->in->get('eventid', 0);
 		$arrMembers = $this->pdh->get('member', 'id_list', array(false, false, false));
 
@@ -73,13 +76,17 @@ class reset_eqdkp extends page_generic {
 
 		$strBackupFile = $this->backup->createDatabaseBackup('zip', true, $tables, true);
 
+		$this->db->beginTransaction();
 
+		$arrLastValues = array();
+		
 		foreach($arrMembers as $intMemberID){
 			//Raids
-			$objRaids = $this->db->prepare("SELECT SUM(r.raid_value) as summe FROM __raids r, __raid_attendees ra WHERE ra.raid_id = r.raid_id AND ra.member_id = ? AND r.event_id=?")->execute($intMemberID, $intEventID);
+			$objRaids = $this->db->prepare("SELECT SUM(r.raid_value) as summe, MAX(r.raid_date) as max_date FROM __raids r, __raid_attendees ra WHERE ra.raid_id = r.raid_id AND ra.member_id = ? AND r.event_id=?")->execute($intMemberID, $intEventID);
 			if($objRaids){
 				$arrResult = $objRaids->fetchAssoc();
 				$fltRaidValue = (float)$arrResult['summe'];
+				$arrLastValues[] = (int)$arrResult['max_date'];
 			} else {
 				$blnError = true;
 				break;
@@ -87,10 +94,11 @@ class reset_eqdkp extends page_generic {
 
 			//Items
 			if(count($arrRaidIDs)){
-				$objItems = $this->db->prepare("SELECT SUM(i.item_value) as summe FROM __items i WHERE i.member_id=? AND i.raid_id :in")->in($arrRaidIDs)->execute($intMemberID);
+				$objItems = $this->db->prepare("SELECT SUM(i.item_value) as summe, MAX(i.item_date) as max_date FROM __items i WHERE i.member_id=? AND i.raid_id :in")->in($arrRaidIDs)->execute($intMemberID);
 				if($objItems){
 					$arrResult = $objItems->fetchAssoc();
 					$fltItemValue = (float)$arrResult['summe'];
+					$arrLastValues[] = (int)$arrResult['max_date'];
 				} else {
 					$blnError = true;
 					break;
@@ -99,13 +107,14 @@ class reset_eqdkp extends page_generic {
 
 			//Adjustments
 			if(count($arrRaidIDs)){
-				$objAdjustments = $this->db->prepare("SELECT SUM(a.adjustment_value) AS summe FROM __adjustments a WHERE a.member_id = ? AND (a.event_id=? OR a.raid_id :in)")->in($arrRaidIDs)->execute($intMemberID, $intEventID);
+				$objAdjustments = $this->db->prepare("SELECT SUM(a.adjustment_value) AS summe, MAX(a.adjustment_date) as max_date FROM __adjustments a WHERE a.member_id = ? AND (a.event_id=? OR a.raid_id :in)")->in($arrRaidIDs)->execute($intMemberID, $intEventID);
 			} else {
-				$objAdjustments = $this->db->prepare("SELECT SUM(a.adjustment_value) AS summe FROM __adjustments a WHERE a.member_id = ? AND a.event_id=?")->execute($intMemberID, $intEventID);
+				$objAdjustments = $this->db->prepare("SELECT SUM(a.adjustment_value) AS summe, MAX(a.adjustment_date) as max_date FROM __adjustments a WHERE a.member_id = ? AND a.event_id=?")->execute($intMemberID, $intEventID);
 			}
 			if($objAdjustments){
 				$arrResult = $objAdjustments->fetchAssoc();
 				$fltAdjValue = (float)$arrResult['summe'];
+				$arrLastValues[] = (int)$arrResult['max_date'];
 			}else {
 				$blnError = true;
 				break;
@@ -115,7 +124,10 @@ class reset_eqdkp extends page_generic {
 			$fltSum = $fltRaidValue - $fltItemValue + $fltAdjValue;
 
 			if($fltSum != 0){
-				$blnResult = $this->pdh->put('adjustment', 'add_adjustment', array($fltSum, $this->user->lang('consolidate').' '.$this->time->user_date($this->time->time), $intMemberID, $intEventID, 0, $this->time->time));
+				
+				$intLastTime = (count($arrLastValues)) ? max($arrLastValues) : $this->time->time;
+				
+				$blnResult = $this->pdh->put('adjustment', 'add_adjustment', array($fltSum, $this->user->lang('consolidate').' '.$this->time->user_date($this->time->time), $intMemberID, $intEventID, 0, $intLastTime));
 				if(!$blnResult){
 					$blnError = true;
 					break;
@@ -125,15 +137,20 @@ class reset_eqdkp extends page_generic {
 
 		if($blnError){
 			//Error Message
+			$this->db->rollbackTransaction();
+			
 			$this->core->message($this->user->lang('consolidate_error'), '', 'red');
-
+			$this->pdh->enqueue_hook('adjustment_update');
 			$this->pdh->process_hook_queue();
 		} else {
+			$this->db->commitTransaction();
+			
 			//Delete the data
 			$this->pdh->put('raid', 'delete_raidsofevent', array($intEventID));
 
 			$this->db->prepare("DELETE FROM __adjustments WHERE event_id=? AND adjustment_date < ?")->execute($intEventID, $this->time->time-300);
 
+			$this->pdh->enqueue_hook('adjustment_update');
 			$this->pdh->process_hook_queue();
 
 			$this->core->message($this->user->lang('consolidate_success'), '', 'green');
