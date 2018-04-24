@@ -1539,7 +1539,7 @@ div.pagination ul li > a, div.pagination ul li > span{
 
 div.pagination ul li.active > a {
 	background-color: @stylePaginationActiveBackgroundColor;
-	color: @stylePaginationActiveColor;
+	color: @stylePaginationActiveColor !important;
 	cursor: default;
 }
 
@@ -1560,7 +1560,7 @@ div.pagination ul li:last-child > a{
 
 .pagination li > a:hover {
 	background-color: @stylePaginationActiveHoverBackgroundColor;
-	color: @stylePaginationActiveHoverColor;
+	color: @stylePaginationActiveHoverColor !important;
 }
 
 .pagination .arrow-right a i{
@@ -4637,4 +4637,9 @@ html, body {
     bottom: 0;
     box-shadow: none;
     border: 1px solid #fff;
+}
+
+.pagination_wrapper{
+	margin-bottom: 0.5em;
+	margin-top: 0.5em;
 }
