@@ -53,6 +53,7 @@ class dbal{
 		
 		foreach ($arrDbals as $key => $name){
 			if (dbal::check_if_pdo($key)){
+				$key = str_replace("_old", "", $key);
 				$blnCheckResult = dbal::check_pdo(dbal::check_if_pdo($key));
 			} else {
 				$blnCheckResult = dbal::check_extension($key);
@@ -78,7 +79,10 @@ class dbal{
 	}
 	
 	private static function check_if_pdo($strDBType){
-		if (substr($strDBType, -4) == "_pdo") return substr($strDBType, 0, -4);
+		if (substr($strDBType, -4) == "_pdo") {
+			$strDBType = str_replace("_old", "", $strDBType);
+			return substr($strDBType, 0, -4);
+		}
 		
 		return false;
 	}
