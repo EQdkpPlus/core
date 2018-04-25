@@ -153,7 +153,7 @@ function redirect($url='', $return=false, $extern=false, $blnShowPage=true, $str
 	if($url == "") $url = registry::get_const('controller_path_plain');
 
 	$outurl = (registry::fetch('user')->removeSIDfromString($url));
-	$out = (!$extern) ? registry::register('environment')->link.str_replace('&amp;', '&', $url) : registry::register('environment')->link.'derefer.php?url='.urlencode($outurl).'&key='.substr(sha1(registry::get_const('encryptionKey').'|'.$outurl), 0, 12);
+	$out = (!$extern) ? (registry::register('environment')->link.str_replace('&amp;', '&', $url)) : (registry::register('environment')->link.'derefer.php?url='.urlencode($outurl).'&key='.substr(sha1(registry::get_const('encryptionKey').'|'.$outurl), 0, 12));
 
 	if ($return){
 		return $out;
