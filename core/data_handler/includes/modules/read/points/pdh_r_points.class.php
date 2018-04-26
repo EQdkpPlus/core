@@ -352,7 +352,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 						'id'			=> $multidkp_id.'_'.$member_id,
 						'val'			=> $value,
 				);
-				$value = $this->apa->get_value('current_cap', $multidkp_id, $this->time->time, $data);
+				$value = $this->apa->get_value('current_hardcap', $multidkp_id, $this->time->time, $data);
 			}
 			return $value;
 		}
