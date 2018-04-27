@@ -3928,20 +3928,6 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	text-align: left;
 }
 
-.dropdown li {
-	font-size: 14px;
-}
-
-.dropdown:hover {
-	border-color: rgba(82, 168, 236, 0.8);
-	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-}
-
-.dropdown li.focus {
-	background-color:#efefef !important;
-	color: #000;
-}
-
 .simple-header .ui-dialog {
 	max-width: 90%;
 }
@@ -4016,18 +4002,14 @@ li.prio_2 {
   color: @eqdkpContentBackgroundColor !important;
   display: inline-block;
   font-size: .90rem;
-  padding: 1px 10px 1px;
+  padding: 4px 10px 4px;
   position: relative;
   text-shadow: none !important;
   vertical-align: middle;
   white-space: nowrap;
   word-wrap: normal;
+  font-weight: normal;
   border-radius: @styleBubbleBorderRadius;
-}
-
-h1 .bubble, h2 .bubble, h3 .bubble {
-	padding: 4px 10px 4px;
-	font-weight: normal;
 }
 
 .notification_list li{
@@ -4323,10 +4305,12 @@ align-items:stretch;
 }
 #footer .menu li a::before{color: #2F2F2F;}
 
-/*END Portalmodule Menu in Footer*/
+/*END Portalmodule Menu in Footer */
 
-//Tool Container
-.tool-container{background-color: @styleContentFooter;}
+/* Tool Container */
+.tool-container {
+	background-color: @styleContentFooter;
+}
 
 /* Iframe widget */
 body.module-iframe {
@@ -4376,12 +4360,9 @@ button > i, .button > i {
 	display: none !important;
 }
 
-
-
 .news_author_category {
 	display: inline !important;
 }
-
 
 .comment_write_container iframe {
 	display: inline-block !important;
@@ -4390,7 +4371,6 @@ button > i, .button > i {
 .news_social {
 	margin-top: 20px;
 }
-
 
 .toolbar-button {
 	font-size: 20px;
