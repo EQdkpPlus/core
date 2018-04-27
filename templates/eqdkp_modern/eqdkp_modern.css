@@ -274,8 +274,9 @@ h3 {
 	width:100%;
 }
 
-.fixed_width #wrapper {
-	min-width: T_PORTAL_WIDTH !important;
+.fixed_width #header, .fixed_width #contentContainer {
+	width: T_PORTAL_WIDTH !important;
+	margin: auto;
 }
 
 #wrapper {
@@ -324,17 +325,17 @@ h3 {
 	display:table;
 }
 
-#header .center {
+#logoContainer.center {
 	margin-left:auto;
 	margin-right:auto;
 }
 
-#header .right {
+#logoContainer.right {
 	margin-left:auto;
 	margin-right:0px;
 }
 
-#header .none {
+#logoContainer.none {
 	display:none;
 }
 

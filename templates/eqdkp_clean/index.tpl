@@ -27,8 +27,12 @@
 			{CSS_CODE}
 			<!-- IF T_BACKGROUND_TYPE > 0 -->
 			body {
-				background:#000000 url('{TEMPLATE_BACKGROUND}') no-repeat center top;
+				background:{T_BACKGROUND_COLOR} url('{TEMPLATE_BACKGROUND}') no-repeat center top;
 				background-attachment: {T_BACKGROUND_POSITION};
+				-webkit-background-size: cover;
+				-moz-background-size: cover;
+				-o-background-size: cover;
+				background-size: cover;
 			}
 			
 			#wrapper header {
@@ -473,6 +477,7 @@
 	<!-- ENDIF -->
 
 			<footer id="contentFooter">
+			<div class="contentFooterInner">
 				<!-- LISTENER content-footer-top -->
 				<div class="floatLeft">
 					<!-- IF S_REPONSIVE -->
@@ -507,6 +512,7 @@
 					
 					<!-- LISTENER footer_bottom -->{EQDKP_PLUS_COPYRIGHT}
 				<!-- close footer -->
+				</div>
 				</footer>
 				
 				<!-- ELSE -->
