@@ -149,11 +149,15 @@ function get_sortedids($tosort, $order, $sort_order){
  * @param		bool		$extern			Is it an external link (other server) or an internal link?
  * @return		mixed						null, else the parsed redirect url if return is true.
  */
-function redirect($url='', $return=false, $extern=false, $blnShowPage=true, $strContent=""){
+function redirect($url='', $return=false, $extern=false, $blnShowPage=true, $strContent="", $blnUseReferer=false){
 	if($url == "") $url = registry::get_const('controller_path_plain');
 
 	$outurl = (registry::fetch('user')->removeSIDfromString($url));
-	$out = (!$extern) ? (registry::register('environment')->link.str_replace('&amp;', '&', $url)) : (registry::register('environment')->link.'derefer.php?url='.urlencode($outurl).'&key='.substr(sha1(registry::get_const('encryptionKey').'|'.$outurl), 0, 12));
+	if($blnUseReferer){
+		$outurl = (registry::register('environment')->link.'derefer.php?url='.urlencode($outurl).'&key='.substr(sha1(registry::get_const('encryptionKey').'|'.$outurl), 0, 12));
+	}
+	
+	$out = (!$extern) ? (registry::register('environment')->link.str_replace('&amp;', '&', $url)) : $outurl;
 
 	if ($return){
 		return $out;
