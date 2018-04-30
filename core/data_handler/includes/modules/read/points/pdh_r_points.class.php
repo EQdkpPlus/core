@@ -118,7 +118,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 			}
 
 			$this->pdc->del('pdh_points_snapshot_mapping');
-			$this->pdc->del('pdh_points_table');
+			$this->pdc->del_prefix('pdh_points_table');
 
 			//Reset the member point cache for affected members only
 			if(is_array($arrTotalAffected)) $arrTotalAffected = array_unique($arrTotalAffected);
