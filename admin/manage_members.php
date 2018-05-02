@@ -100,7 +100,7 @@ class Manage_Members extends page_generic {
 			$member_ids[] = $member_id;
 		}
 
-		$pos = $neg = '';
+		$pos = $neg = array();
 		foreach($member_ids as $id){
 			//delete member
 			$membername = $this->pdh->get('member', 'name', array(intval($id)));
@@ -110,10 +110,10 @@ class Manage_Members extends page_generic {
 				$neg[] = $membername;
 			}
 		}
-		if($neg){
+		if(count($neg)){
 			$messages[]	= array('title' => $this->user->lang('del_nosuc'), 'text' => $this->user->lang('mems_no_del').implode(', ', $neg), 'color' => 'red');
 		}
-		if($pos){
+		if(count($pos)){
 			$messages[]	= array('title' => $this->user->lang('del_suc'), 'text' => $this->user->lang('mems_del').implode(', ', $pos), 'color' => 'green');
 		}
 		$this->display($messages);
