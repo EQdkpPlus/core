@@ -41,12 +41,14 @@ class update_23028 extends sql_update_task {
 				1	=> 'Add Indexes for Raids',
 				2	=> 'Add Indexes for Items',
 				3	=> 'Add Indexes for Adjustments',
+				4	=> 'Extend Log Table',
 			),
 			'german' => array(
 				'update_23028'	=> 'EQdkp Plus 2.3.0 RC9',
 					1	=> 'Füge Indexes für Raids hinzu',
 					2	=> 'Füge Indexes für Items hinzu',
 					3	=> 'Füge Indexes für Adjustments hinzu',
+					4	=> 'Erweitere Log-Tabelle',
 			),
 		);
 
@@ -63,6 +65,8 @@ class update_23028 extends sql_update_task {
 	ADD INDEX `member_id` (`member_id`),
 	ADD INDEX `item_value` (`item_value`),
 	ADD INDEX `itempool_id` (`itempool_id`);",
+			4 => "ALTER TABLE `__logs`
+	ADD COLUMN `trace` TEXT NULL COLLATE 'utf8_bin' AFTER `log_record_id`;",
 		);
 	}
 
