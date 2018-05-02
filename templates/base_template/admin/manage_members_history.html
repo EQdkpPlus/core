@@ -67,9 +67,19 @@
 	
 </div>
 
-
+<script>
+function change_raid_setting(value){
+	if(value){
+		$('#delete_raid_checkbox').attr('checked', true);
+	} else {
+		$('#delete_raid_checkbox').attr('checked', false);
+	}
+}
+</script>
 <div class="contentFooter">
-		<button class="mainoption" type="submit" name="del_history_entries"><i class="fa fa-times"></i>{L_delete_selected_entries}</button>
+		<button type="button" onclick="delete_warning()" /><i class="fa fa-times"></i>{L_delete_selected_entries}</button>
+		<input type="checkbox" name="delete_raids" id="delete_raid_checkbox" value="1" style="display:none"/>
+		<button class="mainoption" type="submit" name="del_history_entries" id="del_history_entries_btm" style="display:none"></button>
 </div>
 {CSRF_TOKEN}
 </form>

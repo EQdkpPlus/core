@@ -1841,6 +1841,8 @@ $lang = array(
 		"core_sett_f_notify_updates_email" => "Notify admin via mail about updates",
 		"create_style" => "Create new style",
 		"style_parent" => "Select template",
+		"confirm_delete_member_history" => "Are you sure you want to delete the selected adjustments, items and the selected raid attendance of the character?",
+		"confirm_delete_member_history_raids" => "Delete selected raids instead only the attendance of the character",		
 		
 		//Quickstart Wizard
 		'wizard' => "Quickstart-Assistant",

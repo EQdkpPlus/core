@@ -1846,7 +1846,8 @@ $lang = array(
 "core_sett_f_notify_updates_email" => "Administrator per Email über Updates informieren",
 "create_style" => "Neuen Style erstellen",
 "style_parent" => "Vorlage auswählen",
-		
+"confirm_delete_member_history" => "Willst du die ausgewählten Korrekturen und Items, sowie die Raidteilnahme des Charakters wirklich löschen?",
+"confirm_delete_member_history_raids" => "Ausgewählte Raids komplett löschen anstatt nur die Raidteilnahme des Charakters",		
 //Quickstart Wizard
 'wizard' => "Schnellstart-Assistent",
 'wizard_step0'=> "Spiel auswählen",

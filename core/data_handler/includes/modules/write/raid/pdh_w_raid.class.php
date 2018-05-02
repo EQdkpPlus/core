@@ -239,6 +239,33 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 			return true;
 		}
 		
+		public function delete_raid_attendance($raid_id, $member_id){
+			$raid_attendees 	= $this->pdh->get('raid', 'raid_attendees', array($raid_id));
+			$old['members']		= $this->pdh->aget('member', 'name', 0, array($raid_attendees));
+			$old['event']		= $this->pdh->get('event', 'name', array($this->pdh->get('raid', 'event', array($raid_id))));
+			
+			$arrOld = array(
+					'attendees' => implode(', ', $old['members']),
+			);
+			
+			$intKey = array_search($member_id, $old['members']);
+			if($intKey !== false) unset($old['members'][$intKey]);
+			
+			$arrNew = array(
+					'attendees' => implode(', ', $new['members']),
+			);
+			
+			$objQuery = $this->db->prepare( "DELETE FROM __raid_attendees WHERE raid_id = ? AND member_id =?")->execute($raid_id, $member_id);
+		
+			$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
+			
+			$this->log_insert('action_raid_updated', $log_action, $raid_id, $this->pdh->get('event', 'name', array($old['event'])));
+			
+			$this->pdh->enqueue_hook('raid_update', $raid_id, array('action' => 'update', 'time' => $raid_date, 'members' => array($member_id)));
+			
+			return true;
+		}
+		
 		public function update_apa_value($raid_id, $apa_id, $val){
 			$arrCurrentApaValue = $this->pdh->get('raid', 'apa_value', array($raid_id));
 			if(!$arrCurrentApaValue || !is_array($arrCurrentApaValue)) $arrCurrentApaValue = array();
