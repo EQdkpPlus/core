@@ -58,7 +58,7 @@ if(!class_exists('pdh_w_logs')) {
 			return false;
 		}
 
-		public function add_log($tag, $value, $recordid=0, $record='',$admin_action=true, $plugin='', $result=1, $userid = false) {
+		public function add_log($tag, $value, $recordid=0, $record='',$admin_action=true, $plugin='', $result=1, $userid = false, $strTrace='') {
 			if(!$userid){
 				$userid = (defined('IN_CRON')) ? CRONJOB : $this->user->id;
 			} 
@@ -76,6 +76,7 @@ if(!class_exists('pdh_w_logs')) {
 				'log_flag'			=> ($admin_action) ? 1 : 0,
 				'log_record'		=> (!$record || $record === NULL) ? '' : $record,
 				'log_record_id'		=> $recordid,
+				'trace'				=> $strTrace,
 			))->execute();
 			
 			if ($objQuery){

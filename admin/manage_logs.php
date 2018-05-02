@@ -148,6 +148,7 @@ class Manage_Logs extends page_generic {
 			'LOG_ACTION'		=> $log_action,
 			'LOG_RECORD'		=> $this->pdh->geth('logs', 'record', array($this->url_id)),
 			'LOG_RECORD_ID'		=> $this->pdh->geth('logs', 'recordid', array($this->url_id)),
+			'LOG_TRACE'			=> $this->pdh->geth('logs', 'trace', array($this->url_id)),
 			'S_COMPARE_VIEW'	=> $blnCompare,
 			'S_MORE_INFOS'		=> count($log_value),
 		));
