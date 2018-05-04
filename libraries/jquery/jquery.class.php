@@ -1647,9 +1647,8 @@ if (!class_exists("jquery")) {
 						title: "'.$this->sanitize($markerdata['title']).'",
 					).addTo(map);';
 
-					$this->tpl->add_js("var map = L.map('".$id."_map').setView([51.505, -0.09], 13);
-						$markersJS.
-						'map.fitZoom();',
+					$this->tpl->add_js("var map = L.map('".$id."_map').setView([51.505, -0.09], 13);"
+						.$markersJS,
 					"docready");
 				}
 
