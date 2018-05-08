@@ -163,6 +163,11 @@ function redirect($url='', $return=false, $extern=false, $blnShowPage=true, $str
 		if($strContent && $strContent != ""){
 			$intRedirectTime = 5;
 		} else {
+			//Do not send Referer when redirecting to external pages
+			if($extern){
+				header('Referrer-Policy: no-referrer');
+			}
+			
 			header('Location: ' . $out);
 			$intRedirectTime = 3;
 		}
