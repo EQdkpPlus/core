@@ -1014,7 +1014,7 @@ input[type=radio], input[type=checkbox]{
 }
 
 /* Buttons */
-.button, input[type="submit"], input[type="button"], input[type="reset"], button{
+.button, input[type="submit"], input[type="button"], input[type="reset"], button, a.button {
 	zoom: 1;
 	display: inline;
 	vertical-align: baseline;
@@ -1063,12 +1063,12 @@ select[readonly], textarea[readonly], input[type="text"][readonly], input[type="
 	cursor: not-allowed;
 }
 
-.button, input[type="submit"], input[type="button"], input[type="reset"], button {
+.button, input[type="submit"], input[type="button"], input[type="reset"], button, a.button {
 	color: @eqdkpButtonFontColor;
 	border: solid 1px @eqdkpButtonBorderColor;
 	background: @eqdkpButtonBackgroundColor;
 }
-.button:hover, input[type="submit"]:hover, input[type="button"]:hover, input[type="reset"]:hover, button:not(.ui-widget):hover {
+.button:hover, input[type="submit"]:hover, input[type="button"]:hover, input[type="reset"]:hover, button:not(.ui-widget):hover, a.button:hover {
 	color: @eqdkpButtonFontColorHover;
 	background:@eqdkpButtonBackgroundColorHover;
 	border-color: @eqdkpButtonBorderColorHover;
