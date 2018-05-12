@@ -54,7 +54,7 @@ if ( !class_exists( "pruneerrorlogs_crontask" ) ) {
 				if(strpos($strLogfile, '20') === 0){
 					$intTime = strtotime(substr($strLogfile, 0, 10));
 
-					if(($intTime + ($intDays*86400)) < date()) $this->pdl->delete_logfile($strLogfile);
+					if(($intTime + ($intDays*86400)) < time()) $this->pdl->delete_logfile($strLogfile);
 				} else continue;
 			}
 			

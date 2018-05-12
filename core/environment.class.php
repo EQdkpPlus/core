@@ -184,7 +184,7 @@ if (!class_exists("environment")) {
 		}
 
 		private function get_useragent(){
-			$strUserAgent = (!empty($_SERVER['HTTP_USER_AGENT'])) ? $_SERVER['HTTP_USER_AGENT']	: $_ENV['HTTP_USER_AGENT'];
+			$strUserAgent = (!empty($_SERVER['HTTP_USER_AGENT'])) ? $_SERVER['HTTP_USER_AGENT']	: ((isset($_ENV['HTTP_USER_AGENT'])) ? $_ENV['HTTP_USER_AGENT'] : 'No Useragent given');
 			$strUserAgent = strip_tags($strUserAgent);
 			$strUserAgent = preg_replace('/javascript|vbscri?pt|script|applet|alert|document|write|cookie/i', '', $strUserAgent);
 			return $strUserAgent;

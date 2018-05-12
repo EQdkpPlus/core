@@ -53,6 +53,9 @@ if(!class_exists( "cache_file")){
 			$result = false;
 			if(file_exists($filename)){
 				$result = file_get_contents($filename);
+				$this->pdl->log( 'pdc_query', '', $filename.', cache hit, size: '.human_filesize(filesize($filename)));
+			} else {
+				$this->pdl->log( 'pdc_query', '', $filename.', cache missed');
 			}
 
 			//file read error

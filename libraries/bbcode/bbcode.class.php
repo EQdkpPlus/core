@@ -471,7 +471,7 @@ if (!class_exists("bbcode")) {
 								}
 				}
 
-				$strBuffer .= $arrCache[$strTag];
+				$strBuffer .= (isset($arrCache[$strTag])) ? $arrCache[$strTag] : "";
 			}
 
 			return $strBuffer;
