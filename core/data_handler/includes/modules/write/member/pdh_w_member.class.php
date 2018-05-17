@@ -83,6 +83,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 			} else {
 				$data['mainid'] = ($takechar) ? $this->pdh->get('member','mainchar',array($this->user->data['user_id'])) : $data['mainid'];
 				if(empty($data['profiledata'])) $data['profiledata'] = $this->profilefields($data);
+				if(empty($data['mainid'])) $data['mainid'] = 0;
 			}
 
 			//dont allow chars without a name
