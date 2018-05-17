@@ -129,7 +129,7 @@ class points_pageobject extends pageobject {
 
 		//Create our suffix
 		$suffix		 = '';
-		$suffix		.= ($mdkpid > 0)		? '&amp;mdkpid='.$mdkpid	: '';
+		$suffix		.= ($mdkpid > 0 || $defaultPoolOverview > 0)		? '&amp;mdkpid='.$mdkpid	: '';
 		$suffix		.= ($filter != 'none')	? '&amp;filter='.$filter	: '';
 		$suffix		.= ($show_inactive)		? '&amp;show_inactive=1'	: '';
 		$suffix		.= ($show_hidden)		? '&amp;show_hidden=1'		: '';
