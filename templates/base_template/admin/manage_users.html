@@ -1,9 +1,10 @@
 
 <form method="post" action="{ACTION}" name="post">
 <div class="contentHeader">
-	<h1 class="contentTitle">{L_manage_users} <span class="bubble">{LISTUSERS_COUNT}</span></h1>
+	<h1 class="contentTitle"><!-- IF S_IS_SEARCH -->{L_manage_users_search}<!-- ELSE -->{L_manage_users}<!-- ENDIF --> <span class="bubble">{LISTUSERS_COUNT}</span></h1>
 </div>
 <div class="tableHeader floatRight">
+	<button class="mainoption" type="button" name="search" onclick="window.location.href='{U_MANAGE_USERS}search'"><i class="fa fa-search"></i>{L_manage_users_search}</button>
 	<button class="mainoption" type="button" name="create" onclick="window.location.href='{U_MANAGE_USERS}u=0'"><i class="fa fa-plus"></i>{L_user_creation}</button>
 </div>
 

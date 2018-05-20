@@ -1843,6 +1843,10 @@ $lang = array(
 		"style_parent" => "Select template",
 		"confirm_delete_member_history" => "Are you sure you want to delete the selected adjustments, items and the selected raid attendance of the character?",
 		"confirm_delete_member_history_raids" => "Delete selected raids instead only the attendance of the character",		
+		"manage_users_search" => "Search Users",
+		"locked" => "Locked",
+		"not_confirmed" => "No activated Email-address",
+		"count_chars" => "Number of characters",
 		
 		//Quickstart Wizard
 		'wizard' => "Quickstart-Assistant",

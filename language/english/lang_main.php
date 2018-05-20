@@ -419,6 +419,7 @@ $lang = array(
 	"overview" => 'Overview',
 	"preview" => 'Preview',
 	"registered_at" => 'Registered on',
+	"registered_before" => 'Registered before',
 	"adduser_tab_registration_information" => 'Registration information',
 	"adduser_tab_view_options" => 'Display Options',
 	"required_field_note" => 'Items marked with a * are required fields.',

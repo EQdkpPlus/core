@@ -40,6 +40,8 @@ class Manage_Users extends page_generic {
 				array('process' => 'overtake_permissions', 'value' => 'ovperms', 'csrf' => true),
 				array('process' => 'resolve_permissions', 'value' => 'resolveperms'),
 			),
+			'search' =>	array('process' => 'search', 'csrf' => false),
+			'submit_search' =>	array('process' => 'process_search', 'csrf' => true),
 			'bulk_lock' =>	array('process' => 'bulk_lock', 'csrf' => true),
 			'bulk_unlock' => array('process' => 'bulk_unlock', 'csrf' => true),
 			'bulk_confirmemail' =>	array('process' => 'bulk_confirmemail', 'csrf' => true),
@@ -107,6 +109,169 @@ class Manage_Users extends page_generic {
 		$this->core->message($this->user->lang('bulk_user_forceemailconfirm_success'), $this->user->lang('success'), 'green');
 		$this->pdh->process_hook_queue();
 		$this->display();
+	}
+	
+	
+	public function search(){
+		
+		$this->tpl->assign_vars(array(
+				'SPINNER_CHAR_COUNT' => (new hspinner('charcount'))->output(),
+				'DATEPICKER_BEFORE'	=> (new hdatepicker('date_before', array('value' => false)))->output(),
+				'DATEPICKER_AFTER'	=> (new hdatepicker('date_after', array('value' => false)))->output(),
+		));
+		
+		$this->core->set_vars([
+				'page_title'		=> $this->user->lang('manage_users_search'),
+				'template_file'		=> 'admin/manage_users_search.html',
+				'page_path'			=> [
+						['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+						['title'=>$this->user->lang('manage_users'), 'url'=> $this->root_path.'admin/manage_users.php'.$this->SID],
+						['title'=>$this->user->lang('manage_users_search'), 'url'=> ''],
+				],
+				'display'			=> true
+		]);
+
+	}
+	
+	public function process_search(){
+		//I will process each search, and merge the found user array later
+		
+		$arrUserIDs = $this->pdh->get('user', 'id_list', array(false));
+		$arrResults = array(
+				'name' => false,
+				'email' => false,
+				'date_before' => false,
+				'date_after' => false,
+				'charname' => false,
+				'charcount' => false,
+				'locked' => false,
+				'not_confirmed' => false,
+		);
+		
+		//Username
+		$strSearchName = utf8_strtolower($this->in->get('name'));
+		if($strSearchName != ""){
+			$arrResults['name'] = array();
+			foreach($arrUserIDs as $intUserID){
+				$arrUserData = $this->pdh->get('user', 'data', array($intUserID));
+				
+				if(stripos($arrUserData['username'], $strSearchName) !== false OR stripos($arrUserData['username_clean'], $strSearchName) !== false) {
+					$arrResults['name'][] = $intUserID;
+				}
+				
+			}
+		}
+
+		//Useremail
+		$strSearchEmail = utf8_strtolower($this->in->get('email'));
+		if($strSearchEmail != ""){
+			$arrResults['email'] = array();
+			foreach($arrUserIDs as $intUserID){
+				$arrUserData = $this->pdh->get('user', 'data', array($intUserID, true));
+				
+				if(stripos($arrUserData['user_email'], $strSearchEmail) !== false) {
+					$arrResults['email'][] = $intUserID;
+				}
+				
+			}
+		}
+
+		//Date before
+		$strBeforeDate = $this->in->get('date_before');
+		if($strBeforeDate){
+			$arrResults['date_before'] = array();
+			$intTime = $this->time->fromformat($strBeforeDate, 0);
+			
+			foreach($arrUserIDs as $intUserID){
+				$intRegDate = $this->pdh->get('user', 'regdate', array($intUserID));
+				
+				if($intRegDate < $intTime) $arrResults['date_before'][] = $intUserID;
+			}
+		}
+			
+		
+		//Date after
+		$strAfterDate = $this->in->get('date_after');
+		if($strAfterDate){
+			$arrResults['date_after'] = array();
+			$intTime = $this->time->fromformat($strAfterDate, 0);
+			
+			foreach($arrUserIDs as $intUserID){
+				$intRegDate = $this->pdh->get('user', 'regdate', array($intUserID));
+				
+				if($intRegDate > $intTime) $arrResults['date_after'][] = $intUserID;
+			}
+		}
+		
+		//Charname
+		$strCharname = utf8_strtolower($this->in->get('charname'));		
+		$arrChars = $this->pdh->get('member', 'id_list');
+		if($strCharname != ""){
+			$arrResults['charname'] = array();
+			foreach($arrChars as $intCharID){
+				$strMyCharname = $this->pdh->get('member', 'name', array($intCharID));
+				
+				if(stripos($strMyCharname, $strCharname) !== false) {
+					//Find Owner
+					$intOwner = $this->pdh->get('member', 'userid', array($intCharID));
+					if($intOwner > 0) $arrResults['charname'][] = $intOwner;
+				}
+			}
+		}
+		
+		
+		
+		//Charcount
+		$charCountExist = $this->in->exists('charcount');
+		$intCharcount = $this->in->get('charcount');
+		if(strlen($intCharcount)){
+			$intCharcount = intval($intCharcount);
+			$arrResults['charcount'] = array();
+			
+			foreach($arrUserIDs as $intUserID){
+				$a = $this->pdh->get('member', 'connection_id', array($intUserID));
+
+				$count = (is_array($a)) ? count($a) : 0;
+				
+				if($intCharcount == $count){
+					$arrResults['charcount'][] = $intUserID;
+				}
+			}
+		}
+		
+		//Locked
+		$arrStatus = $this->in->getArray('status');
+
+		if(in_array('locked',$arrStatus ) ){
+			$arrResults['locked'] = array();
+			foreach($arrUserIDs as $intUserID){
+				$intActive = $this->pdh->get('user', 'active', array($intUserID));
+				
+				if(!$intActive) $arrResults['locked'][] = $intUserID;
+			}
+		}
+
+		if(in_array('notconfirmed',$arrStatus ) ){
+			$arrResults['not_confirmed'] = array();
+			foreach($arrUserIDs as $intUserID){
+				$intActive = $this->pdh->get('user', 'email_confirmed', array($intUserID));
+				
+				if(!$intActive) $arrResults['not_confirmed'][] = $intUserID;
+			}
+		}
+
+		//Now combine the search results
+		$intFalseCount = 0;
+		$arrOutResult = $arrUserIDs;
+		foreach($arrResults as $key => $val){
+			if($val === false) {
+				$intFalseCount++;
+			} else {
+				$arrOutResult = array_intersect($arrOutResult, $val);
+			}
+		}
+		
+		$this->display($arrOutResult);
 	}
 
 
@@ -652,7 +817,8 @@ class Manage_Users extends page_generic {
 	// ---------------------------------------------------------
 	// Display
 	// ---------------------------------------------------------
-	public function display() {
+	public function display($arrUsers=false) {
+		
 		$order = explode('.', $this->in->get('o', '0.0'));
 		$sort = array(
 			0 => array('name', array('asc', 'desc')),
@@ -663,7 +829,14 @@ class Manage_Users extends page_generic {
 			5 => array('awaymode', array('desc', 'asc')),
 		);
 
-		$user_ids = $this->pdh->sort($this->pdh->get('user', 'id_list'), 'user', $sort[$order[0]][0], $sort[$order[0]][1][$order[1]]);
+		if($arrUsers !== false){
+			$user_ids = $this->pdh->sort($arrUsers, 'user', $sort[$order[0]][0], $sort[$order[0]][1][$order[1]]);
+			$blnIsSearch = true;
+		} else {
+			$user_ids = $this->pdh->sort($this->pdh->get('user', 'id_list'), 'user', $sort[$order[0]][0], $sort[$order[0]][1][$order[1]]);
+			$blnIsSearch = false;
+		}
+
 		$total_users = count($user_ids);
 		$start = $this->in->get('start', 0);
 
@@ -677,13 +850,16 @@ class Manage_Users extends page_generic {
 		}
 
 		$adm_memberships = $this->acl->get_user_group_memberships($this->user->data['user_id']);
+		
+		$intUsersPerPage = ($blnIsSearch) ? PHP_INT_MAX : 100;
+		
 		$k = 0;
 		foreach($user_ids as $user_id) {
 			if($k < $start) {
 				$k++;
 				continue;
 			}
-			if($k >= ($start+100)) break;
+			if($k >= ($start+$intUsersPerPage)) break;
 			
 			$user_avatar = $this->pdh->geth('user', 'avatarimglink', array($user_id));
 			if($this->pdh->get('user', 'active', array($user_id))) {
@@ -798,22 +974,33 @@ class Manage_Users extends page_generic {
 			'RED'.$order[0].$order[1] => '_red',
 			'CSRF_MAINCHARCHANGE' => $this->CSRFGetToken('maincharchange'),
 			'S_PERM_PERMISSION'		=> $this->user->check_auth('a_users_perms', false),
+			'S_IS_SEARCH'			=> $blnIsSearch,
 
 			// Page vars
 			'U_MANAGE_USERS'	=> 'manage_users.php' . $this->SID . '&amp;start=' . $start . '&amp;',
 			'LISTUSERS_COUNT'	=> $total_users,
 			'BUTTON_MENU'		=> $this->core->build_dropdown_menu($this->user->lang('selected_user').'...', $arrMenuItems, '', 'manage_users_menu', array("input[name=\"user_id[]\"]")),
 
-			'USER_PAGINATION'		=> generate_pagination('manage_users.php'.$this->SID.'&amp;o='.$this->in->get('o'), $total_users, 100, $start))
+			'USER_PAGINATION'		=> generate_pagination('manage_users.php'.$this->SID.'&amp;o='.$this->in->get('o'), $total_users, $intUsersPerPage, $start))
 		);
+		
+		if($blnIsSearch){
+			$arrPagePath = [
+					['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+					['title'=>$this->user->lang('manage_users'), 'url'=> $this->root_path.'admin/manage_users.php'.$this->SID],
+					['title'=>$this->user->lang('manage_users_search'), 'url'=> ' '],
+			];
+		} else {
+			$arrPagePath = [
+					['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+					['title'=>$this->user->lang('manage_users'), 'url'=>' '],
+			];
+		}
 
 		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manage_users_title'),
 			'template_file'		=> 'admin/manage_users.html',
-			'page_path'			=> [
-				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
-				['title'=>$this->user->lang('manage_users'), 'url'=>' '],
-			],
+			'page_path'			=> $arrPagePath,
 			'display'			=> true
 		]);
 	}
