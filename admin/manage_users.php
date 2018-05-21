@@ -120,6 +120,15 @@ class Manage_Users extends page_generic {
 				'DATEPICKER_AFTER'	=> (new hdatepicker('date_after', array('value' => false)))->output(),
 		));
 		
+		
+		$arrUsers = $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list', array(false))));
+		
+		$arrMembers = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'id_list', array(false,true,false))));
+		
+		
+		$this->jquery->Autocomplete('name', $arrUsers);
+		$this->jquery->Autocomplete('charname', $arrMembers);
+		
 		$this->core->set_vars([
 				'page_title'		=> $this->user->lang('manage_users_search'),
 				'template_file'		=> 'admin/manage_users_search.html',
