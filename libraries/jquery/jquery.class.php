@@ -43,7 +43,7 @@ if (!class_exists("jquery")) {
 			'multilang'			=> false,
 			'placepicker'		=> false,
 			'monthpicker'		=> false,
-			'geomaps'			=> false,
+			'geomap'			=> false,
 			'qtip'				=> array(),
 			'depr_suckerfish'	=> false,		// DEPRECATED
 			'googlemaps'		=> false,		// DEPRECATED
@@ -218,10 +218,10 @@ if (!class_exists("jquery")) {
 		}
 
 		public function init_geomap(){
-			if(!$this->inits['geomaps']){
-				$this->tpl->js_file($this->path."js/leaflet/leaflet.js");
+			if(!$this->inits['geomap']){
 				$this->tpl->css_file($this->path."js/leaflet/leaflet.css");
-				$this->inits['geomaps']	= true;
+				$this->tpl->js_file($this->path."js/leaflet/leaflet.js");
+				$this->inits['geomap']	= true;
 			}
 		}
 
@@ -1423,7 +1423,7 @@ if (!class_exists("jquery")) {
 				$child_js .= "$('#".$id."').find('option').remove();";
 				$child_js .= "$('#".$id."').append(data).trigger('change');";
 			}
-			
+
 			$addValues = "";
 			if(count($arrAdditionalValues)){
 				$addValues .= ', parents: '.json_encode($arrAdditionalValues);
@@ -1431,7 +1431,7 @@ if (!class_exists("jquery")) {
 					$addValues .= ', '.$myid.": $('#".$myid."').val()";
 				}
 			}
-			
+
 			$js .= "$.post('".$url."',{requestid:$('#".$id1."').val()".$addValues.$add_posts."},function(data){".$child_js."});";
 			// initialize on page-load
 			$this->tpl->add_js($js, 'docready');
@@ -1646,7 +1646,7 @@ if (!class_exists("jquery")) {
 		}
 
 		public function geomaps($id, $arrMarkers=array()){
-			$this->init_geomaps();
+			$this->init_geomap();
 
 			// We use markers, build a custom map used in usermaps plugin
 			if(is_array($arrMarkers) && count($arrMarkers) > 0){
@@ -1666,28 +1666,18 @@ if (!class_exists("jquery")) {
 			// we will use the address field as used in the calendar events
 			}else{
 				$this->tpl->add_js("
-					map = new GMaps({
-						el: '#".$id."_map',
-						lat: -12.043333,
-						lng: -77.028333
+					var map = L.map('".$id."_map', {
+						center: [$('#".$id."-datacontainer').data('latitude'), $('#".$id."-datacontainer').data('longitude')],
+						zoom: 13
 					});
-					GMaps.geocode({
-						address: $('#".$id."_address').text(),
-						callback: function(results, status) {
-							if (status == 'OK') {
-								$('#mapframe_".$id."').show();
-								var latlng = results[0].geometry.location;
-								map.setCenter(latlng.lat(), latlng.lng());
-								map.addMarker({
-									lat: latlng.lat(),
-									lng: latlng.lng()
-								});
-							}else{
-								$('#mapframe_".$id."').hide();
-							}
-						}
-					});" ,
-				"docready");
+
+					L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+						attribution: '&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors'
+					}).addTo(map);
+
+					L.marker(
+						[$('#".$id."-datacontainer').data('latitude'), $('#".$id."-datacontainer').data('longitude')]
+					).addTo(map);");
 			}
 			return '<div class="map_frame" id="mapframe_'.$id.'"><div id="'.$id.'_map"></div></div>';
 		}

@@ -87,8 +87,8 @@ class calendarevent_pageobject extends pageobject {
 		$sort_suffix		= $this->SID.'&amp;sort='.$this->in->get('sort');
 		$hptt->setPageRef($this->strPath);
 		$logs_list 			= $hptt->get_html_table($this->in->get('sort',''), $page_suffix);
-		
-		
+
+
 		$this->tpl->assign_vars(array(
 			'LOGS_LIST'				=> $logs_list,
 			'LOGS_PAGINATION'		=> generate_pagination($this->strPath.$this->SID.$sort_suffix.$strFilterSuffix, $actionlog_count, 100, $this->in->get('start', 0)),
@@ -281,11 +281,11 @@ class calendarevent_pageobject extends pageobject {
 			#return false;
 		}
 
-		
+
 		if($do_updatestatuschange){
 			// check if another char is used
 			$arrAttendeeIDs = $this->pdh->get('calendar_raids_attendees', 'other_user_attendees', array($this->url_id, $this->in->get('member_id', 0)));
-			
+
 			$intAffectedID = $this->pdh->put('calendar_raids_attendees', 'update_status', array(
 				$this->url_id,
 				$this->in->get('member_id', 0),
@@ -295,7 +295,7 @@ class calendarevent_pageobject extends pageobject {
 				$this->in->get('subscribed_member_id', 0),
 				$this->in->get('signupnote'),
 			));
-			
+
 			//A new row was inserted, otherwise $intAffectedID = false
 			if($intAffectedID){
 				//There are other user attendees
@@ -303,7 +303,7 @@ class calendarevent_pageobject extends pageobject {
 					//Delete the new added row
 					$this->pdh->put('calendar_raids_attendees', 'delete_attendeeid', array($intAffectedID));
 				}
-				
+
 			}
 
 			//Send Notification to Raidlead, Creator and Admins
@@ -1315,6 +1315,22 @@ class calendarevent_pageobject extends pageobject {
 		$this->jquery->Dialog('addEvent', $this->user->lang('calendar_win_add'), array('url'=> $this->routing->build('editcalendarevent')."&simple_head=true", 'width'=>'920', 'height'=>'730', 'onclose' => $this->strPath.$this->SID));
 		$this->jquery->Dialog('editEvent', $this->user->lang('calendar_win_edit'), array('url'=> $this->routing->build('editcalendarevent')."&eventid=".$this->url_id."&simple_head=true", 'width'=>'920', 'height'=>'730', 'onclose' => $this->strPath.$this->SID));
 
+		// if no lat/lon is availble..
+		if(isset($eventdata['extension']['location']) && !empty($eventdata['extension']['location'])){
+			if(!isset($eventdata['extension']['location-lat']) && !isset($eventdata['extension']['location-lon'])){
+
+				// fetch geolocation data
+				$result = $this->geoloc->getCoordinates($eventdata['extension']['location']);
+
+				$this->pdh->put('calendar_events', 'add_extension', array($this->url_id, array(
+					'location-lat'	=> $result['latitude'],
+					'location-lon'	=> $result['longitude'],
+				)));
+				$this->pdh->process_hook_queue();
+			}
+		}
+d($eventdata['extension']);
+
 		$this->tpl->assign_vars(array(
 			'EVENT_ID'			=> $this->url_id,
 			'PRIVATE_EVENT'		=> ($eventdata['private'] == 1) ? true : false,
@@ -1327,10 +1343,12 @@ class calendarevent_pageobject extends pageobject {
 			'MYSTATUS'			=> (isset($statusofuser[$this->user->data['user_id']]) && $statusofuser[$this->user->data['user_id']] > 0) ? $statusofuser[$this->user->data['user_id']] : 0,
 			'ALLDAY'			=> ($eventdata['allday'] == 1) ? true : false,
 			'LOCATION'			=> (isset($eventdata['extension']['location']) && !empty($eventdata['extension']['location'])) ? $eventdata['extension']['location'] : false,
+			'LOCATION_LON'		=> (isset($eventdata['extension']['location-lon']) && !empty($eventdata['extension']['location-lon'])) ? number_format($eventdata['extension']['location-lon'], 6, '.', '') : false,
+			'LOCATION_LAT'		=> (isset($eventdata['extension']['location-lat']) && !empty($eventdata['extension']['location-lat'])) ? number_format($eventdata['extension']['location-lat'], 6, '.', '') : false,
 			'CREATOR'			=> $this->pdh->get('user', 'name', array($eventdata['creator'])),
 			'NOTE'				=> ($eventdata['notes']) ? $this->bbcode->toHTML(nl2br($eventdata['notes'])) : '',
 			'CALENDAR'			=> $this->pdh->get('calendars', 'name', array($eventdata['calendar_id'])),
-			'MAPFRAME'			=> (isset($eventdata['extension']['location']) && !empty($eventdata['extension']['location'])) ? $this->jquery->googlemaps('eventdetailsmap') : '',
+			'MAPFRAME'			=> (isset($eventdata['extension']['location']) && !empty($eventdata['extension']['location'])) ? $this->jquery->geomaps('eventdetailsmap') : '',
 			'HAS_INVITE'		=> ($eventdata['private'] == 1 || (isset($userstatus['invited']) && count($userstatus['invited']) > 0)) ? true : false,
 			'SHOW_ATTENDEES'	=> (($eventdata['private'] == 1 && isset($userstatus['invited']) && count($userstatus['invited']) > 0) || $eventdata['private'] == 0) ? true : false,
 			'NUMBER_INVITES'	=> (isset($userstatus['invited'])) ? count($userstatus['invited']) : 0,
