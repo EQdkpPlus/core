@@ -94,6 +94,7 @@ abstract class super_registry {
 		'xmltools'				=> 'core/',
 		'zip'					=> 'core/',
 		'requirements'			=> 'core/',
+		'geolocation'			=> 'core/',
 		'infotooltip'			=> 'infotooltip/',
 		'bbcode'				=> 'libraries/bbcode/',
 		'MyMailer'				=> 'libraries/MyMailer/',
