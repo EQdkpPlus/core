@@ -42,6 +42,7 @@ abstract class super_registry {
 		'pw'		=> 'password',
 		'pgh'		=> 'hooks', //Plus global hook
 		'ntfy'		=> 'notifications',
+		'geoloc'	=> 'geolocation',
 	);
 	//all classes in here must have their file named after its name, e.g. admin_index.class.php (keep them in alphabetical order, results in easy searching)
 	protected static $locs = array(
@@ -105,7 +106,7 @@ abstract class super_registry {
 	public static $lite_igno = array('bridge');
 
 	protected static $const = array();
-	
+
 	private static $autoloadedLibs = array();
 
 	public static function init($root_path, $lite=false) {
@@ -342,7 +343,7 @@ abstract class super_registry {
 
 	public static function autoload_libraries($strClassname){
 		if(isset(self::$autoloadedLibs[$strClassname])) return true;
-		
+
 		$arrParts = explode('\\', $strClassname);
 
 		$arrKeyMapping = array_flip(self::$libraries);
