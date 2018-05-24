@@ -46,7 +46,6 @@ if (!class_exists("jquery")) {
 			'geomap'			=> false,
 			'qtip'				=> array(),
 			'depr_suckerfish'	=> false,		// DEPRECATED
-			'googlemaps'		=> false,		// DEPRECATED
 		);
 
 		/**
@@ -222,15 +221,6 @@ if (!class_exists("jquery")) {
 				$this->tpl->css_file($this->path."js/leaflet/leaflet.css");
 				$this->tpl->js_file($this->path."js/leaflet/leaflet.js");
 				$this->inits['geomap']	= true;
-			}
-		}
-
-		// https://github.com/hpneo/gmaps
-		public function init_gmaps(){
-			if(!$this->inits['googlemaps']){
-				$this->tpl->js_file("https://maps.googleapis.com/maps/api/js?key=".$this->googleAPIkey."&sensor=true", 'direct');
-				$this->tpl->js_file($this->path."js/gmaps/gmaps.min.js");
-				$this->inits['googlemaps']	= true;
 			}
 		}
 
@@ -1652,13 +1642,17 @@ if (!class_exists("jquery")) {
 			if(is_array($arrMarkers) && count($arrMarkers) > 0){
 				$markersJS = '';
 				foreach($arrMarkers as $markerUserID=>$markerdata){
+					$latlangfrinit = $markerdata['lat'].', '.$markerdata['lng'];
 					$markersJS .= '
 					L.marker(
 						['.$markerdata['lat'].', '.$markerdata['lng'].'],
-						title: "'.$this->sanitize($markerdata['title']).'",
+						{title: "'.$this->sanitize($markerdata['title']).'", autoPan: true}
 					).addTo(map);';
 
-					$this->tpl->add_js("var map = L.map('".$id."_map').setView([51.505, -0.09], 13);"
+					$this->tpl->add_js("var map = L.map('".$id."_map').setView([".$latlangfrinit."], 13);
+					L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+						attribution: '&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors'
+					}).addTo(map);"
 						.$markersJS,
 					"docready");
 				}
@@ -1682,60 +1676,9 @@ if (!class_exists("jquery")) {
 			return '<div class="map_frame" id="mapframe_'.$id.'"><div id="'.$id.'_map"></div></div>';
 		}
 
+		// placeholder for old calls, will be removed in the future
 		public function googlemaps($id, $arrMarkers=array()){
-			$this->init_gmaps();
-
-			// We use markers, build a custom map used in usermaps plugin
-			if(is_array($arrMarkers) && count($arrMarkers) > 0){
-				$markersJS = '';
-				foreach($arrMarkers as $markerUserID=>$markerdata){
-					$markersJS .= 'map.addMarker({
-						lat: '.$markerdata['lat'].',
-						lng: '.$markerdata['lng'].',
-						title: "'.$this->sanitize($markerdata['title']).'",
-						infoWindow: {
-							content: "'.$this->sanitize($markerdata['tooltip']).'"
-						}
-					});';
-
-					$this->tpl->add_js("
-						map = new GMaps({
-							el: '#".$id."_map',
-							lat: -12.043333,
-							lng: -77.028333
-						});".
-						$markersJS.
-						'map.fitZoom();' ,
-					"docready");
-				}
-
-			// we will use the address field as used in the calendar events
-			}else{
-				$this->tpl->add_js("
-					map = new GMaps({
-						el: '#".$id."_map',
-						lat: -12.043333,
-						lng: -77.028333
-					});
-					GMaps.geocode({
-						address: $('#".$id."_address').text(),
-						callback: function(results, status) {
-							if (status == 'OK') {
-								$('#mapframe_".$id."').show();
-								var latlng = results[0].geometry.location;
-								map.setCenter(latlng.lat(), latlng.lng());
-								map.addMarker({
-									lat: latlng.lat(),
-									lng: latlng.lng()
-								});
-							}else{
-								$('#mapframe_".$id."').hide();
-							}
-						}
-					});" ,
-				"docready");
-			}
-			return '<div class="map_frame" id="mapframe_'.$id.'"><div id="'.$id.'_map"></div></div>';
+			return $this->geomaps($id, $arrMarkers);
 		}
 
 		private function gen_options($array){
