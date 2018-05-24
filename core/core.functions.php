@@ -1460,6 +1460,65 @@ function implode_r($glue, $pieces){
  	return preg_replace(array_keys($utf8), array_values($utf8), $text);
  }
  
+/**
+ * Anonymizes an IP address
+ * @param string $ip IP-address
+ * @param number $byteCount How much bytes should by anomymized
+ * @return string anonymized ip address
+ */
+function anonymize_ipaddress($ip, $byteCount=1){
+
+ 	$binaryIp = @inet_pton($ip);
+ 	if(!$binaryIp) $binaryIp = "\x00\x00\x00\x00";
+ 	
+ 	$strlen = function_exists('mb_orig_strlen') ? 'mb_orig_strlen' : 'strlen';
+ 	if($strlen($binaryIp) == 4){
+ 		//ipv4
+ 		$i = strlen($binaryIp);
+ 		if ($byteCount > $i) {
+ 			$byteCount = $i;
+ 		}
+ 		
+ 		while ($byteCount-- > 0) {
+ 			$binaryIp[--$i] = chr(0);
+ 		}
+ 		
+ 		$ipStr = @inet_ntop($binaryIp);
+ 		if(!$ipStr) $ipStr = "0.0.0.0";
+ 		return $ipStr;
+ 	} else {
+ 		//ipv6
+ 		if (substr_compare($binaryIp, "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff", 0, 12) === 0
+ 				|| substr_compare($binaryIp, "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00", 0, 12) === 0) {
+ 					
+ 					$i = strlen($binaryIp);
+ 					if ($byteCount > $i) {
+ 						$byteCount = $i;
+ 					}
+ 					
+ 					while ($byteCount-- > 0) {
+ 						$binaryIp[--$i] = chr(0);
+ 					}
+ 					
+ 					$ipStr = @inet_ntop($binaryIp);
+ 					if(!$ipStr) $ipStr = "0.0.0.0";
+ 					return $ipStr;
+ 				}
+ 				
+ 				$masks = array(
+ 						'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff',
+ 						'ffff:ffff:ffff:ffff::',
+ 						'ffff:ffff:ffff:0000::',
+ 						'ffff:ff00:0000:0000::'
+ 				);
+ 				
+ 				$binaryIp = $binaryIp & pack('a16', inet_pton($masks[$byteCount]));
+ 				$ipStr = @inet_ntop($binaryIp);
+ 				if(!$ipStr) $ipStr = "0.0.0.0";
+ 				return $ipStr;
+ 	}
+ }
+ 
  
  
  
