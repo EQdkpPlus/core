@@ -530,7 +530,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 				'earned'	=> $this->get_earned($intMemberID, $intMdkpID, 0, false),
 				'spent'		=> $this->get_spent($intMemberID, $intMdkpID, 0, false),
 				'adjustments' => $this->get_adjustment($intMemberID, $intMdkpID, 0, false),
-				'misc'		=> $this->points[$intMemberID][$intMdkpID]['single'],
+				'misc'		=> serialize($this->points[$intMdkpID][$intMemberID]['single']),
 				'type'		=> 'snapshot',
 			))->execute();
 			$this->snapshot_mapping();

@@ -1847,7 +1847,7 @@ $lang = array(
 		"locked" => "Locked",
 		"not_confirmed" => "No activated Email-address",
 		"count_chars" => "Number of characters",
-		
+		"user_download_gdpr" => "Download personal data (GDPR)",
 		//Quickstart Wizard
 		'wizard' => "Quickstart-Assistant",
 		'wizard_step0'=> "Select game",

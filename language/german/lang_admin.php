@@ -1852,6 +1852,7 @@ $lang = array(
 "locked" => "Gesperrt",
 "not_confirmed" => "Keine aktivierte Email-Adresse",
 "count_chars" => "Anzahl an Charakteren",
+"user_download_gdpr" => "Persönliche Daten exportieren (DSGVO)",
 //Quickstart Wizard
 'wizard' => "Schnellstart-Assistent",
 'wizard_step0'=> "Spiel auswählen",
