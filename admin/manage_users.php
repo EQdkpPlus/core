@@ -184,7 +184,11 @@ class Manage_Users extends page_generic {
 		}
 		
 		
-		$arrOutdata = array('userobject' => $arrUserdata, 'sessions' => $arrSession, 'extensions' => $arrOutHooks);
+		$arrOutdata = array('userobject' => $arrUserdata, 'sessions' => $arrSession, 'extensions' => $arrOutHooks, 'info' => array(
+				'created' => time(),
+				'system' => 'EQdkp Plus',
+				'version' => VERSION_EXT,
+		));
 		
 		$strJson = json_encode($arrOutdata, JSON_PRETTY_PRINT);
 		
