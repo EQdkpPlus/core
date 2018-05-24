@@ -25,10 +25,11 @@ if ( !defined('EQDKP_INC') ){
 if (!class_exists("environment")) {
 	class environment extends gen_class {
 
-		public $protocol, $ip, $useragent, $request, $request_page, $request_query, $ssl, $current_page, $server_name, $server_path, $httpHost, $phpself, $link, $agent, $path, $is_ajax, $referer;
+		public $protocol, $ip, $ip_anonymized, $useragent, $request, $request_page, $request_query, $ssl, $current_page, $server_name, $server_path, $httpHost, $phpself, $link, $agent, $path, $is_ajax, $referer;
 
 		public function __construct() {
 			$this->ip 				= $this->get_ipaddress();
+			$this->ip_anonymized	= $this->get_anonymized_ipaddress();
 			$this->useragent 		= $this->get_useragent();
 			$this->request 			= $this->get_request();
 			$this->request_page 	= $this->get_request_page();
@@ -104,24 +105,36 @@ if (!class_exists("environment")) {
 				$arrIps = explode(',', $ips);
 				if (strlen(trim($arrIps[0]))){
 					$ip = $arrIps[0];
-					if(strpos($ip, '.') !== false){
-						//IPv4 address
-						return preg_replace('/(\:[0-9]*)/', '', trim($ip));
-					} else {
-						//IPv6 address
-						return preg_replace('/(\[|(\]\:[0-9]*))/', '', trim($ip));
-					}
+					$ipAddr = trim($ip);
 
 				} else {
-					return $_SERVER['REMOTE_ADDR'];
+					$ipAddr = $_SERVER['REMOTE_ADDR'];
 				}
 			} else {
-				return $_SERVER['REMOTE_ADDR'];
+				$ipAddr = $_SERVER['REMOTE_ADDR'];
 			}
+			
+			//Remove Ports
+			if(substr_count($ipAddr, ":") > 1){
+				//ipv6
+				$ipAddr = preg_replace("/\[(.*)\]\:([0-9]*)/", "$1", $ipAddr);
+				
+			} else {
+				//ipv4
+				$ipAddr = preg_replace("/(\:([0-9]*))/", "", $ipAddr);
+			}
+			
+			return $ipAddr;
+		}
+		
+		private function get_anonymized_ipaddress(){
+			$ip = $this->get_ipaddress();
+		
+			return anonymize_ipaddress($ip);
 		}
 
 		private function get_useragent(){
-			$strUserAgent = (!empty($_SERVER['HTTP_USER_AGENT'])) ? $_SERVER['HTTP_USER_AGENT']	: $_ENV['HTTP_USER_AGENT'];
+			$strUserAgent = (!empty($_SERVER['HTTP_USER_AGENT'])) ? $_SERVER['HTTP_USER_AGENT']	: ((isset($_ENV['HTTP_USER_AGENT'])) ? $_ENV['HTTP_USER_AGENT'] : 'No Useragent given');
 			$strUserAgent = strip_tags($strUserAgent);
 			$strUserAgent = preg_replace('/javascript|vbscri?pt|script|applet|alert|document|write|cookie/i', '', $strUserAgent);
 			return $strUserAgent;

@@ -27,8 +27,12 @@
 			{CSS_CODE}
 			<!-- IF T_BACKGROUND_TYPE > 0 -->
 			body {
-				background:#000000 url('{TEMPLATE_BACKGROUND}') no-repeat center top;
+				background:{T_BACKGROUND_COLOR} url('{TEMPLATE_BACKGROUND}') no-repeat center top;
 				background-attachment: {T_BACKGROUND_POSITION};
+				-webkit-background-size: cover;
+				-moz-background-size: cover;
+				-o-background-size: cover;
+				background-size: cover;
 			}
 			
 			#wrapper header {
@@ -83,7 +87,7 @@
 									<li>
 										<a href="{U_USER_PROFILE}">
 											<div class="user-tooltip-avatar">
-												<img src="{USER_AVATAR}" alt="{USER_NAME}"/>
+												<img src="{USER_AVATAR}" alt="{USER_NAME}" class="user-avatar"/>
 											</div>
 											<div class="user-tooltip-name">
 												<span class="bold">{USER_NAME}</span><br />
@@ -227,7 +231,7 @@
 
 			<!-- LISTENER content_container_top -->
 			<header>
-				<nav id="nav">
+				<nav id="nav" itemscope itemtype="http://schema.org/SiteNavigationElement">
 					<div id="mainmenu">
 						<!-- LISTENER mainmenu -->
 						<div class="hiddenSmartphone">
@@ -473,6 +477,7 @@
 	<!-- ENDIF -->
 
 			<footer id="contentFooter">
+			<div class="contentFooterInner">
 				<!-- LISTENER content-footer-top -->
 				<div class="floatLeft">
 					<!-- IF S_REPONSIVE -->
@@ -507,6 +512,7 @@
 					
 					<!-- LISTENER footer_bottom -->{EQDKP_PLUS_COPYRIGHT}
 				<!-- close footer -->
+				</div>
 				</footer>
 				
 				<!-- ELSE -->
@@ -526,7 +532,7 @@
 			$(function() {
 				/* Login Dialog */
 				$( "#dialog-login" ).dialog({
-					height: <!-- IF S_BRIDGE_INFO -->470<!-- ELSE -->370<!-- ENDIF -->,
+					height: <!-- IF S_BRIDGE_INFO -->570<!-- ELSE -->470<!-- ENDIF -->,
 					width: 580,
 					modal: true,
 					autoOpen: false,

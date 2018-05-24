@@ -122,10 +122,31 @@ class addcharacter_pageobject extends pageobject {
 		if($this->in->get('ajax', false)) {
 			$requestID = ($this->in->exists('requestid') && strlen($this->in->get('requestid'))) ? $this->in->get('requestid') : $this->config->get($this->in->get('parent'));
 
+			$arrParents = ($this->in->exists('parents')) ? $this->in->getArray('parents') : array();
+
+			if (($key = array_search($this->in->get('parent'), $arrParents)) !== false) {
+				unset($arrParents[$key]);
+			}
+			
 			$data = $this->game->get_dep_classes($this->in->get('parent'), $this->in->get('child'), $requestID);
+			
+			if(count($arrParents)){
+				$arrOut = array();
+				foreach($arrParents as $parentClass){
+					$arrAddData = $this->game->get_dep_classes($parentClass, $this->in->get('child'), $this->in->get($parentClass));
+				}
+				
+				foreach($arrAddData as $key => $val){
+					if(isset($data[$key])) $arrOut[$key] = $val;
+				}
+			} else {
+				$arrOut = $data;
+			}
+
+			
 			$options = array(
 				'options_only'	=> true,
-				'options' 		=> $data,
+				'options' 		=> $arrOut,
 			);
 			if($this->url_id > 0) {
 				$options['value'] = $this->pdh->get('member', 'profile_field', array($this->url_id, $this->in->get('child')));
@@ -155,7 +176,8 @@ class addcharacter_pageobject extends pageobject {
 		));
 
 		$this->core->set_vars(array(
-			'page_title'		=> '',
+			'page_title'		=> $this->user->lang('uc_add_char'),
+			'description'		=> $this->user->lang('uc_add_char'),
 			'template_file'		=> 'addcharacter.html',
 			'header_format'		=> 'simple',
 			'display'			=> true)

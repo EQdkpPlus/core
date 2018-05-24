@@ -160,6 +160,14 @@ class settings_pageobject extends pageobject {
 
 		}
 		
+		//Check Password length
+		$intPWLength = ($this->config->get('password_length') ? (int)$this->config->get('password_length') : 8);
+		if($change_password && strlen($values['new_password']) < $intPWLength){
+			$this->core->message(sprintf($this->user->lang('password_too_short'), $intPWLength), $this->user->lang('error'), 'red');
+			$this->display($values);
+			return;
+		}
+		
 		// If they changed their username or password, we have to confirm their current password
 		if ( ($change_username) || ($change_password) || ($change_email)){
 			if (!$this->user->checkPassword($values['current_password'], $this->user->data['user_password'])){

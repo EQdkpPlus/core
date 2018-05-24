@@ -39,9 +39,11 @@
 			</dd>
 		</dl>
 		<!-- ENDIF -->
+		<!-- LISTENER viewraid_fieldset -->
 	</fieldset>
 
 <br />
+<!-- LISTENER viewraid_beforetables -->
 <div class="tableHeader raid-attendees">
 	<h2>{L_attendees} <span class="bubble">{ATTENDEES_COUNT}</span></h2>
 </div>
@@ -115,7 +117,7 @@
   <!-- END class_row -->
 </table>
 <br/>
-
+<!-- LISTENER viewraid_aftertables -->
 
 <div class="contentFooter">
 	<button class="mainoption" type="button" onclick="window.location='{U_RAIDLIST}'"><i class="fa fa-chevron-left"></i>{L_back}</button>

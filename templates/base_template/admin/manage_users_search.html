@@ -1,0 +1,43 @@
+
+<form method="post" action="{ACTION}" name="post">
+	<fieldset class="settings smallsettings">
+		<legend>{L_manage_users_search}</legend>
+		<dl>
+			<dt><label>{L_username}:</label></dt>
+			<dd><input name="name" type="text" class="input" id="name" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_email_address}:</label></dt>
+			<dd><input name="email" type="text" class="input" id="email" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_registered_before}:</label></dt>
+			<dd>{DATEPICKER_BEFORE}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_registered_at}:</label></dt>
+			<dd>{DATEPICKER_AFTER}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_status}:</label></dt>
+			<dd><div>
+			<label><input type="checkbox" name="status[]" value="locked" /> {L_locked}</label><br />
+			<label><input type="checkbox" name="status[]" value="notconfirmed" /> {L_not_confirmed}</label><br />
+			</div></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_charname}:</label></dt>
+			<dd><input name="charname" type="text" class="input" id="charname" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_count_chars}:</label></dt>
+			<dd><input name="charcount" type="text" class="input" id="charcount" /></dd>
+		</dl>
+	</fieldset>
+	<div class="contentFooter">
+		<button class="mainoption" type="submit" name="submit_search"><i class="fa fa-search"></i>{L_manage_users_search}</button>
+		<button class="mainoption" type="reset" name=""><i class="fa fa-trash"></i>{L_reset}</button>
+		<button class="mainoption" type="button" name="" onclick="window.location.href='manage_users.php{SID}'"><i class="fa fa-chevron-left"></i>{L_cancel}</button>
+	</div>
+{CSRF_TOKEN}
+</form>

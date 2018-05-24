@@ -92,16 +92,15 @@ function includeLibraries($path, $mask){
 function runden($value){
 	$ret_val		= $value;
 	$precision	= (int)registry::register('config')->get('round_precision');
+	
+	if($precision < 0) $precision = 0;
+	if($precision > 5) $precision = 5;
 
-	if (($precision < 0) or ($precision > 5) ){
-		$precision = 2;
-	}
-
-	if (registry::register('config')->get('round_activate') == "1"){
+	if ((int)registry::register('config')->get('round_activate')){
 		$ret_val = round($value,$precision)	;
 		$ret_val = number_format($ret_val, $precision, '.', '');
 	} else {
-		$ret_val = number_format(round($value, 5), $precision, '.', '');
+		$ret_val = number_format(round($value, 2), 2, '.', '');
 	}
 	return $ret_val;
 }
@@ -150,23 +149,37 @@ function get_sortedids($tosort, $order, $sort_order){
  * @param		bool		$extern			Is it an external link (other server) or an internal link?
  * @return		mixed						null, else the parsed redirect url if return is true.
  */
-function redirect($url='', $return=false, $extern=false, $blnShowPage=true){
+function redirect($url='', $return=false, $extern=false, $blnShowPage=true, $strContent=""){
 	if($url == "") $url = registry::get_const('controller_path_plain');
 
-	$out = (!$extern) ? registry::register('environment')->link.str_replace('&amp;', '&', $url) : registry::fetch('user')->removeSIDfromString($url);
+	$outurl = (registry::fetch('user')->removeSIDfromString($url));
+
+	$out = (!$extern) ? (registry::register('environment')->link.str_replace('&amp;', '&', $url)) : $outurl;
+
 	if ($return){
 		return $out;
 	}else{
-		header('Location: ' . $out);
+		
+		if($strContent && $strContent != ""){
+			$intRedirectTime = 5;
+		} else {
+			//Do not send Referer when redirecting to external pages
+			if($extern){
+				header('Referrer-Policy: no-referrer');
+			}
+			
+			header('Location: ' . $out);
+			$intRedirectTime = 3;
+		}
 
 		if(defined('USER_INITIALIZED') && $blnShowPage) {
-			registry::register('template')->add_meta('<meta http-equiv="refresh" content="3;URL='.$out.'" />');
+			registry::register('template')->add_meta('<meta http-equiv="refresh" content="'.$intRedirectTime.';URL='.$out.'" />');
 
 			registry::register('template')->assign_vars(array(
 				'MSG_CLASS'		=> 'blue',
 				'MSG_ICON'		=> 'fa-refresh',
 				'MSG_TITLE'		=> registry::register('user')->lang('redirection'),
-				'MSG_TEXT'		=> '<br/><a href="'.$out.'">'.registry::register('user')->lang('redirection_info')."</a>",
+				'MSG_TEXT'		=> '<br/><a href="'.$out.'">'.registry::register('user')->lang('redirection_info')."</a>".$strContent,
 				'S_MESSAGE'		=> true,
 			));
 
@@ -1370,6 +1383,33 @@ function is_serialized0($strValue){
 	}
 }
 
+function full_copy($source, $target){
+	if (is_dir($source)){
+		register('pfh')->CheckCreateFolder($target);
+		$d = dir($source);
+		
+		while (FALSE !== ($entry = $d->read())){
+			if ($entry == '.' || $entry == '..'){
+				continue;
+			}
+			
+			$Entry = $source . '/' . $entry;
+			if (is_dir( $Entry )){
+				full_copy($Entry, $target . '/' . $entry);
+				continue;
+			}
+			register('pfh')->copy($Entry, $target . '/' . $entry);
+			if (!is_file($target . '/' . $entry)) return false;
+		}
+		$d->close();
+	} else {
+		register('pfh')->copy($source, $target);
+		if (!is_file($target)) return false;
+	}
+	
+	return true;
+}
+
 function implode_r($glue, $pieces){
 	$out = "";
 	foreach ($pieces as $piece) {
@@ -1379,6 +1419,109 @@ function implode_r($glue, $pieces){
 	return $out;
  }
 
+ 
+ function hyphenize($string) {
+ 	$dict = array(
+ 			"I'm"      => "I am",
+ 			"thier"    => "their",
+ 			// Add your own replacements here
+ 	);
+ 	return strtolower(
+ 			preg_replace(
+ 					array( '#[\\s-]+#', '#[^A-Za-z0-9\. -]+#' ),
+ 					array( '-', '' ),
+ 					// the full cleanString() can be downloaded from http://www.unexpectedit.com/php/php-clean-string-of-utf8-chars-convert-to-similar-ascii-char
+ 					cleanString(urldecode($string))
+ 					)
+ 			);
+ }
+ 
+ function cleanString($text) {
+ 	$utf8 = array(
+ 			'/[áàâãªä]/u'   =>   'a',
+ 			'/[ÁÀÂÃÄ]/u'    =>   'A',
+ 			'/[ÍÌÎÏ]/u'     =>   'I',
+ 			'/[íìîï]/u'     =>   'i',
+ 			'/[éèêë]/u'     =>   'e',
+ 			'/[ÉÈÊË]/u'     =>   'E',
+ 			'/[óòôõºö]/u'   =>   'o',
+ 			'/[ÓÒÔÕÖ]/u'    =>   'O',
+ 			'/[úùûü]/u'     =>   'u',
+ 			'/[ÚÙÛÜ]/u'     =>   'U',
+ 			'/ç/'           =>   'c',
+ 			'/Ç/'           =>   'C',
+ 			'/ñ/'           =>   'n',
+ 			'/Ñ/'           =>   'N',
+ 			'/–/'           =>   '-', // UTF-8 hyphen to "normal" hyphen
+ 			'/[’‘‹›‚]/u'    =>   ' ', // Literally a single quote
+ 			'/[“”«»„]/u'    =>   ' ', // Double quote
+ 			'/ /'           =>   ' ', // nonbreaking space (equiv. to 0x160)
+ 	);
+ 	return preg_replace(array_keys($utf8), array_values($utf8), $text);
+ }
+ 
+/**
+ * Anonymizes an IP address
+ * @param string $ip IP-address
+ * @param number $byteCount How much bytes should by anomymized
+ * @return string anonymized ip address
+ */
+function anonymize_ipaddress($ip, $byteCount=1){
+
+ 	$binaryIp = @inet_pton($ip);
+ 	if(!$binaryIp) $binaryIp = "\x00\x00\x00\x00";
+ 	
+ 	$strlen = function_exists('mb_orig_strlen') ? 'mb_orig_strlen' : 'strlen';
+ 	if($strlen($binaryIp) == 4){
+ 		//ipv4
+ 		$i = strlen($binaryIp);
+ 		if ($byteCount > $i) {
+ 			$byteCount = $i;
+ 		}
+ 		
+ 		while ($byteCount-- > 0) {
+ 			$binaryIp[--$i] = chr(0);
+ 		}
+ 		
+ 		$ipStr = @inet_ntop($binaryIp);
+ 		if(!$ipStr) $ipStr = "0.0.0.0";
+ 		return $ipStr;
+ 	} else {
+ 		//ipv6
+ 		if (substr_compare($binaryIp, "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff", 0, 12) === 0
+ 				|| substr_compare($binaryIp, "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00", 0, 12) === 0) {
+ 					
+ 					$i = strlen($binaryIp);
+ 					if ($byteCount > $i) {
+ 						$byteCount = $i;
+ 					}
+ 					
+ 					while ($byteCount-- > 0) {
+ 						$binaryIp[--$i] = chr(0);
+ 					}
+ 					
+ 					$ipStr = @inet_ntop($binaryIp);
+ 					if(!$ipStr) $ipStr = "0.0.0.0";
+ 					return $ipStr;
+ 				}
+ 				
+ 				$masks = array(
+ 						'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff',
+ 						'ffff:ffff:ffff:ffff::',
+ 						'ffff:ffff:ffff:0000::',
+ 						'ffff:ff00:0000:0000::'
+ 				);
+ 				
+ 				$binaryIp = $binaryIp & pack('a16', inet_pton($masks[$byteCount]));
+ 				$ipStr = @inet_ntop($binaryIp);
+ 				if(!$ipStr) $ipStr = "0.0.0.0";
+ 				return $ipStr;
+ 	}
+ }
+ 
+ 
+ 
+ 
 /* Workarounds because php does not allow arrays in Constants < 5.6 */
 function get_attr_blacklist(){
 	global $ATTR_BLACKLIST;

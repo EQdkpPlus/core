@@ -1,0 +1,582 @@
+<h1>{WIZARD_HEADLINE}</h1>
+
+<div class="infobox infobox-large infobox-blue clearfix">
+			<i class="fa fa-info-circle fa-4x pull-left"></i> {WIZARD_INFOBOX}
+		</div>
+
+<div class="infobox infobox-large infobox-red clearfix" id="lu_error" style="display:none;">
+	<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> <span id="lu_error_label"></span>
+</div>
+
+<!-- IF S_SHOW_0 -->
+	<form method="post" action="{ACTION}" name="post" id="step0form">
+	<fieldset class="settings">
+	<dl>
+		<dt>
+			<label>{L_wizard_step0}</label><br />
+			<span></span>
+		</dt>
+		<dd>
+			{DD_GAMES} <span class="loadingIndicator" style="display:none;"><i class="fa fa-spin fa-spinner fa-lg"></i></span>
+		</dd>
+	</dl>
+	<input type="hidden" name="process" value="{STEP}"/>
+	<input type="hidden" name="show" value="{STEP}"/>
+	</fieldset>
+
+
+<button onclick="step1()" type="button" id="submitButton"><i class="fa fa-chevron-right"></i> {L_bridge_continue}</button>
+
+{CSRF_TOKEN}
+</form>
+
+<script>
+
+var games = {JSON_GAMES};
+var runs = false;
+
+function step1(){
+	if(runs) return;
+	runs = true;
+	
+	$('#submitButton').attr('disabled', true);
+	
+	var intGame = $('#games').val();
+	var code = games[intGame];
+	repo_step1(intGame, 7, code, 'install');
+	$(".loadingIndicator").show();
+}
+
+function update_error(error){
+	$(".loadingIndicator").hide();
+	$("#lu_error").show();
+	$("#lu_error_label").html("<b>"+{L_liveupdate_step_error|jsencode}+"</b>" + error);
+}
+
+function repo_step1(extid, cat, extensioncode, mode){
+	$.get('manage_extensions.php{SID}&step=1&cat='+cat+'&code='+extensioncode+'&extid='+extid, function(data) {
+		  if ($.trim(data) == 'true'){
+			repo_step2(extid, cat, extensioncode, mode);
+		  } else {
+			update_error(data);
+		  }
+	}).fail(function(){
+		update_error('Error 500');
+	});
+}
+
+function repo_step2(extid, cat, extensioncode, mode){
+	$.get('manage_extensions.php{SID}&step=2&cat='+cat+'&code='+extensioncode+'&extid='+extid, function(data) {
+		  if ($.trim(data) == 'true'){
+			repo_step3(extid, cat, extensioncode, mode);
+		  } else {
+			update_error(data);
+		  }
+	}).fail(function(){
+		update_error('Error 500');
+	});
+}
+
+function repo_step3(extid, cat, extensioncode, mode){
+	$.get('manage_extensions.php{SID}&step=3&cat='+cat+'&code='+extensioncode+'&extid='+extid, function(data) {
+		  if ($.trim(data) == 'true'){
+			repo_step4(extid, cat, extensioncode, mode);
+		  } else {
+			update_error(data);
+		  }
+	}).fail(function(){
+		update_error('Error 500');
+	});
+}
+
+function repo_step4(extid, cat, extensioncode, mode){
+	$.get('manage_extensions.php{SID}&step=4&cat='+cat+'&code='+extensioncode+'&extid='+extid, function(data) {
+		  if ($.trim(data) == 'true'){
+			repo_step5(extid, cat, extensioncode, mode);
+		  } else {
+			update_error(data);
+		  }
+	}).fail(function(){
+		update_error('Error 500');
+	});
+}
+
+function repo_step5(extid, cat, extensioncode, mode){
+	var url = 'manage_extensions.php{SID}&mode='+mode+'&cat='+cat+'&code='+extensioncode+'&extid='+extid+'&link_hash=f42a7098eeb7';
+	
+	document.getElementById('step0form').submit();
+	return;
+}
+</script>
+
+<!-- ENDIF -->
+
+<!-- IF S_SHOW_1 -->
+<form method="post" action="{ACTION}" name="post" id="step1form">
+	<fieldset class="settings">
+		<legend>{tabs.fieldsets.NAME}</legend>
+		<!-- BEGIN fields -->
+		<dl>
+			<dt><label>{fields.NAME}</label><br /><span>{fields.HELP}</span></dt>
+			<dd>{fields.FIELD}</dd>
+		</dl>
+		<!-- END fields -->
+	</fieldset>
+	<button type="submit"><i class="fa fa-chevron-right"></i> {L_bridge_continue}</button>
+	<input type="hidden" name="process" value="{STEP}"/>
+	<input type="hidden" name="show" value="{STEP}"/>
+	{CSRF_TOKEN}
+</form>
+<!-- ENDIF -->
+
+<!-- IF S_SHOW_2 -->
+<form method="post" action="{ACTION}" name="post" id="step2form">
+	<fieldset class="settings">
+		<legend>{tabs.fieldsets.NAME}</legend>
+		<!-- BEGIN fields -->
+		<dl>
+			<dt><label>{fields.NAME}</label><br /><span>{fields.HELP}</span></dt>
+			<dd>{fields.FIELD}</dd>
+		</dl>
+		<!-- END fields -->
+	</fieldset>
+	<button type="submit"><i class="fa fa-chevron-right"></i> {L_bridge_continue}</button>
+	<input type="hidden" name="process" value="{STEP}"/>
+	<input type="hidden" name="show" value="{STEP}"/>
+	{CSRF_TOKEN}
+</form>
+<!-- ENDIF -->
+
+<!-- IF S_SHOW_3 -->
+<form method="post" action="{ACTION}" name="post" id="step3form">
+
+	<table class="table fullwidth colorswitch hoverrows">
+		<tr>
+			<th style="width:35px"></th>
+			<th style="width:80px"></th>
+			<th>{L_name}</th>
+			
+		</tr>
+	<!-- BEGIN style_row -->
+	<tr>
+	<td><input type="radio" name="style" {style_row.IS_CHECKED} <!-- IF style_row.IS_LOCAL -->data-localid="{style_row.STYLE_ID}"<!-- ENDIF --> <!-- IF style_row.IS_REPO -->data-repoid="{style_row.PLUGINID}" data-plugin="{style_row.PLUGINPATH}"<!-- ENDIF -->/></td><td><img src="{style_row.SCREENSHOT}" style="max-height: 130px;"/></td><td> {style_row.NAME} <span class="loadingIndicator li_{style_row.PLUGINID}" style="display:none;"><i class="fa-spin fa-spinner fa fa-lg"></i></span></td>
+	</tr>
+	<!-- END style_row -->
+	</table>
+	<button type="button" onclick="step1()" id="submitButton"><i class="fa fa-chevron-right"></i> {L_bridge_continue}</button>
+	<input type="hidden" name="process" value="{STEP}"/>
+	<input type="hidden" name="show" value="{STEP}"/>
+	{CSRF_TOKEN}
+</form>
+
+<script>
+var runs = false;
+function step1(){
+	if(runs) return;
+	runs = true;
+	
+	$('#submitButton').attr('disabled', true);
+	
+	if($('input[name=style]:checked').data('localid') != undefined){
+		var url = 'wizard.php{SID}&show=3&link_hash={LINK_HASH}&process&local='+$('input[name=style]:checked').data('localid');
+		window.location=url;
+		
+		
+	}else if($('input[name=style]:checked').data('repoid') != undefined){
+		var intRepoID = $('input[name=style]:checked').data('repoid');
+		var strRepoName = $('input[name=style]:checked').data('plugin');
+		
+		repo_step1(intRepoID, 2, strRepoName, 'install');
+		$(".li_"+intRepoID).show();
+	}
+
+}
+
+function update_error(error){
+	$(".loadingIndicator").hide();
+	$("#lu_error").show();
+	$("#lu_error_label").html("<b>"+{L_liveupdate_step_error|jsencode}+"</b>" + error);
+}
+
+function repo_step1(extid, cat, extensioncode, mode){
+	$('#submitButton').attr('disabled', true);
+	
+	$.get('manage_extensions.php{SID}&step=1&cat='+cat+'&code='+extensioncode+'&extid='+extid, function(data) {
+		  if ($.trim(data) == 'true'){
+			repo_step2(extid, cat, extensioncode, mode);
+		  } else {
+			update_error(data);
+		  }
+	}).fail(function(){
+		update_error('Error 500');
+	});
+}
+
+function repo_step2(extid, cat, extensioncode, mode){
+
+	$.get('manage_extensions.php{SID}&step=2&cat='+cat+'&code='+extensioncode+'&extid='+extid, function(data) {
+		  if ($.trim(data) == 'true'){
+			repo_step3(extid, cat, extensioncode, mode);
+		  } else {
+			update_error(data);
+		  }
+	}).fail(function(){
+		update_error('Error 500');
+	});
+}
+
+function repo_step3(extid, cat, extensioncode, mode){
+
+	$.get('manage_extensions.php{SID}&step=3&cat='+cat+'&code='+extensioncode+'&extid='+extid, function(data) {
+		  if ($.trim(data) == 'true'){
+			repo_step4(extid, cat, extensioncode, mode);
+		  } else {
+			update_error(data);
+		  }
+	}).fail(function(){
+		update_error('Error 500');
+	});
+}
+
+function repo_step4(extid, cat, extensioncode, mode){
+
+	$.get('manage_extensions.php{SID}&step=4&cat='+cat+'&code='+extensioncode+'&extid='+extid, function(data) {
+		  if ($.trim(data) == 'true'){
+			repo_step5(extid, cat, extensioncode, mode);
+		  } else {
+			update_error(data);
+		  }
+	}).fail(function(){
+		update_error('Error 500');
+	});
+}
+
+function repo_step5(extid, cat, extensioncode, mode){
+	var url = 'wizard.php{SID}&show=3&process=3&code='+extensioncode+"&extid="+extid+"&link_hash={LINK_HASH}";
+	window.location=url;
+
+	return;
+}
+</script>
+
+<!-- ENDIF -->
+
+
+
+
+
+
+<!-- IF S_SHOW_4 -->
+
+<form method="post" action="{ACTION}" name="post" id="step3form">
+
+	<table class="table fullwidth colorswitch hoverrows">
+		<tr>
+			<th style="width:35px"></th>
+			<th style="width:80px"></th>
+			<th>{L_name}</th>
+			
+		</tr>
+	<!-- BEGIN style_row -->
+	<tr>
+	<td><input type="checkbox" name="plugins" data-repoid="{style_row.PLUGINID}" data-plugin="{style_row.PLUGINPATH}"/></td><td><img src="{style_row.SCREENSHOT}" style="max-height: 130px;"/></td><td> <h3>{style_row.NAME} <span class="loadingIndicator li_{style_row.PLUGINID}" style="display:none;"><i class="fa-spin fa-spinner fa fa-lg"></i></span></h3>{style_row.DESC}</td>
+	</tr>
+	<!-- END style_row -->
+	</table>
+	<button type="button" onclick="step1()" id="submitButton"><i class="fa fa-chevron-right"></i> {L_bridge_continue}</button>
+	<input type="hidden" name="show" value="{STEP}"/>
+	{CSRF_TOKEN}
+</form>
+
+<script>
+var plugins = new Array();
+
+function handle_installs(){
+	if(plugins.length == 0){
+		document.getElementById('step3form').submit();
+		
+		return;
+	}
+	
+	var lastElement = plugins[plugins.length-1];
+	plugins.pop();
+	var pluginid = lastElement[0];
+	var code = lastElement[1];
+	repo_step1(pluginid, 1, code, 'install');
+}
+
+var runs =false;
+function step1(){
+	if(runs) return;
+	runs = true;
+	
+	$('#submitButton').attr('disabled', true);
+	
+	$('input[name=plugins]:checked').each(function() {
+	    plugins.push( new Array($(this).data('repoid'), $(this).data('plugin')));
+	}).get();
+
+	handle_installs();
+	return;
+}
+
+function update_error(error){
+	$(".loadingIndicator").hide();
+	$("#lu_error").show();
+	$("#lu_error_label").html("<b>"+{L_liveupdate_step_error|jsencode}+"</b>" + error);
+}
+
+
+function repo_step1(extid, cat, extensioncode, mode){
+	$(".li_"+extid).show();
+	
+	$.get('manage_extensions.php{SID}&step=1&cat='+cat+'&code='+extensioncode+'&extid='+extid, function(data) {
+		  if ($.trim(data) == 'true'){
+			repo_step2(extid, cat, extensioncode, mode);
+		  } else {
+			update_error(data);
+		  }
+	}).fail(function(){
+		update_error('Error 500');
+	});
+}
+
+function repo_step2(extid, cat, extensioncode, mode){
+	$.get('manage_extensions.php{SID}&step=2&cat='+cat+'&code='+extensioncode+'&extid='+extid, function(data) {
+		  if ($.trim(data) == 'true'){
+			repo_step3(extid, cat, extensioncode, mode);
+		  } else {
+			update_error(data);
+		  }
+	}).fail(function(){
+		update_error('Error 500');
+	});
+}
+
+function repo_step3(extid, cat, extensioncode, mode){
+	$.get('manage_extensions.php{SID}&step=3&cat='+cat+'&code='+extensioncode+'&extid='+extid, function(data) {
+		  if ($.trim(data) == 'true'){
+			repo_step4(extid, cat, extensioncode, mode);
+		  } else {
+			update_error(data);
+		  }
+	}).fail(function(){
+		update_error('Error 500');
+	});
+}
+
+function repo_step4(extid, cat, extensioncode, mode){
+	$.get('manage_extensions.php{SID}&step=4&cat='+cat+'&code='+extensioncode+'&extid='+extid, function(data) {
+		  if ($.trim(data) == 'true'){
+			repo_step5(extid, cat, extensioncode, mode);
+		  } else {
+			update_error(data);
+		  }
+	}).fail(function(){
+		update_error('Error 500');
+	});
+}
+
+function repo_step5(extid, cat, extensioncode, mode){
+	
+	$.get('wizard.php{SID}&show=4&process=4&code='+extensioncode+"&extid="+extid+"&link_hash={LINK_HASH}", function(data) {
+		$(".li_"+extid).html('<i class="fa fa-check fa-lg"></i>');
+	}).fail(function(){
+	});
+	
+	handle_installs();
+
+	return;
+}
+</script>
+
+
+<!-- ENDIF -->
+
+
+<!-- IF S_SHOW_5 -->
+
+<form method="post" action="{ACTION}" name="post" id="step5form">
+
+	<table class="table fullwidth colorswitch hoverrows">
+		<tr>
+			<th style="width:35px"></th>
+			<th style="width:80px"></th>
+			<th>{L_name}</th>
+			
+		</tr>
+	<!-- BEGIN style_row -->
+	<tr>
+	<td><input type="checkbox" name="plugins" data-repoid="{style_row.PLUGINID}" data-plugin="{style_row.PLUGINPATH}"/></td><td><img src="{style_row.SCREENSHOT}" style="max-height: 130px;"/></td><td> <h3>{style_row.NAME} <span class="loadingIndicator li_{style_row.PLUGINID}" style="display:none;"><i class="fa-spin fa-spinner fa fa-lg"></i></span></h3>{style_row.DESC}</td>
+	</tr>
+	<!-- END style_row -->
+	</table>
+	<button type="button" onclick="step1()" id="submitButton"><i class="fa fa-chevron-right"></i> {L_bridge_continue}</button>
+	<input type="hidden" name="show" value="{STEP}"/>
+	{CSRF_TOKEN}
+</form>
+
+<script>
+var plugins = new Array();
+var total_plugins = 0;
+var current_plugin = 0;
+
+function handle_installs(){
+	if(plugins.length == 0){
+		document.getElementById('step5form').submit();
+		return;
+	}
+	
+	var lastElement = plugins[plugins.length-1];
+	plugins.pop();
+	current_plugin = current_plugin+1;
+	var pluginid = lastElement[0];
+	var code = lastElement[1];
+	repo_step1(pluginid, 3, code, 'install');
+}
+
+var runs =false;
+function step1(){
+	if(runs) return;
+	runs = true;
+	
+	$('#submitButton').attr('disabled', true);
+	
+	$('input[name=plugins]:checked').each(function() {
+	    plugins.push( new Array($(this).data('repoid'), $(this).data('plugin')));
+	}).get();
+	
+	total_plugins = plugins.length;
+
+	handle_installs();
+	return;
+}
+
+function update_error(error){
+	$(".loadingIndicator").hide();
+	$("#lu_error").show();
+	$("#lu_error_label").html("<b>"+{L_liveupdate_step_error|jsencode}+"</b>" + error);
+}
+
+
+function repo_step1(extid, cat, extensioncode, mode){
+	$(".li_"+extid).show();
+	
+	$.get('manage_extensions.php{SID}&step=1&cat='+cat+'&code='+extensioncode+'&extid='+extid, function(data) {
+		  if ($.trim(data) == 'true'){
+			repo_step2(extid, cat, extensioncode, mode);
+		  } else {
+			update_error(data);
+		  }
+	}).fail(function(){
+		update_error('Error 500');
+	});
+}
+
+function repo_step2(extid, cat, extensioncode, mode){
+	$.get('manage_extensions.php{SID}&step=2&cat='+cat+'&code='+extensioncode+'&extid='+extid, function(data) {
+		  if ($.trim(data) == 'true'){
+			repo_step3(extid, cat, extensioncode, mode);
+		  } else {
+			update_error(data);
+		  }
+	}).fail(function(){
+		update_error('Error 500');
+	});
+}
+
+function repo_step3(extid, cat, extensioncode, mode){
+	$.get('manage_extensions.php{SID}&step=3&cat='+cat+'&code='+extensioncode+'&extid='+extid, function(data) {
+		  if ($.trim(data) == 'true'){
+			repo_step4(extid, cat, extensioncode, mode);
+		  } else {
+			update_error(data);
+		  }
+	}).fail(function(){
+		update_error('Error 500');
+	});
+}
+
+function repo_step4(extid, cat, extensioncode, mode){
+	$.get('manage_extensions.php{SID}&step=4&cat='+cat+'&code='+extensioncode+'&extid='+extid, function(data) {
+		  if ($.trim(data) == 'true'){
+			repo_step5(extid, cat, extensioncode, mode);
+		  } else {
+			update_error(data);
+		  }
+	}).fail(function(){
+		update_error('Error 500');
+	});
+}
+
+function repo_step5(extid, cat, extensioncode, mode){
+	
+	$.get('wizard.php{SID}&show=5&process=5&code='+extensioncode+"&extid="+extid+"&link_hash={LINK_HASH}&current="+current_plugin, function(data) {
+		$(".li_"+extid).html('<i class="fa fa-check fa-lg"></i>');
+	}).fail(function(){
+	});
+	
+	handle_installs();
+
+	return;
+}
+</script>
+
+
+<!-- ENDIF -->
+
+<!-- IF S_SHOW_6 -->
+
+<form method="post" action="{ACTION}" name="post" id="step6form">
+
+	<table class="table fullwidth colorswitch hoverrows">
+		<tr>
+			<th style="width:35px"></th>
+			<th>{L_name}</th>
+			
+		</tr>
+	<!-- BEGIN style_row -->
+	<tr>
+	<td style="width:35px"><input type="radio" name="pointlayout" value="{style_row.NAME}" {style_row.IS_CURRENT}/></td><td> <h3>{style_row.NAME} <span class="loadingIndicator li_{style_row.PLUGINID}" style="display:none;"><i class="fa-spin fa-spinner fa fa-lg"></i></span></h3>{style_row.DESC}</td>
+	</tr>
+	<!-- END style_row -->
+	</table>
+	<button type="submit" id="submitButton"><i class="fa fa-chevron-right"></i> {L_bridge_continue}</button>
+	<input type="hidden" name="show" value="{STEP}"/>
+	<input type="hidden" name="process" value="{STEP}"/>
+	{CSRF_TOKEN}
+</form>
+
+
+<!-- ENDIF -->
+
+<!-- IF S_SHOW_7 -->
+
+<table class="table fullwidth">
+	  <tr>
+      	<td><span class="fa-stack fa-3x"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-question fa-stack-1x fa-inverse"></i></span></td>
+      	<td>{L_adminc_support_tour}</td>
+     	</tr>
+      <tr>
+        <td><span class="fa-stack fa-3x"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-wikipedia-w fa-stack-1x fa-inverse"></i></span></td>
+        <td>{L_adminc_support_wiki}</td>
+      </tr>
+       <tr>
+        <td><span class="fa-stack fa-3x"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-bug fa-stack-1x fa-inverse"></i></span></td>
+        <td>{L_adminc_support_bugtracker}</td>
+      </tr>
+      <tr>
+        <td><span class="fa-stack fa-3x"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-users fa-stack-1x fa-inverse"></i></span></td>
+        <td>{L_adminc_support_forums}</td>
+      </tr>
+      
+      <tr>
+        <td id="support"><i class="fa fa-heart fa-5x" style="color:red;vertical-align:middle;"></i>
+						<span class="fa-stack fa-lg" style="margin-left: -30px; margin-bottom: -10px; margin-right: 10px;">
+						<i class="fa fa-circle fa-stack-2x"></i>
+  						<i class="fa fa-usd fa-stack-1x fa-inverse"></i>
+						</span></td>
+        <td>{L_support_eqdkplus}</td>
+      </tr>
+    </table>
+<!-- ENDIF -->

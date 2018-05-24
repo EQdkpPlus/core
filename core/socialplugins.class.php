@@ -116,6 +116,20 @@ if (!class_exists("socialplugins")) {
 		private function opengraph_tags($title, $description, $image){
 			if($this->blnMetaAdded) return;
 			
+			// the logo...
+			$strHeaderLogoPath	= "templates/".$this->user->style['template_path']."/images/";
+			
+			// the logo...
+			if(is_file($this->pfh->FolderPath('','files').$this->config->get('custom_logo'))){
+				$headerlogo	= $this->pfh->FolderPath('','files', 'absolute').$this->config->get('custom_logo');
+			} else if(file_exists($this->root_path.$strHeaderLogoPath.'logo.png')){
+				$headerlogo	= $this->env->link.$strHeaderLogoPath.'logo.png';
+			} else if(file_exists($this->root_path.$strHeaderLogoPath.'logo.svg')){
+				$headerlogo	= $this->env->link.$strHeaderLogoPath.'logo.svg';
+			} else $headerlogo = "";
+
+			if($image == "") $image = $headerlogo;
+			
 			$strMetatags = '<meta property="og:title" content="'.$title.'" />
 							<meta property="og:type" content="article" />
 							<meta property="og:url" content="'.$this->env->httpHost.xhtml_entity_decode($this->env->request).'" />

@@ -57,9 +57,16 @@ if (!class_exists('exchange_add_adjustment')){
 					//Adjustment Members
 					$arrAdjMembers = array();
 					$arrMemberIDList = $this->pdh->get('member', 'id_list', array());
-					foreach($arrBody['adjustment_members']['member'] as $objMemberID){
+					
+					if(is_array($arrBody['adjustment_members']['member'])){
+						foreach($arrBody['adjustment_members']['member'] as $objMemberID){
+							if (in_array(intval($objMemberID), $arrMemberIDList)) $arrAdjMembers[] = intval($objMemberID);
+						}
+					} else {
+						$objMemberID = intval($arrBody['adjustment_members']['member']);
 						if (in_array(intval($objMemberID), $arrMemberIDList)) $arrAdjMembers[] = intval($objMemberID);
 					}
+
 					if(count($arrAdjMembers) == 0) return $this->pex->error('required data missing', 'no member found');
 					
 					//Adjustment Value

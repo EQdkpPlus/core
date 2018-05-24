@@ -67,9 +67,16 @@ if (!class_exists('exchange_add_item')){
 					//Item Buyers
 					$arrItemBuyers = array();
 					$arrMemberIDList = $this->pdh->get('member', 'id_list', array());
-					foreach($arrBody['item_buyers']['member'] as $objMemberID){
+					
+					if(is_array($arrBody['item_buyers']['member'])){
+						foreach($arrBody['item_buyers']['member'] as $objMemberID){
+							if (in_array(intval($objMemberID), $arrMemberIDList)) $arrItemBuyers[] = intval($objMemberID);
+						}
+					} else {
+						$objMemberID = intval($arrBody['item_buyers']['member']);
 						if (in_array(intval($objMemberID), $arrMemberIDList)) $arrItemBuyers[] = intval($objMemberID);
 					}
+					
 					if(count($arrItemBuyers) == 0) return $this->pex->error('required data missing', 'no member found');
 					
 					//Item Value

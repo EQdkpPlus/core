@@ -19,6 +19,10 @@
 #	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
+##
+# This is just an example file. Please rename it from default.htaccess to .htaccess if you want to use it.
+##
+
 # EQDKP-SEO-START
 # Please adjust your Rewrite Base and set it to the path your EQdkp Plus is reachable, e.g. /eqdkp, or / if your have EQdkp is reached directly under your domain.
 # To activate the SEO, remove the trailing # from the next line until the EQDKP-SEO-END (not included)
@@ -48,38 +52,51 @@ FileETag None
 ##
 # Gzip compression
 # @see https://github.com/h5bp/html5-boilerplate
+# Default to Apache 2.4 if version module is not available
 ##
-<IfModule mod_deflate.c>
-  # Current Apache versions (>= 2.2)
-  <IfModule filter_module>
-    FilterDeclare   COMPRESS
-    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $text/html
-    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $text/css
-    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $text/plain
-    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $text/xml
-    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $text/x-component
-    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/javascript
-    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/json
-    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/xml
-    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/xhtml+xml
-    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/rss+xml
-    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/atom+xml
-    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/vnd.ms-fontobject
-    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $image/svg+xml
-    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $image/x-icon
-    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/x-font-ttf
-    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $font/opentype
-    FilterChain     COMPRESS
-    FilterProtocol  COMPRESS  DEFLATE change=yes;byteranges=no
-  </IfModule>
-  # Legacy Apache versions
-  <IfModule !mod_filter.c>
-    AddOutputFilterByType DEFLATE text/html text/plain text/css application/json
-    AddOutputFilterByType DEFLATE application/javascript
-    AddOutputFilterByType DEFLATE text/xml application/xml text/x-component
-    AddOutputFilterByType DEFLATE application/xhtml+xml application/rss+xml application/atom+xml
-    AddOutputFilterByType DEFLATE image/x-icon image/svg+xml application/vnd.ms-fontobject application/x-font-ttf font/opentype
-  </IfModule>
+
+<IfModule filter_module.c>
+	<IfModule version.c>
+		<IfVersion >= 2.4>
+			FilterDeclare  COMPRESS
+			FilterProvider COMPRESS DEFLATE "%{CONTENT_TYPE} =~ m#^text/(html|css|plain|xml|x-component)#i"
+			FilterProvider COMPRESS DEFLATE "%{CONTENT_TYPE} =~ m#^application/(javascript|json|xml|xhtml+xml|rss+xml|atom+xml|vnd.ms-fontobject|x-font-ttf)#i"
+			FilterProvider COMPRESS DEFLATE "%{CONTENT_TYPE} =~ m#^image/(svg+xml|x-icon)#i"
+			FilterProvider COMPRESS DEFLATE "%{CONTENT_TYPE} = 'font/opentype'"
+			FilterChain    COMPRESS
+			FilterProtocol COMPRESS DEFLATE change=yes;byteranges=no
+		</IfVersion>
+		<IfVersion < 2.4>
+			FilterDeclare COMPRESS
+			FilterProvider COMPRESS DEFLATE resp=Content-Type $text/html
+			FilterProvider COMPRESS DEFLATE resp=Content-Type $text/css
+			FilterProvider COMPRESS DEFLATE resp=Content-Type $text/plain
+			FilterProvider COMPRESS DEFLATE resp=Content-Type $text/xml
+			FilterProvider COMPRESS DEFLATE resp=Content-Type $text/x-component
+			FilterProvider COMPRESS DEFLATE resp=Content-Type $application/javascript
+			FilterProvider COMPRESS DEFLATE resp=Content-Type $application/json
+			FilterProvider COMPRESS DEFLATE resp=Content-Type $application/xml
+			FilterProvider COMPRESS DEFLATE resp=Content-Type $application/xhtml+xml
+			FilterProvider COMPRESS DEFLATE resp=Content-Type $application/rss+xml
+			FilterProvider COMPRESS DEFLATE resp=Content-Type $application/atom+xml
+			FilterProvider COMPRESS DEFLATE resp=Content-Type $application/vnd.ms-fontobject
+			FilterProvider COMPRESS DEFLATE resp=Content-Type $image/svg+xml
+			FilterProvider COMPRESS DEFLATE resp=Content-Type $image/x-icon
+			FilterProvider COMPRESS DEFLATE resp=Content-Type $application/x-font-ttf
+			FilterProvider COMPRESS DEFLATE resp=Content-Type $font/opentype
+			FilterChain COMPRESS
+			FilterProtocol COMPRESS DEFLATE change=yes;byteranges=no
+		</IfVersion>
+	</IfModule>
+	<IfModule !version.c>
+		FilterDeclare  COMPRESS
+		FilterProvider COMPRESS DEFLATE "%{CONTENT_TYPE} =~ m#^text/(html|css|plain|xml|x-component)#i"
+		FilterProvider COMPRESS DEFLATE "%{CONTENT_TYPE} =~ m#^application/(javascript|json|xml|xhtml+xml|rss+xml|atom+xml|vnd.ms-fontobject|x-font-ttf)#i"
+		FilterProvider COMPRESS DEFLATE "%{CONTENT_TYPE} =~ m#^image/(svg+xml|x-icon)#i"
+		FilterProvider COMPRESS DEFLATE "%{CONTENT_TYPE} = 'font/opentype'"
+		FilterChain    COMPRESS
+		FilterProtocol COMPRESS DEFLATE change=yes;byteranges=no
+	</IfModule>
 </IfModule>
 
 ##
@@ -116,8 +133,8 @@ FileETag None
   ExpiresByType image/svg+xml                 "access plus 1 month"
   ExpiresByType application/vnd.ms-fontobject "access plus 1 month"
   # CSS and JavaScript
-  ExpiresByType text/css                      "access plus 1 year"
-  ExpiresByType application/javascript        "access plus 1 year"
+  ExpiresByType text/css                      "access plus 1 month"
+  ExpiresByType application/javascript        "access plus 1 month"
 </IfModule>
 
 ##

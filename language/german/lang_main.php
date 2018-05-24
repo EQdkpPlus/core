@@ -320,8 +320,8 @@ $lang = array(
 "add_itemvote_success" => "Deine Abstimmung zu dem Item wurde gespeichert.",
 "update_itemvote_success" => "Deine Abstimmung zu dem Item wurde aktualisiert.",
 "update_settings_success" => "Die Benutzereinstellungen wurden aktualisiert.",
-
 "fv_invalid_email" => "Die E-Mail-Adresse scheint nicht gültig zu sein.",
+"fv_invalid_email_blocked" => "Eine Registrierung mit dieser Email-Adresse ist nicht möglich.",
 "fv_required" => "Bitte fülle das Eingabefeld aus.",
 "fv_php_required" => 'Das Feld \'%s\' ist notwendig!',
 "fv_required_password" => "Du musst ein Passwort eingeben.",
@@ -371,6 +371,7 @@ $lang = array(
 "overview" => "Überblick",
 "preview" => "Vorschau",
 "registered_at" => "Registriert seit",
+"registered_before" => "Registriert vor",
 "adduser_tab_registration_information" => "Benutzerinformationen",
 "adduser_tab_view_options"	=> "Anzeige-Optionen",
 "required_field_note" => "Mit * gekennzeichnete Felder sind Pflichtfelder.",
@@ -936,6 +937,7 @@ $lang = array(
 "login_twofactor_remember" => "Auf diesem Rechner für 30 Tage nicht mehr fragen",
 "password_not_match" => "Die eingegebenen Passwörter stimmen nicht überein.",
 "password_too_long" => "Das eingegeben Passwort ist zu lang. Bitte verwende ein kürzeres Passwort.",
+"password_too_short" => "Das eingegeben Passwort ist zu kurz. Bitte verwende mindestens %s Zeichen.",
 "rsslink" => "RSS-Feed dieser Kategorie",
 "pluskernel_new_version" => "Es wurde eine neue Version von EQdkp Plus gefunden.<br />Bitte aktualisiere dein EQdkp Plus.",
 "lib_pupd_intro" => "Es sind neuere Versionen verfügbar:",
@@ -1098,6 +1100,7 @@ $lang = array(
 "user_delete_account" => "Benutzeraccount endgültig löschen",
 "confirm_account_info" => "Willst du deinen Bernuteraccount wirklich löschen? Alle damit verbundenen Daten, wie persönlichen Daten, Medien etc. werden vollständig aus dem System gelöscht und können nicht wiederhergestellt werden.<br /><br />Willst du diese Aktion wirklich durchführen, bestätige die Löschung deines Benutzeraccounts mit deinem aktuellen Benutzerpasswort.<br />",
 "click_to_reveal" => "Klicken, um diese Informationen anzuzeigen",
-"new_coreupdate_subject" => "Neues EQdkp Plus Update verfügbar",		
+"new_coreupdate_subject" => "Neues EQdkp Plus Update verfügbar",
+"charname" => "Charaktername",
 );
 ?>

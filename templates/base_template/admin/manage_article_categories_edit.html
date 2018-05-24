@@ -38,7 +38,7 @@ function calculate_permission(perm, gid, obj){
 			cache: false,
 			success: function(response){
 				tr = $(obj).closest('tr');
-				tr.find('.calc-perm').html(response);
+				tr.find('.calc-perm').html($.trim(response));
 			}
 		});
 }

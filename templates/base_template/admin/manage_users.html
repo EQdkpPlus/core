@@ -1,17 +1,22 @@
 
 <form method="post" action="{ACTION}" name="post">
 <div class="contentHeader">
-	<h1 class="contentTitle">{L_manage_users} <span class="bubble">{LISTUSERS_COUNT}</span></h1>
+	<h1 class="contentTitle"><!-- IF S_IS_SEARCH -->{L_manage_users_search}<!-- ELSE -->{L_manage_users}<!-- ENDIF --> <span class="bubble">{LISTUSERS_COUNT}</span></h1>
 </div>
 <div class="tableHeader floatRight">
+	<button class="mainoption" type="button" name="search" onclick="window.location.href='{U_MANAGE_USERS}search'"><i class="fa fa-search"></i>{L_manage_users_search}</button>
 	<button class="mainoption" type="button" name="create" onclick="window.location.href='{U_MANAGE_USERS}u=0'"><i class="fa fa-plus"></i>{L_user_creation}</button>
 </div>
-<div class="clear"></div>
+
+	<div class="center pagination_wrapper">
+			{USER_PAGINATION}
+	</div>
+	<div class="clear"></div>
 	<table class="table fullwidth colorswitch hoverrows">
 		<tr>
 			<th style="width:25px" class="nowrap center"><input type="checkbox" id="selall_user" name="all_nr" value="all_nr" /></th>
-			<th colspan="6" class="left">{L_action}</th>
-			<th class="left" colspan="2">
+			<th colspan="8" class="left">{L_action}</th>
+			<th class="left" colspan="1">
 				<a href="{U_MANAGE_USERS}o=0.0"><span class="down_arrow{RED00}"></span></a><a href="{U_MANAGE_USERS}o=0.1"><span class="up_arrow{RED01}"></span></a>
 				<a href="{U_MANAGE_USERS}o={O_USERNAME}">{L_username}</a>
 			</th>
@@ -26,7 +31,7 @@
 				<a href="{U_MANAGE_USERS}o=2.0"><span class="down_arrow{RED20}"></span></a><a href="{U_MANAGE_USERS}o=2.1"><span class="up_arrow{RED21}"></span></a>
 				<a href="{U_MANAGE_USERS}o={O_LAST_VISIT}">{L_last_visit}</a>
 			</th>
-			<th style="width:60px" class="hiddenSmartphone left">{L_online}</th>
+
 			<th style="width:40px" class="hiddenSmartphone left">
 				<a href="{U_MANAGE_USERS}o=5.0"><span class="down_arrow{RED50}"></span></a><a href="{U_MANAGE_USERS}o=5.1"><span class="up_arrow{RED51}"></span></a>
 				<a href="{U_MANAGE_USERS}o={O_AWAY}"><i class="fa fa-suitcase"></i></a>
@@ -43,6 +48,7 @@
 			<td style="width:20px"><!-- IF not users_row.PROTECT_SUPERADMIN -->
 				<a href="javascript:delete_single_warning('{users_row.USER_ID}')" title="{L_delete_user}"><i class="fa fa-trash-o fa-lg"></i></a>    	<!-- ENDIF -->
 			</td>
+			<td style="width:20px"><a href="{users_row.U_DOWNLOAD_GDPR}" title="{L_user_download_gdpr}"><i class="fa fa-lg fa-download"></i></a></td>
 			<td style="width:20px">{users_row.ADMIN_ICON}</td>
 			<td><a href="{users_row.U_MANAGE_USER}" style="{users_row.NAME_STYLE}">{users_row.USERNAME}</a></td>
 
@@ -87,7 +93,6 @@
 			<td style="width:100px" class="hiddenSmartphone nowrap left"><a href="mailto:{users_row.EMAIL}">{users_row.EMAIL}</a></td>
 			<td style="width:150px" class="hiddenSmartphone">{users_row.REG_DATE}</td>
 			<td style="width:150px" class="hiddenSmartphone">{users_row.LAST_VISIT}</td>
-			<td style="width:60px" class="hiddenSmartphone center">{users_row.ONLINE}</td>
 			<td style="width:60px" class="hiddenSmartphone center">{users_row.AWAY}</td>
 		</tr>
 		<!-- END users_row -->
@@ -134,7 +139,7 @@ function delete_single(id){
 function change_mainchar(userid, memberid){
 	$.post('{SID}&link_hash={CSRF_MAINCHARCHANGE}', { maincharchange: memberid, user: userid },
 		function(data){
-			system_message(data, 'success');
+			system_message($.trim(data), 'success');
 		}
 	);
 }

@@ -480,6 +480,7 @@ class Manage_Extensions extends page_generic {
 			if ($plugin_code == 'pluskernel') continue;
 			
 			$contact			= $this->pm->get_data($plugin_code, 'contact');
+			$contact = (strlen($contact)) ? ((strpos($contact, '@')) ? 'mailto:'.$contact : $contact) : 'https://eqdkp-plus.eu';
 			$version			= $this->pm->get_data($plugin_code, 'version');
 			$description		= $this->pm->get_data($plugin_code, 'description');
 			$long_description	= $this->pm->get_data($plugin_code, 'long_description');
@@ -541,12 +542,22 @@ class Manage_Extensions extends page_generic {
 				$link .= '&nbsp;&nbsp;&nbsp;<a href="manage_extensions.php' . $this->SID . '&amp;cat=1&amp;mode=remove&amp;code=' . $plugin_code. '&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('delete').'"><i class="fa fa-lg fa-trash-o"></i></a>';
 			}
 			$plugin_count++;
+			
+			
+			$depout = "";
+			foreach($dep as $key => $depdata) {
+				$tt = (isset($deptt[$key])) ? $deptt[$key] : $this->user->lang('plug_dep_'.$key);
+				if(!$depdata){
+					$depout .= '<span class="coretip" data-coretip="'.$tt.'">'.$this->user->lang('plug_dep_'.$key.'_short').'</span> ';
+				}
+			}
+			
 			$this->tpl->assign_block_vars('plugins_row_'.$row, array(
 				'NAME'				=> (isset($arrExtensionListNamed[1][$plugin_code])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[1][$plugin_code].')">'.$this->pm->get_data($plugin_code, 'name').'</a>' : $this->pm->get_data($plugin_code, 'name'),
 
 				'VERSION'			=> ( !empty($version) ) ? $version : '&nbsp;',
 				'CODE'				=> $plugin_code,
-				'CONTACT'			=> ( !empty($contact) ) ? ( !empty($author) ) ? '<a href="mailto:' . $contact . '">' . $author . '</a>' : '<a href="mailto:' . $contact . '">' . $contact . '</a>'  : $author,
+				'CONTACT'			=> ( !empty($contact) ) ? ( !empty($author) ) ? '<a href="' . $contact . '">' . $author . '</a>' : '<a href="' . $contact . '">' . $contact . '</a>'  : $author,
 				'DESCRIPTION'		=> ( !empty($description) ) ? $description : '&nbsp;',
 				'LONG_DESCRIPTION'	=> $long_description,
 				'HOMEPAGE_LINK'		=> ($homepagelink != '') ? $homepagelink : false,
@@ -555,16 +566,8 @@ class Manage_Extensions extends page_generic {
 				'MANUAL'			=> $this->user->lang('manual'),
 				'ACTION_LINK'		=> $link,
 				'BUGTRACKER_URL'	=> $bugtracker_url,
+				'DEPENDENCIES'		=> ($dep_all) ? '<i class="fa fa-lg fa-check icon-color-green"></i>' : '<i class="fa fa-lg fa-times icon-color-red"></i> '.$depout,
 			));
-
-			foreach($dep as $key => $depdata) {
-				$tt = (isset($deptt[$key])) ? $deptt[$key] : $this->user->lang('plug_dep_'.$key);
-				$this->tpl->assign_block_vars('plugins_row_'.$row.'.dep_row', array(
-					'DEPENDENCY_TT'		=> $tt,
-					'DEPENDENCY_NAME'	=> $this->user->lang('plug_dep_'.$key.'_short'),
-					'ICON'				=> ($depdata) ? 'eqdkp-icon-online' : 'eqdkp-icon-offline'
-				));
-			}
 		}
 
 		//Now bring the Extensions from the REPO to template
@@ -572,10 +575,17 @@ class Manage_Extensions extends page_generic {
 			foreach ($arrExtensionList[1] as $id => $extension){
 				if ($this->pm->search($extension['plugin']) || $extension['plugin'] == 'pluskernel') continue;
 				$plugin_count++;
-				$row = 'grey_repo';
+				$row = 'grey_repo';	
 				$dep['plusv']	= (version_compare($extension['dep_coreversion'], $this->config->get('plus_version'), '<='));
-				$dep['games']	= 'skip';
-				$dep['phpf']	= 'skip';
+				
+				$depout = "";
+				foreach($dep as $key => $depdata) {
+					$tt = (isset($deptt[$key])) ? $deptt[$key] : $this->user->lang('plug_dep_'.$key);
+					if(!$depdata){
+						$depout .= '<span class="coretip" data-coretip="'.$tt.'">'.$this->user->lang('plug_dep_'.$key.'_short').'</span> ';
+					}
+				}
+				
 				$dl_link = '<a href="javascript:repo_install('.$extension['plugin_id'].', 1, \''.sanitize($extension['plugin']).'\');" ><i class="fa fa-toggle-off fa-lg" title="'.$this->user->lang('install').'"></i></a>';
 				$link = ($dep['plusv']) ? $dl_link : '';
 				$this->tpl->assign_block_vars('plugins_row_'.$row, array(
@@ -586,17 +596,9 @@ class Manage_Extensions extends page_generic {
 					'DESCRIPTION'		=> sanitize($extension['description']),
 					'ACTION_LINK'		=> $link,
 					'BUGTRACKER_URL'	=> sanitize($extension['bugtracker_url']),
+					'DEPENDENCIES'		=> ($dep['plusv']) ? '<i class="fa fa-lg fa-check icon-color-green"></i>' : '<i class="fa fa-lg fa-times icon-color-red"></i> '.$depout,
+						
 				));
-
-				foreach($dep as $key => $depdata) {
-					$tt = $this->user->lang('plug_dep_'.$key);
-
-					$this->tpl->assign_block_vars('plugins_row_'.$row.'.dep_row', array(
-						'DEPENDENCY_TT'		=> $tt,
-						'DEPENDENCY_NAME'	=> $this->user->lang('plug_dep_'.$key.'_short'),
-						'ICON'				=> ($depdata) ? 'eqdkp-icon-online' : 'eqdkp-icon-offline'
-					));
-				}
 			}
 		}
 
@@ -690,6 +692,7 @@ class Manage_Extensions extends page_generic {
 			$this->jquery->Dialog('style_preview', $this->user->lang('template_preview'), array('url'=>$this->server_path."".$this->SID."&style='+ styleid+'", 'width'=>'750', 'height'=>'520', 'modal'=>true, 'withid' => 'styleid'));
 
 			$intStyles++;
+			
 			$this->tpl->assign_block_vars('styles_row_'.$rowname, array(
 				'ID'				=> $row['style_id'],
 				'ROWNAME'			=> 'style_'.$rowname,
@@ -804,11 +807,15 @@ class Manage_Extensions extends page_generic {
 				$reinst_link = '<i class="fa fa-retweet fa-lg" title="'.$this->user->lang('reinstall').'" onclick="javascript:reinstall_portal(\''.$plugin_code.'\')" style="cursor:pointer;"></i>';
 
 				$intPortalModules++;
+				$contact = sanitize($class_name::get_data('contact'));
+				$contact = (strlen($contact)) ? ((strpos($contact, '@')) ? 'mailto:'.$contact : $contact) : 'https://eqdkp-plus.eu'; 
+				$author = sanitize($class_name::get_data('author'));
+				
 				$this->tpl->assign_block_vars('pm_row_'.$row, array(
 					'NAME'				=> (isset($arrExtensionListNamed[3][$value['path']])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[3][$value['path']].')">'.$value['name'].'</a>' : $value['name'],
 					'VERSION'			=> sanitize($value['version']),
 					'CODE'				=> sanitize($value['path']),
-					'CONTACT'			=> sanitize($class_name::get_data('contact')),
+					'CONTACT'			=> ( !empty($contact) ) ? ( !empty($author) ) ? '<a href="' . $contact . '">' . $author . '</a>' : '<a href="' . $contact . '">' . $contact . '</a>'  : $author,
 					'ACTION_LINK'		=> $link,
 					'REINSTALL_LINK'	=> ($row == 'green') ? $reinst_link : '',
 					'DELETE_LINK'		=> $del_link,
@@ -1039,6 +1046,7 @@ class Manage_Extensions extends page_generic {
 			'AUTOUPD_TRY'				=> $this->in->get('try', 0),
 			'S_SHOW_CAT_UPLOAD'			=> ((!$intShowOnly || $intShowOnly == 'update') ? true : false),
 			'S_SHOW_TABS'				=> (!$intShowOnly),
+			'S_MANUAL_UPLOAD'			=> (class_exists("ZipArchive")) ? true : false,
 			'ME_URL_SUFFIX'				=> (($this->in->get('simple_head') != "") ? '&simple_head='.$this->in->get('simple_head') : '').(($this->in->get('show_only') != "") ? '&show_only='.$this->in->get('show_only') : '')
 		));
 

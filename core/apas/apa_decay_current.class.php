@@ -43,7 +43,7 @@ if ( !class_exists( "apa_decay_current" ) ) {
 			),
 			'start_date' => array(
 				'type'		=> 'datepicker',
-				'timepicker' => true,
+				'timepicker' => false,
 				'default'	=> 'now',
 			),			
 			'calc_func' => array(
@@ -76,7 +76,10 @@ if ( !class_exists( "apa_decay_current" ) ) {
 		// get date of last calculation
 		public function get_last_run($date, $apa_id) {
 			$max_ttl = $this->apa->get_data('decay_time', $apa_id)*86400; //decay time in days
-			$exectime = $this->apa->get_data('exectime', $apa_id); //exectime as seconds from midnight
+			$exectime = $this->apa->get_data('exectime', $apa_id);
+			list($h,$i) = explode(':',$exectime);
+			$exectime = 3600*$h + 60*$i;//exectime as seconds from midnight		
+			
 			$decay_start = $this->apa->get_data('start_date', $apa_id); //start_date for fetching first day (wether we start on monday, thursday or w/e)
 			//set decay_start to next exectime
 			if(($decay_start%86400) > $exectime) $decay_start += 86400;
@@ -90,6 +93,9 @@ if ( !class_exists( "apa_decay_current" ) ) {
 			// load decay parameters, set decay_start to its proper timestamp (from somewhere at that day to exectime)
 			$decay_start = $this->apa->get_data('start_date', $apa_id);	
 			$exectime = $this->apa->get_data('exectime', $apa_id);
+			list($h,$i) = explode(':',$exectime);
+			$exectime = 3600*$h + 60*$i;//exectime as seconds from midnight
+			
 			if(($decay_start%86400) > $exectime) $decay_start += 86400;
 			$decay_start = $decay_start + $exectime - $decay_start%86400;
 			$decay_time = $this->apa->get_data('decay_time', $apa_id)*86400;
@@ -129,6 +135,7 @@ if ( !class_exists( "apa_decay_current" ) ) {
 				$decay_adj = $value - $decayed_val;
 			} else {
 				$decayed_val = $value;
+				$decay_adj = 0;
 			}
 			
 			// write to cache if the entry is new

@@ -285,7 +285,9 @@ if( !class_exists( "cachePagination" ) ) {
 		 */
 		public function initIndex(){
 			$this->index = $this->pdc->get('pdh_'.$this->strCacheKey.'_index');
-			if ($this->index == null){
+			if ($this->index === null){
+				$this->index = array();
+				
 				$strQuery = (isset($this->arrQuerys['index']) && strlen($this->arrQuerys['index'])) ? $this->arrQuerys['index'] : "SELECT ".$this->strID." FROM ".$this->strTablename;
 				
 				$objQuery = $this->db->query($strQuery);

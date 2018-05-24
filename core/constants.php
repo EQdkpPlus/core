@@ -29,8 +29,8 @@ if ( !defined('EQDKP_INC') ){
  * -------------------------------------------------------------------------
  */
 
-define('VERSION_INT',		'2.3.0.24');			// the internal version number for updates & update check
-define('VERSION_EXT',		'2.3.0 RC 5');		// the external version number to be shown in the footer
+define('VERSION_INT',		'2.3.0.28');			// the internal version number for updates & update check
+define('VERSION_EXT',		'2.3.0 RC 9');		// the external version number to be shown in the footer
 define('VERSION_WIP',		false);					// work in progress or stable?
 define('VERSION_PHP_RQ',	'5.6.0');				// required version of PHP
 define('VERSION_PHP_REC',	'7.0.0');				// recommended version of PHP
@@ -81,6 +81,7 @@ define('EQDKP_BOARD_URL',			"http://eqdkp-plus.eu/forum");
 define('EQDKP_CRL_URL',				"https://raw.githubusercontent.com/EQdkpPlus/misc-crl/master/crl.txt");
 define('EQDKP_WIKI_URL',			"http://eqdkp-plus.eu/wiki/");
 define('EQDKP_BUGTRACKER_URL',		"http://eqdkp-plus.eu/bugtracker/");
+define('EQDKP_CONNECTION_CHECK_URL', 'https://raw.githubusercontent.com/EQdkpPlus/misc-connectioncheck/master/status.txt');
 
 //Tag Blacklist for filtering article content
 $TAG_BLACKLIST = array(

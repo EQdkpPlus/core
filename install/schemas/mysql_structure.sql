@@ -147,7 +147,10 @@ CREATE TABLE `__adjustments` (
 	`adjustment_group_key` varchar(32) COLLATE utf8_bin DEFAULT NULL,
 	`event_id` varchar(255) COLLATE utf8_bin NOT NULL,
 	`raid_id` mediumint(8) unsigned DEFAULT NULL,
-	PRIMARY KEY (`adjustment_id`)
+	PRIMARY KEY (`adjustment_id`),
+	INDEX `adjustment_value` (`adjustment_value`),
+	INDEX `event_id` (`event_id`),
+	INDEX `member_id` (`member_id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 DROP TABLE IF EXISTS __events;
@@ -177,7 +180,10 @@ CREATE TABLE `__items` (
 	`game_itemid` varchar(50) COLLATE utf8_bin DEFAULT NULL,
 	`itempool_id` int(11) unsigned NOT NULL,
 	`item_color` VARCHAR(255) COLLATE utf8_bin DEFAULT NULL,
-	PRIMARY KEY (`item_id`)
+	PRIMARY KEY (`item_id`),
+	INDEX `member_id` (`member_id`),
+	INDEX `item_value` (`item_value`),
+	INDEX `itempool_id` (`itempool_id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 DROP TABLE IF EXISTS __members;
@@ -276,7 +282,9 @@ CREATE TABLE `__raids` (
 	`raid_added_by` varchar(30) COLLATE utf8_bin NOT NULL,
 	`raid_updated_by` varchar(30) COLLATE utf8_bin DEFAULT NULL,
 	`raid_additional_data` TEXT NULL DEFAULT NULL COLLATE 'utf8_bin',
-	PRIMARY KEY (`raid_id`)
+	PRIMARY KEY (`raid_id`),
+	INDEX `raid_value` (`raid_value`),
+	INDEX `event_id` (`event_id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 DROP TABLE IF EXISTS __raid_attendees;
@@ -360,6 +368,7 @@ CREATE TABLE `__logs` (
 	`username` VARCHAR(30) COLLATE utf8_bin NOT NULL,
 	`log_record` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`log_record_id` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+	`trace` TEXT NULL COLLATE 'utf8_bin',
 	PRIMARY KEY (`log_id`),
 	KEY `user_id` (`user_id`),
 	KEY `log_tag` (`log_tag`),

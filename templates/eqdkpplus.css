@@ -136,15 +136,6 @@ td.w10p, tr.w10p, th.w10p{
 	background-color:gray;
 }
 
-/* information boxes icons */
-.errorbox a, .infobox a{
-	text-decoration: none;
-	font-weight: bold;
-}
-.errorbox a:hover, .infobox a:hover{
-	text-decoration: underline;
-}
-
 /* Everything button image below this line has been ported to 1.1 */
 .bi_openid{
 	background:url(../images/global/openid.svg) no-repeat 2px center;
@@ -476,4 +467,57 @@ i.small {
 	cursor: pointer;
 	font-size: 1.4em;
 	font-weight: bold;
+}
+
+.user-avatar-container {
+	position: relative;
+	display: inline-block;
+}
+.user-avatar-container .eqdkp-icon-online {
+	position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+/* Login Buttons Third Party */
+
+button.thirdpartylogin.facebook {
+	background: #3b5998;
+	color: #fff;
+	border-radius: 0px;
+	border-color: transparent;
+}
+
+button.thirdpartylogin.google {
+	background: #dd4b39;
+	color: #fff;
+	border-radius: 0px;
+	border-color: transparent;
+}
+
+button.thirdpartylogin.battlenet {
+	background: #0e98d8;
+	color: #fff;
+	border-radius: 0px;
+	border-color: transparent;
+}
+
+button.thirdpartylogin.twitch {
+	background: #6441a4;
+	color: #fff;
+	border-radius: 0px;
+	border-color: transparent;
+}
+
+button.thirdpartylogin.openid {
+	background: #d5d5d5;
+	color: #000;
+	border-radius: 0px;
+	border-color: transparent;
+}
+button.thirdpartylogin.discord {
+	background: #7289DA;
+	color: #fff;
+	border-radius: 0px;
+	border-color: transparent;
 }

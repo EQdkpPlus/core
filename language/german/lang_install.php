@@ -244,7 +244,7 @@ $lang = array(
 	'no_pw_match'			=> 'Die Passwörter stimmen nicht überein.',
 
 	//Step: additional_keys
-	'additional_keys_info'	=> 'Wir nutzen Funktionen anderer Anbieter, um euch Funktionen wie Spamschutz oder das automatische Umwandeln von Links in Videos anbieten zu können. Hierfür benötigt ihr aber eigene Keys, die ihr euch auf den verlinkten Seiten holen und hier eintragen könnt.<br /><b>Natürlich könnt ihr diesen Schritt auch überspringen und die Keys später in den Einstellungen nachtragen.</b>',
+	'additional_keys_info'	=> 'Wir nutzen Funktionen anderer Anbieter, um euch Funktionen wie Spamschutz anbieten zu können. Hierfür benötigt ihr aber eigene Keys, die ihr euch auf den verlinkten Seiten holen und hier eintragen könnt.<br /><b>Natürlich könnt ihr diesen Schritt auch überspringen und die Keys später in den Einstellungen nachtragen.</b>',
 	'recaptcha_info' 		=> 'reCAPTCHA ist ein Verfahren, um Aktionen von Bots zu unterbinden, z.B. um Spam oder Registrierungen. Neue Keys kannst du auf folgender Seite anlegen: <br /> <a href="https://www.google.com/recaptcha/admin/create" target="_blank"><i class="fa fa-lg fa-external-link"></i> https://www.google.com/recaptcha/admin/create</a>',
 	"recaptcha_okey" 		=> "Öffentlicher Key von reCATPCHA",
 	"recaptcha_pkey" 		=> "Privater Key von reCATPCHA",
@@ -260,7 +260,7 @@ $lang = array(
 							<li><i class="fa fa-usd"></i> <a href="http://eqdkp-plus.eu/de/spenden.html">Unterstützte uns finanziell, damit wir euch weiterhin unsere Services anbieten können</a></li>
 						</ul>
 
-						Also wenn ihr EQdkp Plus genauso liebt wie wir, denkt doch mal darüber nach, uns zu unterstützen!'
-
+						Also wenn ihr EQdkp Plus genauso liebt wie wir, denkt doch mal darüber nach, uns zu unterstützen!',
+	'module_externalconnection'	=> 'Externe Verbindungen',
 );
 ?>

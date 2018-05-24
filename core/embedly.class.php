@@ -194,7 +194,13 @@ class embedly extends gen_class {
 				case 'rich':
 				case 'video':
 					$out = '<div class="embed-content"><div class="embed-media">';
-					$out .= $objEmbedly->html;
+				
+					if($objEmbedly->provider_url == 'https://www.youtube.com/'){
+						$out .= str_replace('youtube.com/em', 'youtube-nocookie.com/em', $objEmbedly->html);
+					} else {
+						$out .= $objEmbedly->html;
+					}
+					
 					$out .= '</div></div>';
 					break;
 				case 'error':

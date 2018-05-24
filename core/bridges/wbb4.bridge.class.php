@@ -25,7 +25,7 @@ if ( !defined('EQDKP_INC') ){
 
 class wbb4_bridge extends bridge_generic {
 	
-	public static $name = 'WBB 4';
+	public static $name = 'WBB 4'; //WCF 2.0
 	
 	public $data = array(
 		//Data
@@ -85,7 +85,7 @@ class wbb4_bridge extends bridge_generic {
 			
 			//Single Sign On
 			if ($this->config->get('cmsbridge_disable_sso') != '1'){
-				$this->sso($arrUserdata, $boolSetAutoLogin);
+				$this->sso($arrUserdata, $boolSetAutoLogin, $strPassword);
 			}
 			
 			return true;
@@ -116,7 +116,7 @@ class wbb4_bridge extends bridge_generic {
 		return false;
 	}
 	
-	private function sso($arrUserdata, $boolAutoLogin){
+	private function sso($arrUserdata, $boolAutoLogin, $strPassword){
 		$user_id = intval($arrUserdata['id']);
 		$strSessionID = substr(md5(generateRandomBytes(55)).md5(generateRandomBytes(55)), 0, 40);
 		//$this->bridgedb->prepare("DELETE FROM ".$this->prefix."session WHERE userID=?")->execute($user_id);
@@ -162,7 +162,7 @@ class wbb4_bridge extends bridge_generic {
 		//SID Cookie
 		setcookie($config['cookie_prefix'].'cookieHash', $strSessionID, $expire, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
 		setcookie($config['cookie_prefix'].'userID', (int) $user_id, $expire, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
-		if ($boolAutoLogin) setcookie($config['cookie_prefix'].'password', $arrUserdata['password'], $expire, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
+		if ($boolAutoLogin) setcookie($config['cookie_prefix'].'password', self::getSaltedHash($strPassword,$arrUserdata['password']), $expire, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
 		return true;
 	}
 	

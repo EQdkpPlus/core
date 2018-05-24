@@ -64,7 +64,7 @@ class user_pageobject extends pageobject {
 		
 		$this->tpl->assign_vars(array(
 			'USER_PROFILE_ID' => $user_id,
-			'USER_PROFILE_AVATAR' => ($this->pdh->get('user', 'avatarimglink', array($user_id))) ? $this->pfh->FileLink($this->pdh->get('user', 'avatarimglink', array($user_id)), false, 'absolute') : $this->server_path.'images/global/avatar-default.svg',
+			'USER_PROFILE_AVATAR' => ($this->pdh->geth('user', 'avatarimglink', array($user_id, true))),
 			'USER_PROFILE_USERNAME'	=> sanitize($row['username']),
 			'USER_PROFILE_GENDER' => $strGender,
 			'USER_PROFILE_REGISTERED'	=> $this->pdh->geth('user', 'regdate', array($user_id)),

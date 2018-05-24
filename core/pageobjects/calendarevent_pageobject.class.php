@@ -209,17 +209,8 @@ class calendarevent_pageobject extends pageobject {
 
 	// user changes his status for that raid
 	public function update_status(){
-
 		// check if the user is already in the database for that event and skip if already existing (avoid reload-cheating)
 		if($this->pdh->get('calendar_raids_attendees', 'in_db', array($this->url_id, $this->in->get('member_id', 0)))){
-
-			// check if another char is used
-			$signedin_memberid = $this->pdh->get('calendar_raids_attendees', 'has_already_signedin', array($this->url_id, $this->in->get('member_id', 0)));
-
-			if($signedin_memberid > 0){
-				return false;
-			}
-
 			// the char is in the db, now, check if the status is unchanged
 			if($this->pdh->get('calendar_raids_attendees', 'status', array($this->url_id, $this->in->get('member_id', 0))) == $this->in->get('signup_status', 4)){
 				// check if the note changed
@@ -290,8 +281,12 @@ class calendarevent_pageobject extends pageobject {
 			#return false;
 		}
 
+		
 		if($do_updatestatuschange){
-			$this->pdh->put('calendar_raids_attendees', 'update_status', array(
+			// check if another char is used
+			$arrAttendeeIDs = $this->pdh->get('calendar_raids_attendees', 'other_user_attendees', array($this->url_id, $this->in->get('member_id', 0)));
+			
+			$intAffectedID = $this->pdh->put('calendar_raids_attendees', 'update_status', array(
 				$this->url_id,
 				$this->in->get('member_id', 0),
 				$myrole,
@@ -300,6 +295,16 @@ class calendarevent_pageobject extends pageobject {
 				$this->in->get('subscribed_member_id', 0),
 				$this->in->get('signupnote'),
 			));
+			
+			//A new row was inserted, otherwise $intAffectedID = false
+			if($intAffectedID){
+				//There are other user attendees
+				if(count($arrAttendeeIDs)){
+					//Delete the new added row
+					$this->pdh->put('calendar_raids_attendees', 'delete_attendeeid', array($intAffectedID));
+				}
+				
+			}
 
 			//Send Notification to Raidlead, Creator and Admins
 			$raidleaders_chars	= ($eventdata['extension']['raidleader'] > 0) ? $eventdata['extension']['raidleader'] : array();
@@ -1193,6 +1198,7 @@ class calendarevent_pageobject extends pageobject {
 
 		$this->set_vars(array(
 			'page_title'		=> $strPageTitle,
+			'description'		=> $strPageTitle,
 			'template_file'		=> 'calendar/viewcalraid.html',
 			'header_format'		=> $this->simple_head,
 			'display'			=> true

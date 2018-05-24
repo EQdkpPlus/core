@@ -254,6 +254,7 @@ if (!class_exists("styles")){
 
 				//Get the install instructions
 				$xml = simplexml_load_file($installer_file);
+				
 				if ($xml){
 					$data = array(
 						'style_name'	=> (string)$xml->name,
@@ -296,8 +297,11 @@ if (!class_exists("styles")){
 							}
 						}
 						$this->core->message( sprintf($this->user->lang('install_style_suc'), $stylename), $this->user->lang('success'), 'green');
+						
+						return $style_id;
 					} else {
 						$this->core->message( sprintf($this->user->lang('install_style_nosuc'), $stylename), $this->user->lang('error'), 'red');
+						return false;
 					}
 				}
 			} else {

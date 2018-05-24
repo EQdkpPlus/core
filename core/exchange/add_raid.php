@@ -53,9 +53,17 @@ if (!class_exists('exchange_add_raid')){
 					$arrRaidAttendees = array();
 					
 					$arrMemberIDList = $this->pdh->get('member', 'id_list', array());
-					foreach($arrBody['raid_attendees']['member'] as $objMemberID){
+					
+					if(is_array($arrBody['raid_attendees']['member'])){
+						foreach($arrBody['raid_attendees']['member'] as $objMemberID){
+							if (in_array(intval($objMemberID), $arrMemberIDList)) $arrRaidAttendees[] = intval($objMemberID);
+						}
+					} else {
+						$objMemberID = intval($arrBody['raid_attendees']['member']);
 						if (in_array(intval($objMemberID), $arrMemberIDList)) $arrRaidAttendees[] = intval($objMemberID);
+						
 					}
+					
 					if(count($arrRaidAttendees) == 0) return $this->pex->error('required data missing', 'no member found');
 					
 					$fltRaidValue = (float)$arrBody['raid_value'];

@@ -396,9 +396,9 @@ class core extends gen_class {
 
 			// the logo...
 			if(is_file($this->pfh->FolderPath('','files').$this->config->get('custom_logo'))){
-				$headerlogo	= $this->pfh->FolderPath('','files', 'serverpath').$this->config->get('custom_logo');
+				$headerlogo	= $this->pfh->FolderPath('','files', 'absolute').$this->config->get('custom_logo');
 			} else if(file_exists($this->root_path.$strHeaderLogoPath.'logo.svg')){
-				$headerlogo	= $this->server_path.$strHeaderLogoPath.'logo.svg';
+				$headerlogo	= $this->env->link.$strHeaderLogoPath.'logo.svg';
 			} else $headerlogo = "";
 
 			// Load the jQuery stuff
@@ -424,6 +424,7 @@ class core extends gen_class {
 				'T_COLUMN_RIGHT_WIDTH'		=> $this->user->style['column_right_width'],
 				'T_LOGO_POSITION'			=> $this->user->style['logo_position'],
 				'T_BACKGROUND_TYPE'			=> $this->user->style['background_type'],
+				'T_BACKGROUND_COLOR'		=> $this->user->style['background_color'],
 				'T_BACKGROUND_POSITION'		=> ($this->user->style['background_pos'] == 'normal') ? 'scroll' : 'fixed',
 				'T_MENU_BACKGROUND_COLOR'=> $this->user->style['menu_background_color'],
 				'S_REGISTER'				=> (int)$this->config->get('enable_registration'),
@@ -536,9 +537,10 @@ class core extends gen_class {
 			}
 			$strHref = ((isset($arrLinkData['plus_link']) && $arrLinkData['plus_link']==true && $arrLinkData['link']) ? $arrLinkData['link'] : $this->server_path . $arrLinkData['link']);
 			if ($strHref == $this->server_path.'#') $strHref = "#";
-
+			
 			if ($blnHrefOnly) return $strHref;
-			return '<a href="' . $strHref . '"'.$target.' class="'.$strCssClass.'">' . $icon . $arrLinkData['text'] . '</a>';
+			
+			return '<a href="' . $strHref . '"'.$target.' class="'.$strCssClass.'" itemprop="url">' . $icon . '<span itemprop="name">'.$arrLinkData['text'] . '</span></a>';
 		}
 
 		//Returns all possible Menu Items
@@ -837,14 +839,16 @@ class core extends gen_class {
 			if(is_string($this->page_path)) return $this->page_path;
 			if($this->page_path == [[]]) $this->page_path = [];
 			
-			$arrBreadcrumb = array_merge([[
-				'title'	=> '<i class="fa fa-home"></i>',
-				'url'	=> $this->controller_path.$this->SID,
-			]], $this->page_path);
+			$arrBreadcrumb = $this->page_path;
 			
-			$html = '<ul class="breadcrumb">';
-			foreach($arrBreadcrumb as $arrItem){
-				$html .= '<li><a href="'.$arrItem['url'].'">'.$arrItem['title'].'</a></li>';
+			$html = '<ul class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">';
+			
+			$html .= '<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="'.$this->controller_path.$this->SID.'" itemscope itemtype="http://schema.org/Thing" itemprop="item"><i class="fa fa-home"></i><span itemprop="name" style="display:none;">Home</span></a>
+					<meta itemprop="position" content="1" /></li>';
+			
+			foreach($arrBreadcrumb as $key => $arrItem){
+				$html .= '<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="'.$arrItem['url'].'" itemscope itemtype="http://schema.org/Thing" itemprop="item"><span itemprop="name">'.$arrItem['title'].'</span></a>
+				<meta itemprop="position" content="'.($key+2).'" /></li>';
 			}
 			return $html.'</ul>';
 		}
@@ -1051,7 +1055,10 @@ class core extends gen_class {
 			);
 
 			// Hiding the normal-footer-stuff, but show debug-info, since in normal usage debug mode is turned off, and for developing purposes debug-tabs help alot info if header is set to none..
+			$commonDescription = ($this->config->get('meta_description') && strlen($this->config->get('meta_description'))) ? $this->config->get('meta_description') : $this->config->get('guildtag');
+			
 			$this->tpl->assign_vars(array(
+				'META_DESCRIPTION'			=> (strlen($this->description)) ? $this->description : $commonDescription,
 				'S_NORMAL_FOOTER' 			=> ($this->header_format != 'simple') ? true : false,
 				'EQDKP_PLUS_COPYRIGHT'		=> $this->Copyright())
 			);

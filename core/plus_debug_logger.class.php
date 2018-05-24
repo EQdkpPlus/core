@@ -379,7 +379,7 @@ if ( !defined('EQDKP_INC') ){
 		}
 
 		public function search_fatal_error_id($strErrorID){
-			$arrLogFiles = $this->get_logfiles();
+			$arrLogFiles = $this->get_logfiles(true);
 			$arrMatches = array();
 			$exception = array();
 			$blnRecord=false;
@@ -594,16 +594,9 @@ if ( !defined('EQDKP_INC') ){
 							}
 
 							body {
-								background: #2e78b0; /* Old browsers */
-								background: -moz-linear-gradient(top,  #2e78b0 0%, #193759 100%); /* FF3.6+ */
-								background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2e78b0), color-stop(100%,#193759)); /* Chrome,Safari4+ */
-								background: -webkit-linear-gradient(top,  #2e78b0 0%,#193759 100%); /* Chrome10+,Safari5.1+ */
-								background: -o-linear-gradient(top,  #2e78b0 0%,#193759 100%); /* Opera 11.10+ */
-								background: -ms-linear-gradient(top,  #2e78b0 0%,#193759 100%); /* IE10+ */
-								background: linear-gradient(to bottom,  #2e78b0 0%,#193759 100%); /* W3C */
-								filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\'#2e78b0\', endColorstr=\'#193759\',GradientType=0 ); /* IE6-9 */
+								background: #F5F5F5; /* Old browsers */
 								font-size: 14px;
-								font-family: Tahoma,Arial,Verdana,sans-serif;
+								font-family: \'Segoe UI\', \'Lucida Grande\', \'Helvetica Neue\', Helvetica, Arial, sans-serif;
 								color: #000000;
 								padding:0;
 							  	margin:0;
@@ -612,36 +605,36 @@ if ( !defined('EQDKP_INC') ){
 							}
 
 							.wrapper{
-								background: url('.$this->root_path.'templates/maintenance/images/background-head.svg) no-repeat scroll center top transparent;
-								background-size: 100%;
+							
 							}
 
 							.header {
-								padding-top: 10px;
+								padding-top: 20px;
 								font-size: 45px;
-								font-weight: bold;
+								font-weight: 300;
 								text-shadow: 1px 1px 2px #fff;
 								filter: dropshadow(color=#fff, offx=1, offy=1);
 								border: none;
 								color:  #fff;
 								text-align:center;
 								vertical-align: middle;
-								font-family: \'Trebuchet MS\',Arial,sans-serif;
+								background-color: #2e78b0;
+								height: 60px;
 							}
 
 							.header img {
-								height: 150px;
-								vertical-align: middle;
+								display: none;
 							}
 
 							.footer {
 								margin-top: 10px;
-								color: #fff;
+								color: #000;
 								text-align: center;
+								font-size: 11px;
 							}
 
 							.footer a, .footer a:link, .footer a:visited {
-								color: #fff;
+								color: #000;
 								text-decoration: none;
 							}
 
@@ -652,10 +645,6 @@ if ( !defined('EQDKP_INC') ){
 							.innerWrapper {
 								margin-right: auto;
 								margin-left: auto;
-								background-color: #F5F5F5;
-							    border: 1px solid #383838;
-							    border-radius: 4px 4px 4px 4px;
-							    box-shadow: 2px 2px 3px 0 #000000;
 								padding: 10px;
 								margin-bottom: 20px;
 								margin-top: 10px;
@@ -707,6 +696,7 @@ if ( !defined('EQDKP_INC') ){
 							    word-break: break-all;
 							    word-wrap: break-word;
 							}
+
 						</style>
 						</head>
 
@@ -714,7 +704,7 @@ if ( !defined('EQDKP_INC') ){
 
 						<div class="wrapper">
 							<div class="header">
-								<img src="'.$this->root_path.'templates/maintenance/images/logo.svg" alt="EQdkp Plus" class="absmiddle" style="height: 130px;"/> '.$strErrorName.'
+								EQdkp Plus '.$strErrorName.'
 							</div>
 
 							<div class="innerWrapper">
@@ -725,9 +715,16 @@ if ( !defined('EQDKP_INC') ){
 		}
 
 		private function error_message_footer($blnShowEQdkpLink = true){
-			return (($blnShowEQdkpLink) ? '<br />' : '').'
-
-							</div>
+			$out = '';
+			
+			if($this->debug_level > 2){
+				$out .= '<br /><br /><h1>System information</h1>
+					<ul><li>PHP Version: '.phpversion().'</li>
+					<li>EQdkp Plus Version: '.VERSION_INT.'</li>
+					</ul>';
+			}
+			
+			$out .= '</div>
 
 					</div>
 					<div class="footer">
@@ -735,6 +732,8 @@ if ( !defined('EQDKP_INC') ){
 					</div>
 					</body>
 					</html>';
+			
+			return $out;
 		}
 
 		public function catch_fatals(){

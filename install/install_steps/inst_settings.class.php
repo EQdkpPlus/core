@@ -73,7 +73,7 @@ class inst_settings extends install_generic {
 		'itemhistory_dia' 				=> '1',
 		'color_items' 					=> array(34, 67),
 		'auth_method'					=> 'db',
-		'failed_logins_inactivity'		=> 5,
+		'failed_logins_inactivity'		=> 10,
 		'thumbnail_defaultsize'			=> 500,
 		'seo_extension'					=> 1,
 		'round_activate'				=> 1,
@@ -87,7 +87,10 @@ class inst_settings extends install_generic {
 		'avatar_default'				=> 'eqdkp',
 		'avatar_allowed'				=> array('eqdkp', 'gravatar'),
 		'admin_favs'					=> 'a:2:{i:0;s:7:"raids|1";i:1;s:8:"portal|4";}',
-
+		
+		'sp_opengraph_tags'				=> 1,
+		'password_length'				=> 8,
+			
 		// Calendar settings
 		'calendar_addevent_mode'		=> 'raid',
 		'calendar_raid_guests'			=> '2',

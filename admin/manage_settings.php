@@ -103,7 +103,7 @@ class admin_settings extends page_generic {
 			'1'				=> 'core_sett_f_debug_type1',
 			'2'				=> 'core_sett_f_debug_type2',
 			'3'				=> 'core_sett_f_debug_type3',
-			//'4'			=> 'pk_set_debug_type4',
+			'4'				=> 'core_sett_f_debug_type4',
 		);
 
 		$a_modelviewer = array(
@@ -474,6 +474,16 @@ class admin_settings extends page_generic {
 						'type'			=> 'multiselect',
 						'options'		=> $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list', array(false)))),
 						'datatype'		=> 'int'
+					),
+					'password_length' => array(
+						'default'	=> 8,
+						'type'		=> 'spinner',
+						'min'		=> 6,
+					),
+					'banned_emails' => array(
+						'type'			=> 'textarea',
+						'cols'			=> 80,
+						'rows'			=> 5,
 					),
 				),
 					'login'			=> array(
@@ -1002,6 +1012,7 @@ class admin_settings extends page_generic {
 				$objStyles->delete_cache(false);
 				$this->form->reset_fields();
 				$this->settings_saved = true;
+				$this->config->set($this->itt->changed_prio1($this->in->get('default_game'), $this->in->get('itt_prio1')));
 				$this->display();
 				redirect('admin/manage_settings.php'.$this->SID);		// we need to reload cause of the per-game settings
 			}

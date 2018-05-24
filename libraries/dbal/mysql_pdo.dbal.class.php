@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /**
  * Class DB_Mysqli
@@ -19,23 +19,25 @@ class dbal_mysql_pdo extends Database
 	 * @var string
 	 */
 	protected $strListTables = "SHOW TABLES FROM `%s`";
-
+	
 	/**
 	 * List fields query
 	 * @var string
 	 */
 	protected $strListFields = "SHOW COLUMNS FROM `%s`";
-
-
+	
+	
 	/**
 	 * Connect to the database server and select the database
 	 */
 	public function connect($strHost, $strDatabase, $strUser, $strPassword, $intPort=false, $blnPersistent=false)
-	{			
+	{
 		$strPort = ($intPort !== false) ? ';port='.$intPort : "";
 		$arrOptions = array();
 		if($blnPersistent) $arrOptions[PDO::ATTR_PERSISTENT] = true;
 		if($strDatabase == "") throw new DBALException("Database Name missing");
+		
+		$arrOptions[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
 		
 		try {
 			$this->resConnection = new PDO('mysql:host='.$strHost.';dbname='.$strDatabase.';charset='.$this->strCharset.$strPort, $strUser, $strPassword, $arrOptions);
@@ -43,11 +45,11 @@ class dbal_mysql_pdo extends Database
 			$strError =  $e->getMessage();
 			throw new DBALException($strError);
 		}
-
+		
 		$this->strDatabase = $strDatabase;
 	}
-
-
+	
+	
 	/**
 	 * Disconnect from the database
 	 */
@@ -63,7 +65,7 @@ class dbal_mysql_pdo extends Database
 	protected function get_server_version(){
 		return @$this->resConnection->getAttribute(PDO::ATTR_SERVER_VERSION);
 	}
-
+	
 	/**
 	 * Return the last error message
 	 * @return string
@@ -83,8 +85,8 @@ class dbal_mysql_pdo extends Database
 		$arrError = $this->resConnection->errorInfo();
 		return $arrError[2];
 	}
-
-
+	
+	
 	/**
 	 * Auto-generate a FIND_IN_SET() statement
 	 * @param string
@@ -103,11 +105,11 @@ class dbal_mysql_pdo extends Database
 			return "FIND_IN_SET(" . $strKey . ", " . $this->resConnection->quote($strSet) . ")";
 		}
 	}
-
-
+	
+	
 	/**
 	 * Return a standardized array with field information
-	 * 
+	 *
 	 * Standardized format:
 	 * - name:       field name (e.g. my_field)
 	 * - type:       field type (e.g. "int" or "number")
@@ -127,32 +129,32 @@ class dbal_mysql_pdo extends Database
 	{
 		$arrReturn = array();
 		$arrFields = $this->query(sprintf($this->strListFields, $strTable))->fetchAllAssoc();
-
+		
 		foreach ($arrFields as $k=>$v)
 		{
 			$arrChunks = preg_split('/(\([^\)]+\))/', $v['Type'], -1, PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY);
-
+			
 			$arrReturn[$k]['name'] = $v['Field'];
 			$arrReturn[$k]['type'] = $arrChunks[0];
-
+			
 			if (isset($arrChunks[1]) && strlen($arrChunks[1]))
 			{
 				$arrChunks[1] = str_replace(array('(', ')'), array('', ''), $arrChunks[1]);
 				$arrSubChunks = explode(',', $arrChunks[1]);
-
+				
 				$arrReturn[$k]['length'] = trim($arrSubChunks[0]);
-
+				
 				if (isset($arrSubChunks[1]) && strlen($arrSubChunks[1]))
 				{
 					$arrReturn[$k]['precision'] = trim($arrSubChunks[1]);
 				}
 			}
-
+			
 			if (isset($arrChunks[2]) && strlen($arrChunks[2]))
 			{
 				$arrReturn[$k]['attributes'] = trim($arrChunks[2]);
 			}
-
+			
 			if (strlen($v['Key']))
 			{
 				switch ($v['Key'])
@@ -160,30 +162,30 @@ class dbal_mysql_pdo extends Database
 					case 'PRI':
 						$arrReturn[$k]['index'] = 'PRIMARY';
 						break;
-
+						
 					case 'UNI':
 						$arrReturn[$k]['index'] = 'UNIQUE';
 						break;
-
+						
 					case 'MUL':
 						// Ignore
 						break;
-
+						
 					default:
 						$arrReturn[$k]['index'] = 'KEY';
 						break;
 				}
 			}
-
+			
 			$arrReturn[$k]['null'] = ($v['Null'] == 'YES') ? 'NULL' : 'NOT NULL';
 			$arrReturn[$k]['default'] = $v['Default'];
 			$arrReturn[$k]['extra'] = $v['Extra'];
 			$arrNumeric = array("tinyint", "smallint", "mediumint", "int", "bigint", "bit", "float", "double", "decimal");
 			$arrReturn[$k]['numeric'] = (in_array($arrReturn[$k]['type'], $arrNumeric));
 		}
-
+		
 		$arrIndexes = $this->query("SHOW INDEXES FROM `$strTable`")->fetchAllAssoc();
-
+		
 		foreach ($arrIndexes as $arrIndex)
 		{
 			$arrReturn[$arrIndex['Key_name']]['name'] = $arrIndex['Key_name'];
@@ -191,11 +193,11 @@ class dbal_mysql_pdo extends Database
 			$arrReturn[$arrIndex['Key_name']]['index_fields'][] = $arrIndex['Column_name'];
 			$arrReturn[$arrIndex['Key_name']]['index'] = (($arrIndex['Non_unique'] == 0) ? 'UNIQUE' : 'KEY');
 		}
-
+		
 		return $arrReturn;
 	}
-
-
+	
+	
 	/**
 	 * Change the current database
 	 * @param string
@@ -215,8 +217,8 @@ class dbal_mysql_pdo extends Database
 			throw new DBALException($strError);
 		}
 	}
-
-
+	
+	
 	/**
 	 * Begin a transaction
 	 */
@@ -224,8 +226,8 @@ class dbal_mysql_pdo extends Database
 	{
 		$this->resConnection->beginTransaction();
 	}
-
-
+	
+	
 	/**
 	 * Commit a transaction
 	 */
@@ -233,8 +235,8 @@ class dbal_mysql_pdo extends Database
 	{
 		$this->resConnection->commit();
 	}
-
-
+	
+	
 	/**
 	 * Rollback a transaction
 	 */
@@ -242,8 +244,8 @@ class dbal_mysql_pdo extends Database
 	{
 		$this->resConnection->rollBack();
 	}
-
-
+	
+	
 	/**
 	 * Lock one or more tables
 	 * @param array
@@ -251,7 +253,7 @@ class dbal_mysql_pdo extends Database
 	protected function lock_tables($arrTables)
 	{
 		$arrLocks = array();
-
+		
 		foreach ($arrTables as $table=>$mode)
 		{
 			$arrLocks[] = $table .' '. $mode;
@@ -259,8 +261,8 @@ class dbal_mysql_pdo extends Database
 		
 		$this->resConnection->query("LOCK TABLES " . implode(', ', $arrLocks));
 	}
-
-
+	
+	
 	/**
 	 * Unlock all tables
 	 */
@@ -268,8 +270,8 @@ class dbal_mysql_pdo extends Database
 	{
 		$this->resConnection->query("UNLOCK TABLES");
 	}
-
-
+	
+	
 	/**
 	 * Return the table size in bytes
 	 * @param string
@@ -278,7 +280,7 @@ class dbal_mysql_pdo extends Database
 	protected function get_size_of($strTable)
 	{
 		$objStatus = @$this->resConnection->query("SHOW TABLE STATUS LIKE '" . $strTable . "'")
-										  ->fetch(PDO::FETCH_OBJ);
+		->fetch(PDO::FETCH_OBJ);
 		return ($objStatus->Data_length + $objStatus->Index_length);
 	}
 	
@@ -286,16 +288,16 @@ class dbal_mysql_pdo extends Database
 		$objStatus = @$this->resConnection->query("SHOW TABLE STATUS LIKE '" . $strTable . "'")
 		->fetch(PDO::FETCH_OBJ);
 		return array(
-			'data_length'	=> $objStatus->Data_length,
-			'index_length'	=> $objStatus->Index_length,
-			'rows'			=> $objStatus->Rows,
-			'collation'		=> $objStatus->Collation,
-			'engine'		=> $objStatus->Engine,
-			'auto_increment'=> $objStatus->Auto_increment,
+				'data_length'	=> $objStatus->Data_length,
+				'index_length'	=> $objStatus->Index_length,
+				'rows'			=> $objStatus->Rows,
+				'collation'		=> $objStatus->Collation,
+				'engine'		=> $objStatus->Engine,
+				'auto_increment'=> $objStatus->Auto_increment,
 		);
 	}
-
-
+	
+	
 	/**
 	 * Return the next autoincrement ID of a table
 	 * @param string
@@ -304,12 +306,12 @@ class dbal_mysql_pdo extends Database
 	protected function get_next_id($strTable)
 	{
 		$objStatus = @$this->resConnection->query("SHOW TABLE STATUS LIKE '" . $strTable . "'")
-										  ->fetch(PDO::FETCH_OBJ);
-
+		->fetch(PDO::FETCH_OBJ);
+		
 		return $objStatus->Auto_increment;
 	}
-
-
+	
+	
 	/**
 	 * Create a Database_Statement object
 	 * @param resource
@@ -321,13 +323,13 @@ class dbal_mysql_pdo extends Database
 		return new DB_Mysql_PDO_Statement($resConnection, $strTablePrefix, $strDebugPrefix, $blnDisableAutocommit);
 	}
 	
-	protected function show_create_table($strTable){	
+	protected function show_create_table($strTable){
 		$objQuery = $this->query("SHOW CREATE TABLE ".$strTable);
 		if ($objQuery) {
 			$arrResult = $objQuery->fetchAssoc();
 			return $arrResult['Create Table'];
 		}
-			
+		
 		return "";
 	}
 }
@@ -343,7 +345,9 @@ class dbal_mysql_pdo extends Database
  */
 class DB_Mysql_PDO_Statement extends DatabaseStatement
 {
-
+	
+	protected $arrParams = array();
+	protected $arrParamsList = array();
 	/**
 	 * Prepare a query and return it
 	 * @param string
@@ -352,8 +356,8 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
 	{
 		return $strQuery;
 	}
-
-
+	
+	
 	/**
 	 * Escape a string
 	 * @param string
@@ -363,8 +367,8 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
 	{
 		return $this->resConnection->quote($strString);
 	}
-
-
+	
+	
 	/**
 	 * Limit the current query
 	 * @param integer
@@ -381,8 +385,8 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
 			$this->strQuery .= ' LIMIT ' . (int)$intRows;
 		}
 	}
-
-
+	
+	
 	/**
 	 * Execute the current query
 	 * @return resource
@@ -390,18 +394,252 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
 	protected function execute_query()
 	{
 		$this->strQuery  = preg_replace("/([^\w]|^)__(\w)/", '$1'.$this->strTablePrefix.'$2', $this->strQuery);
+
+		//Bring params to the correct order
+		if(isset($this->arrParams['multiple'])){
+			//First, bind the query
+			try {
+				$objStatement = $this->resConnection->prepare($this->strQuery);
+			}catch(PDOException $e){
+				$strError =  $e->getMessage();
+				throw new DBALQueryException($strError);
+			}
+
+			
+			foreach($this->arrParams['multiple'] as $arrSetParams){
+				$arrParams = array();
+				foreach($this->arrParamsList as $key => $val){
+					if($val == '?') $arrParams[] = array_shift($this->arrParams['execute']);
+					
+					if($val == ':in') {
+						foreach($this->arrParams['in'] as $v){
+							$arrParams[] = $v;
+						}
+					}
+					if($val == ':p') {
+						foreach($arrSetParams as $v){
+							$arrParams[] = $v;
+						}
+					}
+				}
+				
+				// Log the Query
+				$this->objLogger->log($this->strDebugPrefix . 'sql_query', $this->strQuery, $arrParams);
+				
+				//Now Execute
+				try {
+					$objStatement->execute($arrParams);
+				}catch(PDOException $e){
+					$strError =  $e->getMessage();
+					throw new DBALQueryException($strError);
+				}
+			}
+			
+			
+			//Now Return
+			if (is_object($objStatement)) $this->resConnection->affectedRows = $objStatement->rowCount();
+			if (is_object($objStatement) && $objStatement->columnCount() === 0) return true;
+			return $objStatement;
+			
+		} else {
+			$arrParams = array();
+			foreach($this->arrParamsList as $key => $val){
+				if($val == '?') $arrParams[] = array_shift($this->arrParams['execute']);
+				if($val == ':in') {
+					foreach($this->arrParams['in'] as $v){
+						$arrParams[] = $v;
+					}
+				}
+				if($val == ':p') {
+					foreach($this->arrParams['set'] as $v){
+						$arrParams[] = $v;
+					}
+				}
+			}
+			
+			// Log the Query
+			$this->objLogger->log($this->strDebugPrefix . 'sql_query', $this->strQuery, $arrParams);
+			
+			try {
+				$objStatement = $this->resConnection->prepare($this->strQuery);
+				$objStatement->execute($arrParams);
+			}catch(PDOException $e){
+				$strError =  $e->getMessage();
+				throw new DBALQueryException($strError);
+			}
+			
+			if (is_object($objStatement)) $this->resConnection->affectedRows = $objStatement->rowCount();
+			if (is_object($objStatement) && $objStatement->columnCount() === 0) return true;
+			return $objStatement;
+		}
 		
-		// Log the Query
-		$this->objLogger->log($this->strDebugPrefix . 'sql_query', $this->strQuery);
+	}
+	
+	/**
+	 * Prepare a statement
+	 * @param string
+	 * @return Database_Statement
+	 * @throws Exception
+	 */
+	public function prepare($strQuery)
+	{
+		if (!strlen($strQuery))
+		{
+			throw new Exception('Empty query string');
+		}
 		
-		$objStatement = $this->resConnection->query($this->strQuery);
+		$this->resResult = NULL;
+		$this->strQuery = $this->prepare_query($strQuery);
 		
-		if (is_object($objStatement)) $this->resConnection->affectedRows = $objStatement->rowCount();
-		if (is_object($objStatement) && $objStatement->columnCount() === 0) return true;
-		return @$this->resConnection->query($this->strQuery);
+		
+		$intWildcards = preg_match_all("/(\?|\:in|\:p)/", $this->strQuery, $arrWilcards);
+		if($intWildcards){
+			$this->arrParamsList = $arrWilcards[0];
+		}
+		
+		// Auto-generate the SET/VALUES subpart
+		if (strncasecmp($this->strQuery, 'INSERT', 6) === 0 || strncasecmp($this->strQuery, 'REPLACE', 7) === 0 || strncasecmp($this->strQuery, 'UPDATE', 6) === 0)
+		{
+			$this->strQuery = str_replace(':p', '%p', $this->strQuery);
+		}
+		
+		return $this;
+	}
+	
+	
+	/**
+	 * Take an associative array and auto-generate the SET/VALUES subpart of a query
+	 *
+	 * Usage example:
+	 * $objStatement->prepare("UPDATE table %s")->set(array('id'=>'my_id'));
+	 * will be transformed into "UPDATE table SET id='my_id'".
+	 * @param array
+	 * @return Database_Statement
+	 */
+	public function set($arrParams)
+	{
+		$arrKeys = array_keys($arrParams);
+		
+		if (isset($arrKeys[0]) && is_array($arrParams[$arrKeys[0]])){
+			$arrParamsArray = $arrParams;
+			
+			if (strncasecmp($this->strQuery, 'INSERT', 6) === 0 || (strncasecmp($this->strQuery, 'REPLACE', 7) === 0))
+			{
+				$arrQuestions = array_fill(0, count($arrParams[$arrKeys[0]]), '?');
+				$strQuery = sprintf('(%s) VALUES (%s)',
+						implode(', ', array_keys($arrParams[$arrKeys[0]])),
+						implode(', ', $arrQuestions));
+			}
+
+			foreach($arrParamsArray as $arrParams){
+				//$arrParams = $this->escapeParams($arrParams);
+				
+				// INSERT / REPLACE
+				if (strncasecmp($this->strQuery, 'INSERT', 6) === 0 || (strncasecmp($this->strQuery, 'REPLACE', 7) === 0))
+				{
+					$this->arrParams['multiple'][] = $arrParams;
+				}
+			}
+
+		} else {
+			//$arrParams = $this->escapeParams($arrParams);
+			
+			// INSERT / REPLACE
+			if (strncasecmp($this->strQuery, 'INSERT', 6) === 0 || (strncasecmp($this->strQuery, 'REPLACE', 7) === 0))
+			{
+				$this->arrParams['set'] = array_values($arrParams);
+				$arrQuestions = array_fill(0, count($arrParams), '?');
+				$strQuery = sprintf('(%s) VALUES (%s)',
+						implode(', ', array_keys($arrParams)),
+						implode(', ', $arrQuestions));
+			}
+			
+			// UPDATE
+			elseif (strncasecmp($this->strQuery, 'UPDATE', 6) === 0)
+			{
+				$arrSet = array();
+				$this->arrParams['set'] = array_values($arrParams);
+				
+				foreach ($arrParams as $k=>$v)
+				{
+					$arrSet[] = $k . '=?';
+				}
+				
+				$strQuery = 'SET ' . implode(', ', $arrSet);
+			}
+		}
+		
+		$this->strQuery = str_replace('%p', $strQuery, $this->strQuery);
+		return $this;
+	}
+	
+	/**
+	 * Create an IN-Statement
+	 *
+	 * Usage example:
+	 * $objStatement->prepare("UPDATE table SET a=4 WHERE id :in")->set(array(1, 3, 4));
+	 * will be transformed into "UPDATE table SET a=4 WHERE id IN(1,3,4);".
+	 * @param array
+	 * @return Database_Statement
+	 */
+	public function in($arrParams){
+		if (!count($arrParams))
+		{
+			throw new Exception('Empty param array');
+		}
+		//$arrParams = $this->escapeParams($arrParams, true);
+		
+		$this->arrParams['in'] = $arrParams;
+		
+		$arrQuestions = array_fill(0, count($arrParams), '?');
+		
+		$this->strQuery = str_replace(':in', "IN (".implode(',', $arrQuestions).")", $this->strQuery);
+		
+		return $this;
+	}
+	
+	/**
+	 * Execute the current statement
+	 * @return Database_Result
+	 * @throws Exception
+	 */
+	public function execute(){
+		$arrParams = func_get_args();
+		
+		if (isset($arrParams[0]) && is_array($arrParams[0]))
+		{
+			$arrParams = array_values($arrParams[0]);
+		}
+		
+		$this->arrParams['execute'] = $arrParams;
+		
+		try {
+			$objResult = $this->query();
+			return $objResult;
+		} catch(DBALQueryException $e){
+			$this->error($e->getMessage(), $e->getQuery(), $e->getCode());
+		}
+		
+		return false;
 	}
 
-
+	
+	/**
+	 * Build the query string
+	 * @param array
+	 * @throws Exception
+	 */
+	protected function replaceWildcards($arrParams){
+		$arrParams = $this->escapeParams($arrParams);
+		$this->strQuery = preg_replace('/(?<!%)%([^bcdufosxX%])/', '%%$1', $this->strQuery);
+		
+		// Replace wildcards
+		if (($this->strQuery = @vsprintf($this->strQuery, $arrParams)) == false)
+		{
+			throw new Exception('Too few arguments to build the query string');
+		}
+	}
+	
 	/**
 	 * Return the last error message
 	 * @return string
@@ -421,8 +659,8 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
 		return 0;
 		return @$this->resConnection->errorCode();
 	}
-
-
+	
+	
 	/**
 	 * Return the number of affected rows
 	 * @return integer
@@ -431,8 +669,8 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
 	{
 		return @$this->resConnection->affectedRows;
 	}
-
-
+	
+	
 	/**
 	 * Return the last insert ID
 	 * @return integer
@@ -441,8 +679,8 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
 	{
 		return @$this->resConnection->lastInsertId();
 	}
-
-
+	
+	
 	/**
 	 * Explain the current query
 	 * @return array
@@ -451,7 +689,7 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
 	{
 		return $this->resConnection->query('EXPLAIN ' . $this->strQuery)->fetch(PDO::FETCH_ASSOC);
 	}
-
+	
 	/**
 	 * Create a Database_Result object
 	 * @param resource
@@ -475,7 +713,7 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
  */
 class DB_Mysql_PDO_Result extends DatabaseResult
 {
-
+	
 	/**
 	 * Fetch the current row as enumerated array
 	 * @return array
@@ -484,8 +722,8 @@ class DB_Mysql_PDO_Result extends DatabaseResult
 	{
 		return @$this->resResult->fetch(PDO::FETCH_NUM);
 	}
-
-
+	
+	
 	/**
 	 * Fetch the current row as associative array
 	 * @return array
@@ -494,8 +732,8 @@ class DB_Mysql_PDO_Result extends DatabaseResult
 	{
 		return @$this->resResult->fetch(PDO::FETCH_ASSOC);
 	}
-
-
+	
+	
 	/**
 	 * Return the number of rows of the current result
 	 * @return integer
@@ -504,8 +742,8 @@ class DB_Mysql_PDO_Result extends DatabaseResult
 	{
 		return @$this->resResult->rowCount();
 	}
-
-
+	
+	
 	/**
 	 * Return the number of fields of the current result
 	 * @return integer
@@ -514,8 +752,8 @@ class DB_Mysql_PDO_Result extends DatabaseResult
 	{
 		return @$this->resResult->columnCount();
 	}
-
-
+	
+	
 	/**
 	 * Get the column information
 	 * @param integer
@@ -525,8 +763,8 @@ class DB_Mysql_PDO_Result extends DatabaseResult
 	{
 		return @$this->resResult->getColumnMeta($intOffset);
 	}
-
-
+	
+	
 	/**
 	 * Free the current result
 	 */
@@ -537,6 +775,6 @@ class DB_Mysql_PDO_Result extends DatabaseResult
 			@$this->resResult = null;
 		}
 	}
-	}
+}
 
 ?>

@@ -28,24 +28,6 @@ class avatar extends gen_class {
 	private $defaults = array(
 		'chars' => 2,
 		'fontSize' => 38,
-		'foreground'   => '#FFFFFF',
-	    	'backgrounds'   => [
-			'#f44336',
-			'#E91E63',
-			'#9C27B0',
-			'#673AB7',
-			'#3F51B5',
-			'#2196F3',
-			'#03A9F4',
-			'#00BCD4',
-			'#009688',
-			'#4CAF50',
-			'#8BC34A',
-			'#CDDC39',
-			'#FFC107',
-			'#FF9800',
-			'#FF5722',
-		    ],
 	);
 
 	public function getAvatar($intUserID, $strName, $intSize = 64){
@@ -54,7 +36,7 @@ class avatar extends gen_class {
 		$strCachedImage = $this->getCachedImage($strHash, $intSize);
 		if (!$strCachedImage){
 			//Create
-			$result = $this->cacheImage($strHash, $strName, $intSize);
+			$result = $this->cacheImage($intUserID, $strHash, $strName, $intSize);
 			return $result;
 		}
 		return $strCachedImage;
@@ -86,20 +68,29 @@ class avatar extends gen_class {
 
 
 
-	public function cacheImage($strHash, $strName, $intSize=64){
+	public function cacheImage($intUserID, $strHash, $strName, $intSize=64){
 		$strInitials = $this->getInitials($strName);
-		$strBackground = $this->getRandomBackground();
+		
+		$strBackground = $this->getBackground($intUserID, $strName);
+		
+		$perceptiveLuminance = $this->getPerceptiveLuminance(
+				hexdec($strBackground[0] . $strBackground[1]),
+				hexdec($strBackground[2] . $strBackground[3]),
+				hexdec($strBackground[4] . $strBackground[5])
+				);
+		
+		$textColor = ($perceptiveLuminance < 0.3) ? '#000000' : '#FFFFFF';
+		
 		$intFontSize = ($intSize/100) * $this->defaults['fontSize'];
-
+		
 		$image = imagecreatetruecolor ( $intSize , $intSize );	
 		$arrColor = $this->hex2rgb($strBackground);
 		$backgroundColor = imagecolorallocate($image, $arrColor[0], $arrColor[1], $arrColor[2]);
 		imagefill($image, 0, 0, $backgroundColor);
-		$fontColor = $this->hex2rgb($this->defaults['foreground']);
+		$fontColor = $this->hex2rgb($textColor);
 		$fontColorRes = ImageColorAllocate($image, $fontColor[0], $fontColor[1], $fontColor[2]);
+		$fontfile = realpath($this->root_path.'libraries/opensans/opensans-bold.ttf');
 
-		$fontfile = $this->root_path.'libraries/opensans/opensans-bold.ttf';
-		
 		$bbox = imagettfbbox($intFontSize, 0, $fontfile, $strInitials);
 		$center1 = (imagesx($image) / 2) - (($bbox[2] - $bbox[0]) / 2)-$bbox[0];
 		$y = ($intSize - ($bbox[1] - $bbox[7])) / 2; 
@@ -135,13 +126,12 @@ class avatar extends gen_class {
 		return utf8_strtoupper($strInitial);
 	}
 
-	public function getRandomBackground(){
-		$arrBackgrounds = $this->defaults['backgrounds'];
-		$randKey = array_rand($arrBackgrounds);
-		return $arrBackgrounds[$randKey];
+	public function getBackground($intUserID, $strUsername){
+		$backgroundColor = substr(sha1($intUserID.'_'.$strUsername), 0, 6);
+		return $backgroundColor;
 	}
 
-	public function hex2rgb($hex) {
+	private function hex2rgb($hex) {
 		$hex = str_replace("#", "", $hex);
 	
 		if(strlen($hex) == 3) {
@@ -155,6 +145,10 @@ class avatar extends gen_class {
 		}
 		$rgb = array($r, $g, $b);
 		return $rgb;
+	}
+	
+	private function getPerceptiveLuminance($r, $g, $b) {
+		return 1 - (0.299 * $r + 0.587 * $g + 0.114 * $b) / 255;
 	}
 }
 ?>

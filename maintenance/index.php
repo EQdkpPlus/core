@@ -67,15 +67,16 @@ class task_manager_display extends gen_class {
 		}
 
 		//disable if no necessary tasks or errors
-		if($this->in->get('disable') == true || $this->in->get('start_tour') != "" || $this->in->get('no_tour') != "" || $this->in->get('guild_import') != ""){
+		if($this->in->get('disable') == true || $this->in->get('start_wizard') != "" || $this->in->get('start_tour') != "" || $this->in->get('no_tour') != ""){
 			if(!$necessary['necessary_tasks'] && !$pfh_error){
 				$this->config->set('pk_maintenance_mode', 0);
-				if($this->in->get('start_tour') == "true") {
+				
+				if($this->in->get('start_wizard') == "true") {
+					$redirect_url	= 'admin/wizard.php'.$this->SID;
+				}elseif($this->in->get('start_tour') == "true") {
 					$redirect_url	= 'admin/'.$this->SID.'&tour=start';
 				}elseif($this->in->get('no_tour' == "true")){
 					$redirect_url	= 'admin/settings.php'.$this->SID;
-				}elseif($this->in->get('guild_import') == "true"){
-					$redirect_url	= 'admin/manage_settings.php'.$this->SID.'#fragment-game';
 				}else{
 					$redirect_url	= 'admin/index.php'.$this->SID;
 				}

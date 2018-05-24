@@ -430,6 +430,7 @@ class template extends gen_class {
 					$strPathDir = "EQDKP_ROOT_PATH".substr($strPathDir, 2);
 				}
 				$strContent = str_replace(array('(./', '("./', "('./"), array('('.$strPathDir, '("'.$strPathDir, "('".$strPathDir),$strContent);
+				
 				$data[] = array('content' => "\r\n/* ".$strFile."*/ \r\n".$strContent, 'path' => $strPathDir);
 			}
 
@@ -615,7 +616,10 @@ class template extends gen_class {
 
 	// Load the JS / CSS / RSS files to the header
 	private function perform_header_tasks(){
+		
 		$debug = (DEBUG == 4);
+		if(!$debug) include_once($this->root_path.'libraries/JShrink/JShrink.class.php');
+		
 		$this->cleanup_combined();
 		if(!$this->get_templateout('js_code')){
 			// JS in header...
@@ -626,6 +630,7 @@ class template extends gen_class {
 					$imploded_jscode .= implode("\n", $this->get_templatedata('js_code_head_docready'));
 					$imploded_jscode .= "});";
 				}
+				if(!$debug) $imploded_jscode = \JShrink\Minifier::minify($imploded_jscode);
 				$this->assign_var('JS_CODE', $imploded_jscode);
 				$this->set_templateout('js_code', true);
 			}
@@ -641,7 +646,7 @@ class template extends gen_class {
 					if($debug) $imploded_jscodeeop .= implode("\n", $this->get_templatedata('js_code_file_docready'));
 					$imploded_jscodeeop .= "});";
 				}
-
+				if(!$debug) $imploded_jscodeeop = \JShrink\Minifier::minify($imploded_jscodeeop);
 				$this->assign_var('JS_CODE_EOP', $imploded_jscodeeop);
 				$this->set_templateout('js_code', true);
 			}
@@ -692,7 +697,9 @@ class template extends gen_class {
 				$js_files = "";
 				if(is_array($this->get_templatedata('js_code_head_top')) && count($this->get_templatedata('js_code_head_top'))) {
 					$js_files .= "<script type='text/javascript'>";
-					$js_files .= implode("\n", $this->get_templatedata('js_code_head_top'));
+					$imploded_jscodeeop = implode("\n", $this->get_templatedata('js_code_head_top'));
+					if(!$debug) $imploded_jscodeeop = \JShrink\Minifier::minify($imploded_jscodeeop);				
+					$js_files .= $imploded_jscodeeop;
 					$js_files .= "</script>\n";
 				}
 				$js_files .= $this->implode_cssjsfiles("<script type='text/javascript' src='", "'></script>", "\n", $aryJSFile);
@@ -1423,7 +1430,7 @@ class template extends gen_class {
 		}
 
 		$filename		= $this->cachedir . $handle_filename . '.php';
-		$data			= '<?php' . "\nif (\$this->security()) {\n" . $data . "\n}\n?".">";
+		$data			= '<?php' . "\nif ( !defined('EQDKP_INC') ){\nheader('HTTP/1.0 404 Not Found');exit;\n}\nif (\$this->security()) {\n" . $data . "\n}\n?".">";
 		$data 			= str_replace('</body>', '</body><!-- Cache File '.$handle_filename.' generated '.date("Y-m-d H:i").' ('.time().') -->', $data);
 
 		// save the file data
@@ -1721,6 +1728,7 @@ class template extends gen_class {
 
 
 		$options = array();
+		
 		$lessVars = array(
 			'eqdkpURL'							=> '"'.$this->env->link.'"',
 			'eqdkpGame'							=> '"'.$this->config->get('default_game').'"',
@@ -1728,6 +1736,7 @@ class template extends gen_class {
 			'eqdkpRootPath'						=> '"'.$root_path.'"',
 			'eqdkpImagePath'					=> '"'.$root_path.'images/"',
 			'eqdkpImageURL'						=> '"'.$this->env->link.'images/"',
+			'eqdkpTemplatePathLess' 			=> '"./templates/'.$stylepath.'/"',
 			'eqdkpTemplateImagePath' 			=> '"'.$root_path.'templates/'.$stylepath.'/images/"',
 			'eqdkpTemplateImageURL'				=> '"'.$this->env->link.'templates/'.$stylepath.'/images/"',
 			'eqdkpTemplateBanner' 				=> '"'.$this->replaceSomePathVariables($style['banner_img'], $root_path, $stylepath).'"',

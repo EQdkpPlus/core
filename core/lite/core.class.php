@@ -149,10 +149,11 @@ class core extends gen_class {
 				'L_SPLASH_WELCOME' => $this->user->lang('splash_welcome'),
 				'L_SPLASH_DESC' => $this->user->lang('splash_desc'),
 				'L_SPLASH_NEW' => $this->user->lang('splash_new'),
+				'L_SPLASH_QUICKSTART'  => $this->user->lang('splash_quickstart'),
+				'L_SPLASH_START_QUICKSTART' => $this->user->lang('splash_start_quickstart'),
 				'L_TOUR_START' => $this->user->lang('start_tour'),
-				'L_JUMP_TOUR' => $this->user->lang('jump_tour'),
-				'L_GUILD_IMPORT' => $this->user->lang('guild_import'),
-				'L_GUILD_IMPORT_INFO' => $this->user->lang('guild_import_info'),
+				'L_CLOSE_INFO' => $this->user->lang('splash_close_info'),
+				'L_CLOSE_SPLASH' => $this->user->lang('splash_close'),
 			));
 		}
 	}

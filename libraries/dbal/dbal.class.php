@@ -48,10 +48,12 @@ class dbal{
 		$arrDbals = array(
 			'mysqli'	=> 'MySQLi',
 			'mysql_pdo' => 'MySQL PDO',
+			'mysql_old_pdo'=> 'MySQL PDO (Old)',
 		);
 		
 		foreach ($arrDbals as $key => $name){
 			if (dbal::check_if_pdo($key)){
+				$key = str_replace("_old", "", $key);
 				$blnCheckResult = dbal::check_pdo(dbal::check_if_pdo($key));
 			} else {
 				$blnCheckResult = dbal::check_extension($key);
@@ -77,7 +79,10 @@ class dbal{
 	}
 	
 	private static function check_if_pdo($strDBType){
-		if (substr($strDBType, -4) == "_pdo") return substr($strDBType, 0, -4);
+		if (substr($strDBType, -4) == "_pdo") {
+			$strDBType = str_replace("_old", "", $strDBType);
+			return substr($strDBType, 0, -4);
+		}
 		
 		return false;
 	}
@@ -218,8 +223,12 @@ abstract class Database extends gen_class {
 		$text = '';
 		//shorten really long queries (e.g. gzipped cache updates)
 		if(strlen($log_entry['args'][0]) > 1000)
-			$log_entry['args'][0] = substr($log_entry['args'][0], 0, 1000) . ' (...)';
+			$log_entry['args'][0] = sanitize(substr($log_entry['args'][0], 0, 1000) . ' (...)');
 		$text = $this->highlight(htmlentities(wordwrap($log_entry['args'][0],120,"\n",true)));
+		if($log_entry['args'][1]){
+			$text .= '<br />Params: '.sanitize(implode(', ', $log_entry['args'][1]));
+		}
+		
 		return $text;
 	}
 	

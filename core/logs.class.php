@@ -45,7 +45,18 @@ if ( !defined('EQDKP_INC') ){
 
 		public function add($tag, $value, $record_id = '', $record = '',  $admin_action=true, $plugin='', $result=1, $userid = false, $process_hooks=1){
 			$plugin = ($plugin != '') ? $plugin : $this->pluginname;
-			$this->pdh->put('logs', 'add_log', array($tag, $value, $record_id, $record, $admin_action, $plugin, $result, $userid));
+			
+			$a = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+			unset($a[0]);
+			unset($a[1]);
+			$a = array_reverse($a);
+			
+			$strTrace = "";
+			foreach($a as $val){
+				$strTrace .= $val['class'].': '.$val['function'].'; ';
+			}
+			
+			$this->pdh->put('logs', 'add_log', array($tag, $value, $record_id, $record, $admin_action, $plugin, $result, $userid, $strTrace));
 			if($process_hooks) $this->pdh->process_hook_queue();
 		}
 

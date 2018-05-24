@@ -82,21 +82,23 @@ if ( !class_exists( "pdh_r_event_attendance" ) ) {
 			}
 			//count total per event
 			if(!isset($this->counts[$first_date['member']]) || !isset($this->counts[$first_date['main']])) {
-				$raids = $this->pdh->maget('raid', array('date', 'event'), 0, array($this->pdh->get('raid', 'id_list')));
-				foreach($raids as $raid_id => $raid) {
-					$date = $raid['date'];
-					$event_id = $raid['event'];
-						if($date >= $first_date['member']) {
-							if(!isset($this->counts[$first_date['member']][$event_id])) $this->counts[$first_date['member']][$event_id] = 0;
-							$this->counts[$first_date['member']][$event_id]++;
-						}
-						if($date >= $first_date['main'] && $first_date['main'] != $first_date['member']) {
-						if(!isset($this->counts[$first_date['main']][$event_id])) $this->counts[$first_date['main']][$event_id] = 0;
-						$this->counts[$first_date['main']][$event_id]++;
+				$objQuery = $this->db->prepare("SELECT COUNT(*) as count, event_id FROM __raids WHERE raid_date > ? GROUP BY event_id")->execute($first_date['member']);
+				if($objQuery){
+					while($row = $objQuery->fetchAssoc()){
+						$this->counts[$first_date['member']][$row['event_id']] = $row['count'];
 					}
 				}
+				
+				$objQuery = $this->db->prepare("SELECT COUNT(*) as count, event_id FROM __raids WHERE raid_date > ? GROUP BY event_id")->execute($first_date['main']);
+				if($objQuery){
+					while($row = $objQuery->fetchAssoc()){
+						$this->counts[$first_date['main']][$row['event_id']] = $row['count'];
+					}
+				}
+				
 				$this->pdc->put('pdh_event_att_count', $this->counts);
 			}
+			
 			//get raids
 			$raid_ids = array();
 			foreach($all_members as $mem_id) {
@@ -117,6 +119,7 @@ if ( !class_exists( "pdh_r_event_attendance" ) ) {
 					$this->attendance[$time_period][$member_id]['member'][$event_id]['attended']++;
 				}
 			}
+			
 			//cache it and let it expire at midnight
 			$stm = 86400-$this->time->time%86400;
 			$this->pdc->put('pdh_event_attendance_'.$time_period.'_'.$member_id, $this->attendance[$time_period][$member_id], $stm);
@@ -140,7 +143,7 @@ if ( !class_exists( "pdh_r_event_attendance" ) ) {
 			if(empty($this->counts[$first_date][$event_id])) $this->counts[$first_date][$event_id] = 0;
 			$total_raidcount = $this->counts[$first_date][$event_id];
 			if ($count) {
-				$return['total_raidcount'] = $total_raidcount ;
+				$return['total_raidcount'] = $total_raidcount;
 				$return['member_raidcount'] = $member_raidcount;
 				$return['member_attendance'] = ($total_raidcount > 0) ? $member_raidcount/$total_raidcount : '0';
 				return $return;

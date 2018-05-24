@@ -1,0 +1,20 @@
+<form method="post" action="{ACTION}" name="post">
+		<fieldset class="settings">
+			<legend>{L_create_style}</legend>
+			<dl>
+				<dt><label>{L_style_name}:</label></dt>
+				<dd><input type="text" name="style_name" size="35" maxlength="100" value="{STYLE_NAME}" class="input" required/></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_style_parent}:</label></dt>
+				<dd>{DD_STYLE_PARENT}</dd>
+			</dl>
+		</fieldset>
+
+	<div class="contentFooter">
+		<button type="button" name="cancel" class="liteoption" onclick="window.location='manage_extensions.php{SID}'"><i class="fa fa-chevron-left"></i>{L_cancel}</button>
+		<button type="submit" name="create_style" class="liteoption"><i class="fa fa-check"></i>{L_save}</button>
+	</div>
+	{CSRF_TOKEN}
+</form>
+

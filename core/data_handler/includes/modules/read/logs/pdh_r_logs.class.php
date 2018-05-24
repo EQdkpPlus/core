@@ -298,6 +298,10 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 			return '<a href="'.$link.'"><i class="fa fa-search fa-lg"></i></a>';
 		}
 		
+		public function get_trace($id){
+			return $this->objPagination->get($id, 'trace');
+		}
+		
 	}//end class
 }//end if
 ?>

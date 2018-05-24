@@ -23,12 +23,12 @@ if (!defined('EQDKP_INC')){
 	die('Do not access this file directly.');
 }
 
-if (!class_exists('exchange_comment_add')){
-	class exchange_comment_add extends gen_class {
+if (!class_exists('exchange_add_comment')){
+	class exchange_add_comment extends gen_class {
 		public static $shortcuts = array('pex'=>'plus_exchange');
 		public $options		= array();
 
-		public function post_comment_add($params, $arrBody){
+		public function post_add_comment($params, $arrBody){
 			
 			 // be sure user is logged in
 			if ($this->user->is_signedin()){

@@ -180,6 +180,7 @@ class controller extends gen_class {
 				$this->core->set_vars(array(
 						'page_title'		=> $arrVars['page_title'],
 						'template_file'		=> $arrVars['template_file'],
+						'description'		=> $arrVars['description'],
 						'display'			=> true)
 				);
 			} else {
@@ -372,7 +373,7 @@ class controller extends gen_class {
 				}
 
 
-				$userlink = '<a href="'.$this->routing->build('user', $this->pdh->geth('articles',  'user_id', array($intArticleID)), 'u'.$this->pdh->get('articles',  'user_id', array($intArticleID))).'">'.$this->pdh->geth('articles',  'user_id', array($intArticleID)).'</a>';
+				$userlink = '<a href="'.$this->routing->build('user', $this->pdh->geth('articles',  'user_id', array($intArticleID)), 'u'.$this->pdh->get('articles',  'user_id', array($intArticleID))).'" itemprop="url"><span itemprop="name">'.$this->pdh->geth('articles',  'user_id', array($intArticleID)).'</span></a>';
 
 				$arrToolbarItems = array();
 				if ($arrPermissions['create']) {
@@ -616,6 +617,7 @@ class controller extends gen_class {
 						'ARTICLE_TITLE'		=> $arrTitles[$intPageID],
 						'ARTICLE_SUBMITTED'	=> sprintf($this->user->lang('news_submitter'), $userlink, $this->time->user_date($arrArticle['date'], false, true)),
 						'ARTICLE_DATE'		=> $this->time->user_date($arrArticle['date'], false, false, true),
+						'ARTICLE_DATE_ATOM'	=> date(DATE_ATOM, $arrArticle['date']),
 						'ARTILE_DATE_DAY'	=> $this->time->date('d', $this->pdh->get('articles', 'date', array($intArticleID))),
 						'ARTILE_DATE_MONTH'	=> $this->time->date('F', $this->pdh->get('articles', 'date', array($intArticleID))),
 						'ARTILE_DATE_YEAR'	=> $this->time->date('Y', $this->pdh->get('articles', 'date', array($intArticleID))),
@@ -637,6 +639,7 @@ class controller extends gen_class {
 						'S_COMMENTS'		=> ($arrArticle['comments']) ? true : false,
 						'S_HIDE_HEADER'		=> ($arrArticle['hide_header']),
 						'S_FEATURED'		=> ($this->pdh->get('articles',  'featured', array($intArticleID))),
+						'ARTICLE_LINK'		=> $this->env->link.$this->controller_path_plain.$this->pdh->get('articles', 'path', array($intArticleID)),
 				));
 
 				$strPreviewImage = ($this->pdh->get('articles',  'previewimage', array($intArticleID)) != "") ? $this->pdh->geth('articles', 'previewimage', array($intArticleID)) : '';
@@ -663,7 +666,7 @@ class controller extends gen_class {
 
 				$this->core->set_vars(array(
 						'page_title'		=> $arrArticle['title'].$strAdditionalTitles,
-						'description'		=> truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrContent[$intPageID])))), 600, '...', false, true),
+						'description'		=> ($arrCoreVars['description']) ? $arrCoreVars['description'] : truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrContent[$intPageID])))), 600, '...', false, true),
 						'page_path'			=> $this->pdh->get('articles', 'breadcrumb', array($intArticleID, $strAdditionalTitles, registry::get_const('url_id'), $arrPath)),
 						'image'				=> $strPreviewImage,
 						'template_file'		=> 'article.html',
@@ -714,7 +717,7 @@ class controller extends gen_class {
 
 				//Articles to template
 				foreach($arrLimitedIDs as $intArticleID){
-					$userlink = '<a href="'.$this->routing->build('user', $this->pdh->geth('articles',  'user_id', array($intArticleID)), 'u'.$this->pdh->get('articles',  'user_id', array($intArticleID))).'">'.$this->pdh->geth('articles',  'user_id', array($intArticleID)).'</a>';
+					$userlink = '<a href="'.$this->routing->build('user', $this->pdh->geth('articles',  'user_id', array($intArticleID)), 'u'.$this->pdh->get('articles',  'user_id', array($intArticleID))).'" itemprop="url"><span itemprop="name">'.$this->pdh->geth('articles',  'user_id', array($intArticleID)).'</span></a>';
 
 					//Content dependet from list_type
 					//1 = until readmore
@@ -943,8 +946,7 @@ class controller extends gen_class {
 						'CATEGORY_ID'			=> $intCategoryID,
 				));
 
-				$strPreviewImage = ($this->pdh->get('articles',  'previewimage', array($intArticleID)) != "") ? $this->pdh->geth('articles', 'previewimage', array($intArticleID)) : '';
-				if(!strlen($strPreviewImage) && isset($strContent)) $strPreviewImage = $this->social->getFirstImage($strContent);
+				$strPreviewImage = $this->social->getFirstImage(xhtml_entity_decode($arrCategory['description']));
 
 				$this->social->callSocialPlugins($arrCategory['name'], strip_tags(xhtml_entity_decode($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(truncate($arrCategory['description'], 600, '...', false, true))))), $strPreviewImage);
 

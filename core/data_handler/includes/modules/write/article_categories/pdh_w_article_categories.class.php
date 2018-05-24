@@ -279,10 +279,7 @@ if(!class_exists('pdh_w_article_categories')) {
 		
 		private function create_alias($strName){
 			$strAlias = utf8_strtolower(unsanitize($strName));
-			$strAlias = str_replace(' ', '-', $strAlias);
-			$a_satzzeichen = array("'",'"',"\"",",",";",".",":","!","?", "&", "=", "/", "|", "#", "*", "+", "(", ")", "%", "$", "´", "„", "“", "‚", "‘", "`", "^");
-			$strAlias = str_replace($a_satzzeichen, "", $strAlias);
-			return $strAlias;
+			return hyphenize($strAlias);
 		}
 		
 	}

@@ -34,6 +34,8 @@ class Manage_Styles extends page_generic{
 		$handler = array(
 			'cancel'	=> array('process' => 'display'),
 			'version_update' => array('process' => 'version_update'),
+			'create' => array('process' => 'display_create'),
+			'create_style' => array('process' => 'process_create', 'csrf'=>true),
 			'template_edit_button' => array('process' => 'edit_template', 'csrf'=>true),
 			'template_reset_button' => array('process' => 'reset_template', 'csrf'=>true),
 
@@ -65,6 +67,63 @@ class Manage_Styles extends page_generic{
 
 	public function exportChangedFiles() {
 		$this->objStyles->exportChangedFiles($this->url_id);
+	}
+	
+	public function display_create(){
+		$style_array = array();
+		foreach(register('pdh')->get('styles', 'styles', array(0, true)) as $styleid=>$row){
+			$style_array[$styleid] = $row['style_name'];
+		}
+		
+		$this->tpl->assign_vars(array(
+			'DD_STYLE_PARENT' => (new hdropdown('parent', array('options' => $style_array)))->output(),	
+		));
+		
+		$this->core->set_vars([
+				'page_title'		=> $this->user->lang('create_style'),
+				'template_file'		=> 'admin/manage_styles_create.html',
+				'page_path'			=> [
+						['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+						['title'=>$this->user->lang('extension_repo'), 'url'=>$this->root_path.'admin/manage_extensions.php'.$this->SID],
+						['title'=>$this->user->lang('create_style'), 'url'=>' '],
+				],
+				'display'			=> true
+		]);
+	}
+	
+	public function process_create(){
+		$intParent = $this->in->get('parent', 0);
+		
+		$strParentPath = $this->pdh->get('styles', 'templatepath', array($intParent));
+		
+		$strNewName = $this->in->get('style_name');
+		$strNewNamePath = utf8_strtolower($strNewName);
+		$strNewNamePath = preg_replace('/[^A-Za-z0-9\-\_]/', '', $strNewName);
+		
+		$strBaseFolder = $this->root_path.'/templates/';
+		if(is_dir($strBaseFolder.$strParentPath)){
+			full_copy($strBaseFolder.$strParentPath, $strBaseFolder.$strNewNamePath);
+			$this->pfh->rename( $strBaseFolder.$strNewNamePath.'/'.$strParentPath.'.css', $strBaseFolder.$strNewNamePath.'/'.$strNewNamePath.'.css');
+			$this->pfh->rename( $strBaseFolder.$strNewNamePath.'/'.$strParentPath.'.js', $strBaseFolder.$strNewNamePath.'/'.$strNewNamePath.'.js');
+			
+			$strPackageXML = file_get_contents($strBaseFolder.$strNewNamePath.'/package.xml');
+			$strNewPackageXML = preg_replace('/folder\>(.*)\<\/folder/', 'folder>'.$strNewNamePath.'</folder', $strPackageXML);
+			$strNewPackageXML = preg_replace('/name\>(.*)\<\/name/', 'name>'.htmlentities($strNewName).'</name', $strNewPackageXML);
+			$this->pfh->putContent($strBaseFolder.$strNewNamePath.'/package.xml', $strNewPackageXML);
+			
+			
+			$strSettingsXML= file_get_contents($strBaseFolder.$strNewNamePath.'/settings.xml');
+			$strNewSettingsXML = preg_replace('/template\_path\>(.*)\<\/template\_path/', 'template_path>'.$strNewNamePath.'</template_path', $strSettingsXML);
+			
+			$this->pfh->putContent($strBaseFolder.$strNewNamePath.'/settings.xml', $strNewSettingsXML);
+			
+			$intStyleID = $this->objStyles->install($strNewNamePath);
+			
+			redirect('admin/manage_styles.php'.$this->SID.'&edit=true&styleid='.$intStyleID);
+		}
+		
+		
+		die();
 	}
 
 	public function reset_template(){

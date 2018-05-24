@@ -51,6 +51,9 @@ if (!class_exists('exchange_me')){
 				$arrUserdata['custom_fields'] = unserialize($arrUserdata['custom_fields']);
 				$arrUserdata['plugin_settings'] = unserialize($arrUserdata['plugin_settings']);
 				$arrUserdata['usergroups'] = $this->pdh->get('user_groups_users', 'memberships', array($this->user->id));
+				$arrUserdata['avatar_big'] = $this->env->httpHost.$this->env->root_to_serverpath($this->pdh->get('user', 'avatarimglink', array($this->user->id, true)));
+				$arrUserdata['avatar_small'] = $this->env->httpHost.$this->env->root_to_serverpath($this->pdh->get('user', 'avatarimglink', array($this->user->id, false)));
+				
 				
 				return array('data' => $arrUserdata);
 			} else {
