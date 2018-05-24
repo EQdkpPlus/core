@@ -30,6 +30,9 @@
  }
 
 class geolocation extends gen_class {
+
+	public static $shortcuts = array('puf' => 'urlfetcher');
+
 	// API URL
 	const nominatim_apiURL = 'https://nominatim.openstreetmap.org/';
 
@@ -45,10 +48,10 @@ class geolocation extends gen_class {
 		foreach ($parameters as $key => $value) $url .= $key . '=' . urlencode($value) . '&';
 
 		// fetch the data
-		$response = register('urlfetcher')->fetch($url);
+		$response = $this->puf->fetch($url);
 		if($response){
-			$response = json_decode($response);
-			return $response->results;
+			$response = json_decode($response, true);
+			return $response;
 		}
 		return false;
 	}
@@ -111,8 +114,8 @@ class geolocation extends gen_class {
 
 		// return coordinates latitude/longitude
 		return array(
-			'latitude'	=> array_key_exists(0, $results) ? (float) $results[0]->lat : null,
-			'longitude'	=> array_key_exists(0, $results) ? (float) $results[0]->lon : null
+			'latitude'	=> array_key_exists(0, $results) ? (float) $results[0]['lat'] : null,
+			'longitude'	=> array_key_exists(0, $results) ? (float) $results[0]['lon'] : null
 		);
 	}
 }
