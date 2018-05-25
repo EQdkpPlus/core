@@ -59,7 +59,7 @@ if(!class_exists('pdh_w_articles')) {
 
 			$this->pdh->enqueue_hook('articles_update');
 			$this->pdh->enqueue_hook('article_categories_update');
-			
+						
 			$arrOld = array(
 					'title' 			=> $arrOldData["title"],
 					'text'				=> $arrOldData["text"],
@@ -84,6 +84,11 @@ if(!class_exists('pdh_w_articles')) {
 			if ($arrChanges){
 				$this->log_insert('action_article_deleted', $arrChanges, $id, $this->user->multilangValue($arrOldData["title"]), 1, 'article');
 			}
+			
+			if($this->hooks->isRegistered('articles_deleted')){
+				$this->hooks->process('articles_deleted', array('id' => $id, 'data' => $arrOld));
+			}
+			
 			return true;
 		}
 		
@@ -123,6 +128,10 @@ if(!class_exists('pdh_w_articles')) {
 					$arrChanges = $this->logs->diff(false, $arrOld, $this->arrLang);
 					if ($arrChanges){
 						$this->log_insert('action_article_deleted', $arrChanges, $intArticleID, $this->user->multilangValue($arrOldData["title"]), 1, 'article');
+					}
+					
+					if($this->hooks->isRegistered('articles_deleted')){
+						$this->hooks->process('articles_deleted', array('id' => $intArticleID, 'data' => $arrOld));
 					}
 				}
 			}
@@ -232,6 +241,11 @@ if(!class_exists('pdh_w_articles')) {
 						
 				$this->pdh->enqueue_hook('articles_update');
 				$this->pdh->enqueue_hook('article_categories_update');
+				
+				if($this->hooks->isRegistered('articles_added')){
+					$this->hooks->process('articles_added', array('id' => $id, 'data' => $arrNew));
+				}
+				
 				return $id;
 			}
 			
@@ -273,6 +287,10 @@ if(!class_exists('pdh_w_articles')) {
 				$arrChanges = $this->logs->diff($arrOld, $arrNew, $this->arrLang, $arrFlags);
 				if ($arrChanges){
 					$this->log_insert('action_article_updated', $arrChanges, $id, $this->user->multilangValue($arrOldData["title"]), 1, 'article');
+				}
+				
+				if($this->hooks->isRegistered('articles_headlines_updated')){
+					$this->hooks->process('articles_headlines_updated', array('id' => $id, 'data' => $strTitle));
 				}
 			
 				return $id;
@@ -330,6 +348,10 @@ if(!class_exists('pdh_w_articles')) {
 				$arrChanges = $this->logs->diff($arrOld, $arrNew, $this->arrLang, $arrFlags);
 				if ($arrChanges){
 					$this->log_insert('action_article_updated', $arrChanges, $id, $this->user->multilangValue($arrOldData["title"]), 1, 'article');
+				}
+				
+				if($this->hooks->isRegistered('articles_text_updated')){
+					$this->hooks->process('articles_text_updated', array('id' => $id, 'data' => $arrNew));
 				}
 			
 				return $id;
@@ -455,6 +477,10 @@ if(!class_exists('pdh_w_articles')) {
 				$arrChanges = $this->logs->diff($arrOld, $arrNew, $this->arrLang, $arrFlags);
 				if ($arrChanges){
 					$this->log_insert('action_article_updated', $arrChanges, $id, $this->user->multilangValue($arrOldData["title"]), 1, 'article');
+				}
+				
+				if($this->hooks->isRegistered('articles_updated')){
+					$this->hooks->process('articles_updated', array('id' => $id, 'data' => $arrNew));
 				}
 				
 				return $id;

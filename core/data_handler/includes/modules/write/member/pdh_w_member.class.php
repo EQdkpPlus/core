@@ -135,6 +135,11 @@ if ( !class_exists( "pdh_w_member" ) ) {
 							$this->change_mainid($data['mainid'], $data['mainid']);
 						}
 					}
+					
+					if($this->hooks->isRegistered('member_updated')){
+						$this->hooks->process('member_updated', array('id' => $member_id, 'data' => $data));
+					}
+					
 					return $member_id;
 				}
 			} else {
@@ -177,6 +182,10 @@ if ( !class_exists( "pdh_w_member" ) ) {
 						if (($this->pdh->get('member', 'mainid', array($data['mainid'])) == $member_id) && ($this->pdh->get('member', 'mainid', array($member_id)) == $data['mainid'])){
 							$this->change_mainid($data['mainid'], $data['mainid']);
 						}
+					}
+					
+					if($this->hooks->isRegistered('member_added')){
+						$this->hooks->process('member_added', array('id' => $member_id, 'data' => $data));
 					}
 					
 					$this->pdh->enqueue_hook('member_update', array($member_id), array('action' => 'add', 'members' => array($member_id)));
@@ -244,6 +253,11 @@ if ( !class_exists( "pdh_w_member" ) ) {
 					$new_main = $twinks[0];
 					$this->change_mainid($twinks,$new_main);
 				}
+				
+				if($this->hooks->isRegistered('member_deleted')){
+					$this->hooks->process('member_deleted', array('id' => $member_id, 'data' => $old));
+				}
+				
 				return true;
 			}
 			return false;
@@ -299,6 +313,10 @@ if ( !class_exists( "pdh_w_member" ) ) {
 			}
 			
 			$arrChangedMembers[] = $mainchar;
+			
+			if($this->hooks->isRegistered('member_connection')){
+				$this->hooks->process('member_connection', array('id' => $member_id, 'data' => $arrChangedMembers, 'user' => $user_id));
+			}
 			
 			$this->pdh->enqueue_hook('update_connection', array($member_id), array('members' => $arrChangedMembers, 'users' => array($user_id)));
 			return $myupdate;

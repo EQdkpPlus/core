@@ -124,7 +124,7 @@ if(!class_exists('pdh_w_user')) {
 			return $arrData;
 		}
 
-		public function update_user ($user_id, $query_ary, $logging = true, $defaults = true){
+		public function update_user($user_id, $query_ary, $logging = true, $defaults = true){
 			if ($defaults){
 				$query_ary = $this->set_defaults($query_ary);
 			}

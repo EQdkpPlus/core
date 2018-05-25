@@ -75,6 +75,11 @@ if ( !class_exists( "pdh_w_item" ) ) {
 				$log_action = $this->logs->diff(false, $arrNew, $this->arrLogLang);
 				$this->log_insert('action_item_added', $log_action, $item_id, $item_name);
 				$this->pdh->enqueue_hook('item_update', $item_id, array('action' => 'add', 'time' => $time, 'members' => $item_buyers));
+				
+				if($this->hooks->isRegistered('item_added')){
+					$this->hooks->process('item_added', array('id' => $item_id, 'data' => $arrNew));
+				}
+				
 				return $item_id;
 			}
 			return false;
@@ -222,6 +227,10 @@ if ( !class_exists( "pdh_w_item" ) ) {
 				);
 
 				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
+				
+				if($this->hooks->isRegistered('item_updated')){
+					$this->hooks->process('item_updated', array('id' => $item_id, 'data' => $arrNew));
+				}
 
 				$this->log_insert('action_item_updated', $log_action, $item_id, $old['name']);
 				$this->pdh->enqueue_hook('item_update', $hook_id, array('action' => 'update', 'time' => $time, 'members' => array_merge($updated_mems, $added_mems, $items2del)));
@@ -255,6 +264,11 @@ if ( !class_exists( "pdh_w_item" ) ) {
 				
 				$this->log_insert('action_item_deleted', $log_action, $item_id, $old['name']);
 				$this->pdh->enqueue_hook('item_update', $item_id, array('action' => 'delete', 'time' => $old['date'], 'members' => array($old['buyer'] )));
+				
+				if($this->hooks->isRegistered('item_deleted')){
+					$this->hooks->process('item_deleted', array('id' => $item_id, 'data' => $old));
+				}
+				
 				return true;
 			}
 			return false;
@@ -271,6 +285,11 @@ if ( !class_exists( "pdh_w_item" ) ) {
 			);
 			$this->log_insert('action_itemsofraid_deleted', $log_action, $raid_id, $this->pdh->get('raid', 'event_name', array($raid_id)));
 			$this->pdh->enqueue_hook('item_update', $items, array('action' => 'delete', 'time' => 0));
+			
+			if($this->hooks->isRegistered('item_deleted')){
+				$this->hooks->process('item_deleted', array('id' => $items, 'data' => $old));
+			}
+			
 			return true;
 		}
 		
@@ -291,6 +310,10 @@ if ( !class_exists( "pdh_w_item" ) ) {
 		public function reset() {
 			$this->db->query("TRUNCATE TABLE __items;");
 			$this->pdh->enqueue_hook('item_update');
+			
+			if($this->hooks->isRegistered('item_reset')){
+				$this->hooks->process('item_reset', array());
+			}
 		}
 	}//end class
 }//end if
