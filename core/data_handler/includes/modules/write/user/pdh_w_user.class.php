@@ -331,6 +331,8 @@ if(!class_exists('pdh_w_user')) {
 			$this->pdh->put('member', 'update_connection', array(array(), $user_id));
 			$this->pdh->put('notifications', 'delete_by_user', array($user_id));
 			
+			$this->hooks->process('user_delete', array('user_id' => $user_id));
+			
 			$this->pdh->enqueue_hook('user');
 			$this->pdh->enqueue_hook('user_groups_update');
 			$this->pdh->enqueue_hook('comment_update');
@@ -342,6 +344,11 @@ if(!class_exists('pdh_w_user')) {
 		public function reset() {
 			$this->db->prepare("DELETE FROM __users WHERE user_id !=?")->execute($this->user->id);
 			$this->db->prepare("DELETE FROM __member_user WHERE user_id !=?")->execute($this->user->id);
+			$this->db->prepare("DELETE FROM __comments WHERE userid !=?")->execute($this->user->id);
+			$this->db->prepare("DELETE FROM __groups_users WHERE user_id !=?")->execute($this->user->id);
+			$this->db->prepare("DELETE FROM __sessions WHERE session_user_id !=?")->execute($this->user->id);
+			
+			$this->hooks->process('user_reset', array('own_userid' => $this->user->id));
 
 			$this->pdh->enqueue_hook('user');
 			$this->pdh->enqueue_hook('user_groups_update');

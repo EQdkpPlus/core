@@ -1827,7 +1827,7 @@ $lang = array(
 						</ul>
 						So if you love EQdkp Plus as much as we do, think about supporting us!',
 		'install_other_games' => 'Download other games',
-		
+		"user_download_gdpr" => "Download personal data (GDPR)",
 );
 
 ?>

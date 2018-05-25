@@ -68,7 +68,7 @@ if(!class_exists('pdh_w_logs')) {
 				'log_result'		=> $result,
 				'log_tag'			=> $tag,
 				'log_date'			=> time(),
-				'log_ipaddress'		=> $this->env->ip,
+				'log_ipaddress'		=> (!$this->env->ip_anonymized) ? '0.0.0.0' : $this->env->ip_anonymized,
 				'log_sid'			=> $this->user->sid,
 				'user_id'			=> $userid,
 				'username'			=> $this->pdh->get('user', 'name', array($userid)),

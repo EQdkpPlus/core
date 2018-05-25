@@ -25,10 +25,11 @@ if ( !defined('EQDKP_INC') ){
 if (!class_exists("environment")) {
 	class environment extends gen_class {
 
-		public $protocol, $ip, $useragent, $request, $request_page, $request_query, $ssl, $current_page, $server_name, $server_path, $httpHost, $phpself, $link, $agent, $path, $is_ajax, $referer;
+		public $protocol, $ip, $ip_anonymized, $useragent, $request, $request_page, $request_query, $ssl, $current_page, $server_name, $server_path, $httpHost, $phpself, $link, $agent, $path, $is_ajax, $referer;
 
 		public function __construct() {
 			$this->ip 				= $this->get_ipaddress();
+			$this->ip_anonymized	= $this->get_anonymized_ipaddress();
 			$this->useragent 		= $this->get_useragent();
 			$this->request 			= $this->get_request();
 			$this->request_page 	= $this->get_request_page();
@@ -110,6 +111,12 @@ if (!class_exists("environment")) {
 			} else {
 				return $_SERVER['REMOTE_ADDR'];
 			}
+		}
+		
+		private function get_anonymized_ipaddress(){
+			$ip = $this->get_ipaddress();
+			
+			return anonymize_ipaddress($ip);
 		}
 
 		private function get_useragent(){

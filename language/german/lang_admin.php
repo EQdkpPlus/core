@@ -1833,5 +1833,6 @@ $lang = array(
 		
 						Also wenn ihr EQdkp Plus genauso liebt wie wir, denkt doch mal darüber nach, uns zu unterstützen!',
 'install_other_games' => 'Andere Spiele herunterladen',
+"user_download_gdpr" => "Persönliche Daten exportieren (DSGVO)",
 );
 ?>

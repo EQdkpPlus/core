@@ -31,6 +31,7 @@ class Manage_Users extends page_generic {
 		$this->user->check_auth('a_users_man');
 		$handler = array(
 			'maincharchange' => array('process' => 'maincharchange', 'csrf' => true),
+			'export_gdpr'  =>	array('process' => 'export_gdpr', 'csrf' => false),
 			'mode' => array(
 				array('process' => 'delete_authaccount', 'value' => 'delauthacc', 'csrf' => true),
 				array('process' => 'activate', 'value' => 'activate', 'csrf' => true),
@@ -66,6 +67,64 @@ class Manage_Users extends page_generic {
 		}
 		$this->pdh->process_hook_queue();
 		$this->display();
+	}
+	
+	public function export_gdpr(){
+		$intUserID = $this->in->get('u', 0);
+		
+		//User data
+		$arrUserdata = $this->pdh->get('user', 'data', array($intUserID, true));
+		
+		$arrUserdata['email'] = $this->pdh->get('user', 'email', array($this->user->id));
+		$hideArray = array('user_password', 'user_login_key', 'user_email','user_email_confirmkey', 'salt', 'password', 'exchange_key');
+		foreach($hideArray as $entry){
+			if(isset($arrUserdata[$entry])) unset($arrUserdata[$entry]);
+		}
+		$arrUserdata['custom_fields'] = unserialize($arrUserdata['custom_fields']);
+		$arrUserdata['plugin_settings'] = unserialize($arrUserdata['plugin_settings']);
+		$arrUserdata['privacy_settings'] = unserialize($arrUserdata['plugin_settings']);
+		$arrUserdata['notifications'] = unserialize($arrUserdata['notifications']);
+		$arrUserdata['usergroups'] = $this->pdh->get('user_groups_users', 'memberships', array($this->user->id));
+		$arrUserdata['avatar_big'] = $this->env->httpHost.$this->env->root_to_serverpath($this->pdh->get('user', 'avatarimglink', array($this->user->id, true)));
+		$arrUserdata['avatar_small'] = $this->env->httpHost.$this->env->root_to_serverpath($this->pdh->get('user', 'avatarimglink', array($this->user->id, false)));
+		
+		//Session data
+		$arrSession = array();
+		$objQuery = $this->db->prepare("SELECT * FROM __sessions WHERE session_user_id=?")->execute($intUserID);
+		if($objQuery){
+			while($row = $objQuery->fetchAssoc()){
+				unset($row['session_key']);
+				$arrSession[] = $row;
+			}
+		}
+		
+		//Hooks
+		$arrOutHooks = array();
+		if($this->hooks->isRegistered('user_export_gdpr')){
+			$arrHooks = $this->hooks->process('user_export_gdpr', array('user_id' => $intUserID));
+			
+			foreach($arrHooks as $key => $val){
+				$strNewKey = str_replace('_user_export_gdpr_hook', '', $key);
+				$arrOutHooks[$strNewKey] = $val;
+			}
+		}
+		
+		
+		$arrOutdata = array('userobject' => $arrUserdata, 'sessions' => $arrSession, 'extensions' => $arrOutHooks, 'info' => array(
+				'created' => time(),
+				'system' => 'EQdkp Plus',
+				'version' => VERSION_EXT,
+		));
+		
+		$strJson = json_encode($arrOutdata, JSON_PRETTY_PRINT);
+		
+		header('Content-Type: application/octet-stream');
+		header('Content-Length: '.strlen($strJson));
+		header('Content-Disposition: attachment; filename="export_gdpr_user'.$intUserID.'_'.time().'.json"');
+		header('Content-Transfer-Encoding: binary');
+		echo $strJson;
+		
+		die();
 	}
 
 	public function activate() {
@@ -449,6 +508,7 @@ class Manage_Users extends page_generic {
 				'U_MANAGE_USER'		=> 'manage_users.php'.$this->SID.'&amp;' . 'u' . '='.$user_id,
 				'U_OVERTAKE_PERMS'	=> 'manage_users.php'.$this->SID.'&amp;mode=ovperms&amp;' . 'u' . '='.$user_id.'&amp;link_hash='.$this->CSRFGetToken('mode'),
 				'U_DELETE'			=> 'manage_users.php'.$this->SID.'&amp;del=single&amp;user_id='.$user_id.'&amp;link_hash='.$this->CSRFGetToken('del'),
+				'U_DOWNLOAD_GDPR'	=> 'manage_users.php'.$this->SID.'&amp;export_gdpr&amp;' . 'u' . '='.$user_id,
 				'USER_ID'			=> $user_id,
 				'NAME_STYLE'		=> ( $this->user->check_auth('a_', false, $user_id) ) ? 'font-weight: bold' : 'font-weight: none',
 				'ADMIN_ICON'		=> ( $this->user->check_auth('a_', false, $user_id) ) ? '<span class="adminicon"></span> ' : '',
