@@ -172,6 +172,21 @@ class Manage_Users extends page_generic {
 			}
 		}
 		
+		//Logs
+		$arrLogs = array();
+		$objQuery = $this->db->prepare("SELECT * FROM __logs WHERE user_id=?")->execute($intUserID);
+		if($objQuery){
+			while($row = $objQuery->fetchAssoc()){
+				$anonIP = anonymize_ipaddress($row['log_ipaddress']);
+				if($anonIP == $row['log_ipaddress']) continue;
+				
+				$arrLogs[] = array(
+						'date'  => $row['log_date'],
+						'ip'	=> $row['log_ipaddress'],
+				);
+			}
+		}
+		
 		//Hooks
 		$arrOutHooks = array();
 		if($this->hooks->isRegistered('user_export_gdpr')){
@@ -184,7 +199,7 @@ class Manage_Users extends page_generic {
 		}
 		
 		
-		$arrOutdata = array('userobject' => $arrUserdata, 'sessions' => $arrSession, 'extensions' => $arrOutHooks, 'info' => array(
+		$arrOutdata = array('userobject' => $arrUserdata, 'sessions' => $arrSession, 'logs' => $arrLogs, 'extensions' => $arrOutHooks, 'info' => array(
 				'created' => time(),
 				'system' => 'EQdkp Plus',
 				'version' => VERSION_EXT,
