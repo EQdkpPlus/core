@@ -1,64 +1,64 @@
 ### Permission Options
 ### Admin Permissions
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_event_add','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_event_upd','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_event_del','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_indivadj_add','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_indivadj_upd','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_indivadj_del','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_item_add','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_item_upd','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_item_del','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_raid_add','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_raid_upd','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_raid_del','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_config_man','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_members_man','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_users_man','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_logs_view','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_logs_del','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_extensions_man','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_backup','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_reset','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_maintenance','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_sms_send','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_files_man','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_cal_event_man','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_calendars_man','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_cal_revent_conf','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_cal_addrestricted','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_users_massmail','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_usergroups_man','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_usergroups_grpleader','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_articles_man','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_raidgroups_man','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_raidgroups_grpleader','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_export_data','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_article_categories_man','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_users_perms','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_users_profilefields','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_roles_man','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_member_profilefields_man','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_apa_man','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_tables_man','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_notifications_man','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_menues_man','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_cronjobs_man','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_bridge_man','N');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('a_cache_man','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_event_add','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_event_upd','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_event_del','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_indivadj_add','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_indivadj_upd','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_indivadj_del','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_item_add','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_item_upd','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_item_del','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_raid_add','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_raid_upd','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_raid_del','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_config_man','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_members_man','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_users_man','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_logs_view','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_logs_del','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_extensions_man','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_backup','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_reset','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_maintenance','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_sms_send','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_files_man','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_cal_event_man','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_calendars_man','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_cal_revent_conf','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_cal_addrestricted','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_users_massmail','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_usergroups_man','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_usergroups_grpleader','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_articles_man','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_raidgroups_man','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_raidgroups_grpleader','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_export_data','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_article_categories_man','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_users_perms','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_users_profilefields','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_roles_man','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_member_profilefields_man','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_apa_man','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_tables_man','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_notifications_man','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_menues_man','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_cronjobs_man','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_bridge_man','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('a_cache_man','N');
 
 ### User Permissions
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_member_man','Y');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_member_add','Y');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_member_conn','Y');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_member_del','Y');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_userlist','Y');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_cal_event_add','Y');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_calendar_raidnotes','Y');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_search','Y');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_usermailer','Y');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_files_man','Y');
-INSERT INTO __auth_options (auth_value, auth_default) VALUES ('u_articles_script','N');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('u_member_man','Y');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('u_member_add','Y');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('u_member_conn','Y');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('u_member_del','Y');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('u_userlist','Y');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('u_cal_event_add','Y');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('u_calendar_raidnotes','Y');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('u_search','Y');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('u_usermailer','Y');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('u_files_man','Y');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('u_articles_script','N');
 
 ### Style presets
 
@@ -67,13 +67,13 @@ INSERT INTO `__styles` (`style_id`, `style_name`, `style_version`, `style_contac
 INSERT INTO `__styles` (`style_id`, `style_name`, `style_version`, `style_contact`, `style_author`, `enabled`, `template_path`, `attendees_columns`, `logo_position`, `favicon_img`, `banner_img`, `background_img`, `column_right_width`, `column_left_width`, `portal_width`, `background_pos`, `background_type`, `body_background_color`, `body_font_color`, `body_font_size`, `body_font_family`, `body_link_color`, `body_link_color_hover`, `body_link_decoration`, `container_background_color`, `container_border_color`, `content_background_color`, `content_font_color`, `content_font_color_headings`, `content_link_color`, `content_link_color_hover`, `content_border_color`, `content_accent_color`, `userarea_background_color`, `userarea_font_color`, `userarea_link_color`, `userarea_link_color_hover`, `table_th_background_color`, `table_th_font_color`, `table_tr_font_color`, `table_tr_background_color1`, `table_tr_background_color2`, `table_tr_background_color_hover`, `table_border_color`, `menu_background_color`, `menu_font_color`, `menu_item_background_color`, `menu_item_background_color_hover`, `menu_item_font_color_hover`, `sidebar_background_color`, `sidebar_font_color`, `sidebar_border_color`, `button_background_color`, `button_font_color`, `button_border_color`, `button_background_color_hover`, `button_font_color_hover`, `button_border_color_hover`, `input_background_color`, `input_border_color`, `input_font_color`, `input_background_color_active`, `input_border_color_active`, `input_font_color_active`, `content_contrast_color`, `content_contrast_border_color`, `misc_color1`, `misc_color2`, `misc_color3`, `content_contrast_background_color`, `content_positive_color`, `content_negative_color`, `content_neutral_color`, `misc_text1`, `misc_text2`, `misc_text3`, `additional_less`, `content_highlight_color`) VALUES (2, 'EQdkp Modern', '0.2.2', '', 'GodMod', '1', 'eqdkp_modern', '6', 'left', '', '../../../../templates/eqdkp_modern/images/background-head.svg', '', '0px', '0px', '0px', 'normal', 0, 'rgb(46, 120, 176)', 'rgb(255, 255, 255)', '13', 'Tahoma,Arial,Verdana,sans-serif', 'rgb(254, 254, 254)', 'rgb(255, 255, 255)', 'none', 'rgb(224, 224, 224)', 'rgb(56, 56, 56)', 'rgb(245, 245, 245)', 'rgb(0, 0, 0)', 'rgb(0, 0, 0)', 'rgb(78, 127, 168)', 'rgb(0, 0, 0)', 'rgb(204, 204, 204)', 'rgb(234, 234, 234)', 'rgb(69, 72, 77)', 'rgb(217, 215, 215)', 'rgb(217, 215, 215)', 'rgb(255, 255, 255)', 'rgb(232, 232, 232)', 'rgb(0, 0, 0)', '', 'rgb(249, 249, 249)', 'rgb(245, 245, 245)', 'rgb(232, 232, 232)', 'rgb(221, 221, 221)', 'rgb(69, 72, 77)', 'rgb(217, 215, 215)', 'rgba(255, 255, 255, 0)', 'rgb(0, 0, 0)', 'rgb(217, 215, 215)', 'rgb(234, 234, 234)', 'rgb(0, 0, 0)', 'rgb(204, 204, 204)', 'rgb(0, 173, 238)', 'rgb(228, 245, 252)', 'rgb(0, 118, 163)', 'rgb(0, 149, 204)', 'rgb(217, 238, 247)', 'rgb(0, 118, 163)', 'rgb(255, 255, 255)', 'rgb(204, 204, 204)', 'rgb(85, 85, 85)', 'rgb(255, 255, 255)', 'rgba(82, 168, 236, 0.8)', 'rgb(85, 85, 85)', 'rgb(0, 0, 0)', 'rgb(204, 204, 204)', 'rgb(78, 127, 168)', 'rgb(255, 255, 255)', '', 'rgb(252, 253, 254)', 'rgb(51, 204, 51)', 'rgb(226, 59, 48)', 'rgb(153, 153, 153)', '', '', '', '@styleCommentContainerBackgroundColor: #fff;\r\n@styleCommentContainerBorderColor: #ccc;\r\n@styleCommentAuthorColor: #9f9f9f;\r\n@stylePaginationBorderColor: #ddd;\r\n@stylePaginationBackgroundColor: #fff;\r\n@stylePaginationActiveBackgroundColor: #F7F7F9;\r\n@stylePaginationActiveColor: #999;\r\n@stylePaginationActiveHoverBackgroundColor: #F7F7F9;\r\n@stylePaginationActiveHoverColor: #000;\r\n@styleArticleSitemapBorderColor: #ddd;\r\n@styleArticleSitemapBackgroundColor: #fff;\r\n@styleArticleSitemapActiveBackgroundColor: #F7F7F9;\r\n@styleArticleSitemapActiveColor: #999999;\r\n@styleArticleSitemapHoverColor: #000;\r\n', 'rgb(78, 127, 168)');
 
 ### Default calendars
-INSERT INTO __calendars (id,name,color,private,feed,system, type, restricted, affiliation, permissions) VALUES ('1','Raids','#00628c','0',NULL,'1', '1', '1', 'core', 'all');
-INSERT INTO __calendars (id,name,color,private,feed,system, type, restricted, affiliation, permissions) VALUES ('2','Userraids','#0cb20f','0',NULL,'1', '1', '0', 'core', 'all');
-INSERT INTO __calendars (id,name,color,private,feed,system, type, restricted, affiliation, permissions) VALUES ('3','Standard','#ba1e1e','0',NULL,'0', '2', '0', 'core', 'all');
+INSERT INTO __calendars (`id`, `name`, `color`, `private`, `feed`, `system`, `type`, `restricted`, `affiliation`, `permissions`) VALUES ('1','Raids','#00628c','0',NULL,'1', '1', '1', 'core', 'all');
+INSERT INTO __calendars (`id`, `name`, `color`, `private`, `feed`, `system`, `type`, `restricted`, `affiliation`, `permissions`) VALUES ('2','Userraids','#0cb20f','0',NULL,'1', '1', '0', 'core', 'all');
+INSERT INTO __calendars (`id`, `name`, `color`, `private`, `feed`, `system`, `type`, `restricted`, `affiliation`, `permissions`) VALUES ('3','Standard','#ba1e1e','0',NULL,'0', '2', '0', 'core', 'all');
 
 ### Member ranks
-INSERT INTO __member_ranks (rank_id, rank_name) VALUES ('0', '');
-INSERT INTO __member_ranks (rank_id, rank_name) VALUES ('1', 'Member');
+INSERT INTO __member_ranks (`rank_id`, `rank_name`) VALUES ('0', '');
+INSERT INTO __member_ranks (`rank_id`, `rank_name`) VALUES ('1', 'Member');
 
 ## Links
 INSERT INTO `__links` (`link_id`, `link_url`, `link_name`, `link_window`, `link_menu`, `link_sortid`, `link_visibility`, `link_height`) VALUES (1, '#', 'Guild', '0', 0, 0, '[&#34;0&#34;]', 4024);
@@ -83,13 +83,13 @@ INSERT INTO `__links` (`link_id`, `link_url`, `link_name`, `link_window`, `link_
 
 
 #multidkp-pool
-INSERT INTO __multidkp (multidkp_id, multidkp_name, multidkp_desc) VALUES ('1', 'def', 'Default-Pool');
+INSERT INTO __multidkp (`multidkp_id`, `multidkp_name`, `multidkp_desc`) VALUES ('1', 'def', 'Default-Pool');
 
 #itempools
-INSERT INTO __itempool (itempool_name, itempool_desc) VALUES ('default', 'Default itempool');
+INSERT INTO __itempool (`itempool_name`, `itempool_desc`) VALUES ('default', 'Default itempool');
 
 #multidkp2itempool
-INSERT INTO __multidkp2itempool (multidkp2itempool_itempool_id, multidkp2itempool_multi_id) VALUES (1, 1);
+INSERT INTO __multidkp2itempool (`multidkp2itempool_itempool_id`, `multidkp2itempool_multi_id`) VALUES (1, 1);
 
 #article categories
 INSERT INTO `__article_categories` (`id`, `name`, `alias`, `portal_layout`, `description`, `per_page`, `permissions`, `published`, `parent`, `sort_id`, `list_type`, `aggregation`, `featured_only`, `notify_on_onpublished_articles`, `social_share_buttons`, `show_childs`, `article_published_state`, `hide_header`, `sortation_type`, `featured_ontop`, `hide_on_rss`) VALUES (1, 'System', 'system', 1, '', 25, 'a:5:{s:3:"rea";a:6:{i:2;s:1:"1";i:3;s:1:"1";i:4;s:1:"1";i:5;s:1:"1";i:6;s:1:"1";i:1;s:1:"1";}s:3:"cre";a:6:{i:2;s:1:"1";i:3;s:1:"1";i:4;s:2:"-1";i:5;s:2:"-1";i:6;s:1:"0";i:1;s:2:"-1";}s:3:"upd";a:6:{i:2;s:1:"1";i:3;s:1:"1";i:4;s:2:"-1";i:5;s:2:"-1";i:6;s:1:"0";i:1;s:2:"-1";}s:3:"del";a:6:{i:2;s:1:"1";i:3;s:1:"1";i:4;s:2:"-1";i:5;s:2:"-1";i:6;s:1:"0";i:1;s:2:"-1";}s:3:"chs";a:6:{i:2;s:1:"1";i:3;s:1:"1";i:4;s:2:"-1";i:5;s:2:"-1";i:6;s:1:"0";i:1;s:2:"-1";}}', 1, 0, 99999999, 1, 'a:0:{}', 0, 0, 0, 0, 1, 0, 1, 0, 1);
