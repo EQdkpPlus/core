@@ -523,7 +523,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 
 		public function get_add_snapshot($intMemberID, $intMdkpID){
 			$objQuery = $this->db->prepare("INSERT INTO __member_points :p")->set(array(
-				'time' 		=> time(),
+				'time' 		=> $this->time->time,
 				'member_id' => $intMemberID,
 				'mdkp_id'	=> $intMdkpID,
 				'current'	=> $this->get_current($intMemberID, $intMdkpID, 0, 0, false, false),
