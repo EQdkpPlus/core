@@ -86,5 +86,31 @@ $(function(){
 		$('#overwrite-game').val(selected);
 		$( "#dialog-change-game" ).dialog('close');
 	})
+	
+	$( "#dialog-mailtest" ).dialog({
+		height: 200,
+		width: 400,
+		modal: true,
+		autoOpen: false,
+	});
 })
+
+function testmail(){
+	$.get("manage_settings.php{SID}&ajax=mailtest", function(data) {
+		mailtest_callback($.trim(data), {L_test_mail|jsencode});
+	});
+}
+
+var mailtest_callback = function(data, cronname){
+	$( "#dialog-mailtest-content" ).html( data );
+	$( "#dialog-mailtest" ).dialog('option', 'title', cronname);
+	$( "#dialog-mailtest" ).dialog( "open" );
+};
+
 </script>
+
+<div id="dialog-mailtest" title="" style="display:none;">
+		<div id="dialog-mailtest-content">
+			
+		</div>
+</div>

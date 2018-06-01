@@ -1866,7 +1866,9 @@ $lang = array(
 		'wizard_step6_info'=> "Here you can select which pointsystem you want to user. If you don't know which one you are going to use, keep the 'normal' one. If you don't need points, select the 'nopoint' pointsystem. You can change your pointsystem later, using the 'Table- & Pointmanagement'.",
 		'wizard_step7'=> "Quickstart-Assitant finished",
 		'wizard_step7_info'=> "You are now done with the Quickstart-Assistant. Have fun with your EQdkp Plus!",
-		
+		"test_mail" => "Send testmail",
+		"test_mail_ok" => "Testmail was sent successfully.",
+		"test_mail_fail" => "While sending the testmail, an error occured:",
 );
 
 ?>

@@ -28,6 +28,7 @@ class admin_settings extends page_generic {
 	public static $shortcuts = array(
 			'itt' => 'infotooltip',
 			'social' => 'socialplugins',
+			'email'=>'MyMailer',
 			'form'	=> array('form', array('core_settings'))
 		);
 
@@ -37,6 +38,7 @@ class admin_settings extends page_generic {
 		$handler = array(
 			'ajax'	=> array(
 				array('process' => 'ajax_gamelanguage',	'value' => 'games'),
+				array('process' => 'ajax_mailtest',	'value' => 'mailtest'),
 			),
 			'dellogo' => array('process' => 'delete_logo'),
 		);
@@ -47,6 +49,28 @@ class admin_settings extends page_generic {
 	public function delete_logo(){
 		$this->pfh->Delete( $this->pfh->FolderPath('','files').$this->config->get('custom_logo'));
 		$this->config->set("custom_logo", "");
+	}
+	
+	public function ajax_mailtest(){
+		$adminmail	= register('encrypt')->decrypt($this->config->get('admin_email'));
+		
+		$options = array(
+				'template_type'		=> 'input',
+		);
+		
+		//Set E-Mail-Options
+		$this->email->SetOptions($options);
+		
+		$blnResult = $this->email->SendMail($adminmail, $adminmail, "Testmail", "This is a test mail to check your mail settings.");
+		
+		if($blnResult){
+			echo $this->user->lang('test_mail_ok');
+		} else {
+			echo $this->user->lang('test_mail_fail').'<br /><br />';
+			echo $this->email->ErrorInfo;
+		}
+		
+		exit;
 	}
 
 	public function ajax_gamelanguage() {
@@ -334,6 +358,7 @@ class admin_settings extends page_generic {
 						'type'			=> 'dropdown',
 						'tolang'		=> true,
 						'options'		=> $mail_array,
+						'text_after' => '<button onclick="testmail()" type="button"><i class="fa fa-lg fa-envelope-o"></i> '.$this->user->lang('test_mail').'</button>',
 						'dependency'	=> array(
 							'sendmail' => array('lib_email_sendmail_path'),
 							'smtp' => array('lib_email_smtp_host', 'lib_email_smtp_port', 'lib_email_smtp_connmethod', 'lib_email_smtp_auth', 'lib_email_smtp_user', 'lib_email_smtp_pw')

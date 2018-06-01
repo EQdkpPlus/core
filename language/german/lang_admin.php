@@ -1871,6 +1871,8 @@ $lang = array(
 'wizard_step6_info'=> "Hier kannst du das Punktesystem auswählen, welches du verwenden willst. Solltest du noch nicht wissen, welches du verwenden willst, belasse es einfach bei 'normal'. Wenn du überhaupt keine Punkte brauchst, wähle 'nopoints' aus. Du kannst das Punktesystem auch später über die 'Tabellen- & Punkteverwaltung' später jederzeit ändern.",
 'wizard_step7'=> "Schnellstart-Assistent beendet",
 'wizard_step7_info'=> "Du hast nun die wichtigsten Einstellungen erledigt. Viel Spaß mit EQdkp Plus!",
-
+"test_mail" => "Testemail senden",
+"test_mail_ok" => "Die Testemail wurde erfolgreich versendet.",
+"test_mail_fail" => "Beim Versenden der Testemail ist ein Fehler aufgetreten:",
 );
 ?>
