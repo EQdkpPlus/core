@@ -61,12 +61,13 @@ if (!class_exists('exchange_calevents_list')){
 						}
 
 						// Build the guest array
-						$guests	= array();
+						$guests = array(0 => 0, 1=>0, 2=>0, 3=>0);
 						if(registry::register('config')->get('calendar_raid_guests') > 0){
 							$guestarray = registry::register('plus_datahandler')->get('calendar_raids_guests', 'members', array($intRaidID));
 							if(is_array($guestarray)){
 								foreach($guestarray as $guest_row){
-									$guests[] = $guest_row['name'];
+									$statusid = intval($guest_row['status']);
+									$guests[$statusid] = $guests[$statusid] + 1;
 								}
 							}
 						}
@@ -78,9 +79,7 @@ if (!class_exists('exchange_calevents_list')){
 							foreach($raidcal_status as $raidcalstat_id){
 								if($raidcalstat_id != 4){
 									$actcount  = ((isset($attendees[$raidcalstat_id])) ? count($attendees[$raidcalstat_id]) : 0);
-									if($raidcalstat_id == 0){
-										$actcount += (is_array($guests) ? count($guests) : 0);
-									}
+									$actcount += $guests[$raidcalstat_id];
 									$rstatusdata['status'.$raidcalstat_id] = array(
 										'id'	=> $raidcalstat_id,
 										'name'	=> $this->user->lang(array('raidevent_raid_status', $raidcalstat_id)),
