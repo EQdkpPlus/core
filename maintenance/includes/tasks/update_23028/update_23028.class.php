@@ -26,7 +26,7 @@ if ( !defined('EQDKP_INC') ){
 include_once(registry::get_const('root_path').'maintenance/includes/sql_update_task.class.php');
 
 class update_23028 extends sql_update_task {
-	public $author			= 'Wallenium';
+	public $author			= 'GodMod';
 	public $version			= '2.3.0.28'; //new plus-version
 	public $ext_version		= '2.3.0'; //new plus-version
 	public $name			= '2.3.0 RC9';
@@ -34,7 +34,6 @@ class update_23028 extends sql_update_task {
 	public function __construct(){
 		parent::__construct();
 
-// combined update 2.3.0.1 to 2.3.0.11
 		$this->langs = array(
 			'english' => array(
 				'update_23028'	=> 'EQdkp Plus 2.3.0 RC9',
