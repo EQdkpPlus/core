@@ -52,7 +52,7 @@ if ( !class_exists( "inactive_crontask" ) ) {
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					//set the members immediately active, as they have been confirmed
-					if((int)$row['signup_status'] === 0){
+					if((int)$row['signup_status'] === 0 || (int)$row['signup_status'] === 3){
 						$member_id = (int)$row['member_id'];
 						$this->pdh->put('member', 'change_status', array($member_id, 1));
 						
