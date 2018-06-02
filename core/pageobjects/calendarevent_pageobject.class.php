@@ -727,6 +727,7 @@ class calendarevent_pageobject extends pageobject {
 		if(in_array(4, $raidcal_status)){
 			$a_js_disable = array();
 
+			$sort_names = $sort_class = array();
 			// sort the array
 			foreach ($this->unsigned as $k_unsigned => $v_unsigned) {
 				$sort_names[$k_unsigned]	= $v_unsigned['name'];
