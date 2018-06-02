@@ -739,6 +739,7 @@ class calendarevent_pageobject extends pageobject {
 			}
 
 			// build the json data
+			$array_json	= array();
 			foreach($this->unsigned as $us_key => $us_classdata){
 				if($us_classdata['userid'] > 0){
 					$myrolesrry		= $this->pdh->get('roles', 'memberroles', array($us_classdata['classid']));
