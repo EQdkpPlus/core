@@ -41,7 +41,6 @@ if (!class_exists("jquery")) {
 			'jqplot'			=> false,
 			'spinner'			=> false,
 			'multilang'			=> false,
-			'placepicker'		=> false,
 			'monthpicker'		=> false,
 			'geomap'			=> false,
 			'qtip'				=> array(),
@@ -198,21 +197,6 @@ if (!class_exists("jquery")) {
 				", "docready");
 
 				$this->inits['multilang']	= true;
-			}
-		}
-
-		// http://benignware.github.io/jquery-placepicker/
-		public function init_placepicker($returnJS){
-			if(!$this->inits['placepicker']){
-				if($returnJS){
-					$output	 = "<script type='text/javascript' src='https://maps.googleapis.com/maps/api/js?key=".$this->googleAPIkey."&sensor=true&libraries=places'></script>";
-					$output .= "<script type='text/javascript' src='".$this->env->buildlink()."/libraries/jquery/js/placepicker/jquery.placepicker.min.js'></script>";
-					return $output;
-				}else{
-					$this->tpl->js_file("https://maps.googleapis.com/maps/api/js?key=".$this->googleAPIkey."&sensor=true&libraries=places", 'direct');
-					$this->tpl->js_file($this->path."js/placepicker/jquery.placepicker.min.js");
-				}
-				$this->inits['placepicker']	= true;
 			}
 		}
 
@@ -584,18 +568,18 @@ if (!class_exists("jquery")) {
 		* @return false
 		*/
 		public function Autocomplete($id, $myarray, $returnJS=false){
+			if (is_array($id)){
+				$ids = implode(',#', $id);
+				$id = array_shift($id);
+			} else {
+				$ids = $id;
+			}
+
 			if(is_array($myarray) && count($myarray) > 0){
 				foreach($myarray as $k => $v){
 					$myarray[$k] = $this->sanitize($v, true);
 				}
 				$js_array = $this->implode_wrapped('"','"', ",", $myarray);
-				if (is_array($id)){
-					$ids = implode(',#', $id);
-					$id = array_shift($id);
-				} else {
-					$ids = $id;
-				}
-
 
 				$this->returnJScache['autocomplete'][$id] = 'var jquiac_'.$id.' = ['.$js_array.'];
 						$("#'.$ids.'").autocomplete({
@@ -605,6 +589,14 @@ if (!class_exists("jquery")) {
 					$this->tpl->add_js($this->returnJScache['autocomplete'][$id], 'docready');
 				}
 				return '['.$js_array.']';
+			}else{
+				$this->returnJScache['autocomplete'][$id] = '
+						$("#'.$ids.'").autocomplete({
+							source: "'.$myarray.'"
+						});';
+				if(!$returnJS){
+					$this->tpl->add_js($this->returnJScache['autocomplete'][$id], 'docready');
+				}
 			}
 			return '[]';
 		}
@@ -1623,16 +1615,8 @@ if (!class_exists("jquery")) {
 			return array('id' => $toolbar_id, 'items' => $intItems);
 		}
 
-		public function placepicker($id, $withmap=false, $returnJS=false){
-			$init_PP	= $this->init_placepicker($returnJS);
-			if($returnJS){
-				$this->returnJScache['placepicker'][$id] = $init_PP."<script>$('#".$id."').placepicker();</script>";
-			}else{
-				$this->returnJScache['placepicker'][$id] = "$('#".$id."').placepicker();";
-			}
-
-			if(!$returnJS){ $this->tpl->add_js($this->returnJScache['placepicker'][$id], "docready"); }
-			return true;
+		public function placepicker($id, $returnJS=false){
+			return $this->Autocomplete($id, $this->env->link.'exchange.php?out=placepicker', $returnJS);
 		}
 
 		public function geomaps($id, $arrMarkers=array()){

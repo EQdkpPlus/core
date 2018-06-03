@@ -267,24 +267,22 @@ if(registry::register('input')->get('out') != ''){
 				echo 'access_denied';
 			}
 
-			$result = register('geoloc')->getAutocompleteResult(registry::register('input')->get('placesearch', ''), registry::fetch('user')->lang('XML_LANG'));
-			#var_dump($result);exit;
-			$arrOut	= array();
+			$searchterm	= registry::register('input')->get('term', '');
+			$result		= register('geoloc')->getAutocompleteResult($searchterm, registry::fetch('user')->lang('XML_LANG'));
+
+			$out	= array();
 			foreach($result['features'] as $resultkey=>$resultdata){
 				$result_name	= $resultdata['properties']['name'];
 				$result_city	= $resultdata['properties']['city'];
 				$result_country	= $resultdata['properties']['country'];
+				if(strpos($result_city, $searchterm) === false) continue;
 
-				$out[$resultkey]	 = '';
-				$out[$resultkey]	.= $result_name;
-				if($result_city && $result_name !== $result_city){
-					$out[$resultkey]	.= ', '.$result_city;
-				}
+				$out[$resultkey]	= $result_city;
 				if($result_country){
 					$out[$resultkey]	.= ', '.$result_country;
 				}
 			}
-			echo $out;
+			echo json_encode(array_values($out));
 			exit;
 		break;
 	}
