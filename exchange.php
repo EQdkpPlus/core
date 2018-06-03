@@ -263,6 +263,10 @@ if(registry::register('input')->get('out') != ''){
 		break;
 
 		case 'placepicker':
+			if (!registry::fetch('user')->is_signedin()){
+				echo 'access_denied';
+			}
+
 			$result = register('geoloc')->getAutocompleteResult(registry::register('input')->get('placesearch', ''), registry::fetch('user')->lang('XML_LANG'));
 			#var_dump($result);exit;
 			$arrOut	= array();
@@ -280,7 +284,6 @@ if(registry::register('input')->get('out') != ''){
 					$out[$resultkey]	.= ', '.$result_country;
 				}
 			}
-			d($out);exit;
 			echo $out;
 			exit;
 		break;
