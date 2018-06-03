@@ -34,7 +34,8 @@ class geolocation extends gen_class {
 	public static $shortcuts = array('puf' => 'urlfetcher');
 
 	// API URL
-	const nominatim_apiURL = 'https://nominatim.openstreetmap.org/';
+	const nominatim_apiURL	= 'https://nominatim.openstreetmap.org/';
+	const photon_apiURL		= 'https://photon.komoot.de/api/?q=berlin';
 
 	/**
 	* Do call
@@ -42,9 +43,12 @@ class geolocation extends gen_class {
 	* @return object
 	* @param  array  $parameters
 	*/
-	protected function doCall($parameters = array(), $type="normal"){
-		// define url
-		$url = self::nominatim_apiURL.(($type == "reverse") ? 'reverse?format=json&' : 'search?format=json&');
+	protected function doCall($parameters = array(), $engine="nominatim", $type="normal"){
+		if($engine == "nominatim"){
+			$url = self::nominatim_apiURL.(($type == "reverse") ? 'reverse?format=json&' : 'search?format=json&');
+		}else{
+			$url = self::photon_apiURL.'?';
+		}
 		foreach ($parameters as $key => $value) $url .= $key . '=' . urlencode($value) . '&';
 
 		// fetch the data
@@ -82,7 +86,7 @@ class geolocation extends gen_class {
 			'lat'				=> $latitude,
 			'lon'				=> $longitude,
 			'addressdetails'	=> 1
-		), 'reverse');
+		), 'nominatim', 'reverse');
 
 		return $addressSuggestions->address;
 	}
@@ -117,5 +121,14 @@ class geolocation extends gen_class {
 			'latitude'	=> array_key_exists(0, $results) ? (float) $results[0]['lat'] : null,
 			'longitude'	=> array_key_exists(0, $results) ? (float) $results[0]['lon'] : null
 		);
+	}
+
+	public function getAutocompleteResult($input='', $language='en'){
+		if(empty($input)) return array();
+
+		return $this->doCall(array(
+			'q'		=> sanitize($input),
+			'lang'	=> $language,
+		), 'photon');
 	}
 }
