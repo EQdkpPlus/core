@@ -41,17 +41,16 @@ if ( !class_exists( "inactive_crontask" ) ) {
 			
 			//Check the Raids
 			$members = $this->pdh->aget('member_dates', 'last_raid', 0, array($this->pdh->get('member', 'id_list'), null, false));
-			$crit_time = $this->time->time - 24*3600*$this->config->get('inactive_period');
+			$crit_time = $this->time->time - (24*3600*intval($this->config->get('inactive_period')));
 			foreach($members as $member_id => $last_raid) {
 				if($last_raid < $crit_time) $arrMarkedForInactive[$member_id] = $member_id;
 			}
-			$this->pdh->process_hook_queue();
 			
 			//Now check the calendarevents for attendance
 			$objQuery = $this->db->prepare("SELECT ca.* FROM __calendar_events ce, __calendar_raid_attendees ca WHERE ce.timestamp_start < ? AND ce.timestamp_start > ? AND ca.calendar_events_id = ce.id")->execute($this->time->time, $crit_time);
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
-					//set the members immediately active, as they have been confirmed
+					//set the members immediately active, as they have been confirmed or backup
 					if((int)$row['signup_status'] === 0 || (int)$row['signup_status'] === 3){
 						$member_id = (int)$row['member_id'];
 						$this->pdh->put('member', 'change_status', array($member_id, 1));
@@ -65,6 +64,8 @@ if ( !class_exists( "inactive_crontask" ) ) {
 			foreach($arrMarkedForInactive as $member_id){
 				$this->pdh->put('member', 'change_status', array($member_id, 0));
 			}
+			
+			$this->pdh->process_hook_queue();
 		}
 	}
 }
