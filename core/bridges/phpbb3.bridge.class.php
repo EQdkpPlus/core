@@ -158,7 +158,7 @@ class phpbb3_bridge extends bridge_generic {
 	
 	public function autologin($arrCookieData){
 		//If Single Sign On is disabled, abort
-		if ($this->config->get('cmsbridge_disable_sso') != '1') return false;
+		if ((int)$this->config->get('cmsbridge_disable_sso') == 1) return false;
 		
 		$query = $this->bridgedb->query("SELECT * FROM ".$this->prefix."config");
 		if ($query){
@@ -239,7 +239,7 @@ class phpbb3_bridge extends bridge_generic {
 	
 	public function logout() {
 		//If Single Sign On is disabled, abort
-		if ($this->config->get('cmsbridge_disable_sso') != '1') return false;
+		if ((int)$this->config->get('cmsbridge_disable_sso') == 1) return false;
 		
 		$arrUserdata = $this->bridge->get_userdata($this->user->data['username']);
 		if (isset($arrUserdata['id'])){
@@ -253,10 +253,10 @@ class phpbb3_bridge extends bridge_generic {
 			}
 		} else return;
 				
-		setcookie($arrConfig['cookie_name'].'_sid', '', 0, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
+		setcookie($arrConfig['cookie_name'].'_sid', 'somevalue', 0, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
 		//User-Cookie
-		setcookie($arrConfig['cookie_name'].'_u', '', 0, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
-		setcookie($arrConfig['cookie_name'].'_k', '', 0, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
+		setcookie($arrConfig['cookie_name'].'_u', 'somevalue', 0, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
+		setcookie($arrConfig['cookie_name'].'_k', 'somevalue', 0, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
 	}
 	
 	public function sync($arrUserdata){
