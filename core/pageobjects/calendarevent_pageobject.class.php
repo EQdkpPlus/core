@@ -1327,9 +1327,7 @@ class calendarevent_pageobject extends pageobject {
 					'location-lon'	=> $result['longitude'],
 				)));
 				$this->pdh->process_hook_queue();
-				
-				echo "hallo";
-				
+
 				$eventdata['extension']['location-lat'] = $result['latitude'];
 				$eventdata['extension']['location-lon'] = $result['longitude'];
 			}
