@@ -1041,6 +1041,9 @@ $lang = array(
 	"core_sett_f_help_special_members" => 'Special characters are \'bank\' or \'disenchanted\'. They are not shown on e.g. the points list.',
 	"core_sett_f_special_user" => 'Special users',
 	"core_sett_f_help_special_user" => 'Special user are user like the maintenance user. They are not shown on e.g. the userlist.',
+	"core_sett_f_password_length" => 'Required length of passwords',
+	"core_sett_f_banned_emails" => 'Blocked email addresses',
+	"core_sett_f_help_banned_emails" => 'Each email address in one line. You can use * for wildcards, e.g. "*@gmail.com"',
 	"core_sett_f_detail_twink" => 'Detailed twink information',
 	"core_sett_f_help_detail_twink" => 'If activated, you can view a list of Twinks with their corresponding points for each character on the standings page.',
 	"core_sett_f_hide_inactive" => 'Hide Inactive characters',
@@ -1838,7 +1841,13 @@ $lang = array(
 		"core_sett_f_notify_updates_email" => "Notify admin via mail about updates",
 		"create_style" => "Create new style",
 		"style_parent" => "Select template",
-		
+		"confirm_delete_member_history" => "Are you sure you want to delete the selected adjustments, items and the selected raid attendance of the character?",
+		"confirm_delete_member_history_raids" => "Delete selected raids instead only the attendance of the character",		
+		"manage_users_search" => "Search Users",
+		"locked" => "Locked",
+		"not_confirmed" => "No activated Email-address",
+		"count_chars" => "Number of characters",
+		"user_download_gdpr" => "Download personal data (GDPR)",
 		//Quickstart Wizard
 		'wizard' => "Quickstart-Assistant",
 		'wizard_step0'=> "Select game",
@@ -1857,7 +1866,9 @@ $lang = array(
 		'wizard_step6_info'=> "Here you can select which pointsystem you want to user. If you don't know which one you are going to use, keep the 'normal' one. If you don't need points, select the 'nopoint' pointsystem. You can change your pointsystem later, using the 'Table- & Pointmanagement'.",
 		'wizard_step7'=> "Quickstart-Assitant finished",
 		'wizard_step7_info'=> "You are now done with the Quickstart-Assistant. Have fun with your EQdkp Plus!",
-		
+		"test_mail" => "Send testmail",
+		"test_mail_ok" => "Testmail was sent successfully.",
+		"test_mail_fail" => "While sending the testmail, an error occured:",
 );
 
 ?>

@@ -433,12 +433,13 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
 					$strError =  $e->getMessage();
 					throw new DBALQueryException($strError);
 				}
-				
-				//Now Return
-				if (is_object($objStatement)) $this->resConnection->affectedRows = $objStatement->rowCount();
-				if (is_object($objStatement) && $objStatement->columnCount() === 0) return true;
-				return $objStatement;
 			}
+			
+			
+			//Now Return
+			if (is_object($objStatement)) $this->resConnection->affectedRows = $objStatement->rowCount();
+			if (is_object($objStatement) && $objStatement->columnCount() === 0) return true;
+			return $objStatement;
 			
 		} else {
 			$arrParams = array();
@@ -505,6 +506,20 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
 		return $this;
 	}
 	
+	private function add_ticks($mixTables){
+		if(is_array($mixTables)){
+			foreach($mixTables as $key => $val){
+				if($val[0] != "`") $mixTables[$key] = "`".$val."`";
+			}
+			
+			return $mixTables;
+			
+		} else {
+			if($mixTables[0] != "`") $mixTables = "`".$mixTables."`";
+			return $mixTables;
+		}
+	}
+	
 	
 	/**
 	 * Take an associative array and auto-generate the SET/VALUES subpart of a query
@@ -526,7 +541,7 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
 			{
 				$arrQuestions = array_fill(0, count($arrParams[$arrKeys[0]]), '?');
 				$strQuery = sprintf('(%s) VALUES (%s)',
-						implode(', ', array_keys($arrParams[$arrKeys[0]])),
+						implode(', ', $this->add_ticks(array_keys($arrParams[$arrKeys[0]]))),
 						implode(', ', $arrQuestions));
 			}
 
@@ -549,7 +564,7 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
 				$this->arrParams['set'] = array_values($arrParams);
 				$arrQuestions = array_fill(0, count($arrParams), '?');
 				$strQuery = sprintf('(%s) VALUES (%s)',
-						implode(', ', array_keys($arrParams)),
+						implode(', ', $this->add_ticks(array_keys($arrParams))),
 						implode(', ', $arrQuestions));
 			}
 			
@@ -561,7 +576,7 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
 				
 				foreach ($arrParams as $k=>$v)
 				{
-					$arrSet[] = $k . '=?';
+					$arrSet[] = $this->add_ticks($k) . '=?';
 				}
 				
 				$strQuery = 'SET ' . implode(', ', $arrSet);

@@ -82,7 +82,12 @@ if ( !class_exists( "pdh_r_points_history" ) ) {
 				if($arrLastSnapshot){
 					$intTime = (int)$arrLastSnapshot['time'];
 					if($intTime >= $from && $intTime <= $to){
-						$arrPoints = unserialize($arrLastSnapshot['misc']);
+						if(strlen($arrLastSnapshot['misc'])){
+							$arrPoints = unserialize($arrLastSnapshot['misc']);
+							unset($arrPoints['adjustment'][0]);
+							unset($arrPoints['earned'][0]);
+							unset($arrPoints['spent'][0]);
+						} 
 					}
 					
 					//Get latest activities
@@ -97,7 +102,7 @@ if ( !class_exists( "pdh_r_points_history" ) ) {
 				$arrEvents = $this->get_time_items($from, $to);
 				$arrPoints = array('earned' => array(), 'spent' => array(), 'adjustment' => array());
 			}
-			
+
 			//For each item
 			foreach($arrEvents['items'] as $itemID){
 				$member_id = $this->pdh->get('item', 'buyer', array($itemID));
@@ -116,6 +121,7 @@ if ( !class_exists( "pdh_r_points_history" ) ) {
 					}
 				}
 			}
+
 			
 			//Adjustments
 			foreach($arrEvents['adjustments'] as $adjID){
@@ -131,6 +137,8 @@ if ( !class_exists( "pdh_r_points_history" ) ) {
 				}
 			}
 			
+			
+			
 			//Raids
 			foreach($arrEvents['raids'] as $raidID){
 				$attendees = $this->pdh->get('raid', 'raid_attendees', array($raidID));
@@ -145,7 +153,6 @@ if ( !class_exists( "pdh_r_points_history" ) ) {
 				}
 			}
 
-			
 			//calculate
 			if(is_array($arrPoints['earned'])){
 				foreach($arrPoints['earned'] as $event_id => $earned){
@@ -155,7 +162,10 @@ if ( !class_exists( "pdh_r_points_history" ) ) {
 			
 			if(is_array($arrPoints['spent'])){
 				foreach($arrPoints['spent'] as $event_id => $itempools) {
+					$arrPoints['spent'][$event_id][0] = 0;
+
 					foreach($itempools as $itempool_id => $spent){
+						if($itempool_id == 0) continue;
 						$arrPoints['spent'][0][0] += $spent;
 						if(!isset($arrPoints['spent'][$event_id][0])) $arrPoints['spent'][$event_id][0] = 0;
 						$arrPoints['spent'][$event_id][0] += $spent;
@@ -195,7 +205,7 @@ if ( !class_exists( "pdh_r_points_history" ) ) {
 				$arrPoints['earned'][0] = (isset($points['earned'][0])) ? $points['earned'][0] : 0;
 				$arrPoints['spent'][0] = (isset($points['spent'][0])) ? $points['spent'][0] : 0;
 				$arrPoints['adjustment'][0] = (isset($points['adjustment'][0])) ? $points['adjustment'][0] : 0;
-
+				
 				//Accumulate points from twinks
 				if(!empty($twinks) && is_array($twinks)){
 					foreach($twinks as $twinkid){

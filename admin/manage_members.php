@@ -69,24 +69,35 @@ class Manage_Members extends page_generic {
 		$arrItems = $this->in->getArray('item_ids', 'int');
 		$arrRaids = $this->in->getArray('raid_ids', 'int');
 		$arrAdjustments = $this->in->getArray('adj_ids', 'int');
+		
+		$intMember = $this->in->get('member', 0);
 
 		$intDelCount = 0;
 
 		//Raids
 		if(count($arrRaids) > 0 && $this->user->check_auth('a_raid_del', false)) {
-			foreach($arrRaids as $raidid) {
-
-				//delete everything connected to the raid
-				//adjustments first
-				$adj_ids = $this->pdh->get('adjustment', 'adjsofraid', array($raidid));
-				$adj_del = array(true);
-				foreach($adj_ids as $id) {
-					$adj_del[] = $this->pdh->put('adjustment', 'delete_adjustment', array($id));
+			if($this->in->get('delete_raids', 0)){
+				foreach($arrRaids as $raidid) {
+					//delete everything connected to the raid
+					//adjustments first
+					$adj_ids = $this->pdh->get('adjustment', 'adjsofraid', array($raidid));
+					$adj_del = array(true);
+					foreach($adj_ids as $id) {
+						$adj_del[] = $this->pdh->put('adjustment', 'delete_adjustment', array($id));
+					}
+					//raid itself now
+					$raid_del = $this->pdh->put('raid', 'delete_raid', array($raidid));
+					if($raid_del) {
+						$intDelCount++;
+					}
 				}
-				//raid itself now
-				$raid_del = $this->pdh->put('raid', 'delete_raid', array($raidid));
-				if($raid_del) {
-					$intDelCount++;
+			} else {
+				foreach($arrRaids as $raidid) {
+					//delete raid attendance of the member
+					$raid_del = $this->pdh->put('raid', 'delete_raid_attendance', array($raidid, $intMember));
+					if($raid_del) {
+						$intDelCount++;
+					}
 				}
 			}
 		}
@@ -128,10 +139,10 @@ class Manage_Members extends page_generic {
 				$neg[] = $membername;
 			}
 		}
-		if($neg){
+		if(count($neg)){
 			$messages[]	= array('title' => $this->user->lang('del_nosuc'), 'text' => $this->user->lang('mems_no_del').implode(', ', $neg), 'color' => 'red');
 		}
-		if($pos){
+		if(count($pos)){
 			$messages[]	= array('title' => $this->user->lang('del_suc'), 'text' => $this->user->lang('mems_del').implode(', ', $pos), 'color' => 'green');
 		}
 		$this->display($messages);
@@ -225,6 +236,8 @@ class Manage_Members extends page_generic {
 		));
 
 		$this->jquery->Tab_header('profile_information', true);
+		
+		$this->jquery->Dialog('delete_warning', '', array('custom_js'=>"$('#del_history_entries_btm').click();", 'height' => 300, 'message' => $this->user->lang('confirm_delete_member_history').'<br /><br /><label><input type="checkbox" onclick="change_raid_setting(this.checked)" />'.$this->user->lang('confirm_delete_member_history_raids').'</label>'), 'confirm');
 
 		$this->tpl->assign_vars(array(
 				'MEMBER_NAME' => $strMembername,

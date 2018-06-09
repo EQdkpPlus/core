@@ -222,6 +222,12 @@ class editcalendarevent_pageobject extends pageobject {
 			if(is_array($invited_usergroup) && count($invited_usergroup) > 0){
 				$invited_users = $this->pdh->get('user_groups_users', 'user_list', array($invited_usergroup));
 			}
+
+			// fetch gelocation lat/lon values
+			$location_value		= $this->in->get('location');
+			$location_longlat	= $this->geoloc->getCoordinates($location_value);
+
+			// the query
 			$raidid			= $this->pdh->put('calendar_events', 'add_cevent', array(
 				$this->in->get('calendar_id'),
 				$this->in->get('eventname'),
@@ -234,8 +240,10 @@ class editcalendarevent_pageobject extends pageobject {
 				array(
 					'invited'			=> $invited_users,
 					'invited_usergroup'	=> $invited_usergroup,
-					'location'			=> $this->in->get('location'),
-					'calevent_icon'	=> $this->in->get('calevent_icon'),
+					'location'			=> $location_value,
+					'location-lat'		=> $location_longlat['latitude'],
+					'location-lon'		=> $location_longlat['longitude'],
+					'calevent_icon'		=> $this->in->get('calevent_icon'),
 				),
 				0,
 				$this->in->get('private', 0),
@@ -342,6 +350,8 @@ class editcalendarevent_pageobject extends pageobject {
 					'invited'			=> $invited_users,
 					'invited_usergroup'	=> $invited_usergroup,
 					'location'			=> $this->in->get('location'),
+					'location-lat'		=> '',
+					'location-lon'		=> '',
 					'calevent_icon'		=> $this->in->get('calevent_icon'),
 				),
 				$this->in->get('private', 0),

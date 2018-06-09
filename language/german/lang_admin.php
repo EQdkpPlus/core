@@ -1045,6 +1045,9 @@ $lang = array(
 "core_sett_f_help_special_members" => "Besondere Charaktere sind z.B. 'bank' oder 'disenchanted'. Sie werden z.B. auf der Punktestandsliste nicht angezeigt.",
 "core_sett_f_special_user" => "Besondere Benutzer",
 "core_sett_f_help_special_user" => "Besondere Benutzer sind z.B. 'Wartungsbenutzer'. Sie werden z.B. auf der Benutzerliste nicht angezeigt.",
+"core_sett_f_password_length" => 'Mindestlänge von Passwörter',
+"core_sett_f_banned_emails" => 'Blockierte Email-Adressen',
+"core_sett_f_help_banned_emails" => 'Eine Adresse pro Zeile. Du kannst * als Platzhalter verwenden, z.B. "*@gmail.com"',
 "core_sett_f_detail_twink" => "Detaillierte Informationen zu Twinks",
 "core_sett_f_help_detail_twink" => "Wenn aktiviert, kann auf der Punktestandsseite zu jedem einzelnen Charakter eine Liste ausgeklappt werden, in der seine Twinks aufgelistet stehen mit den zugehörigen Werten.",
 "core_sett_f_hide_inactive" => "Inaktive Charaktere verstecken",
@@ -1843,7 +1846,13 @@ $lang = array(
 "core_sett_f_notify_updates_email" => "Administrator per Email über Updates informieren",
 "create_style" => "Neuen Style erstellen",
 "style_parent" => "Vorlage auswählen",
-		
+"confirm_delete_member_history" => "Willst du die ausgewählten Korrekturen und Items, sowie die Raidteilnahme des Charakters wirklich löschen?",
+"confirm_delete_member_history_raids" => "Ausgewählte Raids komplett löschen anstatt nur die Raidteilnahme des Charakters",
+"manage_users_search" => "Benutzer suchen",
+"locked" => "Gesperrt",
+"not_confirmed" => "Keine aktivierte Email-Adresse",
+"count_chars" => "Anzahl an Charakteren",
+"user_download_gdpr" => "Persönliche Daten exportieren (DSGVO)",
 //Quickstart Wizard
 'wizard' => "Schnellstart-Assistent",
 'wizard_step0'=> "Spiel auswählen",
@@ -1862,6 +1871,8 @@ $lang = array(
 'wizard_step6_info'=> "Hier kannst du das Punktesystem auswählen, welches du verwenden willst. Solltest du noch nicht wissen, welches du verwenden willst, belasse es einfach bei 'normal'. Wenn du überhaupt keine Punkte brauchst, wähle 'nopoints' aus. Du kannst das Punktesystem auch später über die 'Tabellen- & Punkteverwaltung' später jederzeit ändern.",
 'wizard_step7'=> "Schnellstart-Assistent beendet",
 'wizard_step7_info'=> "Du hast nun die wichtigsten Einstellungen erledigt. Viel Spaß mit EQdkp Plus!",
-
+"test_mail" => "Testemail senden",
+"test_mail_ok" => "Die Testemail wurde erfolgreich versendet.",
+"test_mail_fail" => "Beim Versenden der Testemail ist ein Fehler aufgetreten:",
 );
 ?>

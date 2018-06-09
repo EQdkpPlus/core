@@ -57,13 +57,13 @@ function add_template(){
 					$('#delete_template_button').show();
 				}
 				console.log(mode);
-				system_message('{L_massmail_save_success|jsencode}', 'success');
+				system_message({L_massmail_save_success|jsencode}, 'success');
 			} else {
-				system_message('{L_massmail_save_nosuccess|jsencode}', 'error');
+				system_message({L_massmail_save_nosuccess|jsencode}, 'error');
 			}
 		})
 		.fail(function(data) {
-			system_message('{L_massmail_save_nosuccess|jsencode}', 'error');
+			system_message({L_massmail_save_nosuccess|jsencode}, 'error');
 		});
 
 	}

@@ -8,7 +8,7 @@
  * @author     Leo Feyer <http://www.contao.org>
  * @package    Driver
  */
-class dbal_mysql_pdo extends Database
+class dbal_mysql_old_pdo extends Database
 {
 	
 	protected $strDbalName = 'mysql pdo';
@@ -314,11 +314,11 @@ class dbal_mysql_pdo extends Database
 	 * Create a Database_Statement object
 	 * @param resource
 	 * @param boolean
-	 * @return DB_Mysql_PDO_Statement
+	 * @return DB_Mysql_PDO_Old_Statement
 	 */
 	protected function createStatement($resConnection, $strTablePrefix, $strDebugPrefix, $blnDisableAutocommit)
 	{
-		return new DB_Mysql_PDO_Statement($resConnection, $strTablePrefix, $strDebugPrefix, $blnDisableAutocommit);
+		return new DB_Mysql_PDO_Old_Statement($resConnection, $strTablePrefix, $strDebugPrefix, $blnDisableAutocommit);
 	}
 	
 	protected function show_create_table($strTable){	
@@ -334,14 +334,14 @@ class dbal_mysql_pdo extends Database
 
 
 /**
- * Class DB_Mysql_PDO_Statement
+ * Class DB_Mysql_PDO_Old_Statement
  *
  * Driver class for MySQLi databases.
  * @copyright  Leo Feyer 2005-2012
  * @author     Leo Feyer <http://www.contao.org>
  * @package    Driver
  */
-class DB_Mysql_PDO_Statement extends DatabaseStatement
+class DB_Mysql_PDO_Old_Statement extends DatabaseStatement
 {
 
 	/**
@@ -460,7 +460,7 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
 	 */
 	protected function createResult($resResult, $strQuery)
 	{
-		return new DB_Mysql_PDO_Result($resResult, $strQuery);
+		return new DB_Mysql_PDO_Old_Result($resResult, $strQuery);
 	}
 }
 
@@ -473,7 +473,7 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
  * @author     Leo Feyer <http://www.contao.org>
  * @package    Driver
  */
-class DB_Mysql_PDO_Result extends DatabaseResult
+class DB_Mysql_PDO_Old_Result extends DatabaseResult
 {
 
 	/**

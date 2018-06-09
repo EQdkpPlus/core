@@ -36,6 +36,7 @@ if( !class_exists( "apa_type_generic" ) ) {
 				'default'	=> 14400,
 				'hour'		=> 4,
 				'min'		=> 0,
+				'returnDatetime' => 1,
 				'required'	=> true,
 			),
 			'pools'	=> array(

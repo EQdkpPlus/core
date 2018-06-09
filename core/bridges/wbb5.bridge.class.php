@@ -212,7 +212,7 @@ class wbb5_bridge extends bridge_generic {
 	
 	public function autologin($arrCookieData){
 		//If Single Sign On is disabled, abort
-		if ($this->config->get('cmsbridge_disable_sso') != '1') return false;
+		if ((int)$this->config->get('cmsbridge_disable_sso') == 1) return false;
 		
 		$config = array();
 		$objQuery =  $this->bridgedb->query("SELECT * FROM ".$this->prefix."option WHERE optionName = 'cookie_prefix'");
@@ -254,7 +254,7 @@ class wbb5_bridge extends bridge_generic {
 	
 	public function logout(){
 		//If Single Sign On is disabled, abort
-		if ($this->config->get('cmsbridge_disable_sso') != '1') return false;
+		if ((int)$this->config->get('cmsbridge_disable_sso') == 1) return false;
 		
 		$arrUserdata = $this->bridge->get_userdata($this->user->data['username']);
 		if (isset($arrUserdata['id'])){
@@ -284,9 +284,9 @@ class wbb5_bridge extends bridge_generic {
 		
 		$config['cookie_path'] = (strlen($this->config->get('cmsbridge_sso_cookiepath'))) ? $this->config->get('cmsbridge_sso_cookiepath') : '/';
 		
-		setcookie($config['cookie_prefix'].'cookieHash', '', 0, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
-		setcookie($config['cookie_prefix'].'userID', '', 0, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
-		setcookie($config['cookie_prefix'].'password', '', 0, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
+		setcookie($config['cookie_prefix'].'cookieHash', 'somevalue', 0, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
+		setcookie($config['cookie_prefix'].'userID', 'somevalue', 0, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
+		setcookie($config['cookie_prefix'].'password', 'somevalue', 0, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
 	}
 	
 	public function sync_fields(){

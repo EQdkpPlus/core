@@ -279,6 +279,10 @@ class raids_pageobject extends pageobject {
 			}
 
 			chartooltip_js();
+			
+			if($this->hooks->isRegistered('viewraid')){
+				$this->hooks->process('viewraid', array('raid_id' => $raid_id));
+			}
 
 			$this->set_vars(array(
 					'page_title' 		=> $this->pdh->get('raid', 'event_name', array($raid_id)).', '.$this->time->user_date($this->pdh->get('raid', 'date', array($raid_id))),

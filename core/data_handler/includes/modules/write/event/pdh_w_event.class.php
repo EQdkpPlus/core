@@ -54,6 +54,11 @@ if(!class_exists('pdh_w_event')) {
 				);
 				$this->log_insert('action_event_added', $log_action, $id, $name);
 				$this->pdh->enqueue_hook('event_update', array($id));
+				
+				if($this->hooks->isRegistered('event_added')){
+					$this->hooks->process('event_added', array('id' => $id, 'data' => array()));
+				}
+				
 				return $id;
 			}
 			return false;
@@ -90,6 +95,10 @@ if(!class_exists('pdh_w_event')) {
 				);
 				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
 				if ($log_action) $this->log_insert('action_event_updated', $log_action, $id, $old['name']);
+				
+				if($this->hooks->isRegistered('event_updated')){
+					$this->hooks->process('event_updated', array('id' => $id, 'data' => $arrNew));
+				}
 								
 				$this->pdh->enqueue_hook('event_update', array($id));
 				return true;
@@ -128,6 +137,10 @@ if(!class_exists('pdh_w_event')) {
 					$this->pdh->enqueue_hook('event_update', array($id));
 					return true;
 				}
+				
+				if($this->hooks->isRegistered('event_deleted')){
+					$this->hooks->process('event_deleted', array('id' => $id, 'data' => $old));
+				}
 			}
 			$this->db->rollbackTransaction();
 			return false;
@@ -137,6 +150,10 @@ if(!class_exists('pdh_w_event')) {
 			$this->db->query("TRUNCATE TABLE __events;");
 			$this->db->query("TRUNCATE TABLE __multidkp2event;");
 			$this->pdh->enqueue_hook('event_update');
+			
+			if($this->hooks->isRegistered('event_reset')){
+				$this->hooks->process('event_reset', array());
+			}
 		}
 	}
 }

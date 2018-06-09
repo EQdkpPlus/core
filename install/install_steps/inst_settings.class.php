@@ -89,6 +89,7 @@ class inst_settings extends install_generic {
 		'admin_favs'					=> 'a:2:{i:0;s:7:"raids|1";i:1;s:8:"portal|4";}',
 		
 		'sp_opengraph_tags'				=> 1,
+		'password_length'				=> 8,
 			
 		// Calendar settings
 		'calendar_addevent_mode'		=> 'raid',

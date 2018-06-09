@@ -66,6 +66,9 @@
 		</form>
 		<br />
 		<form method="post" action="{ACTION}" name="post3">
+		<div class="center pagination_wrapper">
+			{LOGS_PAGINATION}
+		</div>
 		<table  class="table fullwidth colorswitch">
 			{LOGS_LIST}
 		</table>
@@ -117,6 +120,9 @@
 			<!-- BEGIN errorlogs -->
 			<div id="el_{errorlogs.TYPE}">
 				<h2>{errorlogs.TYPE} <span class="bubble">{errorlogs.COUNT}</span></h2>
+				<div class="center pagination_wrapper">
+					{errorlogs.PAGINATION}
+				</div>
 				<table  class="table fullwidth colorswitch">
 					<tr>
 						<th class="left" style="width:150px">{L_date}</th>

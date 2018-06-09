@@ -424,6 +424,7 @@ class core extends gen_class {
 				'T_COLUMN_RIGHT_WIDTH'		=> $this->user->style['column_right_width'],
 				'T_LOGO_POSITION'			=> $this->user->style['logo_position'],
 				'T_BACKGROUND_TYPE'			=> $this->user->style['background_type'],
+				'T_BACKGROUND_COLOR'		=> $this->user->style['background_color'],
 				'T_BACKGROUND_POSITION'		=> ($this->user->style['background_pos'] == 'normal') ? 'scroll' : 'fixed',
 				'T_MENU_BACKGROUND_COLOR'=> $this->user->style['menu_background_color'],
 				'S_REGISTER'				=> (int)$this->config->get('enable_registration'),

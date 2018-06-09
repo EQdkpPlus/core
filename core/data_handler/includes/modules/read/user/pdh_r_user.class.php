@@ -881,7 +881,7 @@ if (!class_exists("pdh_r_user")){
 					$tmpCryptAuthAccount								= $this->encrypt->decrypt($row['auth_account']);
 					$this->users[$row['user_id']]['auth_account']		= (is_serialized($tmpCryptAuthAccount)) ? unserialize($tmpCryptAuthAccount) : $tmpCryptAuthAccount;
 						
-					$this->users[$row['user_id']]['user_email_clean']	= utf8_strtolower($row['user_email']);
+					$this->users[$row['user_id']]['user_email_clean']	= utf8_strtolower($this->users[$row['user_id']]['user_email']);
 					
 				}
 				
@@ -897,7 +897,7 @@ if (!class_exists("pdh_r_user")){
 					$tmpCryptAuthAccount								= $this->encrypt->decrypt($row['auth_account']);
 					$this->users[$row['user_id']]['auth_account']		= (is_serialized($tmpCryptAuthAccount)) ? unserialize($tmpCryptAuthAccount) : $tmpCryptAuthAccount;
 					
-					$this->users[$row['user_id']]['user_email_clean']	= utf8_strtolower($row['user_email']);
+					$this->users[$row['user_id']]['user_email_clean']	= utf8_strtolower($this->users[$row['user_id']]['user_email']);
 				}
 				$this->arrUserdataDecrypted[] = $intUserID;
 			}

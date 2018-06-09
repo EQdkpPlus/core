@@ -141,7 +141,7 @@ class smf21_bridge extends bridge_generic {
 	
 	public function logout() {
 		//If Single Sign On is disabled, abort
-		if ($this->config->get('cmsbridge_disable_sso') != '1') return false;
+		if ((int)$this->config->get('cmsbridge_disable_sso') == 1) return false;
 		
 		$strBoardURL = parse_url($this->config->get('cmsbridge_url'), PHP_URL_HOST);
 		$strBoardPath = parse_url($this->config->get('cmsbridge_url'), PHP_URL_PATH);
@@ -153,7 +153,7 @@ class smf21_bridge extends bridge_generic {
 			$cookieDomain = ($strBoardURL == 'localhost') ? '' : $strBoardURL;
 		}
 		
-		setcookie($this->config->get('cmsbridge_sso_cookiename'), '', 0, $strBoardPath, $cookieDomain, $this->env->ssl);
+		setcookie($this->config->get('cmsbridge_sso_cookiename'), 'somevalue', 0, $strBoardPath, $cookieDomain, $this->env->ssl);
 	}
 	
 	public function sync($arrUserdata){

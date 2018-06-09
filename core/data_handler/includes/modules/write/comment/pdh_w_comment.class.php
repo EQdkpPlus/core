@@ -44,6 +44,11 @@ if(!class_exists('pdh_w_comment')) {
 			if($objQuery){
 				$id = $objQuery->insertId;
 				$this->pdh->enqueue_hook('comment_update', $id);
+				
+				if($this->hooks->isRegistered('comments_added')){
+					$this->hooks->process('comments_added', array('id' => $id, 'data' => array()));
+				}
+				
 				return $id;
 			}
 			return false;
@@ -60,6 +65,10 @@ if(!class_exists('pdh_w_comment')) {
 			))->execute($intCommentId);
 				
 			if($objQuery){
+				if($this->hooks->isRegistered('comments_updated')){
+					$this->hooks->process('comments_updated', array('id' => $intCommentId, 'data' => str_replace("\n", "[br]", $strComment)));
+				}
+				
 				return true;
 			}
 			return false;
@@ -69,12 +78,22 @@ if(!class_exists('pdh_w_comment')) {
 			if(!$id) return false;
 			$objQuery = $this->db->prepare("DELETE FROM __comments WHERE id=? OR reply_to=?")->execute($id, $id);
 			$this->pdh->enqueue_hook('comment_update', array($id));
+			
+			if($this->hooks->isRegistered('comments_deleted')){
+				$this->hooks->process('comments_deleted', array('id' => $id, 'data' => array()));
+			}
+			
 			return true;
 		}
 
 		public function uninstall($page) {
 			if(!$page) return false;
 			$objQuery = $this->db->prepare("DELETE FROM __comments WHERE page=?")->execute($page);
+			
+			if($this->hooks->isRegistered('comments_deleted')){
+				$this->hooks->process('comments_deleted', array('page' => $page, 'data' => array()));
+			}
+			
 			$this->pdh->enqueue_hook('comment_update');
 			return true;
 		}
@@ -82,6 +101,11 @@ if(!class_exists('pdh_w_comment')) {
 		public function delete_all($attach_id) {
 			if(!$attach_id) return false;
 			$objQuery = $this->db->prepare("DELETE FROM __comments WHERE attach_id=?")->execute($attach_id);
+			
+			if($this->hooks->isRegistered('comments_deleted')){
+				$this->hooks->process('comments_deleted', array('attach_id' => $attach_id, 'data' => array()));
+			}
+			
 			$this->pdh->enqueue_hook('comment_update');
 			return true;
 		}
@@ -89,6 +113,11 @@ if(!class_exists('pdh_w_comment')) {
 		public function delete_page($page) {
 			if(!$page) return false;
 			$objQuery = $this->db->prepare("DELETE FROM __comments WHERE page=?")->execute($page);
+			
+			if($this->hooks->isRegistered('comments_deleted')){
+				$this->hooks->process('comments_deleted', array('page' => $page, 'data' => array()));
+			}
+			
 			$this->pdh->enqueue_hook('comment_update');
 			return true;
 		}
@@ -96,6 +125,11 @@ if(!class_exists('pdh_w_comment')) {
 		public function delete_attach_id($page, $attach_id){
 			if(!$attach_id) return false;
 			$objQuery = $this->db->prepare("DELETE FROM __comments WHERE page=? AND attach_id=?")->execute($page, $attach_id);
+			
+			if($this->hooks->isRegistered('comments_deleted')){
+				$this->hooks->process('comments_deleted', array('page' => $page, 'attach_id' => $attach_id, 'data' => array()));
+			}
+			
 			$this->pdh->enqueue_hook('comment_update');
 			return true;
 		}

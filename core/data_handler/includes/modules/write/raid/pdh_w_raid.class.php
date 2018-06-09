@@ -89,6 +89,11 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 				$this->log_insert('action_raid_added', $log_action, $raid_id, $this->pdh->get('event', 'name', array($event_id)));
 				//call pdh hooks
 				$this->pdh->enqueue_hook('raid_update', $raid_id, array('action' => 'add', 'time' => $raid_date));
+				
+				if($this->hooks->isRegistered('raid_added')){
+					$this->hooks->process('raid_added', array('id' => $raid_id));
+				}
+				
 				return $raid_id;
 			} else {
 				return false;
@@ -160,6 +165,10 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 				$this->log_insert('action_raid_updated', $log_action, $raid_id, $this->pdh->get('event', 'name', array($old['event'])));
 				$this->pdh->enqueue_hook('raid_update', $raid_id, array('action' => 'update', 'time' => $raid_date, 'members' => array_merge($upd_atts, $add_atts, $del_atts)));				
 				
+				if($this->hooks->isRegistered('raid_updated')){
+					$this->hooks->process('raid_updated', array('id' => $raid_id));
+				}
+				
 				return true;
 			}
 			return false;
@@ -210,6 +219,10 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 						'{L_ADDITIONAL_INFOS}' => $old['additional_data'],
 					);
 					$this->log_insert('action_raid_deleted', $log_action, $raid_id, $old['event']);
+					
+					if($this->hooks->isRegistered('raid_deleted')){
+						$this->hooks->process('raid_deleted', array('id' => $raid_id));
+					}
 
 					//call pdh hook
 					$this->pdh->enqueue_hook('raid_update', $raid_id, array('action' => 'delete', 'time' => $old['date'], 'members' => $raid_attendees));
@@ -226,6 +239,10 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 			foreach($raids as $raid_id) {
 				$this->pdh->put('item', 'delete_itemsofraid', array($raid_id));
 				$this->pdh->put('adjustment', 'delete_adjustmentsofraid', array($raid_id));
+				
+				if($this->hooks->isRegistered('raid_deleted')){
+					$this->hooks->process('raid_deleted', array('id' => $raid_id));
+				}
 			}
 			$this->db->prepare("DELETE FROM __raids WHERE raid_id :in")->in($raids)->execute();
 			$this->db->prepare("DELETE FROM __raid_attendees WHERE raid_id :in")->in($raids)->execute();
@@ -236,6 +253,33 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 			);
 			$this->log_insert('action_raidsofevent_deleted', $log_action, $event_id, $this->pdh->get('event', 'name', array($event_id)));
 			$this->pdh->enqueue_hook('raid_update', $raids, array('action' => 'delete', 'time' => 0));
+			return true;
+		}
+		
+		public function delete_raid_attendance($raid_id, $member_id){
+			$raid_attendees 	= $this->pdh->get('raid', 'raid_attendees', array($raid_id));
+			$old['members']		= $this->pdh->aget('member', 'name', 0, array($raid_attendees));
+			$old['event']		= $this->pdh->get('event', 'name', array($this->pdh->get('raid', 'event', array($raid_id))));
+			
+			$arrOld = array(
+					'attendees' => implode(', ', $old['members']),
+			);
+			
+			$intKey = array_search($member_id, $old['members']);
+			if($intKey !== false) unset($old['members'][$intKey]);
+			
+			$arrNew = array(
+					'attendees' => implode(', ', $new['members']),
+			);
+			
+			$objQuery = $this->db->prepare( "DELETE FROM __raid_attendees WHERE raid_id = ? AND member_id =?")->execute($raid_id, $member_id);
+		
+			$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
+			
+			$this->log_insert('action_raid_updated', $log_action, $raid_id, $this->pdh->get('event', 'name', array($old['event'])));
+			
+			$this->pdh->enqueue_hook('raid_update', $raid_id, array('action' => 'update', 'time' => $raid_date, 'members' => array($member_id)));
+			
 			return true;
 		}
 		
@@ -257,6 +301,10 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 			$this->db->query("TRUNCATE TABLE __raids;");
 			$this->db->query("TRUNCATE TABLE __raid_attendees;");
 			$this->pdh->enqueue_hook('raid_update');
+			
+			if($this->hooks->isRegistered('raid_reset')){
+				$this->hooks->process('raid_reset', array());
+			}
 		}
 	}//end class
 }//end if

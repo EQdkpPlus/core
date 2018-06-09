@@ -73,7 +73,7 @@ class htimepicker extends html {
 	public function _inpval() {
 		$strTimeInUserTime = $this->in->get($this->name, '');
 		$intTimestamp = $this->time->convert_usertimestring_to_utc($strTimeInUserTime);
-		return ($returnDatetime) ? date("H:i", $intTimestamp) : $intTimestamp;
+		return ($this->returnDatetime) ? date("H:i", $intTimestamp) : $intTimestamp;
 	}
 }
 ?>

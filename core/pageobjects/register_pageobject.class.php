@@ -101,9 +101,9 @@ class register_pageobject extends pageobject {
 		
 		//Static input vars
 		$this->data = array(
-				'username'			=> $this->in->get('username'),
-				'user_email'		=> $this->in->get('user_email'),
-				'user_email2'		=> $this->in->get('user_email2'),
+				'username'			=> trim($this->in->get('username')),
+				'user_email'		=> trim($this->in->get('user_email')),
+				'user_email2'		=> trim($this->in->get('user_email2')),
 				'user_lang'			=> $this->in->get('user_lang', $this->config->get('default_lang')),
 				'user_timezone'		=> $this->in->get('user_timezone', $this->config->get('timezone')),
 				'user_password1'	=> $this->in->get('new_user_password1'),
@@ -149,6 +149,30 @@ class register_pageobject extends pageobject {
 			$this->display_form();
 			return;
 		}
+		
+		//Check Password length
+		$intPWLength = ($this->config->get('password_length') ? (int)$this->config->get('password_length') : 8);
+		if(strlen($this->in->get('new_user_password1')) < $intPWLength){
+			$this->core->message(sprintf($this->user->lang('password_too_short'), $intPWLength), $this->user->lang('error'), 'red');
+			$this->display_form();
+			return;
+		}
+
+		//Check blocked Email
+		$strBlockedMail = $this->config->get('banned_emails');
+		$arrBlockedMails = ($strBlockedMail) ? explode("\n", $strBlockedMail) : array();
+		foreach($arrBlockedMails as $strBlockedMail){
+			$strForRegex = preg_quote(str_replace('*', "|", trim($strBlockedMail)));
+			$strForRegex = str_replace('\|', "(.*)", $strForRegex);
+			
+			if(preg_match('/'.$strForRegex.'/Ui', trim($this->in->get('user_email')))){
+				$this->core->message($this->user->lang('fv_invalid_email_blocked'), $this->user->lang('error'), 'red');
+				$this->display_form();
+				return;
+				
+			}
+		}
+
 		
 		//Check Email
 		if ($this->pdh->get('user', 'check_email', array($this->in->get('user_email'))) == 'false'){
@@ -551,6 +575,7 @@ class register_pageobject extends pageobject {
 				'S_SETTING_ADMIN'				=> false,
 				'S_MU_TABLE'					=> false,
 				'S_PROFILEFIELDS'				=> count($arrUserProfileFields) ? true : false,
+				'PASSWORD_LENGTH'				=> ($this->config->get('password_length') ? (int)$this->config->get('password_length') : 8),
 				
 				'VALID_EMAIL_INFO'				=> ($this->config->get('account_activation') == 1) ? '<br />'.$this->user->lang('valid_email_note') : '',
 				'AUTH_REGISTER_BUTTON'			=> ($arrRegisterButtons = $this->user->handle_login_functions('register_button')) ? implode(' ', $arrRegisterButtons) : '',

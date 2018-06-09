@@ -97,9 +97,6 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 				$first_date = $this->time->time-($time_period*86400);
 				$first_date -= 3600*$this->time->date('H')+60*$this->time->date('i')+$this->time->date('s');
 			}
-			
-			//get raids
-			$raid_ids = $this->pdh->get('raid', 'id_list');
 
 			//create array with all first_raid dates
 			$first_raids = array();
@@ -134,33 +131,39 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 			}
 
 			unset($temp);
-			foreach($raid_ids as $raid_id){
-				//raid not relevant for this attendance calculation
-				$date = $this->pdh->get('raid', 'date', array($raid_id));
-				if($date <= $first_date) continue;
-				$eventid = $this->pdh->get('raid', 'event', array($raid_id));
-				$mdkpids = $this->pdh->get('multidkp', 'mdkpids4eventid', array($eventid, false));
-				if(!in_array($mdkp_id, $mdkpids)) continue;
-
-				$attendees = $this->pdh->get('raid', 'raid_attendees', array($raid_id));
-				$mains = array();
-				//increment attendence counter
-				if(is_array($attendees)) {
-					foreach($attendees as $attendee_id){
-						$this->member_attendance[$time_period][$mdkp_id]['members'][$attendee_id]['attended']++;
-						$mains[$this->twink2main[$attendee_id]] = true;
+			
+			//get Raids
+			$objQuery = $this->db->prepare("SELECT raid_id, event_id, raid_date FROM __raids WHERE raid_date > ?")->execute($first_date);
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$raid_id = intval($row['raid_id']);
+					$eventid = intval($row['event_id']);
+					$date = intval($row['raid_date']);
+					
+					$mdkpids = $this->pdh->get('multidkp', 'mdkpids4eventid', array($eventid, false));
+					if(!in_array($mdkp_id, $mdkpids)) continue;
+					
+					$attendees = $this->pdh->get('raid', 'raid_attendees', array($raid_id));
+					$mains = array();
+					//increment attendence counter
+					if(is_array($attendees)) {
+						foreach($attendees as $attendee_id){
+							$this->member_attendance[$time_period][$mdkp_id]['members'][$attendee_id]['attended']++;
+							$mains[$this->twink2main[$attendee_id]] = true;
+						}
+						foreach($mains as $main_id => $tru) {
+							$this->member_attendance[$time_period][$mdkp_id]['mains'][$main_id]['attended']++;
+						}
 					}
-					foreach($mains as $main_id => $tru) {
-						$this->member_attendance[$time_period][$mdkp_id]['mains'][$main_id]['attended']++;
-					}
-				}
-				//increment total counter
-				foreach($first_raids as $first_raid => $num){
-					if($date >= $first_raid) {
-						$first_raids[$first_raid][$mdkp_id]++;
+					//increment total counter
+					foreach($first_raids as $first_raid => $num){
+						if($date >= $first_raid) {
+							$first_raids[$first_raid][$mdkp_id]++;
+						}
 					}
 				}
 			}
+			
 			//connect total-raid counts to member_id
 			$twink_first_dates = array();
 			foreach($member_first_raid as $mdkp_id => $mfirst_raid) {

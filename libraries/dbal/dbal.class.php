@@ -53,6 +53,7 @@ class dbal{
 		
 		foreach ($arrDbals as $key => $name){
 			if (dbal::check_if_pdo($key)){
+				$key = str_replace("_old", "", $key);
 				$blnCheckResult = dbal::check_pdo(dbal::check_if_pdo($key));
 			} else {
 				$blnCheckResult = dbal::check_extension($key);
@@ -78,7 +79,10 @@ class dbal{
 	}
 	
 	private static function check_if_pdo($strDBType){
-		if (substr($strDBType, -4) == "_pdo") return substr($strDBType, 0, -4);
+		if (substr($strDBType, -4) == "_pdo") {
+			$strDBType = str_replace("_old", "", $strDBType);
+			return substr($strDBType, 0, -4);
+		}
 		
 		return false;
 	}
@@ -689,7 +693,7 @@ abstract class DatabaseStatement {
 			
 			if (strncasecmp($this->strQuery, 'INSERT', 6) === 0 || (strncasecmp($this->strQuery, 'REPLACE', 7) === 0))
 			{
-				$strQuery = sprintf('(%s) VALUES ', implode(', ', array_keys($arrParams[$arrKeys[0]])));
+				$strQuery = sprintf('(%s) VALUES ', implode(', ', $this->add_ticks(array_keys($arrParams[$arrKeys[0]]))));
 			}
 
 			$arrQuery = array();
@@ -714,7 +718,7 @@ abstract class DatabaseStatement {
 			if (strncasecmp($this->strQuery, 'INSERT', 6) === 0 || (strncasecmp($this->strQuery, 'REPLACE', 7) === 0))
 			{
 				$strQuery = sprintf('(%s) VALUES (%s)',
-									implode(', ', array_keys($arrParams)),
+									implode(', ', $this->add_ticks(array_keys($arrParams))),
 									str_replace('%', '%%', implode(', ', array_values($arrParams))));
 			}
 	
@@ -725,7 +729,7 @@ abstract class DatabaseStatement {
 	
 				foreach ($arrParams as $k=>$v)
 				{
-					$arrSet[] = $k . '=' . $v;
+					$arrSet[] = $this->add_ticks($k) . '=' . $v;
 				}
 	
 				$strQuery = 'SET ' . str_replace('%', '%%', implode(', ', $arrSet));
@@ -737,6 +741,20 @@ abstract class DatabaseStatement {
 
 		$this->strQuery = str_replace('%p', $strQuery, $this->strQuery);
 		return $this;
+	}
+	
+	private function add_ticks($mixTables){
+		if(is_array($mixTables)){
+			foreach($mixTables as $key => $val){
+				if($val[0] != "`") $mixTables[$key] = "`".$val."`";
+			}
+			
+			return $mixTables;
+			
+		} else {
+			if($mixTables[0] != "`") $mixTables = "`".$mixTables."`";
+			return $mixTables;
+		}
 	}
 	
 	/**

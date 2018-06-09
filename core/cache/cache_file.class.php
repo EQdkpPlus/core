@@ -37,7 +37,7 @@ if(!class_exists( "cache_file")){
 
 		public function put( $key, $data, $ttl, $global_prefix, $compress = false ) {
 			$key = md5($global_prefix.$key);
-			$this->pdl->log( 'pdc_query', '', $this->cache_folder.$key[0].DIRECTORY_SEPARATOR.$key.$this->file_extension.', size: '.human_filesize(sizeof($data)));
+			$this->pdl->log( 'pdc_query', '', $this->cache_folder.$key[0].DIRECTORY_SEPARATOR.$key.$this->file_extension.', size: '.human_filesize(strlen(serialize($data))));
 			$this->pfh->FolderPath( 'data'.DIRECTORY_SEPARATOR.$key[0], 'cache' );
 			if( $compress ) {
 				$ret = $this->pfh->putContent($this->cache_folder.$key[0].DIRECTORY_SEPARATOR.$key.$this->file_extension, gzcompress( serialize( $data ), 9 ));
@@ -53,6 +53,9 @@ if(!class_exists( "cache_file")){
 			$result = false;
 			if(file_exists($filename)){
 				$result = file_get_contents($filename);
+				$this->pdl->log( 'pdc_query', '', $filename.', cache hit, size: '.human_filesize(filesize($filename)));
+			} else {
+				$this->pdl->log( 'pdc_query', '', $filename.', cache missed');
 			}
 
 			//file read error

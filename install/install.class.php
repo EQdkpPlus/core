@@ -50,23 +50,141 @@ class install extends gen_class {
 				registry::register('file_handler', array('installer'))->putContent($this->root_path.'config.php', $config);
 				unset($config);
 			} elseif($this->current_step != 'end') {
-				echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-				<html>
-					<head>
-						<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-						<link rel="stylesheet" type="text/css" media="screen" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" />
-						<title>Installation - Error</title>
-					</head>
-					<body>
-					<div class="ui-widget">
-						<div class="ui-state-error ui-corner-all" style="padding: 0pt 0.7em;">
-							<p>
-							<strong>Alert:</strong> Already Installed. Remove the \'install\' folder, or remove your config.php to install again.</p>
-						</div>
-					</div>
+				echo '<!DOCTYPE html>
+						<html>
+						<head>
+							<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 
+							<title>EQdkp Plus - '.$strErrorName.'</title>
+							<style type="text/css">
+							/* body */
+							html {
+								height: 100%;
+							}
+
+							body {
+								background: #F5F5F5; /* Old browsers */
+								font-size: 14px;
+								font-family: \'Segoe UI\', \'Lucida Grande\', \'Helvetica Neue\', Helvetica, Arial, sans-serif;
+								color: #000000;
+								padding:0;
+							  	margin:0;
+								height: 100%;
+								line-height: 20px;
+							}
+
+							.wrapper{
+							
+							}
+
+							.header {
+								padding-top: 20px;
+								font-size: 45px;
+								font-weight: 300;
+								text-shadow: 1px 1px 2px #fff;
+								filter: dropshadow(color=#fff, offx=1, offy=1);
+								border: none;
+								color:  #fff;
+								text-align:center;
+								vertical-align: middle;
+								background-color: #2e78b0;
+								height: 60px;
+							}
+
+							
+							.footer {
+								margin-top: 10px;
+								color: #000;
+								text-align: center;
+								font-size: 11px;
+							}
+
+							.footer a, .footer a:link, .footer a:visited {
+								color: #000;
+								text-decoration: none;
+							}
+
+							.footer a:hover {
+								text-decoration: underline;
+							}
+
+							.innerWrapper {
+								margin-right: auto;
+								margin-left: auto;
+								padding: 10px;
+								margin-bottom: 20px;
+								margin-top: 10px;
+								width: 700px;
+							}
+
+							h1, h2, h3 {
+								font-family: \'Trebuchet MS\',Arial,sans-serif;
+							    font-weight: bold;
+							    margin-bottom: 10px;
+							    padding-bottom: 5px;
+								border-bottom: 1px solid #CCCCCC;
+								margin-top: 5px;
+							}
+
+							h1 {
+							    font-size: 20px;
+							}
+
+							h2 {
+								font-size: 18px;
+							}
+
+							h3 {
+								font-size: 14px;
+								border-bottom: none;
+								margin-bottom: 5px;
+							}
+
+							/* Links */
+							a,a:link,a:active,a:visited {
+								color: #4E7FA8;
+								text-decoration: none;
+							}
+
+							a:hover {
+								color: #000;
+								text-decoration: none;
+							}
+
+							.inlineCode {
+							    background-color: #ffffff;
+							    border: 1px solid #cccccc;
+							    border-radius: 3px;
+							    display: inline-block;
+							    font-family: Consolas, \'Courier New\', monospace;
+							    margin: 0 2px;
+							    padding: 0 5px;
+							    word-break: break-all;
+							    word-wrap: break-word;
+							}
+
+						</style>
+						</head>
+
+						<body>
+
+						<div class="wrapper">
+							<div class="header">
+								EQdkp Plus '.$strErrorName.'
+							</div>
+
+							<div class="innerWrapper">
+								<h1>Installation error</h1><br />
+								EQdkp Plus is already installed. You can delete this <span class="inlineCode">install</span> folder.<br />
+								If you want to reinstall, please remove the file <span class="inlineCode">config.php</span> from the root folder of your EQdkp Plus installation.
+						</div>
+
+					</div>
+					<div class="footer">
+						<a href="'.EQDKP_PROJECT_URL.'" target="_new">EQDKP Plus</a> &copy; 2003 - '.date('Y').' by EQDKP Plus Developer Team
+					</div>
 					</body>
-				</html>';
+					</html>';
 				die();
 			}
 		}

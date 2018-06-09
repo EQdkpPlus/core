@@ -261,6 +261,47 @@ if(registry::register('input')->get('out') != ''){
 			echo $out;
 			exit;
 		break;
+
+		case 'placepicker':
+			//Only for logged in users
+			if (!registry::fetch('user')->is_signedin()){
+				echo 'Permission denied';
+				exit;
+			}
+
+			$searchterm	= registry::register('input')->get('term', '');
+			$result		= register('geoloc')->getAutocompleteResult($searchterm, registry::fetch('user')->lang('XML_LANG'));
+			
+			$out	= array();
+			foreach($result['features'] as $resultkey=>$resultdata){
+				
+				$result_name	= $resultdata['properties']['name'];
+				$result_city	= $resultdata['properties']['city'];
+				$result_country	= $resultdata['properties']['country'];
+				
+				if($resultdata['properties']['osm_value'] == 'city'){
+					$out[$resultkey]	= $result_city;
+					if($result_country){
+						$out[$resultkey]	.= ', '.$result_country;
+					}
+				} elseif($resultdata['properties']['osm_value'] == 'residential') {
+					$out[$resultkey] = $result_name;
+					$out[$resultkey]	.= ', '.$result_city;
+					if($result_country){
+						$out[$resultkey]	.= ', '.$result_country;
+					}
+				} elseif($resultdata['properties']['osm_key'] == 'building') {
+					$out[$resultkey] = $resultdata['properties']['street'].' ';
+					$out[$resultkey] .= $resultdata['properties']['housenumber'];
+					$out[$resultkey]	.= ', '.$result_city;
+					if($result_country){
+						$out[$resultkey]	.= ', '.$result_country;
+					}
+				}
+			}
+			echo json_encode(array_values($out));
+			exit;
+		break;
 	}
 
 

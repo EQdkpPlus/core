@@ -157,7 +157,7 @@ class wbb3_bridge extends bridge_generic {
 	
 	public function logout(){
 		//If Single Sign On is disabled, abort
-		if ($this->config->get('cmsbridge_disable_sso') != '1') return false;
+		if ((int)$this->config->get('cmsbridge_disable_sso') == 1) return false;
 		
 		$arrUserdata = $this->bridge->get_userdata($this->user->data['username']);
 		if (isset($arrUserdata['id'])){
@@ -185,7 +185,7 @@ class wbb3_bridge extends bridge_generic {
 			}
 		}
 		
-		setcookie($config['cookie_prefix'].'cookieHash', '', 0, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
+		setcookie($config['cookie_prefix'].'cookieHash', 'somevalue', 0, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
 	}
 	
 	/**

@@ -184,6 +184,7 @@ if (!class_exists('exchange_calevents_details')){
 									'name'		=> unsanitize($guestsdata['name']),
 									'classid'	=> $guestsdata['class'],
 									'class'		=> $this->game->get_name('primary', $guestsdata['class']),
+									'status'	=> $guestsdata['status'],
 								);
 							}
 						}
