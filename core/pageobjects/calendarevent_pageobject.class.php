@@ -1317,7 +1317,7 @@ class calendarevent_pageobject extends pageobject {
 
 		// if no lat/lon is availble..
 		if(isset($eventdata['extension']['location']) && !empty($eventdata['extension']['location'])){
-			if(!isset($eventdata['extension']['location-lat']) && !isset($eventdata['extension']['location-lon'])){
+			if(!isset($eventdata['extension']['location-lat']) || empty($eventdata['extension']['location-lat'])){
 
 				// fetch geolocation data
 				$result = $this->geoloc->getCoordinates($eventdata['extension']['location']);
@@ -1327,6 +1327,11 @@ class calendarevent_pageobject extends pageobject {
 					'location-lon'	=> $result['longitude'],
 				)));
 				$this->pdh->process_hook_queue();
+				
+				echo "hallo";
+				
+				$eventdata['extension']['location-lat'] = $result['latitude'];
+				$eventdata['extension']['location-lon'] = $result['longitude'];
 			}
 		}
 
