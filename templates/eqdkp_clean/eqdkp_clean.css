@@ -4390,7 +4390,7 @@ button > i, .button > i {
 	display: none;
 }
 
-.pageobject-calendarevent .toolbar-button {
+.pageobject-calendarevent  #contentBody2 > section > div.floatRight > div.toolbar-button {
 	display: none;
 }
 
