@@ -35,7 +35,7 @@ class geolocation extends gen_class {
 
 	// API URL
 	const nominatim_apiURL	= 'https://nominatim.openstreetmap.org/';
-	const photon_apiURL		= 'https://photon.komoot.de/api/?q=berlin';
+	const photon_apiURL		= 'https://photon.komoot.de/api/';
 
 	/**
 	* Do call

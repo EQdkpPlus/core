@@ -263,8 +263,10 @@ if(registry::register('input')->get('out') != ''){
 		break;
 
 		case 'placepicker':
+			//Only for logged in users
 			if (!registry::fetch('user')->is_signedin()){
-				echo 'access_denied';
+				echo 'Permission denied';
+				exit;
 			}
 
 			$searchterm	= registry::register('input')->get('term', '');

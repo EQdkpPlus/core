@@ -1329,7 +1329,6 @@ class calendarevent_pageobject extends pageobject {
 				$this->pdh->process_hook_queue();
 			}
 		}
-d($eventdata['extension']);
 
 		$this->tpl->assign_vars(array(
 			'EVENT_ID'			=> $this->url_id,
