@@ -111,25 +111,25 @@ class Manage_Users extends page_generic {
 		$this->pdh->process_hook_queue();
 		$this->display();
 	}
-	
-	
+
+
 	public function search(){
-		
+
 		$this->tpl->assign_vars(array(
 				'SPINNER_CHAR_COUNT' => (new hspinner('charcount'))->output(),
 				'DATEPICKER_BEFORE'	=> (new hdatepicker('date_before', array('value' => false)))->output(),
 				'DATEPICKER_AFTER'	=> (new hdatepicker('date_after', array('value' => false)))->output(),
 		));
-		
-		
+
+
 		$arrUsers = $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list', array(false))));
-		
+
 		$arrMembers = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'id_list', array(false,true,false))));
-		
-		
+
+
 		$this->jquery->Autocomplete('name', $arrUsers);
 		$this->jquery->Autocomplete('charname', $arrMembers);
-		
+
 		$this->core->set_vars([
 				'page_title'		=> $this->user->lang('manage_users_search'),
 				'template_file'		=> 'admin/manage_users_search.html',
@@ -142,13 +142,13 @@ class Manage_Users extends page_generic {
 		]);
 
 	}
-	
+
 	public function export_gdpr(){
 		$intUserID = $this->in->get('u', 0);
 
 		//User data
 		$arrUserdata = $this->pdh->get('user', 'data', array($intUserID, true));
-		
+
 		$arrUserdata['email'] = $this->pdh->get('user', 'email', array($this->user->id));
 		$hideArray = array('user_password', 'user_login_key', 'user_email','user_email_confirmkey', 'salt', 'password', 'exchange_key');
 		foreach($hideArray as $entry){
@@ -161,7 +161,7 @@ class Manage_Users extends page_generic {
 		$arrUserdata['usergroups'] = $this->pdh->get('user_groups_users', 'memberships', array($this->user->id));
 		$arrUserdata['avatar_big'] = $this->env->httpHost.$this->env->root_to_serverpath($this->pdh->get('user', 'avatarimglink', array($this->user->id, true)));
 		$arrUserdata['avatar_small'] = $this->env->httpHost.$this->env->root_to_serverpath($this->pdh->get('user', 'avatarimglink', array($this->user->id, false)));
-		
+
 		//Session data
 		$arrSession = array();
 		$objQuery = $this->db->prepare("SELECT * FROM __sessions WHERE session_user_id=?")->execute($intUserID);
@@ -171,7 +171,7 @@ class Manage_Users extends page_generic {
 				$arrSession[] = $row;
 			}
 		}
-		
+
 		//Logs
 		$arrLogs = array();
 		$objQuery = $this->db->prepare("SELECT * FROM __logs WHERE user_id=?")->execute($intUserID);
@@ -179,46 +179,46 @@ class Manage_Users extends page_generic {
 			while($row = $objQuery->fetchAssoc()){
 				$anonIP = anonymize_ipaddress($row['log_ipaddress']);
 				if($anonIP == $row['log_ipaddress']) continue;
-				
+
 				$arrLogs[] = array(
 						'date'  => $row['log_date'],
 						'ip'	=> $row['log_ipaddress'],
 				);
 			}
 		}
-		
+
 		//Hooks
 		$arrOutHooks = array();
 		if($this->hooks->isRegistered('user_export_gdpr')){
 			$arrHooks = $this->hooks->process('user_export_gdpr', array('user_id' => $intUserID));
-			
+
 			foreach($arrHooks as $key => $val){
 				$strNewKey = str_replace('_user_export_gdpr_hook', '', $key);
 				$arrOutHooks[$strNewKey] = $val;
 			}
 		}
-		
-		
+
+
 		$arrOutdata = array('userobject' => $arrUserdata, 'sessions' => $arrSession, 'logs' => $arrLogs, 'extensions' => $arrOutHooks, 'info' => array(
 				'created' => time(),
 				'system' => 'EQdkp Plus',
 				'version' => VERSION_EXT,
 		));
-		
+
 		$strJson = json_encode($arrOutdata, JSON_PRETTY_PRINT);
-		
+
 		header('Content-Type: application/octet-stream');
 		header('Content-Length: '.strlen($strJson));
 		header('Content-Disposition: attachment; filename="export_gdpr_user'.$intUserID.'_'.time().'.json"');
 		header('Content-Transfer-Encoding: binary');
 		echo $strJson;
-		
+
 		die();
 	}
-	
+
 	public function process_search(){
 		//I will process each search, and merge the found user array later
-		
+
 		$arrUserIDs = $this->pdh->get('user', 'id_list', array(false));
 		$arrResults = array(
 				'name' => false,
@@ -230,18 +230,18 @@ class Manage_Users extends page_generic {
 				'locked' => false,
 				'not_confirmed' => false,
 		);
-		
+
 		//Username
 		$strSearchName = utf8_strtolower($this->in->get('name'));
 		if($strSearchName != ""){
 			$arrResults['name'] = array();
 			foreach($arrUserIDs as $intUserID){
 				$arrUserData = $this->pdh->get('user', 'data', array($intUserID));
-				
+
 				if(stripos($arrUserData['username'], $strSearchName) !== false OR stripos($arrUserData['username_clean'], $strSearchName) !== false) {
 					$arrResults['name'][] = $intUserID;
 				}
-				
+
 			}
 		}
 
@@ -251,11 +251,11 @@ class Manage_Users extends page_generic {
 			$arrResults['email'] = array();
 			foreach($arrUserIDs as $intUserID){
 				$arrUserData = $this->pdh->get('user', 'data', array($intUserID, true));
-				
+
 				if(stripos($arrUserData['user_email'], $strSearchEmail) !== false) {
 					$arrResults['email'][] = $intUserID;
 				}
-				
+
 			}
 		}
 
@@ -264,36 +264,36 @@ class Manage_Users extends page_generic {
 		if($strBeforeDate){
 			$arrResults['date_before'] = array();
 			$intTime = $this->time->fromformat($strBeforeDate, 0);
-			
+
 			foreach($arrUserIDs as $intUserID){
 				$intRegDate = $this->pdh->get('user', 'regdate', array($intUserID));
-				
+
 				if($intRegDate < $intTime) $arrResults['date_before'][] = $intUserID;
 			}
 		}
-			
-		
+
+
 		//Date after
 		$strAfterDate = $this->in->get('date_after');
 		if($strAfterDate){
 			$arrResults['date_after'] = array();
 			$intTime = $this->time->fromformat($strAfterDate, 0);
-			
+
 			foreach($arrUserIDs as $intUserID){
 				$intRegDate = $this->pdh->get('user', 'regdate', array($intUserID));
-				
+
 				if($intRegDate > $intTime) $arrResults['date_after'][] = $intUserID;
 			}
 		}
-		
+
 		//Charname
-		$strCharname = utf8_strtolower($this->in->get('charname'));		
+		$strCharname = utf8_strtolower($this->in->get('charname'));
 		$arrChars = $this->pdh->get('member', 'id_list');
 		if($strCharname != ""){
 			$arrResults['charname'] = array();
 			foreach($arrChars as $intCharID){
 				$strMyCharname = $this->pdh->get('member', 'name', array($intCharID));
-				
+
 				if(stripos($strMyCharname, $strCharname) !== false) {
 					//Find Owner
 					$intOwner = $this->pdh->get('member', 'userid', array($intCharID));
@@ -301,27 +301,27 @@ class Manage_Users extends page_generic {
 				}
 			}
 		}
-		
-		
-		
+
+
+
 		//Charcount
 		$charCountExist = $this->in->exists('charcount');
 		$intCharcount = $this->in->get('charcount');
 		if(strlen($intCharcount)){
 			$intCharcount = intval($intCharcount);
 			$arrResults['charcount'] = array();
-			
+
 			foreach($arrUserIDs as $intUserID){
 				$a = $this->pdh->get('member', 'connection_id', array($intUserID));
 
 				$count = (is_array($a)) ? count($a) : 0;
-				
+
 				if($intCharcount == $count){
 					$arrResults['charcount'][] = $intUserID;
 				}
 			}
 		}
-		
+
 		//Locked
 		$arrStatus = $this->in->getArray('status');
 
@@ -329,7 +329,7 @@ class Manage_Users extends page_generic {
 			$arrResults['locked'] = array();
 			foreach($arrUserIDs as $intUserID){
 				$intActive = $this->pdh->get('user', 'active', array($intUserID));
-				
+
 				if(!$intActive) $arrResults['locked'][] = $intUserID;
 			}
 		}
@@ -338,7 +338,7 @@ class Manage_Users extends page_generic {
 			$arrResults['not_confirmed'] = array();
 			foreach($arrUserIDs as $intUserID){
 				$intActive = $this->pdh->get('user', 'email_confirmed', array($intUserID));
-				
+
 				if(!$intActive) $arrResults['not_confirmed'][] = $intUserID;
 			}
 		}
@@ -353,7 +353,7 @@ class Manage_Users extends page_generic {
 				$arrOutResult = array_intersect($arrOutResult, $val);
 			}
 		}
-		
+
 		$this->display($arrOutResult);
 	}
 
@@ -364,14 +364,14 @@ class Manage_Users extends page_generic {
 			$this->core->message($this->user->lang('error_set_new_pw'), $this->user->lang('error'), 'red');
 			$this->display();
 		}
-		
+
 		//Set a random password, as this method should be used if an account is compromised.
 		$user_salt = $this->user->generate_salt();
 		$user_password = random_string();
 		$arrSet = array(
 			'user_password' => $this->user->encrypt_password($user_password, $user_salt).':'.$user_salt,
 		);
-		
+
 		$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set($arrSet)->execute($this->in->get('u', 0));
 
 		// Email them their new password
@@ -658,7 +658,7 @@ class Manage_Users extends page_generic {
 				$new_salt = $this->user->generate_salt();
 				$query_ary['user_password'] = $this->user->encrypt_password($values['new_password'], $new_salt).':'.$new_salt;
 				$query_ary['user_login_key'] = '';
-				
+
 				//Destroy other sessions
 				$this->user->destroyOtherSessions();
 			}
@@ -684,7 +684,7 @@ class Manage_Users extends page_generic {
 			$customArray = array();
 			$pluginArray = array();
 			$notificationArray = array();
-			
+
 			//Hook usersettings_update
 			if($this->hooks->isRegistered('usersettings_update')){
 				$values= $this->hooks->process('usersettings_update', array('settingsdata' => $values, 'admin' => true), true);
@@ -901,7 +901,7 @@ class Manage_Users extends page_generic {
 	// Display
 	// ---------------------------------------------------------
 	public function display($arrUsers=false) {
-		
+
 		$order = explode('.', $this->in->get('o', '0.0'));
 		$sort = array(
 			0 => array('name', array('asc', 'desc')),
@@ -933,9 +933,9 @@ class Manage_Users extends page_generic {
 		}
 
 		$adm_memberships = $this->acl->get_user_group_memberships($this->user->data['user_id']);
-		
+
 		$intUsersPerPage = ($blnIsSearch) ? PHP_INT_MAX : 100;
-		
+
 		$k = 0;
 		foreach($user_ids as $user_id) {
 			if($k < $start) {
@@ -943,7 +943,7 @@ class Manage_Users extends page_generic {
 				continue;
 			}
 			if($k >= ($start+$intUsersPerPage)) break;
-			
+
 			$user_avatar = $this->pdh->geth('user', 'avatarimglink', array($user_id));
 			if($this->pdh->get('user', 'active', array($user_id))) {
 				$user_active = '<i class="eqdkp-icon-online"></i>';
@@ -980,7 +980,6 @@ class Manage_Users extends page_generic {
 				'ACTIVE'			=> $user_active,
 				'ACTIVATE_ICON'		=> $activate_icon,
 				'EMAIL_CONFIRM'		=> $user_mail_confirmed_icon,
-				'ONLINE'			=> $user_online,
 				'MEMBER_COUNT'		=> count($a_members),
 				'AWAY'				=> $this->pdh->get('user', 'html_is_away', array($user_id)),
 			));
@@ -1067,7 +1066,7 @@ class Manage_Users extends page_generic {
 
 			'USER_PAGINATION'		=> generate_pagination('manage_users.php'.$this->SID.'&amp;o='.$this->in->get('o'), $total_users, $intUsersPerPage, $start))
 		);
-		
+
 		if($blnIsSearch){
 			$arrPagePath = [
 					['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
@@ -1309,7 +1308,7 @@ class Manage_Users extends page_generic {
 		if($this->hooks->isRegistered('usersettings_display')){
 			$settingsdata = $this->hooks->process('usersettings_display', array('settingsdata' => $settingsdata, 'admin' => true), true);
 		}
-		
+
 		$this->form->add_tabs($settingsdata);
 		// add send-new-password-button (if editing user)
 		if($user_id > 0) {
