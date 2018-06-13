@@ -1632,14 +1632,15 @@ if (!class_exists("jquery")) {
 						['.$markerdata['lat'].', '.$markerdata['lng'].'],
 						{title: "'.$this->sanitize($markerdata['title']).'", autoPan: true}
 					).addTo(map);';
+				}
 
-					$this->tpl->add_js("var map = L.map('".$id."_map').setView([".$latlangfrinit."], 13);
+				// now, init the map itsself
+				$this->tpl->add_js("var map = L.map('".$id."_map').setView([".$latlangfrinit."], 13);
 					L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 						attribution: '&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors'
 					}).addTo(map);"
 						.$markersJS,
 					"docready");
-				}
 
 			// we will use the address field as used in the calendar events
 			}else{
