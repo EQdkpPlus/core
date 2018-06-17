@@ -151,7 +151,7 @@ class core extends gen_class {
 			}else{
 				if($val === false) $this->$var = false;
 				if(empty($val)) return false;
-				
+
 				if (($var == 'display') && ($val === true)){
 					$this->generate_page();
 				}else{
@@ -180,7 +180,7 @@ class core extends gen_class {
 
 		private function page_header(){
 			define('HEADER_INC', true);		// Define a variable so we know the header's been included
-			
+
 			//Redirect to Guildrules if user hasn't accepted them
 			$intGuildrulesArticleID = $this->pdh->get('articles', 'resolve_alias', array('guildrules'));
 			$blnGuildrules = ($intGuildrulesArticleID && $this->pdh->get('articles', 'published', array($intGuildrulesArticleID)));
@@ -424,7 +424,7 @@ class core extends gen_class {
 				'T_COLUMN_RIGHT_WIDTH'		=> $this->user->style['column_right_width'],
 				'T_LOGO_POSITION'			=> $this->user->style['logo_position'],
 				'T_BACKGROUND_TYPE'			=> $this->user->style['background_type'],
-				'T_BACKGROUND_COLOR'		=> $this->user->style['background_color'],
+				'T_BACKGROUND_COLOR'		=> $this->user->style['body_background_color'],
 				'T_BACKGROUND_POSITION'		=> ($this->user->style['background_pos'] == 'normal') ? 'scroll' : 'fixed',
 				'T_MENU_BACKGROUND_COLOR'=> $this->user->style['menu_background_color'],
 				'S_REGISTER'				=> (int)$this->config->get('enable_registration'),
@@ -537,9 +537,9 @@ class core extends gen_class {
 			}
 			$strHref = ((isset($arrLinkData['plus_link']) && $arrLinkData['plus_link']==true && $arrLinkData['link']) ? $arrLinkData['link'] : $this->server_path . $arrLinkData['link']);
 			if ($strHref == $this->server_path.'#') $strHref = "#";
-			
+
 			if ($blnHrefOnly) return $strHref;
-			
+
 			return '<a href="' . $strHref . '"'.$target.' class="'.$strCssClass.'" itemprop="url">' . $icon . '<span itemprop="name">'.$arrLinkData['text'] . '</span></a>';
 		}
 
@@ -838,14 +838,14 @@ class core extends gen_class {
 			if($this->page_path === false) return '';
 			if(is_string($this->page_path)) return $this->page_path;
 			if($this->page_path == [[]]) $this->page_path = [];
-			
+
 			$arrBreadcrumb = $this->page_path;
-			
+
 			$html = '<ul class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">';
-			
+
 			$html .= '<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="'.$this->controller_path.$this->SID.'" itemscope itemtype="http://schema.org/Thing" itemprop="item"><i class="fa fa-home"></i><span itemprop="name" style="display:none;">Home</span></a>
 					<meta itemprop="position" content="1" /></li>';
-			
+
 			foreach($arrBreadcrumb as $key => $arrItem){
 				$html .= '<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="'.$arrItem['url'].'" itemscope itemtype="http://schema.org/Thing" itemprop="item"><span itemprop="name">'.$arrItem['title'].'</span></a>
 				<meta itemprop="position" content="'.($key+2).'" /></li>';
@@ -1056,7 +1056,7 @@ class core extends gen_class {
 
 			// Hiding the normal-footer-stuff, but show debug-info, since in normal usage debug mode is turned off, and for developing purposes debug-tabs help alot info if header is set to none..
 			$commonDescription = ($this->config->get('meta_description') && strlen($this->config->get('meta_description'))) ? $this->config->get('meta_description') : $this->config->get('guildtag');
-			
+
 			$this->tpl->assign_vars(array(
 				'META_DESCRIPTION'			=> (strlen($this->description)) ? $this->description : $commonDescription,
 				'S_NORMAL_FOOTER' 			=> ($this->header_format != 'simple') ? true : false,
@@ -1182,13 +1182,13 @@ class core extends gen_class {
 		private function pagetitle($title = ''){
 			$pt_prefix		= (defined('IN_ADMIN')) ? $this->user->lang('admin_title_prefix') : $this->user->lang('title_prefix');
 			$dkp_name 		= '';
-			
+
 			if($this->config->get('main_title')){
 				$main_title	= $this->config->get('main_title');
 			}else {
 				$main_title = sprintf($pt_prefix, $this->config->get('guildtag'), $dkp_name);
 			}
-			
+
 			return sanitize((( $title != '' ) ? $title.' - ' : '').$main_title);
 		}
 
