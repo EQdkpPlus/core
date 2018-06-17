@@ -30,7 +30,7 @@ if(!class_exists('pdh_w_rank')) {
 			$arrSet = array(
 				'rank_id'		=> $id,
 				'rank_name'		=> $name,
-				'rank_hide'		=> $hide,
+				'rank_hide'		=> ($hide) ? 1 : 0,
 				'rank_prefix'	=> $prefix,
 				'rank_suffix'	=> $suffix,
 				'rank_sortid'	=> $sortid,
