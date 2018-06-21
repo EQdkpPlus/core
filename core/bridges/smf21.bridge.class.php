@@ -70,12 +70,28 @@ class smf21_bridge extends bridge_generic {
 		//Use normal strtolower and not utf8_strotolower, because SMF2 does the same...
 		$blnResult = false;
 		
-		if (sha1(strtolower($strUsername).$password) == $hash){
+		if (sha1(strtolower(utf8_decode($strUsername)).$password) === $hash){
 			$blnResult = true;
 		}
 		
 		if(!$blnResult){
+			$blnResult = sha1(strtolower($strUsername).$password) === $hash;
+		}
+		
+		if(!$blnResult){
+			$blnResult = sha1(utf8_strtolower($strUsername).$password) === $hash;
+		}
+		
+		if(!$blnResult){
 			$blnResult = crypt(strtolower($strUsername).$password, $hash) === $hash;
+		}
+		
+		if(!$blnResult){
+			$blnResult = crypt(strtolower(utf8_decode($strUsername)).$password, $hash) === $hash;
+		}
+		
+		if(!$blnResult){
+			$blnResult = crypt(utf8_strtolower($strUsername).$password, $hash) === $hash;
 		}
 		
 		return $blnResult;
