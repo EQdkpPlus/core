@@ -332,7 +332,7 @@ class user_pageobject extends pageobject {
 			));
 		}
 		
-		$this->jquery->Dialog('usermailer', $this->user->lang('adduser_send_mail'), array('url'=>$this->server_path."email.php".$this->SID."&user=".$row['user_id'], 'width'=>'660', 'height'=>'450'));
+		$this->jquery->Dialog('usermailer', $this->user->lang('adduser_send_mail'), array('url'=>$this->server_path."email.php".$this->SID."&user=".$row['user_id'], 'width'=>'660', 'height'=>'500'));
 	
 		
 		$this->tpl->add_meta('<link rel="canonical" href="'.$this->env->link.$this->routing->build('User', $row['username'], 'u'.$row['user_id'], false, true).'" />');
@@ -372,7 +372,7 @@ class user_pageobject extends pageobject {
 			'USER_PAGINATION'	=> generate_pagination($this->strPath.$this->SID.$sort_suffix, $user_count, $this->user->data['user_rlimit'], $start),
 		));
 
-		$this->jquery->Dialog('usermailer', $this->user->lang('adduser_send_mail'), array('url'=>$this->server_path."email.php".$this->SID."&user='+userid+'", 'width'=>'660', 'height'=>'450', 'withid'=>'userid'));
+		$this->jquery->Dialog('usermailer', $this->user->lang('adduser_send_mail'), array('url'=>$this->server_path."email.php".$this->SID."&user='+userid+'", 'width'=>'660', 'height'=>'500', 'withid'=>'userid'));
 		$this->tpl->add_meta('<link rel="canonical" href="'.$this->env->link.$this->routing->build('User', false, false, false, true).'" />');
 		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('user_list'),

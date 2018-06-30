@@ -440,7 +440,7 @@ class Manage_User_Groups extends page_generic {
 		$this->jquery->Tab_header('groups_tabs');
 		$this->jquery->Tab_header('permission_tabs');
 
-		$this->jquery->Dialog('usermailer', $this->user->lang('adduser_send_mail'), array('url'=>$this->root_path."email.php".$this->SID."&user='+userid+'", 'width'=>'660', 'height'=>'450', 'withid'=>'userid'));
+		$this->jquery->Dialog('usermailer', $this->user->lang('adduser_send_mail'), array('url'=>$this->root_path."email.php".$this->SID."&user='+userid+'", 'width'=>'660', 'height'=>'500', 'withid'=>'userid'));
 
 		$arrMenuItems = array(
 			0 => array(
