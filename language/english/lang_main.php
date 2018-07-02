@@ -1142,6 +1142,7 @@ $lang = array(
 	"click_to_reveal" => "Click to reveal this information",
 	"new_coreupdate_subject" => "New EQdkp Plus update available",
 	"charname" => "Charactername",
+	"creation_date" => "Created at",
 	);
 
 ?>

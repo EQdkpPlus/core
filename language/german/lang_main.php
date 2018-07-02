@@ -1102,5 +1102,6 @@ $lang = array(
 "click_to_reveal" => "Klicken, um diese Informationen anzuzeigen",
 "new_coreupdate_subject" => "Neues EQdkp Plus Update verfügbar",
 "charname" => "Charaktername",
+"creation_date" => "Erstellt am",
 );
 ?>

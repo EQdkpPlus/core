@@ -60,6 +60,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				$old['notes']			= $this->pdh->get('member', 'note', array($member_id));
 				$old['lastupdate']		= $this->pdh->get('member', 'last_update', array($member_id));
 				$old['picture']			= $this->pdh->get('member', 'picture', array($member_id));
+				$old['creation_date']	= $this->pdh->get('member', 'creation_date', array($member_id));
 				$changes = false;
 				foreach($old as $type => $val) {
 					if(!isset($data[$type])){
@@ -97,7 +98,8 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				'notes'				=> !empty($data['notes']) ? $data['notes'] : '',
 				'profiledata'		=> $data['profiledata'],
 				'last_update'		=> time(),
-				'picture'			=> !empty($data['picture']) ? $data['picture'] : ''
+				'picture'			=> !empty($data['picture']) ? $data['picture'] : '',
+				'member_creation_date' => !empty($data['creation_date']) ? $data['creation_date'] : $old['creation_date'],
 			);
 			
 			if($member_id > 0) {
@@ -111,6 +113,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 						'status'		=> $old['status'],
 						'notes'			=> $old['notes'],
 						'picture'		=> $old['picture'],
+						'creation_date'	=> $old['creation_date'],
 					);
 					
 					$arrNew = array(
@@ -120,6 +123,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 						'status'		=> $querystr['member_status'],
 						'notes'			=> $querystr['notes'],
 						'picture'		=> $querystr['picture'],
+						'creation_date'	=> $querystr['creation_date'],
 					);
 					
 					

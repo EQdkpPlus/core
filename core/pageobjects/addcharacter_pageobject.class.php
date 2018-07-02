@@ -251,6 +251,11 @@ class addcharacter_pageobject extends pageobject {
 				'lang'			=> 'rank',
 				'default'		=> $this->pdh->get('rank', 'default', array()),
 			);
+			$static_fields['creation_date'] = array(
+					'type'	=> 'datepicker',
+					'lang'	=> 'creation_date',
+					'timepicker' => true,
+			);
 		}
 		$this->form->add_tab(array('name' => 'character', 'lang' => 'character'));
 		$this->form->add_fields($static_fields, '', 'character');
