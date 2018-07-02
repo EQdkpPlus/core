@@ -229,10 +229,10 @@ if ( !class_exists( "pdh_w_item" ) ) {
 				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
 				
 				if($this->hooks->isRegistered('item_updated')){
-					$this->hooks->process('item_updated', array('id' => $item_id, 'data' => $arrNew));
+					$this->hooks->process('item_updated', array('id' => $group_key_or_id, 'data' => $arrNew));
 				}
 
-				$this->log_insert('action_item_updated', $log_action, $item_id, $old['name']);
+				$this->log_insert('action_item_updated', $log_action, $group_key_or_id, $old['name']);
 				$this->pdh->enqueue_hook('item_update', $hook_id, array('action' => 'update', 'time' => $time, 'members' => array_merge($updated_mems, $added_mems, $items2del)));
 				$this->db->commitTransaction();
 				return true;
