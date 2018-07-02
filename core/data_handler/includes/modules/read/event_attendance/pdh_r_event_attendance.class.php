@@ -80,16 +80,17 @@ if ( !class_exists( "pdh_r_event_attendance" ) ) {
 				$first_date['member'] = $this->pdh->get('member_dates', 'first_raid', array($member_id, null, false));
 				$first_date['main'] = $this->pdh->get('member_dates', 'first_raid', array($main_id));
 			}
+			
 			//count total per event
 			if(!isset($this->counts[$first_date['member']]) || !isset($this->counts[$first_date['main']])) {
-				$objQuery = $this->db->prepare("SELECT COUNT(*) as count, event_id FROM __raids WHERE raid_date > ? GROUP BY event_id")->execute($first_date['member']);
+				$objQuery = $this->db->prepare("SELECT COUNT(*) as count, event_id FROM __raids WHERE raid_date >= ? GROUP BY event_id")->execute($first_date['member']);
 				if($objQuery){
 					while($row = $objQuery->fetchAssoc()){
 						$this->counts[$first_date['member']][$row['event_id']] = $row['count'];
 					}
 				}
 				
-				$objQuery = $this->db->prepare("SELECT COUNT(*) as count, event_id FROM __raids WHERE raid_date > ? GROUP BY event_id")->execute($first_date['main']);
+				$objQuery = $this->db->prepare("SELECT COUNT(*) as count, event_id FROM __raids WHERE raid_date >= ? GROUP BY event_id")->execute($first_date['main']);
 				if($objQuery){
 					while($row = $objQuery->fetchAssoc()){
 						$this->counts[$first_date['main']][$row['event_id']] = $row['count'];
@@ -110,7 +111,7 @@ if ( !class_exists( "pdh_r_event_attendance" ) ) {
 				$date = $raid['date'];
 				$event_id = $raid['event'];
 				//raid not relevant for this attendance calculation
-					if($date < $first_date['main']) continue;
+				if($date < $first_date['main']) continue;
 				if(!isset($this->attendance[$time_period][$member_id]['main'][$event_id]['attended'])) $this->attendance[$time_period][$member_id]['main'][$event_id]['attended'] = 0;
 				$this->attendance[$time_period][$member_id]['main'][$event_id]['attended']++;
 				$attendees = $this->pdh->get('raid', 'raid_attendees', array($raid_id));
