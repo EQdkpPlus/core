@@ -225,6 +225,9 @@ class mybb_bridge extends bridge_generic {
 	}
 
 	public function logout(){
+		//If Single Sign On is disabled, abort
+		if ((int)$this->config->get('cmsbridge_disable_sso') == 1) return false;
+		
 		$query = $this->bridgedb->query("SELECT name,value FROM ".$this->prefix."settings");
 		if ($query){
 			$result = $query->fetchAllAssoc();
@@ -239,10 +242,10 @@ class mybb_bridge extends bridge_generic {
 		if (isset($arrUserdata['id'])){
 			$this->bridgedb->prepare("DELETE FROM ".$this->prefix."sessions WHERE uid=?")->execute($arrUserdata['id']);
 		}
-		setcookie($arrConfig['cookieprefix'].'sid', '', $expire, $arrConfig['cookiepath'], $arrConfig['cookiedomain']);
+		setcookie($arrConfig['cookieprefix'].'sid', 'somevalue', $expire, $arrConfig['cookiepath'], $arrConfig['cookiedomain']);
 		//User-Cookie
-		setcookie($arrConfig['cookieprefix'].'uid', '', $expire, $arrConfig['cookiepath'], $arrConfig['cookiedomain']);
-		setcookie($arrConfig['cookieprefix'].'mybbuser', '', $expire, $arrConfig['cookiepath'], $arrConfig['cookiedomain']);
+		setcookie($arrConfig['cookieprefix'].'uid', 'somevalue', $expire, $arrConfig['cookiepath'], $arrConfig['cookiedomain']);
+		setcookie($arrConfig['cookieprefix'].'mybbuser', 'somevalue', $expire, $arrConfig['cookiepath'], $arrConfig['cookiedomain']);
 	}
 
 }

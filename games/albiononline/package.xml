@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install type="game" version="2.0.0.0">
+	<folder>albiononline</folder>
+	<name>albiononline</name>
+	<author>Gamebuilder</author>
+	<authorEmail>gamebuilder@eqdkp-plus.eu</authorEmail>
+	<creationDate>1503478227</creationDate>
+	<copyright>(C)2017 Gamebuilder</copyright>
+	<version>0.1.0</version>
+	<level>stable</level>
+</install>

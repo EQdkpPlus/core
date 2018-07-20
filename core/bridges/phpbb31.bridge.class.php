@@ -236,7 +236,7 @@ class phpbb31_bridge extends bridge_generic {
 		
 			setcookie($arrConfig['cookie_name'].'_k', $strLoginKey, $expire, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
 		} else {
-			setcookie($arrConfig['cookie_name'].'_k', '', $expire, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
+			setcookie($arrConfig['cookie_name'].'_k', 'somekey', $expire, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
 		}
 		
 		return true;
@@ -292,10 +292,10 @@ class phpbb31_bridge extends bridge_generic {
 			}
 		} else return;
 				
-		setcookie($arrConfig['cookie_name'].'_sid', '', 0, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
+		setcookie($arrConfig['cookie_name'].'_sid', 'asd', 0, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
 		//User-Cookie
-		setcookie($arrConfig['cookie_name'].'_u', '', 0, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
-		setcookie($arrConfig['cookie_name'].'_k', '', 0, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
+		setcookie($arrConfig['cookie_name'].'_u', 'asd', 0, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
+		setcookie($arrConfig['cookie_name'].'_k', 'asd', 0, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
 	}
 	
 	
