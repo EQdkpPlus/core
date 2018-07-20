@@ -48,6 +48,11 @@ class php_check extends install_generic {
 				'installed'		=> (extension_loaded('zlib')) ? $this->lang['yes'] : $this->lang['no'],
 				'passfail'		=> (extension_loaded('zlib')) ? true : false
 			),
+			'ziparchive'		=> array(
+				'required'		=> $this->lang['yes'],
+				'installed'		=> (class_exists('ZipArchive')) ? $this->lang['yes'] : $this->lang['no'],
+				'passfail'		=> (class_exists('ZipArchive')) ? true : false
+			),
 			'safemode'	=> array(
 				'required'		=> $this->lang['no'],
 				'installed'		=> (ini_get('safe_mode') != '1') ? $this->lang['no'] : $this->lang['yes'],

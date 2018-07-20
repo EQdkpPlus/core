@@ -84,6 +84,7 @@ $lang = array(
 	'module_php'			=> 'PHP-Version',
 	'module_mysql'			=> 'MySQL Datenbank',
 	'module_zLib'			=> 'zLib PHP-Modul',
+	'module_ziparchive'		=> 'ZIP PHP-Modul',
 	'module_safemode'		=> 'PHP Safe Mode',
 	'module_curl'			=> 'cURL PHP-Modul',
 	'module_fopen'			=> 'fopen PHP-Funktion',
