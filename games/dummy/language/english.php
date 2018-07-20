@@ -40,7 +40,8 @@ $english_array = array(
 	"roles" => array(
 	),
 	"lang" => array(
-	"dummy" => 'Default',
+			"dummy" => 'Default',
+			'uc_class' => 'Class',
 	),
 	
 );

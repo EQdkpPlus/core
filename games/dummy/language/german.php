@@ -33,6 +33,7 @@ $german_array = array(
 	'roles' => array(),
 	'lang' => array(
 		'dummy'	=> 'Standard',
+		'uc_class' => 'Klasse',
 	),
 );
 ?>
