@@ -94,6 +94,13 @@ if(!class_exists('requirements')) {
 					'installed'		=> (extension_loaded('gd') && function_exists('gd_info')) ? $this->user->lang('yes') : $this->user->lang('no'),
 					'passfail'		=> (extension_loaded('gd') && function_exists('gd_info')) ? true : false
 				),
+				'mb'		=> array(
+					'required'		=> $this->user->lang('yes'),
+					'installed'		=> (function_exists('mb_strtolower')) ? $this->user->lang('yes') : $this->user->lang('no'),
+					'passfail'		=> true,
+					'adviced_fail'	=> (!function_exists('mb_strtolower')) ? true : false,
+					'ignore'		=> true
+				),
 			);
 		}
 

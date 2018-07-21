@@ -292,12 +292,14 @@ class admin_index extends gen_class {
 		$requirements	= $this->requirements->getRequirements();
 		$req_count 		= $this->requirements->getCounts();
 		foreach($requirements as $reqname=>$reqrow){
+			$color = ($reqrow['passfail']) ? (($reqrow['adviced_fail']) ? 'orange' : 'green') : 'red';
+
 			$this->tpl->assign_block_vars('requirements', array(
 					'NAME'			=> ($this->user->lang('requirements_'.$reqname) != '') ? $this->user->lang('requirements_'.$reqname) : $reqname,
 					'REQUIRED'		=> $reqrow['required'],
-					'AVAILABLE'		=> $reqrow['installed'],
-					'FA'				=> ($reqrow['passfail']) ? 'check-circle' : 'times-circle',
-					'COLOR'			=> ($reqrow['passfail']) ? 'green' : 'red',
+					'AVAILABLE'		=> '<span style="color:'.$color.'">'.$reqrow['installed'].'</span>',
+					'FA'			=> ($reqrow['passfail']) ? 'check-circle' : 'times-circle',
+					'COLOR'			=> $color,
 			));
 		}
 
