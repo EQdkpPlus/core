@@ -106,7 +106,7 @@ if(!class_exists('routing')){
 				foreach($arrFiles as $strFilename) {
 					$strObjectName = str_replace('_pageobject.class.php', '', $strFilename);
 					if (!$blnIncludeStatic && in_array($strObjectName, $this->arrStaticRoutes)) continue;
-					$arrOut[$strObjectName] = ucfirst($strObjectName);
+					$arrOut[$strObjectName] = utf8_ucfirst($strObjectName);
 				}
 				return $arrOut;
 			}
@@ -118,12 +118,12 @@ if(!class_exists('routing')){
 			if (is_array($arrPageObject)){
 				foreach($arrPageObject as $key => $strPageObject){
 					if ($key == 0){
-						$strPath .= ucfirst($this->get($strPageObject, true));
+						$strPath .= utf8_ucfirst($this->get($strPageObject, true));
 					} else {
 						$strPath .= '/'.$strPageObject;
 					}
 				}
-			} else $strPath .= ucfirst($this->get($arrPageObject, true));
+			} else $strPath .= utf8_ucfirst($this->get($arrPageObject, true));
 			
 			if ($strParamText || $strParam) $strPath .= '/';
 			if ($strParamText) $strPath .= $this->clean($strParamText);
@@ -144,7 +144,7 @@ if(!class_exists('routing')){
 		
 		public function simpleBuild($strPageObject){
 			$strPath = $this->controller_path;
-			$strPath .= ucfirst($this->get($strPageObject, true));
+			$strPath .= utf8_ucfirst($this->get($strPageObject, true));
 			if (substr($strPath, -1, 1) != "/") $strPath .= '/';
 			return $strPath;
 		}
@@ -168,7 +168,7 @@ if(!class_exists('routing')){
 			$a_satzzeichen = array("\"",",",";",".",":","!","?", "&", "=", "/", "|", "#", "*", "+", "(", ")", "%", "$", "´", "„", "“", "‚", "‘", "`", "^", '"', "'", ">", "<");
 			$strText = str_replace($a_satzzeichen, "", $strText);
 			$strText = htmlspecialchars($strText);
-			return ucfirst($strText);
+			return utf8_ucfirst($strText);
 		}
 		
 		public function getPageObject($strObjectName){

@@ -821,6 +821,15 @@ function is_utf8($str){
 	return true; // kein ungültiges UTF-8-Zeichen gefunden
 }
 
+function utf8_ucfirst($str) {
+	if(function_exists('mb_strtoupper')){
+		$fc = mb_strtoupper(mb_substr($str, 0, 1));
+		return $fc.mb_substr($str, 1);
+	} else {
+		return ucfirst($str);
+	}
+}
+
 function clean_username($strUsername){
 	$strUsername = utf8_strtolower($strUsername);
 	return $strUsername;
