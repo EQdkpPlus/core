@@ -419,6 +419,14 @@ class admin_settings extends page_generic {
 					'enable_captcha'	=> array(
 						'type'		=> 'radio',
 					),
+					'recaptcha_type' => array(
+						'type' 		=> 'radio',
+						'options'	=> array(
+							'v2' => 'V2',
+							'invisible' => 'Invisible',
+						),
+						'default' => 'v2',
+					),
 					'lib_recaptcha_okey'	=> array(
 						'type'		=> 'text',
 						'size'		=> 30

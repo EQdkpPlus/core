@@ -38,8 +38,9 @@ class captcha extends gen_class {
 		
 		//Load default recaptcha
 		if ($this->config->get('lib_recaptcha_pkey') && strlen($this->config->get('lib_recaptcha_pkey'))){
+			$type = ($this->config->get('recaptcha_type')) ? $this->config->get('recaptcha_type') : 'v2';
 			require_once($this->root_path.'libraries/recaptcha/recaptcha.class.php');
-			$recaptcha = new recaptcha;
+			$recaptcha = new recaptcha($type);
 			
 			$strOut ='<dl>
 			<dt>
@@ -84,10 +85,11 @@ class captcha extends gen_class {
 		
 		//Load default recaptcha
 		if ($this->config->get('lib_recaptcha_pkey') && strlen($this->config->get('lib_recaptcha_pkey'))){
+			$type = ($this->config->get('recaptcha_type')) ? $this->config->get('recaptcha_type') : 'v2';
 			require_once($this->root_path.'libraries/recaptcha/recaptcha.class.php');
-			$recaptcha = new recaptcha;
-			
-			$response = $recaptcha->check_answer ($this->config->get('lib_recaptcha_pkey'), $this->env->ip, $this->in->get('g-recaptcha-response'));
+			$recaptcha = new recaptcha($type);
+
+			$response = $recaptcha->check_answer($this->config->get('lib_recaptcha_pkey'), $this->env->ip, $this->in->get('g-recaptcha-response'));
 			if ($response->is_valid) {
 				$blnResult = true;
 			}
