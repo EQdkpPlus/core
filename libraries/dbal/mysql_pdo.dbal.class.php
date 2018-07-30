@@ -581,7 +581,7 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
 					$sign = substr($vi, 0, 1);
 					
 					if (strpos($v, $k) === 0 && in_array($sign, array('+', '-', '*'. '/'))){
-						$arrSet[] = $this->add_ticks($k).' = '.$k.''.$sign.''.intval(trim(substr($v, 1)));
+						$arrSet[] = $this->add_ticks($k).' = '.$k.''.$sign.''.intval(trim(substr($vi, 1)));
 						unset($this->arrParams['set'][$i]);
 					} else {
 						$arrSet[] = $this->add_ticks($k) . '=?';
