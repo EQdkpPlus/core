@@ -166,6 +166,7 @@ class ManageUserProfileFields extends page_generic {
 								'gender'		=> 'Gender',
 								'birthday'		=> 'Birthday',
 								'imageuploader' => 'Image',
+								'bbcode'		=> 'BB-Code',
 						),
 						'required'	=> true
 				),

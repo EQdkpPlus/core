@@ -333,6 +333,10 @@ if ( !class_exists( "pdh_r_member" ) ) {
 				}
 				break;
 				
+				case 'bbcodeeditor':
+					$out = $this->bbcode->toHTML($out);
+				break;
+				
 				case 'imageuploader':
 					if (strlen($out)){
 						$out = str_replace($this->root_path, $this->server_path, $out);

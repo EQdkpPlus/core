@@ -131,6 +131,7 @@ class ManageProfileFields extends page_generic {
 			'radio'			=> 'Radio',
 			'datepicker'	=> 'Datepicker',
 			'imageuploader' => 'Image',
+			'bbcodeeditor'	=> 'BB-Code',
 		);
 
 		$categories = array(

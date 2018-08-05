@@ -437,6 +437,10 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 				$myField['returnFormat'] = 'relative';
 				$myField['imgup_type']	= 'user';	
 			}
+			
+			if($strType == 'bbcode'){
+				$myField['type'] = 'bbcodeeditor';
+			}
 
 			return $myField;
 		}
@@ -495,6 +499,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 					case 'datepicker':
 					case 'birthday':
 					case 'imageuploader':
+					case 'bbcode':
 						return $strUserValue;
 					case 'dropdown':
 					case 'radio':
@@ -541,6 +546,8 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 				case 'text':
 				case 'int':
 					return $strIcon.$strUserValue;
+				case 'bbcode':
+					return $this->bbcode->toHTML($strUserValue);
 				case 'imageuploader':
 					if (strlen($strUserValue)){
 						$out = str_replace($this->root_path, $this->server_path, $strUserValue);
