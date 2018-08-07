@@ -49,7 +49,7 @@ if ( !class_exists( "mmtaskmanager" ) ) {
 					$plugs[] = $row['code'];
 				}
 			}
-			
+
 			$task_dir = $this->root_path.'plugins/';
 			$folder = scandir($task_dir);
 			foreach($folder as $file) {
@@ -57,7 +57,7 @@ if ( !class_exists( "mmtaskmanager" ) ) {
 				$this->task_scan($file, $task_dir);
 			}
 			//scan update-tasks for games
-			$task_dir = $this->root_path.'games/'.$this->config->get('default_game');
+			$task_dir = $this->root_path.'games/'.$this->config->get('default_game').'/';
 			if(is_dir($task_dir)) {
 				$folder = scandir($task_dir);
 				foreach($folder as $file) {
@@ -65,7 +65,7 @@ if ( !class_exists( "mmtaskmanager" ) ) {
 				}
 			}
 		}
-				
+
 		private function task_scan($file, $task_dir) {
 			$path = (is_dir($task_dir.$file.'/includes/')) ? $task_dir.$file.'/includes/updates/' : $task_dir.$file.'/include/updates/';
 			if(is_dir($path)) {
@@ -93,20 +93,20 @@ if ( !class_exists( "mmtaskmanager" ) ) {
 			}
 			return count($this->tasks);
 		}
-		
+
 		public function get_task_hash(){
 			if(empty($this->tasks)){
 				$this->scan_tasks();
 			}
-			
+
 			$arrTasks = $this->tasks;
 			asort($arrTasks);
-			
+
 			$arrKeys = array_keys($arrTasks);
 			$strHash = md5(serialize($arrKeys));
 			return $strHash;
 		}
-		
+
 		public function init_tasks() {
 			require_once($this->root_path.'maintenance/includes/task.aclass.php');
 			$this->get_task_list();
