@@ -172,12 +172,14 @@ class editcalendarevent_pageobject extends pageobject {
 			// fetch the count
 			if($this->in->get('raidmode') == 'role'){
 				foreach($this->pdh->get('roles', 'roles', array()) as $classid=>$classname){
-					$raid_clsdistri[$classid] = $this->in->get('roles_'.$classid.'_count', 0);
+					$intCount = $this->in->get('roles_'.$classid.'_count', 0);
+					$raid_clsdistri[$classid] = ($intCount < 0) ? 0 : $intCount;
 				}
 			}else{
 				$classdata = $this->game->get_primary_classes(array('id_0'));
 				foreach($classdata as $classid=>$classname){
-					$raid_clsdistri[$classid] = $this->in->get('classes_'.$classid.'_count', 0);
+					$intCount = $this->in->get('classes_'.$classid.'_count', 0);
+					$raid_clsdistri[$classid] = ($intCount < 0) ? 0 : $intCount;
 				}
 			}
 
