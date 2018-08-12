@@ -654,6 +654,12 @@ class calendarevent_pageobject extends pageobject {
 				$this->raidcategories[-9]		= 'DeletedRole';
 				$this->charswithdeletedroles	= array_keys($charswithwrongrole);
 			}
+			
+			$guestswithwrongrole	= $this->pdh->get('calendar_raids_guests', 'chars_with_wrong_role', array($this->url_id, $available_roles));
+			if(is_array($guestswithwrongrole) && count($guestswithwrongrole) > 0){
+				$this->raidcategories[-9]		= 'DeletedRole';
+				$this->guestswithdeletedroles	= array_keys($guestswithwrongrole);
+			}
 		}
 
 		$this->mystatus			= $this->pdh->get('calendar_raids_attendees', 'myattendees', array($this->url_id, $this->user->data['user_id']));
@@ -802,10 +808,10 @@ class calendarevent_pageobject extends pageobject {
 					'ID'			=> $classid,
 					'NAME'			=> ($classid == -9) ? $this->user->lang('raidevent_deleted_role_assigned') : $classname,
 					'CLASS_ICON'	=> ($eventdata['extension']['raidmode'] == 'role') ? $this->game->decorate('roles', $classid) : $this->game->decorate('primary', $classid),
-					'MAX'			=> ($eventdata['extension']['raidmode'] == 'none' && $eventdata['extension']['distribution'][$classid] == 0) ? '' : '/'.(($classid == '-9') ? '&infin;' : $eventdata['extension']['distribution'][$classid]),
+					'MAX'			=> ($eventdata['extension']['raidmode'] == 'none' && $eventdata['extension']['distribution'][$classid] == 0) ? '' : '/'.(($classid == '-9') ? '&infin;' : ((isset($eventdata['extension']['distribution'][$classid])) ? $eventdata['extension']['distribution'][$classid] : 0)),
 					'MAXCOUNT'		=> (isset($eventdata['extension']['distribution'][$classid])) ? $eventdata['extension']['distribution'][$classid] : 0,
 					'COUNT'			=> $classcount,
-					'SHOW'			=> ($classid > 0 || ($classid == -9 && isset($this->attendees[$statuskey][$classid]) && count($this->attendees[$statuskey][$classid]) > 0) || ($classid == 0 && $eventdata['extension']['distribution'][$classid] > 0)) ? true : false,
+					'SHOW'			=> ($classid > 0 || ($classid == -9 && isset($this->attendees[$statuskey][$classid]) && count($this->attendees[$statuskey][$classid]) > 0) || ($classid == 0 && $eventdata['extension']['distribution'][$classid] > 0) || count($this->guestswithdeletedroles)) ? true : false,
 				));
 
 				// The characters
@@ -912,9 +918,23 @@ class calendarevent_pageobject extends pageobject {
 					}
 				}
 
+				if($classid == -9 && count($this->guestswithdeletedroles)){
+					foreach($this->guests[$statuskey] as $a_classid => $a_guests){
+						foreach($a_guests as $guestid=>$guestsdata){
+							if(in_array($guestid,$this->guestswithdeletedroles)){
+								$this->guests[$statuskey][-9][$guestid] =$guestsdata;
+							}
+						}
+					}
+				}
+				
+				
 				// add the guests to the attendee list
 				if(isset($this->guests[$statuskey][$classid]) && is_array($this->guests[$statuskey][$classid]) && count($this->guests) > 0){
+					
+					
 					foreach($this->guests[$statuskey][$classid] as $guestid=>$guestsdata){
+
 						if($guestsdata['status'] == $statuskey){
 							$dragto_roles	= (isset($ddroles[$guestsdata['class']]) && is_array($ddroles[$guestsdata['class']]) && count($ddroles[$guestsdata['class']]) > 0) ? 'classrole_'.implode(', classrole_', $ddroles[$guestsdata['class']]) : '';
 							$guest_clssicon	= $this->game->decorate('primary', $guestsdata['class']);
@@ -940,6 +960,7 @@ class calendarevent_pageobject extends pageobject {
 						}
 					}
 				}
+				
 			}
 			$status_first = false;
 		}

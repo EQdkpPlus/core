@@ -200,6 +200,19 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 			}
 			return $tmpcount;
 		}
+		
+		public function get_chars_with_wrong_role($eventid, $roles){
+			$chars_out = array();
+			$guests = $this->get_members($eventid);
+			if(is_array($guests)){
+				foreach($guests as $charID=>$charData){
+					if(!in_array($charData['role'], $roles)){
+						$chars_out[$charID] = $charData;
+					}
+				}
+			}
+			return $chars_out;
+		}
 
 	} //end class
 } //end if class not exists
