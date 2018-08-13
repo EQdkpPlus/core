@@ -269,6 +269,9 @@ class Manage_Styles extends page_generic{
 	}
 
 	public function edit(){
+		// work-around for a known Chrome bug that causes the XSS auditor to incorrectly detect JavaScript inside a textarea
+		@header('X-XSS-Protection: 0');
+		
 		if($this->in->get('save') == 'success')
 			$this->core->message( $this->user->lang('admin_update_style_success'), $this->user->lang('success'), 'green');
 		
