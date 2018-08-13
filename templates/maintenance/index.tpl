@@ -4,8 +4,8 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   {META}
   <title>EQdkp Plus {L_MMODE}</title>
-  <link rel='stylesheet' href='{ROOT_PATH}templates/maintenance/css/maintenance.css' type='text/css' media='screen' />
-  <link rel='stylesheet' href='{ROOT_PATH}libraries/FontAwesome/font-awesome.min.css' type='text/css' media='screen' />
+  <link rel='stylesheet' href='{ROOT_PATH}templates/maintenance/css/maintenance.css?v={EQDKP_VERSION_CONST}' type='text/css' media='screen' />
+  <link rel='stylesheet' href='{ROOT_PATH}libraries/FontAwesome/font-awesome.min.css?v={EQDKP_VERSION_CONST}' type='text/css' media='screen' />
   <link rel="icon" href="{ROOT_PATH}templates/maintenance/favicon.png" type="image/png" />
   
   <style type="text/css">

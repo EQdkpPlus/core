@@ -141,6 +141,7 @@ class core extends gen_class {
 			'S_SPLASH' => ($this->in->get('splash') == 'true') ? true : false,
 			'SID'	=> $this->SID,
 			'ROOT_PATH' => $this->root_path,
+			'EQDKP_VERSION_CONST' => substr(md5(VERSION_EXT), 0, 7),
 			'L_MMODE_INFO'		=> $this->user->lang('mmode_info'),
 			'S_IS_ADMIN'	=> ($this->user->check_auth('a_maintenance', false)),
 		));
