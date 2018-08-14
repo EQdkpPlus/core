@@ -169,7 +169,10 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 
 		public function get_event($id, $raw=false){
 			return ($raw) ? $this->guests[$id]['eventid'] : $this->pdh->get('calendar_events', 'name', array($this->guests[$id]['eventid']));
+		}
 
+		public function get_event_with_link($id){
+			return "<a href='".$this->get_eventlink($id)."'>".$this->pdh->get('calendar_events', 'name', array($this->guests[$id]['eventid']))." [".$this->pdh->get('calendar_events', 'html_date', array($this->guests[$id]['eventid']))." / ".$this->pdh->get('calendar_events', 'html_time_start', array($this->guests[$id]['eventid']))."]</a>";
 		}
 
 		public function get_email($id){

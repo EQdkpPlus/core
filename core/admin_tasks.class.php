@@ -67,7 +67,7 @@ class admin_tasks extends gen_class {
 						),
 				),
 
-				//InactiveUsers
+				//Calendar: Guest Application
 				'GuestApplication' => array(
 						'name'			=> 'raidevent_guestapplication',
 						'icon'			=> 'fa fa-user-plus',
@@ -311,7 +311,7 @@ class admin_tasks extends gen_class {
 				$arrContent[] = array(
 					'id'		=> $guestID,
 					'name'		=> $this->pdh->get('calendar_raids_guests', 'name', array($guestID)),
-					'event'		=> $this->pdh->get('calendar_raids_guests', 'event', array($guestID)),
+					'event'		=> $this->pdh->get('calendar_raids_guests', 'event_with_link', array($guestID)),
 					'email'		=> $this->pdh->get('calendar_raids_guests', 'email', array($guestID)),
 					'date'		=> $this->pdh->get('calendar_raids_guests', 'date', array($guestID)),
 				);
