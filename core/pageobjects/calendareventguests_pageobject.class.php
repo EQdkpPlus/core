@@ -102,7 +102,7 @@ class calendareventguests_pageobject extends pageobject {
 				return;
 			}
 			$blub = $this->pdh->put('calendar_raids_guests', 'insert_guest', array(
-				$this->in->get('eventid', 0), $this->in->get('membername'), $this->in->get('class'), 0, $this->in->get('note'), $this->in->get('email')
+				$this->in->get('eventid', 0), $this->in->get('membername'), $this->in->get('class'), 0, $this->in->get('note'), $this->in->get('email'), $this->in->get('role', 0)
 			));
 		}
 		$this->pdh->process_hook_queue();
