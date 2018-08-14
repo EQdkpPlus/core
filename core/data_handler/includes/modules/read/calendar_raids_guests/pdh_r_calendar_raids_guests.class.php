@@ -90,10 +90,14 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 						'eventid'			=> $row['calendar_events_id'],
 						'role'				=> $row['role'],
 					);
-					$this->guestsEvent[$row['calendar_events_id']][$row['id']] = $this->guests[$row['id']];
-					$this->guestsStatus[$row['calendar_events_id']][$row['status']][$row['class']][$row['id']] = $this->guests[$row['id']];
+					
+					//if role=0, try to set to default role for class			
 					$defautrole_config	= json_decode($this->config->get('roles_defaultclasses'), true);
 					$role	= ($row['role'] > 0) ? $row['role'] : (($defautrole_config > 0 && $row['class'] > 0 && isset($defautrole_config[$row['class']])) ? $defautrole_config[$row['class']] : 0);
+					$this->guests[$row['id']]['role'] = $role;
+
+					$this->guestsEvent[$row['calendar_events_id']][$row['id']] = $this->guests[$row['id']];
+					$this->guestsStatus[$row['calendar_events_id']][$row['status']][$row['class']][$row['id']] = $this->guests[$row['id']];
 					$this->guestsStatus2[$row['calendar_events_id']][$row['status']][$role][$row['id']] = $this->guests[$row['id']];
 				}
 				$this->pdc->put('pdh_calendar_raids_table.guests', $this->guests, NULL);
