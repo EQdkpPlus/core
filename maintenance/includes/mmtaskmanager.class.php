@@ -59,10 +59,7 @@ if ( !class_exists( "mmtaskmanager" ) ) {
 			//scan update-tasks for games
 			$task_dir = $this->root_path.'games/'.$this->config->get('default_game').'/';
 			if(is_dir($task_dir)) {
-				$folder = scandir($task_dir);
-				foreach($folder as $file) {
-					$this->task_scan($file, $task_dir);
-				}
+				$this->task_scan("", $task_dir);
 			}
 		}
 				
