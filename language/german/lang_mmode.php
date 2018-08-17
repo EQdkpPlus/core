@@ -76,9 +76,10 @@ $lang = array(
 
 	//Task types
 	'fix' => 'Fix',
-	'update' => 'Update',
+	'update' => 'Core-Update',
 	'import' => 'Import',
 	'plugin_update' => 'Plugin-Update',
+	'game_update' => 'Game-Update',
 	'worker' => 'Worker',
 
 	//Task page
