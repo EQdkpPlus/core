@@ -1271,7 +1271,7 @@ class Manage_Users extends page_generic {
 		$this->form->output($user_data);
 
 
-		$this->tpl->assign_var('JS_TAB_SELECT', $this->jquery->Tab_Select('usersettings_tabs', (($user_id) ? 5+count($this->pm->get_menus('settings')) : 0)));
+		$this->tpl->assign_var('JS_TAB_SELECT', $this->jquery->Tab_Select('usersettings_tabs', (($user_id) ? 6+count($this->pm->get_menus('settings')) : 0)));
 
 		$this->core->set_vars([
 			'page_title'		=> ($user_id) ? $this->user->lang('manage_users').': '.sanitize($user_data['username']) : $this->user->lang('user_creation'),
