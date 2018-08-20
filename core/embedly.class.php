@@ -79,6 +79,11 @@ class embedly extends gen_class {
 					'format' => 'json',
 					'oembed' => 'https://open.spotify.com/oembed?url=URL',
 				),
+				'playstv' => array(
+						'regex' =>["https://plays\.tv/video/.*"],
+						'format' => 'json',
+						'oembed' => 'https://plays.tv/oembed?url=URL&format=json',
+				),
 		);
 	
 	//Parse one single Link
