@@ -99,7 +99,7 @@ $lang = array(
 	0 => 'from now',
 	1 => 'ago',
 	),
-	"nicetime_format" => '%2$s %1$s',
+	"nicetime_format" => '%1$s %2$s',
 	"jquery_multiselect_selectedtxt" => "# of # selected",
 	"admin_title_prefix" => '%1$s %2$s Admin',
 	"listitems_title" => 'Item Values',
