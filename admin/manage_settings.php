@@ -1001,7 +1001,7 @@ class admin_settings extends page_generic {
 
 		//Merge loginmethod-settings
 		if ($arrLoginmethodSettings = $this->user->get_loginmethod_settings()){
-			$this->form->add_fields($arrLoginmethodSettings, 'login', 'system');
+			$this->form->add_fields($arrLoginmethodSettings, 'login', 'user');
 		}
 
 		//Notifications
