@@ -387,7 +387,9 @@ class settings_pageobject extends pageobject {
 		//Deactivate Profilefields synced by Bridge
 		
 		if ($this->config->get('cmsbridge_active') == 1){
-			$synced_fields = array('username', 'current_password', 'new_password', 'confirm_password');
+			$synced_fields = array('username', 'new_password', 'confirm_password');
+			
+			if($this->bridge->get_sync_email()) $synced_fields[] = 'current_password';
 			
 			if((int)$this->config->get('cmsbridge_disable_sync') != 1){
 				//Key: Bridge ID, Value: EQdkp Profilefield ID

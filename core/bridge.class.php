@@ -624,6 +624,13 @@ class bridge extends gen_class {
 		return $bridges;
 	}
 	
+	
+	public function get_sync_email(){
+		if(!$this->objBridge->blnSyncEmail) return false;
+		
+		return true;
+	}
+	
 	/**
 	 * Checks if there is an special Query instead of the predefined.
 	 * Returns false if there is none, otherwise returns the Querystring.
