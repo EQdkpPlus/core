@@ -435,8 +435,10 @@ $('.js_reload').change(reload_settings);", 'docready');
 			// Build Permission Info
 			$arrGroups = $this->config->get('visibility', 'pmod_'.$id);
 			$arrGroupsOut = array();
-			foreach($arrGroups as $intGroupID){
-				$arrGroupsOut[] = $filter_rights[$intGroupID];
+			if(is_array($arrGroups)){
+				foreach($arrGroups as $intGroupID){
+					$arrGroupsOut[] = $filter_rights[$intGroupID];
+				}
 			}
 			//if (count($arrGroupsOut) === 0) $arrGroupsOut[] = $filter_rights[0];
 			$data['perms'] = $arrGroupsOut;
