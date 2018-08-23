@@ -138,9 +138,8 @@ if (!class_exists("pdh_r_user")){
 		}
 
 		public function get_check_auth_account($name, $strMethod){
-			if(!$this->blnDecryptedAll) $this->decrypt_data_all();
-			
-			return (is_array(search_in_array($name, $this->users, true, 'auth_account'))) ? false : true;
+			if(!$this->blnDecryptedAll) $this->decrypt_data_all();		
+			return (is_array(search_in_array($name, $this->users, true, $strMethod))) ? false : true;
 		}
 
 		public function get_is_online($user_id){
