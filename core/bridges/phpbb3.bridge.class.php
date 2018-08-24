@@ -25,7 +25,7 @@ if ( !defined('EQDKP_INC') ){
 
 class phpbb3_bridge extends bridge_generic {
 	
-	public static $name = "phpBB3";
+	public static $name = "phpBB 3.0";
 	
 	public $data = array(
 		'user'	=> array( //User
