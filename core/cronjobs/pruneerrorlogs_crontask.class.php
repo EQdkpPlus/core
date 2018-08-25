@@ -31,6 +31,7 @@ if ( !class_exists( "pruneerrorlogs_crontask" ) ) {
 			$this->defaults['editable']		= true;
 			$this->defaults['ajax']			= true;
 			$this->defaults['description']	= 'Prune Error Logs';
+			$this->defaults['active']			= true;
 		}
 		
 		public $options = array(
@@ -45,8 +46,8 @@ if ( !class_exists( "pruneerrorlogs_crontask" ) ) {
 			$crons		= $this->cronjobs->list_crons();
 			$params		= $crons['pruneerrorlogs']['params'];
 			
-			//Per default, delete logs older than 14 days
-			$intDays = (intval($params['days']) > 0) ? intval($params['days']) : 14;
+			//Per default, delete logs older than 30 days
+			$intDays = (intval($params['days']) > 0) ? intval($params['days']) : 30;
 			
 			$arrLogfiles = $this->pdl->get_logfiles(true);		
 			
