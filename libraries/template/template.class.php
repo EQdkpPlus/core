@@ -630,7 +630,15 @@ class template extends gen_class {
 					$imploded_jscode .= implode("\n", $this->get_templatedata('js_code_head_docready'));
 					$imploded_jscode .= "});";
 				}
-				if(!$debug) $imploded_jscode = \JShrink\Minifier::minify($imploded_jscode);
+				if(!$debug) {
+					
+					try {
+						$imploded_jscode = \JShrink\Minifier::minify($imploded_jscode);
+					} catch (Exception $e){
+						$imploded_jscode = $imploded_jscode;
+					}
+					
+				}
 				$this->assign_var('JS_CODE', $imploded_jscode);
 				$this->set_templateout('js_code', true);
 			}
@@ -646,7 +654,13 @@ class template extends gen_class {
 					if($debug) $imploded_jscodeeop .= implode("\n", $this->get_templatedata('js_code_file_docready'));
 					$imploded_jscodeeop .= "});";
 				}
-				if(!$debug) $imploded_jscodeeop = \JShrink\Minifier::minify($imploded_jscodeeop);
+				if(!$debug) {
+					try {
+						$imploded_jscodeeop = \JShrink\Minifier::minify($imploded_jscodeeop);
+					} catch (Exception $e){
+						$imploded_jscodeeop = $imploded_jscodeeop;
+					}
+				}
 				$this->assign_var('JS_CODE_EOP', $imploded_jscodeeop);
 				$this->set_templateout('js_code', true);
 			}
