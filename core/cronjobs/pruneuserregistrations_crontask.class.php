@@ -53,12 +53,16 @@ if ( !class_exists( "pruneuserregistrations_crontask" ) ) {
 			}
 			
 			$objQuery = $this->db->query("SELECT * FROM __users WHERE user_email_confirmed = -1");
+			$intCount = 0;
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					$intUserID = $row['user_id'];
 					$this->pdh->put('user', 'delete_user', array($intUserID, 0));
+					$intCount++;
 				}
 			}
+			
+			echo "Deleted ".$intCount." inactive user registrations.";
 			
 			$this->pdh->process_hook_queue();
 			
