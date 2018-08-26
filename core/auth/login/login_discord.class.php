@@ -30,6 +30,8 @@ class login_discord extends gen_class {
 			'login_button'		=> 'login_button',
 			'account_button'	=> 'account_button',
 			'get_account'		=> 'get_account',
+			'register_button' 	=> 'register_button',
+			'pre_register'		=> 'pre_register',
 	);
 
 	public static $options = array(
@@ -93,6 +95,50 @@ class login_discord extends gen_class {
 
 		return '<button type="button" class="mainoption thirdpartylogin discord accountbtn" onclick="window.location=\''.$auth_url.'\'">Discord</button>';
 	}
+	
+	public function register_button(){
+		$this->init_oauth();
+		
+		$redir_url = $this->env->buildLink().'index.php/Register/?register&lmethod=discord';
+		
+		$client = new OAuth2\Client($this->appid, $this->appsecret);
+		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $redir_url, array('scope' => 'email'));
+		
+		
+		return '<button type="button" class="mainoption thirdpartylogin discord accountbtn" onclick="window.location=\''.$auth_url.'\'">Discord</button>';
+	}
+	
+	public function pre_register(){
+		$this->init_oauth();
+		
+		$blnLoginResult = false;
+		
+		if($this->in->exists('code')){
+			$redir_url = $this->env->buildLink().'index.php/Register/?register&lmethod=discord';
+			$client = new OAuth2\Client($this->appid, $this->appsecret);
+			$params = array('code' => $this->in->get('code'), 'redirect_uri' => $redir_url, 'scope' => 'email');
+			$response = $client->getAccessToken($this->TOKEN_ENDPOINT, 'authorization_code', $params);
+			
+			if ($response && $response['result']){
+				$arrAccountResult = $this->fetchUserData($response['result']['access_token']);
+				
+				if($arrAccountResult){
+					$bla = array(
+							'username'			=> isset($arrAccountResult['username']) ? utf8_ucfirst($arrAccountResult['username']) : '',
+							'user_email'		=> isset($arrAccountResult['email']) ? $arrAccountResult['email'] : '',
+							'user_email2'		=> isset($arrAccountResult['email']) ? $arrAccountResult['email'] : '',
+							'auth_account'		=> $arrAccountResult['id'],
+					);
+					
+					return $bla;
+				}
+			}
+
+		}
+		
+		return false;
+	}
+	
 
 	public function get_account(){
 		$this->init_oauth();
