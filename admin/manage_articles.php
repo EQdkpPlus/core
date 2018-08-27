@@ -198,7 +198,7 @@ class Manage_Articles extends page_generic {
 	}
 
 	public function delete(){
-		$retu = array();
+		$retu = $pos = $messages = array();
 
 		if(count($this->in->getArray('selected_ids', 'int')) > 0) {
 			foreach($this->in->getArray('selected_ids','int') as $id) {
@@ -382,7 +382,7 @@ class Manage_Articles extends page_generic {
 		$strName = $this->pdh->get('article_categories', 'name', array($cid));
 		$this->tpl->assign_vars(array(
 			'ARTICLE_LIST' 		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), 25, false),
-			'PAGINATION' 		=> generate_pagination('manage_articles.php'.$sort_suffix, $raid_count, 25, $this->in->get('start', 0)),
+				'PAGINATION' 		=> generate_pagination('manage_articles.php'.$sort_suffix, count($view_list), 25, $this->in->get('start', 0)),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
 			'ARTICLE_COUNT'		=> count($view_list),
 			'CATEGORY_NAME' 	=> $strName,
