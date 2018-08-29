@@ -3816,6 +3816,17 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	.responsive .settings input {
 		max-width: 95%;
 	}
+	
+	.notsignedpanel_close:before{
+		top: 10px;
+    	left: 10px;
+	}
+	
+	.notsignedpanel {
+		overflow: scroll;
+		height: auto;
+		top: 0;
+	}
 }
 
 @media all and (max-width: 590px) {
