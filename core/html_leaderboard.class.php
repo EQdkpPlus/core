@@ -28,7 +28,7 @@ if ( !class_exists( "html_leaderboard" ) ) {
 		private $mdkpid;
 		private $vpre;
 
-		public function get_html_leaderboard($mdkpid, $view_list, $settings, $with_twinks=false) {
+		public function get_html_leaderboard($mdkpid, $view_list, $settings, $with_twinks=false, $filter="") {
 			$arrMdkpIDList = $this->pdh->get('multidkp', 'id_list');
 			$this->mdkpid = ($mdkpid) ? $mdkpid : $settings['default_pool'];
 			$this->mdkpid = (in_array($this->mdkpid, $arrMdkpIDList)) ? $this->mdkpid : ((isset($arrMdkpIDList[0])) ? $arrMdkpIDList[0] : 0);
@@ -69,7 +69,7 @@ if ( !class_exists( "html_leaderboard" ) ) {
 				$this->timekeeper->put('lb_reset_times', $this->mdkpid, time(), true);
 			}
 
-			$strCacheKey = md5('lb_'.$this->mdkpid.'_'.$column.'_'.$sort.'_'.$max_member);
+			$strCacheKey = md5('lb_'.$this->mdkpid.'_'.$column.'_'.$sort.'_'.$max_member.'_'.$filter);
 			$cachedViewList = $this->pdc->get('lb_'.$this->mdkpid.'_'.$strCacheKey);
 
 			$member_classes_mapping = $this->pdh->aget('member', $column, 0, array($view_list));
