@@ -271,7 +271,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 
 		public function get_chars_with_wrong_role($eventid, $roles){
 			$chars_out = array();
-			if(is_array($this->attendees[$eventid])){
+			if(isset($this->attendees[$eventid]) && is_array($this->attendees[$eventid])){
 				foreach($this->attendees[$eventid] as $charID=>$charData){
 					if(!in_array($charData['member_role'], $roles)){
 						$chars_out[$charID] = $charData;
@@ -305,7 +305,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			$inDB		= $this->db->prepare('SELECT * FROM __calendar_raid_attendees WHERE calendar_events_id=? AND member_id :in')->in($arrChars)->execute($eventid);
 			return ($inDB->numRows > 0) ? true : false;
 		}
-		
+
 		public function get_other_user_attendees($eventid, $memberid){
 			$userid		= $this->pdh->get('member', 'userid', array($memberid));
 			$arrChars	= $this->pdh->get('member', 'connection_id', array($userid));
@@ -317,7 +317,7 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 					$arrOut[(int)$arrRow['id']] = (int)$arrRow['id'];
 				}
 			}
-				
+
 			return $arrOut;
 		}
 
