@@ -272,7 +272,7 @@ if (!class_exists("comments")){
 			$html	.= '<div class="boxContent">';
 			
 			if(($this->user->is_signedin() && $this->userPerm) || ($this->showFormForGuests && !$this->user->is_signedin())){
-				if(count($comments) > 5) $html .= '<div><a href="javascript:tinyMCE.get(\'comment_textarea_'.$this->id.'\').focus();"  #comment_data'.$this->id.'" class="button floatRight" style="margin-bottom: 5px;"><i class="fa fa-comment"></i> '.$this->user->lang('comment_write').'</a><br /><br /><div class="clear"></div></div>';
+				if(count($comments) > 5) $html .= '<div><a href="javascript:tinyMCE.get(\'comment_textarea_'.$this->id.'\').focus().scrollIntoView();"  #comment_data'.$this->id.'" class="button floatRight" style="margin-bottom: 5px;"><i class="fa fa-comment"></i> '.$this->user->lang('comment_write').'</a><br /><br /><div class="clear"></div></div>';
 			}
 
 			$out = array();
