@@ -1871,6 +1871,7 @@ $lang = array(
 		"test_mail" => "Send testmail",
 		"test_mail_ok" => "Testmail was sent successfully.",
 		"test_mail_fail" => "While sending the testmail, an error occured:",
+		"new_release_notes" => "Notes on the new version",
 );
 
 ?>

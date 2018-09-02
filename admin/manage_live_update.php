@@ -186,6 +186,8 @@ class Manage_Live_Update extends page_generic {
 			$this->config->set('download_link', $this->encrypt->encrypt($downloadLink['link']), 'live_update');
 			$this->config->set('download_hash', $this->encrypt->encrypt($downloadLink['hash']), 'live_update');
 			$this->config->set('download_signature', $this->encrypt->encrypt($downloadLink['signature']), 'live_update');
+			//Set release note to global namespace to prevent deletion
+			$this->config->set('release_note', $downloadLink['note']);
 			$new_version = str_replace('.', '', $this->getNewVersion());
 			$this->config->set('download_newversion', $this->encrypt->encrypt($new_version), 'live_update');
 			echo "true";
@@ -557,10 +559,18 @@ class Manage_Live_Update extends page_generic {
 		$updates = NULL;
 
 		if($this->in->get('finished') == 'true'){
-			if(registry::register('config')->get('pk_maintenance_mode')){
+			$blnReleaseNote = ($this->config->get('release_note') && strlen($this->config->get('release_note'))) ? true : false;
+			
+			if(!$blnReleaseNote && registry::register('config')->get('pk_maintenance_mode')){
 				redirect('maintenance/index.php'.$this->SID, false, false, false);
 			}
-			$this->tpl->assign_var('S_FINISHED', true);
+			$this->tpl->assign_vars(array(
+					'S_FINISHED' 	=> true,
+					'S_RELEASE_NOTE' => $blnReleaseNote,
+					'STR_RELEASE_NOTE' => $this->bbcode->toHTML($this->config->get('release_note')),
+			));
+			
+			$this->config->del('release_note');
 		}
 
 		if ($this->getNewVersion()){

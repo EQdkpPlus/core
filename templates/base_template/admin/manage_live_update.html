@@ -16,6 +16,32 @@
 	<div class="infobox infobox-large infobox-green clearfix">
 		<i class="fa fa-check fa-4x pull-left"></i> {L_liveupdate_no_update_available}
 	</div>
+	<!-- IF S_RELEASE_NOTE -->
+	<script>
+	$(function(){
+		$( "#releaseNoteDialog" ).dialog({
+			height: 500,
+			width: 600,
+			modal: true,
+			autoOpen: false,
+		});
+		
+		$('#releaseNoteDialog').on('dialogclose', function(event) {
+			location.reload();
+		 });
+		
+		$( "#releaseNoteDialog" ).dialog('open');
+	});
+	</script>
+	<div id="releaseNoteDialog" title="{L_new_release_notes}">
+		<form method="post" action="">
+			<h2>{L_new_release_notes}</h2>
+			{STR_RELEASE_NOTE}
+		</form>
+	</div>
+
+	
+	<!-- ENDIF -->
 	<!-- IF S_FINISHED -->
 	 <table class="table fullwidth">
       <tr>
