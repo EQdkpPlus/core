@@ -567,7 +567,7 @@ class Manage_Live_Update extends page_generic {
 			$this->tpl->assign_vars(array(
 					'S_FINISHED' 	=> true,
 					'S_RELEASE_NOTE' => $blnReleaseNote,
-					'STR_RELEASE_NOTE' => $this->bbcode->toHTML($this->config->get('release_note')),
+					'STR_RELEASE_NOTE' => str_replace('\r\n', "<br/>", nl2br($this->bbcode->toHTML($this->config->get('release_note')))),
 			));
 			
 			$this->config->del('release_note');
