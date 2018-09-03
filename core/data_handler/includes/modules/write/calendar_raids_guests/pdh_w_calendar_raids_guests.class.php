@@ -76,8 +76,8 @@ if(!class_exists('pdh_w_calendar_raids_guests')){
 		public function update_guest($guestid, $classid=0, $group=0, $note='', $role=0){
 
 			$classid	= ((int)$classid > 0)	? $classid: $this->pdh->get('calendar_raids_guests', 'class', array($guestid));
-			
-			
+
+
 			$group		= ((int)$group > 0)		? $group	: $this->pdh->get('calendar_raids_guests', 'group', array($guestid));
 			$note		= ($note)		? $note 	: $this->pdh->get('calendar_raids_guests', 'note', array($guestid));
 			$role		= ($role)		? $role 	: $this->pdh->get('calendar_raids_guests', 'role', array($guestid));
@@ -86,14 +86,14 @@ if(!class_exists('pdh_w_calendar_raids_guests')){
 				'raidgroup'		=> $group,
 				'note'			=> $note,
 				'role'			=> $role
-			))->execute($guestid);			
+			))->execute($guestid);
 
 			$this->pdh->enqueue_hook('guests_update', array($guestid));
 		}
 
 		public function dragdrop_update($guestid, $role=0, $status=1){
 			$role		= ($role > 0)	? $role 	: $this->pdh->get('calendar_raids_guests', 'role', array($guestid));
-			$status		= ($status)		? $status 	: $this->pdh->get('calendar_raids_guests', 'status', array($guestid));
+			$status		= (isset($status) && in_array($status, array(0,1,2,3,4))) ? $status : $this->pdh->get('calendar_raids_guests', 'status', array($guestid));
 			$objQuery = $this->db->prepare("UPDATE __calendar_raid_guests :p WHERE id=?")->set(array(
 				'status'		=> $status,
 				'role'			=> $role

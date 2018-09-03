@@ -158,7 +158,7 @@ class calendarevent_pageobject extends pageobject {
 			$isguest		= $this->in->get("isguest", 'false');
 			$eventextension	= $this->pdh->get('calendar_events', 'extension', array($this->url_id));
 			$newrole		= ($eventextension['raidmode'] == 'role') ? $this->in->get("newroleclass", 0) : 0;
-			$newstatus 		= $this->in->get("newstatus", 0);
+			$newstatus 		= $this->in->get("newstatus", 1);
 
 			// do the math
 			if($classid > 0 && $attendeeid > 0){
@@ -654,7 +654,7 @@ class calendarevent_pageobject extends pageobject {
 				$this->raidcategories[-9]		= 'DeletedRole';
 				$this->charswithdeletedroles	= array_keys($charswithwrongrole);
 			}
-			
+
 			$guestswithwrongrole	= $this->pdh->get('calendar_raids_guests', 'chars_with_wrong_role', array($this->url_id, $available_roles));
 			if(is_array($guestswithwrongrole) && count($guestswithwrongrole) > 0){
 				$this->raidcategories[-9]		= 'DeletedRole';
@@ -927,12 +927,12 @@ class calendarevent_pageobject extends pageobject {
 						}
 					}
 				}
-				
-				
+
+
 				// add the guests to the attendee list
 				if(isset($this->guests[$statuskey][$classid]) && is_array($this->guests[$statuskey][$classid]) && count($this->guests) > 0){
-					
-					
+
+
 					foreach($this->guests[$statuskey][$classid] as $guestid=>$guestsdata){
 
 						if($guestsdata['status'] == $statuskey){
@@ -960,7 +960,7 @@ class calendarevent_pageobject extends pageobject {
 						}
 					}
 				}
-				
+
 			}
 			$status_first = false;
 		}
