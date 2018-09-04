@@ -81,7 +81,7 @@ $(function(){
 		$('#bottommenu_chars_html').html($('#' + charid + '').html());
 
 		if($('#bottommenu_chars').is(":visible")){
-			console.log($('#bottommenu_chars').data('charid'));
+			//console.log($('#bottommenu_chars').data('charid'));
 			if($('#bottommenu_chars').data('charid') === charid){
 				$('#bottommenu_chars').fadeOut( "slow");
 				$('#bottommenu_admin').addClass("bottommenu_roundedcorner");
@@ -180,6 +180,9 @@ $(function(){
 				system_message('{L_raidevent_dragdrop_moveerrormsg}', 'error');
 			});
 
+			// do the sorting of the attendees
+			sort_attendees();
+
 			// count class attendees
 			max_count	= dnd_start_container.data('attendee-max');
 			start_count	= dnd_start_container.find('.guest_box, .attendee_box').length;
@@ -217,6 +220,8 @@ $(function(){
 		}
 	});
 	<!-- ENDIF -->
+
+	sort_attendees();
 });
 
 <!-- IF S_NOTSIGNED_VISIBLE -->
@@ -339,7 +344,7 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 		$.each(arrAttendees, function(i, item) {
 			checkbox_checked	= (arrCheckboxes.length > 0 && $.inArray(parseInt(item.id), arrCheckboxes) != -1) ? 'checked="checked"' : '';
 			filter_applied		= ((typeof(arrFilter) != "undefined" && arrFilter.length > 0 && $.inArray(parseInt(item.id), arrFilter) == -1) || arrFilter == -1) ? '  style="display: none;"' : '';
-			console.log(arrFilter);console.log(filter_applied);
+			//console.log(arrFilter);console.log(filter_applied);
 			attoutput += '<div id="unsigened_'+item.id+'"'+filter_applied+'>';
 			attoutput += '<!-- IF IS_OPERATOR --><input type="checkbox" name="memberid[]" value="'+item.id+'" id="member'+item.id+'" title="'+item.userid+'" class="notsigned_check" '+checkbox_checked+' /> <!-- ENDIF -->';
 			if(item.class_icon != ''){
@@ -349,7 +354,7 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 			attoutput += ' <span class="class_'+away_marking+'" id="memberid_'+item.id+'">'+item.name+'</span>';
 
 			if(item.roles != ''){
-				console.log(item.roles);
+				//console.log(item.roles);
 				attoutput += '<select size="1" name="memrole['+item.id+']" id="memroles'+item.id+'" class="input">';
 				$.each(item.roles, function(roleindex, rolename) {
 					if (item.defaultrole == roleindex){
@@ -365,6 +370,17 @@ function populate_unsigned(arrAttendees, arrCheckboxes, arrFilter){
 		});
 	}
 	$("#memberScroller").html(attoutput);
+}
+
+function sort_attendees(){
+	$('.class_column').each(function(){
+		var listitems = $('.attendee_box', $(this));
+		var sortbyclass = {SORT_BY_CLASS};
+		listitems.sort(function (a, b) {
+			return (sortbyclass == 1) ? (($(a).data('class-id') > $(b).data('class-id'))  ? 1 : -1) : (($(a).find('.attendee_name .rawname').text().toUpperCase() > $(b).find('.attendee_name .rawname').text().toUpperCase())  ? 1 : -1);
+		});
+		$(this).append(listitems);
+	});
 }
 
 <!-- ENDIF -->

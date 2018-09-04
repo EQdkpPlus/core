@@ -545,7 +545,7 @@ $lang = array(
 "pdc_cache_info_memcache" => "Memcache. Siehe <a href=\"http://de.php.net/memcache\">hier</a> für mehr Informationen.",
 "pdc_cache_info_memcached" => "Memcached. Siehe <a href=\"https://memcached.org/\">hier</a> für mehr Informationen.",
 "pdc_cache_info_redis" => "Redis In-Memory Cache. Siehe <a href=\"https://redis.io/\">hier</a> für mehr Informationen.",
-    
+
 "pdc_expire_time" => "Ablaufdatum",
 "pluskernel" => "EQDKP-PLUS Core",
 "attention" => "Achtung",
@@ -972,6 +972,8 @@ $lang = array(
 "calendar_acl_raidnotes" => "Zeige Anmeldenotizen",
 "core_sett_f_calendar_raid_notsigned_classsort" => "Sortiere unangemeldete Charaktere nach den Klassennamen",
 "core_sett_f_help_calendar_raid_notsigned_classsort" => "Sortiere die unangemeldeten Charaktere nach dem Namen ihrer Klassen anstatt alphabetisch.",
+"core_sett_f_calendar_raid_attendees_classsort" => 'Sortiere Teilnehmer nach den Klassennamen',
+"core_sett_f_help_calendar_raid_attendees_classsort" => 'Sortiere die Teilnehmer nach dem Namen ihrer Klassen anstatt alphabetisch. Gäste werden nicht mit eingereiht.',
 "core_sett_f_calendar_raid_coloredclassnames" => "Charaktere in Klassenfarben einfärben",
 "core_sett_f_help_calendar_raid_coloredclassnames" => "Färbe die Charaktere in deren jeweiliger Klassenfarbe ein",
 "core_sett_f_calendar_raid_shownotsigned" => "Unangemeldete Charaktere für alle sichtbar",
@@ -1842,7 +1844,7 @@ $lang = array(
 "consolidate_error" => "Bei der Konsolidierung ist ein Fehler aufgetreten. Es wurden keine Daten entfernt. Überprüfe bitte die eventuell angelegten Korrekturen.",
 "consolidate_success" => "Die Konsolidierung wurde durchgeführt. Zur Sicherheit wurde vor der Konsolidierung ein Backup angelegt.",
 "consolidate_info"	=> "Bei einer Konsolidierung werden für das ausgewählte Event alle Items, Raids und Korrekturen zu einer einzelnen Korrektur für einen Charakter zusammengefasst und die einzelnen Items, Raids und Korrekturen anschließend gelöscht.<br />Dies kann dazu verwendet werden, die Stände eines nicht mehr benötigten MultiDKP-Pools zu erhalten und zugleich die Datenmenge schlank zu halten.<br />Vor der Konsolidierung wird automatisch ein Backup angelegt.",
-"consolidate_detele_warning" => "Bist du sicher, dass du die Konsolidierung für das ausgewählte Event durchführen willst?",		
+"consolidate_detele_warning" => "Bist du sicher, dass du die Konsolidierung für das ausgewählte Event durchführen willst?",
 "consolidate_start"	=> "Konsolidierung starten",
 "userpf_sett_f_example" => "Eingabebeispiel",
 "core_sett_f_notify_updates_email" => "Administrator per Email über Updates informieren",

@@ -24,10 +24,10 @@
 
 				<!-- BEGIN status -->
 				<!-- IF raidstatus.classes.status.GUEST -->
-				<div class="guest_box <!-- IF COLORED_NAMESBYCLASS -->class_{raidstatus.classes.status.CLASSID}<!-- ENDIF -->" data-role-id="{raidstatus.classes.ID}" data-class-id="{raidstatus.classes.status.CLASSID}" data-guestid="{raidstatus.classes.status.ID}" data-approval="{raidstatus.classes.status.TOBEAPPROVED}" data-status="{raidstatus.classes.status.SIGNEDSTATUS}" data-droppable-to="{raidstatus.classes.status.DRAGDROP_TO}" data-is-guest="true">
+				<div class="guest_box sort_attgst_box <!-- IF COLORED_NAMESBYCLASS -->class_{raidstatus.classes.status.CLASSID}<!-- ENDIF -->" data-role-id="{raidstatus.classes.ID}" data-class-id="{raidstatus.classes.status.CLASSID}" data-guestid="{raidstatus.classes.status.ID}" data-approval="{raidstatus.classes.status.TOBEAPPROVED}" data-status="{raidstatus.classes.status.SIGNEDSTATUS}" data-droppable-to="{raidstatus.classes.status.DRAGDROP_TO}" data-is-guest="true">
 					<div class="guest_name">
 						<!-- IF raidstatus.classes.status.CLASSICON -->{raidstatus.classes.status.CLASSICON}<!-- ENDIF -->
-						{raidstatus.classes.status.NAME}
+						<span class="rawname">{raidstatus.classes.status.NAME}</span>
 						<!-- IF raidstatus.classes.status.EXTERNALAPPL --><!-- IF raidstatus.classes.status.TOBEAPPROVED --><i class="fa fa-external-link-square icon-color-red"><!-- ELSE --><i class="fa fa-check-square icon-color-green"><!-- ENDIF --></i><!-- ENDIF -->
 					</div>
 
@@ -38,7 +38,7 @@
 					</div>
 				</div>
 				<!-- ELSE -->
-				<div class="attendee_box" id="attendee_{raidstatus.classes.status.MEMBERID}" data-droppable-to="{raidstatus.classes.status.DRAGDROP_TO}" data-is-guest="false" data-role-id="{raidstatus.classes.ID}" data-class-id="{raidstatus.classes.status.CLASSID}" data-attendeeid="{raidstatus.classes.status.MEMBERID}">
+				<div class="attendee_box sort_attgst_box" id="attendee_{raidstatus.classes.status.MEMBERID}" data-droppable-to="{raidstatus.classes.status.DRAGDROP_TO}" data-is-guest="false" data-role-id="{raidstatus.classes.ID}" data-class-id="{raidstatus.classes.status.CLASSID}" data-attendeeid="{raidstatus.classes.status.MEMBERID}">
 					<div class="attendee_select">
 						<!-- IF IS_OPERATOR -->
 						<input type="checkbox" name="modstat_change[]" value="{raidstatus.classes.status.MEMBERID}" />
@@ -47,7 +47,7 @@
 
 					<div class="attendee_name">
 						<!-- IF RAIDMODE == 'role' and raidstatus.classes.status.CLASSICON -->{raidstatus.classes.status.CLASSICON}<!-- ENDIF -->
-						<a class="normal <!-- IF COLORED_NAMESBYCLASS -->class_{raidstatus.classes.status.CLASSID}<!-- ENDIF -->" href="{raidstatus.classes.status.MEMBERLINK}" target="_blank"<!-- IF raidstatus.classes.status.GROUPCOLOR --> style="color:{raidstatus.classes.status.GROUPCOLOR};"<!-- ENDIF -->>{raidstatus.classes.status.NAME}</a>
+						<a class="normal <!-- IF COLORED_NAMESBYCLASS -->class_{raidstatus.classes.status.CLASSID}<!-- ENDIF --> rawname" href="{raidstatus.classes.status.MEMBERLINK}" target="_blank"<!-- IF raidstatus.classes.status.GROUPCOLOR --> style="color:{raidstatus.classes.status.GROUPCOLOR};"<!-- ENDIF -->>{raidstatus.classes.status.NAME}</a>
 						<!-- IF SHOW_RANDOMVALUE -->
 						<!-- IF raidstatus.classes.status.RANDOM gt 0 -->
 						[{raidstatus.classes.status.RANDOM}]

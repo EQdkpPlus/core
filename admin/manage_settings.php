@@ -50,26 +50,26 @@ class admin_settings extends page_generic {
 		$this->pfh->Delete( $this->pfh->FolderPath('','files').$this->config->get('custom_logo'));
 		$this->config->set("custom_logo", "");
 	}
-	
+
 	public function ajax_mailtest(){
 		$adminmail	= register('encrypt')->decrypt($this->config->get('admin_email'));
-		
+
 		$options = array(
 				'template_type'		=> 'input',
 		);
-		
+
 		//Set E-Mail-Options
 		$this->email->SetOptions($options);
-		
+
 		$blnResult = $this->email->SendMail($adminmail, $adminmail, "Testmail", "This is a test mail to check your mail settings.");
-		
+
 		if($blnResult){
 			echo $this->user->lang('test_mail_ok');
 		} else {
 			echo $this->user->lang('test_mail_fail').'<br /><br />';
 			echo $this->email->ErrorInfo;
 		}
-		
+
 		exit;
 	}
 
@@ -548,7 +548,7 @@ class admin_settings extends page_generic {
 								'type'		=> 'text',
 								'size'		=> 5,
 						),
-						
+
 						'round_activate'	=> array(
 								'type'		=> 'radio',
 								'default'	=> 0,
@@ -676,6 +676,9 @@ class admin_settings extends page_generic {
 						'type'			=> 'radio',
 					),
 					'calendar_raid_notsigned_classsort'	=> array(
+						'type'			=> 'radio',
+					),
+					'calendar_raid_attendees_classsort'	=> array(
 						'type'			=> 'radio',
 					),
 					'calendar_raid_coloredclassnames'	=> array(

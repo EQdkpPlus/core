@@ -1167,6 +1167,7 @@ class calendarevent_pageobject extends pageobject {
 			'IS_STATUS_CONFIRMED'	=> ($this->mystatus['signup_status'] == 0) ? true : false,
 			'SHOW_CONFIRMBUTTON'	=> (in_array(0, $raidcal_status)) ? true : false,
 			'IS_RAID_TRANSFORMED'	=> (isset($eventdata['extension']['transformed']) && isset($eventdata['extension']['transformed']['id']) && $eventdata['extension']['transformed']['id'] > 0) ? $eventdata['extension']['transformed']['id'] : false,
+			'SORT_BY_CLASS'			=> ($this->config->get('calendar_raid_attendees_classsort')) ? 1 : 0,
 
 			//Data
 			'MENU_OPTIONS'			=> $this->core->build_dropdown_menu('<i class="fa fa-cog fa-lg"></i> '.$this->user->lang('raidevent_raid_settbutton'), $optionsmenu, 'floatRight'),
