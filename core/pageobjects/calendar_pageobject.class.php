@@ -316,6 +316,9 @@ class calendar_pageobject extends pageobject {
 								'color'			=> $eventcolor.' !important',
 								'textColor'		=> $eventcolor_txt.' !important',
 								'className'		=> 'calendarevent_'.$calender_id,
+								'isowner'		=> $this->pdh->get('calendar_events', 'is_owner', array($calid)) || $this->user->check_auth('a_cal_revent_conf', false),
+								'isinvited'		=> $this->pdh->get('calendar_events', 'is_invited', array($calid)),
+								'joinedevent'	=> $this->pdh->get('calendar_events', 'joined_invitation', array($calid)),
 							);
 						}else{
 							$alldayevents	= ($this->pdh->get('calendar_events', 'allday', array($calid)) > 0) ? true : false;
@@ -323,7 +326,7 @@ class calendar_pageobject extends pageobject {
 								'type'			=> 'event',
 								'eventid'		=> $calid,
 								'editable'		=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission($calid)) ? true : false,
-									'url'			=> (!is_utf8($str)) ? utf8_encode($this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid)) : $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid),
+								'url'			=> (!is_utf8($str)) ? utf8_encode($this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid)) : $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid),
 								'title'			=> $this->pdh->get('calendar_events', 'name', array($calid)),
 								'start'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_start', array($calid))),
 								'end'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_end', array($calid, $alldayevents))),

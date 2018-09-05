@@ -187,6 +187,12 @@ class editcalendarevent_pageobject extends pageobject {
 			$asi_groups	= $this->in->getArray('asi_group');
 			$asi_status	= (is_array($asi_groups) && count($asi_groups) > 0) ? $this->in->get('asi_status', 0) : false;
 
+			// private raids and invited$invited_users		= $this->in->getArray('invited', 'int');
+			$invited_usergroup	= $this->in->getArray('invited_usergroup', 'int');
+			if(is_array($invited_usergroup) && count($invited_usergroup) > 0){
+				$invited_users = $this->pdh->get('user_groups_users', 'user_list', array($invited_usergroup));
+			}
+
 			$raidid = $this->pdh->put('calendar_events', 'add_cevent', array(
 				$this->in->get('calendar_id', 1),
 				'',
@@ -208,7 +214,11 @@ class editcalendarevent_pageobject extends pageobject {
 					'created_on'		=> $this->time->time,
 					'autosignin_group'	=> $asi_groups,
 					'autosignin_status'	=> (int)$asi_status,
-				)
+					'invited'			=> $invited_users,
+					'invited_usergroup'	=> $invited_usergroup,
+				),
+				0,
+				$this->in->get('private', 0),
 			));
 			$this->pdh->process_hook_queue();
 
@@ -257,7 +267,7 @@ class editcalendarevent_pageobject extends pageobject {
 		$this->pdh->process_hook_queue();
 
 		// send the notification for a event invitiation
-		if($this->in->get('calendarmode') != 'raid' && $raidid > 0){
+		if($invited_users > 0 && $raidid > 0){
 			$this->notify_invitations($raidid, $invited_users);
 		}
 
