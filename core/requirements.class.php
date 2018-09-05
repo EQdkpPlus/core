@@ -46,7 +46,7 @@ if(!class_exists('requirements')) {
 					'installed'		=> (extension_loaded('zlib')) ? $this->user->lang('yes') : $this->user->lang('no'),
 					'passfail'		=> (extension_loaded('zlib')) ? true : false
 				),
-				'ZipArchive'		=> array(
+				'Zip'		=> array(
 						'required'		=> $this->user->lang('yes'),
 						'installed'		=> (class_exists('ZipArchive')) ? $this->user->lang('yes') : $this->user->lang('no'),
 						'passfail'		=> (class_exists('ZipArchive')) ? true : false
