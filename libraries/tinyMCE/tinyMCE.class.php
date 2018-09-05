@@ -25,7 +25,7 @@ if ( !defined('EQDKP_INC') ){
 
 class tinyMCE extends gen_class {
 
-	protected $tinymce_version = '4.7.11';
+	protected $tinymce_version = '4.8.2';
 	protected $language	= 'en';
 	protected $trigger	= array(
 		'bbcode'	=> false,

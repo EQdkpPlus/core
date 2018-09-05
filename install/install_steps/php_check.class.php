@@ -55,7 +55,7 @@ class php_check extends install_generic {
 				'installed'		=> (extension_loaded('zlib')) ? $this->lang['yes'] : $this->lang['no'],
 				'passfail'		=> (extension_loaded('zlib')) ? true : false
 			),
-			'ziparchive'		=> array(
+			'zip'		=> array(
 				'required'		=> $this->lang['yes'],
 				'installed'		=> (class_exists('ZipArchive')) ? $this->lang['yes'] : $this->lang['no'],
 				'passfail'		=> (class_exists('ZipArchive')) ? true : false

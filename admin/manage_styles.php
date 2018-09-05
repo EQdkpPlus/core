@@ -98,7 +98,7 @@ class Manage_Styles extends page_generic{
 		
 		$strNewName = $this->in->get('style_name');
 		$strNewNamePath = utf8_strtolower($strNewName);
-		$strNewNamePath = preg_replace('/[^A-Za-z0-9\-\_]/', '', $strNewName);
+		$strNewNamePath = preg_replace('/[^A-Za-z0-9\-\_]/', '', $strNewNamePath);
 		
 		$strBaseFolder = $this->root_path.'/templates/';
 		if(is_dir($strBaseFolder.$strParentPath)){

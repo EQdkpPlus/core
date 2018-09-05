@@ -1,4 +1,3 @@
-"use strict";
 /**
  * elFinder client options and main script for RequireJS
  *
@@ -6,8 +5,9 @@
  * e.g. `<script data-main="./main.js" src="./require.js"></script>`
  **/
 (function(){
+	"use strict";
 	var // jQuery and jQueryUI version
-		jqver = '3.2.1',
+		jqver = '3.3.1',
 		uiver = '1.12.1',
 		
 		// Detect language (optional)
@@ -22,8 +22,7 @@
 				fullLang = (navigator.browserLanguage || navigator.language || navigator.userLanguage);
 			}
 			lang = fullLang.substr(0,2);
-			if (lang === 'ja') lang = 'jp';
-			else if (lang === 'pt') lang = 'pt_BR';
+			if (lang === 'pt') lang = 'pt_BR';
 			else if (lang === 'ug') lang = 'ug_CN';
 			else if (lang === 'zh') lang = (fullLang.substr(0,5).toLowerCase() === 'zh-tw')? 'zh_TW' : 'zh_CN';
 			return lang;
@@ -62,16 +61,15 @@
 							function(fm, extraObj) {
 								// `init` event callback function
 								fm.bind('init', function() {
-									// Optional for Japanese decoder "extras/encoding-japanese.min"
-									delete fm.options.rawStringDecoder;
-									if (fm.lang === 'jp') {
+									// Optional for Japanese decoder "encoding-japanese"
+									if (fm.lang === 'ja') {
 										require(
-											[ 'extras/encoding-japanese.min' ],
+											[ 'encoding-japanese' ],
 											function(Encoding) {
-												if (Encoding.convert) {
-													fm.options.rawStringDecoder = function(s) {
-														return Encoding.convert(s,{to:'UNICODE',type:'string'});
-													};
+												if (Encoding && Encoding.convert) {
+													fm.registRawStringDecoder(function(s) {
+														return Encoding.convert(s, {to:'UNICODE',type:'string'});
+													});
 												}
 											}
 										);
@@ -102,21 +100,25 @@
 			);
 		},
 		
-		// is IE8? for determine the jQuery version to use (optional)
-		ie8 = (typeof window.addEventListener === 'undefined' && typeof document.getElementsByClassName === 'undefined');
+		// is IE8 or :? for determine the jQuery version to use (optional)
+		old = (typeof window.addEventListener === 'undefined' && typeof document.getElementsByClassName === 'undefined')
+		       ||
+		      (!window.chrome && !document.unqueID && !window.opera && !window.sidebar && 'WebkitAppearance' in document.documentElement.style && document.body.style && typeof document.body.style.webkitFilter === 'undefined');
 
 	// config of RequireJS (REQUIRED)
 	require.config({
 		baseUrl : 'js',
 		paths : {
-			'jquery'   : '//cdnjs.cloudflare.com/ajax/libs/jquery/'+(ie8? '1.12.4' : jqver)+'/jquery.min',
+			'jquery'   : '//cdnjs.cloudflare.com/ajax/libs/jquery/'+(old? '1.12.4' : jqver)+'/jquery.min',
 			'jquery-ui': '//cdnjs.cloudflare.com/ajax/libs/jqueryui/'+uiver+'/jquery-ui.min',
-			'elfinder' : 'elfinder.min'
+			'elfinder' : 'elfinder.min',
+			'encoding-japanese': '//cdn.rawgit.com/polygonplanet/encoding.js/1.0.26/encoding.min'
 		},
 		waitSeconds : 10 // optional
 	});
 
 	// check elFinderConfig and fallback
+	// This part don't used if you are using elfinder.html, see elfinder.html
 	if (! require.defined('elFinderConfig')) {
 		define('elFinderConfig', {
 			// elFinder options (REQUIRED)
@@ -136,8 +138,13 @@
 						}
 					}
 					,quicklook : {
+						// to enable CAD-Files and 3D-Models preview with sharecad.org
+						sharecadMimes : ['image/vnd.dwg', 'image/vnd.dxf', 'model/vnd.dwf', 'application/vnd.hp-hpgl', 'application/plt', 'application/step', 'model/iges', 'application/vnd.ms-pki.stl', 'application/sat', 'image/cgm', 'application/x-msmetafile'],
 						// to enable preview with Google Docs Viewer
-						googleDocsMimes : ['application/pdf', 'image/tiff', 'application/vnd.ms-office', 'application/msword', 'application/vnd.ms-word', 'application/vnd.ms-excel', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.openxmlformats-officedocument.presentationml.presentation']
+						googleDocsMimes : ['application/pdf', 'image/tiff', 'application/vnd.ms-office', 'application/msword', 'application/vnd.ms-word', 'application/vnd.ms-excel', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 'application/postscript', 'application/rtf'],
+						// to enable preview with Microsoft Office Online Viewer
+						// these MIME types override "googleDocsMimes"
+						officeOnlineMimes : ['application/vnd.ms-office', 'application/msword', 'application/vnd.ms-word', 'application/vnd.ms-excel', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 'application/vnd.oasis.opendocument.text', 'application/vnd.oasis.opendocument.spreadsheet', 'application/vnd.oasis.opendocument.presentation']
 					}
 				}
 			},
