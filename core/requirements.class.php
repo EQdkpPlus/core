@@ -25,6 +25,7 @@ if(!defined('EQDKP_INC')) {
 if(!class_exists('requirements')) {
 	class requirements extends gen_class {
 		private $checks = array();
+		private $blnWritable = NULL;
 
 		public function __construct(){
 			$this->checks = array(
@@ -101,7 +102,19 @@ if(!class_exists('requirements')) {
 					'adviced_fail'	=> (!function_exists('mb_strtolower')) ? true : false,
 					'ignore'		=> true
 				),
+				'data-folder' => array(
+					'required' => 'Writable',
+					'installed' => ($this->checkDataFolder()) ? 'Writable' : 'Folder '.$this->pfh->FolderPath('templates', 'eqdkp').' not writable',
+					'passfail' => $this->checkDataFolder(),
+				),
 			);
+		}
+		
+		private function checkDataFolder(){
+			if($this->blnWritable != NULL) return $this->blnWritable;
+			$blnIsWritable = register('pfh')->is_writable($this->pfh->FolderPath('templates', 'eqdkp').'testfile.txt', true);
+			$this->blnWritable = $blnIsWritable;
+			return $blnIsWritable;
 		}
 
 		/**
