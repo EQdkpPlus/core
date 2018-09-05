@@ -25,7 +25,7 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "pdh_r_raid_groups_members" ) ){
 	class pdh_r_raid_groups_members extends pdh_r_generic{
-	
+
 		public $default_lang = 'english';
 		public $raid_groups_members;
 		public $raid_memberships;
@@ -65,12 +65,12 @@ if ( !class_exists( "pdh_r_raid_groups_members" ) ){
 				return (isset($this->raid_groups_members[$group_id]) && is_array($this->raid_groups_members[$group_id])) ? array_keys($this->raid_groups_members[$group_id]) : array();
 			}
 		}
-		
+
 		public function get_is_grpleader($member_id, $group_id){
 			if (isset($this->raid_memberships[$member_id][$group_id]) && $this->raid_memberships[$member_id][$group_id] == 1) return true;
 			return false;
 		}
-		
+
 		public function get_user_is_grpleader($user_id, $group_id){
 			$arrMembers = $this->pdh->get('member', 'connection_id', array($user_id));
 			if (is_array($arrMembers)){
@@ -80,12 +80,12 @@ if ( !class_exists( "pdh_r_raid_groups_members" ) ){
 			}
 			return false;
 		}
-		
+
 		public function get_user_has_grpleaders($user_id){
 			$arrMembers = $this->pdh->get('member', 'connection_id', array($user_id));
 			if (is_array($arrMembers)){
 				$arrRaidGroups = $this->pdh->get('raid_groups', 'id_list');
-				
+
 				foreach($arrRaidGroups as $raidgroup_id){
 					foreach($arrMembers as $member_id){
 						if ($this->get_is_grpleader($member_id, $raidgroup_id)) return true;
@@ -112,13 +112,33 @@ if ( !class_exists( "pdh_r_raid_groups_members" ) ){
 				return array();
 			}
 		}
-		
+
 		public function get_membership_status($member_id, $group_id){
 			if (isset($this->raid_memberships[$member_id][$group_id])){
-				return $this->raid_memberships[$member_id][$group_id];
+				if(is_array($this->raid_memberships[$member_id][$group_id])){
+					$statusout = array();
+					foreach($group_id as $tmpgroupid){
+						if($this->raid_memberships[$member_id][$tmpgroupid] == 1){
+							return 1;
+						}
+					}
+					return 0;
+				}else{
+					return $this->raid_memberships[$member_id][$group_id];
+				}
 			} else {
 				return false;
 			}
+		}
+
+		public function get_user_is_in_groups($user_id, $group_id){
+			$arrMembers = $this->pdh->get('member', 'connection_id', array($user_id));
+			if (is_array($arrMembers)){
+				foreach($arrMembers as $member_id){
+					if ($this->get_membership_status($member_id, $group_id) == 1) return true;
+				}
+			}
+			return false;
 		}
 
 		public function get_groupcount($group_id){
