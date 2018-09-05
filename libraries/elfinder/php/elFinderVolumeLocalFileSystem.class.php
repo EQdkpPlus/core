@@ -806,8 +806,12 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 	protected function _mkdir($path, $name) {
 		$path = $this->_joinPath($path, $name);
 
-		if (mkdir($path)) {
-			chmod($path, $this->options['dirMode']);
+		//Security by GodMod
+		if (!isFilelinkInFolder($path, get_absolute_path($this->root))) return false;
+		
+		$a = register('pfh')->CheckCreateFolder($path);
+		if ($a){
+			clearstatcache();
 			return $path;
 		}
 
@@ -825,9 +829,12 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 	protected function _mkfile($path, $name) {
 		$path = $this->_joinPath($path, $name);
 		
-		if (($fp = fopen($path, 'w'))) {
-			fclose($fp);
-			chmod($path, $this->options['fileMode']);
+		//Security by GodMod
+		if (!isFilelinkInFolder($path, get_absolute_path($this->root))) return false;
+		
+		$a = register('pfh')->CheckCreateFile($path);
+		if ($a){
+			clearstatcache();
 			return $path;
 		}
 		return false;
@@ -843,7 +850,10 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 	 * @author Dmitry (dio) Levashov
 	 **/
 	protected function _symlink($source, $targetDir, $name) {
-		return symlink($source, $this->_joinPath($targetDir, $name));
+		//Added by GodMod
+		return false;
+		
+		return @symlink($source, $this->_joinPath($targetDir, $name));
 	}
 	
 	/**
@@ -856,12 +866,15 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 	 * @author Dmitry (dio) Levashov
 	 **/
 	protected function _copy($source, $targetDir, $name) {
-		$mtime = filemtime($source);
-		$target = $this->_joinPath($targetDir, $name);
-		if ($ret = copy($source, $target)) {
-			isset($this->options['keepTimestamp']['copy']) && $mtime && touch($target, $mtime);
-		}
-		return $ret;
+		$path = $this->_joinPath($targetDir, $name);
+		
+		//Security by GodMod
+		if (!isFilelinkInFolder($path, get_absolute_path($this->root))) return false;
+		
+		$a = register('pfh')->copy($source, $path);
+		clearstatcache();
+		
+		return $a;
 	}
 
 	/**
@@ -878,10 +891,13 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 	protected function _move($source, $targetDir, $name) {
 		$mtime = filemtime($source);
 		$target = $this->_joinPath($targetDir, $name);
-		if ($ret = rename($source, $target) ? $target : false) {
-			isset($this->options['keepTimestamp']['move']) && $mtime && touch($target, $mtime);
-		}
-		return $ret;
+		
+		//Security by GodMod
+		if (!isFilelinkInFolder($target, get_absolute_path($this->root))) return false;
+		
+		$a = register('pfh')->rename($source, $target) ? $target : false;
+		clearstatcache();
+		return $a;
 	}
 		
 	/**
@@ -892,7 +908,12 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 	 * @author Dmitry (dio) Levashov
 	 **/
 	protected function _unlink($path) {
-		return is_file($path) && unlink($path);
+		//Security by GodMod
+		if (!isFilelinkInFolder($path, get_absolute_path($this->root))) return false;
+		
+		register('pfh')->Delete($path);
+		clearstatcache();
+		return true;
 	}
 
 	/**
@@ -903,7 +924,12 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 	 * @author Dmitry (dio) Levashov
 	 **/
 	protected function _rmdir($path) {
-		return rmdir($path);
+		//Security by GodMod
+		if (!isFilelinkInFolder($path, get_absolute_path($this->root))) return false;
+		
+		register('pfh')->Delete($path);
+		clearstatcache();
+		return true;
 	}
 	
 	/**
@@ -919,6 +945,9 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 	 **/
 	protected function _save($fp, $dir, $name, $stat) {
 		$path = $this->_joinPath($dir, $name);
+		
+		//Security by GodMod
+		if (!isFilelinkInFolder($path, get_absolute_path($this->root))) return false;
 
 		$meta = stream_get_meta_data($fp);
 		$uri = isset($meta['uri'])? $meta['uri'] : '';
@@ -940,7 +969,18 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 			}
 		}
 		
+		if (is_link($path)) {
+			unlink($path);
+			return $this->setError(elFinder::ERROR_SAVE, $name);
+		}
+		
+		$filename = $uri;
+		
+		$a = register('pfh')->FileMove($filename, $path, true);
+		
 		chmod($path, $this->options['fileMode']);
+		
+		clearstatcache();
 		return $path;
 	}
 	
@@ -964,7 +1004,12 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 	 * @author Dmitry (dio) Levashov
 	 **/
 	protected function _filePutContents($path, $content) {
-		return (file_put_contents($path, $content, LOCK_EX) !== false);
+		//Security by GodMod
+		if (!isFilelinkInFolder($path, get_absolute_path($this->root))) return false;
+		
+		$a = register('pfh')->putContent($path, $content);
+		clearstatcache();
+		return $a;
 	}
 
 	/**
@@ -973,6 +1018,9 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 	 * @return void
 	 **/
 	protected function _checkArchivers() {
+		//Added by GodMod
+		return false;
+		
 		$this->archivers = $this->getArchivers();
 		return;
 	}
@@ -1010,6 +1058,8 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 	 * @author Alexey Sukhotin
 	 **/
 	protected function _extract($path, $arc) {
+		//Added by GodMod
+		return false;
 		
 		if ($this->quarantine) {
 
@@ -1122,6 +1172,9 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 	 * @author Alexey Sukhotin
 	 **/
 	protected function _archive($dir, $files, $name, $arc) {
+		//Added by GodMod
+		return false;
+		
 		return $this->makeArchive($dir, $files, $name, $arc);
 	}
 	
