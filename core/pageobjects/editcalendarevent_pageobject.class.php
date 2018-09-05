@@ -187,12 +187,6 @@ class editcalendarevent_pageobject extends pageobject {
 			$asi_groups	= $this->in->getArray('asi_group');
 			$asi_status	= (is_array($asi_groups) && count($asi_groups) > 0) ? $this->in->get('asi_status', 0) : false;
 
-			// private raids and invited$invited_users		= $this->in->getArray('invited', 'int');
-			$invited_usergroup	= $this->in->getArray('invited_usergroup', 'int');
-			if(is_array($invited_usergroup) && count($invited_usergroup) > 0){
-				$invited_users = $this->pdh->get('user_groups_users', 'user_list', array($invited_usergroup));
-			}
-
 			$raidid = $this->pdh->put('calendar_events', 'add_cevent', array(
 				$this->in->get('calendar_id', 1),
 				'',
@@ -214,8 +208,7 @@ class editcalendarevent_pageobject extends pageobject {
 					'created_on'		=> $this->time->time,
 					'autosignin_group'	=> $asi_groups,
 					'autosignin_status'	=> (int)$asi_status,
-					'invited'			=> $invited_users,
-					'invited_usergroup'	=> $invited_usergroup,
+					'invited_raidgroup'	=> $this->in->getArray('invited_raidgroup', 'int'),
 				),
 				0,
 				$this->in->get('private', 0),
@@ -339,7 +332,9 @@ class editcalendarevent_pageobject extends pageobject {
 					'raidleader'		=> $this->in->getArray('raidleader', 'int'),
 					'distribution'		=> $raid_clsdistri,
 					'attendee_count'	=> $this->in->get('raid_attendees_count', 0),
-				)
+					'invited_raidgroup'	=> $this->in->getArray('invited_raidgroup', 'int'),
+				),
+				$this->in->get('private', 0),
 			));
 		}else{
 			$withtime			= ($this->in->get('allday') == '1') ? 0 : 1;
@@ -587,6 +582,7 @@ class editcalendarevent_pageobject extends pageobject {
 			'DR_GROUPS'			=> (new hmultiselect('asi_group', array('options' => $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list'))), 'value' => $this->config->get('calendar_raid_autocaddchars'))))->output(),
 			'DR_SHARE_USERS'	=> (new hmultiselect('invited', array('options' => $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list'))), 'filter' => true, 'clickfunc' => 'var arrInvitedUG = $("#invited").multiselect("getChecked").map(function(){ return this.value; }).get(); if(arrInvitedUG.length > 0){ $("#invited_usergroup").multiselect("disable"); }else{ $("#invited_usergroup").multiselect("enable"); }' , 'value' => ((isset($eventdata['extension']['invited']) && $eventdata['extension']['invited']) ? $eventdata['extension']['invited'] : array()))))->output(),
 			'DR_INVITED_UG'		=> (new hmultiselect('invited_usergroup', array('options' => $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list'))), 'clickfunc' => 'var arrInvitedUG = $("#invited_usergroup").multiselect("getChecked").map(function(){ return this.value; }).get(); if(arrInvitedUG.length > 0){ $("#invited").multiselect("disable"); }else{ $("#invited").multiselect("enable"); }' , 'value' => ((isset($eventdata['extension']['invited_usergroup']) && $eventdata['extension']['invited_usergroup']) ? $eventdata['extension']['invited_usergroup'] : array()))))->output(),
+			'DR_INVITED_RG'		=> (new hmultiselect('invited_raidgroup', array('options' => $this->pdh->aget('raid_groups', 'name', 0, array($this->pdh->get('raid_groups', 'id_list'))), 'value' => ((isset($eventdata['extension']['invited_raidgroup']) && $eventdata['extension']['invited_raidgroup']) ? $eventdata['extension']['invited_raidgroup'] : array()))))->output(),
 			'DR_STATUS'			=> (new hdropdown('asi_status', array('options' => $raidstatus, 'value' => 0)))->output(),
 			'CB_ALLDAY'			=> (new hcheckbox('allday', array('options' => array(1=>''), 'value' => ((isset($eventdata['allday'])) ? $eventdata['allday'] : 0), 'class' => 'allday_cb', 'inputid' => 'cb_allday')))->output(),
 			'CB_PRIVATE'		=> (new hcheckbox('private', array('options' => array(1=>''), 'value' => ((isset($eventdata['private'])) ? $eventdata['private'] : 0))))->output(),
