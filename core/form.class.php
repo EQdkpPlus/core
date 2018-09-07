@@ -92,7 +92,7 @@ class form extends gen_class {
 		$text = (empty($options['text'])) ? '' : $options['text'];
 		$text2 = (empty($options['text2'])) ? '' : $options['text2'];
 		$field = (registry::class_exists('h'.$options['type'])) ?  new $field_class($name, $options) : '';
-		
+
 		// add the correct id into the options-array
 		if(is_object($field)) {
 			$options['id'] = $field->id;
@@ -100,7 +100,7 @@ class form extends gen_class {
 		} else {
 			$strField = "";
 		}
-		
+
 		return $text.$strField.$text2;
 	}
 
@@ -421,7 +421,7 @@ class form extends gen_class {
 
 		// dependency stuff - hide other elements depening on selection
 		if(!empty($options['dependency'])) $this->jq_dep_init($options['type']);
-		
+
 		if(!empty($options['equalto'])) $this->jq_dep_init('equalto');
 
 		// ajax-reload for dropdown-options
@@ -431,13 +431,13 @@ class form extends gen_class {
 			} else {
 				$ajax_reload = array($options['ajax_reload']);
 			}
-			
+
 			foreach($ajax_reload as $ajre) {
 				if(strpos($ajre[1], '%URL%') !== false) {
 					$ajre[1] = str_replace('%URL%', $this->ajax_url, $ajre[1]);
 				}
-				
-				$this->jquery->js_dd_ajax($options['id'], $ajre[0], $ajre[1], (isset($ajre[2]) ? $ajre[2] : ''), $options['_parents']);
+
+				$this->jquery->js_dd_ajax($options['id'], $ajre[0], $ajre[1], (isset($ajre[2]) ? $ajre[2] : ''), ((isset($options['_parents'])) ? $options['_parents'] : ''));
 			}
 		}
 
@@ -469,7 +469,7 @@ class form extends gen_class {
 $('[data-equalto]').bind('input', function() {
     var to_confirm = $(this);
     var to_equal = $('#' + to_confirm.data('equalto'));
-						
+
     if(to_confirm.val() != to_equal.val()){
 			if(fieldtype == 'email'){
 				 this.setCustomValidity(\"".$this->jquery->sanitize(registry::fetch('user')->lang('fv_email_not_match'))."\");
@@ -484,7 +484,7 @@ $('[data-equalto]').bind('input', function() {
 	}
 });";
 				break;
-			
+
 			case 'dropdown':
 				$js = "
 	$('.form_change').change(function(){
