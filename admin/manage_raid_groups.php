@@ -249,6 +249,7 @@ class Manage_Raid_Groups extends page_generic {
 
 		//Get all chars
 		$member_data = $this->pdh->get('member', 'id_list');
+		$member_data = $this->pdh->sort($member_data, 'member', 'name');
 		$not_in = array();
 
 		//Bring all members from Group to template
