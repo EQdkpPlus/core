@@ -51,9 +51,6 @@ class update_2310 extends sql_update_task {
 		);
 	}
 
-	public function update_function(){
-		return true;
-	}
 }
 
 ?>
