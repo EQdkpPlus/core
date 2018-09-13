@@ -456,6 +456,13 @@ class calendar_pageobject extends pageobject {
 			if(!$this->in->exists('timestamps')) {
 				$date1 = $this->time->fromformat($this->in->get('from'));
 				$date2 = $this->time->fromformat($this->in->get('to'));
+				
+				$date1 = (int)($date1 / 1000);
+				$date1 = $date1 * 1000;
+				
+				$date2 = (int)($date2 / 1000);
+				$date2 = $date2 * 1000;
+				
 				$date2 += 86400; // Includes raids/items ON that day
 			} else {
 				$date1 = $this->in->get('from');
@@ -498,7 +505,7 @@ class calendar_pageobject extends pageobject {
 
 				$arrMemberlist	= $this->pdh->get('member', 'id_list', array(true, true, true, !($show_twinks)));
 
-				$hptt= $this->get_hptt($arrRaidstatsSettings, $arrMemberlist, $arrMemberlist, array('%link_url%' => $this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%use_controller%' => true, '%from%'=> $date1, '%to%' => $date2, '%with_twink%' => !$show_twinks), md5($date1.'.'.$date2), 'statsort');
+				$hptt= $this->get_hptt($arrRaidstatsSettings, $arrMemberlist, $arrMemberlist, array('%link_url%' => $this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%use_controller%' => true, '%from%'=> $date1, '%to%' => $date2, '%with_twink%' => !$show_twinks), md5($date1.'.'.$date2.'.'.($show_twinks)), 'statsort');
 				$hptt->setPageRef($this->strPath);
 
 				$sort = $this->in->get('statsort');
