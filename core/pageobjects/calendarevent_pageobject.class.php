@@ -167,7 +167,8 @@ class calendarevent_pageobject extends pageobject {
 					$this->pdh->put('calendar_raids_guests', 'dragdrop_update', array($attendeeid, $newrole, $newstatus));
 				}else{
 					#update_status($eventid, $memberid, $memberrole='', $signupstatus='', $raidgroup=0, $signed_memberid=0, $note='', $signedbyadmin=0)
-					$this->pdh->put('calendar_raids_attendees', 'update_status', array($this->url_id, $attendeeid, $newrole, $newstatus));
+					$raidgroup		= $this->pdh->get('calendar_raids_attendees', 'raidgroup', array($this->url_id, $attendeeid));
+					$this->pdh->put('calendar_raids_attendees', 'update_status', array($this->url_id, $attendeeid, $newrole, $newstatus, $raidgroup, $attendeeid));
 				}
 				$this->pdh->process_hook_queue();
 			}
