@@ -485,7 +485,7 @@ class calendar_pageobject extends pageobject {
 					'table_sort_dir' => 'asc',
 					'table_presets' => array(
 							array('name' => 'mlink', 'sort' => true, 'th_add' => '', 'td_add' => ''),
-							array('name' => 'mactive', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+							array('name' => 'mraidgroups', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 							array('name' => 'mtwink', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 					),
 				);
@@ -502,8 +502,24 @@ class calendar_pageobject extends pageobject {
 					$show_twinks = true;
 					$statsuffix .= '&amp;show_twinks=1';
 				}
+				
+				$hide_inactive = false;
+				if($this->in->exists('hide_inactive')){
+					$hide_inactive = true;
+					$statsuffix .= '&amp;hide_inactive=1';
+				}
 
 				$arrMemberlist	= $this->pdh->get('member', 'id_list', array(true, true, true, !($show_twinks)));
+				
+				//Filter
+				if($hide_inactive){
+					$arrMemberlistFiltered = array();
+					foreach($arrMemberlist as $intMemberID){
+						$total = $this->pdh->get('calendar_raids_attendees', 'calstat_raids_total_fromto', array($intMemberID, $date1, $date2, !$show_twinks));
+						if($total > 0) $arrMemberlistFiltered[] = $intMemberID;
+					}
+					$arrMemberlist = $arrMemberlistFiltered;
+				}
 
 				$hptt= $this->get_hptt($arrRaidstatsSettings, $arrMemberlist, $arrMemberlist, array('%link_url%' => $this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%use_controller%' => true, '%from%'=> $date1, '%to%' => $date2, '%with_twink%' => !$show_twinks), md5($date1.'.'.$date2.'.'.($show_twinks)), 'statsort');
 				$hptt->setPageRef($this->strPath);
@@ -533,6 +549,7 @@ class calendar_pageobject extends pageobject {
 			'DATEPICK_DATE_FROM'	=> (new hdatepicker('from', array('value' => $this->time->user_date($date1, false, false, false, function_exists('date_create_from_format')))))->output(),
 			'DATEPICK_DATE_TO'		=> (new hdatepicker('to', array('value' => $this->time->user_date($date2, false, false, false, function_exists('date_create_from_format')))))->output(),
 			'SHOW_TWINKS_CHECKED'	=> ($show_twinks)?'checked="checked"':'',
+			'HIDE_INACTIVE_CHECKED'	=> ($hide_inactive)?'checked="checked"':'',
 			'AMOUNT_CALENDARS'		=> count($calendar_idlist),
 			'MS_CALENDAR_SELECT'	=> (new hmultiselect('calendarfilter', array('options' => $calendar_idlist, 'preview_num' => 3, 'todisable' => $todisable, 'value' => array(1,2), 'selectedtext'=>$this->user->lang('calendar_filter_bycalendar'), 'width' => 260)))->output(),
 		));
