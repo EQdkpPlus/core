@@ -251,17 +251,88 @@ class login_facebook extends gen_class {
 					list($locale1, $locale2) = explode('_', $me['data']['locale']);
 				}
 
-				return array(
+				$bla = array(
 						'username'			=> $this->in->get('username', ($me['data']['name'] != null) ? $me['data']['name'] : ''),
 						'user_email'		=> $this->in->get('user_email', ($me['data']['email']  != null) ? $me['data']['email'] : ''),
 						'user_email2'		=> $this->in->get('user_email2', ($me['data']['email']  != null) ? $me['data']['email'] : ''),
-						'first_name'		=> $this->in->get('first_name', ($me['data']['first_name']  != null) ? $me['data']['first_name'] : ''),
 						'user_lang'			=> $this->in->get('user_lang',	$this->config->get('default_lang')),
 						'user_timezone'		=> $this->in->get('user_timezone',	$this->config->get('timezone')),
 						'user_password1'	=> $this->in->get('new_user_password1'),
 						'user_password2'	=> $this->in->get('new_user_password2'),
 						'auth_account'		=> $me['uid'],
 				);
+				
+				$auth_account = $me['uid'];
+				
+				//Admin activation
+				if ($this->config->get('account_activation') == 2){
+					return $bla;
+				}
+				
+				//Check Auth Account
+				if (!$this->pdh->get('user', 'check_auth_account', array($auth_account, 'facebook'))){
+					return $bla;
+				}
+				
+				//Check Email address
+				if($this->pdh->get('user', 'check_email', array($bla['user_email'])) == 'false'){
+					return $bla;
+				}
+				
+				//Create Username
+				$strUsername = ($bla['username'] != "") ? $bla['username'] : 'FacebookUser'.rand(100, 999);
+				
+				//Check Username and create a new one
+				if ($this->pdh->get('user', 'check_username', array($strUsername)) == 'false'){
+					$strUsername = $strUsername.rand(100, 999);
+				}
+				if ($this->pdh->get('user', 'check_username', array($strUsername)) == 'false'){
+					return $bla;
+				}
+				
+				//Register User (random credentials)
+				$salt = $this->user->generate_salt();
+				$strPwdHash = $this->user->encrypt_password(random_string(false, 16), $salt);
+				
+				$intUserID = $this->pdh->put('user', 'insert_user_bridge', array(
+						$strUsername, $strPwdHash, $bla['user_email']
+				));
+				
+				//Add the auth account
+				$this->pdh->put('user', 'add_authaccount', array($intUserID, $auth_account, 'facebook'));
+				
+				//Send Email with username
+				$email_template		= 'register_activation_none';
+				$email_subject		= $this->user->lang('email_subject_activation_none');
+				
+				$objMailer = register('MyMailer');
+				
+				$objMailer->Set_Language($this->user->lang_name);
+				
+				$bodyvars = array(
+						'USERNAME'		=> stripslashes($strUsername),
+						'GUILDTAG'		=> $this->config->get('guildtag'),
+				);
+				
+				if(!$objMailer->SendMailFromAdmin($bla['user_email'], $email_subject, $email_template.'.html', $bodyvars)){
+					$success_message = $this->user->lang('email_subject_send_error');
+				}
+				
+				//Log the user in
+				
+				$this->tpl->add_js("
+					function FB_wait() {
+						console.log('fb_wait');
+					    if (typeof FB == 'undefined') {
+					        window.setTimeout(FB_wait, 1000);
+					    } else {
+					       facebook_login();
+					    }
+					}
+					FB_wait();
+				");
+				
+				return $bla;
 			}
 		} catch(Exception $e){
 			$this->core->message($e->getMessage(), "Facebook Exception preRegister()", 'red');
