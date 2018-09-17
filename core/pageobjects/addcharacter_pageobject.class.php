@@ -272,7 +272,7 @@ class addcharacter_pageobject extends pageobject {
 		// Dynamic Fields
 		$profilefields = $this->pdh->get('profile_fields', 'fields');
 		if($this->hooks->isRegistered('addcharacter_profilefields')){
-			$profilefields = $this->hooks->process('addcharacter_profilefields', array($this->url_id, $member_data), true);
+			$profilefields = $this->hooks->process('addcharacter_profilefields', array($profilefields, $this->url_id, $member_data), true);
 		}
 		
 		foreach($profilefields as $fieldid => $fielddata) {
