@@ -157,7 +157,7 @@ class addcharacter_pageobject extends pageobject {
 			exit;
 		}
 
-		$this->build_form();
+		$this->build_form($member_data);
 
 		// Fill fields with values
 		$this->form->output($member_data);
@@ -184,7 +184,7 @@ class addcharacter_pageobject extends pageobject {
 		);
 	}
 
-	private function build_form() {
+	private function build_form($member_data=array()) {
 		if($this->form_build) return true;
 		$this->form_build = true;
 		// initialize form class
@@ -271,6 +271,10 @@ class addcharacter_pageobject extends pageobject {
 
 		// Dynamic Fields
 		$profilefields = $this->pdh->get('profile_fields', 'fields');
+		if($this->hooks->isRegistered('addcharacter_profilefields')){
+			$profilefields = $this->hooks->process('addcharacter_profilefields', array($this->url_id, $member_data), true);
+		}
+		
 		foreach($profilefields as $fieldid => $fielddata) {
 			$fieldname = $fielddata['name'];
 			//Set Required for Unique Options
