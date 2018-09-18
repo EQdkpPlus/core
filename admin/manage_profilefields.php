@@ -119,7 +119,7 @@ class ManageProfileFields extends page_generic {
 		$intProfilefieldID = $this->in->get('edit', 0);
 
 		if($intProfilefieldID) $field_data = $this->pdh->get('profile_fields', 'field_by_id', array($intProfilefieldID));
-		else $field_data = array('name' => '', 'lang' => '', 'options_language' => '', 'type' => '', 'category' => '', 'size' => '', 'image' => '', 'options' => array());
+		else $field_data = array('name' => '', 'lang' => '', 'options_language' => '', 'type' => '', 'category' => 'character', 'size' => '', 'image' => '', 'options' => array());
 		$types = array(
 			'text'			=> 'Text',
 			'int'			=> 'Integer',
@@ -135,6 +135,7 @@ class ManageProfileFields extends page_generic {
 		);
 
 		$categories = array(
+			'-'			=> '-',
 			'character'	=> ($this->game->glang('uc_cat_character')) ? $this->game->glang('uc_cat_character') : $this->user->lang('uc_cat_character'),
 		);
 		$arrCategories = $this->pdh->get('profile_fields', 'categories', array());
@@ -151,7 +152,7 @@ class ManageProfileFields extends page_generic {
 			'OPTIONS_LANGUAGE'			=> $field_data['options_language'],
 			'TYPE_DD'					=> (new hdropdown('type', array('options' => $types, 'value' => $field_data['type'], 'id' => 'type_dd')))->output(),
 
-			'CATEGORY_DD'				=> (new hdropdown('category', array('options' => $categories, 'value' => $field_data['category'])))->output(),
+				'CATEGORY_DD'				=> (new hdropdown('category', array('options' => $categories, 'js' => 'onchange="handle_profilecategories(this.value);"', 'value' => $field_data['category'])))->output(),
 			'SIZE'						=> $field_data['size'],
 			'IMAGE'						=> $field_data['image'],
 			'S_SHOW_OPTIONS'			=> ($field_data['type'] == 'dropdown' || $field_data['type'] == 'multiselect' || $field_data['type'] == 'radio' || $field_data['type'] == 'checkbox') ? '' : 'style="display:none;"',

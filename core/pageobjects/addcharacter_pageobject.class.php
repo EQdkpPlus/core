@@ -263,7 +263,9 @@ class addcharacter_pageobject extends pageobject {
 		// Dynamic Tabs
 		$categorynames = $this->pdh->get('profile_fields', 'categories');
 		foreach($categorynames as $catname) {
-			$this->form->add_tab(array('name' => $catname, 'lang' => 'uc_cat_'.$catname));
+			$lang = 'uc_cat_'.$catname;
+			$tabname = ($this->user->lang($lang, false, false)) ? $lang : (($this->game->glang($lang)) ? $lang : $catname);
+			$this->form->add_tab(array('name' => $catname, 'lang' => $tabname));
 		}
 
 		$arrGameUniqueIDs = $this->game->get_char_unique_ids();

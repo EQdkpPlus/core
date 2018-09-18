@@ -21,7 +21,7 @@
 		</dl>
 		<dl>
 			<dt><label>{L_category}:</label></dt>
-			<dd>{CATEGORY_DD}</dd>
+			<dd>{CATEGORY_DD} <input name="new_category" id="new_category" type="text" class="input" value="" size="40" disabled/></dd>
 		</dl>
 		<dl>
 			<dt><label>{L_field_length}:</label></dt>
@@ -57,3 +57,14 @@
 	</div>
 {CSRF_TOKEN}
 </form>
+
+<script>
+function handle_profilecategories(val){
+	if(val == '-'){
+		$('#new_category').removeAttr('disabled');
+	} else {
+		
+		$('#new_category').attr('disabled', true).val('');
+	}
+}
+</script>
