@@ -37,17 +37,26 @@ class update_2310 extends sql_update_task {
 		$this->langs = array(
 			'english' => array(
 				'update_2310'	=> 'EQdkp Plus 2.3.1',
-				1	=> 'Remove duplicate calendar raid attendees intriduced by a bug in 2.3.0',
+				1	=> 'Create a temporary table for calendar raid attendees',
+				2	=> 'Add unique poperty to calendar_events_id and member_id fields at calendar_raids_attendees table',
+				3	=> 'Insert the non-duplicate entries into the temporary table',
+				4	=> 'Rename temporary table to real one and real one to backup'
 			),
 			'german' => array(
 				'update_2310'	=> 'EQdkp Plus 2.3.1',
-				1	=> 'Entferne Dupikate der Raidteilnehmer, die durch einen Fehler in 2.3.0 gespeichert wurden',
+				1	=> 'Erstelle eine temporäre Tabelle für Kalender Raidteilnehmer',
+				2	=> 'Füge Unique Eigenschaft zu den Feldern calendar_events_id und member_id bei der Tabele calendar_raids_attendees',
+				3	=> 'Übertrage die duplikatfreien Einträge aus der calendar_raids_attendees in die temporäre Tabelle',
+				4	=> 'Bennene die live Tabelle in Backup um und die temporäre calendar_raids_attendees in die live.',
 			),
 		);
 
 		// init SQL querys
 		$this->sqls = array(
-			1	=> "DELETE att1 FROM __calendar_raid_attendees att1, __calendar_raid_attendees att2 WHERE att1.id < att2.id AND att1.calendar_events_id = att2.calendar_events_id AND att1.member_id=att2.member_id",
+			1	=> "CREATE TABLE __tmp_calendar_raid_attendees LIKE __calendar_raid_attendees;",
+			2	=> "ALTER TABLE __tmp_calendar_raid_attendees ADD UNIQUE(calendar_events_id, member_id);",
+			3	=> "INSERT IGNORE INTO __tmp_calendar_raid_attendees SELECT * FROM __calendar_raid_attendees ORDER BY id DESC;",
+			4	=> "RENAME TABLE __calendar_raid_attendees TO __backup_calendar_raid_attendees, __tmp_calendar_raid_attendees TO __calendar_raid_attendees;",
 		);
 	}
 
