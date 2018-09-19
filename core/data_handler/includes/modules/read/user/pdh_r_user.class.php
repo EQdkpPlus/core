@@ -462,9 +462,12 @@ if (!class_exists("pdh_r_user")){
 		public function get_birthday_list(){
 			$useroutput	= array();
 			foreach($this->users as $user_id => $uderdata){
+				//Hide special users
+				if($this->get_is_special_user($user_id)) continue;
+			
 				$intBirthday = $this->get_birthday($user_id);
-				if($intBirthday > 0){
-					$useroutput[$user_id] = $intBirthday;
+				if(strlen($intBirthday) && (int)$intBirthday > 0){
+					$useroutput[$user_id] = (int)$intBirthday;
 				}
 			}
 			return $useroutput;
@@ -841,6 +844,15 @@ if (!class_exists("pdh_r_user")){
 		public function get_country_list(){
 			$this->init_countries();
 			return $this->countries;
+		}
+		
+		public function get_is_special_user($intUserID){
+			$arrSpecialUser = $this->config->get('special_user');
+			if(!$arrSpecialUser) $arrSpecialUser = array();
+			
+			if (in_array($intUserID, $arrSpecialUser)) return true;
+			
+			return false;
 		}
 
 		private function get_privacy_defaults($strField){
