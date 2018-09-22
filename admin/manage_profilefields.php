@@ -175,7 +175,9 @@ $("#addopt_icon").click(function(){
 	$("#new_options").append(fields);
 });
 $("#type_dd").change(function(){
-	if($("#type_dd").attr("value") == "dropdown" || $("#type_dd").attr("value") == "multiselect" || $("#type_dd").attr("value") == "radio" || $("#type_dd").attr("value") == "checkbox") {
+	myval = $("#type_dd").val();
+
+	if(myval == "dropdown" || myval == "multiselect" || myval == "radio" || myval == "checkbox") {
 		$("#options_row").show();
 	} else {
 		$("#options_row").hide();
