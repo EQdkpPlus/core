@@ -149,8 +149,8 @@ class Manage_Users extends page_generic {
 		//User data
 		$arrUserdata = $this->pdh->get('user', 'data', array($intUserID, true));
 
-		$arrUserdata['email'] = $this->pdh->get('user', 'email', array($this->user->id));
-		$hideArray = array('user_password', 'user_login_key', 'user_email','user_email_confirmkey', 'salt', 'password', 'exchange_key');
+		$arrUserdata['email'] = $this->pdh->get('user', 'email', array($intUserID));
+		$hideArray = array('user_password', 'user_login_key', 'user_email','user_email_confirmkey', 'salt', 'password', 'exchange_key', 'user_email_clean');
 		foreach($hideArray as $entry){
 			if(isset($arrUserdata[$entry])) unset($arrUserdata[$entry]);
 		}
