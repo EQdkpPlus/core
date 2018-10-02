@@ -144,3 +144,15 @@ align-items:stretch;
 	}
 }
 */
+/* Color the users by group 
+
+a[data-user-group-id="2"] {
+ color: red !important; 
+}
+ a[data-usergroup-id="2"] {
+  background-color: red;
+ }
+[data-user-group-id="2"] img{
+ border: 2px solid red !important;
+}
+*/
