@@ -255,7 +255,7 @@ class register_pageobject extends pageobject {
 			$email_subject		= $this->user->lang('email_subject_activation_admin');
 			$title				= $this->user->lang('email_subject_activation_admin');
 		} else {
-			$success_message = sprintf($this->user->lang('register_activation_none'), '<a href="'.$this->controller_path.'Login/'.$this->SID.'">', '</a>', $this->in->get('user_email'));
+			$success_message = sprintf($this->user->lang('register_activation_none'), '<a href="'.$this->controller_path.'Login/">', '</a>', $this->in->get('user_email'));
 			$email_template		= 'register_activation_none';
 			$email_subject		= $this->user->lang('email_subject_activation_none');
 			$title				= $this->user->lang('success');
@@ -288,7 +288,7 @@ class register_pageobject extends pageobject {
 		}
 		
 		//Notify Admins
-		$this->ntfy->add('eqdkp_user_new_registered', $user_id, $this->in->get('username'), $this->root_path.'admin/manage_users.php'.$this->SID.'&u='.$user_id, false, "", false, array("a_users_man"));
+		$this->ntfy->add('eqdkp_user_new_registered', $user_id, $this->in->get('username'), $this->root_path.'admin/manage_users.php?u='.$user_id, false, "", false, array("a_users_man"));
 		
 		message_die($success_message, $title);
 	}

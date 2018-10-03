@@ -373,7 +373,7 @@ class controller extends gen_class {
 				}
 
 
-				$userlink = '<a href="'.$this->routing->build('user', $this->pdh->geth('articles',  'user_id', array($intArticleID)), 'u'.$this->pdh->get('articles',  'user_id', array($intArticleID))).'" itemprop="url"><span itemprop="name">'.$this->pdh->geth('articles',  'user_id', array($intArticleID)).'</span></a>';
+				$userlink = $this->pdh->geth('user', 'name', array($this->pdh->get('articles',  'user_id', array($intArticleID)), '', '', true));
 
 				$arrToolbarItems = array();
 				if ($arrPermissions['create']) {
@@ -717,7 +717,7 @@ class controller extends gen_class {
 
 				//Articles to template
 				foreach($arrLimitedIDs as $intArticleID){
-					$userlink = '<a href="'.$this->routing->build('user', $this->pdh->geth('articles',  'user_id', array($intArticleID)), 'u'.$this->pdh->get('articles',  'user_id', array($intArticleID))).'" itemprop="url"><span itemprop="name">'.$this->pdh->geth('articles',  'user_id', array($intArticleID)).'</span></a>';
+					$userlink = $this->pdh->geth('user', 'name', array($this->pdh->get('articles',  'user_id', array($intArticleID)), '', '', true));
 
 					//Content dependet from list_type
 					//1 = until readmore

@@ -115,10 +115,69 @@ class login_google extends gen_class {
 							'username'			=> isset($arrGoogleUser['displayName']) ? $arrGoogleUser['displayName'] : '',
 							'user_email'		=> isset($arrGoogleUser['emails'][0]) ? $arrGoogleUser['emails'][0]['value'] : '',
 							'user_email2'		=> isset($arrGoogleUser['emails'][0]) ? $arrGoogleUser['emails'][0]['value'] : '',
-							//'country'			=> isset($me['contact/country/home']) ? $me['contact/country/home'] : '',
 							'auth_account'		=> $myGoogleID,
 							'user_timezone'		=> $this->in->get('user_timezone', $this->config->get('timezone')),
+							'user_lang'			=> $this->user->lang_name,
 					);
+					
+					$auth_account = $myGoogleID;
+					
+					//Admin activation
+					if ($this->config->get('account_activation') == 2){
+						return $bla;
+					}
+					
+					//Check Auth Account
+					if (!$this->pdh->get('user', 'check_auth_account', array($auth_account, 'google'))){
+						return $bla;
+					}
+					
+					//Check Email address
+					if($this->pdh->get('user', 'check_email', array($bla['user_email'])) == 'false'){
+						return $bla;
+					}
+					
+					//Create Username
+					$strUsername = ($bla['username'] != "") ? $bla['username'] : 'GoogleUser'.rand(100, 999);
+					
+					//Check Username and create a new one
+					if ($this->pdh->get('user', 'check_username', array($strUsername)) == 'false'){
+						$strUsername = $strUsername.rand(100, 999);
+					}
+					if ($this->pdh->get('user', 'check_username', array($strUsername)) == 'false'){
+						return $bla;
+					}
+					
+					//Register User (random credentials)
+					$salt = $this->user->generate_salt();
+					$strPwdHash = $this->user->encrypt_password(random_string(false, 16), $salt);
+					
+					$intUserID = $this->pdh->put('user', 'insert_user_bridge', array(
+							$strUsername, $strPwdHash, $bla['user_email']
+					));
+					
+					//Add the auth account
+					$this->pdh->put('user', 'add_authaccount', array($intUserID, $auth_account, 'google'));
+					
+					//Send Email with username
+					$email_template		= 'register_activation_none';
+					$email_subject		= $this->user->lang('email_subject_activation_none');
+					
+					$objMailer = register('MyMailer');
+					
+					$objMailer->Set_Language($this->user->lang_name);
+					
+					$bodyvars = array(
+							'USERNAME'		=> stripslashes($strUsername),
+							'GUILDTAG'		=> $this->config->get('guildtag'),
+					);
+					
+					if(!$objMailer->SendMailFromAdmin($bla['user_email'], $email_subject, $email_template.'.html', $bodyvars)){
+						$success_message = $this->user->lang('email_subject_send_error');
+					}
+					
+					//Log the user in
+					redirect($this->controller_path_plain."Login/".$this->SID.'&login&lmethod=google&status=start');
 					
 					return $bla;
 				}

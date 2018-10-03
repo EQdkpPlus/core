@@ -693,6 +693,7 @@ CREATE TABLE `__calendar_raid_attendees` (
 	`signedbyadmin` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
 	PRIMARY KEY (`id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+ALTER TABLE __calendar_raid_attendees ADD UNIQUE(calendar_events_id, member_id);
 
 DROP TABLE IF EXISTS __calendar_raid_templates;
 CREATE TABLE `__calendar_raid_templates` (

@@ -370,7 +370,7 @@ class form extends gen_class {
 		$lang = (!empty($data['_lang'])) ? $data['_lang'] : $this->lang_prefix.'tab_'.$tabname;
 		$this->tpl->assign_block_vars('tabs', array(
 			'NAME'	=> $this->lang($lang),
-			'ID'	=> $tabname
+			'ID'	=> str_replace(' ', '_', $tabname),
 			)
 		);
 	}

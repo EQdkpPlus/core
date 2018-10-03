@@ -535,6 +535,7 @@ $lang = array(
 	"show_hidden_ranks" => 'Show hidden ranks',
 	"show_inactive" => 'Show inactive',
 	"show_twinks" => 'Show twinks',
+	"hide_inactive" => 'Hide inactive',
 	"images_not_available_admin" => '<b>The embedded image could not be checked</b><br/>There are several reasons why this could happen:<br/>- Dynamic generated images are disabled for security reasons<br/>- blocked external connections: Try paths instead of URL<br/>- Image not longer available',
 	"loot_distribution" => 'Loot Distribution',
 	"cl_on" => 'On',
