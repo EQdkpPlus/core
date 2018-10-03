@@ -99,7 +99,7 @@ if ( !class_exists( "pdh_r_raid_groups_members" ) ){
 			if (isset($this->raid_memberships[$member_id]) && is_array($this->raid_memberships[$member_id])){
 				return array_keys($this->raid_memberships[$member_id]);
 			} elseif ($member_id == ANONYMOUS) {
-				return array(0 => 0);
+				return array(0 => -1);
 			} else {
 				return array();
 			}
@@ -114,7 +114,10 @@ if ( !class_exists( "pdh_r_raid_groups_members" ) ){
 		}
 
 		public function get_membership_status($member_id, $group_id){
-			if (isset($this->raid_memberships[$member_id][$group_id])){
+			if(is_array($group_id)){
+				$group_id	= $group_id[0];
+			}
+			if (isset($this->raid_memberships[$member_id]) && isset($this->raid_memberships[$member_id][$group_id])){
 				if(is_array($this->raid_memberships[$member_id][$group_id])){
 					$statusout = array();
 					foreach($group_id as $tmpgroupid){
@@ -135,7 +138,7 @@ if ( !class_exists( "pdh_r_raid_groups_members" ) ){
 			$arrMembers = $this->pdh->get('member', 'connection_id', array($user_id));
 			if (is_array($arrMembers)){
 				foreach($arrMembers as $member_id){
-					if ($this->get_membership_status($member_id, $group_id) == 1) return true;
+					if ($this->get_membership_status($member_id, $group_id) == 1 || $this->get_membership_status($member_id, $group_id) == 0) return true;
 				}
 			}
 			return false;

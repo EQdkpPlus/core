@@ -559,6 +559,11 @@ class calendarevent_pageobject extends pageobject {
 			//message_die($this->user->lang('calendar_page_noid'));
 		}
 
+		// check if the event is private
+		if(!$this->pdh->get('calendar_events', 'private_userperm', array($this->url_id))){
+			message_die($this->user->lang('calendar_page_private'));
+		}
+
 		if($mssg && is_array($mssg)){
 			$this->core->message($mssg['text'], $mssg['title'], $mssg['style']);
 		}
