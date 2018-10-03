@@ -123,14 +123,16 @@ if ( !class_exists( "pdh_r_raid_groups_members" ) ){
 					foreach($group_id as $tmpgroupid){
 						if($this->raid_memberships[$member_id][$tmpgroupid] == 1){
 							return 1;
+						}elseif($this->raid_memberships[$member_id][$tmpgroupid] == 0){
+							return 0;
 						}
 					}
-					return 0;
+					return -1;
 				}else{
-					return $this->raid_memberships[$member_id][$group_id];
+					return (isset($this->raid_memberships[$member_id][$group_id])) ? $this->raid_memberships[$member_id][$group_id] : -1;
 				}
 			} else {
-				return false;
+				return -1;
 			}
 		}
 
@@ -138,7 +140,9 @@ if ( !class_exists( "pdh_r_raid_groups_members" ) ){
 			$arrMembers = $this->pdh->get('member', 'connection_id', array($user_id));
 			if (is_array($arrMembers)){
 				foreach($arrMembers as $member_id){
-					if ($this->get_membership_status($member_id, $group_id) == 1 || $this->get_membership_status($member_id, $group_id) == 0) return true;
+					if ($this->get_membership_status($member_id, $group_id) != -1){
+						return true;
+					}
 				}
 			}
 			return false;
