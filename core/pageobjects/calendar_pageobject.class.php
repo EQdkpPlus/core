@@ -315,7 +315,7 @@ class calendar_pageobject extends pageobject {
 								'rstatusdata'	=> $rstatusdata,
 								'color'			=> $eventcolor.' !important',
 								'textColor'		=> $eventcolor_txt.' !important',
-								'className'		=> 'calendarevent_'.$calender_id,
+								'className'		=> 'calendarevent_'.$calender_id.(($this->pdh->get('calendar_events', 'private', array($calid)) == 1) ? ' calendar_raid_private' : ''),
 								'isinvited'		=> $this->pdh->get('calendar_events', 'is_invited', array($calid)),
 							);
 						}else{
@@ -337,7 +337,7 @@ class calendar_pageobject extends pageobject {
 								'joinedevent'	=> $this->pdh->get('calendar_events', 'joined_invitation', array($calid)),
 								'author'		=> $this->pdh->get('calendar_events', 'creator', array($calid)),
 								'attendees'		=> $this->pdh->get('calendar_events', 'sharedevent_attendees', array($calid)),
-								'className'		=> 'calendarevent_'.$calender_id,
+								'className'		=> 'calendarevent_'.$calender_id.(($this->pdh->get('calendar_events', 'private', array($calid)) == 1) ? ' calendar_raid_private' : ''),
 								'icon'			=> $this->pdh->get('calendar_events', 'event_icon', array($calid)),
 							);
 						}
