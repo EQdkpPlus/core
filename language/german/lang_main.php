@@ -657,6 +657,7 @@ $lang = array(
 "calendar_event_icon" => 'Icon des Ereignisses',
 "calendar_event_icon_none" => "Kein Icon",
 "calendar_raidgroup"	=> "Raidgruppe",
+"calendar_raidgroups"	=> "Raidgruppe(n)",
 "calendar_location"		=> "Ort",
 "calendar_others"	=> 'Sonstiges',
 "raideventlist_masssignin" => "Für ausgewählte Raids anmelden",

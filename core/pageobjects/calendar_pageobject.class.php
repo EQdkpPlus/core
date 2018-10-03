@@ -317,6 +317,7 @@ class calendar_pageobject extends pageobject {
 								'textColor'		=> $eventcolor_txt.' !important',
 								'className'		=> 'calendarevent_'.$calender_id.(($this->pdh->get('calendar_events', 'private', array($calid)) == 1) ? ' calendar_raid_private' : ''),
 								'isinvited'		=> $this->pdh->get('calendar_events', 'is_invited', array($calid)),
+								'raidgroups'	=> ($this->pdh->get('calendar_events', 'private', array($calid)) == 1) ? $this->pdh->get('calendar_events', 'raid_raidgroups', array($calid)) : '',
 							);
 						}else{
 							$alldayevents	= ($this->pdh->get('calendar_events', 'allday', array($calid)) > 0) ? true : false;

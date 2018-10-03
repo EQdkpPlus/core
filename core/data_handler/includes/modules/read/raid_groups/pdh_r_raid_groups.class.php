@@ -69,6 +69,13 @@ if ( !class_exists( "pdh_r_raid_groups" ) ){
 		}
 
 		public function get_name($groups_raid_id){
+			if(is_array($groups_raid_id)){
+				$tmp_out	= array();
+				foreach($groups_raid_id as $groupID){
+					$tmp_out[] = $this->raid_groups[$groupID]['name'];
+				}
+				return $tmp_out;
+			}
 			return $this->raid_groups[$groups_raid_id]['name'];
 		}
 

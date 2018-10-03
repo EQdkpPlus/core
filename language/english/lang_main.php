@@ -702,6 +702,7 @@ $lang = array(
 	"calendar_event_icon" => 'Icon of the event',
 	"calendar_event_icon_none" => "No icon",
 	"calendar_raidgroup" => 'Raidgroup',
+	"calendar_raidgroups"	=> "Raidgroup(s)",
 	"calendar_location"		=> "Location",
 	"calendar_others"	=> 'Others',
 	"raideventlist_masssignin" => 'Signup to selected raids',

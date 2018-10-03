@@ -354,6 +354,18 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			return (isset($this->events[$id]['private'])) ? $this->events[$id]['private'] : 0;
 		}
 
+		public function get_raid_raidgroups($id, $asArray=false){
+			$extension	= $this->get_extension($id);
+			if($this->get_private($id) > 0){
+				$userid		= ($userid > 0) ? $userid : $this->user->data['user_id'];
+				if((isset($extension['calendarmode']) && $extension['calendarmode'] == 'raid')){
+					$raidgroup_name	= $this->pdh->get('raid_groups', 'name', array($extension['invited_raidgroup']));
+					return ($asArray) ? $raidgroup_name : implode(',', $raidgroup_name);
+				}
+			}
+			return false;
+		}
+
 		public function get_private_userperm($id, $userid=0){
 			$extension	= $this->get_extension($id);
 			if($this->get_private($id) > 0){

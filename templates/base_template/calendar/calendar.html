@@ -152,6 +152,9 @@
 					tmpttcontent += (event.rstatusdata) ? "<br/><div class='calendartt_raidcount'>"+event.rstatusdata+"</div>" : '';
 
 					tmpttcontent += (event.note) ? "<br/><div class='calendartt_note'>{L_note}: "+event.note+"</div>" : '';
+					if(event.raidgroups){
+						tmpttcontent += "<div class='calendartt_note'>{L_calendar_raidgroups}: "+event.raidgroups+"</div>";
+					}
 					if(event.editable){
 						element.qtip({
 							content: {
