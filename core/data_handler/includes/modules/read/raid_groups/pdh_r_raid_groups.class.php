@@ -73,7 +73,7 @@ if ( !class_exists( "pdh_r_raid_groups" ) ){
 				$tmp_out	= array();
 				foreach($groups_raid_id as $groupID){
 					if($show_colorfield){
-						$bgcolor	= (($this->get_color($groups_raid_id)) ? '#'.$this->get_color($groups_raid_id) : 'gray').';';
+						$bgcolor	= (($this->get_color($groupID)) ? $this->get_color($groupID) : 'gray').';';
 						$colorfield = '<span class="raidgroups_colorbox raidgroup_bgcolor_'.$groupID.'" style="background: '.$bgcolor.'"></span>';
 					}else{
 						$colorfield = '';

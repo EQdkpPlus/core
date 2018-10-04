@@ -2209,7 +2209,7 @@ fieldset.settings.floatRight.raid input[type="text"]{
 	float: left;
 	width: 16px;
 	height: 16px;
-	margin: 3px;
+	margin: -1px 4px 0 8px;
 	border: 1px solid rgba(0, 0, 0, .2);
 }
 .raidcal_name .toggle_button {
