@@ -1205,6 +1205,8 @@ class calendarevent_pageobject extends pageobject {
 			'DATE_YEAR'				=> $this->time->date('Y', $eventdata['timestamp_start']),
 			'LINK2TRANSFORMEDRAID'	=> $this->pdh->get('calendar_events', 'transformed_raid_link', array($this->url_id)),
 			'TRANSFORMEDRAID_TT'	=> $tooltip_transformedraid,
+			'PRIVATERAID'			=> ($this->pdh->get('calendar_events', 'private', array($this->url_id)) == 1) ? true : false,
+			'RAIDGROUPS'			=> $this->pdh->get('calendar_events', 'raid_raidgroups', array($this->url_id))
 
 			// Language files
 			'L_NOTSIGNEDIN'			=> $this->user->lang(array('raidevent_raid_status', 4)),
