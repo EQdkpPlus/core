@@ -2145,6 +2145,13 @@ fieldset.settings.floatRight.raid input[type="text"]{
 .calendar_redicon{
 	color: red;
 }
+.raidgroups_colorbox {
+	float: left;
+	width: 16px;
+	height: 16px;
+	margin: 3px;
+	border: 1px solid rgba(0, 0, 0, .2);
+}
 .raidcal_name .toggle_button {
 	font-size: 13px;
 	font-weight: normal;

@@ -359,8 +359,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			if($this->get_private($id) > 0){
 				$userid		= ($userid > 0) ? $userid : $this->user->data['user_id'];
 				if((isset($extension['calendarmode']) && $extension['calendarmode'] == 'raid')){
-					$raidgroup_name	= $this->pdh->get('raid_groups', 'name', array($extension['invited_raidgroup']));
-					return ($asArray) ? $raidgroup_name : implode(',', $raidgroup_name);
+					return ($asArray) ? $this->pdh->get('raid_groups', 'name', array($extension['invited_raidgroup'])) : implode(',', $this->pdh->get('raid_groups', 'name', array($extension['invited_raidgroup'], true)));
 				}
 			}
 			return false;
