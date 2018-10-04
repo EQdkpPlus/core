@@ -54,7 +54,7 @@
 			eventRender: function(event, element) {
 				if(event.icon){
 					element.find('.fc-time').hide();
-					element.find(".fc-title").before($("<span class=\"fc-icons\"></span>").html("<img src='"+event.icon+"' height='20px' width='20px' alt='' class='absmiddle eventicon' />"));
+					element.find(".fc-title").before($("<span class=\"fc-icons\"></span>").html("<img src='"+event.icon+"' height='20px' width='20px' alt='' class='eventicon' />"));
 				}
 
 				if(event.flag){
@@ -153,7 +153,7 @@
 
 					tmpttcontent += (event.note) ? "<br/><div class='calendartt_note'>{L_note}: "+event.note+"</div>" : '';
 					if(event.raidgroups){
-						tmpttcontent += "<div class='calendartt_note'>{L_calendar_raidgroups}: "+event.raidgroups+"</div>";
+						tmpttcontent += "<div class='calendartt_raidgroups'>{L_calendar_raidgroups}: "+event.raidgroups+"</div>";
 					}
 					if(event.editable){
 						element.qtip({
