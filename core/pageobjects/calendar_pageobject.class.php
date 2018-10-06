@@ -296,7 +296,6 @@ class calendar_pageobject extends pageobject {
 
 							$deadlinedate	= $this->pdh->get('calendar_events', 'time_start', array($calid)) - ($eventextension['deadlinedate'] * 3600);
 							$deadline = ($deadlinedate > $this->time->time || ($this->config->get('calendar_raid_allowstatuschange') == '1' && $this->pdh->get('calendar_raids_attendees', 'status', array($calid, $this->user->id)) > 0 && $this->pdh->get('calendar_raids_attendees', 'status', array($calid, $this->user->id)) != 4 && $this->pdh->get('calendar_events', 'time_end', array($calid)) > $this->time->time)) ? false : true;
-							$deadlineflag = ($deadline) ? '<i class="fa fa-lock fa-lg" title="'.$this->user->lang('raidevent_raid_deadl_reach').'"></i>' : '';
 
 							// Build the JSON
 							$event_json[] = array(
@@ -308,7 +307,8 @@ class calendar_pageobject extends pageobject {
 								'start'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_start', array($calid))),
 								'end'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_end', array($calid))),
 								'closed'		=> ($this->pdh->get('calendar_events', 'raidstatus', array($calid)) == 1) ? true : false,
-								'flag'			=> $deadlineflag.$this->pdh->get('calendar_raids_attendees', 'html_status', array($calid, $this->user->data['user_id'])),
+								'flag'			=> $this->pdh->get('calendar_raids_attendees', 'html_status', array($calid, $this->user->data['user_id'])),
+								'deadline'		=> ($deadline) ? true : false,
 								'icon'			=> $this->pdh->get('calendar_events', 'event_icon', array($calid)),
 								'note'			=> $this->pdh->get('calendar_events', 'notes', array($calid, true)),
 								'raidleader'	=> ($eventextension['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'name', 0, array($eventextension['raidleader']))) : '',
@@ -458,13 +458,13 @@ class calendar_pageobject extends pageobject {
 			if(!$this->in->exists('timestamps')) {
 				$date1 = $this->time->fromformat($this->in->get('from'));
 				$date2 = $this->time->fromformat($this->in->get('to'));
-				
+
 				$date1 = (int)($date1 / 1000);
 				$date1 = $date1 * 1000;
-				
+
 				$date2 = (int)($date2 / 1000);
 				$date2 = $date2 * 1000;
-				
+
 				$date2 += 86400; // Includes raids/items ON that day
 			} else {
 				$date1 = $this->in->get('from');
@@ -504,7 +504,7 @@ class calendar_pageobject extends pageobject {
 					$show_twinks = true;
 					$statsuffix .= '&amp;show_twinks=1';
 				}
-				
+
 				$hide_inactive = false;
 				if($this->in->exists('hide_inactive')){
 					$hide_inactive = true;
@@ -512,7 +512,7 @@ class calendar_pageobject extends pageobject {
 				}
 
 				$arrMemberlist	= $this->pdh->get('member', 'id_list', array(true, true, true, !($show_twinks)));
-				
+
 				//Filter
 				if($hide_inactive){
 					$arrMemberlistFiltered = array();

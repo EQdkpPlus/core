@@ -54,11 +54,20 @@
 			eventRender: function(event, element) {
 				if(event.icon){
 					element.find('.fc-time').hide();
-					element.find(".fc-title").before($("<span class=\"fc-icons\"></span>").html("<img src='"+event.icon+"' height='20px' width='20px' alt='' class='eventicon' />"));
+					if(event.deadline){
+						element.find(".fc-title").before($("<span class=\"fc-icons\"></span>").html("<img src='"+event.icon+"' height='20px' width='20px' alt='' class='eventicon' /><span class=\"fc-deadlinereached\"><i class=\"fa fa-lock fa-lg\" title=\"{L_raidevent_raid_deadl_reach}\"></i></span>"));
+					}else{
+						element.find(".fc-title").before($("<span class=\"fc-icons\"></span>").html("<img src='"+event.icon+"' height='20px' width='20px' alt='' class='eventicon' />"));
+					}
+
+				}
+
+				if(event.deadline && !event.icon){
+					element.find(".fc-title").before($("<span class=\"fc-deadlinereached\"></span>").html('<i class="fa fa-lock fa-lg" title="{L_raidevent_raid_deadl_reach}"></i>'));
 				}
 
 				if(event.flag){
-					element.find(".fc-title").after($("<span class=\"fc-flag\"></span>").html(event.flag));
+					element.find(".fc-title").before($("<span class=\"fc-flag\"></span>").html(event.flag));
 				}
 
 				if(event.closed){

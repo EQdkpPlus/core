@@ -2086,7 +2086,8 @@ ul.portal_block {
 	margin-top:2px;
 	border: 0px;
 	display:block;
-	float:right;
+	float:left;
+	font-size:10px;
 }
 .fc-title{
 	vertical-align: middle;

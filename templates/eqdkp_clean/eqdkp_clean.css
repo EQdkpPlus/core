@@ -2145,10 +2145,23 @@ div #calendar_tab .ui-widget-content{
 	margin-top:2px;
 	border: 0px;
 	display:block;
-	float:right;
+	float:left;
+	font-size:10px;
+}
+.fc-deadlinereached {
+	display: inline-block;
+	position: absolute; content: '';
+	width: 8px;
+	height: 100%;
+	left: 4px;
+	top: 2px;
 }
 .fc-title{
 	vertical-align: middle;
+	padding-left: 4px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 .calendartt_raidgroups {
 	margin-top: 2px;
