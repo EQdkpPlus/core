@@ -2089,6 +2089,14 @@ ul.portal_block {
 	float:left;
 	font-size:10px;
 }
+.fc-icons .fc-deadlinereached {
+	display: inline-block;
+	position: absolute; content: '';
+	width: 8px;
+	height: 100%;
+	left: 4px;
+	top: 2px;
+}
 .fc-title{
 	vertical-align: middle;
 }
