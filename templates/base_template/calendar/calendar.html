@@ -54,7 +54,7 @@
 			eventRender: function(event, element) {
 				if(event.icon){
 					element.find('.fc-time').hide();
-					if(event.deadline){
+					if(event.deadline || event.closed){
 						element.find(".fc-title").before($("<span class=\"fc-icons\"></span>").html("<img src='"+event.icon+"' height='20px' width='20px' alt='' class='eventicon' /><span class=\"fc-deadlinereached\"><i class=\"fa fa-lock fa-lg\" title=\"{L_raidevent_raid_deadl_reach}\"></i></span>"));
 					}else{
 						element.find(".fc-title").before($("<span class=\"fc-icons\"></span>").html("<img src='"+event.icon+"' height='20px' width='20px' alt='' class='eventicon' />"));
