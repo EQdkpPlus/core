@@ -102,6 +102,7 @@ if(!class_exists("calevents_repeatable_crontask")){
 									'created_on'		=> $this->time->time,
 									'autosignin_group'	=> $eventsdata['extension']['autosignin_group'],
 									'autosignin_status'	=> $eventsdata['extension']['autosignin_status'],
+									'invited_raidgroup'	=> $this->in->getArray('invited_raidgroup', 'int'),
 									));
 								} else {
 								array_push($a_data, array(
