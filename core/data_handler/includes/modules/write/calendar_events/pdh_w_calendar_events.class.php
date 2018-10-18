@@ -59,6 +59,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 			$old['notes']			= $this->pdh->get('calendar_events', 'notes', array($id, true));
 			$old['allday']			= $this->pdh->get('calendar_events', 'allday', array($id));
 			$old['private']			= $this->pdh->get('calendar_events', 'private', array($id));
+			$old['creator']			= $this->pdh->get('calendar_events', 'creator', array($id));
 			$changes				= false;
 
 			foreach($old as $varname => $value) {
@@ -91,29 +92,29 @@ if(!class_exists('pdh_w_calendar_events')) {
 			if($changes || (serialize($tmp_old) !== serialize($tmp_new))) {
 				// the extensions array
 
-
-				// Handle the cloned events..
+				// Handle the cloned mass events..
 				if(isset($editclones) && $editclones != 0){
 					$cloneid				= $this->pdh->get('calendar_events', 'cloneid', array($id));
 					$cloneid_eventid		= (($cloneid > 0) ? $cloneid : $id);
 					$timestamp_start_diff	= ($old['startdate'] != $startdate) ? $this->time->dateDiff($old['startdate'], $startdate, 'sec', true) : "+0";
 					$timestamp_end_diff		= ($old['enddate'] != $enddate) ? $this->time->dateDiff($old['enddate'], $enddate, 'sec', true) : "+0";
 
-					#die($startdate.' -- '.$old['startdate'].' = '.$timestamp_start_diff);
+					// only future raids
 					if($editclones == '2'){
-						// only future raids
 						$objQuery = $this->db->prepare("UPDATE __calendar_events :p WHERE cloneid=? AND timestamp_start > ?")->set(array(
 							'calendar_id'			=> $cal_id,
 							'name'					=> $name,
 							'timestamp_start'		=> 'timestamp_start'.$timestamp_start_diff,
 							'timestamp_end'			=> 'timestamp_end'.$timestamp_end_diff,
 							'allday'				=> $allday,
-							'private'				=> 0,
+							'private'				=> (int)$private,
 							'visible'				=> 1,
 							'notes'					=> $notes,
 							'repeating'				=> $repeat,
 							'extension'				=> serialize($extdata),
 						))->execute($cloneid_eventid, $this->time->time);
+
+					// all other raids
 					}else{
 						$objQuery = $this->db->prepare("UPDATE __calendar_events :p WHERE cloneid=?")->set(array(
 							'calendar_id'			=> $cal_id,
@@ -121,14 +122,13 @@ if(!class_exists('pdh_w_calendar_events')) {
 							'timestamp_start'		=> 'timestamp_start'.$timestamp_start_diff,
 							'timestamp_end'			=> 'timestamp_end'.$timestamp_end_diff,
 							'allday'				=> $allday,
-							'private'				=> 0,
+							'private'				=> (int)$private,
 							'visible'				=> 1,
 							'notes'					=> $notes,
 							'repeating'				=> $repeat,
 							'extension'				=> serialize($extdata),
-						))->execute($cloneid_eventid);#var_dump($objQuery);die();
+						))->execute($cloneid_eventid);
 					}
-
 
 					//now, alter the parent event
 					$objQuery = $this->db->prepare("UPDATE __calendar_events :p WHERE id=?")->set(array(
@@ -137,13 +137,12 @@ if(!class_exists('pdh_w_calendar_events')) {
 						'timestamp_start'		=> 'timestamp_start'.$timestamp_start_diff,
 						'timestamp_end'			=> 'timestamp_end'.$timestamp_end_diff,
 						'allday'				=> $allday,
-						'private'				=> 0,
+						'private'				=> (int)$private,
 						'visible'				=> 1,
 						'notes'					=> $notes,
 						'repeating'				=> $repeat,
 						'extension'				=> serialize($extdata),
 					))->execute($cloneid_eventid);
-
 					$this->pdh->enqueue_hook('calendar_events_update');
 
 				// and now, handle the single events

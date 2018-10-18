@@ -57,7 +57,6 @@ if(!class_exists("calevents_repeatable_crontask")){
 						$repeating_value	= ($repeating_value > 1) ? $repeating_value : 1;
 						$rptbl_period		= 86400*$repeating_value;
 						$private			= $this->pdh->get('calendar_events', 'private', array($parentid));
-						
 
 						// if the calendar id is < 1, continue
 						if($eventsdata['calendar_id'] < 1){
@@ -102,20 +101,22 @@ if(!class_exists("calevents_repeatable_crontask")){
 									'created_on'		=> $this->time->time,
 									'autosignin_group'	=> $eventsdata['extension']['autosignin_group'],
 									'autosignin_status'	=> $eventsdata['extension']['autosignin_status'],
-									));
-								} else {
+									'invited_raidgroup'	=> $this->in->getArray('invited_raidgroup', 'int'),
+								));
+							} else {
 								array_push($a_data, array(
-										'invited'			=> $eventsdata['extension']['invited'],
-										'invited_usergroup'	=> $eventsdata['extension']['invited_usergroup'],
-										'location'			=> $eventsdata['extension']['location'],
+									'invited'			=> $eventsdata['extension']['invited'],
+									'invited_usergroup'	=> $eventsdata['extension']['invited_usergroup'],
+									'location'			=> $eventsdata['extension']['location'],
 								));
 							}
 							array_push($a_data, $parentid);
 							array_push($a_data, $private);
-							
+
 							$clonedraidid = $this->pdh->put('calendar_events', 'add_cevent', $a_data);
 							$this->pdh->process_hook_queue();
 
+							// Auto add the chars
 							$this->pdh->put('calendar_events', 'auto_addchars', array($eventsdata['extension']['raidmode'], $clonedraidid, $eventsdata['extension']['raidleader'], $this->cleanExtensionField($eventsdata['extension']['autosignin_group']), $eventsdata['extension']['autosignin_status']));
 
 							// set the date for the next event
