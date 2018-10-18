@@ -59,6 +59,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 			$old['notes']			= $this->pdh->get('calendar_events', 'notes', array($id, true));
 			$old['allday']			= $this->pdh->get('calendar_events', 'allday', array($id));
 			$old['private']			= $this->pdh->get('calendar_events', 'private', array($id));
+			$old['creator']			= $this->pdh->get('calendar_events', 'creator', array($id));
 			$changes				= false;
 
 			foreach($old as $varname => $value) {
@@ -90,7 +91,6 @@ if(!class_exists('pdh_w_calendar_events')) {
 
 			if($changes || (serialize($tmp_old) !== serialize($tmp_new))) {
 				// the extensions array
-
 
 				// Handle the cloned mass events..
 				if(isset($editclones) && $editclones != 0){
@@ -143,7 +143,6 @@ if(!class_exists('pdh_w_calendar_events')) {
 						'repeating'				=> $repeat,
 						'extension'				=> serialize($extdata),
 					))->execute($cloneid_eventid);
-
 					$this->pdh->enqueue_hook('calendar_events_update');
 
 				// and now, handle the single events
