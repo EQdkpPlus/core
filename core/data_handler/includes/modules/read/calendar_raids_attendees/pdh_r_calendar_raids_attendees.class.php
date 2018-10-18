@@ -323,13 +323,18 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 
 		public function get_status_flag($status){
 			switch($status){
-				case 0: $flagcolor	= 'icon-color-green';break;
-				case 1: $flagcolor	= 'icon-color-yellow';break;
-				case 2: $flagcolor	= 'icon-color-red';break;
-				case 3: $flagcolor	= 'icon-color-purple';break;
-				case 5: $flagcolor	= 'icon-color-blue';break;
+				case 0: $flagcolor	= 'fa-star';break;
+				case 1: $flagcolor	= 'fa-user';break;
+				case 2: $flagcolor	= 'fa-star-o';break;
+				case 3: $flagcolor	= 'fa-star-half-o';break;
+				case 5: $flagcolor	= 'fa-flag icon-color-blue';break;
+				/*case 0: $flagcolor	= 'fa-check';break;
+				case 1: $flagcolor	= 'fa-user';break;
+				case 2: $flagcolor	= 'fa-times';break;
+				case 3: $flagcolor	= 'fa-question';break;
+				case 5: $flagcolor	= 'fa-flag icon-color-blue';break;*/
 			}
-			return '<i class="fa fa-flag '.$flagcolor.' fa-lg"></i>';
+			return '<i class="fa '.$flagcolor.' fa-lg"></i>';
 		}
 
 		public function get_html_status($eventid, $userid, $flag=true){
