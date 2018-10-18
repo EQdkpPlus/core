@@ -510,8 +510,19 @@ class calendar_pageobject extends pageobject {
 					$hide_inactive = true;
 					$statsuffix .= '&amp;hide_inactive=1';
 				}
+				
+				$intRaidgroup = 0;
+				if($this->in->exists('raidgroup')){
+					$intRaidgroup = $this->in->get('raidgroup', 0);
+					$statsuffix .= '&amp;raidgroup='.$intRaidgroup;
+				}
 
 				$arrMemberlist	= $this->pdh->get('member', 'id_list', array(true, true, true, !($show_twinks)));
+				
+				//Filter for Raidgroup
+				if($intRaidgroup){
+					$arrMemberlist = $this->pdh->get('raid_groups_members', 'member_list', array($intRaidgroup));
+				}
 
 				//Filter
 				if($hide_inactive){
@@ -546,6 +557,8 @@ class calendar_pageobject extends pageobject {
 		#$todisable				= array(1,2);
 		$todisable				= array();
 
+		$arrRaidgroups = array_merge(array(0 => ' - '), $this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list'))));
+		
 		$this->tpl->assign_vars(array (
 			// Date Picker
 			'DATEPICK_DATE_FROM'	=> (new hdatepicker('from', array('value' => $this->time->user_date($date1, false, false, false, function_exists('date_create_from_format')))))->output(),
@@ -553,6 +566,7 @@ class calendar_pageobject extends pageobject {
 			'SHOW_TWINKS_CHECKED'	=> ($show_twinks)?'checked="checked"':'',
 			'HIDE_INACTIVE_CHECKED'	=> ($hide_inactive)?'checked="checked"':'',
 			'AMOUNT_CALENDARS'		=> count($calendar_idlist),
+			'DD_RAIDGROUP'			=> (new hdropdown('raidgroup', array('options' => $arrRaidgroups, 'value' => $intRaidgroup)))->output(),
 			'MS_CALENDAR_SELECT'	=> (new hmultiselect('calendarfilter', array('options' => $calendar_idlist, 'preview_num' => 3, 'todisable' => $todisable, 'value' => array(1,2), 'selectedtext'=>$this->user->lang('calendar_filter_bycalendar'), 'width' => 260)))->output(),
 		));
 
