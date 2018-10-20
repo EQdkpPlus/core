@@ -454,6 +454,8 @@ class calendar_pageobject extends pageobject {
 		));
 
 		//Calenderevent Statistics
+		$hide_inactive	= false;
+		$intRaidgroup	= 0;
 		if ($this->in->get('from') && $this->in->get('to')){
 			if(!$this->in->exists('timestamps')) {
 				$date1 = $this->time->fromformat($this->in->get('from'));
@@ -505,20 +507,18 @@ class calendar_pageobject extends pageobject {
 					$statsuffix .= '&amp;show_twinks=1';
 				}
 
-				$hide_inactive = false;
 				if($this->in->exists('hide_inactive')){
 					$hide_inactive = true;
 					$statsuffix .= '&amp;hide_inactive=1';
 				}
-				
-				$intRaidgroup = 0;
+
 				if($this->in->exists('raidgroup')){
 					$intRaidgroup = $this->in->get('raidgroup', 0);
 					$statsuffix .= '&amp;raidgroup='.$intRaidgroup;
 				}
 
 				$arrMemberlist	= $this->pdh->get('member', 'id_list', array(true, true, true, !($show_twinks)));
-				
+
 				//Filter for Raidgroup
 				if($intRaidgroup){
 					$arrMemberlist = $this->pdh->get('raid_groups_members', 'member_list', array($intRaidgroup));
@@ -558,7 +558,7 @@ class calendar_pageobject extends pageobject {
 		$todisable				= array();
 
 		$arrRaidgroups = array_merge(array(0 => ' - '), $this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list'))));
-		
+
 		$this->tpl->assign_vars(array (
 			// Date Picker
 			'DATEPICK_DATE_FROM'	=> (new hdatepicker('from', array('value' => $this->time->user_date($date1, false, false, false, function_exists('date_create_from_format')))))->output(),
