@@ -58,8 +58,9 @@ if(!class_exists('pdh_w_calendar_events')) {
 			$old['repeat']			= $this->pdh->get('calendar_events', 'repeating', array($id));
 			$old['notes']			= $this->pdh->get('calendar_events', 'notes', array($id, true));
 			$old['allday']			= $this->pdh->get('calendar_events', 'allday', array($id));
-			$old['private']			= $this->pdh->get('calendar_events', 'private', array($id));
-			$old['creator']			= $this->pdh->get('calendar_events', 'creator', array($id));
+			$private_old			= $this->pdh->get('calendar_events', 'private', array($id));
+			$private				= ((int)$private == 0 || (int)$private == 1) ? (int)$private : (int)$private_old;
+			$creator				= $this->pdh->get('calendar_events', 'creatorid', array($id));
 			$changes				= false;
 
 			foreach($old as $varname => $value) {
@@ -72,7 +73,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 				}
 			}
 
-			if(isset($old['private']) && $old['private'] > 0 && $old['creator'] != $this->user->data['user_id']){
+			if(isset($old['private']) && $old['private'] > 0 && $creator != $this->user->data['user_id']){
 				return false;
 			}
 
@@ -107,7 +108,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 							'timestamp_start'		=> 'timestamp_start'.$timestamp_start_diff,
 							'timestamp_end'			=> 'timestamp_end'.$timestamp_end_diff,
 							'allday'				=> $allday,
-							'private'				=> (int)$private,
+							'private'				=> $private,
 							'visible'				=> 1,
 							'notes'					=> $notes,
 							'repeating'				=> $repeat,
@@ -122,7 +123,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 							'timestamp_start'		=> 'timestamp_start'.$timestamp_start_diff,
 							'timestamp_end'			=> 'timestamp_end'.$timestamp_end_diff,
 							'allday'				=> $allday,
-							'private'				=> (int)$private,
+							'private'				=> $private,
 							'visible'				=> 1,
 							'notes'					=> $notes,
 							'repeating'				=> $repeat,
@@ -137,7 +138,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 						'timestamp_start'		=> 'timestamp_start'.$timestamp_start_diff,
 						'timestamp_end'			=> 'timestamp_end'.$timestamp_end_diff,
 						'allday'				=> $allday,
-						'private'				=> (int)$private,
+						'private'				=> $private,
 						'visible'				=> 1,
 						'notes'					=> $notes,
 						'repeating'				=> $repeat,
@@ -153,7 +154,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 						'timestamp_start'		=> $startdate,
 						'timestamp_end'			=> $enddate,
 						'allday'				=> $allday,
-						'private'				=> (int)$private,
+						'private'				=> $private,
 						'visible'				=> 1,
 						'notes'					=> $notes,
 						'repeating'				=> $repeat,
@@ -193,7 +194,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 				}
 
 				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
-				
+
 				if($this->hooks->isRegistered('calendarevent_updated')){
 					$this->hooks->process('calendarevent_updated', array('id' => $id, 'data' => $arrNew));
 				}
@@ -254,7 +255,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 				$log_action = $this->logs->diff(false, $arrNew, $this->arrLogLang);
 
 				$this->log_insert('calendar_log_eventadded', $log_action, $id, ((isset($extension['raid_eventid']) && $extension['raid_eventid'] > 0) ? $this->pdh->get('event', 'name', array($extension['raid_eventid'])) : $name), true, 'calendar', ((defined("IN_CRON") && IN_CRON) ? CRONJOB : false));
-			
+
 				if($this->hooks->isRegistered('calendarevent_added')){
 					$this->hooks->process('calendarevent_added', array('id' => $id, 'data' => $arrNew));
 				}
@@ -351,11 +352,11 @@ if(!class_exists('pdh_w_calendar_events')) {
 			// perform the hooks
 			$this->pdh->enqueue_hook('calendar_raid_attendees_update');
 			$this->pdh->enqueue_hook('calendar_events_update', array( (is_array($id) ? $id[0] : $id)));
-			
+
 			if($this->hooks->isRegistered('calendarevent_deleted')){
 				$this->hooks->process('calendarevent_deleted', array('id' => $field, 'data' => $arrOld));
 			}
-			
+
 			return true;
 		}
 
@@ -372,11 +373,11 @@ if(!class_exists('pdh_w_calendar_events')) {
 			$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
 			if ($log_action) $this->log_insert('calendar_log_raid'.$openclose, $log_action, $id, $this->pdh->get('calendar_events', 'name', array($id)), true, 'calendar');
 			$this->pdh->enqueue_hook('calendar_events_update', array($id));
-			
+
 			if($this->hooks->isRegistered('calendarevent_closeraidstatus')){
 				$this->hooks->process('calendarevent_closeraidstatus', array('id' => $id, 'data' => $openclose));
 			}
-			
+
 			return $id;
 
 		}
@@ -387,11 +388,11 @@ if(!class_exists('pdh_w_calendar_events')) {
 			))->execute($id);
 
 			$this->pdh->enqueue_hook('calendar_events_update', array($id));
-			
+
 			if($this->hooks->isRegistered('calendarevent_updatenote')){
 				$this->hooks->process('calendarevent_updatenote', array('id' => $id, 'data' => $note));
 			}
-			
+
 			return $id;
 
 		}
@@ -445,7 +446,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 				);
 				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
 				$this->log_insert('calendar_log_eventupdated', $log_action, $eventid, $this->pdh->get('calendar_events', 'name', array($eventid)), true, 'calendar');
-				
+
 				if($this->hooks->isRegistered('calendarevent_moved')){
 					$this->hooks->process('calendarevent_moved', array('id' => $eventid, 'data' => $arrNew));
 				}
@@ -470,7 +471,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 				$this->log_insert('calendar_log_eventupdated', $log_action, $eventid, $this->pdh->get('calendar_events', 'name', array($eventid)), true, 'calendar');
 
 				$this->pdh->enqueue_hook('calendar_events_update', array($eventid));
-				
+
 				if($this->hooks->isRegistered('calendarevent_resized')){
 					$this->hooks->process('calendarevent_resized', array('id' => $eventid, 'data' => $arrNew));
 				}
@@ -491,7 +492,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 						'extension'		=> serialize($extensiondata),
 					))->execute($eventid);
 					$this->pdh->enqueue_hook('calendar_events_update', array($eventid));
-					
+
 					if($this->hooks->isRegistered('calendarevent_handle_invitation')){
 						$this->hooks->process('calendarevent_handle_invitation', array('id' => $eventid, 'data' => $extensiondata));
 					}
@@ -517,7 +518,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 						'extension'		=> serialize($extensiondata),
 					))->execute($eventid);
 					$this->pdh->enqueue_hook('calendar_events_update', array($eventid));
-					
+
 					if($this->hooks->isRegistered('calendarevent_handle_attendance')){
 						$this->hooks->process('calendarevent_handle_attendance', array('id' => $eventid, 'data' => $extensiondata));
 					}
@@ -616,7 +617,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 					'extension'				=> serialize($new_extensiondata),
 				))->execute($eventID);
 				$this->pdh->enqueue_hook('calendar_events_update');
-				
+
 				if($this->hooks->isRegistered('calendarevent_addextension')){
 					$this->hooks->process('calendarevent_addextension', array('id' => $eventID, 'data' => $new_extensiondata));
 				}
