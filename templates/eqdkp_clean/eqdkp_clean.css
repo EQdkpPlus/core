@@ -2161,6 +2161,7 @@ div #calendar_tab .ui-widget-content{
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	font-size: 11px;
 }
 .calendartt_raidgroups {
 	margin-top: 2px;

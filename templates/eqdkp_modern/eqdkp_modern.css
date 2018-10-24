@@ -2098,6 +2098,11 @@ ul.portal_block {
 }
 .fc-title{
 	vertical-align: middle;
+	padding-left: 4px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size: 11px;
 }
 .calendartt_raidgroups {
 	margin-top: 2px;
