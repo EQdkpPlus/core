@@ -76,6 +76,7 @@ class tinyMCE extends gen_class {
 					theme : "'.$this->theme.'",
 					skin : "'.$this->skin.'",
 					paste_as_text: true,
+					browser_spellcheck: true,
 					mentions: {
 						source: function(query, process, delimiter){
 							$.getJSON("'.$this->server_path.'libraries/tinyMCE/tinymce/plugins/mention/users.php", function (data) {
@@ -195,6 +196,7 @@ class tinyMCE extends gen_class {
 						"searchreplace visualblocks code fullscreen colorpicker",
 						"media table contextmenu paste textcolor emoticons'.$autoresize.$pageobjects.$readmore.$gallery.$raidloot.$strHooksPlugin.'"
 					],
+					browser_spellcheck: true,
 					images_upload_credentials: true,
 					images_upload_url: "'.$this->server_path.'libraries/tinyMCE/imageUploader.php'.$this->SID.'",
 					entity_encoding : "raw",
@@ -285,6 +287,7 @@ class tinyMCE extends gen_class {
 						toolbar: "undo redo '.$strHooksToolbar.'",
 						menubar: false,
 						plugins: ["save '.$strHooksPlugin.'"],
+						browser_spellcheck: true,
 						setup: function(editor) {
 							'.$strSetup.$strHooks.'
 						},
@@ -380,6 +383,7 @@ class tinyMCE extends gen_class {
 						"searchreplace visualblocks code fullscreen",
 						"save media table contextmenu paste textcolor emoticons'.$autoresize.$pageobjects.$readmore.$gallery.$raidloot.$strHooksPlugin.'"
 					],
+					browser_spellcheck: true,
 					entity_encoding : "raw",
 					rel_list: [{value:"", text: "" }, {value:"lightbox", text: "Lightbox" }, {value:"nofollow", text: "nofollow" }],
 					extended_valid_elements : "p[class|id|style|data-sort|data-folder|data-id|title],script[type|lang|src]",
