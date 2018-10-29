@@ -478,16 +478,16 @@ class calendar_pageobject extends pageobject {
 
 			//Create a Summary
 			$arrRaidstatsSettings = array(
-					'name' => 'hptt_viewmember_itemlist',
-					'table_main_sub' => '%member_id%',
-					'table_subs' => array('%member_id%', '%link_url%', '%link_url_suffix%', '%raid_link_url%', '%raid_link_url_suffix%', '%itt_lang%', '%itt_direct%', '%onlyicon%', '%noicon%', '%from%', '%to%'),
-					'page_ref' => 'viewcharacter.php',
-					'show_numbers' => false,
-					'show_select_boxes' => false,
-					'show_detail_twink' => false,
-					'table_sort_col' => 0,
-					'table_sort_dir' => 'asc',
-					'table_presets' => array(
+					'name'				=> 'hptt_viewmember_itemlist',
+					'table_main_sub'	=> '%member_id%',
+					'table_subs'		=> array('%member_id%', '%link_url%', '%link_url_suffix%', '%raid_link_url%', '%raid_link_url_suffix%', '%itt_lang%', '%itt_direct%', '%onlyicon%', '%noicon%', '%from%', '%to%'),
+					'page_ref'			=> 'viewcharacter.php',
+					'show_numbers'		=> false,
+					'show_select_boxes'	=> false,
+					'show_detail_twink'	=> false,
+					'table_sort_col'	=> 0,
+					'table_sort_dir'	=> 'asc',
+					'table_presets'		=> array(
 							array('name' => 'mlink', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 							array('name' => 'mraidgroups', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 							array('name' => 'mtwink', 'sort' => true, 'th_add' => '', 'td_add' => ''),
@@ -538,7 +538,6 @@ class calendar_pageobject extends pageobject {
 				$hptt->setPageRef($this->strPath);
 
 				$sort = $this->in->get('statsort');
-				//$suffix = (strlen($sort))? '&amp;statsort='.$sort : '';
 
 				$this->tpl->assign_vars(array (
 					'RAIDSTATS_OUT' 		=> $hptt->get_html_table($sort, $statsuffix, null, null, null),
@@ -554,7 +553,6 @@ class calendar_pageobject extends pageobject {
 		$calendar_idlist		= $this->pdh->aget('calendars', 'name', 0, array($this->pdh->get('calendars', 'idlist')));
 		$calendar_idlist[-2]	= $this->user->lang('user_sett_f_birthday');
 		$calendar_idlist[-3]	= $this->user->lang('calendar_others');
-		#$todisable				= array(1,2);
 		$todisable				= array();
 
 		$arrRaidgroups = array_merge(array(0 => ' - '), $this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list'))));

@@ -534,11 +534,11 @@ if(!class_exists('pdh_w_calendar_events')) {
 			// auto add raid groups
 			$raidgroups = ($group && is_array($group)) ? $group : $this->config->get('calendar_raid_add_raidgroupchars');
 			if(is_array($raidgroups) && count($raidgroups) > 0){
-				$userids = $this->pdh->get('raid_groups_members', 'user_list', array($raidgroups));
-				if(is_array($userids)){
-					foreach($userids as $userid){
+				$memberids = $this->pdh->get('raid_groups_members', 'member_list', array($raidgroups, true));
+				if(is_array($memberids)){
+					foreach($memberids as $memberid){
+						$userid			= $this->get('user', 'userid', array($memberid));
 						$away_mode		= $this->pdh->get('calendar_raids_attendees', 'user_awaymode', array($userid, $raidid));
-						$memberid		= $this->pdh->get('member', 'mainchar', array($userid));
 						$defaultrole	= $this->pdh->get('member', 'defaultrole', array($memberid));
 						$signupstatus	= ($away_mode) ? 2 : 1;
 

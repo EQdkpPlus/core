@@ -964,7 +964,7 @@ $lang = array(
 "core_sett_f_calendar_raid_confirm_raidgroupchars" => "Automatisches Bestätigen bestimmter Raidgruppen",
 "core_sett_f_help_calendar_raid_confirm_raidgroupchars" => "Wähle die Raidgruppen die automatisch bestätigt werden sollen. Meldet sich ein Benutzer mit einem Charakter an, wird dieser direkt bestätigt.",
 "core_sett_f_calendar_raid_add_raidgroupchars" => "Automatisches Anmelden bestimmter Raidgruppen beim Erstellen von Raids",
-"core_sett_f_help_calendar_raid_add_raidgroupchars" => "Wähle die Raidgruppen deren Hauptcharakter beim Erstellen eines Raids automatisch angemeldet werden sollen. Hat der User keinen Hauptcharakter, wird er nicht angemeldet!",
+"core_sett_f_help_calendar_raid_add_raidgroupchars" => "Wähle die Raidgruppen deren Charaktere beim Erstellen eines Raids automatisch angemeldet werden sollen. Sind mehrere Charaktere eines Benutzers in der Raidgruppe, so wird als erstes der Hauptcharakter, falls dieser nicht in der Raidgruppe ist wird der erste Charakter automatisch angemeldet.",
 
 "core_sett_f_calendar_raidleader_autoinvite" => 'Automatisches Anmelden von Raidleitern beim Erstellen von Raids',
 "core_sett_f_help_calendar_raidleader_autoinvite" => 'Legt fest, on Raidleiter automatisch beim Erstellen eines Raides angemeldet und bestätigt werden sollen. Da Raidleiter einen Raid nur leiten können, wenn sie daran teilnehmen und einen festen Platz benötigen, sollte diese Funktion aktiviert sein.',

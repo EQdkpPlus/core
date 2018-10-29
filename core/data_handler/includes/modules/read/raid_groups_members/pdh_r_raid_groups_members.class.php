@@ -35,8 +35,8 @@ if ( !class_exists( "pdh_r_raid_groups_members" ) ){
 		);
 
 		public function reset(){
-			$this->raid_groups_members	= NULL;
-			$this->raid_memberships		= NULL;
+			$this->raid_groups_members					= NULL;
+			$this->raid_memberships						= NULL;
 		}
 
 		public function init(){
@@ -52,17 +52,45 @@ if ( !class_exists( "pdh_r_raid_groups_members" ) ){
 			}
 		}
 
-		public function get_member_list($group_id){
+		public function get_oneCharByUser($group_id){
+			$tmp_raid_groups_members	= array();
+			if(is_array($this->raid_groups_members[$group_id]) && count($this->raid_groups_members[$group_id]) > 0){
+				$tmp_raid_groups_members = $this->raid_groups_members[$group_id];
+				foreach($tmp_raid_groups_members as $memberid){
+
+					// if the mainchar is in the raid group, unset all other chars of this user
+					$mainchar_id	= $this->pdh->get('member', 'mainid', array($memberid));
+					if(array_search($mainchar_id, $tmp_raid_groups_members)){
+						$other_chars	= $this->pdh->get('member', 'other_members', array($mainchar_id));
+						foreach($other_chars as $othercharIds){
+							unset($tmp_raid_groups_members[$othercharIds]);
+						}
+
+					// if there is no mainchar, use the first char and unset the rest
+					}else{
+						$other_chars	= $this->pdh->get('member', 'other_members', array($memberid));
+						foreach($other_chars as $othercharIds){
+							unset($tmp_raid_groups_members[$othercharIds]);
+						}
+					}
+				}
+			}
+			return $tmp_raid_groups_members;
+		}
+
+		public function get_member_list($group_id, $onecharperuser=false){
 			if(is_array($group_id)){
 				$tmparray = array();
 				foreach($group_id as $groupid){
-					if(is_array($this->raid_groups_members[$groupid])){
-						$tmparray = array_merge($tmparray, array_keys($this->raid_groups_members[$groupid]));
+					$arr_chars	= ($onecharperuser) ? $this->get_oneCharByUser($groupid) : $this->raid_groups_members[$groupid];
+					if(is_array($arr_chars)){
+						$tmparray = array_merge($tmparray, array_keys($arr_chars));
 					}
 				}
 				return array_unique($tmparray);
 			}else{
-				return (isset($this->raid_groups_members[$group_id]) && is_array($this->raid_groups_members[$group_id])) ? array_keys($this->raid_groups_members[$group_id]) : array();
+				$arr_chars	= ($onecharperuser) ? $this->get_oneCharByUser($group_id) : $this->raid_groups_members[$group_id];
+				return (isset($arr_chars) && is_array($arr_chars)) ? array_keys($arr_chars) : array();
 			}
 		}
 
