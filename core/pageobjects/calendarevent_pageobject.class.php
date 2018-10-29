@@ -286,13 +286,14 @@ class calendarevent_pageobject extends pageobject {
 		if($do_updatestatuschange){
 			// check if another char is used
 			$arrAttendeeIDs = $this->pdh->get('calendar_raids_attendees', 'other_user_attendees', array($this->url_id, $this->in->get('member_id', 0)));
+			$raidgroup		= $this->pdh->get('calendar_raids_attendees', 'raidgroup', array($this->url_id, $this->in->get('member_id', 0)));
 
 			$intAffectedID = $this->pdh->put('calendar_raids_attendees', 'update_status', array(
 				$this->url_id,
 				$this->in->get('member_id', 0),
 				$myrole,
 				$signupstatus,
-				$this->in->get('raidgroup', 0),
+				(($this->in->exists('raidgroup')) ? $this->in->get('raidgroup', 0) : $raidgroup),
 				$this->in->get('subscribed_member_id', 0),
 				$this->in->get('signupnote'),
 			));
