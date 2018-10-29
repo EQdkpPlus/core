@@ -45,7 +45,7 @@ class calendar_pageobject extends pageobject {
 	public function mass_signin(){
 		$eventids = $this->in->getArray('selected_ids', 'int');
 		if(is_array($eventids)){
-			$usergroups		= $this->config->get('calendar_raid_autoconfirm');
+			$usergroups		= $this->config->get('calendar_raid_confirm_raidgroupchars');
 			$signupstatus	= $this->in->get('member_signupstatus', 0);
 			if(is_array($usergroups) && count($usergroups) > 0 && $signupstatus == 1){
 				if($this->user->check_group($usergroups, false)){

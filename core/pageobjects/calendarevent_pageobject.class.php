@@ -238,7 +238,7 @@ class calendarevent_pageobject extends pageobject {
 		}
 
 		// auto confirm if enabled
-		$usergroups		= $this->config->get('calendar_raid_autoconfirm');
+		$usergroups		= $this->config->get('calendar_raid_confirm_raidgroupchars');
 		$signupstatus	= $this->in->get('signup_status', 4);
 		if(is_array($usergroups) && count($usergroups) > 0 && $signupstatus == 1){
 			if($this->user->check_group($usergroups, false)){

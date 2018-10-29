@@ -529,12 +529,12 @@ if(!class_exists('pdh_w_calendar_events')) {
 
 		public function auto_addchars($raidtype, $raidid, $raidleaders=array(), $group=false, $status=false){
 			//Auto confirm Groups
-			$arrAutoconfirmGroups	= $this->config->get('calendar_raid_autoconfirm');
+			$arrAutoconfirmGroups	= $this->config->get('calendar_raid_confirm_raidgroupchars');
 
-			// auto add groups
-			$usergroups = ($group && is_array($group)) ? $group : $this->config->get('calendar_raid_autocaddchars');
-			if(is_array($usergroups) && count($usergroups) > 0){
-				$userids = $this->pdh->get('user_groups_users', 'user_list', array($usergroups));
+			// auto add raid groups
+			$raidgroups = ($group && is_array($group)) ? $group : $this->config->get('calendar_raid_add_raidgroupchars');
+			if(is_array($raidgroups) && count($raidgroups) > 0){
+				$userids = $this->pdh->get('raid_groups_members', 'user_list', array($raidgroups));
 				if(is_array($userids)){
 					foreach($userids as $userid){
 						$away_mode		= $this->pdh->get('calendar_raids_attendees', 'user_awaymode', array($userid, $raidid));
