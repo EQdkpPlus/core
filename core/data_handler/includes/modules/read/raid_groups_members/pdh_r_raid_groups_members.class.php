@@ -29,6 +29,7 @@ if ( !class_exists( "pdh_r_raid_groups_members" ) ){
 		public $default_lang = 'english';
 		public $raid_groups_members;
 		public $raid_memberships;
+		public $raid_groups_charselection;
 
 		public $hooks = array(
 			'raid_groups_update',
@@ -37,6 +38,7 @@ if ( !class_exists( "pdh_r_raid_groups_members" ) ){
 		public function reset(){
 			$this->raid_groups_members					= NULL;
 			$this->raid_memberships						= NULL;
+			$this->raid_groups_charselection			= NULL;
 		}
 
 		public function init(){
@@ -53,7 +55,7 @@ if ( !class_exists( "pdh_r_raid_groups_members" ) ){
 		}
 
 		public function get_oneCharByUser($group_id){
-			$tmp_raid_groups_members	= array();
+			$tmp_raid_groups_members	= $this->raid_groups_charselection = array();
 			if(is_array($this->raid_groups_members[$group_id]) && count($this->raid_groups_members[$group_id]) > 0){
 				$tmp_raid_groups_members = $this->raid_groups_members[$group_id];
 				foreach($tmp_raid_groups_members as $memberid){
@@ -61,6 +63,7 @@ if ( !class_exists( "pdh_r_raid_groups_members" ) ){
 					// if the mainchar is in the raid group, unset all other chars of this user
 					$mainchar_id	= $this->pdh->get('member', 'mainid', array($memberid));
 					if(array_search($mainchar_id, $tmp_raid_groups_members)){
+						$this->raid_groups_charselection[$mainchar_id] = 'mainchar';
 						$other_chars	= $this->pdh->get('member', 'other_members', array($mainchar_id));
 						foreach($other_chars as $othercharIds){
 							unset($tmp_raid_groups_members[$othercharIds]);
@@ -68,7 +71,9 @@ if ( !class_exists( "pdh_r_raid_groups_members" ) ){
 
 					// if there is no mainchar, use the first char and unset the rest
 					}else{
-						$other_chars	= $this->pdh->get('member', 'other_members', array($memberid));
+						$this->raid_groups_charselection[$mainchar_id] = 'attendance';
+						$attending_char		= $this->pdh->get('calendar_raids_attendees', 'twinks_with_highest_attendance', array($memberid));
+						$other_chars		= $this->pdh->get('member', 'other_members', array($attending_char));
 						foreach($other_chars as $othercharIds){
 							unset($tmp_raid_groups_members[$othercharIds]);
 						}
@@ -76,6 +81,10 @@ if ( !class_exists( "pdh_r_raid_groups_members" ) ){
 				}
 			}
 			return $tmp_raid_groups_members;
+		}
+
+		public function get_charSelectionMethod($memberid){
+			return (isset($this->raid_groups_charselection[$memberid])) ? $this->raid_groups_charselection[$memberid] : '';
 		}
 
 		public function get_member_list($group_id, $onecharperuser=false){

@@ -537,10 +537,12 @@ if(!class_exists('pdh_w_calendar_events')) {
 				$memberids = $this->pdh->get('raid_groups_members', 'member_list', array($raidgroups, true));
 				if(is_array($memberids)){
 					foreach($memberids as $memberid){
-						$userid			= $this->get('user', 'userid', array($memberid));
+						$userid			= $this->pdh->get('user', 'userid', array($memberid));
 						$away_mode		= $this->pdh->get('calendar_raids_attendees', 'user_awaymode', array($userid, $raidid));
 						$defaultrole	= $this->pdh->get('member', 'defaultrole', array($memberid));
 						$signupstatus	= ($away_mode) ? 2 : 1;
+						$signupnote		= $this->pdh->get('$raid_groups_members', 'charSelectionMethod', array($memberid));
+						$signupnote_txt	= ($signupnote) ? $this->user_lang('raidevent_raid_note_'.$signupnote) : '';
 
 						if($memberid > 0){
 							if(($raidtype == 'role' && $defaultrole > 0) || $raidtype == 'class' || $raidtype == 'none'){
@@ -570,7 +572,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 									$signupstatus,
 									0,
 									0,
-									'',
+									$signupnote_txt,
 								));
 							}
 						}
