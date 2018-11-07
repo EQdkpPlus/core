@@ -787,6 +787,7 @@ class Manage_Extensions extends page_generic {
 				}
 				
 				$class_name = $plugin_code.'_portal';
+				if(!class_exists($class_name)) continue;
 				$del_link = "";
 				//Ignore Plugin Moduls in terms of repo-updates
 				if (empty($value['plugin'])) {
