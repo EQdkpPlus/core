@@ -58,7 +58,7 @@ if ( !class_exists( "bridge_usersync_crontask" ) ) {
 			}
 		
 			foreach($arrUser as $arrUserdata){
-				if ($this->pdh->get('user', 'check_username', array($arrUserdata['name'])) != 'false'){
+				if ($this->pdh->get('user', 'check_username', array(sanitize($arrUserdata['name']))) != 'false'){
 					if(!$this->bridge->check_user_group($arrUserdata['id'])) continue;
 					
 					//Neu anlegen
@@ -66,7 +66,7 @@ if ( !class_exists( "bridge_usersync_crontask" ) ) {
 					$strPassword = random_string(false, 32);
 					$strPwdHash = $this->user->encrypt_password($strPassword, $salt);
 					
-					$user_id = $this->pdh->put('user', 'insert_user_bridge', array($arrUserdata['name'], $strPwdHash.':'.$salt, $arrUserdata['email'], false));
+					$user_id = $this->pdh->put('user', 'insert_user_bridge', array(sanitize($arrUserdata['name']), $strPwdHash.':'.$salt, $arrUserdata['email'], false));
 					$this->pdh->process_hook_queue();
 					//Sync Usergroups
 					$this->bridge->sync_usergroups((int)$arrUserdata['id'], $user_id);
@@ -74,10 +74,10 @@ if ( !class_exists( "bridge_usersync_crontask" ) ) {
 					$this->bridge->sync_fields($user_id, $arrUserdata);
 					
 					//Notify Admins
-					$this->ntfy->add('eqdkp_user_new_registered', $user_id, $arrUserdata['name'], $this->root_path.'admin/manage_users.php'.$this->SID.'&u='.$user_id, false, "", false, array("a_users_man"));
+					$this->ntfy->add('eqdkp_user_new_registered', $user_id, sanitize($arrUserdata['name']), $this->root_path.'admin/manage_users.php'.$this->SID.'&u='.$user_id, false, "", false, array("a_users_man"));
 					
 				} else {
-					$user_id = $this->pdh->get('user', 'userid', array($arrUserdata['name']));
+					$user_id = $this->pdh->get('user', 'userid', array(sanitize($arrUserdata['name'])));
 					//Sync Usergroups
 					$this->bridge->sync_usergroups((int)$arrUserdata['id'], $user_id);
 					//Sync Userdata
