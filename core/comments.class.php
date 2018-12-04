@@ -288,7 +288,7 @@ if (!class_exists("comments")){
 									<div class="comment_avatar"><a href="'.$this->routing->build('user', $row['username'], 'u'.$row['userid']).'">'.$avatar.'</a></div>
 								</div>
 								<div class="comment_container">
-									<div class="comment_author"><a href="'.$this->routing->build('user', $row['username'], 'u'.$row['userid']).'">'.sanitize($row['username']).'</a>, '.$this->time->createTimeTag($row['date'], $this->time->user_date($row['date'], true)).'</div>';
+									<div class="comment_author">'.$this->pdh->geth('user', 'name', array($row['userid'], '', '', true)).', '.$this->time->createTimeTag($row['date'], $this->time->user_date($row['date'], true)).'</div>';
 					if($this->isAdmin OR $row['userid'] == $this->UserID){
 						$out[] .= '<div class="comments_delete bold floatRight hand"><i class="fa fa-times-circle fa-lg icon-grey"></i>';
 						$out[] .= '<div style="display:none" class="comments_page">'.$page.'</div>';
@@ -319,7 +319,7 @@ if (!class_exists("comments")){
 											<div class="comment_avatar"><a href="'.$this->routing->build('user', $com['username'], 'u'.$com['userid']).'">'.$avatar.'</a></div>
 										</div>
 										<div class="comment_container">
-											<div class="comment_author"><a href="'.$this->routing->build('user', $com['username'], 'u'.$com['userid']).'">'.sanitize($com['username']).'</a>, '.$this->time->createTimeTag($com['date'], $this->time->user_date($com['date'], true)).'</div>';
+											<div class="comment_author"><a href="'.$this->pdh->geth('user', 'name', array($row['userid'], '', '', true)).', '.$this->time->createTimeTag($com['date'], $this->time->user_date($com['date'], true)).'</div>';
 							if($this->isAdmin OR $com['userid'] == $this->UserID){
 								$out[] .= '<div class="comments_delete bold floatRight hand"><i class="fa fa-times-circle fa-lg icon-grey"></i>';
 								$out[] .= '<div style="display:none" class="comments_page">'.$page.'</div>';

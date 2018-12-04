@@ -575,7 +575,7 @@ div .contentFooter {
 	top: 0;
 	left: 0;
 	width: 100%;
-	z-index: 300;
+	z-index: 1000;
 }
 
 .admin.jsFixedBody .portal{

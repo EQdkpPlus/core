@@ -116,8 +116,8 @@ if (!class_exists("pdh_r_user")){
 		}
 
 		public function get_html_name($user_id, $link_url = '', $link_url_suffix = '', $blnUseController=false){
-			if ($blnUseController) return '<a href="'.$this->routing->build('User', $this->get_name($user_id), 'u'.$user_id).'" data-user-id="'.$user_id.'">'.$this->get_name($user_id).'</a>';
-			return '<a href="'.$link_url.$this->SID.'&u='.$user_id.'" data-user-id="'.$user_id.'">'.$this->get_name($user_id).'</a>';
+			if ($blnUseController) return '<a href="'.$this->routing->build('User', $this->get_name($user_id), 'u'.$user_id).'" data-user-id="'.$user_id.'" data-user-group-id="'.$this->get_highest_group($user_id).'" itemprop="url"><span itemprop="name">'.$this->get_name($user_id).'</span></a>';
+			return '<a href="'.$link_url.$this->SID.'&u='.$user_id.'" data-user-id="'.$user_id.'"  data-user-group-id="'.$this->get_highest_group($user_id).'" itemprop="url"><span itemprop="name">'.$this->get_name($user_id).'</span></a>';
 		}
 
 		public function comp_name($params1, $params2) {
@@ -359,6 +359,12 @@ if (!class_exists("pdh_r_user")){
 			$arrMemberships = $this->pdh->sort($arrMemberships, 'user_groups', 'sortid');
 			return $arrMemberships;
 		}
+		
+		public function get_highest_group($user_id){
+			$arrGroups = $this->get_groups($user_id);
+
+			return $arrGroups[0];;
+		}
 
 
 		public function get_style($user_id){
@@ -462,9 +468,12 @@ if (!class_exists("pdh_r_user")){
 		public function get_birthday_list(){
 			$useroutput	= array();
 			foreach($this->users as $user_id => $uderdata){
+				//Hide special users
+				if($this->get_is_special_user($user_id)) continue;
+			
 				$intBirthday = $this->get_birthday($user_id);
-				if($intBirthday > 0){
-					$useroutput[$user_id] = $intBirthday;
+				if(strlen($intBirthday) && (int)$intBirthday > 0){
+					$useroutput[$user_id] = (int)$intBirthday;
 				}
 			}
 			return $useroutput;
@@ -575,7 +584,7 @@ if (!class_exists("pdh_r_user")){
 			
 			$onlineBadge = ($this->get_is_online($user_id)) ? '<i class="eqdkp-icon-online"></i>' : '';
 
-			return '<div class="user-avatar-container"><img src="'.$strImg.'" class="user-avatar '.$class.'" alt="'.$this->get_name($user_id).'" />'.$onlineBadge.'</div>';
+			return '<div class="user-avatar-container" data-user-group-id="'.$this->get_highest_group($user_id).'"><img src="'.$strImg.'" class="user-avatar '.$class.'" alt="'.$this->get_name($user_id).'" />'.$onlineBadge.'</div>';
 		}
 
 		public function get_avatar_withtooltip($user_id, $tt_extension=false, $withOnlineBadge=true){
@@ -599,7 +608,7 @@ if (!class_exists("pdh_r_user")){
 			
 			$onlineBadge = ($this->get_is_online($user_id)) ? '<i class="eqdkp-icon-online"></i>' : '';
 			
-			return '<div class="user-avatar-container user-avatar-tooltip coretip" data-coretip="'.htmlspecialchars(implode('', $usertooltip)).'"><img src="'.$strImg.'" class="user-avatar" alt="'.$this->get_name($user_id).'" />'.$onlineBadge.'</div>';
+			return '<div class="user-avatar-container user-avatar-tooltip coretip" data-user-group-id="'.$this->get_highest_group($user_id).'" data-coretip="'.htmlspecialchars(implode('', $usertooltip)).'"><img src="'.$strImg.'" class="user-avatar" alt="'.$this->get_name($user_id).'" />'.$onlineBadge.'</div>';
 		}
 
 		public function get_privacy_settings($user_id) {
@@ -841,6 +850,15 @@ if (!class_exists("pdh_r_user")){
 		public function get_country_list(){
 			$this->init_countries();
 			return $this->countries;
+		}
+		
+		public function get_is_special_user($intUserID){
+			$arrSpecialUser = $this->config->get('special_user');
+			if(!$arrSpecialUser) $arrSpecialUser = array();
+			
+			if (in_array($intUserID, $arrSpecialUser)) return true;
+			
+			return false;
 		}
 
 		private function get_privacy_defaults($strField){

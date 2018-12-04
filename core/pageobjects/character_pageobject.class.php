@@ -158,6 +158,9 @@ class character_pageobject extends pageobject {
 		// the profile fields
 		if(!$profile_owntpl){
 			$pfields	= $this->pdh->get('profile_fields', 'fields');
+			if($this->hooks->isRegistered('character_profilefields')){
+				$pfields = $this->hooks->process('addcharacter_profilefields', array($pfields, $this->url_id), true);
+			}
 
 			$category	= array();
 			$this->jquery->Tab_header('profile_field_data', true);

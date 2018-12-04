@@ -27,7 +27,7 @@ class embedly extends gen_class {
 				'youtube' => array(
 					'regex' => ["https?://(?:[^\.]+\.)?youtube\.com/watch/?\?(?:.+&)?v=([^&]+)","https?://(?:[^\.]+\.)?(?:youtu\.be|youtube\.com/embed)/([a-zA-Z0-9_-]+)"],
 					'format'=> 'json',
-					'oembed'=> 'http://www.youtube.com/oembed?url=URL',
+					'oembed'=> 'https://www.youtube.com/oembed?url=URL',
 				),
 				'twitch' => array(
 					'regex' => ["https?://clips\.twitch\.tv/.*","https?://www\.twitch\.tv/.*","https?://twitch\.tv/.*"],

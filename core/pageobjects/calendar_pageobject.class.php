@@ -456,6 +456,13 @@ class calendar_pageobject extends pageobject {
 			if(!$this->in->exists('timestamps')) {
 				$date1 = $this->time->fromformat($this->in->get('from'));
 				$date2 = $this->time->fromformat($this->in->get('to'));
+				
+				$date1 = (int)($date1 / 1000);
+				$date1 = $date1 * 1000;
+				
+				$date2 = (int)($date2 / 1000);
+				$date2 = $date2 * 1000;
+				
 				$date2 += 86400; // Includes raids/items ON that day
 			} else {
 				$date1 = $this->in->get('from');
@@ -478,7 +485,7 @@ class calendar_pageobject extends pageobject {
 					'table_sort_dir' => 'asc',
 					'table_presets' => array(
 							array('name' => 'mlink', 'sort' => true, 'th_add' => '', 'td_add' => ''),
-							array('name' => 'mactive', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+							array('name' => 'mraidgroups', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 							array('name' => 'mtwink', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 					),
 				);
@@ -495,10 +502,37 @@ class calendar_pageobject extends pageobject {
 					$show_twinks = true;
 					$statsuffix .= '&amp;show_twinks=1';
 				}
+				
+				$hide_inactive = false;
+				if($this->in->exists('hide_inactive')){
+					$hide_inactive = true;
+					$statsuffix .= '&amp;hide_inactive=1';
+				}
+				
+				$intRaidgroup = 0;
+				if($this->in->exists('raidgroup')){
+					$intRaidgroup = $this->in->get('raidgroup', 0);
+					$statsuffix .= '&amp;raidgroup='.$intRaidgroup;
+				}
 
 				$arrMemberlist	= $this->pdh->get('member', 'id_list', array(true, true, true, !($show_twinks)));
+				
+				//Filter for Raidgroup
+				if($intRaidgroup){
+					$arrMemberlist = $this->pdh->get('raid_groups_members', 'member_list', array($intRaidgroup));
+				}
+				
+				//Filter
+				if($hide_inactive){
+					$arrMemberlistFiltered = array();
+					foreach($arrMemberlist as $intMemberID){
+						$total = $this->pdh->get('calendar_raids_attendees', 'calstat_raids_total_fromto', array($intMemberID, $date1, $date2, !$show_twinks));
+						if($total > 0) $arrMemberlistFiltered[] = $intMemberID;
+					}
+					$arrMemberlist = $arrMemberlistFiltered;
+				}
 
-				$hptt= $this->get_hptt($arrRaidstatsSettings, $arrMemberlist, $arrMemberlist, array('%link_url%' => $this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%use_controller%' => true, '%from%'=> $date1, '%to%' => $date2, '%with_twink%' => !$show_twinks), md5($date1.'.'.$date2), 'statsort');
+				$hptt= $this->get_hptt($arrRaidstatsSettings, $arrMemberlist, $arrMemberlist, array('%link_url%' => $this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%use_controller%' => true, '%from%'=> $date1, '%to%' => $date2, '%with_twink%' => !$show_twinks), md5($date1.'.'.$date2.'.'.($show_twinks)), 'statsort');
 				$hptt->setPageRef($this->strPath);
 
 				$sort = $this->in->get('statsort');
@@ -521,12 +555,16 @@ class calendar_pageobject extends pageobject {
 		#$todisable				= array(1,2);
 		$todisable				= array();
 
+		$arrRaidgroups = array_merge(array(0 => ' - '), $this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list'))));
+		
 		$this->tpl->assign_vars(array (
 			// Date Picker
 			'DATEPICK_DATE_FROM'	=> (new hdatepicker('from', array('value' => $this->time->user_date($date1, false, false, false, function_exists('date_create_from_format')))))->output(),
 			'DATEPICK_DATE_TO'		=> (new hdatepicker('to', array('value' => $this->time->user_date($date2, false, false, false, function_exists('date_create_from_format')))))->output(),
 			'SHOW_TWINKS_CHECKED'	=> ($show_twinks)?'checked="checked"':'',
+			'HIDE_INACTIVE_CHECKED'	=> ($hide_inactive)?'checked="checked"':'',
 			'AMOUNT_CALENDARS'		=> count($calendar_idlist),
+			'DD_RAIDGROUP'			=> (new hdropdown('raidgroup', array('options' => $arrRaidgroups, 'value' => $intRaidgroup)))->output(),
 			'MS_CALENDAR_SELECT'	=> (new hmultiselect('calendarfilter', array('options' => $calendar_idlist, 'preview_num' => 3, 'todisable' => $todisable, 'value' => array(1,2), 'selectedtext'=>$this->user->lang('calendar_filter_bycalendar'), 'width' => 260)))->output(),
 		));
 

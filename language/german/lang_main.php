@@ -486,6 +486,7 @@ $lang = array(
 "manage_members" => "Charaktere verwalten",
 "show_hidden_ranks" => "Zeige versteckte Charaktere",
 "show_inactive" => "Zeige inaktive Charaktere",
+"hide_inactive" => "Verstecke inaktive Charaktere",
 "show_twinks" => "Zeige Twinks",
 "images_not_available_admin" => "<b>Das eingebettete Bild konnte nicht überprüft werden</b><br/>Das kann folgende Gründe haben, bitte prüfe ob:<br/>- Dynamische Bilder sind aus Sicherheitsgründen deaktiviert<br/>- externe Verbindungen gesperrt: Versuche es mit Pfaden anstatt von URLs<br/>- Bild nicht länger verfügbar",
 "loot_distribution" => "Loot-Verteilung",

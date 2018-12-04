@@ -103,10 +103,14 @@ if(!class_exists('pdh_w_profile_fields')) {
 				$data['name'] = $data['name'].'_'.unique_id();
 			}
 			
+			$category = $this->in->get('category');
+			if($category == '-') $category = ($this->in->get('new_category') != "") ? $this->in->get('new_category') : 'character';
+			
+			
 			$objQuery = $this->db->prepare('UPDATE __member_profilefields :p WHERE id=?')->set(array(
 				'name'			=> $data['name'],
 				'type'			=> $this->in->get('type'),
-				'category'		=> $this->in->get('category'),
+				'category'		=> $category,
 				'lang'			=> $this->in->get('language'),
 				'options_language' => $this->in->get('options_language'),
 				'size'			=> $this->in->get('size'),
@@ -149,10 +153,14 @@ if(!class_exists('pdh_w_profile_fields')) {
 					$data['data'][$key] = $dat;
 				}
 			}
+			
+			$category = (isset($data['category'])) ? $data['category'] : $this->in->get('category');
+			if($category == '-') $category = ($this->in->get('new_category') != "") ? $this->in->get('new_category') : 'character';
+			
 			$data = array(
 				'name'			=> $data['name'],
 				'type'			=> (isset($data['type'])) ? $data['type'] : $this->in->get('type'),
-				'category'		=> (isset($data['category'])) ? $data['category'] : $this->in->get('category'),
+				'category'		=> $category,
 				'lang'			=> (isset($data['lang'])) ? $data['lang'] : $this->in->get('language'),
 				'options_language'=> (isset($data['options_lang'])) ? $data['options_lang'] : $this->in->get('options_language'),
 				'size'			=> (isset($data['size'])) ? intval($data['size']) : $this->in->get('size', 3),

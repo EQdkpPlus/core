@@ -26,6 +26,12 @@ if ( !defined('EQDKP_INC') ){
 class login_battlenet extends gen_class {
 	private $oauth_loaded = false;
 	
+	private $appid, $appsecret = false;
+	
+	private $AUTHORIZATION_ENDPOINT = 'https://{region}.battle.net/oauth/authorize';
+	private $TOKEN_ENDPOINT         = 'https://{region}.battle.net/oauth/token';
+	private $CHECK_TOKEN          = 'https://{region}.battle.net/oauth/check_token?token={token}';
+	
 	public static $functions = array(
 		'login_button'		=> 'login_button',
 		'account_button'	=> 'account_button',
@@ -37,6 +43,40 @@ class login_battlenet extends gen_class {
 	);
 	
 	public function __construct(){
+		$region = $this->config->get('uc_server_loc');
+		if(!$region) $region = 'eu';		
+		switch($region){
+			case 'eu' :
+				$region = 'eu';
+				$this->TOKEN_ENDPOINT = str_replace('{region}', $region, $this->TOKEN_ENDPOINT);
+				$this->AUTHORIZATION_ENDPOINT = str_replace('{region}', $region, $this->AUTHORIZATION_ENDPOINT);
+				$this->CHECK_TOKEN  = str_replace('{region}', $region, $this->CHECK_TOKEN);
+				break;
+			case 'us' :
+				$region = 'us';
+				$this->TOKEN_ENDPOINT = str_replace('{region}', $region, $this->TOKEN_ENDPOINT);
+				$this->AUTHORIZATION_ENDPOINT = str_replace('{region}', $region, $this->AUTHORIZATION_ENDPOINT);
+				$this->CHECK_TOKEN  = str_replace('{region}', $region, $this->CHECK_TOKEN);
+				break;
+			case 'tw' :
+				$region = 'apac';
+				$this->TOKEN_ENDPOINT = str_replace('{region}', $region, $this->TOKEN_ENDPOINT);
+				$this->AUTHORIZATION_ENDPOINT = str_replace('{region}', $region, $this->AUTHORIZATION_ENDPOINT);
+				$this->CHECK_TOKEN  = str_replace('{region}', $region, $this->CHECK_TOKEN);
+				break;
+			case 'kr' :
+				$region = 'apac';
+				$this->TOKEN_ENDPOINT = str_replace('{region}', $region, $this->TOKEN_ENDPOINT);
+				$this->AUTHORIZATION_ENDPOINT = str_replace('{region}', $region, $this->AUTHORIZATION_ENDPOINT);
+				$this->CHECK_TOKEN  = str_replace('{region}', $region, $this->CHECK_TOKEN);
+				break;
+			case 'cn' :
+				$region = 'eu';
+				$this->TOKEN_ENDPOINT = "https://www.battlenet.com.cn/oauth/token";
+				$this->AUTHORIZATION_ENDPOINT = "https://www.battlenet.com.cn/oauth/authorize";
+				$this->CHECK_TOKEN  = "https://www.battlenet.com.cn/oauth/check_token?token={token}";
+				break;
+		}		
 	}
 	
 	public function settings(){
@@ -47,26 +87,11 @@ class login_battlenet extends gen_class {
 			'login_bnet_appsecret' => array(
 				'type'	=> 'text',
 			),
-			'login_bnet_eqdkp_relay' => array(
-				'type'	=> 'radio',
-				'dependency' => array(1=>array('login_bnet_eqdkp_appid', 'login_bnet_eqdkp_appsecret')),
-			),
-			'login_bnet_eqdkp_appid'	=> array(
-				'type'	=> 'text',
-			),
-			'login_bnet_eqdkp_appsecret' => array(
-				'type'	=> 'text',
-			),
 		);
 		return $settings;
 	}
 	
-	private $appid, $appsecret, $relay, $eqdkp_appid, $eqdkp_appsecret = false;
-	
-	private $AUTHORIZATION_ENDPOINT = 'https://eu.battle.net/oauth/authorize';
-	private $TOKEN_ENDPOINT         = 'https://eu.battle.net/oauth/token';
-	
-	private $RELAY_URL = 'https://eqdkp-plus.eu/repository/relay.php';
+
 	
 	public function init_oauth(){
 		if (!$this->oauth_loaded){
@@ -78,9 +103,6 @@ class login_battlenet extends gen_class {
 			
 			$this->appid = $this->config->get('login_bnet_appid');
 			$this->appsecret = $this->config->get('login_bnet_appsecret');
-			$this->relay = ((int)$this->config->get('login_bnet_eqdkp_relay')) ? true : false;
-			$this->eqdkp_appid = $this->config->get('login_bnet_eqdkp_appid');
-			$this->eqdkp_appsecret = $this->config->get('login_bnet_eqdkp_appsecret');
 			
 			$this->oauth_loaded = true;
 		
@@ -90,14 +112,8 @@ class login_battlenet extends gen_class {
 	public function login_button(){
 		$this->init_oauth();
 		
-		if ($this->relay){
-			$time = time();
-			$hmac = hash('sha1', $time.'_'.$this->eqdkp_appid.'_'.$this->eqdkp_appsecret);
-			$redir_url = $this->RELAY_URL.'?_t='.$time.'&_id='.$this->eqdkp_appid.'&_hmac='.$hmac;
-		} else {
-			$redir_url = $this->env->buildLink().'index.php/Login/?login&lmethod=battlenet&norelay=1';
-		}
-		
+		$redir_url = $this->env->buildLink().'index.php/Login/?login&lmethod=battlenet';
+
 		$client = new OAuth2\Client($this->appid, $this->appsecret);
 		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $redir_url, array('scope' => 'wow.profile'));
 		
@@ -109,14 +125,7 @@ class login_battlenet extends gen_class {
 	public function account_button(){
 		$this->init_oauth();
 		
-		if ($this->relay){
-			$time = time();
-			$hmac = hash('sha1', $time.'_'.$this->eqdkp_appid.'_'.$this->eqdkp_appsecret);
-			$redir_url = $this->RELAY_URL.'?_t='.$time.'&_id='.$this->eqdkp_appid.'&_hmac='.$hmac.'&_s=ac';
-	
-		} else {
-			$redir_url = $this->env->buildLink().'index.php/Settings/?mode=addauthacc&lmethod=battlenet&norelay=1';
-		}
+		$redir_url = $this->env->buildLink().'index.php/Settings/?mode=addauthacc&lmethod=battlenet';
 
 		$client = new OAuth2\Client($this->appid, $this->appsecret);
 		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $redir_url, array('scope' => 'wow.profile'));
@@ -128,35 +137,23 @@ class login_battlenet extends gen_class {
 	public function get_account(){
 		$this->init_oauth();
 		
-		if ($this->in->get('norelay', 0)){
-			$code = $this->in->get('code');
-		} else {
-			$encrypt = register('encrypt', array($this->eqdkp_appsecret));
-			$code = $encrypt->decrypt(rawurldecode($_GET['code']));
-		}
+		$code = $this->in->get('code');
 		
 		if ($code){
 			$client = new OAuth2\Client($this->appid, $this->appsecret);
 			
-			if ($this->relay){
-				$time = $this->in->get('t');
-				$hmac = $this->in->get('h');
-				$s = ($this->in->get('_s')) ? '&_s='.$this->in->get('_s') : '';
-				$redir_url = $this->RELAY_URL.'?_t='.$time.'&_id='.$this->eqdkp_appid.'&_hmac='.$hmac.$s;
-			} else {
-				$redir_url = $this->env->buildLink().'index.php/Settings/?mode=addauthacc&lmethod=battlenet&norelay=1';
-			}
+			$redir_url = $this->env->buildLink().'index.php/Settings/?mode=addauthacc&lmethod=battlenet';
 			
 			$params = array('code' => $code, 'redirect_uri' => $redir_url, 'scope' => 'wow.profile');
 			$response = $client->getAccessToken($this->TOKEN_ENDPOINT, 'authorization_code', $params);
 			
 			if ($response && $response['result'] && $response['result']['access_token']){
 				
-				$accountResponse = register('urlfetcher')->fetch("https://eu.api.battle.net/account/user?access_token=".$response['result']['access_token']);
+				$accountResponse = register('urlfetcher')->fetch(str_replace('{token}', $response['result']['access_token'], $this->CHECK_TOKEN));
 				if($accountResponse){
 					$arrAccountResult = json_decode($accountResponse, true);
-					if(isset($arrAccountResult['id'])){
-						return $arrAccountResult['id'];
+					if(isset($arrAccountResult['user_name'])){
+						return $arrAccountResult['user_name'];
 					}
 				}
 			}
@@ -181,35 +178,23 @@ class login_battlenet extends gen_class {
 		
 		$this->init_oauth();
 		
-		if ($this->in->get('norelay', 0)){
-			$code = $_GET['code'];
-		} else {
-			$encrypt = register('encrypt', array($this->eqdkp_appsecret));
-			$code = $encrypt->decrypt(rawurldecode($_GET['code']));
-		}
-		
+		$code = $_GET['code'];
+	
 		if ($code){
 			$client = new OAuth2\Client($this->appid, $this->appsecret);
-				
-			if ($this->relay){
-				$time = $this->in->get('t');
-				$hmac = $this->in->get('h');
-				$s = ($this->in->get('_s')) ? '&_s='.$this->in->get('_s') : '';
-				$redir_url = $this->RELAY_URL.'?_t='.$time.'&_id='.$this->eqdkp_appid.'&_hmac='.$hmac.$s;
-			} else {
-				$redir_url = $this->env->buildLink().'index.php/Login/?login&lmethod=battlenet&norelay=1';
-			}
-				
+			
+			$redir_url = $this->env->buildLink().'index.php/Login/?login&lmethod=battlenet';
+
 			$params = array('code' => $code, 'redirect_uri' => $redir_url, 'scope' => 'wow.profile');
 			$response = $client->getAccessToken($this->TOKEN_ENDPOINT, 'authorization_code', $params);
 
 			if ($response && $response['result']){
-				
-				$accountResponse = register('urlfetcher')->fetch("https://eu.api.battle.net/account/user?access_token=".$response['result']['access_token']);
+					
+				$accountResponse = register('urlfetcher')->fetch(str_replace('{token}', $response['result']['access_token'], $this->CHECK_TOKEN));
 				if($accountResponse){
 					$arrAccountResult = json_decode($accountResponse, true);
-					if(isset($arrAccountResult['id'])){
-						$userid = $this->pdh->get('user', 'userid_for_authaccount', array($arrAccountResult['id'], 'battlenet'));
+					if(isset($arrAccountResult['user_name'])){
+						$userid = $this->pdh->get('user', 'userid_for_authaccount', array($arrAccountResult['user_name'], 'battlenet'));
 						if ($userid){
 							$userdata = $this->pdh->get('user', 'data', array($userid));
 							if ($userdata){
