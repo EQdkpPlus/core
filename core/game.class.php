@@ -37,7 +37,7 @@ class game extends gen_class {
 	private $game			= '';
 	private $lang_name		= '';
 	private $installer		= false;
-	public $import_apikey	= false;
+	public $import_apikey	= array();
 	private $deficon_path	= array(
 								'roles'		=> 'images/roles/',
 								'events'	=> 'images/events/',
@@ -51,10 +51,17 @@ class game extends gen_class {
 		if(!$installer){
 			$this->lang_name		= $this->user->lang_name;
 			$this->game				= $this->config->get('default_game');
-			if($this->config->get('game_importer_apikey')){
-				$this->import_apikey	= $this->config->get('game_importer_apikey');
-			}
+
 			$this->init_gameclass();
+
+			// the api key loader
+			$apikey_data			= $this->get_importers('apikey');
+			foreach($apikey_data['form'] as $fieldname=>$fieldcontent){
+				if($this->config->get($fieldname)){
+					$this->import_apikey[$fieldname]	= $this->config->get($fieldname);
+				}
+			}
+
 			$this->pdl->register_type('game');
 		} else {
 			$this->installer	= true;
@@ -375,8 +382,8 @@ class game extends gen_class {
 		}
 	}
 
-	public function get_import_apikey(){
-		return $this->import_apikey;
+	public function get_import_apikey($key=false){
+		return (isset($this->import_apikey[$key])) ? $this->import_apikey[$key] : $this->import_apikey;
 	}
 
 	/**
@@ -393,7 +400,7 @@ class game extends gen_class {
 	public function get_require_apikey(){
 		$setting_apikey		= $this->config->get('game_importer_apikey');
 		$apikey_config		= $this->get_importers('apikey');
-		return ($apikey_config['status'] == 'required' && empty($setting_apikey)) ? true : false;
+		return ($apikey_config['status'] == 'required' && count(array_filter($this->import_apikey)) > 0) ? true : false;
 	}
 
 	/**
@@ -1115,15 +1122,15 @@ class game extends gen_class {
 				);
 			}
 			$z++;
-			
+
 			if(isset($class_deps[$class['name']])) {
 				foreach($class_deps[$class['name']] as $child => $type) {
 					$field['ajax_reload']['multiple'][] = array(array($child), '%URL%&ajax=true&child='.$child.'&parent='.$class['name']);
 				}
 			}
-			
+
 			$field['_parents'] = $child_to_parents;
-			
+
 			foreach($class_data as $iclass) {
 				if($iclass['name'] == $class['name'])
 					$field['options'] = $this->get($iclass['type']);
@@ -1160,7 +1167,7 @@ class game extends gen_class {
 				$child_to_parents[$class['name']][] = $parent;
 			}
 		}
-		
+
 		$z = 0;
 		foreach($class_data as $class) {
 			if($class['admin']) {
@@ -1188,15 +1195,15 @@ class game extends gen_class {
 					'options_lang'	=> $class['type'],
 				);
 			}
-			
+
 			if(isset($class_deps[$class['name']])) {
 				foreach($class_deps[$class['name']] as $child => $type) {
 					$field['ajax_reload']['multiple'][] = array(array($child), '%URL%&ajax=true&child='.$child.'&parent='.$class['name']);
 				}
 			}
-			
+
 			$field['_parents'] = $child_to_parents;
-			
+
 			foreach($class_data as $iclass) {
 				if($iclass['name'] == $class['name'])
 					$field['options'] = $this->get($iclass['type']);
