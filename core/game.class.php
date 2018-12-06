@@ -400,7 +400,7 @@ class game extends gen_class {
 	public function get_require_apikey(){
 		$setting_apikey		= $this->config->get('game_importer_apikey');
 		$apikey_config		= $this->get_importers('apikey');
-		return ($apikey_config['status'] == 'required' && empty($setting_apikey)) ? true : false;
+		return ($apikey_config['status'] == 'required' && count(array_filter($this->import_apikey)) > 0) ? true : false;
 	}
 
 	/**
