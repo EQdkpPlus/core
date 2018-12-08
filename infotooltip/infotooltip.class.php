@@ -512,7 +512,7 @@ if(!class_exists('infotooltip')) {
 			foreach($arrAllowedDomains as $strAllowedDomain){
 				$arrDomainParts = parse_url($strAllowedDomain);
 				if($arrDomainParts['host'] != ""){
-					$pattern = '/^http:\/\/([\w_-]+\.)*' . $arrDomainParts['host'] . '$/';
+					$pattern = '/^https?:\/\/([\w_-]+\.)*' . $arrDomainParts['host'] . '$/';
 
 					$allow = preg_match($pattern, $incomingOrigin);
 					if ($allow){
