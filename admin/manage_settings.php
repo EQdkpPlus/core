@@ -929,8 +929,7 @@ class admin_settings extends page_generic {
 
 		// Importer API Key Wizzard
 		$apikey_config		= $this->game->get_importers('apikey');
-		$setting_apikey		= $this->config->get('game_importer_apikey');
-		if(($this->game->get_importAuth('a_members_man', 'guild_import') || $this->game->get_importAuth('a_members_man', 'char_mupdate')) && $apikey_config && !defined('GAME_IMPORT_APIKEY')){
+		if(($this->game->get_importAuth('a_members_man', 'guild_import') || $this->game->get_importAuth('a_members_man', 'char_mupdate')) && $apikey_config){
 			if($apikey_config['status'] == 'required' || $apikey_config['status'] == 'optional'){
 				if(isset($apikey_config['steps']) && is_array($apikey_config['steps']) && count($apikey_config['steps']) > 0){
 					$appisetts	= array();
@@ -939,7 +938,21 @@ class admin_settings extends page_generic {
 					}
 
 					// now, let us add the API-Key-Field to the last element of the array
-					$apikeyform			= (new htext('game_importer_apikey', array('value' => $setting_apikey, 'size' => '30')))->output();
+					if(isset($apikey_config['version']) && isset($apikey_config['form']) &&  $apikey_config['version'] > 1 && is_array($apikey_config['form'])){
+						$apikeyform = '';
+						$apikey_set	= false;
+						foreach($apikey_config['form'] as $fieldname=>$fieldcontent){
+							if($this->config->get($fieldname) != '') { $apikey_set = true; }
+							$tmp_options	= array_merge($fieldcontent, array('value'=>$this->config->get($fieldname)));
+							$apikeyform	.= '<br/>'.$this->game->glang($fieldname).': '.$this->form->field($fieldname, array_merge($fieldcontent, array('value'=>$this->config->get($fieldname))));;
+						}
+
+					}else{
+						// Fallback for old games
+						$apikey_set	= ($this->config->get('game_importer_apikey') != '') ? true : false;
+						$apikeyform	= (new htext('game_importer_apikey', array('value' => $this->config->get('game_importer_apikey'), 'size' => '30')))->output();
+					}
+
 					end($appisetts);
 					$key				= key($appisetts);
 					reset($appisetts);
@@ -948,7 +961,7 @@ class admin_settings extends page_generic {
 					$this->form->add_field('settings_apikey', array(
 						'type'		=> 'accordion',
 						'options'	=> $appisetts,
-						'active'	=> (($setting_apikey != '') ? (count($appisetts)-1) : 0),
+						'active'	=> (($apikey_set) ? (count($appisetts)-1) : 0),
 					), 'importer', 'game');
 				}
 			}
@@ -956,7 +969,7 @@ class admin_settings extends page_generic {
 
 		// The importer settings
 		if($this->game->get_importAuth('a_members_man', 'guild_import')){
-			if(($this->game->get_importers('guild_imp_rsn') && $this->config->get('servername') == '') || $this->game->get_require_apikey()){
+			if(($this->game->get_importers('guild_imp_rsn') && $this->config->get('servername') == '') || !$this->game->get_require_apikey()){
 				$gimport_out = '<input type="button" name="add" value="'.$this->user->lang('uc_bttn_import').'" disabled="disabled" />';
 			}else{
 				$gimport_out = '<input type="button" name="add" value="'.$this->user->lang('uc_bttn_import').'" class="mainoption" onclick="javascript:GuildImport()" />';
@@ -969,7 +982,7 @@ class admin_settings extends page_generic {
 		}
 
 		if($this->game->get_importAuth('a_members_man', 'char_mupdate')){
-			if(($this->game->get_importers('guild_imp_rsn') && $this->config->get('servername') == '')  || $this->game->get_require_apikey()){
+			if(($this->game->get_importers('guild_imp_rsn') && $this->config->get('servername') == '')  || !$this->game->get_require_apikey()){
 				$cupdate_out = '<input type="button" name="add" value="'.$this->user->lang('uc_bttn_update').'" disabled="disabled" />';
 			}else{
 				$cupdate_out = '<input type="button" name="add" value="'.$this->user->lang('uc_bttn_update').'" class="mainoption" onclick="javascript:MassUpdateChars()" />';
@@ -1022,8 +1035,16 @@ class admin_settings extends page_generic {
 			$game_changed = false;
 
 			// add the API key save code
-			$save_array['game_importer_apikey']	= $this->in->get('game_importer_apikey', '');
+			if(isset($apikey_config['version']) && isset($apikey_config['form']) &&  $apikey_config['version'] > 1 && is_array($apikey_config['form'])){
+				$apikeyform = '';
+				foreach($apikey_config['form'] as $fieldname=>$fieldcontent){
+					$save_array[$fieldname]	= $this->in->get($fieldname, '');
+				}
+			}else{
+				$save_array['game_importer_apikey']	= $this->in->get('game_importer_apikey', '');
+			}
 
+			// default game
 			if (($this->in->get('default_game') != $this->config->get('default_game')) || ($this->in->get('game_language') != $this->config->get('game_language'))){
 				$game_changed = true;
 			}
