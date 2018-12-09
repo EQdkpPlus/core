@@ -959,7 +959,7 @@ class admin_settings extends page_generic {
 
 		// The importer settings
 		if($this->game->get_importAuth('a_members_man', 'guild_import')){
-			if(($this->game->get_importers('guild_imp_rsn') && $this->config->get('servername') == '') || !$this->game->get_require_apikey()){
+			if(($this->game->get_importers('guild_imp_rsn') && $this->config->get('servername') == '') || $this->game->get_apikeyfield_requiered_and_empty()){
 				$gimport_out = '<input type="button" name="add" value="'.$this->user->lang('uc_bttn_import').'" disabled="disabled" />';
 			}else{
 				$gimport_out = '<input type="button" name="add" value="'.$this->user->lang('uc_bttn_import').'" class="mainoption" onclick="javascript:GuildImport()" />';
@@ -972,7 +972,7 @@ class admin_settings extends page_generic {
 		}
 
 		if($this->game->get_importAuth('a_members_man', 'char_mupdate')){
-			if(($this->game->get_importers('guild_imp_rsn') && $this->config->get('servername') == '')  || !$this->game->get_require_apikey()){
+			if(($this->game->get_importers('guild_imp_rsn') && $this->config->get('servername') == '')  || $this->game->get_apikeyfield_requiered_and_empty()){
 				$cupdate_out = '<input type="button" name="add" value="'.$this->user->lang('uc_bttn_update').'" disabled="disabled" />';
 			}else{
 				$cupdate_out = '<input type="button" name="add" value="'.$this->user->lang('uc_bttn_update').'" class="mainoption" onclick="javascript:MassUpdateChars()" />';
@@ -1059,7 +1059,7 @@ class admin_settings extends page_generic {
 				$objStyles->delete_cache(false);
 				$this->form->reset_fields();
 				$this->settings_saved = true;
-				$itt_parserlist	= $this->itt->get_parserlist($this->in->get('default_game'));	
+				$itt_parserlist	= $this->itt->get_parserlist($this->in->get('default_game'));
 				$this->config->set($this->itt->changed_prio1($this->in->get('default_game'), key($itt_parserlist)));
 				$this->display();
 				redirect('admin/manage_settings.php'.$this->SID);		// we need to reload cause of the per-game settings

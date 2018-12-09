@@ -103,13 +103,13 @@ class mycharacters_pageobject extends pageobject {
 				'link'		=> "javascript:AddCharArmory()",
 				'text'		=> $this->user->lang('uc_add_char_armory'),
 				'icon'		=> 'fa-download',
-				'perm'		=> $this->game->get_importAuth('u_member_add', 'char_import') && !$this->game->get_require_apikey(),
+				'perm'		=> $this->game->get_importAuth('u_member_add', 'char_import') && !$this->game->get_apikeyfield_requiered_and_empty(),
 			),
 			2 => array(
 				'link'		=> "javascript:MassUpdateChars()",
 				'text'		=> $this->user->lang('uc_add_massupdate'),
 				'icon'		=> 'fa-refresh',
-				'perm'		=> $this->game->get_importAuth('a_members_man', 'char_mupdate') && !$this->game->get_require_apikey(),
+				'perm'		=> $this->game->get_importAuth('a_members_man', 'char_mupdate') && !$this->game->get_apikeyfield_requiered_and_empty(),
 			),
 		);
 
@@ -140,14 +140,14 @@ class mycharacters_pageobject extends pageobject {
 		", 'docready');
 
 		// The Importer things..
-		if($this->game->get_importAuth('u_member_add', 'char_import') && !$this->game->get_require_apikey()){
+		if($this->game->get_importAuth('u_member_add', 'char_import') && !$this->game->get_apikeyfield_requiered_and_empty()){
 			$this->jquery->Dialog('AddCharArmory', $this->user->lang('uc_ext_import_sh'), array('url'=>$this->game->get_importers('char_import', true).$this->SID, 'width'=>'600', 'height'=>'300', 'onclose'=>$this->env->link.$this->controller_path_plain.'MyCharacters/'.$this->SID));
 		}
-		if($this->game->get_importAuth('u_', 'char_update') && !$this->game->get_require_apikey()){
+		if($this->game->get_importAuth('u_', 'char_update') && !$this->game->get_apikeyfield_requiered_and_empty()){
 			$this->jquery->Dialog('UpdateChar', $this->user->lang('uc_ext_import_sh'), array('url'=>$this->game->get_importers('char_update', true).$this->SID."&member_id='+memberid+'", 'width'=>'600', 'height'=>'300', 'onclose'=>$this->env->link.$this->controller_path_plain.'MyCharacters/'.$this->SID, 'withid'=>'memberid'));
 		}
 
-		if($this->game->get_importAuth('a_members_man', 'char_mupdate') && !$this->game->get_require_apikey()){
+		if($this->game->get_importAuth('a_members_man', 'char_mupdate') && !$this->game->get_apikeyfield_requiered_and_empty()){
 			$this->jquery->Dialog('MassUpdateChars', $this->user->lang('uc_cache_update'), array('url'=>$this->game->get_importers('char_mupdate', true).$this->SID, 'width'=>'600', 'height'=>'450', 'onclose'=>$this->env->link.$this->controller_path_plain.'MyCharacters/'.$this->SID));
 		}
 
