@@ -130,22 +130,10 @@ class admin_settings extends page_generic {
 			'4'				=> 'core_sett_f_debug_type4',
 		);
 
-		$a_modelviewer = array(
-			'0'				=> 'WoWHead',
-			'1'				=> 'Thottbot',
-			'2'				=> 'SpeedyDragon'
-		);
-
 		$accact_array = array(
 			'0'				=> 'none',
 			'1'				=> 'user',
 			'2'				=> 'admin',
-		);
-
-		$portal_positions = array(
-			'right'		=> 'portalplugin_right',
-			'middle'	=> 'portalplugin_middle',
-			'bottom'	=> 'portalplugin_bottom',
 		);
 
 		$mail_array = array(
@@ -190,7 +178,7 @@ class admin_settings extends page_generic {
 
 		// Startpage
 		$arrMenuItems = $this->core->build_menu_array(true, true);
-
+		$startpage_array = array();
 		foreach($arrMenuItems as $page){
 			$link = $this->user->removeSIDfromString($page['link']);
 			if ($link != "" && $link != "#" && $link != "index.php"){
@@ -207,6 +195,7 @@ class admin_settings extends page_generic {
 		}
 
 		// Build language array
+		$language_array = $locale_array = $lang = array();
 		if($dir = @opendir($this->core->root_path . 'language/')){
 			while ( $file = @readdir($dir) ){
 				if ((!is_file($this->core->root_path . 'language/' . $file)) && (!is_link($this->core->root_path . 'language/' . $file)) && valid_folder($file)){
@@ -943,14 +932,15 @@ class admin_settings extends page_generic {
 						$apikey_set	= false;
 						foreach($apikey_config['form'] as $fieldname=>$fieldcontent){
 							if($this->config->get($fieldname) != '') { $apikey_set = true; }
-							$tmp_options	= array_merge($fieldcontent, array('value'=>$this->config->get($fieldname)));
-							$apikeyform	.= '<br/>'.$this->game->glang($fieldname).': '.$this->form->field($fieldname, array_merge($fieldcontent, array('value'=>$this->config->get($fieldname))));;
+							$value = ($this->in->exists($fieldname)) ? $this->in->get($fieldname) : $this->config->get($fieldname);
+							$apikeyform	.= '<br/>'.$this->game->glang($fieldname).': '.$this->form->field($fieldname, array_merge($fieldcontent, array('value'=>$value)));
 						}
 
 					}else{
 						// Fallback for old games
 						$apikey_set	= ($this->config->get('game_importer_apikey') != '') ? true : false;
-						$apikeyform	= (new htext('game_importer_apikey', array('value' => $this->config->get('game_importer_apikey'), 'size' => '30')))->output();
+						$apikey = ($this->in->exists('game_importer_apikey', '')) ? $this->in->get('game_importer_apikey', '') : $this->config->get('game_importer_apikey');
+						$apikeyform	= (new htext('game_importer_apikey', array('value' => $apikey, 'size' => '30')))->output();
 					}
 
 					end($appisetts);
