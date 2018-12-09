@@ -904,7 +904,7 @@ class calendarevent_pageobject extends pageobject {
 							'NAME'				=> $this->pdh->get('member', 'name', array($memberid)),
 							'RANDOM'			=> $memberdata['random_value'],
 							'GROUPS'			=> (new hdropdown('groupchange_group', array('options' => $this->raidgroup_dd, 'value' => $raidgroup)))->output(),
-							'TOOLTIP'			=> implode('<br />', $membertooltip),
+							'TOOLTIP'			=> $this->jquery->sanitize(implode('<br />', $membertooltip)),
 							'ADMINNOTE'			=> ($memberdata['signedbyadmin']) ? true : false,
 							'NOTE'				=> (trim($memberdata['note'])) ? $memberdata['note'] : false,
 							'NOTE_PUBLIC'		=> ((trim($memberdata['note']) && $this->user->check_group($shownotes_ugroups, false)) ? $memberdata['note'] : false),
