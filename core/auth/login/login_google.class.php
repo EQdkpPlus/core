@@ -61,7 +61,8 @@ class login_google extends gen_class {
 					'type'	=> 'text',
 				),
 				'login_google_privatekey' => array(
-					'type'	=> 'text',
+						'type'	=> 'password',
+						'set_value' => true,
 				),
 		);
 		return $settings;

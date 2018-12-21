@@ -51,13 +51,13 @@ class hpassword extends html {
 
 	public function output() {
 		$out = '<input type="'.self::$type.'" name="'.$this->name.'" id="'.$this->id.'" ';
-		if($this->set_value && !empty($this->value)) $out .= 'value="'.$this->value.'" ';
+		if($this->set_value && !empty($this->value)) $out .= 'value="'.$this->redactValue($this->value).'" ';
 		if(!empty($this->pattern)) $this->class .= ' fv_success';
 		if(!empty($this->equalto)) $this->class .= ' equalto';
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
 		if($this->readonly) $out .= 'readonly="readonly" ';
 		if($this->required) $out .= ' required="required" data-fv-message="'.(($this->fvmessage) ? $this->fvmessage : registry::fetch('user')->lang('fv_required')).'"';
-		if(!$this->autocomplete) $out .= 'autocomplete="off" ';
+		if(!$this->autocomplete) $out .= 'autocomplete="new-password" ';
 		if(!empty($this->pattern)) $out .= 'pattern="'.$this->pattern($this->pattern).'" ';
 		if(!empty($this->equalto)) $out .= 'data-equalto="'.$this->equalto.'" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
@@ -65,8 +65,16 @@ class hpassword extends html {
 		if($this->required) $out .= '<i class="fa fa-asterisk required small"></i>';
 		return $out;
 	}
+	
+	private function redactValue($strValue){
+		if (!$strValue || !is_string($strValue)) return '';
+		return str_repeat("*", 8);
+	}
 
 	public function _inpval() {
+		$strValue = $this->in->get($this->name, '');
+		if($strValue == str_repeat("*", 8)) return $this->old_value;
+		
 		return $this->in->get($this->name, '');
 	}
 }

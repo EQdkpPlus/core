@@ -25,29 +25,29 @@ $eqdkp_root_path = './../';
 include_once($eqdkp_root_path.'common.php');
 
 class QuickStartWizard extends page_generic {
-	
+
 	public static $shortcuts = array(
 			'repo'		=> 'repository',
 			'objStyles'	=> 'styles',
 			'encrypt'	=> 'encrypt',
 			'form'	=> array('form', array('core_settings'))
 	);
-	
+
 	public function __construct(){
 		$this->user->check_auth('a_maintenance');
-		
+
 		$handler = array(
 
 		);
 		parent::__construct(false, $handler,  false, null);
 		$this->process();
 	}
-	
-	
+
+
 	//Step1 - select game
-	public function step0(){	
+	public function step0(){
 		$arrGames = array();
-		
+
 		$arrExtensionList = $this->repo->getExtensionList();
 		if (is_array($arrExtensionList)){
 			foreach($arrExtensionList[7] as $intID => $val){
@@ -55,41 +55,41 @@ class QuickStartWizard extends page_generic {
 				$arrJsonGames[$val['plugin_id']] = $val['plugin'];
 			}
 		}
-		
+
 		natsort($arrGames);
-		
+
 		$this->tpl->assign_vars(array(
 				'DD_GAMES' => (new hdropdown('games', array('options' => $arrGames)))->output(),
 				'JSON_GAMES' => json_encode($arrJsonGames),
 		));
 	}
-	
+
 	public function process_step0(){
 		if(!$this->checkCSRF('process')) return false;
 
 		//Game muss installiert werden
 		$intPluginID = $this->in->get('games');
-		
+
 		$arrExtensionList = $this->repo->getExtensionList();
 		if (is_array($arrExtensionList)){
 			foreach($arrExtensionList[7] as $intID => $val){
 				$arrGames[$val['plugin_id']] =  $val['plugin'];
 			}
 		}
-		
+
 		$strPluginname = $arrGames[$intPluginID];
-		
+
 		$this->game->installGame($strPluginname, $this->user->lang_name, 1);
 		$this->pdc->flush();
 		$objStyles = register('styles');
 		$objStyles->delete_cache(false);
 	}
-	
+
 	//Step2 - Gildenname, plus Spiel-Einstellungen, Gildenlogo
 	public function step1(){
 		$this->form->use_tabs = false;
 		$this->form->use_fieldsets = false;
-		
+
 		$arrSettings = array(
 				'guildtag'		=> array(
 						'type'		=> 'text',
@@ -103,17 +103,17 @@ class QuickStartWizard extends page_generic {
 						//'deletelink'	=> $this->root_path.'admin/manage_settings.php'.$this->SID.'&dellogo=true',
 				),
 		);
-		
+
 		$this->form->lang_prefix = 'core_sett_';
-		
+
 		$this->form->add_fields($arrSettings);
-		
+
 		// merge the game admin array to the existing one
 		$settingsdata_admin = $this->game->admin_settings();
 		if(is_array($settingsdata_admin) && !empty($settingsdata_admin)){
 			$this->form->add_fields($settingsdata_admin);
 		}
-		
+
 		// Importer API Key Wizzard
 		$apikey_config		= $this->game->get_importers('apikey');
 		$setting_apikey		= $this->config->get('game_importer_apikey');
@@ -124,14 +124,14 @@ class QuickStartWizard extends page_generic {
 					foreach($apikey_config['steps'] as $title=>$val){
 						$appisetts[$this->game->glang($title)]	= $this->game->glang($val);
 					}
-					
+
 					// now, let us add the API-Key-Field to the last element of the array
 					$apikeyform			= (new htext('game_importer_apikey', array('value' => $setting_apikey, 'size' => '30')))->output();
 					end($appisetts);
 					$key				= key($appisetts);
 					reset($appisetts);
 					$appisetts[$key]	= str_replace('{APIKEY_FORM}', $apikeyform, $appisetts[$key]);
-					
+
 					$this->form->add_field('settings_apikey', array(
 							'type'		=> 'accordion',
 							'options'	=> $appisetts,
@@ -140,16 +140,16 @@ class QuickStartWizard extends page_generic {
 				}
 			}
 		}
-		
+
 		$this->form->output();
 	}
-	
+
 	public function process_step1(){
 		if(!$this->checkCSRF('process')) return false;
-		
+
 		$this->form->use_tabs = false;
 		$this->form->use_fieldsets = false;
-		
+
 		$arrSettings = array(
 				'guildtag'		=> array(
 						'type'		=> 'text',
@@ -163,11 +163,11 @@ class QuickStartWizard extends page_generic {
 						//'deletelink'	=> $this->root_path.'admin/manage_settings.php'.$this->SID.'&dellogo=true',
 				),
 		);
-		
+
 		$this->form->lang_prefix = 'core_sett_';
-		
+
 		$this->form->add_fields($arrSettings);
-		
+
 		// merge the game admin array to the existing one
 		$settingsdata_admin = $this->game->admin_settings();
 		if(is_array($settingsdata_admin) && !empty($settingsdata_admin)){
@@ -175,23 +175,23 @@ class QuickStartWizard extends page_generic {
 		}
 
 		$arrValues = $this->form->return_values();
-		
+
 		$arrValues['game_importer_apikey'] = $this->in->get('game_importer_apikey');
-		
+
 		$this->config->set($arrValues);
-		
+
 		$this->config->set('main_title', $arrValues['guildtag']);
-		
+
 		$this->pdh->process_hook_queue();
 	}
-	
+
 	//Step3 - Gildenimport falls vorhanden
 	public function step2(){
 		//siehe SEttings
 		$this->form->reset_fields();
-		
+
 		$blnHasImport = false;
-		
+
 		if($this->game->get_importAuth('a_members_man', 'char_mupdate')){
 			$this->jquery->Dialog('MassUpdateChars', $this->user->lang('uc_import_adm_update'), array('url'=>$this->game->get_importers('char_mupdate', true), 'width'=>'600', 'height'=>'450'));
 			$blnHasImport = true;
@@ -202,10 +202,10 @@ class QuickStartWizard extends page_generic {
 		}
 
 		if(!$blnHasImport) return false;
-		
+
 		// The importer settings
 		if($this->game->get_importAuth('a_members_man', 'guild_import')){
-			if(($this->game->get_importers('guild_imp_rsn') && $this->config->get('servername') == '') || $this->game->get_require_apikey()){
+			if(($this->game->get_importers('guild_imp_rsn') && $this->config->get('servername') == '') || $this->game->get_apikeyfield_requiered_and_empty()){
 				$gimport_out = '<input type="button" name="add" value="'.$this->user->lang('uc_bttn_import').'" disabled="disabled" />';
 			}else{
 				$gimport_out = '<input type="button" name="add" value="'.$this->user->lang('uc_bttn_import').'" class="mainoption" onclick="javascript:GuildImport()" />';
@@ -216,30 +216,30 @@ class QuickStartWizard extends page_generic {
 					'text'	=> $gimport_out,
 			));
 		}
-		
+
 		if($this->game->get_importAuth('a_members_man', 'char_mupdate')){
-			if(($this->game->get_importers('guild_imp_rsn') && $this->config->get('servername') == '')  || $this->game->get_require_apikey()){
+			if(($this->game->get_importers('guild_imp_rsn') && $this->config->get('servername') == '')  || $this->game->get_apikeyfield_requiered_and_empty()){
 				$cupdate_out = '<input type="button" name="add" value="'.$this->user->lang('uc_bttn_update').'" disabled="disabled" />';
 			}else{
 				$cupdate_out = '<input type="button" name="add" value="'.$this->user->lang('uc_bttn_update').'" class="mainoption" onclick="javascript:MassUpdateChars()" />';
 			}
-			
+
 			$this->form->add_field('uc_update_all', array(
 					'lang'	=> 'uc_update_all',
 					'type'	=> 'direct',
 					'text'	=> $cupdate_out,
 			));
 		}
-		
+
 		$this->form->output();
 	}
-	
+
 	//Step4 - Select Style
 	public function step3(){
 		//Auflisten und Nachinstallieren, aber erst im letzten Step dann als default setzen
-		
+
 		$arrStyles = array();
-		
+
 		//First, the local styles
 		$style_array = array();
 		foreach(register('pdh')->get('styles', 'styles', array(0, false)) as $styleid=>$row){
@@ -249,7 +249,7 @@ class QuickStartWizard extends page_generic {
 			} elseif(file_exists($this->root_path.'templates/'.$row['template_path'].'/screenshot.jpg' )){
 				$screenshot = $this->root_path.'templates/'.$row['template_path'].'/screenshot.jpg';
 			}
-			
+
 			$this->tpl->assign_block_vars('style_row', array(
 					'PLUGINID'	=> 0,
 					'STYLE_ID'	=> $row['style_id'],
@@ -258,12 +258,12 @@ class QuickStartWizard extends page_generic {
 					'IS_LOCAL'	=> true,
 					'IS_CHECKED' => ($row['template_path'] == 'eqdkp_clean') ? ' checked="checked"' : '',
 			));
-			
+
 			$style_array[$styleid] = $row['style_name'];
 		}
-		
-		
-		
+
+
+
 		//Now the ones from the Extension List
 		$arrExtensionList = $this->repo->getExtensionList();
 		if (is_array($arrExtensionList)){
@@ -276,39 +276,39 @@ class QuickStartWizard extends page_generic {
 						'SCREENSHOT' => 'http://cdn1.eqdkp-plus.eu/repository/screenshot.php?extid='.$val['plugin_id'],
 						'IS_REPO'	=> true,
 				));
-			
+
 			}
-		}		
+		}
 	}
-	
+
 	public function process_step3(){
 		if(!$this->checkCSRF('process')) return false;
-		
+
 		if($this->in->get('local', 0)){
 			$intStyleID = $this->in->get('local', 0);
-			
+
 			$this->config->set('styleid', $intStyleID, 'wizard');
-			
+
 			$this->config->set('default_style', $intStyleID);
 			$this->pdh->put('user', 'update_userstyle', array($intStyleID));
 
 		}elseif($this->in->get('extid', 0)){
 			$intPluginCode = $this->in->get('extid', 0);
 			$strPluginName = $this->in->get('code');
-			
+
 			$objStyles = register('styles');
-			
+
 			$intStyleID = $this->objStyles->install($strPluginName);
-			
+
 			$this->config->set('styleid', $intStyleID, 'wizard');
 		}
 		$this->pdh->process_hook_queue();
 	}
-	
+
 	//Step5 - Select Plugins
 	public function step4(){
 		//Auflisten und Installieren, per checkbox.
-		
+
 		//Now the ones from the Extension List
 		$arrExtensionList = $this->repo->getExtensionList();
 		if (is_array($arrExtensionList)){
@@ -316,13 +316,13 @@ class QuickStartWizard extends page_generic {
 			foreach($arrExtensionList[1] as $intID => $val){
 				$arrNames[$intID] = $val['name'];
 			}
-			
+
 			natsort($arrNames);
-			
+
 			foreach($arrNames as $intID => $v){
 				$val = $arrExtensionList[1][$intID];
 				if($val['plugin'] == 'pluskernel') continue;
-				
+
 				$this->tpl->assign_block_vars('style_row', array(
 						'PLUGINID'	=> $val['plugin_id'],
 						'NAME'		=> sanitize($val['name']),
@@ -331,27 +331,27 @@ class QuickStartWizard extends page_generic {
 						'SCREENSHOT' => 'http://cdn1.eqdkp-plus.eu/repository/screenshot.php?extid='.$val['plugin_id'],
 						'IS_REPO'	=> true,
 				));
-				
+
 			}
-		}		
+		}
 	}
-	
+
 	//Install Plugin
 	public function process_step4(){
 		if(!$this->checkCSRF('process')) return false;
-		
+
 		$code = $this->in->get('code');
-		
+
 		$this->pm->install($code);
-		
+
 		$this->pdh->process_hook_queue();
 		exit; //because it is ajax
 	}
-	
+
 	//Step6 - Select Portal Moduls, install, permission all, put to right and left
 	public function step5(){
 		//Auflisten und Installieren, per checkbox.
-		
+
 		//Now the ones from the Extension List
 		$arrExtensionList = $this->repo->getExtensionList();
 		if (is_array($arrExtensionList)){
@@ -359,12 +359,12 @@ class QuickStartWizard extends page_generic {
 			foreach($arrExtensionList[3] as $intID => $val){
 				$arrNames[$intID] = $val['name'];
 			}
-			
+
 			natsort($arrNames);
-			
+
 			foreach($arrNames as $intID => $v){
 				$val = $arrExtensionList[3][$intID];
-				
+
 				$this->tpl->assign_block_vars('style_row', array(
 						'PLUGINID'	=> $val['plugin_id'],
 						'NAME'		=> sanitize($val['name']),
@@ -373,43 +373,43 @@ class QuickStartWizard extends page_generic {
 						'SCREENSHOT' => 'http://cdn1.eqdkp-plus.eu/repository/screenshot.php?extid='.$val['plugin_id'],
 						'IS_REPO'	=> true,
 				));
-				
+
 			}
 		}
 	}
-	
+
 	public function process_step5(){
 		if(!$this->checkCSRF('process')) return false;
-		
+
 		$intCurrent = $this->in->get('current');
 		$path = $this->in->get('code');
-		
+
 		$this->portal->get_all_modules();
-		
+
 		$idList = $this->pdh->get('portal', 'id_by_path', array($path));
 		$plugin = $this->pdh->get('portal', 'plugin', array($idList[0]));
 		$name = $this->pdh->get('portal', 'name', array($idList[0]));
-		
+
 		$this->portal->uninstall($path, $plugin);
 		$intID = $this->portal->install($path, $plugin);
-		
+
 		//Set Permissions to all
 		$this->config->set('visibility', 'a:1:{i:0;s:1:"0";}', 'pmod_'.$intID);
-		
+
 		//Set Position
 		$arrBlockModules = $this->pdh->get('portal_layouts', 'modules', array(1));
 		$strBlock = (($intCurrent % 2) == 0) ? 'right' : 'left';
 		$arrBlockModules[$strBlock][] = $intID;
-		
+
 		$blnResult = $this->pdh->put('portal_layouts', 'update', array(1, 'Standard', array('left', 'middle', 'bottom', 'right'), $arrBlockModules, array()));
 
 		$this->pdh->process_hook_queue();
 		exit; //because it is ajax
 	}
-	
+
 	public function step6(){
 		//DKP System
-		
+
 		$this->pdh->auto_update_layout($current_layout);
 		$intLayouts = 0;
 		foreach($this->pdh->get_layout_list(true, false) as $layout){
@@ -421,13 +421,13 @@ class QuickStartWizard extends page_generic {
 			));
 		}
 	}
-	
+
 	public function process_step6(){
 		if(!$this->checkCSRF('process')) return false;
-		
+
 		$strPointLayout = $this->in->get("pointlayout");
 		$this->config->set('eqdkp_layout', $strPointLayout);
-		
+
 		if($strPointLayout == 'nopoints'){
 			$this->config->set('enable_points', 0);
 		} else {
@@ -435,14 +435,14 @@ class QuickStartWizard extends page_generic {
 		}
 		$this->pdc->flush();
 	}
-	
-	
+
+
 	public function step7(){
 		//finish
-		
+
 		//set default style
 		$intStyleID = $this->config->get('styleid', 'wizard');
-		
+
 		$this->config->set('default_style', $intStyleID);
 		$this->pdh->put('user', 'update_userstyle', array($intStyleID));
 
@@ -451,16 +451,16 @@ class QuickStartWizard extends page_generic {
 	public function display(){
 		$show = (int)$this->in->get('show', 0);
 		$process = (int)$this->in->exists('process', 0);
-		
+
 		if($process){
 			$function = 'process_step'.$show;
 			if(method_exists($this, $function)){
 				$this->$function();
-			}	
+			}
 		}
-		
+
 		if($this->in->exists('show')) $show++ ;
-		
+
 		$function = 'step'.$show;
 		$blnResult = $this->$function();
 		//Go to the next step
@@ -469,7 +469,7 @@ class QuickStartWizard extends page_generic {
 			$function = 'step'.$show;
 			$blnResult = $this->$function();
 		}
-		
+
 		$this->tpl->assign_vars(array(
 				'S_SHOW_'.strtoupper($show)	=> true,
 				'STEP' => $show,
@@ -478,7 +478,7 @@ class QuickStartWizard extends page_generic {
 				'WIZARD_INFOBOX' => $this->user->lang('wizard_step'.$show.'_info'),
 		));
 
-		
+
 		$this->core->set_vars([
 				'page_title'		=> $this->user->lang('wizard'),
 				'template_file'		=> 'admin/wizard.html',

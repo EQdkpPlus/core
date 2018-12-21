@@ -45,7 +45,8 @@ class login_twitch extends gen_class {
 				'type'	=> 'text',
 			),
 			'login_twitch_appsecret' => array(
-				'type'	=> 'text',
+					'type'	=> 'password',
+					'set_value' => true,
 			),
 		);
 		return $settings;

@@ -198,7 +198,7 @@ class Manage_Portal extends page_generic {
 	public function save_settings($displayPage = true) {
 		if($id = $this->in->get('id')){
 			$this->get_settings($id, 'save');
-			$save_array = $this->form->return_values();
+			$save_array = $this->form->return_values($this->config->get('pmod_'.$id));
 			if(count($save_array) > 0){
 				$this->config->set($save_array, '', 'pmod_'.$id);
 			}

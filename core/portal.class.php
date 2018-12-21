@@ -311,8 +311,8 @@ class portal extends gen_class {
 		if(!file_exists($cwd) || ($plugin && !$this->pm->check($plugin, PLUGIN_INSTALLED))){
 			if(!$nodelete) {
 				$this->pdl->log('portal', 'File '.$cwd.' not available, module not loaded.');
-				#$this->pdh->put('portal', 'delete', array($path, 'path'));
-				#$this->pdh->process_hook_queue();
+				$this->pdh->put('portal', 'delete', array($path, 'path'));
+				$this->pdh->process_hook_queue();
 			}
 			return 0;
 		} else {

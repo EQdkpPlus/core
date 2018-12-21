@@ -489,7 +489,7 @@ if (!class_exists("pdh_r_user")){
 				}
 				return $fields;
 			} else {
-				return array();
+				return (($field) ? '' : array());
 			}
 		}
 

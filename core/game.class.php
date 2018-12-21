@@ -397,10 +397,15 @@ class game extends gen_class {
 		return ($this->user->check_auth($myperm, false) && $this->get_importers($import)) ? true : false;
 	}
 
-	public function get_require_apikey(){
+	public function get_apikeyfield_requiered_and_empty(){
 		$setting_apikey		= $this->config->get('game_importer_apikey');
 		$apikey_config		= $this->get_importers('apikey');
-		return ($apikey_config['status'] == 'required' && count(array_filter($this->import_apikey)) > 0) ? true : false;
+		if(isset($apikey_config['version']) && isset($apikey_config['form']) &&  $apikey_config['version'] > 1){
+			return ($apikey_config['status'] == 'required' && count(array_filter($this->import_apikey)) > 0) ? false : true;
+		}else{
+			return ($apikey_config['status'] == 'required' && empty($setting_apikey)) ? true : false;
+		}
+
 	}
 
 	/**
@@ -850,7 +855,7 @@ class game extends gen_class {
 		$relevant_deps = array();
 		$child_ids = array();
 		foreach($class_dep as $class) {
-			if($class['parent'] && isset($name2type[key($class['parent'])])) {
+			if($class['parent'] && is_array($class['parent']) && isset($name2type[key($class['parent'])])) {
 				$relevant_deps[$name2type[key($class['parent'])]] = $class['type'];
 				$child_ids[$name2type[key($class['parent'])]] = current($class['parent']);
 			}

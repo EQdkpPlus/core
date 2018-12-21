@@ -47,7 +47,8 @@ class login_discord extends gen_class {
 						'type'	=> 'text',
 				),
 				'login_discord_appsecret' => array(
-						'type'	=> 'text',
+						'type'	=> 'password',
+						'set_value' => true,
 				),
 		);
 		return $settings;

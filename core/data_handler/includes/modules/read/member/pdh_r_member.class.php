@@ -97,7 +97,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 				$this->init_points();
 				return true;
 			}
-			
+
 			$this->pdc->del('pdh_members_table');
 			$this->pdc->del('pdh_member_connections_table');
 			$this->pdc->del('pdh_members_table_other_chars');
@@ -217,29 +217,29 @@ if ( !class_exists( "pdh_r_member" ) ) {
 				}
 				$this->pdc->put('pdh_members_table', $this->data, null);
 				$this->pdc->put('pdh_members_table_other_chars', $this->otherChars, null);
-				
+
 			}
 		}
-		
+
 		public function init_points(){
 			$this->data_points	= $this->pdc->get('pdh_members_table_points');
 			if( $this->data_points !== NULL){
 				return true;
 			}
-			
+
 			// basic member data
 			$bmd_sql = "SELECT
 						member_id, points,
 						points_apa
 						FROM __members;";
-			
+
 			$objQuery = $this->db->query($bmd_sql);
-			
+
 			if($objQuery){
 				while($bmd_row = $objQuery->fetchAssoc()){
 						$this->data_points[$bmd_row['member_id']]['points']			= $bmd_row['points'];
 						$this->data_points[$bmd_row['member_id']]['apa_points']		= $bmd_row['points_apa'];
-				}		
+				}
 			}
 
 			$this->pdc->put('pdh_members_table_points', $this->data_points, null);
@@ -323,7 +323,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 					$strImage =  $this->server_path.$strPlainImage;
 				}
 			} else $strImage = false;
-			
+
 			switch($arrField['type']){
 				case 'int':
 				case 'text': {
@@ -332,27 +332,27 @@ if ( !class_exists( "pdh_r_member" ) ) {
 					}
 				}
 				break;
-				
+
 				case 'bbcodeeditor':
 					$out = $this->bbcode->toHTML($out);
 				break;
-				
+
 				case 'imageuploader':
 					if (strlen($out)){
 						$out = str_replace($this->root_path, $this->server_path, $out);
 					}
-					
+
 					return '<img src="'.$out.'" class="member-profilefield-'.$profile_field.' member-additional-image gameicon" alt="" />';
-					
+
 				break;
-				
+
 				case 'hidden':
 					if ($arrField['options_language'] != ""){
 						if (strpos($arrField['options_language'], 'lang:') === 0){
 							$arrSplitted = explode(':', $arrField['options_language']);
 							$arrGlang = $this->game->glang($arrSplitted[1]);
 							$arrLang = (isset($arrSplitted[2])) ? $arrGlang[$arrSplitted[2]] : $arrGlang;
-							
+
 						} else $arrLang = $this->game->get($arrField['options_language']);
 						if (isset($arrLang[$strMemberValue])) return $arrLang[$strMemberValue];
 					}
@@ -865,7 +865,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 					'link'		=> "javascript:UpdateChar('".$memberid."')",
 					'text'		=> $this->game->glang('uc_updat_armory'),
 					'icon'		=> 'fa-refresh',
-					'perm'		=> $this->game->get_importAuth('u_member_man', 'char_update') && !$this->game->get_require_apikey(),
+					'perm'		=> $this->game->get_importAuth('u_member_man', 'char_update') && !$this->game->get_apikeyfield_requiered_and_empty(),
 				),
 			);
 			return $this->core->build_dropdown_menu('<i class="fa fa-wrench fa-lg"></i>', $cm_actions, 'floatRight', 'actionmenu'.$memberid);
@@ -957,12 +957,12 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			} else {
 				$out .= '&nbsp;&nbsp;&nbsp;<a href="'.$this->root_path.'admin/manage_members.php'.$this->SID.'&setactive='.$id.'&link_hash='.$this->user->csrfGetToken('Manage_Memberssetactive').'" title="'.$this->user->lang('option_false').'"><i class="fa fa-square-o fa-lg icon-color-red"></i></a>';
 			}
-			
+
 			if($this->pdh->get('rank', 'is_hidden', array($this->data[$id]['rank_id']))){
 				$out .= '&nbsp;&nbsp;&nbsp;<i class="fa fa-user-secret fa-lg" title="'.$this->user->lang('hidden').'"></i>';
 			}
-			
-			
+
+
 			return $out;
 		}
 
