@@ -855,7 +855,7 @@ class game extends gen_class {
 		$relevant_deps = array();
 		$child_ids = array();
 		foreach($class_dep as $class) {
-			if($class['parent'] && isset($name2type[key($class['parent'])])) {
+			if($class['parent'] && is_array($class['parent']) && isset($name2type[key($class['parent'])])) {
 				$relevant_deps[$name2type[key($class['parent'])]] = $class['type'];
 				$child_ids[$name2type[key($class['parent'])]] = current($class['parent']);
 			}
