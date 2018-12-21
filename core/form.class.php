@@ -330,7 +330,7 @@ class form extends gen_class {
 	/*	read input data according to form-fields
 	 *	@return (array):	inputname => value
 	 */
-	public function return_values() {
+	public function return_values($arrOldValues=array()) {
 		$values = array();
 		foreach($this->field_array as $tabname => $fieldsets) {
 			if(strpos($tabname, '_') === 0) continue;
@@ -339,6 +339,7 @@ class form extends gen_class {
 				// variable fieldsets holds fields in this case
 				foreach($fieldsets as $name => $options) {
 					try {
+						if(isset($arrOldValues[$name])) $options['old_value'] = $arrOldValues[$name];
 						$values[$name] = self::value($name, $options, $this->lang_prefix);
 					} catch (FormException $e) {
 						$this->error = true;
@@ -354,6 +355,7 @@ class form extends gen_class {
 					if (!is_array($options)) continue;
 
 					try {
+						if(isset($arrOldValues[$name])) $options['old_value'] = $arrOldValues[$name];
 						$values[$name] = self::value($name, $options, $this->lang_prefix);
 					} catch (FormException $e) {
 						$this->error = true;

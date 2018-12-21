@@ -1020,7 +1020,7 @@ class admin_settings extends page_generic {
 		// save the setting
 		if ($this->in->exists('save_plus') && $this->checkCSRF('display') && !$this->settings_saved){
 
-			$save_array = $this->form->return_values();
+			$save_array = $this->form->return_values($this->config->get_config());
 			//check for changed game
 			$game_changed = false;
 

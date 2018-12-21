@@ -290,7 +290,7 @@ class Manage_Bridge extends page_generic {
 
 			'DB_HOST'			=> ($this->crypt->decrypt($this->config->get('cmsbridge_host')) == '') ? $this->dbhost : $this->crypt->decrypt($this->config->get('cmsbridge_host')),
 			'DB_USER'			=> ($this->crypt->decrypt($this->config->get('cmsbridge_user')) == '') ? $this->dbuser : $this->crypt->decrypt($this->config->get('cmsbridge_user')),
-			'DB_PW'				=> ($this->crypt->decrypt($this->config->get('cmsbridge_password'))  == '') ? '' : $this->crypt->decrypt($this->config->get('cmsbridge_password')),
+			'DB_PW'				=> ($this->crypt->decrypt($this->config->get('cmsbridge_password'))  == '') ? '' : '********',
 			'DB_DATABASE'		=> $this->crypt->decrypt($this->config->get('cmsbridge_database')),
 			'DD_PREFIX'			=> (new hdropdown('db_prefix', array('options' => $arrPrefix, 'value' => $this->config->get('cmsbridge_prefix'), 'js' => 'onchange="onchange_prefix()"')))->output(),
 			'OWN_PREFIX'		=> (!in_array($this->config->get('cmsbridge_prefix'), $arrPrefix)) ? $this->config->get('cmsbridge_prefix') : '',
