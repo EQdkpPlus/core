@@ -60,7 +60,6 @@ class hpassword extends html {
 		if(!$this->autocomplete) $out .= 'autocomplete="new-password" ';
 		if(!empty($this->pattern)) $out .= 'pattern="'.$this->pattern($this->pattern).'" ';
 		if(!empty($this->equalto)) $out .= 'data-equalto="'.$this->equalto.'" ';
-		if(!empty($this->equalto)) $out .= 'data-equalto="'.$this->equalto.'" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
 		$out .= ' />';
 		if($this->required) $out .= '<i class="fa fa-asterisk required small"></i>';
