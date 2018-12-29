@@ -34,6 +34,7 @@ class db_access extends install_generic {
 	private $dbhost			= 'localhost';
 	private $dbname			= '';
 	private $dbuser			= '';
+	private $dbport			= 3306;
 	
 	public static function before() {
 		return self::$before;
@@ -62,6 +63,10 @@ class db_access extends install_generic {
 				<td><input type="text" name="dbhost" size="25" value="'.$this->dbhost.'" class="input" required="" /></td>
 			</tr>
 			<tr>
+				<td align="right"><strong>'.$this->lang['dbport'].': </strong><br/>'.$this->lang['dbport_help'].'</td>
+				<td><input type="text" name="dbport" size="25" value="'.$this->dbport.'" class="input" required="" /></td>
+			</tr>
+			<tr>
 				<td align="right"><strong>'.$this->lang['dbname'].': </strong></td>
 				<td><input type="text" name="dbname" size="25" value="'.$this->dbname.'" class="input" required="" /></td>
 			</tr>
@@ -85,6 +90,7 @@ class db_access extends install_generic {
 		$this->dbhost = registry::get_const('dbhost');
 		$this->dbname = registry::get_const('dbname');
 		$this->dbuser = registry::get_const('dbuser');
+		$this->dbport = registry::get_const('dbport');
 		$this->table_prefix = registry::get_const('table_prefix');
 		return $this->get_output();
 	}
@@ -94,6 +100,7 @@ class db_access extends install_generic {
 		$this->dbhost		= $this->in->get('dbhost', $this->dbhost);
 		$this->dbname		= $this->in->get('dbname');
 		$this->dbuser		= $this->in->get('dbuser');
+		$this->dbport		= $this->in->get('dbport', 3306);
 		$this->table_prefix	= $this->in->get('table_prefix', $this->table_prefix);
 		$this->dbpass		= $this->in->get('dbpass', '', 'raw');
 
@@ -170,10 +177,11 @@ class db_access extends install_generic {
 	private function configfile_fill() {
 		$content = substr(file_get_contents($this->root_path.'config.php'), 0, -2); //discard last two symbols (? >)
 		$content = preg_replace('/^\$(dbtype|dbhost|dbname|dbuser|dbpass|table_prefix) = \'(.*)\';$/m', "", $content);
+		$content = preg_replace('/^\$(dbport|dbpers) = (.*);$/m', "", $content);
 		$content = preg_replace('/\\n{3,}/', "\n\n", $content);
 		$content .= '$dbtype = \''.$this->dbtype.'\';'."\n";
 		$content .= '$dbhost = \''.$this->dbhost.'\';'."\n";
-		$content .= '$dbport = false;'."\n";
+		$content .= '$dbport = '.intval($this->dbport).';'."\n";
 		$content .= '$dbname = \''.$this->dbname.'\';'."\n";
 		$content .= '$dbuser = \''.$this->dbuser.'\';'."\n";
 		$content .= '$dbpass = \''.$this->dbpass.'\';'."\n";
