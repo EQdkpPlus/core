@@ -46,7 +46,7 @@ class login_google extends gen_class {
 		$this->publicKey = $this->config->get("login_google_publickey");
 		$this->privateKey = $this->config->get("login_google_privatekey");
 		$token = $this->user->csrfGetToken('google');
-		$this->authURL = "https://accounts.google.com/o/oauth2/auth?client_id=".rawurlencode(trim($this->publicKey)). "&state=".$token."&scope=profile+email&response_type=code&redirect_uri=";
+		$this->authURL = "https://accounts.google.com/o/oauth2/auth?client_id=".rawurlencode(trim($this->publicKey)). "&state=".$token."&scope=profile+openid+email&response_type=code&redirect_uri=";
 		$this->callbackURLs = array(
 			'login' => $this->env->link.$this->controller_path_plain."Login/?login&lmethod=google",
 			'register' => $this->env->link.$this->controller_path_plain."Register/?register&lmethod=google",
@@ -90,7 +90,7 @@ class login_google extends gen_class {
 			if($accessToken){
 				$arrGoogleUser = $this->fetchUserData($accessToken);
 				if($arrGoogleUser){
-					$myGoogleID = $arrGoogleUser['id'];
+					$myGoogleID = $arrGoogleUser['sub'];
 					return $myGoogleID;
 				}
 			}			
@@ -110,15 +110,16 @@ class login_google extends gen_class {
 				$arrGoogleUser = $this->fetchUserData($accessToken);
 			
 				if($arrGoogleUser){
-					$myGoogleID = $arrGoogleUser['id'];
+					$myGoogleID = $arrGoogleUser['sub'];
 
 					$bla = array(
-							'username'			=> isset($arrGoogleUser['displayName']) ? $arrGoogleUser['displayName'] : '',
-							'user_email'		=> isset($arrGoogleUser['emails'][0]) ? $arrGoogleUser['emails'][0]['value'] : '',
-							'user_email2'		=> isset($arrGoogleUser['emails'][0]) ? $arrGoogleUser['emails'][0]['value'] : '',
+							'username'			=> isset($arrGoogleUser['name']) ? $arrGoogleUser['name'] : '',
+							'user_email'		=> isset($arrGoogleUser['email']) ? $arrGoogleUser['email'] : '',
+							'user_email2'		=> isset($arrGoogleUser['email']) ? $arrGoogleUser['email'] : '',
 							'auth_account'		=> $myGoogleID,
 							'user_timezone'		=> $this->in->get('user_timezone', $this->config->get('timezone')),
 							'user_lang'			=> $this->user->lang_name,
+							'avatar'			=> $arrGoogleUser['picture'],
 					);
 					
 					$auth_account = $myGoogleID;
@@ -209,7 +210,7 @@ class login_google extends gen_class {
 				$arrGoogleUser = $this->fetchUserData($accessToken);
 				
 				if($arrGoogleUser){
-					$myGoogleID = $arrGoogleUser['id'];
+					$myGoogleID = $arrGoogleUser['sub'];
 					
 					$userid = $this->pdh->get('user', 'userid_for_authaccount', array($myGoogleID, 'google'));
 					if ($userid){
@@ -277,7 +278,9 @@ class login_google extends gen_class {
 	}
 	
 	private function fetchUserData($strAccessToken){
-		$result = register('urlfetcher')->fetch('https://www.googleapis.com/plus/v1/people/me', array('Authorization: Bearer '.$strAccessToken));
+
+		$result = register('urlfetcher')->fetch('https://openidconnect.googleapis.com/v1/userinfo', array('Authorization: Bearer '.$strAccessToken));
+
 		if($result){
 			$arrJSON = json_decode($result, true);
 
