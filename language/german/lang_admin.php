@@ -994,7 +994,6 @@ $lang = array(
 "core_sett_f_sp_twitter_share" => "Auf Twitter teilen",
 "core_sett_f_sp_facebook_share" => "Auf Facebook teilen",
 "core_sett_f_sp_facebook_like" => "Facebook Like-Button",
-"core_sett_f_sp_google_plusone" => "Google +1 Button",
 "core_sett_f_sp_twitter_tweet" => "Twitter Tweet-Button",
 "core_sett_f_sp_opengraph_tags" => "OpenGraph Metatags",
 "core_sett_f_help_sp_opengraph_tags" => "Soziale Netzwerke können Inhalte leichter identifizieren, z.B. beim Teilen von News",
