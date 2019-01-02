@@ -116,7 +116,7 @@ class auth extends user {
 				//If the IP&Browser fits
 				if (($arrResult['session_ip'] === $this->env->ip) && ($arrResult['session_browser'] === $this->env->useragent)){
 					//Check Session length
-					if ((($arrResult['session_start'] + $this->session_length) > $this->current_time)){				
+					if ((($arrResult['session_current'] + $this->session_length) > $this->current_time)){				
 						//We have a valid session
 						$this->data['user_id'] = ($this->data['user_id'] == (int)$arrResult['session_user_id']) ? intval($arrResult['session_user_id']) : $this->data['user_id'];
 						$this->id = $this->data['user_id'];					
