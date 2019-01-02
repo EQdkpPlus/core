@@ -413,11 +413,11 @@ class auth extends user {
 		//Delete all guest sessions
 		$this->db->prepare("DELETE FROM __sessions
 									WHERE session_user_id = ?
-									AND session_start < ?")->execute(ANONYMOUS, $this->time->time - $this->session_length);
+									AND session_current < ?")->execute(ANONYMOUS, $this->time->time - $this->session_length);
 		
 		
 		// Get expired user sessions
-		$objQuery = $this->db->prepare("SELECT DISTINCT(session_user_id) FROM __sessions WHERE session_start < ?")
+		$objQuery = $this->db->prepare("SELECT DISTINCT(session_user_id) FROM __sessions WHERE session_current < ?")
 						->execute($this->time->time - ($this->session_length*2));
 		
 		if ($objQuery){
@@ -437,7 +437,7 @@ class auth extends user {
 				//Delete user sessions
 				$this->db->prepare("DELETE FROM __sessions
 									WHERE session_user_id = ?
-									AND session_start < ?")->execute($intUserID, ($this->time->time - $this->session_length));
+									AND session_current < ?")->execute($intUserID, ($this->time->time - $this->session_length));
 			}
 		}
 		
