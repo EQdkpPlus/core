@@ -228,9 +228,10 @@ $lang = array(
 	'additional_keys'		=> 'Additional Features',
 	//Step: additional_keys
 	'additional_keys_info'	=> 'We use features from other providers, like spam protection. In order to use this features, you need own Keys for this features. Therefore you can create your own keys at the following pages.<br /><b>Of course you can skip this step, and insert the keys at any time at the EQdkp Plus Settings.</b>',
-	'recaptcha_info' 		=> 'reCATPCHA is a spam protection method. Enabling this method reduces spam and increases the security of your EQdkp Plus. You can create your own keys at this page: <br /> <a href="https://www.google.com/recaptcha/admin/create" target="_blank"><i class="fa fa-lg fa-external-link"></i> https://www.google.com/recaptcha/admin/create</a>',
-	"recaptcha_okey" 		=> "Public Key of reCATPCHA",
+	'recaptcha_info' 		=> 'reCATPCHA is a spam protection method. Enabling this method reduces spam and increases the security of your EQdkp Plus. You can create your own keys at this page: <br /> <a href="https://www.google.com/recaptcha/admin/create" target="_blank"><i class="fa fa-lg fa-external-link"></i> https://www.google.com/recaptcha/admin/create</a>. Please use only supported types when creating a new key.',
+	"recaptcha_okey" 		=> "Website Key of reCATPCHA",
 	"recaptcha_pkey" 		=> "Private Key of reCATPCHA",
+	"recaptcha_type"		=> "Type",
 	'delete_ownership_file' => 'For security reasons, please delete the file "database_ownership_file.txt" from the EQdkp Plus root folder to continue with your installation.',
 	'module_externalconnection'	=> 'External connections',
 );

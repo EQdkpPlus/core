@@ -247,9 +247,10 @@ $lang = array(
 
 	//Step: additional_keys
 	'additional_keys_info'	=> 'Wir nutzen Funktionen anderer Anbieter, um euch Funktionen wie Spamschutz anbieten zu können. Hierfür benötigt ihr aber eigene Keys, die ihr euch auf den verlinkten Seiten holen und hier eintragen könnt.<br /><b>Natürlich könnt ihr diesen Schritt auch überspringen und die Keys später in den Einstellungen nachtragen.</b>',
-	'recaptcha_info' 		=> 'reCAPTCHA ist ein Verfahren, um Aktionen von Bots zu unterbinden, z.B. um Spam oder Registrierungen. Neue Keys kannst du auf folgender Seite anlegen: <br /> <a href="https://www.google.com/recaptcha/admin/create" target="_blank"><i class="fa fa-lg fa-external-link"></i> https://www.google.com/recaptcha/admin/create</a>',
-	"recaptcha_okey" 		=> "Öffentlicher Key von reCATPCHA",
-	"recaptcha_pkey" 		=> "Privater Key von reCATPCHA",
+	'recaptcha_info' 		=> 'reCAPTCHA ist ein Verfahren, um Aktionen von Bots zu unterbinden, z.B. um Spam oder Registrierungen. Neue Keys kannst du auf folgender Seite anlegen: <br /> <a href="https://www.google.com/recaptcha/admin/create" target="_blank"><i class="fa fa-lg fa-external-link"></i> https://www.google.com/recaptcha/admin/create</a>. Beachte bitte hierbei die unterstützten Typen.',
+	"recaptcha_okey" 		=> "Websiteschlüssel von reCATPCHA",
+	"recaptcha_pkey" 		=> "Geheimer Schlüssel von reCATPCHA",
+	"recaptcha_type"		=> "Typ auswählen",
 
 	//Step: end
 	'install_end_text'		=> 'Die Installation kann nun erfolgreich abgeschlossen werden.',

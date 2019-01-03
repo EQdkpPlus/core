@@ -44,6 +44,10 @@ class additional_keys extends install_generic {
 					'.$this->lang['recaptcha_info'].'
 					<table width="100%" border="0" cellspacing="1" cellpadding="2" class="no-borders">
 						<tr>
+							<td align="right"><strong>'.$this->lang['recaptcha_type'].'</strong></td>
+							<td align="left"><div id="recaptcha_type" class="radioContainer"><label><input type="radio" name="recaptcha_type" value="v2" checked="checked"> V2 - Checkbox</label><label><input type="radio" name="recaptcha_type" value="invisible"> V2 - Invisible</label></div></td>
+						</tr>
+						<tr>
 							<td align="right"><strong>'.$this->lang['recaptcha_okey'].'</strong></td>
 							<td align="left"><input type="text" name="lib_recaptcha_okey" value="" class="input" size="30" onchange="change_next_button()"/></td>
 						</tr>
@@ -64,11 +68,13 @@ class additional_keys extends install_generic {
 	public function parse_input() {
 		$strRecaptchaPub = $this->in->get('lib_recaptcha_okey');
 		$strRecaptchaPriv = $this->in->get('lib_recaptcha_pkey');
+		$strRecaptchaType = $this->in->get('recaptcha_type');
 		
 		if($strRecaptchaPub != "" && $strRecaptchaPriv != ""){
 			$this->config->set(array(
 				'lib_recaptcha_okey' => $strRecaptchaPub,
 				'lib_recaptcha_pkey' => $strRecaptchaPriv,
+				'recaptcha_type'	=> $strRecaptchaType,
 			));
 		}
 	

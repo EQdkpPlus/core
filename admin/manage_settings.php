@@ -411,8 +411,8 @@ class admin_settings extends page_generic {
 					'recaptcha_type' => array(
 						'type' 		=> 'radio',
 						'options'	=> array(
-							'v2' => 'V2',
-							'invisible' => 'Invisible',
+							'v2' => 'V2 - Checkbox',
+							'invisible' => 'V2 - Invisible',
 						),
 						'default' => 'v2',
 					),
