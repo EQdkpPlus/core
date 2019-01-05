@@ -172,7 +172,6 @@ class register_pageobject extends pageobject {
 				
 			}
 		}
-
 		
 		//Check Email
 		if ($this->pdh->get('user', 'check_email', array($this->in->get('user_email'))) == 'false'){
@@ -209,6 +208,29 @@ class register_pageobject extends pageobject {
 		} else {
 			$user_key = '';
 			$intEmailConfirmed = '1';
+		}
+		
+		//Hook System
+		if($this->hooks->isRegistered('register_status')){
+			$arrHooks = $this->hooks->process('register_status', array('data' => $this->data, 'profile_data' => $this->userProfileData));
+			if (count($arrHooks) > 0){
+				foreach($arrHooks as $arrHook){
+					if(is_array($arrHook)) {
+						if(!$arrHook['status']){
+							if(isset($arrHook['error'])) $this->core->message($arrHook['error'], $this->user->lang('error'), 'red');
+							$this->display_form();
+							return;
+						}
+					}
+				}
+			}
+		}
+		
+		if($this->hooks->isRegistered('register_data')){
+			$this->data = $this->hooks->process('register_data', array($this->data), true);
+		}
+		if($this->hooks->isRegistered('register_profiledata')){
+			$this->data = $this->hooks->process('register_profiledata', array($this->userProfileData, $this->data), true);
 		}
 		
 		//Insert the user into the DB
@@ -567,7 +589,9 @@ class register_pageobject extends pageobject {
         this.setCustomValidity('');
 	}
 });");
-		
+
+		$hidden_fields = (isset($this->data['auth_account'])) ? (new hhidden('lmethod', array('value' => $this->in->get('lmethod'))))->output().(new hhidden('auth_account', array('value' => $this->crypt->encrypt($this->data['auth_account']))))->output() : '';
+		$hidden_fields .= (isset($this->data['avatar'])) ? (new hhidden('avatar', array('value' => $this->crypt->encrypt($this->data['avatar']))))->output() : '';
 		
 		$this->tpl->assign_vars(array(
 				'S_CURRENT_PASSWORD'			=> false,
@@ -584,7 +608,7 @@ class register_pageobject extends pageobject {
 				
 				'DD_LANGUAGE'					=> (new hdropdown('user_lang', array('options' => $language_array, 'value' => $this->data['user_lang'])))->output(),
 				'DD_TIMEZONES'					=> (new hdropdown('user_timezone', array('options' => $this->time->timezones, 'value' => $this->data['user_timezone'])))->output(),
-				'HIDDEN_FIELDS'					=> (isset($this->data['auth_account'])) ? (new hhidden('lmethod', array('value' => $this->in->get('lmethod'))))->output().(new hhidden('auth_account', array('value' => $this->crypt->encrypt($this->data['auth_account']))))->output() : '',
+				'HIDDEN_FIELDS'					=> $hidden_fields,
 				
 				'USERNAME'						=> $this->data['username'],
 				'USER_EMAIL'					=> $this->data['user_email'],
