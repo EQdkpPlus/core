@@ -27,9 +27,8 @@ if (!class_exists("socialplugins")) {
 	class socialplugins extends gen_class {
 		public static $shortcuts	= array('puf'	=> 'urlfetcher');
 		
-		
 		private $plugins = array('opengraph_tags');
-		private $buttons = array('facebook_share', 'twitter_share', 'google_plusone',  'whatsapp_share', 'facebook_like');
+		private $buttons = array('facebook_share', 'twitter_share', 'whatsapp_share', 'facebook_like');
 		private $js_included = false;
 		private $intCacheTime = 10;
 		private $cache = -1;
@@ -160,13 +159,7 @@ if (!class_exists("socialplugins")) {
 			$html = '<a class="social-bookmarks-nocount twitter" href="https://twitter.com/share?text='.rawurlencode($text).'&amp;url='.rawurlencode($urlToShare).'" onclick="window.open(this.href, \'\', \'width=570,height=370,modal=yes,left=100,top=50,location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no\'); return false;" title="'.$this->user->lang('sp_twitter_share').'"><i class="fa fa-twitter"></i> <span class="share-text">'.$this->user->lang('sp_btn_twitter_share').'</span></a>';
 			return $html;
 		}
-				
-		private function google_plusone($urlToShare, $text, $height){
-			$intCount = ($this->getCache($urlToShare, 'gplus') !== false) ? $this->getCache($urlToShare, 'gplus') : 0;
-			$html = '<a class="social-bookmarks-count gplus" href="https://plus.google.com/share?url='.rawurlencode($urlToShare).'" onclick="window.open(this.href, \'\', \'width=500,height=350,modal=yes,left=100,top=50,location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no\'); return false;"><i class="fa fa-google-plus"></i> <span class="share-text">+1</span><span class="share-count">'.$intCount.'</span></a>';
-			return $html;
-		}
-		
+						
 		private function whatsapp_share($urlToShare, $text, $height){
 			$html = '<a class="social-bookmarks-nocount whatsapp" href="whatsapp://send?text='.rawurlencode($text).' '.rawurlencode($urlToShare).'"><i class="fa fa-whatsapp"></i> <span class="share-text">'.$this->user->lang('sp_btn_facebook_share').'</span></a>';
 			return $html;

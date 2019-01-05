@@ -9855,7 +9855,7 @@ class Less_Exception_Chunk extends Less_Exception_Parser{
 					break;
 				// \
 				case 92:
-					if ($this->parserCurrentIndex < $this->input_len - 1) { $this->parserCurrentIndex++; continue; }
+					if ($this->parserCurrentIndex < $this->input_len - 1) { $this->parserCurrentIndex++; break; }
 					return $this->fail("unescaped `\\`");
 
 				// ", ' and `

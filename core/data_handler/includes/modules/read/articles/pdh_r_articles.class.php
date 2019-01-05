@@ -307,7 +307,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 
 		public function get_previewimage($intArticleID){
 			if (isset($this->articles[$intArticleID])){
-				return $this->articles[$intArticleID]['previewimage'];
+				return urldecode($this->articles[$intArticleID]['previewimage']);
 			}
 			return false;
 		}

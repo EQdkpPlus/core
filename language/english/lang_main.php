@@ -1007,7 +1007,6 @@ $lang = array(
 	"userpf_twitter" => 'Twitter',
 	"userpf_skype" => 'Skype',
 	"userpf_youtube" => 'Youtube',
-	"userpf_googleplus" => 'Google Plus',
 	"userpf_icq" => 'ICQ',
 	"userpf_mobile" => 'Mobile Number',
 	"userpf_country" => 'County',

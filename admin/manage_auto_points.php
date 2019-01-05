@@ -250,7 +250,8 @@ class ManageAutoPoints extends page_generic {
 		foreach ($options as $name => $option){
 			if($name == 'pools') {
 				$option['options'] = $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list')));
-				if(!$this->in->exists('id')) {
+				//Onetime adjustments can be applied multiple time to one DKP Pool
+				if(!$this->in->exists('id') && stripos($type, 'onetime')===false) {
 					$used = $this->apa->get_pools_used($type);
 					foreach($used as $dkpid) {
 						if(!in_array($dkpid, $option['value'])) unset($option['options'][$dkpid]);
