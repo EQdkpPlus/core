@@ -379,7 +379,7 @@ i.small {
 }
 .fv_checkit [required]:invalid ~ .fv_msg,
 .fv_checkit [pattern]:invalid ~ .fv_msg,
-.errormessage {
+.input-error-message {
 	display: inline-block;
 	position: relative;
 	margin-left: 10px;
@@ -391,7 +391,7 @@ i.small {
 }
 .fv_checkit [required]:invalid ~ .fv_msg:before,
 .fv_checkit [pattern]:invalid ~ .fv_msg:before,
-.errormessage::before {
+.input-error-message::before {
 	content: '';
 	position: absolute;
 	right: 100%;
@@ -415,6 +415,8 @@ i.small {
 		pointer-events: none;
 	}
 }
+
+
 
 /* 12 Column Grid */
 .grid {

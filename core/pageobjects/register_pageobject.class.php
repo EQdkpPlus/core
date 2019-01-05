@@ -572,7 +572,7 @@ class register_pageobject extends pageobject {
 		}
 		
 		$this->tpl->add_js("
-			$('[data-equalto]').bind('input', function() {
+			$('[data-equalto]').on('input', function() {
     var to_confirm = $(this);
     var to_equal = $('#' + to_confirm.data('equalto'));
 				
@@ -588,7 +588,7 @@ class register_pageobject extends pageobject {
     } else {
         this.setCustomValidity('');
 	}
-});");
+});", 'head_docready');
 
 		$hidden_fields = (isset($this->data['auth_account'])) ? (new hhidden('lmethod', array('value' => $this->in->get('lmethod'))))->output().(new hhidden('auth_account', array('value' => $this->crypt->encrypt($this->data['auth_account']))))->output() : '';
 		$hidden_fields .= (isset($this->data['avatar'])) ? (new hhidden('avatar', array('value' => $this->crypt->encrypt($this->data['avatar']))))->output() : '';
@@ -609,6 +609,7 @@ class register_pageobject extends pageobject {
 				'DD_LANGUAGE'					=> (new hdropdown('user_lang', array('options' => $language_array, 'value' => $this->data['user_lang'])))->output(),
 				'DD_TIMEZONES'					=> (new hdropdown('user_timezone', array('options' => $this->time->timezones, 'value' => $this->data['user_timezone'])))->output(),
 				'HIDDEN_FIELDS'					=> $hidden_fields,
+				'S_TRIGGER_FORMCHANGE'			=> ($this->in->exists('lmethod')),
 				
 				'USERNAME'						=> $this->data['username'],
 				'USER_EMAIL'					=> $this->data['user_email'],
