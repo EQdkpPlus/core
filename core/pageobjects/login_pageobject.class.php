@@ -301,6 +301,7 @@ class login_pageobject extends pageobject {
 						
     if(to_confirm.val() != to_equal.val())
         this.setCustomValidity(\"".$this->jquery->sanitize(registry::fetch('user')->lang('fv_required_password_repeat'))."\");
+		$(this).attr('data-fv-message', \"".$this->jquery->sanitize(registry::fetch('user')->lang('fv_required_password_repeat'))."\");
     else
         this.setCustomValidity('');
 });");

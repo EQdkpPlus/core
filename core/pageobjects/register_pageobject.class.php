@@ -580,10 +580,13 @@ class register_pageobject extends pageobject {
 		var fieldtype = $(this).attr('type');
 		if(fieldtype == 'email'){
 			 this.setCustomValidity(\"".$this->jquery->sanitize(registry::fetch('user')->lang('fv_email_not_match'))."\");
+			$(this).attr('data-fv-message', \"".$this->jquery->sanitize(registry::fetch('user')->lang('fv_email_not_match'))."\");
 		}else if(fieldtype == 'password'){
 			 this.setCustomValidity(\"".$this->jquery->sanitize(registry::fetch('user')->lang('fv_required_password_repeat'))."\");
+			$(this).attr('data-fv-message', \"".$this->jquery->sanitize(registry::fetch('user')->lang('fv_required_password_repeat'))."\");
 		} else {
 			 this.setCustomValidity(\"".$this->jquery->sanitize(registry::fetch('user')->lang('fv_fields_not_match'))."\");
+			$(this).attr('data-fv-message', \"".$this->jquery->sanitize(registry::fetch('user')->lang('fv_fields_not_match'))."\");
 		};
     } else {
         this.setCustomValidity('');
