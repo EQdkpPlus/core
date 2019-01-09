@@ -225,6 +225,8 @@ class login_google extends gen_class {
 									'user_login_key' => $userdata['user_login_key'],
 							);
 						}
+					} else {
+						redirect($this->controller_path_plain."Register/".$this->SID.'&register&lmethod=google&status=start');
 					}
 				}
 				

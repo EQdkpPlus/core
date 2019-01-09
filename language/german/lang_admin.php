@@ -1155,7 +1155,7 @@ $lang = array(
 "core_sett_f_help_login_bnet_appid" => "Trage hier die ID deines Clients bei <a href=\"https://develop.battle.net\" target=\"_blank\">develop.battle.net</a> ein.",
 "core_sett_f_login_bnet_appsecret" => "Battle.net Client Secret",
 "core_sett_f_login_twitch_appid" => "Twitch Client-ID",
-"core_sett_f_help_login_twitch_appid" => "Trage hier den Key deiner App bei <a href=\"https://www.twitch.tv/settings/connections\" target=\"_blank\">https://www.twitch.tv/settings/connections</a> ein. Als Redirect-URI verwende http://deinedomain.de/index.php/Login/?login&lmethod=twitch",
+"core_sett_f_help_login_twitch_appid" => "Trage hier den Key deiner App bei <a href=\"https://dev.twitch.tv/dashboard\" target=\"_blank\">https://dev.twitch.tv/dashboard</a> ein. Als Redirect-URI verwende http://deinedomain.de/index.php/Login/?login&lmethod=twitch",
 "core_sett_f_login_twitch_appsecret" => "Twitch Client Secret",
 "core_sett_f_login_discord_appid" => "Discord Client-ID",
 "core_sett_f_help_login_discord_appid" => "Trage hier die Client-ID deiner App bei <a href=\"https://discordapp.com/developers/applications/me\" target=\"_blank\">https://discordapp.com/developers/applications/me</a> ein. Als Redirect-URI verwende http://deinedomain.de/index.php/Login/?login&lmethod=discord",

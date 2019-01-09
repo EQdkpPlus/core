@@ -30,6 +30,7 @@ class login_twitch extends gen_class {
 		'login_button'		=> 'login_button',
 		'account_button'	=> 'account_button',
 		'get_account'		=> 'get_account',
+		'register_button' 	=> 'login_button',
 	);
 	
 	public static $options = array(
@@ -54,8 +55,9 @@ class login_twitch extends gen_class {
 	
 	private $appid, $appsecret = false;
 	
-	private $AUTHORIZATION_ENDPOINT = 'https://api.twitch.tv/kraken/oauth2/authorize';
-	private $TOKEN_ENDPOINT         = 'https://api.twitch.tv/kraken/oauth2/token';
+	private $AUTHORIZATION_ENDPOINT = 'https://id.twitch.tv/oauth2/authorize';
+	private $TOKEN_ENDPOINT         = 'https://id.twitch.tv/oauth2/token';
+	private $USER_INFO				= 'https://id.twitch.tv/oauth2/userinfo';
 
 	
 	public function init_oauth(){
@@ -76,7 +78,7 @@ class login_twitch extends gen_class {
 		$redir_url = $this->env->buildLink().'index.php/Login/?login&lmethod=twitch';
 		
 		$client = new OAuth2\Client($this->appid, $this->appsecret);
-		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $redir_url, array('scope' => 'user_read'));
+		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $redir_url, array('scope' => 'user:read:email'));
 		
 		
 		return '<button type="button" class="mainoption thirdpartylogin twitch loginbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-twitch fa-lg"></i> Twitch</button>';
@@ -89,7 +91,7 @@ class login_twitch extends gen_class {
 		$redir_url = $this->env->buildLink().'index.php/Login/?login&lmethod=twitch';
 
 		$client = new OAuth2\Client($this->appid, $this->appsecret);
-		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $redir_url, array('scope' => 'user_read'));
+		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $redir_url, array('scope' => 'user:read:email'));
 		
 		
 		return '<button type="button" class="mainoption thirdpartylogin twitch accountbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-twitch fa-lg"></i> Twitch</button>';		
@@ -105,23 +107,116 @@ class login_twitch extends gen_class {
 			
 			$redir_url =  $this->env->buildLink().'index.php/Login/?login&lmethod=twitch';
 			
-			$params = array('code' => $code, 'redirect_uri' => $redir_url, 'scope' => 'user_read');
+			$params = array('code' => $code, 'redirect_uri' => $redir_url, 'scope' => 'user:read:email');
 			$response = $client->getAccessToken($this->TOKEN_ENDPOINT, 'authorization_code', $params);
 
 			if ($response && $response['result'] && $response['result']['access_token']){
 				
-				$accountResponse = register('urlfetcher')->fetch("https://api.twitch.tv/kraken/user?oauth_token=".$response['result']['access_token']);
+				$accountResponse = register('urlfetcher')->fetch($this->USER_INFO, array('Authorization: Bearer '.$response['result']['access_token']));
+				
 				if($accountResponse){
 					
 					$arrAccountResult = json_decode($accountResponse, true);
-					if(isset($arrAccountResult['_id'])){
-						return $arrAccountResult['_id'];
+					if(isset($arrAccountResult['sub'])){
+						
+						return $arrAccountResult['sub'];
 					}
 				}
 			}
 		}
 
 		return false;
+	}
+	
+	public function fetchUserData($userId, $accessToken){
+		$accountResponse = register('urlfetcher')->fetch("https://api.twitch.tv/helix/users?id=".$userId, array('Authorization: Bearer '.$accessToken));
+		if($accountResponse){
+			$arrAccountResponse = json_decode($accountResponse, true);
+			return (isset($arrAccountResponse['data'][0])) ? $arrAccountResponse['data'][0] : false;
+		}	
+		
+		return false;
+	}
+	
+	private function register_user($arrAccountResult){
+		
+			$auth_account = $arrAccountResult['id'];
+			
+			$bla = array(
+					'username'			=> isset($arrAccountResult['display_name']) ? utf8_ucfirst($arrAccountResult['display_name']) : '',
+					'user_email'		=> isset($arrAccountResult['email']) ? $arrAccountResult['email'] : '',
+					'user_email2'		=> isset($arrAccountResult['email']) ? $arrAccountResult['email'] : '',
+					'auth_account'		=> $arrAccountResult['id'],
+					'user_timezone'		=> $this->config->get('timezone'),
+					'user_lang'			=> $this->user->lang_name,
+			);
+			
+			//Admin activation
+			if ($this->config->get('account_activation') == 2){
+				return $bla;
+			}
+			
+			echo "a";
+			
+			//Check Auth Account
+			if (!$this->pdh->get('user', 'check_auth_account', array($auth_account, 'twitch'))){
+				return $bla;
+			}
+			
+			//Check Email address
+			if($this->pdh->get('user', 'check_email', array($bla['user_email'])) == 'false'){
+				return $bla;
+			}
+			
+			//Create Username
+			$strUsername = ($bla['username'] != "") ? $bla['username'] : 'TwitchUser'.rand(100, 999);
+			
+			//Check Username and create a new one
+			if ($this->pdh->get('user', 'check_username', array($strUsername)) == 'false'){
+				$strUsername = $strUsername.rand(100, 999);
+			}
+			if ($this->pdh->get('user', 'check_username', array($strUsername)) == 'false'){
+				return $bla;
+			}
+			
+			//Register User (random credentials)
+			$salt = $this->user->generate_salt();
+			$strPwdHash = $this->user->encrypt_password(random_string(false, 16), $salt);
+			
+			$intUserID = $this->pdh->put('user', 'insert_user_bridge', array(
+					$strUsername, $strPwdHash, $bla['user_email']
+			));
+			
+			//Add the auth account
+			$this->pdh->put('user', 'add_authaccount', array($intUserID, $auth_account, 'twitch'));
+			
+			
+			//Send Email with username
+			$email_template		= 'register_activation_none';
+			$email_subject		= $this->user->lang('email_subject_activation_none');
+			
+			$objMailer = register('MyMailer');
+			
+			$objMailer->Set_Language($this->user->lang_name);
+			
+			$bodyvars = array(
+					'USERNAME'		=> stripslashes($strUsername),
+					'GUILDTAG'		=> $this->config->get('guildtag'),
+			);
+			
+			if(!$objMailer->SendMailFromAdmin($bla['user_email'], $email_subject, $email_template.'.html', $bodyvars)){
+				$success_message = $this->user->lang('email_subject_send_error');
+			}
+			
+			//Log the user in
+			$redir_url = $this->env->buildLink().'index.php/Login/?login&lmethod=twitch';
+			
+			$client = new OAuth2\Client($this->appid, $this->appsecret);
+			$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $redir_url, array('scope' => 'user:read:email'));
+			redirect($auth_url, false, true);
+			
+			return $bla;
+			
 	}
 	
 	
@@ -146,16 +241,17 @@ class login_twitch extends gen_class {
 				
 			$redir_url = $this->env->buildLink().'index.php/Login/?login&lmethod=twitch';
 				
-			$params = array('code' => $code, 'redirect_uri' => $redir_url, 'scope' => 'user_read');
+			$params = array('code' => $code, 'redirect_uri' => $redir_url, 'scope' => 'user:read:email');
 			$response = $client->getAccessToken($this->TOKEN_ENDPOINT, 'authorization_code', $params);
 
 			if ($response && $response['result']){
 				
-				$accountResponse = register('urlfetcher')->fetch("https://api.twitch.tv/kraken/user?oauth_token=".$response['result']['access_token']);
+				$accountResponse = register('urlfetcher')->fetch($this->USER_INFO, array('Authorization: Bearer '.$response['result']['access_token']));
+				
 				if($accountResponse){
 					$arrAccountResult = json_decode($accountResponse, true);
-					if(isset($arrAccountResult['_id'])){
-						$userid = $this->pdh->get('user', 'userid_for_authaccount', array($arrAccountResult['_id'], 'twitch'));
+					if(isset($arrAccountResult['sub'])){
+						$userid = $this->pdh->get('user', 'userid_for_authaccount', array($arrAccountResult['sub'], 'twitch'));
 						if ($userid){
 							$userdata = $this->pdh->get('user', 'data', array($userid));
 							if ($userdata){
@@ -168,6 +264,12 @@ class login_twitch extends gen_class {
 										'user_login_key' => $userdata['user_login_key'],
 								);
 							}
+						} else {
+							$arrAccountInfos = $this->fetchUserData($arrAccountResult['sub'], $response['result']['access_token']);
+							if($arrAccountInfos){
+								$this->register_user($arrAccountInfos);
+							}
+							
 						}
 						
 					}

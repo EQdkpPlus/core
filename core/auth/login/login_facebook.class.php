@@ -416,6 +416,32 @@ class login_facebook extends gen_class {
 							'user_login_key' => $userdata['user_login_key'],
 						);
 					}
+				} else {
+					//Redirect to register
+					$this->init_js();
+					
+					$this->tpl->add_js("
+						function facebook_register(){
+							FB.login(function(response) {
+							   if (response.authResponse) {
+								 console.log('Welcome!  Fetching your information.... ');
+								 if (response.status == 'connected') window.location.href='".$this->controller_path."Register/".$this->SID."&register&lmethod=facebook&act='+response.authResponse.accessToken;
+							   } else {
+								 console.log('User cancelled login or did not fully authorize.');
+							   }
+							 }, {scope: 'email,public_profile'});
+						}
+						function FB_wait() {
+							console.log('fb_wait');
+						    if (typeof FB == 'undefined') {
+						        window.setTimeout(FB_wait, 1000);
+						    } else {
+						       facebook_register();
+						    }
+						}
+						FB_wait();
+				  ");
+					
 				}
 			}
 
