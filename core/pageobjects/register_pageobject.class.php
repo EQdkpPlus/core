@@ -602,6 +602,8 @@ class register_pageobject extends pageobject {
 				'S_SETTING_ADMIN'				=> false,
 				'S_MU_TABLE'					=> false,
 				'S_PROFILEFIELDS'				=> count($arrUserProfileFields) ? true : false,
+				'S_IS_CONNECTED_AUTH_ACCOUNT'	=> (isset($this->data['auth_account']) && strlen($this->data['auth_account'])) ? true : false,
+				'REG_CONNECTED_METHOD'			=> sanitize( ($this->in->exists('lmethod')) ? utf8_ucfirst($this->in->get('lmethod')).' - '.$this->data['auth_account'] : ''),
 				'PASSWORD_LENGTH'				=> ($this->config->get('password_length') ? (int)$this->config->get('password_length') : 8),
 				
 				'VALID_EMAIL_INFO'				=> ($this->config->get('account_activation') == 1) ? '<br />'.$this->user->lang('valid_email_note') : '',
