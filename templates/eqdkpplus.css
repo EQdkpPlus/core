@@ -524,5 +524,13 @@ button.thirdpartylogin.discord {
 	border-color: transparent;
 }
 
+button.thirdpartylogin.steam {
+	background: #5c7e10;
+	color: #fff;
+	border-radius: 0px;
+	border-color: transparent;
+}
+
+
 /* Set a higher z-index for jQuery Dialog */
 .ui-dialog { z-index: 1000 !important ;}
