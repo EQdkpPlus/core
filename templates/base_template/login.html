@@ -64,6 +64,9 @@
 		{REDIRECT}
 		<button type="submit" name="login" class="mainoption"><i class="fa fa-sign-in"></i>{L_login}</button>
 	</div>
+	
+		{CSRF_TOKEN}
+	</form>
 
 	<!-- IF AUTH_LOGIN_BUTTON != "" -->
 	<br />
@@ -72,7 +75,4 @@
 		{AUTH_LOGIN_BUTTON}
 	</fieldset>
 	<!-- ENDIF -->
-
-	{CSRF_TOKEN}
-	</form>
 

@@ -50,21 +50,84 @@ class login_openid extends gen_class {
 	}
 	
 	public function login_button(){
-		$this->jquery->dialog('openid_login_selector', 'OpenID', array('url' => $this->server_path.'libraries/openid/selector/selector.html', 'height'	=> 400));
+		$this->tpl->add_js('
+		function openid_login_selector(obj){
+			$(obj).find(".openid_button_name").hide();
+			$(obj).find(".openid_button_input").show();
+			$(obj).find(".openid_button_input input").focus();
+
+			var myvalue = $(obj).find(".openid_button_input input").val();
+
+			if(myvalue != ""){
+				window.location = "'.$this->env->buildLink().'index.php/Login/?login&lmethod=openid&openid="+myvalue;
+			}
+		}
+
+		function submit_openid_login(obj){
+			var myvalue = $(obj).find(".openid_button_input input").val();
+
+			if(myvalue != ""){
+				window.location = "'.$this->env->buildLink().'index.php/Login/?login&lmethod=openid&openid="+myvalue;
+			}
+			return false;
+		}
+		');
 		
-		return '<button type="button" class="mainoption thirdpartylogin openid loginbtn" onclick="openid_login_selector()"><i class="bi_openid"></i>OpenID</button>';
+		return '<form onsubmit="return submit_openid_login(this)" style="display:inline;"><button type="button" class="mainoption thirdpartylogin openid loginbtn" onclick="openid_login_selector(this)"><i class="bi_openid"></i><div class="openid_button_name" style="display:inline;">OpenID</div><span class="openid_button_input" style="display:none;"><input type="text" placeholder="https://" size="20"></span></button></form>';
 	}
 	
 	public function register_button(){
-		$this->jquery->dialog('openid_reg_selector', 'OpenID', array('url' => $this->server_path.'libraries/openid/selector/reg_selector.html', 'height'	=> 400));
+		$this->tpl->add_js('
+		function openid_login_selector(obj){
+			$(obj).find(".openid_button_name").hide();
+			$(obj).find(".openid_button_input").show();
+			$(obj).find(".openid_button_input input").focus();
+				
+			var myvalue = $(obj).find(".openid_button_input input").val();
+				
+			if(myvalue != ""){
+				indow.location = "'.$this->env->buildLink().'Register/?register&lmethod=openid&openid="+myvalue;
+			}
+		}
+				
+		function submit_openid_login(obj){
+			var myvalue = $(obj).find(".openid_button_input input").val();
+				
+			if(myvalue != ""){
+				window.location = "'.$this->env->buildLink().'Register/?register&lmethod=openid&openid="+myvalue;
+			}
+			return false;
+		}
+		');
 		
-		return '<button type="button" class="mainoption thirdpartylogin openid registerbtn" onclick="openid_reg_selector()"><i class="bi_openid"></i>OpenID</button>';		
+		return '<form onsubmit="return submit_openid_login(this)" style="display:inline;"><button type="button" class="mainoption thirdpartylogin openid registerbtn" onclick="openid_login_selector(this)"><i class="bi_openid"></i><div class="openid_button_name" style="display:inline;">OpenID</div><span class="openid_button_input" style="display:none;"><input type="text" placeholder="https://" size="20"></span></button></form>';
 	}
 	
 	public function account_button(){
-		$this->jquery->dialog('openid_acc_selector', 'OpenID', array('url' => $this->server_path.'libraries/openid/selector/acc_selector.html', 'height'	=> 400));
+		$this->tpl->add_js('
+		function openid_login_selector(obj){
+			$(obj).find(".openid_button_name").hide();
+			$(obj).find(".openid_button_input").show();
+			$(obj).find(".openid_button_input input").focus();
+				
+			var myvalue = $(obj).find(".openid_button_input input").val();
+				
+			if(myvalue != ""){
+				window.location = "'.$this->env->buildLink().'index.php/Settings/?mode=addauthacc&lmethod=openid&openid="+myvalue;
+			}
+		}
+				
+		function submit_openid_login(obj){
+			var myvalue = $(obj).find(".openid_button_input input").val();
+				
+			if(myvalue != ""){
+				window.location = "'.$this->env->buildLink().'index.php/Settings/?mode=addauthacc&lmethod=openid&openid="+myvalue;
+			}
+			return false;
+		}
+		');
 		
-		return '<button type="button" class="mainoption thirdpartylogin openid accountbtn" onclick="openid_acc_selector()"><i class="bi_openid"></i>OpenID</button>';
+		return '<form onsubmit="return submit_openid_login(this)" style="display:inline;"><button type="button" class="mainoption thirdpartylogin openid accountbtn" onclick="openid_login_selector(this)"><i class="bi_openid"></i><div class="openid_button_name" style="display:inline;">OpenID</div><span class="openid_button_input" style="display:none;"><input type="text" placeholder="https://" size="20"></span></button></form>';
 	}
 	
 	public function get_account(){
@@ -134,34 +197,37 @@ class login_openid extends gen_class {
 	public function login($strUsername, $strPassword, $boolUseHash = false){
 		$blnLoginResult = false;
 		
-			
-		if ($this->in->get('openid') != ''){
-			$this->init_openid();
-			if(!$this->oid->mode) {
-				$this->oid->identity = $this->in->get('openid');
-				redirect($this->oid->authUrl(), false, true);
-			} elseif($this->oid->mode == 'cancel') {
-			
-			
-			} else {
-			
-				if ($this->oid->validate() ){
-					$userid = $this->pdh->get('user', 'userid_for_authaccount', array($this->oid->identity, 'openid'));
-					if ($userid){
-						$userdata = $this->pdh->get('user', 'data', array($userid));
-						if ($userdata){
-							list($strPwdHash, $strSalt) = explode(':', $userdata['user_password']);
-							return array(
-								'status'		=> 1,
-								'user_id'		=> $userdata['user_id'],
-								'password_hash'	=> $strPwdHash,
-								'autologin'		=> true,
-								'user_login_key' => $userdata['user_login_key'],
-							);
-						}
-					}				
+		try {
+			if ($this->in->get('openid') != ''){
+				$this->init_openid();
+				if(!$this->oid->mode) {
+					$this->oid->identity = $this->in->get('openid');
+					redirect($this->oid->authUrl(), false, true);
+				} elseif($this->oid->mode == 'cancel') {
+				
+				
+				} else {
+				
+					if ($this->oid->validate() ){
+						$userid = $this->pdh->get('user', 'userid_for_authaccount', array($this->oid->identity, 'openid'));
+						if ($userid){
+							$userdata = $this->pdh->get('user', 'data', array($userid));
+							if ($userdata){
+								list($strPwdHash, $strSalt) = explode(':', $userdata['user_password']);
+								return array(
+									'status'		=> 1,
+									'user_id'		=> $userdata['user_id'],
+									'password_hash'	=> $strPwdHash,
+									'autologin'		=> true,
+									'user_login_key' => $userdata['user_login_key'],
+								);
+							}
+						}				
+					}
 				}
 			}
+		} catch (Exception $e) {
+			$this->core->message($e->getMessage(), 'OpenID Error', 'red');
 		}
 		
 		return false;
