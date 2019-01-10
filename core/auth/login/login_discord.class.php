@@ -275,6 +275,16 @@ class login_discord extends gen_class {
 										'user_login_key' => $userdata['user_login_key'],
 								);
 							}
+						} else {
+							$redir_url = $this->env->buildLink().'index.php/Register/?register&lmethod=discord';
+							
+							$client = new OAuth2\Client($this->appid, $this->appsecret);
+							$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $redir_url, array('scope' => 'email'));
+							
+							redirect($auth_url, false, true);
+							
+							return '<button type="button" class="mainoption thirdpartylogin discord accountbtn" onclick="window.location=\''.$auth_url.'\'">Discord</button>';
+							
 						}
 
 					}

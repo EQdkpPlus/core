@@ -86,7 +86,7 @@ class login_openid extends gen_class {
 			var myvalue = $(obj).find(".openid_button_input input").val();
 				
 			if(myvalue != ""){
-				indow.location = "'.$this->env->buildLink().'Register/?register&lmethod=openid&openid="+myvalue;
+				window.location = "'.$this->env->buildLink().'Register/?register&lmethod=openid&openid="+myvalue;
 			}
 		}
 				
@@ -222,7 +222,9 @@ class login_openid extends gen_class {
 									'user_login_key' => $userdata['user_login_key'],
 								);
 							}
-						}				
+						} else {
+							redirect($this->controller_path_plain.'Register/?register&lmethod=openid&openid='.sanitize($this->oid->identity));
+						}
 					}
 				}
 			}
