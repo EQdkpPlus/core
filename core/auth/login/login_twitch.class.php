@@ -156,8 +156,6 @@ class login_twitch extends gen_class {
 				return $bla;
 			}
 			
-			echo "a";
-			
 			//Check Auth Account
 			if (!$this->pdh->get('user', 'check_auth_account', array($auth_account, 'twitch'))){
 				return $bla;
