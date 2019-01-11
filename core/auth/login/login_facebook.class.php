@@ -180,16 +180,19 @@ class login_facebook extends gen_class {
 			if ($token){
 				$me = $this->getMe($token);
 				if ($me){
+					$link_hash = ((string)$this->user->csrfGetToken('settings_pageobjectmode'));
 					$uid = $me['uid'];
-					return $me['data']['name']	.' <button type="button" class="mainoption thirdpartylogin facebook accountbtn" onclick="window.location.href = \''.$this->controller_path.'Settings/'.$this->SID.'&mode=addauthacc&lmethod=facebook\';"><i class="fa fa-facebook fa-lg"></i> Facebook</button>'.(new hhidden('auth_account', array('value' => $uid)))->output();
+					return $me['data']['name']	.' <button type="button" class="mainoption thirdpartylogin facebook accountbtn" onclick="window.location.href = \''.$this->controller_path.'Settings/'.$this->SID.'&mode=addauthacc&link_hash='.$link_hash.'lmethod=facebook\';"><i class="fa fa-facebook fa-lg"></i> Facebook</button>'.(new hhidden('auth_account', array('value' => $uid)))->output();
 				}
 			} else {
+				$link_hash = ((string)$this->user->csrfGetToken('settings_pageobjectmode'));
+				
 				$this->tpl->add_js("
 				function facebook_connect_acc(){
 					FB.login(function(response) {
 					   if (response.authResponse) {
 						 console.log('Welcome!  Fetching your information.... ');
-						  if (response.status == 'connected') window.location.href='".$this->controller_path."Settings/".$this->SID."&mode=addauthacc&lmethod=facebook&act='+response.authResponse.accessToken;
+						  if (response.status == 'connected') window.location.href='".$this->controller_path."Settings/".$this->SID."&mode=addauthacc&link_hash=".$link_hash."&lmethod=facebook&act='+response.authResponse.accessToken;
 					   } else {
 						 console.log('User cancelled login or did not fully authorize.');
 					   }

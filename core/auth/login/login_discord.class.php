@@ -25,6 +25,7 @@ if ( !defined('EQDKP_INC') ){
 
 class login_discord extends gen_class {
 	private $oauth_loaded = false;
+	private $redirURL = "";
 
 	public static $functions = array(
 			'login_button'		=> 'login_button',
@@ -32,6 +33,7 @@ class login_discord extends gen_class {
 			'get_account'		=> 'get_account',
 			'register_button' 	=> 'register_button',
 			'pre_register'		=> 'pre_register',
+			'redirect'			=> 'redirect',
 	);
 
 	public static $options = array(
@@ -39,6 +41,7 @@ class login_discord extends gen_class {
 	);
 
 	public function __construct(){
+		$this->redirURL = $this->env->buildLink().'index.php/auth-endpoint/?lmethod=discord';
 	}
 
 	public function settings(){
@@ -71,14 +74,18 @@ class login_discord extends gen_class {
 		$this->appid = $this->config->get('login_discord_appid');
 		$this->appsecret = $this->config->get('login_discord_appsecret');
 	}
+	
+	public function redirect($arrOptions=array()){
+		$this->init_oauth();
+		
+		$client = new OAuth2\Client($this->appid, $this->appsecret);
+		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $this->redirURL, array('scope' => 'identify'));
+		
+		return $auth_url;
+	}
 
 	public function login_button(){
-		$this->init_oauth();
-
-		$redir_url = $this->env->buildLink().'index.php/Login/?login&lmethod=discord';
-
-		$client = new OAuth2\Client($this->appid, $this->appsecret);
-		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $redir_url, array('scope' => 'identify'));
+		$auth_url = $this->redirURL.'&status=login&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
 
 		//Button color: #7289DA
 		return '<button type="button" class="mainoption thirdpartylogin discord loginbtn" onclick="window.location=\''.$auth_url.'\'">Discord</button>';
@@ -86,27 +93,15 @@ class login_discord extends gen_class {
 
 
 	public function account_button(){
-		$this->init_oauth();
-
-		$redir_url = $this->env->buildLink().'index.php/Login/?login&lmethod=discord';
-
-		$client = new OAuth2\Client($this->appid, $this->appsecret);
-		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $redir_url, array('scope' => 'identify'));
-
+		$auth_url = $this->redirURL.'&status=account&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
 
 		return '<button type="button" class="mainoption thirdpartylogin discord accountbtn" onclick="window.location=\''.$auth_url.'\'">Discord</button>';
 	}
 	
 	public function register_button(){
-		$this->init_oauth();
+		$auth_url = $this->redirURL.'&status=register&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
 		
-		$redir_url = $this->env->buildLink().'index.php/Register/?register&lmethod=discord';
-		
-		$client = new OAuth2\Client($this->appid, $this->appsecret);
-		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $redir_url, array('scope' => 'email'));
-		
-		
-		return '<button type="button" class="mainoption thirdpartylogin discord accountbtn" onclick="window.location=\''.$auth_url.'\'">Discord</button>';
+		return '<button type="button" class="mainoption thirdpartylogin discord registerbtn" onclick="window.location=\''.$auth_url.'\'">Discord</button>';
 	}
 	
 	public function pre_register(){
@@ -115,9 +110,9 @@ class login_discord extends gen_class {
 		$blnLoginResult = false;
 		
 		if($this->in->exists('code')){
-			$redir_url = $this->env->buildLink().'index.php/Register/?register&lmethod=discord';
+
 			$client = new OAuth2\Client($this->appid, $this->appsecret);
-			$params = array('code' => $this->in->get('code'), 'redirect_uri' => $redir_url, 'scope' => 'email');
+			$params = array('code' => $this->in->get('code'), 'redirect_uri' => $this->redirURL, 'scope' => 'email');
 			$response = $client->getAccessToken($this->TOKEN_ENDPOINT, 'authorization_code', $params);
 			
 			if ($response && $response['result']){
@@ -191,10 +186,7 @@ class login_discord extends gen_class {
 					}
 					
 					//Log the user in
-					$redir_url = $this->env->buildLink().'index.php/Login/?login&lmethod=discord';
-					
-					$client = new OAuth2\Client($this->appid, $this->appsecret);
-					$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $redir_url, array('scope' => 'identify'));
+					$auth_url = $this->redirURL.'&status=login&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
 					redirect($auth_url, false, true);
 					
 					return $bla;
@@ -215,9 +207,7 @@ class login_discord extends gen_class {
 		if ($code){
 			$client = new OAuth2\Client($this->appid, $this->appsecret);
 				
-			$redir_url =  $this->env->buildLink().'index.php/Login/?login&lmethod=discord';
-				
-			$params = array('code' => $code, 'redirect_uri' => $redir_url, 'scope' => 'identify');
+			$params = array('code' => $code, 'redirect_uri' => $this->redirURL, 'scope' => 'identify');
 			$response = $client->getAccessToken($this->TOKEN_ENDPOINT, 'authorization_code', $params);
 
 			if ($response && $response['result'] && $response['result']['access_token']){
@@ -253,9 +243,7 @@ class login_discord extends gen_class {
 		if ($code){
 			$client = new OAuth2\Client($this->appid, $this->appsecret);
 
-			$redir_url = $this->env->buildLink().'index.php/Login/?login&lmethod=discord';
-
-			$params = array('code' => $code, 'redirect_uri' => $redir_url, 'scope' => 'identify');
+			$params = array('code' => $code, 'redirect_uri' => $this->redirURL, 'scope' => 'identify');
 			$response = $client->getAccessToken($this->TOKEN_ENDPOINT, 'authorization_code', $params);
 
 			if ($response && $response['result']){
@@ -276,12 +264,9 @@ class login_discord extends gen_class {
 								);
 							}
 						} elseif((int)$this->config->get('cmsbridge_active') != 1){
-							$redir_url = $this->env->buildLink().'index.php/Register/?register&lmethod=discord';
+							$auth_url = $this->controller_path_plain.'auth-endpoint/?lmethod=discord&status=login&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
 							
-							$client = new OAuth2\Client($this->appid, $this->appsecret);
-							$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $redir_url, array('scope' => 'email'));
-							
-							redirect($auth_url, false, true);
+							redirect($auth_url);
 						}
 
 					}

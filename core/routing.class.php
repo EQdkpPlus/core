@@ -41,6 +41,7 @@ if(!class_exists('routing')){
 			'external'		=> 'wrapper',
 			'tag'			=> 'tag',
 			'notifications' => 'notifications',
+			'auth-endpoint' => 'authendpoint',
 				
 			//Static Pages for Calendar
 			'editcalendarevent' => 'editcalendarevent',

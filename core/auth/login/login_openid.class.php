@@ -104,6 +104,8 @@ class login_openid extends gen_class {
 	}
 	
 	public function account_button(){
+		$link_hash = ((string)$this->user->csrfGetToken('settings_pageobjectmode'));
+		
 		$this->tpl->add_js('
 		function openid_login_selector(obj){
 			$(obj).find(".openid_button_name").hide();
@@ -113,73 +115,71 @@ class login_openid extends gen_class {
 			var myvalue = $(obj).find(".openid_button_input input").val();
 				
 			if(myvalue != ""){
-				window.location = "'.$this->env->buildLink().'index.php/Settings/?mode=addauthacc&lmethod=openid&openid="+myvalue;
+				window.location = "'.$this->env->buildLink().'index.php/Settings/?mode=addauthacc&link_hash='.$link_hash.'&lmethod=openid&openid="+myvalue;
 			}
-		}
-				
-		function submit_openid_login(obj){
-			var myvalue = $(obj).find(".openid_button_input input").val();
-				
-			if(myvalue != ""){
-				window.location = "'.$this->env->buildLink().'index.php/Settings/?mode=addauthacc&lmethod=openid&openid="+myvalue;
-			}
-			return false;
 		}
 		');
 		
-		return '<form onsubmit="return submit_openid_login(this)" style="display:inline;"><button type="button" class="mainoption thirdpartylogin openid accountbtn" onclick="openid_login_selector(this)"><i class="bi_openid"></i><div class="openid_button_name" style="display:inline;">OpenID</div><span class="openid_button_input" style="display:none;"><input type="text" placeholder="https://" size="20"></span></button></form>';
+		return '<button type="button" class="mainoption thirdpartylogin openid accountbtn" onclick="openid_login_selector(this)"><i class="bi_openid"></i><div class="openid_button_name" style="display:inline;">OpenID</div><span class="openid_button_input" style="display:none;"><input type="text" placeholder="https://" size="20"></span></button>';
 	}
 	
 	public function get_account(){
-		if ($this->in->get('openid') != ''){
-			$this->init_openid();
-			if(!$this->oid->mode) {
-				$this->oid->identity = $this->in->get('openid');
-				redirect($this->oid->authUrl(), false, true);
-			} elseif($this->oid->mode == 'cancel') {
-			
-			} else {
-				if ($this->oid->validate() ){
-					return $this->oid->identity;
+		try {
+			if ($this->in->get('openid') != ''){
+				$this->init_openid();
+				if(!$this->oid->mode) {
+					$this->oid->identity = $this->in->get('openid');
+					redirect($this->oid->authUrl(), false, true);
+				} elseif($this->oid->mode == 'cancel') {
+				
+				} else {
+					if ($this->oid->validate() ){
+						return $this->oid->identity;
+					}
 				}
 			}
+		} catch (Exception $e) {
+			$this->core->message($e->getMessage(), 'OpenID Error', 'red');
 		}
-		
 		return false;
 	}
 	
 	public function pre_register(){
-		if ($this->in->get('openid') != ''){
-			$this->init_openid();
-			if(!$this->oid->mode) {
-				$this->oid->required = array(
-				'namePerson/friendly',
-				'contact/email',
-				'namePerson',
-				//'person/gender',
-				//'contact/country/home',
-				);
-				$this->oid->identity = $this->in->get('openid');
-
-				redirect($this->oid->authUrl(), false, true);
-			} elseif($this->oid->mode == 'cancel') {
-			
-			} else {
-				if ($this->oid->validate() ){
-					$me = $this->oid->getAttributes();
-
-					$bla = array(
-						'username'			=> isset($me['namePerson/friendly']) ? $me['namePerson/friendly'] : '',
-						'user_email'		=> isset($me['contact/email']) ? $me['contact/email'] : '',
-						'user_email2'		=> isset($me['contact/email']) ? $me['contact/email'] : '',
-						'auth_account'		=> $this->oid->identity,
-						'user_timezone'		=> $this->in->get('user_timezone', $this->config->get('timezone')),
+		try {
+			if ($this->in->get('openid') != ''){
+				$this->init_openid();
+				if(!$this->oid->mode) {
+					$this->oid->required = array(
+					'namePerson/friendly',
+					'contact/email',
+					'namePerson',
+					//'person/gender',
+					//'contact/country/home',
 					);
-
-					return $bla;
-					
+					$this->oid->identity = $this->in->get('openid');
+	
+					redirect($this->oid->authUrl(), false, true);
+				} elseif($this->oid->mode == 'cancel') {
+				
+				} else {
+					if ($this->oid->validate() ){
+						$me = $this->oid->getAttributes();
+	
+						$bla = array(
+							'username'			=> isset($me['namePerson/friendly']) ? $me['namePerson/friendly'] : '',
+							'user_email'		=> isset($me['contact/email']) ? $me['contact/email'] : '',
+							'user_email2'		=> isset($me['contact/email']) ? $me['contact/email'] : '',
+							'auth_account'		=> $this->oid->identity,
+							'user_timezone'		=> $this->in->get('user_timezone', $this->config->get('timezone')),
+						);
+	
+						return $bla;
+						
+					}
 				}
 			}
+		} catch (Exception $e) {
+			$this->core->message($e->getMessage(), 'OpenID Error', 'red');
 		}
 		
 		return false;

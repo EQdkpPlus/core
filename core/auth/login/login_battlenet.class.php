@@ -32,6 +32,7 @@ class login_battlenet extends gen_class {
 	private $TOKEN_ENDPOINT         = 'https://{region}.battle.net/oauth/token';
 	private $CHECK_TOKEN          = 'https://{region}.battle.net/oauth/check_token?token={token}';
 	private $USER_INFO				= 'https://{region}.battle.net/oauth/userinfo?access_token={token}';
+	private $redirURL = "";
 	
 	public static $functions = array(
 		'login_button'		=> 'login_button',
@@ -39,6 +40,7 @@ class login_battlenet extends gen_class {
 		'get_account'		=> 'get_account',
 		'register_button' 	=> 'register_button',
 		'pre_register'		=> 'pre_register',
+		'redirect'			=> 'redirect',
 	);
 	
 	public static $options = array(
@@ -46,6 +48,8 @@ class login_battlenet extends gen_class {
 	);
 	
 	public function __construct(){
+		$this->redirURL = $this->env->buildLink().'index.php/auth-endpoint/?lmethod=battlenet';
+		
 		$region = $this->config->get('uc_server_loc');
 		if(!$region) $region = 'eu';		
 		switch($region){
@@ -118,26 +122,24 @@ class login_battlenet extends gen_class {
 		}
 	}
 	
-	public function login_button(){
+	public function redirect($arrOptions=array()){
 		$this->init_oauth();
+		$redir_url = $this->env->buildLink().'index.php/auth-endpoint/?lmethod=battlenet';
 		
-		$redir_url = $this->env->buildLink().'index.php/Login/?login&lmethod=battlenet';
-
 		$client = new OAuth2\Client($this->appid, $this->appsecret);
 		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $redir_url, array('scope' => 'wow.profile'));
-		
+	
+		return $auth_url;
+	}
+	
+	public function login_button(){
+		$auth_url = $this->redirURL.'&status=login&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
 		
 		return '<button type="button" class="mainoption thirdpartylogin battlenet loginbtn" onclick="window.location=\''.$auth_url.'\'"><i class="bi_battlenet"></i> Battle.net</button>';
 	}
 	
 	public function register_button(){
-		$this->init_oauth();
-		
-		$redir_url = $this->env->buildLink().'index.php/Register/?register&lmethod=battlenet';
-		
-		$client = new OAuth2\Client($this->appid, $this->appsecret);
-		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $redir_url, array('scope' => 'wow.profile'));
-		
+		$auth_url = $this->redirURL.'&status=register&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
 		
 		return '<button type="button" class="mainoption thirdpartylogin battlenet loginbtn" onclick="window.location=\''.$auth_url.'\'"><i class="bi_battlenet"></i> Battle.net</button>';
 	}
@@ -172,13 +174,7 @@ class login_battlenet extends gen_class {
 	
 	
 	public function account_button(){
-		$this->init_oauth();
-		
-		$redir_url = $this->env->buildLink().'index.php/Settings/?mode=addauthacc&lmethod=battlenet';
-
-		$client = new OAuth2\Client($this->appid, $this->appsecret);
-		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $redir_url, array('scope' => 'wow.profile'));
-		
+		$auth_url = $this->redirURL.'&status=account&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
 		
 		return '<button type="button" class="mainoption thirdpartylogin battlenet accountbtn" onclick="window.location=\''.$auth_url.'\'"><i class="bi_battlenet"></i> Battle.net</button>';		
 	}
@@ -192,7 +188,7 @@ class login_battlenet extends gen_class {
 			$client = new OAuth2\Client($this->appid, $this->appsecret);
 			$redir_url = $this->env->buildLink().'index.php/Settings/?mode=addauthacc&lmethod=battlenet';
 			
-			$params = array('code' => $code, 'redirect_uri' => $redir_url, 'scope' => 'wow.profile');
+			$params = array('code' => $code, 'redirect_uri' => $this->redirURL, 'scope' => 'wow.profile');
 			$response = $client->getAccessToken($this->TOKEN_ENDPOINT, 'authorization_code', $params);
 			
 			if ($response && $response['result'] && $response['result']['access_token']){
@@ -218,9 +214,7 @@ class login_battlenet extends gen_class {
 		if ($code){
 			$client = new OAuth2\Client($this->appid, $this->appsecret);
 			
-			$redir_url = $this->env->buildLink().'index.php/Register/?register&lmethod=battlenet';
-			
-			$params = array('code' => $code, 'redirect_uri' => $redir_url, 'scope' => 'wow.profile');
+			$params = array('code' => $code, 'redirect_uri' => $this->redirURL, 'scope' => 'wow.profile');
 			$response = $client->getAccessToken($this->TOKEN_ENDPOINT, 'authorization_code', $params);
 			
 			if ($response && $response['result'] && $response['result']['access_token']){
@@ -259,9 +253,7 @@ class login_battlenet extends gen_class {
 		if ($code){
 			$client = new OAuth2\Client($this->appid, $this->appsecret);
 			
-			$redir_url = $this->env->buildLink().'index.php/Login/?login&lmethod=battlenet';
-
-			$params = array('code' => $code, 'redirect_uri' => $redir_url, 'scope' => 'wow.profile');
+			$params = array('code' => $code, 'redirect_uri' => $this->redirURL, 'scope' => 'wow.profile');
 			$response = $client->getAccessToken($this->TOKEN_ENDPOINT, 'authorization_code', $params);
 
 			if ($response && $response['result']){
@@ -285,9 +277,6 @@ class login_battlenet extends gen_class {
 							}
 						} elseif((int)$this->config->get('cmsbridge_active') != 1){
 							$redir_url = $this->env->buildLink().'index.php/Register/?register&lmethod=battlenet';
-							
-							$client = new OAuth2\Client($this->appid, $this->appsecret);
-							$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $redir_url, array('scope' => 'wow.profile'));
 							redirect($redir_url, false, true);
 						}
 						
