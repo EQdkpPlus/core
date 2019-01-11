@@ -283,6 +283,12 @@ class login_battlenet extends gen_class {
 										'user_login_key' => $userdata['user_login_key'],
 								);
 							}
+						} elseif((int)$this->config->get('cmsbridge_active') != 1){
+							$redir_url = $this->env->buildLink().'index.php/Register/?register&lmethod=battlenet';
+							
+							$client = new OAuth2\Client($this->appid, $this->appsecret);
+							$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $redir_url, array('scope' => 'wow.profile'));
+							redirect($redir_url, false, true);
 						}
 						
 					}

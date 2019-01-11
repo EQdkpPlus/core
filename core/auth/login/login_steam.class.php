@@ -155,7 +155,7 @@ class login_steam extends gen_class {
 							'user_login_key' => $userdata['user_login_key'],
 						);
 					}
-				} else {
+				} elseif((int)$this->config->get('cmsbridge_active') != 1){
 					redirect($this->env->buildLink().'index.php/Register/?register&lmethod=steam', false, true);
 				}
 			}

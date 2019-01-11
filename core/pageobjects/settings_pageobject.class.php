@@ -105,7 +105,7 @@ class settings_pageobject extends pageobject {
 	public function add_authaccount() {
 		$strMethod = $this->in->get('lmethod');
 		$account = $this->user->handle_login_functions('get_account', $strMethod);
-		if ($strMethod && !is_array($account) && $this->pdh->get('user', 'check_auth_account', array($account, $strMethod))){
+		if ($strMethod && !is_array($account) && strlen($account) && $this->pdh->get('user', 'check_auth_account', array($account, $strMethod))){
 			$this->pdh->put('user', 'add_authaccount', array($this->user->id, $account, $strMethod));
 			$this->pdh->process_hook_queue();
 			$this->user->data['auth_account'][$strMethod] = $account;

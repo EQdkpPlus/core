@@ -262,7 +262,7 @@ class login_twitch extends gen_class {
 										'user_login_key' => $userdata['user_login_key'],
 								);
 							}
-						} else {
+						} elseif((int)$this->config->get('cmsbridge_active') != 1){
 							$arrAccountInfos = $this->fetchUserData($arrAccountResult['sub'], $response['result']['access_token']);
 							if($arrAccountInfos){
 								$this->register_user($arrAccountInfos);

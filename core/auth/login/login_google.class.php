@@ -225,7 +225,7 @@ class login_google extends gen_class {
 									'user_login_key' => $userdata['user_login_key'],
 							);
 						}
-					} else {
+					} elseif((int)$this->config->get('cmsbridge_active') != 1){
 						redirect($this->controller_path_plain."Register/".$this->SID.'&register&lmethod=google&status=start');
 					}
 				}

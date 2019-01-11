@@ -416,7 +416,7 @@ class login_facebook extends gen_class {
 							'user_login_key' => $userdata['user_login_key'],
 						);
 					}
-				} else {
+				} elseif((int)$this->config->get('cmsbridge_active') != 1){
 					//Redirect to register
 					$this->init_js();
 					
