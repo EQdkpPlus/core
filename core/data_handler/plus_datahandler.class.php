@@ -218,7 +218,7 @@ if( !class_exists( "plus_datahandler")){
 			//Scan "local" read modules
 			$dh = opendir( $this->rm_path );
 			while( false !== ( $file = readdir( $dh ) ) ) {
-				if( $file != '.' && $file != '..'  && is_file( $this->rm_path.$file.'/pdh_r_'.$file.'.class.php' ) ) {
+				if( $file != '.' && $file != '..'  && is_dir($this->rm_path.$file) && is_file( $this->rm_path.$file.'/pdh_r_'.$file.'.class.php' ) ) {
 					$this->register_read_module( $file, $this->rm_path.$file );
 				}
 			}
