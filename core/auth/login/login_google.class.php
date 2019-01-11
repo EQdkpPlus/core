@@ -89,20 +89,20 @@ class login_google extends gen_class {
 		$auth_url = $this->redirURL.'&status=login&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
 		
 		//Button color: #7289DA
-		return '<button type="button" class="mainoption thirdpartylogin google loginbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-google-plus fa-lg"></i> Google</button>';
+		return '<button type="button" class="mainoption thirdpartylogin google loginbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-google fa-lg"></i> Google</button>';
 	}
 	
 	
 	public function account_button(){
 		$auth_url = $this->redirURL.'&status=account&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
 		
-		return '<button type="button" class="mainoption thirdpartylogin google accountbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-google-plus fa-lg"></i> Google</button>';
+		return '<button type="button" class="mainoption thirdpartylogin google accountbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-google fa-lg"></i> Google</button>';
 	}
 	
 	public function register_button(){
 		$auth_url = $this->redirURL.'&status=register&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
 		
-		return '<button type="button" class="mainoption thirdpartylogin google accountbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-google-plus fa-lg"></i> Google</button>';
+		return '<button type="button" class="mainoption thirdpartylogin google accountbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-google fa-lg"></i> Google</button>';
 	}
 	
 	public function pre_register(){
