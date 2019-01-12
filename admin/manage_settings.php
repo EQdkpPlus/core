@@ -67,7 +67,7 @@ class admin_settings extends page_generic {
 			echo $this->user->lang('test_mail_ok');
 		} else {
 			echo $this->user->lang('test_mail_fail').'<br /><br />';
-			echo $this->email->ErrorInfo;
+			echo nl2br($this->email->getLatestErrorMessage());
 		}
 
 		exit;
