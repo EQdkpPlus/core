@@ -81,10 +81,12 @@ class login_twofactor extends gen_class {
 				if ($data){
 					$cookie = $this->in->getEQdkpCookie("twofactor");
 					$cookie_secret = unserialize(register('encrypt')->decrypt($cookie));
-					if (($cookie_secret['secret'] === $data['secret']) && (intval($cookie_secret['user_id'])===intval($arrOptions[0]['user_id']))) return false;
+					if (($cookie_secret['secret'] === hash("sha256", $data['secret'])) && (intval($cookie_secret['user_id'])===intval($arrOptions[0]['user_id']))) return false;
 
+					$strEncryptedUser = register('encrypt')->encrypt(serialize($arrOptions[0]['user_id']));
+					
 					$this->tpl->assign_vars(array(
-						'TWOFACTOR_DATA'		=>  register('encrypt')->encrypt(serialize($arrOptions[0]['user_id'])),
+						'TWOFACTOR_DATA'		=>  $strEncryptedUser.':'.$this->time->time.':'.hash_hmac("sha256", $strEncryptedUser.'_'.$this->time->time.'.'.$arrOptions[0]['user_id'], hash("sha256", registry::get_const('encryptionKey'))),
 						'TWOFACTOR_AUTOLOGIN'	=> ($arrOptions[4]) ? 'checked' : '',
 					));
 					
@@ -139,7 +141,13 @@ class login_twofactor extends gen_class {
 	* @return bool/array	
 	*/	
 	public function login($strUsername, $strPassword, $boolUseHash = false){
-		$user = unserialize(register('encrypt')->decrypt($this->in->get('twofactor_data')));
+		list($serializedUser, $intTimestamp, $strHmac) = explode(':', $this->in->get('twofactor_data'));
+		$user = unserialize(register('encrypt')->decrypt($serializedUser));
+		$strCalcMac = hash_hmac("sha256", $serializedUser.'_'.$intTimestamp.'.'.$user, hash("sha256", registry::get_const('encryptionKey')));
+		
+		if($strCalcMac !== $strHmac) return false;
+		if ($intTimestamp < ($this->time->time-5*60)) return false;
+		
 		$code = $this->in->get('twofactor_code');
 		$blnLoginResult = false;
 		
@@ -155,10 +163,6 @@ class login_twofactor extends gen_class {
 						$userdata = $this->pdh->get('user', 'data', array($user));
 						if ($userdata){
 							list($strPwdHash, $strSalt) = explode(':', $userdata['user_password']);
-
-							if ($this->in->get('twofactor_cookie', 0)){
-								set_cookie("twofactor", register('encrypt')->encrypt(serialize(array('secret' => $data['secret'], 'user_id' => $userdata['user_id']))), time()+60*60*24*30);
-							}
 
 							return array(
 									'status'		=> 1,
@@ -182,7 +186,7 @@ class login_twofactor extends gen_class {
 								list($strPwdHash, $strSalt) = explode(':', $userdata['user_password']);
 
 								if ($this->in->get('twofactor_cookie', 0)){
-									set_cookie("twofactor", register('encrypt')->encrypt(serialize(array('secret' => $data['secret'], 'user_id' => $userdata['user_id']))), time()+60*60*24*30);
+									set_cookie("twofactor", register('encrypt')->encrypt(serialize(array('secret' => hash("sha256", $data['secret']), 'user_id' => $userdata['user_id']))), time()+60*60*24*30);
 								}
 
 								return array(
