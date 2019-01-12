@@ -514,6 +514,9 @@ class admin_settings extends page_generic {
 									'options'	=> $this->user->get_available_loginmethods(),
 									'tolang'	=> true,
 							),
+							'login_fastregister'	=> array(
+									'type'		=> 'radio',
+							),
 					),
 				'avatar' => array(
 					'avatar_allowed' => array(

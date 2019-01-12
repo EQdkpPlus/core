@@ -1147,6 +1147,8 @@ $lang = array(
 "auth_db" => "Datenbank",
 "core_sett_f_login_method" => "Login-Methoden",
 "core_sett_f_help_login_method" => "Wähle zusätzliche Module aus, mit deren Hilfe sich die Benutzer anmelden können.",
+"core_sett_f_login_fastregister" => "Schnellregistrierung erlauben",
+"core_sett_f_help_login_fastregister" => "Der Benutzer wird registriert, wenn er sich mit einer Login-Methode anmeldet und noch kein Account für ihn existiert",
 "core_sett_f_login_fb_appid" => "Facebook Anwendungsnummer",
 "core_sett_f_help_login_fb_appid" => "Trage hier die Anwendungsnummer deiner Facebook-Anwendung ein. Eine neue Anwendung kannst du <a href=\"https://developers.facebook.com/apps\" target=\"_blank\">hier</a> erstellen.",
 "core_sett_f_login_fb_appsecret" => "Facebook Anwendungs-Geheimcode",
