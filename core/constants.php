@@ -90,20 +90,24 @@ $TAG_BLACKLIST = array(
 	'bgsound',
 	'base',
 	'basefont',
+	'canvas',
+	'embed',
 	'frame',
 	'frameset',
 	'head',
 	'html',
 	'id',
+	'iframe',
 	'ilayer',
 	'layer',
 	'link',
 	'meta',
 	'name',
+	'object',
 	'script',
+	'style',
 	'title',
 	'xml',
-	'iframe',
 );
 
 //Attribute Blacklist for filtering article content
@@ -124,6 +128,7 @@ $ATTR_BLACKLIST = array(
 	'codebase',
 	'dynsrc',
 	'lowsrc',
+	'formaction',
 );
 
 ?>
