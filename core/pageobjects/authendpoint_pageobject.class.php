@@ -49,7 +49,7 @@ class authendpoint_pageobject extends pageobject {
 			redirect($strRedirURL, false, true);
 		}
 		
-		echo "a"; die();
+		//echo "a"; die();
 		
 		redirect($this->controller_path_plain.'Login/'.$this->SID);
 	}
@@ -64,13 +64,13 @@ class authendpoint_pageobject extends pageobject {
 		
 		if($strCookie == "" || $strCookie != $strSessionVar) {
 			//Error
-			echo "b"; die();
+			//echo "b"; die();
 			redirect($this->controller_path_plain.'Login/'.$this->SID);
 		}
 		
 		if($strCookie == 'account'){
 			if (!$this->user->is_signedin()){
-				echo "c"; die();
+				//echo "c"; die();
 				redirect($this->controller_path_plain.'Login/'.$this->SID);
 			}
 			
@@ -105,7 +105,7 @@ class authendpoint_pageobject extends pageobject {
 			$redir_url = $this->controller_path_plain.'Login/'.$this->SID.'&'.$strURL.'&login';
 			redirect($redir_url);
 		}
-		echo "d"; die();
+		//echo "d"; die();
 		redirect($this->controller_path_plain.'Login/'.$this->SID);
 	}
 
