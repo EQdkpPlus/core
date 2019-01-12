@@ -245,6 +245,17 @@ class register_pageobject extends pageobject {
 			}
 		}
 		
+		//Add Avatar
+		if ($this->in->exists('avatar')){
+			$strAvatarInput = $this->crypt->decrypt($this->in->get('avatar'));
+			
+			include_once $this->root_path.'core/avatar.class.php';
+			$strAvatar = registry::register('avatar')->downloadExternalAvatar($user_id, $strAvatarInput);
+			if($strAvatar != ""){
+				$this->pdh->put('user', 'add_custom_avatar', array($user_id, $strAvatar));
+			}
+		}
+		
 		//Give permissions if there is no default group
 		$default_group = $this->pdh->get('user_groups', 'standard_group', array());
 		if (!$default_group) {
