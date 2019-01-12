@@ -199,6 +199,7 @@ if (!class_exists("zip")) {
 		}
 		
 		public function extract($strTargetFolder, $arrFiles = false){
+			@set_time_limit(0);
 			$strTargetFolder = (substr( $strTargetFolder, -1 ) != '/') ? $strTargetFolder.'/' : $strTargetFolder;
 		
 			if ($this->objZip){
