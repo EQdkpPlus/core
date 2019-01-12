@@ -222,7 +222,7 @@ class login_openid extends gen_class {
 									'user_login_key' => $userdata['user_login_key'],
 								);
 							}
-						} elseif((int)$this->config->get('cmsbridge_active') != 1){
+						} elseif((int)$this->config->get('cmsbridge_active') != 1 && (int)$this->config->get('login_fastregister')){
 							redirect($this->controller_path_plain.'Register/?register&lmethod=openid&openid='.sanitize($this->oid->identity));
 						}
 					}

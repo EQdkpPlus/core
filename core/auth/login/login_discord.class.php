@@ -107,8 +107,6 @@ class login_discord extends gen_class {
 	public function pre_register(){
 		$this->init_oauth();
 		
-		$blnLoginResult = false;
-		
 		if($this->in->exists('code')){
 
 			$client = new OAuth2\Client($this->appid, $this->appsecret);
@@ -119,8 +117,6 @@ class login_discord extends gen_class {
 				$arrAccountResult = $this->fetchUserData($response['result']['access_token']);
 				
 				if($arrAccountResult){
-					$auth_account = $arrAccountResult['id'];
-					
 					$bla = array(
 							'username'			=> isset($arrAccountResult['username']) ? utf8_ucfirst($arrAccountResult['username']) : '',
 							'user_email'		=> isset($arrAccountResult['email']) ? $arrAccountResult['email'] : '',
@@ -128,68 +124,17 @@ class login_discord extends gen_class {
 							'auth_account'		=> $arrAccountResult['id'],
 							'user_timezone'		=> $this->config->get('timezone'),
 							'user_lang'			=> $this->user->lang_name,
+							'avatar'			=> isset($arrAccountResult['avatar']) ? 'https://cdn.discordapp.com/avatars/'.$arrAccountResult['id'].'/'.$arrAccountResult['avatar'].'.png' : '',
 					);
 					
-					//Admin activation
-					if ($this->config->get('account_activation') == 2){
-						return $bla;
+					$arrUserData = $this->user->registerUserFromAuthProvider($bla, 'discord');
+					if(isset($arrUserData['user_id'])){
+						//Log the user in
+						$auth_url = $this->controller_path_plain.'auth-endpoint/?lmethod=discord&status=login&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
+						redirect($auth_url);
 					}
 					
-					//Check Auth Account
-					if (!$this->pdh->get('user', 'check_auth_account', array($auth_account, 'discord'))){
-						return $bla;
-					}
-					
-					//Check Email address
-					if($this->pdh->get('user', 'check_email', array($bla['user_email'])) == 'false'){
-						return $bla;
-					}
-					
-					//Create Username
-					$strUsername = ($bla['username'] != "") ? $bla['username'] : 'DiscordUser'.rand(100, 999);
-					
-					//Check Username and create a new one
-					if ($this->pdh->get('user', 'check_username', array($strUsername)) == 'false'){
-						$strUsername = $strUsername.rand(100, 999);
-					}
-					if ($this->pdh->get('user', 'check_username', array($strUsername)) == 'false'){
-						return $bla;
-					}
-					
-					//Register User (random credentials)
-					$salt = $this->user->generate_salt();
-					$strPwdHash = $this->user->encrypt_password(random_string(false, 16), $salt);
-
-					$intUserID = $this->pdh->put('user', 'insert_user_bridge', array(
-							$strUsername, $strPwdHash, $bla['user_email']
-					));
-					
-					//Add the auth account
-					$this->pdh->put('user', 'add_authaccount', array($intUserID, $auth_account, 'discord'));
-
-					
-					//Send Email with username
-					$email_template		= 'register_activation_none';
-					$email_subject		= $this->user->lang('email_subject_activation_none');
-					
-					$objMailer = register('MyMailer');
-					
-					$objMailer->Set_Language($this->user->lang_name);
-
-					$bodyvars = array(
-							'USERNAME'		=> stripslashes($strUsername),
-							'GUILDTAG'		=> $this->config->get('guildtag'),
-					);
-					
-					if(!$objMailer->SendMailFromAdmin($bla['user_email'], $email_subject, $email_template.'.html', $bodyvars)){
-						$success_message = $this->user->lang('email_subject_send_error');
-					}
-					
-					//Log the user in
-					$auth_url = $this->redirURL.'&status=login&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
-					redirect($auth_url, false, true);
-					
-					return $bla;
+					return $arrUserData;
 				}
 			}
 
@@ -263,8 +208,9 @@ class login_discord extends gen_class {
 										'user_login_key' => $userdata['user_login_key'],
 								);
 							}
-						} elseif((int)$this->config->get('cmsbridge_active') != 1){
-							$auth_url = $this->controller_path_plain.'auth-endpoint/?lmethod=discord&status=login&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
+						} elseif((int)$this->config->get('cmsbridge_active') != 1 && (int)$this->config->get('login_fastregister')){
+							//Try to register the user
+							$auth_url = $this->controller_path_plain.'auth-endpoint/?lmethod=discord&status=register&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
 							
 							redirect($auth_url);
 						}

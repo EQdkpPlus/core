@@ -275,9 +275,11 @@ class login_battlenet extends gen_class {
 										'user_login_key' => $userdata['user_login_key'],
 								);
 							}
-						} elseif((int)$this->config->get('cmsbridge_active') != 1){
-							$redir_url = $this->env->buildLink().'index.php/Register/?register&lmethod=battlenet';
-							redirect($redir_url, false, true);
+						} elseif((int)$this->config->get('cmsbridge_active') != 1 && (int)$this->config->get('login_fastregister')){
+							//Try to register the user
+							$auth_url = $this->controller_path_plain.'auth-endpoint/?lmethod=battlenet&status=register&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
+							
+							redirect($auth_url);
 						}
 						
 					}
