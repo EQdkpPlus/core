@@ -198,13 +198,28 @@ if (!class_exists("zip")) {
 			return false;
 		}
 		
-		public function extract($strTargetFolder, $arrFiles = false){
+		/**
+		 * Extracts the Archive to TargetFolder. Chunk extracting is possible with $from and $to params
+		 * 
+		 * @param string $strTargetFolder
+		 * @param array $arrFiles
+		 * @param number $from 
+		 * @param number $to
+		 * @return boolean
+		 */
+		public function extract($strTargetFolder, $arrFiles = false, $from=0, $to=false){
 			@set_time_limit(0);
 			
 			$strTargetFolder = (substr( $strTargetFolder, -1 ) != '/') ? $strTargetFolder.'/' : $strTargetFolder;
 		
 			if ($this->objZip){
-				for ( $i=0; $i < $this->objZip->numFiles; $i++ ) {
+				if($to === false) $to = $this->objZip->numFiles;
+				if($to > $this->objZip->numFiles) $to = $this->objZip->numFiles;
+				if($from > $this->objZip->numFiles) $from = $this->objZip->numFiles;
+				
+				$i = $from;
+				
+				for ( $i; $i < $to; $i++ ) {
 					$entry = $this->objZip->getNameIndex($i);
 					
 					if ($arrFiles && is_array($arrFiles)){
