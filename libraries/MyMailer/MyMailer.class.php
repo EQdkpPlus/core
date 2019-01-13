@@ -51,7 +51,7 @@ class MyMailer extends gen_class {
 	*
 	* @param $options				Array with options (see above)
 	* @param $path					root path to tmplate/language files folder
-	* @return traue/false
+	* @return true/false
 	*/
 	public function __construct($options='') {
 		if(!is_array($options)){
@@ -83,6 +83,11 @@ class MyMailer extends gen_class {
 		$this->myoptions	= $options;
 	}
 
+	/**
+	 * Set Language for Email Templates
+	 * 
+	 * @param string $lang
+	 */
 	public function Set_Language($lang){
 		$this->mydeflang	= $lang;
 	}
@@ -104,19 +109,28 @@ class MyMailer extends gen_class {
 	}
 
 	/**
-	* Send the Mail with admin sender adress
-	*
-	* @param $adress				recipient email address
-	* @param $subject				email subject
-	* @param $templatename	Name of the Email template to use
-	* @param $bodyvars			Body Vars
-	* @param $method				Method to send the mails (smtp, sendmail, mail)
-	* @return traue/false
-	*/
+	 * Send a Mail from the admin sender address
+	 * 
+	 * @param string $adress Receiver
+	 * @param string $subject
+	 * @param string $templatename
+	 * @param array $bodyvars
+	 * @return true/false
+	 */
 	public function SendMailFromAdmin($adress, $subject, $templatename, $bodyvars = array()){
 		return $this->GenerateMail($adress, $subject, $templatename, $bodyvars, $this->adminmail);
 	}
 	
+	/**
+	 * Send a Mail from a given sender
+	 * 
+	 * @param string $adress Receiver
+	 * @param string $from	Sender
+	 * @param string $subject
+	 * @param string $templatename
+	 * @param array $bodyvars
+	 * @return true/false
+	 */
 	public function SendMail($adress, $from, $subject, $templatename, $bodyvars = array()){
 		return $this->GenerateMail($adress, $subject, $templatename, $bodyvars, $from);
 	}
@@ -219,7 +233,7 @@ class MyMailer extends gen_class {
 	
 			if($this->myoptions['mail_type'] == 'text'){
 				// Text Mail
-				$this->Body		= $tmp_body.$strSignature;
+				$this->objMailer->Body		= $tmp_body.$strSignature;
 			}else{
 				// HTML Mail
 				$this->objMailer->msgHTML($tmp_body, $this->root_path);
@@ -228,7 +242,7 @@ class MyMailer extends gen_class {
 			}
 			
 			if (DEBUG == 4){
-				pd($$this->objMailer->Body);
+				pd($this->objMailer->Body);
 			}
 			
 			if($this->sendmeth == 'smtp'){
