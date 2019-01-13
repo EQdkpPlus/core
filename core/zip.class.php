@@ -27,7 +27,7 @@ if (!class_exists("zip")) {
 		private $zipfile = false;
 		private $objZip = false;
 		private $files = array();
-
+		
 		public function __construct($zipfile){
 			$this->zipfile = $zipfile;
 			if (class_exists("ZipArchive")){
@@ -55,7 +55,7 @@ if (!class_exists("zip")) {
 		
 		//Add files that will be written to the archiv when calling create()
 		public function add($mixFiles, $strRemovePath = false, $strAddPath = false){
-
+			
 			if (is_array($mixFiles)){
 				foreach ($mixFiles as $file){
 					$localfilename = $file;
@@ -68,18 +68,18 @@ if (!class_exists("zip")) {
 					$this->files['add'][$localfilename] = $file;
 					if (isset($this->files['delete'][$localfilename])) unset($this->files['delete'][$localfilename]);
 				}
-
-			} elseif (strlen($mixFiles)) {	
+				
+			} elseif (strlen($mixFiles)) {
 				if (is_dir($mixFiles)){
 					$mixFiles = (substr($mixFiles, -1) != '/') ? $mixFiles.'/' : $mixFiles;
 					
 					$d = dir($mixFiles);
-
+					
 					while (FALSE !== ($entry = $d->read())){
 						if ($entry == '.' || $entry == '..'){
 							continue;
 						}
-
+						
 						$Entry = $mixFiles . $entry;
 						if (is_dir( $Entry )){
 							$this->add($Entry, $strRemovePath, $strAddPath);
@@ -98,7 +98,7 @@ if (!class_exists("zip")) {
 					}
 					
 				} else {
-			
+					
 					$localfilename = $mixFiles;
 					if ($strRemovePath && strlen($strRemovePath) && strpos($mixFiles, $strRemovePath) === 0){
 						$localfilename = substr($mixFiles, strlen($strRemovePath));
@@ -198,18 +198,34 @@ if (!class_exists("zip")) {
 			return false;
 		}
 		
-		public function extract($strTargetFolder, $arrFiles = false){
+		/**
+		 * Extracts the Archive to TargetFolder. Chunk extracting is possible with $from and $to params
+		 *
+		 * @param string $strTargetFolder
+		 * @param array $arrFiles
+		 * @param number $from
+		 * @param number $to
+		 * @return boolean
+		 */
+		public function extract($strTargetFolder, $arrFiles = false, $from=0, $to=false){
 			@set_time_limit(0);
+			
 			$strTargetFolder = (substr( $strTargetFolder, -1 ) != '/') ? $strTargetFolder.'/' : $strTargetFolder;
-		
+			
 			if ($this->objZip){
-				for ( $i=0; $i < $this->objZip->numFiles; $i++ ) {
+				if($to === false) $to = $this->objZip->numFiles;
+				if($to > $this->objZip->numFiles) $to = $this->objZip->numFiles;
+				if($from > $this->objZip->numFiles) $from = $this->objZip->numFiles;
+				
+				$i = $from;
+				
+				for ( $i; $i < $to; $i++ ) {
 					$entry = $this->objZip->getNameIndex($i);
 					
 					if ($arrFiles && is_array($arrFiles)){
 						if (!in_array($entry, $arrFiles)) continue;
 					}
-
+					
 					//Directory
 					if ( substr( $entry, -1 ) == '/' ) {
 						$this->pfh->CheckCreateFolder($strTargetFolder.$entry);
@@ -218,24 +234,24 @@ if (!class_exists("zip")) {
 						$contents = '';
 						$fp = $this->objZip->getStream($entry);
 						if(!$fp) return false;
-
+						
 						while (!feof($fp)) {
 							$contents .= fread($fp, 2);
 						}
-
+						
 						fclose($fp);
 						$this->pfh->CheckCreateFolder(pathinfo($strTargetFolder.$entry, PATHINFO_DIRNAME));
 						$this->pfh->CheckCreateFile($strTargetFolder.$entry);
 						$blnWriteResult = $this->pfh->putContent($strTargetFolder.$entry, $contents);
 						if(!$blnWriteResult) return false;
 					}
-						
+					
 				}
 				return true;
 			}
 			return false;
 		}
-	
+		
 		public function getFileNumber(){
 			return ($this->objZip) ? $this->objZip->numFiles : 0;
 		}
