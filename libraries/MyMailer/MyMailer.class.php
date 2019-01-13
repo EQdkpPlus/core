@@ -66,6 +66,7 @@ class MyMailer extends gen_class {
 		$this->adminmail	= $this->crypt->decrypt($this->config->get('admin_email'));
 		$this->dkpname		= ($this->config->get('main_title')) ? $this->config->get('main_title') : $this->config->get('guildtag').' '.$this->config->get('dkp_name');
 		$this->sendmeth		= $this->config->get('lib_email_method');
+		$this->Signature	= ($this->config->get('lib_email_signature')) ? "\n".$this->config->get('lib_email_signature_value') : '';
 
 		// Language Vars
 		$this->nohtmlmssg	= $this->user->lang('error_nohtml');
@@ -227,13 +228,11 @@ class MyMailer extends gen_class {
 			$this->objMailer->Subject = $this->generateSubject($subject);
 			$this->objMailer->XMailer = "EQdkp Plus";
 	
-	
-			$strSignature	= ($this->config->get('lib_email_signature')) ? "\n".$this->config->get('lib_email_signature_value') : '';
 			$tmp_body		= $this->Template($templatename, $bodyvars);
 	
 			if($this->myoptions['mail_type'] == 'text'){
 				// Text Mail
-				$this->objMailer->Body		= $tmp_body.$strSignature;
+				$this->objMailer->Body		= $tmp_body;
 			}else{
 				// HTML Mail
 				$this->objMailer->msgHTML($tmp_body, $this->root_path);
