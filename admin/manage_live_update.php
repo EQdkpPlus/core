@@ -91,14 +91,25 @@ class Manage_Live_Update extends page_generic {
 		foreach ($this->steps as $id	=> $value){
 			if ($id < $showFrom) continue;
 			$this->tpl->add_js(
-				"function lu_step".$id."(){
-					set_progress_bar_value(".((($id-1) < 0) ? 0 : $id-1).", '".$this->jquery->sanitize($value['label'])."...');
-
-					$.get('manage_live_update.php".$this->SID."&step=".$id."&link_hash=".$this->CSRFGetToken('step')."', function(data) {
+					"function lu_step".$id."(chunk){
+					if(chunk === undefined){
+						set_progress_bar_value(".((($id-1) < 0) ? 0 : $id-1).", '".$this->jquery->sanitize($value['label'])."...');
+						chunkval = '';
+					} else {
+						chunkval = '&chunk='+chunk;
+					}
+					
+					$.get('manage_live_update.php".$this->SID."&step=".$id."&link_hash=".$this->CSRFGetToken('step')."'+chunkval, function(data) {
 					  if ($.trim(data) == 'true'){
 						".(($id == $last_step) ? "set_progress_bar_value(".$last_step.", '".$this->jquery->sanitize($this->user->lang('liveupdate_step_end'))."'); window.location='manage_live_update.php".$this->SID."&finished=true';" : ((isset($this->steps[$id+1]['show']) && $this->steps[$id+1]['show'] == true) ? 'window.location.href="manage_live_update.php'.$this->SID.'&show='.($id+1).'"' : 'lu_step'.($id+1).'();'))."
 					  }else {
-						update_error(data);
+						var mydata = $.trim(data);
+						if(mydata.substr(0, 7) == 'chunked'){
+							var mypars = mydata.split(':');
+							lu_step".$id."(mypars[1]);
+						} else {
+							update_error(data);
+						}
 					  }
 					});
 				}"
@@ -216,14 +227,36 @@ class Manage_Live_Update extends page_generic {
 		$srcFolder = $this->pfh->FolderPath('update_to_'.$new_version,'live_update');
 		$filename = 'lu_'.$new_version.'.zip';
 
-		if ($this->repo->unpackPackage($srcFolder.$filename, $destFolder)){
+		$archive = registry::register('zip', array($srcFolder.$filename));
+		
+		$intChunkSize = 100;
+		$intFiles = $archive->getFileNumber();
+		
+		$intCurrentChunk = $this->in->get('chunk', 0);
+		
+		$from = $intCurrentChunk*$intChunkSize;
+		$to = $from+$intChunkSize;
+		
+		if($from > $intFiles) {
+			//Finished
 			echo "true";
-		} else {
-			echo $this->user->lang('liveupdate_step3_error');
+			exit;
 		}
+		
+		if($to > $intFiles) $to = $intFiles;
+		
+		$my_extract = $archive->extract($destFolder, false, $from, $to);
+		
+		if(!$my_extract) {
+			$this->pfh->Delete($srcFolder.$filename);
+			echo $this->user->lang('liveupdate_step3_error');
+			exit;
+		}
+		
+		echo "chunked:".($intCurrentChunk+1).":".ceil($intFiles/$intChunkSize).":".$intFiles;
 		exit;
 	}
-
+	
 	//Compare Files
 	public function process_step4(){
 		$new_version = str_replace('.', '', $this->getNewVersion());
@@ -361,30 +394,59 @@ class Manage_Live_Update extends page_generic {
 	public function process_step7(){
 		$new_version = str_replace('.', '', $this->getNewVersion());
 		$tmp_folder = $this->pfh->FolderPath('update_to_'.$new_version.'/tmp/','live_update');
+		$strLogFile = $this->pfh->FolderPath('update_to_'.$new_version.'/','live_update').'/copy.log';
 		$xmlfile = $tmp_folder.'package.xml';
 		$arrFiles = $this->repo->getFilelistFromPackageFile($xmlfile);
 		
+		$intChunkSize = 100;
+		$intFiles = count($arrFiles);
+		
+		$intCurrentChunk = $this->in->get('chunk', 0);
+		if($intCurrentChunk == 0){
+			$this->pfh->putContent($strLogFile, "");
+		}
+		
+		$from = $intCurrentChunk*$intChunkSize;
+		$to = $from+$intChunkSize;
+		
+		if($from > $intFiles) {
+			//Reset Opcache, for PHP7
+			if(function_exists('opcache_reset')){
+				opcache_reset();
+			}
+			
+			//Get Log
+			$strLog = file_get_contents($strLogFile);
+			
+			if ($strLog != "") register('logs')->add('liveupdate_copied_files', array('Copied Files' => $strLog), '', $new_version);
+			
+			//Finished
+			echo "true";
+			exit;
+		}
+		
+		if($to > $intFiles) $to = $intFiles;
+		
 		$strLog = '';
+		$i = 0;
 		foreach($arrFiles as $file){
+			if($i < $from || $i > $to) {
+				$i++;
+				continue;
+			}
 			
 			if (file_exists($this->root_path.$file['name'])){
 				$strLog .= 'Replaced File '.$file['name']."\r\n";
 			} else {
 				$strLog .= 'Added File '.$file['name']."\r\n";
 			}
-			
 			$this->pfh->copy($tmp_folder.$file['name'],$this->root_path.$file['name']);
+			$i++;
 		}
 		
-		//Reset Opcache, for PHP7
-		if(function_exists('opcache_reset')){
-			opcache_reset();
-		}
+		if ($strLog != "") $this->pfh->addContent($strLogFile, $strLog);
 		
-		if ($strLog != "") register('logs')->add('liveupdate_copied_files', array('Copied Files' => $strLog));
-
-		echo "true";
-
+		echo "chunked:".($intCurrentChunk+1).":".ceil($intFiles/$intChunkSize).":".$intFiles;
 		exit;
 	}
 
