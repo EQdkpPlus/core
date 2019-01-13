@@ -245,6 +245,17 @@ class register_pageobject extends pageobject {
 			}
 		}
 		
+		//Add Avatar
+		if ($this->in->exists('avatar')){
+			$strAvatarInput = $this->crypt->decrypt($this->in->get('avatar'));
+			
+			include_once $this->root_path.'core/avatar.class.php';
+			$strAvatar = registry::register('avatar')->downloadExternalAvatar($user_id, $strAvatarInput);
+			if($strAvatar != ""){
+				$this->pdh->put('user', 'add_custom_avatar', array($user_id, $strAvatar));
+			}
+		}
+		
 		//Give permissions if there is no default group
 		$default_group = $this->pdh->get('user_groups', 'standard_group', array());
 		if (!$default_group) {
@@ -602,6 +613,8 @@ class register_pageobject extends pageobject {
 				'S_SETTING_ADMIN'				=> false,
 				'S_MU_TABLE'					=> false,
 				'S_PROFILEFIELDS'				=> count($arrUserProfileFields) ? true : false,
+				'S_IS_CONNECTED_AUTH_ACCOUNT'	=> (isset($this->data['auth_account']) && strlen($this->data['auth_account'])) ? true : false,
+				'REG_CONNECTED_METHOD'			=> sanitize( ($this->in->exists('lmethod')) ? utf8_ucfirst($this->in->get('lmethod')).' - '.$this->data['auth_account'] : ''),
 				'PASSWORD_LENGTH'				=> ($this->config->get('password_length') ? (int)$this->config->get('password_length') : 8),
 				
 				'VALID_EMAIL_INFO'				=> ($this->config->get('account_activation') == 1) ? '<br />'.$this->user->lang('valid_email_note') : '',

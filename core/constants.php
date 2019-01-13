@@ -29,11 +29,11 @@ if ( !defined('EQDKP_INC') ){
  * -------------------------------------------------------------------------
  */
 
-define('VERSION_INT',		'2.3.2.0');				// the internal version number for updates & update check
-define('VERSION_EXT',		'2.3.2');				// the external version number to be shown in the footer
+define('VERSION_INT',		'2.3.3.0');				// the internal version number for updates & update check
+define('VERSION_EXT',		'2.3.3');				// the external version number to be shown in the footer
 define('VERSION_WIP',		false);					// work in progress or stable?
 define('VERSION_PHP_RQ',	'5.6.0');				// required version of PHP
-define('VERSION_PHP_REC',	'7.0.0');				// recommended version of PHP
+define('VERSION_PHP_REC',	'7.2.0');				// recommended version of PHP
 define('REQ_PHP_MEMORY',	'64M');					// required PHP Memory
 define('REQ_PHP_MEMORY_REC','128M');				// required PHP Memory
 
@@ -90,20 +90,24 @@ $TAG_BLACKLIST = array(
 	'bgsound',
 	'base',
 	'basefont',
+	'canvas',
+	'embed',
 	'frame',
 	'frameset',
 	'head',
 	'html',
 	'id',
+	'iframe',
 	'ilayer',
 	'layer',
 	'link',
 	'meta',
 	'name',
+	'object',
 	'script',
+	'style',
 	'title',
 	'xml',
-	'iframe',
 );
 
 //Attribute Blacklist for filtering article content
@@ -124,6 +128,7 @@ $ATTR_BLACKLIST = array(
 	'codebase',
 	'dynsrc',
 	'lowsrc',
+	'formaction',
 );
 
 ?>

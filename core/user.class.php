@@ -794,6 +794,82 @@ class user extends gen_class {
 
 		return $arrAvatarProviders;
 	}
+	
+	public function registerUserFromAuthProvider($arrAccountDetails, $strAuthMethod){
+		
+		$auth_account = $arrAccountDetails['auth_account'];
+		
+		//Admin activation
+		if ($this->config->get('account_activation') == 2){
+			return $arrAccountDetails;
+		}
+		
+		//Check Auth Account
+		if (!$this->pdh->get('user', 'check_auth_account', array($arrAccountDetails['auth_account'], $strAuthMethod))){
+			return $arrAccountDetails;
+		}
+		
+		//Check Email address
+		if($this->pdh->get('user', 'check_email', array($arrAccountDetails['user_email'])) == 'false'){
+			return $arrAccountDetails;
+		}
+		
+		//Create Username
+		$strUsername = ($arrAccountDetails['username'] != "") ? $arrAccountDetails['username'] : ucfirst($strAuthMethod).'User'.rand(100, 999);
+		
+		//Check Username and create a new one
+		if ($this->pdh->get('user', 'check_username', array($strUsername)) == 'false'){
+			$strUsername = $strUsername.rand(100, 999);
+		}
+		if ($this->pdh->get('user', 'check_username', array($strUsername)) == 'false'){
+			return $arrAccountDetails;
+		}
+		
+		//Register User (random credentials)
+		$salt = $this->user->generate_salt();
+		$strPwdHash = $this->user->encrypt_password(random_string(false, 16), $salt);
+		
+		$intUserID = $this->pdh->put('user', 'insert_user_bridge', array(
+				$strUsername, $strPwdHash, $arrAccountDetails['user_email']
+		));
+		
+		if(!$intUserID) return $arrAccountDetails;
+		
+		//Add the auth account
+		$this->pdh->put('user', 'add_authaccount', array($intUserID, $auth_account, $strAuthMethod));
+		
+		//Add an avatar
+		if(isset($arrAccountDetails['avatar']) && $arrAccountDetails['avatar'] != ""){
+			include_once $this->root_path.'core/avatar.class.php';
+			$strAvatar = registry::register('avatar')->downloadExternalAvatar($intUserID, $arrAccountDetails['avatar']);
+			if($strAvatar != ""){
+				$this->pdh->put('user', 'add_custom_avatar', array($intUserID, $strAvatar));
+			}
+		}
+		
+		
+		//Send Email with username
+		$email_template		= 'register_activation_none';
+		$email_subject		= $this->user->lang('email_subject_activation_none');
+		
+		$objMailer = register('MyMailer');
+		
+		$objMailer->Set_Language($this->user->lang_name);
+		
+		$bodyvars = array(
+				'USERNAME'		=> stripslashes($strUsername),
+				'GUILDTAG'		=> $this->config->get('guildtag'),
+		);
+		
+		if(!$objMailer->SendMailFromAdmin($arrAccountDetails['user_email'], $email_subject, $email_template.'.html', $bodyvars)){
+			$success_message = $this->user->lang('email_subject_send_error');
+		}
+		
+		$arrAccountDetails['user_id'] = $intUserID;
+		return $arrAccountDetails;
+	}
+	
+	
 
 	public function __destruct() {
 		if(is_array($this->unused) && count($this->unused) > 0) $this->pfh->putContent($this->pfh->FilePath('unused.lang', 'eqdkp'), serialize($this->unused));

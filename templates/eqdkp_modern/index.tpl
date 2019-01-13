@@ -425,6 +425,7 @@
 			</fieldset>
 			<input type="text" name="{HONEYPOT_VALUE}" size="30" maxlength="30" class="userpass" />
 			<button type="submit" name="login" class="mainoption"><i class="fa fa-sign-in"></i> {L_login}</button>
+		</form>
 			<!-- IF AUTH_LOGIN_BUTTON != "" -->
 			<br /><br />
 			<fieldset class="settings mediumsettings">
@@ -432,7 +433,6 @@
 				{AUTH_LOGIN_BUTTON}
 			</fieldset>
 			<!-- ENDIF -->
-		</form>
 	</div>
 	<!-- ENDIF -->
 

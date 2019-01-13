@@ -24,41 +24,30 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class login_google extends gen_class {
-	
-	private $publicKey = "";
-	private $privateKey = "";
-	private $authURL = "";
-	private $callbackURLs = "";
-	
-	public static $options = array(
-		'connect_accounts'	=> true,
-	);
+	private $oauth_loaded = false;
+	private $redirURL = "";
 	
 	public static $functions = array(
-		'login_button'		=> 'login_button',
-		'register_button' 	=> 'register_button',
-		'account_button'	=> 'account_button',
-		'get_account'		=> 'get_account',
-		'pre_register'		=> 'pre_register',
+			'login_button'		=> 'login_button',
+			'account_button'	=> 'account_button',
+			'get_account'		=> 'get_account',
+			'register_button' 	=> 'register_button',
+			'pre_register'		=> 'pre_register',
+			'redirect'			=> 'redirect',
+	);
+	
+	public static $options = array(
+			'connect_accounts'	=> true,
 	);
 	
 	public function __construct(){
-		$this->publicKey = $this->config->get("login_google_publickey");
-		$this->privateKey = $this->config->get("login_google_privatekey");
-		$token = $this->user->csrfGetToken('google');
-		$this->authURL = "https://accounts.google.com/o/oauth2/auth?client_id=".rawurlencode(trim($this->publicKey)). "&state=".$token."&scope=profile+openid+email&response_type=code&redirect_uri=";
-		$this->callbackURLs = array(
-			'login' => $this->env->link.$this->controller_path_plain."Login/?login&lmethod=google",
-			'register' => $this->env->link.$this->controller_path_plain."Register/?register&lmethod=google",
-			'account' => $this->env->link.$this->controller_path_plain."Settings/?mode=addauthacc&lmethod=google",
-		);
+		$this->redirURL = $this->env->buildLink().'index.php/auth-endpoint/?lmethod=google';
 	}
-
 	
 	public function settings(){
 		$settings = array(
 				'login_google_publickey'	=> array(
-					'type'	=> 'text',
+						'type'	=> 'text',
 				),
 				'login_google_privatekey' => array(
 						'type'	=> 'password',
@@ -68,167 +57,90 @@ class login_google extends gen_class {
 		return $settings;
 	}
 	
+	private $appid, $appsecret = false;
+	
+	private $AUTHORIZATION_ENDPOINT = 'https://accounts.google.com/o/oauth2/auth';
+	private $TOKEN_ENDPOINT         = 'https://accounts.google.com/o/oauth2/token';
+	
+	
+	public function init_oauth(){
+		if (!$this->oauth_loaded && !class_exists('OAuth2\\Client')){
+			require($this->root_path.'libraries/oauth/Client.php');
+			require($this->root_path.'libraries/oauth/GrantType/IGrantType.php');
+			require($this->root_path.'libraries/oauth/GrantType/AuthorizationCode.php');
+			$this->oauth_loaded = true;
+		}
+		
+		$this->appid = $this->config->get('login_google_publickey');
+		$this->appsecret = $this->config->get('login_google_privatekey');
+	}
+	
+	public function redirect($arrOptions=array()){
+		$this->init_oauth();
+		$redir_url = $this->env->buildLink().'index.php/auth-endpoint/?lmethod=google';
+		
+		$client = new OAuth2\Client($this->appid, $this->appsecret);
+		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $redir_url, array('scope' => 'profile openid email'));
+		
+		return $auth_url;
+	}
+	
 	public function login_button(){
-		return '<button type="button" class="mainoption thirdpartylogin google loginbtn" onclick="window.location=\''.$this->controller_path."Login/".$this->SID.'&login&lmethod=google&status=start\'"><i class="fa fa-google-plus fa-lg"></i> Google</button>';
+		$auth_url = $this->redirURL.'&status=login&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
+		
+		//Button color: #7289DA
+		return '<button type="button" class="mainoption thirdpartylogin google loginbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-google fa-lg"></i> Google</button>';
+	}
+	
+	
+	public function account_button(){
+		$auth_url = $this->redirURL.'&status=account&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
+		
+		return '<button type="button" class="mainoption thirdpartylogin google accountbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-google fa-lg"></i> Google</button>';
 	}
 	
 	public function register_button(){
-		return '<button type="button" class="mainoption thirdpartylogin google registerbtn" onclick="window.location=\''.$this->controller_path."Register/".$this->SID.'&register&lmethod=google&status=start\'"><i class="fa fa-google-plus fa-lg"></i> Google</button>';		
-	}
-	
-	public function account_button(){
-		return '<button type="button" class="mainoption thirdpartylogin google accountbtn" onclick="window.location=\''.$this->controller_path."Settings/".$this->SID.'&mode=addauthacc&lmethod=google&status=start\'"><i class="fa fa-google-plus fa-lg"></i> Google</button>';
-	}
-	
-	public function get_account(){
-		$blnLoginResult = false;
+		$auth_url = $this->redirURL.'&status=register&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
 		
-		if(!$this->in->exists('code')){
-			redirect($this->authURL.rawurlencode($this->callbackURLs['account']), false, true);
-		} else {
-			$accessToken = $this->fetchAccessToken($this->in->get('code'), $this->callbackURLs['account']);
-			if($accessToken){
-				$arrGoogleUser = $this->fetchUserData($accessToken);
-				if($arrGoogleUser){
-					$myGoogleID = $arrGoogleUser['sub'];
-					return $myGoogleID;
-				}
-			}			
-		}
-		
-		return false;
+		return '<button type="button" class="mainoption thirdpartylogin google accountbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-google fa-lg"></i> Google</button>';
 	}
 	
 	public function pre_register(){
+		$this->init_oauth();
+		
 		$blnLoginResult = false;
 		
-		if(!$this->in->exists('code')){
-			redirect($this->authURL.rawurlencode($this->callbackURLs['register']), false, true);
-		} else {
-			$accessToken = $this->fetchAccessToken($this->in->get('code'), $this->callbackURLs['register']);
-			if($accessToken){
-				$arrGoogleUser = $this->fetchUserData($accessToken);
+		if($this->in->exists('code')){
 			
-				if($arrGoogleUser){
-					$myGoogleID = $arrGoogleUser['sub'];
-
+			$client = new OAuth2\Client($this->appid, $this->appsecret);
+			$params = array('code' => $this->in->get('code'), 'redirect_uri' => $this->redirURL, 'scope' => 'profile openid email');
+			$response = $client->getAccessToken($this->TOKEN_ENDPOINT, 'authorization_code', $params);
+			
+			if ($response && $response['result']){
+				$arrAccountResult = $this->fetchUserData($response['result']['access_token']);
+				
+				if($arrAccountResult){
+					$auth_account = $arrAccountResult['sub'];
+					
 					$bla = array(
-							'username'			=> isset($arrGoogleUser['name']) ? $arrGoogleUser['name'] : '',
-							'user_email'		=> isset($arrGoogleUser['email']) ? $arrGoogleUser['email'] : '',
-							'user_email2'		=> isset($arrGoogleUser['email']) ? $arrGoogleUser['email'] : '',
-							'auth_account'		=> $myGoogleID,
-							'user_timezone'		=> $this->in->get('user_timezone', $this->config->get('timezone')),
+							'username'			=> isset($arrAccountResult['name']) ? utf8_ucfirst($arrAccountResult['name']) : '',
+							'user_email'		=> isset($arrAccountResult['email']) ? $arrAccountResult['email'] : '',
+							'user_email2'		=> isset($arrAccountResult['email']) ? $arrAccountResult['email'] : '',
+							'auth_account'		=> $arrAccountResult['sub'],
+							'user_timezone'		=> $this->config->get('timezone'),
 							'user_lang'			=> $this->user->lang_name,
-							'avatar'			=> $arrGoogleUser['picture'],
+							'avatar'			=> isset($arrAccountResult['picture']) ? $arrAccountResult['picture'] : '',
 					);
 					
-					$auth_account = $myGoogleID;
-					
-					//Admin activation
-					if ($this->config->get('account_activation') == 2){
-						return $bla;
+					$arrUserData = $this->user->registerUserFromAuthProvider($bla, 'google');
+					if(isset($arrUserData['user_id'])){
+						//Log the user in
+						$auth_url = $this->controller_path_plain.'auth-endpoint/?lmethod=google&status=login&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
+						redirect($auth_url);
 					}
 					
-					//Check Auth Account
-					if (!$this->pdh->get('user', 'check_auth_account', array($auth_account, 'google'))){
-						return $bla;
-					}
-					
-					//Check Email address
-					if($this->pdh->get('user', 'check_email', array($bla['user_email'])) == 'false'){
-						return $bla;
-					}
-					
-					//Create Username
-					$strUsername = ($bla['username'] != "") ? $bla['username'] : 'GoogleUser'.rand(100, 999);
-					
-					//Check Username and create a new one
-					if ($this->pdh->get('user', 'check_username', array($strUsername)) == 'false'){
-						$strUsername = $strUsername.rand(100, 999);
-					}
-					if ($this->pdh->get('user', 'check_username', array($strUsername)) == 'false'){
-						return $bla;
-					}
-					
-					//Register User (random credentials)
-					$salt = $this->user->generate_salt();
-					$strPwdHash = $this->user->encrypt_password(random_string(false, 16), $salt);
-					
-					$intUserID = $this->pdh->put('user', 'insert_user_bridge', array(
-							$strUsername, $strPwdHash, $bla['user_email']
-					));
-					
-					//Add the auth account
-					$this->pdh->put('user', 'add_authaccount', array($intUserID, $auth_account, 'google'));
-					
-					//Send Email with username
-					$email_template		= 'register_activation_none';
-					$email_subject		= $this->user->lang('email_subject_activation_none');
-					
-					$objMailer = register('MyMailer');
-					
-					$objMailer->Set_Language($this->user->lang_name);
-					
-					$bodyvars = array(
-							'USERNAME'		=> stripslashes($strUsername),
-							'GUILDTAG'		=> $this->config->get('guildtag'),
-					);
-					
-					if(!$objMailer->SendMailFromAdmin($bla['user_email'], $email_subject, $email_template.'.html', $bodyvars)){
-						$success_message = $this->user->lang('email_subject_send_error');
-					}
-					
-					//Log the user in
-					redirect($this->controller_path_plain."Login/".$this->SID.'&login&lmethod=google&status=start');
-					
-					return $bla;
+					return $arrUserData;
 				}
-
-			}			
-		}
-		
-		return false;
-	}
-	
-	
-	/**
-	* User-Login
-	*
-	* @param $strUsername
-	* @param $strPassword
-	* @param $boolUseHash Use Hash for comparing
-	* @return bool/array	
-	*/	
-	public function login($strUsername, $strPassword, $boolUseHash = false){
-		$blnLoginResult = false;
-		
-		if(!$this->in->exists('code')){
-			redirect($this->authURL.rawurlencode($this->callbackURLs['login']), false, true);
-		} else {
-			$accessToken = $this->fetchAccessToken($this->in->get('code'), $this->callbackURLs['login']);
-			if($accessToken){
-				$arrGoogleUser = $this->fetchUserData($accessToken);
-				
-				if($arrGoogleUser){
-					$myGoogleID = $arrGoogleUser['sub'];
-					
-					$userid = $this->pdh->get('user', 'userid_for_authaccount', array($myGoogleID, 'google'));
-					if ($userid){
-						$userdata = $this->pdh->get('user', 'data', array($userid));
-						if ($userdata){
-							list($strPwdHash, $strSalt) = explode(':', $userdata['user_password']);
-							return array(
-									'status'		=> 1,
-									'user_id'		=> $userdata['user_id'],
-									'password_hash'	=> $strPwdHash,
-									'autologin'		=> true,
-									'user_login_key' => $userdata['user_login_key'],
-							);
-						}
-					}
-				}
-				
-				
 			}
 			
 		}
@@ -236,54 +148,108 @@ class login_google extends gen_class {
 		return false;
 	}
 	
+	
+	public function get_account(){
+		$this->init_oauth();
+		
+		$code = $this->in->get('code');
+		
+		if ($code){
+			$client = new OAuth2\Client($this->appid, $this->appsecret);
+			
+			$params = array('code' => $code, 'redirect_uri' => $this->redirURL, 'scope' => 'profile openid email');
+			$response = $client->getAccessToken($this->TOKEN_ENDPOINT, 'authorization_code', $params);
+			
+			if ($response && $response['result'] && $response['result']['access_token']){
+				$arrAccountResult = $this->fetchUserData($response['result']['access_token']);
+				if($arrAccountResult){
+					if(isset($arrAccountResult['sub'])){
+						return $arrAccountResult['sub'];
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	
+	
 	/**
-	* User-Logout
-	*
-	* @return bool
-	*/
+	 * User-Login for google
+	 *
+	 * @param $strUsername
+	 * @param $strPassword
+	 * @param $boolUseHash Use Hash for comparing
+	 * @return bool/array
+	 */
+	public function login($strUsername, $strPassword, $boolUseHash = false){
+		$blnLoginResult = false;
+		
+		$this->init_oauth();
+		
+		$code = $_GET['code'];
+		
+		if ($code){
+			$client = new OAuth2\Client($this->appid, $this->appsecret);
+			
+			$params = array('code' => $code, 'redirect_uri' => $this->redirURL, 'scope' => 'profile openid email');
+			$response = $client->getAccessToken($this->TOKEN_ENDPOINT, 'authorization_code', $params);
+			
+			if ($response && $response['result']){
+				$arrAccountResult = $this->fetchUserData($response['result']['access_token']);
+				if($arrAccountResult){
+					if(isset($arrAccountResult['sub'])){
+						$userid = $this->pdh->get('user', 'userid_for_authaccount', array($arrAccountResult['sub'], 'google'));
+						if ($userid){
+							$userdata = $this->pdh->get('user', 'data', array($userid));
+							if ($userdata){
+								list($strPwdHash, $strSalt) = explode(':', $userdata['user_password']);
+								return array(
+										'status'		=> 1,
+										'user_id'		=> $userdata['user_id'],
+										'password_hash'	=> $strPwdHash,
+										'autologin'		=> true,
+										'user_login_key' => $userdata['user_login_key'],
+								);
+							}
+						} elseif((int)$this->config->get('cmsbridge_active') != 1 && (int)$this->config->get('login_fastregister')){
+							$auth_url = $this->controller_path_plain.'auth-endpoint/?lmethod=google&status=register&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');							
+							redirect($auth_url);
+						}
+						
+					}
+				}
+				
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * User-Logout
+	 *
+	 * @return bool
+	 */
 	public function logout(){
 		return true;
 	}
 	
 	/**
-	* Autologin
-	*
-	* @param $arrCookieData The Data ot the Session-Cookies
-	* @return bool
-	*/
+	 * Autologin
+	 *
+	 * @param $arrCookieData The Data ot the Session-Cookies
+	 * @return bool
+	 */
 	public function autologin($arrCookieData){
 		return false;
 	}
 	
-	private function fetchAccessToken($strCode, $callbackURL){
-		$settings = array(
-				'code' => $strCode,
-				'client_id' => trim($this->publicKey),
-				'client_secret' => trim($this->privateKey),
-				'redirect_uri' => $callbackURL,
-				'grant_type' => 'authorization_code',
-		);
-		
-		$result = register('urlfetcher')->post('https://accounts.google.com/o/oauth2/token', $settings, 'application/x-www-form-urlencoded');
-		
-		if($result){
-			$arrJSON = json_decode($result, true);
-			if(isset($arrJSON['access_token'])){
-				return $arrJSON['access_token'];
-			} elseif(isset($arrJSON['error'])){
-				$this->core->message($arrJSON['error'], 'Google Error', 'red');
-			}
-		}
-		return false;
-	}
-	
 	private function fetchUserData($strAccessToken){
-
 		$result = register('urlfetcher')->fetch('https://openidconnect.googleapis.com/v1/userinfo', array('Authorization: Bearer '.$strAccessToken));
-
 		if($result){
 			$arrJSON = json_decode($result, true);
-
 			if(!isset($arrJSON['error'])){
 				return $arrJSON;
 			} else {
@@ -292,5 +258,6 @@ class login_google extends gen_class {
 		}
 		return false;
 	}
+	
 }
 ?>

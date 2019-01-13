@@ -23,20 +23,14 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-// Include Needed files...
-include_once('class.phpmailer.php');
-include_once('class.pop3.php');
-include_once('class.smtp.php');
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-/**************** OPTIONS HELP *****************
-	$options = array(
-		'sender_mail'		=> $conf['rp_sender_email'],
-		'mail_type'			=> 'html',
-		'template_type'		=> 'file',
-	);
-************************************************/
+require 'Exception.php';
+require 'PHPMailer.php';
+require 'SMTP.php';
 
-class MyMailer extends PHPMailer {
+class MyMailer extends gen_class {
 	
 	private $myoptions = array();
 	protected $adminmail;
@@ -44,6 +38,9 @@ class MyMailer extends PHPMailer {
 	protected $dkpname;
 	protected $sendmeth = 'php';
 	protected $nohtmlmssg;
+	private $objMailer = false;
+	private $sendStatus = false;
+	private $sendError = "";
 	
 	public static $shortcuts = array(
 		'crypt'		=> 'encrypt',
@@ -54,19 +51,22 @@ class MyMailer extends PHPMailer {
 	*
 	* @param $options				Array with options (see above)
 	* @param $path					root path to tmplate/language files folder
-	* @return traue/false
+	* @return true/false
 	*/
 	public function __construct($options='') {
 		if(!is_array($options)){
 			$this->myoptions['mail_type']		= 'html';
 			$this->myoptions['template_type']	= 'file';
 		}
+		
+		$this->objMailer = new PHPMailer;
 
 		// Some usefull information
 		$this->mydeflang	= $this->config->get('default_lang');
 		$this->adminmail	= $this->crypt->decrypt($this->config->get('admin_email'));
 		$this->dkpname		= ($this->config->get('main_title')) ? $this->config->get('main_title') : $this->config->get('guildtag').' '.$this->config->get('dkp_name');
 		$this->sendmeth		= $this->config->get('lib_email_method');
+		$this->Signature	= ($this->config->get('lib_email_signature')) ? "\n".$this->config->get('lib_email_signature_value') : '';
 
 		// Language Vars
 		$this->nohtmlmssg	= $this->user->lang('error_nohtml');
@@ -84,6 +84,11 @@ class MyMailer extends PHPMailer {
 		$this->myoptions	= $options;
 	}
 
+	/**
+	 * Set Language for Email Templates
+	 * 
+	 * @param string $lang
+	 */
 	public function Set_Language($lang){
 		$this->mydeflang	= $lang;
 	}
@@ -105,25 +110,30 @@ class MyMailer extends PHPMailer {
 	}
 
 	/**
-	* Send the Mail with admin sender adress
-	*
-	* @param $adress				recipient email address
-	* @param $subject				email subject
-	* @param $templatename	Name of the Email template to use
-	* @param $bodyvars			Body Vars
-	* @param $method				Method to send the mails (smtp, sendmail, mail)
-	* @return traue/false
-	*/
+	 * Send a Mail from the admin sender address
+	 * 
+	 * @param string $adress Receiver
+	 * @param string $subject
+	 * @param string $templatename
+	 * @param array $bodyvars
+	 * @return true/false
+	 */
 	public function SendMailFromAdmin($adress, $subject, $templatename, $bodyvars = array()){
-		$this->AddAddress(stripslashes($adress));
-		$this->GenerateMail($subject, $templatename, $bodyvars, $this->adminmail);
-		return $this->PerformSend();
+		return $this->GenerateMail($adress, $subject, $templatename, $bodyvars, $this->adminmail);
 	}
 	
+	/**
+	 * Send a Mail from a given sender
+	 * 
+	 * @param string $adress Receiver
+	 * @param string $from	Sender
+	 * @param string $subject
+	 * @param string $templatename
+	 * @param array $bodyvars
+	 * @return true/false
+	 */
 	public function SendMail($adress, $from, $subject, $templatename, $bodyvars = array()){
-		$this->AddAddress(stripslashes($adress));
-		$this->GenerateMail($subject, $templatename, $bodyvars, $from);
-		return $this->PerformSend();
+		return $this->GenerateMail($adress, $subject, $templatename, $bodyvars, $from);
 	}
 
 	/****** PRIVATE FUNCTIONS *****/
@@ -157,7 +167,8 @@ class MyMailer extends PHPMailer {
 			}else{
 				$headerlogo	= $this->root_path.'templates/eqdkp_modern/images/logo.svg';
 			}
-			$this->AddEmbeddedImage($headerlogo, 'headerlogo');
+
+			$this->objMailer->addEmbeddedImage($headerlogo, 'headerlogo');
 			
 			// load the images out of the template/images/email folder. If the image is a svg, also include png woth same name if available
 			$images	= glob($this->root_path."templates/eqdkp_modern/images/emails/*.{jpg,png,svg}", GLOB_BRACE);
@@ -168,12 +179,9 @@ class MyMailer extends PHPMailer {
 			}
 			foreach($arrEmbedd as $fileid=>$filedata){
 				foreach($filedata as $image){
-					$this->AddEmbeddedImage($this->root_path.'templates/eqdkp_modern/images/emails/'.$image['filename'], $fileid.'_'.$image['extension']);
+					$this->objMailer->addEmbeddedImage($this->root_path.'templates/eqdkp_modern/images/emails/'.$image['filename'], $fileid.'_'.$image['extension']);
 				}
 			}
-			#d($arrEmbedd);die();
-			#$this->AddEmbeddedImage($this->root_path.'templates/eqdkp_modern/images/background-head.svg', 'backgroundimage');
-			#$this->AddEmbeddedImage($this->root_path.'templates/eqdkp_modern/images/background-head.png', 'backgroundimage_fallback');
 
 			// replace the stuff
 			$strMaintitle = $this->config->get('main_title');
@@ -202,85 +210,105 @@ class MyMailer extends PHPMailer {
 	/**
 	* Generate the Mail Body & rest
 	*
+	* @param $to				Receiver of the  Mail
 	* @param $subject				Subject of the Mail
 	* @param $templatename	Name of the Email template to use
 	* @param $bodyvars			Array with input variables to change in mail body
 	* @return traue/false
 	*/
-	private function GenerateMail($subject, $templatename, $bodyvars, $from){
-		$this->From			= $this->adminmail;
-		$this->FromName		= ($this->config->get('lib_email_sender_name') && strlen($this->config->get('lib_email_sender_name'))) ? $this->config->get('lib_email_sender_name') : $from;
-		
-		$this->ClearReplyTos();
-		$this->addReplyTo($from, $from);
-		
-		$this->CharSet		= 'UTF-8';
-		$this->Subject		= $this->generateSubject($subject);
-		$this->Signature	= ($this->config->get('lib_email_signature')) ? "\n".$this->config->get('lib_email_signature_value') : '';
-		$tmp_body			= $this->Template($templatename, $bodyvars);
+	private function GenerateMail($to, $subject, $templatename, $bodyvars, $from){
+		try {
+			$strFromName		= ($this->config->get('lib_email_sender_name') && strlen($this->config->get('lib_email_sender_name'))) ? $this->config->get('lib_email_sender_name') : $from;
+			
+			$this->objMailer->setFrom($this->adminmail, $strFromName);
+			$this->objMailer->clearReplyTos();
+			$this->objMailer->addReplyTo($from, $from);
+			$this->objMailer->CharSet = 'UTF-8';
+			$this->objMailer->addAddress($to);
+			$this->objMailer->Subject = $this->generateSubject($subject);
+			$this->objMailer->XMailer = "EQdkp Plus";
+	
+			$tmp_body		= $this->Template($templatename, $bodyvars);
+	
+			if($this->myoptions['mail_type'] == 'text'){
+				// Text Mail
+				$this->objMailer->Body		= $tmp_body;
+			}else{
+				// HTML Mail
+				$this->objMailer->msgHTML($tmp_body, $this->root_path);
+				$this->objMailer->isHTML(true);
+				//$this->objMailer->AltBody = $this->nohtmlmssg; Disable because Autogenerated
+			}
+			
+			if (DEBUG == 4){
+				pd($this->objMailer->Body);
+			}
+			
+			if($this->sendmeth == 'smtp'){
+				$this->objMailer->SMTPDebug = 0;                                 // Enable verbose debug output
+				$this->objMailer->isSMTP();                                      // Set mailer to use SMTP
+				$this->objMailer->Host = $this->config->get('lib_email_smtp_host');  // Specify main and backup SMTP servers
+				$this->objMailer->SMTPAuth = ($this->config->get('lib_email_smtp_auth') == 1) ? true : false;// Enable SMTP authentication
+				$this->objMailer->Username = $this->config->get('lib_email_smtp_user');                 // SMTP username
+				$this->objMailer->Password = $this->config->get('lib_email_smtp_pw');                           // SMTP password
+				$this->objMailer->SMTPSecure = (strlen($this->config->get('lib_email_smtp_connmethod'))) ? $this->config->get('lib_email_smtp_connmethod') : '';                            // Enable TLS encryption, `ssl` also accepted
+				$this->objMailer->Port = (strlen($this->config->get('lib_email_smtp_port'))) ? (int)$this->config->get('lib_email_smtp_port') : 587;                                    // TCP port to connect to
+			} elseif($this->sendmeth == 'sendmail'){
+				$this->objMailer->isSendmail();
+				$this->objMailer->Sendmail = ($this->config->get('lib_email_sendmail_path') && strlen($this->config->get('lib_email_sendmail_path'))) ? $this->config->get('lib_email_sendmail_path') : '/usr/sbin/sendmail';
+			
+			}else{
+				$this->objMailer->isMail();
+			}
 
-		if($this->myoptions['mail_type'] == 'text'){
-			// Text Mail
-			$this->Body		= $tmp_body.$this->Signature;
-		}else{
-			// HTML Mail
-			$this->MsgHTML($tmp_body);
-			$this->AltBody	= $this->nohtmlmssg;
+			$blnSendresult = $this->objMailer->send();
+			
+			$this->objMailer->clearAddresses();
+			
+			//Debugging
+			$this->pdl->log("mail", "\nFrom: ".$from."
+To: ".print_r($this->objMailer->getAllRecipientAddresses(), true)."
+Subject: ".$this->objMailer->Subject."
+Body: ".$this->objMailer->Body."
+Method: ".$this->objMailer->Mailer."
+Result: ".print_r($blnSendresult, true)."
+Error: ".$this->objMailer->ErrorInfo."
+=================================");
+			//Reset Status
+			$this->sendStatus = false;
+			$this->sendError = "";
+			
+			if (!$blnSendresult) {
+				$this->core->message(nl2br(sanitize($this->objMailer->ErrorInfo)), 'Mail error', 'red');
+				$this->sendStatus = false;
+				$this->sendError = $this->objMailer->ErrorInfo;
+				return false;
+			} else {
+				$this->sendStatus = true;
+				return true;
+			}
+			
+		} catch (Exception $e) {
+			$this->core->message("Message could not be sent. Mailer Error: ".nl2br(sanitize($this->objMailer->ErrorInfo)), 'Mail error', 'red');
 		}
 		
-		if (DEBUG == 4){
-			pd($this->Body);
-		}
+	}
+	
+	function getLatestSendStatus(){
+		return $this->sendStatus;
+	}
+	
+	function getLatestErrorMessage(){
+		return $this->sendError;
 	}
 
 	/**
-	* Perform the message delivery
+	* Helper file for file Handling
 	*
-	* @param $method Method to send the mails (smtp, sendmail, mail)
-	* @return traue/false
+	* @param $filename  the filename of the template file
+	* @return file/false
 	*/
-	private function PerformSend(){
-		if($this->sendmeth == 'smtp'){
-			// set the smtp auth
-			$this->Mailer		= 'smtp';
-			$this->SMTPAuth		= ($this->config->get('lib_email_smtp_auth') == 1) ? true : false;
-			$this->Host			= $this->config->get('lib_email_smtp_host');
-			$this->Username		= $this->config->get('lib_email_smtp_user');
-			$this->Password		= $this->config->get('lib_email_smtp_pw');
-			$this->SMTPSecure	= (strlen($this->config->get('lib_email_smtp_connmethod'))) ? $this->config->get('lib_email_smtp_connmethod') : '';
-			$this->Port			= (strlen($this->config->get('lib_email_smtp_port'))) ? $this->config->get('lib_email_smtp_port') : 25;
-		}elseif($this->sendmeth == 'sendmail'){
-			$this->Mailer		= 'sendmail';
-			if($this->config->get('lib_email_sendmail_path')){
-				$this->Sendmail	= $this->config->get('lib_email_sendmail_path');
-			}
-		}else{
-			$this->Mailer	= 'mail';
-		}
-		
-		$sendput = $this->Send();
-		
-		//Debugging
-		$this->pdl->log("mail", "\nFrom: ".$this->From."
-To: ".print_r($this->all_recipients, true)."
-Subject: ".$this->Subject."
-Body: ".$this->Body."
-Method: ".$this->Mailer."
-Result: ".print_r($sendput, true)."
-Error: ".$this->ErrorInfo."
-=================================");
-		
-		$this->ClearAddresses();
-		return $sendput;
-	}
-
-		/**
-		* Helper file for file Handling
-		*
-		* @param $filename  the filename of the template file
-		* @return file/false
-		*/
-		function getFile($filename) {
+	function getFile($filename) {
 		if( false == ($return = file_get_contents($filename))){
 			return false;
 		}else{

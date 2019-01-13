@@ -16,6 +16,7 @@ function DownloadImage($img){
 		//If its an dynamic image...
 		$extension_array = array('jpg', 'png', 'gif', 'jpeg');
 		$path_parts = pathinfo($img);
+		
 		if (!in_array(strtolower($path_parts['extension']), $extension_array)){
 			return false;
 		}
@@ -23,7 +24,8 @@ function DownloadImage($img){
 		// Load it...
 		$tmp_name = md5(generateRandomBytes());
 		$pfh->CheckCreateFile($imgfolder.$tmp_name);
-		$pfh->putContent($imgfolder.$tmp_name, $puf->fetch($img)); 
+
+		$pfh->putContent($imgfolder.$tmp_name, $puf->fetch(str_replace(' ', '%20', $img))); 
 		$i = getimagesize($imgfolder.$tmp_name);
 		
 		// Image is no image, lets remove it
@@ -32,7 +34,9 @@ function DownloadImage($img){
 			return false;
 		}
 		
-		$myFileName = $imgfolder.substr(md5(generateRandomBytes()), 0,8).'_'.$path_parts['filename'].'.'.$path_parts['extension'];
+		$strNewFilename = preg_replace("/[^a-zA-Z0-9.]/", "_", $path_parts['filename']);
+		
+		$myFileName = $imgfolder.substr(md5(generateRandomBytes()), 0,8).'_'.$strNewFilename.'.'.$path_parts['extension'];
 		$pfh->rename($imgfolder.$tmp_name, $myFileName);
 		return $myFileName;
 }
@@ -42,14 +46,14 @@ $in = register('input');
 
 if ($user->is_signedin()){
 	if (strlen($in->get('img'))){
-		$strImageSource = $in->get('img');
+		$strImageSource = urldecode($in->get('img'));
 		if (strpos($strImageSource, '/') === 0){
 			$link = register('env')->link;
 			$arrURL = parse_url($link);
 			
 			$strImageSource = $arrURL['scheme'].'://'.$arrURL['host'].$strImageSource;
 			
-		} 
+		}
 	
 		$image = DownloadImage($strImageSource);
 

@@ -98,6 +98,11 @@ if(!class_exists('pdh_w_user')) {
 				'user_email_confirmed'	=> 1,
 				'rules'					=> ($rules) ? 1 : 0,
 			);
+			
+			if($this->hooks->isRegistered('register_data')){
+				$arrData = $this->hooks->process('register_data', array($arrData), true);
+			}
+			
 			$user_id = $this->insert_user($arrData, false);
 			$this->pdh->enqueue_hook('user');
 			$this->pdh->enqueue_hook('styles_update');
@@ -161,6 +166,23 @@ if(!class_exists('pdh_w_user')) {
 				return true;
 			}
 			return false;		
+		}
+		
+		public function add_custom_avatar($user_id, $strAvatar) {
+			$objQuery = $this->db->prepare("SELECT custom_fields FROM __users WHERE user_id =?")->execute($user_id);
+			if ($objQuery && $objQuery->numRows){
+				$arrResult = $objQuery->fetchAssoc();
+				$custom = ($arrResult['custom_fields'] != "") ? unserialize($arrResult['custom_fields']) : array();
+				$custom['user_avatar'] = $strAvatar;
+				
+				$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
+						'custom_fields' => serialize($custom)
+				))->execute($user_id);
+				
+				$this->pdh->enqueue_hook('user');
+				return true;
+			}
+			return false;
 		}
 		
 		public function disable_gravatar($user_id){

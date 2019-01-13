@@ -56,7 +56,7 @@ class settings_pageobject extends pageobject {
 			'delete_account'  => array('process' => 'delete_account', 'csrf' => true),
 			'mode' => array(
 				array('process' => 'delete_authaccount', 'value' => 'delauthacc', 'csrf' => true),
-				array('process' => 'add_authaccount', 'value' => 'addauthacc'),
+				array('process' => 'add_authaccount', 'value' => 'addauthacc', 'csrf' => true),
 				array('process' => 'delete_avatar', 'value' => 'deleteavatar',  'csrf' => true),
 			),
 
@@ -105,10 +105,11 @@ class settings_pageobject extends pageobject {
 	public function add_authaccount() {
 		$strMethod = $this->in->get('lmethod');
 		$account = $this->user->handle_login_functions('get_account', $strMethod);
-		if ($strMethod && !is_array($account) && $this->pdh->get('user', 'check_auth_account', array($account, $strMethod))){
+		if ($strMethod && !is_array($account) && strlen($account) && $this->pdh->get('user', 'check_auth_account', array($account, $strMethod))){
 			$this->pdh->put('user', 'add_authaccount', array($this->user->id, $account, $strMethod));
 			$this->pdh->process_hook_queue();
 			$this->user->data['auth_account'][$strMethod] = $account;
+			$this->core->message(ucfirst($strMethod), $this->user->lang('success'), 'green');
 		} else {
 			$this->core->message($this->user->lang('auth_connect_account_error'), $this->user->lang('error'), 'red');
 		}

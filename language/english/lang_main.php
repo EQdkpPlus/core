@@ -1148,6 +1148,8 @@ $lang = array(
 	"new_coreupdate_subject" => "New EQdkp Plus update available",
 	"charname" => "Charactername",
 	"creation_date" => "Created at",
+	"reg_connected_account" => "Connected Account",
+	"reg_connected_account_help" => "You can use the connected account from a login provider to login into EQdkp Plus.",
 	);
 
 ?>

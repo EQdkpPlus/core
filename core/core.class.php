@@ -611,7 +611,8 @@ class core extends gen_class {
 		public function build_menu_array($show_hidden = true, $blnOneLevel = false){
 			$arrItems = $this->menu_items($show_hidden);
 			$arrSortation = $this->config->get('mainmenu');
-
+			$arrHashArray = array();
+			
 			foreach ($arrItems as $key => $item){
 				$strHash = $this->build_link_hash($item);
 				$arrItems[$key]['_hash'] = $this->build_link_hash($item);

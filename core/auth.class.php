@@ -183,8 +183,13 @@ class auth extends user {
 		if (!$boolSetAutoLogin && $this->config->get('cmsbridge_active') == 1 && $this->config->get('pk_maintenance_mode') != 1){
 			$arrAutologin = $this->bridge->autologin($arrCookieData);
 			if ($arrAutologin){
-				$this->data = array_merge($this->data, $arrAutologin);
-				$boolSetAutoLogin = true;
+				//Check if user has two Factor Authentification
+				$arrAuthAccounts = $this->pdh->get('user', 'auth_account', array($arrAutologin['user_id']));
+
+				if (!isset($arrAuthAccounts['twofactor']) || $arrAuthAccounts['twofactor'] == ""){
+					$this->data = array_merge($this->data, $arrAutologin);
+					$boolSetAutoLogin = true;
+				}
 			}
 		}
 		//END Autologin

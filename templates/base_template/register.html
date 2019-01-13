@@ -136,6 +136,18 @@ $(function() {
 						<span class="input-error-message" style="display:none;"><i class="fa fa-exclamation-triangle fa-lg"></i> {L_fv_required_password_repeat}</span>
 					</dd>
 				</dl>
+				<!-- IF S_IS_CONNECTED_AUTH_ACCOUNT -->
+				<dl>
+					<dt>
+						<label>{L_reg_connected_account}</label>
+						<br />
+						<span>{L_reg_connected_account_help}</span>
+					</dt>
+					<dd>
+						{REG_CONNECTED_METHOD}
+					</dd>
+				</dl>
+				<!-- ENDIF -->
 			</fieldset>
 
 		</div>

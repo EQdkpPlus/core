@@ -24,7 +24,8 @@ if ( !defined('EQDKP_INC') ){
 } 
 
 class avatar extends gen_class {
-
+	public static $shortcuts = array('puf'=>'urlfetcher');
+	
 	private $defaults = array(
 		'chars' => 2,
 		'fontSize' => 38,
@@ -129,6 +130,43 @@ class avatar extends gen_class {
 	public function getBackground($intUserID, $strUsername){
 		$backgroundColor = substr(sha1($intUserID.'_'.$strUsername), 0, 6);
 		return $backgroundColor;
+	}
+	
+	public function downloadExternalAvatar($intUserID, $strURL){
+		$arrImageExtensions = array('jpg', 'png', 'gif', 'jpeg');
+		//If its an dynamic image...
+		$path_parts = pathinfo($strURL);
+		if (!in_array(strtolower($path_parts['extension']), $arrImageExtensions)){
+			return false;
+		}
+		
+		// Load it...
+		$tmp_name = md5(generateRandomBytes());
+		$strImageCacheFolder = $this->pfh->FolderPath('images', 'eqdkp');
+		$this->pfh->CheckCreateFile($strImageCacheFolder.$tmp_name);
+		
+		$strImageContent = $this->puf->fetch($strURL);
+		if(!$strImageContent) return false;
+		
+		$this->pfh->putContent($strImageCacheFolder.$tmp_name, $strImageContent);
+		$i = getimagesize($strImageCacheFolder.$tmp_name);
+		
+		// Image is no image, lets remove it
+		if (!$i) {
+			$this->pfh->Delete($strImageCacheFolder.$tmp_name);
+			return false;
+		}
+		
+		$strNewFilename = md5(generateRandomBytes()).'.'.$path_parts['extension'];
+		
+		$myFileName = $this->pfh->FolderPath('users/'.$intUserID, 'files').$strNewFilename;
+		
+		$this->pfh->rename($strImageCacheFolder.$tmp_name, $myFileName);
+		
+		//Create Thumbnail
+		$this->pfh->thumbnail($myFileName, $this->pfh->FolderPath('users/thumbs','files'), 'useravatar_'.$intUserID.'_68.'.pathinfo($strNewFilename, PATHINFO_EXTENSION), 68, 68);
+		
+		return $strNewFilename;
 	}
 
 	private function hex2rgb($hex) {
