@@ -70,20 +70,21 @@ $(function() {
 
 //]]>
 </script>
+
+<div class="content">
+<!-- IF AUTH_REGISTER_BUTTON != "" -->
+<fieldset class="settings">
+	<legend>{L_register_use_authmethods}</legend>
+	{AUTH_REGISTER_BUTTON}
+</fieldset>
+<br />
+<!-- ENDIF -->
+
 <form method="post" action="{ACTION}" name="register" id="register" class="{FORMCLASS} fv_checkit">
-	<div class="content">
 
 		<input type="hidden" name="old_username" value="{USERNAME}" />
 
 		<div id="account">
-			<!-- IF AUTH_REGISTER_BUTTON != "" -->
-			<fieldset class="settings">
-				<legend>{L_register_use_authmethods}</legend>
-				{AUTH_REGISTER_BUTTON}
-			</fieldset>
-			<br />
-			<!-- ENDIF -->
-
 			<fieldset class="settings">
 				<legend>{L_user_sett_tab_registration_info}</legend>
 				<i class="fa fa-info-circle fa-lg"></i> {L_required_field_note}<br/><br/>
@@ -195,9 +196,9 @@ $(function() {
 			<button class="" type="submit" name="submit"><i class="fa fa-check"></i>{L_submit}</button>
 			<button class="" type="reset" name="reset"><i class="fa fa-trash-o" onclick="reset_validator_register();"></i>{L_reset}</button>
 		</div>
-	</div>
+
 	{HIDDEN_FIELDS}
 	{CSRF_TOKEN}
 </form>
-
+</div>
 <!-- ENDIF -->
