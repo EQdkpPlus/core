@@ -82,6 +82,7 @@ $lang = array(
 	'update' => 'Update',
 	'import' => 'Import',
 	'plugin_update' => 'Plugin-Update',
+	'game_update' => 'Spiel-Update',
 
 	//Task page
 	'unknown_task_warning' => 'Unbekannter Task!',
