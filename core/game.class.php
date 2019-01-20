@@ -1365,7 +1365,7 @@ class game extends gen_class {
 			$this->load_default_roles();
 		}
 
-		$this->config->set(array_merge($game_config, ((is_array($info['config'])) ? $info['config'] : array()), $itt_config, $this->itt->changed_prio1($newgame, $itt_config['itt_prio1'])));
+		$this->config->set(array_merge($game_config, ((is_array($info['config'])) ? $info['config'] : array()), $itt_config, $this->itt->changed_prio1($strGamename, $itt_config['itt_prio1'])));
 
 		//Reset PDH Cache
 		$this->pdh->process_hook_queue();

@@ -508,7 +508,7 @@ if (!class_exists("styles")){
 		}
 
 		public function getUninstalledStyles(){
-			$available_templates = array();
+			$available_templates = $templates = array();
 
 			foreach ($this->pdh->get('styles', 'styles') as $row){
 				$templates[$row['template_path']] =  $row['template_path'];
@@ -521,7 +521,7 @@ if (!class_exists("styles")){
 
 						//iterate through installed templates and check if the template path is installed
 						if (!in_array($file, $templates)){
-							$install_xml;
+							$install_xml = "";
 							if (file_exists($tpl_index)){
 								//Get the install instructions
 								$install_xml = simplexml_load_file($tpl_index);
@@ -607,7 +607,7 @@ if (!class_exists("styles")){
 					if(is_dir($storage_folder.$file)){
 						$arrDir = sdir($storage_folder.$file, 'combined_*');
 						foreach($arrDir as $file){
-							$this->pfh->Delete('templates/'.$templatepath.'/'.$file, 'eqdkp');
+							$this->pfh->Delete('templates/'.$storage_folder.$file, 'eqdkp');
 						}
 					}
 				}
