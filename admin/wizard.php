@@ -125,20 +125,12 @@ class QuickStartWizard extends page_generic {
 					}
 					
 					// now, let us add the API-Key-Field to the last element of the array
-					if(isset($apikey_config['version']) && isset($apikey_config['form']) &&  $apikey_config['version'] > 1 && is_array($apikey_config['form'])){
-						$apikeyform = '';
-						$apikey_set	= false;
-						foreach($apikey_config['form'] as $fieldname=>$fieldcontent){
-							if($this->config->get($fieldname) != '') { $apikey_set = true; }
-							$value = ($this->in->exists($fieldname)) ? $this->in->get($fieldname) : $this->config->get($fieldname);
-							$apikeyform	.= '<br/>'.$this->game->glang($fieldname).': '.$this->form->field($fieldname, array_merge($fieldcontent, array('value'=>$value)));
-						}
-						
-					}else{
-						// Fallback for old games
-						$apikey_set	= ($this->config->get('game_importer_apikey') != '') ? true : false;
-						$apikey = ($this->in->exists('game_importer_apikey', '')) ? $this->in->get('game_importer_apikey', '') : $this->config->get('game_importer_apikey');
-						$apikeyform	= (new htext('game_importer_apikey', array('value' => $apikey, 'size' => '30')))->output();
+					$apikeyform = '';
+					$apikey_set	= false;
+					foreach($apikey_config['form'] as $fieldname=>$fieldcontent){
+						if($this->config->get($fieldname) != '') { $apikey_set = true; }
+						$value = ($this->in->exists($fieldname)) ? $this->in->get($fieldname) : $this->config->get($fieldname);
+						$apikeyform	.= '<br/>'.$this->game->glang($fieldname).': '.$this->form->field($fieldname, array_merge($fieldcontent, array('value'=>$value)));
 					}
 					
 					end($appisetts);
