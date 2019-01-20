@@ -116,26 +116,40 @@ class QuickStartWizard extends page_generic {
 
 		// Importer API Key Wizzard
 		$apikey_config		= $this->game->get_importers('apikey');
-		$setting_apikey		= $this->config->get('game_importer_apikey');
-		if(($this->game->get_importAuth('a_members_man', 'guild_import') || $this->game->get_importAuth('a_members_man', 'char_mupdate')) && $apikey_config && !defined('GAME_IMPORT_APIKEY')){
+		if(($this->game->get_importAuth('a_members_man', 'guild_import') || $this->game->get_importAuth('a_members_man', 'char_mupdate')) && $apikey_config){
 			if($apikey_config['status'] == 'required' || $apikey_config['status'] == 'optional'){
 				if(isset($apikey_config['steps']) && is_array($apikey_config['steps']) && count($apikey_config['steps']) > 0){
 					$appisetts	= array();
 					foreach($apikey_config['steps'] as $title=>$val){
 						$appisetts[$this->game->glang($title)]	= $this->game->glang($val);
 					}
-
+					
 					// now, let us add the API-Key-Field to the last element of the array
-					$apikeyform			= (new htext('game_importer_apikey', array('value' => $setting_apikey, 'size' => '30')))->output();
+					if(isset($apikey_config['version']) && isset($apikey_config['form']) &&  $apikey_config['version'] > 1 && is_array($apikey_config['form'])){
+						$apikeyform = '';
+						$apikey_set	= false;
+						foreach($apikey_config['form'] as $fieldname=>$fieldcontent){
+							if($this->config->get($fieldname) != '') { $apikey_set = true; }
+							$value = ($this->in->exists($fieldname)) ? $this->in->get($fieldname) : $this->config->get($fieldname);
+							$apikeyform	.= '<br/>'.$this->game->glang($fieldname).': '.$this->form->field($fieldname, array_merge($fieldcontent, array('value'=>$value)));
+						}
+						
+					}else{
+						// Fallback for old games
+						$apikey_set	= ($this->config->get('game_importer_apikey') != '') ? true : false;
+						$apikey = ($this->in->exists('game_importer_apikey', '')) ? $this->in->get('game_importer_apikey', '') : $this->config->get('game_importer_apikey');
+						$apikeyform	= (new htext('game_importer_apikey', array('value' => $apikey, 'size' => '30')))->output();
+					}
+					
 					end($appisetts);
 					$key				= key($appisetts);
 					reset($appisetts);
 					$appisetts[$key]	= str_replace('{APIKEY_FORM}', $apikeyform, $appisetts[$key]);
-
+					
 					$this->form->add_field('settings_apikey', array(
 							'type'		=> 'accordion',
 							'options'	=> $appisetts,
-							'active'	=> (($setting_apikey != '') ? (count($appisetts)-1) : 0),
+							'active'	=> (($apikey_set) ? (count($appisetts)-1) : 0),
 					));
 				}
 			}
