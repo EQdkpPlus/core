@@ -938,12 +938,6 @@ class admin_settings extends page_generic {
 							$value = ($this->in->exists($fieldname)) ? $this->in->get($fieldname) : $this->config->get($fieldname);
 							$apikeyform	.= '<br/>'.$this->game->glang($fieldname).': '.$this->form->field($fieldname, array_merge($fieldcontent, array('value'=>$value)));
 						}
-
-					}else{
-						// Fallback for old games
-						$apikey_set	= ($this->config->get('game_importer_apikey') != '') ? true : false;
-						$apikey = ($this->in->exists('game_importer_apikey', '')) ? $this->in->get('game_importer_apikey', '') : $this->config->get('game_importer_apikey');
-						$apikeyform	= (new htext('game_importer_apikey', array('value' => $apikey, 'size' => '30')))->output();
 					}
 
 					end($appisetts);
