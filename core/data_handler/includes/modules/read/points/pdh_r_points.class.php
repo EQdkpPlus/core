@@ -66,6 +66,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 
 		public function reset($affected_ids=array(), $strHook='', $arrAdditionalData=array()){
 			$arrTotalAffected = array();
+			$strAction = "";
 
 			//For Hooks with additional data
 			foreach($arrAdditionalData as $arrData){
