@@ -193,6 +193,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 			//raid2event mapping
 			if(is_array($evip['event_ids']) && count($evip['event_ids'])){
 				$objQuery = $this->db->prepare("SELECT event_id,raid_id FROM __raids WHERE event_id :in")->in($evip['event_ids'])->execute();
+				
 				if($objQuery){
 					while($row = $objQuery->fetchAssoc()){
 						$raid2event[$row['raid_id']] = $row['event_id'];
@@ -411,12 +412,13 @@ if ( !class_exists( "pdh_r_points" ) ) {
 			if(isset($this->points[$multidkpid][$memberid]['single']['_status'])){
 				return $this->points[$multidkpid][$memberid]['single'];
 			}
-
+			
 			//init
 			$this->points[$multidkpid][$memberid]['single']['earned'][0] = 0;
 			$this->points[$multidkpid][$memberid]['single']['spent'][0][0] = 0;
 			$this->points[$multidkpid][$memberid]['single']['adjustment'][0] = 0;
 			$this->points[$multidkpid][$memberid]['single']['_status'] = 1;
+
 
 			//calculate
 			if(is_array($this->points[$multidkpid][$memberid]['single']['earned'])){
@@ -430,13 +432,12 @@ if ( !class_exists( "pdh_r_points" ) ) {
 					foreach($itempools as $itempool_id => $spent){
 						$this->points[$multidkpid][$memberid]['single']['spent'][0][0] += $spent;
 						if(!isset($this->points[$multidkpid][$memberid]['single']['spent'][$event_id][0])) $this->points[$multidkpid][$memberid]['single']['spent'][$event_id][0] = 0;
-						$this->points[$multidkpid][$memberid]['single']['spent'][$event_id][0] += $spent;
+						if($event_id != 0) $this->points[$multidkpid][$memberid]['single']['spent'][$event_id][0] += $spent;
 						if(!isset($this->points[$multidkpid][$memberid]['single']['spent'][0][$itempool_id])) $this->points[$multidkpid][$memberid]['single']['spent'][0][$itempool_id] = 0;
-						$this->points[$multidkpid][$memberid]['single']['spent'][0][$itempool_id] += $spent;
+						//$this->points[$multidkpid][$memberid]['single']['spent'][0][$itempool_id] += $spent;
 					}
 				}
 			}
-
 
 			if(is_array($this->points[$multidkpid][$memberid]['single']['adjustment'])){
 				foreach($this->points[$multidkpid][$memberid]['single']['adjustment'] as $event_id => $adjustment){
@@ -447,6 +448,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 			$arrToSave = array($this->points[$multidkpid][$memberid]['single']['earned'][0],
 					$this->points[$multidkpid][$memberid]['single']['spent'][0][0],
 					$this->points[$multidkpid][$memberid]['single']['adjustment'][0]);
+			
 
 			$this->pdh->put('member', 'points', array($memberid, $multidkpid, $arrToSave));
 
