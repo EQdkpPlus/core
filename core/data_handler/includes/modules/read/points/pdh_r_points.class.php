@@ -185,9 +185,9 @@ if ( !class_exists( "pdh_r_points" ) ) {
 						foreach($adjustment_ids as $adjustment_id) {
 							$member_id = $this->pdh->get('adjustment', 'member', array($adjustment_id));
 							$value = $this->pdh->get('adjustment', 'value', array($adjustment_id, $dkp_id));
-							if(!isset($this->points[$member_id][$dkp_id]['single']['adjustment'][$event_id]))
+							if(!isset($arrLocalPoints[$dkp_id][$member_id]['single']['adjustment'][$event_id]))
 								$arrLocalPoints[$dkp_id][$member_id]['single']['adjustment'][$event_id] = 0;
-								$arrLocalPoints[$dkp_id][$member_id]['single']['adjustment'][$event_id] += $value;
+							$arrLocalPoints[$dkp_id][$member_id]['single']['adjustment'][$event_id] += $value;
 						}
 					}
 				} else {
@@ -216,7 +216,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 							if( !is_array($attendees) ) continue;
 							$value = $this->pdh->get('raid', 'value', array($raid_id, $dkp_id));
 							foreach($attendees as $attendee){
-								if(!isset($this->points[$attendee][$dkp_id]['single']['earned'][$event_id]))
+								if(!isset($arrLocalPoints[$dkp_id][$attendee]['single']['earned'][$event_id]))
 									$arrLocalPoints[$dkp_id][$attendee]['single']['earned'][$event_id] = 0;
 								$arrLocalPoints[$dkp_id][$attendee]['single']['earned'][$event_id] += $value;
 							}
@@ -248,9 +248,9 @@ if ( !class_exists( "pdh_r_points" ) ) {
 								$member_id = $this->pdh->get('item', 'buyer', array($item_id));
 								$value = $this->pdh->get('item', 'value', array($item_id, $dkp_id));
 								$raid_id = $this->pdh->get('item', 'raid_id', array($item_id));
-								if(!isset($this->points[$member_id][$dkp_id]['single']['spent'][$raid2event[$raid_id]][$itempool_id]))
+								if(!isset($arrLocalPoints[$dkp_id][$member_id]['single']['spent'][$raid2event[$raid_id]][$itempool_id]))
 									$arrLocalPoints[$dkp_id][$member_id]['single']['spent'][$raid2event[$raid_id]][$itempool_id] = 0;
-									$arrLocalPoints[$dkp_id][$member_id]['single']['spent'][$raid2event[$raid_id]][$itempool_id] += $value;
+								$arrLocalPoints[$dkp_id][$member_id]['single']['spent'][$raid2event[$raid_id]][$itempool_id] += $value;
 							}
 						}
 					}
