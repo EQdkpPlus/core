@@ -281,11 +281,11 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 		
 		public function reset_cache($apa_id, $module, $id){
 			if($module == 'item'){
-				$this->pdh->put('item', 'update_apa_value', array($apa_id, $id, ''));
+				$this->pdh->put('item', 'update_apa_value', array($id, $apa_id, ''));
 			} elseif($module == 'adjustment'){
-				$this->pdh->put('adjustment', 'update_apa_value', array($apa_id, $id, ''));
+				$this->pdh->put('adjustment', 'update_apa_value', array($id, $apa_id, ''));
 			} elseif($module == 'raid'){
-				$this->pdh->put('raid', 'update_apa_value', array($apa_id, $id, ''));
+				$this->pdh->put('raid', 'update_apa_value', array($id, $apa_id, ''));
 			}
 			$this->pdh->process_hook_queue();
 		}
