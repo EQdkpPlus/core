@@ -39,12 +39,12 @@ class build_pointcache extends task {
 	}
 	
 	public function get_form_content() {
+		@set_time_limit(0);
 		
 		$arrTasks = array();
 		
 		//Raids
 		$arrRaids = $this->pdh->get('raid', 'id_list');
-		
 		foreach($arrRaids as $intRaidID){
 			$intEventID = $this->pdh->get('raid', 'event', array($intRaidID));
 			$arrMultiPools = $this->pdh->get('event', 'multidkppools', array($intEventID));
@@ -83,29 +83,40 @@ class build_pointcache extends task {
 		
 		//Execute Task
 		if($this->in->exists('primaryID')){
-			$intPrimary = intval($this->in->get('primaryID'));
-			$intSecondary = intval($this->in->get('secondaryID'));
+			$strInputPrimary = $this->in->get('primaryID');
+			$strInputSecondary = $this->in->get('secondaryID');
+			$strInputType = $this->in->get('type');
 			
-			$strType = $this->in->get('type');
-			if($strType == 'points'){
-				$this->pdh->get('points', 'current', array($intPrimary, $intSecondary));
-				echo "points ";
-			} elseif($strType == 'raid'){
-				$this->pdh->get('raid', 'value', array($intPrimary, $intSecondary));
-				echo "raid ";
-			} elseif($strType == 'item'){
-				$this->pdh->get('item', 'value', array($intPrimary, $intSecondary));
-				echo "item ";
-			} elseif($strType == 'adjustment'){
-				$arrMultidkpPools = $this->pdh->get('multidkp', 'id_list');
-				foreach($arrMultidkpPools as $intPoolID){
-					$this->pdh->get('adjustment', 'value', array($intPrimary, $intPoolID));
+			$arrPrimary = explode(',', $strInputPrimary);
+			$arrSecondary = explode(',', $strInputSecondary);
+			$arrType = explode(',', $strInputType);
+			
+			foreach($arrPrimary as $key => $strVal){
+				$intPrimary = intval($strVal);
+				$intSecondary = intval($arrSecondary[$key]);
+				$strType = $arrType[$key];
+				
+				if($strType == 'points'){
+					$this->pdh->get('points', 'current', array($intPrimary, $intSecondary));
+					echo "points ";
+				} elseif($strType == 'raid'){
+					$this->pdh->get('raid', 'value', array($intPrimary, $intSecondary));
+					echo "raid ";
+				} elseif($strType == 'item'){
+					$this->pdh->get('item', 'value', array($intPrimary, $intSecondary));
+					echo "item ";
+				} elseif($strType == 'adjustment'){
+					$arrMultidkpPools = $this->pdh->get('multidkp', 'id_list');
+					foreach($arrMultidkpPools as $intPoolID){
+						$this->pdh->get('adjustment', 'value', array($intPrimary, $intPoolID));
+					}
+					
+					echo "adjustment ";
 				}
 				
-				echo "adjustment ";
+				echo sanitize($intPrimary).'-'.sanitize($intSecondary).'; ';
+				
 			}
-			
-			echo sanitize($this->in->get('primaryID'));
 			
 			exit;
 		} else {
@@ -154,40 +165,86 @@ class build_pointcache extends task {
 		var firstElement = tasks[0];
 				
 		var current_item = 0;
+		var cookie = getCookie('pointcache_step');
+		if(cookie != null && cookie != '') current_item = parseInt(cookie);
+
 		var max_item = tasks.length-1;
 		if(tasks.length == 0){
 			document.getElementById('progressbar-inner').style.width = 100+'%';
 		} else {
 			do_request();
 		}
+
+		function setCookie(name,value,days) {
+		    var expires = '';
+		    if (days) {
+		        var date = new Date();
+		        date.setTime(date.getTime() + (days*24*60*60*1000));
+		        expires = '; expires=' + date.toUTCString();
+		    }
+		    document.cookie = name + '=' + (value || '')  + expires + '; path=/';
+		}
+		function getCookie(name) {
+		    var nameEQ = name + '=';
+		    var ca = document.cookie.split(';');
+		    for(var i=0;i < ca.length;i++) {
+		        var c = ca[i];
+		        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+		        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+		    }
+		    return null;
+		}
 				
 		function do_request(){
 			if(current_item > max_item) {
 				console.log('finished');
+				document.getElementById('stepnumber').innerHTML = max_item+1;
+				document.getElementById('progressbar-inner').style.width = 100+'%';
                 alert('All tasks finished.');
+				setCookie('pointcache_step', 0, 0.1);
 				return;
 			}
 				
-			document.getElementById('stepnumber').innerHTML = current_item+1;
-				
-			var arrElement = tasks[current_item];
-				
-			var primary = arrElement[0];
-			var secondary = arrElement[1];
-			var type = arrElement[2];
-				
+			var i;
+			var combined_primary = '';
+			var combined_secondary = '';
+			var combined_type = '';
+			var combineCount = ".((defined('POINTCACHE_COMBINE')) ? POINTCACHE_COMBINE : 5).";
+
+			for (i = 0; i < combineCount; i++) { 
+				var arrElement = tasks[current_item];
+				if (typeof arrElement == 'undefined' || arrElement == null) break;
+
+				var primary = arrElement[0];
+				var secondary = arrElement[1];
+				var type = arrElement[2];
+				combined_primary = combined_primary + ',' + primary;
+				combined_secondary = combined_secondary  + ',' + secondary;
+				combined_type = combined_type + ',' + type;
+				current_item = current_item + 1;
+			}
+
+			document.getElementById('stepnumber').innerHTML = current_item;
+
+			console.log(combined_primary);
+			console.log(combined_secondary);
+			console.log(combined_type);
+
+			setCookie('pointcache_step', current_item, 14);
+
 			var xhttp = new XMLHttpRequest();
 			  xhttp.onreadystatechange = function() {
 			    if (this.readyState == 4 && this.status == 200) {
-					document.getElementById('progressbar-inner').style.width = ((current_item+1) / (max_item+1))*100+'%';
-					current_item = current_item + 1;
+					current_display = current_item;
+					if(current_item > max_item) current_display = max_item;
+					document.getElementById('progressbar-inner').style.width = ((current_display+1) / (max_item+1))*100+'%';
 					do_request();
 			    } else if(this.readyState == 4) {
 					console.log('Request failed');
 					document.getElementById('progressbar-inner').style.backgroundColor = 'orange';
 				}
 			  };
-			  xhttp.open('GET', 'task.php".$this->SID."&task=build_pointcache&primaryID='+primary+'&secondaryID='+secondary+'&type='+type, true);
+			  xhttp.open('GET', 'task.php".$this->SID."&task=build_pointcache&primaryID='+combined_primary.substring(1)+'&secondaryID='+combined_secondary.substring(1)+'&type='+combined_type.substring(1), true);
 			  xhttp.send();
 		}
 			  		
