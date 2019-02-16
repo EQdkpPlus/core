@@ -28,9 +28,14 @@ class urlfetcher  extends gen_class {
 	private $useragent			= '';		// User Agent
 	private $timeout			= 15;											// Timeout
 	private $conn_timeout		= 5;											// Connection Timeout
-	private $methods			= array('curl','file_gets','fopen');			// available function methods
+	private $methods			= array('curl', 'file_gets');			// available function methods
 	private $method				= '';											// the selected method
 	private $maxRedirects		= 5;
+	
+	private $responseStatus		= false;
+	private $responseCode		= 0;
+	private $responseHeader		= "";
+	private $responseBody		= "";
 
 	public function get_method(){
 		return $this->method;
@@ -60,12 +65,27 @@ class urlfetcher  extends gen_class {
 	 * @param String $geturl
 	 * @return string
 	 */
-	public function fetch($geturl, $header='', $conn_timeout = false, $timeout = false){
+	public function fetch($geturl, $header='', $conn_timeout = false, $timeout = false, $blnIgnoreResponseCode=false){
+		$this->responseStatus	= false;
+		$this->responseCode		= 0;
+		$this->responseHeader	= "";
+		$this->responseBody		= 0;
+		
 		$this->method = ($this->method) ? $this->method : 'fopen';
 		if (!$conn_timeout) $conn_timeout = $this->conn_timeout;
 		if (!$timeout) $timeout = $this->timeout;
 		$this->pdl->log('urlfetcher', 'fetch url: '.$geturl.' method: '.$this->method);
-		return $this->{'get_'.$this->method}($geturl, $header, $conn_timeout, $timeout);
+		return $this->{'get_'.$this->method}($geturl, $header, $conn_timeout, $timeout, $blnIgnoreResponseCode);
+	}
+	
+	public function fetch_last_response(){
+		return array(
+			'status' 			=> $this->responseStatus,
+			'method' 			=> $this->method,
+			'responseHeader'	=> $this->responseHeader,
+			'responseBody'		=> $this->responseBody,
+			'responseCode'		=> $this->responseCode,
+		);
 	}
 	
 	public function post($url, $data, $content_type = "text/html; charset=utf-8", $header='', $conn_timeout = false, $timeout = false){
@@ -86,7 +106,7 @@ class urlfetcher  extends gen_class {
 	 * @param string $geturl
 	 * @return string
 	 */
-	private function get_curl($geturl, $header, $conn_timeout, $timeout){
+	private function get_curl($geturl, $header, $conn_timeout, $timeout, $blnIgnoreResponseCode=false){
 		$curlOptions = array(
 			CURLOPT_URL				=> $geturl,
 			CURLOPT_USERAGENT		=> $this->useragent,
@@ -97,6 +117,7 @@ class urlfetcher  extends gen_class {
 			CURLOPT_SSL_VERIFYHOST	=> false,
 			CURLOPT_SSL_VERIFYPEER	=> false,
 			CURLOPT_VERBOSE			=> false,
+			CURLOPT_HEADER			=> true,
 			CURLOPT_HTTPAUTH		=> CURLAUTH_ANY,
 			CURLOPT_HTTPHEADER		=> ((is_array($header) && count($header) > 0) ? $header : array())
 		);
@@ -107,6 +128,10 @@ class urlfetcher  extends gen_class {
 			curl_setopt_array($curl, $curlOptions);
 			$getdata = curl_exec($curl);
 			
+			$header_size = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
+			$header = substr($getdata, 0, $header_size);
+			$body = substr($getdata, $header_size);
+			
 			$code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 			
 			$arrCurlInfo = curl_getinfo($curl);
@@ -114,12 +139,17 @@ class urlfetcher  extends gen_class {
 			$this->pdl->log('urlfetcher', 'Curl Error Nr. '.$curl_error);
 			$this->pdl->log('urlfetcher', 'Curl Info: '.print_r($curl_error, true));
 			$this->pdl->log('urlfetcher', 'Response Code: '.$code);
-			$this->pdl->log('urlfetcher', 'Response: '.strlen($getdata).'; First 200 Chars: '.htmlspecialchars(substr($getdata, 0, 200)));
+			$this->pdl->log('urlfetcher', 'Response: '.strlen($body).'; First 200 Chars: '.htmlspecialchars(substr($getdata, 0, 200)));
+			
+			$this->responseStatus	= (intval($code) >= 400) ? false : true;
+			$this->responseCode		= intval($code);
+			$this->responseHeader	= $this->parseHeaders($header);
+			$this->responseBody		= $body;
 			
 			curl_close($curl);
-			if(intval($code) >= 400) return false;
+			if(intval($code) >= 400 && !$blnIgnoreResponseCode) return false;
 			
-			return $getdata;	
+			return $body;	
 		} else {
 			$curlOptions[CURLOPT_HEADER] = true;
 			$curlOptions[CURLOPT_FORBID_REUSE] = false;
@@ -173,7 +203,16 @@ class urlfetcher  extends gen_class {
 			
 			curl_close($curl);
 			//Remove Header
-			list ($header,$page) = preg_split('/\r\n\r\n/',$getdata,2); 
+			$header_size = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
+			$header = substr($getdata, 0, $header_size);
+			$page = substr($getdata, $header_size);
+			
+			#list ($header,$page) = preg_split('/\r\n\r\n/',$getdata,2); 
+			
+			$this->responseStatus	= (intval($code) >= 400) ? false : true;
+			$this->responseCode		= intval($code);
+			$this->responseHeader	= $this->parseHeaders($header);
+			$this->responseBody		= $page;
 			
 			$this->pdl->log('urlfetcher', 'Response Code: '.$code);
 			$this->pdl->log('urlfetcher', 'Reponse Header: '.$header);
@@ -235,7 +274,7 @@ class urlfetcher  extends gen_class {
 	 * @param string $geturl
 	 * @return string
 	 */
-	private function get_file_gets($geturl, $header, $conn_timeout, $timeout){
+	private function get_file_gets($geturl, $header, $conn_timeout, $timeout, $blnIgnoreResponseCode=false){
 		// set the useragent first. if not, you'll get the source....
 		if(function_exists('ini_set')){
 			@ini_set('user_agent', $this->useragent);
@@ -255,6 +294,12 @@ class urlfetcher  extends gen_class {
 		$getdata	= @file_get_contents($geturl, false, $context);
 		if($getdata === false) 		$this->pdl->log('urlfetcher', 'file_get_contents ERROR, see php Log');
 		else 		$this->pdl->log('urlfetcher', 'Response: '.strlen($getdata).'; First 200 Chars: '.htmlspecialchars(substr($getdata, 0, 200)));
+		
+		$arrHeaders = $this->parseHeaders($http_response_header);
+		$this->responseStatus	= (intval($arrHeaders['response_code']) >= 400) ? false : true;
+		$this->responseCode		= intval($arrHeaders['response_code']);
+		$this->responseHeader	= $arrHeaders;
+		$this->responseBody		= $getdata;
 		
 		return $getdata;
 	}
@@ -283,85 +328,6 @@ class urlfetcher  extends gen_class {
 	
 	}
 
-	/**
-	 * Try to get the data from the URL via the fsockopen function
-	 *
-	 * @param string $geturl
-	 * @return string
-	 */
-	private function get_fopen($geturl, $header, $conn_timeout, $timeout){
-		$url_array	= parse_url($geturl);
-		$port = ($url_array['scheme'] == 'https') ? 443 : 80;
-		$fsock_host = ($url_array['scheme'] == 'https') ? 'ssl://'.$url_array['host'] : $url_array['host'];
-		
-		$getdata = '';
-		if (isset($url_array['host']) AND $fp = @fsockopen($fsock_host, $port, $errno, $errstr, $conn_timeout)){
-			$out	 = "GET " .$url_array['path']."?".((isset($url_array['query'])) ? $url_array['query'] : '')." HTTP/1.0\r\n";
-			$out	.= "Host: ".$url_array['host']." \r\n";
-			$out	.= "User-Agent: ".$this->useragent."\r\n";
-			$out	.= "Connection: Close\r\n";
-			$out	.= ((is_array($header) && count($header) > 0) ? implode("\r\n", $header): '');
-			$out	.= "\r\n";
-			fwrite($fp, $out);
-
-			// Get rid of the HTTP headers
-			while ($fp && !feof($fp)){
-				$headerbuffer = fgets($fp, 1024);
-				if (urlencode($headerbuffer) == "%0D%0A"){
-					// We've reached the end of the headers
-					break;
-				}
-			}
-			// Read the raw data from the socket in 1kb chunks
-			while (!feof($fp)){
-				$getdata .= fgets($fp, 1024);
-			}
-			fclose($fp);
-		}
-		
-		$this->pdl->log('urlfetcher', 'Response: '.strlen($getdata).'; First 200 Chars: '.htmlspecialchars(substr($getdata, 0, 200)));
-		
-		return $getdata;
-	}
-	
-	private function post_fopen($url, $data, $content_type, $header, $conn_timeout, $timeout){
-		$url_array	= parse_url($url);
-		$port = ($url_array['scheme'] == 'https') ? 443 : 80;
-		$fsock_host = ($url_array['scheme'] == 'https') ? 'ssl://'.$url_array['host'] : $url_array['host'];
-		
-		$getdata = '';
-		if (isset($url_array['host']) && $fp = @fsockopen($fsock_host, $port, $errno, $errstr, $conn_timeout)){
-			$out	 = "POST " .$url_array['path']."?".((isset($url_array['query'])) ? $url_array['query'] : '')." HTTP/1.0\r\n";
-			$out	.= "Host: ".$url_array['host']." \r\n";
-			$out	.= "User-Agent: ".$this->useragent."\r\n";
-			$out	.= "Content-type: ".$content_type."\r\n";
-			$out	.= "Content-Length: ".strlen($data)."\r\n";
-			$out	.= ((is_array($header) && count($header) > 0) ? implode("\r\n", $header): '');
-			$out	.= "Connection: Close\r\n";
-			$out	.= "\r\n";
-			$out	.= $data;
-			fwrite($fp, $out);
-
-			// Get rid of the HTTP headers
-			while ($fp && !feof($fp)){
-				$headerbuffer = fgets($fp, 1024);
-				if (urlencode($headerbuffer) == "%0D%0A"){
-					// We've reached the end of the headers
-					break;
-				}
-			}
-			// Read the raw data from the socket in 1kb chunks
-			while (!feof($fp)){
-				$getdata .= fgets($fp, 1024);
-			}
-			fclose($fp);
-		}
-		
-		$this->pdl->log('urlfetcher', 'Response: '.strlen($getdata).'; First 200 Chars: '.htmlspecialchars(substr($getdata, 0, 200)));
-		
-		return $getdata;
-	}
-
 	private function check_function($method){
 		switch($method){
 			case 'curl':			$func_ex = 'curl_init';			break;
@@ -370,5 +336,27 @@ class urlfetcher  extends gen_class {
 			default: $func_ex =$method;
 		}
 		return (function_exists($func_ex)) ? true : false;
+	}
+	
+	private function parseHeaders( $mixHeaders )
+	{
+		if(!is_array($mixHeaders)){	
+			$mixHeaders = explode("\r\n", $mixHeaders);
+		}
+		
+		$head = $out = array();
+		foreach( $mixHeaders as $k=>$v )
+		{
+			$t = explode( ':', $v, 2 );
+			if( isset( $t[1] ) )
+				$head[ trim($t[0]) ] = trim( $t[1] );
+				else
+				{
+					$head[] = $v;
+					if( preg_match( "#HTTP/[0-9\.]+\s+([0-9]+)#",$v, $out ) )
+						$head['response_code'] = intval($out[1]);
+				}
+		}
+		return $head;
 	}
 }
