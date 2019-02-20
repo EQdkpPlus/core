@@ -31,5 +31,8 @@ include_once(registry::get_const('root_path').'core/html/htext.class.php');
 class hcolorpicker extends htext {
 	
 	public $colorpicker = true;
+	public $showAlpha = false;
+	public $format = "hex6";
+	public $group = "";
 }
 ?>

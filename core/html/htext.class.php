@@ -73,7 +73,12 @@ class htext extends html {
 				$jsout = '<script>'.$this->jquery->get_jscode('autocomplete', $this->id).'</script>';
 			}
 		} elseif($this->colorpicker) {
-			$this->jquery->colorpicker($this->id,0,'',14,'',array(),$this->returnJS);
+			$arrOptions = array('format' => $this->format);
+			if($this->showAlpha) $arrOptions['showAlpha'] = true;
+			if($this->group != "") $arrOptions['group'] = $this->group;
+			$this->class = $this->class.= ' colorpicker_'.$this->id;
+			
+			$this->jquery->colorpicker($this->id,0,'',14,'',$arrOptions,$this->returnJS);
 			if($this->returnJS){
 				$jsout = '<script>'.$this->jquery->get_jscode('colorpicker', $this->id).'</script>';
 			}

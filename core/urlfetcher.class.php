@@ -139,7 +139,7 @@ class urlfetcher  extends gen_class {
 			$this->pdl->log('urlfetcher', 'Curl Error Nr. '.$curl_error);
 			$this->pdl->log('urlfetcher', 'Curl Info: '.print_r($curl_error, true));
 			$this->pdl->log('urlfetcher', 'Response Code: '.$code);
-			$this->pdl->log('urlfetcher', 'Response: '.strlen($body).'; First 200 Chars: '.htmlspecialchars(substr($getdata, 0, 200)));
+			$this->pdl->log('urlfetcher', 'Response: '.strlen($body).'; First 200 Chars: '.htmlspecialchars(substr($body, 0, 200)));
 			
 			$this->responseStatus	= (intval($code) >= 400) ? false : true;
 			$this->responseCode		= intval($code);

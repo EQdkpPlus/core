@@ -224,6 +224,7 @@ class Manage_Styles extends page_generic{
 	public function update(){
 		// add the class colors to the database
 		$this->objStyles->ClassColorManagement($this->url_id, false);
+
 		$this->pdh->put('styles', 'update_style', array($this->url_id, $this->get_data()));
 		$this->pdh->process_hook_queue();
 		$this->style = $this->pdh->get('styles', 'styles', array($this->url_id));
@@ -232,6 +233,8 @@ class Manage_Styles extends page_generic{
 		$this->objStyles->deleteStyleCache($this->style['template_path']);
 
 		redirect('admin/manage_styles.php'.$this->SID.'&edit=true&styleid='.$this->url_id.'&save=success');
+		
+		return;
 	}
 
 	private function get_data() {
@@ -272,8 +275,12 @@ class Manage_Styles extends page_generic{
 		// work-around for a known Chrome bug that causes the XSS auditor to incorrectly detect JavaScript inside a textarea
 		@header('X-XSS-Protection: 0');
 		
-		if($this->in->get('save') == 'success')
+		if($this->in->get('save') == 'success') {
+			$arrStyle = $this->pdh->get('styles', 'styles', array($this->url_id));
+			$this->objStyles->deleteStyleCache($arrStyle['template_path']);
+			
 			$this->core->message( $this->user->lang('admin_update_style_success'), $this->user->lang('success'), 'green');
+		}
 		
 		
 		$text_decoration = array(
@@ -466,7 +473,7 @@ class Manage_Styles extends page_generic{
 				$field = "";
 
 				if($elem == 'color'){
-					$field = (new hcolorpicker($name, array('value' =>  $this->style[$name], 'id' => $name, 'disabled' => ((!in_array($name, $arrUsedVariables)) ? true : false), 'size' => 14, 'showAlpha' => true, 'format' => 'rgb', 'group' => 'editstyle')))->output();
+					$field = (new hcolorpicker($name, array('value' =>  $this->style[$name], 'id' => $name, 'disabled' => ((!in_array($name, $arrUsedVariables)) ? true : false), 'size' => 14, 'showAlpha' => true, 'format' => 'rgb')))->output();
 				} elseif($elem == 'decoration'){
 					$field = (new hdropdown($name, array('options' => $text_decoration, 'value' => $this->style[$name], 'disabled' => ((!in_array($name, $arrUsedVariables)) ? true : false))))->output();
 				} elseif($elem == 'font-family'){
