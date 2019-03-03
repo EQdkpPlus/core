@@ -360,6 +360,8 @@ class bridge extends gen_class {
 			$strCleanUsername = utf8_strtolower($name);
 		}
 		
+		if($strCleanUsername == "") return false;
+		
 		if ($this->check_function('user')){
 			$method_name = $this->objBridge->data['user']['FUNCTION'];
 			return $this->objBridge->$method_name($strCleanUsername);
