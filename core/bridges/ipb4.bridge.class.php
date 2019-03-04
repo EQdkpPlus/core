@@ -54,9 +54,12 @@ class ipb4_bridge extends bridge_generic {
 		
 	//Needed function
 	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = "", $arrUserdata=array()){
-
+		if ($strSalt == NULL) {
+			/* IPB 4.4+ */
+			return password_verify($password, $hash);
+			
+		} elseif ( strlen( $strSalt ) === 22 )
 		/* New password style introduced in IPS4 using Blowfish */
-		if ( strlen( $strSalt ) === 22 )
 		{
 			$strUserPassword = crypt( $password, '$2a$13$' . $strSalt );
 			return ($strUserPassword === $hash) ? true : false;
