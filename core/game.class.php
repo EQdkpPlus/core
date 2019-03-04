@@ -228,7 +228,7 @@ class game extends gen_class {
 	 */
 	private function decorate_talents($talent_id, $profile=array(), $size=16, $pathonly=false){
 		$strIconPathPrefix = $this->root_path.'games/'.$this->game.'/icons/talents/'.$talent_id;
-		$strIconServerPathPrefix =  $this->server_path.'games/'.$this->game.'/talents/races/'.$talent_id;
+		$strIconServerPathPrefix =  $this->server_path.'games/'.$this->game.'/icons/talents/'.$talent_id;
 
 		if(is_file($strIconPathPrefix.'.svg')){
 			$icon_path = $strIconServerPathPrefix.'.svg';
