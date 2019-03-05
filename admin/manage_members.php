@@ -29,6 +29,8 @@ class Manage_Members extends page_generic {
 	public function __construct(){
 		$this->user->check_auth('a_members_man');
 		$handler = array(
+			'search' =>	array('process' => 'search', 'csrf' => false),
+			'submit_search' =>	array('process' => 'process_search', 'csrf' => true),
 			'del' => array('process' => 'member_del', 'csrf'=>true),
 			'del_history_entries' => array('process' => 'delete_history_items', 'csrf'=>true),
 			'mstatus' => array('process' => 'member_status', 'csrf'=>true),
@@ -274,16 +276,177 @@ class Manage_Members extends page_generic {
 		}
 		return $url;
 	}
+	
+	public function search(){
+		
+		$arrClasses = $this->game->get_primary_classes(array('id_0'));
+		array_unshift($arrClasses, "");
+		
+		$this->tpl->assign_vars(array(
+				'SPINNER_CHAR_COUNT' => (new hspinner('charcount'))->output(),
+				'DATEPICKER_BEFORE'	=> (new hdatepicker('date_before', array('value' => false)))->output(),
+				'DATEPICKER_AFTER'	=> (new hdatepicker('date_after', array('value' => false)))->output(),
+				'DD_CLASS'			=> (new hdropdown('class', array('options' => $arrClasses)))->output(),
+		));
+		
+		
+		$arrUsers = $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list', array(false))));
+		
+		$arrMembers = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'id_list', array(false,true,false))));
+		
+		
+		$this->jquery->Autocomplete('name', $arrUsers);
+		$this->jquery->Autocomplete('charname', $arrMembers);
+		
+		$this->core->set_vars([
+				'page_title'		=> $this->user->lang('manage_members_search'),
+				'template_file'		=> 'admin/manage_members_search.html',
+				'page_path'			=> [
+						['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+						['title'=>$this->user->lang('manage_members'), 'url'=> $this->root_path.'admin/manage_members.php'.$this->SID],
+						['title'=>$this->user->lang('manage_members_search'), 'url'=> ''],
+				],
+				'display'			=> true
+		]);
+		
+	}
+	
+	public function process_search(){
+		//I will process each search, and merge the found user array later
+		$arrUserIDs = $this->pdh->get('member', 'id_list', array(false, false, false));
+		$arrResults = array(
+				'name' => false,
+				'date_before' => false,
+				'date_after' => false,
+				'active' => false,
+				'inactive' => false,
+				'twinkname' => false,
+				'class' => false,
+		);
+		
+		//Username
+		$strSearchName = utf8_strtolower($this->in->get('name'));
+		if($strSearchName != ""){
+			$arrResults['name'] = array();
+			foreach($arrUserIDs as $intUserID){
+				$strMembername = $this->pdh->get('member', 'name', array($intUserID));
+				
+				if(stripos($strMembername, $strSearchName) !== false) {
+					$arrResults['name'][] = $intUserID;
+				}
+				
+			}
+		}
+				
+		//Date before
+		$strBeforeDate = $this->in->get('date_before');
+		if($strBeforeDate){
+			$arrResults['date_before'] = array();
+			$intTime = $this->time->fromformat($strBeforeDate, 0);
+			
+			foreach($arrUserIDs as $intUserID){
+				$intRegDate = $this->pdh->get('member', 'creation_date', array($intUserID));
+				
+				if($intRegDate < $intTime) $arrResults['date_before'][] = $intUserID;
+			}
+		}
+		
+		
+		//Date after
+		$strAfterDate = $this->in->get('date_after');
+		if($strAfterDate){
+			$arrResults['date_after'] = array();
+			$intTime = $this->time->fromformat($strAfterDate, 0);
+			
+			foreach($arrUserIDs as $intUserID){
+				$intRegDate = $this->pdh->get('member', 'creation_date', array($intUserID));
+				
+				if($intRegDate > $intTime) $arrResults['date_after'][] = $intUserID;
+			}
+		}
+		
+		//Charname
+		$strCharname = utf8_strtolower($this->in->get('twinkname'));
+		$arrChars = $this->pdh->get('member', 'id_list');
+		if($strCharname != ""){
+			$arrResults['twinkname'] = array();
+			foreach($arrChars as $intCharID){
+				$strMyCharname = $this->pdh->get('member', 'name', array($intCharID));
+				
+				if(stripos($strMyCharname, $strCharname) !== false) {
+					//Find Main Char
+					$intOwner = $this->pdh->get('member', 'mainid', array($intCharID));
+					if($intOwner === false) $arrResults['twinkname'][] = $intCharID;
+					if($intOwner > 0) $arrResults['twinkname'][] = $intOwner;
+				}
+			}
+		}
+		
+		
+		//Locked
+		$arrStatus = $this->in->getArray('status');
 
-	public function display($messages=false){
+		if(in_array('active',$arrStatus ) ){
+			$arrResults['active'] = array();
+			foreach($arrUserIDs as $intUserID){
+				$intActive = $this->pdh->get('member', 'active', array($intUserID));
+				
+				if($intActive) $arrResults['active'][] = $intUserID;
+			}
+		}
+		
+		if(in_array('inactive',$arrStatus ) ){
+			$arrResults['inactive'] = array();
+			foreach($arrUserIDs as $intUserID){
+				$intActive = $this->pdh->get('member', 'active', array($intUserID));
+				if(!$intActive) $arrResults['inactive'][] = $intUserID;
+			}
+		}
+		
+		//Class
+		$intClass = $this->in->get('class', 0);
+		if($intClass){
+			$arrResults['class'] = array();
+			
+			foreach($arrUserIDs as $intUserID){
+				$intCharClass = $this->pdh->get('member', 'classid', array($intUserID));
+				
+				if($intCharClass == $intClass) $arrResults['class'][] = $intUserID;
+			}
+		}
+		
+		
+		//Now combine the search results
+		$intFalseCount = 0;
+		$arrOutResult = $arrUserIDs;
+		foreach($arrResults as $key => $val){
+			if($val === false) {
+				$intFalseCount++;
+			} else {
+				$arrOutResult = array_intersect($arrOutResult, $val);
+			}
+		}
+		
+		$this->display(false, $arrOutResult);
+	}
+
+	public function display($messages=false, $arrChars=false){
 		if($messages){
 			$this->pdh->process_hook_queue();
 			$this->core->messages($messages);
 		}
+		
+		if($arrChars !== false){
+			$blnIsSearch = true;
+			$view_list = $arrChars;
+		} else {
+			$blnIsSearch = false;
+			$view_list		= $this->pdh->get('member', 'id_list', array(false, false, false));
+		}
 
-		$view_list		= $this->pdh->get('member', 'id_list', array(false, false, false));
 		$hptt_page_settings = $this->pdh->get_page_settings('admin_manage_members', 'hptt_admin_manage_members_memberlist');
-		$hptt			= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => 'manage_members.php', '%link_url_suffix%' => '&mupd=true'));
+		$cache_suffix 	= ($blnIsSearch) ? random_string() : '';
+		$hptt			= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => 'manage_members.php', '%link_url_suffix%' => '&mupd=true'), $cache_suffix);
 		$ranks			= $this->pdh->aget('rank', 'name', 0, array($this->pdh->get('rank', 'id_list', array())));
 		asort($ranks);
 		$page_suffix	= '&amp;start='.$this->in->get('start', 0);
@@ -332,13 +495,16 @@ class Manage_Members extends page_generic {
 				'options' => array('rank', $ranks),
 			),
 		);
+		
+		$intCharsPerPage = ($blnIsSearch) ? PHP_INT_MAX : $this->user->data['user_rlimit'];
 
 		$this->tpl->assign_vars(array(
 			'SID'				=> $this->SID,
-			'MEMBER_LIST'		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_rlimit'], false),
-			'PAGINATION'		=> generate_pagination('manage_members.php'.$sort_suffix, $character_count, $this->user->data['user_rlimit'], $this->in->get('start', 0)),
+			'MEMBER_LIST'		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $intCharsPerPage, false),
+			'PAGINATION'		=> generate_pagination('manage_members.php'.$sort_suffix, $character_count, $intCharsPerPage, $this->in->get('start', 0)),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count(),
 			'MEMBER_COUNT'		=> $character_count,
+			'S_IS_SEARCH'		=> $blnIsSearch,
 			'HPTT_ADMIN_LINK'	=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('admin_manage_members').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,
 			'BUTTON_MENU'		=> $this->core->build_dropdown_menu($this->user->lang('selected_chars').'...', $arrMenuItems, '', 'manage_members_menu', array("input[name=\"selected_ids[]\"]")),
 		));

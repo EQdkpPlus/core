@@ -955,8 +955,9 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			if($this->get_active($id)){
 				$out .= '&nbsp;&nbsp;&nbsp;<a href="'.$this->root_path.'admin/manage_members.php'.$this->SID.'&setinactive='.$id.'&link_hash='.$this->user->csrfGetToken('Manage_Memberssetinactive').'" title="'.$this->user->lang('option_true').'"><i class="fa fa-check-square-o fa-lg icon-color-green"></i></a>';
 			} else {
-				$out .= '&nbsp;&nbsp;&nbsp;<a href="'.$this->root_path.'admin/manage_members.php'.$this->SID.'&setactive='.$id.'&link_hash='.$this->user->csrfGetToken('Manage_Memberssetactive').'" title="'.$this->user->lang('option_false').'"><i class="fa fa-square-o fa-lg icon-color-red"></i></a>';
+				$out .= '&nbsp;&nbsp;&nbsp;<a href="'.$this->root_path.'admin/manage_members.php'.$this->SID.'&setactive='.$id.'&link_hash='.$this->user->csrfGetToken('Manage_Memberssetactive').'" title="'.$this->user->lang('option_false').'"><i class="fa fa-square-o fa-lg icon-color-red"></i></a>&nbsp;';
 			}
+			$out .= '&nbsp;&nbsp;&nbsp;<a href="'.$this->get_memberlink($id, $this->routing->simpleBuild('character'), '', true).'" title="'.$this->user->lang('uc_cat_profiler').'"><i class="fa fa-lg fa-eye"></i></a>';
 
 			if($this->pdh->get('rank', 'is_hidden', array($this->data[$id]['rank_id']))){
 				$out .= '&nbsp;&nbsp;&nbsp;<i class="fa fa-user-secret fa-lg" title="'.$this->user->lang('hidden').'"></i>';
