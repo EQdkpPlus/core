@@ -119,6 +119,13 @@ class build_pointcache extends task {
 			}
 			
 			exit;
+		} elseif($this->in->exists('finished')) {
+			
+			//Clear Cache
+			$this->pdc->flush();
+			
+			echo "finished";
+			exit;
 		} else {
 			$this->config->del('build_pointcache');
 			
@@ -200,6 +207,12 @@ class build_pointcache extends task {
 				console.log('finished');
 				document.getElementById('stepnumber').innerHTML = max_item+1;
 				document.getElementById('progressbar-inner').style.width = 100+'%';
+
+				var xhttp = new XMLHttpRequest();
+			  	xhttp.onreadystatechange = function() {};
+			  	xhttp.open('GET', 'task.php".$this->SID."&task=build_pointcache&finished=true', true);
+			  	xhttp.send();
+
                 alert('All tasks finished.');
 				setCookie('pointcache_step', 0, 0.1);
 				return;
