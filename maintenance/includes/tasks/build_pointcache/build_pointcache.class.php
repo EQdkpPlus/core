@@ -98,6 +98,7 @@ class build_pointcache extends task {
 				
 				if($strType == 'points'){
 					$this->pdh->get('points', 'current', array($intPrimary, $intSecondary));
+					$this->pdh->get('points', 'current', array($intPrimary, $intSecondary, 0, 0, true, false));
 					echo "points ";
 				} elseif($strType == 'raid'){
 					$this->pdh->get('raid', 'value', array($intPrimary, $intSecondary));
