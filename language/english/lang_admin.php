@@ -1876,6 +1876,7 @@ $lang = array(
 		"new_release_notes" => "Notes on the new version",
 		"manage_members_search" => "Search character",
 		"twinkname" => "Twinkname",
+		"inactive" => "Inactive",
 );
 
 ?>
