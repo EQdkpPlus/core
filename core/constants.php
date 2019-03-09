@@ -71,16 +71,16 @@ if(!defined('POINTS_SNAPSHOT_TIME')) define('POINTS_SNAPSHOT_TIME', 1814400);
 
 //URLs
 //-------------------------------------------------------------------------
-define('EQDKP_PROJECT_URL',			"http://eqdkp-plus.eu");
-define('EQDKP_ABOUT_URL',			"http://eqdkp-plus.eu/about");
-define('EQDKP_DOWNLOADS_URL',		"http://eqdkp-plus.eu/repository/");
-define('EQDKP_REPO_URL',			"http://eqdkp-plus.eu/repository/");
-define('EQDKP_NOTIFICATIONS_URL',	"http://eqdkp-plus.eu/rss/notifications.xml");
+define('EQDKP_PROJECT_URL',			"https://eqdkp-plus.eu");
+define('EQDKP_ABOUT_URL',			"https://eqdkp-plus.eu/about");
+define('EQDKP_DOWNLOADS_URL',		"https://repo.eqdkp-plus.eu/");
+define('EQDKP_REPO_URL',			"https://repo.eqdkp-plus.eu/");
+define('EQDKP_NOTIFICATIONS_URL',	"https://eqdkp-plus.eu/rss/notifications.xml");
 define('EQDKP_TWITTER_SCREENNAME',	"EQdkpPlus");
-define('EQDKP_BOARD_URL',			"http://eqdkp-plus.eu/forum");
+define('EQDKP_BOARD_URL',			"https://forum.eqdkp-plus.eu");
 define('EQDKP_CRL_URL',				"https://raw.githubusercontent.com/EQdkpPlus/misc-crl/master/crl.txt");
-define('EQDKP_WIKI_URL',			"http://eqdkp-plus.eu/wiki/");
-define('EQDKP_BUGTRACKER_URL',		"http://eqdkp-plus.eu/bugtracker/");
+define('EQDKP_WIKI_URL',			"https://wiki.eqdkp-plus.eu/wiki/");
+define('EQDKP_BUGTRACKER_URL',		"https://forum.eqdkp-plus.eu/bugtracker/");
 define('EQDKP_CONNECTION_CHECK_URL', 'https://raw.githubusercontent.com/EQdkpPlus/misc-connectioncheck/master/status.txt');
 
 //Tag Blacklist for filtering article content
