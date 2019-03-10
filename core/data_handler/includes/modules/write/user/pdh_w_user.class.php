@@ -267,6 +267,19 @@ if(!class_exists('pdh_w_user')) {
 			return true;
 		}
 		
+		/**
+		 * Sets the confirmed-email status
+		 * -2 = Account was locked by too much logins
+		 * -1 = Registration
+		 * 0 = Not confirmed, Admin requestes email confirmation
+		 * 1 = Confirmed; desired state
+		 * 2 = User changed his Email on his ow
+		 * 
+		 * @param int $user_id
+		 * @param number $status
+		 * @param mixed $strNewEmail
+		 * @return boolean
+		 */
 		public function confirm_email($user_id, $status = 1, $strNewEmail=false) {
 			$arrData = array(
 					'user_email_confirmed'	=> $status,
