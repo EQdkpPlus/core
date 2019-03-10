@@ -200,12 +200,13 @@ class urlfetcher  extends gen_class {
 			$curl_error = curl_errno($curl);
 			$this->pdl->log('urlfetcher', 'Curl Error Nr. '.$curl_error);
 			$this->pdl->log('urlfetcher', 'Curl Info: '.print_r($curl_error, true));
-			
-			curl_close($curl);
+
 			//Remove Header
 			$header_size = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
 			$header = substr($getdata, 0, $header_size);
 			$page = substr($getdata, $header_size);
+			
+			curl_close($curl);
 			
 			#list ($header,$page) = preg_split('/\r\n\r\n/',$getdata,2); 
 			
