@@ -37,12 +37,12 @@ class update_2360 extends sql_update_task {
 // combined update 2.3.5.1 to 2.3.5.11
 		$this->langs = array(
 			'english' => array(
-				'update_2350'	=> 'EQdkp Plus 2.3.6',
+				'update_2360'	=> 'EQdkp Plus 2.3.6',
 				'update_function' => 'Rebuild Pointcache',
 			),
 			'german' => array(
-					'update_2350'	=> 'EQdkp Plus 2.3.6',
-					'update_function' => 'Rebuild Pointcache',
+				'update_2360'	=> 'EQdkp Plus 2.3.6',
+				'update_function' => 'Rebuild Pointcache',
 			),
 		);
 
