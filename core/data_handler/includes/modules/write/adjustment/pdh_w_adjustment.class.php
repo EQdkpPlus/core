@@ -92,6 +92,7 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 			//fetch old-data
 			$group_key = (!$first_param_is_id) ? $group_key_or_id : $this->pdh->get('adjustment', 'group_key', array($group_key_or_id));
 			if($recalculate_group_key == false) $new_group_key = $group_key;  
+			$old = array();
 			$old['ids'] = $this->pdh->get('adjustment', 'ids_of_group_key', array($group_key));
 			foreach($old['ids'] as $adjustment_id){
 				$old['members'][$adjustment_id] = $this->pdh->get('adjustment', 'member', array($adjustment_id));
@@ -104,7 +105,10 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 			$retu = array(true);
 			$updated_mems = array();
 			$added_mems = array();
-			$adjs2del = $old['members'];
+			$hook_id = array();
+			$adjs2del = is_array($old['members']) ? $old['members'] : array();
+			$log_action = array();
+			
 			$log_action['{L_GROUP_KEY}'] = $new_group_key;
 			foreach($member_ids as $member_id){
 				$adj_id = array_search($member_id, $old['members']);
@@ -188,7 +192,8 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
 				
 				$this->log_insert('action_indivadj_updated', $log_action, $new_group_key, $old['reason']);
-				$this->pdh->enqueue_hook('adjustment_update', $hook_id,  array('action' => 'update', 'time' => $time, 'members' => $updated_mems, $added_mems, $adjs2del));
+
+				$this->pdh->enqueue_hook('adjustment_update', $hook_id,  array('action' => 'update', 'time' => $time, 'members' => array_merge($updated_mems, $added_mems, $adjs2del)));
 				return $retu;
 			}
 			return false;
@@ -196,6 +201,7 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 
 		public function delete_adjustment($adjustment_id){
 			//fetch old-data
+			$old = array();
 			$old['member'] = $this->pdh->get('adjustment', 'member', array($adjustment_id));
 			$old['value'] = $this->pdh->get('adjustment', 'value', array($adjustment_id));
 			$old['reason'] = $this->pdh->get('adjustment', 'reason', array($adjustment_id));
@@ -221,6 +227,7 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 
 		public function delete_adjustments_by_group_key($group_key){
 			$adj_ids = $this->pdh->get('adjustment', 'ids_of_group_key', array($group_key));
+			$old = array();
 			foreach($adj_ids as $adjustment_id){
 				$old['member'][] = $this->pdh->get('adjustment', 'member', array($adjustment_id));
 				$old['value'] = $this->pdh->get('adjustment', 'value', array($adjustment_id));
