@@ -278,9 +278,9 @@ if(registry::register('input')->get('out') != ''){
 				$result_name	= $resultdata['properties']['name'];
 				$result_city	= $resultdata['properties']['city'];
 				$result_country	= $resultdata['properties']['country'];
-				
+
 				if($resultdata['properties']['osm_value'] == 'city'){
-					$out[$resultkey]	= $result_city;
+					$out[$resultkey]	= (strlen($result_city)) ? $result_city : $result_name;
 					if($result_country){
 						$out[$resultkey]	.= ', '.$result_country;
 					}
