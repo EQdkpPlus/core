@@ -84,7 +84,7 @@ class hplacepicker extends htext {
 	}
 
 	public function _inpval() {
-		return $this->in->get($this->name, '');
+		return trim($this->in->get($this->name, ''));
 	}
 }
 ?>
