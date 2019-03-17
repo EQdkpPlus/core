@@ -117,7 +117,7 @@ class urlfetcher  extends gen_class {
 			CURLOPT_SSL_VERIFYHOST	=> false,
 			CURLOPT_SSL_VERIFYPEER	=> false,
 			CURLOPT_VERBOSE			=> false,
-			CURLOPT_HEADER			=> true,
+			CURLOPT_HEADER			=> false,
 			CURLOPT_HTTPAUTH		=> CURLAUTH_ANY,
 			CURLOPT_HTTPHEADER		=> ((is_array($header) && count($header) > 0) ? $header : array())
 		);
@@ -126,11 +126,8 @@ class urlfetcher  extends gen_class {
 			
 			$curl = curl_init();
 			curl_setopt_array($curl, $curlOptions);
-			$getdata = curl_exec($curl);
-			
-			$header_size = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
-			$header = substr($getdata, 0, $header_size);
-			$body = substr($getdata, $header_size);
+			curl_setopt( $curl, CURLOPT_HEADERFUNCTION, array( $this, 'curl_headers_callback' ) );
+			$body = curl_exec($curl);
 			
 			$code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 			
@@ -139,11 +136,11 @@ class urlfetcher  extends gen_class {
 			$this->pdl->log('urlfetcher', 'Curl Error Nr. '.$curl_error);
 			$this->pdl->log('urlfetcher', 'Curl Info: '.print_r($curl_error, true));
 			$this->pdl->log('urlfetcher', 'Response Code: '.$code);
-			$this->pdl->log('urlfetcher', 'Response: '.strlen($body).'; First 200 Chars: '.htmlspecialchars(substr($body, 0, 200)));
+			$this->pdl->log('urlfetcher', 'Response: '.strlen($body).'; First 200 Chars: '.htmlspecialchars(substr($body, 0, 200)));	
 			
 			$this->responseStatus	= (intval($code) >= 400) ? false : true;
 			$this->responseCode		= intval($code);
-			$this->responseHeader	= $this->parseHeaders($header);
+			$this->responseHeader	= $this->parseHeaders($this->responseHeader);
 			$this->responseBody		= $body;
 			
 			curl_close($curl);
@@ -193,6 +190,7 @@ class urlfetcher  extends gen_class {
 			}
 			
 			curl_setopt($curl, CURLOPT_URL, $newurl);
+			curl_setopt($curl, CURLOPT_HEADERFUNCTION, array( $this, 'curl_headers_callback' ) );
 			$getdata = curl_exec($curl);
 			$code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 			
@@ -200,27 +198,27 @@ class urlfetcher  extends gen_class {
 			$curl_error = curl_errno($curl);
 			$this->pdl->log('urlfetcher', 'Curl Error Nr. '.$curl_error);
 			$this->pdl->log('urlfetcher', 'Curl Info: '.print_r($curl_error, true));
-
-			//Remove Header
-			$header_size = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
-			$header = substr($getdata, 0, $header_size);
-			$page = substr($getdata, $header_size);
 			
 			curl_close($curl);
-			
-			#list ($header,$page) = preg_split('/\r\n\r\n/',$getdata,2); 
+			//Remove Header
+			list ($header,$page) = preg_split('/\r\n\r\n/',$getdata,2); 
 			
 			$this->responseStatus	= (intval($code) >= 400) ? false : true;
 			$this->responseCode		= intval($code);
-			$this->responseHeader	= $this->parseHeaders($header);
+			$this->responseHeader	= $this->parseHeaders($this->responseHeader);
 			$this->responseBody		= $page;
 			
 			$this->pdl->log('urlfetcher', 'Response Code: '.$code);
-			$this->pdl->log('urlfetcher', 'Reponse Header: '.$header);
+			$this->pdl->log('urlfetcher', 'Reponse latest Header: '.$header);
 			$this->pdl->log('urlfetcher', 'Response: '.strlen($page).'; First 200 Chars: '.htmlspecialchars(substr($page, 0, 200)));
 			 
 			return $page;
 		}
+	}
+	
+	private function curl_headers_callback($curl, $string){
+		$this->responseHeader	.= $string;
+		return strlen($string);
 	}
 	
 	private function post_curl($url, $data, $content_type, $header, $conn_timeout, $timeout){
