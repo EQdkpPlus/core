@@ -25,23 +25,22 @@ if ( !defined('EQDKP_INC') ){
 
 include_once(registry::get_const('root_path').'maintenance/includes/sql_update_task.class.php');
 
-class update_2360 extends sql_update_task {
+class update_2380 extends sql_update_task {
 	public $author			= 'GodMod';
-	public $version			= '2.3.6.0'; //new plus-version
-	public $ext_version		= '2.3.6'; //new plus-version
-	public $name			= '2.3.6 Update';
+	public $version			= '2.3.8.0'; //new plus-version
+	public $ext_version		= '2.3.8'; //new plus-version
+	public $name			= '2.3.8 Update';
 
 	public function __construct(){
 		parent::__construct();
 
-// combined update 2.3.5.1 to 2.3.5.11
 		$this->langs = array(
 			'english' => array(
-				'update_2360'	=> 'EQdkp Plus 2.3.6 Update',
+				'update_2380'	=> 'EQdkp Plus 2.3.8 Update',
 				'update_function' => 'Rebuild Pointcache',
 			),
 			'german' => array(
-				'update_2360'	=> 'EQdkp Plus 2.3.6 Update',
+				'update_2380'	=> 'EQdkp Plus 2.3.8 Update',
 				'update_function' => 'Rebuild Pointcache',
 			),
 		);
@@ -52,7 +51,14 @@ class update_2360 extends sql_update_task {
 	}
 
 	public function update_function(){
-		$this->config->set('build_pointcache', 'true');
+		$arrMultiDKPPools = $this->pdh->get('multidkp', 'id_list');
+		foreach($arrMultiDKPPools as $multidkp_id){
+			$blnIsDecayed = register('auto_point_adjustments')->is_decay('current', $multidkp_id);
+			if($blnIsDecayed){
+				$this->config->set('build_pointcache', 'true');
+				break;
+			}
+		}
 				
 		return true;
 	}

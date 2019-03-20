@@ -30,14 +30,14 @@ class update_2200 extends sql_update_task {
 	public $author			= 'GodMod';
 	public $version		= '2.2.0.0'; //new plus-version
 	public $ext_version	= '2.2.0'; //new plus-version
-	public $name			= '2.2.0';
+	public $name			= '2.2.0 Update';
 
 	public function __construct(){
 		parent::__construct();
 
 		$this->langs = array(
 			'english' => array(
-				'update_2200'	=> 'EQdkp Plus 2.2.0',
+				'update_2200'	=> 'EQdkp Plus 2.2.0 Update',
 					1			=> 'Alter notification_types table',
 					2			=> 'Alter member profilefields table',
 					3			=> 'Alter notification_types table',
@@ -60,7 +60,7 @@ class update_2200 extends sql_update_task {
 					20			=> 'Cleanup session table',
 				),
 			'german' => array(
-				'update_2200'	=> 'EQdkp Plus 2.2.0',
+				'update_2200'	=> 'EQdkp Plus 2.2.0 Update',
 					1			=> 'Ändere die Benachrichtigungstypen-Tabelle',
 					2			=> 'Ändere die Charakter Profilfeld-Tabelle',
 					3			=> 'Ändere die Benachrichtigungstypen-Tabelle',

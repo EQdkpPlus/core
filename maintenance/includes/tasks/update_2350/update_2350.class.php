@@ -29,7 +29,7 @@ class update_2350 extends sql_update_task {
 	public $author			= 'GodMod';
 	public $version			= '2.3.5.0'; //new plus-version
 	public $ext_version		= '2.3.5'; //new plus-version
-	public $name			= '2.3.5';
+	public $name			= '2.3.5 Update';
 
 	public function __construct(){
 		parent::__construct();
@@ -37,11 +37,11 @@ class update_2350 extends sql_update_task {
 // combined update 2.3.5.1 to 2.3.5.11
 		$this->langs = array(
 			'english' => array(
-				'update_2350'	=> 'EQdkp Plus 2.3.5',
+				'update_2350'	=> 'EQdkp Plus 2.3.5 Update',
 				'update_function' => 'Rebuild Pointcache',
 			),
 			'german' => array(
-					'update_2350'	=> 'EQdkp Plus 2.3.5',
+					'update_2350'	=> 'EQdkp Plus 2.3.5 Update',
 					'update_function' => 'Rebuild Pointcache',
 			),
 		);
