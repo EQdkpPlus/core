@@ -274,6 +274,42 @@ if ( !class_exists( "pdh_w_item" ) ) {
 			return false;
 		}
 		
+		public function update_itempool($item_id, $itempool_id){
+			$old = array();
+			$old['buyer'] = $this->pdh->get('item', 'buyer', array($item_id));
+			$old['name'] = $this->pdh->get('item', 'name', array($item_id));
+			$old['itempool'] = $this->pdh->get('itempool', 'name', array($this->pdh->get('item', 'itempool_id', array($item_id))));
+			
+			//If the itempool stays the same, return 
+			if($itempool_id == $old['itempool']) return true;
+			
+			$old['date'] = $this->pdh->get('item', 'date', array($item_id));
+			
+			$arrOld = array(
+					'itempool'			=> $old['itempool_id'],
+			);
+			$arrNew = array(
+					'itempool'			=> $itempool_id,
+			);
+			
+			$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
+			
+			$arrSet = array(
+					'itempool_id' => $itempool_id,
+			);
+
+			$objQuery = $this->db->prepare("UPDATE __items :p WHERE item_id = ?;")->set($arrSet)->execute($item_id);
+			if($objQuery){
+				
+				$this->log_insert('action_item_updated', $log_action, $item_id, $old['name']);
+				$this->pdh->enqueue_hook('item_update', array($item_id), array('action' => 'update', 'time' => $old['date'], 'members' => array($old['buyer'])));
+				
+				return true;
+			}
+			
+			return false;
+		}
+		
 		public function delete_itemsofraid($raid_id) {
 			$items = $this->pdh->get('item', 'itemsofraid', array($raid_id));
 			if(count($items) < 1) return true;
