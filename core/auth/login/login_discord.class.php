@@ -26,6 +26,11 @@ if ( !defined('EQDKP_INC') ){
 class login_discord extends gen_class {
 	private $oauth_loaded = false;
 	private $redirURL = "";
+	
+	private $appid, $appsecret = false;
+	
+	private $AUTHORIZATION_ENDPOINT = 'https://discordapp.com/api/oauth2/authorize';
+	private $TOKEN_ENDPOINT         = 'https://discordapp.com/api/oauth2/token';
 
 	public static $functions = array(
 			'login_button'		=> 'login_button',
@@ -57,12 +62,6 @@ class login_discord extends gen_class {
 		return $settings;
 	}
 
-	private $appid, $appsecret = false;
-
-	private $AUTHORIZATION_ENDPOINT = 'https://discordapp.com/api/oauth2/authorize';
-	private $TOKEN_ENDPOINT         = 'https://discordapp.com/api/oauth2/token';
-
-
 	public function init_oauth(){
 		if (!$this->oauth_loaded && !class_exists('OAuth2\\Client')){
 			require($this->root_path.'libraries/oauth/Client.php');
@@ -77,6 +76,10 @@ class login_discord extends gen_class {
 	
 	public function redirect($arrOptions=array()){
 		$this->init_oauth();
+		
+		if(!strlen($this->appid) || !strlen($this->appsecret)){
+			message_die('Discord Client-ID or Client-Secret is missing. Please insert it into the fields at the EQdkp Plus settings, tab "User".');
+		}
 		
 		$client = new OAuth2\Client($this->appid, $this->appsecret);
 		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $this->redirURL, array('scope' => 'identify'));

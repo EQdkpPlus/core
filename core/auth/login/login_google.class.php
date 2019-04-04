@@ -79,6 +79,10 @@ class login_google extends gen_class {
 		$this->init_oauth();
 		$redir_url = $this->env->buildLink().'index.php/auth-endpoint/?lmethod=google';
 		
+		if(!strlen($this->appid) || !strlen($this->appsecret)){
+			message_die('Google Client-ID or Client-Secret is missing. Please insert it into the fields at the EQdkp Plus settings, tab "User".');
+		}
+		
 		$client = new OAuth2\Client($this->appid, $this->appsecret);
 		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $redir_url, array('scope' => 'profile openid email'));
 		

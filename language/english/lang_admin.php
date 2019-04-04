@@ -1155,7 +1155,7 @@ $lang = array(
 	"core_sett_f_login_twitch_appsecret" => "Twitch Client Secret",
 	"core_sett_f_login_discord_appid" => "Discord Client-ID",
 	"core_sett_f_help_login_discord_appid" => "Insert here the Client-ID of your App created at <a href=\"https://discordapp.com/developers/applications/me\" target=\"_blank\">https://discordapp.com/developers/applications/me</a>.<br/>As Redirect-URI use ".register('env')->buildLink().'index.php/auth-endpoint/?lmethod=discord',
-	"core_sett_f_login_discord_appsecret" => "Discord App Secret",
+	"core_sett_f_login_discord_appsecret" => "Discord Client Secret",
 	"core_sett_f_enable_embedly" => 'Automatic conversion of links to embedded videos/pictures',
 	"core_sett_f_help_enable_embedly" => 'Links to video/pictures (e.g. youtube) will be converted automatically to embedded objects',
 	"core_sett_tab_global" => 'Global',
@@ -1877,6 +1877,7 @@ $lang = array(
 		"manage_members_search" => "Search character",
 		"twinkname" => "Twinkname",
 		"inactive" => "Inactive",
+		"event_defaultvalue_note" => "Default value of the event. Is used as a help and can be changed during raid creation.",
 );
 
 ?>
