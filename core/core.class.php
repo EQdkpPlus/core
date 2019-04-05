@@ -306,7 +306,20 @@ class core extends gen_class {
 								$(this).val(original_val);
 							}
 						});
+
 					});", 'static_docready');
+			
+			if(strlen($this->user->style['portal_width']) > 2 && (strpos($this->user->style['portal_width'], '%') == false)){
+				$this->tpl->add_js("
+					$(function(){
+						if($( 'body' ).hasClass( 'fixed_width' )){
+							if($( window ).width() < ".intval($this->user->style['portal_width'])."){
+								$( 'body' ).removeClass('fixed_width');
+							}
+						}
+						
+					});", 'static_docready');
+			}
 
 			$this->tpl->add_js("
 					$('.paginationPageSelector').on('click', function(){
