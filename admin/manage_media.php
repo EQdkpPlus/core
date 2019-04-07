@@ -35,6 +35,10 @@ class Manage_Media extends page_generic {
 	}
 
 	public function display(){
+		$this->tpl->assign_vars(array(
+				'ELFINDER_LANG' => $this->user->lang('XML_LANG'),
+		));
+		
 		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manage_media'),
 			'template_file'		=> 'admin/manage_media.html',
