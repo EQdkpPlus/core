@@ -58,11 +58,17 @@ class addcharacter_pageobject extends pageobject {
 		$data['notes'] = $this->in->get('notes');
 
 		if (strlen($data['name'])){
-			$blnResult = $this->pdh->put('member', 'addorupdate_member', array($this->url_id, $data, $data['overtakechar']));
+			$mixResult = $this->pdh->put('member', 'addorupdate_member', array(0, $data, $data['overtakechar']));
+			
+			if($this->adminmode && $mixResult){
+				if($data['userid']){
+					$this->pdh->put('member', 'add_char_to_user', array($mixResult, (int)$data['userid']));
+				}
+			}
 
 			$this->pdh->process_hook_queue();
 
-			if ($blnResult){
+			if ($mixResult){
 				$this->tpl->add_js('jQuery.FrameDialog.closeDialog();');
 				return true;
 			} else {
@@ -87,8 +93,19 @@ class addcharacter_pageobject extends pageobject {
 			unset($data['rankid']);
 		}
 
+		$intOldUserID = $this->pdh->get('member', 'user', array($this->url_id));
 		$id = $this->pdh->put('member', 'addorupdate_member', array($this->url_id, $data, $data['overtakechar']));
-
+		
+		if($id){
+			if($this->adminmode && $data['userid'] != $intOldUserID){
+				if($data['userid']){
+					$this->pdh->put('member', 'add_char_to_user', array($this->url_id, (int)$data['userid']));
+				} else {
+					$this->pdh->put('member', 'delete_char_from_user', array($this->url_id, $intOldUserID));
+				}
+			}
+		}
+		
 		//Transfer character history
 		if ($this->adminmode && ($this->url_id != $this->in->get('history_receiver', 0)) && $this->in->get('history_receiver', 0) > 0){
 			$this->pdh->put('member', 'trans_member', array($this->url_id, $this->in->get('history_receiver', 0)));
@@ -115,6 +132,7 @@ class addcharacter_pageobject extends pageobject {
 			// some modifications - TODO: solve this inconsistency
 			$member_data['rankid'] = $member_data['rank_id'];
 			$member_data['mainid'] = $member_data['main_id'];
+			$member_data['userid'] = $this->pdh->get('member', 'user', array($this->url_id));
 		}
 		$userid_real	= ($this->url_id > 0) ? $this->pdh->get('member', 'userid', array($this->url_id)) : $this->user->data['user_id'];
 
@@ -220,7 +238,7 @@ class addcharacter_pageobject extends pageobject {
 				);
 			}
 		}
-		if(!($this->adminmode && $this->url_id > 0)) {
+		if(!($this->adminmode)) {
 			$static_fields['overtakechar'] = array(
 				'type'	=> 'radio',
 				'lang'	=> 'overtake_char',
@@ -244,6 +262,17 @@ class addcharacter_pageobject extends pageobject {
 				'options'		=> $maincharsel,
 				'lang'			=> 'mainchar',
 			);
+			
+			$arrUsers = $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list')));
+			array_unshift($arrUsers, '');
+			
+			$static_fields['userid']	= array(
+					'type'			=> 'dropdown',
+					'options'		=> $arrUsers,
+					'lang'			=> 'user',
+			);
+
+			
 			$tmpranks		= $this->pdh->aget('rank', 'name', 0, array($this->pdh->get('rank', 'id_list')));
 			$static_fields['rankid']	= array(
 				'type'			=> 'dropdown',
@@ -252,13 +281,15 @@ class addcharacter_pageobject extends pageobject {
 				'default'		=> $this->pdh->get('rank', 'default', array()),
 			);
 			$static_fields['creation_date'] = array(
-					'type'	=> 'datepicker',
-					'lang'	=> 'creation_date',
-					'timepicker' => true,
+					'type'			=> 'datepicker',
+					'lang'			=> 'creation_date',
+					'timepicker'	=> true,
+					'default'		=> $this->time->time,
 			);
 		}
+		$this->form->add_tab(array('name' => 'general', 'lang' => $this->user->lang('uc_cat_general')));
+		$this->form->add_fields($static_fields, '', 'general');
 		$this->form->add_tab(array('name' => 'character', 'lang' => 'character'));
-		$this->form->add_fields($static_fields, '', 'character');
 
 		// Dynamic Tabs
 		$categorynames = $this->pdh->get('profile_fields', 'categories');

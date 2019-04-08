@@ -78,7 +78,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				}
 
 				if($changes == false && json_encode($old['profiledata']) == $data['profiledata']) {
-					return true;
+					return $member_id;
 				}
 			//add new member
 			} else {
@@ -266,6 +266,36 @@ if ( !class_exists( "pdh_w_member" ) ) {
 			}
 			return false;
 		}
+		
+		public function add_char_to_user($member_id, $user_id){
+			//hole alten user
+			$intUser = $this->pdh->get('member', 'user', array($member_id));
+			if($intUser){
+				//delete_char_from_user
+				$this->delete_char_from_user($member_id, $user_id);
+			}
+						
+			//Hole alle des neuen Owners
+			$arrConnections = $this->pdh->get('member', 'connection_id', array($user_id));
+			//Füge ihn in das Array ein
+			$arrConnections[] = $member_id;
+			//update_connection
+			$this->update_connection($arrConnections, $user_id);
+		}
+		
+		public function delete_char_from_user($member_id, $user_id){
+			//Hole alle des Owners
+			$arrConnections = $this->pdh->get('member', 'connection_id', array($user_id));
+			
+			//Lösche ihn aus dem Array
+			foreach($arrConnections as $key => $val){
+				if($val == $member_id) unset($arrConnections[$key]);
+			}
+			
+			//Aktualisiere die Zuordnung
+			$this->update_connection($arrConnections, $user_id);
+		}
+		
 
 		public function update_connection($member_id, $user_id=0){
 			$user_id	= ($user_id == 0) ? $this->user->data['user_id'] : $user_id;
@@ -337,10 +367,10 @@ if ( !class_exists( "pdh_w_member" ) ) {
 			return true;
 		}
 
-		public function takeover($id){
+		public function takeover($id, $user_id=false){
 			$objQuery = $this->db->prepare('INSERT INTO __member_user :p')->set(array(
 				'member_id'		=> $id,
-				'user_id'		=> $this->user->id
+				'user_id'		=> (!$user_id) ? $this->user->id : $user_id,
 			))->execute();
 			
 			$this->pdh->enqueue_hook('member_update', $id, array('action' => 'update', 'members' => array($id), 'users' => array($this->user->id)));

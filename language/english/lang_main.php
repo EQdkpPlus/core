@@ -1145,6 +1145,7 @@ $lang = array(
 	"creation_date" => "Created at",
 	"reg_connected_account" => "Connected Account",
 	"reg_connected_account_help" => "You can use the connected account from a login provider to login into EQdkp Plus.",
+	"uc_cat_general" => "General",
 	);
 
 ?>

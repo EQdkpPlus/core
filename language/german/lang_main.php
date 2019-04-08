@@ -1105,5 +1105,6 @@ $lang = array(
 "creation_date" => "Erstellt am",
 "reg_connected_account" => "Verknüpftes Konto",
 "reg_connected_account_help" => "Mit Hilfe des verknüpften Kontos eines Login-Anbieters kannst du dich im EQdkp Plus anmelden.",
+"uc_cat_general" => "Allgemeines",
 );
 ?>
