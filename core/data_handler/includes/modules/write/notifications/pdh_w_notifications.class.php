@@ -108,7 +108,7 @@ if(!class_exists('pdh_w_notifications')) {
 		}
 		
 		public function delete_by_type($strType){
-			$objQuery = $this->db->prepare("DELETE FROM __notifications WHERE type = ?")->execute($strType);
+			$objQuery = $this->db->prepare("DELETE FROM __notifications WHERE `type` = ?")->execute($strType);
 				
 			if($objQuery) {
 				$this->pdh->enqueue_hook('notifications_update');
@@ -118,7 +118,7 @@ if(!class_exists('pdh_w_notifications')) {
 		}
 		
 		public function delete_by_type_and_recordset($strType, $strRecordsetID){
-			$objQuery = $this->db->prepare("DELETE FROM __notifications WHERE type = ? AND dataset_id=?")->execute($strType, $strRecordsetID);
+			$objQuery = $this->db->prepare("DELETE FROM __notifications WHERE `type` = ? AND dataset_id=?")->execute($strType, $strRecordsetID);
 			if($objQuery) {
 				$this->pdh->enqueue_hook('notifications_update');
 				return true;
@@ -127,7 +127,7 @@ if(!class_exists('pdh_w_notifications')) {
 		}
 		
 		public function delete_by_type_and_recordset_for_user($strType, $strRecordsetID, $intUserID){
-			$objQuery = $this->db->prepare("DELETE FROM __notifications WHERE type = ? AND dataset_id=? AND user_id = ?")->execute($strType, $strRecordsetID, $intUserID);
+			$objQuery = $this->db->prepare("DELETE FROM __notifications WHERE `type` = ? AND dataset_id=? AND user_id = ?")->execute($strType, $strRecordsetID, $intUserID);
 			if($objQuery) {
 				$this->pdh->enqueue_hook('notifications_update');
 				return true;
@@ -146,7 +146,7 @@ if(!class_exists('pdh_w_notifications')) {
 		}
 		
 		public function cleanup_read($intTime){
-			$objQuery = $this->db->prepare("DELETE FROM __notifications WHERE `read` = 1 AND time < ?")->execute($intTime);
+			$objQuery = $this->db->prepare("DELETE FROM __notifications WHERE `read` = 1 AND `time` < ?")->execute($intTime);
 			
 			if($objQuery) {
 				$this->pdh->enqueue_hook('notifications_update');
@@ -156,7 +156,7 @@ if(!class_exists('pdh_w_notifications')) {
 		}
 		
 		public function cleanup_unread($intTime){
-			$objQuery = $this->db->prepare("DELETE FROM __notifications WHERE time < ?")->execute($intTime);
+			$objQuery = $this->db->prepare("DELETE FROM __notifications WHERE `time` < ?")->execute($intTime);
 				
 			if($objQuery) {
 				$this->pdh->enqueue_hook('notifications_update');

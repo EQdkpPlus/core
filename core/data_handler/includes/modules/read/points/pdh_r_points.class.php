@@ -593,9 +593,9 @@ if ( !class_exists( "pdh_r_points" ) ) {
 
 		public function get_latest_snapshot($intMemberID, $intMdkpID, $intTime=false){
 			if($intTime){
-				$objQuery = $this->db->prepare("SELECT * FROM __member_points WHERE member_id=? AND mdkp_id=? AND time < ? ORDER by time DESC LIMIT 1;")->execute($intMemberID, $intMdkpID, $intTime);
+				$objQuery = $this->db->prepare("SELECT * FROM __member_points WHERE member_id=? AND mdkp_id=? AND `time` < ? ORDER by `time` DESC LIMIT 1;")->execute($intMemberID, $intMdkpID, $intTime);
 			} else {
-				$objQuery = $this->db->prepare("SELECT * FROM __member_points WHERE member_id=? AND mdkp_id=? ORDER BY time DESC LIMIT 1")->execute($intMemberID, $intMdkpID);
+				$objQuery = $this->db->prepare("SELECT * FROM __member_points WHERE member_id=? AND mdkp_id=? ORDER BY `time` DESC LIMIT 1")->execute($intMemberID, $intMdkpID);
 			}
 
 			if($objQuery){
@@ -621,9 +621,9 @@ if ( !class_exists( "pdh_r_points" ) ) {
 
 		public function get_delete_from_snapshot($intTime, $arrMembers=false){
 			if($arrMembers && is_array($arrMembers)){
-				$objQuery = $this->db->prepare("DELETE FROM __member_points WHERE time > ? AND member_id :in")->in($arrMembers)->execute($intTime);
+				$objQuery = $this->db->prepare("DELETE FROM __member_points WHERE `time` > ? AND member_id :in")->in($arrMembers)->execute($intTime);
 			} else {
-				$objQuery = $this->db->prepare("DELETE FROM __member_points WHERE time > ?")->execute($intTime);
+				$objQuery = $this->db->prepare("DELETE FROM __member_points WHERE `time` > ?")->execute($intTime);
 			}
 
 
