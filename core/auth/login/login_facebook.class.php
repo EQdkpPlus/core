@@ -92,20 +92,20 @@ class login_facebook extends gen_class {
 		$auth_url = $this->redirURL.'&status=login&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
 		
 		//Button color: #7289DA
-		return '<button type="button" class="mainoption thirdpartylogin facebook loginbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-facebook fa-lg"></i> Facebook</button>';
+		return '<button type="button" class="mainoption thirdpartylogin facebook loginbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-facebook-official fa-lg"></i> Facebook</button>';
 	}
 	
 	
 	public function account_button(){
 		$auth_url = $this->redirURL.'&status=account&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
 		
-		return '<button type="button" class="mainoption thirdpartylogin facebook accountbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-facebook fa-lg"></i> Facebook</button>';
+		return '<button type="button" class="mainoption thirdpartylogin facebook accountbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-facebook-official fa-lg"></i> Facebook</button>';
 	}
 	
 	public function register_button(){
 		$auth_url = $this->redirURL.'&status=register&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
 		
-		return '<button type="button" class="mainoption thirdpartylogin facebook registerbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-facebook fa-lg"></i> Facebook</button>';
+		return '<button type="button" class="mainoption thirdpartylogin facebook registerbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-facebook-official fa-lg"></i> Facebook</button>';
 	}
 	
 	public function pre_register(){

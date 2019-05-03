@@ -26,7 +26,7 @@ if(!defined('EQDKP_INC')) {
 if(!class_exists('pdh_w_multidkp')) {
 	class pdh_w_multidkp extends pdh_w_generic {
 
-		public function add_multidkp($name, $desc, $events, $itempools, $no_atts=array()) {
+		public function add_multidkp($name, $desc, $events, $itempools=array(), $no_atts=array()) {
 			$arrSet = array(
 				'multidkp_name' => $name,
 				'multidkp_desc' => $desc,
