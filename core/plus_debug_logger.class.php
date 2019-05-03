@@ -800,7 +800,7 @@ if ( !defined('EQDKP_INC') ){
 					} else {
 						$strLogFolder = ($this->table_prefix != "" && $this->dbname != "") ? ((defined('INSTALLED_VERSION')) ? '' : md5($this->table_prefix.$this->dbname)) : '<HASH>/';
 						$output .= 'Please forward the above error code to the site administrator.<br /><br /> The error code can be used by an administrator to lookup the full error message in the Administration Control Panel via <span class="inlineCode">Logs >> Errors</span>.
-								In addition, the error has been written to the log file located at <span class="inlineCode">*/data/'.$strLogFolder.'tmp/'.$this->date.'-fatal_error.log</span> and can be accessed with a FTP program or similar.';
+								In addition, the error has been written to the log file located at <span class="inlineCode">*/data/'.$strLogFolder.'/tmp/'.$this->date.'-fatal_error.log</span> and can be accessed with a FTP program or similar.';
 					}
 					$output .= $this->error_message_footer();
 					echo $output;
