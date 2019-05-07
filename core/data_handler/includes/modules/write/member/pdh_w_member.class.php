@@ -270,11 +270,12 @@ if ( !class_exists( "pdh_w_member" ) ) {
 		public function add_char_to_user($member_id, $user_id){
 			//hole alten user
 			$intUser = $this->pdh->get('member', 'user', array($member_id));
+			
 			if($intUser){
-				//delete_char_from_user
-				$this->delete_char_from_user($member_id, $user_id);
+				//delete_char_from_user from old user
+				$this->delete_char_from_user($member_id, $intUser);
 			}
-						
+			
 			//Hole alle des neuen Owners
 			$arrConnections = $this->pdh->get('member', 'connection_id', array($user_id));
 			//Füge ihn in das Array ein
