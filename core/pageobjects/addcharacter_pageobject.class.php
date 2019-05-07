@@ -263,8 +263,11 @@ class addcharacter_pageobject extends pageobject {
 				'lang'			=> 'mainchar',
 			);
 			
-			$arrUsers = $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list')));
-			array_unshift($arrUsers, '');
+			$arrUsersTmp = $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list')));
+			$arrUsers = array(0 => '');
+			foreach($arrUsersTmp as $usrid => $usernm){
+				$arrUsers[$usrid] = $usernm;
+			}
 			
 			$static_fields['userid']	= array(
 					'type'			=> 'dropdown',
