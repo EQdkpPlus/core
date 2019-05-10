@@ -156,6 +156,7 @@ if ( !class_exists( "pdh_r_points_history" ) ) {
 			//calculate
 			if(is_array($arrPoints['earned'])){
 				foreach($arrPoints['earned'] as $event_id => $earned){
+					if(!isset($arrPoints['earned'][0])) $arrPoints['earned'][0] = 0;
 					$arrPoints['earned'][0] += $earned;
 				}
 			}
@@ -166,6 +167,7 @@ if ( !class_exists( "pdh_r_points_history" ) ) {
 
 					foreach($itempools as $itempool_id => $spent){
 						if($itempool_id == 0) continue;
+						if(!isset($arrPoints['spent'][0][0])) $arrPoints['spent'][0][0] = 0;
 						$arrPoints['spent'][0][0] += $spent;
 						if(!isset($arrPoints['spent'][$event_id][0])) $arrPoints['spent'][$event_id][0] = 0;
 						$arrPoints['spent'][$event_id][0] += $spent;
