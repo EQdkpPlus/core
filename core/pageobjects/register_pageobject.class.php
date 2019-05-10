@@ -403,12 +403,12 @@ class register_pageobject extends pageobject {
 	// Process Activate
 	// ---------------------------------------------------------
 	public function process_activate() {
-		if($this->user->is_signedin() || (int)$this->config->get('enable_registration') == 0){
+		if((int)$this->config->get('enable_registration') == 0){
 			redirect($this->controller_path_plain.$this->SID);
 			return;
 		}
 		
-		if((int)$this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))) {
+		if((int)$this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url')) && $this->bridge->get_sync_email()) {
 			redirect($this->config->get('cmsbridge_reg_url'),false,true);
 			return;
 		}
