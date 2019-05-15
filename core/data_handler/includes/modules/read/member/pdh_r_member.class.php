@@ -838,7 +838,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_memberlink_decorated($member_id, $base_url, $url_suffix = '', $blnUseController=false){
-			return '<a href="'.$this->get_memberlink($member_id, $base_url, $url_suffix, $blnUseController).'">'.$this->get_name_decorated($member_id).'</a>';
+			return '<a href="'.$this->get_memberlink($member_id, $base_url, $url_suffix, $blnUseController).'" data-char-rankid="'.$this->get_rankid($member_id).'" data-char-twink="'.(($this->get_is_main($member_id)) ? 0 : 1).'" data-char-classid="'.$this->get_classid($member_id).'">'.$this->get_name_decorated($member_id).'</a>';
 		}
 
 		public function comp_memberlink_decorated($params1, $params2){
