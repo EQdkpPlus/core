@@ -942,7 +942,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 				chartooltip_js();
 				$ctt = ' class="chartooltip" title="'.$member_id.'"';
 			}
-			return '<a href="'.$this->get_memberlink($member_id, $base_url, $url_suffix, $blnUseController).'"'.$ctt.'>'.$this->get_html_name($member_id, $rank_prefix, $rank_suffix).'</a>';
+			return '<a href="'.$this->get_memberlink($member_id, $base_url, $url_suffix, $blnUseController).'"'.$ctt.' data-char-rankid="'.$this->get_rankid($member_id).'" data-char-twink="'.(($this->get_is_main($member_id)) ? 0 : 1).'" data-char-classid="'.$this->get_classid($member_id).'">'.$this->get_html_name($member_id, $rank_prefix, $rank_suffix).'</a>';
 		}
 
 		public function comp_memberlink($params1, $params2){
