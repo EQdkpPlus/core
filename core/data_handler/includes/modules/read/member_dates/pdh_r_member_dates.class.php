@@ -396,6 +396,12 @@ if ( !class_exists( "pdh_r_member_dates" ) ) {
 		}
 
 		public function get_html_last_item_name($member_id, $mdkp_id=null, $with_twink=true){
+			if($with_twink){
+				if(!$this->blnItemsMultiLoaded) $this->init_item_multi();
+			} else {
+				if(!$this->blnItemsSingleLoaded) $this->init_item_single();
+			}
+			
 			$with_twink = ($with_twink) ? 'multi' : 'single';
 			infotooltip_js();
 			if($mdkp_id == null AND isset($this->fl_item_dates[$with_twink][$member_id]['total']['last']['item_id'])){
