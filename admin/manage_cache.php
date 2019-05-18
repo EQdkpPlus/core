@@ -75,7 +75,8 @@ class manage_cache extends page_generic {
 		} else {
 			$pdc_array = $this->in->getArray('cache_'.$selected_cache, '');
 			$pdc_array['mode'] = $selected_cache;
-			$this->pdc->flush();
+			$objPdc = register('datacache', array('cache_'.$selected_cache));
+			$objPdc->flush();
 			$this->config->set($pdc_array, '', 'pdc');
 			$this->core->message($this->user->lang('save_suc'), $this->user->lang('success'), 'green');
 		}
