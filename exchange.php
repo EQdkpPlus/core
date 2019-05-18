@@ -26,7 +26,7 @@ define('NO_MMODE_REDIRECT', true);
 //Create no session for external portal modules.
 //Using Get here is neccessary, because input class not loaded yet and not working with the user input
 if(isset($_GET['out']) && $_GET['out'] == 'portal'){
-	define('NO_SESSION', true);
+	define('NO_NEW_SESSION', true);
 }
 
 include_once($eqdkp_root_path . 'common.php');
