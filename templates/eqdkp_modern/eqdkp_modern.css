@@ -310,7 +310,7 @@ h3 {
 }
 
 /* Header and Site-Titles */
-#wrapper header {
+#wrapper > header {
 	background: url('@{eqdkpBannerImage}') no-repeat scroll ~"center top / 100%" transparent;
 }
 
@@ -4279,4 +4279,8 @@ body.module-iframe {
 
 .user-avatar-container .eqdkp-icon-online {
     border: 1px solid #fff;
+}
+
+.fixed_width textarea {
+	max-width: 90%;
 }
