@@ -228,7 +228,7 @@ class game extends gen_class {
 	 */
 	private function decorate_talents($talent_id, $profile=array(), $size=16, $pathonly=false){
 		$strIconPathPrefix = $this->root_path.'games/'.$this->game.'/icons/talents/'.$talent_id;
-		$strIconServerPathPrefix =  $this->server_path.'games/'.$this->game.'/talents/races/'.$talent_id;
+		$strIconServerPathPrefix =  $this->server_path.'games/'.$this->game.'/icons/talents/'.$talent_id;
 
 		if(is_file($strIconPathPrefix.'.svg')){
 			$icon_path = $strIconServerPathPrefix.'.svg';
@@ -819,11 +819,13 @@ class game extends gen_class {
 	 */
 	public function get_recruitment_classes($filter=array(), $lang=false) {
 		$class_dep = $this->gameinfo()->get_class_dependencies();
-		// gather all classes for roster
+		
+		// gather all classes for recruitment
 		$todisplay = array();
 		foreach($class_dep as $class) {
 			if(isset($class['recruitment']) && $class['recruitment']) $todisplay[] = $class['type'];
 		}
+
 		return $this->get_assoc_classes($todisplay, $filter, $lang);
 	}
 
@@ -848,6 +850,7 @@ class game extends gen_class {
 		foreach($class_dep as $class) {
 			$name2type[$class['name']] = $class['type'];
 		}
+		
 		// get all single dependencies
 		$relevant_deps = array();
 		$child_ids = array();
@@ -857,11 +860,17 @@ class game extends gen_class {
 				$child_ids[$name2type[key($class['parent'])]] = current($class['parent']);
 			}
 		}
+		
+		//check if $todisplay is in $revelant_deps
+		$allIn = true;
+		foreach($todisplay as $val){
+			if(!in_array($val, $relevant_deps)) $allIn = false;
+		}
 
-		if (count($relevant_deps) === 0 || !in_array($todisplay, $relevant_deps)){
+		if (count($relevant_deps) === 0 || !$allIn){
 			return array(
 				'todisplay'	=> $todisplay,
-					'data'		=> (isset($todisplay[0])) ? (($this->get($todisplay[0], $filter, $lang)) ? array_keys($this->get($todisplay[0], $filter, $lang))  : array() ) : '',
+				'data'		=> (isset($todisplay[0])) ? (($this->get($todisplay[0], $filter, $lang)) ? array_keys($this->get($todisplay[0], $filter, $lang))  : array() ) : '',
 			);
 		}
 

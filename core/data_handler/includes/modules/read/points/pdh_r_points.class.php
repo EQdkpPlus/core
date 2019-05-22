@@ -34,6 +34,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 		// initialise array to store multipools which are decayed
 		private $decayed = array();
 		private $hardcap = array();
+		private $riadecayed = array();
 		private $arrCalculatedSingle = array();
 		private $arrCalculatedMulti = array();
 		private $arrSnapshotTime = array();
@@ -163,37 +164,9 @@ if ( !class_exists( "pdh_r_points" ) ) {
 			
 			if((!is_array($evip['event_ids']) || count($evip['event_ids']) < 1) && (!is_array($evip['itempool_ids']) || count($evip['itempool_ids']) < 1)) return;
 			
-			//adjustments
-			if(is_array($evip['event_ids']) && count($evip['event_ids'])){
-				$objQuery = $this->db->prepare("SELECT SUM(adjustment_value) AS sum,event_id,member_id FROM __adjustments WHERE event_id :in GROUP BY member_id, event_id")->in($evip['event_ids'])->execute();
-				if($objQuery){
-					while($row = $objQuery->fetchAssoc()){
-						$arrLocalPoints[$dkp_id][$row['member_id']]['single']['adjustment'][0] += $row['sum'];
-						$arrLocalPoints[$dkp_id][$row['member_id']]['single']['adjustment'][$row['event_id']] = $row['sum'];
-					}
-				}
-			} else {
-				$arrLocalPoints[$dkp_id][$row['member_id']]['single']['adjustment'][0] = 0;
-			}
-			
-			//earned
-			if(is_array($evip['event_ids']) && count($evip['event_ids'])){
-				$objQuery = $this->db->prepare("SELECT SUM(r.raid_value) as sum,r.event_id,ra.member_id FROM __raids r, __raid_attendees ra WHERE ra.raid_id = r.raid_id AND r.event_id :in GROUP BY ra.member_id,r.event_id")->in($evip['event_ids'])->execute();
-				if($objQuery){
-					while($row = $objQuery->fetchAssoc()){
-						$arrLocalPoints[$dkp_id][$row['member_id']]['single']['earned'][0] += $row['sum'];
-						$arrLocalPoints[$dkp_id][$row['member_id']]['single']['earned'][$row['event_id']] = $row['sum'];
-					}
-				}
-			} else {
-				$arrLocalPoints[$dkp_id][$row['member_id']]['single']['earned'][0] = 0;
-			}
-			
-			
 			//raid2event mapping
 			if(is_array($evip['event_ids']) && count($evip['event_ids'])){
 				$objQuery = $this->db->prepare("SELECT event_id,raid_id FROM __raids WHERE event_id :in")->in($evip['event_ids'])->execute();
-				
 				if($objQuery){
 					while($row = $objQuery->fetchAssoc()){
 						$raid2event[$row['raid_id']] = $row['event_id'];
@@ -203,17 +176,96 @@ if ( !class_exists( "pdh_r_points" ) ) {
 				$raid2event = array();
 			}
 			
+			//adjustments
+			if(is_array($evip['event_ids']) && count($evip['event_ids'])){
+				if(!isset($this->riadecayed[$multidkp_id]['adj'])) $this->riadecayed[$multidkp_id]['adj'] = $this->apa->is_decay('adjustment', $multidkp_id);
+				if($this->riadecayed[$multidkp_id]['adj']){
+					foreach($evip['event_ids'] as $event_id) {
+						$adjustment_ids = $this->pdh->get('adjustment', 'adjsofeventid', array($event_id));
+						foreach($adjustment_ids as $adjustment_id) {
+							$member_id = $this->pdh->get('adjustment', 'member', array($adjustment_id));
+							$value = $this->pdh->get('adjustment', 'value', array($adjustment_id, $dkp_id));
+							if(!isset($arrLocalPoints[$dkp_id][$member_id]['single']['adjustment'][$event_id]))
+								$arrLocalPoints[$dkp_id][$member_id]['single']['adjustment'][$event_id] = 0;
+							$arrLocalPoints[$dkp_id][$member_id]['single']['adjustment'][$event_id] += $value;
+						}
+					}
+				} else {
+					$objQuery = $this->db->prepare("SELECT SUM(adjustment_value) AS sum,event_id,member_id FROM __adjustments WHERE event_id :in GROUP BY member_id, event_id")->in($evip['event_ids'])->execute();
+					if($objQuery){
+						while($row = $objQuery->fetchAssoc()){
+							$arrLocalPoints[$dkp_id][$row['member_id']]['single']['adjustment'][0] += $row['sum'];
+							$arrLocalPoints[$dkp_id][$row['member_id']]['single']['adjustment'][$row['event_id']] = $row['sum'];
+						}
+					}
+				}
+
+			} else {
+				$arrLocalPoints[$dkp_id][$row['member_id']]['single']['adjustment'][0] = 0;
+			}
+			
+			//earned
+			if(is_array($evip['event_ids']) && count($evip['event_ids'])){
+				if(!isset($this->riadecayed[$multidkp_id]['raid'])) $this->riadecayed[$multidkp_id]['raid'] = $this->apa->is_decay('raid', $multidkp_id);
+				if($this->riadecayed[$multidkp_id]['raid']){
+					foreach($evip['event_ids'] as $event_id) {
+						$raid_ids = $this->pdh->get('raid', 'raidids4eventid', array($event_id));
+						foreach($raid_ids as $raid_id) {
+							$raid2event[$raid_id] = $event_id;
+							$attendees = $this->pdh->get('raid', 'raid_attendees', array($raid_id));
+							if( !is_array($attendees) ) continue;
+							$value = $this->pdh->get('raid', 'value', array($raid_id, $dkp_id));
+							foreach($attendees as $attendee){
+								if(!isset($arrLocalPoints[$dkp_id][$attendee]['single']['earned'][$event_id]))
+									$arrLocalPoints[$dkp_id][$attendee]['single']['earned'][$event_id] = 0;
+								$arrLocalPoints[$dkp_id][$attendee]['single']['earned'][$event_id] += $value;
+							}
+						}
+					}
+				} else {
+					$objQuery = $this->db->prepare("SELECT SUM(r.raid_value) as sum,r.event_id,ra.member_id FROM __raids r, __raid_attendees ra WHERE ra.raid_id = r.raid_id AND r.event_id :in GROUP BY ra.member_id,r.event_id")->in($evip['event_ids'])->execute();
+					if($objQuery){
+						while($row = $objQuery->fetchAssoc()){
+							$arrLocalPoints[$dkp_id][$row['member_id']]['single']['earned'][0] += $row['sum'];
+							$arrLocalPoints[$dkp_id][$row['member_id']]['single']['earned'][$row['event_id']] = $row['sum'];
+						}
+					}
+				}
+
+			} else {
+				$arrLocalPoints[$dkp_id][$row['member_id']]['single']['earned'][0] = 0;
+			}
+			
+						
 			//spent
 			if(is_array($evip['itempool_ids']) && count($evip['itempool_ids'])){
-				$objQuery = $this->db->prepare("SELECT SUM(item_value) as sum,itempool_id,raid_id,member_id FROM __items WHERE itempool_id :in GROUP BY member_id,raid_id, itempool_id")->in($evip['itempool_ids'])->execute();
-				if($objQuery){
-					while($row = $objQuery->fetchAssoc()){
-						$raid_id = $row['raid_id'];
-						$eventID = (isset($raid2event[$raid_id])) ? $raid2event[$raid_id] : 0;
-						if(isset($arrLocalPoints[$dkp_id][$row['member_id']]['single']['spent'][$eventID])){
-							$arrLocalPoints[$dkp_id][$row['member_id']]['single']['spent'][$eventID][$row['itempool_id']] += $row['sum'];
-						} else {
-							$arrLocalPoints[$dkp_id][$row['member_id']]['single']['spent'][$eventID][$row['itempool_id']] = $row['sum'];
+				if(!isset($this->riadecayed[$multidkp_id]['item'])) $this->riadecayed[$multidkp_id]['item'] = $this->apa->is_decay('item', $multidkp_id);
+				if($this->riadecayed[$multidkp_id]['item']){
+					foreach($evip['itempool_ids'] as $itempool_id) {
+						$item_ids = $this->pdh->get('item', 'item_ids_of_itempool', array($itempool_id));
+						if(is_array($item_ids)) {
+							foreach($item_ids as $item_id){
+								$member_id = $this->pdh->get('item', 'buyer', array($item_id));
+								$value = $this->pdh->get('item', 'value', array($item_id, $dkp_id));
+								$raid_id = $this->pdh->get('item', 'raid_id', array($item_id));
+								if(!isset($arrLocalPoints[$dkp_id][$member_id]['single']['spent'][$raid2event[$raid_id]][$itempool_id]))
+									$arrLocalPoints[$dkp_id][$member_id]['single']['spent'][$raid2event[$raid_id]][$itempool_id] = 0;
+								$arrLocalPoints[$dkp_id][$member_id]['single']['spent'][$raid2event[$raid_id]][$itempool_id] += $value;
+							}
+						}
+					}
+	
+				} else {
+					$objQuery = $this->db->prepare("SELECT SUM(item_value) as sum,itempool_id,raid_id,member_id FROM __items WHERE itempool_id :in GROUP BY member_id,raid_id, itempool_id")->in($evip['itempool_ids'])->execute();
+					if($objQuery){
+						while($row = $objQuery->fetchAssoc()){
+							$raid_id = $row['raid_id'];
+							$eventID = (isset($raid2event[$raid_id])) ? $raid2event[$raid_id] : 0;
+							if(isset($arrLocalPoints[$dkp_id][$row['member_id']]['single']['spent'][$eventID])){
+								$arrLocalPoints[$dkp_id][$row['member_id']]['single']['spent'][$eventID][$row['itempool_id']] += $row['sum'];
+							} else {
+								$arrLocalPoints[$dkp_id][$row['member_id']]['single']['spent'][$eventID][$row['itempool_id']] = $row['sum'];
+							}
 						}
 					}
 				}
@@ -541,9 +593,9 @@ if ( !class_exists( "pdh_r_points" ) ) {
 
 		public function get_latest_snapshot($intMemberID, $intMdkpID, $intTime=false){
 			if($intTime){
-				$objQuery = $this->db->prepare("SELECT * FROM __member_points WHERE member_id=? AND mdkp_id=? AND time < ? ORDER by time DESC LIMIT 1;")->execute($intMemberID, $intMdkpID, $intTime);
+				$objQuery = $this->db->prepare("SELECT * FROM __member_points WHERE member_id=? AND mdkp_id=? AND `time` < ? ORDER by `time` DESC LIMIT 1;")->execute($intMemberID, $intMdkpID, $intTime);
 			} else {
-				$objQuery = $this->db->prepare("SELECT * FROM __member_points WHERE member_id=? AND mdkp_id=? ORDER BY time DESC LIMIT 1")->execute($intMemberID, $intMdkpID);
+				$objQuery = $this->db->prepare("SELECT * FROM __member_points WHERE member_id=? AND mdkp_id=? ORDER BY `time` DESC LIMIT 1")->execute($intMemberID, $intMdkpID);
 			}
 
 			if($objQuery){
@@ -569,9 +621,9 @@ if ( !class_exists( "pdh_r_points" ) ) {
 
 		public function get_delete_from_snapshot($intTime, $arrMembers=false){
 			if($arrMembers && is_array($arrMembers)){
-				$objQuery = $this->db->prepare("DELETE FROM __member_points WHERE time > ? AND member_id :in")->in($arrMembers)->execute($intTime);
+				$objQuery = $this->db->prepare("DELETE FROM __member_points WHERE `time` > ? AND member_id :in")->in($arrMembers)->execute($intTime);
 			} else {
-				$objQuery = $this->db->prepare("DELETE FROM __member_points WHERE time > ?")->execute($intTime);
+				$objQuery = $this->db->prepare("DELETE FROM __member_points WHERE `time` > ?")->execute($intTime);
 			}
 
 

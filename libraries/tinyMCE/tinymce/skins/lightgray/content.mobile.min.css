@@ -1,1 +1,74 @@
 .tinymce-mobile-unfocused-selections .tinymce-mobile-unfocused-selection{position:absolute;display:inline-block;background-color:green;opacity:.5}body{-webkit-text-size-adjust:none}body img{max-width:96vw}body table img{max-width:95%}
+
+hr#system-readmore {    
+	border: 1px dashed red;
+    color: red;
+	height: 30px;
+	background: url("img/readmore.png") no-repeat scroll center center #efefef;
+	border-radius: 3px 3px 3px 3px;
+}
+
+.system-gallery {
+	background: url("img/gallery.png") no-repeat scroll center center #F2F8FF;
+	border: 1px dashed #888888;
+	height: 200px;
+	width: 99%;
+	border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.system-raidloot {
+	background: url("img/trophy.png") no-repeat scroll center center #F2F8FF;
+	border: 1px dashed #888888;
+	height: 50px;
+	width: 99%;
+	border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+hr.system-pagebreak {
+    border: 1px dashed gray;
+	height: 30px;
+	background: url("img/pagebreak.png") no-repeat scroll center center #efefef;
+	border-radius: 3px 3px 3px 3px;
+}
+
+.system-article {
+    background: url("img/pageobject.png") no-repeat scroll center center #F2F8FF;
+	border: 1px dashed #888888;
+	height: 200px;
+	width: 99%;
+	border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+	font-weight: bold;
+	text-align: center;
+	line-height: 130px;
+}
+
+.system-block {
+	background-color: #F2F8FF;
+	border: 1px dashed #888888;
+	height: 50px;
+	width: 99%;
+	border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.system-block2 {
+	background-color: #F2F8FF;
+	border: 1px dashed #888888;
+	min-height: 20px;
+	width: 99%;
+	border-radius: 3px 3px 3px 3px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+blockquote {
+    padding-left: 4px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    min-height: 28px;
+    position: relative;
+    color: #808080;
+}

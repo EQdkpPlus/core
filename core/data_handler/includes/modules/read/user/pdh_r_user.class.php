@@ -512,7 +512,7 @@ if (!class_exists("pdh_r_user")){
 					$fullSizeImage = $this->pfh->FolderPath('users/'.$user_id,'files').$avatarimg;
 					$thumbnail = $this->pfh->FolderPath('users/thumbs','files').'useravatar_'.$user_id.'_68.'.pathinfo($avatarimg, PATHINFO_EXTENSION);
 					if (!$fullSize && is_file($thumbnail)) return $thumbnail;
-					return $fullSizeImage;
+					if(is_file($fullSizeImage)) return $fullSizeImage;
 				}
 			}
 			

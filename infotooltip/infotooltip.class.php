@@ -32,7 +32,7 @@ if(!class_exists('infotooltip')) {
 		protected $parser		= false;
 		protected $parser_info	= false;
 
-		protected $cached		= false; //cached-files
+		protected $cached		= array(); //cached-files
 
 		public $config			= array();
 
@@ -184,6 +184,7 @@ if(!class_exists('infotooltip')) {
 				'debug'					=> 'itt_debug',
 				'game_importer_apikey'	=> 'game_importer_apikey',
 				'access_control_header' => 'access_control_header',
+				'server_path'			=> 'server_path',
 			);
 			//only copy the "wanted" configs array('game', 'icon_path', 'icon_ext', 'default_icon', 'useitemlist', 'armory_region', 'debug', 'game_language', 'prio', 'lang_prio')
 			foreach($needed_configs as $name => $key) {
@@ -436,10 +437,11 @@ if(!class_exists('infotooltip')) {
 					$display_name			= (isset($item['name']) AND strlen($item['name']) > 1) ? $item['name'] : $data['name'];
 					
 					if(isset($item['icon']) && !$noicon) {
+						$strDefaultIcon = $this->buildlink().'/images/global/default-item.png';
 						if($onlyicon > 0) {
-							$visible = '<img src="'.((stripos($item['icon'], 'http') === 0) ? $item['icon'] : $iconpath.$item['icon'].$iconext).'" width="'.$onlyicon.'" height="'.$onlyicon.'" style="margin-top: 1px;" alt="icon" class="itt-icon"/>';
+							$visible = '<img src="'.((stripos($item['icon'], 'http') === 0) ? $item['icon'] : $iconpath.$item['icon'].$iconext).'" width="'.$onlyicon.'" height="'.$onlyicon.'" style="margin-top: 1px;" alt="icon" class="itt-icon" onerror="this.onerror=null;this.src=\''.$strDefaultIcon.'\';"/>';
 						} else {
-							$visible = '<img src="'.((stripos($item['icon'], 'http') === 0) ? $item['icon'] : $iconpath.$item['icon'].$iconext).'" width="16" height="16" style="margin-top: 1px;" alt="icon" class="itt-icon"/> '.$display_name;
+							$visible = '<img src="'.((stripos($item['icon'], 'http') === 0) ? $item['icon'] : $iconpath.$item['icon'].$iconext).'" width="16" height="16" style="margin-top: 1px;" alt="icon" class="itt-icon" onerror="this.onerror=null;this.src=\''.$strDefaultIcon.'\';"/> '.$display_name;
 						}
 					} else {
 						$visible = $display_name;
@@ -538,6 +540,12 @@ if(!class_exists('infotooltip')) {
 				$host	.= ($_SERVER['SERVER_PORT'] != 80) ? ':' . $_SERVER['SERVER_PORT'] : '';
 			}
 			return $protocol.preg_replace('/[^A-Za-z0-9\.:-]/', '', (!empty($xhost) ? $xhost : $host));
+		}
+		
+		public function buildlink($blnWithServerpath=true) {
+			$script_name = preg_replace('/^\/?(.*?)\/?$/', '\1', trim($this->config['server_path']));
+			$script_name = ( $script_name != '' ) ? $script_name . '/' : '';
+			return ($blnWithServerpath) ? $this->httpHost().'/'.$script_name : $this->httpHost();
 		}
 	}#class
 }

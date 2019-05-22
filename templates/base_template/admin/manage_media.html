@@ -9,6 +9,9 @@
 <!-- elFinder JS (REQUIRED) -->
 <script type="text/javascript" src="{EQDKP_ROOT_PATH}libraries/elfinder/js/elfinder.min.js"></script>
 
+<!-- IF ELFINDER_LANG -->
+<script type="text/javascript" src="{EQDKP_ROOT_PATH}libraries/elfinder/js/i18n/elfinder.{ELFINDER_LANG}.js"></script>
+<!-- ENDIF -->
 
 <script type="text/javascript" charset="utf-8">
 	var myCommands = elFinder.prototype._options.commands;
@@ -20,9 +23,9 @@
 	$(function() {
 		var elf = $('#elfinder').elfinder({
 			url : '{EQDKP_ROOT_PATH}libraries/elfinder/php/connector.php',  // connector URL (REQUIRED)
-			// lang: 'ru',             // language (OPTIONAL)
+			lang: '{ELFINDER_LANG}',
 			commands : myCommands,
-			height: 500
+			height: 500,
 		}).elfinder('instance');
 	});
 </script>

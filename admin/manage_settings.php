@@ -1025,10 +1025,10 @@ class admin_settings extends page_generic {
 			if(isset($apikey_config['version']) && isset($apikey_config['form']) &&  $apikey_config['version'] > 1 && is_array($apikey_config['form'])){
 				$apikeyform = '';
 				foreach($apikey_config['form'] as $fieldname=>$fieldcontent){
-					$save_array[$fieldname]	= $this->in->get($fieldname, '');
+					$save_array[$fieldname]	= trim($this->in->get($fieldname, ''));
 				}
 			}else{
-				$save_array['game_importer_apikey']	= $this->in->get('game_importer_apikey', '');
+				$save_array['game_importer_apikey']	= trim($this->in->get('game_importer_apikey', ''));
 			}
 
 			// default game

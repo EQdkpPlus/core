@@ -152,9 +152,7 @@ function get_sortedids($tosort, $order, $sort_order){
 function redirect($url='', $return=false, $extern=false, $blnShowPage=true, $strContent=""){
 	if($url == "") $url = registry::get_const('controller_path_plain');
 
-	$outurl = (registry::fetch('user')->removeSIDfromString($url));
-
-	$out = (!$extern) ? (registry::register('environment')->link.str_replace('&amp;', '&', $url)) : $outurl;
+	$out = (!$extern) ? (registry::register('environment')->link.str_replace('&amp;', '&', $url)) : registry::fetch('user')->removeSIDfromString($url);
 
 	if ($return){
 		return $out;

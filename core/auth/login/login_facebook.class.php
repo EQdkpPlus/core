@@ -78,6 +78,10 @@ class login_facebook extends gen_class {
 	public function redirect($arrOptions=array()){
 		$this->init_oauth();
 		
+		if(!strlen($this->appid) || !strlen($this->appsecret)){
+			message_die('Facebook Client-ID or Client-Secret is missing. Please insert it into the fields at the EQdkp Plus settings, tab "User".');
+		}
+		
 		$client = new OAuth2\Client($this->appid, $this->appsecret);
 		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $this->redirURL, array('scope' => 'email,public_profile'));
 		
@@ -88,20 +92,20 @@ class login_facebook extends gen_class {
 		$auth_url = $this->redirURL.'&status=login&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
 		
 		//Button color: #7289DA
-		return '<button type="button" class="mainoption thirdpartylogin facebook loginbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-facebook fa-lg"></i> Facebook</button>';
+		return '<button type="button" class="mainoption thirdpartylogin facebook loginbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-facebook-official fa-lg"></i> Facebook</button>';
 	}
 	
 	
 	public function account_button(){
 		$auth_url = $this->redirURL.'&status=account&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
 		
-		return '<button type="button" class="mainoption thirdpartylogin facebook accountbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-facebook fa-lg"></i> Facebook</button>';
+		return '<button type="button" class="mainoption thirdpartylogin facebook accountbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-facebook-official fa-lg"></i> Facebook</button>';
 	}
 	
 	public function register_button(){
 		$auth_url = $this->redirURL.'&status=register&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
 		
-		return '<button type="button" class="mainoption thirdpartylogin facebook registerbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-facebook fa-lg"></i> Facebook</button>';
+		return '<button type="button" class="mainoption thirdpartylogin facebook registerbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-facebook-official fa-lg"></i> Facebook</button>';
 	}
 	
 	public function pre_register(){

@@ -29,8 +29,8 @@ if ( !defined('EQDKP_INC') ){
  * -------------------------------------------------------------------------
  */
 
-define('VERSION_INT',		'2.3.4.0');				// the internal version number for updates & update check
-define('VERSION_EXT',		'2.3.4');				// the external version number to be shown in the footer
+define('VERSION_INT',		'2.3.10.0');				// the internal version number for updates & update check
+define('VERSION_EXT',		'2.3.10');				// the external version number to be shown in the footer
 define('VERSION_WIP',		false);					// work in progress or stable?
 define('VERSION_PHP_RQ',	'5.6.0');				// required version of PHP
 define('VERSION_PHP_REC',	'7.2.0');				// recommended version of PHP
@@ -71,16 +71,16 @@ if(!defined('POINTS_SNAPSHOT_TIME')) define('POINTS_SNAPSHOT_TIME', 1814400);
 
 //URLs
 //-------------------------------------------------------------------------
-define('EQDKP_PROJECT_URL',			"http://eqdkp-plus.eu");
-define('EQDKP_ABOUT_URL',			"http://eqdkp-plus.eu/about");
-define('EQDKP_DOWNLOADS_URL',		"http://eqdkp-plus.eu/repository/");
-define('EQDKP_REPO_URL',			"http://eqdkp-plus.eu/repository/");
-define('EQDKP_NOTIFICATIONS_URL',	"http://eqdkp-plus.eu/rss/notifications.xml");
+define('EQDKP_PROJECT_URL',			"https://eqdkp-plus.eu");
+define('EQDKP_ABOUT_URL',			"https://eqdkp-plus.eu/about");
+define('EQDKP_DOWNLOADS_URL',		"https://repo.eqdkp-plus.eu/");
+define('EQDKP_REPO_URL',			"https://repo.eqdkp-plus.eu/");
+define('EQDKP_NOTIFICATIONS_URL',	"https://eqdkp-plus.eu/rss/notifications.xml");
 define('EQDKP_TWITTER_SCREENNAME',	"EQdkpPlus");
-define('EQDKP_BOARD_URL',			"http://eqdkp-plus.eu/forum");
+define('EQDKP_BOARD_URL',			"https://forum.eqdkp-plus.eu");
 define('EQDKP_CRL_URL',				"https://raw.githubusercontent.com/EQdkpPlus/misc-crl/master/crl.txt");
-define('EQDKP_WIKI_URL',			"http://eqdkp-plus.eu/wiki/");
-define('EQDKP_BUGTRACKER_URL',		"http://eqdkp-plus.eu/bugtracker/");
+define('EQDKP_WIKI_URL',			"https://wiki.eqdkp-plus.eu/wiki/");
+define('EQDKP_BUGTRACKER_URL',		"https://forum.eqdkp-plus.eu/bugtracker/");
 define('EQDKP_CONNECTION_CHECK_URL', 'https://raw.githubusercontent.com/EQdkpPlus/misc-connectioncheck/master/status.txt');
 
 //Tag Blacklist for filtering article content

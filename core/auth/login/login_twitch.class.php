@@ -79,6 +79,10 @@ class login_twitch extends gen_class {
 	
 	public function redirect($arrOptions=array()){
 		$this->init_oauth();
+		
+		if(!strlen($this->appid) || !strlen($this->appsecret)){
+			message_die('Twitch Client-ID or Client-Secret is missing. Please insert it into the fields at the EQdkp Plus settings, tab "User".');
+		}
 
 		$client = new OAuth2\Client($this->appid, $this->appsecret);
 		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $this->redirURL, array('scope' => 'user:read:email'));

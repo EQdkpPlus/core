@@ -203,6 +203,28 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 			if(($last_run - $this->apa->get_data('zero_time', $apa_id)*2592000) > $data['date']) {
 				$decayed_val = 0;
 				$decay_adj = 0;
+				
+				switch($module){
+					case 'item': $arrCache = $this->pdh->get('item', 'apa_value', array($data['id'], $apa_id));
+					break;
+					case 'raid': $arrCache = $this->pdh->get('raid', 'apa_value', array($data['id'], $apa_id));
+					break;
+					case 'adjustment': $arrCache = $this->pdh->get('adjustment', 'apa_value', array($data['id'], $apa_id));
+					break;
+				}
+				
+				if($arrCache == ""){
+					$arrToSave = array('time' => $last_run, 'val' => $decayed_val);
+					
+					switch($module){
+						case 'item': $this->pdh->put('item', 'update_apa_value', array($data['id'], $apa_id, $arrToSave));
+						break;
+						case 'raid': $this->pdh->put('raid', 'update_apa_value', array($data['id'], $apa_id, $arrToSave));
+						break;
+						case 'adjustment': $this->pdh->put('adjustment', 'update_apa_value', array($data['id'], $apa_id, $arrToSave));
+						break;
+					}
+				}
 			} else {
 
 				//Get Cache Entry
@@ -259,11 +281,11 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 		
 		public function reset_cache($apa_id, $module, $id){
 			if($module == 'item'){
-				$this->pdh->put('item', 'update_apa_value', array($apa_id, $id, ''));
+				$this->pdh->put('item', 'update_apa_value', array($id, $apa_id, ''));
 			} elseif($module == 'adjustment'){
-				$this->pdh->put('adjustment', 'update_apa_value', array($apa_id, $id, ''));
+				$this->pdh->put('adjustment', 'update_apa_value', array($id, $apa_id, ''));
 			} elseif($module == 'raid'){
-				$this->pdh->put('raid', 'update_apa_value', array($apa_id, $id, ''));
+				$this->pdh->put('raid', 'update_apa_value', array($id, $apa_id, ''));
 			}
 			$this->pdh->process_hook_queue();
 		}

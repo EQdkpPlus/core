@@ -144,7 +144,8 @@ if ( !class_exists( "apa_decay_current" ) ) {
 			}
 			
 			// if this is the most recent decay, add current points from from last cache date to now
-			if(($last_run + $decay_time) > $refdate) {
+			
+			if(($last_run + $decay_time) > $refdate && ($refdate != $last_run)) {
 				$decayed_val += $this->pdh->get('points', 'current_history', array($data['member_id'], $data['dkp_id'], $last_run, $this->time->time+1, $data['event_id'], $data['itempool_id'], $data['with_twink']));
 			}
 			

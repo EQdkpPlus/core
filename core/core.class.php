@@ -306,7 +306,20 @@ class core extends gen_class {
 								$(this).val(original_val);
 							}
 						});
+
 					});", 'static_docready');
+			
+			if(strlen($this->user->style['portal_width']) > 2 && (strpos($this->user->style['portal_width'], '%') == false)){
+				$this->tpl->add_js("
+					$(function(){
+						if($( 'body' ).hasClass( 'fixed_width' )){
+							if($( window ).width() < ".intval($this->user->style['portal_width'])."){
+								$( 'body' ).removeClass('fixed_width');
+							}
+						}
+						
+					});", 'static_docready');
+			}
 
 			$this->tpl->add_js("
 					$('.paginationPageSelector').on('click', function(){
@@ -468,7 +481,7 @@ class core extends gen_class {
 			// show the full head
 			if ($this->header_format != 'simple'){
 				// System Message if user has no assigned members
-				if($this->pdh->get('member', 'connection_id', array($this->user->data['user_id'])) < 1 && ($this->user->is_signedin()) && ($this->user->data['hide_nochar_info'] != '1')){
+				if($this->pdh->get('member', 'connection_id', array($this->user->data['user_id'])) < 1 && ($this->user->is_signedin()) && ($this->user->data['hide_nochar_info'] != '1') && $this->user->check_auths(array('u_member_man', 'u_member_add', 'u_member_conn', 'u_member_del'), 'OR', false)){
 					$message = '<a href="'.$this->routing->build('mycharacters').'">'.$this->user->lang('no_connected_char').'</a>';
 					$message .= '<br /><br /><a href="'.$this->routing->build('mycharacters').'&hide_info=true">'.$this->user->lang('no_connected_char_hide').'</a>';
 					$this->message($message);

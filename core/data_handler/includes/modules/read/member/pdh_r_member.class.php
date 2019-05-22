@@ -838,7 +838,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_memberlink_decorated($member_id, $base_url, $url_suffix = '', $blnUseController=false){
-			return '<a href="'.$this->get_memberlink($member_id, $base_url, $url_suffix, $blnUseController).'">'.$this->get_name_decorated($member_id).'</a>';
+			return '<a href="'.$this->get_memberlink($member_id, $base_url, $url_suffix, $blnUseController).'" data-char-rankid="'.$this->get_rankid($member_id).'" data-char-twink="'.(($this->get_is_main($member_id)) ? 0 : 1).'" data-char-classid="'.$this->get_classid($member_id).'">'.$this->get_name_decorated($member_id).'</a>';
 		}
 
 		public function comp_memberlink_decorated($params1, $params2){
@@ -942,7 +942,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 				chartooltip_js();
 				$ctt = ' class="chartooltip" title="'.$member_id.'"';
 			}
-			return '<a href="'.$this->get_memberlink($member_id, $base_url, $url_suffix, $blnUseController).'"'.$ctt.'>'.$this->get_html_name($member_id, $rank_prefix, $rank_suffix).'</a>';
+			return '<a href="'.$this->get_memberlink($member_id, $base_url, $url_suffix, $blnUseController).'"'.$ctt.' data-char-rankid="'.$this->get_rankid($member_id).'" data-char-twink="'.(($this->get_is_main($member_id)) ? 0 : 1).'" data-char-classid="'.$this->get_classid($member_id).'">'.$this->get_html_name($member_id, $rank_prefix, $rank_suffix).'</a>';
 		}
 
 		public function comp_memberlink($params1, $params2){
@@ -955,8 +955,9 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			if($this->get_active($id)){
 				$out .= '&nbsp;&nbsp;&nbsp;<a href="'.$this->root_path.'admin/manage_members.php'.$this->SID.'&setinactive='.$id.'&link_hash='.$this->user->csrfGetToken('Manage_Memberssetinactive').'" title="'.$this->user->lang('option_true').'"><i class="fa fa-check-square-o fa-lg icon-color-green"></i></a>';
 			} else {
-				$out .= '&nbsp;&nbsp;&nbsp;<a href="'.$this->root_path.'admin/manage_members.php'.$this->SID.'&setactive='.$id.'&link_hash='.$this->user->csrfGetToken('Manage_Memberssetactive').'" title="'.$this->user->lang('option_false').'"><i class="fa fa-square-o fa-lg icon-color-red"></i></a>';
+				$out .= '&nbsp;&nbsp;&nbsp;<a href="'.$this->root_path.'admin/manage_members.php'.$this->SID.'&setactive='.$id.'&link_hash='.$this->user->csrfGetToken('Manage_Memberssetactive').'" title="'.$this->user->lang('option_false').'"><i class="fa fa-square-o fa-lg icon-color-red"></i></a>&nbsp;';
 			}
+			$out .= '&nbsp;&nbsp;&nbsp;<a href="'.$this->get_memberlink($id, $this->routing->simpleBuild('character'), '', true).'" title="'.$this->user->lang('uc_cat_profiler').'"><i class="fa fa-lg fa-eye"></i></a>';
 
 			if($this->pdh->get('rank', 'is_hidden', array($this->data[$id]['rank_id']))){
 				$out .= '&nbsp;&nbsp;&nbsp;<i class="fa fa-user-secret fa-lg" title="'.$this->user->lang('hidden').'"></i>';

@@ -403,12 +403,12 @@ class register_pageobject extends pageobject {
 	// Process Activate
 	// ---------------------------------------------------------
 	public function process_activate() {
-		if($this->user->is_signedin() || (int)$this->config->get('enable_registration') == 0){
+		if((int)$this->config->get('enable_registration') == 0){
 			redirect($this->controller_path_plain.$this->SID);
 			return;
 		}
 		
-		if((int)$this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))) {
+		if((int)$this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url')) && $this->bridge->get_sync_email()) {
 			redirect($this->config->get('cmsbridge_reg_url'),false,true);
 			return;
 		}
@@ -446,6 +446,9 @@ class register_pageobject extends pageobject {
 							$this->tpl->add_meta('<meta http-equiv="refresh" content="3;'.$this->controller_path. $this->SID . '">');
 							//Account was locked by too much logins
 						} elseif($intConfirmType == -2){
+							//Reset failed login attempts
+							$this->pdh->put('user', 'update_failed_logins', array($row['user_id'], 0));
+							
 							$success_message = sprintf($this->user->lang('account_activated_user'), '<a href="'.$this->controller_path.'Login/' . $this->SID . '">', '</a>');
 							$this->tpl->add_meta('<meta http-equiv="refresh" content="3;'.$this->controller_path.'Login/' . $this->SID . '">');
 							//User changed his Email on his own
@@ -454,8 +457,6 @@ class register_pageobject extends pageobject {
 							$success_message = $this->user->lang('email_confirmed');
 							$this->tpl->add_meta('<meta http-equiv="refresh" content="3;'.$this->controller_path. $this->SID . '">');
 						}
-						
-						
 						
 					} else {
 						message_die($this->user->lang('email_subject_send_error'), $this->user->lang('success'), 'error');

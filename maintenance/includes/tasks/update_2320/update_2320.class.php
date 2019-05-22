@@ -29,21 +29,21 @@ class update_2320 extends sql_update_task {
 	public $author			= 'Wallenium';
 	public $version			= '2.3.2.0'; //new plus-version
 	public $ext_version		= '2.3.2'; //new plus-version
-	public $name			= '2.3.2';
+	public $name			= '2.3.2 Update';
 
 	public function __construct(){
 		parent::__construct();
 
 		$this->langs = array(
 			'english' => array(
-				'update_2320'	=> 'EQdkp Plus 2.3.2',
+				'update_2320'	=> 'EQdkp Plus 2.3.2 Update',
 				1	=> 'Create a temporary table for calendar raid attendees',
 				2	=> 'Add unique poperty to calendar_events_id and member_id fields at calendar_raids_attendees table',
 				3	=> 'Insert the non-duplicate entries into the temporary table',
 				4	=> 'Rename temporary table to real one and real one to backup'
 			),
 			'german' => array(
-				'update_2320'	=> 'EQdkp Plus 2.3.2',
+				'update_2320'	=> 'EQdkp Plus 2.3.2 Update',
 				1	=> 'Erstelle eine temporäre Tabelle für Kalender Raidteilnehmer',
 				2	=> 'Füge Unique Eigenschaft zu den Feldern calendar_events_id und member_id bei der Tabele calendar_raids_attendees',
 				3	=> 'Übertrage die duplikatfreien Einträge aus der calendar_raids_attendees in die temporäre Tabelle',

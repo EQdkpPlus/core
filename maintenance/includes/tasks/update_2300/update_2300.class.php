@@ -29,7 +29,7 @@ class update_2300 extends sql_update_task {
 	public $author			= 'Wallenium';
 	public $version		= '2.3.0.0'; //new plus-version
 	public $ext_version	= '2.3.0'; //new plus-version
-	public $name			= '2.3.0';
+	public $name			= '2.3.0 Update';
 
 	public function __construct(){
 		parent::__construct();
@@ -37,7 +37,7 @@ class update_2300 extends sql_update_task {
 // combined update 2.3.0.1 to 2.3.0.11
 		$this->langs = array(
 			'english' => array(
-				'update_2300'	=> 'EQdkp Plus 2.3.0',
+				'update_2300'	=> 'EQdkp Plus 2.3.0 Update',
 				1	=> 'Add icons field to roles table',
 				2	=> 'Change article table',
 				3	=> 'Change calendar_raid_attendees table',
@@ -88,7 +88,7 @@ class update_2300 extends sql_update_task {
 				47	=> 'Extend Log Table',
 			),
 			'german' => array(
-				'update_2300'	=> 'EQdkp Plus 2.3.0',
+				'update_2300'	=> 'EQdkp Plus 2.3.0 Update',
 				1	=> 'Füge Icons-Feld zur Rollentabelle hinzu',
 				2	=> 'Ändere Article-Tabelle',
 				3	=> 'Ändere calendar_raid_attendees-Tabelle',

@@ -1013,7 +1013,7 @@ $lang = array(
 	"userpf_name" => 'Name',
 	"userpf_lastname" => 'Lastname',
 	"userpf_steam" => 'Steam',
-	"userpf_birthday" => 'Geburtstag',
+	"userpf_birthday" => 'Birthday',
 	"userpf_country" => 'Country',
 	"userpf_gender"	=> 'Gender',
 	"fv_php_minlength_error" => 'The input in field \'%s\' was too short!',
@@ -1150,6 +1150,7 @@ $lang = array(
 	"creation_date" => "Created at",
 	"reg_connected_account" => "Connected Account",
 	"reg_connected_account_help" => "You can use the connected account from a login provider to login into EQdkp Plus.",
+	"uc_cat_general" => "General",
 	);
 
 ?>

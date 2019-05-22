@@ -402,95 +402,70 @@ class Manage_Live_Update extends page_generic {
 
 	//Copy new files
 	public function process_step7(){
+		@set_time_limit(0);
+		
 		$new_version = str_replace('.', '', $this->getNewVersion());
 		$tmp_folder = $this->pfh->FolderPath('update_to_'.$new_version.'/tmp/','live_update');
-		$strLogFile = $this->pfh->FolderPath('update_to_'.$new_version.'/','live_update').'/copy.log';
 		$xmlfile = $tmp_folder.'package.xml';
 		$arrFiles = $this->repo->getFilelistFromPackageFile($xmlfile);
-		
-		$intChunkSize = 100;
-		$intFiles = count($arrFiles);
-		
-		$intCurrentChunk = $this->in->get('chunk', 0);
-		if($intCurrentChunk == 0){
-			$this->pfh->putContent($strLogFile, "");
-		}
-		
-		$from = $intCurrentChunk*$intChunkSize;
-		$to = $from+$intChunkSize;
-		
-		if($from > $intFiles) {
-			//Reset Opcache, for PHP7
-			if(function_exists('opcache_reset')){
-				opcache_reset();
-			}
-			
-			//Get Log
-			$strLog = file_get_contents($strLogFile);
-			
-			if ($strLog != "") register('logs')->add('liveupdate_copied_files', array('Copied Files' => $strLog), '', $new_version);
-			
-			//Finished
-			echo "true";
-			exit;
-		}
-		
-		if($to > $intFiles) $to = $intFiles;		
-
 		$strLog = '';
-		$i = 0;
 		foreach($arrFiles as $file){
-			if($i < $from || $i > $to) {
-				$i++;
-				continue;
-			}
-			
 			if (file_exists($this->root_path.$file['name'])){
 				$strLog .= 'Replaced File '.$file['name']."\r\n";
 			} else {
 				$strLog .= 'Added File '.$file['name']."\r\n";
 			}
 			$this->pfh->copy($tmp_folder.$file['name'],$this->root_path.$file['name']);
-			$i++;
 		}
-
-		if ($strLog != "") $this->pfh->addContent($strLogFile, $strLog);
-		
-		echo "chunked:".($intCurrentChunk+1).":".ceil($intFiles/$intChunkSize).":".$intFiles;
+		//Reset Opcache, for PHP7
+		if(function_exists('opcache_reset')){
+			opcache_reset();
+		}
+		if ($strLog != "") register('logs')->add('liveupdate_copied_files', array('Copied Files' => $strLog), '', $new_version);
+		echo "true";
 		exit;
 	}
 
 	//Check if all new files have been copied to the right place
 	public function process_step8(){
+		
+		$new_version = str_replace('.', '', $this->getNewVersion());
+		$strLogFile = $this->pfh->FolderPath('update_to_'.$new_version.'/','live_update').'/missing.log';
+		
 		$new_version = $this->encrypt->decrypt($this->config->get('download_newversion', 'live_update'));
-
+		
 		$tmp_folder = $this->pfh->FolderPath('update_to_'.$new_version.'/tmp/','live_update');
 		$xmlfile = $tmp_folder.'package.xml';
 		$arrFiles = $this->repo->getFilelistFromPackageFile($xmlfile);
-
+		
 		$arrMissingFiles = array();
-
+		
+		$this->pfh->putContent($strLogFile, "");
+		
 		foreach($arrFiles as $file){
 			if (($file['type'] == 'changed' || $file['type'] == 'new') && md5_file($this->root_path.$file['name']) != $file['md5']){
 				$arrMissingFiles[] = $file['name'];
 			}
 		}
-
-		$this->config->set('missing_files', $this->encrypt->encrypt(serialize($arrMissingFiles)), 'live_update');
-
+		
+		$this->pfh->putContent($strLogFile, $this->encrypt->encrypt(serialize($arrMissingFiles)));
+		
 		echo "true";
 		exit;
 	}
-
+	
 	private function download_missing_files(){
 		$new_version = $this->encrypt->decrypt($this->config->get('download_newversion', 'live_update'));
 		$tmp_folder = $this->pfh->FolderPath('update_to_'.$new_version,'live_update');
 		$zipfile = $tmp_folder.'missing_files.zip';
 		$archive = registry::register('zip', array($zipfile));
-
+		
 		//Missing Files
-
-		$arrConflictedFiles = unserialize($this->encrypt->decrypt($this->config->get('missing_files', 'live_update')));
+		$new_version = str_replace('.', '', $this->getNewVersion());
+		$strLogFile = $this->pfh->FolderPath('update_to_'.$new_version.'/','live_update').'/missing.log';
+		
+		$arrFiles = array();
+		$arrConflictedFiles = unserialize($this->encrypt->decrypt(file_get_contents($strLogFile)));
 		foreach ($arrConflictedFiles as $file){
 			if (file_exists($tmp_folder.'tmp/'.$file)) {
 				$arrFiles[] = $tmp_folder.'tmp/'.$file;
@@ -498,7 +473,7 @@ class Manage_Live_Update extends page_generic {
 		}
 		$archive->add($arrFiles, $tmp_folder.'tmp/');
 		$archive->create();
-
+		
 		if (file_exists($zipfile)){
 			header('Content-Type: application/octet-stream');
 			header('Content-Length: '.$this->pfh->FileSize($zipfile));
@@ -507,7 +482,7 @@ class Manage_Live_Update extends page_generic {
 			readfile($zipfile);
 			exit;
 		}
-
+		
 	}
 
 	//Continue with steps

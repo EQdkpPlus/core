@@ -4453,6 +4453,10 @@ button > i, .button > i {
 	max-width: 100%;
 }
 
+textarea, .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
+	font-family: @eqdkpBodyFontFamily;
+}
+
 /* ================================== */
 /* General helpers */
 .noheight {

@@ -63,7 +63,7 @@ if(!class_exists('pdh_r_itempool')){
 
 		public function get_id($itempool_name){
 			foreach($this->itempools as $id => $itempool){
-				if($itempool['name'] == $name){
+				if(utf8_strtolower($itempool['name']) == utf8_strtolower($itempool_name)){
 					return $id;
 				}
 			}

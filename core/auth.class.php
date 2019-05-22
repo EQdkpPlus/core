@@ -199,6 +199,12 @@ class auth extends user {
 			return true;
 		}
 		
+		//Return, if we don't want a new session
+		if (defined('NO_NEW_SESSION')) {
+			$this->sid = "";
+			registry::add_const('SID', '?s=');
+			return true;
+		}
 		
 		//Let's create a session
 		$this->create($this->data['user_id'], (isset($this->data['user_login_key']) ? $this->data['user_login_key'] : ''), $boolSetAutoLogin, ((isset($this->data['old_sessionkey'])) ? $this->data['old_sessionkey'] : false)  );

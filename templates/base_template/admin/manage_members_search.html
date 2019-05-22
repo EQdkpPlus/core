@@ -1,0 +1,39 @@
+
+<form method="post" action="{ACTION}" name="post">
+	<fieldset class="settings smallsettings">
+		<legend>{L_manage_members_search}</legend>
+		<dl>
+			<dt><label>{L_charname}:</label></dt>
+			<dd><input name="name" type="text" class="input" id="name" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_registered_before}:</label></dt>
+			<dd>{DATEPICKER_BEFORE}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_registered_at}:</label></dt>
+			<dd>{DATEPICKER_AFTER}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_status}:</label></dt>
+			<dd><div>
+			<label><input type="checkbox" name="status[]" value="active" /> {L_active}</label><br />
+			<label><input type="checkbox" name="status[]" value="inactive" /> {L_inactive}</label><br />
+			</div></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_twinkname}:</label></dt>
+			<dd><input name="twinkname" type="text" class="input" id="twinkname" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_class}:</label></dt>
+			<dd>{DD_CLASS}</dd>
+		</dl>
+	</fieldset>
+	<div class="contentFooter">
+		<button class="mainoption" type="submit" name="submit_search"><i class="fa fa-search"></i>{L_manage_members_search}</button>
+		<button class="mainoption" type="reset" name=""><i class="fa fa-trash"></i>{L_reset}</button>
+		<button class="mainoption" type="button" name="" onclick="window.location.href='manage_members.php{SID}'"><i class="fa fa-chevron-left"></i>{L_cancel}</button>
+	</div>
+{CSRF_TOKEN}
+</form>

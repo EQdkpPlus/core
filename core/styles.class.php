@@ -618,7 +618,8 @@ if (!class_exists("styles")){
 
 		public function deleteStyleCache($templatepath){
 			//Delete the Combined Files
-			$arrDir = sdir($storage_folder = $this->pfh->FolderPath('templates', 'eqdkp').$templatepath, 'combined_*');
+			$arrDir = sdir($this->pfh->FolderPath('templates', 'eqdkp').$templatepath, 'combined_*');
+			
 			foreach($arrDir as $file){
 				$this->pfh->Delete('templates/'.$templatepath.'/'.$file, 'eqdkp');
 			}

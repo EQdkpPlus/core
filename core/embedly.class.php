@@ -40,7 +40,7 @@ class embedly extends gen_class {
 					'oembed'=> 'https://vid.me/api/videos/oembed.json?url=URL'
 				),
 				'facebook_video' => array(
-					'regex' => ['https?://www\.facebook\.com/video\.php.*', 'https?://www\.facebook\.com/.*/videos/.*'],
+					'regex' => ['https://www\.facebook\.com/video\.php.*', 'https://www\.facebook\.com/.*/videos/.*', 'https://www.facebook.com/watch/?v=.*'],
 					'format' => 'json',
 					'oembed'=> 'https://www.facebook.com/plugins/video/oembed.json/?url=URL'
 				),

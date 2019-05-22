@@ -88,6 +88,14 @@ class notifications_pageobject extends pageobject {
 		
 		foreach($arrIDs as $intID){
 			$intID = intval($intID);
+			
+			//Check User
+			$intUser = $this->pdh->get('notifications', 'user_id', array($intID));
+			if($intUser != $this->user->id) {
+				$this->display();
+				return;
+			}
+			
 			$this->pdh->put('notifications', 'mark_as_read', array($intID));
 		}
 		

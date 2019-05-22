@@ -77,6 +77,7 @@ class ManageRaids extends page_generic {
 		$arrNewValues['value'] = $this->in->get('value',0.0);
 		$arrNewValues['attendees'] = $this->in->getArray('raid_attendees','int');
 		$arrNewValues['date'] = $this->time->fromformat($this->in->get('date','1.1.1970 00:00'), 1);
+		$arrNewValues['itempool'] = $this->in->get('itempool_id',0);
 
 		$arrCheckboxes = array('date', 'note', 'event', 'value', 'attendees');
 
@@ -93,7 +94,18 @@ class ManageRaids extends page_generic {
 			$messages = array();
 
 			foreach($arrBulk as $key => $val){
-				if(!in_array($key, $arrCheckboxes) || !$val) continue;
+				if(!in_array($key, $arrCheckboxes) && $key != "itempool" || !$val) continue;
+				
+				if($key == 'itempool'){
+					//Get Items of Raid
+					
+					//Change Itempool of Items
+					$arrItemsOfRaid = $this->pdh->get('item', 'itemsofraid', array($raidID));
+					foreach($arrItemsOfRaid as $intItemID){
+						$this->pdh->put('item', 'update_itempool', array($intItemID, $arrNewValues['itempool']));
+					}
+					
+				}
 
 				$raid[$key] = $arrNewValues[$key];
 				if($key == 'note'){
@@ -476,6 +488,7 @@ class ManageRaids extends page_generic {
 				'RAID_EVENT'		=> $this->pdh->get('event', 'name', array($raid['event'])),
 				'RAID_DATE'			=> $this->time->user_date($raid['date']),
 				'RAID_ID'			=> ($raid['id'] && !$copy) ? $raid['id'] : 0,
+				'ITEMPOOL_DD'		=> (new hdropdown('itempool_id', array('options' => $itempools)))->output(),
 				'VALUE'				=> runden((($this->in->get('dataimport', '') == 'true') ? $this->in->get('value', 0) : $raid['value'])),
 				'NEW_MEM_SEL'		=> (new hmultiselect('raid_attendees', array('options' => $members, 'value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->getArray('attendees', 'int') : $raid['attendees']), 'width' => 400, 'filter' => true)))->output(),
 				'RAID_DROPDOWN'		=> (new hdropdown('draft', array('options' => $raids, 'value' => $this->in->get('draft', 0), 'js' => 'onchange="window.location=\'manage_raids.php'.$this->SID.'&amp;upd=true&amp;draft=\'+this.value"')))->output(),

@@ -1,9 +1,10 @@
 
 <form action='manage_members.php{SID}' method='post' >
 <div class="contentHeader">
-	<h1 class="contentTitle">{L_manage_members} <span class="bubble">{MEMBER_COUNT}</span>{HPTT_ADMIN_LINK}</h1>
+	<h1 class="contentTitle"><!-- IF S_IS_SEARCH -->{L_manage_members_search}<!-- ELSE -->{L_manage_members}<!-- ENDIF --> <span class="bubble">{MEMBER_COUNT}</span>{HPTT_ADMIN_LINK}</h1>
 </div>
 <div class="tableHeader floatRight">
+	<button class="mainoption" type="button" name="search" onclick="window.location.href='manage_members.php{SID}&search'"><i class="fa fa-search"></i>{L_manage_members_search}</button>
 	<button class="mainoption" type="button" name="addadj" onclick="AddChar()"><i class="fa fa-plus"></i>{L_add_member}</button>
 </div>
 <div class="center pagination_wrapper">
