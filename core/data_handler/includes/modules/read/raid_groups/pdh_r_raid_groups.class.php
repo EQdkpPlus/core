@@ -68,7 +68,20 @@ if ( !class_exists( "pdh_r_raid_groups" ) ){
 			return $this->raid_groups[$groups_raid_id];
 		}
 
-		public function get_name($groups_raid_id){
+		public function get_name($groups_raid_id, $show_colorfield=false){
+			if(is_array($groups_raid_id)){
+				$tmp_out	= array();
+				foreach($groups_raid_id as $groupID){
+					if($show_colorfield){
+						$bgcolor	= (($this->get_color($groupID)) ? $this->get_color($groupID) : 'gray').';';
+						$colorfield = '<span class="raidgroups_colorbox raidgroup_bgcolor_'.$groupID.'"></span>';
+					}else{
+						$colorfield = '';
+					}
+					$tmp_out[] = $colorfield.$this->raid_groups[$groupID]['name'];
+				}
+				return $tmp_out;
+			}
 			return $this->raid_groups[$groups_raid_id]['name'];
 		}
 

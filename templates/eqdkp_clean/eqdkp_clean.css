@@ -2133,21 +2133,45 @@ div #calendar_tab .ui-widget-content{
 	background: @eqdkpContentBackgroundColor;
 }
 .fc-icons{
-	margin-left: 4px;
-	margin-top:2px;
+	margin: 0;
 	border: 0px;
+	border-right: 1px solid white;
+	margin-right: 4px;
 	display:block;
 	float:left;
 }
 .fc-flag{
-	margin-right: 4px;
 	margin-top:2px;
 	border: 0px;
 	display:block;
-	float:right;
+	float:left;
+	font-size:10px;
+}
+.fc-icons .fc-deadlinereached {
+	display: inline-block;
+	position: absolute; content: '';
+	width: 8px;
+	height: 100%;
+	left: 4px;
+	top: 2px;
 }
 .fc-title{
 	vertical-align: middle;
+	padding-left: 4px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size: 11px;
+}
+.calendartt_raidgroups {
+	margin-top: 2px;
+	vertical-align: middle;
+}
+.calendartt_raidgroups .raidgroups_colorbox {
+	margin-left: 0px !important;
+	width: 12px;
+	height: 12px;
+
 }
 /* fix for the buttons in modern template */
 .fc-button-group .ui-corner-left {
@@ -2167,6 +2191,18 @@ div #calendar_tab .ui-widget-content{
 }
 .fc .fc-toolbar > * > *{  border-radius: @styleBorderRadius;}
 .fc-event {	border-radius: @styleBorderRadius;}
+td.fc-event-container { position:relative; }
+.calendar_raid_private:after {
+	position:absolute;
+	top:-13px;
+	right:-13px;
+	transform:rotate(135deg);
+	content:'';
+	height:0;
+	width:0;
+	border:12px solid transparent;
+	border-right-color:gray;
+}
 
 /* add calendar event */
 input#selectmode + ul { position: relative; width: 160px; cursor: pointer; }
@@ -2205,12 +2241,19 @@ fieldset.settings.floatRight.raid input[type="text"]{
 .calendar_redicon{
 	color: red;
 }
+.raidgroups_colorbox {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	margin: 0px 4px 0 8px;
+	border: 1px solid rgba(0, 0, 0, .2);
+}
 .raidcal_name .toggle_button {
 	font-size: 13px;
 	font-weight: normal;
 	line-height: 35px;
 }
-#bottommenu_admin, #bottommenu_chars{
+#bottommenu_admin, #bottommenu_chars {
 	position: fixed;
 	bottom: 0px;
 	background: rgba(0,0,0,.85);
@@ -2224,14 +2267,14 @@ fieldset.settings.floatRight.raid input[type="text"]{
 	vertical-align:middle;
 	margin:0;
 }
-.attendee_awaymode{
+.attendee_awaymode {
 	border-color: red;
 }
-#bottommenu_chars{
+#bottommenu_chars {
 	height: 70px;
 	clear: both;
 }
-.bottommenu_roundedcorner{
+.bottommenu_roundedcorner {
 	border-radius: @styleBorderRadius @styleBorderRadius 0px 0px;
 }
 .bottommenu_chars_table {

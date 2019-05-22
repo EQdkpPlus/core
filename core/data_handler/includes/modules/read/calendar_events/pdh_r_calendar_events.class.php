@@ -168,6 +168,9 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 										continue;
 									}
 								}
+
+								// remove private events if no permission for it
+								if(!$this->get_private_userperm($row['id'])){ continue; }
 								$ids[] = $row['id'];
 							}
 						}
@@ -269,6 +272,11 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			return $this->pdh->get('calendars', 'name', array($this->events[$id]['calendar_id']));
 		}
 
+		public function get_calendarmode($id){
+			$extension = $this->events[$id]['extension'];
+			return (isset($extension['calendarmode']) && $extension['calendarmode'] == 'raid') ? 'raid' : 'event';
+		}
+
 		public function get_name($id){
 			$extension = $this->events[$id]['extension'];
 			if(isset($extension['calendarmode']) && $extension['calendarmode'] == 'raid'){
@@ -346,12 +354,31 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			return (isset($this->events[$id]['private'])) ? $this->events[$id]['private'] : 0;
 		}
 
-		public function get_private_userperm($id, $userid=0){
+		public function get_raid_raidgroups($id, $asArray=false){
+			$extension	= $this->get_extension($id);
 			if($this->get_private($id) > 0){
 				$userid		= ($userid > 0) ? $userid : $this->user->data['user_id'];
-				$owner		= $this->get_creatorid($id);
-				$extension	= $this->get_extension($id);
-				return ($owner ==  $userid || (isset($extension['invited']) && in_array($userid, $extension['invited']))) ? true : false;
+				if((isset($extension['calendarmode']) && $extension['calendarmode'] == 'raid')){
+					return ($asArray) ? $this->pdh->get('raid_groups', 'name', array($extension['invited_raidgroup'])) : implode(',', $this->pdh->get('raid_groups', 'name', array($extension['invited_raidgroup'], true)));
+				}
+			}
+			return false;
+		}
+
+		public function get_private_userperm($id, $userid=0){
+			$extension	= $this->get_extension($id);
+			if($this->get_private($id) > 0){
+				$userid		= ($userid > 0) ? $userid : $this->user->data['user_id'];
+				if((isset($extension['calendarmode']) && $extension['calendarmode'] == 'raid')){
+					$owner		= $this->get_creatorid($id);
+					$raidgroup	= $extension['invited_raidgroup'];
+					$myattendees	= $this->pdh->get('calendar_raids_attendees', 'myattendees', array($id, $userid));
+					$is_in_raidgroup	= $this->pdh->get('raid_groups_members', 'user_is_in_groups', array($userid, $raidgroup));
+					return ($owner ==  $userid || (is_array($myattendees) && $myattendees['member_id'] > 0) || $is_in_raidgroup) ? true : false;
+				}else{
+					$owner		= $this->get_creatorid($id);
+					return ($owner ==  $userid || (isset($extension['invited']) && in_array($userid, $extension['invited']))) ? true : false;
+				}
 			}
 			return true;
 		}

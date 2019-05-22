@@ -238,7 +238,7 @@ class calendarevent_pageobject extends pageobject {
 		}
 
 		// auto confirm if enabled
-		$usergroups		= $this->config->get('calendar_raid_autoconfirm');
+		$usergroups		= $this->config->get('calendar_raid_confirm_raidgroupchars');
 		$signupstatus	= $this->in->get('signup_status', 4);
 		if(is_array($usergroups) && count($usergroups) > 0 && $signupstatus == 1){
 			if($this->user->check_group($usergroups, false)){
@@ -286,13 +286,14 @@ class calendarevent_pageobject extends pageobject {
 		if($do_updatestatuschange){
 			// check if another char is used
 			$arrAttendeeIDs = $this->pdh->get('calendar_raids_attendees', 'other_user_attendees', array($this->url_id, $this->in->get('member_id', 0)));
+			$raidgroup		= $this->pdh->get('calendar_raids_attendees', 'raidgroup', array($this->url_id, $this->in->get('member_id', 0)));
 
 			$intAffectedID = $this->pdh->put('calendar_raids_attendees', 'update_status', array(
 				$this->url_id,
 				$this->in->get('member_id', 0),
 				$myrole,
 				$signupstatus,
-				$this->in->get('raidgroup', 0),
+				(($this->in->exists('raidgroup')) ? $this->in->get('raidgroup', 0) : $raidgroup),
 				$this->in->get('subscribed_member_id', 0),
 				$this->in->get('signupnote'),
 			));
@@ -558,6 +559,11 @@ class calendarevent_pageobject extends pageobject {
 		if(!$this->url_id || count($this->pdh->get('calendar_events', 'data', array($this->url_id))) == 0){
 			redirect($this->routing->build('calendar',false,false,true,true));
 			//message_die($this->user->lang('calendar_page_noid'));
+		}
+
+		// check if the event is private
+		if(!$this->pdh->get('calendar_events', 'private_userperm', array($this->url_id))){
+			message_die($this->user->lang('calendar_page_private'));
 		}
 
 		if($mssg && is_array($mssg)){
@@ -1200,6 +1206,8 @@ class calendarevent_pageobject extends pageobject {
 			'DATE_YEAR'				=> $this->time->date('Y', $eventdata['timestamp_start']),
 			'LINK2TRANSFORMEDRAID'	=> $this->pdh->get('calendar_events', 'transformed_raid_link', array($this->url_id)),
 			'TRANSFORMEDRAID_TT'	=> $tooltip_transformedraid,
+			'PRIVATERAID'			=> ($this->pdh->get('calendar_events', 'private', array($this->url_id)) == 1) ? true : false,
+			'RAIDGROUPS'			=> $this->pdh->get('calendar_events', 'raid_raidgroups', array($this->url_id)),
 
 			// Language files
 			'L_NOTSIGNEDIN'			=> $this->user->lang(array('raidevent_raid_status', 4)),
