@@ -55,12 +55,12 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 					'member_role'			=> $memberrole,
 					'signup_status'			=> $signupstatus,
 				))->execute($signed_memberid, $eventid);
-				
+
 				$affectedID	= false;
 			}else{
 				$rand_value		= rand(1,100);
 				$raidgroup_new	= 0;
-				if((int)$raidgroup > 0){
+				if((int)$raidgroup == 0){
 					$raidgroup_new = array_shift($this->pdh->get('raid_groups_members', 'memberships', array($memberid)));
 				}
 				$objQuery = $this->db->prepare("INSERT INTO __calendar_raid_attendees :p")->set(array(
@@ -74,7 +74,7 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 					'signup_status'			=> $signupstatus,
 					'signedbyadmin'			=> $signedbyadmin
 				))->execute();
-				
+
 				$affectedID	= $objQuery->insertId;
 
 				// old & new array for comparison
@@ -99,7 +99,7 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 
 			$this->log_insert('calendar_log_charchanged', $log_action, $eventid, $this->pdh->get('calendar_events', 'name', array($eventid)), true, 'calendar');
 			$this->pdh->enqueue_hook('calendar_raid_attendees_update', array($eventid));
-			
+
 			return $affectedID;
 		}
 
@@ -253,7 +253,7 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 			$objQuery = $this->db->prepare("DELETE FROM __calendar_raid_attendees WHERE member_id :in")->in($memberids)->execute();
 			$this->pdh->enqueue_hook('calendar_raid_attendees_update');
 		}
-		
+
 		public function delete_attendeeid($mixAttendeeIDs){
 			$mixAttendeeIDs = (is_array($mixAttendeeIDs)) ? $mixAttendeeIDs : array($mixAttendeeIDs);
 			$objQuery = $this->db->prepare("DELETE FROM __calendar_raid_attendees WHERE id :in")->in($mixAttendeeIDs)->execute();

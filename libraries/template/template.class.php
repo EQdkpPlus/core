@@ -430,7 +430,7 @@ class template extends gen_class {
 					$strPathDir = "EQDKP_ROOT_PATH".substr($strPathDir, 2);
 				}
 				$strContent = str_replace(array('(./', '("./', "('./"), array('('.$strPathDir, '("'.$strPathDir, "('".$strPathDir),$strContent);
-				
+
 				$data[] = array('content' => "\r\n/* ".$strFile."*/ \r\n".$strContent, 'path' => $strPathDir);
 			}
 
@@ -616,10 +616,10 @@ class template extends gen_class {
 
 	// Load the JS / CSS / RSS files to the header
 	private function perform_header_tasks(){
-		
+
 		$debug = (DEBUG == 4);
 		if(!$debug) include_once($this->root_path.'libraries/JShrink/JShrink.class.php');
-		
+
 		$this->cleanup_combined();
 		if(!$this->get_templateout('js_code')){
 			// JS in header...
@@ -631,13 +631,13 @@ class template extends gen_class {
 					$imploded_jscode .= "});";
 				}
 				if(!$debug) {
-					
+
 					try {
 						$imploded_jscode = \JShrink\Minifier::minify($imploded_jscode);
 					} catch (Exception $e){
 						$imploded_jscode = $imploded_jscode;
 					}
-					
+
 				}
 				$this->assign_var('JS_CODE', $imploded_jscode);
 				$this->set_templateout('js_code', true);
@@ -712,7 +712,7 @@ class template extends gen_class {
 				if(is_array($this->get_templatedata('js_code_head_top')) && count($this->get_templatedata('js_code_head_top'))) {
 					$js_files .= "<script type='text/javascript'>";
 					$imploded_jscodeeop = implode("\n", $this->get_templatedata('js_code_head_top'));
-					if(!$debug) $imploded_jscodeeop = \JShrink\Minifier::minify($imploded_jscodeeop);				
+					if(!$debug) $imploded_jscodeeop = \JShrink\Minifier::minify($imploded_jscodeeop);
 					$js_files .= $imploded_jscodeeop;
 					$js_files .= "</script>\n";
 				}
@@ -1495,6 +1495,12 @@ class template extends gen_class {
 			}
 			$this->add_css($data);
 		}
+
+		// raidgroup colors
+		$raid_groups	= $this->pdh->get('raid_groups', 'id_list', array());
+		foreach($raid_groups as $raidgroup){
+			$this->add_css('.raidgroup_bgcolor_'.$raidgroup.'{ background: '.$this->pdh->get('raid_groups', 'color', array($raidgroup)).'; }');
+		}
 	}
 
 
@@ -1742,7 +1748,7 @@ class template extends gen_class {
 
 
 		$options = array();
-		
+
 		$lessVars = array(
 			'eqdkpURL'							=> '"'.$this->env->link.'"',
 			'eqdkpGame'							=> '"'.$this->config->get('default_game').'"',
@@ -1792,7 +1798,7 @@ class template extends gen_class {
 
 		//Add Additional LESS
 		$strCSS .= $style['additional_less'];
-		
+
 		try {
 			require_once $this->root_path.'libraries/less/Less.php';
 
@@ -1808,17 +1814,17 @@ class template extends gen_class {
 
 		return $strCSS;
 	}
-	
-	
+
+
 	private function replaceSomePathVariables($in, $root_path, $stylepath) {
 		$arrSearch = array('@eqdkpURL', '@eqdkpServerPath', '@eqdkpRootPath', '@eqdkpImagePath', '@eqdkpTemplateImagePath');
-		
+
 		$arrReplace = array($this->env->link, $this->server_path, $root_path, $root_path.'images/', $root_path.'templates/'.$stylepath.'/images/');
-		
+
 		$in = str_replace($arrSearch, $arrReplace, $in);
 		return $in;
 	}
-	
+
 
 
 	public function __destruct() {

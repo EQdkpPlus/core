@@ -2074,21 +2074,45 @@ ul.portal_block {
 	display: none;
 }
 .fc-icons{
-	margin-left: 4px;
-	margin-top:2px;
+	margin: 0;
 	border: 0px;
+	border-right: 1px solid white;
+	margin-right: 4px;
 	display:block;
 	float:left;
 }
 .fc-flag{
-	margin-right: 4px;
 	margin-top:2px;
 	border: 0px;
 	display:block;
-	float:right;
+	float:left;
+	font-size:10px;
+}
+.fc-icons .fc-deadlinereached {
+	display: inline-block;
+	position: absolute; content: '';
+	width: 8px;
+	height: 100%;
+	left: 4px;
+	top: 2px;
 }
 .fc-title{
 	vertical-align: middle;
+	padding-left: 4px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size: 11px;
+}
+.calendartt_raidgroups {
+	margin-top: 2px;
+	vertical-align: middle;
+}
+.calendartt_raidgroups .raidgroups_colorbox {
+	margin-left: 0px !important;
+	width: 12px;
+	height: 12px;
+
 }
 /* fix for the buttons in modern template */
 .fc-button-group .ui-corner-left {
@@ -2105,6 +2129,18 @@ ul.portal_block {
 }
 .fc-button-group button {
 	border-radius: 0em;
+}
+td.fc-event-container { position:relative; }
+.calendar_raid_private:after {
+	position:absolute;
+	top:-13px;
+	right:-13px;
+	transform:rotate(135deg);
+	content:'';
+	height:0;
+	width:0;
+	border:12px solid transparent;
+	border-right-color:gray;
 }
 
 /* add calendar event */
@@ -2144,6 +2180,13 @@ fieldset.settings.floatRight.raid input[type="text"]{
 }
 .calendar_redicon{
 	color: red;
+}
+.raidgroups_colorbox {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	margin: 0px 4px 0 8px;
+	border: 1px solid rgba(0, 0, 0, .2);
 }
 .raidcal_name .toggle_button {
 	font-size: 13px;
@@ -3433,7 +3476,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	.responsive .portal .second, .portal .first {
 		padding: 0px;
 	}
-	
+
 	.responsive:not(.simple-header) fieldset.settings dd {
 		border-left: none;
 		margin: 0px;
@@ -3660,7 +3703,7 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		width: 100% !important;
 		height: auto !important;
 	}
-	
+
 	.responsive .article_content iframe {
 		max-width: 100%;
 	}
@@ -3712,13 +3755,13 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	#bottommenu_admin, #bottommenu_chars{
 		width: 90% !important;
 	}
-	
+
 	// relocate portal modules
 	.portal .columnContainer { display:flex; flex-flow:column nowrap; }
 	.portal .columnContainer .first.column { order:1; }
 	.portal .columnContainer .second.column { order:0; }
 	.portal .columnContainer .third.column { order:2; }
-	
+
 }
 
 @media all and (max-width: 590px) {

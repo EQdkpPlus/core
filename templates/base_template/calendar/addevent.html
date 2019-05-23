@@ -308,17 +308,21 @@ function attendeeCount(){
 		</dl>
 		<!-- ENDIF -->
 
-		<dl class="event">
-			<dt><label>{L_calendar_event_private}:</label></dt>
+		<dl>
+			<dt><label class="raid">{L_calendar_raid_private}:</label><label class="event">{L_calendar_event_private}:</label></dt>
 			<dd>{CB_PRIVATE}</dd>
 		</dl>
-		<dl id="invitefield">
+		<dl id="invitefield" class="event">
 			<dt><label>{L_calendar_sharing_receipients}:</label></dt>
 			<dd>{DR_SHARE_USERS}</dd>
 		</dl>
-		<dl id="invitefield_usergroup">
+		<dl id="invitefield_usergroup" class="event">
 			<dt><label>{L_calendar_sharing_receipients_usergroup}:</label></dt>
 			<dd>{DR_INVITED_UG}</dd>
+		</dl>
+		<dl id="invitefield_raidgroup" class="raid">
+			<dt><label>{L_calendar_sharing_receipients_raidgroup}:</label></dt>
+			<dd>{DR_INVITED_RG}</dd>
 		</dl>
 
 	</fieldset>

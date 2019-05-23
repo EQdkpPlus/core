@@ -323,13 +323,18 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 
 		public function get_status_flag($status){
 			switch($status){
-				case 0: $flagcolor	= 'icon-color-green';break;
-				case 1: $flagcolor	= 'icon-color-yellow';break;
-				case 2: $flagcolor	= 'icon-color-red';break;
-				case 3: $flagcolor	= 'icon-color-purple';break;
-				case 5: $flagcolor	= 'icon-color-blue';break;
+				case 0: $flagcolor	= 'fa-star';break;
+				case 1: $flagcolor	= 'fa-user';break;
+				case 2: $flagcolor	= 'fa-star-o';break;
+				case 3: $flagcolor	= 'fa-star-half-o';break;
+				case 5: $flagcolor	= 'fa-flag icon-color-blue';break;
+				/*case 0: $flagcolor	= 'fa-check';break;
+				case 1: $flagcolor	= 'fa-user';break;
+				case 2: $flagcolor	= 'fa-times';break;
+				case 3: $flagcolor	= 'fa-question';break;
+				case 5: $flagcolor	= 'fa-flag icon-color-blue';break;*/
 			}
-			return '<i class="fa fa-flag '.$flagcolor.' fa-lg"></i>';
+			return '<i class="fa '.$flagcolor.' fa-lg"></i>';
 		}
 
 		public function get_html_status($eventid, $userid, $flag=true){
@@ -691,6 +696,23 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 			}
 
 			return $statsperdays;
+		}
+
+		public function get_twinks_with_highest_attendance($memberid){
+			$other_chars		= $this->pdh->get('member', 'other_members', array($memberid));
+			if(is_array($other_chars) && count($other_chars) > 0){
+				// get the chars & add the own ID
+				$mychars			= array_merge($other_chars, array($memberid));
+
+				// add all attendances of members to an array
+				$sttendance_chars = array();
+				foreach($mychars as $charID){
+					$sttendance_chars[$charID] = $this->get_calstat_raids_total_fromto($memberid, ($this->time->time - (90*24*3600)), $this->time->time, false);
+				}
+				// return the array key (memberID) of the highes attendance char
+				return array_search(max($sttendance_chars), $sttendance_chars);
+			}
+			return $memberid;
 		}
 
 		/* -----------------------------------------------------------------------

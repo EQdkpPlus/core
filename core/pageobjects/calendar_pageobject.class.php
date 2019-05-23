@@ -45,7 +45,7 @@ class calendar_pageobject extends pageobject {
 	public function mass_signin(){
 		$eventids = $this->in->getArray('selected_ids', 'int');
 		if(is_array($eventids)){
-			$usergroups		= $this->config->get('calendar_raid_autoconfirm');
+			$usergroups		= $this->config->get('calendar_raid_confirm_raidgroupchars');
 			$signupstatus	= $this->in->get('member_signupstatus', 0);
 			if(is_array($usergroups) && count($usergroups) > 0 && $signupstatus == 1){
 				if($this->user->check_group($usergroups, false)){
@@ -296,7 +296,6 @@ class calendar_pageobject extends pageobject {
 
 							$deadlinedate	= $this->pdh->get('calendar_events', 'time_start', array($calid)) - ($eventextension['deadlinedate'] * 3600);
 							$deadline = ($deadlinedate > $this->time->time || ($this->config->get('calendar_raid_allowstatuschange') == '1' && $this->pdh->get('calendar_raids_attendees', 'status', array($calid, $this->user->id)) > 0 && $this->pdh->get('calendar_raids_attendees', 'status', array($calid, $this->user->id)) != 4 && $this->pdh->get('calendar_events', 'time_end', array($calid)) > $this->time->time)) ? false : true;
-							$deadlineflag = ($deadline) ? '<i class="fa fa-lock fa-lg" title="'.$this->user->lang('raidevent_raid_deadl_reach').'"></i>' : '';
 
 							// Build the JSON
 							$event_json[] = array(
@@ -308,14 +307,17 @@ class calendar_pageobject extends pageobject {
 								'start'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_start', array($calid))),
 								'end'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_end', array($calid))),
 								'closed'		=> ($this->pdh->get('calendar_events', 'raidstatus', array($calid)) == 1) ? true : false,
-								'flag'			=> $deadlineflag.$this->pdh->get('calendar_raids_attendees', 'html_status', array($calid, $this->user->data['user_id'])),
+								'flag'			=> $this->pdh->get('calendar_raids_attendees', 'html_status', array($calid, $this->user->data['user_id'])),
+								'deadline'		=> ($deadline) ? true : false,
 								'icon'			=> $this->pdh->get('calendar_events', 'event_icon', array($calid)),
 								'note'			=> $this->pdh->get('calendar_events', 'notes', array($calid, true)),
 								'raidleader'	=> ($eventextension['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'name', 0, array($eventextension['raidleader']))) : '',
 								'rstatusdata'	=> $rstatusdata,
 								'color'			=> $eventcolor.' !important',
 								'textColor'		=> $eventcolor_txt.' !important',
-								'className'		=> 'calendarevent_'.$calender_id,
+								'className'		=> 'calendarevent_'.$calender_id.(($this->pdh->get('calendar_events', 'private', array($calid)) == 1) ? ' calendar_raid_private' : ''),
+								'isinvited'		=> $this->pdh->get('calendar_events', 'is_invited', array($calid)),
+								'raidgroups'	=> ($this->pdh->get('calendar_events', 'private', array($calid)) == 1) ? $this->pdh->get('calendar_events', 'raid_raidgroups', array($calid)) : '',
 							);
 						}else{
 							$alldayevents	= ($this->pdh->get('calendar_events', 'allday', array($calid)) > 0) ? true : false;
@@ -323,7 +325,7 @@ class calendar_pageobject extends pageobject {
 								'type'			=> 'event',
 								'eventid'		=> $calid,
 								'editable'		=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission($calid)) ? true : false,
-									'url'			=> (!is_utf8($str)) ? utf8_encode($this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid)) : $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid),
+								'url'			=> (!is_utf8($str)) ? utf8_encode($this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid)) : $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid),
 								'title'			=> $this->pdh->get('calendar_events', 'name', array($calid)),
 								'start'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_start', array($calid))),
 								'end'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_end', array($calid, $alldayevents))),
@@ -336,7 +338,7 @@ class calendar_pageobject extends pageobject {
 								'joinedevent'	=> $this->pdh->get('calendar_events', 'joined_invitation', array($calid)),
 								'author'		=> $this->pdh->get('calendar_events', 'creator', array($calid)),
 								'attendees'		=> $this->pdh->get('calendar_events', 'sharedevent_attendees', array($calid)),
-								'className'		=> 'calendarevent_'.$calender_id,
+								'className'		=> 'calendarevent_'.$calender_id.(($this->pdh->get('calendar_events', 'private', array($calid)) == 1) ? ' calendar_raid_private' : ''),
 								'icon'			=> $this->pdh->get('calendar_events', 'event_icon', array($calid)),
 							);
 						}
@@ -452,17 +454,19 @@ class calendar_pageobject extends pageobject {
 		));
 
 		//Calenderevent Statistics
+		$hide_inactive	= false;
+		$intRaidgroup	= 0;
 		if ($this->in->get('from') && $this->in->get('to')){
 			if(!$this->in->exists('timestamps')) {
 				$date1 = $this->time->fromformat($this->in->get('from'));
 				$date2 = $this->time->fromformat($this->in->get('to'));
-				
+
 				$date1 = (int)($date1 / 1000);
 				$date1 = $date1 * 1000;
-				
+
 				$date2 = (int)($date2 / 1000);
 				$date2 = $date2 * 1000;
-				
+
 				$date2 += 86400; // Includes raids/items ON that day
 			} else {
 				$date1 = $this->in->get('from');
@@ -474,16 +478,16 @@ class calendar_pageobject extends pageobject {
 
 			//Create a Summary
 			$arrRaidstatsSettings = array(
-					'name' => 'hptt_viewmember_itemlist',
-					'table_main_sub' => '%member_id%',
-					'table_subs' => array('%member_id%', '%link_url%', '%link_url_suffix%', '%raid_link_url%', '%raid_link_url_suffix%', '%itt_lang%', '%itt_direct%', '%onlyicon%', '%noicon%', '%from%', '%to%'),
-					'page_ref' => 'viewcharacter.php',
-					'show_numbers' => false,
-					'show_select_boxes' => false,
-					'show_detail_twink' => false,
-					'table_sort_col' => 0,
-					'table_sort_dir' => 'asc',
-					'table_presets' => array(
+					'name'				=> 'hptt_viewmember_itemlist',
+					'table_main_sub'	=> '%member_id%',
+					'table_subs'		=> array('%member_id%', '%link_url%', '%link_url_suffix%', '%raid_link_url%', '%raid_link_url_suffix%', '%itt_lang%', '%itt_direct%', '%onlyicon%', '%noicon%', '%from%', '%to%'),
+					'page_ref'			=> 'viewcharacter.php',
+					'show_numbers'		=> false,
+					'show_select_boxes'	=> false,
+					'show_detail_twink'	=> false,
+					'table_sort_col'	=> 0,
+					'table_sort_dir'	=> 'asc',
+					'table_presets'		=> array(
 							array('name' => 'mlink', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 							array('name' => 'mraidgroups', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 							array('name' => 'mtwink', 'sort' => true, 'th_add' => '', 'td_add' => ''),
@@ -502,26 +506,24 @@ class calendar_pageobject extends pageobject {
 					$show_twinks = true;
 					$statsuffix .= '&amp;show_twinks=1';
 				}
-				
-				$hide_inactive = false;
+
 				if($this->in->exists('hide_inactive')){
 					$hide_inactive = true;
 					$statsuffix .= '&amp;hide_inactive=1';
 				}
-				
-				$intRaidgroup = 0;
+
 				if($this->in->exists('raidgroup')){
 					$intRaidgroup = $this->in->get('raidgroup', 0);
 					$statsuffix .= '&amp;raidgroup='.$intRaidgroup;
 				}
 
 				$arrMemberlist	= $this->pdh->get('member', 'id_list', array(true, true, true, !($show_twinks)));
-				
+
 				//Filter for Raidgroup
 				if($intRaidgroup){
 					$arrMemberlist = $this->pdh->get('raid_groups_members', 'member_list', array($intRaidgroup));
 				}
-				
+
 				//Filter
 				if($hide_inactive){
 					$arrMemberlistFiltered = array();
@@ -536,7 +538,6 @@ class calendar_pageobject extends pageobject {
 				$hptt->setPageRef($this->strPath);
 
 				$sort = $this->in->get('statsort');
-				//$suffix = (strlen($sort))? '&amp;statsort='.$sort : '';
 
 				$this->tpl->assign_vars(array (
 					'RAIDSTATS_OUT' 		=> $hptt->get_html_table($sort, $statsuffix, null, null, null),
@@ -552,11 +553,10 @@ class calendar_pageobject extends pageobject {
 		$calendar_idlist		= $this->pdh->aget('calendars', 'name', 0, array($this->pdh->get('calendars', 'idlist')));
 		$calendar_idlist[-2]	= $this->user->lang('user_sett_f_birthday');
 		$calendar_idlist[-3]	= $this->user->lang('calendar_others');
-		#$todisable				= array(1,2);
 		$todisable				= array();
 
 		$arrRaidgroups = array_merge(array(0 => ' - '), $this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list'))));
-		
+
 		$this->tpl->assign_vars(array (
 			// Date Picker
 			'DATEPICK_DATE_FROM'	=> (new hdatepicker('from', array('value' => $this->time->user_date($date1, false, false, false, function_exists('date_create_from_format')))))->output(),

@@ -109,7 +109,7 @@ if(!class_exists('requirements')) {
 				),
 			);
 		}
-		
+
 		private function checkDataFolder(){
 			if($this->blnWritable != NULL) return $this->blnWritable;
 			$blnIsWritable = register('pfh')->is_writable($this->pfh->FolderPath('templates', 'eqdkp').'testfile.txt', true);
@@ -128,7 +128,7 @@ if(!class_exists('requirements')) {
 					($type == 'optional' && (isset($fdata['adviced_fail']) && $fdata['adviced_fail'])) ||
 					($type == 'both' && ((isset($fdata['adviced_fail']) && $fdata['adviced_fail']) || (isset($fdata['adviced_fail']) && $fdata['adviced_fail'])))
 				){
-					if(!$fdata['ignore']){
+					if(!isset($fdata['ignore']) || !$fdata['ignore']){
 						$arrCount[]	= $fname;
 					}
 

@@ -174,7 +174,7 @@ class admin_settings extends page_generic {
 			$mobile_pagelayout_array[$val] = $val;
 		}
 
-		$a_groups = $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list')));
+		$a_groups = $this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list')));
 
 		// Startpage
 		$arrMenuItems = $this->core->build_menu_array(true, true);
@@ -607,7 +607,7 @@ class admin_settings extends page_generic {
 				'raids'		=> array(
 					/*'calendar_raid_enabled'	=> array(
 						'type'	=> 'radio',
-						'dependency'	=> array(1 => array('calendar_raid_guests', 'calendar_raid_random', 'calendar_raid_status', 'calendar_raid_nsfilter', 'calendar_addraid_deadline', 'calendar_addraid_duration', 'calendar_addraid_use_def_start', 'calendar_repeat_crondays', 'calendar_raid_autoconfirm', 'calendar_raid_autocaddchars', 'calendar_raidleader_autoinvite', 'calendar_raid_notsigned_classsort', 'calendar_raid_coloredclassnames', 'calendar_raid_shownotsigned', 'calendar_raid_allowstatuschange', 'calendar_raid_statuschange_status')),
+						'dependency'	=> array(1 => array('calendar_raid_guests', 'calendar_raid_random', 'calendar_raid_status', 'calendar_raid_nsfilter', 'calendar_addraid_deadline', 'calendar_addraid_duration', 'calendar_addraid_use_def_start', 'calendar_repeat_crondays', 'calendar_raid_confirm_raidgroupchars', 'calendar_raid_add_raidgroupchars', 'calendar_raidleader_autoinvite', 'calendar_raid_notsigned_classsort', 'calendar_raid_coloredclassnames', 'calendar_raid_shownotsigned', 'calendar_raid_allowstatuschange', 'calendar_raid_statuschange_status')),
 					),*/
 					'calendar_raid_guests'	=> array(
 						'type'			=> 'dropdown',
@@ -620,7 +620,7 @@ class admin_settings extends page_generic {
 					'calendar_raid_status'	=> array(
 						'type'			=> 'multiselect',
 						'options'		=> $a_calraid_status,
-						'datatype'	=> 'int'
+						'datatype'		=> 'int'
 					),
 					'calendar_raid_nsfilter'	=> array(
 						'type'			=> 'multiselect',
@@ -635,13 +635,13 @@ class admin_settings extends page_generic {
 					'calendar_addraid_duration'	=> array(
 						'type'			=> 'spinner',
 						'size'			=> 5,
-						'min'				=> 10,
+						'min'			=> 10,
 						'step'			=> 10,
 						'default'		=> 120
 					),
 					'calendar_addraid_use_def_start'	=> array(
 						'type'			=> 'radio',
-						'dependency'=> array(1 => array('calendar_addraid_def_starttime')),
+						'dependency'	=> array(1 => array('calendar_addraid_def_starttime')),
 					),
 					'calendar_addraid_def_starttime'	=> array(
 						'type'			=> 'timepicker',
@@ -650,19 +650,19 @@ class admin_settings extends page_generic {
 					'calendar_repeat_crondays'	=> array(
 						'type'			=> 'spinner',
 						'size'			=> 5,
-						'min'				=> 5,
+						'min'			=> 5,
 						'step'			=> 5,
 						'default'		=> 40
 					),
-					'calendar_raid_autoconfirm'	=> array(
+					'calendar_raid_confirm_raidgroupchars'	=> array(
 						'type'			=> 'multiselect',
 						'options'		=> $a_groups,
-						'datatype'	=> 'int',
+						'datatype'		=> 'int',
 					),
-					'calendar_raid_autocaddchars'	=> array(
+					'calendar_raid_add_raidgroupchars'	=> array(
 						'type'			=> 'multiselect',
 						'options'		=> $a_groups,
-						'datatype'	=> 'int',
+						'datatype'		=> 'int',
 					),
 					'calendar_raidleader_autoinvite'	=> array(
 						'type'			=> 'radio',
@@ -685,7 +685,7 @@ class admin_settings extends page_generic {
 					'calendar_raid_statuschange_status'	=> array(
 						'type'			=> 'dropdown',
 						'options'		=> $a_calraid_status2,
-						'datatype'	=> 'int'
+						'datatype'		=> 'int'
 					),
 				),
 			),
@@ -938,7 +938,6 @@ class admin_settings extends page_generic {
 							$value = ($this->in->exists($fieldname)) ? $this->in->get($fieldname) : $this->config->get($fieldname);
 							$apikeyform	.= '<br/>'.$this->game->glang($fieldname).': '.$this->form->field($fieldname, array_merge($fieldcontent, array('value'=>$value)));
 						}
-
 					}
 
 					end($appisetts);
