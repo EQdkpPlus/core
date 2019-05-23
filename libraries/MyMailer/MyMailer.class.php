@@ -261,19 +261,22 @@ class MyMailer extends gen_class {
 				$this->objMailer->isMail();
 			}
 
+			$dbgBody = $this->objMailer->AltBody;
+			
 			$blnSendresult = $this->objMailer->send();
-			
-			$this->objMailer->clearAddresses();
-			
+						
 			//Debugging
 			$this->pdl->log("mail", "\nFrom: ".$from."
 To: ".print_r($this->objMailer->getAllRecipientAddresses(), true)."
 Subject: ".$this->objMailer->Subject."
-Body: ".$this->objMailer->Body."
+Body: ".$dbgBody."
 Method: ".$this->objMailer->Mailer."
 Result: ".print_r($blnSendresult, true)."
 Error: ".$this->objMailer->ErrorInfo."
 =================================");
+			
+			$this->objMailer->clearAddresses();
+			
 			//Reset Status
 			$this->sendStatus = false;
 			$this->sendError = "";
