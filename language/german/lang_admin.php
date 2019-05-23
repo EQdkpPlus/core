@@ -1529,6 +1529,7 @@ $lang = array(
 "list_type_full" => "Voller Artikeltext",
 "list_type_headline" => "Nur Artikelüberschriften",
 "list_type_teaser" => "Artikeltext bis 200 Wörter",
+"list_type_boxes" => "Boxen",
 "show_child_categories" => "Unterkategorien auf Liste anzeigen",
 "aggregation" => "Artikel von diesen Kategorien einbinden",
 "featured_only" => "Nur Artikel mit Status 'Featured' anzeigen",

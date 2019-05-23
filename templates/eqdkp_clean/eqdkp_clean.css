@@ -1616,6 +1616,10 @@ hr#system-readmore {
 	display:none;
 }
 
+.button.readmore {
+	display: inline-block;
+}
+
 /* Articelcategorie childs */
 .article-child-container {
 	border-color: #DDDDDD;
@@ -3762,8 +3766,17 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		padding-left: 10px;
 	}
 
-	.responsive .list-type1 .ribbons, .responsive .list-type2 .ribbons, .responsive .list-type3 .ribbons  {
+	.responsive .list-type1 .ribbons, .responsive .list-type2 .ribbons, .responsive .list-type3 .ribbons, .responsive .list-type4 .ribbons  {
 		display: none;
+	}
+	
+	.responsive .article-container.list-type4, .responsive .article-container.list-type4 .article-banner-image > a{
+		width: 100% !important;
+		margin-right: 0;
+	}
+	
+	.responsive .article-container.list-type4 .article-banner-image a > img {
+		width: 100% !important;
 	}
 
 	.responsive .nav-mobile .mobileMainLogo {
@@ -4104,7 +4117,7 @@ li.prio_2 {
 	width: 100px;
 }
 
-.list-type1 .td, .list-type2 .td, .list-type3 .td {
+.list-type1 .td, .list-type2 .td, .list-type3 .td, .list-type4 .td {
 	vertical-align: top;
 }
 
@@ -4114,6 +4127,35 @@ li.prio_2 {
 
 .list-type2 .fa-calendar-o, .list-type2 .fa-comments, .list-type2 .fa-folder-o {
 	margin-left: 10px;
+}
+
+.list-type4 {
+	display:flex; 
+	flex-wrap: wrap;
+}
+
+.article-container.list-type4 {
+	width: 500px; 
+	margin-right:20px;
+	background-color: @eqdkpContentContrastBackgroundColor;
+}
+
+.list-type4 .article-banner-image {
+	align-items:center;
+	display:flex;
+	max-height:160px;
+	overflow:hidden;
+}
+
+.list-type4 .news_author {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.list-type4 .article_content {
+	padding: 0px 10px 5px 10px;
 }
 /* ================================== */
 /* Ribbons */
@@ -4394,7 +4436,7 @@ button > i, .button > i {
 }
 
 
-.list-type1 .news_social, .list-type2  .news_social, .list-type3 .news_social {
+.list-type1 .news_social, .list-type2  .news_social, .list-type3 .news_social, .list-type4 .news_social {
 	display: none;
 }
 

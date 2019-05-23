@@ -1521,6 +1521,7 @@ $lang = array(
 	"list_type_full" => 'Full Articletext',
 	"list_type_headline" => 'Headlines only',
 	"list_type_teaser" => 'Articletext up to 200 Words',
+	"list_type_boxes" => 'Boxes',
 	"show_child_categories" => 'Show subcategories on list',
 	"aggregation" => 'Aggregate articles from this categories',
 	"featured_only" => 'Show only featured articles',

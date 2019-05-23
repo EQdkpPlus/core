@@ -11,7 +11,9 @@
 						</div>
 						<div class="td">
 							<!-- IF article_row.ARTICLE_PREVIEW_IMAGE != "" -->
-								<img src="{article_row.ARTICLE_PREVIEW_IMAGE}" class="floatLeft articlePreviewImage" style="margin-right: 5px;"/>
+							<div style="align-items:stretch;display:flex;overflow:hidden;margin-right:20px;" class="floatLeft">
+								<a href="{article_row.ARTICLE_PATH}" style="background:url('{article_row.ARTICLE_PREVIEW_IMAGE_BIG}');background-size: cover;width:160px;height:100px;background-position:center center;"></a>
+							</div>
 							<!-- ENDIF -->
 							<div class="floatLeft">
 								<h2>
@@ -22,7 +24,7 @@
 								<br />
 								<!-- IF not article_row.S_HIDE_HEADER -->
 								<p>
-								<i class="fa fa-user"></i> {article_row.ARTICLE_AUTHOR} <i class="fa fa-calendar-o"></i> {article_row.ARTICLE_DATE} <!-- IF article_row.S_COMMENTS --> <i class="fa fa-folder-o"></i> {article_row.ARTICLE_REAL_CATEGORY_NAME} <a href="{article_row.ARTICLE_PATH}#comments"><i class="fa fa-comments"></i>{article_row.COMMENTS_COUNTER}</a><!-- ENDIF -->
+								{article_row.ARTICLE_AUTHOR_AVATAR}<span class="news_author_user"> {article_row.ARTICLE_AUTHOR}</span>  <i class="fa fa-calendar-o"></i> {article_row.ARTICLE_DATE}  <i class="fa fa-folder-o"></i> {article_row.ARTICLE_REAL_CATEGORY_NAME} <!-- IF article_row.S_COMMENTS -->  <a href="{article_row.ARTICLE_PATH}#comments"><i class="fa fa-comments"></i> {article_row.COMMENTS_COUNTER}</a><!-- ENDIF -->
 								</p>
 								<!-- ENDIF -->
 							</div>
