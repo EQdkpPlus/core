@@ -274,6 +274,9 @@ class admin_settings extends page_generic {
 					'notify_updates_email' => array(
 							'type'		=> 'radio',
 					),
+					'disable_guild_features' => array(
+							'type'		=> 'radio',
+					),
 					'debug'	=> array(
 						'type'		=> 'dropdown',
 						'tolang'	=> true,
@@ -817,6 +820,15 @@ class admin_settings extends page_generic {
 		if($this->config->get('default_game') == 'dummy'){
 			$settingsdata['game']['game']['default_game']['text_after'] = '<button onclick="window.location=\'manage_extensions.php'.$this->SID.'#fragment-7\'" type="button"><i class="fa fa-lg fa-download"></i> '.$this->user->lang('install_other_games').'</button>';
 		}
+		
+		if($this->config->get('disable_guild_features')) {
+			unset($settingsdata['itemtooltip']);
+			unset($settingsdata['calendar']['raids']);
+			unset($settingsdata['calendar']['calendar']['calendar_addevent_mode']);
+			unset($settingsdata['chars']);
+			unset($settingsdata['points']);
+			unset($settingsdata['game']);
+		}
 
 		//Avatar Provider
 		$arrAllAvatarProviders = array();
@@ -834,9 +846,9 @@ class admin_settings extends page_generic {
 						'type'		=> 'radio',
 				),
 		);
-		$this->form->add_fields($fields, 'itemtooltip' ,'itemtooltip');
+		if(!$this->config->get('disable_guild_features')) $this->form->add_fields($fields, 'itemtooltip' ,'itemtooltip');
 
-		if(count($this->itt->get_parserlist())){
+		if(count($this->itt->get_parserlist()) && !$this->config->get('disable_guild_features')){
 			$fields = array(
 				'itt_debug'	=> array(
 						'type'		=> 'radio',
@@ -917,7 +929,7 @@ class admin_settings extends page_generic {
 				'codeinput'		=> true,
 			),
 		);
-		$this->form->add_fields($fields, 'ittownscripts', 'itemtooltip');
+		if(!$this->config->get('disable_guild_features')) $this->form->add_fields($fields, 'ittownscripts', 'itemtooltip');
 
 		// Importer API Key Wizzard
 		$apikey_config		= $this->game->get_importers('apikey');

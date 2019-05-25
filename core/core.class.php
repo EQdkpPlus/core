@@ -442,7 +442,7 @@ class core extends gen_class {
 				'T_MENU_BACKGROUND_COLOR'=> $this->user->style['menu_background_color'],
 				'S_REGISTER'				=> (int)$this->config->get('enable_registration'),
 				'U_LOGOUT'					=> $this->controller_path.'Login/Logout'.$this->routing->getSeoExtension().$this->SID.'&amp;link_hash='.$this->user->csrfGetToken("login_pageobjectlogout"),
-				'U_CHARACTERS'				=> ($this->user->is_signedin() && $this->user->check_auths(array('u_member_man', 'u_member_add', 'u_member_conn', 'u_member_del'), 'OR', false)) ? $this->controller_path.'MyCharacters' . $this->routing->getSeoExtension().$this->SID : '',
+				'U_CHARACTERS'				=> ($this->user->is_signedin() && !$this->config->get('disable_guild_features') && $this->user->check_auths(array('u_member_man', 'u_member_add', 'u_member_conn', 'u_member_del'), 'OR', false)) ? $this->controller_path.'MyCharacters' . $this->routing->getSeoExtension().$this->SID : '',
 				'U_REGISTER'				=> $registerLink,
 				'MAIN_MENU'					=> $this->build_menu_ul($this->build_menu_array(false)),
 				'MAIN_MENU_MOBILE'			=> $this->build_menu_ul($this->build_menu_array(false), 'mainmenu-mobile'),
@@ -460,6 +460,7 @@ class core extends gen_class {
 				'CURRENT_PAGE'				=> sanitize($this->env->request),
 				'S_STYLECHANGER'			=> (!intval($this->config->get('default_style_overwrite')) && count(register('pdh')->get('styles', 'styles', array(0, false))) > 1) ? true : false,
 				'USER_IS_AWAY'				=> ($this->user->data['user_id'] > 0) ? $this->pdh->get('calendar_raids_attendees', 'user_awaymode', array($this->user->data['user_id'])) : false,
+				'S_DISABLE_GUILD_FEATURES'	=> ($this->config->get('disable_guild_features') == 1) ? true : false,
 			));
 
 			if (isset($this->page_body) && $this->page_body == 'full'){
@@ -481,7 +482,7 @@ class core extends gen_class {
 			// show the full head
 			if ($this->header_format != 'simple'){
 				// System Message if user has no assigned members
-				if($this->pdh->get('member', 'connection_id', array($this->user->data['user_id'])) < 1 && ($this->user->is_signedin()) && ($this->user->data['hide_nochar_info'] != '1') && $this->user->check_auths(array('u_member_man', 'u_member_add', 'u_member_conn', 'u_member_del'), 'OR', false)){
+				if($this->pdh->get('member', 'connection_id', array($this->user->data['user_id'])) < 1 && ($this->user->is_signedin()) && ($this->user->data['hide_nochar_info'] != '1') && $this->user->check_auths(array('u_member_man', 'u_member_add', 'u_member_conn', 'u_member_del'), 'OR', false) && !$this->config->get('disable_guild_features')){
 					$message = '<a href="'.$this->routing->build('mycharacters').'">'.$this->user->lang('no_connected_char').'</a>';
 					$message .= '<br /><br /><a href="'.$this->routing->build('mycharacters').'&hide_info=true">'.$this->user->lang('no_connected_char_hide').'</a>';
 					$this->message($message);

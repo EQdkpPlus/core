@@ -20,7 +20,9 @@
 				<a href="{U_MANAGE_USERS}o=0.0"><span class="down_arrow{RED00}"></span></a><a href="{U_MANAGE_USERS}o=0.1"><span class="up_arrow{RED01}"></span></a>
 				<a href="{U_MANAGE_USERS}o={O_USERNAME}">{L_username}</a>
 			</th>
+			<!-- IF not S_DISABLE_GUILD_FEATURES -->
 			<th style="width:35%" class="left hiddenSmartphone">{L_associated_members}</th>
+			<!-- ENDIF -->
 			<th style="width:100px" class="hiddenSmartphone nowrap left">
 				<a href="{U_MANAGE_USERS}o=1.0"><span class="down_arrow{RED10}"></span></a><a href="{U_MANAGE_USERS}o=1.1"><span class="up_arrow{RED11}"></span></a>
 				<a href="{U_MANAGE_USERS}o={O_EMAIL}">{L_email_address}</a>
@@ -31,11 +33,12 @@
 				<a href="{U_MANAGE_USERS}o=2.0"><span class="down_arrow{RED20}"></span></a><a href="{U_MANAGE_USERS}o=2.1"><span class="up_arrow{RED21}"></span></a>
 				<a href="{U_MANAGE_USERS}o={O_LAST_VISIT}">{L_last_visit}</a>
 			</th>
-
+			<!-- IF not S_DISABLE_GUILD_FEATURES -->
 			<th style="width:40px" class="hiddenSmartphone left">
 				<a href="{U_MANAGE_USERS}o=5.0"><span class="down_arrow{RED50}"></span></a><a href="{U_MANAGE_USERS}o=5.1"><span class="up_arrow{RED51}"></span></a>
 				<a href="{U_MANAGE_USERS}o={O_AWAY}"><i class="fa fa-suitcase"></i></a>
 			</th>
+			<!-- ENDIF -->
 		</tr>
 		<!-- BEGIN users_row -->
 		<tr>
@@ -52,6 +55,7 @@
 			<td style="width:20px">{users_row.ADMIN_ICON}</td>
 			<td><a href="{users_row.U_MANAGE_USER}" style="{users_row.NAME_STYLE}">{users_row.USERNAME}</a></td>
 
+			<!-- IF not S_DISABLE_GUILD_FEATURES -->
 			<td style="width:35%" class="hiddenSmartphone">
 				<script type="text/javascript">
 				$(function() {
@@ -90,10 +94,13 @@
 				{users_row.MEMBER_COUNT} {L_chars}
 				<!-- ENDIF -->
 			</td>
+			<!-- ENDIF -->
 			<td style="width:100px" class="hiddenSmartphone nowrap left"><a href="mailto:{users_row.EMAIL}">{users_row.EMAIL}</a></td>
 			<td style="width:150px" class="hiddenSmartphone">{users_row.REG_DATE}</td>
 			<td style="width:150px" class="hiddenSmartphone">{users_row.LAST_VISIT}</td>
+			<!-- IF not S_DISABLE_GUILD_FEATURES -->
 			<td style="width:60px" class="hiddenSmartphone center">{users_row.AWAY}</td>
+			<!-- ENDIF -->
 		</tr>
 		<!-- END users_row -->
 	</table>

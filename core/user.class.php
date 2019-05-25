@@ -720,6 +720,8 @@ class user extends gen_class {
 
 		$settingsdata['profile']['user_avatar']['user_avatar_type']['options'] = $arrAvatarOptions;
 		$settingsdata['profile']['user_avatar']['user_avatar_type']['dependency'] = $arrAvatarDependencies;
+		
+		if(register('config')->get('disable_guild_features')) unset($settingsdata['calendar']);
 
 		return $settingsdata;
 	}

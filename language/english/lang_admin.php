@@ -1879,6 +1879,8 @@ $lang = array(
 		"twinkname" => "Twinkname",
 		"inactive" => "Inactive",
 		"event_defaultvalue_note" => "Default value of the event. Is used as a help and can be changed during raid creation.",
+		"core_sett_f_disable_guild_features" => "Disable all guild features",
+		"core_sett_f_help_disable_guild_features" => "Disables all features like characters, raids, items, adjustments etc.",
 );
 
 ?>

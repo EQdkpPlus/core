@@ -548,12 +548,13 @@ td.fc-day:hover:after {
 </div>
 
 <div id='calendar_tab'>
+	<!-- IF not S_DISABLE_GUILD_FEATURES -->
 	<ul>
 		<li><a href='#fragment-calendar'><span>{L_calendar}</span></a></li>
 		<li><a href='#fragment-list'><span>{L_calendar_list}</span></a></li>
 		<li><a href='#fragment-raidstats'><span>{L_statistics}</span></a></li>
 	</ul>
-
+	<!-- ENDIF -->
 	<div id="fragment-calendar">
 		<div class="fc calendar-filtertoolbar">
 			<div class="fc-button-group" id="calendar_filter">
@@ -582,6 +583,7 @@ td.fc-day:hover:after {
 		<div id='calendar'></div>
 	</div>
 
+	<!-- IF not S_DISABLE_GUILD_FEATURES -->
 	<div id="fragment-list">
 		<form name="masssignin" method="post" action="{ACTION}">
 		<div class="tableHeader">
@@ -645,4 +647,5 @@ td.fc-day:hover:after {
 		{CSRF_TOKEN}
 		</form>
 	</div>
+	<!-- ENDIF -->
 </div>

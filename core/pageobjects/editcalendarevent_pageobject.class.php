@@ -529,6 +529,7 @@ class editcalendarevent_pageobject extends pageobject {
 			$calendermode = 'event';
 		} else {
 			$calendermode = ($this->config->get('calendar_addevent_mode')) ? $this->config->get('calendar_addevent_mode') : 'event';
+			if($this->config->get('disable_guild_features')) $calendermode = 'event';
 		}
 
 		// build json for calendar dropdown
@@ -566,6 +567,7 @@ class editcalendarevent_pageobject extends pageobject {
 				'TEXT'			=> $cm_name,
 			));
 		}
+
 
 		$this->tpl->assign_vars(array(
 			'IS_EDIT'			=> ($this->url_id > 0) ? true : false,

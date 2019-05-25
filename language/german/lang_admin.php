@@ -1884,5 +1884,8 @@ $lang = array(
 "twinkname" => "Twinkname",
 "inactive" => "Inaktiv",
 "event_defaultvalue_note" => "Standard-Wert des Events. Dient als Hilfe und ist nicht bindend.",
+"core_sett_f_disable_guild_features" => "Gildenfunktionen deaktivieren",
+"core_sett_f_help_disable_guild_features" => "Schaltet alle Gildenbezogene Funktionen wie Charaktere, Raids, Items, DKP-Punkte etc. ab",
+		
 );
 ?>

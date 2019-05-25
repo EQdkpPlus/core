@@ -312,6 +312,11 @@ class admin_functions extends gen_class {
 		// Now get plugin hooks for the menu
 		$admin_menu = (is_array($this->pm->get_menus('admin'))) ? array_merge_recursive($admin_menu, array('extensions'=>$this->pm->get_menus('admin'))) : $admin_menu;
 
+		if($this->config->get('disable_guild_features')){
+			unset($admin_menu['members']);
+			unset($admin_menu['raids']);
+		}
+		
 		// Now get the admin-favorites
 		if($blnShowFavorites){
 			$favs_array = array();

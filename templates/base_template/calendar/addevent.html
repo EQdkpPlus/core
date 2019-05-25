@@ -221,6 +221,7 @@ function attendeeCount(){
 	<!-- ENDIF -->
 
 	<fieldset class="settings mediumsettings floatLeft" id="eventsettings" style="width: 540px;">
+		<!-- IF not S_DISABLE_GUILD_FEATURES -->
 		<legend>
 			<input id="selectmode" name="calendarmode" value="{CALENDARMODE}" style="display:none;" />
 			<ul><li data-value="{CALENDARMODE}" onclick="$(this).toggleClass('open')"></li>
@@ -231,6 +232,9 @@ function attendeeCount(){
 				</ul>
 			</ul>
 		</legend>
+		<!-- ELSE -->
+		<input id="selectmode" name="calendarmode" value="{CALENDARMODE}" style="display:none;" />
+		<!-- ENDIF -->
 		<dl>
 			<dt><label>{L_raidevent_template}</label></dt>
 			<dd>{DR_TEMPLATE}
@@ -250,10 +254,12 @@ function attendeeCount(){
 			<dt><label>{L_calendar_event_name}:</label></dt>
 			<dd><input type="text" name="eventname" value="{EVENTNAME}" class="input resettemplate_input {required:true, messages:{required:'{L_raidevent_event_val_name}'}" /></dd>
 		</dl>
+		<!-- IF not S_DISABLE_GUILD_FEATURES -->
 		<dl class="event">
 			<dt><label>{L_calendar_event_icon}:</label></dt>
 			<dd>{DR_ICONSELECT}</dd>
 		</dl>
+		<!-- ENDIF -->
 		<dl class="raid">
 			<dt><label>{L_raidevent_raidevent}:</label></dt>
 			<dd>
@@ -327,6 +333,7 @@ function attendeeCount(){
 
 	</fieldset>
 
+	<!-- IF not S_DISABLE_GUILD_FEATURES -->
 	<fieldset class="settings floatRight raid" style="width: 310px;">
 		<legend>{L_raidevent_attendees}</legend>
 		<dl>
@@ -358,6 +365,7 @@ function attendeeCount(){
 		</div>
 	</fieldset>
 	<div class="clear"></div>
+	<!-- ENDIF -->
 
 	<!-- IF IS_EDIT -->
 		<button type="submit" name="upd" class="mainoption"><i class="fa fa-check"></i>{L_calendars_upd_button}</button>
