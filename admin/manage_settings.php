@@ -697,6 +697,7 @@ class admin_settings extends page_generic {
 					'default_game'	=> array(
 						'type'		=> 'dropdown',
 						'options'	=> $games,
+						'default'	=> 'dummy',
 						'ajax_reload' => array('game_language', 'manage_settings.php'.$this->SID.'&ajax=games'),
 					),
 					'game_language'	=> array(
@@ -905,7 +906,7 @@ class admin_settings extends page_generic {
 
 			//check if user wanted to reload defaults$
 			if($this->in->get('itt_force_default', '') != ''){
-				$this->config->set($this->itt->changed_prio1($this->in->get('default_game'), $this->in->get('itt_prio1')));
+				$this->config->set($this->itt->changed_prio1($this->in->get('default_game', 'dummy'), $this->in->get('itt_prio1')));
 				$this->core->message($this->user->lang('itt_default_success'), $this->user->lang('success'), 'green');
 			}
 		}
@@ -1044,12 +1045,12 @@ class admin_settings extends page_generic {
 			}
 
 			// default game
-			if (($this->in->get('default_game') != $this->config->get('default_game')) || ($this->in->get('game_language') != $this->config->get('game_language'))){
+			if (($this->in->get('default_game', 'dummy') != $this->config->get('default_game')) || ($this->in->get('game_language') != $this->config->get('game_language'))){
 				$game_changed = true;
 			}
 			//check for changed itt 1.prio and load defaults if so
 			if($this->config->get('itt_prio1') != $this->in->get('itt_prio1', '')) {
-				$save_array = array_merge($save_array, $this->itt->changed_prio1($this->in->get('default_game'), $this->in->get('itt_prio1')));
+				$save_array = array_merge($save_array, $this->itt->changed_prio1($this->in->get('default_game', 'dummy'), $this->in->get('itt_prio1')));
 			}
 
 			//check for changed disable points
@@ -1062,14 +1063,15 @@ class admin_settings extends page_generic {
 
 			// Since ChangeGame alters Config it has to be executed after config-save
 			if($game_changed) {
-				$this->game->installGame($this->in->get('default_game'), $this->in->get('game_language'), $this->in->get('overwrite-game', 0));
+				$this->game->installGame($this->in->get('default_game', 'dummy'), $this->in->get('game_language'), $this->in->get('overwrite-game', 0));
+				if($this->config->get('disable_guild_features')) $this->config->set('default_game', 'dummy');
 				$this->pdc->flush();
 				$objStyles = register('styles');
 				$objStyles->delete_cache(false);
 				$this->form->reset_fields();
 				$this->settings_saved = true;
-				$itt_parserlist	= $this->itt->get_parserlist($this->in->get('default_game'));
-				$this->config->set($this->itt->changed_prio1($this->in->get('default_game'), key($itt_parserlist)));
+				$itt_parserlist	= $this->itt->get_parserlist($this->in->get('default_game', 'dummy'));
+				$this->config->set($this->itt->changed_prio1($this->in->get('default_game', 'dummy'), key($itt_parserlist)));
 				$this->display();
 				redirect('admin/manage_settings.php'.$this->SID);		// we need to reload cause of the per-game settings
 			}
