@@ -30,6 +30,7 @@ class calendareventexport_pageobject extends pageobject {
 
 	public function display(){
 		$menu_structure	= $this->generateMenuStructure();
+		
 		if($this->in->get('eventid', 0)){
 			$eventid		= $this->in->get('eventid', 0);
 			$output			= $this->in->get('output');
@@ -48,7 +49,7 @@ class calendareventexport_pageobject extends pageobject {
 			$this->tpl->add_js('$("#exportdropdown").change(function(){ window.location.href = "'.$this->strPath.$this->SID.'&eventid='.$eventid.'&output="+$(this).val();});', "docready");
 
 			$this->tpl->assign_vars(array(
-				'DROPDOWN'			=> (new hdropdown('link', array('options' => $menu_structure, 'value' => $output, 'id' => 'exportdropdown'))),
+				'DROPDOWN'			=> (new hdropdown('link', array('options' => $menu_structure, 'value' => $output, 'id' => 'exportdropdown')))->output(),
 				'EVENT_ID'			=> $eventid,
 				'F_MULTISIGNIN'		=> 'listraids.php',
 			));
