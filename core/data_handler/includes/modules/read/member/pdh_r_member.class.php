@@ -280,7 +280,9 @@ if ( !class_exists( "pdh_r_member" ) ) {
 					foreach($this->member_connections as $userid => $data){
 						foreach($data as $member_id){
 							if($memid == $member_id){
-								$ArrOut[]	= $userid;
+								if($userid > 0){
+									$ArrOut[]	= $userid;
+								}
 							}
 						}
 					}
