@@ -82,6 +82,10 @@ class Manage_Calendars extends page_generic {
 			$this->core->messages($messages);
 		}
 
+		$todisable = array();
+		if($this->config->get('disable_guild_features')){
+			$todisable[1] = 1;
+		}
 		$types = array(
 			1	=> $this->user->lang(array('calendars_types', 1)),
 			2	=> $this->user->lang(array('calendars_types', 2)),
@@ -113,7 +117,7 @@ class Manage_Calendars extends page_generic {
 				'DELETABLE'		=> $this->pdh->get('calendars', 'is_deletable', array($id)),
 				'ID'			=> $id,
 				'NAME'			=> $name,
-				'TYPE'			=> (new hdropdown('calendars['.$key.'][type]', array('options' => $types, 'value' => $this->pdh->get('calendars', 'type', array($id)), 'id' => 'calendars'.$key)))->output(),
+				'TYPE'			=> (new hdropdown('calendars['.$key.'][type]', array('options' => $types, 'todisable' => $todisable, 'value' => $this->pdh->get('calendars', 'type', array($id)), 'id' => 'calendars'.$key)))->output(),
 				'COLOR'			=> (new hcolorpicker('calendars['.$key.'][color]', array('value' =>  $this->pdh->get('calendars', 'color', array($id)), 'id' => 'cal_'.$key)))->output(),
 				'PRIVATE'		=> $this->pdh->get('calendars', 'private', array($id)),
 				'FEED'			=> $this->pdh->get('calendars', 'feed', array($id)),
