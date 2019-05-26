@@ -86,14 +86,27 @@ class editcalendarevent_pageobject extends pageobject {
 
 	// send the email of the created raid to all users
 	private function notify_newraid($eventID){
-		$eventextension	= $this->pdh->get('calendar_events', 'extension', array($eventID));
-		$strEventName = $this->pdh->get('event', 'name', array($eventextension['raid_eventid']));
+		$strEventName = $this->pdh->get('calendar_events', 'name', array($eventID));
 		if($strEventName && $strEventName != "") $strEventName .= ', ';
 
 		$a_users = $this->pdh->get('user', 'active_users');
 		if(is_array($a_users) && count($a_users) > 0){
 			foreach($a_users as $userid){
-				$strEventTitle	= $strEventName.$this->time->date_for_user($userid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true);
+				$strEventTitle	= $strEventName.$this->time->date_for_user($userid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true).' ('.$this->user->lang('calendar_mode_raid').')';
+				$this->ntfy->add('calendarevent_new', $eventID, $this->pdh->get('calendar_events', 'notes', array($eventID)), $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($eventID)), $eventID, true, true), $userid, $strEventTitle);
+			}
+		}
+	}
+	
+	// send the email of the created event to all users
+	private function notify_newevent($eventID){
+		$strEventName = $this->pdh->get('calendar_events', 'name', array($eventID));
+		if($strEventName && $strEventName != "") $strEventName .= ', ';
+		
+		$a_users = $this->pdh->get('user', 'active_users');
+		if(is_array($a_users) && count($a_users) > 0){
+			foreach($a_users as $userid){
+				$strEventTitle	= $strEventName.$this->time->date_for_user($userid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true).' ('.$this->user->lang('calendar_mode_event').')';
 				$this->ntfy->add('calendarevent_new', $eventID, $this->pdh->get('calendar_events', 'notes', array($eventID)), $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($eventID)), $eventID, true, true), $userid, $strEventTitle);
 			}
 		}
@@ -253,6 +266,8 @@ class editcalendarevent_pageobject extends pageobject {
 				0,
 				$this->in->get('private', 0),
 			));
+			
+			
 		}
 		if($this->in->get('repeating', 0) > 0){
 			$this->cronjobs->run_cron('calevents_repeatable', true);
@@ -262,6 +277,8 @@ class editcalendarevent_pageobject extends pageobject {
 		// send the notification for a event invitiation
 		if($invited_users > 0 && $raidid > 0){
 			$this->notify_invitations($raidid, $invited_users);
+		} elseif ($raidid > 0){
+			$this->notify_newevent($raidid);
 		}
 
 		// close the dialog
