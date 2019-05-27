@@ -83,6 +83,20 @@ if ( !class_exists( "pdh_r_raid_groups_members" ) ){
 			return $tmp_raid_groups_members;
 		}
 
+		public function get_userOfGroups($group_id){
+			if(is_array($group_id)){
+				$users_of_group	= array();
+				foreach($group_id as $rgroupid){
+					$raid_groups_members	= $this->get_member_list($rgroupid, true);
+					$users_of_group = array_merge($users_of_group, $this->pdh->get('member', 'userid', array($raid_groups_members)));
+				}
+			}else{
+				$raid_groups_members	= $this->get_member_list($group_id, true);
+				$users_of_group			= $this->pdh->get('member', 'userid', array($raid_groups_members));
+			}
+			return $users_of_group;
+		}
+
 		public function get_charSelectionMethod($memberid){
 			return (isset($this->raid_groups_charselection[$memberid])) ? $this->raid_groups_charselection[$memberid] : '';
 		}

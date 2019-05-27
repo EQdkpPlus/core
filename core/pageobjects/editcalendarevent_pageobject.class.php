@@ -83,41 +83,33 @@ class editcalendarevent_pageobject extends pageobject {
 		echo($output);
 		exit;
 	}
-
-	// send the email of the created raid to all users
-	private function notify_newraid($eventID){
-		$strEventName = $this->pdh->get('calendar_events', 'name', array($eventID));
-		if($strEventName && $strEventName != "") $strEventName .= ', ';
-
-		$a_users = $this->pdh->get('user', 'active_users');
-		if(is_array($a_users) && count($a_users) > 0){
-			foreach($a_users as $userid){
-				$strEventTitle	= $strEventName.$this->time->date_for_user($userid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true).' ('.$this->user->lang('calendar_mode_raid').')';
-				$this->ntfy->add('calendarevent_new', $eventID, $this->pdh->get('calendar_events', 'notes', array($eventID)), $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($eventID)), $eventID, true, true), $userid, $strEventTitle);
-			}
-		}
-	}
 	
-	// send the email of the created event to all users
-	private function notify_newevent($eventID){
+	// send notification of the created event/raid to all users
+	private function notify_newevent($eventID, $type='event'){
 		$strEventName = $this->pdh->get('calendar_events', 'name', array($eventID));
 		if($strEventName && $strEventName != "") $strEventName .= ', ';
 		
 		$a_users = $this->pdh->get('user', 'active_users');
 		if(is_array($a_users) && count($a_users) > 0){
 			foreach($a_users as $userid){
-				$strEventTitle	= $strEventName.$this->time->date_for_user($userid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true).' ('.$this->user->lang('calendar_mode_event').')';
+				$strEventTitle	= $strEventName.$this->time->date_for_user($userid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true).' ('.(($type=='raid') ? $this->user->lang('calendar_mode_raid') :  $this->user->lang('calendar_mode_event')).')';
 				$this->ntfy->add('calendarevent_new', $eventID, $this->pdh->get('calendar_events', 'notes', array($eventID)), $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($eventID)), $eventID, true, true), $userid, $strEventTitle);
 			}
 		}
 	}
 
-	private function notify_invitations($eventID, $invited_users=false){
+	// send notification to invited 
+	private function notify_invitations($eventID, $invited_users=false, $type='event'){
 		$eventextension	= $this->pdh->get('calendar_events', 'extension', array($eventID));
 		$strEventName	= $this->pdh->get('calendar_events', 'name', array($eventID));
 		if($strEventName && $strEventName != "") $strEventName .= ', ';
 
-		$a_users = (isset($invited_users) && is_array($invited_users)) ? $invited_users : ((isset($eventextension['invited'])) ? $eventextension['invited'] : false);
+		if($type == 'event'){
+			$a_users = (isset($invited_users) && is_array($invited_users)) ? $invited_users : ((isset($eventextension['invited'])) ? $eventextension['invited'] : false);
+		}else{
+			$a_users = (isset($invited_users) && is_array($invited_users)) ? $invited_users : ((isset($eventextension['invited'])) ? $eventextension['invited'] : false);
+		}
+		
 		if(is_array($a_users) && count($a_users) > 0){
 			foreach($a_users as $userid){
 				$strEventTitle	= $strEventName.$this->time->date_for_user($userid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true);
@@ -126,6 +118,7 @@ class editcalendarevent_pageobject extends pageobject {
 		}
 	}
 
+	// remove notifications for invited
 	private function remove_invitation_notification($eventID, $userID){
 		$this->ntfy->deleteNotification('calenderevent_invitation', $eventID, $userID);
 	}
@@ -197,8 +190,9 @@ class editcalendarevent_pageobject extends pageobject {
 			}
 
 			// Auto confirm / confirm by raid-add-setting
-			$asi_groups	= $this->in->getArray('asi_group');
-			$asi_status	= (is_array($asi_groups) && count($asi_groups) > 0) ? $this->in->get('asi_status', 0) : false;
+			$asi_groups		= $this->in->getArray('asi_group');
+			$asi_status		= (is_array($asi_groups) && count($asi_groups) > 0) ? $this->in->get('asi_status', 0) : false;
+			$invited_rgroup	= $this->in->getArray('invited_raidgroup', 'int');
 
 			$raidid = $this->pdh->put('calendar_events', 'add_cevent', array(
 				$this->in->get('calendar_id', 1),
@@ -221,7 +215,7 @@ class editcalendarevent_pageobject extends pageobject {
 					'created_on'		=> $this->time->time,
 					'autosignin_group'	=> $asi_groups,
 					'autosignin_status'	=> (int)$asi_status,
-					'invited_raidgroup'	=> $this->in->getArray('invited_raidgroup', 'int'),
+					'invited_raidgroup'	=> $invited_rgroup,
 				),
 				0,
 				$this->in->get('private', 0),
@@ -231,7 +225,14 @@ class editcalendarevent_pageobject extends pageobject {
 			// if the raid had been added, do the rest...
 			if($raidid > 0){
 				$this->pdh->put('calendar_events', 'auto_addchars', array($this->in->get('raidmode'), $raidid, $this->in->getArray('raidleader', 'int'), $asi_groups, $asi_status));
-				$this->notify_newraid($raidid);
+				if(is_array($invited_rgroup) && count($invited_rgroup) > 0){
+					$invited_users	= $this->pdh->get('raid_groups_members', 'userOfGroups', array($invited_rgroup));
+				}
+				if($invited_users > 0 && $raidid > 0){
+					$this->notify_invitations($raidid, $invited_users);
+				} elseif ($raidid > 0){
+					$this->notify_newevent($raidid, 'raid');
+				}
 			}
 		}else{
 			$withtime			= ($this->in->get('allday') == '1') ? 0 : 1;
@@ -278,7 +279,7 @@ class editcalendarevent_pageobject extends pageobject {
 		if($invited_users > 0 && $raidid > 0){
 			$this->notify_invitations($raidid, $invited_users);
 		} elseif ($raidid > 0){
-			$this->notify_newevent($raidid);
+			$this->notify_newevent($raidid, 'event');
 		}
 
 		// close the dialog
