@@ -1062,7 +1062,7 @@ $lang = array(
 	"notification_newcomment_response" => '{PRIMARY} answered to your comment in "{ADDITIONAL}"',
 	"notification_newcomment_response_grouped" => '{PRIMARY} answered to your comment in "{ADDITIONAL}"',
 	"notification_newmention" => '{PRIMARY} mentioned you in his comment in "{ADDITIONAL}"',
-	"notification_calendarevent_new" => "A new Raid has been created: {ADDITIONAL}, {PRIMARY}",
+	"notification_calendarevent_new" => "A new Calendarevent has been created: {ADDITIONAL}, {PRIMARY}",
 	"notification_calendarevent_invitation" => "{PRIMARY} has invited you to a calendar event",
 	"notification_type_twitterdm" => "Twitter Direct Message",
 	"notification_type_email" => "Email",
@@ -1095,7 +1095,8 @@ $lang = array(
 	"user_sett_f_help_ntfy_xmpp_user" => "Insert here the Jabber Account that will get the Notifications, e.g. user@jabber.org",
 	"user_sett_f_ntfy_twitter_user" => "Twitter-Account",
 	"user_sett_f_help_ntfy_twitter_user" => "Insert here the Twitter-Account that will get the Notifications. He must follow \"{TWITTER}\" at Twitter to receive the Notifications.",
-
+	"user_sett_f_ntfy_discord_channelid" => "Discord User-ID or Channel-ID",
+	"user_sett_f_help_ntfy_discord_channelid" => "Insert your User-ID (use command \@YourUsername#xxxx to get it) or a Channel-ID with 'chan:' at the beginning.",
 	//Admin menu tooltip
 	"managing_styles" => 'Managing Styles',
 	"styles_title" => 'Styles Management',

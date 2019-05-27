@@ -1057,7 +1057,9 @@ $lang = array(
 "user_sett_f_help_ntfy_xmpp_user" => "Trage hier den Jabber Account ein, der Benachrichtigungen erhalten soll, z.B. user@jabber.org",
 "user_sett_f_ntfy_twitter_user" => "Twitter-Account",
 "user_sett_f_help_ntfy_twitter_user" => "Trage hier den Twitter-Account ein, der Benachrichtigungen erhalten soll. Er muss \"{TWITTER}\" auf Twitter folgen, um Nachrichten erhalten zu können.",
-
+"user_sett_f_ntfy_discord_channelid" => "Discord Benutzer-ID oder Channel-ID",
+"user_sett_f_help_ntfy_discord_channelid" => "Trage hier deine Benutzer-ID (die du mit dem Befehl \@DeinUsername#xxxx rausbekommst) oder die ID eines Channels ein mit 'chan:' beginnend ein.",
+		
 //Admin menu tooltip
 "managing_styles" => "Styles verwalten",
 "styles_title" => "Styles verwalten",

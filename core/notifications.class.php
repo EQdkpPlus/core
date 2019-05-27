@@ -427,6 +427,7 @@ class notifications extends gen_class {
 			'from_username' 	=> $strFromUsername,
 			'type' 				=> $strType,
 			'link' 				=> $this->env->buildlink().$this->routing->build('Notifications', false, false, false, true).'?redirect='.$intNotificationID,
+			'direct_link'		=> $this->env->buildlink(false).$strLink,
 			'additional_data'	=> $strAdditionalData,
 			'dataset_id'		=> $strDatasetID,
 			'prio'				=> $arrNotificationType['prio'],
