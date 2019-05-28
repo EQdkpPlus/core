@@ -129,6 +129,11 @@ class sql_update extends task {
 			$this->form		.= '<tr class="row'.$this->row_class.'"><td>'.(($func) ? '<i class="fa fa-check icon-green"></i>' : '<i class="fa fa-times icon-red"></i>').' '.$current->lang['before_update_function'].'</td></tr>';
 		}
 		$this->do_sql($current->sqls, $current->version, $current->lang, $current->name);
+		
+		if(method_exists($current, 'output_function')) {
+			$func			= $current->output_function();
+			$this->form 	.= '<tr class="row'.$this->row_class.'"><td>'.$func.'</td></tr>';
+		}
 
 		// perform the function "update"
 		if(method_exists($current, 'update_function')) {
