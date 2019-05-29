@@ -354,7 +354,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 			return (isset($this->events[$id]['private'])) ? $this->events[$id]['private'] : 0;
 		}
 
-		public function get_raid_raidgroups($id, $asArray=false){
+		public function get_raid_raidgroups($id, $userid = false, $asArray=false){
 			$extension	= $this->get_extension($id);
 			if($this->get_private($id) > 0){
 				$userid		= ($userid > 0) ? $userid : $this->user->data['user_id'];
