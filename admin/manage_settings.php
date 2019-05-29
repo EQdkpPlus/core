@@ -1063,7 +1063,10 @@ class admin_settings extends page_generic {
 
 			// Since ChangeGame alters Config it has to be executed after config-save
 			if($game_changed) {
-				$this->game->installGame($this->in->get('default_game', 'dummy'), $this->in->get('game_language'), $this->in->get('overwrite-game', 0));
+				$strDefaultGame = $this->in->get('default_game', 'dummy');
+				if($strDefaultGame == "") $strDefaultGame = 'dummy';
+				
+				$this->game->installGame($strDefaultGame, $this->in->get('game_language'), $this->in->get('overwrite-game', 0));
 				if($this->config->get('disable_guild_features')) $this->config->set('default_game', 'dummy');
 				$this->pdc->flush();
 				$objStyles = register('styles');

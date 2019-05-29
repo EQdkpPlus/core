@@ -136,11 +136,12 @@ class tinyMCE extends gen_class {
 			$pageobjects	= (isset($settings['pageobjects']) && $settings['pageobjects']) ? ' eqdkp_pageobject' : '';
 			$readmore		= (isset($settings['readmore']) && !$settings['readmore']) ? '' : ' eqdkp_pagebreak_readmore';
 			$gallery 		= (isset($settings['gallery']) && $settings['gallery']) ? ' eqdkp_gallery' : '';
-			$raidloot		= (isset($settings['raidloot']) && $settings['raidloot']) ? ' eqdkp_raidloot eqdkp_chars' : '';
+			$raidloot		= (isset($settings['raidloot']) && $settings['raidloot'] && !$this->config->get('disable_guild_features')) ? ' eqdkp_raidloot eqdkp_chars' : '';
 			$relative_url	= (isset($settings['relative_urls']) && $settings['relative_urls'] == false) ? 'relative_urls : false,' : '';
 			$removeHost		= (isset($settings['remove_host']) && $settings['remove_host'] == false) ? 'remove_script_host : false,' : 'remove_script_host : true, convert_urls : true,';
 			$image_upload	= (isset($settings['image_upload']) && $settings['image_upload'] == true) ? 'paste_data_images: true, images_upload_credentials: true, images_upload_url: "'.$this->server_path.'libraries/tinyMCE/imageUploader.php'.$this->SID.'",' : '';
-
+			$item_plugin	= (!$this->config->get('disable_guild_features')) ? ' eqdkp_item' : '';
+			
 			$link_list = '';
 			if (isset($settings['link_list'])){
 				//Articles & Categories
@@ -192,9 +193,9 @@ class tinyMCE extends gen_class {
 					toolbar: "insertfile undo redo | fullscreen | styleselect fontselect fontsizeselect bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist | link image media emoticons eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | eqdkp_item eqdkp_gallery eqdkp_raidloot eqdkp_chars | custom_buttons '.$strHooksToolbar.'",
 					language : "'.$this->language.'",
 					plugins: [
-					 	"advlist autolink lists link image imagetools charmap preview anchor eqdkp_item eqdkp_lightbox eqdkp_filebrowser eqdkp_easyinsert",
+					 	"advlist autolink lists link image imagetools charmap preview anchor eqdkp_lightbox eqdkp_filebrowser eqdkp_easyinsert",
 						"searchreplace visualblocks code fullscreen colorpicker",
-						"media table contextmenu paste textcolor emoticons'.$autoresize.$pageobjects.$readmore.$gallery.$raidloot.$strHooksPlugin.'"
+						"media table contextmenu paste textcolor emoticons'.$item_plugin.$autoresize.$pageobjects.$readmore.$gallery.$raidloot.$strHooksPlugin.'"
 					],
 					browser_spellcheck: true,
 					images_upload_credentials: true,
@@ -316,11 +317,12 @@ class tinyMCE extends gen_class {
 			$pageobjects	= (isset($settings['pageobjects']) && $settings['pageobjects']) ? ' eqdkp_pageobject' : '';
 			$readmore		= (isset($settings['readmore']) && !$settings['readmore']) ? '' : ' eqdkp_pagebreak_readmore';
 			$gallery 		= (isset($settings['gallery']) && $settings['gallery']) ? ' eqdkp_gallery' : '';
-			$raidloot		= (isset($settings['raidloot']) && $settings['raidloot']) ? ' eqdkp_raidloot eqdkp_chars' : '';
+			$raidloot		= (isset($settings['raidloot']) && $settings['raidloot'] && !$this->config->get('disable_guild_features')) ? ' eqdkp_raidloot eqdkp_chars' : '';
 			$relative_url	= (isset($settings['relative_urls']) && $settings['relative_urls'] == false) ? 'relative_urls : false,' : '';
 			$removeHost		= (isset($settings['remove_host']) && $settings['remove_host'] == false) ? 'remove_script_host : false,' : 'remove_script_host : true, convert_urls : true,';
 			$image_upload	= (isset($settings['image_upload']) && $settings['image_upload'] == true) ? 'paste_data_images: true, images_upload_credentials: true, images_upload_url: "'.$this->server_path.'libraries/tinyMCE/imageUploader.php'.$this->SID.'",' : '';
-
+			$item_plugin	= (!$this->config->get('disable_guild_features')) ? ' eqdkp_item' : '';
+			
 			$strSetup = (isset($settings['setup'])) ? $settings['setup'] : '';
 			$strAutofocus = (isset($settings['autofocus']) && $settings['autofocus']) ? 'true' : 'false';
 			$blnStart = (isset($settings['start_onload'])) ? $settings['start_onload'] : true;
@@ -379,9 +381,9 @@ class tinyMCE extends gen_class {
 					toolbar: "insertfile undo redo | fullscreen | styleselect fontselect fontsizeselect bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist | link image media emoticons eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | eqdkp_item eqdkp_gallery eqdkp_raidloot eqdkp_chars | custom_buttons '.$strHooksToolbar.'",
 					language : "'.$this->language.'",
 					 plugins: [
-					 	"advlist autolink lists link image imagetools charmap preview anchor eqdkp_item eqdkp_lightbox eqdkp_filebrowser eqdkp_easyinsert",
+					 	"advlist autolink lists link image imagetools charmap preview anchor eqdkp_lightbox eqdkp_filebrowser eqdkp_easyinsert",
 						"searchreplace visualblocks code fullscreen",
-						"save media table contextmenu paste textcolor emoticons'.$autoresize.$pageobjects.$readmore.$gallery.$raidloot.$strHooksPlugin.'"
+						"save media table contextmenu paste textcolor emoticons'.$item_plugin.$autoresize.$pageobjects.$readmore.$gallery.$raidloot.$strHooksPlugin.'"
 					],
 					browser_spellcheck: true,
 					entity_encoding : "raw",
