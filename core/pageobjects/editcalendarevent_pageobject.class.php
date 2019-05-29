@@ -110,9 +110,11 @@ class editcalendarevent_pageobject extends pageobject {
 			$a_users = (isset($invited_users) && is_array($invited_users)) ? $invited_users : ((isset($eventextension['invited'])) ? $eventextension['invited'] : false);
 		}
 		
+		$a_users = array_unique($a_users);
+		
 		if(is_array($a_users) && count($a_users) > 0){
 			foreach($a_users as $userid){
-				$strEventTitle	= $strEventName.$this->time->date_for_user($userid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true);
+				$strEventTitle	= $strEventName.$this->time->date_for_user($userid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true).' ('.(($type=='raid') ? $this->user->lang('calendar_mode_raid') :  $this->user->lang('calendar_mode_event')).')';
 				$this->ntfy->add('calendarevent_invitation', $eventID, $this->pdh->get('calendar_events', 'creator', array($eventID)), $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($eventID)), $eventID, true, true), $userid, $strEventTitle);
 			}
 		}
@@ -229,7 +231,7 @@ class editcalendarevent_pageobject extends pageobject {
 					$invited_users	= $this->pdh->get('raid_groups_members', 'userOfGroups', array($invited_rgroup));
 				}
 				if($invited_users > 0 && $raidid > 0){
-					$this->notify_invitations($raidid, $invited_users);
+					$this->notify_invitations($raidid, $invited_users, 'raid');
 				} elseif ($raidid > 0){
 					$this->notify_newevent($raidid, 'raid');
 				}
@@ -268,19 +270,17 @@ class editcalendarevent_pageobject extends pageobject {
 				$this->in->get('private', 0),
 			));
 			
-			
+			// send the notification for a event invitiation
+			if($invited_users > 0 && $raidid > 0){
+				$this->notify_invitations($raidid, $invited_users);
+			} elseif ($raidid > 0){
+				$this->notify_newevent($raidid, 'event');
+			}
 		}
 		if($this->in->get('repeating', 0) > 0){
 			$this->cronjobs->run_cron('calevents_repeatable', true);
 		}
 		$this->pdh->process_hook_queue();
-
-		// send the notification for a event invitiation
-		if($invited_users > 0 && $raidid > 0){
-			$this->notify_invitations($raidid, $invited_users);
-		} elseif ($raidid > 0){
-			$this->notify_newevent($raidid, 'event');
-		}
 
 		// close the dialog
 		if($this->in->exists('simple_head')){
