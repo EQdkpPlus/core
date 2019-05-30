@@ -141,7 +141,8 @@ class register_pageobject extends pageobject {
 		$blnSpamCheckOk = true;
 		if($this->config->get('stopforumspam_use')){
 			$emailhash = md5($this->in->get('user_email'));
-			$strSFSResult = $this->urlfetcher->fetch("https://europe.stopforumspam.org/api?username=".$this->in->get('username')."&emailhash=".$emailhash."&json");
+			$emailhash_lower = md5(utf8_strtolower($this->in->get('user_email')));
+			$strSFSResult = $this->urlfetcher->fetch("https://europe.stopforumspam.org/api?username=".$this->in->get('username')."&emailhash[]=".$emailhash_lower."&emailhash[]=".$emailhash."&json");
 			if($strSFSResult){
 				$arrJsonResult = json_decode($strSFSResult, true);
 				
@@ -152,8 +153,8 @@ class register_pageobject extends pageobject {
 				}
 				
 				if(isset($arrJsonResult['emailhash'])){
-					$intAppears = (int)$arrJsonResult['emailhash']['appears'];
-					$intFrequency = (int)$arrJsonResult['emailhash']['frequency'];
+					$intAppears = ((int)$arrJsonResult['emailhash'][0]['appears'] > (int)$arrJsonResult['emailhash'][1]['appears']) ? (int)$arrJsonResult['emailhash'][0]['appears'] : (int)$arrJsonResult['emailhash'][1]['appears'];
+					$intFrequency = ((int)$arrJsonResult['emailhash'][0]['frequency'] > (int)$arrJsonResult['emailhash'][1]['frequency']) ? (int)$arrJsonResult['emailhash'][0]['frequency'] : (int)$arrJsonResult['emailhash'][1]['frequency'];
 				} else {
 					$intAppears = 0;
 					$intFrequency = 0;
