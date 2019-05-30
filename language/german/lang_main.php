@@ -1113,5 +1113,6 @@ $lang = array(
 "reg_connected_account" => "Verknüpftes Konto",
 "reg_connected_account_help" => "Mit Hilfe des verknüpften Kontos eines Login-Anbieters kannst du dich im EQdkp Plus anmelden.",
 "uc_cat_general" => "Allgemeines",
+"stopforumspam_denied" => "Die Registrierung wurde aus Sicherheitsgründen nicht durchgeführt. Bei anhaltenden Problemen wende dich an den Administrator.",
 );
 ?>

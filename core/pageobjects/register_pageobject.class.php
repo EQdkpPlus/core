@@ -138,6 +138,40 @@ class register_pageobject extends pageobject {
 			}
 		}
 		
+		$blnSpamCheckOk = true;
+		if($this->config->get('stopforumspam_use')){
+			$emailhash = md5($this->in->get('user_email'));
+			$strSFSResult = $this->urlfetcher->fetch("https://europe.stopforumspam.org/api?username=".$this->in->get('username')."&emailhash=".$emailhash."&json");
+			if($strSFSResult){
+				$arrJsonResult = json_decode($strSFSResult, true);
+				
+				if(isset($arrJsonResult['username']) && isset ($arrJsonResult['username']['confidence'])){
+					$intConfidence = (int)$arrJsonResult['username']['confidence'];
+				} else {
+					$intConfidence = 0;
+				}
+				
+				if(isset($arrJsonResult['emailhash'])){
+					$intAppears = (int)$arrJsonResult['emailhash']['appears'];
+					$intFrequency = (int)$arrJsonResult['emailhash']['frequency'];
+				} else {
+					$intAppears = 0;
+					$intFrequency = 0;
+				}
+
+				if($intConfidence >= STOPFORUMSPAM_CONFIDENCE || ($intAppears && $intFrequency > STOPFORUMSPAM_FREQUENCY)){
+					$blnSpamCheckOk = false;
+					
+					if($this->config->get('stopforumspam_action') == 'deny'){
+						$this->core->message($this->user->lang('stopforumspam_denied'), $this->user->lang('error'), 'red');
+						$this->display_form();
+						return;
+					}
+				}
+				
+			}
+		}
+		
 		//Check Password
 		if ($this->in->get('new_user_password1') !== $this->in->get('new_user_password2')){
 			$this->core->message($this->user->lang('password_not_match'), $this->user->lang('error'), 'red');
@@ -225,7 +259,7 @@ class register_pageobject extends pageobject {
 				}
 			}
 		}
-		
+				
 		if($this->hooks->isRegistered('register_data')){
 			$this->data = $this->hooks->process('register_data', array($this->data), true);
 		}
@@ -321,7 +355,11 @@ class register_pageobject extends pageobject {
 		}
 		
 		//Notify Admins
-		$this->ntfy->add('eqdkp_user_new_registered', $user_id, $this->in->get('username'), $this->root_path.'admin/manage_users.php?u='.$user_id, false, "", false, array("a_users_man"));
+		$this->ntfy->add('eqdkp_user_new_registered', $user_id, $this->in->get('username'), $this->root_path.'admin/manage_users.php?u='.$user_id, false, "", false, array("a_users_man"));	
+		
+		if(!$blnSpamCheckOk && $this->config->get('stopforumspam_use') && $this->config->get('stopforumspam_action') == 'disable'){
+			$this->pdh->put('user', 'activate', array($user_id, 0));
+		}
 		
 		message_die($success_message, $title);
 	}

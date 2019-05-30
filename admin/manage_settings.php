@@ -489,6 +489,14 @@ class admin_settings extends page_generic {
 					'enable_registration'	=> array(
 						'type'		=> 'radio',
 					),
+					'stopforumspam_use' => array(
+							'type'		=> 'radio',
+							'dependency' => array(1=>array('stopforumspam_action')),
+					),
+					'stopforumspam_action' => array(
+							'type' => 'radio',
+							'options' => array('deny' => $this->user->lang('stopforumspam_action_deny'), 'disable' => $this->user->lang('stopforumspam_action_disable'))
+					),
 					'enable_username_change'	=> array(
 						'type'		=> 'radio',
 					),

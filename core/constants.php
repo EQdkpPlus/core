@@ -69,6 +69,9 @@ if(!defined('MAX_CONCURRENT_SESSIONS')) define('MAX_CONCURRENT_SESSIONS', 50);
 //Snapshot time - default: three weeks
 if(!defined('POINTS_SNAPSHOT_TIME')) define('POINTS_SNAPSHOT_TIME', 1814400);
 
+if(!defined('STOPFORUMSPAM_CONFIDENCE')) define('STOPFORUMSPAM_CONFIDENCE', 70);
+if(!defined('STOPFORUMSPAM_FREQUENCY')) define('STOPFORUMSPAM_FREQUENCY', 2);
+
 //URLs
 //-------------------------------------------------------------------------
 define('EQDKP_PROJECT_URL',			"https://eqdkp-plus.eu");

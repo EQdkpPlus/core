@@ -1881,6 +1881,11 @@ $lang = array(
 		"event_defaultvalue_note" => "Default value of the event. Is used as a help and can be changed during raid creation.",
 		"core_sett_f_disable_guild_features" => "Disable all guild features",
 		"core_sett_f_help_disable_guild_features" => "Disables all features like characters, raids, items, adjustments etc.",
+		"core_sett_f_stopforumspam_use" => "Enable StopForumSpam ",
+		"core_sett_f_help_stopforumspam_use" => "StopForumSpam is used to detect suspicious registrations",
+		"core_sett_f_stopforumspam_action" => "StopForumSpam - actions on suspicious registration",
+		"stopforumspam_action_deny" => "Deny registration",
+		"stopforumspam_action_disable" => "Create user, but locked",
 );
 
 ?>
