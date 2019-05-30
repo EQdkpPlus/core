@@ -356,6 +356,8 @@ class settings_pageobject extends pageobject {
 			'S_SETTING_ADMIN'				=> false,
 			'S_MU_TABLE'					=> false,
 			'USERNAME'						=> $this->user->data['username'],
+			'PASSWORD_LENGTH'				=> ($this->config->get('password_length') ? (int)$this->config->get('password_length') : 8),
+				
 
 			// Validation
 			'AJAXEXTENSION_USER'			=> '&olduser='.urlencode($this->user->data['username']),

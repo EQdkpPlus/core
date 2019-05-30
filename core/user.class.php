@@ -490,6 +490,7 @@ class user extends gen_class {
 						'size'		=> 40,
 						'id'		=> 'password1',
 						'required'	=> false,
+						'after_txt' => '<div id="complexity" class="default"></div>',
 					),
 					'confirm_password' => array(
 						'type'		=> 'password',

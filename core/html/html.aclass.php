@@ -109,7 +109,7 @@ abstract class html {
 				return 'http(s){0,1}://'.$w.'+(\.'.$w.'+)+';
 				
 			case 'password':
-				$minlength = 6;
+				$minlength = ($this->config->get('password_length') ? (int)$this->config->get('password_length') : 8);
 				if(empty($this->placeholder)) $this->placeholder = sprintf(registry::fetch('user')->lang('fv_password_placeholder'), $minlength-1);
 				return '.{'.$minlength.',}';
 				

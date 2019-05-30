@@ -44,6 +44,7 @@ class hpassword extends html {
 	public $fvmessage			= false;
 	public $pattern				= 'password';
 	public $autocomplete		= false;
+	public $after_txt			= '';
 
 	public function _construct() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
@@ -63,6 +64,7 @@ class hpassword extends html {
 		if(!empty($this->js)) $out.= $this->js.' ';
 		$out .= ' />';
 		if($this->required) $out .= '<i class="fa fa-asterisk required small"></i>';
+		if(!empty($this->after_txt)) $out .= $this->after_txt;
 		return $out;
 	}
 	
