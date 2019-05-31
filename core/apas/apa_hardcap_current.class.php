@@ -38,7 +38,7 @@ if ( !class_exists( "apa_hardcap_current" ) ) {
 				'type'		=> 'spinner',
 				'step'		=> 10,
 				'size'		=> 5,
-				'default'	=> 0
+				'default'	=> -100
 			),
 		);
 		

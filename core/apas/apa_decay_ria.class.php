@@ -62,7 +62,7 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 		private $cached_data = array();
 
 		public function __construct() {
-			for($i=1; $i<10; $i++) {
+			for($i=1; $i<37; $i++) {
 				$this->ext_options['zero_time']['options'][$i] = sprintf($this->user->lang('apa_zero_time_dd'), $i);
 			}
 			$this->ext_options['start_date']['value'] = $this->time->time;
