@@ -35,6 +35,14 @@ if(!class_exists('pdh_w_calendar_raids_guests')){
 		public function insert_guest($eventid, $name='', $classid=0, $group=0, $note='', $email='', $role=0){
 			$userid		= $this->user->data['user_id'];
 			$creator 	= ($userid && $userid > 0) ? $userid : 0;
+			
+			$status = ($creator > 0) ? 0 : 1;
+			$arrAllowedStatus = $this->config->get('calendar_raid_status');
+			//Take the first status from above
+			if(!in_array($status, $arrAllowedStatus)){
+				$status = $arrAllowedStatus[0];
+			}
+			
 			$objQuery = $this->db->prepare("INSERT INTO __calendar_raid_guests :p")->set(array(
 				'calendar_events_id'	=> $eventid,
 				'name'					=> $name,
@@ -44,7 +52,7 @@ if(!class_exists('pdh_w_calendar_raids_guests')){
 				'class'					=> ((int)$classid > 0) ? $classid : 0,
 				'raidgroup'				=> ((int) $group > 0) ? $group : 0,
 				'creator'				=> $creator,
-				'status'				=> ($creator > 0) ? 0 : 1,
+				'status'				=> $status,
 				'role'					=> $role
 			))->execute();
 			$this->pdh->enqueue_hook('guests_update', array($objQuery->insertId));
