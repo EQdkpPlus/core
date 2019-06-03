@@ -151,6 +151,20 @@ if ( !class_exists( "apa_cap_current" ) ) {
 		public function get_last_run($date, $apa_id) { 
 			return $this->last_run; 
 		}
+		
+		public function get_next_run($apa_id) {
+			$nextRun = $this->config->get('apa_cap_next_run_'.$apa_id);
+			if(!$nextRun){
+				list($h,$i) = explode(':',$this->apa->get_data('exectime', $apa_id));
+				$nextRun = $this->apa->get_data('start_date', $apa_id) + $h*3600 + $i*60;
+			}
+			
+			if($nextRun < $this->time->time){
+				return $this->time->time;
+			}
+			return $nextRun;
+		}
+		
 		public function get_value($apa_id, $cache_date, $module, $dkp_id, $data, $refdate) { return; }
 		
 		public function recalculate($apa_id){

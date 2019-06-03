@@ -126,6 +126,7 @@ if ( !class_exists( "apa_startpoints" ) ) {
 		
 		public function modules_affected($apa_id) { return array(); }
 		public function get_last_run($date, $apa_id) { return; }
+		public function get_next_run($apa_id) { return 0; }
 		public function get_value($apa_id, $cache_date, $module, $dkp_id, $data, $refdate) { return; }
 		
 		public function recalculate($apa_id){

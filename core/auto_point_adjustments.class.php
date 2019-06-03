@@ -166,6 +166,17 @@ if ( !defined('EQDKP_INC') ){
 			return $ids;
 		}
 		
+		public function get_next_aparuns(){
+			$arrOut = array();
+			foreach($this->apa_tab as $apa_id => $options) {
+				$objApa = $this->get_apa_type($options['type']);
+				$intOut = $objApa->get_next_run($apa_id);
+				if($intOut > 0) $arrOut[] = $intOut;
+			}
+			
+			return (count($arrOut)) ? min($arrOut) : false;
+		}
+		
 		public function scan_types($force_update=false) {
 			if(count($this->available_types) > 0 && !$force_update) return $this->available_types;
 			$files = scandir($this->root_path.'core/apas');
