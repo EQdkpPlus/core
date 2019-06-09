@@ -236,6 +236,9 @@
 	<input type="hidden" name="raid_id" value="{RAID_ID}" />
 	<input type="hidden" name="caldata_import" value="{S_CALDATAIMPORT}" />
 	<button class="mainoption" type="submit" name="save" id="save_button"><i class="fa fa-check"></i>{L_RAID_SAVE}</button>
+	<!-- IF S_COPY -->
+	<input type="hidden" name="copy" value="1" />
+	<!-- ENDIF -->
 	<!-- IF S_RAID_UPD -->
 	<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="fa fa-times"></i>{L_delete_raid}</button>
 	<!-- ENDIF -->
