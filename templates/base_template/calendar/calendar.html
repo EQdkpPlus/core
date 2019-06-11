@@ -154,6 +154,7 @@
 
 				}else{
 					tmpttcontent = '';
+					tmpttcontent += "<div class='calendartt_title'>"+event.title+"</div><br/>";
 					tmpttcontent += (event.raidleader) ? "<div class='calendartt_raidleader'>{L_raidevent_raidleader}: "+event.raidleader+"</div><br/>" : '';
 					tmpttcontent += "<div class='calendartt_start'>{L_calendar_startdate}: "+moment(event.start).format('{JS_DATEFORMAT}, '+mmocms_user_timeformat)+"</div>";
 					tmpttcontent += "<div class='calendartt_end'>{L_calendar_enddate}: "+moment(event.end).format('{JS_DATEFORMAT}, '+mmocms_user_timeformat)+"</div>";
@@ -258,7 +259,7 @@
 			},
 			//eventSources: curSource
 		});
-console.log(curSource);
+
 		// start the hack for the date picker
 		$(".fc-header-toolbar .fc-center h2").attr('id', 'fc-datepicker-header').before('<input size="1" style="height: 0px; width:0px; border: 0px;" id="fc-datepicker" value="" /><input size="1" style="height: 0px; width:0px; border: 0px;" id="fc-monthpicker" value="" />');
 
