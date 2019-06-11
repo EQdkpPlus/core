@@ -255,7 +255,7 @@ class ManageRaids extends page_generic {
 		}
 
 		//fetch members
-		$members = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list', array(false,true,false)), 'member', 'name', 'asc')));
+		$members = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list', array(false,false,false)), 'member', 'name', 'asc')));
 
 		//fetch events
 		$events = $this->pdh->aget('event', 'name', 0, array($this->pdh->get('event', 'id_list')));
@@ -396,7 +396,8 @@ class ManageRaids extends page_generic {
 			'ITEM_AUTOCOMPLETE' => $this->jquery->Autocomplete('item_KEY', array_unique($item_names)),
 			'EVENT_ITEMPOOL_MAPPING' => json_encode($arrEventItempoolMapping),
 			'FIRST_EVENT_ID'	=> isset($arrEventKeys[0]) ? $arrEventKeys[0] : 0,
-
+			'S_COPY'			=> ($copy),
+				
 			//language vars
 			'L_RAID_SAVE'		=> ($blnRaidUpdate) ? $this->user->lang('update_raid') : $this->user->lang('add_raid'),
 			//other needed vars
@@ -448,7 +449,7 @@ class ManageRaids extends page_generic {
 		}
 
 		//fetch members
-		$members = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list', array(false,true,false)), 'member', 'name', 'asc')));
+		$members = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list', array(false,false,false)), 'member', 'name', 'asc')));
 
 		//fetch events
 		$events = $this->pdh->aget('event', 'name', 0, array($this->pdh->get('event', 'id_list')));
@@ -652,7 +653,7 @@ class ManageRaids extends page_generic {
 
 	private function get_post($refresh=false) {
 		$data = array();
-		$data['raid']['id'] = $this->url_id;
+		$data['raid']['id'] = ($this->in->get('copy',0)) ? 0 : $this->url_id;
 		$data['raid']['date'] = $this->time->fromformat($this->in->get('date','1.1.1970 00:00'), 1);
 		$data['raid']['note'] = $this->in->get('rnote','');
 		$data['raid']['additonal_data'] = $this->in->get('additional_data','');

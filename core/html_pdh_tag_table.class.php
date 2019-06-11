@@ -45,6 +45,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 		private $cached_table_rows		= array();
 		private $not_cached_row_count	= 0;
 		private $cache_suffix			= '';
+		private $cache_time				= null;
 		private $settings				= array();
 
 		private $dt_cssjs 				= false;
@@ -96,13 +97,19 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 					$needs_update = true;
 					break;
 				}
-			}
-
+			}		
+			
 			if($needs_update) {
 				//reset
 				$this->pdc->del_prefix($this->page.$this->cache_suffix);
 				//put new update time
 				$this->timekeeper->put('hptt_reset_times', $this->page, time(), true);
+			}
+			
+			//Check if reset for APA is necessary
+			$nextApaRun = register('auto_point_adjustments')->get_next_aparuns();
+			if($nextApaRun ){
+				$this->cache_time = $nextApaRun - $this->time->time + 360;
 			}
 		}
 
@@ -138,7 +145,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 					$id_position = array_search($this->id_tag, $this->columns[$this->sort_cid]['2']);
 					$params = $this->pdh->post_process_preset($this->columns[$this->sort_cid]['2'], $this->sub_array);
 					$this->full_list = $this->pdh->sort($this->full_list, $this->columns[$this->sort_cid]['0'], $this->columns[$this->sort_cid]['1'], $this->sort_direction, $params, $id_position);
-					$this->pdc->put($this->page.$this->cache_suffix.'_vlc_'.$this->sort_cid.'_'.$this->sort_direction, $this->full_list, null);
+					$this->pdc->put($this->page.$this->cache_suffix.'_vlc_'.$this->sort_cid.'_'.$this->sort_direction, $this->full_list, $this->cache_time);
 				}else{
 					$this->full_list = $cached_view_list;
 				}
@@ -183,7 +190,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 			}
 
 			if($this->not_cached_row_count > 0){
-				$this->pdc->put($this->page.$this->cache_suffix, $this->cached_table_rows, null);
+				$this->pdc->put($this->page.$this->cache_suffix, $this->cached_table_rows, $this->cache_time);
 			}
 			return $table;
 		}

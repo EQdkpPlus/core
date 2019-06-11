@@ -121,6 +121,7 @@ if ( !class_exists( "apa_cap_current" ) ) {
 		public function get_last_run($date, $apa_id) { 
 			return $this->last_run; 
 		}
+		public function get_next_run($apa_id) { return 0; }
 		public function get_value($apa_id, $cache_date, $module, $dkp_id, $data, $refdate) { return; }
 		
 		public function recalculate($apa_id){
