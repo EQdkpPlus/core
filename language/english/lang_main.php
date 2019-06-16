@@ -801,6 +801,8 @@ $lang = array(
 	"raidevent_raid_unsigned_level" => 'Filter: Level',
 	"raidevent_raid_unsigned_level_help" => '0 = All, Show all results larger or equal to the selected level',
 	"raidevent_raid_unsigned_button" => 'Unsigned characters',
+	"raidevent_raid_status_title" => "Your current raid-attendance status: ",
+	"raidevent_raid_status_tt" => "Attendance status: ",
 	"raidevent_raid_status" => array(
 	0 => 'confirmed',
 	1 => 'signed up',

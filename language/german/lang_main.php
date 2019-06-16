@@ -755,6 +755,8 @@ $lang = array(
 "raidevent_raid_unsigned_level" => "Filter: Level",
 "raidevent_raid_unsigned_level_help" => "0 = Alle, Zeigt alle Ergebnisse größer oder gleich der Eingabe an",
 "raidevent_raid_unsigned_button" => "Unangemeldete Charaktere",
+"raidevent_raid_status_title" => "Dein aktueller Anmeldestatus: ",
+"raidevent_raid_status_tt" => "Anmeldestatus: ",
 "raidevent_raid_status" => array(
 	0	=> 'Bestätigt',
 	1	=> 'Angemeldet',

@@ -144,3 +144,40 @@ align-items:stretch;
 	}
 }
 */
+
+/*============================================================================================*/
+
+/* CALENDAR */
+
+/* Raid Event Detail View: Sort Roles / Classes in custom Order instead of by name */
+
+/*.attendee_table .class_table{
+	flex-direction: row-reverse;
+}
+.attendee_table .class_column[data-class-id="1"] {
+	order: 1;
+}
+.attendee_table .class_column[data-class-id="2"] {
+	order: 2;
+}
+.attendee_table .class_column[data-class-id="3"] {
+	order: 3;
+}
+.attendee_table .class_column[data-class-id="4"] {
+	order: 4;
+}
+*/
+
+/* Raid Event Detail View: 2.3.11 changed the layout of the attendance status indicator. To re-add colours, simply use this code */
+/*.raidcal-attendance-status-0 {
+	color: #00a400;
+}
+.raidcal-attendance-status-1 {
+	color: #e9ec00;
+}
+.raidcal-attendance-status-2 {
+	color: #E80000;
+}
+.raidcal-attendance-status-3 {
+	color: purple;
+}*/

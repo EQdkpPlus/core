@@ -323,18 +323,29 @@ if (!class_exists('pdh_r_calendar_raids_attendees')){
 
 		public function get_status_flag($status){
 			switch($status){
-				case 0: $flagcolor	= 'fa-star';break;
-				case 1: $flagcolor	= 'fa-user';break;
-				case 2: $flagcolor	= 'fa-star-o';break;
-				case 3: $flagcolor	= 'fa-star-half-o';break;
-				case 5: $flagcolor	= 'fa-flag icon-color-blue';break;
-				/*case 0: $flagcolor	= 'fa-check';break;
-				case 1: $flagcolor	= 'fa-user';break;
-				case 2: $flagcolor	= 'fa-times';break;
-				case 3: $flagcolor	= 'fa-question';break;
-				case 5: $flagcolor	= 'fa-flag icon-color-blue';break;*/
+				case 0:
+					$flagcolor	= 'fa-star';
+					$titletext	= $this->user->lang(array('raidevent_raid_status', 0));
+					break;
+				case 1:
+					$flagcolor	= 'fa-user';
+					$titletext	= $this->user->lang(array('raidevent_raid_status', 1));
+					break;
+				case 2:
+					$flagcolor	= 'fa-star-o';
+					$titletext	= $this->user->lang(array('raidevent_raid_status', 2));
+					break;
+				case 3:
+					$flagcolor	= 'fa-star-half-o';
+					$titletext	= $this->user->lang(array('raidevent_raid_status', 3));
+					break;
+				// TODO: check why we have a status 5
+				case 5:
+					$flagcolor	= 'fa-flag icon-color-blue';
+					$titletext	= $this->user->lang(array('raidevent_raid_status', 5));
+					break;
 			}
-			return '<i class="fa '.$flagcolor.' fa-lg"></i>';
+			return '<i class="fa '.$flagcolor.' fa-lg raidcal-attendance-status-'.$status.'" title="'.$this->user->lang('raidevent_raid_status_title').$titletext.'"></i>';
 		}
 
 		public function get_html_status($eventid, $userid, $flag=true){
