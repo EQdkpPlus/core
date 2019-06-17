@@ -47,10 +47,10 @@
 									<i class="fa fa-eye-slash fa-lg"></i> {L_article_unpublished_note}
 								</div>
 								<!-- ENDIF -->
-								{article_row.ARTICLE_CUTTED_CONTENT}
+								{article_row.ARTICLE_CONTENT|truncate-600}
 							</div>
 							<footer>
-								<!-- IF article_row.S_ARTICLE_CUTTED -->
+								<!-- IF article_row.ARTICLE_CONTENT_LENGTH > 600 -->
 								<div>
 									<a href="{article_row.ARTICLE_PATH}#system-readmore" class="button readmore"><i class="fa fa-chevron-down"></i>{L_news_readmore}</a>
 								</div>
@@ -79,10 +79,10 @@
 					<i class="fa fa-eye-slash fa-lg"></i> {L_article_unpublished_note}
 				</div>
 				<!-- ENDIF -->
-				{article_row.ARTICLE_CUTTED_CONTENT}
+				{article_row.ARTICLE_CONTENT|truncate-600}
 			</div>
 			<footer>
-				<!-- IF article_row.S_ARTICLE_CUTTED -->
+				<!-- IF article_row.ARTICLE_CONTENT_LENGTH > 600 -->
 				<div>
 					<a href="{article_row.ARTICLE_PATH}#system-readmore" class="button readmore"><i class="fa fa-chevron-down"></i>{L_news_readmore}</a>
 				</div>
