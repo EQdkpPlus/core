@@ -181,3 +181,10 @@ align-items:stretch;
 .raidcal-attendance-status-3 {
 	color: purple;
 }*/
+
+/* Raid Event Detail View: 2.3.11 changed the layout of the attendance status indicator. Use flag instead of the current icons */
+/*.raidcal-attendance-status-0:before, .raidcal-attendance-status-1:before, 
+.raidcal-attendance-status-2:before, .raidcal-attendance-status-3:before {
+	font-family: FontAwesome;
+	content: "\f024";
+}*/
