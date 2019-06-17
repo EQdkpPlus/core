@@ -32,7 +32,6 @@ if (!class_exists("jquery")) {
 		private $dyndd_counter			= 0;
 		private $file_browser			= array();
 		private $returnJScache			= false;
-		private $googleAPIkey			= 'AIzaSyAogA0D9EuHGziYSXc9XUktG_FJrV6rIKA';
 		private $inits					= array(
 			'colorpicker'		=> false,
 			'starrating'		=> false,
