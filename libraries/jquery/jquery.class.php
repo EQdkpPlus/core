@@ -32,7 +32,6 @@ if (!class_exists("jquery")) {
 		private $dyndd_counter			= 0;
 		private $file_browser			= array();
 		private $returnJScache			= false;
-		private $googleAPIkey			= 'AIzaSyAogA0D9EuHGziYSXc9XUktG_FJrV6rIKA';
 		private $inits					= array(
 			'colorpicker'		=> false,
 			'starrating'		=> false,
@@ -1057,14 +1056,28 @@ if (!class_exists("jquery")) {
 
 			$dropdown = "<select name='".$name."[]' id='".$myID."' multiple='multiple'".$javascript.">";
 			$selected = (is_array($selected))? $selected : explode("|", $selected);
+			
 			if(is_array($list)){
 				foreach ($list as $key => $value) {
-					$selected_choice = (in_array($key, $selected)) ? ' selected="selected"' : '';
-					$disabled = (in_array($key, $todisable)) ? ' disabled="disabled"' : '';
-					$dropdown .= "<option value='".$key."'".$selected_choice.$disabled.">".$value."</option>";
+					if(is_array($value)){
+						$dropdown .= '<optgroup label="'.$key.'">';
+						
+						foreach ($value as $key2 => $value2) {
+							$selected_choice = (in_array($key2, $selected)) ? ' selected="selected"' : '';
+							$disabled = (in_array($key2, $todisable)) ? ' disabled="disabled"' : '';
+							$dropdown .= "<option value='".$key2."'".$selected_choice.$disabled.">".$value2."</option>";
+						}
+						
+						$dropdown .= '</optgroup>';
+					} else {
+						$selected_choice = (in_array($key, $selected)) ? ' selected="selected"' : '';
+						$disabled = (in_array($key, $todisable)) ? ' disabled="disabled"' : '';
+						$dropdown .= "<option value='".$key."'".$selected_choice.$disabled.">".$value."</option>";
+					}
 				}
 			}
 			$dropdown .= "</select>";
+			
 			return $dropdown;
 		}
 

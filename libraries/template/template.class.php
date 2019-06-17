@@ -1043,7 +1043,7 @@ class template extends gen_class {
 		$text_blocks	= str_replace('\'', '\\\'', $text_blocks);
 
 		// This one will handle varrefs WITH namespaces
-		preg_match_all('#\{(([a-z0-9\-_]+?\.)+?)([a-z0-9\-_]+?)\}#is', $text_blocks, $varrefs);
+		preg_match_all('#\{(([a-z0-9\-_\|]+?\.)+?)([a-z0-9\-_\|]+?)\}#is', $text_blocks, $varrefs);
 		for ($j = 0; $j < sizeof($varrefs[1]); $j++){
 			$namespace		= $varrefs[1][$j];
 			$varname		= $varrefs[3][$j];
@@ -1060,16 +1060,34 @@ class template extends gen_class {
 		$text_blocks	= preg_replace('#\{L_([a-z0-9\-_]*?)\}#is', "' . ((isset(\$this->_data['.'][0]['L_\\1'])) ? \$this->_data['.'][0]['L_\\1'] : ((\$this->lang('\\1')) ? \$this->lang('\\1') : '{ ' . ucfirst(strtolower(str_replace('_', ' ', '\\1'))) . '         }')) . '", $text_blocks);
 		//game language
 		if(strpos($text_blocks, '{GL_') !== false) $text_blocks = preg_replace('#\{GL_([a-z0-9\-_]*?)\}#is', "' . ((isset(\$this->_data['.'][0]['L_\\1'])) ? \$this->_data['.'][0]['L_\\1'] : ((\$this->glang('\\1', false, true)) ? \$this->glang('\\1') : '{ ' . ucfirst(strtolower(str_replace('_', ' ', '\\1'))) . '         }')) . '", $text_blocks);
+		$text_blocks	= preg_replace('#\{(([a-z0-9\:\@\-_]*?)\|([a-z0-9\-_]+?))\}#is',  "'.\$this->handleModifier('{"."$2"."}', '$3').'", $text_blocks);
 		$text_blocks	= preg_replace('#\{([a-z0-9\:\@\-_]*?)\}#is', "' . ((isset(\$this->_data['.'][0]['\\1'])) ? \$this->_data['.'][0]['\\1'] : '') . '", $text_blocks);
+
+		
 		return;
 	}
-
+	
 	public function handleModifier($strLangString, $strModifier){
-		switch($strModifier){
+		$arrModifier = explode('-', $strModifier);
+		
+		switch($arrModifier[0]){
 			case 'jsencode':
 					return "'".str_replace("'", "\'", $strLangString)."'";
 				break;
+				
+			case 'truncate':
+				if(isset($arrModifier[2]) && $arrModifier[2] == 'nohtml'){
+					$strLangString = strip_tags($strLangString);
+				}
+				return truncate($strLangString, ((isset($arrModifier[1])) ? $arrModifier[1] : 600), '...', false, true);
+				break;
 
+			case 'sanitize':
+				return sanitize($strLangString);
+				
+			case 'nohtml':
+				return strip_tags($strLangString);
+				
 			default: return $strLangString;
 		}
 	}
@@ -1355,9 +1373,20 @@ class template extends gen_class {
 	 * NOTE: expects a trailing "." on the namespace.
 	 */
 	private function generate_block_varref($namespace, $varname){
+		$arrModifierMatches = array();
+		$intModifier = preg_match("/([a-z0-9\-_]+)\|([a-z0-9_]+\-[a-z0-9_\-]*)/is", $varname, $arrModifierMatches);
+		if($intModifier){
+			$varname = $arrModifierMatches[1];
+		}
+		
 		$namespace = substr($namespace, 0, -1);							// Strip the trailing period.
 		$varref = $this->generate_block_data_ref($namespace, true);		// Get a reference to the data block for this namespace.
 		$varref .= '[\'' . $varname . '\']';							// Append the variable reference.
+		
+		if($intModifier){
+			return '\' . ((isset(' . $varref . ')) ? $this->handleModifier(' . $varref . ', \''.$arrModifierMatches[2].'\') : \'\') . \'';
+		}
+		
 		return '\' . ((isset(' . $varref . ')) ? ' . $varref . ' : \'\') . \'';
 	}
 

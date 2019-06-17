@@ -858,17 +858,15 @@ class controller extends gen_class {
 							'ARTICLE_PREVIEW_IMAGE_BIG' => ($this->pdh->get('articles',  'previewimage', array($intArticleID)) != "") ? $this->pdh->geth('articles', 'previewimage', array($intArticleID, 500)) : '',
 							'PERMALINK'				=> $this->pdh->get('articles', 'permalink', array($intArticleID)),
 							'S_TOOLBAR'				=> ($arrPermissions['create'] || $arrPermissions['update'] || $arrPermissions['delete'] || $arrPermissions['change_state']),
-							'S_TAGS'				=> (count($arrTags)  && $arrTags[0] != "") ? true : false,
-							'ARTICLE_CUTTED_CONTENT'=> truncate(strip_tags($strText), 600, '...', false, true),
-							'ARTICLE_CUTTED_CONTENT_SHORT'=> truncate(strip_tags($strText), 300, '...', false, true),
-							'S_ARTICLE_CUTTED'		=> (strlen($strText) > 600) ? true : false,
+							'S_TAGS'				=> (count($arrTags)  && $arrTags[0] != "") ? true : false,			
+							'ARTICLE_CONTENT_LENGTH'=> strlen($strText),
 							'S_READMORE'			=> (isset($arrContent[1])) ? true : false,
 							'COMMENTS_COUNTER'		=> ($intCommentsCount == 1 ) ? $intCommentsCount.' '.$this->user->lang('comment') : $intCommentsCount.' '.$this->user->lang('comments'),
 							'S_COMMENTS'			=> ($this->pdh->get('articles',  'comments', array($intArticleID))) ? true : false,
 							'S_FEATURED'			=> ($this->pdh->get('articles',  'featured', array($intArticleID))),
 							'S_HIDE_HEADER'			=> ($this->pdh->get('articles',  'hide_header', array($intArticleID))),
 					));
-
+					
 					if (count($arrTags) && $arrTags[0] != ""){
 						foreach($arrTags as $tag){
 							$this->tpl->assign_block_vars('article_row.tag_row', array(
