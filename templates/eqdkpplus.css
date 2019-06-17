@@ -534,3 +534,8 @@ button.thirdpartylogin.steam {
 
 /* Set a higher z-index for jQuery Dialog */
 .ui-dialog { z-index: 1000 !important ;}
+
+.ui-multiselect-optgroup a {
+	font-weight: bold;
+	cursor: pointer;
+}
