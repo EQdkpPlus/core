@@ -255,8 +255,18 @@ class ManageRaids extends page_generic {
 		}
 
 		//fetch members
-		$members = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list', array(false,false,false)), 'member', 'name', 'asc')));
+		$members_active = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list', array(true,true,true)), 'member', 'name', 'asc')));
+		$members_hidden = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list_hidden', array()), 'member', 'name', 'asc')));
+		$members_special = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list_special', array()), 'member', 'name', 'asc')));
+		$members_inactive = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list_inactive', array()), 'member', 'name', 'asc')));
 
+		$members = array(
+				$this->user->lang('active') => $members_active,
+				$this->user->lang('inactive') => $members_inactive,
+				$this->user->lang('hidden') => $members_hidden,
+				$this->user->lang('core_sett_f_special_members') => $members_special,
+		);
+		
 		//fetch events
 		$events = $this->pdh->aget('event', 'name', 0, array($this->pdh->get('event', 'id_list')));
 		asort($events);
@@ -449,8 +459,18 @@ class ManageRaids extends page_generic {
 		}
 
 		//fetch members
-		$members = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list', array(false,false,false)), 'member', 'name', 'asc')));
-
+		$members_active = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list', array(true,true,true)), 'member', 'name', 'asc')));
+		$members_hidden = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list_hidden', array()), 'member', 'name', 'asc')));
+		$members_special = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list_special', array()), 'member', 'name', 'asc')));
+		$members_inactive = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list_inactive', array()), 'member', 'name', 'asc')));
+		
+		$members = array(
+				$this->user->lang('active') => $members_active,
+				$this->user->lang('inactive') => $members_inactive,
+				$this->user->lang('hidden') => $members_hidden,
+				$this->user->lang('core_sett_f_special_members') => $members_special,
+		);
+		
 		//fetch events
 		$events = $this->pdh->aget('event', 'name', 0, array($this->pdh->get('event', 'id_list')));
 		asort($events);

@@ -267,6 +267,49 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			}
 			return $members;
 		}
+		
+		public function get_id_list_hidden(){
+			$members = array();
+			if(is_array($this->data)){
+				foreach (array_keys($this->data) as $member_id){
+					if($this->pdh->get('rank', 'is_hidden', array($this->data[$member_id]['rank_id']))){
+						$members[] = $member_id;
+					}
+				}
+			}
+			
+			return $members;
+		}
+		
+		public function get_id_list_special(){
+			$members = array();
+			
+			$special_members = (is_array($this->config->get('special_members'))) ? $this->config->get('special_members') : array();
+			
+			if(is_array($this->data)){
+				foreach (array_keys($this->data) as $member_id){
+					if(in_array($member_id, $special_members)){
+						$members[] = $member_id;
+					}
+				}
+			}
+			
+			return $members;
+		}
+		
+		public function get_id_list_inactive(){
+			$members = array();
+			if(is_array($this->data)){
+				foreach (array_keys($this->data) as $member_id){
+					if(!$this->data[$member_id]['status']){
+						$members[] = $member_id;
+					}
+				}
+			}
+			
+			return $members;
+		}
+		
 
 		public function get_connection_id($userid){
 			if(isset($this->member_connections[$userid])) return $this->member_connections[$userid];
