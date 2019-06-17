@@ -85,10 +85,26 @@ class hmultiselect extends html {
 		if(!is_array($this->todisable)) $this->todisable = array($this->todisable);
 		if(is_array($this->options) && count($this->options) > 0){
 			foreach ($this->options as $key => $value) {
-				if($this->tolang) $value = ($this->user->lang($value, false, false)) ? $this->user->lang($value) : (($this->game->glang($value)) ? $this->game->glang($value) : $value);
-				$disabled = (($key === 0 && in_array($key, $this->todisable, true)) || ($key !== 0 && in_array($key, $this->todisable))) ? ' disabled="disabled"' : '';
-				$selected_choice = (!empty($this->value) && ($this->value == 'all' || (is_array($this->value) && in_array($key, $this->value)))) ? 'selected="selected"' : '';
-				$dropdown .= "<option value='".$key."' ".$selected_choice.$disabled.">".$value."</option>";
+				if(is_array($value)){
+					$label = $key;
+					if($this->tolang) $label = ($this->user->lang($key, false, false)) ? $this->user->lang($key) : (($this->game->glang($key)) ? $this->game->glang($key) : $key);
+					$dropdown .= '<optgroup label="'.$label.'">';
+					foreach($value as $key2 => $value2){
+						if($this->tolang) $value2 = ($this->user->lang($value2, false, false)) ? $this->user->lang($value2) : (($this->game->glang($value2)) ? $this->game->glang($value2) : $value2);
+						$disabled = (($key2 === 0 && in_array($key2, $this->todisable, true)) || ($key2 !== 0 && in_array($key2, $this->todisable))) ? ' disabled="disabled"' : '';
+						$selected_choice = (!empty($this->value) && ($this->value == 'all' || (is_array($this->value) && in_array($key2, $this->value)))) ? 'selected="selected"' : '';
+						$dropdown .= "<option value='".$key2."' ".$selected_choice.$disabled.">".$value2."</option>";
+					}
+					$dropdown .= '</optgroup>';
+					
+				} else {
+					if($this->tolang) $value = ($this->user->lang($value, false, false)) ? $this->user->lang($value) : (($this->game->glang($value)) ? $this->game->glang($value) : $value);
+					$disabled = (($key === 0 && in_array($key, $this->todisable, true)) || ($key !== 0 && in_array($key, $this->todisable))) ? ' disabled="disabled"' : '';
+					$selected_choice = (!empty($this->value) && ($this->value == 'all' || (is_array($this->value) && in_array($key, $this->value)))) ? 'selected="selected"' : '';
+					$dropdown .= "<option value='".$key."' ".$selected_choice.$disabled.">".$value."</option>";
+					
+				}
+				
 			}
 		} else {
 			$dropdown .= "<option value=''></option>";
