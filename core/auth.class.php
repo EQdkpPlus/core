@@ -439,9 +439,11 @@ class auth extends user {
 					$objQueryMaxSession = $this->db->prepare("SELECT MAX(session_current) as max_session_current FROM __sessions WHERE session_user_id=?")->execute($intUserID);
 					if($objQueryMaxSession){
 						$rowMaxSession = $objQueryMaxSession->fetchAssoc();
-						$this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
-								'user_lastvisit'	=> $rowMaxSession['max_session_current'],
-						))->execute($intUserID);
+						if($rowMaxSession && isset($rowMaxSession['max_session_current']) && $rowMaxSession['max_session_current'] != NULL){
+							$this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
+									'user_lastvisit'	=> $rowMaxSession['max_session_current'],
+							))->execute($intUserID);
+						}
 					}
 				}
 				
