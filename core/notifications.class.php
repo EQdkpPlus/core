@@ -421,13 +421,19 @@ class notifications extends gen_class {
 		
 		$arrNotificationType = $this->pdh->get('notification_types', 'data', array($strType));
 		
+		if($this->server_path != "/" && $this->server_path != ""){
+			$strLink = str_replace($this->server_path, '', $strLink);
+		}
+		$strLink = str_replace($this->root_path, '', $strLink);
+		$strLink = str_replace('//', '/', $strLink);
+		
 		$arrNotification = array(
 			'to_userid' 		=> $intUserID,
 			'to_username'		=> $this->pdh->get('user', 'name', array($intUserID)),
 			'from_username' 	=> $strFromUsername,
 			'type' 				=> $strType,
 			'link' 				=> $this->env->buildlink().$this->routing->build('Notifications', false, false, false, true).'?redirect='.$intNotificationID,
-			'direct_link'		=> $this->env->buildlink(false).$strLink,
+			'direct_link'		=> $this->env->buildlink().$strLink,
 			'additional_data'	=> $strAdditionalData,
 			'dataset_id'		=> $strDatasetID,
 			'prio'				=> $arrNotificationType['prio'],
