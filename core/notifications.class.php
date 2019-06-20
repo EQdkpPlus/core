@@ -68,7 +68,9 @@ class notifications extends gen_class {
 				if ((int)$intUserID === $this->user->id) continue;
 				if(!$this->check_permission($mixPermission, $intUserID)) continue;
 				
+				# Create EQdkp Plus Notification
 				$intNotificationID = $this->pdh->put('notifications', 'add', array($strType, $intUserID, $strFromUsername, $strDatasetID, $strLink, $strAdditionalData));
+				# And now send by additional method
 				$this->sendNofiticationByMethod($intUserID, $intNotificationID, $strType, $strFromUsername, $strDatasetID, $strLink, $strAdditionalData);
 			}
 			$this->pdh->process_hook_queue();

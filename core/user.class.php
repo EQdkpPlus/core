@@ -650,6 +650,7 @@ class user extends gen_class {
 		$arrNotificationSettings = register('pdh')->get('user', 'notification_settings', array($user_id));
 
 		foreach($arrNotificationTypes as $strNotificationType){
+			$strCategory = register('pdh')->get('notification_types', 'category', array($strNotificationType));
 			if ($strNotificationType === 'comment_new_article'){
 				$arrCategoryIDs = register('pdh')->sort(register('pdh')->get('article_categories', 'id_list', array()), 'articles', 'sort_id', 'asc');
 				$arrCategories = array();
@@ -657,13 +658,13 @@ class user extends gen_class {
 					$arrCategories[$caid] = register('pdh')->get('article_categories', 'name_prefix', array($caid)).register('pdh')->get('article_categories', 'name', array($caid));
 				}
 
-				$settingsdata['notifications']['notifications']['ntfy_'.$strNotificationType] = array(
+				$settingsdata['notifications']['notifications_'.$strCategory]['ntfy_'.$strNotificationType] = array(
 						'type'		=> 'dropdown',
 						'options'	=> $arrNotificationMethods,
 						'text_after'=> (new hmultiselect('ntfy_comment_new_article_categories', array('options' => $arrCategories, 'default'	=> array_keys($arrCategories), 'value' => $arrNotificationSettings['ntfy_comment_new_article_categories'])))->output().'<br />',
 				);
 			} else {
-				$settingsdata['notifications']['notifications']['ntfy_'.$strNotificationType] = array(
+				$settingsdata['notifications']['notifications_'.$strCategory]['ntfy_'.$strNotificationType] = array(
 						'type'		=> 'dropdown',
 						'options'	=> $arrNotificationMethods,
 						'default'	=> (string)register('pdh')->get('notification_types', 'default', array($strNotificationType)),

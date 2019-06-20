@@ -1886,6 +1886,12 @@ $lang = array(
 		"core_sett_f_stopforumspam_action" => "StopForumSpam - actions on suspicious registration",
 		"stopforumspam_action_deny" => "Deny registration",
 		"stopforumspam_action_disable" => "Create user, but locked",
+		"user_sett_fs_notifications_articles" => "Articles",
+		"user_sett_fs_notifications_calendarevent" => "Calendarevent",
+		"user_sett_fs_notifications_chars" => "Characters",
+		"user_sett_fs_notifications_comment" => "Comments",
+		"user_sett_fs_notifications_user" => "User",
+		"user_sett_fs_notifications_userwall" => "Userwall",
 );
 
 ?>
