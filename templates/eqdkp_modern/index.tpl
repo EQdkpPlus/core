@@ -443,7 +443,7 @@
 			$(function() {
 				/* Login Dialog */
 				$( "#dialog-login" ).dialog({
-					height: <!-- IF S_BRIDGE_INFO -->450<!-- ELSE -->350<!-- ENDIF -->,
+					height: 'auto',
 					width: 530,
 					modal: true,
 					autoOpen: false,

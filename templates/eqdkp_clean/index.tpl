@@ -532,7 +532,7 @@
 			$(function() {
 				/* Login Dialog */
 				$( "#dialog-login" ).dialog({
-					height: <!-- IF S_BRIDGE_INFO -->570<!-- ELSE -->470<!-- ENDIF -->,
+					height: 'auto',
 					width: 580,
 					modal: true,
 					autoOpen: false,
