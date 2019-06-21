@@ -155,7 +155,6 @@ if(!class_exists('pdh_w_user')) {
 			if ($objQuery && $objQuery->numRows){
 				$arrResult = $objQuery->fetchAssoc();
 				$custom = unserialize($arrResult['custom_fields']);
-				$this->pfh->Delete($this->pfh->FilePath('user_avatars/'.$custom['user_avatar']));
 				unset($custom['user_avatar']);
 				
 				$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
