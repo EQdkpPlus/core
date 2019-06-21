@@ -745,9 +745,9 @@ class Manage_Extensions extends page_generic {
 		}
 		
 		
-		$this->jquery->dialog('style_default_info', $this->user->lang('default_style'), array('message' => $this->user->lang('style_default_info').'<br /><br /><label><input type="radio" name="override" value="0" onchange="change_override(1);">'.$this->user->lang('yes').'</label>  <label><input type="radio" name="override" value="1" checked="checked" onchange="change_override(0);">'.$this->user->lang('no').'</label>', 'custom_js' => 'submit_form();', 'height' => 200), 'confirm');
-		$this->jquery->dialog('style_reset_warning', $this->user->lang('reset_style'), array('message' => $this->user->lang('style_confirm_reset'), 'height' => 200, 'url' => $this->root_path.'admin/manage_extensions.php' . $this->SID . '&link_hash='.$this->CSRFGetToken('mode')."&cat=2&mode=reset&code='+ styleid+'", 'withid' => 'styleid'), 'confirm');
-		$this->jquery->dialog('style_delete_warning', $this->user->lang('delete_style'), array('message' => $this->user->lang('confirm_delete_style'), 'height' => 200, 'url'=> $this->root_path.'admin/manage_extensions.php' . $this->SID . '&link_hash='.$this->CSRFGetToken('mode')."&cat=2&mode=uninstall&code='+ styleid+'", 'withid' => 'styleid'), 'confirm');
+		$this->jquery->dialog('style_default_info', $this->user->lang('default_style'), array('message' => $this->user->lang('style_default_info').'<br /><br /><label><input type="radio" name="override" value="0" onchange="change_override(1);">'.$this->user->lang('yes').'</label>  <label><input type="radio" name="override" value="1" checked="checked" onchange="change_override(0);">'.$this->user->lang('no').'</label>', 'custom_js' => 'submit_form();', 'height' => 300), 'confirm');
+		$this->jquery->dialog('style_reset_warning', $this->user->lang('reset_style'), array('message' => $this->user->lang('style_confirm_reset'), 'height' => 300, 'url' => $this->root_path.'admin/manage_extensions.php' . $this->SID . '&link_hash='.$this->CSRFGetToken('mode')."&cat=2&mode=reset&code='+ styleid+'", 'withid' => 'styleid'), 'confirm');
+		$this->jquery->dialog('style_delete_warning', $this->user->lang('delete_style'), array('message' => $this->user->lang('confirm_delete_style'), 'height' => 300, 'url'=> $this->root_path.'admin/manage_extensions.php' . $this->SID . '&link_hash='.$this->CSRFGetToken('mode')."&cat=2&mode=uninstall&code='+ styleid+'", 'withid' => 'styleid'), 'confirm');
 
 		$badge = '';
 		if ($arrUpdateCount[2]['red']){
