@@ -1,3 +1,20 @@
+//Game Background 
+//	If you want to have the game specific background image, please uncomment the following block
+
+/*
+body {
+	background:#000000 url('TEMPLATE_BACKGROUND') no-repeat center top;
+	background-attachment: T_BACKGROUND_POSITION;
+	background-size: cover;
+}
+
+#wrapper header {
+	background: none !important;
+}
+
+*/
+
+
 
 // Fixed Personal Area
 //    If you want the personal area to have a fixed position, please uncomment the following line.
