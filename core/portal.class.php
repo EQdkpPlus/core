@@ -100,6 +100,8 @@ class portal extends gen_class {
 		
 		if($this->in->get('iframe', 0)){
 			
+			infotooltip_js();
+			
 			$this->tpl->assign_vars(array(
 				'WIDGET' => $return
 			));
