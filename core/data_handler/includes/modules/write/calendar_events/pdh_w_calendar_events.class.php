@@ -551,7 +551,7 @@ if(!class_exists('pdh_w_calendar_events')) {
 									$signupstatus = $status;
 								}else{
 									if(is_array($arrAutoconfirmGroups) && count($arrAutoconfirmGroups) > 0 && $signupstatus == 1){
-										if($this->pdh->get('raid_groups_members', 'check_user_is_in_groups', array($userid, $arrAutoconfirmGroups))){
+										if($this->user->check_group($arrAutoconfirmGroups, false, $userid)){
 											$signupstatus = 0;
 										}
 									}
