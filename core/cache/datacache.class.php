@@ -53,8 +53,8 @@ if( !class_exists( "datacache" ) ) {
 			//create our cache object
 			if(!$cache_type) $cache_type = ($this->config->get('mode', 'pdc')) ? 'cache_'.$this->config->get('mode', 'pdc') : 'cache_none';
 			require_once( $this->root_path.'core/cache/cache.iface.php' );
-			require_once( $this->root_path.'core/cache/'.$cache_type.'.class.php' );
 			try {
+				require_once( $this->root_path.'core/cache/'.$cache_type.'.class.php' );
 				$this->cache = registry::register($cache_type);
 			} catch (Exception $e){
 				//Fallback: load file cache
