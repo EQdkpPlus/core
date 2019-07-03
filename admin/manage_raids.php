@@ -75,7 +75,7 @@ class ManageRaids extends page_generic {
 		$arrNewValues['additonal_data'] = $this->in->get('additional_data','');
 		$arrNewValues['event'] = $this->in->get('event',0);
 		$arrNewValues['value'] = $this->in->get('value',0.0);
-		$arrNewValues['attendees'] = $this->in->getArray('raid_attendees','int');
+		$arrNewValues['attendees'] = array_unique($this->in->getArray('raid_attendees','int'));
 		$arrNewValues['date'] = $this->time->fromformat($this->in->get('date','1.1.1970 00:00'), 1);
 		$arrNewValues['itempool'] = $this->in->get('itempool_id',0);
 
@@ -312,21 +312,8 @@ class ManageRaids extends page_generic {
 			$adjs = $this->get_adjsofraid($raid['id']);
 			//fetch items
 			$items = $this->get_itemsofraid($raid['id']);
-
-			//Add additional members
-			if (count($raid['attendees']) > 0){
-				$arrIDList = array_keys($members);
-				$blnResort = false;
-				foreach($raid['attendees'] as $member_id){
-					if (!isset($members[$member_id])) {
-						$arrIDList[] = $member_id;
-						$blnResort = true;
-					}
-				}
-				if ($blnResort) $members = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($arrIDList, 'member', 'name', 'asc')));
-			}
-
 		}
+		
 		//If we get a draft
 		if ($this->in->get('draft', 0) > 0) {
 			$raid = $this->get_raiddata($this->in->get('draft', 0), true);
@@ -603,7 +590,7 @@ class ManageRaids extends page_generic {
 		$raid['value'] = $this->pdh->get('raid', 'value', array($raid_id));
 		$raid['additional_data'] = $this->pdh->get('raid', 'additional_data', array($raid_id));
 		if($attendees) {
-			$raid['attendees'] = $this->pdh->get('raid', 'raid_attendees', array($raid_id));
+			$raid['attendees'] = $this->pdh->get('raid', 'raid_attendees', array($raid_id, false));
 		}
 		return $raid;
 	}
@@ -680,7 +667,9 @@ class ManageRaids extends page_generic {
 		$data['raid']['event'] = $this->in->get('event',0);
 		$data['raid']['caleventid'] = $this->in->get('caldata_import',0);
 		$data['raid']['value'] = $this->in->get('value',0.0);
-		$data['raid']['attendees'] = $this->in->getArray('raid_attendees','int');
+		
+		$data['raid']['attendees'] = array_unique($this->in->getArray('raid_attendees','int'));
+
 		if(empty($data['raid']['attendees'])) {
 			$data['false'][] = 'raids_members';
 		}
@@ -691,7 +680,7 @@ class ManageRaids extends page_generic {
 						$data['false'][] = 'adjustments_members';
 					}
 					$data['adjs'][$key]['group_key'] = $this->in->get('adjs:'.$key.':group_key','','hash');
-					$data['adjs'][$key]['members'] = $this->in->getArray('adjs:'.$key.':members','int');
+					$data['adjs'][$key]['members'] = array_unique($this->in->getArray('adjs:'.$key.':members','int'));
 					$data['adjs'][$key]['reason'] = $this->in->get('adjs:'.$key.':reason','');
 					$data['adjs'][$key]['event'] = $this->in->get('adjs:'.$key.':event',0);
 					$data['adjs'][$key]['value'] = $this->in->get('adjs:'.$key.':value',0.0);
@@ -717,7 +706,7 @@ class ManageRaids extends page_generic {
 					$data['items'][$key]['group_key'] = $this->in->get('items:'.$key.':group_key','','hash');
 					$data['items'][$key]['name'] = $this->in->get('items:'.$key.':name','');
 					$data['items'][$key]['item_id'] = $this->in->get('items:'.$key.':itemid','');
-					$data['items'][$key]['members'] = $this->in->getArray('items:'.$key.':members','int');
+					$data['items'][$key]['members'] = array_unique($this->in->getArray('items:'.$key.':members','int'));
 					$data['items'][$key]['value'] = $this->in->get('items:'.$key.':value',0.0);
 					$data['items'][$key]['itempool_id'] = $this->in->get('items:'.$key.':itempool_id',0);
 					$data['items'][$key]['amount'] = $this->in->get('items:'.$key.':amount',0);
