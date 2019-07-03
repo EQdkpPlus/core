@@ -56,12 +56,12 @@ class login_steam extends gen_class {
 	
 	public function login_button(){		
 		$auth_url = $this->env->buildLink().'index.php/Login/?login&lmethod=steam';
-		return '<button type="button" class="mainoption thirdpartylogin steam accountbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-steam fa-lg"></i> Steam</button>';
+		return '<button type="button" class="mainoption thirdpartylogin steam loginbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-steam fa-lg"></i> Steam</button>';
 	}
 	
 	public function register_button(){
 		$auth_url = $this->env->buildLink().'index.php/Register/?register&lmethod=steam';
-		return '<button type="button" class="mainoption thirdpartylogin steam accountbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-steam fa-lg"></i> Steam</button>';
+		return '<button type="button" class="mainoption thirdpartylogin steam registerbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-steam fa-lg"></i> Steam</button>';
 	}
 	
 	public function account_button(){
