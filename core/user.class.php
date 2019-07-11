@@ -209,7 +209,7 @@ class user extends gen_class {
 
 		//Global Warning if somebody has overtaken user permissions
 		if (!$this->lite_mode && isset($this->data['session_perm_id']) && $this->data['session_perm_id'] > 0){
-			$username	= $this->pdh->get('user', 'username', array((int)$this->data['session_perm_id']));
+			$username	= $this->pdh->get('user', 'name', array((int)$this->data['session_perm_id']));
 			$message	= sprintf($this->lang('info_overtaken_permissions'), $username);
 			$message	.= '<br /><b><a href="'.$this->server_path.'index.php'.$this->SID.'&mode=rstperms">'.$this->lang('link_overtaken_permissions')."</a></b>";
 			$this->core->global_warning($message);
@@ -809,12 +809,12 @@ class user extends gen_class {
 		}
 		
 		//Check Auth Account
-		if (!$this->pdh->get('user', 'check_auth_account', array($arrAccountDetails['auth_account'], $strAuthMethod))){
+		if ($arrAccountDetails['auth_account'] == "" || !$this->pdh->get('user', 'check_auth_account', array($arrAccountDetails['auth_account'], $strAuthMethod))){
 			return $arrAccountDetails;
 		}
 		
 		//Check Email address
-		if($this->pdh->get('user', 'check_email', array($arrAccountDetails['user_email'])) == 'false'){
+		if($arrAccountDetails['user_email'] == "" || $this->pdh->get('user', 'check_email', array($arrAccountDetails['user_email'])) == 'false'){
 			return $arrAccountDetails;
 		}
 		
@@ -866,7 +866,7 @@ class user extends gen_class {
 		);
 		
 		if(!$objMailer->SendMailFromAdmin($arrAccountDetails['user_email'], $email_subject, $email_template.'.html', $bodyvars)){
-			$success_message = $this->user->lang('email_subject_send_error');
+			
 		}
 		
 		$arrAccountDetails['user_id'] = $intUserID;
