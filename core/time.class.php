@@ -673,7 +673,7 @@ if (!class_exists("time")){
 			$newtime	= ($newtime=='now') ? (new DateTime())->format('H:i') : $newtime;
 
 			// get the date
-			$objDate	= new DateTime('@'.$timestamp, $this->utcTimeZone);
+			$objDate	= new DateTime('@'.(int)$timestamp, $this->utcTimeZone);
 			$datewotime	= $objDate->format('Y-m-d');
 
 			// now, get the time in UTC

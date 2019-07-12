@@ -189,7 +189,8 @@ if ( !class_exists( "pdh_r_raid_groups_members" ) ){
 		public function get_check_user_is_in_groups($user_id, $group_id){
 			if(is_array($group_id)){
 				foreach($group_id as $groups){
-					$output = $this->get_user_is_in_groups($user_id, $group_id);
+					$output = $this->get_user_is_in_groups($user_id, $groups);
+					if($output) { return true; }
 				}
 			}else{
 				$output = $this->get_user_is_in_groups($user_id, $group_id);

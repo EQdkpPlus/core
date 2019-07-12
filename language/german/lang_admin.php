@@ -526,6 +526,7 @@ $lang = array(
 "pdc_cache_name_file" => "Datei Cache",
 "pdc_cache_name_xcache" => "XCache",
 "pdc_cache_name_apc" => "Alternativer PHP Cache (APC)",
+"pdc_cache_name_apcu" => 'APC User Cache (APCu)',
 "pdc_cache_name_memcache" => "Memcache",
 		"pdc_cache_name_redis" => "Redis",
 "pdc_globalprefix" => "Globales Prefix",

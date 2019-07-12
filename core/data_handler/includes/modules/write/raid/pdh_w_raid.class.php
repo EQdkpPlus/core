@@ -106,7 +106,7 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 			$old['note'] = $this->pdh->get('raid', 'note', array($raid_id));
 			$old['value'] = $this->pdh->get('raid', 'value', array($raid_id));
 			$old['date'] = $this->pdh->get('raid', 'date', array($raid_id));
-			$old['members'] = $this->pdh->get('raid', 'raid_attendees', array($raid_id));
+			$old['members'] = $this->pdh->get('raid', 'raid_attendees', array($raid_id, true));
 			$old['additional_data'] = $this->pdh->get('raid', 'additional_data', array($raid_id));
 			
 			//get member names for log
@@ -132,6 +132,7 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 				$add_atts = array_diff($raid_attendees, $old['members']);
 				$del_atts = array_diff($old['members'], $raid_attendees);
 				$upd_atts = array_diff($old['members'], $del_atts);
+
 				foreach($add_atts as $add_att) {
 					$objQuery = $this->db->prepare("INSERT INTO __raid_attendees :p")->set(array(
 						'raid_id' => $raid_id,

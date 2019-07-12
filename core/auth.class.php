@@ -593,6 +593,8 @@ class auth extends user {
 		$objQuery = $this->db->prepare("UPDATE __sessions :p WHERE session_id=?")->set(array(
 			'session_perm_id' => $intUserID,
 		))->execute($this->sid);
+		
+		$this->pdc->flush();
 	}
 
 	/**
@@ -602,6 +604,8 @@ class auth extends user {
 		$objQuery = $this->db->prepare("UPDATE __sessions :p WHERE session_id=?")->set(array(
 				'session_perm_id'					=> ANONYMOUS,
 		))->execute($this->sid);
+		
+		$this->pdc->flush();
 	}
 
 
