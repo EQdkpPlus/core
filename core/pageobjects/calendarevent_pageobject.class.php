@@ -238,10 +238,10 @@ class calendarevent_pageobject extends pageobject {
 		}
 
 		// auto confirm if enabled
-		$usergroups		= $this->config->get('calendar_raid_confirm_raidgroupchars');
+		$arrConfirmRaidgroups	= $this->config->get('calendar_raid_confirm_raidgroupchars');
 		$signupstatus	= $this->in->get('signup_status', 4);
-		if(is_array($usergroups) && count($usergroups) > 0 && $signupstatus == 1){
-			if($this->user->check_group($usergroups, false)){
+		if(is_array($arrConfirmRaidgroups) && count($arrConfirmRaidgroups) > 0 && $signupstatus == 1){
+			if($this->pdh->get('raid_groups_members', 'check_user_is_in_groups', array($this->user->id, $arrConfirmRaidgroups))){
 				$signupstatus = 0;
 			}
 		}else{
