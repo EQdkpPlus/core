@@ -56,9 +56,11 @@ class game extends gen_class {
 
 			// the api key loader
 			$apikey_data			= $this->get_importers('apikey');
-			foreach($apikey_data['form'] as $fieldname=>$fieldcontent){
-				if($this->config->get($fieldname)){
-					$this->import_apikey[$fieldname]	= $this->config->get($fieldname);
+			if(isset($apikey_data['form'])){
+				foreach($apikey_data['form'] as $fieldname=>$fieldcontent){
+					if($this->config->get($fieldname)){
+						$this->import_apikey[$fieldname]	= $this->config->get($fieldname);
+					}
 				}
 			}
 
