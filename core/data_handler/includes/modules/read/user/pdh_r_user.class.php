@@ -500,8 +500,8 @@ if (!class_exists("pdh_r_user")){
 
 		public function get_avatarimglink($user_id, $fullSize=false){
 			$strAvatarType = $this->get_custom_fields($user_id, 'user_avatar_type');
-			if(!$strAvatarType || is_array($strAvatarType)) $strAvatarType = 'eqdkp';
-			$arrAllowedTypes = $this->config->get('avatar_allowed');	
+			if(!$strAvatarType || is_array($strAvatarType)) $strAvatarType = $this->config->get('avatar_default');
+			$arrAllowedTypes = $this->config->get('avatar_allowed');
 			
 			//Get the avatar by the user selected type
 			//If the type is allowed by admin
