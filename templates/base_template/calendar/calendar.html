@@ -635,6 +635,12 @@ td.fc-day:hover:after {
 				<dt><label>{L_hide_inactive}</label></dt>
 				<dd><label><input type="checkbox" name="hide_inactive" value="1" {HIDE_INACTIVE_CHECKED} /></label></dd>
 			</dl>
+			<!-- IF S_SHOW_STAT_RAIDGROUP -->
+			<dl>
+				<dt><label>{L_calendar_raidgroup}</label></dt>
+				<dd>{DD_RAIDGROUP}</dd>
+			</dl>
+			<!-- ENDIF -->
 
 			<button class="mainoption" type="submit" name="submit" id="raidSumformSubmitBtn"><i class="fa fa-check"></i>{L_viewraid_create_summ}</button>
 		</div>

@@ -565,6 +565,7 @@ class calendar_pageobject extends pageobject {
 			'HIDE_INACTIVE_CHECKED'	=> ($hide_inactive)?'checked="checked"':'',
 			'AMOUNT_CALENDARS'		=> count($calendar_idlist),
 			'DD_RAIDGROUP'			=> (new hdropdown('raidgroup', array('options' => $arrRaidgroups, 'value' => $intRaidgroup)))->output(),
+			'S_SHOW_STAT_RAIDGROUP' => (count($arrRaidgroups) > 1) ? true : false,
 			'MS_CALENDAR_SELECT'	=> (new hmultiselect('calendarfilter', array('options' => $calendar_idlist, 'preview_num' => 3, 'todisable' => $todisable, 'value' => array(1,2), 'selectedtext'=>$this->user->lang('calendar_filter_bycalendar'), 'width' => 260)))->output(),
 		));
 
