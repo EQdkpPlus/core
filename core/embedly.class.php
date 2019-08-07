@@ -23,7 +23,7 @@ class embedly extends gen_class {
 
 	public function __construct(){}
 	
-	public $arrServices = array(
+	protected $arrServices = array(
 				'youtube' => array(
 					'regex' => ["https?://(?:[^\.]+\.)?youtube\.com/watch/?\?(?:.+&)?v=([^&]+)","https?://(?:[^\.]+\.)?(?:youtu\.be|youtube\.com/embed)/([a-zA-Z0-9_-]+)"],
 					'format'=> 'json',
@@ -225,7 +225,7 @@ class embedly extends gen_class {
 			//Check link
 			$mixResult = $this->checkLink($mixLink);
 			if($mixResult !== false){
-				$arrMyService = $this->arrServices[$mixResult];
+				$arrMyService = $this->getServices($mixResult);
 				
 				$strUrl = str_replace('URL', urlencode($mixLink), $arrMyService['oembed']);
 				
@@ -247,8 +247,25 @@ class embedly extends gen_class {
 		return false;
 	}
 	
+	private function getServices($strService=false){
+		$arrServices = $this->arrServices;
+		if($this->hooks->isRegistered('embedly_services')){
+			$arrHooks = $this->hooks->process('embedly_services');
+			
+			if (count($arrHooks) > 0){
+				foreach($arrHooks as $arrHook){
+					if(is_array($arrHook)) $arrServices = array_merge($arrServices, $arrHook);
+				}
+			}
+		}
+		
+		if($strService !== false) return $arrServices[$strService];
+		
+		return $arrServices;
+	}
+	
 	public function checkLink($strLink){
-		foreach($this->arrServices as $strServicename => $arrServiceDetails){
+		foreach($this->getServices() as $strServicename => $arrServiceDetails){
 			$arrRegex = $arrServiceDetails['regex'];
 			foreach($arrRegex as $strRegex){
 				if(preg_match('#'.$strRegex.'#', $strLink)) return $strServicename;
