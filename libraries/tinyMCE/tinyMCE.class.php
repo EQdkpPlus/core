@@ -58,6 +58,7 @@ class tinyMCE extends gen_class {
 			$strHooksPlugin = isset($arrHooks['plugins']) ? $arrHooks['plugins'] : '';
 			$strHooksToolbar = isset($arrHooks['toolbar']) ? $arrHooks['toolbar'] : '';
 			$mention  = (isset($settings['mention']) && $settings['mention']) ? ' mention' : '';
+			$autolink = ($this->config->get('enable_embedly')) ? '' : ' autolink';
 			
 			$this->tpl->add_js('
 				function initialize_bbcode_editor(){
@@ -67,9 +68,9 @@ class tinyMCE extends gen_class {
 
 					// General options
 					plugins: [
-						"bbcode autolink link image charmap paste",
+						"bbcode link image charmap paste",
 						"searchreplace visualblocks code fullscreen",
-						"media textcolor '.$mention.$strHooksPlugin.'"
+						"media textcolor '.$mention.$strHooksPlugin.$autolink.'"
 					],
 					language : "'.$this->language.'",
 					branding: false,
@@ -178,6 +179,7 @@ class tinyMCE extends gen_class {
 			$strHooks = isset($arrHooks['js']) ? $arrHooks['js'] : '';
 			$strHooksPlugin = isset($arrHooks['plugins']) ? $arrHooks['plugins'] : '';
 			$strHooksToolbar = isset($arrHooks['toolbar']) ? $arrHooks['toolbar'] : '';
+			$autolink = ($this->config->get('enable_embedly')) ? '' : ' autolink';
 
 			$this->tpl->add_js('
 				$(".mceEditor").tinymce({
@@ -193,9 +195,9 @@ class tinyMCE extends gen_class {
 					toolbar: "insertfile undo redo | fullscreen | styleselect fontselect fontsizeselect bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist | link image media emoticons eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | eqdkp_item eqdkp_gallery eqdkp_raidloot eqdkp_chars | custom_buttons '.$strHooksToolbar.'",
 					language : "'.$this->language.'",
 					plugins: [
-					 	"advlist autolink lists link image imagetools charmap preview anchor eqdkp_lightbox eqdkp_filebrowser eqdkp_easyinsert",
+					 	"advlist lists link image imagetools charmap preview anchor eqdkp_lightbox eqdkp_filebrowser eqdkp_easyinsert",
 						"searchreplace visualblocks code fullscreen colorpicker",
-						"media table contextmenu paste textcolor emoticons'.$item_plugin.$autoresize.$pageobjects.$readmore.$gallery.$raidloot.$strHooksPlugin.'"
+						"media table contextmenu paste textcolor emoticons'.$autolink.$item_plugin.$autoresize.$pageobjects.$readmore.$gallery.$raidloot.$strHooksPlugin.'"
 					],
 					browser_spellcheck: true,
 					images_upload_credentials: true,
@@ -363,6 +365,7 @@ class tinyMCE extends gen_class {
 			$strHooks = isset($arrHooks['js']) ? $arrHooks['js'] : '';
 			$strHooksPlugin = isset($arrHooks['plugins']) ? $arrHooks['plugins'] : '';
 			$strHooksToolbar = isset($arrHooks['toolbar']) ? $arrHooks['toolbar'] : '';
+			$autolink = ($this->config->get('enable_embedly')) ? '' : ' autolink';
 
 			$tinyid = md5($selector);
 
@@ -381,7 +384,7 @@ class tinyMCE extends gen_class {
 					toolbar: "insertfile undo redo | fullscreen | styleselect fontselect fontsizeselect bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist | link image media emoticons eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | eqdkp_item eqdkp_gallery eqdkp_raidloot eqdkp_chars | custom_buttons '.$strHooksToolbar.'",
 					language : "'.$this->language.'",
 					 plugins: [
-					 	"advlist autolink lists link image imagetools charmap preview anchor eqdkp_lightbox eqdkp_filebrowser eqdkp_easyinsert",
+					 	"advlist lists link image imagetools charmap preview anchor eqdkp_lightbox eqdkp_filebrowser eqdkp_easyinsert",
 						"searchreplace visualblocks code fullscreen",
 						"save media table contextmenu paste textcolor emoticons'.$item_plugin.$autoresize.$pageobjects.$readmore.$gallery.$raidloot.$strHooksPlugin.'"
 					],
