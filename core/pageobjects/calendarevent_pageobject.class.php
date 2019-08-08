@@ -1325,23 +1325,26 @@ class calendarevent_pageobject extends pageobject {
 		$this->jquery->Tab_header('tab_attendance');
 
 		// edit menu
-		$arrToolbarItems = array(
-			array(
-				'icon'	=> 'fa-plus',
-				'js'	=> 'onclick="addEvent()"',
-				'title'	=> $this->user->lang('add_new_article'),
-			),
-			array(
-				'icon'	=> 'fa-pencil-square-o',
-				'js'	=> 'onclick="editEvent()"',
-				'title'	=> $this->user->lang('edit'),
-			),
+		$arrToolbarItems = array();
+		if(($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission())){
+			$arrToolbarItems[] = array(
+					'icon'	=> 'fa-plus',
+					'js'	=> 'onclick="addEvent()"',
+					'title'	=> $this->user->lang('add_new_article'),
+			);
+			$arrToolbarItems[] = array(
+					'icon'	=> 'fa-pencil-square-o',
+					'js'	=> 'onclick="editEvent()"',
+					'title'	=> $this->user->lang('edit'),
+			);
+		}
+
 			/*array(
 				'icon'	=> 'fa-lock',
 				'js'	=> 'onclick="lockEvent()"',
 				'title'	=> $this->user->lang('lockEvent'),
 			),*/
-		);
+
 		$jqToolbar = $this->jquery->toolbar('calevent_event', $arrToolbarItems, array('position' => 'bottom'));
 
 		// the Windows
@@ -1390,7 +1393,8 @@ class calendarevent_pageobject extends pageobject {
 			'NUMBER_MAYBES'		=> (isset($userstatus['maybe'])) ? count($userstatus['maybe']) : 0,
 			'NUMBER_ATTENDEES'	=> (isset($userstatus['attendance'])) ? count($userstatus['attendance']) : 0,
 			'NUMBER_DECLINES'	=> (isset($userstatus['decline'])) ? count($userstatus['decline']) : 0,
-			'TOOLBAR'			=> $jqToolbar['id'],
+			'CALENDAR_TOOLBAR'	=> $jqToolbar['id'],
+			'CALENDAR_TOOLBAR_COUNT' => count($arrToolbarItems),
 		));
 
 		$this->set_vars(array(
