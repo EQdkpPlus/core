@@ -19,6 +19,10 @@
 <script language="JavaScript" type="text/javascript">
 //<![CDATA[
 $(function() {
+	//Try to detect the Timezone
+	var user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+	if (user_timezone) { $('#user_timezone').val(user_timezone).change(); }
+	
 	$('#username').change(function() {
 		var username = $(this).val();
 		if(username.length > 0){
@@ -87,7 +91,6 @@ $(function() {
 		<div id="account">
 			<fieldset class="settings">
 				<legend>{L_user_sett_tab_registration_info}</legend>
-				<i class="fa fa-info-circle fa-lg"></i> {L_required_field_note}<br/><br/>
 
 				<dl>
 					<dt>
