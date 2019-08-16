@@ -1821,10 +1821,10 @@ $lang = array(
 							<li><i class="fa fa-puzzle-piece"></i> <a href="http://eqdkp-plus.eu/repository/">Veröffentliche ein Plugin oder Template, damit alle EQdkp Plus Benutzer was davon haben</a></li>
 							<li><i class="fa fa-comments"></i> <a href="http://eqdkp-plus.eu/forum/">Unterstütze uns in unserem Forum</a></li>
 							<li><i class="fa fa-cogs"></i> <a href="http://eqdkp-plus.eu/de/entwicklung.html">Beteilige dich aktiv an der Weiterentwicklung von EQdkp Plus</a></li>
-							<li><i class="fa fa-usd"></i> <a href="http://eqdkp-plus.eu/de/spenden.html">Unterstützte uns finanziell, damit wir euch weiterhin unsere Services anbieten können</a></li>
+							<li><i class="fa fa-usd"></i> <a href="https://eqdkp-plus.eu/Donate.html">Unterstützte uns finanziell, damit wir euch weiterhin unsere Services anbieten können</a></li>
 						</ul>
 
-						Also wenn ihr EQdkp Plus genauso liebt wie wir, denkt doch mal darüber nach, uns zu unterstützen!',
+						Also wenn ihr EQdkp Plus genauso liebt wie wir, denkt doch mal darüber nach, uns zu unterstützen!<br /><a href="https://eqdkp-plus.eu/Donate.html?" style="background:orange;border-radius:5px;padding:7px;display:inline-block;color:black;"><i class="fa fa-paypal"></i> Jetzt Spenden</a>',
 'install_other_games' => 'Andere Spiele herunterladen',
 'lock' => 'Sperren',
 'unlock' => 'Entsperren',

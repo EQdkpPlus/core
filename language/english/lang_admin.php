@@ -1814,7 +1814,7 @@ $lang = array(
 							<li><i class="fa fa-cogs"></i> <a href="http://eqdkp-plus.eu/en/development.html">Take part actively in the development of EQdkp Plus</a></li>
 							<li><i class="fa fa-usd"></i> <a href="http://eqdkp-plus.eu/en/donate.html">Support us financially so we can continue offering you our services</a></li>
 						</ul>
-						So if you love EQdkp Plus as much as we do, think about supporting us!',
+						So if you love EQdkp Plus as much as we do, think about supporting us!<br /><a href="https://eqdkp-plus.eu/Donate.html?" style="background:orange;border-radius:5px;padding:7px;display:inline-block;color:black;"><i class="fa fa-paypal"></i> Donate now</a>',
 		'install_other_games' => 'Download other games',
 		'user_lock_success' => 'The user <i>%s</i> has been successfully locked. This user cannot login anymore.',
 		'user_unlock_success' => 'The user <i>%s</i> has been successfully unlocked. This user can login again.',

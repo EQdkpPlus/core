@@ -224,7 +224,7 @@ $lang = array(
 							<li><i class="fa fa-cogs"></i> <a href="https://eqdkp-plus.eu/en/development.html">Take part actively in the development of EQdkp Plus</a></li>
 							<li><i class="fa fa-usd"></i> <a href="https://eqdkp-plus.eu/en/donate.html">Support us financially so we can continue offering you our services like LiveUpdate</a></li>
 						</ul>
-						So if you love EQdkp Plus as much as we do, think about supporting us!',
+						So if you love EQdkp Plus as much as we do, think about supporting us!<br /><a href="https://eqdkp-plus.eu/Donate.html?" style="background:orange;border-radius:5px;padding:7px;display:inline-block;color:black;"><i class="fa fa-paypal"></i> Donate now</a>',
 	'additional_keys'		=> 'Additional Features',
 	//Step: additional_keys
 	'additional_keys_info'	=> 'We use features from other providers, like spam protection. In order to use this features, you need own Keys for this features. Therefore you can create your own keys at the following pages.<br /><b>Of course you can skip this step, and insert the keys at any time at the EQdkp Plus Settings.</b>',

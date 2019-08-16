@@ -263,7 +263,7 @@ $lang = array(
 							<li><i class="fa fa-usd"></i> <a href="http://eqdkp-plus.eu/de/spenden.html">Unterstützte uns finanziell, damit wir euch weiterhin unsere Services anbieten können</a></li>
 						</ul>
 
-						Also wenn ihr EQdkp Plus genauso liebt wie wir, denkt doch mal darüber nach, uns zu unterstützen!',
+						Also wenn ihr EQdkp Plus genauso liebt wie wir, denkt doch mal darüber nach, uns zu unterstützen!<br /><a href="https://eqdkp-plus.eu/Donate.html?" style="background:orange;border-radius:5px;padding:7px;display:inline-block;color:black;"><i class="fa fa-paypal"></i> Jetzt Spenden</a>',
 	'module_externalconnection'	=> 'Externe Verbindungen',
 );
 ?>
