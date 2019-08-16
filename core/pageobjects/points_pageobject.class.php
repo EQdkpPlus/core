@@ -49,7 +49,7 @@ class points_pageobject extends pageobject {
 			$show_twinks = true;
 			$sort_suffix = '&amp;show_twinks=1';
 		}
-		
+				
 		//DKP Id
 		$mdkp_suffix = '';
 		$arrOverviewSettings = $this->pdh->get_page_settings('listmembers', 'hptt_listmembers_memberlist_overview');
@@ -157,6 +157,21 @@ class points_pageobject extends pageobject {
 			}
 		}
 		
+		$arrRaidgroups = $this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list')));
+		
+		$this->tpl->assign_block_vars('filter_row', array(
+				'VALUE'		=> '',
+				'SELECTED'	=> '',
+				'OPTION'	=> '-----------',
+		));
+		foreach($arrRaidgroups as $key=>$details){
+			$this->tpl->assign_block_vars('filter_row', array(
+					'VALUE'		=> 'raidgroup:'.$key,
+					'SELECTED'	=> ( ($filter != 'none') && ($filter == 'raidgroup:'.$key) ) ? ' selected="selected"' : '',
+					'OPTION'	=> $this->user->lang('calendar_raidgroup').' '.$details,
+			));
+		}
+		
 		$this->tpl->assign_vars(array (
 			'POINTOUT'					=> $hptt->get_html_table($sort, $suffix, null, null, $footer_text),
 			'BUTTON_NAME'				=> 'compare_b',
@@ -187,6 +202,7 @@ class points_pageobject extends pageobject {
 				case	'class':
 					$classids = explode(',',$params);
 					if(is_array($classids) && !empty($classids)){
+						$temp = array();
 						foreach($view_list as $index => $memberid){
 							if(in_array($this->pdh->get('member', 'classid', array($memberid)), $classids))
 							$temp[]	=$memberid;
@@ -198,6 +214,19 @@ class points_pageobject extends pageobject {
 					$memberids = explode(',',$params);
 					if(is_array($memberids) && !empty($memberids))
 					$view_list = array_intersect($view_list, $memberids);
+					break;
+				case 'raidgroup':
+					$groupids = explode(',',$params);
+					if(is_array($groupids) && !empty($groupids)){
+						$temp = array();
+						foreach($groupids as $groupid){
+							$arrMemberlist = $this->pdh->get('raid_groups_members', 'member_list', array($groupid));
+							if(is_array($arrMemberlist)) $temp = array_merge($temp, $arrMemberlist);
+						}
+						$view_list = array_unique($temp);
+					}
+					
+					
 					break;
 			}
 		}
