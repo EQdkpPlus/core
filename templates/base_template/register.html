@@ -20,8 +20,10 @@
 //<![CDATA[
 $(function() {
 	//Try to detect the Timezone
-	var user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-	if (user_timezone) { $('#user_timezone').val(user_timezone).change(); }
+	try {
+		var user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+		if (user_timezone) { $('#user_timezone').val(user_timezone).change(); }
+	}  catch (e) {}
 	
 	$('#username').change(function() {
 		var username = $(this).val();
