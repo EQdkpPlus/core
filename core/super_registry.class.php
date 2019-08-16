@@ -141,11 +141,10 @@ abstract class super_registry {
 
 			include_once(self::$const['root_path'].'core/core.functions.php');
 			registry::register('environment');
-			if(!registry::register('config')->get('server_path')) self::fix_server_path();
 			self::$const['server_path'] = registry::register('config')->get('server_path');
 			self::$const['controller_path'] = self::$const['server_path'].((!intval(registry::register('config')->get('seo_remove_index'))) ? 'index.php/' : '');
 			self::$const['controller_path_plain'] = ((!intval(registry::register('config')->get('seo_remove_index'))) ? 'index.php/' : '');
-
+			
 			//Auth/User
 			require(self::$const['root_path'] . 'core/auth.class.php');
 			$auth_method = 'auth_'.((registry::register('config')->get('auth_method') != '') ? registry::register('config')->get('auth_method') : 'db');
@@ -311,9 +310,13 @@ abstract class super_registry {
 		registry::register('plus_debug_logger')->set_debug_level(DEBUG);
 	}
 
-	private static function fix_server_path() {
-		registry::register('config')->set('server_path', registry::register('environment')->server_path);
-		redirect(registry::register('environment')->phpself, false, false, false);
+	public static function fix_server_path() {
+		$saved = registry::register('config')->get('server_path');
+		$current = registry::register('environment')->server_path;
+
+		if($saved !== $current && strlen($current)){
+			registry::register('config')->set('server_path', registry::register('environment')->server_path);
+		}
 	}
 
 	private static function set_timezone() {

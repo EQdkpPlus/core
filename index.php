@@ -27,6 +27,8 @@ class controller extends gen_class {
 	public static $shortcuts = array('social' => 'socialplugins');
 
 	public function __construct() {
+		registry::fix_server_path();
+		
 		$blnCheckPost = $this->user->checkCsrfPostToken($this->in->get($this->user->csrfPostToken()));
 		$blnCheckPostOld = $this->user->checkCsrfPostToken($this->in->get($this->user->csrfPostToken(true)));
 
