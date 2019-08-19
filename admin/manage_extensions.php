@@ -1016,6 +1016,68 @@ class Manage_Extensions extends page_generic {
 			'BADGE_11'		=> $badge,
 			'LANGUAGE_COUNT' => $intLanguages,
 		));
+		//=================================================================
+		//Search for extensions
+		if($this->in->get('search') != ""){
+			$arrSearchResults = $this->pdh->get('repository', 'search', array($this->in->get('search')));
+			
+			foreach($arrSearchResults as $intExtension => $extension){
+				if ($extension['plugin'] == 'pluskernel') continue;
+				//Check if the extension is already installed
+				$blnInstallable = true;
+				$strCategoryIcon = '';
+				
+				if($extension['category'] == 1){
+					$strCategoryIcon = '<i class="fa fa-cogs"></i>';
+					if ($this->pm->search($extension['plugin']))  $blnInstallable = false;
+				} elseif($extension['category'] == 2){
+					$strCategoryIcon = '<i class="fa fa-paint-brush"></i>';
+					if (in_array($extension['plugin'], $arrStyles))  $blnInstallable = false;
+				} elseif($extension['category'] == 3){
+					$strCategoryIcon = '<i class="fa fa-columns"></i>';
+					if ((is_array(search_in_array($extension['plugin'], $arrModules, true, 'path')))) $blnInstallable = false;
+				} elseif($extension['category'] == 7){
+					$strCategoryIcon = '<i class="fa fa-gamepad"></i>';
+					if (in_array($extension['plugin'], $arrGames)) $blnInstallable = false;
+				} elseif($extension['category'] == 11){
+					$strCategoryIcon = '<i class="fa fa-globe"></i>';
+					if (isset($arrLanguages[$extension['plugin']])) $blnInstallable = false;
+				}
+				
+				$dep = array();
+				$dep['plusv']	= (version_compare($extension['dep_coreversion'], $this->config->get('plus_version'), '<='));
+				
+				$depout = "";
+				foreach($dep as $key => $depdata) {
+					$tt = (isset($deptt[$key])) ? $deptt[$key] : $this->user->lang('plug_dep_'.$key);
+					if(!$depdata){
+						$depout .= '<span class="coretip" data-coretip="'.$tt.'">'.$this->user->lang('plug_dep_'.$key.'_short').'</span> ';
+					}
+				}
+				
+				$dl_link = '<a href="javascript:repo_install('.$extension['plugin_id'].', '.$extension['category'].', \''.sanitize($extension['plugin']).'\');" ><i class="fa fa-toggle-off fa-lg" title="'.$this->user->lang('install').'"></i></a>';
+				$link = ($dep['plusv']) ? $dl_link : '';
+				$this->tpl->assign_block_vars('plugins_search_row', array(
+						'NAME'				=> '<a href="javascript:repoinfo('.$intExtension.')">'.$extension['name'].'</a>',
+						'VERSION'			=> sanitize($extension['version']),
+						'CATEGORY'			=> $this->user->lang('pi_category_'.$extension['category']),
+						'CATEGORY_ICON'		=> $strCategoryIcon,
+						'CODE'				=> sanitize($extension['plugin']),
+						'CONTACT'			=> sanitize($extension['author']),
+						'DESCRIPTION'		=> sanitize($extension['description']),
+						'ACTION_LINK'		=> ($blnInstallable) ? $link : '',
+						'BUGTRACKER_URL'	=> sanitize($extension['bugtracker_url']),
+						'DEPENDENCIES'		=> ($dep['plusv']) ? '<i class="fa fa-lg fa-check icon-color-green"></i>' : '<i class="fa fa-lg fa-times icon-color-red"></i> '.$depout,	
+				));
+			}
+	
+			$this->tpl->assign_vars(array(
+					'S_SHOW_EXT_SEARCH'		=> true,
+					'SEARCH_COUNT'			=> count($arrSearchResults),
+					'S_EXT_SEARCH_VAL'		=> sanitize($this->in->get('search')),
+			));
+
+		}
 
 		//=================================================================
 		//Common Output
@@ -1025,6 +1087,9 @@ class Manage_Extensions extends page_generic {
 		$this->jquery->Tab_header('plus_plugins_tab', true);
 		if ($this->in->exists('tab')){
 			$this->jquery->Tab_Select('plus_plugins_tab', $this->in->get('tab',0));
+		}
+		if($this->in->get('search') != ""){
+			$this->jquery->Tab_Select('plus_plugins_tab', 6);
 		}
 		
 		$this->jquery->Dialog('update_confirm', '', array('custom_js'	=> 'repo_update_start(extid, cat, extensioncode);', 'message'	=> $this->user->lang('repo_updatewarning').'<br /><br /><input type="checkbox" onclick="hide_update_warning(this.checked);" value="1" />'.$this->user->lang('repo_hide_updatewarning'), 'withid'	=> 'extid, cat, extensioncode', 'width'=> 300, 'height'=>300), 'confirm');

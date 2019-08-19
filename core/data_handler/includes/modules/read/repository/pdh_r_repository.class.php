@@ -27,7 +27,7 @@ if ( !class_exists( "pdh_r_repository" ) ) {
 	class pdh_r_repository extends pdh_r_generic{
 
 		public $default_lang = 'english';
-		public $repository;
+		public $repository, $tags;
 
 		public $hooks = array(
 			'repository_update'
@@ -41,6 +41,8 @@ if ( !class_exists( "pdh_r_repository" ) ) {
 		public function init(){
 			// disable for now until repository.php is fully converted
 			$this->repository	= $this->pdc->get('pdh_repository_table');
+			$this->tags				= $this->pdc->get('pdh_repository_table.tags');
+			
 			if($this->repository !== NULL){
 				return true;
 			}
@@ -58,17 +60,25 @@ if ( !class_exists( "pdh_r_repository" ) ) {
 						'changelog'		=> $row['changelog'],
 						'lastupdate'	=> $row['updated'],
 						'description'	=> $row['description'],
-						'category'		=> $row['category'],
+						'category'		=> (int)$row['category'],
 						'level'			=> $row['level'],
 						'rating'		=> $row['rating'],
 						'dep_coreversion'=> $row['dep_coreversion'],
 						'dep_php'		=> $row['dep_php'],
 						'plugin_id'		=> $row['plugin_id'],
 						'bugtracker_url'=> $row['bugtracker_url'],
+						'tags'			=> $row['tags'],
 					);
+					
+					$arrTags = unserialize($row['tags']);
+					foreach($arrTags as $elem){
+						if ($elem != "") $this->tags[$elem][(int)$row['id']] = (int)$row['id'];
+					}
+					$this->repository[(int)$row['category']][$row['id']]['tags'] = unserialize($row['tags']);
 				}
 				
 				$this->pdc->put('pdh_repository_table', $this->repository, null);
+				$this->pdc->put('pdh_repository_table.tags', $this->tags, null);
 			}
 		}
 
@@ -103,6 +113,25 @@ if ( !class_exists( "pdh_r_repository" ) ) {
 			if(isset($this->repository[$cat][$id])){
 				return $this->repository[$cat][$id]['bugtracker_url'];
 			}
+		}
+		
+		public function get_search($strQuery){
+			$arrOut = array();
+			foreach($this->repository as $intCategory => $arrCategory){
+				foreach($arrCategory as $intExtension => $arrExtension){
+					if(stripos($arrExtension['description'], $strQuery) !== false || stripos($arrExtension['name'], $strQuery) !== false || stripos($arrExtension['plugin'], $strQuery) !== false){
+						$arrOut[$intExtension] = $arrExtension;
+					}
+					
+					foreach($arrExtension['tags'] as $strTags){
+						if(stripos($strTags, $strQuery) !== false){
+							$arrOut[$intExtension] = $arrExtension;
+						}
+					}
+				}
+			}
+
+			return $arrOut;
 		}
 	}//end class
 }//end if

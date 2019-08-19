@@ -266,8 +266,6 @@ $(function(){
 });
 //]]>
 </script>
-
-
 <div class="infobox infobox-large infobox-red clearfix" id="lu_error" style="display:none;">
 	<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> <span id="lu_error_label"></span>
 </div>
@@ -276,6 +274,9 @@ $(function(){
 	<span class="nl_progressbar_label"><i class="fa fa-spinner fa-spin fa-lg" id="lu_loading_img"></i> &nbsp;<span id="nl_progressbar_label">{L_liveupdate}...</span></span>
 </div>
 <!-- IF S_NORMAL_HEADER -->
+<div class="floatLeft">
+	<form action="" method="post"><input type="text" name="search" /><button class="mainoption" type="submit"><i class="fa fa-search"></i>{L_search}</button></form>
+</div>
 <div class="floatRight">
 	<button type="button" class="update-all-btn mainoption" onclick="start_auto_update();" ><i class="fa fa-refresh"></i> {L_update_all_extensions}</button>
 </div>
@@ -290,6 +291,9 @@ $(function(){
 		<li><a href='#fragment-7'><span><i class="fa fa-gamepad"></i> {L_CATEGORY_7}</span>{BADGE_7}</a></li>
 		<li><a href='#fragment-11'><span><i class="fa fa-globe"></i> {L_CATEGORY_11}</span>{BADGE_11}</a></li>
 		<li><a href='#fragment-upload'><span><i class="fa fa-upload"></i> {L_pi_manualupload}</span></a></li>
+		<!-- IF S_SHOW_EXT_SEARCH -->
+		<li><a href='#fragment-search'><span><i class="fa fa-search"></i> {L_search}</span></a></li>
+		<!-- ENDIF -->
 	</ul>
 	<!-- ENDIF -->
 	<!-- IF S_SHOW_CAT_1 -->
@@ -886,4 +890,36 @@ $(function(){
 		  </form>
 	</div>
 	<!-- ENDIF -->
+	
+	<!-- IF S_SHOW_EXT_SEARCH -->
+	<div id="fragment-search">
+		<div class="contentHeader">
+			<h1 class="contentTitle">{L_search} "{S_EXT_SEARCH_VAL}" <span class="bubble">{SEARCH_COUNT}</span></h1>
+		</div>
+
+		<table class="table fullwidth colorswitch">
+		<tr>
+			<th class="left" style="width:16px">{L_action}</th>
+			<th class="left">{L_name}</th>
+			<th class="left">{L_category}</th>
+			<th class="hiddenSmartphone left">{L_description}</th>
+			<th class="left">{L_version}</th>
+			<th class="hiddenSmartphone left">{L_plug_dep_title}</th>
+			<th class="hiddenSmartphone left">{L_portalplugin_author}</th>
+		</tr>
+		<!-- BEGIN plugins_search_row -->
+		<tr>
+			<td class="nowrap desktopOnly">{plugins_search_row.ACTION_LINK}</td>
+			<td>{plugins_search_row.NAME}</td>
+			<td class="nowrap">{plugins_search_row.CATEGORY_ICON} {plugins_search_row.CATEGORY}</td>
+			<td class="hiddenSmartphone">{plugins_search_row.DESCRIPTION}</td>
+			<td>{plugins_search_row.VERSION}</td>
+			<td>{plugins_search_row.DEPENDENCIES}</td>
+			<td class="hiddenSmartphone">{plugins_search_row.CONTACT}</td>
+		</tr>
+		<!-- END plugins_search_row -->
+		</table>
+	</div>
+	<!-- ENDIF -->
+	
 </div>
