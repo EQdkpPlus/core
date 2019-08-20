@@ -483,7 +483,7 @@ class user extends gen_class {
 						'size'		=> 40,
 						'id'		=> 'oldpassword',
 						'required'	=> false,
-						'pattern'	=> 'password',
+						'pattern'	=> '',
 					),
 					'new_password' => array(
 						'type'		=> 'password',

@@ -364,6 +364,9 @@ class Manage_Users extends page_generic {
 			$this->core->message($this->user->lang('error_set_new_pw'), $this->user->lang('error'), 'red');
 			$this->display();
 		}
+		
+		//Destroy other sessions
+		$this->user->destroyUserSessions($this->in->get('u'));
 
 		//Set a random password, as this method should be used if an account is compromised.
 		$user_salt = $this->user->generate_salt();
@@ -660,7 +663,7 @@ class Manage_Users extends page_generic {
 				$query_ary['user_login_key'] = '';
 
 				//Destroy other sessions
-				$this->user->destroyOtherSessions();
+				$this->user->destroyUserSessions($user_id);
 			}
 
 			$query_ary['user_email']	= $this->encrypt->encrypt($values['user_email']);

@@ -358,7 +358,7 @@ $(document).ready(function()
 	outputResult();
 	$("#password1").bind("keyup", checkVal);
 	var w = $("#password1").width();
-	complexity.width(w);
+	complexity.width(Math.round(w));
 
 function checkVal()
 {

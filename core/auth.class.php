@@ -347,7 +347,7 @@ class auth extends user {
 	 */
 	public function destroyUserSessions($intUserID){
 		$this->db->prepare("DELETE FROM __sessions WHERE session_user_id=?")->execute($intUserID);
-		
+		$this->user->updateAutologinKey($intUserID, '');
 		return true;
 	}
 	
@@ -367,6 +367,8 @@ class auth extends user {
 		} else {
 			$this->destroyUserSessions($intUserID);
 		}
+		
+		$this->user->updateAutologinKey($intUserID, '');
 		
 		return true;
 	}
