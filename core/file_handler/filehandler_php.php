@@ -110,9 +110,9 @@ if (!class_exists("filehandler_php")) {
 			$this->make_index($folder, $plugin);
 			//Create a .htaccess
 			if($deny_all){
-				$htaccess = $this->FilePath($folder.'/.htaccess', $plugin, true);
-				if(!file_exists($htaccess)){
-					$blnWritten = $this->putContent($htaccess, "<Files *>\nOrder Allow,Deny\nDeny from All\n</Files>\n");
+				$htaccess = $this->FilePath($folder.'/.htaccess', $plugin, false);
+				if(!file_exists($htaccess) || filesize($htaccess) === 0){
+					$blnWritten = $this->putContent($htaccess, "<IfModule !mod_authz_host.c>\nDeny from all\n</IfModule>\n\n<IfModule mod_authz_host.c>\nRequire all denied\n</IfModule>");
 					return $blnWritten;
 				}
 				return true;

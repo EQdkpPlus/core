@@ -1,3 +1,11 @@
-<Files "*.*">
-Allow from all
-</Files>
+<IfModule !mod_authz_host.c>
+	<Files "*.*">
+	Allow from all
+	</Files>
+</IfModule>
+
+<IfModule mod_authz_host.c>
+	<Files "*.*">
+	Require all granted
+	</Files>
+</IfModule>

@@ -1,7 +1,21 @@
-<Files "*.*">
-Deny from all
-</Files>
+<IfModule !mod_authz_host.c>
+	<Files "*.*">
+	Deny from all
+	</Files>
 
-<FilesMatch "\.(js)$">
-Allow from all
-</FilesMatch>
+	<FilesMatch "\.(js)$">
+	Allow from all
+	</FilesMatch>
+</IfModule>
+
+<IfModule mod_authz_host.c>
+	
+	<Files "*.*">
+	Require all denied
+	</Files>
+
+	<FilesMatch "\.(js)$">
+	Require all granted
+	</FilesMatch>
+	
+</IfModule>
