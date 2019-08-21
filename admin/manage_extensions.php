@@ -330,7 +330,11 @@ class Manage_Extensions extends page_generic {
 			
 			$this->pdl->log('repository', '4. Target for '.$this->code.' is '.$target);
 			if($target){
-				$result = $this->repo->full_copy($srcFolder, $target);
+				if((int)$this->in->get('cat', 0) === 11){
+					$result = $this->repo->installLanguage($srcFolder);
+				} else {
+					$result = $this->repo->full_copy($srcFolder, $target);
+				}
 				
 				if((int)$this->in->get('cat', 0) === 2){
 					//Copy package.xml file
@@ -973,8 +977,9 @@ class Manage_Extensions extends page_generic {
 					$link = '<a href="javascript:repo_update('.$allUpdates[$plugin_code]['plugin_id'].',11, \''.$plugin_code.'\');" class="needs_update" data-id="'.$allUpdates[$plugin_code]['plugin_id'].'" data-category="11" data-code="'.$plugin_code.'"  title="'.$this->user->lang('uc_bttn_update').'"><i class="fa fa-refresh fa-lg"></i></a>';
 					$arrUpdateCount[11]['yellow'] ++;
 				} else {
+					$intExtensionID = (isset($arrExtensionListNamed[11][$plugin_code])) ? $arrExtensionListNamed[11][$plugin_code] : false;
 						$row = 'green';
-						$link = '';
+						$link = ($intExtensionID) ? '<a href="javascript:repo_update('.$arrExtensionList['11'][$intExtensionID]['plugin_id'].',11, \''.$plugin_code.'\');" class="needs_update" data-id="'.$allUpdates[$plugin_code]['plugin_id'].'" data-category="11" data-code="'.$plugin_code.'"  title="'.$this->user->lang('uc_bttn_update').'"><i class="fa fa-refresh fa-lg"></i></a>' : '';
 				}
 
 				$intLanguages++;

@@ -669,6 +669,48 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 			return true;
 		}
 		
+		public function installLanguage($source){
+			$arrFolders = scandir($source);
+			foreach($arrFolders as $strSubfolder){
+				if($strSubfolder == '.' || $strSubfolder == '..') continue;
+				
+				if($strSubfolder == 'core') $this->full_copy($source.'core', $this->root_path.'core/');
+				if($strSubfolder == 'language') $this->full_copy($source.'language', $this->root_path.'language/');
+				if($strSubfolder == 'maintenance') $this->full_copy($source.'maintenance', $this->root_path.'maintenance/');
+				
+				if($strSubfolder == 'games') {
+					$arrGames = scandir($source.'games');
+					foreach($arrGames as $strGame){
+						if($strGame == '.' || $strGame == '..') continue;
+						if(is_dir($this->root_path.'games/'.$strGame.'/')){
+							$this->full_copy($source.'games/'.$strGame, $this->root_path.'games/'.$strGame);
+						}
+					}
+				}
+				
+				if($strSubfolder == 'portal') {
+					$arrGames = scandir($source.'portal');
+					foreach($arrGames as $strGame){
+						if($strGame == '.' || $strGame == '..') continue;
+						if(is_dir($this->root_path.'portal/'.$strGame.'/')){
+							$this->full_copy($source.'portal/'.$strGame, $this->root_path.'portal/'.$strGame);
+						}
+					}
+				}
+				
+				if($strSubfolder == 'plugins') {
+					$arrGames = scandir($source.'plugins');
+					foreach($arrGames as $strGame){
+						if($strGame == '.' || $strGame == '..') continue;
+						if(is_dir($this->root_path.'plugins/'.$strGame.'/')){
+							$this->full_copy($source.'plugins/'.$strGame, $this->root_path.'plugins/'.$strGame);
+						}
+					}
+				}
+			}
+			return true;
+		}
+		
 		public function checkRequirementsForNewCore($strRequirementsString, $updates){			
 			if(!$strRequirementsString || $strRequirementsString == "") return true;
 			
