@@ -1892,5 +1892,6 @@ $lang = array(
 "core_sett_f_stopforumspam_action" => "StopForumSpam - Aktion bei verdächtiger Registrierung",
 "stopforumspam_action_deny" => "Registrierung verweigern",
 "stopforumspam_action_disable" => "Benutzer anlegen, aber gesperrt",
+"extensions_install_language_info" => "Wenn weitere Sprachen installiert werden, werden Sprachdateien nur für die aktuell installierten Erweiterungen abgerufen. Durch das Aktualisieren der Sprache kannst du die Sprachdateien für neu hinzugekommene Erweiterungen jederzeit hinzufügen.",
 );
 ?>

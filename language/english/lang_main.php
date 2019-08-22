@@ -30,9 +30,7 @@ if (!defined('EQDKP_INC')) {
 //Source-Language: german
 
 $lang = array(
-
-'LANG_VERSION' => '2.0.0.7',
-"LANG_VERSION" => '2.0.0.7',
+"LANG_VERSION" => '2.3.14.0',
 	"XML_LANG" => 'en',
 	"ISO_LANG_SHORT" => 'en_EN',
 	"ISO_LANG_NAME" => 'English',

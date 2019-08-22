@@ -1893,6 +1893,8 @@ $lang = array(
 		"user_sett_fs_notifications_comment" => "Comments",
 		"user_sett_fs_notifications_user" => "User",
 		"user_sett_fs_notifications_userwall" => "Userwall",
+		"extensions_install_language_info" => "When installing new languages, language files for the current installed extensions are downloaded. You can refresh the language to download the language files for newly installed extensions at any time.",
+		
 );
 
 ?>
