@@ -71,8 +71,10 @@ if ( !class_exists( "pdh_r_repository" ) ) {
 					);
 					
 					$arrTags = unserialize($row['tags']);
-					foreach($arrTags as $elem){
-						if ($elem != "") $this->tags[$elem][(int)$row['id']] = (int)$row['id'];
+					if($arrTags && is_array($arrTags)){
+						foreach($arrTags as $elem){
+							if ($elem != "") $this->tags[$elem][(int)$row['id']] = (int)$row['id'];
+						}
 					}
 					$this->repository[(int)$row['category']][$row['id']]['tags'] = unserialize($row['tags']);
 				}

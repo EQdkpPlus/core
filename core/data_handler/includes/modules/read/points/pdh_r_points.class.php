@@ -154,6 +154,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 			}
 			
 			$this->points[$multidkp_id] = $arrLocalPoints = array();
+			$arrLocalPoints[$multidkp_id] = array();
 			$mdkpids = $this->pdh->maget('multidkp', array('event_ids', 'itempool_ids'), 0, array($this->pdh->get('multidkp', 'id_list')));
 			
 			$arrMultidkpData = $mdkpids[$multidkp_id];
@@ -194,6 +195,8 @@ if ( !class_exists( "pdh_r_points" ) ) {
 					$objQuery = $this->db->prepare("SELECT SUM(adjustment_value) AS sum,event_id,member_id FROM __adjustments WHERE event_id :in GROUP BY member_id, event_id")->in($evip['event_ids'])->execute();
 					if($objQuery){
 						while($row = $objQuery->fetchAssoc()){
+							if(!isset($arrLocalPoints[$dkp_id][$row['member_id']]))
+								$arrLocalPoints[$dkp_id][$row['member_id']]['single']['adjustment'][0] = 0;
 							$arrLocalPoints[$dkp_id][$row['member_id']]['single']['adjustment'][0] += $row['sum'];
 							$arrLocalPoints[$dkp_id][$row['member_id']]['single']['adjustment'][$row['event_id']] = $row['sum'];
 						}
@@ -226,6 +229,8 @@ if ( !class_exists( "pdh_r_points" ) ) {
 					$objQuery = $this->db->prepare("SELECT SUM(r.raid_value) as sum,r.event_id,ra.member_id FROM __raids r, __raid_attendees ra WHERE ra.raid_id = r.raid_id AND r.event_id :in GROUP BY ra.member_id,r.event_id")->in($evip['event_ids'])->execute();
 					if($objQuery){
 						while($row = $objQuery->fetchAssoc()){
+							if(!isset($arrLocalPoints[$dkp_id][$row['member_id']]['single']['earned'][0]))
+								$arrLocalPoints[$dkp_id][$row['member_id']]['single']['earned'][0] = 0;
 							$arrLocalPoints[$dkp_id][$row['member_id']]['single']['earned'][0] += $row['sum'];
 							$arrLocalPoints[$dkp_id][$row['member_id']]['single']['earned'][$row['event_id']] = $row['sum'];
 						}
