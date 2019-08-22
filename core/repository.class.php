@@ -190,7 +190,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 								'version_ext'		=> (isset($ext->version_ext)) ? $ext->version_ext : $ext->version,
 								'dep_php'			=> ($ext->dep_php) ? $ext->dep_php : '',
 								'bugtracker_url'	=> (string)$ext->bugtracker_url,
-								'tags'				=> (string)$ext->tags,
+								'tags'				=> (isset($ext->tags)) ? (string)$ext->tags : serialize(array()),
 							)));
 						}
 					}
