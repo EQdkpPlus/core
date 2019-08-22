@@ -125,9 +125,11 @@ if ( !class_exists( "pdh_r_repository" ) ) {
 						$arrOut[$intExtension] = $arrExtension;
 					}
 					
-					foreach($arrExtension['tags'] as $strTags){
-						if(stripos($strTags, $strQuery) !== false){
-							$arrOut[$intExtension] = $arrExtension;
+					if(is_array($arrExtension['tags'])){
+						foreach($arrExtension['tags'] as $strTags){
+							if(stripos($strTags, $strQuery) !== false){
+								$arrOut[$intExtension] = $arrExtension;
+							}
 						}
 					}
 				}
