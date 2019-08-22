@@ -47,7 +47,7 @@ class update_23150 extends sql_update_task {
 		
 		// init SQL querys
 		$this->sqls = array(
-				1	=> "ALTER TABLE `__repository` ADD COLUMN `tags` TEXT NULL AFTER `bugtracker_url`;",
+				1	=> "ALTER TABLE `__repository` ADD COLUMN `tags` TEXT NULL;",
 		);
 	}
 	
