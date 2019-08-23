@@ -219,6 +219,11 @@ class reset_eqdkp extends page_generic {
 		$this->pdh->put('calendar_raids_templates', 'reset');
 		$this->pdh->put('calendars', 'reset');
 	}
+	
+	public function reset__multipools(){
+		$this->pdh->put('multidkp', 'reset');
+		$this->db->prepare("INSERT INTO __multidkp (`multidkp_id`, `multidkp_name`, `multidkp_desc`) VALUES ('1', 'Default', 'Default-Pool');")->execute();
+	}
 
 	public function reset__logs() {
 		$this->pdh->put('logs', 'truncate_log');

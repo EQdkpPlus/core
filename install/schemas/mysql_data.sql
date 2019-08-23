@@ -83,7 +83,7 @@ INSERT INTO `__links` (`link_id`, `link_url`, `link_name`, `link_window`, `link_
 
 
 #multidkp-pool
-INSERT INTO __multidkp (`multidkp_id`, `multidkp_name`, `multidkp_desc`) VALUES ('1', 'def', 'Default-Pool');
+INSERT INTO __multidkp (`multidkp_id`, `multidkp_name`, `multidkp_desc`) VALUES ('1', 'Default', 'Default-Pool');
 
 #itempools
 INSERT INTO __itempool (`itempool_name`, `itempool_desc`) VALUES ('default', 'Default itempool');

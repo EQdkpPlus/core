@@ -58,7 +58,7 @@ class points_pageobject extends pageobject {
 		} else {
 			$mdkpid = $this->in->get('mdkpid', 0);
 		}
-
+		
 		//redirect on member compare
 		if($this->in->exists('compare_b') && $this->in->get('compare_b') == $this->user->lang('compare_members')){
 			if($this->in->exists('selected_ids')){
@@ -73,6 +73,10 @@ class points_pageobject extends pageobject {
 		
 		//Multidkp selection output
 		$multilist = $this->pdh->get('multidkp', 'id_list', array());
+		if(!count($multilist)){
+			message_die('No MultiDKP Pool created. Please create a MultiDKP Pool.');
+			return;
+		}
 		
 		if($mdkpid == 0){
 			$hptt_page_settings = $this->pdh->get_page_settings('listmembers', 'hptt_listmembers_memberlist_overview');
