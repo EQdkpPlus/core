@@ -190,7 +190,7 @@ class Manage_Multidkp extends page_generic {
 		if(!$mdkp['desc']) {
 			$missing[] = $this->user->lang('description');
 		}
-		if(!$mdkp['events']) {
+		if(!$mdkp['events'] || (in_array("", $mdkp['events']))) {
 			$missing[] = $this->user->lang('events');
 		}
 		if(isset($missing) AND !$norefresh) {

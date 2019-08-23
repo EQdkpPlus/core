@@ -318,8 +318,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 				}
 				$with_twink = 'single';
 			}
-
-			if(!isset($this->points[$multidkp_id][$member_id][$with_twink]['spent'][$event_id][$itempool_id])) return 0;
+			if(!isset($this->points[$multidkp_id][$member_id][$with_twink]['spent'][$event_id][$itempool_id]) || $multidkp_id == 0 || is_array($this->points[$multidkp_id][$member_id][$with_twink]['spent'][$event_id][$itempool_id])) return 0;
 			return $this->points[$multidkp_id][$member_id][$with_twink]['spent'][$event_id][$itempool_id];
 		}
 
@@ -342,7 +341,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 				$with_twink = 'single';
 			}
 
-			if(!isset($this->points[$multidkp_id][$member_id][$with_twink]['adjustment'][$event_id])) return 0;
+			if(!isset($this->points[$multidkp_id][$member_id][$with_twink]['adjustment'][$event_id]) || $multidkp_id == 0 || is_array($this->points[$multidkp_id][$member_id][$with_twink]['adjustment'][$event_id])) return 0;
 			return $this->points[$multidkp_id][$member_id][$with_twink]['adjustment'][$event_id];
 		}
 
