@@ -1,9 +1,9 @@
 <?php
 /**
- * Part of the Joomla Framework Filter Package
+ * Joomla! Content Management System
  *
- * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
- * @license    GNU General Public License version 2 or later; see LICENSE
+ * @copyright  Copyright (C) 2005 - 2019 Open Source Matters, Inc. All rights reserved.
+ * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 /**
@@ -12,176 +12,70 @@
  * Forked from the php input filter library by: Daniel Morris <dan@rootcube.com>
  * Original Contributors: Gianpaolo Racca, Ghislain Picard, Marco Wandschneider, Chris Tobin and Andrew Eddie.
  *
- * @since  1.0
+ * @since  1.7.0
  */
 class FilterInput
 {
 	/**
-	 * Defines the InputFilter instance should use a whitelist method for sanitising tags.
+	 * A flag for Unicode Supplementary Characters (4-byte Unicode character) stripping.
 	 *
 	 * @var    integer
-	 * @since  1.3.0
-	 */
-	const TAGS_WHITELIST = 0;
-	
-	/**
-	 * Defines the InputFilter instance should use a blacklist method for sanitising tags.
 	 *
-	 * @var    integer
-	 * @since  1.3.0
+	 * @since  3.5
 	 */
-	const TAGS_BLACKLIST = 1;
+	public $stripUSC = 0;
 	
 	/**
-	 * Defines the InputFilter instance should use a whitelist method for sanitising attributes.
-	 *
-	 * @var    integer
-	 * @since  1.3.0
-	 */
-	const ATTR_WHITELIST = 0;
-	
-	/**
-	 * Defines the InputFilter instance should use a blacklist method for sanitising attributes.
-	 *
-	 * @var    integer
-	 * @since  1.3.0
-	 */
-	const ATTR_BLACKLIST = 1;
-	
-	/**
-	 * A container for InputFilter instances.
-	 *
-	 * @var    InputFilter[]
-	 * @since  1.0
-	 * @deprecated  1.2.0
-	 */
-	protected static $instances = array();
-	
-	/**
-	 * The array of permitted tags (whitelist).
-	 *
-	 * @var    array
-	 * @since  1.0
-	 */
-	public $tagsArray;
-	
-	/**
-	 * The array of permitted tag attributes (whitelist).
-	 *
-	 * @var    array
-	 * @since  1.0
-	 */
-	public $attrArray;
-	
-	/**
-	 * The method for sanitising tags
-	 *
-	 * @var    integer
-	 * @since  1.0
-	 */
-	public $tagsMethod;
-	
-	/**
-	 * The method for sanitising attributes
-	 *
-	 * @var    integer
-	 * @since  1.0
-	 */
-	public $attrMethod;
-	
-	/**
-	 * A flag for XSS checks. Only auto clean essentials = 0, Allow clean blacklisted tags/attr = 1
-	 *
-	 * @var    integer
-	 * @since  1.0
-	 */
-	public $xssAuto;
-	
-	/**
-	 * The list of the default blacklisted tags.
-	 *
-	 * @var    array
-	 * @since  1.0
-	 */
-	public $tagBlacklist = array(
-			'applet',
-			'body',
-			'bgsound',
-			'base',
-			'basefont',
-			'canvas',
-			'embed',
-			'frame',
-			'frameset',
-			'head',
-			'html',
-			'id',
-			'iframe',
-			'ilayer',
-			'layer',
-			'link',
-			'meta',
-			'name',
-			'object',
-			'script',
-			'style',
-			'title',
-			'xml',
-	);
-	
-	/**
-	 * The list of the default blacklisted tag attributes. All event handlers implicit.
-	 *
-	 * @var    array
-	 * @since  1.0
-	 */
-	public $attrBlacklist = array(
-			'action',
-			'background',
-			'codebase',
-			'dynsrc',
-			'formaction',
-			'lowsrc',
-	);
-	
-	/**
-	 * A special list of blacklisted chars
-	 *
-	 * @var    array
-	 * @since  1.3.3
-	 */
-	private $blacklistedChars = array(
-			'&tab;',
-			'&space;',
-			'&colon;',
-			'&column;',
-	);
-	
-	/**
-	 * Constructor for InputFilter class.
+	 * Constructor for inputFilter class. Only first parameter is required.
 	 *
 	 * @param   array    $tagsArray   List of user-defined tags
 	 * @param   array    $attrArray   List of user-defined attributes
 	 * @param   integer  $tagsMethod  WhiteList method = 0, BlackList method = 1
 	 * @param   integer  $attrMethod  WhiteList method = 0, BlackList method = 1
 	 * @param   integer  $xssAuto     Only auto clean essentials = 0, Allow clean blacklisted tags/attr = 1
+	 * @param   integer  $stripUSC    Strip 4-byte unicode characters = 1, no strip = 0, ask the database driver = -1
 	 *
-	 * @since   1.0
+	 * @since   1.7.0
 	 */
-	public function __construct($tagsArray = array(), $attrArray = array(), $tagsMethod = self::TAGS_WHITELIST, $attrMethod = self::ATTR_WHITELIST,
-			$xssAuto = 1
-			)
+	public function __construct($tagsArray = array(), $attrArray = array(), $tagsMethod = 0, $attrMethod = 0, $xssAuto = 1, $stripUSC = 0)
 	{
 		// Make sure user defined arrays are in lowercase
 		$tagsArray = array_map('strtolower', (array) $tagsArray);
 		$attrArray = array_map('strtolower', (array) $attrArray);
 		
 		// Assign member variables
-		$this->tagsArray  = $tagsArray;
-		$this->attrArray  = $attrArray;
+		$this->tagsArray = $tagsArray;
+		$this->attrArray = $attrArray;
 		$this->tagsMethod = $tagsMethod;
 		$this->attrMethod = $attrMethod;
-		$this->xssAuto    = $xssAuto;
+		$this->xssAuto = $xssAuto;
+		$this->stripUSC = $stripUSC;
+	}
+	
+	/**
+	 * Returns an input filter object, only creating it if it doesn't already exist.
+	 *
+	 * @param   array    $tagsArray   List of user-defined tags
+	 * @param   array    $attrArray   List of user-defined attributes
+	 * @param   integer  $tagsMethod  WhiteList method = 0, BlackList method = 1
+	 * @param   integer  $attrMethod  WhiteList method = 0, BlackList method = 1
+	 * @param   integer  $xssAuto     Only auto clean essentials = 0, Allow clean blacklisted tags/attr = 1
+	 * @param   integer  $stripUSC    Strip 4-byte unicode characters = 1, no strip = 0, ask the database driver = -1
+	 *
+	 * @return  InputFilter  The InputFilter object.
+	 *
+	 * @since   1.7.0
+	 */
+	public static function &getInstance($tagsArray = array(), $attrArray = array(), $tagsMethod = 0, $attrMethod = 0, $xssAuto = 1, $stripUSC = -1)
+	{
+		$sig = md5(serialize(array($tagsArray, $attrArray, $tagsMethod, $attrMethod, $xssAuto)));
+		
+		if (empty(self::$instances[$sig]))
+		{
+			self::$instances[$sig] = new InputFilter($tagsArray, $attrArray, $tagsMethod, $attrMethod, $xssAuto, $stripUSC);
+		}
+		
+		return self::$instances[$sig];
 	}
 	
 	/**
@@ -210,10 +104,17 @@ class FilterInput
 	 *
 	 * @return  mixed  'Cleaned' version of input parameter
 	 *
-	 * @since   1.0
+	 * @since   1.7.0
 	 */
 	public function clean($source, $type = 'string')
 	{
+		// Strip Unicode Supplementary Characters when requested to do so
+		if ($this->stripUSC)
+		{
+			// Alternatively: preg_replace('/[\x{10000}-\x{10FFFF}]/u', "\xE2\xAF\x91", $source) but it'd be slower.
+			$source = $this->stripUSC($source);
+		}
+		
 		// Handle the type constraint cases
 		switch (strtoupper($type))
 		{
@@ -239,7 +140,6 @@ class FilterInput
 				}
 				
 				break;
-				
 			case 'UINT':
 				$pattern = '/[-+]?[0-9]+/';
 				
@@ -261,7 +161,6 @@ class FilterInput
 				}
 				
 				break;
-				
 			case 'FLOAT':
 			case 'DOUBLE':
 				$pattern = '/[-+]?[0-9]+(\.[0-9]+)?([eE][-+]?[0-9]+)?/';
@@ -284,7 +183,6 @@ class FilterInput
 				}
 				
 				break;
-				
 			case 'BOOL':
 			case 'BOOLEAN':
 				
@@ -304,7 +202,6 @@ class FilterInput
 				}
 				
 				break;
-				
 			case 'WORD':
 				$pattern = '/[^A-Z_]/i';
 				
@@ -324,7 +221,6 @@ class FilterInput
 				}
 				
 				break;
-				
 			case 'ALNUM':
 				$pattern = '/[^A-Z0-9]/i';
 				
@@ -344,7 +240,6 @@ class FilterInput
 				}
 				
 				break;
-				
 			case 'CMD':
 				$pattern = '/[^A-Z0-9_\.-]/i';
 				
@@ -366,7 +261,6 @@ class FilterInput
 				}
 				
 				break;
-				
 			case 'BASE64':
 				$pattern = '/[^A-Z0-9\/+=]/i';
 				
@@ -386,8 +280,8 @@ class FilterInput
 				}
 				
 				break;
-				
 			case 'STRING':
+				
 				if (is_array($source))
 				{
 					$result = array();
@@ -404,8 +298,8 @@ class FilterInput
 				}
 				
 				break;
-				
 			case 'HTML':
+				
 				if (is_array($source))
 				{
 					$result = array();
@@ -422,11 +316,10 @@ class FilterInput
 				}
 				
 				break;
-				
 			case 'ARRAY':
 				$result = (array) $source;
-				break;
 				
+				break;
 			case 'PATH':
 				$pattern = '/^[A-Za-z0-9_\/-]+[A-Za-z0-9_\.-]*([\\\\\/][A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$/';
 				
@@ -448,8 +341,8 @@ class FilterInput
 				}
 				
 				break;
-				
 			case 'TRIM':
+				
 				if (is_array($source))
 				{
 					$result = array();
@@ -458,19 +351,18 @@ class FilterInput
 					foreach ($source as $eachString)
 					{
 						$cleaned  = (string) trim($eachString);
-						$cleaned  = trim($cleaned, chr(0xE3) . chr(0x80) . chr(0x80));
-						$result[] = trim($cleaned, chr(0xC2) . chr(0xA0));
+						$cleaned  = StringHelper::trim($cleaned, chr(0xE3) . chr(0x80) . chr(0x80));
+						$result[] = StringHelper::trim($cleaned, chr(0xC2) . chr(0xA0));
 					}
 				}
 				else
 				{
 					$result = (string) trim($source);
-					$result = trim($result, chr(0xE3) . chr(0x80) . chr(0x80));
-					$result = trim($result, chr(0xC2) . chr(0xA0));
+					$result = StringHelper::trim($result, chr(0xE3) . chr(0x80) . chr(0x80));
+					$result = StringHelper::trim($result, chr(0xC2) . chr(0xA0));
 				}
 				
 				break;
-				
 			case 'USERNAME':
 				$pattern = '/[\x00-\x1F\x7F<>"\'%&]/';
 				
@@ -490,12 +382,12 @@ class FilterInput
 				}
 				
 				break;
-				
 			case 'RAW':
 				$result = $source;
-				break;
 				
+				break;
 			default:
+				
 				// Are we dealing with an array?
 				if (is_array($source))
 				{
@@ -504,7 +396,7 @@ class FilterInput
 						// Filter element for XSS and other 'bad' code etc.
 						if (is_string($value))
 						{
-							$source[$key] = $this->remove($this->decode($value));
+							$source[$key] = $this->_remove($this->_decode($value));
 						}
 					}
 					
@@ -516,7 +408,7 @@ class FilterInput
 					if (is_string($source) && !empty($source))
 					{
 						// Filter source for XSS and other 'bad' code etc.
-						$result = $this->remove($this->decode($source));
+						$result = $this->_remove($this->_decode($source));
 					}
 					else
 					{
@@ -532,23 +424,319 @@ class FilterInput
 	}
 	
 	/**
-	 * Function to determine if contents of an attribute are safe
+	 * Function to punyencode utf8 mail when saving content
 	 *
-	 * @param   array  $attrSubSet  A 2 element array for attribute's name, value
+	 * @param   string  $text  The strings to encode
 	 *
-	 * @return  boolean  True if bad code is detected
+	 * @return  string  The punyencoded mail
 	 *
-	 * @since   1.0
+	 * @since   3.5
 	 */
-	public static function checkAttribute($attrSubSet)
+	public function emailToPunycode($text)
 	{
-		$quoteStyle = version_compare(PHP_VERSION, '5.4', '>=') ? ENT_QUOTES | ENT_HTML401 : ENT_QUOTES;
+		$pattern = '/(("mailto:)+[\w\.\-\+]+\@[^"?]+\.+[^."?]+("|\?))/';
 		
-		$attrSubSet[0] = strtolower($attrSubSet[0]);
-		$attrSubSet[1] = html_entity_decode(strtolower($attrSubSet[1]), $quoteStyle, 'UTF-8');
+		if (preg_match_all($pattern, $text, $matches))
+		{
+			foreach ($matches[0] as $match)
+			{
+				$match  = (string) str_replace(array('?', '"'), '', $match);
+				$text   = (string) str_replace($match, \JStringPunycode::emailToPunycode($match), $text);
+			}
+		}
 		
-		return ((strpos($attrSubSet[1], 'expression') !== false && $attrSubSet[0] === 'style')
-				|| preg_match('/(?:(?:java|vb|live)script|behaviour|mocha)(?::|&colon;|&column;)/', $attrSubSet[1]) !== 0);
+		return $text;
+	}
+	
+	/**
+	 * Checks an uploaded for suspicious naming and potential PHP contents which could indicate a hacking attempt.
+	 *
+	 * The options you can define are:
+	 * null_byte                   Prevent files with a null byte in their name (buffer overflow attack)
+	 * forbidden_extensions        Do not allow these strings anywhere in the file's extension
+	 * php_tag_in_content          Do not allow `<?php` tag in content
+	 * phar_stub_in_content        Do not allow the `__HALT_COMPILER()` phar stub in content
+	 * shorttag_in_content         Do not allow short tag `<?` in content
+	 * shorttag_extensions         Which file extensions to scan for short tags in content
+	 * fobidden_ext_in_content     Do not allow forbidden_extensions anywhere in content
+	 * php_ext_content_extensions  Which file extensions to scan for .php in content
+	 *
+	 * This code is an adaptation and improvement of Admin Tools' UploadShield feature,
+	 * relicensed and contributed by its author.
+	 *
+	 * @param   array  $file     An uploaded file descriptor
+	 * @param   array  $options  The scanner options (see the code for details)
+	 *
+	 * @return  boolean  True of the file is safe
+	 *
+	 * @since   3.4
+	 */
+	public static function isSafeFile($file, $options = array())
+	{
+		$defaultOptions = array(
+				
+				// Null byte in file name
+				'null_byte'                  => true,
+				
+				// Forbidden string in extension (e.g. php matched .php, .xxx.php, .php.xxx and so on)
+				'forbidden_extensions'       => array(
+						'php', 'phps', 'pht', 'phtml', 'php3', 'php4', 'php5', 'php6', 'php7', 'phar', 'inc', 'pl', 'cgi', 'fcgi', 'java', 'jar', 'py',
+				),
+				
+				// <?php tag in file contents
+				'php_tag_in_content'         => true,
+				
+				// <? tag in file contents
+				'shorttag_in_content'        => true,
+				
+				// __HALT_COMPILER()
+				'phar_stub_in_content'        => true,
+				
+				// Which file extensions to scan for short tags
+				'shorttag_extensions'        => array(
+						'inc', 'phps', 'class', 'php3', 'php4', 'php5', 'txt', 'dat', 'tpl', 'tmpl',
+				),
+				
+				// Forbidden extensions anywhere in the content
+				'fobidden_ext_in_content'    => true,
+				
+				// Which file extensions to scan for .php in the content
+				'php_ext_content_extensions' => array('zip', 'rar', 'tar', 'gz', 'tgz', 'bz2', 'tbz', 'jpa'),
+		);
+		
+		$options = array_merge($defaultOptions, $options);
+		
+		// Make sure we can scan nested file descriptors
+		$descriptors = $file;
+		
+		if (isset($file['name']) && isset($file['tmp_name']))
+		{
+			$descriptors = self::decodeFileData(
+					array(
+							$file['name'],
+							$file['type'],
+							$file['tmp_name'],
+							$file['error'],
+							$file['size'],
+					)
+					);
+		}
+		
+		// Handle non-nested descriptors (single files)
+		if (isset($descriptors['name']))
+		{
+			$descriptors = array($descriptors);
+		}
+		
+		// Scan all descriptors detected
+		foreach ($descriptors as $fileDescriptor)
+		{
+			if (!isset($fileDescriptor['name']))
+			{
+				// This is a nested descriptor. We have to recurse.
+				if (!self::isSafeFile($fileDescriptor, $options))
+				{
+					return false;
+				}
+				
+				continue;
+			}
+			
+			$tempNames     = $fileDescriptor['tmp_name'];
+			$intendedNames = $fileDescriptor['name'];
+			
+			if (!is_array($tempNames))
+			{
+				$tempNames = array($tempNames);
+			}
+			
+			if (!is_array($intendedNames))
+			{
+				$intendedNames = array($intendedNames);
+			}
+			
+			$len = count($tempNames);
+			
+			for ($i = 0; $i < $len; $i++)
+			{
+				$tempName     = array_shift($tempNames);
+				$intendedName = array_shift($intendedNames);
+				
+				// 1. Null byte check
+				if ($options['null_byte'])
+				{
+					if (strstr($intendedName, "\x00"))
+					{
+						return false;
+					}
+				}
+				
+				// 2. PHP-in-extension check (.php, .php.xxx[.yyy[.zzz[...]]], .xxx[.yyy[.zzz[...]]].php)
+				if (!empty($options['forbidden_extensions']))
+				{
+					$explodedName = explode('.', $intendedName);
+					$explodedName =	array_reverse($explodedName);
+					array_pop($explodedName);
+					$explodedName = array_map('strtolower', $explodedName);
+					
+					/*
+					 * DO NOT USE array_intersect HERE! array_intersect expects the two arrays to
+					 * be set, i.e. they should have unique values.
+					 */
+					foreach ($options['forbidden_extensions'] as $ext)
+					{
+						if (in_array($ext, $explodedName))
+						{
+							return false;
+						}
+					}
+				}
+				
+				// 3. File contents scanner (PHP tag in file contents)
+				if ($options['php_tag_in_content']
+						|| $options['shorttag_in_content'] || $options['phar_stub_in_content']
+						|| ($options['fobidden_ext_in_content'] && !empty($options['forbidden_extensions'])))
+				{
+					$fp = @fopen($tempName, 'r');
+					
+					if ($fp !== false)
+					{
+						$data = '';
+						
+						while (!feof($fp))
+						{
+							$data .= @fread($fp, 131072);
+							
+							if ($options['php_tag_in_content'] && stripos($data, '<?php') !== false)
+							{
+								return false;
+							}
+							
+							if ($options['phar_stub_in_content'] && stripos($data, '__HALT_COMPILER()') !== false)
+							{
+								return false;
+							}
+							
+							if ($options['shorttag_in_content'])
+							{
+								$suspiciousExtensions = $options['shorttag_extensions'];
+								
+								if (empty($suspiciousExtensions))
+								{
+									$suspiciousExtensions = array(
+											'inc', 'phps', 'class', 'php3', 'php4', 'txt', 'dat', 'tpl', 'tmpl',
+									);
+								}
+								
+								/*
+								 * DO NOT USE array_intersect HERE! array_intersect expects the two arrays to
+								 * be set, i.e. they should have unique values.
+								 */
+								$collide = false;
+								
+								foreach ($suspiciousExtensions as $ext)
+								{
+									if (in_array($ext, $explodedName))
+									{
+										$collide = true;
+										
+										break;
+									}
+								}
+								
+								if ($collide)
+								{
+									// These are suspicious text files which may have the short tag (<?) in them
+									if (strstr($data, '<?'))
+									{
+										return false;
+									}
+								}
+							}
+							
+							if ($options['fobidden_ext_in_content'] && !empty($options['forbidden_extensions']))
+							{
+								$suspiciousExtensions = $options['php_ext_content_extensions'];
+								
+								if (empty($suspiciousExtensions))
+								{
+									$suspiciousExtensions = array(
+											'zip', 'rar', 'tar', 'gz', 'tgz', 'bz2', 'tbz', 'jpa',
+									);
+								}
+								
+								/*
+								 * DO NOT USE array_intersect HERE! array_intersect expects the two arrays to
+								 * be set, i.e. they should have unique values.
+								 */
+								$collide = false;
+								
+								foreach ($suspiciousExtensions as $ext)
+								{
+									if (in_array($ext, $explodedName))
+									{
+										$collide = true;
+										
+										break;
+									}
+								}
+								
+								if ($collide)
+								{
+									/*
+									 * These are suspicious text files which may have an executable
+									 * file extension in them
+									 */
+									foreach ($options['forbidden_extensions'] as $ext)
+									{
+										if (strstr($data, '.' . $ext))
+										{
+											return false;
+										}
+									}
+								}
+							}
+							
+							/*
+							 * This makes sure that we don't accidentally skip a <?php tag if it's across
+							 * a read boundary, even on multibyte strings
+							 */
+							$data = substr($data, -10);
+						}
+						
+						fclose($fp);
+					}
+				}
+			}
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * Method to decode a file data array.
+	 *
+	 * @param   array  $data  The data array to decode.
+	 *
+	 * @return  array
+	 *
+	 * @since   3.4
+	 */
+	protected static function decodeFileData(array $data)
+	{
+		$result = array();
+		
+		if (is_array($data[0]))
+		{
+			foreach ($data[0] as $k => $v)
+			{
+				$result[$k] = self::decodeFileData(array($data[0][$k], $data[1][$k], $data[2][$k], $data[3][$k], $data[4][$k]));
+			}
+			
+			return $result;
+		}
+		
+		return array('name' => $data[0], 'type' => $data[1], 'tmp_name' => $data[2], 'error' => $data[3], 'size' => $data[4]);
 	}
 	
 	/**
@@ -558,15 +746,37 @@ class FilterInput
 	 *
 	 * @return  string  'Cleaned' version of input parameter
 	 *
-	 * @since   1.0
+	 * @since       1.7.0
+	 * @deprecated  4.0 Use InputFilter::remove() instead
+	 */
+	protected function _remove($source)
+	{
+		return $this->remove($source);
+	}
+	
+	/**
+	 * Internal method to iteratively remove all unwanted tags and attributes
+	 *
+	 * @param   string  $source  Input string to be 'cleaned'
+	 *
+	 * @return  string  'Cleaned' version of input parameter
+	 *
+	 * @since   3.5
 	 */
 	protected function remove($source)
 	{
+		// Check for invalid UTF-8 byte sequence
+		if (!preg_match('//u', $source))
+		{
+			// String contains invalid byte sequence, remove it
+			$source = htmlspecialchars_decode(htmlspecialchars($source, ENT_IGNORE, 'UTF-8'));
+		}
+		
 		// Iteration provides nested tag protection
 		do
 		{
 			$temp = $source;
-			$source = $this->cleanTags($source);
+			$source = $this->_cleanTags($source);
 		}
 		while ($temp !== $source);
 		
@@ -580,83 +790,114 @@ class FilterInput
 	 *
 	 * @return  string  'Cleaned' version of input parameter
 	 *
-	 * @since   1.0
+	 * @since       1.7.0
+	 * @deprecated  4.0 Use InputFilter::cleanTags() instead
+	 */
+	protected function _cleanTags($source)
+	{
+		return $this->cleanTags($source);
+	}
+	
+	/**
+	 * Internal method to strip a string of certain tags
+	 *
+	 * @param   string  $source  Input string to be 'cleaned'
+	 *
+	 * @return  string  'Cleaned' version of input parameter
+	 *
+	 * @since   3.5
 	 */
 	protected function cleanTags($source)
 	{
 		// First, pre-process this for illegal characters inside attribute values
-		$source = $this->escapeAttributeValues($source);
+		$source = $this->_escapeAttributeValues($source);
 		
-		// In the beginning we don't really have a tag, so everything is postTag
-		$preTag = null;
-		$postTag = $source;
-		$currentSpace = false;
-		
-		// Setting to null to deal with undefined variables
-		$attr = '';
+		// In the beginning we don't really have a tag, so result is empty
+		$result = '';
+		$offset = 0;
+		$length = strlen($source);
 		
 		// Is there a tag? If so it will certainly start with a '<'.
-		$tagOpenStart = strpos($source, '<');
+		$tagOpenStartOffset = strpos($source, '<');
 		
-		while ($tagOpenStart !== false)
+		// Is there any close tag
+		$tagOpenEndOffset = strpos($source, '>');
+		
+		while ($offset < $length)
 		{
-			// Get some information about the tag we are processing
-			$preTag .= substr($postTag, 0, $tagOpenStart);
-			$postTag = substr($postTag, $tagOpenStart);
-			$fromTagOpen = substr($postTag, 1);
-			$tagOpenEnd = strpos($fromTagOpen, '>');
-			
-			// Check for mal-formed tag where we have a second '<' before the first '>'
-			$nextOpenTag = (strlen($postTag) > $tagOpenStart) ? strpos($postTag, '<', $tagOpenStart + 1) : false;
-			
-			if (($nextOpenTag !== false) && ($nextOpenTag < $tagOpenEnd))
+			// Preserve '>' character which exists before related '<'
+			if ($tagOpenEndOffset !== false && ($tagOpenStartOffset === false || $tagOpenEndOffset < $tagOpenStartOffset))
 			{
-				// At this point we have a mal-formed tag -- remove the offending open
-				$postTag = substr($postTag, 0, $tagOpenStart) . substr($postTag, $tagOpenStart + 1);
-				$tagOpenStart = strpos($postTag, '<');
+				$result .= substr($source, $offset, $tagOpenEndOffset - $offset) . '>';
+				$offset  = $tagOpenEndOffset + 1;
+				
+				// Search for a new closing indicator
+				$tagOpenEndOffset = strpos($source, '>', $offset);
+				
 				continue;
 			}
 			
-			// Let's catch any non-terminated tags and skip over them
-			if ($tagOpenEnd === false)
+			// Add safe text appearing before the '<'
+			if ($tagOpenStartOffset > $offset)
 			{
-				$postTag = substr($postTag, $tagOpenStart + 1);
-				$tagOpenStart = strpos($postTag, '<');
+				$result .= substr($source, $offset, $tagOpenStartOffset - $offset);
+				$offset  = $tagOpenStartOffset;
+			}
+			
+			// There is no more tags
+			if ($tagOpenStartOffset === false && $tagOpenEndOffset === false)
+			{
+				$result .= substr($source, $offset, $length - $offset);
+				$offset  = $length;
+				
+				break;
+			}
+			
+			// Remove every '<' character if '>' does not exists or we have '<>'
+			if ($tagOpenStartOffset !== false && $tagOpenEndOffset === false || $tagOpenStartOffset + 1 == $tagOpenEndOffset)
+			{
+				$offset++;
+				
+				// Search for a new opening indicator
+				$tagOpenStartOffset = strpos($source, '<', $offset);
+				
 				continue;
 			}
 			
-			// Do we have a nested tag?
-			$tagOpenNested = strpos($fromTagOpen, '<');
+			// Check for mal-formed tag where we have a second '<' before the '>'
+			$nextOpenStartOffset = strpos($source, '<', $tagOpenStartOffset + 1);
 			
-			if (($tagOpenNested !== false) && ($tagOpenNested < $tagOpenEnd))
+			if ($nextOpenStartOffset !== false && $nextOpenStartOffset < $tagOpenEndOffset)
 			{
-				$preTag .= substr($postTag, 0, ($tagOpenNested + 1));
-				$postTag = substr($postTag, ($tagOpenNested + 1));
-				$tagOpenStart = strpos($postTag, '<');
+				// At this point we have a mal-formed tag, skip previous '<'
+				$offset++;
+				
+				// Set a new opening indicator position
+				$tagOpenStartOffset = $nextOpenStartOffset;
+				
 				continue;
 			}
 			
 			// Let's get some information about our tag and setup attribute pairs
-			$tagOpenNested = (strpos($fromTagOpen, '<') + $tagOpenStart + 1);
-			$currentTag = substr($fromTagOpen, 0, $tagOpenEnd);
-			$tagLength = strlen($currentTag);
-			$tagLeft = $currentTag;
-			$attrSet = array();
-			$currentSpace = strpos($tagLeft, ' ');
+			// Now we have something like 'span class="" style=""', '/span', 'br/', 'br /' or 'hr disabled /'
+			$tagContent = substr($source, $offset + 1, $tagOpenEndOffset - 1 - $offset);
+			
+			// All ASCII whitespaces replace by 0x20
+			$tagNormalized = preg_replace('/\s/', ' ', $tagContent);
+			$tagLength     = strlen($tagContent);
+			$spaceOffset   = strpos($tagNormalized, ' ');
 			
 			// Are we an open tag or a close tag?
-			if (substr($currentTag, 0, 1) === '/')
+			$isClosingTag     = $tagContent[0] === '/' ? 1 : 0;
+			$isSelfClosingTag = substr($tagContent, -1) === '/' ? 1 : 0;
+			
+			if ($spaceOffset !== false)
 			{
-				// Close Tag
-				$isCloseTag = true;
-				list ($tagName) = explode(' ', $currentTag);
-				$tagName = substr($tagName, 1);
+				$tagName = substr($tagContent, $isClosingTag, $spaceOffset - $isClosingTag);
 			}
 			else
 			{
-				// Open Tag
-				$isCloseTag = false;
-				list ($tagName) = explode(' ', $currentTag);
+				$tagName = substr($tagContent, $isClosingTag, $tagLength - $isClosingTag - $isSelfClosingTag);
 			}
 			
 			/*
@@ -664,105 +905,106 @@ class FilterInput
 			 * OR no tagname
 			 * OR remove if xssauto is on and tag is blacklisted
 			 */
-			if ((!preg_match("/^[a-z][a-z0-9]*$/i", $tagName))
-					|| (!$tagName)
-					|| ((in_array(strtolower($tagName), $this->tagBlacklist)) && ($this->xssAuto)))
+			if (!$tagName
+					|| !preg_match("/^[a-z][a-z0-9]*$/i", $tagName)
+					|| ($this->xssAuto && in_array(strtolower($tagName), $this->tagBlacklist)))
 			{
-				$postTag = substr($postTag, ($tagLength + 2));
-				$tagOpenStart = strpos($postTag, '<');
+				$offset += $tagLength + 2;
+				
+				$tagOpenStartOffset = strpos($source, '<', $offset);
+				$tagOpenEndOffset   = strpos($source, '>', $offset);
 				
 				// Strip tag
 				continue;
 			}
 			
+			$attrSet = array();
+			
 			/*
 			 * Time to grab any attributes from the tag... need this section in
 			 * case attributes have spaces in the values.
 			 */
-			while ($currentSpace !== false)
+			while ($spaceOffset !== false && $spaceOffset + 1 < $tagLength)
 			{
-				$attr = '';
-				$fromSpace = substr($tagLeft, ($currentSpace + 1));
-				$nextEqual = strpos($fromSpace, '=');
-				$nextSpace = strpos($fromSpace, ' ');
-				$openQuotes = strpos($fromSpace, '"');
-				$closeQuotes = strpos(substr($fromSpace, ($openQuotes + 1)), '"') + $openQuotes + 1;
+				$attrStartOffset = $spaceOffset + 1;
 				
-				$startAtt = '';
-				$startAttPosition = 0;
-				
-				// Find position of equal and open quotes ignoring
-				if (preg_match('#\s*=\s*\"#', $fromSpace, $matches, PREG_OFFSET_CAPTURE))
+				// Find position of equal and open quote
+				if (preg_match('#= *(")[^"]*(")#', $tagNormalized, $matches, PREG_OFFSET_CAPTURE, $attrStartOffset))
 				{
-					// We have found an attribute, convert its byte position to a UTF-8 string length, using non-multibyte substr()
-					$stringBeforeAttr = substr($fromSpace, 0, $matches[0][1]);
-					$startAttPosition = strlen($stringBeforeAttr);
-					$startAtt = $matches[0][0];
-					$closeQuotePos = strpos(
-							substr($fromSpace, ($startAttPosition + strlen($startAtt))), '"'
-							);
-					$closeQuotes = $closeQuotePos + $startAttPosition + strlen($startAtt);
-					$nextEqual = $startAttPosition + strpos($startAtt, '=');
-					$openQuotes = $startAttPosition + strpos($startAtt, '"');
-					$nextSpace = strpos(substr($fromSpace, $closeQuotes), ' ') + $closeQuotes;
+					$equalOffset     = $matches[0][1];
+					$quote1Offset    = $matches[1][1];
+					$quote2Offset    = $matches[2][1];
+					$nextSpaceOffset = strpos($tagNormalized, ' ', $quote2Offset);
+				}
+				else
+				{
+					$equalOffset     = strpos($tagNormalized, '=', $attrStartOffset);
+					$quote1Offset    = strpos($tagNormalized, '"', $attrStartOffset);
+					$nextSpaceOffset = strpos($tagNormalized, ' ', $attrStartOffset);
+					
+					if ($quote1Offset !== false)
+					{
+						$quote2Offset = strpos($tagNormalized, '"', $quote1Offset + 1);
+					}
+					else
+					{
+						$quote2Offset = false;
+					}
 				}
 				
 				// Do we have an attribute to process? [check for equal sign]
-				if ($fromSpace !== '/' && (($nextEqual && $nextSpace && $nextSpace < $nextEqual) || !$nextEqual))
+				if ($tagContent[$attrStartOffset] !== '/'
+						&& ($equalOffset && $nextSpaceOffset && $nextSpaceOffset < $equalOffset || !$equalOffset))
 				{
-					if (!$nextEqual)
+					// Search for attribute without value, ex: 'checked/' or 'checked '
+					if ($nextSpaceOffset)
 					{
-						$attribEnd = strpos($fromSpace, '/') - 1;
+						$attrEndOffset = $nextSpaceOffset;
 					}
 					else
 					{
-						$attribEnd = $nextSpace - 1;
+						$attrEndOffset = strpos($tagContent, '/', $attrStartOffset);
+						
+						if ($attrEndOffset === false)
+						{
+							$attrEndOffset = $tagLength;
+						}
 					}
 					
 					// If there is an ending, use this, if not, do not worry.
-					if ($attribEnd > 0)
+					if ($attrEndOffset > $attrStartOffset)
 					{
-						$fromSpace = substr($fromSpace, $attribEnd + 1);
+						$attrSet[] = substr($tagContent, $attrStartOffset, $attrEndOffset - $attrStartOffset);
 					}
 				}
-				
-				if (strpos($fromSpace, '=') !== false)
+				elseif ($equalOffset !== false)
 				{
 					/*
-					 * If the attribute value is wrapped in quotes we need to grab the substring from the closing quote,
-					 * otherwise grab until the next space.
+					 * If the attribute value is wrapped in quotes we need to grab the substring from
+					 * the closing quote, otherwise grab until the next space.
 					 */
-					if (($openQuotes !== false)
-							&& (strpos(substr($fromSpace, ($openQuotes + 1)), '"') !== false))
+					if ($quote1Offset !== false && $quote2Offset !== false)
 					{
-						$attr = substr($fromSpace, 0, ($closeQuotes + 1));
+						// Add attribute, ex: 'class="body abc"'
+						$attrSet[] = substr($tagContent, $attrStartOffset, $quote2Offset + 1 - $attrStartOffset);
 					}
 					else
 					{
-						$attr = substr($fromSpace, 0, $nextSpace);
+						if ($nextSpaceOffset)
+						{
+							$attrEndOffset = $nextSpaceOffset;
+						}
+						else
+						{
+							$attrEndOffset = $tagLength;
+						}
+						
+						// Add attribute, ex: 'class=body'
+						$attrSet[] = substr($tagContent, $attrStartOffset, $attrEndOffset - $attrStartOffset);
 					}
 				}
-				else
-				// No more equal signs so add any extra text in the tag into the attribute array [eg. checked]
-				{
-					if ($fromSpace !== '/')
-					{
-						$attr = substr($fromSpace, 0, $nextSpace);
-					}
-				}
 				
-				// Last Attribute Pair
-				if (!$attr && $fromSpace !== '/')
-				{
-					$attr = $fromSpace;
-				}
-				
-				// Add attribute pair to the attribute array
-				$attrSet[] = $attr;
-				
-				// Move search point and continue iteration
-				$tagLeft = substr($fromSpace, strlen($attr));
-				$currentSpace = strpos($tagLeft, ' ');
+				$spaceOffset = $nextSpaceOffset;
 			}
 			
 			// Is our tag in the user input array?
@@ -772,48 +1014,242 @@ class FilterInput
 			if ((!$tagFound && $this->tagsMethod) || ($tagFound && !$this->tagsMethod))
 			{
 				// Reconstruct tag with allowed attributes
-				if (!$isCloseTag)
+				if ($isClosingTag)
 				{
-					// Open or single tag
-					$attrSet = $this->cleanAttributes($attrSet);
-					$preTag .= '<' . $tagName;
+					$result .= "</$tagName>";
+				}
+				else
+				{
+					$attrSet = $this->_cleanAttributes($attrSet);
 					
-					for ($i = 0, $count = count($attrSet); $i < $count; $i++)
+					// Open or single tag
+					$result .= '<' . $tagName;
+					
+					if ($attrSet)
 					{
-						$preTag .= ' ' . $attrSet[$i];
+						$result .= ' ' . implode(' ', $attrSet);
 					}
 					
 					// Reformat single tags to XHTML
-					if (strpos($fromTagOpen, '</' . $tagName))
+					if (strpos($source, "</$tagName>", $tagOpenStartOffset) !== false)
 					{
-						$preTag .= '>';
+						$result .= '>';
 					}
 					else
 					{
-						$preTag .= ' />';
+						$result .= ' />';
 					}
-				}
-				else
-				// Closing tag
-				{
-					$preTag .= '</' . $tagName . '>';
 				}
 			}
 			
-			// Find next tag's start and continue iteration
-			$postTag = substr($postTag, ($tagLength + 2));
-			$tagOpenStart = strpos($postTag, '<');
+			$offset += $tagLength + 2;
+			
+			if ($offset < $length)
+			{
+				// Find next tag's start and continue iteration
+				$tagOpenStartOffset = strpos($source, '<', $offset);
+				$tagOpenEndOffset   = strpos($source, '>', $offset);
+			}
 		}
 		
-		// Append any code after the end of tags and return
-		if ($postTag !== '<')
-		{
-			$preTag .= $postTag;
-		}
-		
-		return $preTag;
+		return $result;
 	}
 	
+	/**
+	 * Internal method to strip a tag of certain attributes
+	 *
+	 * @param   array  $attrSet  Array of attribute pairs to filter
+	 *
+	 * @return  array  Filtered array of attribute pairs
+	 *
+	 * @since       1.7.0
+	 * @deprecated  4.0 Use InputFilter::cleanAttributes() instead
+	 */
+	protected function _cleanAttributes($attrSet)
+	{
+		return $this->cleanAttributes($attrSet);
+	}
+	
+	/**
+	 * Escape < > and " inside attribute values
+	 *
+	 * @param   string  $source  The source string.
+	 *
+	 * @return  string  Filtered string
+	 *
+	 * @since    3.5
+	 */
+	protected function escapeAttributeValues($source)
+	{
+		$alreadyFiltered = '';
+		$remainder = $source;
+		$badChars = array('<', '"', '>');
+		$escapedChars = array('&lt;', '&quot;', '&gt;');
+		
+		/*
+		 * Process each portion based on presence of =" and "<space>, "/>, or ">
+		 * See if there are any more attributes to process
+		 */
+		while (preg_match('#<[^>]*?=\s*?(\"|\')#s', $remainder, $matches, PREG_OFFSET_CAPTURE))
+		{
+			// Get the portion before the attribute value
+			$quotePosition = $matches[0][1];
+			$nextBefore = $quotePosition + strlen($matches[0][0]);
+			
+			/*
+			 * Figure out if we have a single or double quote and look for the matching closing quote
+			 * Closing quote should be "/>, ">, "<space>, or " at the end of the string
+			 */
+			$quote = substr($matches[0][0], -1);
+			$pregMatch = ($quote == '"') ? '#(\"\s*/\s*>|\"\s*>|\"\s+|\"$)#' : "#(\'\s*/\s*>|\'\s*>|\'\s+|\'$)#";
+			
+			// Get the portion after attribute value
+			if (preg_match($pregMatch, substr($remainder, $nextBefore), $matches, PREG_OFFSET_CAPTURE))
+			{
+				// We have a closing quote
+				$nextAfter = $nextBefore + $matches[0][1];
+			}
+			else
+			{
+				// No closing quote
+				$nextAfter = strlen($remainder);
+			}
+			
+			// Get the actual attribute value
+			$attributeValue = substr($remainder, $nextBefore, $nextAfter - $nextBefore);
+			
+			// Escape bad chars
+			$attributeValue = str_replace($badChars, $escapedChars, $attributeValue);
+			$attributeValue = $this->_stripCSSExpressions($attributeValue);
+			$alreadyFiltered .= substr($remainder, 0, $nextBefore) . $attributeValue . $quote;
+			$remainder = substr($remainder, $nextAfter + 1);
+		}
+		
+		// At this point, we just have to return the $alreadyFiltered and the $remainder
+		return $alreadyFiltered . $remainder;
+	}
+	
+	/**
+	 * Try to convert to plaintext
+	 *
+	 * @param   string  $source  The source string.
+	 *
+	 * @return  string  Plaintext string
+	 *
+	 * @since       1.7.0
+	 * @deprecated  4.0 Use InputFilter::decode() instead
+	 */
+	protected function _decode($source)
+	{
+		return $this->decode($source);
+	}
+	
+	/**
+	 * Try to convert to plaintext
+	 *
+	 * @param   string  $source  The source string.
+	 *
+	 * @return  string  Plaintext string
+	 *
+	 * @since   3.5
+	 */
+	protected function decode($source)
+	{
+		static $ttr;
+		
+		if (!is_array($ttr))
+		{
+			// Entity decode
+			$trans_tbl = get_html_translation_table(HTML_ENTITIES, ENT_COMPAT, 'ISO-8859-1');
+			
+			foreach ($trans_tbl as $k => $v)
+			{
+				$ttr[$v] = utf8_encode($k);
+			}
+		}
+		
+		$source = strtr($source, $ttr);
+		
+		// Convert decimal
+		$source = preg_replace_callback('/&#(\d+);/m', function($m)
+		{
+			return utf8_encode(chr($m[1]));
+		}, $source
+		);
+		
+		// Convert hex
+		$source = preg_replace_callback('/&#x([a-f0-9]+);/mi', function($m)
+		{
+			return utf8_encode(chr(hexdec($m[1])));
+		}, $source
+		);
+		
+		return $source;
+	}
+	
+	/**
+	 * Escape < > and " inside attribute values
+	 *
+	 * @param   string  $source  The source string.
+	 *
+	 * @return  string  Filtered string
+	 *
+	 * @since       1.7.0
+	 * @deprecated  4.0 Use InputFilter::escapeAttributeValues() instead
+	 */
+	protected function _escapeAttributeValues($source)
+	{
+		return $this->escapeAttributeValues($source);
+	}
+	
+	/**
+	 * Remove CSS Expressions in the form of `<property>:expression(...)`
+	 *
+	 * @param   string  $source  The source string.
+	 *
+	 * @return  string  Filtered string
+	 *
+	 * @since       1.7.0
+	 * @deprecated  4.0 Use InputFilter::stripCSSExpressions() instead
+	 */
+	protected function _stripCSSExpressions($source)
+	{
+		return $this->stripCSSExpressions($source);
+	}
+	
+	/**
+	 * Recursively strip Unicode Supplementary Characters from the source. Not: objects cannot be filtered.
+	 *
+	 * @param   mixed  $source  The data to filter
+	 *
+	 * @return  mixed  The filtered result
+	 *
+	 * @since  3.5
+	 */
+	protected function stripUSC($source)
+	{
+		if (is_object($source))
+		{
+			return $source;
+		}
+		
+		if (is_array($source))
+		{
+			$filteredArray = array();
+			
+			foreach ($source as $k => $v)
+			{
+				$filteredArray[$k] = $this->stripUSC($v);
+			}
+			
+			return $filteredArray;
+		}
+		
+		return preg_replace('/[\xF0-\xF7].../s', "\xE2\xAF\x91", $source);
+	}
+
+	
+
 	/**
 	 * Internal method to strip a tag of certain attributes
 	 *
@@ -826,9 +1262,9 @@ class FilterInput
 	protected function cleanAttributes($attrSet)
 	{
 		$newSet = array();
-		
+
 		$count = count($attrSet);
-		
+
 		// Iterate through attribute pairs
 		for ($i = 0; $i < $count; $i++)
 		{
@@ -837,82 +1273,82 @@ class FilterInput
 			{
 				continue;
 			}
-			
+
 			// Split into name/value pairs
 			$attrSubSet = explode('=', trim($attrSet[$i]), 2);
-			
+
 			// Take the last attribute in case there is an attribute with no value
 			$attrSubSet0   = explode(' ', trim($attrSubSet[0]));
 			$attrSubSet[0] = array_pop($attrSubSet0);
-			
+
 			$attrSubSet[0] = strtolower($attrSubSet[0]);
 			$quoteStyle = version_compare(PHP_VERSION, '5.4', '>=') ? ENT_QUOTES | ENT_HTML401 : ENT_QUOTES;
-			
+
 			// Remove all spaces as valid attributes does not have spaces.
 			$attrSubSet[0] = html_entity_decode($attrSubSet[0], $quoteStyle, 'UTF-8');
 			$attrSubSet[0] = preg_replace('/^[\pZ\pC]+|[\pZ\pC]+$/u', '', $attrSubSet[0]);
 			$attrSubSet[0] = preg_replace('/\s+/u', '', $attrSubSet[0]);
-			
+
 			// Remove blacklisted chars from the attribute name
 			foreach ($this->blacklistedChars as $blacklistedChar)
 			{
 				$attrSubSet[0] = str_ireplace($blacklistedChar, '', $attrSubSet[0]);
 			}
-			
+
 			// Remove all symbols
 			$attrSubSet[0] = preg_replace('/[^\p{L}\p{N}\-\s]/u', '', $attrSubSet[0]);
-			
+
 			// Remove all "non-regular" attribute names
 			// AND blacklisted attributes
 			if ((!preg_match('/[a-z]*$/i', $attrSubSet[0]))
-					|| (($this->xssAuto) && ((in_array(strtolower($attrSubSet[0]), $this->attrBlacklist))
-							|| (substr($attrSubSet[0], 0, 2) == 'on'))))
+				|| (($this->xssAuto) && ((in_array(strtolower($attrSubSet[0]), $this->attrBlacklist))
+				|| (substr($attrSubSet[0], 0, 2) == 'on'))))
 			{
 				continue;
 			}
-			
+
 			// XSS attribute value filtering
 			if (!isset($attrSubSet[1]))
 			{
 				continue;
 			}
-			
+
 			// Remove blacklisted chars from the attribute value
 			foreach ($this->blacklistedChars as $blacklistedChar)
 			{
 				$attrSubSet[1] = str_ireplace($blacklistedChar, '', $attrSubSet[1]);
 			}
-			
+
 			// Trim leading and trailing spaces
 			$attrSubSet[1] = trim($attrSubSet[1]);
-			
+
 			// Strips unicode, hex, etc
 			$attrSubSet[1] = str_replace('&#', '', $attrSubSet[1]);
-			
+
 			// Strip normal newline within attr value
 			$attrSubSet[1] = preg_replace('/[\n\r]/', '', $attrSubSet[1]);
-			
+
 			// Strip double quotes
 			$attrSubSet[1] = str_replace('"', '', $attrSubSet[1]);
-			
+
 			// Convert single quotes from either side to doubles (Single quotes shouldn't be used to pad attr values)
 			if ((substr($attrSubSet[1], 0, 1) == "'") && (substr($attrSubSet[1], (strlen($attrSubSet[1]) - 1), 1) == "'"))
 			{
 				$attrSubSet[1] = substr($attrSubSet[1], 1, (strlen($attrSubSet[1]) - 2));
 			}
-			
+
 			// Strip slashes
 			$attrSubSet[1] = stripslashes($attrSubSet[1]);
-			
+
 			// Autostrip script tags
 			if (static::checkAttribute($attrSubSet))
 			{
 				continue;
 			}
-			
+
 			// Is our attribute in the user input array?
 			$attrFound = in_array(strtolower($attrSubSet[0]), $this->attrArray);
-			
+
 			// If the tag is allowed lets keep it
 			if ((!$attrFound && $this->attrMethod) || ($attrFound && !$this->attrMethod))
 			{
@@ -934,85 +1370,28 @@ class FilterInput
 				}
 			}
 		}
-		
+
 		return $newSet;
 	}
-	
+
 	/**
-	 * Try to convert to plaintext
+	 * Function to determine if contents of an attribute are safe
 	 *
-	 * @param   string  $source  The source string.
+	 * @param   array  $attrSubSet  A 2 element array for attribute's name, value
 	 *
-	 * @return  string  Plaintext string
-	 *
-	 * @since   1.0
-	 * @deprecated  This method will be removed once support for PHP 5.3 is discontinued.
-	 */
-	protected function decode($source)
-	{
-		return html_entity_decode($source, ENT_QUOTES, 'UTF-8');
-	}
-	
-	/**
-	 * Escape < > and " inside attribute values
-	 *
-	 * @param   string  $source  The source string.
-	 *
-	 * @return  string  Filtered string
+	 * @return  boolean  True if bad code is detected
 	 *
 	 * @since   1.0
 	 */
-	protected function escapeAttributeValues($source)
+	public static function checkAttribute($attrSubSet)
 	{
-		$alreadyFiltered = '';
-		$remainder = $source;
-		$badChars = array('<', '"', '>');
-		$escapedChars = array('&lt;', '&quot;', '&gt;');
+		$quoteStyle = version_compare(PHP_VERSION, '5.4', '>=') ? ENT_QUOTES | ENT_HTML401 : ENT_QUOTES;
 		
-		// Process each portion based on presence of =" and "<space>, "/>, or ">
-		// See if there are any more attributes to process
-		while (preg_match('#<[^>]*?=\s*?(\"|\')#s', $remainder, $matches, PREG_OFFSET_CAPTURE))
-		{
-			// We have found a tag with an attribute, convert its byte position to a UTF-8 string length, using non-multibyte substr()
-			$stringBeforeTag = substr($remainder, 0, $matches[0][1]);
-			$tagPosition = strlen($stringBeforeTag);
-			
-			// Get the character length before the attribute value
-			$nextBefore = $tagPosition + strlen($matches[0][0]);
-			
-			// Figure out if we have a single or double quote and look for the matching closing quote
-			// Closing quote should be "/>, ">, "<space>, or " at the end of the string
-			$quote = substr($matches[0][0], -1);
-			$pregMatch = ($quote == '"') ? '#(\"\s*/\s*>|\"\s*>|\"\s+|\"$)#' : "#(\'\s*/\s*>|\'\s*>|\'\s+|\'$)#";
-			
-			// Get the portion after attribute value
-			$attributeValueRemainder = substr($remainder, $nextBefore);
-			
-			if (preg_match($pregMatch, $attributeValueRemainder, $matches, PREG_OFFSET_CAPTURE))
-			{
-				// We have a closing quote, convert its byte position to a UTF-8 string length, using non-multibyte substr()
-				$stringBeforeQuote = substr($attributeValueRemainder, 0, $matches[0][1]);
-				$closeQuoteChars = strlen($stringBeforeQuote);
-				$nextAfter = $nextBefore + $matches[0][1];
-			}
-			else
-			{
-				// No closing quote
-				$nextAfter = strlen($remainder);
-			}
-			
-			// Get the actual attribute value
-			$attributeValue = substr($remainder, $nextBefore, $nextAfter - $nextBefore);
-			
-			// Escape bad chars
-			$attributeValue = str_replace($badChars, $escapedChars, $attributeValue);
-			$attributeValue = $this->stripCssExpressions($attributeValue);
-			$alreadyFiltered .= substr($remainder, 0, $nextBefore) . $attributeValue . $quote;
-			$remainder = substr($remainder, $nextAfter + 1);
-		}
+		$attrSubSet[0] = strtolower($attrSubSet[0]);
+		$attrSubSet[1] = html_entity_decode(strtolower($attrSubSet[1]), $quoteStyle, 'UTF-8');
 		
-		// At this point, we just have to return the $alreadyFiltered and the $remainder
-		return $alreadyFiltered . $remainder;
+		return ((strpos($attrSubSet[1], 'expression') !== false && $attrSubSet[0] === 'style')
+				|| preg_match('/(?:(?:java|vb|live)script|behaviour|mocha)(?::|&colon;|&column;)/', $attrSubSet[1]) !== 0);
 	}
 	
 	/**
@@ -1028,14 +1407,14 @@ class FilterInput
 	{
 		// Strip any comments out (in the form of /*...*/)
 		$test = preg_replace('#\/\*.*\*\/#U', '', $source);
-		
+
 		// Test for :expression
 		if (!stripos($test, ':expression'))
 		{
 			// Not found, so we are done
 			return $source;
 		}
-		
+
 		// At this point, we have stripped out the comments and have found :expression
 		// Test stripped string for :expression followed by a '('
 		if (preg_match_all('#:expression\s*\(#', $test, $matches))
@@ -1043,7 +1422,7 @@ class FilterInput
 			// If found, remove :expression
 			return str_ireplace(':expression', '', $test);
 		}
-		
+
 		return $source;
 	}
 }
