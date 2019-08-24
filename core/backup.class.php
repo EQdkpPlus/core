@@ -39,7 +39,7 @@ class backup extends gen_class {
 			if ($is_secure){
 				//$core->message('.htaccess has been created successfully', $user->lang('backup'),'green');
 			}else{
-				$this->core->message('.htaccess could not be created. Please check if the data-folder is writable and has CHMOD 777.',$this->user->lang('backup'),'red');
+				$this->core->message('.htaccess could not be created. Please check if the data-folder is writable.',$this->user->lang('backup'),'red');
 			}
 		} //END Check .htaccess
 	}
