@@ -744,11 +744,11 @@ class controller extends gen_class {
 
 					$strText = $arrContent[1];
 
-					$arrContent = preg_split('#<hr(.*)id="system-readmore"(.*)\/>#iU', xhtml_entity_decode($strText));
+					$arrContent = preg_split('#<hr(.*)id="system-readmore"(.*)\/>#iU', $strText);
 
 					$strText = $this->bbcode->parse_shorttags($arrContent[0]);
 					$blnPublished = $this->pdh->get('articles', 'published', array($intArticleID));
-
+					
 					//Hook to replace content
 					if ($this->hooks->isRegistered('article_parse')){
 						$arrHooks = $this->hooks->process('article_parse', array('content' => $strText, 'view' => 'category', 'article_id' => $intArticleID, 'specific_id' => $strSpecificID), true);
@@ -780,7 +780,6 @@ class controller extends gen_class {
 							$strText = str_replace($arrRaidlootObjects[0][$key], $strRaidlootContent, $strText);
 						}
 					}
-
 
 					//Replace Smilies
 					$strText = $this->bbcode->MyEmoticons($strText);
