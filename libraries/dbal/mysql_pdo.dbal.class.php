@@ -39,6 +39,14 @@ class dbal_mysql_pdo extends Database
 		
 		$arrOptions[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
 		
+		// SSL Connection to MySQL
+		if(defined('DB_SSL_USE') && DB_SSL_USE){
+			$arrOptions[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = (defined('DB_SSL_VERIFY_SERVERCERT')) ? DB_SSL_VERIFY_SERVERCERT : true;
+			$arrOptions[PDO::MYSQL_ATTR_SSL_KEY] = (defined('DB_SSL_KEY')) ? DB_SSL_KEY : '';
+			$arrOptions[PDO::MYSQL_ATTR_SSL_CERT] = (defined('DB_SSL_CERT')) ? DB_SSL_CERT : '';
+			$arrOptions[PDO::MYSQL_ATTR_SSL_CA] = (defined('DB_SSL_CA')) ? DB_SSL_CA : '';			
+		}
+		
 		try {
 			$this->resConnection = new PDO('mysql:host='.$strHost.';dbname='.$strDatabase.';charset='.$this->strCharset.$strPort, $strUser, $strPassword, $arrOptions);
 		} catch (PDOException $e) {
