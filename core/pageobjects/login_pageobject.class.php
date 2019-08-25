@@ -298,16 +298,19 @@ class login_pageobject extends pageobject {
 			$('[data-equalto]').bind('input', function() {
     var to_confirm = $(this);
     var to_equal = $('#' + to_confirm.data('equalto'));
-						
-    if(to_confirm.val() != to_equal.val())
+
+    if(to_confirm.val() != to_equal.val()){
         this.setCustomValidity(\"".$this->jquery->sanitize(registry::fetch('user')->lang('fv_required_password_repeat'))."\");
 		$(this).attr('data-fv-message', \"".$this->jquery->sanitize(registry::fetch('user')->lang('fv_required_password_repeat'))."\");
-    else
+    } else {
         this.setCustomValidity('');
+	}
 });");
 
 		$this->tpl->assign_vars(array(
 			'KEY'	=> sanitize($this->in->get('key', '')),
+			'PW_PATTERN' => '.{'.($this->config->get('password_length') ? (int)$this->config->get('password_length') : 8).',}',
+			'PASSWORD_LENGTH' => 	($this->config->get('password_length') ? (int)$this->config->get('password_length') : 8),
 		));
 
 		$this->core->set_vars([
