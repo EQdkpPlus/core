@@ -162,7 +162,7 @@ if (!class_exists("filehandler_ftp")) {
 			if($deny_all){
 				if (!$this->CheckCreateFile($folder.'/.htaccess', $plugin, false)){	
 					$htaccess = $this->FilePath($folder.'/.htaccess', $plugin, true);
-					$blnWritten = $this->putContent($htaccess, "<Files *>\nOrder Allow,Deny\nDeny from All\n</Files>\n");
+					$blnWritten = $this->putContent($htaccess, "<IfModule !mod_authz_core.c>\n<IfModule mod_authz_host.c>\nOrder Allow,Deny\nDeny from all\n</IfModule>\n</IfModule>\n<IfModule mod_authz_core.c>\nRequire all denied\n</IfModule>");
 					return $blnWritten;
 				} else {
 					return true;

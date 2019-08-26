@@ -1,10 +1,12 @@
-<IfModule !mod_authz_host.c>
+<IfModule !mod_authz_core.c>
+<IfModule mod_authz_host.c>
 	<Files "*.*">
 	Allow from all
 	</Files>
 </IfModule>
+</IfModule>
 
-<IfModule mod_authz_host.c>
+<IfModule mod_authz_core.c>
 	<Files "*.*">
 	Require all granted
 	</Files>
