@@ -290,6 +290,8 @@ class controller extends gen_class {
 
 				//Check if Published
 				$intPublished = $arrArticle['published'];
+				
+				$intCurrentUserID = (isset($this->user->data['session_perm_id']) && $this->user->data['session_perm_id'] > 0) ? intval($this->user->data['session_perm_id']) : $this->user->id;
 
 				//Check Start to/start from
 				if (($arrArticle['show_from'] != "" && $arrArticle['show_from'] > $this->time->time) || ($arrArticle['show_to'] != "" && $arrArticle['show_to'] < $this->time->time)) $intPublished = false;
@@ -301,7 +303,7 @@ class controller extends gen_class {
 				$arrCategory['name'] = $this->user->multilangValue($arrCategory['name']);
 
 				//Category Permissions
-				$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($arrArticle['category'], $this->user->id));
+				$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($arrArticle['category'], $intCurrentUserID));
 				if (!$arrPermissions['read']) message_die($this->user->lang('article_noauth'), $this->user->lang('noauth_default_title'), 'access_denied', true);
 
 				//Check Start to/start from
@@ -311,9 +313,6 @@ class controller extends gen_class {
 				$strPath = ucfirst($this->pdh->get('articles', 'path', array($intArticleID)));
 				registry::add_const('page', $this->user->removeSIDfromString($strPath));
 				registry::add_const('pageobject', 'article');
-
-				//User Memberships
-				$arrUsergroupMemberships = $this->acl->get_user_group_memberships($this->user->id);
 
 
 				//Page divisions
@@ -681,14 +680,15 @@ class controller extends gen_class {
 				$arrCategory = $this->pdh->get('article_categories', 'data', array($intCategoryID));
 				//Check if Published
 				$intPublished = $arrCategory['published'];
+				
+				$intCurrentUserID = (isset($this->user->data['session_perm_id']) && $this->user->data['session_perm_id'] > 0) ? intval($this->user->data['session_perm_id']) : $this->user->id;
 
 				if (!$intPublished) message_die($this->user->lang('category_unpublished'));
 
 				registry::add_const('categoryid', $intCategoryID);
 
 				//User Memberships
-				$arrUsergroupMemberships = $this->acl->get_user_group_memberships($this->user->id);
-				$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($intCategoryID, $this->user->id));
+				$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($intCategoryID, $intCurrentUserID));
 
 				if (!$arrPermissions['read']) message_die($this->user->lang('category_noauth'), $this->user->lang('noauth_default_title'), 'access_denied', true);
 
