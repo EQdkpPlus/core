@@ -131,7 +131,7 @@ class db_access extends install_generic {
 		include_once($this->root_path.'libraries/dbal/dbal.class.php');
 		try {
 			$db = dbal::factory(array('dbtype' => $this->dbtype));
-			$db->connect($this->dbhost, $this->dbname, $this->dbuser, $this->dbpass);
+			$db->connect($this->dbhost, $this->dbname, $this->dbuser, $this->dbpass, $this->dbport);
 		
 		} catch(DBALException $e){
 			$this->pdl->log('install_error', $e->getMessage());
