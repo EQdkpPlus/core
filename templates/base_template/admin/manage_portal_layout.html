@@ -83,7 +83,12 @@ function createEmbeddLink(){
 }
 
 </script>
-
+<style>
+.portal_block .fa-stack {
+	height: 1em;
+	width: 1em;
+}
+</style>
 <form method="post" action="{ACTION}&amp;l={LAYOUT_ID}" name="post" id="portal_layout_form"  class="fv_checkit">
 <div class="contentHeader">
 	<h1 class="contentTitle">{L_portalplugin_management}</h1>
@@ -124,7 +129,10 @@ function createEmbeddLink(){
 						<!-- IF left_row.S_CHILD -->
 						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({left_row.ID});"><i class="fa fa-trash-o fa-lg"></i></div>
 						<!-- ENDIF -->
-						<div class="floatRight" style="height: 20px; padding: 2px;"><i class="fa fa-users coretip fa-lg" data-coretip="{left_row.PERMISSIONS}"></i></div>
+						<div class="floatRight" style="height: 20px; padding: 2px;"><!-- IF left_row.S_PERMISSIONS --><i class="fa fa-users coretip fa-lg" data-coretip="{left_row.PERMISSIONS}"></i><!-- ELSE --><span class="fa-stack fa-lg" style="line-height:1em;">
+  <i class="fa fa-users fa-stack-1x"></i>
+  <i class="fa fa-ban fa-stack-1x" style="color:red"'></i>
+</span><!-- ENDIF --></i></div>
 					</div>
 						{left_row.INFO}
 						{left_row.NAME}
@@ -152,7 +160,10 @@ function createEmbeddLink(){
 						<!-- IF middle_row.S_CHILD -->
 						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({middle_row.ID});"><i class="fa fa-trash-o fa-lg"></i></div>
 						<!-- ENDIF -->
-						<div class="floatRight" style="height: 20px; padding: 2px;"><i class="fa fa-users coretip fa-lg" data-coretip="{middle_row.PERMISSIONS}"></i></div>
+						<div class="floatRight" style="height: 20px; padding: 2px;"><!-- IF middle_row.S_PERMISSIONS --><i class="fa fa-users coretip fa-lg" data-coretip="{middle_row.PERMISSIONS}"></i><!-- ELSE --><span class="fa-stack fa-lg" style="line-height:1em;">
+  <i class="fa fa-users fa-stack-1x"></i>
+  <i class="fa fa-ban fa-stack-1x" style="color:red"'></i>
+</span><!-- ENDIF --></div>
 					</div>
 						{middle_row.INFO}
 						{middle_row.NAME}
@@ -182,7 +193,10 @@ function createEmbeddLink(){
 						<!-- IF bottom_row.S_CHILD -->
 						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({bottom_row.ID});"><i class="fa fa-trash-o fa-lg"></i></div>
 						<!-- ENDIF -->
-						<div class="floatRight" style="height: 20px; padding: 2px;"><i class="fa fa-users coretip fa-lg" data-coretip="{bottom_row.PERMISSIONS}"></i></div>
+						<div class="floatRight" style="height: 20px; padding: 2px;"><!-- IF bottom_row.S_PERMISSIONS --><i class="fa fa-users coretip fa-lg" data-coretip="{bottom_row.PERMISSIONS}"></i><!-- ELSE --><span class="fa-stack fa-lg" style="line-height:1em;">
+  <i class="fa fa-users fa-stack-1x"></i>
+  <i class="fa fa-ban fa-stack-1x" style="color:red"'></i>
+</span><!-- ENDIF --></div>
 					</div>
 						{bottom_row.INFO}
 						{bottom_row.NAME}
@@ -210,7 +224,10 @@ function createEmbeddLink(){
 						<!-- IF right_row.S_CHILD -->
 						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({right_row.ID});"><i class="fa fa-trash-o fa-lg"></i></div>
 						<!-- ENDIF -->
-						<div class="floatRight" style="height: 20px; padding: 2px;"><i class="fa fa-users coretip fa-lg" data-coretip="{right_row.PERMISSIONS}"></i></div>
+						<div class="floatRight" style="height: 20px; padding: 2px;"><!-- IF right_row.S_PERMISSIONS --><i class="fa fa-users coretip fa-lg" data-coretip="{right_row.PERMISSIONS}"></i><!-- ELSE --><span class="fa-stack fa-lg" style="line-height:1em;">
+  <i class="fa fa-users fa-stack-1x"></i>
+  <i class="fa fa-ban fa-stack-1x" style="color:red"'></i>
+</span><!-- ENDIF --></div>
 					</div>
 						{right_row.INFO}
 						{right_row.NAME}
@@ -239,7 +256,10 @@ function createEmbeddLink(){
 						<!-- IF block_row.module_row.S_CHILD -->
 						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({block_row.module_row.ID});"><i class="fa fa-trash-o fa-lg"></i></div>
 						<!-- ENDIF -->
-						<div class="floatRight" style="height: 20px; padding: 2px;"><i class="fa fa-users coretip fa-lg" data-coretip="{block_row.PERMISSIONS}"></i></div>
+						<div class="floatRight" style="height: 20px; padding: 2px;"><!-- IF block_row.S_PERMISSIONS --><i class="fa fa-users coretip fa-lg" data-coretip="{block_row.PERMISSIONS}"></i><!-- ELSE --><span class="fa-stack fa-lg" style="line-height:1em;">
+  <i class="fa fa-users fa-stack-1x"></i>
+  <i class="fa fa-ban fa-stack-1x" style="color:red"'></i>
+</span><!-- ENDIF --></div>
 					</div>
 						{block_row.module_row.INFO}
 						{block_row.module_row.NAME}
@@ -275,7 +295,10 @@ function createEmbeddLink(){
 						<!-- IF disabled_row.S_CHILD -->
 						<div style="height: 20px; padding: 2px;" class="floatRight hand" title="{L_delete}" onclick="javascript:delete_portal({disabled_row.ID});"><i class="fa fa-trash-o fa-lg"></i></div>
 						<!-- ENDIF -->
-						<div class="floatRight" style="height: 20px; padding: 2px;"><i class="fa fa-users coretip fa-lg" data-coretip="{disabled_row.PERMISSIONS}"></i></div>
+						<div class="floatRight" style="height: 20px; padding: 2px;"><!-- IF disabled_row.S_PERMISSIONS --><i class="fa fa-users coretip fa-lg" data-coretip="{disabled_row.PERMISSIONS}"></i><!-- ELSE --><span class="fa-stack fa-lg" style="line-height:1em;">
+  <i class="fa fa-users fa-stack-1x"></i>
+  <i class="fa fa-ban fa-stack-1x" style="color:red"'></i>
+</span><!-- ENDIF --></div>
 					</div>
 					<div class="info">
 						{disabled_row.INFO}

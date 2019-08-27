@@ -462,6 +462,7 @@ $('.js_reload').change(reload_settings);", 'docready');
 					'S_MULTIPLE'	=> $data['multiple'],
 					'S_CHILD'		=> $data['child'],
 					'PERMISSIONS'	=> implode('<br />', $arrGroupsOut),
+					'S_PERMISSIONS' => (count($arrGroupsOut) > 0) ? true : false,
 				));
 				unset($data);
 				unset($modules[$id]);
@@ -488,7 +489,8 @@ $('.js_reload').change(reload_settings);", 'docready');
 					'INFO'			=> $data['desc'],
 					'S_MULTIPLE'	=> $data['multiple'],
 					'S_CHILD'		=> $data['child'],
-					'PERMISSIONS'	=> implode('<br />', $data['perms'])
+					'PERMISSIONS'	=> implode('<br />', $data['perms']),
+					'S_PERMISSIONS' => (count($data['perms']) > 0) ? true : false,
 			);
 			
 			if ($data['tpl_posi'] == 'later'){
@@ -509,7 +511,8 @@ $('.js_reload').change(reload_settings);", 'docready');
 					'INFO'			=> $data['desc'],
 					'S_MULTIPLE'	=> $data['multiple'],
 					'S_CHILD'		=> $data['child'],
-					'PERMISSIONS'	=> implode('<br />', $data['perms'])
+					'PERMISSIONS'	=> implode('<br />', $data['perms']),
+					'S_PERMISSIONS' => (count($data['perms']) > 0) ? true : false,
 			);
 			
 			if ($data['tpl_posi'] == 'later'){
