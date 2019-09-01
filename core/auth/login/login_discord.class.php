@@ -82,7 +82,7 @@ class login_discord extends gen_class {
 		}
 		
 		$client = new OAuth2\Client($this->appid, $this->appsecret);
-		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $this->redirURL, array('scope' => 'email'));
+		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $this->redirURL, array('scope' => 'identify email'));
 		
 		return $auth_url;
 	}
@@ -113,7 +113,7 @@ class login_discord extends gen_class {
 		if($this->in->exists('code')){
 
 			$client = new OAuth2\Client($this->appid, $this->appsecret);
-			$params = array('code' => $this->in->get('code'), 'redirect_uri' => $this->redirURL, 'scope' => 'email');
+			$params = array('code' => $this->in->get('code'), 'redirect_uri' => $this->redirURL, 'scope' => 'identify email');
 			$response = $client->getAccessToken($this->TOKEN_ENDPOINT, 'authorization_code', $params);
 			
 			if ($response && $response['result']){
@@ -155,7 +155,7 @@ class login_discord extends gen_class {
 		if ($code){
 			$client = new OAuth2\Client($this->appid, $this->appsecret);
 				
-			$params = array('code' => $code, 'redirect_uri' => $this->redirURL, 'scope' => 'email');
+			$params = array('code' => $code, 'redirect_uri' => $this->redirURL, 'scope' => 'identify email');
 			$response = $client->getAccessToken($this->TOKEN_ENDPOINT, 'authorization_code', $params);
 
 			if ($response && $response['result'] && $response['result']['access_token']){
@@ -191,7 +191,7 @@ class login_discord extends gen_class {
 		if ($code){
 			$client = new OAuth2\Client($this->appid, $this->appsecret);
 
-			$params = array('code' => $code, 'redirect_uri' => $this->redirURL, 'scope' => 'email');
+			$params = array('code' => $code, 'redirect_uri' => $this->redirURL, 'scope' => 'identify email');
 			$response = $client->getAccessToken($this->TOKEN_ENDPOINT, 'authorization_code', $params);
 
 			if ($response && $response['result']){
