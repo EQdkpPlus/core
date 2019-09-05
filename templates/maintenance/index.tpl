@@ -159,11 +159,6 @@
 		<!-- ENDIF -->
 	
 		<div class="copyright">
-		 <!--
-		  If you use this software and find it to be useful, we ask that you
-		  retain the copyright notice below.  While not required for free use,
-		  it will help build interest in the EQdkp-Plus project.
-		//-->
 		<a href="http://www.eqdkp-plus.eu" target="_new">EQdkp Plus</a> &copy; 2006 - {TYEAR} by EQdkp Plus Developer Team
 		</div>
 	</div>
