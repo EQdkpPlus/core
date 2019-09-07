@@ -1122,5 +1122,17 @@ $lang = array(
 "user_sett_fs_notifications_comment" => "Kommentare",
 "user_sett_fs_notifications_user" => "Benutzer",
 "user_sett_fs_notifications_userwall" => "Pinnwand",
+"login_oauth" => "Eigener Oauth-Provider",
+"core_sett_f_login_oauth_name" => "Eigener Oauth-Provider - Name",
+"core_sett_f_login_oauth_clientid" => "Eigener Oauth-Provider - Client-ID",
+"core_sett_f_login_oauth_clientsecret" => 'Eigener Oauth-Provider - Client-Secret',
+"core_sett_f_login_oauth_scope" => 'Eigener Oauth-Provider - Scope',
+"core_sett_f_login_oauth_authendpoint" => 'Eigener Oauth-Provider - Authentifaction Endpoint URL',
+"core_sett_f_login_oauth_tokenendpoint" => 'Eigener Oauth-Provider - Token Endpoint URL',
+"core_sett_f_login_oauth_userendpoint" => 'Eigener Oauth-Provider - User Endpoint URL',
+"core_sett_f_login_oauth_passtoken"		=> 'Eigener Oauth-Provider - Übergabe des Access-Tokens',
+"core_sett_f_login_oauth_useridparam"=> 'Eigener Oauth-Provider - Parameter für Benutzer-ID',
+"core_sett_f_login_oauth_usernameparam"=> 'Eigener Oauth-Provider - Parameter für Benutzername',
+"core_sett_f_login_oauth_useremailparam"=> 'Eigener Oauth-Provider - Parameter für Email-Adresse',
 );
 ?>
