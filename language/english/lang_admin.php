@@ -1894,6 +1894,19 @@ $lang = array(
 		"user_sett_fs_notifications_user" => "User",
 		"user_sett_fs_notifications_userwall" => "Userwall",
 		"extensions_install_language_info" => "When installing new languages, language files for the current installed extensions are downloaded. You can refresh the language to download the language files for newly installed extensions at any time.",
+		"login_oauth" => "Custom Oauth-Provider",
+		"core_sett_f_login_oauth_name" => "Custom Oauth-Provider - Name",
+		"core_sett_f_login_oauth_clientid" => "Custom Oauth-Provider - Client-ID",
+		"core_sett_f_login_oauth_clientsecret" => 'Custom Oauth-Provider - Client-Secret',
+		"core_sett_f_login_oauth_scope" => 'Custom Oauth-Provider - Scope',
+		"core_sett_f_login_oauth_authendpoint" => 'Custom Oauth-Provider - Authentifaction Endpoint URL',
+		"core_sett_f_login_oauth_tokenendpoint" => 'Custom Oauth-Provider - Token Endpoint URL',
+		"core_sett_f_login_oauth_userendpoint" => 'Custom Oauth-Provider - User Endpoint URL',
+		"core_sett_f_login_oauth_passtoken"		=> 'Custom Oauth-Provider - Passing of the Access Token',
+		"core_sett_f_login_oauth_useridparam"=> 'Custom Oauth-Provider - Param for User-ID',
+		"core_sett_f_login_oauth_usernameparam"=> 'Custom Oauth-Provider - Param for Username',
+		"core_sett_f_login_oauth_useremailparam"=> 'Custom Oauth-Provider - Param for Email address',
+		"core_sett_f_help_login_oauth_clientid" => 'As Redirect-URI use '.register('env')->buildLink().'index.php/auth-endpoint/?lmethod=oauth',
 		
 );
 

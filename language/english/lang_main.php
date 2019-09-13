@@ -1153,18 +1153,6 @@ $lang = array(
 	"reg_connected_account_help" => "You can use the connected account from a login provider to login into EQdkp Plus.",
 	"uc_cat_general" => "General",
 	"stopforumspam_denied" => "Your registration has been blocked because of security reasons. Please contact the administrator if your problems continue.",
-	"login_oauth" => "Custom Oauth-Provider",
-	"core_sett_f_login_oauth_name" => "Custom Oauth-Provider - Name",
-	"core_sett_f_login_oauth_clientid" => "Custom Oauth-Provider - Client-ID",
-	"core_sett_f_login_oauth_clientsecret" => 'Custom Oauth-Provider - Client-Secret',
-	"core_sett_f_login_oauth_scope" => 'Custom Oauth-Provider - Scope',
-	"core_sett_f_login_oauth_authendpoint" => 'Custom Oauth-Provider - Authentifaction Endpoint URL',
-	"core_sett_f_login_oauth_tokenendpoint" => 'Custom Oauth-Provider - Token Endpoint URL',
-	"core_sett_f_login_oauth_userendpoint" => 'Custom Oauth-Provider - User Endpoint URL',
-	"core_sett_f_login_oauth_passtoken"		=> 'Custom Oauth-Provider - Passing of the Access Token',
-	"core_sett_f_login_oauth_useridparam"=> 'Custom Oauth-Provider - Param for User-ID',
-	"core_sett_f_login_oauth_usernameparam"=> 'Custom Oauth-Provider - Param for Username',
-	"core_sett_f_login_oauth_useremailparam"=> 'Custom Oauth-Provider - Param for Email address',
 	);
 
 ?>
