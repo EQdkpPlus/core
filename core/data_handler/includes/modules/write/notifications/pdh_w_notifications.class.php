@@ -36,7 +36,7 @@ if(!class_exists('pdh_w_notifications')) {
 			$strLink = str_replace('{SERVER_PATH}/', '{SERVER_PATH}', $strLink);
 			$strLink = str_replace($this->root_path, '{SERVER_PATH}', $strLink);
 			$strLink = str_replace($this->SID, '{SID}', $strLink);
-			$strLink = str_replace('?', '{SID}', $strLink);
+			$strLink = str_replace('?', '{SID}&', $strLink);
 			$strLink = str_replace('//', '/', $strLink);
 			
 			$objQuery = $this->db->prepare("INSERT INTO __notifications :p")->set(array(
