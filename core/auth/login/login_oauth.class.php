@@ -123,8 +123,11 @@ class login_oauth extends gen_class {
 			message_die('OAuth Client-ID or Client-Secret is missing. Please insert it into the fields at the EQdkp Plus settings, tab "User".');
 		}
 		
+		$state = random_string(false, 32);
+		$this->user->setSessionVar('_oauth_state', $state);
+		
 		$client = new OAuth2\Client($this->appid, $this->appsecret);
-		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $this->redirURL, array('scope' => $this->scope));
+		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $this->redirURL, array('scope' => $this->scope, 'state' => $state));
 		
 		return $auth_url;
 	}
@@ -199,6 +202,12 @@ class login_oauth extends gen_class {
 		$code = $this->in->get('code');
 		
 		if ($code){
+			//Check state
+			$strSavedState = $this->user->data['session_vars']['_oauth_state'];
+			if(!$strSavedState || $strSavedState == '' || $strSavedState !== $this->in->get('state')){
+				return false;
+			}
+			
 			$client = new OAuth2\Client($this->appid, $this->appsecret);
 			
 			$params = array('code' => $code, 'redirect_uri' => $this->redirURL, 'scope' => $this->scope);
@@ -238,6 +247,12 @@ class login_oauth extends gen_class {
 		$code = $_GET['code'];
 		
 		if ($code){
+			//Check state
+			$strSavedState = $this->user->data['session_vars']['_oauth_state'];
+			if(!$strSavedState || $strSavedState == '' || $strSavedState !== $this->in->get('state')){
+				return false;
+			}
+			
 			$client = new OAuth2\Client($this->appid, $this->appsecret);
 			
 			$params = array('code' => $code, 'redirect_uri' => $this->redirURL, 'scope' => $this->scope);

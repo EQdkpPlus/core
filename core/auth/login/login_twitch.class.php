@@ -83,9 +83,12 @@ class login_twitch extends gen_class {
 		if(!strlen($this->appid) || !strlen($this->appsecret)){
 			message_die('Twitch Client-ID or Client-Secret is missing. Please insert it into the fields at the EQdkp Plus settings, tab "User".');
 		}
+		
+		$state = random_string(false, 32);
+		$this->user->setSessionVar('_twitch_state', $state);
 
 		$client = new OAuth2\Client($this->appid, $this->appsecret);
-		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $this->redirURL, array('scope' => 'user:read:email'));
+		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $this->redirURL, array('scope' => 'user:read:email', 'state' => $state));
 		
 		return $auth_url;
 	}
@@ -115,6 +118,11 @@ class login_twitch extends gen_class {
 		$blnLoginResult = false;
 		
 		if($this->in->exists('code')){
+			//Check state
+			$strSavedState = $this->user->data['session_vars']['_twitch_state'];
+			if(!$strSavedState || $strSavedState == '' || $strSavedState !== $this->in->get('state')){
+				return false;
+			}
 			
 			$client = new OAuth2\Client($this->appid, $this->appsecret);
 			$params = array('code' => $this->in->get('code'), 'redirect_uri' => $this->redirURL, 'scope' => 'user:read:email');
@@ -164,6 +172,12 @@ class login_twitch extends gen_class {
 		$code = $this->in->get('code');
 		
 		if ($code){
+			//Check state
+			$strSavedState = $this->user->data['session_vars']['_twitch_state'];
+			if(!$strSavedState || $strSavedState == '' || $strSavedState !== $this->in->get('state')){
+				return false;
+			}
+			
 			$client = new OAuth2\Client($this->appid, $this->appsecret);
 			
 			$params = array('code' => $code, 'redirect_uri' => $this->redirURL, 'scope' => 'user:read:email');
