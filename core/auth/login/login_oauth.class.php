@@ -29,6 +29,8 @@ class login_oauth extends gen_class {
 	
 	private $appid, $appsecret, $scope, $name, $passToken, $userIDparam, $usernameparam, $useremailparam = false;
 	
+	private $paramname = 'access_token';
+	
 	private $AUTHORIZATION_ENDPOINT = '';
 	private $TOKEN_ENDPOINT         = '';
 	private $USER_ENDPOINT         = '';
@@ -58,6 +60,7 @@ class login_oauth extends gen_class {
 		$this->userIDparam 				= $this->config->get('login_oauth_useridparam');
 		$this->usernameparam 			= $this->config->get('login_oauth_usernameparam');
 		$this->useremailparam 			= $this->config->get('login_oauth_useremailparam');
+		$this->paramname				= $this->config->get('login_oauth_tokenparam');
 	}
 	
 	public function settings(){
@@ -86,7 +89,11 @@ class login_oauth extends gen_class {
 				),
 				'login_oauth_passtoken' => array(
 						'type'	=> 'radio',
-						'options' => array('bearer' => 'Bearer Header', 'param' => 'Param'),
+						'options' => array('bearer' => 'Authorization-Header "Bearer"', 'token' => 'Authorization-Header "Token"', 'param' => 'Parameter'),
+				),
+				'login_oauth_tokenparam' => array(
+						'type'	=> 'text',
+						'default' => 'access_token',
 				),
 				'login_oauth_useridparam' => array(
 						'type'	=> 'text',
@@ -167,13 +174,15 @@ class login_oauth extends gen_class {
 				$arrAccountResult = $this->fetchUserData($response['result']['access_token']);
 				
 				if($arrAccountResult){
-					$auth_account = $arrAccountResult[$this->userIDparam];
+					$_userID = $this->extractVariables($arrAccountResult, $this->userIDparam);
+					$_username = $this->extractVariables($arrAccountResult, $this->usernameparam);
+					$_useremail = $this->extractVariables($arrAccountResult, $this->useremailparam);
 					
 					$bla = array(
-							'username'			=> isset($arrAccountResult[$this->usernameparam]) ? utf8_ucfirst($arrAccountResult[$this->usernameparam]) : '',
-							'user_email'		=> isset($arrAccountResult[$this->useremailparam]) ? $arrAccountResult[$this->useremailparam] : '',
-							'user_email2'		=> isset($arrAccountResult[$this->useremailparam]) ? $arrAccountResult[$this->useremailparam] : '',
-							'auth_account'		=> $auth_account,
+							'username'			=> ($_username && strlen($_username)) ? utf8_ucfirst($_username) : '',
+							'user_email'		=> ($_useremail && strlen($_useremail)) ? $_useremail : '',
+							'user_email2'		=> ($_useremail && strlen($_useremail)) ? $_useremail : '',
+							'auth_account'		=> $_userID,
 							'user_timezone'		=> $this->config->get('timezone'),
 							'user_lang'			=> $this->user->lang_name,
 							'avatar'			=> '',
@@ -261,8 +270,12 @@ class login_oauth extends gen_class {
 			if ($response && $response['result']){
 				$arrAccountResult = $this->fetchUserData($response['result']['access_token']);
 				if($arrAccountResult){
-					if(isset($arrAccountResult[$this->userIDparam])){
-						$userid = $this->pdh->get('user', 'userid_for_authaccount', array($arrAccountResult[$this->userIDparam], 'oauth'));
+					$_userID = $this->extractVariables($arrAccountResult, $this->userIDparam);
+					$_username = $this->extractVariables($arrAccountResult, $this->usernameparam);
+					$_useremail = $this->extractVariables($arrAccountResult, $this->useremailparam);
+					
+					if($_userID){
+						$userid = $this->pdh->get('user', 'userid_for_authaccount', array($_userID, 'oauth'));
 						if ($userid){
 							$userdata = $this->pdh->get('user', 'data', array($userid));
 							if ($userdata){
@@ -314,19 +327,20 @@ class login_oauth extends gen_class {
 
 		if($this->passToken == 'bearer'){
 			$result = register('urlfetcher')->fetch($this->USER_ENDPOINT, array('Authorization: Bearer '.$strAccessToken));
-		}elseif($this->passToken == 'param'){
+		} elseif($this->passToken == 'token'){
+			$result = register('urlfetcher')->fetch($this->USER_ENDPOINT, array('Authorization: Token '.$strAccessToken));
+		} elseif($this->passToken == 'param'){
 			$url = "";
 			
 			if(strpos($this->USER_ENDPOINT, '?') === false){
-				$url = $this->USER_ENDPOINT."?access_token=".rawurlencode($strAccessToken);
+				$url = $this->USER_ENDPOINT."?".$this->paramname."=".rawurlencode($strAccessToken);
 			} else {
-				$url = $this->USER_ENDPOINT."&access_token=".rawurlencode($strAccessToken);
+				$url = $this->USER_ENDPOINT."&".$this->paramname."=".rawurlencode($strAccessToken);
 			}
 			$url = str_replace('TOKEN', rawurlencode($strAccessToken), $url);
 			$result = register('urlfetcher')->fetch($url);
 			
 		}
-
 		
 		if($result){
 			$arrJSON = json_decode($result, true);
@@ -337,6 +351,23 @@ class login_oauth extends gen_class {
 			}
 		}
 		return false;
+	}
+	
+	private function extractVariables($userData, $strVariable){
+		$arrParts = explode(':', $strVariable);
+		$tmpArray = $userData;
+		foreach($arrParts as $strKey){
+			if(isset($tmpArray[$strKey])){
+				$out = $tmpArray[$strKey];
+				if(is_array($out)){
+					$tmpArray = $out;
+				}
+			} else {
+				return false;
+			}
+		}
+		
+		return (is_array($out)) ? false : $out;
 	}
 	
 }
