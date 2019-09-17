@@ -95,6 +95,11 @@ class controller extends gen_class {
 
 	private function filterPathArray($arrPath){
 		foreach($arrPath as $key => $val){
+			if(defined('URL_COMPMODE') && strpos($val, "s=") === 0) {
+				unset($arrPath[$key]);
+				continue;
+			}
+			
 			$arrPath[$key] = str_replace(array(".html", ".php", "?s=", "?"), "", utf8_strtolower($arrPath[$key]));
 		}
 
