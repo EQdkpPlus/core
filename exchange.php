@@ -117,7 +117,9 @@ if(registry::register('input')->get('out') != ''){
 								$eventsfilter = 'appointments';
 							break;
 						}
-						$caleventids	= registry::register('plus_datahandler')->get('calendar_events', 'id_list', array($eventsfilter, registry::register('time')->createRepeatableEvents(registry::register('time')->time, -30)));
+						$calendars = registry::register('input')->get('calendars', '');
+						$calendarIds = $calendars ? explode(',', $calendars) : false;
+						$caleventids	= registry::register('plus_datahandler')->get('calendar_events', 'id_list', array($eventsfilter, registry::register('time')->createRepeatableEvents(registry::register('time')->time, -30), PHP_INT_MAX, $calendarIds));
 
 						if(is_array($caleventids) && count($caleventids) > 0){
 							foreach($caleventids as $calid){
