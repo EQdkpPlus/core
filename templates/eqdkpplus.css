@@ -219,6 +219,11 @@ td.w10p, tr.w10p, th.w10p{
 	max-width: none; /* OR alternatively the width of the image (if you know it in advance) */
 }
 
+/* set qtip forms z-index to a lower value */
+.tooltip_uiform {
+	z-index: 9999 !important;
+}
+
 /* Nested Sortable */
 .placeholder {
 	outline: 1px dashed #4183C4;

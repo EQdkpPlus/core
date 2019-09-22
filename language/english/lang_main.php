@@ -715,6 +715,7 @@ $lang = array(
 		"Appointments",
 		"Raids and appointments"
 	),
+	"calendar_export_choose_calendars" => "Choose calendars",
 	"calendar_statuschange_title_success" => "Status successfully changed",
 	"calendar_statuschange_title_notchanged" => "Status not changed",
 	"calendar_statuschange_mmsg_success" => "The signin status was successfully changed",

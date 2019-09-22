@@ -676,6 +676,7 @@ $lang = array(
 	"Termine",
 	"Raids und Termine"
 ),
+"calendar_export_choose_calendars" => "Kalenderauswahl",
 "calendar_statuschange_title_success" => "Statusänderung erfolgreich",
 "calendar_statuschange_title_notchanged" => "Status wurde nicht geändert",
 "calendar_statuschange_mmsg_success" => "Der Anmeldestatus wurde erfolgreich geändert",
