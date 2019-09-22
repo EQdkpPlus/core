@@ -52,7 +52,7 @@ if ( !class_exists( "pruneuserregistrations_crontask" ) ) {
 				$intDays = 30;
 			}
 			
-			$objQuery = $this->db->query("SELECT * FROM __users WHERE user_email_confirmed = -1");
+			$objQuery = $this->db->prepare("SELECT * FROM __users WHERE user_email_confirmed = -1 AND timestampdiff(DAY, FROM_UNIXTIME(user_registered), now()) > ?")->execute($intDays);
 			$intCount = 0;
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
