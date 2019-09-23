@@ -486,6 +486,10 @@ i.small {
     bottom: 0;
 }
 
+.pageobject-roster .member-charimage {
+    max-height: 48px;
+}
+
 /* Login Buttons Third Party */
 
 button.thirdpartylogin.facebook {
