@@ -155,6 +155,10 @@ class calendar_pageobject extends pageobject {
 							'appointments'	=> $this->user->lang(array('calendar_export_types', 1)),
 							'all'			=> $this->user->lang(array('calendar_export_types', 2)),
 						))))->output();
+		
+		$calendarIds 		  = $this->pdh->get('calendars', 'idlist', 'other');
+		$calendar_idlist	  = $this->pdh->aget('calendars', 'name', 0, array($calendarIds));
+		$calendarExportFilter = (new hmultiselect('calendarExportFilter', array('options' => $calendar_idlist, 'preview_num' => 3, 'todisable' => array(), 'value' => $calendarIds, 'selectedtext'=>$this->user->lang('calendar_filter_bycalendar'), 'returnJS' => true)))->output();
 
 		// build the output
 		echo '
@@ -166,6 +170,11 @@ class calendar_pageobject extends pageobject {
 				}
 				$("#type").change(function(){
 					str = replaceQueryParam("type", $(this).val(), $("#icalfeedurl").val());
+					$("#icalfeedurl").val(str);
+					$("#icaldllink").prop("href", str);
+				}).trigger("change");
+				$("#calendarExportFilter").change(function(){
+					str = replaceQueryParam("calendars", $(this).val(), $("#icalfeedurl").val());
 					$("#icalfeedurl").val(str);
 					$("#icaldllink").prop("href", str);
 				}).trigger("change");
@@ -181,6 +190,9 @@ class calendar_pageobject extends pageobject {
 					<dl>
 					<dt><label>'.$this->user->lang('calendar_export_type').'</label><br><span> </span></dt>
 						<dd>'.$exporttypes.'</dd>
+					</dl>
+					<dl><dt><label>'.$this->user->lang('calendar_export_choose_calendars').'</label><br><span /></dt><dd>
+						'.$calendarExportFilter.'</dd>
 					</dl>
 					<dl>
 					<dt><label>'.$this->user->lang('calendar_export_feedurl').'</label><br><span> </span></dt>
