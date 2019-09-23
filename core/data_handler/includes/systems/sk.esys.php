@@ -554,7 +554,9 @@ $system_def = array(
 				'table_presets' => array(
 					array('name' => 'eventedit', 'sort' => false, 'th_add' => '', 'td_add' => ''),
 					array('name' => 'eicon', 'sort' => true, 'th_add' => '', 'td_add' => ''),
-					array('name' => 'elink', 'sort' => true, 'th_add' => 'width="90%"', 'td_add' => ''),
+						array('name' => 'elink', 'sort' => true, 'th_add' => '"', 'td_add' => ''),
+						array('name' => 'emdkps', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+						array('name' => 'eipools', 'sort' => true, 'th_add' => '', 'td_add' => 'class="hiddenSmartphone"'),
 					array('name' => 'evalue', 'sort' => true, 'th_add' => 'class="hiddenSmartphone"', 'td_add' => 'class="hiddenSmartphone"'),
 				),
 			),
