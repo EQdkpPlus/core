@@ -111,6 +111,15 @@ class Manage_Events extends page_generic {
 			$event['default_itempool'] = $this->pdh->get('event', 'def_itempool', array($event['id']));
 
 			$arrItempool = $this->pdh->aget('itempool', 'name', 0, array($this->pdh->get('event', 'itempools', array($event['id']))));
+		} else {
+			//Set to the last MultiDKP Pool
+			$arrPoolIDs = $this->pdh->get('multidkp', 'id_list');
+			$intLatestPool = max($arrPoolIDs);
+			$event['mdkp2event'] = array($intLatestPool);
+			$arrLocalItempools = $this->pdh->get('multidkp', 'itempool_ids', array($intLatestPool));
+			$event['default_itempool'] = max($arrLocalItempools);
+			
+			$arrItempool = $this->pdh->aget('itempool', 'name', 0, array($arrLocalItempools));
 		}
 
 		//Get Icons
