@@ -382,7 +382,7 @@ DROP TABLE IF EXISTS __styles;
 CREATE TABLE `__styles` (
 	`style_id` SMALLINT(5) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`style_name` VARCHAR(100) NOT NULL DEFAULT '' COLLATE 'utf8_bin',
-	`style_version` VARCHAR(7) NULL DEFAULT NULL COLLATE 'utf8_bin',
+	`style_version` VARCHAR(20) NULL DEFAULT NULL COLLATE 'utf8_bin',
 	`style_contact` VARCHAR(100) NULL DEFAULT NULL COLLATE 'utf8_bin',
 	`style_author` VARCHAR(100) NULL DEFAULT NULL COLLATE 'utf8_bin',
 	`enabled` ENUM('0','1') NOT NULL DEFAULT '0' COLLATE 'utf8_bin',
@@ -470,7 +470,7 @@ DROP TABLE IF EXISTS __plugins;
 CREATE TABLE `__plugins` (
 	`code` varchar(20) COLLATE utf8_bin NOT NULL,
 	`status` tinyint(2) NOT NULL DEFAULT 0,
-	`version` varchar(7) COLLATE utf8_bin NOT NULL,
+	`version` varchar(20) COLLATE utf8_bin NOT NULL,
 	PRIMARY KEY (`code`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -510,7 +510,7 @@ CREATE TABLE IF NOT EXISTS `__portal` (
 	`contact` varchar(100) COLLATE utf8_bin DEFAULT NULL,
 	`url` varchar(100) COLLATE utf8_bin DEFAULT NULL,
 	`autor` varchar(100) COLLATE utf8_bin DEFAULT NULL,
-	`version` varchar(7) COLLATE utf8_bin NOT NULL DEFAULT '',
+	`version` varchar(20) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`plugin` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`visibility` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT 'a:1:{i:0;i:0;}',
 	`collapsable` tinyint(1) NOT NULL DEFAULT 1,
