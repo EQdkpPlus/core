@@ -1051,7 +1051,7 @@ class Manage_Users extends page_generic {
 			// Sorting
 			'O_USERNAME'			=> ($this->in->get('o', '0.0') == '0.0') ? '0.1' : '0.0',
 			'O_EMAIL'				=> ($this->in->get('o') == '1.0') ? '1.1' : '1.0',
-			'O_LASTVISIT'			=> ($this->in->get('o') == '2.0') ? '2.1' : '2.0',
+			'O_LAST_VISIT'			=> ($this->in->get('o') == '2.0') ? '2.1' : '2.0',
 			'O_ACTIVE'				=> ($this->in->get('o') == '3.0') ? '3.1' : '3.0',
 			'O_REG_DATE'			=> ($this->in->get('o') == '4.0') ? '4.1' : '4.0',
 			'O_AWAY'				=> ($this->in->get('o') == '5.0') ? '5.1' : '5.0',
