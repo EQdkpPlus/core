@@ -63,7 +63,9 @@ if (!class_exists("bbcode")) {
 				':D',
 				':o',
 				':p',
+				':P',
 				':(',
+				':-(',
 				';)',
 				';-)'
 			);
@@ -74,6 +76,8 @@ if (!class_exists("bbcode")) {
 				' <img alt=":D" src="'.$this->smiliepath.'/happy.svg" class="smilies" />',
 				' <img alt=":o" src="'.$this->smiliepath.'/surprised.svg" class="smilies" />',
 				' <img alt=":p" src="'.$this->smiliepath.'/tongue.svg" class="smilies" />',
+				' <img alt=":p" src="'.$this->smiliepath.'/tongue.svg" class="smilies" />',
+				' <img alt=":(" src="'.$this->smiliepath.'/unhappy.svg" class="smilies" />',
 				' <img alt=":(" src="'.$this->smiliepath.'/unhappy.svg" class="smilies" />',
 				' <img alt=";)" src="'.$this->smiliepath.'/wink.svg" class="smilies" />',
 				' <img alt=";)" src="'.$this->smiliepath.'/wink.svg" class="smilies" />'

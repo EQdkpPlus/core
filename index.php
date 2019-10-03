@@ -599,7 +599,10 @@ class controller extends gen_class {
 						$strContent = str_replace($arrRaidlootObjects[0][$key], $strRaidlootContent, $strContent);
 					}
 				}
-
+				
+				//Replace Embedds
+				$strContent = $this->embedly->parseString($strContent);
+				
 				//Replace Smilies
 				$strContent = $this->bbcode->MyEmoticons($strContent);
 
@@ -785,6 +788,9 @@ class controller extends gen_class {
 							$strText = str_replace($arrRaidlootObjects[0][$key], $strRaidlootContent, $strText);
 						}
 					}
+					
+					//Replace Embedds
+					$strText = $this->embedly->parseString($strText);
 
 					//Replace Smilies
 					$strText = $this->bbcode->MyEmoticons($strText);
@@ -839,7 +845,7 @@ class controller extends gen_class {
 					$arrTags = $this->pdh->get('articles', 'tags', array($intArticleID));
 
 					$strPreviewImage = ($this->pdh->get('articles',  'previewimage', array($intArticleID)) != "") ? $this->pdh->geth('articles', 'previewimage', array($intArticleID)) : '';
-
+					
 					$this->tpl->assign_block_vars('article_row', array(
 							'ARTICLE_ID'			=> $intArticleID,
 							'ARTICLE_CONTENT'		=> $strText,

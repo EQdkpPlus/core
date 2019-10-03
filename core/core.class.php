@@ -357,6 +357,45 @@ class core extends gen_class {
 					", 'docready');
 
 
+			//Embedds
+			$this->tpl->add_js("
+			$('div.embed-consent').each(function(index) {
+				var provider = $(this).find('.embed-consent-provider').html();
+				if(JQisLocalStorageNameSupported()) {
+					var consent = localStorage.getItem('embedd_consent_'+provider);
+					if(consent){
+						var embeddedContent = $(this).find('.embed-consent-content').html();
+						var decoded = $('<div/>').html(embeddedContent).text();
+
+						$(this).html(decoded);
+						$(this).trigger('load');
+					} else {
+						//show message
+						var message = '".$this->jquery->sanitize($this->user->lang('embedd_consent'))."';
+						var button = '".$this->jquery->sanitize($this->user->lang('embedd_consent_ok'))."';
+						message = message.replace(/{PROVIDER}/g, provider);
+						button = '<br /><br /><a class=\"button\"><i class=\"fa fa-lg fa-play-circle\"></i> '+button+'</a>';
+
+						$(this).find('.embed-consent-message').html(message+button);
+					}
+				}
+			});
+			", 'eop');
+			
+			$this->tpl->add_js('
+				function show_embedded_content(obj){
+					var parent = $(obj).parent().parent().parent();
+					var embeddedContent = parent.find(".embed-consent-content").html();
+					var provider = parent.find(".embed-consent-provider").html();
+					var decoded = $("<div/>").html(embeddedContent).text();
+					parent.html(decoded);
+					$(parent).trigger("load");
+					if(JQisLocalStorageNameSupported()) {
+						localStorage.setItem("embedd_consent_"+provider, 1);
+					}
+				}
+			', "static");
+			
 			//Lightbox Zoom-Image
 			$this->tpl->add_js("
 			$('a.lightbox,  a[rel=\"lightbox\"]').each(function(index) {
@@ -364,11 +403,11 @@ class core extends gen_class {
 				var image_obj = $(this).find('img');
 				var image_parent = image_obj.parent();
 				var image_string = image_parent.html();
-
+					
 				var fullimage = $(this).attr('href');
 				var imagetitle = image_obj.attr('alt');
 				$(this).attr('title', imagetitle);
-
+					
 				var image_style = $(this).children().attr('style');
 				if (image_style) {
 					if (image_style == \"display: block; margin-left: auto; margin-right: auto;\") image_style = image_style + \" text-align:center;\";

@@ -548,3 +548,8 @@ button.thirdpartylogin.steam {
 	font-weight: bold;
 	cursor: pointer;
 }
+
+.embed-consent {position:relative;}
+.embed-consent-background {filter: opacity(.5); position:absolute; background-size: cover;}
+.embed-consent-foreground {justify-content: center;align-items: center;text-align: center;display:flex;position:absolute;}
+.embed-consent-message {padding: 10px; padding-bottom: 40px; cursor:pointer; background-color:#efefef;}

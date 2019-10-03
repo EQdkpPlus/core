@@ -1154,6 +1154,9 @@ $lang = array(
 	"reg_connected_account_help" => "You can use the connected account from a login provider to login into EQdkp Plus.",
 	"uc_cat_general" => "General",
 	"stopforumspam_denied" => "Your registration has been blocked because of security reasons. Please contact the administrator if your problems continue.",
+	"embedd_consent" => "Do you want to load external media from '{PROVIDER}'? Please not that this may result in transfering personal information such as your IP address to '{PROVIDER}'. Also, '{PROVIDER}' might set cookies.",
+	"embedd_consent_ok" => "Load and save decision.",
+		
 	);
 
 ?>

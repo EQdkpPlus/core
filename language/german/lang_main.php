@@ -1123,5 +1123,8 @@ $lang = array(
 "user_sett_fs_notifications_comment" => "Kommentare",
 "user_sett_fs_notifications_user" => "Benutzer",
 "user_sett_fs_notifications_userwall" => "Pinnwand",
+"embedd_consent" => "Möchtest du externe Medien von '{PROVIDER}' laden? Bitte beachte, dass dadurch eventuell personenbezogene Daten wie z.B. deine IP-Adresse an '{PROVIDER}' übertragen werden. Außerdem könnte '{PROVIDER}' Cookies setzen.",
+"embedd_consent_ok" => "Laden und Entscheidung speichern.",
+		
 );
 ?>

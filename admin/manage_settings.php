@@ -758,6 +758,9 @@ class admin_settings extends page_generic {
 					'enable_embedly'	=> array(
 						'type'	=> 'radio',
 					),
+					'embedly_gdpr'	=> array(
+							'type'	=> 'radio',
+					),
 					'articleimage_size' => array(
 						'type'		=> 'spinner',
 						'size'		=> 3,
