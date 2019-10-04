@@ -156,7 +156,6 @@ if(!class_exists('pdh_w_articles')) {
 			//Replace Breakline
 			$strText = str_replace('<p></p>', '<br />', $strText);
 			$strText = $this->bbcode->replace_shorttags($strText);
-			if($this->config->get('enable_embedly')) $strText = $this->embedly->parseString($strText, false, false);
 			
 			$arrPageObjects = array();
 			preg_match_all('#<p(.*)class="system-article"(.*) title="(.*)">(.*)</p>#iU', $strText, $arrTmpPageObjects, PREG_PATTERN_ORDER);
@@ -301,7 +300,6 @@ if(!class_exists('pdh_w_articles')) {
 		public function update_article($id, $strText){
 			$strText = str_replace('<p></p>', '<br />', $strText);
 			$strText = $this->bbcode->replace_shorttags($strText);
-			if($this->config->get('enable_embedly')) $strText = $this->embedly->parseString($strText, false, false);
 				
 			$arrPageObjects = array();
 			preg_match_all('#<p(.*)class="system-article"(.*) title="(.*)">(.*)</p>#iU', $strText, $arrTmpPageObjects, PREG_PATTERN_ORDER);
@@ -376,7 +374,6 @@ if(!class_exists('pdh_w_articles')) {
 			
 			$strText = str_replace('<p></p>', '<br />', $strText);
 			$strText = $this->bbcode->replace_shorttags($strText);
-			#if($this->config->get('enable_embedly')) $strText = $this->embedly->parseString($strText, false, false);
 			
 			$arrPageObjects = array();
 			preg_match_all('#<p(.*)class="system-article"(.*) title="(.*)">(.*)</p>#iU', $strText, $arrTmpPageObjects, PREG_PATTERN_ORDER);
