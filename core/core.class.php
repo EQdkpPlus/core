@@ -549,6 +549,10 @@ class core extends gen_class {
 				$admin_functions = register('admin_functions');
 				$admin_functions->setAdminTooltip();
 			}
+			
+			if($this->hooks->isRegistered('coreclass_page_header')){
+				$this->hooks->process('coreclass_page_header');
+			}
 		}
 
 		public function addCommonTemplateVars(){
@@ -1204,6 +1208,10 @@ class core extends gen_class {
 			$arrAdditionalLinks = ($strAdditionalLinks != "") ? unserialize($strAdditionalLinks) : array();
 			foreach($arrAdditionalLinks as $key => $val){
 				$this->tpl->assign_var('LINK_'.strtoupper($key), $val);
+			}
+			
+			if($this->hooks->isRegistered('coreclass_page_tail')){
+				$this->hooks->process('coreclass_page_tail');
 			}
 
 			$this->tpl->display();
