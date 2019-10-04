@@ -266,6 +266,12 @@ if( !class_exists( "plus_exchange" ) ) {
 					}
 				}
 			}
+			
+			//User not authenticated, we are still here
+			if($this->hooks->isRegistered('pex_authenticate_user')){
+				$userID = $this->hooks->process('pex_authenticate_user', $this->user->id, true);
+				return $userID;
+			}
 
 			return $this->user->id;
 		}
