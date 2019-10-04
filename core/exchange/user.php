@@ -34,7 +34,7 @@ if (!class_exists('exchange_user')){
 			if ($isAPITokenRequest){
 				$intUserID = (int)$params['get']['user_id'];
 				
-				$arrUserIDs = $this->pdh->get('user', 'id_list', array());
+				$arrUserIDs = $this->pdh->get('user', 'id_list', array(false));
 				if(!in_array($intUserID, $arrUserIDs)) return $this->pex->error('user not found');
 				
 				

@@ -69,7 +69,7 @@ class user extends gen_class {
 	}
 
 	public function getUserIDfromDerivedExchangekey($strDerivedKey, $strDerivedType){
-		$arrUserList = $this->pdh->get('user', 'id_list');
+		$arrUserList = $this->pdh->get('user', 'id_list', array(false));
 		foreach($arrUserList as $intUserID){
 			$strExchangeKey = $this->pdh->get('user', 'exchange_key', array($intUserID));
 			$strUserDerivedKey = hash("sha256", md5($strExchangeKey).md5($strDerivedType));

@@ -36,7 +36,7 @@ if (!class_exists('exchange_search')){
 				$strSearchFor = (isset($params['get']['for'])) ? $params['get']['for'] : false;
 				$strSearchIn = (isset($params['get']['in'])) ? $params['get']['in'] : 'charname';
 				if($strSearchIn == 'username'){
-					$arrUsers = $this->pdh->get('user', 'id_list');
+					$arrUsers = $this->pdh->get('user', 'id_list', array(false));
 					$strSearchValue = utf8_strtolower($strSearchFor);
 					foreach($arrUsers as $intUserID){
 						$strUsername = $this->pdh->get('user', 'name', array($intUserID));
