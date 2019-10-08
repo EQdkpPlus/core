@@ -1151,7 +1151,12 @@ $lang = array(
 	"stopforumspam_denied" => "Your registration has been blocked because of security reasons. Please contact the administrator if your problems continue.",
 	"embedd_consent" => "Do you want to load external media from '{PROVIDER}'? Please not that this may result in transfering personal information such as your IP address to '{PROVIDER}'. Also, '{PROVIDER}' might set cookies.",
 	"embedd_consent_ok" => "Load and save decision.",
-		
+	"user_sett_fs_notifications_articles" => "Articles",
+	"user_sett_fs_notifications_calendarevent" => "Calendarevent",
+	"user_sett_fs_notifications_chars" => "Characters",
+	"user_sett_fs_notifications_comment" => "Comments",
+	"user_sett_fs_notifications_user" => "User",
+	"user_sett_fs_notifications_userwall" => "Userwall",
 	);
 
 ?>
