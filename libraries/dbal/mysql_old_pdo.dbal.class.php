@@ -389,7 +389,7 @@ class DB_Mysql_PDO_Old_Statement extends DatabaseStatement
 	 */
 	protected function execute_query()
 	{
-		$this->strQuery  = preg_replace("/([^\w]|^)__(\w)/", '$1'.$this->strTablePrefix.'$2', $this->strQuery);
+		$this->strQuery  = $this->replaceTablePrefix();
 		
 		// Log the Query
 		$this->objLogger->log($this->strDebugPrefix . 'sql_query', $this->strQuery);

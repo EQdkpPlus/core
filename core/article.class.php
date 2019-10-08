@@ -289,7 +289,7 @@ if(!class_exists('article')){
 			
 			$this->core->set_vars(array(
 					'page_title'		=> $arrCategory['name'],
-					'description'		=> truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrCategory['description'])))), 600, '...', false, true),
+					'description'		=> htmlspecialchars(truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrCategory['description'])))), 600, '...', false, true), ENT_QUOTES),
 					'page_path'			=> ($this->pdh->get('article_categories', 'parent', array($intCategoryID)) > 1) ? $this->pdh->get('article_categories', 'breadcrumb', array($intCategoryID)) : [],
 					'image'				=> $strPreviewImage,
 					'template_file'		=> 'category.html',
@@ -664,13 +664,13 @@ if(!class_exists('article')){
 			
 			$this->core->set_vars(array(
 					'page_title'		=> $arrArticle['title'].$strAdditionalTitles,
-					'description'		=> (isset($arrCoreVars['description']) && $arrCoreVars['description']) ? $arrCoreVars['description'] : truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrContent[$intPageID])))), 600, '...', false, true),
+					'description'		=> htmlspecialchars((isset($arrCoreVars['description']) && $arrCoreVars['description']) ? $arrCoreVars['description'] : truncate(strip_tags($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags(xhtml_entity_decode($arrContent[$intPageID])))), 600, '...', false, true), ENT_QUOTES),
 					'page_path'			=> $this->pdh->get('articles', 'breadcrumb', array($intArticleID, $strAdditionalTitles, registry::get_const('url_id'), $arrPath)),
 					'image'				=> $strPreviewImage,
 					'template_file'		=> 'article.html',
 					'portal_layout'		=> $intPortallayout,
 					'display'			=> true)
-					);
+			);
 		}
 		
 		public function formatArticleOutput($strText, $intArticleID, $strSpecificID){

@@ -358,6 +358,9 @@ class admin_functions extends gen_class {
 		// Add favorites to template vars
 		foreach (array_slice($admin_menu['favorits'], 2) as $fav)
 		{
+			$blnShow = ((is_array($fav['check'])) ? $this->user->check_auths($fav['check'][1], $fav['check'][0], false) : ((isset($fav['check']) && strlen($fav['check'])) ? $this->user->check_auth($fav['check'], false) : true));
+			if(!$blnShow) continue;
+
 			$this->tpl->assign_block_vars('admin_tooltip', array(
 				'LINK' => $fav['link'],
 				'TEXT' => $fav['text'],

@@ -105,7 +105,7 @@ class user extends gen_class {
 		//START Language
 		//-----------------------------
 		if ($this->data['user_id'] == ANONYMOUS) {
-			$strLanguage = (isset($this->data['session_vars']['lang']) && strlen($this->data['session_vars']['lang'])) ? $this->data['session_vars']['lang'] : '';
+			$strLanguage = (isset($this->data['session_vars']['lang']) && strlen($this->data['session_vars']['lang'])) ? $this->data['session_vars']['lang'] : $this->env->get_browser_language();
 			$this->lang_name = ( $strLanguage != '' && file_exists($this->root_path . 'language/' . $strLanguage) ) ? $strLanguage : $this->config->get('default_lang');
 			$this->data['user_lang'] = $this->lang_name;
 		} else {
