@@ -310,7 +310,7 @@ abstract class Database extends gen_class {
 	 * @return Database_Result
 	 */
 	public function execute($strQuery){
-		$strQuery = preg_replace("/([^\w]|^)__(\w)/", '$1'.$this->strTablePrefix.'$2', $strQuery);
+		$strQuery = $this->replaceTablePrefix($strQuery);
 		
 		// log the query
 		$this->pdl->log($this->strDebugPrefix . 'sql_query', $strQuery);
@@ -325,7 +325,7 @@ abstract class Database extends gen_class {
 	 * @return Database_Result
 	 */
 	public function query($strQuery, $blnGetFirstRow=false){
-		$strQuery = preg_replace("/([^\w]|^)__(\w)/", '$1'.$this->strTablePrefix.'$2', $strQuery);
+		$strQuery = $this->replaceTablePrefix($strQuery);
 		$this->intQueryCount++;
 		$objStatement = $this->createStatement($this->resConnection, $this->strTablePrefix, $this->strDebugPrefix,$this->blnDisableAutocommit);
 		try {
@@ -346,7 +346,7 @@ abstract class Database extends gen_class {
 	 * @return boolean
 	 */
 	public function checkQuery($strQuery){
-		$strQuery = preg_replace("/([^\w]|^)__(\w)/", '$1'.$this->strTablePrefix.'$2', $strQuery);
+		$strQuery = $this->replaceTablePrefix($strQuery);
 		$objStatement = $this->createStatement($this->resConnection, $this->strTablePrefix, $this->strDebugPrefix,$this->blnDisableAutocommit);
 		try {
 			$objQuery = $objStatement->query($strQuery);
@@ -529,6 +529,11 @@ abstract class Database extends gen_class {
 	public function escapeString($strString){
 		$objStatement = $this->createStatement($this->resConnection, $this->strTablePrefix, $this->strDebugPrefix,$this->blnDisableAutocommit);
 		return $objStatement->escapeString($strString);
+	}
+	
+	public function replaceTablePrefix($strQuery){
+		$strQuery = preg_replace("/([\s|`|'])__([a-zA-Z])/", '$1'.$this->strTablePrefix.'$2', $strQuery);
+		return $strQuery;
 	}
 	
 	abstract public function connect($strHost, $strUser, $strPassword, $strDatabase, $intPort=false, $blnPersistent=false);
@@ -938,7 +943,12 @@ abstract class DatabaseStatement {
 	public function escapeString($strString){
 		return $this->string_escape($strString);
 	}
-		
+	
+	public function replaceTablePrefix(){
+		$strQuery = preg_replace("/([\s|`|'])__([a-zA-Z])/", '$1'.$this->strTablePrefix.'$2', $this->strQuery);
+		return $strQuery;
+	}
+			
 	abstract protected function prepare_query($strQuery);
 	abstract protected function string_escape($strString);
 	abstract protected function limit_query($intOffset, $intRows);

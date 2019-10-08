@@ -401,7 +401,7 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
 	 */
 	protected function execute_query()
 	{
-		$this->strQuery  = preg_replace("/([^\w]|^)__(\w)/", '$1'.$this->strTablePrefix.'$2', $this->strQuery);
+		$this->strQuery  = $this->replaceTablePrefix();
 
 		//Bring params to the correct order
 		if(isset($this->arrParams['multiple'])){
