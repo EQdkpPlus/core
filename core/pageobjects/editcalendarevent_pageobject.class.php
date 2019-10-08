@@ -586,14 +586,14 @@ class editcalendarevent_pageobject extends pageobject {
 			));
 		}
 
-
+		$event_is_cloned	= (isset($eventdata['repeating']) && ($eventdata['repeating'] > 0 || ($eventdata['repeating'] == 'custom' && $dr_repeat_custom > 0))) ? true : false;
 		$this->tpl->assign_vars(array(
 			'IS_EDIT'			=> ($this->url_id > 0) ? true : false,
-			'IS_CLONED'			=> ((isset($eventdata['repeating']) && ($eventdata['repeating'] > 0 || ($eventdata['repeating'] == 'custom' && $dr_repeat_custom > 0))) ? true : false),
+			'IS_CLONED'			=> $event_is_cloned,
 			'DKP_ENABLED'		=> ($this->config->get('disable_points') == 0) ? true :false,
 			'DR_CALENDAR_JSON'	=> json_encode($calendars),
 			'DR_CALENDAR_CID'	=> (isset($eventdata['calendar_id'])) ? $eventdata['calendar_id'] : 0,
-			'DR_REPEAT'			=> (new hdropdown('repeat_dd', array('options' => $drpdwn_repeat, 'value' => ((isset($eventdata['repeating']) && (($eventdata['repeating'] == 'custom'  && $dr_repeat_custom > 0) || $eventdata['repeating'] > 0)) ? $eventdata['repeating'] : '0'))))->output(),
+			'DR_REPEAT'			=> (new hdropdown('repeat_dd', array('options' => $drpdwn_repeat, 'value' => ((isset($eventdata['repeating']) && (($eventdata['repeating'] == 'custom'  && $dr_repeat_custom > 0) || $eventdata['repeating'] > 0)) ? $eventdata['repeating'] : '0'), 'disabled' => $event_is_cloned )))->output(),
 			'REPEAT_CUSTOM'		=> $dr_repeat_custom,
 			'DR_TEMPLATE'		=> (new hdropdown('raidtemplate', array('options' => $this->pdh->get('calendar_raids_templates', 'dropdowndata'), 'id' => 'cal_raidtemplate')))->output(),
 			'DR_EVENT'			=> (new hdropdown('raid_eventid', array('options' => $this->pdh->aget('event', 'name', 0, array($this->pdh->sort($this->pdh->get('event', 'id_list'), 'event', 'name'))), 'value' => ((isset($eventdata['extension']['raid_eventid'])) ? $eventdata['extension']['raid_eventid'] : ''), 'id' => 'input_eventid', 'class' => 'resettemplate_input')))->output(),
