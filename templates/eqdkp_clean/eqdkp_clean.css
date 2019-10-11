@@ -2231,6 +2231,12 @@ fieldset.settings.floatRight.raid input[type="text"]{
 }
 
 /* calendar: raidevent view */
+#edit_clones {
+	width: 100%;
+	margin-top: 22px;
+	display: flex;
+	justify-content: space-evenly;
+}
 .raidcal_name {
 	font-size: 28px;
 	font-weight: bold;
@@ -4337,7 +4343,6 @@ label.isBoolean > input[type="radio"]:checked + span.green, label.isBoolean > sp
 .radioContainerBoolean, .radioContainer {
 	display: inline-block;
 }
-
 
 /* =========================== */
 /* Portalmodule Menu in Footer */

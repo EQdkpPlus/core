@@ -2166,6 +2166,12 @@ fieldset.settings.floatRight.raid input[type="text"]{
 }
 
 /* calendar: raidevent view */
+#edit_clones {
+	width: 100%;
+	margin-top: 22px;
+	display: flex;
+	justify-content: space-evenly;
+}
 .raidcal_name {
 	font-size: 28px;
 	font-family: 'Trebuchet MS',Arial,sans-serif;

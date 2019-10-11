@@ -688,7 +688,7 @@ $lang = array(
 	"calendar_mode" => 'Type of event',
 	"calendar_mode_raid" => 'Raid',
 	"calendar_mode_event" => 'Event',
-	"calendar_event_clones_info" => 'You are editing an recurring event. Should the changes affect only this occurence or all occurences?',
+	"calendar_event_clones_info" => "You are editing the recurring event '%s'. This event is a clone, the main information should be edited in the <a href='%s'>parent event</a>. <br/>Should the changes affect only this occurence or all occurences?",
 	"calendar_event_editone" => 'Just this event',
 	"calendar_event_editall" => 'All events',
 	"calendar_event_editall_future" => 'All future Events',
