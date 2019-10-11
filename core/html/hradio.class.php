@@ -38,14 +38,15 @@ class hradio extends html {
 
 	protected static $type = 'radio';
 	
-	public $name = '';
-	public $disabled = false;
-	public $default = 0;
-	public $class = '';
-	public $tolang = false;
-	public $nodiv = false;
-	public $js = "";
-	public $blnIsBoolean = false;
+	public $name			= '';
+	public $disabled		= false;
+	public $default			= 0;
+	public $class			= '';
+	public $tolang			= false;
+	public $nodiv			= false;
+	public $js				= "";
+	public $blnIsBoolean	= false;
+	public $orientation		= 'vertical';
 	
 	public function _construct() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
@@ -72,10 +73,10 @@ class hradio extends html {
 			$js = (!empty($this->js)) ? ' '.$this->js.' ' : '';
 			if($this->tolang) $opt = ($this->user->lang($opt, false, false)) ? $this->user->lang($opt) : (($this->game->glang($opt)) ? $this->game->glang($opt) : $opt);
 			$radiobox .= '><input type="'.self::$type.'" name="'.$this->name.'" value="'.$key.'"'.$selected_choice.$disabled.$dep.$js.'/> '.$opt.'</label>';
-			if(count($this->options) > 2) $radiobox .= '<br />';
+			if(count($this->options) > 2 && $this->orientation == 'vertical') $radiobox .= '<br />';
 		}
 
-		return ($this->nodiv) ? $radiobox: '<div id="'.$this->id.'" class="radioContainer'.(($this->blnIsBoolean) ? 'Boolean' : '').'">'.$radiobox.'</div>';
+		return ($this->nodiv) ? $radiobox: '<div id="'.$this->id.'" class="radioContainer'.(($this->blnIsBoolean) ? 'Boolean' : '').(($this->orientation == 'horizontal') ? ' orientation-horizontal' : ' orientation-vertical').'">'.$radiobox.'</div>';
 	}
 	
 	public function _inpval() {
