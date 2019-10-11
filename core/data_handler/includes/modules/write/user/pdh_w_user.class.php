@@ -113,7 +113,7 @@ if(!class_exists('pdh_w_user')) {
 			$arrDefaults = array(
 				'user_rlimit'		=> $this->config->get('default_rlimit'),
 				'user_style'		=> $this->config->get('default_style'),
-				'user_lang'			=> $this->config->get('default_lang'),
+				'user_lang'			=> $this->env->get_browser_language(),
 				'user_timezone'		=> $this->config->get('timezone'),
 				'user_date_long'	=> ($this->config->get('default_date_long')) ? $this->config->get('default_date_long') : $this->user->lang('style_date_long'),
 				'user_date_short'	=> ($this->config->get('default_date_short')) ? $this->config->get('default_date_short') : $this->user->lang('style_date_short'),
