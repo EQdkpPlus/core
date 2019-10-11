@@ -596,7 +596,7 @@ class editcalendarevent_pageobject extends pageobject {
 		$parent_event_name = $parent_event_url = '';
 		if($is_cloned_event){
 			//$eventdata['cloneid']
-			$parent_event_name	= $this->pdh->get('calendar_events', 'name', array($eventdata['cloneid']));;
+			$parent_event_name	= $this->pdh->get('calendar_events', 'name', array($eventdata['cloneid']));
 			$parent_event_url	= $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($eventdata['cloneid'])), $eventdata['cloneid'], true, true);
 		}
 		$this->tpl->assign_vars(array(
