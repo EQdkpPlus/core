@@ -586,14 +586,22 @@ class editcalendarevent_pageobject extends pageobject {
 			));
 		}
 
+		$txt_repeating 		= '';
+		$is_cloned_event	= (isset($eventdata['repeating']) && ($eventdata['repeating'] > 0 || ($eventdata['repeating'] == 'custom' && $dr_repeat_custom > 0))) ? true : false;
 		if(isset($eventdata['repeating']) && ($eventdata['repeating'] == 'custom'  && $dr_repeat_custom > 0)){
 			$txt_repeating = sprintf($this->user->lang('raidevent_repeat_raid_days'), $eventdata['repeating']);
 		}elseif($eventdata['repeating'] > 0){
 			$txt_repeating = $this->user->lang('calendar_log_repeat_'.$eventdata['repeating']);
 		}
+		$parent_event_name = $parent_event_url = '';
+		if($is_cloned_event){
+			//$eventdata['cloneid']
+			$parent_event_name	= $this->pdh->get('calendar_events', 'name', array($eventdata['cloneid']));
+			$parent_event_url	= $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($eventdata['cloneid'])), $eventdata['cloneid'], true, true);
+		}
 		$this->tpl->assign_vars(array(
 			'IS_EDIT'			=> ($this->url_id > 0) ? true : false,
-			'IS_CLONED'			=> (isset($eventdata['repeating']) && ($eventdata['repeating'] > 0 || ($eventdata['repeating'] == 'custom' && $dr_repeat_custom > 0))) ? true : false,
+			'IS_CLONED'			=> $is_cloned_event,
 			'DKP_ENABLED'		=> ($this->config->get('disable_points') == 0) ? true :false,
 			'DR_CALENDAR_JSON'	=> json_encode($calendars),
 			'DR_CALENDAR_CID'	=> (isset($eventdata['calendar_id'])) ? $eventdata['calendar_id'] : 0,
@@ -610,7 +618,7 @@ class editcalendarevent_pageobject extends pageobject {
 			'DR_STATUS'			=> (new hdropdown('asi_status', array('options' => $raidstatus, 'value' => 0)))->output(),
 			'CB_ALLDAY'			=> (new hcheckbox('allday', array('options' => array(1=>''), 'value' => ((isset($eventdata['allday'])) ? $eventdata['allday'] : 0), 'class' => 'allday_cb', 'inputid' => 'cb_allday')))->output(),
 			'CB_PRIVATE'		=> (new hcheckbox('private', array('options' => array(1=>''), 'value' => ((isset($eventdata['private'])) ? $eventdata['private'] : 0))))->output(),
-			'RADIO_EDITCLONES'	=> (new hradio('edit_clones', array('options' => $radio_repeat_array)))->output(),
+			'RADIO_EDITCLONES'	=> (new hradio('edit_clones', array('options' => $radio_repeat_array, 'orientation' => 'horizontal')))->output(),
 			'BBCODE_NOTE'		=> (new hbbcodeeditor('note', array('rows' => 3, 'value' => ((isset($eventdata['notes'])) ? $eventdata['notes'] : ''), 'id' => 'input_note')))->output(),
 			'LP_LOCATION'		=> (new hplacepicker('location', array('value' => ((isset($eventdata['extension']) && isset($eventdata['extension']['location'])) ? $eventdata['extension']['location'] : ''))))->output(),
 			'DR_ICONSELECT'		=> (new hiconselect('calevent_icon', array('value' => ((isset($eventdata['extension']['calevent_icon']) && $eventdata['extension']['calevent_icon']) ? $eventdata['extension']['calevent_icon'] : array())	)))->output(),
@@ -618,8 +626,6 @@ class editcalendarevent_pageobject extends pageobject {
 			'JQ_DATE_START'		=> (new hdatepicker('startdate', array('value' => $this->time->user_date($defdates['start'], true, false, false), 'timepicker' => true, 'onselect' => $startdate_onselect, 'id' => 'cal_startdate')))->output(),
 			'JQ_DATE_END'		=> (new hdatepicker('enddate', array('value' => $this->time->user_date($defdates['end'], true, false, false), 'timepicker' => true, 'id' => 'cal_enddate')))->output(),
 			'DATE_DEADLINE'		=> ($defdates['deadline'] > 0) ? $defdates['deadline'] : 2,
-
-			'CLONED_REPEAT'		=> sprintf($this->user->lang('raidevent_repeat_raid_text'), $txt_repeating),
 
 			// data
 			'EVENT_ID'			=> $this->url_id,
@@ -630,6 +636,11 @@ class editcalendarevent_pageobject extends pageobject {
 			'RAID_VALUE'		=> (isset($eventdata['extension']) && isset($eventdata['extension']['raid_value'])) ? $eventdata['extension']['raid_value'] : '',
 			'ATTENDEE_COUNT'	=> (isset($eventdata['extension']) && isset($eventdata['extension']['attendee_count'])) ? $eventdata['extension']['attendee_count'] : 0,
 			'RAIDMODE_NONE'		=> (isset($eventdata['extension']['raidmode']) && $eventdata['extension']['raidmode'] == 'none') ? true : false,
+			
+			// lang
+			'CLONED_REPEAT'		=> sprintf($this->user->lang('raidevent_repeat_raid_text'), $txt_repeating),
+			'CLONED_INFO'		=> sprintf($this->user->lang('calendar_event_clones_info'), $parent_event_name, $parent_event_url),
+			
 			'CSRF_DELETETEMPLATE' => $this->CSRFGetToken('deletetemplate'),
 		));
 

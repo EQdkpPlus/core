@@ -650,7 +650,7 @@ $lang = array(
 "calendar_mode" => "Art des Ereignisses",
 "calendar_mode_raid" => "Raid",
 "calendar_mode_event" => "Termin",
-"calendar_event_clones_info" => "Du änderst ein wiederkehrenden Ereignis. Sollen die Änderungen nur für dieses Vorkommen oder für alle Vorkommen übernommen werden?",
+"calendar_event_clones_info" => "Du änderst das wiederkehrenden Ereignis '%s'. Dieses Ereignis ist ein Klon, die Hauptinformationen können im <a href='%s'>Elternevent</a> bearbeitet werden. <br/>Sollen die Änderungen nur für dieses Vorkommen oder für alle Vorkommen übernommen werden?",
 "calendar_event_editone" => "Nur dieses Ereignis",
 "calendar_event_editall" => "Alle Ereignisse",
 "calendar_event_editall_future" => "Alle zukünftigen Ereignisse",
