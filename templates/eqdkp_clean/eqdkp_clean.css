@@ -1477,6 +1477,10 @@ div[aria-describedby="dialog-login"] .password-forgot{
 	border-color: #3A87AD;
 }
 
+.infobox-blue a {
+	color: #000;
+}
+
 .infobox-red {
 	background-color: #F2DEDE;
 	color: #B94A48;
