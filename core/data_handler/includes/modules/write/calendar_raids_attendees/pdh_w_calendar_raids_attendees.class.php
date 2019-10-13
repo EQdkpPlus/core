@@ -58,7 +58,7 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 
 				$affectedID	= false;
 			}else{
-				$rand_value		= rand(1,100);
+				$rand_value		= random_integer(1,100);
 				$raidgroup_new	= 0;
 				if((int)$raidgroup == 0){
 					$raidgroup_new = array_shift($this->pdh->get('raid_groups_members', 'memberships', array($memberid)));

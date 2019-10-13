@@ -770,7 +770,7 @@ class template extends gen_class {
 			$relative_file = $this->env->server_to_rootpath($item['file']);
 
 			if(substr($item['file'],0,4) == "http"){
-				$filetime	= rand(1,100000000);
+				$filetime	= random_integer(1,100000000);
 			} else {
 				$filetime = (file_exists($relative_file)) ? filemtime($relative_file) : false;
 				if($filetime === false) continue;

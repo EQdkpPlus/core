@@ -130,7 +130,7 @@ class ManagePageLayouts extends page_generic {
 		$arrParams = $this->in->getArray('param', 'string');
 		$arrCaption = $this->in->getArray('caption', 'string');
 
-		$strPresetName = $strTag.'_'.substr(md5(rand()), 0, 8);
+		$strPresetName = $strTag.'_'.substr(randomID(), 0, 8);
 
 		if ($strModul !="" && $strTag != ""){
 			$strColumnTitle = $this->in->get('lang');

@@ -819,11 +819,11 @@ class user extends gen_class {
 		}
 		
 		//Create Username
-		$strUsername = ($arrAccountDetails['username'] != "") ? $arrAccountDetails['username'] : ucfirst($strAuthMethod).'User'.rand(100, 999);
+		$strUsername = ($arrAccountDetails['username'] != "") ? $arrAccountDetails['username'] : ucfirst($strAuthMethod).'User'.random_integer(100, 999);
 		
 		//Check Username and create a new one
 		if ($this->pdh->get('user', 'check_username', array($strUsername)) == 'false'){
-			$strUsername = $strUsername.rand(100, 999);
+			$strUsername = $strUsername.random_integer(100, 999);
 		}
 		if ($this->pdh->get('user', 'check_username', array($strUsername)) == 'false'){
 			return $arrAccountDetails;

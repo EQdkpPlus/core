@@ -164,7 +164,7 @@ if(!function_exists('CSVpointexport')){
 		$text .= "<input type='checkbox' name='backup' id='cb_backup' value='true'> ".registry::fetch('user')->lang(array('raidevent_raid_status', 3));
 		$text .= ' | '.registry::fetch('user')->lang('raidevent_export_sorting')." ";
 		$text .= "<br/>";
-		$text .= "<textarea name='group".rand()."' id='attendeeout' cols='60' rows='10' onfocus='this.select()' readonly='readonly'>";
+		$text .= "<textarea name='group".mt_rand()."' id='attendeeout' cols='60' rows='10' onfocus='this.select()' readonly='readonly'>";
 		$text .= "</textarea>";
 
 		$text .= '<br/>'.registry::fetch('user')->lang('rp_copypaste_ig')."</b>";

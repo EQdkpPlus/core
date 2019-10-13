@@ -98,7 +98,7 @@ class Manage_Extensions extends page_generic {
 		$tempname		= $_FILES['extension']['tmp_name'];
 		$name			= $_FILES['extension']['name'];
 		$filetype		= $_FILES['extension']['type'];
-		$upload_id		= md5(time().rand());
+		$upload_id		= randomID();
 	
 		$mime_types = array(
 				'zip'	=> 'application/zip',
