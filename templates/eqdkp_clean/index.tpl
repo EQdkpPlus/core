@@ -193,7 +193,7 @@
 						<li class="personalAreaTime"><i class="fa fa-clock-o fa-lg"></i> <span class="user_time">{USER_TIME}</span></li><!-- ENDIF -->
 						<li><!-- IF S_SEARCH -->
 						<form method="post" action="{EQDKP_CONTROLLER_PATH}Search{SEO_EXTENSION}{SID}" id="search_form">
-							<input name="svalue" size="20" maxlength="30" class="input search" id="loginarea_search" type="text" value="{L_search}..."/>
+							<input name="svalue" size="20" maxlength="30" class="input search" id="loginarea_search" type="text" placeholder="{L_search}..."/>
 							<button type="submit" class="search_button" value="" title="{L_search_do}">
 								<i class="fa fa-search fa-lg"></i>
 							</button>

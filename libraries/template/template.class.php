@@ -1684,9 +1684,7 @@ class template extends gen_class {
 			$title			= $this->lang('templates_error');
 			$content		= (!$this->lang($content)) ? $content : $this->lang($content);
 
-			if ($sprintf !=""){
-				$content	= sprintf($content, $sprintf);
-			}
+			$content		= sprintf($content, $sprintf);
 
 			$message		 = '<h2>'.$this->lang('templates_error_desc').':</h2>';
 			$message		.= $content;

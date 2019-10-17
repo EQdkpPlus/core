@@ -61,6 +61,7 @@ if ( !defined('EQDKP_INC') ){
 				$result = @file_get_contents($this->apa_tab_file);
 			}
 			if($result !== false) $this->apa_tab = unserialize($result);
+			if(!$this->apa_tab) $this->apa_tab = array();
 		}
 
 		private function save_apa_tab($apa_tab){
