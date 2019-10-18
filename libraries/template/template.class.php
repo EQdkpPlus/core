@@ -1007,9 +1007,7 @@ class template extends gen_class {
 						break;
 					case 'LISTENER':
 						$strListenername = strtolower($blocks[2][$curr_tb]);
-						if(isset($this->template_listener[$strListenername])){
-							$compile_blocks[] = "echo \$this->assign_from_listener('".$strListenername."');\n";
-						} else $compile_blocks[] = "";
+						$compile_blocks[] = "echo \$this->assign_from_listener('".$strListenername."');\n";
 						break;
 					default:
 						$this->compile_var_tags($blocks[0][$curr_tb]);
