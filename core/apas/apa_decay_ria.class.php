@@ -192,7 +192,10 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 		
 		public function get_value($apa_id, $last_run, $module, $dkp_id, $data, $refdate) {
 			// load decay parameters, set decay_start to its proper timestamp (from somewhere at that day to exectime)
-			$decay_start = $this->apa->get_data('start_date', $apa_id);	
+			$decay_start = $this->apa->get_data('start_date', $apa_id);
+			if ($decay_start > $this->time->time) {
+				return array($data['value'], false, 0);
+			}
 			$exectime = $this->apa->get_data('exectime', $apa_id);
 			list($h,$i) = explode(':',$exectime);
 			$exectime = 3600*$h + 60*$i;//exectime as seconds from midnight
