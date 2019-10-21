@@ -646,7 +646,7 @@ ul.mainmenu li:hover > ul.sub-menu {
 }
 
 ul.mainmenu .sub-menu-arrow {
-	padding-right: 1.8em;
+	padding-right: 1.8em !important;
 }
 ul.mainmenu .sub-menu-arrow:after {
 	content: '';
