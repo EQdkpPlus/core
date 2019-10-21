@@ -56,6 +56,10 @@ if ( !class_exists( "apa_startpoints" ) ) {
 				'type'		=> 'radio',
 				'default' 	=> 0,
 			),
+			'inactive'	=> array(
+					'type'		=> 'radio',
+					'default' 	=> 1,
+			),
 		);
 
 		protected $required = array('name', 'event');
@@ -82,7 +86,8 @@ if ( !class_exists( "apa_startpoints" ) ) {
 		}
 		
 		public function update_startdkp($apa_id, $last_date) {
-			$members = $this->pdh->get('member', 'id_list', array(true, false, true, !(int)$this->apa->get_data('twinks', $apa_id)));
+			//Skip special chars			
+			$members = $this->pdh->get('member', 'id_list', array(!(int)$this->apa->get_data('inactive', $apa_id), false, true, !(int)$this->apa->get_data('twinks', $apa_id)));
 			if(!$last_date) $last_date = $this->apa->get_data('start_date', $apa_id);
 			$startdkp_before = ($this->config->get('cron_startdkp_before')) ? $this->config->get('cron_startdkp_before') : array();
 

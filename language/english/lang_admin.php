@@ -832,6 +832,7 @@ $lang = array(
 	"apa_startpoints_value" => 'Value',
 	"apa_startpoints_creation" => 'Give Startpoints on Char-creation',
 	"apa_startpoints_twinks" => 'Give Startpoints also to Twinks',
+	"apa_startpoints_inactive" => "Give Startpoints also to inactive characters",
 	"apa_cap_current_upper_cap" => "Upper point cap",
 	"apa_cap_current_lower_cap" => "Lower point cap",
 	"apa_hardcap_current_upper_cap" => "Upper point cap",

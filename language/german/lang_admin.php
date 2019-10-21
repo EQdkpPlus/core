@@ -830,6 +830,7 @@ $lang = array(
 "apa_startpoints_value" => "Anzahl der Punkte",
 "apa_startpoints_creation" => "Startpunkte bei Charakter-Erstellung vergeben",
 "apa_startpoints_twinks" => "Startpunkte auch an Twinks vergeben",
+"apa_startpoints_inactive" => "Startpunkte auch an inaktive Charaktere vergeben",
 "apa_cap_current_upper_cap" => "Oberes Punktelimit",
 "apa_cap_current_lower_cap" => "Unteres Punktelimit",
 "apa_cap_current_interval" => "Punktelimit alle x Tage überprüfen",
