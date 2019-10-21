@@ -47,22 +47,13 @@
 <div class="tableHeader raid-attendees">
 	<h2>{L_attendees} <span class="bubble">{ATTENDEES_COUNT}</span></h2>
 </div>
-<table class="table fullwidth  raid-attendees">
+<div class="raid-attendees grid" style="overflow:hidden;">
   <!-- BEGIN attendees_row -->
-  <tr>
-    <!-- IF S_COLUMN0 --><td class="row2 nowrap" style="width: {COLUMN_WIDTH}%">{attendees_row.COLUMN0_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN1 --><td class="row1 nowrap" style="width: {COLUMN_WIDTH}%">{attendees_row.COLUMN1_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN2 --><td class="row2 nowrap" style="width: {COLUMN_WIDTH}%">{attendees_row.COLUMN2_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN3 --><td class="row1 nowrap" style="width: {COLUMN_WIDTH}%">{attendees_row.COLUMN3_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN4 --><td class="row2 nowrap" style="width: {COLUMN_WIDTH}%">{attendees_row.COLUMN4_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN5 --><td class="row1 nowrap" style="width: {COLUMN_WIDTH}%">{attendees_row.COLUMN5_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN6 --><td class="row2 nowrap" style="width: {COLUMN_WIDTH}%">{attendees_row.COLUMN6_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN7 --><td class="row1 nowrap" style="width: {COLUMN_WIDTH}%">{attendees_row.COLUMN7_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN8 --><td class="row2 nowrap" style="width: {COLUMN_WIDTH}%">{attendees_row.COLUMN8_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN9 --><td class="row1 nowrap" style="width: {COLUMN_WIDTH}%">{attendees_row.COLUMN9_NAME}</td><!-- ENDIF -->
-  </tr>
+  <div class="col2">
+  {attendees_row.MEMBERLINK}
+  </div>
   <!-- END attendees_row -->
-</table>
+</div>
 <br />
 
 <div class="tableHeader raid-items">
@@ -122,3 +113,9 @@
 <div class="contentFooter">
 	<button class="mainoption" type="button" onclick="window.location='{U_RAIDLIST}'"><i class="fa fa-chevron-left"></i>{L_back}</button>
 </div>
+
+<style>
+.raid-attendees.grid > div {
+	padding: 5px;
+}
+</style>
