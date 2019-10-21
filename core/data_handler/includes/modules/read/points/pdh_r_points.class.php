@@ -612,7 +612,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 
 		private function snapshot_mapping(){
 			$this->arrSnapshotTime = array();
-			$objQuery = $this->db->prepare("SELECT MAX(time) as lastsnap, member_id, mdkp_id FROM __member_points GROUP BY member_id, mdkp_id DESC")->execute();
+			$objQuery = $this->db->prepare("SELECT MAX(time) as lastsnap, member_id, mdkp_id FROM __member_points GROUP BY member_id, mdkp_id ORDER BY lastsnap")->execute();
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					if(!isset($this->arrSnapshotTime[(int)$row['member_id']])) $this->arrSnapshotTime[(int)$row['member_id']] = array();
