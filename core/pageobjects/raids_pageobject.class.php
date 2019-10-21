@@ -37,6 +37,7 @@ class raids_pageobject extends pageobject {
 
 			// Attendees
 			$attendees_ids = $this->pdh->get('raid', 'raid_attendees', array($raid_id));
+			$attendees_ids = $this->pdh->sort($attendees_ids, 'member', 'name');
 			$attendee_copy = $attendees = array();
 			foreach($attendees_ids as $attendee_id){
 				$attendees[$attendee_id] = sanitize(($this->pdh->get('member', 'name', array($attendee_id))));
@@ -55,40 +56,12 @@ class raids_pageobject extends pageobject {
 				// First get rid of duplicates and resort them just in case,
 				// so we're sure they're displayed correctly
 				$attendees = array_unique($attendees);
-				sort($attendees);
-				reset($attendees);
-				$rows = ceil(sizeof($attendees) / $this->user->style['attendees_columns']);
-
-				// First loop: iterate through the rows
-				// Second loop: iterate through the columns as defined in template_config,
-				// then "add" an array to $block_vars that contains the column definitions,
-				// then assign the block vars.
-				// Prevents one column from being assigned and the rest of the columns for
-				// that row being blank
-				for ( $i = 0; $i < $rows; $i++ ){
-					$block_vars		= array();
-					for ( $j = 0; $j < $this->user->style['attendees_columns']; $j++ ){
-						$offset		= ($i + ($rows * $j));
-						$attendee	= ( isset($attendees_ids[$offset]) ) ? $attendees_ids[$offset] : '';
-
-						if($attendee != ''){
-							$block_vars += array(
-									'COLUMN'.$j.'_NAME' => $this->pdh->get('member', 'html_memberlink', array($attendee, $this->routing->simpleBuild('character'), '', false, false, true, true))
-							);
-
-						}else{
-							$block_vars += array(
-									'COLUMN'.$j.'_NAME' => ''
-							);
-						}
-
-						// Are we showing this column?
-						$s_column = 's_column'.$j;
-						${$s_column} = true;
-					}
-					$this->tpl->assign_block_vars('attendees_row', $block_vars);
+				foreach($attendees as $intMemberID => $strMembername){
+					$this->tpl->assign_block_vars('attendees_row', array(
+							'MEMBERLINK' => $this->pdh->get('member', 'html_memberlink', array($intMemberID, $this->routing->simpleBuild('character'), '', false, false, true, true)),
+					));
 				}
-				$column_width = floor(100 / $this->user->style['attendees_columns']);
+				
 			}else{
 				message_die('Could not get raid attendee information.','Critical Error');
 			}
@@ -242,17 +215,6 @@ class raids_pageobject extends pageobject {
 
 					'EVENT_ICON'			=> $this->game->decorate('events', $this->pdh->get('raid', 'event', array($raid_id)), array(), 40),
 					'EVENT_NAME'			=> stripslashes($this->pdh->get('raid', 'event_name', array($raid_id))),
-
-					'S_COLUMN0'				=> ( isset($s_column0) ) ? true : false,
-					'S_COLUMN1'				=> ( isset($s_column1) ) ? true : false,
-					'S_COLUMN2'				=> ( isset($s_column2) ) ? true : false,
-					'S_COLUMN3'				=> ( isset($s_column3) ) ? true : false,
-					'S_COLUMN4'				=> ( isset($s_column4) ) ? true : false,
-					'S_COLUMN5'				=> ( isset($s_column5) ) ? true : false,
-					'S_COLUMN6'				=> ( isset($s_column6) ) ? true : false,
-					'S_COLUMN7'				=> ( isset($s_column7) ) ? true : false,
-					'S_COLUMN8'				=> ( isset($s_column8) ) ? true : false,
-					'S_COLUMN9'				=> ( isset($s_column9) ) ? true : false,
 
 					'COLUMN_WIDTH'			=> ( isset($column_width) ) ? $column_width : 0,
 					'COLSPAN'				=> $this->user->style['attendees_columns'],

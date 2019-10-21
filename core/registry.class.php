@@ -58,7 +58,7 @@ final class registry extends super_registry{
 			try {
 				$hash = md5(serialize($params));
 			} catch(Exception $e){
-				$hash = md5(rand());
+				$hash = md5(randomID());
 			}
 		}
 		if(isset(self::$inst[$classname][$hash])) {

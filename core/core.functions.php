@@ -838,164 +838,65 @@ function xhtml_entity_decode($string){
 	return $string;
 }
 
-function random_string($hash = false, $length = 10){
-	$chars = array('a','A','b','B','c','C','d','D','e','E','f','F','g','G','h','H','i','I','j','J',
-					'k','K','l','L','m','M','n','N','o','O','p','P','q','Q','r','R','s','S','t','T',
-					'u','U','v','V','w','W','x','X','y','Y','z','Z','1','2','3','4','5','6','7','8',
-					'9','0');
-
-	$max_chars = count($chars) - 1;
-
-	$rand_str = '';
-	for($i = 0; $i < $length; $i++){
-		$rand_str = ( $i == 0 ) ? $chars[rand(0, $max_chars)] : $rand_str . $chars[rand(0, $max_chars)];
-	}
-	return ( $hash ) ? md5($rand_str) : $rand_str;
+function randomID() {
+	return sha1(microtime() . uniqid(mt_rand(), true));
 }
 
-/**
- * Generate random bytes.
- *
- * @param   integer  $length  Length of the random data to generate
- * @return  string  Random binary data
- *
- */
-function generateRandomBytes($length = 16)
-{
-	$length = (int) $length;
-	$sslStr = '';
-	$strong = false;
-
-	/*
-	* If a secure randomness generator exists and we don't
-	* have a buggy PHP version use it.
-	*/
-	if (function_exists('openssl_random_pseudo_bytes')
-	&& (version_compare(PHP_VERSION, '5.3.4') >= 0 || IS_WIN)){
-		$sslStr = openssl_random_pseudo_bytes($length, $strong);
-
-		if ($strong){
-			$hex   = bin2hex($sslStr);
-			return substr($hex, 0, $length);
+function generateRandomBytes($length = 16) {
+	try {
+		if (function_exists('random_bytes')) {
+			$bytes = random_bytes($length);
+			if ($bytes === false) throw new Exception('Cannot generate a secure stream of bytes.');
+			
+			return $bytes;
 		}
+		
+		$bytes = openssl_random_pseudo_bytes($length, $s);
+		if (!$s) throw new Exception('Cannot generate a secure stream of bytes.');
+		
+		return $bytes;
+	} catch (\Exception $e) {
+		throw new Exception('Cannot generate a secure stream of bytes.', $e);
 	}
-
-	/*
-	 * Collect any entropy available in the system along with a number
-	* of time measurements of operating system randomness.
-	*/
-	$bitsPerRound = 2;
-	$maxTimeMicro = 400;
-	$shaHashLength = 20;
-	$randomStr = '';
-	$total = $length;
-
-	// Check if we can use /dev/urandom.
-	$urandom = false;
-	$handle = null;
-
-	// This is PHP 5.3.3 and up
-	if (function_exists('stream_set_read_buffer') && @is_readable('/dev/urandom'))
-	{
-		$handle = @fopen('/dev/urandom', 'rb');
-
-		if ($handle)
-		{
-			$urandom = true;
-		}
-	}
-
-	while ($length > strlen($randomStr))
-	{
-		$bytes = ($total > $shaHashLength)? $shaHashLength : $total;
-		$total -= $bytes;
-
-		/*
-		 * Collect any entropy available from the PHP system and filesystem.
-		* If we have ssl data that isn't strong, we use it once.
-		*/
-		$entropy = rand() . uniqid(mt_rand(), true) . $sslStr;
-		$entropy .= implode('', @fstat(fopen(__FILE__, 'r')));
-		$entropy .= memory_get_usage();
-		$sslStr = '';
-
-		if ($urandom)
-		{
-			stream_set_read_buffer($handle, 0);
-			$entropy .= @fread($handle, $bytes);
-		}
-		else
-		{
-			/*
-			 * There is no external source of entropy so we repeat calls
-			* to mt_rand until we are assured there's real randomness in
-			* the result.
-			*
-			* Measure the time that the operations will take on average.
-			*/
-			$samples = 3;
-			$duration = 0;
-
-			for ($pass = 0; $pass < $samples; ++$pass)
-			{
-				$microStart = microtime(true) * 1000000;
-				$hash = sha1(mt_rand(), true);
-
-				for ($count = 0; $count < 50; ++$count)
-				{
-					$hash = sha1($hash, true);
-				}
-
-				$microEnd = microtime(true) * 1000000;
-				$entropy .= $microStart . $microEnd;
-
-				if ($microStart >= $microEnd)
-				{
-					$microEnd += 1000000;
-				}
-
-				$duration += $microEnd - $microStart;
-			}
-
-			$duration = $duration / $samples;
-
-			/*
-			 * Based on the average time, determine the total rounds so that
-			* the total running time is bounded to a reasonable number.
-			*/
-			$rounds = (int) (($maxTimeMicro / $duration) * 50);
-
-			/*
-			 * Take additional measurements. On average we can expect
-			* at least $bitsPerRound bits of entropy from each measurement.
-			*/
-			$iter = $bytes * (int) ceil(8 / $bitsPerRound);
-
-			for ($pass = 0; $pass < $iter; ++$pass)
-			{
-				$microStart = microtime(true);
-				$hash = sha1(mt_rand(), true);
-
-				for ($count = 0; $count < $rounds; ++$count)
-				{
-					$hash = sha1($hash, true);
-				}
-
-				$entropy .= $microStart . microtime(true);
-			}
-		}
-
-		$randomStr .= sha1($entropy, true);
-	}
-
-	if ($urandom)
-	{
-		@fclose($handle);
-	}
-	$hex   = bin2hex($randomStr);
-	return substr($hex, 0, $length);
-
 }
+
+function random_integer($min, $max) {
+	try {
+		$range = $max - $min;
+		
+		if (function_exists('random_int')) {
+			return random_int($min, $max);
+		}
+		
+		$log = log($range, 2);
+		$bytes = (int) ($log / 8) + 1; // length in bytes
+		$bits = (int) $log + 1; // length in bits
+		$filter = (int) (1 << $bits) - 1; // set all lower bits to 1
+		do {
+			$rnd = hexdec(bin2hex(generateRandomBytes($bytes)));
+			$rnd = $rnd & $filter; // discard irrelevant bits
+		}
+		while ($rnd > $range);
+		
+		return $min + $rnd;
+		
+		
+	}
+	catch (Exception $e) {
+		// Backwards compatibility: This function never did throw.
+		return mt_rand($min, $max);
+	}
+}
+
+
+function random_string($hash = false, $length = 16){
+	$binLength = ceil($length / 2);
+	
+	$string = bin2hex(generateRandomBytes($binLength));
+	
+	return ( $hash ) ? sha1($string) : $string;
+}
+
 
 function get_absolute_path($path) {
 	$strMyDirectorySeperator = "/";

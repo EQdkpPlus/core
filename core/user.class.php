@@ -234,7 +234,7 @@ class user extends gen_class {
 	* @return bool
 	*/
 	public function check_auth($strAuthValue, $boolDie = true, $intUserID = 0, $boolGroups = true){
-		if($intUserID == 0){
+		if((int)$intUserID === 0){
 			$intUserID = $this->data['user_id'];
 		}
 		//Overtake user permissions
@@ -269,7 +269,7 @@ class user extends gen_class {
 	*/
 	public function check_auths($arrAuths, $mode = 'AND', $boolDie = true, $intUserID = 0, $boolGroups = true){
 		if (is_array($arrAuths) && count($arrAuths) > 0){
-			if (strtolower($mode) == 'and'){
+			if (strtolower($mode) === 'and'){
 				$intPerms = 0;
 				foreach ($arrAuths as $auth){
 					if ($this->check_auth($auth, $boolDie, $intUserID, $boolGroups)){
@@ -306,7 +306,7 @@ class user extends gen_class {
 	* @return bool
 	*/
 	public function check_group($intGroupID, $boolDie = true, $intUserID = 0){
-		if($intUserID == 0) $intUserID = $this->data['user_id'];
+		if((int)$intUserID === 0) $intUserID = $this->data['user_id'];
 		if(!is_array($intGroupID)) $intGroupID = array($intGroupID);
 
 		//Overtake user permissions
@@ -327,7 +327,7 @@ class user extends gen_class {
 	}
 
 	public function check_pageobject($strPageObject, $boolDie = true, $intUserID = 0){
-		if($intUserID == 0) $intUserID = $this->data['user_id'];
+		if((int)$intUserID === 0) $intUserID = $this->data['user_id'];
 
 		$blnResult = $this->pdh->get('articles', 'check_pageobject_permission', array($strPageObject, $intUserID));
 		if($blnResult) return true;
@@ -337,7 +337,7 @@ class user extends gen_class {
 
 	public function check_pageobjects($arrPageObjects, $mode = 'AND', $boolDie = true, $intUserID = 0){
 		if (is_array($arrPageObjects) && count($arrPageObjects) > 0){
-			if (strtolower($mode) == 'and'){
+			if (strtolower($mode) === 'and'){
 				$intPerms = 0;
 				foreach ($arrPageObjects as $strPageObject){
 					if ($this->check_pageobject($strPageObject, $boolDie, $intUserID)){
@@ -819,11 +819,11 @@ class user extends gen_class {
 		}
 		
 		//Create Username
-		$strUsername = ($arrAccountDetails['username'] != "") ? $arrAccountDetails['username'] : ucfirst($strAuthMethod).'User'.rand(100, 999);
+		$strUsername = ($arrAccountDetails['username'] != "") ? $arrAccountDetails['username'] : ucfirst($strAuthMethod).'User'.random_integer(100, 999);
 		
 		//Check Username and create a new one
 		if ($this->pdh->get('user', 'check_username', array($strUsername)) == 'false'){
-			$strUsername = $strUsername.rand(100, 999);
+			$strUsername = $strUsername.random_integer(100, 999);
 		}
 		if ($this->pdh->get('user', 'check_username', array($strUsername)) == 'false'){
 			return $arrAccountDetails;

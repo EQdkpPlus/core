@@ -658,8 +658,8 @@ class core extends gen_class {
 			} else {
 				$toHash = $this->user->removeSIDfromString($arrLinkData['link']);
 				$toHash = str_replace(array("index.php/", ".html", ".php"), "", $toHash);
-				if (substr($toHash, -1) == "/") $toHash = substr($toHash, 0, -1);
 				if (substr($toHash, -1) == "?") $toHash = substr($toHash, 0, -1);
+				if (substr($toHash, -1) == "/") $toHash = substr($toHash, 0, -1);
 				return md5($toHash);
 
 			}
@@ -731,7 +731,6 @@ class core extends gen_class {
 						$show = $secondlevel_show;
 					}
 				}
-				$show = true;
 			}
 
 			foreach($arrToDo as $hash => $item){
@@ -743,7 +742,6 @@ class core extends gen_class {
 
 			$arrOut = $this->hooks->process("menu", $arrOut, true);
 			$arrOutOneLevel = $this->hooks->process("menu_onelevel", $arrOutOneLevel, true);
-
 
 			return ($blnOneLevel) ? $arrOutOneLevel: $arrOut;
 		}
@@ -825,10 +823,11 @@ class core extends gen_class {
 			// Mainmenu
 			}else{
 				foreach($arrMenuItems as $k => $v){
-					if ( !is_array($v) )continue;
+					if ( !is_array($v) ) continue;
 
 					if (!isset($v['childs'])){
 						if ( $this->check_url_for_permission($v)) {
+							if($v['link'] === '#') continue;
 							$class = $this->clean_url($v['link']);
 							if (!strlen($class)) $class = "entry_".$this->clean_url($v['text']);
 							$html .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v, 'link_'.$class).'</li>';
@@ -837,11 +836,11 @@ class core extends gen_class {
 						}
 
 					} else {
-
+						$tmpHtml = $subHtml = "";
 						if ( $this->check_url_for_permission($v)) {
 							$class = $this->clean_url($v['link']);
 							if (!strlen($class)) $class = "entry_".$this->clean_url($v['text']);
-							$html .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v, 'link_'.$class.' sub-menu-arrow').'<ul class="sub-menu">';
+							$tmpHtml .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v, 'link_'.$class.' sub-menu-arrow').'<ul class="sub-menu">';
 						} else {
 							continue;
 						}
@@ -851,7 +850,7 @@ class core extends gen_class {
 								if ( $this->check_url_for_permission($v2)) {
 									$class = $this->clean_url($v2['link']);
 									if (!strlen($class)) $class = "entry_".$this->clean_url($v2['text']);
-									$html .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v2, 'link_'.$class).'</li>';
+									$subHtml .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v2, 'link_'.$class).'</li>';
 								} else {
 									continue;
 								}
@@ -859,7 +858,7 @@ class core extends gen_class {
 								if ( $this->check_url_for_permission($v2)) {
 									$class = $this->clean_url($v2['link']);
 									if (!strlen($class)) $class = "entry_".$this->clean_url($v2['text']);
-									$html .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v2, 'link_'.$class.' sub-menu-arrow').'<ul class="sub-menu">';
+									$subHtml .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v2, 'link_'.$class.' sub-menu-arrow').'<ul class="sub-menu">';
 								} else {
 									continue;
 								}
@@ -868,18 +867,23 @@ class core extends gen_class {
 									if ( $this->check_url_for_permission($v3)) {
 										$class = $this->clean_url($v3['link']);
 										if (!strlen($class)) $class = "entry_".$this->clean_url($v3['text']);
-										$html .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v3, 'link_'.$class).'</li>';
+										$subHtml .= '<li class="link_li_'.$class.'"><i class="link_i_'.$class.'"></i>'.$this->createLink($v3, 'link_'.$class).'</li>';
 									} else {
 										continue;
 									}
 								}
 
-								$html .= '</ul></li>';
+								$subHtml .= '</ul></li>';
 							}
 
 						}
-
-						$html .= '</ul></li>';
+												
+						$tmpHtml .= $subHtml;
+						$tmpHtml .= '</ul></li>';
+						
+						if(!(strlen($subHtml) === 0 && $v['link'] === '#')){
+							$html .= $tmpHtml;
+						}
 					}
 
 				}

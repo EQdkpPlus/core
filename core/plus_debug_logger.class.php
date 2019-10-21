@@ -753,7 +753,7 @@ if ( !defined('EQDKP_INC') ){
 					$this->myErrorHandler($error['type'], $error['message'], $error['file'], $error['line']);
 					$output = $this->error_message_header();
 
-					$strErrorID = str_replace('-', '', $this->date).':'.md5(time().'fatal'.rand());
+					$strErrorID = str_replace('-', '', $this->date).':'.md5(randomID());
 
 					//template errors
 					if ($error['type'] == 4 && strpos($error['file'], 'template.class.php') && strpos($error['file'], ": eval()'d code")){

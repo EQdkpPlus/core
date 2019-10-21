@@ -83,6 +83,16 @@ class password extends gen_class {
 			case "salted_sha512": $strHash = hash('sha512', $strSalt.$strPassword);
 		}
 		
+		if(!$strHash) return false;
+		
+		if (function_exists('hash_equals')) {
+			return (hash_equals($strStoredHash, $strHash));
+		}
+		
+		if (strlen($strStoredHash) !== strlen($strHash)) {
+			return false;
+		}
+		
 		//Prevent Timing attacks
 		for ($i = 0; $i < strlen($strHash); $i++) {
             $status |= (ord($strHash[$i]) ^ ord($strStoredHash[$i]));
@@ -91,9 +101,9 @@ class password extends gen_class {
         $blnCompareStatus = ($status === 0);
 		
 		if ($blnReturnHash){
-				return ($strHash &&  $blnCompareStatus) ? $strHash : false;
+				return ($blnCompareStatus) ? $strHash : false;
 		}
-		return ($strHash &&  $blnCompareStatus);
+		return ($blnCompareStatus);
 	}
 
 
@@ -140,25 +150,7 @@ class password extends gen_class {
 
 	public function get_random_bytes($count)
 	{
-		$output = '';
-		if (is_readable('/dev/urandom') &&
-		    ($fh = @fopen('/dev/urandom', 'rb'))) {
-			$output = fread($fh, $count);
-			fclose($fh);
-		}
-
-		if (strlen($output) < $count) {
-			$output = '';
-			for ($i = 0; $i < $count; $i += 16) {
-				$this->random_state =
-				    md5(microtime() . $this->random_state);
-				$output .=
-				    pack('H*', md5($this->random_state));
-			}
-			$output = substr($output, 0, $count);
-		}
-
-		return $output;
+		return generateRandomBytes($count);
 	}
 
 	function encode64($input, $count)

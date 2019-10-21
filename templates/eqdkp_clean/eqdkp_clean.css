@@ -646,7 +646,7 @@ ul.mainmenu li:hover > ul.sub-menu {
 }
 
 ul.mainmenu .sub-menu-arrow {
-	padding-right: 1.8em;
+	padding-right: 1.8em !important;
 }
 ul.mainmenu .sub-menu-arrow:after {
 	content: '';
@@ -1475,6 +1475,10 @@ div[aria-describedby="dialog-login"] .password-forgot{
 	background-color: #D9EDF7;
 	color: #3A87AD;
 	border-color: #3A87AD;
+}
+
+.infobox-blue a {
+	color: #000;
 }
 
 .infobox-red {

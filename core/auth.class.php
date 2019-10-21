@@ -118,8 +118,8 @@ class auth extends user {
 					//Check Session length
 					if ((($arrResult['session_current'] + $this->session_length) > $this->current_time)){				
 						//We have a valid session
-						$this->data['user_id'] = ($this->data['user_id'] == (int)$arrResult['session_user_id']) ? intval($arrResult['session_user_id']) : $this->data['user_id'];
-						$this->id = $this->data['user_id'];					
+						$this->data['user_id'] = ((int)$this->data['user_id'] === (int)$arrResult['session_user_id']) ? intval($arrResult['session_user_id']) : $this->data['user_id'];
+						$this->id = (int)$this->data['user_id'];					
 						
 						// Only update session DB a minute or so after last update or if page changes
 						if ( !register('environment')->is_ajax && (($this->current_time - $arrResult['session_current'] > 60) || ($arrResult['session_page'] != $this->env->current_page) )){
@@ -133,7 +133,7 @@ class auth extends user {
 						registry::add_const('SID', "?s=".((!empty($arrCookieData['sid'])) ? '' : $this->sid));
 						
 						//If its an guest session, try autologins, otherwise return true;
-						if($this->id == ANONYMOUS){
+						if($this->id === ANONYMOUS){
 							$boolIsExistingGuestSession = true;
 						} else {
 							return true;
@@ -285,7 +285,7 @@ class auth extends user {
 		$arrCookieData['user_id'] = $user_id;
 		if ($boolSetAutoLogin && ($user_id != ANONYMOUS)){
 		
-			if ($strAutologinKey == ''){
+			if (!strlen($strAutologinKey)){
 				$strAutologinKey = hash('sha512', $this->generate_salt());
 				$this->updateAutologinKey($user_id, $strAutologinKey);
 			}
@@ -478,7 +478,7 @@ class auth extends user {
 			// Did the session exist in the DB?
 			if(isset($data['user_id'])){
 				// Validate IP
-				if($data['session_ip'] == $this->env->ip){
+				if($data['session_ip'] === $this->env->ip){
 					return $data['user_id'];
 				}
 			}
@@ -492,7 +492,13 @@ class auth extends user {
 		$strSearch = (strpos($string, '&amp;') !== false) ? $this->SID.'&amp;' : $this->SID;
 		$strReplace = (strpos($string, '&') !== false) ? '?' : '';
 		$string = preg_replace("#(\&|\&amp;)link\_hash\=([a-zA-Z0-9]{12})#", "", $string);
-		return str_replace(array($strSearch, $this->sid), array($strReplace, ''), $string);
+		//Replace current Sessions
+		$string = str_replace(array($strSearch, $this->sid), array($strReplace, ''), $string);
+		//Replace other sessions
+		$string = preg_replace('/s=[a-zA-Z0-9]{40}/', '', $string);
+		$string = str_replace('?&', '?', $string);
+		
+		return $string;
 	}
 
 	/**

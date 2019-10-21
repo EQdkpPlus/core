@@ -138,7 +138,7 @@ class editcalendarevent_pageobject extends pageobject {
 			}
 		}
 		$this->pdh->put('calendar_raids_templates', 'save_template', array(
-			(($this->in->get('templatename')) ? $this->in->get('templatename') : 'template-'.rand(0,1000)),
+			(($this->in->get('templatename')) ? $this->in->get('templatename') : 'template-'.random_integer(0,1000)),
 			array(
 				'input_eventid'		=> $this->in->get('raid_eventid', 0),
 				'input_dkpvalue'	=> $this->in->get('raid_value'),

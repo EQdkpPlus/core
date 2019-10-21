@@ -770,7 +770,7 @@ class template extends gen_class {
 			$relative_file = $this->env->server_to_rootpath($item['file']);
 
 			if(substr($item['file'],0,4) == "http"){
-				$filetime	= rand(1,100000000);
+				$filetime	= random_integer(1,100000000);
 			} else {
 				$filetime = (file_exists($relative_file)) ? filemtime($relative_file) : false;
 				if($filetime === false) continue;
@@ -1007,9 +1007,7 @@ class template extends gen_class {
 						break;
 					case 'LISTENER':
 						$strListenername = strtolower($blocks[2][$curr_tb]);
-						if(isset($this->template_listener[$strListenername])){
-							$compile_blocks[] = "echo \$this->assign_from_listener('".$strListenername."');\n";
-						} else $compile_blocks[] = "";
+						$compile_blocks[] = "echo \$this->assign_from_listener('".$strListenername."');\n";
 						break;
 					default:
 						$this->compile_var_tags($blocks[0][$curr_tb]);
@@ -1684,9 +1682,7 @@ class template extends gen_class {
 			$title			= $this->lang('templates_error');
 			$content		= (!$this->lang($content)) ? $content : $this->lang($content);
 
-			if ($sprintf !=""){
-				$content	= sprintf($content, $sprintf);
-			}
+			$content		= sprintf($content, $sprintf);
 
 			$message		 = '<h2>'.$this->lang('templates_error_desc').':</h2>';
 			$message		.= $content;
