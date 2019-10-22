@@ -154,7 +154,7 @@ if(!class_exists('article')){
 				
 				$strPreviewImage = ($this->pdh->get('articles',  'previewimage', array($intArticleID)) != "") ? $this->pdh->geth('articles', 'previewimage', array($intArticleID)) : '';
 				
-				switch((int)$arrCategory['sortation_type']){
+				switch((int)$arrCategory['list_type']){
 					case 3 : $strText = truncate($strText, 600, '...', false, true);
 					break;
 					
