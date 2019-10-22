@@ -889,12 +889,13 @@ function random_integer($min, $max) {
 }
 
 
-function random_string($hash = false, $length = 16){
+function random_string($length = 20){
+	if($length === false) $length = 20;
+	
 	$binLength = ceil($length / 2);
 	
-	$string = bin2hex(generateRandomBytes($binLength));
-	
-	return ( $hash ) ? sha1($string) : $string;
+	$string = bin2hex(generateRandomBytes($binLength));	
+	return $string;
 }
 
 

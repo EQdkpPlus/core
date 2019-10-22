@@ -41,7 +41,7 @@ class maintenance_user extends page_generic {
 	public function submit() {
 		$valid_until = $this->time->time + ($this->in->get('valid_until_days', 0) * 86400);
 		$salt = $this->user->generate_salt();
-		$password = random_string();
+		$password = random_string(20);
 		$encr_password = $this->user->encrypt_password($password, $salt).':'.$salt;
 
 		$arrUser = array(

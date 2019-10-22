@@ -370,7 +370,7 @@ class Manage_Users extends page_generic {
 
 		//Set a random password, as this method should be used if an account is compromised.
 		$user_salt = $this->user->generate_salt();
-		$user_password = random_string();
+		$user_password = random_string(32);
 		$arrSet = array(
 			'user_password' => $this->user->encrypt_password($user_password, $user_salt).':'.$user_salt,
 		);
@@ -725,7 +725,7 @@ class Manage_Users extends page_generic {
 			$this->pdh->put('user', 'update_user', array($user_id, $query_ary));
 			$this->pdh->put('user', 'activate', array($user_id, $this->in->get('user_active', 0)));
 		} else {
-			$password = ($values['new_password'] == "") ? random_string() : $values['new_password'];
+			$password = ($values['new_password'] == "") ? random_string(32) : $values['new_password'];
 			$new_salt = $this->user->generate_salt();
 			$new_password = $this->user->encrypt_password($password, $new_salt).':'.$new_salt;
 

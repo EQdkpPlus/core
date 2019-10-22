@@ -81,7 +81,7 @@ class login_discord extends gen_class {
 			message_die('Discord Client-ID or Client-Secret is missing. Please insert it into the fields at the EQdkp Plus settings, tab "User".');
 		}
 		
-		$state = random_string(false, 32);
+		$state = random_string(32);
 		$this->user->setSessionVar('_discord_state', $state);
 		
 		$client = new OAuth2\Client($this->appid, $this->appsecret);

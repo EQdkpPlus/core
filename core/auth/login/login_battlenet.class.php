@@ -130,7 +130,7 @@ class login_battlenet extends gen_class {
 			message_die('Battle.net Client-ID or Client-Secret is missing. Please insert it into the fields at the EQdkp Plus settings, tab "User".');
 		}
 		
-		$state = random_string(false, 32);
+		$state = random_string(32);
 		$this->user->setSessionVar('_battlenet_state', $state);
 		
 		$client = new OAuth2\Client($this->appid, $this->appsecret);
@@ -160,7 +160,7 @@ class login_battlenet extends gen_class {
 			$account = $this->get_userinfo();
 			if($account){
 
-				$strPwd = random_string(false, 32);
+				$strPwd = random_string(32);
 				
 				
 				$bla = array(

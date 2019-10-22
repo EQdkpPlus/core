@@ -445,7 +445,7 @@ class Manage_Members extends page_generic {
 		}
 
 		$hptt_page_settings = $this->pdh->get_page_settings('admin_manage_members', 'hptt_admin_manage_members_memberlist');
-		$cache_suffix 	= ($blnIsSearch) ? random_string() : '';
+		$cache_suffix 	= ($blnIsSearch) ? random_string(32) : '';
 		$hptt			= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => 'manage_members.php', '%link_url_suffix%' => '&mupd=true'), $cache_suffix);
 		$ranks			= $this->pdh->aget('rank', 'name', 0, array($this->pdh->get('rank', 'id_list', array())));
 		asort($ranks);

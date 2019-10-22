@@ -42,6 +42,13 @@ class mycharacters_pageobject extends pageobject {
 	public function update_connection(){
 		$arrNewMembers = $this->in->getArray('member_id', 'int');
 		$arrOldMembers = $this->pdh->get('member', 'connection_id', array($this->user->id));
+		
+		//Check the new members
+		$freemember_data = $this->pdh->get('member', 'freechars', array($this->user->data['user_id']));
+		foreach($arrNewMembers as $intMemberID){
+			if(!isset($freemember_data[$intMemberID])) message_die('Member-ID not valid');
+		}
+		
 		if(!is_array($arrOldMembers)) $arrOldMembers = array();
 		$diff = array_diff($arrNewMembers, $arrOldMembers);
 		$diff2 = array_diff($arrOldMembers, $arrNewMembers);
@@ -53,6 +60,10 @@ class mycharacters_pageobject extends pageobject {
 	}
 
 	public function delete_char(){
+		$intMemberID = $this->in->get('delete_id', 0);
+		$arrUserChars = $this->pdh->get('member', 'connection_id', array($this->user->id));
+		if(!in_array($intMemberID, $arrUserChars)) message_die('Member-ID not valid');
+		
 		if($this->in->get('delete_id', 0) > 0){
 			$this->pdh->put('member', 'suspend', array($this->in->get('delete_id', 0)));
 
@@ -66,14 +77,22 @@ class mycharacters_pageobject extends pageobject {
 	}
 
 	public function ajax_mainchar(){
-		$this->pdh->put('member', 'change_mainid', array($this->pdh->get('member', 'connection_id', array($this->user->data['user_id'])), $this->in->get('maincharchange', 0)));
+		$intMemberID = $this->in->get('maincharchange', 0);
+		$arrUserChars = $this->pdh->get('member', 'connection_id', array($this->user->id));
+		if(!in_array($intMemberID, $arrUserChars)) exit('Member-ID not valid');
+		
+		$this->pdh->put('member', 'change_mainid', array($this->pdh->get('member', 'connection_id', array($this->user->id)), $intMemberID));
 		$this->pdh->process_hook_queue();
 		echo($this->user->lang('uc_savedmsg_main'));
 		exit;
 	}
 
 	public function ajax_defaultrole(){
-		$this->pdh->put('member', 'change_defaultrole', array($this->in->get('defrolechange_memberid', 0), $this->in->get('defrolechange', 0)));
+		$intMemberID = $this->in->get('defrolechange_memberid', 0);
+		$arrUserChars = $this->pdh->get('member', 'connection_id', array($this->user->id));
+		if(!in_array($intMemberID, $arrUserChars)) exit('Member-ID not valid');
+		
+		$this->pdh->put('member', 'change_defaultrole', array($intMemberID, $this->in->get('defrolechange', 0)));
 		$this->pdh->process_hook_queue();
 		echo($this->user->lang('uc_savedmsg_roles'));
 		exit;

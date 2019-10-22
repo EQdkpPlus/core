@@ -187,7 +187,7 @@ class joomla_bridge extends bridge_generic {
 				}
 				else
 				{
-					return random_string(false, 16);
+					return random_string(16);
 				}
 				break;
 
