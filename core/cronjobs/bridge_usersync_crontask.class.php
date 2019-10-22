@@ -63,7 +63,7 @@ if ( !class_exists( "bridge_usersync_crontask" ) ) {
 					
 					//Neu anlegen
 					$salt = $this->user->generate_salt();
-					$strPassword = random_string(false, 32);
+					$strPassword = random_string(32);
 					$strPwdHash = $this->user->encrypt_password($strPassword, $salt);
 					
 					$user_id = $this->pdh->put('user', 'insert_user_bridge', array(sanitize($arrUserdata['name']), $strPwdHash.':'.$salt, $arrUserdata['email'], false));

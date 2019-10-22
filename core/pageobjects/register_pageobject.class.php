@@ -234,7 +234,7 @@ class register_pageobject extends pageobject {
 		
 		// If the config requires account activation, generate a random key for validation
 		if ( ((int)$this->config->get('account_activation') == 1) || ((int)$this->config->get('account_activation') == 2) ) {
-			$user_key = random_string(false, 32);
+			$user_key = random_string(32);
 			$intEmailConfirmed = -1;
 			
 			if ($this->user->is_signedin()) {

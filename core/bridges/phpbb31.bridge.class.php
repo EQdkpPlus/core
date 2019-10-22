@@ -445,7 +445,7 @@ class phpbb31_bridge extends bridge_generic {
 	}
 	
 	private function get_random_salt(){
-		$rand = random_string(false, 22);
+		$rand = random_string(22);
 		return base64_encode($rand);
 	}
 	

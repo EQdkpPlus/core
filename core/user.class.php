@@ -831,7 +831,7 @@ class user extends gen_class {
 		
 		//Register User (random credentials)
 		$salt = $this->user->generate_salt();
-		$strPwdHash = $this->user->encrypt_password(random_string(false, 16), $salt);
+		$strPwdHash = $this->user->encrypt_password(random_string(32), $salt);
 		
 		$intUserID = $this->pdh->put('user', 'insert_user_bridge', array(
 				$strUsername, $strPwdHash, $arrAccountDetails['user_email']

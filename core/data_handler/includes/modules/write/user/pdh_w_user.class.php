@@ -315,7 +315,7 @@ if(!class_exists('pdh_w_user')) {
 
 		public function create_new_activationkey($user_id, $new_email = ''){
 			// Create a new activation key
-			$user_key = random_string(false, 32);
+			$user_key = random_string(32);
 
 			$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
 					'user_email_confirmkey'	=> $user_key,
@@ -328,7 +328,7 @@ if(!class_exists('pdh_w_user')) {
 		}
 
 		public function create_new_exchangekey($user_id){
-			$app_key = random_string(false, 32);
+			$app_key = random_string(32);
 			
 			$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
 					'exchange_key'	=> $app_key
