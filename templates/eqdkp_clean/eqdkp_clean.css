@@ -2928,7 +2928,7 @@ a.tool-item {
     background-color: #d00;
 }
 
-.user-avatar.mobile-notify-bubble-red::after {
+.user-avatar.mobile-notify-bubble-yellow::after {
     background-color: #F89406;
 }
 
@@ -3925,6 +3925,19 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	    line-height: 10px;
 	    font-size: 10px;
 	    padding: 4px 6px 4px 6px;
+	    margin-right: -7px;
+	}
+	
+	.responsive .notification-tooltip-trigger.notification-bubble-red {
+		z-index: 20;
+	}
+	
+	.responsive .notification-tooltip-trigger.notification-bubble-yellow {
+		z-index: 19;
+	}
+	
+	.responsive .notification-tooltip-trigger.notification-bubble-green {
+		z-index: 18;
 	}
 }
 
