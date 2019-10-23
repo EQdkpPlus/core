@@ -227,6 +227,8 @@ function user_clock(){
 var favicon;
 function notification_favicon(red, yellow, green){
 	if (typeof favicon === 'undefined') return;
+	
+	notification_mobile(red, yellow, green);
 
 	if (red > 0) {
 		favicon.badge(red, {bgColor: '#d00'});
@@ -241,6 +243,23 @@ function notification_favicon(red, yellow, green){
 		return;
 	}
 	favicon.reset();
+}
+
+function notification_mobile(red, yellow, green){
+	if (red > 0) {
+		$('.nav-mobile .user-avatar').addClass("mobile-notify-bubble-red");
+		return;
+	}
+	if (yellow > 0) {
+		$('.nav-mobile .user-avatar').addClass("mobile-notify-bubble-yellow");
+		return;
+	}
+	if (green > 0) {
+		$('.nav-mobile .user-avatar').addClass("mobile-notify-bubble-green");
+		return;
+	}
+	
+	$('.nav-mobile .user-avatar').removeClass("mobile-notify-bubble-red mobile-notify-bubble-yellow mobile-notify-bubble-green");
 }
 
 function notification_show_only(name){

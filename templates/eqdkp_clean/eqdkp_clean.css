@@ -2913,6 +2913,29 @@ a.tool-item {
 	white-space: nowrap;
 }
 
+.user-avatar.mobile-notify-bubble-red::after, .user-avatar.mobile-notify-bubble-yellow::after, .user-avatar.mobile-notify-bubble-green::after {
+	border: 2px solid @eqdkpMenuBackgroundColor;
+    border-radius: 50%;
+    content: "";
+    height: 10px;
+    position: absolute;
+    left: -3px;
+    bottom: -3px;
+    width: 10px;
+}
+
+.user-avatar.mobile-notify-bubble-red::after {
+    background-color: #d00;
+}
+
+.user-avatar.mobile-notify-bubble-red::after {
+    background-color: #F89406;
+}
+
+.user-avatar.mobile-notify-bubble-green::after {
+    background-color: #468847;
+}
+
 .bubble-red {
 	background-color: #B94A48;
 }
@@ -3893,6 +3916,15 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 		overflow: scroll;
 		height: auto;
 		top: 0;
+	}
+	
+	.responsive .notification-tooltip-trigger.notification-bubble-red, .responsive .notification-tooltip-trigger.notification-bubble-yellow, .responsive .notification-tooltip-trigger.notification-bubble-green {
+		position: relative;
+	    bottom: -14px;
+	    right: 8px;
+	    line-height: 10px;
+	    font-size: 10px;
+	    padding: 4px 6px 4px 6px;
 	}
 }
 
