@@ -583,9 +583,10 @@ $lang = array(
 "uc_last_update" => "Letzte Aktualisierung",
 "uc_delete_char" => "Charakter löschen",
 "no_connected_char" => "Du hast noch keine zugewiesenen Charaktere. Klicken um einen Charakter anzulegen.",
-"no_connected_char_info" => "Willkommen in deinem Charakter-Bereich. Hier kannst du neue Charaktere erstellen/importieren und bestehende bearbeiten.<br /><br />Du hast noch keine zugewiesenen Charaktere.<ul>
+"no_connected_char_info" => "Willkommen in deinem Charakter-Bereich. Hier kannst du neue Charaktere erstellen/importieren und bestehende Charaktere bearbeiten.<ul class='disc'>
+			<li>Du hast noch keine zugewiesenen Charaktere.</li>
 			<li>Taucht dein Charakter nicht bei den Verküpften Charakteren auf, erstelle dir einen neuen Charakter oder importiere ihn</li>
-			<li>wähle ansonsten deinen Charakter aus und verknüpfe ihn mit dir</li></ul>",
+			<li>Wähle ansonsten deinen Charakter aus und verknüpfe ihn mit dir</li></ul>",
 "no_connected_char_hide" => "Hier klicken, um diese Meldung zukünftig auszublenden",
 "user_list" => "Benutzerliste",
 "user_priv" => "Privatsphäre",

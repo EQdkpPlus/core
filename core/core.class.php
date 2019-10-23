@@ -624,6 +624,11 @@ class core extends gen_class {
 			//Plugins
 			if (is_object($this->pm)){
 				$plugin_menu = $this->pm->get_menus('main');
+				if(is_array($plugin_menu)){
+					foreach($plugin_menu as $key=>$val){
+						$plugin_menu[$key]['plugin'] = 1;
+					}
+				}
 				$arrItems = (is_array($plugin_menu)) ? array_merge($arrItems, $plugin_menu) : $arrItems;
 			}
 
@@ -668,18 +673,20 @@ class core extends gen_class {
 		public function build_menu_array($show_hidden = true, $blnOneLevel = false){
 			$arrItems = $this->menu_items($show_hidden);
 			$arrSortation = $this->config->get('mainmenu');
+			$arrExistingHidden = ($this->config->get('mainmenu_hidden')) ? json_decode($this->config->get('mainmenu_hidden'), true) :  array();
+			
 			$arrHashArray = array();
 			
 			foreach ($arrItems as $key => $item){
 				$strHash = $this->build_link_hash($item);
 				$arrItems[$key]['_hash'] = $this->build_link_hash($item);
-				$arrItems[$key]['hidden'] = 0;
+				$arrItems[$key]['hidden'] = (isset($arrExistingHidden[$arrItems[$key]['_hash']])) ? 1 : 0;
 				$arrHashArray[$strHash] = $arrItems[$key];
 			}
 			$arrOut = array();
 			$arrOutOneLevel = array();
 			$arrToDo = $arrHashArray;
-
+			
 			foreach($arrSortation as $key => $item){
 				$show = true;
 				$hidden = $item['item']['hidden'];
@@ -698,7 +705,7 @@ class core extends gen_class {
 				//Second Level
 				if (isset($item['_childs']) && is_array($item['_childs'])){
 					$secondlevel_show = $show;
-
+					
 					foreach($item['_childs'] as $key2 => $item2){
 						$hidden = $item2['item']['hidden'];
 						if ($hidden && !$show_hidden) $show = false;
@@ -732,17 +739,18 @@ class core extends gen_class {
 					}
 				}
 			}
-
+			
 			foreach($arrToDo as $hash => $item){
 				$item['hidden'] = (isset($item['article']) || isset($item['category']) || isset($item['default_hide'])) ? 1 : 0;
+				$item['hidden'] = (isset($arrExistingHidden[$item['_hash']])) ? 1 : $item['hidden'];
 				if (!$show_hidden && $item['hidden']) continue;
 				$arrOut[] = $item;
 				$arrOutOneLevel[] = $item;
 			}
-
+			
 			$arrOut = $this->hooks->process("menu", $arrOut, true);
 			$arrOutOneLevel = $this->hooks->process("menu_onelevel", $arrOutOneLevel, true);
-
+			
 			return ($blnOneLevel) ? $arrOutOneLevel: $arrOut;
 		}
 
