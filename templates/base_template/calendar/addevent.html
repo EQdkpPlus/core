@@ -53,6 +53,7 @@ $(function() {
 
 		$('#selectmode + ul > li').html( $('#selectmode + ul > li + ul > li[data-value="'+value+'"]').html() );
 		$('#selectmode + ul > li').data('value', value );
+		$("#private").trigger('change')
 	});
 
 	// switch the raid distri modes
@@ -77,6 +78,25 @@ $(function() {
 		}
 	});
 
+	$("#private").change(function() {
+		console.log('triggered private check')
+		if($('#selectmode').val() == 'raid'){
+			if($("#private").is(':checked')){
+				$("#invitefield_raidgroup").show();
+			}else{
+				$("#invitefield_raidgroup").hide();
+			}
+		}else{
+			if($("#private").is(':checked')){
+				$("#invitefield").show();
+				$("#invitefield_usergroup").show();
+			}else{
+				$("#invitefield").hide();
+				$("#invitefield_usergroup").hide();
+			}
+		}
+	}).triggerHandler('change');
+
 	$("#cb_allday").change(function() {
 		if($('#selectmode').val() == 'event'){
 			if($(this).is(':checked')){
@@ -100,6 +120,7 @@ $(function() {
 	if($('#cal_raidmodeselect').val() != 'class'){
 		$('#cal_raidmodeselect').trigger('change');
 	}
+	$("#private").trigger('change')
 
 	// calculate the attendee count summ
 	$(document).on('change', '.attendees_count, #cal_raidmodeselect', function(){

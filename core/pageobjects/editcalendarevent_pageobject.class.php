@@ -617,7 +617,7 @@ class editcalendarevent_pageobject extends pageobject {
 			'DR_INVITED_RG'		=> (new hmultiselect('invited_raidgroup', array('options' => $this->pdh->aget('raid_groups', 'name', 0, array($this->pdh->get('raid_groups', 'id_list'))), 'value' => ((isset($eventdata['extension']['invited_raidgroup']) && $eventdata['extension']['invited_raidgroup']) ? $eventdata['extension']['invited_raidgroup'] : array()))))->output(),
 			'DR_STATUS'			=> (new hdropdown('asi_status', array('options' => $raidstatus, 'value' => 0)))->output(),
 			'CB_ALLDAY'			=> (new hcheckbox('allday', array('options' => array(1=>''), 'value' => ((isset($eventdata['allday'])) ? $eventdata['allday'] : 0), 'class' => 'allday_cb', 'inputid' => 'cb_allday')))->output(),
-			'CB_PRIVATE'		=> (new hcheckbox('private', array('options' => array(1=>''), 'value' => ((isset($eventdata['private'])) ? $eventdata['private'] : 0))))->output(),
+			'CB_PRIVATE'		=> (new hcheckbox('private', array('id' => 'label_private', 'options' => array(1=>''), 'value' => ((isset($eventdata['private'])) ? $eventdata['private'] : 0))))->output(),
 			'RADIO_EDITCLONES'	=> (new hradio('edit_clones', array('options' => $radio_repeat_array, 'orientation' => 'horizontal')))->output(),
 			'BBCODE_NOTE'		=> (new hbbcodeeditor('note', array('rows' => 3, 'value' => ((isset($eventdata['notes'])) ? $eventdata['notes'] : ''), 'id' => 'input_note')))->output(),
 			'LP_LOCATION'		=> (new hplacepicker('location', array('value' => ((isset($eventdata['extension']) && isset($eventdata['extension']['location'])) ? $eventdata['extension']['location'] : ''))))->output(),
