@@ -299,7 +299,8 @@ if (!class_exists("comments")){
 					}
 					//Emojis
 					$strText = register('myemojione')->shortcodeToImage($row['text']);
-					$out[] .= '<div class="comment_text">'.$this->bbcode->MyEmoticons($this->bbcode->toHTML($strText)).'</div><br/>
+					$out[] .= '<div class="comment_text">'.$this->bbcode->MyEmoticons($this->bbcode->parse_shorttags($this->bbcode->toHTML($strText), array('guild', 'char', 'item', 'itemid', 'event'))).'</div><br/>
+
 								</div>';
 								
 								
@@ -328,7 +329,7 @@ if (!class_exists("comments")){
 								$out[] .= '<div style="display:none" class="comments_myrootpath">'.$myrootpath.'</div>';
 								$out[] .= '</div>';
 							}
-							$out[] .= '<div class="comment_text">'.$this->bbcode->MyEmoticons($this->bbcode->toHTML($com['text'])).'</div><br/>
+							$out[] .= '<div class="comment_text">'.$this->bbcode->MyEmoticons($this->bbcode->parse_shorttags($this->bbcode->toHTML($com['text']), array('guild', 'char', 'item', 'itemid', 'event'))).'</div><br/>
 										</div>
 										</div>
 										
