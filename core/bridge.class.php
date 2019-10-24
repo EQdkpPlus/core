@@ -126,9 +126,6 @@ class bridge extends gen_class {
 			//Hole User aus der Datenbank		
 			$arrUserdata = $this->get_userdata(unsanitize($strUsername));
 			if ($arrUserdata){
-				d($arrUserdata);
-				die();
-				
 				if ($boolUsePassword){
 					$boolLoginResult = $this->objBridge->check_password(unsanitize($strPassword), $arrUserdata['password'], $arrUserdata['salt'], unsanitize($strUsername), $arrUserdata);
 					$this->pdl->log('login', 'Check Bridge Password, Result: '.(($boolLoginResult) ? 'true' : 'false'));
