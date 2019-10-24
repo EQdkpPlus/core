@@ -118,6 +118,16 @@ class phpbb31_bridge extends bridge_generic {
 			return false;
 		} //end bcrypt
 		
+		//Argon
+		if (strpos($hash, '$argon2id$') === 0 || strpos($hash, '$argon2i$') === 0){
+			$blnResult = password_verify($password, $hash);
+			if(!$blnResult){
+				$blnResult = password_verify(htmlspecialchars($password), $hash);
+			}
+			return $blnResult;
+		}
+		
+		
 		//Bcrypt wcf2
 		if (strpos($hash, '$wcf2$') === 0){
 			

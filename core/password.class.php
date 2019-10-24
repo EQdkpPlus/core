@@ -151,6 +151,7 @@ class password extends gen_class {
 		}		
 		if (substr($strHash, 0, 4) == '$2a$' && strlen($strHash) == 60) return "blowfish_old";
 		if (substr($strHash, 0, 4) == '$2y$' && strlen($strHash) == 60) return "blowfish";
+		if (substr($strHash, 0, 4) == '$2x$' && strlen($strHash) == 60) return "blowfish";
 		if (substr($strHash, 0, 10) == '$argon2id$') return "argon2id";
 		if (substr($strHash, 0, 9) == '$argon2i$') return "argon2i";
 		if (substr($strHash, 0, 1) == '_' && strlen($strHash) == 20) return "ext_des";
