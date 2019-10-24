@@ -409,6 +409,7 @@ class user extends gen_class {
 	* @return string
 	*/
 	public function generate_salt(){
+		$this->pdl->deprecated('User::generate_salt()');
 		return substr(md5(generateRandomBytes(55)), 0, 23);
 	}
 
