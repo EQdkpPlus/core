@@ -145,7 +145,6 @@ class bridge extends gen_class {
 		$boolLoginResult = $this->objBridge->after_login(unsanitize($strUsername), unsanitize($strPassword), $boolSetAutoLogin, $arrUserdata, $boolLoginResult);
 		$this->pdl->log('login', 'Bridge callafter, Result: '.(($boolLoginResult) ? 'true' : 'false'));
 
-		
 		//Existiert der User im EQdkp? Wenn nicht, lege ihn an
 		if ($boolLoginResult){
 		

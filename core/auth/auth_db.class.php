@@ -50,7 +50,7 @@ class auth_db extends auth {
 		//Bridge-Login, only if using not a hash
 		if ($this->config->get('cmsbridge_active') == 1 && $this->config->get('pk_maintenance_mode') != 1){
 			$this->pdl->log('login', 'Try Bridge Login');
-			$arrStatus = $this->bridge->login($strUsername, $strPassword, $boolSetAutoLogin, false);
+			$arrStatus = $this->bridge->login($strUsername, $strPassword, $boolSetAutoLogin);
 		}
 		
 		//Bridge Login failed, Specific Auth-Method Login
