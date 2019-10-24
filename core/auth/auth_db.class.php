@@ -39,17 +39,16 @@ class auth_db extends auth {
 	* @param $strUsername
 	* @param $strPassword
 	* @param $boolSetAutoLogin Save login in cookie?
-	* @param $boolUseHash Use Hash for comparing
 	* @return bool
 	*/
-	public function login($strUsername, $strPassword, $boolSetAutoLogin = false, $boolUseHash = false){
+	public function login($strUsername, $strPassword, $boolSetAutoLogin = false){
 		if(!$this->pdl->type_known("login")) $this->pdl->register_type("login", false, array($this, 'pdl_html_format_login'), array(3,4));
 		
 		$arrStatus = false;
 		$this->error = false;
 		
 		//Bridge-Login, only if using not a hash
-		if ($this->config->get('cmsbridge_active') == 1 && $this->config->get('pk_maintenance_mode') != 1 && $boolUseHash == false){
+		if ($this->config->get('cmsbridge_active') == 1 && $this->config->get('pk_maintenance_mode') != 1){
 			$this->pdl->log('login', 'Try Bridge Login');
 			$arrStatus = $this->bridge->login($strUsername, $strPassword, $boolSetAutoLogin, false);
 		}
@@ -61,7 +60,7 @@ class auth_db extends auth {
 			if ($this->in->get('lmethod') != ""){
 				$this->pdl->log('login', 'Try Auth-Method Login '.$this->in->get('lmethod'));
 				$arrAuthObject = $this->get_login_objects($this->in->get('lmethod'));
-				if ($arrAuthObject) $arrStatus = $arrAuthObject->login($strUsername, $strPassword, $boolUseHash);
+				if ($arrAuthObject) $arrStatus = $arrAuthObject->login($strUsername, $strPassword);
 				if ($arrStatus) $this->pdl->log('login', 'Auth-Method Login '.$this->in->get('lmethod').' successful');
 			}
 			
@@ -74,19 +73,19 @@ class auth_db extends auth {
 				
 				if($objQuery && $objQuery->numRows){		
 					$row = $objQuery->fetchAssoc();
-					list($strUserPassword, $strUserSalt) = explode(':', $row['user_password']);
-					//If it's an old password without salt or there is a better algorythm
-					$blnNeedsUpdate = ($this->checkIfHashNeedsUpdate($strUserPassword) || !$strUserSalt);
+					$strUserPassword = $row['user_password'];
+					//If there is a better algorythm
+					$blnNeedsUpdate = ($this->checkIfHashNeedsUpdate($strUserPassword));
+					
 					if($blnNeedsUpdate){
-					if (((int)$row['user_active']) && (int)$row['user_email_confirmed'] >= 0){
-						$this->pdl->log('login', 'EQDKP User needs update');
-						if($this->checkPassword($strPassword, $row['user_password'], $boolUseHash)){
+						if (((int)$row['user_active']) && (int)$row['user_email_confirmed'] >= 0){
+							$this->pdl->log('login', 'EQDKP User needs update');
 							
-								$strNewSalt		= $this->generate_salt();
-								$strNewPassword	= $this->encrypt_password($strPassword, $strNewSalt);
+							if($this->checkPassword($strPassword, $row['user_password'])){
+								$strNewPassword	= $this->encrypt_password($strPassword);
 								
 								$this->db->prepare("UPDATE  __users :p WHERE user_id=?")->set(array(
-										'user_password' => $strNewPassword.':'.$strNewSalt,
+										'user_password' => $strNewPassword,
 								))->execute($row['user_id']);
 																		
 								$arrStatus = array(
@@ -110,15 +109,15 @@ class auth_db extends auth {
 							$this->pdl->log('login', 'EQDKP Login failed: '.$this->error);
 						}
 						
-					}else{
-						$strLoginPassword = $this->checkPassword($strPassword, $row['user_password'], $boolUseHash, true);
+					} else {					
+						$blnLogin = $this->checkPassword($strPassword, $row['user_password']);
 						if ((int)$row['user_active'] && (int)$row['user_email_confirmed'] >= 0){
-							if($strLoginPassword){
+							if($blnLogin){
 								$arrStatus = array(
-									'status'	=> 1,
-									'user_id'	=> (int)$row['user_id'],
-									'password_hash'	=> $strLoginPassword,
-									'user_login_key' => $row['user_login_key'],
+									'status'			=> 1,
+									'user_id'			=> (int)$row['user_id'],
+									'password_hash'		=> $row['user_password'],
+									'user_login_key'	=> $row['user_login_key'],
 								);
 							} else {
 								$this->error = 'wrong_password';
@@ -155,7 +154,7 @@ class auth_db extends auth {
 					//try Bridge-Login without passwort
 					if (!$blnIsSuperadmin){
 						$this->pdl->log('login', 'User ist not Superadmin, check against Bridge Groups');
-						$arrStatus = $this->bridge->login($this->pdh->get('user', 'name', array((int)$arrStatus['user_id'])), false, false, $boolUseHash, false, false);
+						$arrStatus = $this->bridge->login($this->pdh->get('user', 'name', array((int)$arrStatus['user_id'])), false, false, false, false);
 					}
 
 					//deny access if not Superadmin and not in the groups
@@ -166,7 +165,7 @@ class auth_db extends auth {
 					//Everyone is allowed to login
 					$this->pdl->log('login', 'Checks complete, call Bridge SSO if needed');
 					//Bridge-Login without password, for settings Single Sign On
-					$this->bridge->login($this->pdh->get('user', 'name', array((int)$arrStatus['user_id'])), false, false, $boolUseHash, false, false);
+					$this->bridge->login($this->pdh->get('user', 'name', array((int)$arrStatus['user_id'])), false, false, false, false);
 				}
 			
 
@@ -175,7 +174,7 @@ class auth_db extends auth {
 		
 		//Auth Method After-Login - reading only
 		$this->pdl->log('login', 'Possible Intercept by Auth Methods');
-		$this->handle_login_functions("after_login", false, array($arrStatus, $strUsername, $strPassword, $boolUseHash, ((isset($arrStatus['autologin'])) ? $arrStatus['autologin'] : $boolSetAutoLogin)));
+		$this->handle_login_functions("after_login", false, array($arrStatus, $strUsername, $strPassword, ((isset($arrStatus['autologin'])) ? $arrStatus['autologin'] : $boolSetAutoLogin)));
 		
 		if (!$arrStatus){
 			$this->pdl->log('login', 'User login failed');

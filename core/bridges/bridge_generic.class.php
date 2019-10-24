@@ -70,11 +70,10 @@ abstract class bridge_generic extends gen_class {
 	 * @param string $password	Password
 	 * @param string $hash		Saved Passwordhash
 	 * @param string $strSalt	Saved Salt
-	 * @param boolean $boolUseHash	if $password is a hash or not
 	 * @param string $strUsername	Username
 	 * @return boolean true if password matches
 	 */
-	abstract public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = "", $arrUserdata=array());
+	abstract public function check_password($password, $hash, $strSalt = '', $strUsername = "", $arrUserdata=array());
 	
 	/**
 	 * Returns Array with fields that are available to sync
@@ -126,9 +125,8 @@ abstract class bridge_generic extends gen_class {
 	 * @param string $strUsername
 	 * @param string $strPassword
 	 * @param boolean $boolSetAutologin
-	 * @param boolean $boolUseHash
 	 */
-	public function before_login($strUsername, $strPassword, $boolSetAutologin=false, $boolUseHash=false){
+	public function before_login($strUsername, $strPassword, $boolSetAutologin=false){
 		return;
 	}
 	
@@ -141,10 +139,9 @@ abstract class bridge_generic extends gen_class {
 	 * @param boolean $boolSetAutoLogin
 	 * @param array $arrUserdata
 	 * @param boolean $boolLoginResult
-	 * @param string $boolUseHash
 	 * @return boolean True if user should be logged in, false if not
 	 */
-	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash=false){
+	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult){
 		return $boolLoginResult;
 	}
 	
@@ -154,10 +151,9 @@ abstract class bridge_generic extends gen_class {
 	 * @param string $strUsername
 	 * @param string $strPassword
 	 * @param boolean $boolSetAutologin
-	 * @param boolean $boolUseHash
 	 * @return boolean Return 0 is default login should be used. Otherwise return a boolean for the login status.
 	 */
-	public function login($strUsername, $strPassword, $boolSetAutologin=false, $boolUseHash=false){
+	public function login($strUsername, $strPassword, $boolSetAutologin=false){
 		return 0;
 	}
 }

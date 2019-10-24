@@ -76,7 +76,7 @@ class drupal_bridge extends bridge_generic {
 	);
 		
 	//Needed function
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = "", $arrUserdata=array()){
+	public function check_password($password, $hash, $strSalt = '', $strUsername = "", $arrUserdata=array()){
 		return $this->user_check_password($password, $hash);
 	}
 	

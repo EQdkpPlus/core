@@ -63,14 +63,14 @@ class e107_bridge extends bridge_generic {
 	);
 	
 	//Needed function
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = "", $arrUserdata=array()){
+	public function check_password($password, $hash, $strSalt = '', $strUsername = "", $arrUserdata=array()){
 		if (md5($password) == $hash){
 			return true;
 		}
 		return false;
 	}
 	
-	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash=false){
+	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult){
 		//Is user active?
 		if ($boolLoginResult){
 			if ($arrUserdata['user_ban'] != '0') {

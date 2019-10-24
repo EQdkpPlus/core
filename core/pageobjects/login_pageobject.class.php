@@ -191,11 +191,10 @@ class login_pageobject extends pageobject {
 					message_die($this->user->lang('error_account_inactive'));
 				}
 
-				$user_salt = $this->user->generate_salt();
 				$user_password = $this->in->get('password1');
 
 				$arrSet = array(
-						'user_password' => $this->user->encrypt_password($user_password, $user_salt).':'.$user_salt,
+						'user_password' => $this->user->encrypt_password($user_password),
 						'user_email_confirmkey' => '',
 				);
 				

@@ -53,7 +53,7 @@ class ipb4_bridge extends bridge_generic {
 	);
 		
 	//Needed function
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = "", $arrUserdata=array()){
+	public function check_password($password, $hash, $strSalt = '', $strUsername = "", $arrUserdata=array()){
 		if ($strSalt == NULL) {
 			/* IPB 4.4+ */
 			return password_verify($password, $hash);
@@ -111,7 +111,7 @@ class ipb4_bridge extends bridge_generic {
 		return $arrReturn;
 	}
 	
-	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash=false){
+	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult){
 		//Is user active?
 		if ($boolLoginResult){
 			if ($arrUserdata['temp_ban'] != '0') {

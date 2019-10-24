@@ -58,7 +58,7 @@ class xenforo_bridge extends bridge_generic {
 	public $settings = array(
 	);
 	
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = "", $arrUserdata=array()){
+	public function check_password($password, $hash, $strSalt = '', $strUsername = "", $arrUserdata=array()){
 		$strQuery = "SELECT * FROM ".$this->prefix."user_authenticate WHERE user_id=?";
 		$objQuery = $this->bridgedb->prepare($strQuery)->execute($hash);
 	

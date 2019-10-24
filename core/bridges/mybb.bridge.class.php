@@ -62,7 +62,7 @@ class mybb_bridge extends bridge_generic {
 	);
 
 
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = "", $arrUserdata=array()){
+	public function check_password($password, $hash, $strSalt = '', $strUsername = "", $arrUserdata=array()){
 
 		if($this->salt_password(md5($password), $strSalt) == $hash){
 			return true;
@@ -93,7 +93,7 @@ class mybb_bridge extends bridge_generic {
 		return md5(md5($salt).$password);
 	}
 
-	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash=false){
+	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult){
 		//Is user active?
 		if ($boolLoginResult){
 			if ($arrUserdata['usergroup'] == '5') {

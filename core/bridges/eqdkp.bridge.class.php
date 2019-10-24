@@ -64,12 +64,12 @@ class eqdkp_bridge extends bridge_generic {
 	public $blnSyncEmail = false;
 		
 	//Needed function
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = "", $arrUserdata=array()){
-		$blnResult = $this->user->checkPassword($password, $hash, $boolUseHash);
+	public function check_password($password, $hash, $strSalt = '', $strUsername = "", $arrUserdata=array()){
+		$blnResult = $this->user->checkPassword($password, $hash);
 		return $blnResult;
 	}
 	
-	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash=false){
+	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult){
 		//Is user active?
 		if ($boolLoginResult){
 			if ($arrUserdata['active'] == '0') {

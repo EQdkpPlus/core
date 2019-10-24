@@ -62,11 +62,10 @@ if ( !class_exists( "bridge_usersync_crontask" ) ) {
 					if(!$this->bridge->check_user_group($arrUserdata['id'])) continue;
 					
 					//Neu anlegen
-					$salt = $this->user->generate_salt();
 					$strPassword = random_string(32);
-					$strPwdHash = $this->user->encrypt_password($strPassword, $salt);
+					$strPwdHash = $this->user->encrypt_password($strPassword);
 					
-					$user_id = $this->pdh->put('user', 'insert_user_bridge', array(sanitize($arrUserdata['name']), $strPwdHash.':'.$salt, $arrUserdata['email'], false));
+					$user_id = $this->pdh->put('user', 'insert_user_bridge', array(sanitize($arrUserdata['name']), $strPwdHash, $arrUserdata['email'], false));
 					$this->pdh->process_hook_queue();
 					//Sync Usergroups
 					$this->bridge->sync_usergroups((int)$arrUserdata['id'], $user_id);

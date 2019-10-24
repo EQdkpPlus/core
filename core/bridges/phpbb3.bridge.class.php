@@ -62,7 +62,7 @@ class phpbb3_bridge extends bridge_generic {
 		),
 	);
 
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = "", $arrUserdata=array()){
+	public function check_password($password, $hash, $strSalt = '', $strUsername = "", $arrUserdata=array()){
 		$itoa64 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 		if (strlen($hash) == 34)
 		{
@@ -71,7 +71,7 @@ class phpbb3_bridge extends bridge_generic {
 		return (md5($password) === $hash) ? true : false;
 	}
 	
-	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash=false){
+	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult){
 		//Is user active?
 		if ($boolLoginResult){
 		

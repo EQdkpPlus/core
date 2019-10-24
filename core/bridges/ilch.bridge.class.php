@@ -53,7 +53,7 @@ class ilch_bridge extends bridge_generic {
 	);
  
 	//Needed function
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = "", $arrUserdata=array()){
+	public function check_password($password, $hash, $strSalt = '', $strUsername = "", $arrUserdata=array()){
 		$pwCrypt = new Ilch_PwCrypt();
 		return $pwCrypt->checkPasswd($password, $hash);
 	}

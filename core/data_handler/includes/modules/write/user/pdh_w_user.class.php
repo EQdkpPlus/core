@@ -60,8 +60,7 @@ if(!class_exists('pdh_w_user')) {
 		}
 
 		public function register_user($arrData, $user_active = 1, $user_key = '', $rules = false, $strLoginMethod = false, $arrProfileData=false, $intEmailConfirmed=1) {
-			$new_salt = $this->user->generate_salt();
-			$new_password = $this->user->encrypt_password($arrData['user_password1'], $new_salt).':'.$new_salt;
+			$new_password = $this->user->encrypt_password($arrData['user_password1']);
 
 			//User Profilefields
 			$arrProfileData = (is_array($arrProfileData)) ? $arrProfileData : array();

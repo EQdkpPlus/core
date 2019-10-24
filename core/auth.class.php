@@ -286,7 +286,7 @@ class auth extends user {
 		if ($boolSetAutoLogin && ($user_id != ANONYMOUS)){
 		
 			if (!strlen($strAutologinKey)){
-				$strAutologinKey = hash('sha512', $this->generate_salt());
+				$strAutologinKey = hash('sha512', random_string(64));
 				$this->updateAutologinKey($user_id, $strAutologinKey);
 			}
 			$arrCookieData['auto_login_id'] = $strAutologinKey;

@@ -189,8 +189,7 @@ class settings_pageobject extends pageobject {
 			$query_ary['username'] = $values['username'];
 		}
 		if ( $change_password ) {
-			$new_salt = $this->user->generate_salt();
-			$query_ary['user_password'] = $this->user->encrypt_password($values['new_password'], $new_salt).':'.$new_salt;
+			$query_ary['user_password'] = $this->user->encrypt_password($values['new_password']);
 			$query_ary['user_login_key'] = '';
 			
 			//Send Mail to the recent user's email address

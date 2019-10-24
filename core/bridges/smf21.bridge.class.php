@@ -66,7 +66,7 @@ class smf21_bridge extends bridge_generic {
 		),
 	);
 	
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = "", $arrUserdata=array()){
+	public function check_password($password, $hash, $strSalt = '', $strUsername = "", $arrUserdata=array()){
 		//Use normal strtolower and not utf8_strotolower, because SMF2 does the same...
 		$blnResult = false;
 		
@@ -116,7 +116,7 @@ class smf21_bridge extends bridge_generic {
 		return $arrReturn;
 	}
 	
-	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash=false){
+	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult){
 		//Is user active?
 		if ($boolLoginResult){
 			//Single Sign On

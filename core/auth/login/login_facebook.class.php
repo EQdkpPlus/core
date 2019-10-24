@@ -198,12 +198,9 @@ class login_facebook extends gen_class {
 	 *
 	 * @param $strUsername
 	 * @param $strPassword
-	 * @param $boolUseHash Use Hash for comparing
 	 * @return bool/array
 	 */
-	public function login($strUsername, $strPassword, $boolUseHash = false){
-		$blnLoginResult = false;
-		
+	public function login($strUsername, $strPassword){
 		$this->init_oauth();
 		
 		$code = $_GET['code'];
@@ -222,11 +219,10 @@ class login_facebook extends gen_class {
 						if ($userid){
 							$userdata = $this->pdh->get('user', 'data', array($userid));
 							if ($userdata){
-								list($strPwdHash, $strSalt) = explode(':', $userdata['user_password']);
 								return array(
 										'status'		=> 1,
 										'user_id'		=> $userdata['user_id'],
-										'password_hash'	=> $strPwdHash,
+										'password_hash'	=> $userdata['user_password'],
 										'autologin'		=> true,
 										'user_login_key' => $userdata['user_login_key'],
 								);

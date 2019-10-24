@@ -233,14 +233,14 @@ function outputResult()
 
 		$strEmail =  $this->encrypt->encrypt($this->useremail);
 		$this->config->set('admin_email', $strEmail);
-		$salt = $this->user->generate_salt();
-		$password = $this->user->encrypt_password($this->in->get('user_password1'), $salt);
+
+		$password = $this->user->encrypt_password($this->in->get('user_password1'));
 		$this->db->query("TRUNCATE __users;");
 		
 		$this->db->prepare("INSERT INTO __users :p")->set(array(
 			'user_id'		=> 1,
 			'username'		=> $this->username,
-			'user_password'	=> $password.':'.$salt,
+			'user_password'	=> $password,
 			'user_lang'		=> $this->config->get('default_lang'),
 			'user_email'	=> $strEmail,
 			'user_active'	=> '1',

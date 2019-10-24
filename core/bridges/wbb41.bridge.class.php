@@ -67,7 +67,7 @@ class wbb41_bridge extends bridge_generic {
 	);
 	
 	//Needed function
-	public function check_password($password, $hash, $strSalt = '', $boolUseHash = false, $strUsername = "", $arrUserdata=array()){
+	public function check_password($password, $hash, $strSalt = '', $strUsername = "", $arrUserdata=array()){
 		$blnResult = $this->__checkPassword($strUsername, $password, $hash);
 
 		if ($blnResult) return true;
@@ -76,7 +76,7 @@ class wbb41_bridge extends bridge_generic {
 	}
 
 	
-	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash=false){
+	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult){
 		//Is user active?
 		if ($boolLoginResult){
 			if ($arrUserdata['banned'] != '0' || $arrUserdata['activationCode'] != '0') {

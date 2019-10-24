@@ -100,25 +100,24 @@ class bridge extends gen_class {
 	 * @param string $strUsername
 	 * @param string $strPassword
 	 * @param boolean $boolSetAutoLogin
-	 * @param boolean $boolUseHash
 	 * @param boolean $blnCreateUser
 	 * @param boolean $boolUsePassword
 	 * @return boolean|array
 	 */
-	public function login($strUsername, $strPassword, $boolSetAutoLogin = false, $boolUseHash = false, $blnCreateUser = true, $boolUsePassword = true){
+	public function login($strUsername, $strPassword, $boolSetAutoLogin = false, $blnCreateUser = true, $boolUsePassword = true){
 		if (!$this->status || !$this->objBridge) return false;
 		
 		//Check if username is given
 		if (strlen($strUsername) == 0) return false;
 		
 		//Callbefore Login - without any influence
-		$this->objBridge->before_login(unsanitize($strUsername), unsanitize($strPassword), $boolSetAutoLogin, $boolUseHash);
+		$this->objBridge->before_login(unsanitize($strUsername), unsanitize($strPassword), $boolSetAutoLogin);
 		
 		$boolLoginResult = false;
 		$strPwdHash = '';
 		
 		//Login
-		$arrLoginmethodResult = $this->objBridge->login(unsanitize($strUsername), unsanitize($strPassword), $boolSetAutoLogin, $boolUseHash);
+		$arrLoginmethodResult = $this->objBridge->login(unsanitize($strUsername), unsanitize($strPassword), $boolSetAutoLogin);
 		if($arrLoginmethodResult !== 0){
 			$boolLoginResult = $arrLoginmethodResult['status'];
 			$arrUserdata 	 = $arrLoginmethodResult;
@@ -127,8 +126,11 @@ class bridge extends gen_class {
 			//Hole User aus der Datenbank		
 			$arrUserdata = $this->get_userdata(unsanitize($strUsername));
 			if ($arrUserdata){
+				d($arrUserdata);
+				die();
+				
 				if ($boolUsePassword){
-					$boolLoginResult = $this->objBridge->check_password(unsanitize($strPassword), $arrUserdata['password'], $arrUserdata['salt'], $boolUseHash, unsanitize($strUsername), $arrUserdata);
+					$boolLoginResult = $this->objBridge->check_password(unsanitize($strPassword), $arrUserdata['password'], $arrUserdata['salt'], unsanitize($strUsername), $arrUserdata);
 					$this->pdl->log('login', 'Check Bridge Password, Result: '.(($boolLoginResult) ? 'true' : 'false'));
 					//Passwort stimmt, jetzt müssen wir schaun, ob er auch in der richtigen Gruppe ist
 					if ($boolLoginResult){
@@ -143,7 +145,7 @@ class bridge extends gen_class {
 		}
 		
 		//Callafter Login - has influence to loginstatus
-		$boolLoginResult = $this->objBridge->after_login(unsanitize($strUsername), unsanitize($strPassword), $boolSetAutoLogin, $arrUserdata, $boolLoginResult, $boolUseHash);
+		$boolLoginResult = $this->objBridge->after_login(unsanitize($strUsername), unsanitize($strPassword), $boolSetAutoLogin, $arrUserdata, $boolLoginResult);
 		$this->pdl->log('login', 'Bridge callafter, Result: '.(($boolLoginResult) ? 'true' : 'false'));
 
 		
@@ -154,15 +156,14 @@ class bridge extends gen_class {
 				$user_id = $this->pdh->get('user', 'userid', array(sanitize($arrUserdata['name'])));
 				$arrEQdkpUserdata = $this->pdh->get('user', 'data', array($user_id));
 				
-				list($strEQdkpUserPassword, $strEQdkpUserSalt) = explode(':', $arrEQdkpUserdata['user_password']);
+				$strEQdkpUserPassword = $arrEQdkpUserdata['user_password'];
 				//If it's an old password without salt or there is a better algorythm
-				$blnHashNeedsUpdate = $this->user->checkIfHashNeedsUpdate($strEQdkpUserPassword) || !$strEQdkpUserSalt;
+				$blnHashNeedsUpdate = $this->user->checkIfHashNeedsUpdate($strEQdkpUserPassword);
 				
 				//Update Email und Password - den Rest soll die Sync-Funktion machen	
 				if ($boolUsePassword && $strPassword && ((!$this->user->checkPassword($strPassword, $arrEQdkpUserdata['user_password'])) || ($this->objBridge->blnSyncEmail && ( $arrUserdata['email'] != $arrEQdkpUserdata['user_email'])) || $blnHashNeedsUpdate)){
-					$strSalt = $this->user->generate_salt();
-					$strPwdHash = $this->user->encrypt_password($strPassword, $strSalt);
-					$arrToSync = array('user_password' => $strPwdHash.':'.$strSalt);
+					$strPwdHash = $this->user->encrypt_password($strPassword);
+					$arrToSync = array('user_password' => $strPwdHash);
 					if ($this->objBridge->blnSyncEmail) $arrToSync['user_email'] = $this->crypt->encrypt($arrUserdata['email']);
 					$this->pdh->put('user', 'update_user', array($user_id, $arrToSync, false, false));
 					$this->pdh->process_hook_queue();
@@ -175,10 +176,9 @@ class bridge extends gen_class {
 			} elseif ($blnCreateUser) {
 
 				//Neu anlegen
-				$salt = $this->user->generate_salt();
-				$strPwdHash = $this->user->encrypt_password($strPassword, $salt);
+				$strPwdHash = $this->user->encrypt_password($strPassword);
 				
-				$user_id = $this->pdh->put('user', 'insert_user_bridge', array(sanitize($arrUserdata['name']), $strPwdHash.':'.$salt, $arrUserdata['email'], false));
+				$user_id = $this->pdh->put('user', 'insert_user_bridge', array(sanitize($arrUserdata['name']), $strPwdHash, $arrUserdata['email'], false));
 				$this->pdh->process_hook_queue();
 				
 				//Notify Admins
@@ -384,8 +384,8 @@ class bridge extends gen_class {
 
 			$objQuery = $this->bridgedb->prepare($strQuery)->execute($strCleanUsername);
 			if ($objQuery){
-				$arrResult = $objQuery->fetchAssoc();
-				if ($salt == '')  $arrResult['salt'] = '';
+				$arrResult = $objQuery->fetchAssoc();				
+				if ($arrResult && $salt == '')  $arrResult['salt'] = '';
 				return $arrResult;
 			}
 			return false;

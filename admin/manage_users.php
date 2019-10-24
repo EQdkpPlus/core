@@ -369,10 +369,9 @@ class Manage_Users extends page_generic {
 		$this->user->destroyUserSessions($this->in->get('u'));
 
 		//Set a random password, as this method should be used if an account is compromised.
-		$user_salt = $this->user->generate_salt();
 		$user_password = random_string(32);
 		$arrSet = array(
-			'user_password' => $this->user->encrypt_password($user_password, $user_salt).':'.$user_salt,
+			'user_password' => $this->user->encrypt_password($user_password),
 		);
 
 		$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set($arrSet)->execute($this->in->get('u', 0));
@@ -658,8 +657,7 @@ class Manage_Users extends page_generic {
 			$query_ary = array();
 			if ( $change_username ) $query_ary['username'] = $values['username'];
 			if ( $change_password ) {
-				$new_salt = $this->user->generate_salt();
-				$query_ary['user_password'] = $this->user->encrypt_password($values['new_password'], $new_salt).':'.$new_salt;
+				$query_ary['user_password'] = $this->user->encrypt_password($values['new_password']);
 				$query_ary['user_login_key'] = '';
 
 				//Destroy other sessions
@@ -726,8 +724,7 @@ class Manage_Users extends page_generic {
 			$this->pdh->put('user', 'activate', array($user_id, $this->in->get('user_active', 0)));
 		} else {
 			$password = ($values['new_password'] == "") ? random_string(32) : $values['new_password'];
-			$new_salt = $this->user->generate_salt();
-			$new_password = $this->user->encrypt_password($password, $new_salt).':'.$new_salt;
+			$new_password = $this->user->encrypt_password($password);
 
 			$query_ar = array(
 				'username'				=> $this->in->get('username'),

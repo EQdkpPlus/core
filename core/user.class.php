@@ -391,12 +391,12 @@ class user extends gen_class {
 	* @param string $salt Salt value; not yet in use
 	* @return string
 	*/
-	public function encrypt_password($strPassword, $strSalt = '', $strMethod=''){
-		return $this->pw->hash($strPassword, $strSalt, $strMethod);
+	public function encrypt_password($strPassword, $strMethod=''){
+		return $this->pw->hash($strPassword, $strMethod);
 	}
 
-	public function checkPassword($strPassword, $strStoredHash, $blnUseHash = false, $blnReturnHash = false){
-		return $this->pw->checkPassword($strPassword, $strStoredHash, $blnUseHash, $blnReturnHash);
+	public function checkPassword($strPassword, $strStoredHash){
+		return $this->pw->checkPassword($strPassword, $strStoredHash);
 	}
 
 	public function checkIfHashNeedsUpdate($strHash){
@@ -830,8 +830,7 @@ class user extends gen_class {
 		}
 		
 		//Register User (random credentials)
-		$salt = $this->user->generate_salt();
-		$strPwdHash = $this->user->encrypt_password(random_string(32), $salt);
+		$strPwdHash = $this->user->encrypt_password(random_string(32));
 		
 		$intUserID = $this->pdh->put('user', 'insert_user_bridge', array(
 				$strUsername, $strPwdHash, $arrAccountDetails['user_email']

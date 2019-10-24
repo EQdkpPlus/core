@@ -137,10 +137,9 @@ class login_twofactor extends gen_class {
 	*
 	* @param $strUsername
 	* @param $strPassword
-	* @param $boolUseHash Use Hash for comparing
 	* @return bool/array	
 	*/	
-	public function login($strUsername, $strPassword, $boolUseHash = false){
+	public function login($strUsername, $strPassword){
 		list($serializedUser, $intTimestamp, $strHmac) = explode(':', $this->in->get('twofactor_data'));
 		$user = unserialize(register('encrypt')->decrypt($serializedUser));
 		$strCalcMac = hash_hmac("sha256", $serializedUser.'_'.$intTimestamp.'.'.$user, hash("sha256", registry::get_const('encryptionKey')));
@@ -162,12 +161,10 @@ class login_twofactor extends gen_class {
 						$this->pdh->put('user', 'delete_authaccount', array($user, "twofactor"));
 						$userdata = $this->pdh->get('user', 'data', array($user));
 						if ($userdata){
-							list($strPwdHash, $strSalt) = explode(':', $userdata['user_password']);
-
 							return array(
 									'status'		=> 1,
 									'user_id'		=> $userdata['user_id'],
-									'password_hash'	=> $strPwdHash,
+									'password_hash'	=> $userdata['user_password'],
 									'autologin'		=> true,
 									'user_login_key' => $userdata['user_login_key'],
 							);
@@ -183,8 +180,6 @@ class login_twofactor extends gen_class {
 							$blnLoginResult = true;
 							$userdata = $this->pdh->get('user', 'data', array($user));
 							if ($userdata){
-								list($strPwdHash, $strSalt) = explode(':', $userdata['user_password']);
-
 								if ($this->in->get('twofactor_cookie', 0)){
 									set_cookie("twofactor", register('encrypt')->encrypt(serialize(array('secret' => hash("sha256", $data['secret']), 'user_id' => $userdata['user_id']))), time()+60*60*24*30);
 								}
@@ -192,7 +187,7 @@ class login_twofactor extends gen_class {
 								return array(
 									'status'			=> 1,
 									'user_id'			=> $userdata['user_id'],
-									'password_hash'		=> $strPwdHash,
+									'password_hash'		=> $userdata['user_password'],
 									'autologin'			=> true,
 									'user_login_key'	 => $userdata['user_login_key'],
 								);
