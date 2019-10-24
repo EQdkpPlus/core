@@ -283,7 +283,7 @@ class phpbb31_bridge extends bridge_generic {
 		setcookie($arrConfig['cookie_name'].'_u', $user_id, $expire, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
 		
 		if ($boolAutoLogin){
-			$strLoginKey = substr($this->user->generate_salt(), 4, 16);
+			$strLoginKey = substr(random_string(32), 4, 16);
 			
 			$this->bridgedb->prepare("INSERT INTO ".$this->prefix."sessions_keys :p")->set(array(
 					'key_id'	=> md5($strLoginKey),
