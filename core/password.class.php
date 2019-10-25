@@ -143,7 +143,7 @@ class password extends gen_class {
 	 * @throws Exception
 	 * @return string
 	 */
-	private function getBestHashMethod(){
+	public function getBestHashMethod(){
 		if (CRYPT_BLOWFISH == 1) return "blowfish";
 		if(defined('PASSWORD_ARGON2ID')) return "argon2id";
 		if(defined('PASSWORD_ARGON2I')) return "argon2i";

@@ -93,6 +93,7 @@ $lang = array(
 	'module_zip'		=> 'Zip PHP module',
 	'module_xml'			=> 'XML PHP module',
 	'module_mb'				=> 'MultiByte PHP-module',
+	'module_crypto'			=> 'Cryptographic Methods',
 	"phpcheck_success" => 'The minimum requirements for the installation of EQDKP-Plus are met. The installation can proceed.',
 	"phpcheck_failed" => 'The minimum requirements for the installation of EQDKP-Plus are not met.<br />A selection of suitable hosting companies can be found on our <a href="http://eqdkp-plus.eu" target="_blank">website</a>',
 	"do_match_opt_failed" => 'Some recommends are not met. EQDKP-Plus will work on this system; however, maybe not all features will be available.',

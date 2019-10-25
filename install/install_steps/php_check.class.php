@@ -77,6 +77,11 @@ class php_check extends install_generic {
 				'installed'		=> (function_exists('hash')) ? $this->lang['yes'] : $this->lang['no'],
 				'passfail'		=> (function_exists('hash')) ? true : false
 			),
+			'crypto' => array(
+				'required'		=> $this->lang['yes'],
+				'installed'		=> ($this->check_crypto()) ? $this->lang['yes'] : $this->lang['no'],
+				'passfail'		=> ($this->check_crypto()) ? true : false
+			),
 			'xml'	=> array(
 				'required'		=> $this->lang['yes'],
 				'installed'		=> (function_exists('simplexml_load_string')) ? $this->lang['yes'] : $this->lang['no'],
@@ -146,6 +151,19 @@ class php_check extends install_generic {
 		$installed = ini_get('memory_limit');
 		if (intval($installed) == -1) return true;
 		return ($this->convert_hr_to_bytes($installed) >= $this->convert_hr_to_bytes($needed)) ? true : false;
+	}
+	
+	private function check_crypto(){
+		$pw = register('password');
+		try {
+			$strBestHash = $pw->getBestHashMethod();
+		} catch(Exception $e){
+			return false;
+		}
+		
+		if(!function_exists('crypt') || !function_exists('password_verify') || !function_exists('hash_equals') || !function_exists('password_needs_rehash') || !function_exists('password_hash')) return false;
+		
+		return true;
 	}
 
 	function convert_hr_to_bytes( $size ) {
