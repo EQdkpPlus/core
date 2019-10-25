@@ -24,19 +24,14 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class password extends gen_class {
-	private $itoa64;
-	private $iteration_count_log2;
-	private $random_state;
 
-	public function __construct()
-	{
-		$this->itoa64 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+	private $bcrypt_cost = 11;
+	
+	public $strBestHashMethod;
 
-		$this->iteration_count_log2 = 11; // Must between 4 and 31
 
-		$this->random_state = microtime();
-		if (function_exists('getmypid'))
-			$this->random_state .= getmypid();
+	public function __construct(){
+		$this->strBestHashMethod = $this->getBestHashMethod();
 	}
 
 
@@ -48,9 +43,7 @@ class password extends gen_class {
 	 * @return mixed - string for hash, false on error 
 	 */
 	public function hash($strPassword, $strMethod = ''){
-		$strSalt = generateRandomBytes(26);
-		$strHashedPassword = $this->prehash($strPassword, $strSalt);
-		if ($strMethod == '') $strMethod = $this->getBestHashMethod();
+		if ($strMethod == '') $strMethod = $this->strBestHashMethod;
 		
 		switch ($strMethod){
 			case "blowfish": return $this->hash_blowfish($strPassword);
@@ -62,24 +55,19 @@ class password extends gen_class {
 			case "argon2i": return $this->hash_argon2i($strPassword);
 				break;
 			
-			//Deprecated, uses also pre-salted password-hash
-			case "blowfish_old": return $this->hash_blowfish_old($strHashedPassword, $strSalt);
-				break;
-			//Deprecated, uses also pre-salted password-hash
-			case "ext_des": return $this->hash_ext_des($strHashedPassword, $strSalt);
-				break;
-			//Deprecated, uses also pre-salted password-hash
-			case "sha512":	return $this->hash_sha512($strHashedPassword, $strSalt);
-				break;
 		}
 
 		return false;
 	}
 
-	public function prehash($strPassword, $strSalt=''){
-		return hash('sha512', $strSalt.$strPassword);
-	}
-
+	/**
+	 * Checks a given plaintext password against the saved hash.
+	 * If a salt is needed, it should be appended to the password, seperated by colon (:)
+	 * 
+	 * @param string $strPassword
+	 * @param string $strStoredHash
+	 * @return boolean
+	 */
 	public function checkPassword($strPassword, $strStoredHash){
 		if(strpos($strStoredHash, ':') !== false){
 			list($strStoredHash, $strSalt) = explode(':', $strStoredHash);
@@ -106,6 +94,7 @@ class password extends gen_class {
 			case "argon2i":
 			case "argon2id":	return password_verify($strPassword, $strStoredHash);
 				break;
+				
 			case "sha512":	$strHash = $this->crypt_private($strHashedPassword, $strStoredHash);
 				break;
 
@@ -121,6 +110,8 @@ class password extends gen_class {
 			return (hash_equals($strStoredHash, $strHash));
 		}
 		
+		
+		//Do the compare on our own
 		if (strlen($strStoredHash) !== strlen($strHash)) {
 			return false;
 		}
@@ -135,16 +126,37 @@ class password extends gen_class {
 		return ($blnCompareStatus);
 	}
 
+	/**
+	 * Builds a sha512 hash over the password concatenated with the salt
+	 * 
+	 * @param string $strPassword
+	 * @param string $strSalt
+	 * @return string
+	 */
+	private function prehash($strPassword, $strSalt=''){
+		return hash('sha512', $strSalt.$strPassword);
+	}
 
-
+	/**
+	 * Returns the best suitable hashing algorithm on the sytem
+	 * 
+	 * @throws Exception
+	 * @return string
+	 */
 	private function getBestHashMethod(){
 		if (CRYPT_BLOWFISH == 1) return "blowfish";
 		if(defined('PASSWORD_ARGON2ID')) return "argon2id";
 		if(defined('PASSWORD_ARGON2I')) return "argon2i";
-		if (CRYPT_EXT_DES == 1) return "ext_des";
-		return "sha512";
+		
+		throw new Exception("No suitable Crypto (bcrypt, argon) found.");
 	}
 
+	/**
+	 * Returns hashing method of a given Hash
+	 * 
+	 * @param string $strHash
+	 * @return string|boolean
+	 */
 	private function getHashMethod($strHash){
 		if(strpos($strHash, ':') !== false){
 			list($strHash, $strSalt) = explode(':', $strHash);
@@ -162,214 +174,69 @@ class password extends gen_class {
 		return false;
 	}
 
-	public function getIterationCount($strHash){
-		$strMethod = $this->getHashMethod($strHash);
-		switch ($strMethod){
-			case "blowfish":return intval(substr($strHash, 4,2));
-				break;
 
-			case "sha512":	return intval($count_log2 = strpos($this->itoa64, $strHash[3]));
-				break;
-		}
-
-		return false;
-	}
-
-
-	public function checkIfHashNeedsUpdate($strHash){
-		$strMethod = $this->getHashMethod($strHash);
-		$strBestMethod = $this->getBestHashMethod();
+	/**
+	 * Checks if a given Hash needs an update
+	 * 
+	 * @param string $strHash
+	 * @return boolean
+	 */
+	public function hashNeedsUpdate($strHash){
+		if(strpos($strHash, ':') !== false){
+			list($strHash, $strSalt) = explode(':', $strHash);
+		}		
 		
-		$intItcount = $this->getIterationCount($strHash);
-		if ($strMethod && (($strMethod !== $strBestMethod) || ($intItcount && ($intItcount < $this->iteration_count_log2)))){
+		$strMethod = $this->getHashMethod($strHash);
+		$strBestMethod = $this->strBestHashMethod;
+		
+		if ($strMethod && ($strMethod !== $strBestMethod)){
 			return true;
 		}
+		
+		switch($strMethod){
+			case 'blowfish':
+			case 'blowfish_old': return password_needs_rehash($strHash, PASSWORD_BCRYPT, array('cost' => $this->bcrypt_cost));
+				break;
+				
+			case 'argon2id': return password_needs_rehash($strHash, PASSWORD_ARGON2ID);
+				break;
+			
+			case 'argon2i': return password_needs_rehash($strHash, PASSWORD_ARGON2I);
+				break;	
+		}
+		
+		
 		return false;
 	}
-
-	public function get_random_bytes($count)
-	{
-		return generateRandomBytes($count);
-	}
 	
+	/**
+	 * Generate the Blowfish Hash with PHP built-in methods
+	 * 
+	 * @param string $password
+	 * @return string
+	 */
 	private function hash_blowfish($password){
-		return password_hash($password, PASSWORD_BCRYPT, array('cost' => $this->iteration_count_log2));
+		return password_hash($password, PASSWORD_BCRYPT, array('cost' => $this->bcrypt_cost));
 	}
 	
+	/**
+	 * Generate the Argon2ID Hash with PHP built-in methods
+	 *
+	 * @param string $password
+	 * @return string
+	 */
 	private function hash_argon2id($password){
 		return password_hash($password, PASSWORD_ARGON2ID);
 	}
 	
+	/**
+	 * Generate the Argon2I Hash with PHP built-in methods
+	 *
+	 * @param string $password
+	 * @return string
+	 */
 	private function hash_argon2i($password){
 		return password_hash($password, PASSWORD_ARGON2I);
 	}
-	
-
-	private function encode64($input, $count)
-	{
-		$output = '';
-		$i = 0;
-		do {
-			$value = ord($input[$i++]);
-			$output .= $this->itoa64[$value & 0x3f];
-			if ($i < $count)
-				$value |= ord($input[$i]) << 8;
-			$output .= $this->itoa64[($value >> 6) & 0x3f];
-			if ($i++ >= $count)
-				break;
-			if ($i < $count)
-				$value |= ord($input[$i]) << 16;
-			$output .= $this->itoa64[($value >> 12) & 0x3f];
-			if ($i++ >= $count)
-				break;
-			$output .= $this->itoa64[($value >> 18) & 0x3f];
-		} while ($i < $count);
-
-		return $output;
-	}
-
-	private function gensalt_private($input)
-	{
-		$output = '$S$';
-		$output .= $this->itoa64[min($this->iteration_count_log2 +
-			((PHP_VERSION >= '5') ? 5 : 3), 30)];
-		$output .= $this->encode64($input, 6);
-
-		return $output;
-	}
-
-	private function crypt_private($password, $setting)
-	{
-		$output = '*0';
-		if (substr($setting, 0, 2) == $output)
-			$output = '*1';
-
-		$id = substr($setting, 0, 3);
-		if ($id != '$S$')
-			return $output;
-
-		$count_log2 = strpos($this->itoa64, $setting[3]);
-		if ($count_log2 < 7 || $count_log2 > 30)
-			return $output;
-
-		$count = 1 << $count_log2;
-
-		$salt = substr($setting, 4, 8);
-		if (strlen($salt) != 8)
-			return $output;
-
-		$hash = hash('sha512', $salt . $password, TRUE);
-		do {
-			$hash = hash('sha512', $hash . $password, TRUE);
-		} while (--$count);
-		$len = strlen($hash);
-		$output = substr($setting, 0, 12);
-		$output .= $this->encode64($hash, $len);
-
-		return $output;
-	}
-
-	private function gensalt_extended($input)
-	{
-		$count_log2 = min($this->iteration_count_log2 + 8, 24);
-		# This should be odd to not reveal weak DES keys, and the
-		# maximum valid value is (2**24 - 1) which is odd anyway.
-		$count = (1 << $count_log2) - 1;
-
-		$output = '_';
-		$output .= $this->itoa64[$count & 0x3f];
-		$output .= $this->itoa64[($count >> 6) & 0x3f];
-		$output .= $this->itoa64[($count >> 12) & 0x3f];
-		$output .= $this->itoa64[($count >> 18) & 0x3f];
-
-		$output .= $this->encode64($input, 3);
-
-		return $output;
-	}
-
-	private function gensalt_blowfish($input)
-	{
-		# This one needs to use a different order of characters and a
-		# different encoding scheme from the one in encode64() above.
-		# We care because the last character in our encoded string will
-		# only represent 2 bits.  While two known implementations of
-		# bcrypt will happily accept and correct a salt string which
-		# has the 4 unused bits set to non-zero, we do not want to take
-		# chances and we also do not want to waste an additional byte
-		# of entropy.
-		$itoa64 = './ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-		$output = '$2a$';
-		$output .= chr(ord('0') + $this->iteration_count_log2 / 10);
-		$output .= chr(ord('0') + $this->iteration_count_log2 % 10);
-		$output .= '$';
-
-		$i = 0;
-		do {
-			$c1 = ord($input[$i++]);
-			$output .= $itoa64[$c1 >> 2];
-			$c1 = ($c1 & 0x03) << 4;
-			if ($i >= 16) {
-				$output .= $itoa64[$c1];
-				break;
-			}
-
-			$c2 = ord($input[$i++]);
-			$c1 |= $c2 >> 4;
-			$output .= $itoa64[$c1];
-			$c1 = ($c2 & 0x0f) << 2;
-
-			$c2 = ord($input[$i++]);
-			$c1 |= $c2 >> 6;
-			$output .= $itoa64[$c1];
-			$output .= $itoa64[$c2 & 0x3f];
-		} while (1);
-
-		return $output;
-	}
-
-	private function hash_blowfish_old($password, $strSalt){
-		$random = '';
-
-		if (CRYPT_BLOWFISH == 1) {
-			$random = $this->get_random_bytes(16);
-			$hash =
-			    crypt($password, $this->gensalt_blowfish($random));
-			if (strlen($hash) == 60)
-				return $hash.':'.$strSalt;
-		}
-
-		return false;
-	}
-
-	private function hash_ext_des($password, $strSalt){
-		$random = '';
-
-		if (CRYPT_EXT_DES == 1) {
-			if (strlen($random) < 3)
-				$random = $this->get_random_bytes(3);
-			$hash =
-			    crypt($password, $this->gensalt_extended($random));
-			if (strlen($hash) == 20)
-				return $hash.':'.$strSalt;
-		}
-
-		return false;
-	}
-
-	private function hash_sha512($password, $strSalt){
-		$random = '';
-
-		$random = $this->get_random_bytes(6);
-		$hash =
-		    $this->crypt_private($password,
-		    $this->gensalt_private($random));
-
-		if (strlen($hash) == 98)
-			return $hash.':'.$strSalt;
-
-		return false;
-	}
-
 }
 ?>

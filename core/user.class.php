@@ -400,7 +400,7 @@ class user extends gen_class {
 	}
 
 	public function checkIfHashNeedsUpdate($strHash){
-		return $this->pw->checkIfHashNeedsUpdate($strHash);
+		return $this->pw->hashNeedsUpdate($strHash);
 	}
 
 	/**
