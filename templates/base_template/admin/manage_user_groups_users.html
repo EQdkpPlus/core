@@ -3,17 +3,17 @@
 	<div class="contentHeader">
 		<h1 class="contentTitle">{L_group_members}: {GROUP_NAME}<input type="hidden" name="g" value="{GRP_ID}" /></h1>
 	</div>
-	<div class="tableHeader floatRight">
-		<button class="mainoption" type="button" onclick="$('#dialog-add-users').dialog('open')"><i class="fa fa-plus"></i>{L_add_user_to_group}</button>
-	</div>
 	
-	<!-- IF S_IS_IN_GROUP -->
+	<!-- IF S_IS_IN_GROUP AND S_USERGROUP_ADMIN -->
 	<div class="infobox infobox-large infobox-blue clearfix">
 		<i class="fa fa-exclamation-triangle  fa-4x pull-left"></i> {L_usergroup_edit_membership_info}
 	</div>
 	<!-- ENDIF -->
 	
-
+	<div class="tableHeader floatRight">
+		<button class="mainoption" type="button" onclick="$('#dialog-add-users').dialog('open')"><i class="fa fa-plus"></i>{L_add_user_to_group}</button>
+	</div>
+	
 		<div id="members">		
 			<table id="user_groups_table" class="table fullwidth colorswitch">
 				<tr>
@@ -33,7 +33,7 @@
 					<th>{L_online}</th>
 				</tr>
 				<tr>
-					<th class="center" colspan="6"><a href="#" onclick="$('#dialog-add-grpleaders').dialog('open')">{L_grpleaders} <i class="fa fa-plus"></i></a></th>
+					<th class="center" colspan="6"><!-- IF S_USERGROUP_ADMIN --><a href="#" onclick="$('#dialog-add-grpleaders').dialog('open')">{L_grpleaders} <i class="fa fa-plus"></i></a><!-- ELSE -->{L_grpleaders}<!-- ENDIF --></th>
 				</tr>
 				<!-- BEGIN user_row_grpleader -->
 				<tr>

@@ -187,6 +187,7 @@ class Manage_User_Groups extends page_generic {
 				'S_NO_STANDARD' => ($id == 2 || $id == 3) ? true : false,
 				'STANDARD'	=> ($this->pdh->get('user_groups', 'standard', array($id))) ? 'checked="checked"' : '',
 				'HIDE'	=> ($this->pdh->get('user_groups', 'hide', array($id))) ? 'checked="checked"' : '',
+				'S_IS_GRPLEADER' => $this->pdh->get('user_groups_users', 'is_grpleader', array($this->user->id, $id)),
 			));
 		}
 

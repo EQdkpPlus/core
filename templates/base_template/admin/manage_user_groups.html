@@ -61,15 +61,13 @@
 				{L_name}
 			</th>
 			<th>{L_description}</th>
-			<th style="width:50px" class="nowrap">{L_group_members}</th>
 		</tr>
 		<!-- BEGIN user_groups -->
 		<!-- IF user_groups.S_IS_GRPLEADER -->
 		<tr>
-			<td class="center"><a href="manage_user_groups.php{SID}&amp;g={user_groups.ID}&amp;edit=true" title="{L_manage_user_group}"><i class="fa fa-user fa-lg"></i></a></td>
+			<td class="center"><a href="manage_user_groups.php{SID}&amp;g={user_groups.ID}&amp;users=true" title="{L_group_members}"><i class="fa fa-users fa-lg"></i> {user_groups.USER_COUNT}</a></td>
 			<td>{user_groups.NAME}</td>
 			<td>{user_groups.DESC}</td>
-			<td>{user_groups.USER_COUNT}</td>
 		</tr>
 		<!-- ENDIF -->
 		<!-- END user_groups -->
