@@ -1,88 +1,10 @@
 <!-- IF S_USERGROUP_ADMIN -->
-
-<script type="text/javascript">
-	$(function() {
-
-		$( "#dialog-add-usergroup" ).dialog({
-			height: 310,
-			width: 500,
-			modal: true,
-			autoOpen: false,
-		});
-
-		$('.add_user_group_trigger').on('click', function(event){
-			$('.addgroup-name').val('');
-			$('.addgroup-desc').val('');
-			$('.addgroup-hidden').prop("checked", false);
-			$('.addgroup-team').prop("checked", false);
-
-			$( "#dialog-add-usergroup" ).dialog( "open" );
-		});
-
-		var newid = {ID};
-		var newkey = {KEY};
-
-		$('#addgroup-button').on('click', function(event){
-			var name = $('.addgroup-name').val();
-			var desc = $('.addgroup-desc').val();
-			var hidden = $('.addgroup-hidden').prop("checked");
-			var strHidden = (hidden) ? 'hide]" checked="checked"' : 'hide]"';
-
-			var team = $('.addgroup-team').prop("checked");
-			var strTeam = (team) ? 'team]" checked="checked"' : 'team]"';
-
-			var new_row = $('#usergroup_template>tbody').html()+"";
-			new_row = new_row.replace(/KEY/g, newkey);
-			new_row = new_row.replace(/ID/g, newid);
-			new_row = new_row.replace(/NAME/g, name);
-			new_row = new_row.replace(/DESC/g, desc);
-
-			new_row = new_row.replace(/hide]"/g, strHidden);
-			new_row = new_row.replace(/team]"/g, strTeam);
-
-			newkey++;
-			newid++;
-
-			$('.add_container').append(new_row);
-
-			$( "#dialog-add-usergroup" ).dialog( "close" );
-		});
-
-	});
-</script>
-
-<div id="dialog-add-usergroup" title="{L_add_user_group}">
-		<fieldset class="settings mediumsettings">
-			<dl>
-				<dt><label>{L_name}:</label></dt>
-				<dd><input type="text" style="width:90%" class="addgroup-name"/>
-				</dd>
-			</dl>
-			<dl>
-				<dt><label>{L_description}:</label></dt>
-				<dd>
-					<input type="text" style="width:90%" class="addgroup-desc"/>
-				</dd>
-			</dl>
-			<dl>
-				<dt><label>{L_hidden}:</label></dt>
-				<dd><input type="checkbox" class="addgroup-hidden" value="1"/></dd>
-			</dl>
-			<dl>
-				<dt><label>{L_show_on_teamlist}:</label></dt>
-				<dd><input type="checkbox" class="addgroup-team" value="1"/></dd>
-			</dl>
-		</fieldset>
-		<button type="button" id="addgroup-button"><i class="fa fa-check"></i> {L_submit}</button>
-</div>
-
-
 <form method="post" action="{ACTION}" name="post">
 	<div class="contentHeader">
 		<h1 class="contentTitle">{L_manage_user_groups} <span class="bubble">{GROUP_COUNT}</span></h1>
 	</div>
 	<div class="tableHeader floatRight">
-		<button class="mainoption add_user_group_trigger" type="button"><i class="fa fa-plus"></i>{L_add_user_group}</button>
+		<button class="mainoption" type="button" onclick="window.location='manage_user_groups.php{SID}&g=0&edit=true'"><i class="fa fa-plus"></i>{L_add_user_group}</button>
 		<button class="mainoption" name="user_group_perms" type="submit" id="user_group_perms"><i class="fa fa-list"></i>{L_user_group_permissions}</button>
 	</div>
 	<div class="clear"></div>
@@ -91,58 +13,39 @@
 		<tr class="not-sortable">
 			<th style="width:10px"></th>
 			<th style="width:20px"><input type="checkbox" name="selectall" id="selall_groups" />&nbsp;</th>
-			<th colspan="2" style="width:20px" class="nowrap">{L_action}</th>
+			<th colspan="3" style="width:20px" class="nowrap">{L_action}</th>
 			<th>{L_name}</th>
+			<th style="width:20px">{L_default}</th>
 			<th>{L_description}</th>
-			<th style="width:50px" class="hiddenSmartphone">{L_group_members}</th>
-			<th>{L_default_group}</th>
-			<th>{L_hide}</th>
-			<th>{L_show_teamlist}</th>
 		</tr>
 		</thead>
 		<tbody class="add_container">
 		<!-- BEGIN user_groups -->
 		<tr>
-			<td><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"></span></td>
+			<td style="width:10px"><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"></span></td>
 			<td class="center"><!-- IF user_groups.S_DELETABLE --><input type="checkbox" name="user_group_ids[]" value="{user_groups.ID}" /><!-- ENDIF --><input type="hidden" name="user_groups[{user_groups.KEY}][id]" value="{user_groups.ID}" /></td>
-			<td class="center"><a href="manage_user_groups.php{SID}&amp;g={user_groups.ID}&amp;edit=true" title="{L_manage_user_group}"><i class="fa fa-pencil fa-lg"></i></a></td>
-			<td class="center">
+			<td class="center" style="width:20px"><a href="manage_user_groups.php{SID}&amp;g={user_groups.ID}&amp;edit=true" title="{L_manage_user_group}"><i class="fa fa-pencil fa-lg"></i></a></td>
+			<td class="nowrap" style="width:30px"><a href="manage_user_groups.php{SID}&amp;g={user_groups.ID}&amp;users=true" title="{L_group_members}"><i class="fa fa-users fa-lg"></i> {user_groups.USER_COUNT}</a></td>
+			<td class="center" style="width:20px">
 				<!-- IF user_groups.S_DELETABLE -->
 				<a href="javascript:delete_single_warning({user_groups.ID});" title="{L_delete}"><i class="fa fa-trash-o fa-lg" title="{L_delete}"></i></a>
 				<!-- ENDIF -->
 			</td>
-			<td><input type="text" name="user_groups[{user_groups.KEY}][name]" size="40" maxlength="50" value="{user_groups.NAME}" class="maininput" style="width:95%" /></td>
-			<td><input type="text" name="user_groups[{user_groups.KEY}][desc]" size="50" maxlength="75" value="{user_groups.DESC}" class="maininput" style="width:95%" /></td>
-			<td class="hiddenSmartphone">{user_groups.USER_COUNT}</td>
-			<td style="width:50px" class="nowrap"><!-- IF not user_groups.S_NO_STANDARD --><input type="radio" value="{user_groups.ID}" name="user_groups_standard" {user_groups.STANDARD} /><!-- ENDIF --></td>
-			<td><input type="checkbox" value="1" name="user_groups[{user_groups.KEY}][hide]" {user_groups.HIDE} />&nbsp;</td>
-			<td><input type="checkbox" value="1" name="user_groups[{user_groups.KEY}][team]" {user_groups.TEAM} />&nbsp;</td>
-		</tr>
+			<td><a href="manage_user_groups.php{SID}&amp;g={user_groups.ID}&amp;edit=true" title="{L_manage_user_group}">{user_groups.NAME}</a><!-- IF user_groups.STANDARD --> <i class="fa fa-globe fa-lg" title="{L_default_group}"></i><!-- ENDIF --></td>
+			<td style="width:50px" class="nowrap"><!-- IF not user_groups.S_NO_STANDARD --><input type="radio" value="{user_groups.ID}" name="user_groups_standard" {user_groups.STANDARD} /><!-- ENDIF --></td>		
+			<td>{user_groups.DESC}</td>
+			</tr>
 		<!-- END user_groups -->
 		</tbody>
 	</table>
 	<div class="contentFooter">
-		<button class="mainoption" type="submit" name="save"><i class="fa fa-check"></i>{L_save}</button>
+		<button class="mainoption" type="submit" name="saveorder"><i class="fa fa-check"></i>{L_save}</button>
 		<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="fa fa-times" ></i>{L_delete_selected_group}</button>
 		<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
 	</div>
 
 {CSRF_TOKEN}
 </form>
-	<table id="usergroup_template" style="visibility:hidden;">
-		<tr>
-			<td><span class="ui-icon ui-icon-arrowthick-2-n-s" title="{L_dragndrop}"></span></td>
-			<td class="center"></td>
-			<td class="center"></td>
-			<td class="center"></td>
-			<td><input type="hidden" name="user_groups[KEY][id]" value="ID" /><input type="text" name="user_groups[KEY][name]" size="40" maxlength="50" value="NAME" class="maininput" style="width:95%" /></td>
-			<td><input type="text" name="user_groups[KEY][desc]" size="50" maxlength="75" value="DESC" class="maininput" style="width:95%" /></td>
-			<td></td>
-			<td style="width:50px" class="nowrap"></td>
-			<td><input type="checkbox" value="1" name="user_groups[KEY][hide]" /></td>
-			<td><input type="checkbox" value="1" name="user_groups[KEY][team]" /></td>
-		</tr>
-	</table>
 
 <!-- ELSE -->
 

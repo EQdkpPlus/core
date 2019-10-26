@@ -1,0 +1,156 @@
+<form method="post" action="{ACTION}" name="post">
+	<div class="contentHeader">
+		<h1 class="contentTitle"><!-- IF GRP_ID == 0 -->{L_add_user_group}<!-- ELSE -->{L_edit}: {GRP_NAME}<!-- ENDIF --><input type="hidden" name="g" value="{GRP_ID}" /></h1>
+	</div>
+	
+	<!-- IF S_IS_IN_GROUP -->
+	<div class="infobox infobox-large infobox-blue clearfix">
+		<i class="fa fa-exclamation-triangle  fa-4x pull-left"></i> {L_usergroup_edit_membership_info}
+	</div>
+	<!-- ENDIF -->
+	
+	<!-- IF GRP_ID > 0 -->
+	<div class="tableHeader floatRight">
+		<button class="mainoption" type="button" onclick="window.location='manage_user_groups.php{SID}&g={GRP_ID}&users=true'"><i class="fa fa-users"></i>{L_group_members}</button>
+		<button class="mainoption" name="user_group_perms" type="button" id="user_group_perms" onclick="window.location='{SID}&user_group_perms&grp={GRP_ID}'"><i class="fa fa-list"></i>{L_user_resolve_perms}</button>	
+	</div>
+	<div class="clear"></div>
+	<!-- ENDIF -->
+		
+	<div id="groups_tabs">
+		<ul>
+			<li><a href='#settings'><span>{L_settings}</span></a></li>
+			<li><a href='#permissions'><span>{L_permissions}</span></a></li>
+		</ul>
+
+		<div id="settings">
+			<fieldset class="settings smallsettings">
+				<dl>
+					<dt><label>{L_name}:</label></dt>
+					<dd><input name="name" type="text" class="input" value="{GRP_NAME}" size="100" required/></dd>
+				</dl>
+				<dl>
+					<dt><label>{L_description}:</label></dt>
+					<dd><input name="desc" type="text" class="input" value="{GRP_DESC}" size="100" /></dd>
+				</dl>
+				<dl>
+					<dt><label>{L_hidden}:</label></dt>
+					<dd>{GRP_HIDDEN}</dd>
+				</dl>
+				<dl>
+					<dt><label>{L_show_on_teamlist}:</label></dt>
+					<dd>{GRP_TEAMLIST}</dd>
+				</dl>
+			</fieldset>
+		</div>
+
+		<div id="permissions">
+			<div class="clear"></div>
+	
+			<div id="permission_tabs">
+				<ul>
+					<li><a href='#user_perms'><span>{L_user_permissions}</span></a></li>
+					<li><a href='#admin_perms'><span class="adminicon">{L_admin_permissions}</span></a></li>
+					<li><a href='#articles'>{L_article_categories}</a></li>
+				</ul>
+
+				<div id="user_perms">
+					<!-- BEGIN u_permissions_row -->
+					<fieldset class="settings mediumsettings" class="settings">
+						<legend>{u_permissions_row.ICON} {u_permissions_row.GROUP}</legend>
+						<!-- BEGIN check_group -->
+						<div class="permissions">
+							<label title="{u_permissions_row.check_group.CBNAME}"">
+								<input type="checkbox" name="{u_permissions_row.check_group.CBNAME}" value="Y" {u_permissions_row.check_group.CBCHECKED} class="changepermcolor" id="cb_{u_permissions_row.check_group.CBNAME}"/>
+								<span id="span_cb_{u_permissions_row.check_group.CBNAME}" class="perm_text {u_permissions_row.check_group.CLASS}">{u_permissions_row.check_group.TEXT}</span>
+							</label>
+						</div>
+						<!-- END check_group -->
+					</fieldset>
+					<br />
+					<!-- END u_permissions_row -->
+				</div>
+
+				<div id="admin_perms">
+					<!-- IF GRP_ID == 1 -->
+					<div class="infobox infobox-large infobox-blue clearfix">
+						<i class="fa fa-info-circle fa-4x pull-left"></i> {L_guest_no_admin_perms_note}
+					</div>
+					<!-- ENDIF -->
+
+					<!-- BEGIN a_permissions_row -->
+					<fieldset class="settings mediumsettings" class="settings">
+						<legend>{a_permissions_row.ICON} {a_permissions_row.GROUP}</legend>
+						<!-- BEGIN check_group -->
+						<div class="permissions">
+							<label>
+								<input type="checkbox" name="{a_permissions_row.check_group.CBNAME}" value="Y" {a_permissions_row.check_group.CBCHECKED} class="changepermcolor" id="cb_{a_permissions_row.check_group.CBNAME}"/>
+								<span id="span_cb_{a_permissions_row.check_group.CBNAME}" class="perm_text {a_permissions_row.check_group.CLASS}">{a_permissions_row.check_group.TEXT}</span>
+							</label>
+						</div>
+						<!-- END check_group -->
+					</fieldset>
+					<br />
+					<!-- END a_permissions_row -->
+				</div>
+				
+				<div id="articles">
+					<table id="user_groups_table2" class="table fullwidth colorswitch hoverrows scrollable-x">
+						<!-- BEGIN articelcat_row -->
+						<tr>
+							<th>{articelcat_row.ICON} {articelcat_row.GROUP}</th>
+							<!-- BEGIN headline_row -->
+							<th>{articelcat_row.headline_row.GROUP}</th>
+							<!-- END headline_row -->
+						</tr>
+						<!-- BEGIN check_group -->
+						<tr>
+							<td>
+								<!-- IF articelcat_row.check_group.S_ADMIN -->
+								<span class="adminicon" title="{L_admin_right_icon_title}" style="background-position: 0 -2px;" />
+								<b>{articelcat_row.check_group.CBNAME}</b>
+								<!-- ELSE -->
+								{articelcat_row.check_group.CBNAME}
+								<!-- ENDIF -->
+							</td>
+							<!-- BEGIN group_row -->
+							<td>{articelcat_row.check_group.group_row.STATUS}</td>
+							<!-- END group_row -->
+						</tr>
+						<!-- END check_group -->
+						<!-- END articelcat_row -->
+					</table>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<div class="contentFooter">
+		<input type="hidden" name="g" value="{GRP_ID}" />
+		<button class="mainoption" type="submit" name="save_group"><i class="fa fa-check"></i>{L_save}</button>
+		<button class="mainoption" type="button" name="" onclick="window.location.href='manage_user_groups.php{SID}'"><i class="fa fa-chevron-left"></i>{L_cancel}</button>
+	</div>
+
+{CSRF_TOKEN}
+</form>
+<script type="text/javascript">
+//<![CDATA[
+$(function(){
+	$('.changepermcolor').change(function() {
+		if($(this).prop('checked')){
+			$('#span_'+this.id).attr('class', 'positive');
+		}else{
+			$('#span_'+this.id).attr('class', 'negative');
+		}
+	});
+
+	$("#selall_usergr").click(function(){
+		var checked_status = this.checked;
+		$(".usercheckbox").each(function(){
+			$(this).prop("checked", checked_status).trigger('change');
+		});
+	});
+});
+//]]>
+</script>

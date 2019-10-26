@@ -940,7 +940,7 @@ class core extends gen_class {
 		 * @param $arrCheckBoxListener	Use checkbox listener to rename by count
 		 * @return string html
 		 */
-		public function build_dropdown_menu($strButtonText, $arrMenuItems, $strCssClass = '', $strCssID = '', $arrCheckBoxListener = array()){
+		public function build_dropdown_menu($strButtonText, $arrMenuItems, $strCssClass = '', $strCssID = '', $arrCheckBoxListener = array(), $addClear=true){
 			$strCssClass= (!empty($strCssClass))? $strCssClass : 'floatLeft';
 			$strCssID	= (!empty($strCssID))? $strCssID : $hash = 'ddm_'.md5(serialize($arrMenuItems));
 			$html		= '<div id="'.$strCssID.'" class="btn-ddm '.$strCssClass.'"><button onclick="return false;">'.$strButtonText.'</button><ul>';
@@ -970,7 +970,11 @@ class core extends gen_class {
 					}
 				}
 			}
-			$html .= '</ul></div><div class="clear"></div>';
+			$html .= '</ul></div>';
+			
+			if($addClear){
+				$html .= '<div class="clear"></div>';
+			}
 
 			if(count($arrCheckBoxListener)){
 				foreach($arrCheckBoxListener as $strCheckBox) {

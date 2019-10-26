@@ -26,15 +26,17 @@ if(!defined('EQDKP_INC')) {
 if(!class_exists('pdh_w_user_groups')) {
 	class pdh_w_user_groups extends pdh_w_generic{
 	
-		public function add_grp($id, $name, $desc='', $standard=0, $hide=0, $sortid=0,$deletable=1) {
+		public function add_grp($name, $desc='', $hide=0, $team=0,$deletable=1) {
+			
+			$sortid = max($this->pdh->get('user_groups', 'id_list'))+1;
 			
 			$arrSet = array(
-				'groups_user_id' 		=> $id,
 				'groups_user_name'		=> $name,
 				'groups_user_desc'		=> $desc,
 				'groups_user_deletable' => $deletable,
-				'groups_user_default'	=> $standard,
+				'groups_user_default'	=> 0,
 				'groups_user_hide'		=> $hide,
+				'groups_user_team'		=> $team,
 				'groups_user_sortid'	=> $sortid,
 			);
 			
@@ -44,17 +46,15 @@ if(!class_exists('pdh_w_user_groups')) {
 				return false;
 			}
 			$this->pdh->enqueue_hook('user_groups_update');
-			return true;
+			return $objQuery->insertId;
 		}
 
-		public function update_grp($id, $name='', $desc='', $standard=0, $hide=0, $team=0, $sortid=0) {
+		public function update_grp($id, $name='', $desc='', $hide=0, $team=0) {
 			$old = array();
 			$old['name']		= $this->pdh->get('user_groups', 'name', array($id));
 			$old['desc']		= $this->pdh->get('user_groups', 'desc', array($id));
-			$old['standard']	= (int)$this->pdh->get('user_groups', 'standard', array($id));
 			$old['hide']		= (int)$this->pdh->get('user_groups', 'hide', array($id));
 			$old['team']		= (int)$this->pdh->get('user_groups', 'team', array($id));
-			$old['sortid']		= (int)$this->pdh->get('user_groups', 'sortid', array($id));
 			$changes = false;
 			
 			foreach($old as $varname => $value) {
@@ -71,10 +71,8 @@ if(!class_exists('pdh_w_user_groups')) {
 				$arrSet = array(
 					'groups_user_name' => $name,
 					'groups_user_desc' => $desc,
-					'groups_user_default' => $standard,
 					'groups_user_hide' => $hide,
 					'groups_user_team' => $team,
-					'groups_user_sortid' => $sortid,
 				);
 				
 				$objQuery = $this->db->prepare("UPDATE __groups_user :p WHERE groups_user_id=?")->set($arrSet)->execute($id);
@@ -85,6 +83,41 @@ if(!class_exists('pdh_w_user_groups')) {
 			}
 			$this->pdh->enqueue_hook('user_groups_update');
 			return true;
+		}
+		
+		public function update_sortid($intGroupID, $intSortID){
+			$old['sortid'] = $this->pdh->get('user_groups', 'sortid', array($intGroupID));
+			if ($old['sortid'] != $intSortID){
+				$arrSet = array(
+						'groups_user_sortid'	=> $intSortID,
+				);
+				$objQuery = $this->db->prepare("UPDATE __groups_user :p WHERE groups_user_id=?")->set($arrSet)->execute($intGroupID);
+				
+				if(!$objQuery) {
+					return false;
+				}
+				$this->pdh->enqueue_hook('user_groups_update', array($intGroupID));
+			}
+			return true;
+		}
+		
+		public function update_default($intGroupID){
+			$arrSet = array(
+					'groups_user_default'	=> 0,
+			);
+			$objQuery = $this->db->prepare("UPDATE __groups_user :p")->set($arrSet)->execute();
+			
+			$arrSet = array(
+					'groups_user_default'	=> 1,
+			);
+			$objQuery = $this->db->prepare("UPDATE __groups_user :p WHERE groups_user_id=?")->set($arrSet)->execute($intGroupID);
+			
+			if(!$objQuery) {
+				return false;
+			}
+			$this->pdh->enqueue_hook('user_groups_update');
+
+			return false;
 		}
 
 		public function delete_grp($id) {

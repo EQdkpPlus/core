@@ -71,6 +71,12 @@ if(!class_exists('pdh_w_user_groups_users')) {
 			
 			$arrNames = array();
 			foreach($arrUserIDs as $user_id){
+				//if user already in group?
+				$blnIsInGroup = $this->pdh->get('user_groups_users', 'is_in_group', array($user_id, $group_id));
+				if(!$blnIsInGroup){
+					$this->add_user_to_group($user_id, $group_id);
+				}
+				
 				$objQuery = $this->db->prepare("UPDATE __groups_users :p WHERE group_id=? AND user_id=?")->set($arrSet)->execute($group_id, $user_id);
 				
 				if(!$objQuery) {
