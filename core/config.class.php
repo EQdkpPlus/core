@@ -92,12 +92,13 @@ class config extends gen_class {
 	}
 
 	public function set($config_name, $config_value='', $plugin=''){
+		
 		if(is_array($config_name)){
 			foreach($config_name as $d_name => $d_value){
 				$this->set($d_name, $d_value, $plugin);
 			}
 		}else{
-			if($plugin != ""){
+			if($plugin !== ""){
 				$strKey = md5($config_name.'___'.$plugin);
 				if(!isset($this->config[$plugin][$config_name])){
 					$this->config[$plugin][$config_name]	= $config_value;
@@ -217,8 +218,8 @@ class config extends gen_class {
 		
 		$done = array();
 		foreach($all_keys as $changed){
-			if(strlen(trim($changed['k'])) > 0 && !in_array($changed['k'], $done)) {
-				$done[] = $changed['k'];
+			if(strlen(trim($changed['k'])) > 0 && !in_array($changed['k'].'___'.$changed['p'], $done)) {
+				$done[] = $changed['k'].'___'.$changed['p'];
 				
 				$this->db->prepare("REPLACE INTO __config :p")->set(array(
 					'config_name'	=> $changed['k'],
@@ -268,7 +269,7 @@ class config extends gen_class {
 	private function config_save($manual=false){
 
 		// add the database backup
-		if($manual == false){
+		if($manual === false){
 			//dont save anything, when important configs are not available
 			if(!isset($this->config['server_path'], $this->config['cookie_name'], $this->config['plus_version'])) return false;
 			$this->changeset_db_backup();
