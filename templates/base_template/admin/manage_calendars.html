@@ -2,17 +2,19 @@
 <div class="contentHeader">
 	<h1 class="contentTitle">{L_manage_calendars} <span class="bubble">{CALENDAR_COUNT}</span></h1>
 </div>
-
+<div class="tableHeader floatRight">
+	<button class="mainoption" type="button" onclick="window.location='manage_calendars.php{SID}&c=-1'"><i class="fa fa-plus"></i>{L_add_calendar}</button>
+</div>
+	
 <form method="post" action="{ACTION}" name="post">
 	<table id="calendars_table" class="table fullwidth colorswitch">
 		<tr>
 			<th style="width:20px"></th>
-			<th>{L_calendars_color}</th>
+			<th style="width:20px"></th>
+			<th style="width:20px"></th>
+			<th style="width:20px"></th>
 			<th>{L_calendars_name}</th>
-			<th>{L_calendars_feed}</th>
 			<th>{L_calendars_type}</th>
-			<th>{L_calendars_restricted}</th>
-			<th>{L_calendars_permissions}</th>
 		</tr>
 		<!-- BEGIN calendars -->
 		<tr>
@@ -20,28 +22,18 @@
 				<input type="checkbox" name="calendar_ids[]" value="{calendars.ID}" />
 				<!-- ELSE -->
 				<i class="fa fa-lock fa-lg"></i>
-				<!-- ENDIF --><input type="hidden" name="calendars[{calendars.KEY}][id]" value="{calendars.ID}" />
+				<!-- ENDIF -->
 			</td>
+			<td><a href="manage_calendars.php{SID}&amp;c={calendars.ID}" title="{L_edit}"><i class="fa fa-pencil fa-lg" title="{L_edit}"></i></a></td>
+			<td><a href="manage_calevents.php{SID}&amp;c={calendars.ID}" title="{L_manage_calevents}"><i class="fa fa-clock-o fa-lg" title="{L_manage_calevents}"></i></a></td>
+			
 			<td>{calendars.COLOR}</td>
-			<td><input type="text" name="calendars[{calendars.KEY}][name]" size="30" maxlength="50" value="{calendars.NAME}" class="maininput" /></td>
-			<td><input type="text" name="calendars[{calendars.KEY}][feed]" size="50" maxlength="250" value="{calendars.FEED}" class="maininput" /></td>
+			<td><a href="manage_calendars.php{SID}&amp;c={calendars.ID}" title="{L_edit}">{calendars.NAME}</a></td>
 			<td>{calendars.TYPE}</td>
-			<td>{calendars.RESTRICTED}</td>
-			<td>{calendars.PERMISSIONS}</td>
 		</tr>
 		<!-- END calendars -->
-		<tr>
-			<td><input type="hidden" name="calendars[{KEY}][id]" value="{ID}" /></td>
-			<td>{COLOR}</td>
-			<td><input type="text" name="calendars[{KEY}][name]" size="30" maxlength="50" value="" class="maininput" /></td>
-			<td><input type="text" name="calendars[{KEY}][feed]" size="50" maxlength="250" value="" class="maininput" /></td>
-			<td>{TYPE}</td>
-			<td>{RESTRICTED}</td>
-			<td>{PERMISSIONS}</td>
-		</tr>
 	</table>
 	<div class="contentFooter">
-		<button class="mainoption" type="submit" name="save" ><i class="fa fa-check"></i>{L_save}</button>
 		<button class="liteoption" type="button" name="del" onclick="delete_warning();"><i class="fa fa-times"></i>{L_delete}</button>
 		<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
 	</div>

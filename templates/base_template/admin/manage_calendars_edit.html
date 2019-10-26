@@ -1,0 +1,71 @@
+
+<form method="post" action="{ACTION}" name="post">
+	<fieldset class="settings smallsettings">
+		<legend><!-- IF RANK_ID == -1 -->{L_add_calendar}<!-- ELSE -->{L_edit}: {NAME}<!-- ENDIF --></legend>
+		<dl>
+			<dt><label>{L_calendars_name}:</label></dt>
+			<dd><input name="name" type="text" class="input" value="{NAME}" size="100" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_calendars_type}:</label></dt>
+			<dd>{TYPE}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_calendars_feed}:</label></dt>
+			<dd><input name="feed" id="feed" type="text" class="input" value="{FEED}" size="100" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_calendars_color}:</label></dt>
+			<dd>{COLOR}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_calendars_restricted}:</label></dt>
+			<dd>{RESTRICTED}</dd>
+		</dl>
+		
+		<dl class="usergroups_permission">
+			<dt><label>{L_user_groups}:</label></dt>
+			<dd>{PERMISSIONS}</dd>
+		</dl>
+
+	</fieldset>
+	<div class="contentFooter">
+		<input type="hidden" name="c" value="{ID}" />
+		<button class="mainoption" type="submit" name="save"><i class="fa fa-check"></i>{L_save}</button>
+		<button class="mainoption" type="button" name="" onclick="window.location.href='manage_calendars.php{SID}'"><i class="fa fa-chevron-left"></i>{L_cancel}</button>
+	</div>
+{CSRF_TOKEN}
+</form>
+
+<script>
+$(function() {
+	check_ical();
+	check_restricted();
+	
+	$('#type').on('change', function(){
+		check_ical();
+	})
+	
+	$("input[name='restricted']").on('change', function(){
+		check_restricted();
+	})
+});
+
+function check_ical(){
+	var myval = $("#type").val();
+	if(myval == '3'){
+		$("#feed").removeAttr('disabled');
+	} else {
+		$("#feed").attr('disabled', true);
+	}
+}
+
+function check_restricted(){
+	if($("input[name='restricted']:checked").val() == '0'){
+		$(".usergroups_permission").hide();
+	} else {
+		$(".usergroups_permission").show();
+	}
+}
+
+</script>

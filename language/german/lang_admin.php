@@ -910,7 +910,7 @@ $lang = array(
 "view_calendar" => "Kalender anzeigen",
 "calendars_color" => "Farbe",
 "calendars_type" => "Kalenderart",
-"calendars_restricted" => "Eingeschränkt",
+"calendars_restricted" => "Gruppen das Anlegen von Einträgen erlauben",
 "calendars_permissions" => "Einträge anlegen",
 'calendars_types' => array(
 	1	=> 'Raid',
@@ -919,6 +919,7 @@ $lang = array(
 ),
 "calendars_name" => "Kalendername",
 "calendars_feed" => "iCal Feed URL",
+"add_calendar" => 'Kalender hinzufügen',
 "no_calendars_selected" => "Keine Kalender ausgewählt.",
 "confirm_delete_calendars" => "Sollen die Kalender %s gelöscht werden?",
 "calendar_addevent" => "Kalendereintrag erstellen",

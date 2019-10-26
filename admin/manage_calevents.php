@@ -46,11 +46,16 @@ class Manage_Calevents extends page_generic {
 		$this->jquery->Dialog('editEvent', $this->user->lang('calendar_win_edit'), array('url'=> $this->routing->build('editcalendarevent')."&eventid='+editid+'&simple_head=true", 'width'=>'920', 'height'=>'730', 'withid' => 'editid', 'onclose' => $this->env->link.'admin/manage_calevents.php'.$this->SID));
 
 		// Build the HPTT Table
-		$view_list			= $this->pdh->get('calendar_events', 'id_list');
+		if($this->in->get('c', 0) > 0){
+			$view_list			= $this->pdh->get('calendar_events', 'id_list', array(false, 0, PHP_INT_MAX, array($this->in->get('c', 0))));
+		} else {
+			$view_list			= $this->pdh->get('calendar_events', 'id_list');
+		}
+		
 		$hptt_psettings		= $this->pdh->get_page_settings('admin_manage_calevents', 'hptt_managecalevents_actions');
 		$hptt				= $this->get_hptt($hptt_psettings, $view_list, $view_list, array('%link_url%' => 'manage_calevents.php'));
-		$page_suffix		= '&amp;start='.$this->in->get('start', 0);
-		$sort_suffix		= '?sort='.$this->in->get('sort');
+		$page_suffix		= '&amp;start='.$this->in->get('start', 0).'&amp;c='.$this->in->get('c');
+		$sort_suffix		= '?sort='.$this->in->get('sort').'&amp;c='.$this->in->get('c');
 
 		$this->tpl->assign_vars(array(
 			'CALEVENTS'			=> $hptt->get_html_table($this->in->get('sort',''), $page_suffix, $this->in->get('start', 0), 40, false),

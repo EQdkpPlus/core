@@ -134,13 +134,14 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 
 		public function get_id_list($raids_only=false, $start_date = 0, $end_date = PHP_INT_MAX, $idfilter=false, $filter=false){
 			$ids = array();
+			
 			if(($start_date != 0) || ($end_date != PHP_INT_MAX)){
 				$start_date	 = $this->time->newtime($start_date, '00:00', false);
 				$end_date	 = ($end_date != PHP_INT_MAX) ? $this->time->newtime($end_date, '23:59', false) : $end_date;
 				$sqlstring	 = "SELECT id FROM __calendar_events WHERE";
 				$sqlstring	.= (is_array($idfilter)) ? ' (calendar_id IN ('.implode(",", $idfilter).')) AND' : '';
 				$sqlstring	.= " ((timestamp_start BETWEEN ".$this->db->escapeString($start_date)." AND ".$this->db->escapeString($end_date).") OR (timestamp_end BETWEEN ".$this->db->escapeString($start_date)." AND ".$this->db->escapeString($end_date)."))";
-
+				
 				// apply the filtering
 				switch($filter){
 					case 'mine':
@@ -201,6 +202,11 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 
 						// remove private events if no permission for it
 						if(!$this->get_private_userperm($id)) unset($ids[$key]);
+					}
+				}elseif(is_array($idfilter)){
+					foreach($ids as $key => $id) {
+						// us the calendarfilter
+						if(is_array($idfilter) && !in_array($this->get_calendar_id($id), $idfilter)) unset($ids[$key]);
 					}
 				}
 			}
