@@ -29,15 +29,8 @@ include_once(registry::get_const('root_path').'core/html/htext.class.php');
  * see htext class for available options
  */
 // this class acts as an alias for easier usability
-class hint extends htext {
+class hurl extends htext {
 	
-	protected static $type = 'number';
-	
-	public $default = 0;
-	public $size = 5;
-	
-	public function _inpval() {
-		return $this->in->get($this->name, 0);
-	}
+	protected static $type = 'url';
 }
 ?>

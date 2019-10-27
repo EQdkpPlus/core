@@ -7,7 +7,7 @@
 	{L_login_twofactor_qr_explain}
 	<h2>{L_login_twofactor_code_init}</h2>
 	<form method="post" action="{EQDKP_CONTROLLER_PATH}Settings/{SID}&mode=addauthacc&lmethod=twofactor" name="register" id="register">
-	<input type="text" size="10" name="code" id="code" autocomplete="new-password" /><br />
+	<input type="number" size="10" name="code" id="code" autocomplete="new-password" /><br />
 	{L_login_twofactor_code_explain}<br />
 	<button type="button" onclick="window.parent.location='{EQDKP_CONTROLLER_PATH}Settings/{SID}&mode=addauthacc&link_hash={TWOFACTOR_LINK_HASH}&lmethod=twofactor&code='+$('#code').val()+'&secret={TWOFACTOR_KEY_ENCR}'"><i class="fa fa-check"></i>{L_submit}</button>
 	</form>

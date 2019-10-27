@@ -75,9 +75,9 @@ class htext extends html {
 				$jsout = '<script>'.$this->jquery->get_jscode('autocomplete', $this->id).'</script>';
 			}
 		}
-
+		
 		// start the output
-		$out	 = $jsout.'<input type="'.self::$type.'" name="'.$this->name.'" ';
+		$out	 = $jsout.'<input type="'.static::$type.'" name="'.$this->name.'" ';
 		$out	.= 'id="'.$this->id.'" ';
 		if(isset($this->value)) $out .= 'value="'.$this->value.'" ';
 		if(!empty($this->pattern) && !empty($this->successmsg)) $this->class .= ' fv_success';
