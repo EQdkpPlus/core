@@ -66,6 +66,12 @@ if(!class_exists('pdh_w_raid_groups_members')) {
 
 			$arrNames = array();
 			foreach($arrMemberIDs as $member_id){
+				//if char already in group?
+				$blnIsInGroup = $this->pdh->get('raid_groups_members', 'membership_status', array($member_id, $group_id));
+				if($blnIsInGroup <= 0){
+					$this->add_member_to_group($member_id, $group_id);
+				}
+				
 				$objQuery = $this->db->prepare("UPDATE __groups_raid_members :p WHERE group_id=? AND member_id=?")->set(array('grpleader' => 1))->execute($group_id, $member_id);
 				if(!$objQuery) {
 					return false;

@@ -106,22 +106,6 @@ $(function() {
 		});
 });		
 	
-$(function(){
-	$('.changepermcolor').change(function() {
-		if($(this).prop('checked')){
-			$('#span_'+this.id).attr('class', 'positive');
-		}else{
-			$('#span_'+this.id).attr('class', 'negative');
-		}
-	});
-
-	$("#selall_usergr").click(function(){
-		var checked_status = this.checked;
-		$(".usercheckbox").each(function(){
-			$(this).prop("checked", checked_status).trigger('change');
-		});
-	});
-});
 //]]>
 </script>
 

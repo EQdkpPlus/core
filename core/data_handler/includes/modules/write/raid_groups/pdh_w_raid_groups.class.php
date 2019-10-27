@@ -26,13 +26,15 @@ if(!defined('EQDKP_INC')) {
 if(!class_exists('pdh_w_raid_groups')) {
 	class pdh_w_raid_groups extends pdh_w_generic{
 
-		public function add($name, $color, $desc='', $standard=0, $sortid=0, $system=0) {
+		public function add($name, $desc='', $color='', $system=0) {
 				
+			$sortid = max($this->pdh->get('raid_groups', 'id_list'))+1;
+			
 			$arrSet = array(
 					'groups_raid_name'		=> $name,
 					'groups_raid_desc'		=> $desc,
 					'groups_raid_system'	=> $system,
-					'groups_raid_default'	=> $standard,
+					'groups_raid_default'	=> 0,
 					'groups_raid_sortid'	=> $sortid,
 					'groups_raid_color'		=> $color
 			);
@@ -47,17 +49,15 @@ if(!class_exists('pdh_w_raid_groups')) {
 		}
 		
 		
-		public function add_grp($id, $name, $color, $desc='', $standard=0, $sortid=0,$system=0) {
-			return $this->add($name, $color, $desc, $standard, $sortid, $system);
+		public function add_grp($name, $desc='', $color='') {
+			return $this->add($name, $desc, $color);
 		}
 
-		public function update_grp($id, $name='', $color=0, $desc='', $standard=0, $sortid=0) {
+		public function update_grp($id, $name='', $desc='', $color=0) {
 			$old = array();
 			$old['name']		= $this->pdh->get('raid_groups', 'name', array($id));
 			$old['color']		= $this->pdh->get('raid_groups', 'color', array($id));
-			$old['desc']		= $this->pdh->get('raid_groups', 'desc', array($id));
-			$old['standard']	= (int)$this->pdh->get('raid_groups', 'standard', array($id));
-			$old['sortid']		= (int)$this->pdh->get('raid_groups', 'sortid', array($id));
+			$old['desc']		= $this->pdh->get('raid_groups', 'desc', array($id));;
 			$changes = false;
 			
 			foreach($old as $varname => $value) {
@@ -74,8 +74,6 @@ if(!class_exists('pdh_w_raid_groups')) {
 				$arrSet = array(
 					'groups_raid_name'		=> $name,
 					'groups_raid_desc'		=> $desc,
-					'groups_raid_default'	=> $standard,
-					'groups_raid_sortid'	=> $sortid,
 					'groups_raid_color'		=> $color
 				);
 				
@@ -87,6 +85,41 @@ if(!class_exists('pdh_w_raid_groups')) {
 			}
 			$this->pdh->enqueue_hook('raid_groups_update');
 			return true;
+		}
+		
+		public function update_sortid($intGroupID, $intSortID){
+			$old['sortid'] = $this->pdh->get('raid_groups', 'sortid', array($intGroupID));
+			if ($old['sortid'] != $intSortID){
+				$arrSet = array(
+						'groups_raid_sortid'	=> $intSortID,
+				);
+				$objQuery = $this->db->prepare("UPDATE __groups_raid :p WHERE groups_raid_id=?")->set($arrSet)->execute($intGroupID);
+				
+				if(!$objQuery) {
+					return false;
+				}
+				$this->pdh->enqueue_hook('raid_groups_update', array($intGroupID));
+			}
+			return true;
+		}
+		
+		public function update_default($intGroupID){
+			$arrSet = array(
+					'groups_raid_default'	=> 0,
+			);
+			$objQuery = $this->db->prepare("UPDATE __groups_raid :p")->set($arrSet)->execute();
+			
+			$arrSet = array(
+					'groups_raid_default'	=> 1,
+			);
+			$objQuery = $this->db->prepare("UPDATE __groups_raid :p WHERE groups_raid_id=?")->set($arrSet)->execute($intGroupID);
+			
+			if(!$objQuery) {
+				return false;
+			}
+			$this->pdh->enqueue_hook('raid_groups_update');
+			
+			return false;
 		}
 
 		public function delete_grp($id) {

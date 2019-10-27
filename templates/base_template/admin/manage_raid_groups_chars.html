@@ -4,6 +4,10 @@
 		<h1 class="contentTitle">{L_manage_raid_groups}: {GROUP_NAME}<input type="hidden" name="g" value="{GRP_ID}" /></h1>
 	</div>
 
+	<div class="tableHeader floatRight">
+		<button class="mainoption" type="button" onclick="$('#dialog-add-users').dialog('open')"><i class="fa fa-plus"></i>{L_add_member_to_group}</button>
+	</div>
+
 		<div id="members">
 			<table id="raid_groups_table" class="table fullwidth colorswitch">
 				<tr>
@@ -24,7 +28,7 @@
 					<th class="hiddenSmartphone">{L_active}</th>
 				</tr>
 				<tr>
-					<th class="center" colspan="7">{L_grpleaders}</th>
+					<th class="center" colspan="7"><!-- IF S_USERGROUP_ADMIN --><a href="#" onclick="$('#dialog-add-grpleaders').dialog('open')">{L_grpleaders} <i class="fa fa-plus"></i></a><!-- ELSE -->{L_grpleaders}<!-- ENDIF --></th>
 				</tr>
 				<!-- BEGIN char_row_grpleader -->
 				<tr>
@@ -44,10 +48,23 @@
 				</tr>
 				<!-- END char_row_grpleader -->
 
+				<!-- IF COUNT_GROUPLEADERS == 0 -->
+				<tr>
+					<td colspan="7" style="font-style:italic;"><a href="#" onclick="$('#dialog-add-grpleaders').dialog('open')"><i class="fa fa-plus"></i> {L_no_grpleaders_chars}</a></td>
+				</tr>
+				<!-- ENDIF -->
+				
 
 				<tr>
-					<th colspan="7" />{L_group_members}</th>
+					<th colspan="7"><a href="#" onclick="$('#dialog-add-users').dialog('open')">{L_group_members} <i class="fa fa-plus"></i></a></th>
 				</tr>
+				
+				<!-- IF COUNT_MEMBERS == 0 -->
+				<tr>
+					<td colspan="7" style="font-style:italic;"><a href="#" onclick="$('#dialog-add-users').dialog('open')"><i class="fa fa-plus"></i> {L_no_group_members_chars}</a></td>
+				</tr>
+				<!-- ENDIF -->
+				
 				<!-- BEGIN char_row -->
 				<tr>
 					<td><input type="checkbox" name="group_raid[{char_row.ID}]" value="{char_row.ID}" class="usercheckbox" /></td>
@@ -61,44 +78,57 @@
 					<td class="hiddenSmartphone">{char_row.ACTIVE}</td>
 				</tr>
 				<!-- END char_row -->
-				<tr>
-					<th colspan="7">
-						{BUTTON_MENU}
-					</th>
-				</tr>
-
 				</table>
-				<br />
-				<fieldset class="settings mediumsettings" class="settings">
-						<legend>{L_add_member_to_group}</legend>
-						{ADD_USER_DROPDOWN}
-						<br /><br />
-						<button class="mainoption" type="submit" name="add_group_members" id="add_group_members"><i class="fa fa-plus"></i>{L_add_selected_char_to_group}</button>
-				</fieldset>
 		</div>
 	<div class="contentFooter">
-		<button class="mainoption" type="button" name="back" onclick="window.location='manage_raid_groups.php{SID}'"><i class="fa fa-chevron-left"></i>{L_back}</button>
+		{BUTTON_MENU} <button class="mainoption" type="button" name="back" onclick="window.location='manage_raid_groups.php{SID}'"><i class="fa fa-chevron-left"></i>{L_back}</button>
 	</div>
 
 {CSRF_TOKEN}
 </form>
 <script type="text/javascript">
 //<![CDATA[
-$(function(){
-	$('.changepermcolor').change(function() {
-		if($(this).prop('checked')){
-			$('#span_'+this.id).attr('class', 'positive');
-		}else{
-			$('#span_'+this.id).attr('class', 'negative');
-		}
-	});
-
-	$("#selall_usergr").click(function(){
-		var checked_status = this.checked;
-		$(".usercheckbox").each(function(){
-			$(this).prop("checked", checked_status).trigger('change');
+$(function() {
+		$( "#dialog-add-users" ).dialog({
+			height: 410,
+			width: 500,
+			modal: true,
+			autoOpen: false,
+		});	
+		$( "#dialog-add-grpleaders" ).dialog({
+			height: 410,
+			width: 500,
+			modal: true,
+			autoOpen: false,
 		});
-	});
-});
+});	
 //]]>
 </script>
+
+
+
+<div id="dialog-add-users" title="{L_add_member_to_group}">
+	<form method="post" action="{ACTION}" name="post">
+			<fieldset class="settings mediumsettings" class="settings">
+					<legend>{L_add_member_to_group}</legend>
+					{ADD_USER_DROPDOWN}
+					<br /><br />
+					<button class="mainoption" type="submit" name="add_group_members" id="add_group_users"><i class="fa fa-plus"></i>{L_add_selected_to_group}</button>
+			</fieldset>
+	{CSRF_TOKEN}
+	<input type="hidden" name="g" value="{GRP_ID}" />
+	</form>		
+</div>
+
+<div id="dialog-add-grpleaders" title="{L_add_member_to_groupleader}">
+	<form method="post" action="{ACTION}" name="post">
+			<fieldset class="settings mediumsettings" class="settings">
+					<legend>{L_add_member_to_groupleader}</legend>
+					{ADD_GRPLEADER_DROPDOWN}
+					<br /><br />
+					<button class="mainoption" type="submit" name="add_grpleader"><i class="fa fa-plus"></i>{L_add_selected_to_group}</button>
+			</fieldset>
+	{CSRF_TOKEN}
+	<input type="hidden" name="g" value="{GRP_ID}" />
+	</form>		
+</div>

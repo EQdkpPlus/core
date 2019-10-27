@@ -1,0 +1,37 @@
+<form method="post" action="{ACTION}" name="post">
+	<div class="contentHeader">
+		<h1 class="contentTitle"><!-- IF GRP_ID == 0 -->{L_add_raid_group}<!-- ELSE -->{L_edit}: {GRP_NAME}<!-- ENDIF --><input type="hidden" name="g" value="{GRP_ID}" /></h1>
+	</div>
+	
+	<!-- IF GRP_ID > 0 -->
+	<div class="tableHeader floatRight">
+		<button class="mainoption" type="button" onclick="window.location='manage_raid_groups.php{SID}&g={GRP_ID}&users=true'"><i class="fa fa-users"></i>{L_group_members}</button>
+	</div>
+	<div class="clear"></div>
+	<!-- ENDIF -->
+
+		<div id="settings">
+			<fieldset class="settings smallsettings">
+				<dl>
+					<dt><label>{L_name}:</label></dt>
+					<dd><input name="name" type="text" class="input" value="{GRP_NAME}" size="100" required/></dd>
+				</dl>
+				<dl>
+					<dt><label>{L_description}:</label></dt>
+					<dd><input name="desc" type="text" class="input" value="{GRP_DESC}" size="100" /></dd>
+				</dl>
+				<dl>
+					<dt><label>{L_groupcolor}:</label></dt>
+					<dd>{GRP_COLOR}</dd>
+				</dl>
+			</fieldset>
+		</div>
+
+	<div class="contentFooter">
+		<input type="hidden" name="g" value="{GRP_ID}" />
+		<button class="mainoption" type="submit" name="save_group"><i class="fa fa-check"></i>{L_save}</button>
+		<button class="mainoption" type="button" name="" onclick="window.location.href='manage_raid_groups.php{SID}'"><i class="fa fa-chevron-left"></i>{L_cancel}</button>
+	</div>
+
+{CSRF_TOKEN}
+</form>
