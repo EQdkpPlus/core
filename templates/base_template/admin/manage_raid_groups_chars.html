@@ -38,7 +38,7 @@
 					<!-- ENDIF -->
 					</td>
 					<td>
-						<a href="manage_members.php{SID}&amp;m={char_row_grpleader.ID}">{char_row_grpleader.NAME}</a>
+						<a href="{char_row_grpleader.LINK}">{char_row_grpleader.NAME}</a>
 					</td>
 					<td class="hiddenSmartphone">{char_row_grpleader.LEVEL}</td>
 					<td>{char_row_grpleader.RANK}</td>
@@ -69,7 +69,7 @@
 				<tr>
 					<td><input type="checkbox" name="group_raid[{char_row.ID}]" value="{char_row.ID}" class="usercheckbox" /></td>
 					<td>
-						<a href="manage_members.php{SID}&amp;m={char_row.ID}">{char_row.NAME}</a>
+						<a href="{char_row.LINK}">{char_row.NAME}</a>
 					</td>
 					<td class="hiddenSmartphone">{char_row.LEVEL}</td>
 					<td>{char_row.RANK}</td>

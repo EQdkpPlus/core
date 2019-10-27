@@ -549,6 +549,10 @@ button.thirdpartylogin.steam {
 	cursor: pointer;
 }
 
+.ui-dialog .ui-multiselect-header ul {
+    font-size: 10px;
+}
+
 .embed-consent {position:relative;}
 .embed-consent-background {filter: opacity(.5); position:absolute; background-size: cover;}
 .embed-consent-foreground {justify-content: center;align-items: center;text-align: center;display:flex;position:absolute;}

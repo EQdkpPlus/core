@@ -1024,6 +1024,7 @@ if (!class_exists("jquery")) {
 			if(isset($options['no_animation'])){	$tmpopt[] = 'show: "blind",hide: "blind"';}
 			if(isset($options['clickfunc'])){	$tmpopt[] = 'click: function(e){ '.$options['clickfunc'].' }';}
 			if(isset($options['header'])){			$tmpopt[] = 'header: "'.$this->sanitize($options['header']).'"';}
+			if(isset($options['appendTo'])){			$tmpopt[] = 'appendTo: "'.$this->sanitize($options['appendTo']).'"';}
 			if(isset($options['withmax'])){			$tmpopt[] = 'selectedText: "'.$this->sanitize($this->user->lang('jquery_multiselect_selectedtxt')).'"';}
 			if(isset($options['selectedtext']) && !isset($options['withmax'])){	$tmpopt[] = 'selectedText: "'.$this->sanitize($options['selectedtext']).'"';}
 			if(!isset($options['clickfunc']) && isset($options['minselectvalue']) && $options['minselectvalue'] > 0){

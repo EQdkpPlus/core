@@ -456,8 +456,8 @@ class Manage_Members extends page_generic {
 		$character_count	= count($view_list);
 
 		$onclose_url = "window.location.href = '".$this->server_path."admin/manage_members.php".$this->SID."';";
-		$this->jquery->Dialog('EditChar', $this->user->lang('uc_edit_char'), array('withid'=>'editid', 'url'=> $this->controller_path.'AddCharacter/'.$this->SID."&adminmode=1&editid='+editid+'", 'width'=>'750', 'height'=>'650', 'onclosejs'=>$onclose_url));
-		$this->jquery->Dialog('AddChar', $this->user->lang('uc_add_char'), array('url'=> $this->controller_path.'AddCharacter/'.$this->SID.'&adminmode=1', 'width'=>'750', 'height'=>'650', 'onclosejs'=>$onclose_url));
+		$this->jquery->Dialog('EditChar', $this->user->lang('uc_edit_char'), array('withid'=>'editid', 'url'=> $this->controller_path.'AddCharacter/'.$this->SID."&adminmode=1&editid='+editid+'", 'width'=>'750', 'height'=>'700', 'onclosejs'=>$onclose_url));
+		$this->jquery->Dialog('AddChar', $this->user->lang('uc_add_char'), array('url'=> $this->controller_path.'AddCharacter/'.$this->SID.'&adminmode=1', 'width'=>'750', 'height'=>'700', 'onclosejs'=>$onclose_url));
 		$this->confirm_delete($this->user->lang('confirm_delete_members'));
 
 		$this->tpl->add_js("

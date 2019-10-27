@@ -309,6 +309,7 @@ class Manage_Raid_Groups extends page_generic {
 				$row = ($this->pdh->get('raid_groups_members', 'is_grpleader', array($memberid, $groupID))) ? '_grpleader' : '';
 				$this->tpl->assign_block_vars('char_row'.$row, array(
 					'ID'			=> $memberid,
+					'LINK'			=> 'javascript:EditChar('.$memberid.')',
 					'NAME'			=> sanitize($this->pdh->get('member', 'name', array($memberid))),
 					'CLASS'			=> $this->pdh->get('member', 'html_classname', array($memberid)),
 					'USER'			=> $this->pdh->get('user', 'name', array($this->pdh->get('member', 'userid', array($memberid)))),
@@ -350,14 +351,17 @@ class Manage_Raid_Groups extends page_generic {
 			),
 
 		);
+		
+		$this->jquery->Dialog('EditChar', $this->user->lang('uc_edit_char'), array('withid'=>'editid', 'url'=> $this->controller_path.'AddCharacter/'.$this->SID."&adminmode=1&editid='+editid+'", 'width'=>'750', 'height'=>'700'));
+		
 
 		$this->tpl->assign_vars(array(
 			'GROUP_NAME'			=> sanitize($group_name),
 			$red 					=> '_red',
-			'U_MANAGE_MEMBERS'		=> 'manage_raid_groups.php'.$this->SID.'&amp;g='.$groupID,
+			'U_MANAGE_MEMBERS'		=> 'manage_raid_groups.php'.$this->SID.'&amp;users=true&amp;g='.$groupID,
 			'KEY'					=> $key,
-			'ADD_USER_DROPDOWN'		=> (new hmultiselect('add_members', array('options' => $not_in, 'value' => '', 'width' => 350, 'filter' => true)))->output(),
-			'ADD_GRPLEADER_DROPDOWN'=> (new hmultiselect('group_raid', array('options' => $addGrpLeaders, 'value' => '', 'width' => 350, 'filter' => true)))->output(),
+			'ADD_USER_DROPDOWN'		=> (new hmultiselect('add_members', array('options' => $not_in, 'value' => '', 'width' => 350, 'filter' => true, 'appendTo' => '#dialog-add-users')))->output(),
+			'ADD_GRPLEADER_DROPDOWN'=> (new hmultiselect('group_raid', array('options' => $addGrpLeaders, 'value' => '', 'width' => 350, 'filter' => true, 'appendTo' => '#dialog-add-grpleaders')))->output(),
 			'GRP_ID'				=> $groupID,
 			'BUTTON_MENU'			=> $this->core->build_dropdown_menu($this->user->lang('selected_chars').'...', $arrMenuItems, '', 'raid_groups_user_menu', array(".usercheckbox"), false),
 			'S_USERGROUP_ADMIN' 	=> $this->user->check_auth('a_raidgroups_man', false),

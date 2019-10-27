@@ -505,10 +505,10 @@ class Manage_User_Groups extends page_generic {
 		$this->tpl->assign_vars(array(
 			'GROUP_NAME'			=> sanitize($group_name),
 			$red 					=> '_red',
-			'U_MANAGE_USERS'		=> 'manage_user_groups.php'.$this->SID.'&amp;g='.$groupID,
+			'U_MANAGE_USERS'		=> 'manage_user_groups.php'.$this->SID.'&amp;users=true&amp;g='.$groupID,
 			'KEY'					=> $key,
-			'ADD_USER_DROPDOWN'		=> (new hmultiselect('add_user', array('options' => $not_in, 'value' => '', 'width' => 350, 'filter' => true)))->output(),
-			'ADD_GRPLEADER_DROPDOWN'=> (new hmultiselect('group_user', array('options' => $addGrpLeaders, 'value' => '', 'width' => 350, 'filter' => true)))->output(),
+			'ADD_USER_DROPDOWN'		=> (new hmultiselect('add_user', array('options' => $not_in, 'value' => '', 'width' => 350, 'filter' => true, 'appendTo' => '#dialog-add-users')))->output(),
+			'ADD_GRPLEADER_DROPDOWN'=> (new hmultiselect('group_user', array('options' => $addGrpLeaders, 'value' => '', 'width' => 350, 'filter' => true, 'appendTo' => '#dialog-add-grpleaders')))->output(),
 			'GRP_ID'				=> $groupID,
 			'BUTTON_MENU'			=> $this->core->build_dropdown_menu($this->user->lang('selected_user').'...', $arrMenuItems, '', 'user_groups_user_menu', array(".usercheckbox"), false),
 			'S_USERGROUP_ADMIN' 	=> $this->user->check_auth('a_usergroups_man', false),
