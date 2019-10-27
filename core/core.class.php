@@ -330,7 +330,7 @@ class core extends gen_class {
 						hint = hint.replace(/PAGE/g, pages);
 
 						$('<div></div>')
-								.html('<fieldset class=\"settings mediumsettings\"><dl><dt><label>".$this->user->lang('pagination_goto').":</label></dt><dd><input type=\"text\" size=\"10\" maxlength=\"30\" class=\"input\" id=\"goToPageInput\" placeholder=\"'+hint+'\" /><br />'+hint+'</dd></dl></fieldset>')
+								.html('<fieldset class=\"settings mediumsettings\"><label>".$this->user->lang('pagination_goto').":</label><pre><input type=\"number\" size=\"10\" maxlength=\"30\" class=\"input\" id=\"goToPageInput\" value=\"'+pages+'\" /><br />'+hint+'</pre></fieldset>')
 								.dialog({
 								bgiframe: true,
 								modal: true,
