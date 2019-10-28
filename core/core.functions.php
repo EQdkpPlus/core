@@ -438,7 +438,8 @@ function infotooltip($name='', $game_id='', $lang=false, $direct=0, $onlyicon=0,
 	} else {
 		if(!isset($data['server']) || empty($data['server'])) $data['server'] = registry::register('config')->get("servername");
 		$lang = ($lang) ? $lang : registry::fetch('user')->lang('XML_LANG');
-		
+		if(register('config')->get('itt_overwrite_lang')) $lang = register('config')->get('itt_langprio1');
+
 		if($withColorForIconOnly) $data['withcolorforicon'] = true;
 		
 		$cachedname = register('infotooltip')->getcacheditem($name, $lang, $game_id, $onlyicon, $noicon, $data);

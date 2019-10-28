@@ -907,6 +907,10 @@ class admin_settings extends page_generic {
 					'options'	=> $itt_langlist,
 				);
 			}
+			
+			$fields['itt_overwrite_lang']	= array(
+					'type'		=> 'radio',
+			);
 			$this->form->add_fields($fields, 'ittlanguages', 'itemtooltip');
 
 			//check if user wanted to reset itt-cache
