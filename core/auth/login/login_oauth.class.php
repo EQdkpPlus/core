@@ -79,13 +79,13 @@ class login_oauth extends gen_class {
 						'type'	=> 'text',
 				),
 				'login_oauth_authendpoint' => array(
-						'type'	=> 'text',
+						'type'	=> 'url',
 				),
 				'login_oauth_tokenendpoint' => array(
-						'type'	=> 'text',
+						'type'	=> 'url',
 				),
 				'login_oauth_userendpoint' => array(
-						'type'	=> 'text',
+						'type'	=> 'url',
 				),
 				'login_oauth_passtoken' => array(
 						'type'	=> 'radio',

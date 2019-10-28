@@ -1322,8 +1322,8 @@ fieldset.settings dt span {
 	color: lighten(@eqdkpContentFontColor, 50);
 }
 
-fieldset.settings textarea {
-	max-width: 95%;
+fieldset.settings textarea, fieldset.settings input[type='text'], fieldset.settings input[type='url'], fieldset.settings input[type='password'], fieldset.settings input[type='email'] {
+	width: 95%;
 }
 
 /* notify messages */

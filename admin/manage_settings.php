@@ -357,7 +357,7 @@ class admin_settings extends page_generic {
 						)
 					),
 					'admin_email'	=> array(
-						'type'		=> 'text',
+						'type'		=> 'email',
 						'size'		=> 30,
 						'encrypt'	=> true,
 					),
