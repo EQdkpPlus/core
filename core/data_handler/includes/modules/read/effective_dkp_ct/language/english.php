@@ -1,6 +1,6 @@
 <?php
 /*	Project:	EQdkp-Plus
- *	Package:	EQdkp-plus
+ *	Package:	EQdkp-Plus Language File
  *	Link:		http://eqdkp-plus.eu
  *
  *	Copyright (C) 2006-2016 EQdkp-Plus Developer Team
@@ -18,26 +18,24 @@
  *	You should have received a copy of the GNU Affero General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-if ( !defined('EQDKP_INC') ){
-	header('HTTP/1.0 404 Not Found');exit;
+ 
+if (!defined('EQDKP_INC')) {
+	die('You cannot access this file directly.');
 }
 
-$module_lang = array(
-	'attendance'	=> 'Raids (%d Tage)',
-	'lifetime'		=> 'Raids (Lebenszeit)',
-	'attendance_fromto' => 'Raidteilnahme',
-);
+//Language: English	
+//Created by EQdkp Plus Translation Tool on  2014-12-17 23:17
+//File: core/data_handler/includes/modules/read/effective_dkp/language/english.php
+//Source-Language: german
 
-$preset_lang = array(
-	'attendance_30'			=> 'Raidteilnahme (30 Tage)',
-	'attendance_60'			=> 'Raidteilnahme (60 Tage)',
-	'attendance_90'			=> 'Raidteilnahme (90 Tage)',
-	'attendance_30_real'	=> 'Raidteilnahme (30 Tage, von Erstellungszeit abh.)',
-	'attendance_60_real'	=> 'Raidteilnahme (60 Tage, von Erstellungszeit abh.)',
-	'attendance_90_real'	=> 'Raidteilnahme (90 Tage, von Erstellungszeit abh.)',
-	'attendance_lt_real'	=> 'Raidteilnahme (Lebenszeit, von Erstellungszeit abh.)',
-	'attendance_lt'			=> 'Raidteilnahme (Lebenszeit)',
-	'attendance_fromto_all' => 'Raidteilnahme (def. Zeitraum)',
-);
+$module_lang = array(
+	"effective_dkp" => 'eDKP(%dd)',
+	);
+	$preset_lang = array(
+	"effective_dkp_30" => 'Effective-DKP (30; based on creationtime)',
+	"effective_dkp_all" => 'Effective-DKP (all; based on creationtime)',
+	"effective_dkp" => 'Effective-DKP (based on creationtime)',
+	);
+	
+
 ?>

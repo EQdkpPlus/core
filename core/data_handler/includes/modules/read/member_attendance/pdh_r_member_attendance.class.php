@@ -45,14 +45,21 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 			'attendance_60' => array('attendance', array('%member_id%', '%dkp_id%', 60, '%with_twink%'), array(60)),
 			'attendance_90' => array('attendance', array('%member_id%', '%dkp_id%', 90, '%with_twink%'), array(90)),	
 			'attendance_lt' => array('attendance', array('%member_id%', '%dkp_id%', 'LT', '%with_twink%'), array('LT')),
+				
 			'attendance_30_real' => array('attendance', array('%member_id%', '%dkp_id%', 30, '%with_twink%', false, true), array(30)),
 			'attendance_60_real' => array('attendance', array('%member_id%', '%dkp_id%', 60, '%with_twink%', false, true), array(60)),
 			'attendance_90_real' => array('attendance', array('%member_id%', '%dkp_id%', 90, '%with_twink%', false, true), array(90)),
+			'attendance_lt_real' => array('attendance', array('%member_id%', '%dkp_id%', 'LT', '%with_twink%', false, true), array('LT')),
 				
 			'attendance_30_all' => array('attendance_all', array('%member_id%', '%ALL_IDS%', 30, '%with_twink%'), array('%ALL_IDS%', 30)),
 			'attendance_60_all' => array('attendance_all', array('%member_id%', '%ALL_IDS%', 60, '%with_twink%'), array('%ALL_IDS%', 60)),
 			'attendance_90_all' => array('attendance_all', array('%member_id%', '%ALL_IDS%', 90, '%with_twink%'), array('%ALL_IDS%', 90)),
 			'attendance_lt_all' => array('attendance_all', array('%member_id%', '%ALL_IDS%', 'LT', '%with_twink%'), array('%ALL_IDS%', 'LT')),
+				
+			'attendance_30_real_all' => array('attendance_all', array('%member_id%', '%ALL_IDS%', 30, '%with_twink%', false, true), array('%ALL_IDS%', 30)),
+			'attendance_60_real_all' => array('attendance_all', array('%member_id%', '%ALL_IDS%', 60, '%with_twink%', false, true), array('%ALL_IDS%', 60)),
+			'attendance_90_real_all' => array('attendance_all', array('%member_id%', '%ALL_IDS%', 90, '%with_twink%', false, true), array('%ALL_IDS%', 90)),
+			'attendance_lt_real_all' => array('attendance_all', array('%member_id%', '%ALL_IDS%', 'LT', '%with_twink%', false, true), array('%ALL_IDS%', 'LT')),
 			
 			'attendance_fromto_all' => array('attendance_fromto_all', array('%member_id%', '%ALL_IDS%', '%from%', '%to%', '%with_twink%'), array('%ALL_IDS%')),
 		);
@@ -209,6 +216,7 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 			}
 			
 			if ($count) {
+				$return = array();
 				$return['total_raidcount'] = $total_raidcount ;
 				$return['member_raidcount'] = $member_raidcount;
 				$return['member_attendance'] = ($total_raidcount > 0) ? $member_raidcount/$total_raidcount : '0';
@@ -217,12 +225,12 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 			return ($total_raidcount > 0) ? $member_raidcount/$total_raidcount : '0';
 		}
 		
-		public function get_attendance_all($member_id, $multidkp_id, $time_period, $with_twinks=true, $count=false){
-			return $this->get_attendance($member_id, $multidkp_id, $time_period, $with_twinks, $count);
+		public function get_attendance_all($member_id, $multidkp_id, $time_period, $with_twinks=true, $count=false, $real=false){
+			return $this->get_attendance($member_id, $multidkp_id, $time_period, $with_twinks, $count, $real);
 		}
 		
-		public function get_html_attendance_all($member_id, $multidkp_id, $time_period, $with_twinks=true, $count=false){
-			return $this->get_html_attendance($member_id, $multidkp_id, $time_period, $with_twinks, $count);
+		public function get_html_attendance_all($member_id, $multidkp_id, $time_period, $with_twinks=true, $count=false, $real=false){
+			return $this->get_html_attendance($member_id, $multidkp_id, $time_period, $with_twinks, $count, $real);
 		}
 
 		public function get_html_attendance($member_id, $multidkp_id, $time_period, $with_twinks=true, $count=false, $real=false){

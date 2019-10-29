@@ -24,20 +24,12 @@ if ( !defined('EQDKP_INC') ){
 }
 
 $module_lang = array(
-	'attendance'	=> 'Raids (%d Tage)',
-	'lifetime'		=> 'Raids (Lebenszeit)',
-	'attendance_fromto' => 'Raidteilnahme',
+	'effective_dkp' => 'eDKP(%dd)',
 );
 
 $preset_lang = array(
-	'attendance_30'			=> 'Raidteilnahme (30 Tage)',
-	'attendance_60'			=> 'Raidteilnahme (60 Tage)',
-	'attendance_90'			=> 'Raidteilnahme (90 Tage)',
-	'attendance_30_real'	=> 'Raidteilnahme (30 Tage, von Erstellungszeit abh.)',
-	'attendance_60_real'	=> 'Raidteilnahme (60 Tage, von Erstellungszeit abh.)',
-	'attendance_90_real'	=> 'Raidteilnahme (90 Tage, von Erstellungszeit abh.)',
-	'attendance_lt_real'	=> 'Raidteilnahme (Lebenszeit, von Erstellungszeit abh.)',
-	'attendance_lt'			=> 'Raidteilnahme (Lebenszeit)',
-	'attendance_fromto_all' => 'Raidteilnahme (def. Zeitraum)',
+	'effective_dkp_ct_30'	=> 'Effektiv-DKP (30; von Erstellungszeit abh.)',
+	'effective_dkp_ct_all'	=> 'Effektiv-DKP (alle; von Erstellungszeit abh.)',
+	'effective_dkp_ct'		=> 'Effektiv-DKP (von Erstellungszeit abh.)',
 );
 ?>

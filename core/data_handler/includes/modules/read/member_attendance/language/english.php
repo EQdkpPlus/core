@@ -37,10 +37,11 @@ $preset_lang = array(
 	"attendance_30" => 'Raid attendance (30 days)',
 	"attendance_60" => 'Raid attendance (60 days)',
 	"attendance_90" => 'Raid attendance (90 days)',
-	"attendance_30_real" => 'Raid attendance (30 days, based on lifetime)',
-	"attendance_60_real" => 'Raid attendance (60 days, based on lifetime)',
-	"attendance_90_real" => 'Raid attendance (90 days, based on lifetime)',
+	"attendance_30_real" => 'Raid attendance (30 days, based on creationtime)',
+	"attendance_60_real" => 'Raid attendance (60 days, based on creationtime)',
+	"attendance_90_real" => 'Raid attendance (90 days, based on creationtime)',
 	"attendance_lt" => 'Raid attendance (lifetime)',
+	"attendance_lt_real" => 'Raid attendance (lifetime, base on creationtime)',
 	'attendance_fromto_all' => 'Raid attendance (def. days)',
 );
 	

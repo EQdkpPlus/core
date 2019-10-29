@@ -1323,7 +1323,7 @@ fieldset.settings dt span {
 }
 
 fieldset.settings textarea, fieldset.settings input[type='text'], fieldset.settings input[type='url'], fieldset.settings input[type='password'], fieldset.settings input[type='email'] {
-	width: 95%;
+	width: 88%;
 }
 
 /* notify messages */
