@@ -25,7 +25,7 @@ if ( !defined('EQDKP_INC') ){
 
 $module_lang = array(
 	'name'		=> 'Ereignis',
-	'multidkppools' => 'MultiDKP-Pool(s)',
+	'multidkppools' => 'Punktekonten',
 	'itempools' => 'Item-Pool(s)',
 	'value'		=> 'Wert',
 	'eventlink' => 'Ereignis',
@@ -39,7 +39,7 @@ $preset_lang = array(
 	'eicon'		=> 'Ereignis-Icon',
 	'elink'		=> 'Ereignis-Link',
 	'evalue'	=> 'Ereignis-Wert',
-	'emdkps'	=> 'Ereignis-MultiDKP-Pools',
+	'emdkps'	=> 'Ereignis-Punktekonten',
 	'eipools'	=> 'Ereignis-Itempools',
 	'eventedit'	=> 'Ereignis-Bearbeiten-Icon',
 	'edefitempool'=> 'Ereignis-Standard-Itempool',

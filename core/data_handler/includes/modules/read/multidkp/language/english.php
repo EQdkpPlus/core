@@ -29,10 +29,10 @@ if (!defined('EQDKP_INC')) {
 //Source-Language: german
 
 $module_lang = array(
-	"name" => 'MultiDKP Poolname',
+	"name" => 'Point account name',
 	);
 	$preset_lang = array(
-	"mdkpname" => 'MultiDKP Poolname',
+	"mdkpname" => 'Point account name',
 	);
 	
 

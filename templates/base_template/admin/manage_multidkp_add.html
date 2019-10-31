@@ -1,3 +1,8 @@
+<!-- IF S_DKP_EASYMODE -->
+<div class="infobox infobox-large infobox-blue clearfix">
+		<i class="fa fa-info-circle fa-4x pull-left"></i> {L_dkp_easymode_active}
+	</div>
+<!-- ENDIF -->
 
 <script>
 $(function(){
@@ -41,10 +46,12 @@ $(function(){
 			<dt><label>{L_Multi_eventsnoatt}:</label></dt>
 			<dd>{NO_ATT_SEL}</dd>
 		</dl>
+		<!-- IF not S_DKP_EASYMODE -->
 		<dl>
 			<dt><label>{L_Multi_chooseitempools}:</label></dt>
 			<dd>{ITEMPOOL_SEL}</dd>
 		</dl>
+		<!-- ENDIF -->
 		<dl>
 			<dt><label>{L_Multi_kontoname_short}:</label><br /><span>{L_Multi_discnottolong}</span></dt>
 			<dd><input type="text" name="name" size="10" maxlength="254" value="{NAME}" class="input" /></dd>
@@ -56,7 +63,7 @@ $(function(){
 	</fieldset>
 	<button class="mainoption" type="submit" name="save"><i class="fa fa-check"></i>{L_save}</button>
 	<!-- IF MDKP_ID -->
-	<input type="hidden" name="mdkp_id" value="{MDKP_ID}" />
+	<input type="hidden" name="id" value="{MDKP_ID}" />
 	<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="fa fa-times"></i>{L_delete}</button>
 	<!-- ENDIF -->
 	<button class="mainoption" type="submit" name="cancel"><i class="fa fa-chevron-left"></i>{L_cancel}</button>

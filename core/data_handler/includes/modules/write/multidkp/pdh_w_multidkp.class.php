@@ -46,11 +46,21 @@ if(!class_exists('pdh_w_multidkp')) {
 					);				
 					$retu[] = ($this->db->prepare("INSERT INTO __multidkp2event :p")->set($arrSet)->execute()) ? true : false;
 				}
-					
-				foreach($itempools as $itempool_id) {
-					$retu[] = ($this->db->prepare("INSERT INTO __multidkp2itempool :p")->set(array(
-							'multidkp2itempool_multi_id' => $id, 
-							'multidkp2itempool_itempool_id' => $itempool_id))->execute()) ? true : false;
+				
+				if(!$this->config->get('dkp_easymode')){					
+					foreach($itempools as $itempool_id) {
+						$retu[] = ($this->db->prepare("INSERT INTO __multidkp2itempool :p")->set(array(
+								'multidkp2itempool_multi_id' => $id, 
+								'multidkp2itempool_itempool_id' => $itempool_id))->execute()) ? true : false;
+					}
+				} else {
+					//Auto create Itempool
+					$itempoolID = $this->pdh->put('itempool', 'add_itempool', array($name, 'Auto generated for '.$name));
+					if($itempoolID){
+						$retu[] = ($this->db->prepare("INSERT INTO __multidkp2itempool :p")->set(array(
+								'multidkp2itempool_multi_id' => $id,
+								'multidkp2itempool_itempool_id' => $itempoolID))->execute()) ? true : false;
+					}
 				}
 				if(!in_array(false, $retu)) {
 					$this->pdh->enqueue_hook('multidkp_update',array($id), array('action' => 'add'));
@@ -72,6 +82,15 @@ if(!class_exists('pdh_w_multidkp')) {
 		}
 
 		public function update_multidkp($id, $name, $desc, $events, $itempools, $no_atts) {
+			if(count($itempools) === 0 && $this->config->get('dkp_easymode')){
+				$itempools = $this->pdh->get('multidkp', 'itempool_ids', array($id));
+				if(count($itempools) === 0){
+					//Auto create Itempool
+					$itempoolID = $this->pdh->put('itempool', 'add_itempool', array($name, 'Auto generated for '.$name));
+					$itempools = array($itempoolID);
+				}
+			}
+			
 			$old_events = $this->pdh->get('multidkp', 'event_ids', array($id));
 			$old_itempools = $this->pdh->get('multidkp', 'itempool_ids', array($id));
 			$old_no_atts = $this->pdh->get('multidkp', 'no_attendance', array($id));
@@ -142,15 +161,28 @@ if(!class_exists('pdh_w_multidkp')) {
 
 		public function delete_multidkp($id) {
 			$this->db->beginTransaction();
+			
+			$itempools = $this->pdh->get('multidkp', 'itempool_ids', array($id));
+			
 			$objQuery = $this->db->prepare("DELETE FROM __multidkp WHERE multidkp_id =?")->execute($id);
 			if($objQuery) {
 				$objQuery = $this->db->prepare("DELETE FROM __multidkp2event WHERE multidkp2event_multi_id=?")->execute($id);
 				$retu[] = ($objQuery);
 				$objQuery = $this->db->prepare("DELETE FROM __multidkp2itempool WHERE multidkp2itempool_multi_id =?")->execute($id);
 				$retu[] = ($objQuery);
+				
 				if(!in_array(false, $retu)) {
 					$this->db->commitTransaction();
+					
+					if($this->config->get('dkp_easymode')){
+						foreach($itempools as $intItempoolID){
+							if($intItempoolID == 1) continue;
+							$this->pdh->put('itempool', 'delete_itempool', array($intItempoolID));
+						}
+					}
+					
 					$this->pdh->enqueue_hook('multidkp_update', array($id), array('action' => 'delete'));
+					$this->pdh->enqueue_hook('itempool_update');
 					return true;
 				}
 			}

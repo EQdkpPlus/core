@@ -24,10 +24,12 @@
 			<dd><input type="text" name="value" value="{VALUE}" class="input" id="item_value"/></dd>
 		</dl>
 		<!-- ENDIF -->
+		<!-- IF not S_DKP_EASYMODE -->
 		<dl>
 			<dt><label><input type="checkbox" name="bulk[itempool_id]" value="1" />&nbsp;&nbsp;&nbsp;{L_itempool}:</label></dt>
 			<dd>{ITEMPOOLS}</dd>
 		</dl>
+		<!-- ENDIF -->
 		<dl>
 			<dt><label><input type="checkbox" name="bulk[buyer]" value="1"/>&nbsp;&nbsp;&nbsp;{L_buyers}:</label></dt>
 			<dd>{BUYERS}</dd>

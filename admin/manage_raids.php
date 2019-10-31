@@ -47,7 +47,7 @@ class ManageRaids extends page_generic {
 		header('content-type: text/html; charset=UTF-8');
 
 		$event_id = $this->in->get('event', 0);
-		$defItempool = $this->pdh->geth("event", "def_itempool", array($event_id));
+		$defItempool = $this->pdh->get("event", "def_itempool", array($event_id));
 		echo $defItempool;
 		die();
 	}
@@ -82,17 +82,16 @@ class ManageRaids extends page_generic {
 		$arrCheckboxes = array('date', 'note', 'event', 'value', 'attendees');
 
 		//Für jedes Item
+		$messages = array();
 		foreach($arrSelected as $raidID){
 			//Hole alte daten
 			$raid['note'] 			= $this->pdh->get('raid', 'note', array($raidID));
 			$raid['additonal_data'] = $this->pdh->get('raid', 'additional_data', array($raidID));
 			$raid['value'] 			= $this->pdh->get('raid', 'value', array($raidID));
 			$raid['date'] 			= $this->pdh->get('raid', 'date', array($raidID));
-			$raid['event'] 			= $this->pdh->get('raid', 'event', array($raidID));
+			$raid['event'] 			= $intOldEvent = $this->pdh->get('raid', 'event', array($raidID));
 			$raid['attendees'] 		= $this->pdh->get('raid', 'raid_attendees', array($raidID, false));
-
-			$messages = array();
-
+			
 			foreach($arrBulk as $key => $val){
 				if(!in_array($key, $arrCheckboxes) && $key != "itempool" || !$val) continue;
 				
@@ -111,13 +110,27 @@ class ManageRaids extends page_generic {
 				if($key == 'note'){
 					$raid['additonal_data'] = $arrNewValues['additonal_data'];
 				}
-
-				//update_raid($raid_id, $raid_date, $raid_attendees, $event_id, $raid_note, $raid_value, $additional_data='')
-				$retu = $this->pdh->put('raid', 'update_raid', array($raidID, $raid['date'], $raid['attendees'], $raid['event'], $raid['note'], $raid['value'], $raid['additonal_data']));
-
-				if(!$retu){
-					$messages[] = array('title' => $this->user->lang('save_nosuc'), 'text' => $raid['name'], 'color' => 'red');
+			}
+			
+			if($this->config->get('dkp_easymode') && $raid['event'] != $intOldEvent){
+				$itemPool = $this->pdh->get('event', 'def_itempool', array($raid['event']));
+				if(!$itemPool){
+					$arrItempools = $this->pdh->get('event', 'itempools', array($raid['event']));
+					$itemPool = $arrItempools[0];
 				}
+				
+				//Change Itempool of Items
+				$arrItemsOfRaid = $this->pdh->get('item', 'itemsofraid', array($raidID));
+				foreach($arrItemsOfRaid as $intItemID){
+					$this->pdh->put('item', 'update_itempool', array($intItemID, $itemPool));
+				}
+			}
+			
+			//update_raid($raid_id, $raid_date, $raid_attendees, $event_id, $raid_note, $raid_value, $additional_data='')
+			$retu = $this->pdh->put('raid', 'update_raid', array($raidID, $raid['date'], $raid['attendees'], $raid['event'], $raid['note'], $raid['value'], $raid['additonal_data']));
+			
+			if(!$retu){
+				$messages[] = array('title' => $this->user->lang('save_nosuc'), 'text' => $raid['name'], 'color' => 'red');
 			}
 
 		}
@@ -201,7 +214,18 @@ class ManageRaids extends page_generic {
 			}
 			$item_upd = array(true);
 			if(!empty($data['items']) && is_array($data['items'])) {
+				$intEventID = $data['raid']['event'];				
+				$itemPool = $this->pdh->get('event', 'def_itempool', array($intEventID));
+				if(!$itemPool){
+					$arrItempools = $this->pdh->get('event', 'itempools', array($intEventID));
+					$itemPool = $arrItempools[0];
+				}
+				
 				foreach($data['items'] as $ik => $item) {
+					if($this->config->get('dkp_easymode')){
+						$item['itempool_id'] = $itemPool;
+					}
+					
 					if($item['group_key'] == 'new' OR empty($item['group_key'])) {
 						$intAmount = (int)$item['amount'];
 						if($intAmout == 0 && $data['raid']['id']) $intAmount = 1;
@@ -270,6 +294,15 @@ class ManageRaids extends page_generic {
 		//fetch events
 		$events = $this->pdh->aget('event', 'name', 0, array($this->pdh->get('event', 'id_list')));
 		asort($events);
+		
+		if($this->config->get('dkp_easymode')){
+			foreach($events as $eventID => $strEventname){
+				$arrPools = $this->pdh->get('multidkp', 'mdkpids4eventid', array($eventID));
+				$strPoolname = $this->pdh->get('multidkp', 'name', array($arrPools[0]));
+				$tmpEvents[$strPoolname][$eventID] = $strEventname;
+			}
+			$events = $tmpEvents;
+		}
 
 		//Event Itempool Mapping
 		$arrEventItempoolMapping = array();

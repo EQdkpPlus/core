@@ -59,6 +59,12 @@ class Manage_Events extends page_generic {
 	public function save() {
 		$event = $this->get_post();
 		if($event) {
+			if($this->config->get('dkp_easymode')){
+				$multidkpPool = $this->in->getArray('mdkp2event', 'int');
+				$itemPools = $this->pdh->get('multidkp', 'itempool_ids', array($multidkpPool[0]));
+				$event['default_itempool'] = $itemPools[0];
+			}
+			
 			if($event['id']) {
 				$retu = $this->pdh->put('event', 'update_event', array($event['id'], $event['name'], $event['value'], $event['icon'], $event['default_itempool']));
 				if($retu) $this->pdh->put('multidkp', 'add_multidkp2event', array($event['id'], $this->in->getArray('mdkp2event', 'int')));
@@ -168,12 +174,19 @@ class Manage_Events extends page_generic {
 		$this->confirm_delete(sprintf($this->user->lang('confirm_delete_event'), ((isset($event['name'])) ? $event['name'] : ''), count($this->pdh->get('raid', 'raidids4eventid', array($event['id'])))), 'manage_events.php'.$this->SID.'&event_id='.$event['id'], false, array('height' => 220));
 
 		if(!isset($event['name'])) $event['name'] = '';
+		
+		if($this->config->get('dkp_easymode')){
+			$mdkp2event = (new hdropdown('mdkp2event[]', array('options' => $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), 'value' => $event['mdkp2event'][0])))->output();
+		} else {
+			$mdkp2event = (new hmultiselect('mdkp2event', array('options' => $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), 'value' => $event['mdkp2event'])))->output();
+		}
+		
 		$this->tpl->assign_vars(array(
 			'S_UPD'			=> ($event['id']) ? TRUE : FALSE,
 			'EVENT_ID'		=> $event['id'],
 			'NAME'			=> $event['name'],
 			'VALUE'			=> $this->pdh->geth('event', 'value', array($event['id'])),
-			'MDKP2EVENT' 	=> (new hmultiselect('mdkp2event', array('options' => $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), 'value' => $event['mdkp2event'])))->output(),
+			'MDKP2EVENT' 	=> $mdkp2event,
 			'DD_DEFAULT_ITEMPOOL' => (new hdropdown('default_itempool', array('options' => $arrItempool, 'value' => $event['default_itempool'])))->output(),
 			'CALENDAR'		=> ($this->in->get('calendar') == 'true') ? '1' : '0'
 		));

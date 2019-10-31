@@ -10,17 +10,19 @@
 <table class="table fullwidth colorswitch" id="multidkpsort">
 	<tr>
 		<th style="width:20px"><a href="manage_multidkp.php{SID}&amp;sort=0.0"><span class="down_arrow{RED00}" /></a><a href="manage_multidkp.php{SID}&amp;sort=0.1"><span class="up_arrow{RED01}" /></a></th>
-		<th style="width:20px">&nbsp;</th>
+		<th style="width:20px">{L_action}</th>
 		<th style="width:150px">
 			<a href="manage_multidkp.php{SID}&amp;sort=0.0"><span class="down_arrow{RED10}" /></a><a href="manage_multidkp.php{SID}&amp;sort=1.1"><span class="up_arrow{RED11}" /></a>
 			{L_Multi_kontoname_short}
 		</th>
-		<th style="width:25%" class="hiddenSmartphone">
+		<th style="width:250px" class="hiddenSmartphone">
 			<a href="manage_multidkp.php{SID}&amp;sort=1.0"><span class="down_arrow{RED20}" /></a><a href="manage_multidkp.php{SID}&amp;sort=2.1"><span class="up_arrow{RED21}" /></a>
 			{L_description}
 		</th>
-		<th class="hiddenSmartphone">{L_Multi_events}</th>
-		<th class="hiddenSmartphone">{L_menu_itempools}</th>
+		<th class="hiddenSmartphone" style="width:<!-- IF S_DKP_EASYMODE -->75<!-- ELSE -->50<!-- ENDIF -->%">{L_Multi_events}</th>
+		<!-- IF not S_DKP_EASYMODE -->
+		<th class="hiddenSmartphone" style="width:50%">{L_menu_itempools}</th>
+		<!-- ENDIF -->
 	</tr>
 	<!-- BEGIN multi_row -->
 	<tr>
@@ -29,7 +31,9 @@
 		<td style="width:150px"><a href="manage_multidkp.php{SID}&amp;upd=true&amp;id={multi_row.ID}">{multi_row.NAME}</a></td>
 		<td style="width:250px" class="hiddenSmartphone">{multi_row.DESC}</td>
 		<td style="width:50%" class="hiddenSmartphone">{multi_row.EVENTS}</td>
+		<!-- IF not S_DKP_EASYMODE -->
 		<td style="width:50%" class="hiddenSmartphone">{multi_row.ITEMPOOLS}</td>
+		<!-- ENDIF -->
 	</tr>
 	<!-- END multi_row -->
 </table>

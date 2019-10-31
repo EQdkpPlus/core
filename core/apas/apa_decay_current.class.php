@@ -149,6 +149,8 @@ if ( !class_exists( "apa_decay_current" ) ) {
 				$decay_adj = 0;
 			}
 			
+			$decayed_val = runden($decayed_val);
+			
 			// write to cache if the entry is new
 			if($blnNeedsRecalc && ($last_run > $intCacheTime)){
 				$this->pdh->put('member', 'apa_points', array($data['member_id'], $apa_id, $data['dkp_id'], $data['with_twink'], array('time' => $last_run, 'val' => $decayed_val)));

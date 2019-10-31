@@ -551,7 +551,7 @@ class admin_settings extends page_generic {
 								'type'		=> 'text',
 								'size'		=> 5,
 						),
-
+						
 						'round_activate'	=> array(
 								'type'		=> 'radio',
 								'default'	=> 0,
@@ -571,6 +571,9 @@ class admin_settings extends page_generic {
 								'min'		=> 0,
 								'max'		=> 100,
 								'width'		=> '300px'
+						),
+						'dkp_easymode'=> array(
+								'type'		=> 'radio',
 						),
 				),
 			),

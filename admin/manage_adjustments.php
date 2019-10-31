@@ -53,6 +53,7 @@ class ManageAdjs extends page_generic {
 
 		$arrCheckboxes = array('member', 'reason', 'value', 'date', 'raid_id', 'event');
 		//Für jedes Item
+		$messages = array();
 		foreach($arrSelected as $adjID){
 			//Hole alte daten
 			$adj['member']	= $this->pdh->get('adjustment', 'member', array($adjID));
@@ -62,20 +63,17 @@ class ManageAdjs extends page_generic {
 			$adj['raid_id'] = $this->pdh->get('adjustment', 'raid_id', array($adjID));
 			$adj['event']	= $this->pdh->get('adjustment', 'event', array($adjID));
 
-			$messages = array();
-
 			foreach($arrBulk as $key => $val){
 				if(!in_array($key, $arrCheckboxes) || !$val) continue;
 
 				$adj[$key] = $arrNewValues[$key];
-
-				$retu = $this->pdh->put('adjustment', 'update_adjustment', array($adjID, $adj['value'], $adj['reason'], array($adj['member']), $adj['event'], $adj['raid_id'], $adj['date'], true));
-
-				if(!$retu){
-					$messages[] = array('title' => $this->user->lang('save_nosuc'), 'text' => $adj['name'], 'color' => 'red');
-				}
 			}
-
+			
+			$retu = $this->pdh->put('adjustment', 'update_adjustment', array($adjID, $adj['value'], $adj['reason'], array($adj['member']), $adj['event'], $adj['raid_id'], $adj['date'], true));
+			
+			if(!$retu){
+				$messages[] = array('title' => $this->user->lang('save_nosuc'), 'text' => $adj['name'], 'color' => 'red');
+			}
 		}
 		$messages[] = array('title' => $this->user->lang('save_suc'), 'text' => $this->user->lang('bulkedit'), 'color' => 'green');
 		$this->pdh->process_hook_queue();

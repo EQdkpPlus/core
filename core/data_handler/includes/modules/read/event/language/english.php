@@ -30,7 +30,7 @@ if (!defined('EQDKP_INC')) {
 
 $module_lang = array(
 	"name" => 'Event',
-	"multidkppools" => 'MultiDKP-Pool(s)',
+	"multidkppools" => 'Point accounts',
 	"itempools" => 'Item-Pool(s)',
 	"value" => 'Value',
 	"eventlink" => 'Event',
@@ -43,7 +43,7 @@ $module_lang = array(
 	"eicon" => 'Event icon',
 	"elink" => 'Event link',
 	"evalue" => 'Event value',
-	"emdkps" => 'Event MultiDKP-Pools',
+	"emdkps" => 'Event Point accounts',
 	"eipools" => 'Event Itempools',
 	"eventedit" => 'Event edit icon',
 	'edefitempool'=> 'Event default itempool',

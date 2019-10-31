@@ -45,6 +45,14 @@ class ManageItems extends page_generic {
 
 	public function save() {
 		$item = $this->get_post();
+		if($this->config->get('dkp_easymode')){
+			$raid = $item['raid_id'];
+			$event = $this->pdh->get('raid', 'event', array($raid));
+			$arrPools = $this->pdh->get('event', 'multidkppools', array($event));
+			$arrItempools = $this->pdh->get('multidkp', 'itempool_ids', array($arrPools[0]));
+			$item['itempool_id'] = $arrItempools[0];
+		}
+		
 		if($this->in->get('selected_ids','','hash')) {
 			$retu = $this->pdh->put('item', 'update_item', array($this->in->get('selected_ids','','hash'), $item['name'], $item['buyers'], $item['raid_id'], $item['item_id'], $item['value'], $item['itempool_id'], $item['date']));
 		} else {
@@ -74,28 +82,38 @@ class ManageItems extends page_generic {
 
 		$arrCheckboxes = array('name', 'item_id', 'raid_id', 'date', 'value', 'itempool_id', 'buyer');
 		//Für jedes Item
+		$messages = array();
 		foreach($arrSelected as $itemID){
+			
 			//Hole alte daten
+			$item = array();
 			$item['buyer'] = $this->pdh->get('item', 'buyer', array($itemID));
 			$item['name'] = $this->pdh->get('item', 'name', array($itemID));
 			$item['value'] = $this->pdh->get('item', 'value', array($itemID));
 			$item['date'] = $this->pdh->get('item', 'date', array($itemID));
 			$item['raid_id'] = $this->pdh->get('item', 'raid_id', array($itemID));
 			$item['item_id'] = $this->pdh->get('item', 'game_itemid', array($itemID));
-			$item['itempool_id'] = $this->pdh->get('item', 'itempool_id', array($itemID));
-
-			$messages = array();
-
+			$item['itempool_id'] = $intOldItempoolID = $this->pdh->get('item', 'itempool_id', array($itemID));
+			
 			foreach($arrBulk as $key => $val){
 				if(!in_array($key, $arrCheckboxes) || !$val) continue;
-
+				
 				$item[$key] = $arrNewValues[$key];
-
-				$retu = $this->pdh->put('item', 'update_item', array($itemID, $item['name'], array($item['buyer']), $item['raid_id'], $item['item_id'], $item['value'], $item['itempool_id'], $item['date'], true));
-
-				if(!$retu){
-					$messages[] = array('title' => $this->user->lang('save_nosuc'), 'text' => $item['name'], 'color' => 'red');
+			}
+			
+			if($this->config->get('dkp_easymode')){
+				if($intOldItempoolID != $item['raid_id']){
+					$event = $this->pdh->get('raid', 'event', array($item['raid_id']));
+					$arrPools = $this->pdh->get('event', 'multidkppools', array($event));
+					$arrItempools = $this->pdh->get('multidkp', 'itempool_ids', array($arrPools[0]));
+					$item['itempool_id'] = $arrItempools[0];
 				}
+			}
+			
+			$retu = $this->pdh->put('item', 'update_item', array($itemID, $item['name'], array($item['buyer']), $item['raid_id'], $item['item_id'], $item['value'], $item['itempool_id'], $item['date'], true));
+			
+			if(!$retu){
+				$messages[] = array('title' => $this->user->lang('save_nosuc'), 'text' => $item['name'], 'color' => 'red');
 			}
 
 		}
@@ -373,7 +391,7 @@ class ManageItems extends page_generic {
 		if(!$item['buyers']){
 			$missing[] = $this->user->lang('buyers');
 		}
-		if(!$item['itempool_id']){
+		if(!$item['itempool_id'] && !$this->config->get('dkp_easymode')){
 			$missing[] = $this->user->lang('itempool');
 		}
 		if(!empty($missing) AND !$norefresh){

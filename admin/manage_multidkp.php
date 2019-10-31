@@ -31,13 +31,14 @@ class Manage_Multidkp extends page_generic {
 			'save' => array('process' => 'save', 'check' => 'a_event_add', 'csrf'=>true),
 			'save_sort' => array('process' => 'save_sort', 'check' => 'a_event_add', 'csrf'=>true),
 			'upd'	=> array('process' => 'update', 'csrf'=>false),
+			'info'	=> array('process' => 'display_info', 'check' => 'a_event_add', 'csrf'=>false),
 		);
 		parent::__construct('a_event_', $handler);
 		$this->process();
 	}
 
 	public function save() {
-		$mdkp_id = $this->in->get('mdkp_id',0);
+		$mdkp_id = $this->in->get('id',0);
 		$mdkp = $this->get_post();
 		if($mdkp) {
 			if($mdkp_id) {
@@ -77,8 +78,9 @@ class Manage_Multidkp extends page_generic {
 		$this->display($message);
 	}
 
-	public function update($message=false) {
-		$mdkp_id = $this->in->get('id',0);
+	public function update($message=false, $id=0) {
+		$mdkp_id = ($id !== 0) ? $id : $this->in->get('id',0);
+		
 		$mdkp = array('events' => array(), 'itempools' => array(), 'no_attendance' => array());
 		if($message) {
 			$this->core->messages($message);
@@ -93,7 +95,24 @@ class Manage_Multidkp extends page_generic {
 		}
 
 		//events
-		$events = $this->pdh->aget('event', 'name', 0, array($this->pdh->sort($this->pdh->get('event', 'id_list'), 'event', 'name')));
+		if($this->config->get('dkp_easymode')){
+			//1 event can only be associated to 1 multidkp pool = easy mode
+			$eventList = $this->pdh->sort($this->pdh->get('event', 'id_list'), 'event', 'name');
+			foreach($eventList as $eventID){
+				$pools = $this->pdh->get('multidkp', 'mdkpids4eventid', array($eventID));
+				if(count($pools) > 0 && $mdkp_id === 0) continue;
+				
+				if(count($pools) > 0 && $mdkp_id !==0 && !in_array($mdkp_id, $pools)) continue;
+				
+				$events[$eventID] = $this->pdh->get('event', 'name', array($eventID));
+			}
+			
+			
+		} else {
+			$events = $this->pdh->aget('event', 'name', 0, array($this->pdh->sort($this->pdh->get('event', 'id_list'), 'event', 'name')));
+		}
+		
+		
 		$sel_events = $this->pdh->aget('event', 'name', 0, array($this->pdh->sort($mdkp['events'], 'event', 'name')));
 		
 		//itempools
@@ -121,6 +140,110 @@ class Manage_Multidkp extends page_generic {
 		]);
 	}
 
+	public function display_info(){
+		$mdkpid = $this->in->get('info', 0);
+		
+		//Events - 
+		$arrEvents = $this->pdh->get('multidkp', 'event_ids', array($mdkpid));
+		foreach($arrEvents as $eventID){
+			$this->tpl->assign_block_vars('event_row', array(
+				'NAME' => $this->pdh->get('event', 'name', array($eventID)),
+				'LINK' => '',
+				'ADDITION' => '',
+			));
+		}
+		
+		//Itempools
+		$arrItempools = $this->pdh->get('multidkp', 'itempool_ids', array($mdkpid));
+		foreach($arrItempools as $eventID){
+			$this->tpl->assign_block_vars('itempool_row', array(
+					'NAME' => $this->pdh->get('itempool', 'name', array($eventID)),
+					'LINK' => '',
+					'ADDITION' => '',
+			));
+		}
+		
+		//APAs
+		$apas = register('auto_point_adjustments')->list_apas();
+		//Entweder Pool ist angegeben, oder das Event ist im Pool
+		$intApaCount = 0;
+		foreach($apas as $apaid => $arrAPA){
+			if(isset($arrAPA['event'])){
+				if(in_array($arrAPA['event'], $arrEvents)){
+					#d("APA ".$arrAPA['name']);
+					
+					$this->tpl->assign_block_vars('apa_row', array(
+							'NAME' => $arrAPA['name'],
+							'LINK' => '',
+							'ADDITION' => '',
+					));
+					
+					$intApaCount++;
+				}
+				
+			} elseif(isset($arrAPA['pools'])){
+				if(in_array($mdkpid, $arrAPA['pools'])){
+					#d("APA ".$arrAPA['name']);
+					
+					$this->tpl->assign_block_vars('apa_row', array(
+							'NAME' => $arrAPA['name'],
+							'LINK' => '',
+							'ADDITION' => '',
+					));
+					
+					$intApaCount++;
+				}
+			}
+		}
+		
+		
+		
+		
+		
+		$this->tpl->assign_vars(array(
+				'MDKP_NAME' => $this->pdh->get('multidkp', 'name', array($mdkpid)),
+				'S_MDKP_EVENTS' => (count($arrEvents)),
+				'S_MDKP_ITEMPOOLS' => (count($arrItempools)),
+				'S_MDKP_APA' => $intApaCount,
+				'S_MDKP_TWINKS' => $this->config->get('show_twinks'),
+				'MDKP_LAYOUT' => $this->config->get('eqdkp_layout'),
+		));
+		
+		$presets = array(
+				array('name' => 'earned', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+				array('name' => 'spent', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+				array('name' => 'adjustment', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+				array('name' => 'current', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+		);
+		$arrPresets = array();
+		foreach ($presets as $preset){
+			$pre = $this->pdh->pre_process_preset($preset['name'], $preset);
+			if(empty($pre))
+				continue;
+				
+				$arrPresets[$pre[0]['name']] = $pre[0];
+		}
+		
+		foreach($arrPresets as $strName => $arrPreset){
+			$this->tpl->assign_block_vars('preset_row', array(
+					'NAME' => $strName,
+					'LINK' => '',
+					'ADDITION' => 'Module <i style="font-style:italic">'.$arrPreset[0].'</i>, Function <i style="font-style:italic">'.$arrPreset[1].'</i>',
+			));
+		}
+		
+		$this->core->set_vars([
+				'page_title'		=> $this->user->lang('manmdkp_info'),
+				'template_file'		=> 'admin/manage_multidkp_info.html',
+				'page_path'			=> [
+						['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+						['title'=>$this->user->lang('manmdkp_title'), 'url'=>$this->root_path.'admin/manage_multidkp.php'.$this->SID],
+						['title'=>$this->user->lang('manmdkp_info').': '.$this->pdh->get('multidkp', 'name', array($mdkpid)), 'url'=>' '],
+				],
+				'display'			=> true
+		]);
+	}
+	
 	public function display($messages=false) {
 		if($messages) {
 			$this->pdh->process_hook_queue();
@@ -194,7 +317,7 @@ class Manage_Multidkp extends page_generic {
 			$missing[] = $this->user->lang('events');
 		}
 		if(isset($missing) AND !$norefresh) {
-			$this->update(array('title' => $this->user->lang('missing_values'), 'text' => implode(', ', $missing), 'color' => 'red'));
+			$this->update(array('title' => $this->user->lang('missing_values'), 'text' => implode(', ', $missing), 'color' => 'red'), $this->in->get('id', 0));
 		}
 		$mdkp['itempools'] = $this->in->getArray('itempools','int');
 		$mdkp['no_attendance'] = $this->in->getArray('no_atts', 'int');
