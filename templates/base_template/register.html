@@ -23,7 +23,9 @@ $(function() {
 	try {
 		var user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 		if (user_timezone) { $('#user_timezone').val(user_timezone).change(); }
-	}  catch (e) {}
+	}  catch (e) {
+		//Do nothing
+	}
 	
 	$('#username').change(function() {
 		var username = $(this).val();
