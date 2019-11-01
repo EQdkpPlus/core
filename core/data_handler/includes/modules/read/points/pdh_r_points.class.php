@@ -88,7 +88,8 @@ if ( !class_exists( "pdh_r_points" ) ) {
 						$apaAffectedIDs = array();
 						foreach($this->pdh->get('multidkp', 'id_list') as $mdkpid){
 							foreach($arrAffectedMembers as $memberid){
-								$apaAffectedIDs[] = $mdkpid.'_'.$memberid;
+								$apaAffectedIDs[] = $mdkpid.'_'.$memberid.'_1';
+								$apaAffectedIDs[] = $mdkpid.'_'.$memberid.'_0';
 							}
 						}
 						$this->apa->enqueue_update('current', $apaAffectedIDs);
@@ -103,7 +104,8 @@ if ( !class_exists( "pdh_r_points" ) ) {
 				$arrTotalAffected = array_merge($arrTotalAffected, $affected_ids);
 				foreach($this->pdh->get('multidkp', 'id_list') as $mdkpid){
 					foreach($affected_ids  as $memberid){
-						$apaAffectedIDs[] = $mdkpid.'_'.$memberid;
+						$apaAffectedIDs[] = $mdkpid.'_'.$memberid.'_1';
+						$apaAffectedIDs[] = $mdkpid.'_'.$memberid.'_0';
 					}
 				}
 				$this->apa->enqueue_update('current', $apaAffectedIDs);
@@ -112,7 +114,8 @@ if ( !class_exists( "pdh_r_points" ) ) {
 				$apaAffectedIDs = array();
 				foreach($this->pdh->get('multidkp', 'id_list') as $mdkpid){
 					foreach($this->pdh->get('member', 'id_list')  as $memberid){
-						$apaAffectedIDs[] = $mdkpid.'_'.$memberid;
+						$apaAffectedIDs[] = $mdkpid.'_'.$memberid.'_1';
+						$apaAffectedIDs[] = $mdkpid.'_'.$memberid.'_0';
 					}
 				}
 				$this->apa->enqueue_update('current', $apaAffectedIDs);
