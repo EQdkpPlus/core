@@ -1915,15 +1915,6 @@ $lang = array(
 		"core_sett_f_dkp_easymode" => "Enable simple mode for point accounts",
 		"core_sett_f_help_dkp_easymode" => "When simple mode is enabled, no itempools can be created. Also, events can be assigned to only one point account at a time.",
 		"dkp_easymode_active" => "The simple mode for point accounts is enabled. This means that no own Itempools can be created. Also, Events can only be assigned to one point account at a time.<br />These limitation makes distributing points easier. To disable these limitation, you can disable the simple mode at the  <a href='manage_settings.php#fragment-points'>Settings</a>.",
-		"manmdkp_info" => "Point calculation",
-		"manmdkp_info_calcinfo" => "This page explains you, which factors influences the point calculation of the current point account.",
-		"manmdkp_info_events" => "The characters will receive points for participating in raids or through Adjustments, which are assigned to the following events:",
-		"manmdkp_info_itempools" => "By buying Items, the Charakters will loose points. The Items can be associated to different Itempools. The following Itempools are associated with the current point account:",
-		"manmdkp_info_apa" => "The following auto point adjustments influence the point calculation of the current point account:",
-		"manmdkp_info_pointsystem" => "Pointsystem",
-		"manmdkp_info_without_twinks" => "Twinks are currently not shown, so the main character will get the points of his Twinks.<br />You can change this setting <a href='manage_settings.php#fragment-chars'>here</a> in order to show the twinks and every charakter only gets his own points.",
-		"manmdkp_info_with_twinks" => "Because Twinks are shown, every Character gets his own points.<br />You can change this setting <a href='manage_settings.php#fragment-chars'>here</a>, so that only the main charater is shown and gets also the points of his Twinks.",
-		"manmdkp_info_pointsystem_info" => "Also, the selected pointsystem has influence how the points are calculated. You can change the pointsystem <a href='manage_pagelayouts.php'>here</a>. More Information about the point systems can be found in our <a href='https://wiki.eqdkp-plus.eu/wiki/Lootsystems'>Wiki</a>.",
 		
 );
 
