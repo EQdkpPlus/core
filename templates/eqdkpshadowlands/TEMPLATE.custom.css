@@ -1,0 +1,223 @@
+//Game Background 
+//	If you want to have the game specific background image, please uncomment the following block
+
+/*
+body {
+	background:#000000 url('TEMPLATE_BACKGROUND') no-repeat center top;
+	background-attachment: T_BACKGROUND_POSITION;
+	background-size: cover;
+}
+
+#wrapper header {
+	background: none !important;
+}
+
+*/
+
+
+
+// Fixed Personal Area
+//    If you want the personal area to have a fixed position, please uncomment the following line.
+
+// .custom-css_fixed-personal-area();
+
+.custom-css_fixed-personal-area(){
+	#header { margin-top: 60px; }
+	#personalArea {
+		position: fixed;
+		padding-left: 0;
+		padding-right: 0;
+		width: 100%;
+		z-index: 999;
+	}
+	#personalArea #personalAreaUser { padding-left: 40px; }
+	#personalArea #personalAreaTime { padding-right: 40px; }
+}
+
+
+
+// Hide Portal Modules on Smartphones
+//    If you want to hide portal modules on Smartphone, get the CSS-Class for the module from the source text in your browser, uncomment the following line and add the CSS Class.
+
+// .custom-css_hide-portal-modules(" .offi_conf_portal, .birthday_portal ");
+
+.custom-css_hide-portal-modules(@portal-modules:""){
+	@portal-modules-classes: ~'@{portal-modules}';
+	@media all and (max-width: 480px) {
+		@{portal-modules-classes} { display:none; }
+	}
+}
+
+
+
+// Give Article Headlines of some categories a special color
+//    If you want to change the color of Article Headlines, change following list.
+//    The List will be seperated for each category and the bade-color parameter is optional.
+//    List Parameter (seperate each category by comma):    article-category-id    color    badge-color
+
+.custom-css_article-headline-colors(
+	// 1 #000,        // This line change the category 1 to black without badge changes
+	// 3 #fff #000,   // This line change the category 3 to white and badge color to black
+	// 4 #aaa
+;);
+
+.custom-css_article-headline-colors(@article-categories, @i:1) when(@i <= length(@article-categories)){
+	@id: extract(extract(@article-categories, @i), 1);
+	@color: extract(extract(@article-categories, @i), 2);
+	@ribbon: extract(extract(@article-categories, @i), 3);
+
+	.syntax-check() when(isnumber(@id)) and(iscolor(@color)){
+		.article-container[data-article-category-id="@{id}"] h2 a,
+		.article_detail_container[data-article-category-id="@{id}"] h1 {
+			color: @color;
+		}
+
+		.ribbon-color() when(iscolor(@ribbon)){
+			.article-container[data-article-category-id="@{id}"] .ribbon > span {
+				background: linear-gradient(lighten(@color, 20), @color);
+				color: @ribbon;
+			}
+		}.ribbon-color();
+	}.syntax-check();
+
+	.custom-css_article-headline-colors(@article-categories, @i+1);
+}
+
+
+
+// EQdkp-Plus Embedded
+//    If you want to embedd EQdkp-Plus, uncomment the following line and use this JavaScript Code: $('body').switchClass('responsive','embedded',0);
+
+// .custom-css_embedded();
+
+.custom-css_embedded(){
+	body.embedded { background:transparent; }
+	.embedded #header, .embedded .personalAreaTime { display:none; }
+	.embedded #contentContainer {
+		background: transparent;
+		margin:0;
+		box-shadow: none;
+		border: none;
+	}
+	.embedded #personalArea {
+		padding-right: 20px;
+		padding-left: 20px;
+		margin-bottom: 0;
+		box-shadow: none;
+	}
+	.embedded #contentBody, .embedded #contentBody2 {
+		background: transparent;
+		border: none;
+	}
+	.embedded #footer, .embedded .copyright, .embedded #footer a, .embedded #copyright a { color:inherit; }
+}
+
+
+
+// Show Portal Modules in a row
+//    If you want to show portal modules in a row, uncomment following line.
+
+// .custom-css_portal-module-row();
+
+.custom-css_portal-module-row(){
+	#portal-middle, #portal-footer {
+		display: flex;
+		justify-content: space-around;
+		align-items: stretch;
+
+		.portalbox {
+			flex: 1 1 auto;
+			display: flex;
+			flex-direction: column;
+		}
+		.portalbox_content {
+			display: flex;
+			justify-content: space-around;
+			flex: 1 1 auto;
+		}
+		.colorswitch {
+			background-color: none;
+			display: flex;
+			align-items: flex-end;
+			text-align: center;
+			flex-wrap: wrap;
+			justify-content: center;
+
+			div { background-color:transparent; }
+		}
+	}
+}
+
+
+
+// Color Usernames of special Group
+//    If you want to change the color of special groups, change following list.
+//    List Parameter (seperate each group by comma):    user-group-id    color
+
+.custom-css_group-usernames(
+	// 1 #000,   // This line change the color of group 1 to black
+	// 3 #fff,   // This line change the color of group 3 to white
+	// 4 #aaa
+;);
+
+.custom-css_group-usernames(@groups, @i:1) when(@i <= length(@groups)){
+	@id: extract(extract(@groups, @i), 1);
+	@color: extract(extract(@groups, @i), 2);
+
+	.syntax-check() when(isnumber(@id)) and(iscolor(@color)){
+		a[data-user-group-id="@{id}"] { color: @color !important; }
+		a[data-usergroup-id="@{id}"] { background-color: @color; }
+		[data-user-group-id="@{id}"] img { border: 2px solid @color !important; }
+
+	}.syntax-check();
+
+	.custom-css_group-usernames(@groups, @i+1);
+}
+
+
+
+// Sort Roles/Classes on Raid Event Detail View in custom order
+//    If you want to sort the Roles/Classes on Raid Event Detail View in custom order.
+//    Uncomment and change the following line, parameters are class-id 1,2,3,4,5...
+
+// .custom-css_sort-event-roles(5,4,1,2,3,6,7);
+
+.custom-css_sort-event-roles(@slot_order...){
+	.loop(@i:1) when(@i <= length(@slot_order)){
+		.attendee_table .class_column[data-class-id="@{i}"] { order: extract(@slot_order, @i); }
+
+		.loop(@i+1);
+	}.loop();
+}
+
+
+
+// Change Status Color on Raid Event Detail View (required Version: 2.3.11)
+//    If you want to change the Status Color on Raid Event Detail View.
+//    Uncomment and change the following line, parameters are status-id 0,1,2,3
+
+// .custom-css_event-status-color(#00a400, #e9ec00, #E80000, purple);
+
+.custom-css_event-status-color(@status_color...){
+	.loop(@i:0) when(@i < length(@status_color)){
+		.raidcal-attendance-status-@{i} { color: extract(@status_color, @i+1); }
+
+		.loop(@i+1);
+	}.loop();
+}
+
+
+
+// Use Flag on Raid Event Detail View (required Version: 2.3.11)
+//    If you want to use flags instead of the current icons for the attendance status indicator.
+//    Uncomment the following line
+
+// .custom-css_event-status-icon();
+
+.custom-css_event-status-icon(@icon:'\f024'){
+	.raidcal-attendance-status-0:before, .raidcal-attendance-status-1:before,
+	.raidcal-attendance-status-2:before, .raidcal-attendance-status-3:before {
+		font-family: FontAwesome;
+		content: @icon;
+	}
+}

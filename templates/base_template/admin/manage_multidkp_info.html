@@ -6,42 +6,62 @@
 	<i class="fa fa-info-circle fa-4x pull-left"></i> {L_manmdkp_info_calcinfo}
 </div>
 
+
+<!-- IF S_MDKP_EVENTS -->
+<h2>{L_events}</h2>
+<div class="infobox infobox-large infobox-blue clearfix">
+	{L_manmdkp_info_events}
+</div>
 <table class="table fullwidth colorswitch">
-	<!-- IF S_MDKP_EVENTS -->
-	<tr><th>{L_events}</th><th></th><th></th></tr>
-	
-	<!-- BEGIN event_row -->
-	<tr><td><a href="{event_row.LINK}">{event_row.NAME}</a></td><td>{event_row.ADDITION}</td><td>{event_row.ADDITION2}</td></tr>
+<!-- BEGIN event_row -->
+	<tr><td><a href="{event_row.LINK}">{event_row.NAME}</a></td></tr>
 	<!-- END event_row -->
-	<!-- ENDIF -->
+</table>
+<!-- ENDIF -->
 
 
-	<!-- IF S_MDKP_ITEMPOOLS AND not S_DKP_EASYMODE -->
-	<tr><th>{L_itempool}</th><th></th><th></th></tr>
-	
-	<!-- BEGIN itempool_row -->
-	<tr><td><a href="{itempool_row.LINK}">{itempool_row.NAME}</a></td><td>{itempool_row.ADDITION}</td><td>{itempool_row.ADDITION2}</td></tr>
-	<!-- END itempool_row -->
-	<!-- ENDIF -->
-	
-	
-	<!-- IF S_MDKP_APA -->
-	<tr><th>{L_apa}</th><th></th><th></th></tr>
-	
-	<!-- BEGIN apa_row -->
-	<tr><td><a href="{apa_row.LINK}">{apa_row.NAME}</a></td><td>{apa_row.ADDITION}</td><td>{apa_row.ADDITION2}</td></tr>
+
+<!-- IF S_MDKP_ITEMPOOLS AND not S_DKP_EASYMODE -->
+<h2>{L_itempool}</h2>
+<div class="infobox infobox-large infobox-blue clearfix">
+	{L_manmdkp_info_itempools}
+</div>
+<table class="table fullwidth colorswitch">
+<!-- BEGIN itempool_row -->
+	<tr><td><a href="{itempool_row.LINK}">{itempool_row.NAME}</a></td></tr>
+	<!-- END event_row -->
+</table>
+<!-- ENDIF -->
+
+
+<!-- IF S_MDKP_APA -->
+<h2>{L_manage_auto_points}</h2>
+<div class="infobox infobox-large infobox-blue clearfix">
+	{L_manmdkp_info_apa}
+</div>
+<table class="table fullwidth colorswitch">
+<!-- BEGIN apa_row -->
+	<tr><td><a href="{apa_row.LINK}">{apa_row.NAME}</a> ({apa_row.ADDITION})</td></tr>
 	<!-- END apa_row -->
-	<!-- ENDIF -->
-	
-	
-	<tr><th>{L_twinks}</th><th></th><th></th></tr>
-	<tr><td><!-- IF S_MDKP_TWINKS -->Ja, Twinks<!-- ELSE -->Nein, alles Mainchar<!-- ENDIF --></td><td></td><td></td></tr>
+</table>
+<!-- ENDIF -->
 
-	<tr><th>{L_pointsystem}</th><th></th><th></th></tr>
-	<tr><td>{MDKP_LAYOUT}</td><td></td><td></td></tr>
-	
+<h2>{L_twinks}</h2>
+<div class="infobox infobox-large infobox-blue clearfix">
+<!-- IF S_MDKP_TWINKS -->
+	{L_manmdkp_info_with_twinks}
+<!-- ELSE -->
+	{L_manmdkp_info_without_twinks}
+<!-- ENDIF -->	
+</div>
+
+<h2>{L_manmdkp_info_pointsystem}</h2>
+<div class="infobox infobox-large infobox-blue clearfix">
+	{L_manmdkp_info_pointsystem_info}
+</div>
+<table class="table fullwidth colorswitch">
+	<tr><td><b>{L_manmdkp_info_pointsystem}: {MDKP_LAYOUT}</b></td><td><span style="font-style: italic;">({MDKP_LAYOUT_INFO})</span></td></tr>
 	<!-- BEGIN preset_row -->
-	<tr><td>{preset_row.NAME}</td><td>{preset_row.ADDITION}</td><td>{preset_row.ADDITION2}</td></tr>
+	<tr><td>{preset_row.NAME}</td><td>{preset_row.ADDITION}</td></tr>
 	<!-- END preset_row -->
-
 </table>
