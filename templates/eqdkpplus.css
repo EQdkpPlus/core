@@ -562,3 +562,16 @@ ul.disc {
 	list-style-type: disc;
 	margin-left: 2em;
 }
+
+/* Gameicons */
+.gameicon {
+	max-height: 18px;
+}
+
+.roster_class_container .gameicon, .roster_class_container .classicon, .roster_class_container .roleicon, .roster_class_container .raceicon {
+	max-height: 48px;
+}
+
+.profile_header .gameicon {
+	max-height: 48px;
+}

@@ -165,10 +165,10 @@ class game extends gen_class {
 
 		if(is_file($strIconPathPrefix.'.svg')){
 			$icon_path = $strIconServerPathPrefix.'.svg';
-			return ($pathonly) ? $icon_path : '<img src="'.$icon_path.'" height="'.$size.'"  alt="class '.$class_id.'" class="'.$this->game.'_classicon classicon'.'" title="'.$this->get_name('classes', $class_id).'" />';
+			return ($pathonly) ? $icon_path : '<img src="'.$icon_path.'" alt="class '.$class_id.'" class="'.$this->game.'_classicon classicon gameicon'.'" title="'.$this->get_name('classes', $class_id).'" />';
 		}elseif(is_file($strIconPathPrefix.'.png')){
 			$icon_path = $strIconServerPathPrefix.'.png';
-			return ($pathonly) ? $icon_path : '<img src="'.$icon_path.'" height="'.$size.'"  alt="class '.$class_id.'" class="'.$this->game.'_classicon classicon'.'" title="'.$this->get_name('classes', $class_id).'" />';
+			return ($pathonly) ? $icon_path : '<img src="'.$icon_path.'" alt="class '.$class_id.'" class="'.$this->game.'_classicon classicon gameicon'.'" title="'.$this->get_name('classes', $class_id).'" />';
 		}
 
 		return false;
@@ -342,10 +342,10 @@ class game extends gen_class {
 
 		if(is_file($strIconPathPrefix.'.svg')){
 			$icon_path = $strIconServerPathPrefix.'.svg';
-			return ($pathonly) ? $icon_path : '<img src="'.$icon_path.'" height="'.$size.'"  alt="'.$type.' '.$id.'" class="'.$this->game.'_'.$type.'icon gameicon '.$type.'icon" title="'.$this->get_name($type, $id).'" />';
+			return ($pathonly) ? $icon_path : '<img src="'.$icon_path.'" alt="'.$type.' '.$id.'" class="'.$this->game.'_'.$type.'icon gameicon '.$type.'icon" title="'.$this->get_name($type, $id).'" />';
 		}elseif(is_file($strIconPathPrefix.'.png')){
 			$icon_path = $strIconServerPathPrefix.'.png';
-			return ($pathonly) ? $icon_path : '<img src="'.$icon_path.'" height="'.$size.'"  alt="'.$type.' '.$id.'" class="'.$this->game.'_'.$type.'icon gameicon '.$type.'icon" title="'.$this->get_name($type, $id).'" />';
+			return ($pathonly) ? $icon_path : '<img src="'.$icon_path.'" alt="'.$type.' '.$id.'" class="'.$this->game.'_'.$type.'icon gameicon '.$type.'icon" title="'.$this->get_name($type, $id).'" />';
 		}
 
 		return false;
