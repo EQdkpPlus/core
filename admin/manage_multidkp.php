@@ -148,7 +148,7 @@ class Manage_Multidkp extends page_generic {
 		foreach($arrEvents as $eventID){
 			$this->tpl->assign_block_vars('event_row', array(
 				'NAME' => $this->pdh->get('event', 'name', array($eventID)),
-				'LINK' => '',
+				'LINK' => 'manage_events.php'.$this->SID.'&event_id='.$eventID.'&upd=true',
 				'ADDITION' => '',
 			));
 		}
@@ -158,7 +158,7 @@ class Manage_Multidkp extends page_generic {
 		foreach($arrItempools as $eventID){
 			$this->tpl->assign_block_vars('itempool_row', array(
 					'NAME' => $this->pdh->get('itempool', 'name', array($eventID)),
-					'LINK' => '',
+					'LINK' => 'manage_itempools.php'.$this->SID.'&id='.$eventID.'&upd=true',
 					'ADDITION' => '',
 			));
 		}
@@ -174,8 +174,8 @@ class Manage_Multidkp extends page_generic {
 					
 					$this->tpl->assign_block_vars('apa_row', array(
 							'NAME' => $arrAPA['name'],
-							'LINK' => '',
-							'ADDITION' => '',
+							'LINK' => 'manage_auto_points.php'.$this->SID,
+							'ADDITION' => $this->user->lang('apa_type_'.$arrAPA['type']),
 					));
 					
 					$intApaCount++;
@@ -187,8 +187,8 @@ class Manage_Multidkp extends page_generic {
 					
 					$this->tpl->assign_block_vars('apa_row', array(
 							'NAME' => $arrAPA['name'],
-							'LINK' => '',
-							'ADDITION' => '',
+							'LINK' => 'manage_auto_points.php'.$this->SID,
+							'ADDITION' => $this->user->lang('apa_type_'.$arrAPA['type']),
 					));
 					
 					$intApaCount++;
@@ -207,6 +207,7 @@ class Manage_Multidkp extends page_generic {
 				'S_MDKP_APA' => $intApaCount,
 				'S_MDKP_TWINKS' => $this->config->get('show_twinks'),
 				'MDKP_LAYOUT' => $this->config->get('eqdkp_layout'),
+				'MDKP_LAYOUT_INFO' => $this->user->lang('lm_layout_'.str_replace('user_', '', $this->config->get('eqdkp_layout'))),
 		));
 		
 		$presets = array(

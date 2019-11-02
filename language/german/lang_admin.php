@@ -1920,6 +1920,15 @@ $lang = array(
 		"core_sett_f_dkp_easymode" => "Einfacher Modus für Punktekonten aktivieren",
 		"core_sett_f_help_dkp_easymode" => "Im einfachen Modus können keine Itempools angelegt werden, und Events immer nur einem Punktekonto zugeordnet sein",
 		"dkp_easymode_active" => "Der einfache Punktemodus ist aktiviert. Im einfachen Punktemodus können keine Itempools angelegt werden, diese werden direkt dem jeweiligen Punktekonto zugeordnet. Auch können Events nur einem Punktekonto gleichzeitig zugeordnet sein.<br />Diese Einschränkungen vereinfachen die Punktevergabe. Du kannst diese Einschränkungen deaktivieren, wenn du in den <a href='manage_settings.php#fragment-points'>Einstellungen</a> den einfachen Punktemodus deaktivierst.",
+		"manmdkp_info" => "Punkteberechnung",
+		"manmdkp_info_calcinfo" => "Auf dieser Seite siehst du, welche Faktoren die Punkteberechnung im ausgewählten Punktekonto beeinflussen.",
+		"manmdkp_info_events" => "Die Charaktere erhalten Punkte für die Teilnahme an Raids oder durch Korrekturen welche den folgenden Ereignissen zugeordnet sind:",
+		"manmdkp_info_itempools" => "Durch den Kauf von Items werden Punkte abgezogen. Die Items können hierbei verschiedenen Itemkonten zugeordnet sein. Die folgenden Itemkonten gehen in die Berechnung des aktuellen Punktekontos ein:",
+		"manmdkp_info_apa" => "Die folgenden automatischen Punktekorrekturen haben Einfluss auf die Punkteberechnung dieses Punktekontos:",
+		"manmdkp_info_pointsystem" => "Punktesystem",
+		"manmdkp_info_without_twinks" => "Twinks werden aktuell nicht angezeigt, so dass der Hauptcharakter der Twinks deren Punkte erhält.<br />Du kannst diese <a href='manage_settings.php#fragment-chars'>Einstellung hier</a> ändern, so dass auch Twinks angezeigt werden und jeder Charakter seine eigenen Punkte erhält.",
+		"manmdkp_info_with_twinks" => "Da Twinks angezeigt werden, erhält jeder Charakter seine eigenen Punkte.<br />Du kannst diese <a href='manage_settings.php#fragment-chars'>Einstellung hier</a> ändern, so dass nur der Hauptcharakter angezeigt wird und die Punkte alle seiner Twinks erhält.",
+		"manmdkp_info_pointsystem_info" => "Auch das gewählte Punktesystem hat Einfluss auf die Berechnung der Punkte, da diese eben je nach System anders berechnet werden. Du kannst das Punktesystem <a href='manage_pagelayouts.php'>hier auswählen</a>. Weitere Informationen zu den Punktesystemen findest du in der <a href='https://wiki.eqdkp-plus.eu/wiki/Lootsystems'>Wiki</a>.",
 		
 );
 ?>

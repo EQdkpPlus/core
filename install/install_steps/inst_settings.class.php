@@ -90,6 +90,7 @@ class inst_settings extends install_generic {
 		
 		'sp_opengraph_tags'				=> 1,
 		'password_length'				=> 8,
+		'dkp_easymode'					=> 1,
 			
 		// Calendar settings
 		'calendar_addevent_mode'		=> 'raid',

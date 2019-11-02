@@ -91,7 +91,7 @@ class Manage_Itempools extends page_generic {
 			'page_path'			=> [
 				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
 				['title'=>$this->user->lang('menu_itempools'), 'url'=>$this->root_path.'admin/manage_itempools.php'.$this->SID],
-				['title'=>(($iid)?$this->user->lang('add_itempool'):$itemp['name']), 'url'=>' '],
+				['title'=>(($iid)? $itemp['name'] : $this->user->lang('add_itempool')), 'url'=>' '],
 			],
 			'display'			=> true
 		]);
