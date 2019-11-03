@@ -474,9 +474,9 @@ $system_def = array(
 				'table_sort_dir' 	=> 'asc',
 				'table_sort_col' 	=> 0,
 				'table_presets'		=> array(
-					array('name' => 'mlink',	'sort' => true, 'th_add' => '', 'td_add' => ''),
-					array('name' => 'mrank',	'sort' => true, 'th_add' => '', 'td_add' => ''),
-					array('name' => 'mlevel',	'sort' => true, 'th_add' => '', 'td_add' => ''),
+						array('name' => 'mlink',	'sort' => true, 'th_add' => 'width="30%"', 'td_add' => 'width="30%"'),
+						array('name' => 'mrank',	'sort' => true, 'th_add' => 'width="30%"', 'td_add' => 'width="30%"'),
+						array('name' => 'mlevel',	'sort' => true, 'th_add' => 'width="30%"', 'td_add' => 'width="30%"'),
 				),
 			),
 		),//end roster
