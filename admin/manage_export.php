@@ -60,7 +60,7 @@ class Manage_Export extends page_generic {
 	}
 	
 	public function regenerate_apikey(){
-		$strApiKey = generateRandomBytes(48);
+		$strApiKey = random_string(48);
 		$this->config->set('api_key', $strApiKey);
 	}
 
@@ -71,7 +71,7 @@ class Manage_Export extends page_generic {
 		
 		$strApiKey = $this->config->get('api_key');
 		if(!$strApiKey){
-			$strApiKey = generateRandomBytes(48);
+			$strApiKey = random_string(48);
 			$this->config->set('api_key', $strApiKey);
 		}
 		
