@@ -79,34 +79,7 @@
 			document.post.maintenance_message.focus();
 			</script>
 			<!-- ENDIF -->
-			
-			<!-- IF S_SPLASH -->
-			<div id="layer">
-			</div>
-			<div id="inner_layer" style="height:auto;">
-				<h2>{L_SPLASH_WELCOME}</h2>
-				<p>{L_SPLASH_DESC}</p><br/>
-				
-				<div><span class="fa-stack fa-3x"  style="float:left;margin-top: 10px;">
-					<i class="fa fa-square fa-stack-2x"></i>
-					<i class="fa fa-magic fa-stack-1x fa-inverse"></i>
-				</span>
-				<br />{L_SPLASH_QUICKSTART} <br />
-					<input type="button" value="{L_SPLASH_START_QUICKSTART}" class="mainoption" onclick="window.location='index.php{SID}&start_wizard=true'" />
-					<div class="clear"></div>
-				</div>
-				<br />
-				<div><span class="fa-stack fa-3x"  style="float:left;margin-top: 10px;"><i class="fa fa-square fa-stack-2x"></i><i class="fa fa-tachometer fa-stack-1x fa-inverse"></i></span>
-					<br />{L_SPLASH_NEW} <br />
-					<input type="button" value="{L_TOUR_START}" class="mainoption" onclick="window.location='index.php{SID}&start_tour=true'" />
-					<div class="clear"></div>
-				</div>
-				<br />
-				{L_CLOSE_INFO}<br /><br />
-				<input type="button" value="{L_CLOSE_SPLASH}" class="mainoption" onclick="window.location='index.php{SID}&no_tour=true'" />
-			</div>
-			<!-- ENDIF -->
-			
+						
 			<!-- IF NO_LEAVE -->
 			<div id="layer"></div>
 			<div id="inner_layer">

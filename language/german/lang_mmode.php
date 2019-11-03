@@ -94,17 +94,6 @@ $lang = array(
 	'only_this_update' => 'Führe nur dieses Update aus: ',
 	'start_single_update' => 'Update ausführen',
 
-	//Splash
-	'splash_welcome'	=> 'Willkommen im Wartungsbereich deines EQdkp Plus-Systems!',
-	'splash_desc' 		=> 'Hier kannst du dein EQdkp aktualisieren, und ältere Versionen von EQdkp Plus importieren.',
-	'splash_new'		=> 'Dir ist EQdkp Plus neu? Du hast noch nie DKP-Punkte vergeben oder Raids eingetragen? Lerne nun einige Funktionen des EQdkp Plus kennen.',
-	'start_tour'		=> 'Tour starten',
-	"splash_quickstart" => 'Du willst schnell mit dem EQdkp Plus loslegen, ohne erst alles umständlich einzustellen? Lege mit dem Schnellstart-Assistenten innerhalb von 5 Minuten los.',
-	"splash_start_quickstart" => "Starte den Schnellstart-Assistenten",
-	"splash_close" 		=> 'Fenster schließen',
-	"splash_close_info" => 'Natürlich kannst du die Tour und alle Einstellungen jederzeit später erledigen. Wenn du das EQdkp Plus bereits kennst, schließe einfach dieses Fenster.',
-		
-
 	//Backup
 	'backup'			=> 'Datenbank-Backup',
 	'backup_note'		=> 'Ein Datenbank-Backup wurde erfolgreich unter %s erstellt.',

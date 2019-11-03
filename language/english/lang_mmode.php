@@ -86,15 +86,6 @@ $lang = array(
 	"start_update" => 'Process all necessary Updates!',
 	"only_this_update" => 'Process only this update:',
 	"start_single_update" => 'Process update',
-	"splash_welcome" => 'Welcome to the maintenance area of your EQdkp Plus System!',
-	"splash_desc" => 'Here you can update your EQdkp Plus and import previous versions of EQdkp Plus.',
-	"splash_new" => 'You are new to EQdkp Plus? You have never awarded DKP points or added raids? Take a tour explaining you some features of EQdkp Plus.',
-	"splash_quickstart" => 'You want to start with EQdkp Plus fast, without setting a lot of options? The Quickstart-Assistant will let you use your EQdkp Plus in less than 5 minutes.',
-	"splash_start_quickstart" => "Start Quickstart-Assistant",
-	"start_tour" => 'Start tour',
-	"splash_close" => 'Close these window',
-	"splash_close_info" => 'Of course, you can start the Tour or do all settings any time later. If you already know EQdkp Plus, just close this window.',
-
 	'backup'			=> 'Database-Backup',
 	'backup_note'		=> 'A database-backup was created at %s.',
 	'support_eqdkplus'	=> 'A project like EQdkp Plus can only exist, if we can get back some of the effort, time and love we invest in EQdkp Plus. You can give something back on the following ways:

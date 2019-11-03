@@ -61,10 +61,6 @@ class maintenance_display extends gen_class {
 				$this->user->logout();
 			}
 
-			if($this->in->get('splash')) {
-				$pfh->secure_folder('', 'tmp');
-				redirect('maintenance/'.$this->SID.'&splash=true', false, false, false);
-			}
 		}
 
 		// Login form
@@ -90,14 +86,9 @@ class maintenance_display extends gen_class {
 				'REASON'					=> ($this->config->get('pk_maintenance_message') != "") ? $this->user->lang('reason').$this->config->get('pk_maintenance_message') : '',
 
 				'ONLOAD'					=> ' onload="javascript:document.post.username.focus()"',
-				'SPLASH'					=> $this->in->get('splash'))
-			);
+			));
 
 		}else{
-			if($this->in->get('splash')) {
-				$pfh->secure_folder('', 'tmp');
-				redirect('maintenance/'.$this->SID.'&splash=true', false, false, false);
-			}
 			$redirect_url = ( $this->in->exists('redirect') ) ? preg_replace('#^.*?redirect=(.+?)&(.+?)$#', '\\1' . $this->SID . '&\\2', $this->in->get('redirect')) : 'index.php'.$this->SID;
 			redirect($redirect_url, false, false, false);
 		}
