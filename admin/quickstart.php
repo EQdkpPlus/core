@@ -478,16 +478,16 @@ class QuickStartWizard extends page_generic {
 
 		$this->tpl->assign_vars(array(
 				'S_SHOW_'.strtoupper($show)	=> true,
-				'STEP' => $show,
-				'LINK_HASH' => $this->CSRFGetToken('process'),
-				'WIZARD_HEADLINE' => $this->user->lang('wizard_step'.$show),
-				'WIZARD_INFOBOX' => $this->user->lang('wizard_step'.$show.'_info'),
+				'STEP' 				=> $show,
+				'LINK_HASH' 		=> $this->CSRFGetToken('process'),
+				'WIZARD_HEADLINE'	=> $this->user->lang('wizard_step'.$show),
+				'WIZARD_INFOBOX'	=> $this->user->lang('wizard_step'.$show.'_info'),
 		));
 
 
 		$this->core->set_vars([
 				'page_title'		=> $this->user->lang('wizard'),
-				'template_file'		=> 'admin/wizard.html',
+				'template_file'		=> 'admin/quickstart.html',
 				'page_path'			=> [
 						['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
 						['title'=>$this->user->lang('wizard'), 'url'=>' '],

@@ -26,6 +26,7 @@
 
 
 <button onclick="step1()" type="button" id="submitButton"><i class="fa fa-chevron-right"></i> {L_bridge_continue}</button>
+<button onclick="window.location='index.php'" type="button"><i class="fa fa-times"></i> {L_cancel}</button>
 
 {CSRF_TOKEN}
 </form>
@@ -178,7 +179,7 @@ function step1(){
 	$('#submitButton').attr('disabled', true);
 	
 	if($('input[name=style]:checked').data('localid') != undefined){
-		var url = 'wizard.php{SID}&show=3&link_hash={LINK_HASH}&process&local='+$('input[name=style]:checked').data('localid');
+		var url = 'quickstart.php{SID}&show=3&link_hash={LINK_HASH}&process&local='+$('input[name=style]:checked').data('localid');
 		window.location=url;
 		
 		
@@ -252,7 +253,7 @@ function repo_step4(extid, cat, extensioncode, mode){
 }
 
 function repo_step5(extid, cat, extensioncode, mode){
-	var url = 'wizard.php{SID}&show=3&process=3&code='+extensioncode+"&extid="+extid+"&link_hash={LINK_HASH}";
+	var url = 'quickstart.php{SID}&show=3&process=3&code='+extensioncode+"&extid="+extid+"&link_hash={LINK_HASH}";
 	window.location=url;
 
 	return;
@@ -379,7 +380,7 @@ function repo_step4(extid, cat, extensioncode, mode){
 
 function repo_step5(extid, cat, extensioncode, mode){
 	
-	$.get('wizard.php{SID}&show=4&process=4&code='+extensioncode+"&extid="+extid+"&link_hash={LINK_HASH}", function(data) {
+	$.get('quickstart.php{SID}&show=4&process=4&code='+extensioncode+"&extid="+extid+"&link_hash={LINK_HASH}", function(data) {
 		$(".li_"+extid).html('<i class="fa fa-check fa-lg"></i>');
 	}).fail(function(){
 	});
@@ -511,7 +512,7 @@ function repo_step4(extid, cat, extensioncode, mode){
 
 function repo_step5(extid, cat, extensioncode, mode){
 	
-	$.get('wizard.php{SID}&show=5&process=5&code='+extensioncode+"&extid="+extid+"&link_hash={LINK_HASH}&current="+current_plugin, function(data) {
+	$.get('quickstart.php{SID}&show=5&process=5&code='+extensioncode+"&extid="+extid+"&link_hash={LINK_HASH}&current="+current_plugin, function(data) {
 		$(".li_"+extid).html('<i class="fa fa-check fa-lg"></i>');
 	}).fail(function(){
 	});

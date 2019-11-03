@@ -68,7 +68,7 @@ class inst_settings extends install_generic {
 		'class_color'					=> '1',
 		'pk_newsloot_limit'				=> 'all',
 		'debug'							=> '0',
-		'pk_maintenance_mode'			=> '1',
+		'pk_maintenance_mode'			=> '0',
 		'enable_comments'				=> '1',
 		'itemhistory_dia' 				=> '1',
 		'color_items' 					=> array(34, 67),
