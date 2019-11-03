@@ -223,10 +223,39 @@ if( !class_exists( "plus_exchange" ) ) {
 		private function authenticateUser(){
 			if($this->in->exists('atoken') && strlen($this->in->get('atoken'))){
 				$strToken = $this->in->get('atoken');
-				$strTokenType = $this->in->get('atype');
 				
-				if($strTokenType === 'api'){
-					if($strToken === $this->config->get('api_key')){
+				//It's the Admin API Token
+				if($strToken === $this->config->get('api_key')){
+					$this->isCoreAPIToken = true;
+					//Try to get the first superadmin
+					$arrSuperAdmins = $this->pdh->get('user_groups_users', 'user_list', array(2));
+					reset($arrSuperAdmins);
+					$intKey = key($arrSuperAdmins);
+					$intSuperadminID = $arrSuperAdmins[$intKey];
+					if($intSuperadminID) {
+						$this->user->changeSessionUser($intSuperadminID);
+						return $intSuperadminID;
+					}
+				}
+				
+				//It's an user token
+				$intUserID = $this->user->getUserIDfromDerivedExchangekey($strToken, 'pex_api');
+				$this->user->changeSessionUser($intUserID);
+				return $intUserID;
+				
+			} else {
+				$headers = $this->getAuthorizationHeader();
+				if($headers){
+					$arrToken = array();
+					if(strpos($headers, 'token') !== false){
+						parse_str($headers, $arrToken);
+						$strToken = isset($arrToken['token']) ? $arrToken['token'] : "";
+					} else {
+						$strToken = trim($headers);
+					}
+					
+					//It's the Admin API Token
+					if(strlen($strToken) && $strToken === $this->config->get('api_key')){
 						$this->isCoreAPIToken = true;
 						//Try to get the first superadmin
 						$arrSuperAdmins = $this->pdh->get('user_groups_users', 'user_list', array(2));
@@ -238,32 +267,12 @@ if( !class_exists( "plus_exchange" ) ) {
 							return $intSuperadminID;
 						}
 					}
-				} else {
+					
+					//It's an user token
 					$intUserID = $this->user->getUserIDfromDerivedExchangekey($strToken, 'pex_api');
 					$this->user->changeSessionUser($intUserID);
 					return $intUserID;
-				}
-				
-			} else {
-				$headers = $this->getAuthorizationHeader();
-				if($headers){
-					$arrToken = array();
-					parse_str($headers, $arrToken);
-					$strToken = isset($arrToken['token']) ? $arrToken['token'] : "";
-					$strTokenType = isset($arrToken['type']) ? $arrToken['type'] : "";
-					
-					if(strlen($strTokenType) && strlen($strToken)){
-						if($strTokenType === 'api'){
-							if(strlen($strToken) && $strToken === $this->config->get('api_key')){
-								$this->isCoreAPIToken = true;
-							}
-						} else {
-							$intUserID = $this->user->getUserIDfromDerivedExchangekey($strToken, 'pex_api');
-							$this->user->changeSessionUser($intUserID);
-							return $intUserID;
-						}
-						
-					}
+
 				}
 			}
 			
