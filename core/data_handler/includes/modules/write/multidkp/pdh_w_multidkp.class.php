@@ -212,6 +212,13 @@ if(!class_exists('pdh_w_multidkp')) {
 		
 		public function reset() {
 			$this->db->query("TRUNCATE TABLE __multidkp;");
+			
+			if($this->config->get('dkp_easymode')){
+				$this->db->query("TRUNCATE TABLE __itempool;");
+				$this->db->query("TRUNCATE TABLE __multidkp2itempool;");
+				$this->pdh->enqueue_hook('itempool_update');
+			}
+			
 			$this->pdh->enqueue_hook('multidkp_update');
 		}
 	}
