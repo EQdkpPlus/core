@@ -305,19 +305,23 @@ class Manage_Multidkp extends page_generic {
 	}
 
 	private function get_post($norefresh=false) {
+		$mdkp = array();
 		$mdkp['name'] = $this->in->get('name','');
 		$mdkp['desc'] = $this->in->get('desc','');
 		$mdkp['events'] = $this->in->getArray('events','int');
+		$missing = array();
 		if(!$mdkp['name']) {
 			$missing[] = $this->user->lang('Multi_kontoname_short');
 		}
+		/*
 		if(!$mdkp['desc']) {
 			$missing[] = $this->user->lang('description');
 		}
-		if(!$mdkp['events'] || (in_array("", $mdkp['events']))) {
+		*/
+		if((!$mdkp['events'] || (in_array("", $mdkp['events']))) && !$this->config->get('dkp_easymode')) {
 			$missing[] = $this->user->lang('events');
 		}
-		if(isset($missing) AND !$norefresh) {
+		if(count($missing) AND !$norefresh) {
 			$this->update(array('title' => $this->user->lang('missing_values'), 'text' => implode(', ', $missing), 'color' => 'red'), $this->in->get('id', 0));
 		}
 		$mdkp['itempools'] = $this->in->getArray('itempools','int');
