@@ -59,11 +59,11 @@ if ( !class_exists( "apa_cap_current" ) ) {
 				'default' 	=> 0,
 			),
 		);
-		
+
 		private $modules_affected = array();
-		
+
 		private $cached_data = array();
-		
+
 		private $last_run = 0;
 
 		public function __construct() {
@@ -76,7 +76,7 @@ if ( !class_exists( "apa_cap_current" ) ) {
 			}
 			$this->options = array_merge($this->options, $this->ext_options);
 		}
-		
+
 		public function pre_save_func($apa_id, $options) {
 			// strip time off of start-date
 			$options['start_date'] -= ($this->time->date('H', $options['start_date'])*3600 + $this->time->date('i', $options['start_date'])*60);
@@ -86,7 +86,7 @@ if ( !class_exists( "apa_cap_current" ) ) {
 			$cron = $this->cronjobs->list_crons('pointcap');
 			return $options;
 		}
-		
+
 		public function update_point_cap($apa_id) {
 			$next_run = $this->config->get('apa_cap_next_run_'.$apa_id);
 			echo "<br/>Start function. Next run ".date("d.m.Y H:i:s", $next_run).' '.$next_run."<br/>";
@@ -99,16 +99,16 @@ if ( !class_exists( "apa_cap_current" ) ) {
 				echo "Next run > time. No point update. <br/>";
 				return;
 			}
-			
+
 			// check for points over cap for each character
 			$this->pdh->process_hook_queue();
 			$char_ids = $this->pdh->get('member', 'id_list', array(true, false, true, !(int)$this->apa->get_data('twinks', $apa_id)));
 
 			$pools = $this->apa->get_data('pools', $apa_id);
 			$blnHaveAdjustmentMade = false;
-			
+
 			foreach($pools as $pool) {
-				
+
 				//Check if Event is in Same MDKP Pool
 				$eventID = $this->apa->get_data('event', $apa_id);
 				$arrEventPools = $this->pdh->get('event', 'multidkppools', array($eventID));
@@ -116,10 +116,10 @@ if ( !class_exists( "apa_cap_current" ) ) {
 				echo "Pool ".$pool."<br/>";
 				//With Decay value
 				$points = $this->pdh->aget('points', 'current_history', 0, array($char_ids, $pool, 0, $next_run-1, 0, 0, !$this->apa->get_data('twinks', $apa_id), true));
-				
+
 				foreach($char_ids as $char_id) {
 					if($points[$char_id] > $this->apa->get_data('upper_cap', $apa_id)) {
-						$value = $this->apa->get_data('upper_cap', $apa_id) - $points[$char_id];						
+						$value = $this->apa->get_data('upper_cap', $apa_id) - $points[$char_id];
 						$this->pdh->put('adjustment', 'add_adjustment', array($value, $this->apa->get_data('name', $apa_id), $char_id, $this->apa->get_data('event', $apa_id), NULL, $next_run+1));
 						$blnHaveAdjustmentMade = true;
 						echo "insert adjustment at ".($next_run+1);
@@ -130,13 +130,13 @@ if ( !class_exists( "apa_cap_current" ) ) {
 						echo "insert adjustment at ".($next_run+1);
 					}
 				}
-				
+
 				if($blnHaveAdjustmentMade) {
 					echo "There were adjustments made";
 					$this->pdh->process_hook_queue();
 				}
 			}
-			
+
 			// calculate next check date
 			$next_run = $next_run + $this->apa->get_data('interval', $apa_id)*86400;
 			$this->config->set('apa_cap_next_run_'.$apa_id, $next_run);
@@ -146,27 +146,27 @@ if ( !class_exists( "apa_cap_current" ) ) {
 			$this->apa->reset_local_cache();
 			if($next_run < $this->time->time) $this->update_point_cap($apa_id);
 		}
-		
+
 		public function modules_affected($apa_id) { return array(); }
-		public function get_last_run($date, $apa_id) { 
-			return $this->last_run; 
+		public function get_last_run($date, $apa_id) {
+			return $this->last_run;
 		}
-		
+
 		public function get_next_run($apa_id) {
 			$nextRun = $this->config->get('apa_cap_next_run_'.$apa_id);
 			if(!$nextRun){
 				list($h,$i) = explode(':',$this->apa->get_data('exectime', $apa_id));
 				$nextRun = $this->apa->get_data('start_date', $apa_id) + $h*3600 + $i*60;
 			}
-			
+
 			if($nextRun < $this->time->time){
 				return $this->time->time;
 			}
 			return $nextRun;
 		}
-		
+
 		public function get_value($apa_id, $cache_date, $module, $dkp_id, $data, $refdate) { return; }
-		
+
 		public function recalculate($apa_id){
 			$this->db->prepare("DELETE FROM __adjustments WHERE adjustment_reason=? AND event_id=? ")->execute($this->apa->get_data('name', $apa_id), intval($this->apa->get_data('event', $apa_id)));
 			$this->config->del('apa_cap_next_run_'.$apa_id);
@@ -176,4 +176,3 @@ if ( !class_exists( "apa_cap_current" ) ) {
 		}
 	}//end class
 }//end if
-?>

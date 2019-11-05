@@ -63,14 +63,14 @@ if ( !class_exists( "apa_startpoints" ) ) {
 		);
 
 		protected $required = array('name', 'event');
-		
+
 		private $options_merged = false;
 
 		public function __construct() {
 			unset($this->options['pools']);
 			unset($this->options['exectime']);
 		}
-		
+
 		public function get_options() {
 			if($this->options_merged) return $this->options;
 			$this->options = array_merge($this->options, $this->ext_options);
@@ -84,9 +84,9 @@ if ( !class_exists( "apa_startpoints" ) ) {
 			$this->options_merged = true;
 			return $this->options;
 		}
-		
+
 		public function update_startdkp($apa_id, $last_date) {
-			//Skip special chars			
+			//Skip special chars
 			$members = $this->pdh->get('member', 'id_list', array(!(int)$this->apa->get_data('inactive', $apa_id), false, true, !(int)$this->apa->get_data('twinks', $apa_id)));
 			if(!$last_date) $last_date = $this->apa->get_data('start_date', $apa_id);
 			$startdkp_before = ($this->config->get('cron_startdkp_before')) ? $this->config->get('cron_startdkp_before') : array();
@@ -119,7 +119,7 @@ if ( !class_exists( "apa_startpoints" ) ) {
 
 			$this->pdh->process_hook_queue();
 		}
-		
+
 		public function pre_save_func($apa_id, $options) {
 			$options['pools'] = $this->pdh->get('event', 'multidkppools', array($options['event']));
 			$this->cronjobs->add_cron('startpoints', array('active' => true), true);
@@ -128,12 +128,12 @@ if ( !class_exists( "apa_startpoints" ) ) {
 			$options['exectime'] = date('H', $cron['start_time'])*3600 + date('i', $cron['start_time'])*60;
 			return $options;
 		}
-		
+
 		public function modules_affected($apa_id) { return array(); }
 		public function get_last_run($date, $apa_id) { return; }
 		public function get_next_run($apa_id) { return 0; }
 		public function get_value($apa_id, $cache_date, $module, $dkp_id, $data, $refdate) { return; }
-		
+
 		public function recalculate($apa_id){
 			if($this->apa->get_data('before', $apa_id)) {
 				$startdkp_before = ($this->config->get('cron_startdkp_before')) ? $this->config->get('cron_startdkp_before') : array();
@@ -141,12 +141,11 @@ if ( !class_exists( "apa_startpoints" ) ) {
 				if ($key !== false) unset($startdkp_before[$key]);
 				$this->config->set('cron_startdkp_before', $startdkp_before);
 			}
-			
+
 			$this->db->prepare("DELETE FROM __adjustments WHERE adjustment_reason=? AND event_id=? ")->execute($this->apa->get_data('name', $apa_id), intval($this->apa->get_data('event', $apa_id)));
 			$this->pdh->enqueue_hook('adjustment_update');
-			
+
 			$this->pdh->process_hook_queue();
 		}
 	}//end class
 }//end if
-?>

@@ -24,7 +24,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 if ( !class_exists( "apa_cap_current" ) ) {
-	
+
 	class apa_onetime_current extends apa_type_generic {
 		public static $shortcuts = array('apa'=>'auto_point_adjustments');
 
@@ -43,15 +43,15 @@ if ( !class_exists( "apa_cap_current" ) ) {
 					'required'	=> true,
 			),
 		);
-		
+
 		protected $required = array('name', 'pools');
-		
+
 		protected $multiple = true;
-		
+
 		private $modules_affected = array();
-		
+
 		private $cached_data = array();
-		
+
 		private $last_run = 0;
 
 		public function __construct() {
@@ -65,18 +65,18 @@ if ( !class_exists( "apa_cap_current" ) ) {
 			foreach($funcs as $func) {
 				$this->ext_options['calc_func']['options'][$func] = $func;
 			}
-			
+
 			unset($this->options['exectime']);
-			
+
 			$this->options = array_merge($this->options, $this->ext_options);
 		}
-		
+
 		public function pre_save_func($apa_id, $options) {
 			$this->update_current($apa_id, $options);
-			
+
 			return $options;
 		}
-		
+
 		public function update_current($apa_id, $options) {
 			// check for points over cap for each character
 			$this->pdh->process_hook_queue();
@@ -84,9 +84,9 @@ if ( !class_exists( "apa_cap_current" ) ) {
 
 			$pools = $options['pools'];
 			$blnHaveAdjustmentMade = false;
-			
+
 			foreach($pools as $pool) {
-				
+
 				//Check if Event is in Same MDKP Pool
 				$eventID = $options['event'];
 				$arrEventPools = $this->pdh->get('event', 'multidkppools', array($eventID));
@@ -97,43 +97,43 @@ if ( !class_exists( "apa_cap_current" ) ) {
 				foreach($char_ids as $char_id) {
 					$currentValue = $points[$char_id];
 					$newValue = $this->apa->run_calc_func($options['calc_func'], array($points[$char_id], $this->time->time-10, $this->time->time, $points[$char_id]));
-					
-					$adjValue = $newValue - $currentValue;				
-					
+
+					$adjValue = $newValue - $currentValue;
+
 					if($adjValue == 0) continue;
-					
+
 					$this->pdh->put('adjustment', 'add_adjustment', array($adjValue, $options['name'], $char_id, $options['event']));
 					$blnHaveAdjustmentMade = true;
 					//echo "insert adjustment";
 				}
-				
+
 				if($blnHaveAdjustmentMade) {
 					//echo "There were adjustments made";
 					$this->pdh->process_hook_queue();
 				}
 			}
-			
+
 			// calculate next check date
 			$this->apa->reset_local_cache();
 		}
-		
+
 		public function modules_affected($apa_id) { return array(); }
-		public function get_last_run($date, $apa_id) { 
-			return $this->last_run; 
+		public function get_last_run($date, $apa_id) {
+			return $this->last_run;
 		}
 		public function get_next_run($apa_id) { return 0; }
 		public function get_value($apa_id, $cache_date, $module, $dkp_id, $data, $refdate) { return; }
-		
+
 		public function recalculate($apa_id){
 			// check for points over cap for each character
 			$this->pdh->process_hook_queue();
 			$char_ids = $this->pdh->get('member', 'id_list', array(true, false, true, !(int)$this->apa->get_data('twinks', $apa_id)));
-			
+
 			$pools = $this->apa->get_data('pools', $apa_id);
 			$blnHaveAdjustmentMade = false;
-			
+
 			foreach($pools as $pool) {
-				
+
 				//Check if Event is in Same MDKP Pool
 				$eventID = $this->apa->get_data('event', $apa_id);
 				$arrEventPools = $this->pdh->get('event', 'multidkppools', array($eventID));
@@ -145,26 +145,25 @@ if ( !class_exists( "apa_cap_current" ) ) {
 				foreach($char_ids as $char_id) {
 					$currentValue = $points[$char_id];
 					$newValue = $this->apa->run_calc_func($this->apa->get_data('calc_func', $apa_id), array($points[$char_id], $this->time->time, $this->time->time, $points[$char_id]));
-					
+
 					$adjValue = $newValue - $currentValue;
-					
+
 					if($adjValue == 0) continue;
-					
+
 					$this->pdh->put('adjustment', 'add_adjustment', array($adjValue, $this->apa->get_data('name', $apa_id), $char_id, $this->apa->get_data('event', $apa_id)));
 					$blnHaveAdjustmentMade = true;
 					//echo "insert adjustment";
 				}
-				
+
 				if($blnHaveAdjustmentMade) {
 					//echo "There were adjustments made";
 					$this->pdh->process_hook_queue();
 				}
 			}
-			
+
 			$this->apa->reset_local_cache();
-			
+
 			return;
 		}
 	}//end class
 }//end if
-?>

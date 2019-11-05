@@ -18,7 +18,7 @@
  *	You should have received a copy of the GNU Affero General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 if ( !defined('EQDKP_INC') ){
 	die('Do not access this file directly.');
 }
@@ -43,17 +43,17 @@ if( !class_exists( "apa_type_generic" ) ) {
 				'type'		=> 'multiselect',
 			)
 		);
-		
+
 		protected $required = array('name', 'exectime', 'pools');
 
 		protected $ext_options = array();
 
-		
+
 		abstract public function modules_affected($apa_id);
 		abstract public function get_value($apa_id, $date, $module, $dkp_id, $data, $refdate);
 		abstract public function get_last_run($date, $apa_id);
 		abstract public function get_next_run($apa_id);
-		
+
 		public function pre_save_func($apa_id, $options) {
 			return $options;
 		}
@@ -75,23 +75,22 @@ if( !class_exists( "apa_type_generic" ) ) {
 		public function get_options(){
 			return $this->options;
 		}
-		
+
 		//default functions; if layout changes are necessary, implement functions in specific type
 		public function add_layout_changes($apa_id) {
 			return true;
 		}
-		
+
 		public function update_layout_changes($apa_id) {
 			return true;
 		}
-		
+
 		public function delete_layout_changes($apa_id) {
 			return true;
 		}
-		
+
 		public function recalculate($apa_id){
 			return true;
 		}
 	}
 }
-?>

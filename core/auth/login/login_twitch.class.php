@@ -26,7 +26,7 @@ if ( !defined('EQDKP_INC') ){
 class login_twitch extends gen_class {
 	private $oauth_loaded = false;
 	private $redirURL = "";
-	
+
 	public static $functions = array(
 		'login_button'		=> 'login_button',
 		'account_button'	=> 'account_button',
@@ -36,15 +36,15 @@ class login_twitch extends gen_class {
 		'register_button' 	=> 'register_button',
 		'pre_register'		=> 'pre_register',
 	);
-	
+
 	public static $options = array(
-		'connect_accounts'	=> true,	
+		'connect_accounts'	=> true,
 	);
-	
+
 	public function __construct(){
 		$this->redirURL = $this->env->buildLink().'index.php/auth-endpoint/?lmethod=twitch';
 	}
-	
+
 	public function settings(){
 		$settings = array(
 			'login_twitch_appid'	=> array(
@@ -57,14 +57,14 @@ class login_twitch extends gen_class {
 		);
 		return $settings;
 	}
-	
+
 	private $appid, $appsecret = false;
-	
+
 	private $AUTHORIZATION_ENDPOINT = 'https://id.twitch.tv/oauth2/authorize';
 	private $TOKEN_ENDPOINT         = 'https://id.twitch.tv/oauth2/token';
 	private $USER_INFO				= 'https://id.twitch.tv/oauth2/userinfo';
 
-	
+
 	public function init_oauth(){
 		if (!$this->oauth_loaded && !class_exists('OAuth2\\Client')){
 			require($this->root_path.'libraries/oauth/Client.php');
@@ -72,73 +72,73 @@ class login_twitch extends gen_class {
 			require($this->root_path.'libraries/oauth/GrantType/AuthorizationCode.php');
 			$this->oauth_loaded = true;
 		}
-		
+
 		$this->appid = $this->config->get('login_twitch_appid');
 		$this->appsecret = $this->config->get('login_twitch_appsecret');
 	}
-	
+
 	public function redirect($arrOptions=array()){
 		$this->init_oauth();
-		
+
 		if(!strlen($this->appid) || !strlen($this->appsecret)){
 			message_die('Twitch Client-ID or Client-Secret is missing. Please insert it into the fields at the EQdkp Plus settings, tab "User".');
 		}
-		
+
 		$state = random_string(32);
 		$this->user->setSessionVar('_twitch_state', $state);
 
 		$client = new OAuth2\Client($this->appid, $this->appsecret);
 		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $this->redirURL, array('scope' => 'user:read:email', 'state' => $state));
-		
+
 		return $auth_url;
 	}
-	
+
 	public function login_button(){
 		$auth_url = $this->redirURL.'&status=login&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
-		
+
 		return '<button type="button" class="mainoption thirdpartylogin twitch loginbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-twitch fa-lg"></i> Twitch</button>';
 	}
-	
-	
+
+
 	public function account_button(){
 		$auth_url = $this->redirURL.'&status=account&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
-		
-		return '<button type="button" class="mainoption thirdpartylogin twitch accountbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-twitch fa-lg"></i> Twitch</button>';		
+
+		return '<button type="button" class="mainoption thirdpartylogin twitch accountbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-twitch fa-lg"></i> Twitch</button>';
 	}
-	
+
 	public function register_button(){
 		$auth_url = $this->redirURL.'&status=register&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
-		
+
 		return '<button type="button" class="mainoption thirdpartylogin twitch registerbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-twitch fa-lg"></i> Twitch</button>';
 	}
-	
+
 	public function pre_register(){
 		$this->init_oauth();
-		
+
 		$blnLoginResult = false;
-		
+
 		if($this->in->exists('code')){
 			//Check state
 			$strSavedState = $this->user->data['session_vars']['_twitch_state'];
 			if(!$strSavedState || $strSavedState == '' || $strSavedState !== $this->in->get('state')){
 				return false;
 			}
-			
+
 			$client = new OAuth2\Client($this->appid, $this->appsecret);
 			$params = array('code' => $this->in->get('code'), 'redirect_uri' => $this->redirURL, 'scope' => 'user:read:email');
 			$response = $client->getAccessToken($this->TOKEN_ENDPOINT, 'authorization_code', $params);
-			
+
 			if ($response && $response['result']){
 				$accountResponse = register('urlfetcher')->fetch($this->USER_INFO, array('Authorization: Bearer '.$response['result']['access_token']));
-				
+
 				if($accountResponse){
 					$arrAccountResult = json_decode($accountResponse, true);
-					
+
 					$arrAccountInfos = $this->fetchUserData($arrAccountResult['sub'], $response['result']['access_token']);
 					if($arrAccountInfos){
-						
+
 						$auth_account = $arrAccountResult['sub'];
-						
+
 						$bla = array(
 								'username'			=> isset($arrAccountInfos['display_name']) ? utf8_ucfirst($arrAccountInfos['display_name']) : '',
 								'user_email'		=> isset($arrAccountInfos['email']) ? $arrAccountInfos['email'] : '',
@@ -148,50 +148,50 @@ class login_twitch extends gen_class {
 								'user_lang'			=> $this->user->lang_name,
 								'avatar'			=> isset($arrAccountInfos['profile_image_url']) ? $arrAccountInfos['profile_image_url'] : '',
 						);
-						
+
 						$arrUserData = $this->user->registerUserFromAuthProvider($bla, 'twitch');
 						if(isset($arrUserData['user_id'])){
 							//Log the user in
 							$auth_url = $this->controller_path_plain.'auth-endpoint/?lmethod=twitch&status=login&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
 							redirect($auth_url);
 						}
-						
+
 						return $arrUserData;
 					}
-					
+
 				}
 			}
 		}
 		return false;
 	}
-	
-	
+
+
 	public function get_account(){
 		$this->init_oauth();
-		
+
 		$code = $this->in->get('code');
-		
+
 		if ($code){
 			//Check state
 			$strSavedState = $this->user->data['session_vars']['_twitch_state'];
 			if(!$strSavedState || $strSavedState == '' || $strSavedState !== $this->in->get('state')){
 				return false;
 			}
-			
+
 			$client = new OAuth2\Client($this->appid, $this->appsecret);
-			
+
 			$params = array('code' => $code, 'redirect_uri' => $this->redirURL, 'scope' => 'user:read:email');
 			$response = $client->getAccessToken($this->TOKEN_ENDPOINT, 'authorization_code', $params);
 
 			if ($response && $response['result'] && $response['result']['access_token']){
-				
+
 				$accountResponse = register('urlfetcher')->fetch($this->USER_INFO, array('Authorization: Bearer '.$response['result']['access_token']));
-				
+
 				if($accountResponse){
-					
+
 					$arrAccountResult = json_decode($accountResponse, true);
 					if(isset($arrAccountResult['sub'])){
-						
+
 						return $arrAccountResult['sub'];
 					}
 				}
@@ -200,31 +200,31 @@ class login_twitch extends gen_class {
 
 		return false;
 	}
-	
+
 	public function fetchUserData($userId, $accessToken){
 		$accountResponse = register('urlfetcher')->fetch("https://api.twitch.tv/helix/users?id=".$userId, array('Authorization: Bearer '.$accessToken));
 		if($accountResponse){
 			$arrAccountResponse = json_decode($accountResponse, true);
 			return (isset($arrAccountResponse['data'][0])) ? $arrAccountResponse['data'][0] : false;
-		}	
-		
+		}
+
 		return false;
 	}
-	
-	
+
+
 	/**
 	* User-Login for Facebook
 	*
 	* @param $strUsername
 	* @param $strPassword
-	* @return bool/array	
-	*/	
+	* @return bool/array
+	*/
 	public function login($strUsername, $strPassword){
-		
+
 		$this->init_oauth();
-		
+
 		$code = $_GET['code'];
-		
+
 		if ($code){
 			$client = new OAuth2\Client($this->appid, $this->appsecret);
 
@@ -232,9 +232,9 @@ class login_twitch extends gen_class {
 			$response = $client->getAccessToken($this->TOKEN_ENDPOINT, 'authorization_code', $params);
 
 			if ($response && $response['result']){
-				
+
 				$accountResponse = register('urlfetcher')->fetch($this->USER_INFO, array('Authorization: Bearer '.$response['result']['access_token']));
-				
+
 				if($accountResponse){
 					$arrAccountResult = json_decode($accountResponse, true);
 					if(isset($arrAccountResult['sub'])){
@@ -253,20 +253,20 @@ class login_twitch extends gen_class {
 						} elseif((int)$this->config->get('cmsbridge_active') != 1 && (int)$this->config->get('login_fastregister')){
 							//Try to register the user
 							$auth_url = $this->controller_path_plain.'auth-endpoint/?lmethod=twitch&status=register&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
-							
+
 							redirect($auth_url);
-							
+
 						}
-						
+
 					}
 				}
 
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	* User-Logout
 	*
@@ -275,15 +275,14 @@ class login_twitch extends gen_class {
 	public function logout(){
 		return true;
 	}
-	
+
 	/**
 	* Autologin
 	*
 	* @param $arrCookieData The Data ot the Session-Cookies
 	* @return bool
 	*/
-	public function autologin($arrCookieData){		
+	public function autologin($arrCookieData){
 		return false;
 	}
 }
-?>

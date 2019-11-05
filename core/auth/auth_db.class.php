@@ -26,13 +26,13 @@ if ( !defined('EQDKP_INC') ){
 if(!class_exists('auth')) include_once(registry::get_const('root_path').'core/auth.class.php');
 
 class auth_db extends auth {
-	
+
 	public $error = false;
-	
+
 	public function pdl_html_format_login($log_entry) {
 		return $log_entry['args'][0];
 	}
-	
+
 	/**
 	* Attempt to log in a user
 	*
@@ -43,16 +43,16 @@ class auth_db extends auth {
 	*/
 	public function login($strUsername, $strPassword, $boolSetAutoLogin = false){
 		if(!$this->pdl->type_known("login")) $this->pdl->register_type("login", false, array($this, 'pdl_html_format_login'), array(3,4));
-		
+
 		$arrStatus = false;
 		$this->error = false;
-		
+
 		//Bridge-Login, only if using not a hash
 		if ($this->config->get('cmsbridge_active') == 1 && $this->config->get('pk_maintenance_mode') != 1){
 			$this->pdl->log('login', 'Try Bridge Login');
 			$arrStatus = $this->bridge->login($strUsername, $strPassword, $boolSetAutoLogin);
 		}
-		
+
 		//Bridge Login failed, Specific Auth-Method Login
 		if (!$arrStatus){
 			$this->pdl->log('login', 'Bridge Login failed or Bridge not activated');
@@ -63,31 +63,31 @@ class auth_db extends auth {
 				if ($arrAuthObject) $arrStatus = $arrAuthObject->login($strUsername, $strPassword);
 				if ($arrStatus) $this->pdl->log('login', 'Auth-Method Login '.$this->in->get('lmethod').' successful');
 			}
-			
+
 			//Auth Login, because all other failed
 			if (!$arrStatus){
 				$this->pdl->log('login', 'Try EQdkp Plus Login');
 				$objQuery = $this->db->prepare("SELECT user_id, username, user_password, user_email, user_active, user_email_confirmed, failed_login_attempts, user_login_key
 								FROM __users
 								WHERE LOWER(username) =?")->execute(clean_username($strUsername));
-				
-				if($objQuery && $objQuery->numRows){		
+
+				if($objQuery && $objQuery->numRows){
 					$row = $objQuery->fetchAssoc();
 					$strUserPassword = $row['user_password'];
 					//If there is a better algorythm
 					$blnNeedsUpdate = ($this->checkIfHashNeedsUpdate($strUserPassword));
-					
+
 					if($blnNeedsUpdate){
 						if (((int)$row['user_active']) && (int)$row['user_email_confirmed'] >= 0){
 							$this->pdl->log('login', 'EQDKP User needs update');
-							
+
 							if($this->checkPassword($strPassword, $row['user_password'])){
 								$strNewPassword	= $this->encrypt_password($strPassword);
-								
+
 								$this->db->prepare("UPDATE  __users :p WHERE user_id=?")->set(array(
 										'user_password' => $strNewPassword,
 								))->execute($row['user_id']);
-																		
+
 								$arrStatus = array(
 									'status'			=> 1,
 									'user_id'			=> (int)$row['user_id'],
@@ -104,12 +104,12 @@ class auth_db extends auth {
 								$this->error = 'user_inactive_failed_logins';
 							}
 							$this->pdl->log('login', 'EQDKP Login failed: '.$this->error);
-						} else {	
+						} else {
 							$this->error = 'user_locked';
 							$this->pdl->log('login', 'EQDKP Login failed: '.$this->error);
 						}
-						
-					} else {					
+
+					} else {
 						$blnLogin = $this->checkPassword($strPassword, $row['user_password']);
 						if ((int)$row['user_active'] && (int)$row['user_email_confirmed'] >= 0){
 							if($blnLogin){
@@ -122,7 +122,7 @@ class auth_db extends auth {
 							} else {
 								$this->error = 'wrong_password';
 								$this->pdl->log('login', 'EQDKP Login failed: '.$this->error);
-							}	
+							}
 						} elseif((int)$row['user_email_confirmed'] < 0) {
 							$this->error = 'user_inactive';
 							if ($row['failed_login_attempts'] >= (int)$this->config->get('failed_logins_inactivity') ){
@@ -133,7 +133,7 @@ class auth_db extends auth {
 							$this->error = 'user_locked';
 							$this->pdl->log('login', 'EQDKP Login failed: '.$this->error);
 						}
-						
+
 					}
 				} else {
 					$this->error = 'wrong_username';
@@ -143,14 +143,14 @@ class auth_db extends auth {
 
 			//If Bridge is active, check if EQdkp User is allowed to login
 			if ($arrStatus && $this->config->get('cmsbridge_active') == 1 && (int)$this->config->get('pk_maintenance_mode') != 1){
-				
+
 				$this->pdl->log('login', 'Check EQdkp Plus User against Bridge Groups');
 				//Only CMS User are allowed to login
 				if ((int)$this->config->get('cmsbridge_onlycmsuserlogin')){
 					$this->pdl->log('login', 'Only CMS User are allowed to login');
 					//check if user is Superadmin, if yes, login
 					$blnIsSuperadmin = $this->check_group(2, false, (int)$arrStatus['user_id']);
-					
+
 					//try Bridge-Login without passwort
 					if (!$blnIsSuperadmin){
 						$this->pdl->log('login', 'User ist not Superadmin, check against Bridge Groups');
@@ -167,22 +167,22 @@ class auth_db extends auth {
 					//Bridge-Login without password, for settings Single Sign On
 					$this->bridge->login($this->pdh->get('user', 'name', array((int)$arrStatus['user_id'])), false, false, false, false);
 				}
-			
+
 
 			}
 		}
-		
+
 		//Auth Method After-Login - reading only
 		$this->pdl->log('login', 'Possible Intercept by Auth Methods');
 		$this->handle_login_functions("after_login", false, array($arrStatus, $strUsername, $strPassword, ((isset($arrStatus['autologin'])) ? $arrStatus['autologin'] : $boolSetAutoLogin)));
-		
+
 		if (!$arrStatus){
 			$this->pdl->log('login', 'User login failed');
-			
+
 			$this->db->prepare("UPDATE __sessions SET session_failed_logins = session_failed_logins + 1 WHERE session_id=?")->execute($this->sid);
 
 			$this->data['session_failed_logins']++;
-			
+
 			//Failed Login
 			if ($this->config->get('pk_maintenance_mode') != 1){ //Only do this if not in MMode
 				$userid = $this->pdh->get('user', 'userid', array($strUsername));
@@ -194,13 +194,13 @@ class auth_db extends auth {
 					//Set him inactive
 					if ((int)$this->config->get('failed_logins_inactivity') > 0 && $intFailedLogins == (int)$this->config->get('failed_logins_inactivity')){
 						$this->pdh->put('user', 'confirm_email', array($userid, -2));
-						
+
 						//Write to admin-Log
 						$this->logs->add('action_user_failed_logins', '', $userid, $strUsername, false, '', 1, $userid);
-						
+
 						//Send the User an Email with activation link
 						$user_key = $this->pdh->put('user', 'create_new_activationkey', array($userid));
-						
+
 						// Email them their new key
 						$email = registry::register('MyMailer');
 						$bodyvars = array(
@@ -209,10 +209,10 @@ class auth_db extends auth {
 						);
 						$email->SendMailFromAdmin($this->pdh->get('user', 'email', array($userid)), $this->lang('email_subject_activation_self'), 'user_activation_failed_logins.html', $bodyvars);
 					}
-					
+
 				}
 			}
-			
+
 		} else {
 			$this->pdl->log('login', 'User successfull authenticated');
 			$this->data['hooks'][] = array('id' => 'user_login_successful', 'data' => array('auth_method' => 'db', 'user_id' => $arrStatus['user_id'], 'autologin' => ((isset($arrStatus['autologin'])) ? $arrStatus['autologin'] : $boolSetAutoLogin)));
@@ -225,8 +225,8 @@ class auth_db extends auth {
 		}
 		return false;
 	}
-	
-	
+
+
 	/**
 	* Autologin
 	*
@@ -236,13 +236,13 @@ class auth_db extends auth {
 	public function autologin($arrCookieData){
 		$intCookieUserID = (isset($arrCookieData['data']['user_id'])) ? intval($arrCookieData['data']['user_id']) : ANONYMOUS;
 		$strCookieAutologinKey = (isset($arrCookieData['data']['auto_login_id'])) ? $arrCookieData['data']['auto_login_id'] : '';
-		
+
 		if (isset($intCookieUserID) && intval($intCookieUserID) > 0){
-			
+
 			$objQuery = $this->db->prepare("SELECT *
 								FROM __users
 								WHERE user_id = ?")->execute($intCookieUserID);
-			
+
 			if ($objQuery && $objQuery->numRows){
 				$arrUserResult = $objQuery->fetchAssoc();
 				if ($arrUserResult){
@@ -250,12 +250,11 @@ class auth_db extends auth {
 						$arrUserResult['hooks'][] = array('id' => 'user_autologin_successful', 'data' => array('auth_method' => 'db', 'user_data' => $arrUserResult));
 						return $arrUserResult;
 					}
-				}	
-			}			
-			
+				}
+			}
+
 		}
-		
+
 		return false;
 	}
 }
-?>

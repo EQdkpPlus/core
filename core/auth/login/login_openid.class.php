@@ -28,7 +28,7 @@ class login_openid extends gen_class {
 	public static $options = array(
 		'connect_accounts'	=> true,
 	);
-	
+
 	public static $functions = array(
 		'login_button'		=> 'login_button',
 		'register_button' 	=> 'register_button',
@@ -36,10 +36,10 @@ class login_openid extends gen_class {
 		'get_account'		=> 'get_account',
 		'pre_register'		=> 'pre_register',
 	);
-	
-	public function __construct(){		
+
+	public function __construct(){
 	}
-	
+
 	public function init_openid(){
 		if (!is_object($this->oid)){
 			//Init Facebook Api
@@ -48,7 +48,7 @@ class login_openid extends gen_class {
 			$this->oid = $openid;
 		}
 	}
-	
+
 	public function login_button(){
 		$this->tpl->add_js('
 		function openid_login_selector(obj){
@@ -72,57 +72,57 @@ class login_openid extends gen_class {
 			return false;
 		}
 		');
-		
+
 		return '<form onsubmit="return submit_openid_login(this)" style="display:inline;"><button type="button" class="mainoption thirdpartylogin openid loginbtn" onclick="openid_login_selector(this)"><i class="bi_openid"></i><div class="openid_button_name" style="display:inline;">OpenID</div><span class="openid_button_input" style="display:none;"><input type="text" placeholder="https://" size="20"></span></button></form>';
 	}
-	
+
 	public function register_button(){
 		$this->tpl->add_js('
 		function openid_login_selector(obj){
 			$(obj).find(".openid_button_name").hide();
 			$(obj).find(".openid_button_input").show();
 			$(obj).find(".openid_button_input input").focus();
-				
+
 			var myvalue = $(obj).find(".openid_button_input input").val();
-				
+
 			if(myvalue != ""){
 				window.location = "'.$this->env->buildLink().'Register/?register&lmethod=openid&openid="+myvalue;
 			}
 		}
-				
+
 		function submit_openid_login(obj){
 			var myvalue = $(obj).find(".openid_button_input input").val();
-				
+
 			if(myvalue != ""){
 				window.location = "'.$this->env->buildLink().'Register/?register&lmethod=openid&openid="+myvalue;
 			}
 			return false;
 		}
 		');
-		
+
 		return '<form onsubmit="return submit_openid_login(this)" style="display:inline;"><button type="button" class="mainoption thirdpartylogin openid registerbtn" onclick="openid_login_selector(this)"><i class="bi_openid"></i><div class="openid_button_name" style="display:inline;">OpenID</div><span class="openid_button_input" style="display:none;"><input type="text" placeholder="https://" size="20"></span></button></form>';
 	}
-	
+
 	public function account_button(){
 		$link_hash = ((string)$this->user->csrfGetToken('settings_pageobjectmode'));
-		
+
 		$this->tpl->add_js('
 		function openid_login_selector(obj){
 			$(obj).find(".openid_button_name").hide();
 			$(obj).find(".openid_button_input").show();
 			$(obj).find(".openid_button_input input").focus();
-				
+
 			var myvalue = $(obj).find(".openid_button_input input").val();
-				
+
 			if(myvalue != ""){
 				window.location = "'.$this->env->buildLink().'index.php/Settings/?mode=addauthacc&link_hash='.$link_hash.'&lmethod=openid&openid="+myvalue;
 			}
 		}
 		');
-		
+
 		return '<button type="button" class="mainoption thirdpartylogin openid accountbtn" onclick="openid_login_selector(this)"><i class="bi_openid"></i><div class="openid_button_name" style="display:inline;">OpenID</div><span class="openid_button_input" style="display:none;"><input type="text" placeholder="https://" size="20"></span></button>';
 	}
-	
+
 	public function get_account(){
 		try {
 			if ($this->in->get('openid') != ''){
@@ -131,7 +131,7 @@ class login_openid extends gen_class {
 					$this->oid->identity = $this->in->get('openid');
 					redirect($this->oid->authUrl(), false, true);
 				} elseif($this->oid->mode == 'cancel') {
-				
+
 				} else {
 					if ($this->oid->validate() ){
 						return $this->oid->identity;
@@ -143,7 +143,7 @@ class login_openid extends gen_class {
 		}
 		return false;
 	}
-	
+
 	public function pre_register(){
 		try {
 			if ($this->in->get('openid') != ''){
@@ -157,14 +157,14 @@ class login_openid extends gen_class {
 					//'contact/country/home',
 					);
 					$this->oid->identity = $this->in->get('openid');
-	
+
 					redirect($this->oid->authUrl(), false, true);
 				} elseif($this->oid->mode == 'cancel') {
-				
+
 				} else {
 					if ($this->oid->validate() ){
 						$me = $this->oid->getAttributes();
-	
+
 						$bla = array(
 							'username'			=> isset($me['namePerson/friendly']) ? $me['namePerson/friendly'] : '',
 							'user_email'		=> isset($me['contact/email']) ? $me['contact/email'] : '',
@@ -172,27 +172,27 @@ class login_openid extends gen_class {
 							'auth_account'		=> $this->oid->identity,
 							'user_timezone'		=> $this->in->get('user_timezone', $this->config->get('timezone')),
 						);
-	
+
 						return $bla;
-						
+
 					}
 				}
 			}
 		} catch (Exception $e) {
 			$this->core->message($e->getMessage(), 'OpenID Error', 'red');
 		}
-		
+
 		return false;
 	}
-	
-	
+
+
 	/**
 	* User-Login
 	*
 	* @param $strUsername
 	* @param $strPassword
-	* @return bool/array	
-	*/	
+	* @return bool/array
+	*/
 	public function login($strUsername, $strPassword){
 		try {
 			if ($this->in->get('openid') != ''){
@@ -201,10 +201,10 @@ class login_openid extends gen_class {
 					$this->oid->identity = $this->in->get('openid');
 					redirect($this->oid->authUrl(), false, true);
 				} elseif($this->oid->mode == 'cancel') {
-				
-				
+
+
 				} else {
-				
+
 					if ($this->oid->validate() ){
 						$userid = $this->pdh->get('user', 'userid_for_authaccount', array($this->oid->identity, 'openid'));
 						if ($userid){
@@ -227,10 +227,10 @@ class login_openid extends gen_class {
 		} catch (Exception $e) {
 			$this->core->message($e->getMessage(), 'OpenID Error', 'red');
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	* User-Logout
 	*
@@ -239,7 +239,7 @@ class login_openid extends gen_class {
 	public function logout(){
 		return true;
 	}
-	
+
 	/**
 	* Autologin
 	*
@@ -250,4 +250,3 @@ class login_openid extends gen_class {
 		return false;
 	}
 }
-?>
