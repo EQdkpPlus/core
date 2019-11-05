@@ -979,6 +979,7 @@ class game extends gen_class {
 			return false;
 		}
 		$name = trim($name);
+		
 		foreach ($this->data[$type] as $lang => $ids) {
 			$langs[] = $lang;
 			foreach($ids as $id => $typ) {
@@ -993,7 +994,9 @@ class game extends gen_class {
 					$langs2search[] = $lang;
 				}
 			}
+			
 			$this->data[$type] = $this->gameinfo()->get($type, $langs2search);
+
 			$this->gameinfo()->flush($type);
 			return $this->get_id($type, $name, true);
 		}
@@ -1639,8 +1642,18 @@ if(!class_exists('game_generic')) {
 				$add_lang = array($add_lang);
 			}
 			$langs = (!empty($add_lang)) ? $add_lang : array($this->lang);
+
+			$blnReload = false;
+			foreach($langs as $strLang){
+				if(!isset($this->$type) || !isset($this->$type[$strLang])){
+					$blnReload = true;
+					break;
+				}
+			}
+			
+			
 			//type already loaded?
-			if(empty($this->$type)) {
+			if(empty($this->$type) || $blnReload) {
 				if(method_exists($this, 'load_'.$type)) {
 					call_user_func_array(array($this, 'load_'.$type), array($langs));
 				} else {
