@@ -94,6 +94,7 @@ class hspinner extends html {
 	}
 	
 	public function _inpval() {
+		if(is_float($this->step)) return trim($this->in->get($this->name, 0.0));
 		return trim($this->in->get($this->name, 0));
 	}
 }
