@@ -37,7 +37,7 @@ if ( !class_exists( "apa_decay_current" ) ) {
 				'type'		=> 'spinner',
 				'max'		=> 99,
 				'min'		=> 1,
-				'step'		=> 1,
+				'step'		=> 0.5,
 				'size'		=> 2,
 				'default'	=> 1
 			),
