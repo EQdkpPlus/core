@@ -72,4 +72,3 @@ class php_info extends page_generic {
 	}
 }
 registry::register('php_info');
-?>

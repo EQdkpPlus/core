@@ -68,9 +68,9 @@ class ManageAdjs extends page_generic {
 
 				$adj[$key] = $arrNewValues[$key];
 			}
-			
+
 			$retu = $this->pdh->put('adjustment', 'update_adjustment', array($adjID, $adj['value'], $adj['reason'], array($adj['member']), $adj['event'], $adj['raid_id'], $adj['date'], true));
-			
+
 			if(!$retu){
 				$messages[] = array('title' => $this->user->lang('save_nosuc'), 'text' => $adj['name'], 'color' => 'red');
 			}
@@ -342,4 +342,3 @@ class ManageAdjs extends page_generic {
 	}
 }
 registry::register('ManageAdjs');
-?>

@@ -59,7 +59,7 @@ class reset_eqdkp extends page_generic {
 	public function consolidate_event(){
 		@set_time_limit(0);
 		@ignore_user_abort(true);
-		
+
 		$intEventID = $this->in->get('eventid', 0);
 		$arrMembers = $this->pdh->get('member', 'id_list', array(false, false, false));
 
@@ -79,7 +79,7 @@ class reset_eqdkp extends page_generic {
 		$this->db->beginTransaction();
 
 		$arrGlobalLastValues = array();
-		
+
 		foreach($arrMembers as $intMemberID){
 			$arrLastValues = array();
 			//Raids
@@ -125,10 +125,10 @@ class reset_eqdkp extends page_generic {
 			$fltSum = $fltRaidValue - $fltItemValue + $fltAdjValue;
 
 			if($fltSum != 0){
-				
+
 				$intLastTime = (count($arrLastValues)) ? max($arrLastValues) : $this->time->time;
 				$arrGlobalLastValues[] = $intLastTime;
-				
+
 				$blnResult = $this->pdh->put('adjustment', 'add_adjustment', array($fltSum, $this->user->lang('consolidate').' '.$this->time->user_date($this->time->time), $intMemberID, $intEventID, 0, $intLastTime));
 				if(!$blnResult){
 					$blnError = true;
@@ -140,13 +140,13 @@ class reset_eqdkp extends page_generic {
 		if($blnError){
 			//Error Message
 			$this->db->rollbackTransaction();
-			
+
 			$this->core->message($this->user->lang('consolidate_error'), '', 'red');
 			$this->pdh->enqueue_hook('adjustment_update');
 			$this->pdh->process_hook_queue();
 		} else {
 			$this->db->commitTransaction();
-			
+
 			//Delete the data
 			$this->pdh->put('raid', 'delete_raidsofevent', array($intEventID));
 
@@ -219,7 +219,7 @@ class reset_eqdkp extends page_generic {
 		$this->pdh->put('calendar_raids_templates', 'reset');
 		$this->pdh->put('calendars', 'reset');
 	}
-	
+
 	public function reset__multipools(){
 		$this->pdh->put('multidkp', 'reset');
 		$this->db->prepare("INSERT INTO __multidkp (`multidkp_id`, `multidkp_name`, `multidkp_desc`) VALUES ('1', 'Default', 'Default-Pool');")->execute();
@@ -302,4 +302,3 @@ class reset_eqdkp extends page_generic {
 	}
 }
 registry::register('reset_eqdkp');
-?>

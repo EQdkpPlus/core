@@ -31,7 +31,7 @@ class Manage_Extensions extends page_generic {
 			'objStyles'	=> 'styles',
 			'encrypt'	=> 'encrypt'
 		);
-		
+
 	private $code = '';
 
 	public function __construct(){
@@ -52,15 +52,15 @@ class Manage_Extensions extends page_generic {
 		parent::__construct(false, $handler);
 		$this->code = $this->in->get('code', '');
 		$this->code = preg_replace("/[^a-z0-9\.\_\-]/", "", strtolower($this->code));
-		
+
 		if(!$this->pdl->type_known("repository")) $this->pdl->register_type("repository", null, null, array(3,4), true);
-		
+
 		$this->process();
 	}
-	
+
 	public function repo_info(){
 		$extension = $this->pdh->get('repository', 'row', $this->in->get('info', 0));
-		
+
 		$this->tpl->assign_vars(array(
 			'EXTID'				=> sanitize($extension['plugin_id']),
 			'CATEGORY'			=> sanitize($extension['category']),
@@ -75,7 +75,7 @@ class Manage_Extensions extends page_generic {
 			'BUGTRACKER_URL'	=> sanitize($extension['bugtracker_url']),
 			'RATING'			=> $this->jquery->starrating('extension_'.md5($extension['plugin']), $this->env->phpself, array('score' => $extension['rating'], 'readonly' => true)),
 		));
-		
+
 		$this->core->set_vars([
 			'page_title'		=> 'Repo Info',
 			'template_file'		=> 'admin/manage_extensions_repoinfo.html',
@@ -93,17 +93,17 @@ class Manage_Extensions extends page_generic {
 		}
 		exit;
 	}
-	
+
 	public function process_upload(){
 		$tempname		= $_FILES['extension']['tmp_name'];
 		$name			= $_FILES['extension']['name'];
 		$filetype		= $_FILES['extension']['type'];
 		$upload_id		= randomID();
-	
+
 		$mime_types = array(
 				'zip'	=> 'application/zip',
 		);
-	
+
 		// get the mine....
 		$fileEnding		= pathinfo($name, PATHINFO_EXTENSION);
 		$mime = false;
@@ -115,19 +115,19 @@ class Manage_Extensions extends page_generic {
 			$mime			= mime_content_type( $tempname );
 		}else{
 			// try to get the extension... not really secure...
-				
+
 			if (array_key_exists($fileEnding, $mime_types)) {
 				$mime			= $mime_types[$fileEnding];
 			}
 		}
-	
+
 		$mime = array_shift(preg_split('/[; ]/', $mime));
 		$blnTypeAllowed = false;
 		switch ($mime) {
 			case 'application/zip':
 			case 'application/x-zip': $blnTypeAllowed = true;
 		}
-	
+
 		if (!strlen($tempname)){
 			$this->core->message($this->user->lang('plugin_upload_error1'), $this->user->lang('error'), 'red');
 		} elseif (!$blnTypeAllowed){
@@ -139,18 +139,18 @@ class Manage_Extensions extends page_generic {
 			$blnResult = $this->repo->unpackPackage($tempname, $this->pfh->FolderPath('tmp/'.$upload_id, 'repository'));
 			if ($blnResult){
 				$src_path = $extension_name = false;
-	
+
 				if (is_file($this->pfh->FolderPath('tmp/'.$upload_id, 'repository').'package.xml')){
 					$xml = simplexml_load_file($this->pfh->FolderPath('tmp/'.$upload_id, 'repository').'package.xml');
-	
+
 					if ($xml && $xml->folder != ''){
 						$extension_name = $xml->folder;
 						$extension_name = preg_replace("/[^a-z0-9\.\_\-]/", "", strtolower($extension_name));
-						
+
 						//Subfolder detection
 						$src_path = $this->pfh->FolderPath('tmp/'.$upload_id, 'repository');
 						$arrSubfolder = scandir($src_path);
-							
+
 						$arrIgnore = array(".", "..", "package.xml", "settings.xml", "index.html");
 						$arrDiff = array_diff($arrSubfolder, $arrIgnore);
 						if(is_array($arrDiff) && count($arrDiff) === 1){
@@ -158,9 +158,9 @@ class Manage_Extensions extends page_generic {
 								$src_path .= $strSubfolder;
 							}
 						}
-	
+
 						$arrAttributes = $xml->attributes();
-	
+
 						switch ($arrAttributes['type']){
 							case 'plugin':			$target = $this->root_path.'plugins';	$cat=1; 	break;
 							case 'game':			$target = $this->root_path.'games';		$cat=7;		break;
@@ -169,39 +169,39 @@ class Manage_Extensions extends page_generic {
 							case 'language':		$target = $this->root_path;				$cat=11;	break;
 							default: $target = false;
 						}
-						
+
 						//Delete custom files, because they should not be overwritten during update
 						if($cat === 2){
 							$this->pfh->Delete($src_path.'/custom.css');
 							$this->pfh->Delete($src_path.'/custom.js');
 						}
-						
+
 						if($target){
-	
+
 							$blnResult = $this->repo->full_copy($src_path, $target.'/'.$extension_name);
-							
+
 							//Copy package.xml file
 							$this->pfh->copy($this->pfh->FolderPath('tmp/'.$upload_id, 'repository').'package.xml', $target.'/'.$extension_name.'/package.xml');
-							
+
 							$this->pfh->FolderPath('tmp/'.$upload_id, 'repository').'package.xml';
 							}
-						
+
 						if (!$blnResult){
 							$this->core->message($this->user->lang('plugin_package_error3'), $this->user->lang('error'), 'red');
 						} else {
 							$this->pm->search();
 							redirect('admin/manage_extensions.php'.$this->SID.'&cat='.$cat.'&mode=install&code='.$extension_name.'&link_hash='.$this->CSRFGetToken('mode'));
 						}
-	
+
 					} else {
 						$this->core->message($this->user->lang('plugin_package_error2'), $this->user->lang('error'), 'red');
 					}
-	
+
 				} else {
 					$this->core->message($this->user->lang('plugin_package_error1'), $this->user->lang('error'), 'red');
-	
+
 				}
-	
+
 			} else {
 				$this->core->message($this->user->lang('plugin_upload_error3'), $this->user->lang('error'), 'red');
 			}
@@ -213,14 +213,14 @@ class Manage_Extensions extends page_generic {
 	public function process_step1(){
 		$intExtensionID = $this->in->get('extid', 0);
 		$this->pdl->log('repository', '1. Get Download Link for Ext. '.$intExtensionID);
-		
+
 		//Check for Zip Extension
 		if (!class_exists("ZipArchive")){
 			echo $this->user->lang('repo_error_zip');
 			$this->pdl->log('repository', '1. Error: Zip not available, Ext. '.$intExtensionID);
 			return;
 		}
-		
+
 		if ($this->in->get('cat', 0) && strlen($this->code)){
 			$downloadLink = $this->repo->getExtensionDownloadLink($intExtensionID, $this->in->get('cat', 0), $this->code);
 			if($downloadLink && $downloadLink['status'] == 1){
@@ -245,7 +245,7 @@ class Manage_Extensions extends page_generic {
 			@set_time_limit(0);
 			@ignore_user_abort(true);
 			$this->pdl->log('repository', '2. Download for Ext. '.$this->code);
-			
+
 			$downloadLink 		= $this->encrypt->decrypt($this->config->get(md5($this->in->get('cat', 0).$this->code).'_link', 'repository'));
 			$downloadHash 		= $this->encrypt->decrypt($this->config->get(md5($this->in->get('cat', 0).$this->code).'_hash', 'repository'));
 			$downloadSignature	= $this->encrypt->decrypt($this->config->get(md5($this->in->get('cat', 0).$this->code).'_signature', 'repository'));
@@ -272,10 +272,10 @@ class Manage_Extensions extends page_generic {
 	public function process_step3(){
 		if ($this->in->get('cat', 0) && strlen($this->code)){
 			$this->pdl->log('repository', '3. Unzip Package '.$this->code);
-			
+
 			@set_time_limit(0);
 			@ignore_user_abort(true);
-			
+
 			$destFolder = $this->pfh->FolderPath('tmp/'.md5($this->in->get('cat', 0).$this->code),'repository');
 			$srcFolder = $this->pfh->FolderPath('','repository');
 			$filename = 'repo_'.md5($this->in->get('cat', 0).$this->code).'.zip';
@@ -300,12 +300,12 @@ class Manage_Extensions extends page_generic {
 			@set_time_limit(0);
 			@ignore_user_abort(true);
 			$this->pdl->log('repository', '4. Copy files '.$this->code);
-			
+
 			$srcFolder = $origSrcFolder = $this->pfh->FolderPath('tmp/'.md5($this->in->get('cat', 0).$this->code),'repository');
-			
+
 			//Subfolder detection
 			$arrSubfolder = scandir($srcFolder);
-			
+
 			$arrIgnore = array(".", "..", "package.xml", "index.html");
 			$arrDiff = array_diff($arrSubfolder, $arrIgnore);
 			if(is_array($arrDiff) && count($arrDiff) === 1){
@@ -321,13 +321,13 @@ class Manage_Extensions extends page_generic {
 				case 7:			$target = $this->root_path.'games/'.strtolower($this->code);	break;
 				case 11:		$target = $this->root_path; break;
 			}
-			
+
 			//Delete custom files, because they should not be overwritten during update
 			if((int)$this->in->get('cat', 0) === 2){
 				$this->pfh->Delete($srcFolder.'/custom.css');
 				$this->pfh->Delete($srcFolder.'/custom.js');
 			}
-			
+
 			$this->pdl->log('repository', '4. Target for '.$this->code.' is '.$target);
 			if($target){
 				if((int)$this->in->get('cat', 0) === 11){
@@ -335,12 +335,12 @@ class Manage_Extensions extends page_generic {
 				} else {
 					$result = $this->repo->full_copy($srcFolder, $target);
 				}
-				
+
 				if((int)$this->in->get('cat', 0) === 2){
 					//Copy package.xml file
 					$this->pfh->copy($origSrcFolder.'/package.xml', $target.'/package.xml');
 				}
-				
+
 				if ($result){
 					echo "true";
 				} else {
@@ -357,12 +357,12 @@ class Manage_Extensions extends page_generic {
 		//clean up
 		$this->pfh->Delete('', 'repository');
 		$this->config->del('repository');
-		
+
 		//Reset Opcache, for PHP7
 		if(function_exists('opcache_reset')){
 			opcache_reset();
 		}
-		
+
 		exit;
 	}
 
@@ -400,7 +400,7 @@ class Manage_Extensions extends page_generic {
 							$this->objStyles->$mode();
 						}
 			break;
-						
+
 			//Portalmodules
 			case 3:		$path = $this->in->get('selected_id');
 
@@ -414,14 +414,14 @@ class Manage_Extensions extends page_generic {
 								$idList = $this->pdh->get('portal', 'id_by_path', array($path));
 								$plugin = $this->pdh->get('portal', 'plugin', array($idList[0]));
 								$name = $this->pdh->get('portal', 'name', array($idList[0]));
-								
+
 								$this->portal->uninstall($path, $plugin);
 								$this->portal->install($path, $plugin);
 								$arrMessage = array(sprintf($this->user->lang('portal_reinstall_success'), $name), $this->user->lang('success'), 'green');
 							}
 						}
 			break;
-			
+
 			//Games
 			case 7: 	if($this->in->get('mode') == "remove"){
 							$plugin_code = preg_replace("/[^a-zA-Z0-9-_]/", "", $this->code);
@@ -447,10 +447,10 @@ class Manage_Extensions extends page_generic {
 				$this->core->message($arrMessage[0],$arrMessage[1],$arrMessage[2]);
 			}
 		}
-		
+
 		$intShowOnly = ($this->in->get('show_only', '') != "") ? $this->in->get('show_only', '') : false;
-		
-		
+
+
 		//Get Extensions
 		$arrExtensionList = $this->repo->getExtensionList();
 		$arrExtensionListNamed = array();
@@ -464,7 +464,7 @@ class Manage_Extensions extends page_generic {
 				}
 			}
 		}
-		
+
 		//Get Updates
 		$urgendUpdates = $this->repo->BuildUpdateArray();
 		$allUpdates = $this->repo->BuildUpdateArray(false);
@@ -482,7 +482,7 @@ class Manage_Extensions extends page_generic {
 
 		foreach ( $plugins_array as $plugin_code ) {
 			if ($plugin_code == 'pluskernel') continue;
-			
+
 			$contact			= $this->pm->get_data($plugin_code, 'contact');
 			$contact = (strlen($contact)) ? ((strpos($contact, '@')) ? 'mailto:'.$contact : $contact) : 'https://eqdkp-plus.eu';
 			$version			= $this->pm->get_data($plugin_code, 'version');
@@ -546,8 +546,8 @@ class Manage_Extensions extends page_generic {
 				$link .= '&nbsp;&nbsp;&nbsp;<a href="manage_extensions.php' . $this->SID . '&amp;cat=1&amp;mode=remove&amp;code=' . $plugin_code. '&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('delete').'"><i class="fa fa-lg fa-trash-o"></i></a>';
 			}
 			$plugin_count++;
-			
-			
+
+
 			$depout = "";
 			foreach($dep as $key => $depdata) {
 				$tt = (isset($deptt[$key])) ? $deptt[$key] : $this->user->lang('plug_dep_'.$key);
@@ -555,7 +555,7 @@ class Manage_Extensions extends page_generic {
 					$depout .= '<span class="coretip" data-coretip="'.$tt.'">'.$this->user->lang('plug_dep_'.$key.'_short').'</span> ';
 				}
 			}
-			
+
 			$this->tpl->assign_block_vars('plugins_row_'.$row, array(
 				'NAME'				=> (isset($arrExtensionListNamed[1][$plugin_code])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[1][$plugin_code].')">'.$this->pm->get_data($plugin_code, 'name').'</a>' : $this->pm->get_data($plugin_code, 'name'),
 
@@ -579,9 +579,9 @@ class Manage_Extensions extends page_generic {
 			foreach ($arrExtensionList[1] as $id => $extension){
 				if ($this->pm->search($extension['plugin']) || $extension['plugin'] == 'pluskernel') continue;
 				$plugin_count++;
-				$row = 'grey_repo';	
+				$row = 'grey_repo';
 				$dep['plusv']	= (version_compare($extension['dep_coreversion'], $this->config->get('plus_version'), '<='));
-				
+
 				$depout = "";
 				foreach($dep as $key => $depdata) {
 					$tt = (isset($deptt[$key])) ? $deptt[$key] : $this->user->lang('plug_dep_'.$key);
@@ -589,7 +589,7 @@ class Manage_Extensions extends page_generic {
 						$depout .= '<span class="coretip" data-coretip="'.$tt.'">'.$this->user->lang('plug_dep_'.$key.'_short').'</span> ';
 					}
 				}
-				
+
 				$dl_link = '<a href="javascript:repo_install('.$extension['plugin_id'].', 1, \''.sanitize($extension['plugin']).'\');" ><i class="fa fa-toggle-off fa-lg" title="'.$this->user->lang('install').'"></i></a>';
 				$link = ($dep['plusv']) ? $dl_link : '';
 				$this->tpl->assign_block_vars('plugins_row_'.$row, array(
@@ -601,7 +601,7 @@ class Manage_Extensions extends page_generic {
 					'ACTION_LINK'		=> $link,
 					'BUGTRACKER_URL'	=> sanitize($extension['bugtracker_url']),
 					'DEPENDENCIES'		=> ($dep['plusv']) ? '<i class="fa fa-lg fa-check icon-color-green"></i>' : '<i class="fa fa-lg fa-times icon-color-red"></i> '.$depout,
-						
+
 				));
 			}
 		}
@@ -643,7 +643,7 @@ class Manage_Extensions extends page_generic {
 				$link = '<a href="manage_extensions.php' . $this->SID . '&amp;cat=2&amp;mode=install&amp;code=' . $key. '&amp;link_hash='.$this->CSRFGetToken('mode').'" title="' . $this->user->lang('install') . '"><i class="fa fa-lg fa-toggle-off"></i></a>';
 				$link .= '&nbsp;&nbsp;&nbsp;<a href="manage_extensions.php' . $this->SID . '&amp;cat=2&amp;mode=remove&amp;code=' . $plugin_code. '&amp;link_hash='.$this->CSRFGetToken('mode').'" title="'.$this->user->lang('delete').'"><i class="fa fa-lg fa-trash-o"></i></a>';
 			}
-			
+
 			$screenshot = '';
 			if (file_exists($this->root_path.'templates/'.$plugin_code.'/screenshot.png' )){
 				$screenshot = $this->root_path.'templates/'.$plugin_code.'/screenshot.png';
@@ -696,7 +696,7 @@ class Manage_Extensions extends page_generic {
 			$this->jquery->Dialog('style_preview', $this->user->lang('template_preview'), array('url'=>$this->server_path."".$this->SID."&style='+ styleid+'", 'width'=>'750', 'height'=>'520', 'modal'=>true, 'withid' => 'styleid'));
 
 			$intStyles++;
-			
+
 			$this->tpl->assign_block_vars('styles_row_'.$rowname, array(
 				'ID'				=> $row['style_id'],
 				'ROWNAME'			=> 'style_'.$rowname,
@@ -718,12 +718,12 @@ class Manage_Extensions extends page_generic {
 				'USERS'				=> $row['users'],
 				'ACTION_LINK'		=> $link,
 				'BUGTRACKER_URL'	=> (isset($arrExtensionListNamed[2][$plugin_code])) ? sanitize($this->pdh->get('repository', 'bugtracker_url', array(2, $arrExtensionListNamed[2][$plugin_code]))) : '',
-						
+
 			));
-			
+
 			$arrStyles[] = $plugin_code;
 		}
-		
+
 		//Now bring the Extensions from the REPO to template
 		if (isset($arrExtensionList[2]) && is_array($arrExtensionList[2])){
 			foreach ($arrExtensionList[2] as $id => $extension){
@@ -747,8 +747,8 @@ class Manage_Extensions extends page_generic {
 
 			}
 		}
-		
-		
+
+
 		$this->jquery->dialog('style_default_info', $this->user->lang('default_style'), array('message' => $this->user->lang('style_default_info').'<br /><br /><label><input type="radio" name="override" value="0" onchange="change_override(1);">'.$this->user->lang('yes').'</label>  <label><input type="radio" name="override" value="1" checked="checked" onchange="change_override(0);">'.$this->user->lang('no').'</label>', 'custom_js' => 'submit_form();', 'height' => 300), 'confirm');
 		$this->jquery->dialog('style_reset_warning', $this->user->lang('reset_style'), array('message' => $this->user->lang('style_confirm_reset'), 'height' => 300, 'url' => $this->root_path.'admin/manage_extensions.php' . $this->SID . '&link_hash='.$this->CSRFGetToken('mode')."&cat=2&mode=reset&code='+ styleid+'", 'withid' => 'styleid'), 'confirm');
 		$this->jquery->dialog('style_delete_warning', $this->user->lang('delete_style'), array('message' => $this->user->lang('confirm_delete_style'), 'height' => 300, 'url'=> $this->root_path.'admin/manage_extensions.php' . $this->SID . '&link_hash='.$this->CSRFGetToken('mode')."&cat=2&mode=uninstall&code='+ styleid+'", 'withid' => 'styleid'), 'confirm');
@@ -767,10 +767,10 @@ class Manage_Extensions extends page_generic {
 
 		//=================================================================
 		//Portal Modules
-		
+
 		$arrTmpModules = array();
 		$intPortalModules = 0;
-		
+
 		if (isset($arrExtensionList[3]) && is_array($arrExtensionList[3])){
 			foreach ($arrExtensionList[3] as $id => $extension){
 				$arrTmpModules[$extension['plugin']] = $extension;
@@ -781,7 +781,7 @@ class Manage_Extensions extends page_generic {
 		if (is_array($arrModules)){
 			foreach($arrModules as $id => $value){
 				if((int)$value['child'] === 1) continue;
-				
+
 				$row = 'green';
 				$link = '';
 				$plugin_code = $value['path'];
@@ -789,7 +789,7 @@ class Manage_Extensions extends page_generic {
 					$this->core->message("Could not initiate module ID ".$id, "Error", 'red');
 					continue;
 				}
-				
+
 				$class_name = $plugin_code.'_portal';
 				if(!class_exists($class_name)) continue;
 				$del_link = "";
@@ -813,9 +813,9 @@ class Manage_Extensions extends page_generic {
 
 				$intPortalModules++;
 				$contact = sanitize($class_name::get_data('contact'));
-				$contact = (strlen($contact)) ? ((strpos($contact, '@')) ? 'mailto:'.$contact : $contact) : 'https://eqdkp-plus.eu'; 
+				$contact = (strlen($contact)) ? ((strpos($contact, '@')) ? 'mailto:'.$contact : $contact) : 'https://eqdkp-plus.eu';
 				$author = sanitize($class_name::get_data('author'));
-				
+
 				$this->tpl->assign_block_vars('pm_row_'.$row, array(
 					'NAME'				=> (isset($arrExtensionListNamed[3][$value['path']])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[3][$value['path']].')">'.$value['name'].'</a>' : $value['name'],
 					'VERSION'			=> sanitize($value['version']),
@@ -826,7 +826,7 @@ class Manage_Extensions extends page_generic {
 					'DELETE_LINK'		=> $del_link,
 					'DESCRIPTION'		=> (isset($arrTmpModules[$value['path']])) ? '<a href="javascript:repoinfo('.$arrExtensionListNamed[3][$value['path']].')">'.sanitize(cut_text($arrTmpModules[$value['path']]['description'], 100)).'</a>' : '',
 					'BUGTRACKER_URL'	=> (isset($arrExtensionListNamed[3][$plugin_code])) ? sanitize($this->pdh->get('repository', 'bugtracker_url', array(3, $arrExtensionListNamed[3][$plugin_code]))) : '',
-							
+
 				));
 
 			}
@@ -876,7 +876,7 @@ class Manage_Extensions extends page_generic {
 		$arrGameAuthors = $this->game->get_authors();
 		$arrTmpExtension = array();
 		$intGames = 0;
-		
+
 		if (isset($arrExtensionList[7]) && is_array($arrExtensionList[7])){
 			foreach ($arrExtensionList[7] as $id => $extension){
 				$arrTmpExtension[$extension['plugin']] = $extension;
@@ -947,10 +947,10 @@ class Manage_Extensions extends page_generic {
 			'BADGE_7'	=> $badge,
 			'GAME_COUNT'=> $intGames,
 		));
-		
+
 		//=================================================================
 		//Languages
-		
+
 		$arrLanguages = $arrLanguageVersions = array();
 		$intLanguages = 0;
 		// Build language array
@@ -1025,13 +1025,13 @@ class Manage_Extensions extends page_generic {
 		//Search for extensions
 		if($this->in->get('search') != ""){
 			$arrSearchResults = $this->pdh->get('repository', 'search', array($this->in->get('search')));
-			
+
 			foreach($arrSearchResults as $intExtension => $extension){
 				if ($extension['plugin'] == 'pluskernel') continue;
 				//Check if the extension is already installed
 				$blnInstallable = true;
 				$strCategoryIcon = '';
-				
+
 				if($extension['category'] == 1){
 					$strCategoryIcon = '<i class="fa fa-cogs"></i>';
 					if ($this->pm->search($extension['plugin']))  $blnInstallable = false;
@@ -1048,10 +1048,10 @@ class Manage_Extensions extends page_generic {
 					$strCategoryIcon = '<i class="fa fa-globe"></i>';
 					if (isset($arrLanguages[$extension['plugin']])) $blnInstallable = false;
 				}
-				
+
 				$dep = array();
 				$dep['plusv']	= (version_compare($extension['dep_coreversion'], $this->config->get('plus_version'), '<='));
-				
+
 				$depout = "";
 				foreach($dep as $key => $depdata) {
 					$tt = (isset($deptt[$key])) ? $deptt[$key] : $this->user->lang('plug_dep_'.$key);
@@ -1059,7 +1059,7 @@ class Manage_Extensions extends page_generic {
 						$depout .= '<span class="coretip" data-coretip="'.$tt.'">'.$this->user->lang('plug_dep_'.$key.'_short').'</span> ';
 					}
 				}
-				
+
 				$dl_link = '<a href="javascript:repo_install('.$extension['plugin_id'].', '.$extension['category'].', \''.sanitize($extension['plugin']).'\');" ><i class="fa fa-toggle-off fa-lg" title="'.$this->user->lang('install').'"></i></a>';
 				$link = ($dep['plusv']) ? $dl_link : '';
 				$this->tpl->assign_block_vars('plugins_search_row', array(
@@ -1072,10 +1072,10 @@ class Manage_Extensions extends page_generic {
 						'DESCRIPTION'		=> sanitize($extension['description']),
 						'ACTION_LINK'		=> ($blnInstallable) ? $link : '',
 						'BUGTRACKER_URL'	=> sanitize($extension['bugtracker_url']),
-						'DEPENDENCIES'		=> ($dep['plusv']) ? '<i class="fa fa-lg fa-check icon-color-green"></i>' : '<i class="fa fa-lg fa-times icon-color-red"></i> '.$depout,	
+						'DEPENDENCIES'		=> ($dep['plusv']) ? '<i class="fa fa-lg fa-check icon-color-green"></i>' : '<i class="fa fa-lg fa-times icon-color-red"></i> '.$depout,
 				));
 			}
-	
+
 			$this->tpl->assign_vars(array(
 					'S_SHOW_EXT_SEARCH'		=> true,
 					'SEARCH_COUNT'			=> count($arrSearchResults),
@@ -1096,9 +1096,9 @@ class Manage_Extensions extends page_generic {
 		if($this->in->get('search') != ""){
 			$this->jquery->Tab_Select('plus_plugins_tab', 6);
 		}
-		
+
 		$this->jquery->Dialog('update_confirm', '', array('custom_js'	=> 'repo_update_start(extid, cat, extensioncode);', 'message'	=> $this->user->lang('repo_updatewarning').'<br /><br /><input type="checkbox" onclick="hide_update_warning(this.checked);" value="1" />'.$this->user->lang('repo_hide_updatewarning'), 'withid'	=> 'extid, cat, extensioncode', 'width'=> 300, 'height'=>300), 'confirm');
-		
+
 		$this->jquery->Dialog('repoinfo', $this->user->lang('repo_extensioninfo'), array('url'=>$this->root_path."admin/manage_extensions.php".$this->SID."&info='+moduleid+'", 'width'=>'700', 'height'=>'600', 'withid'=>'moduleid'));
 
 		foreach ($this->repo->DisplayCategories() as $key=>$category){
@@ -1107,7 +1107,7 @@ class Manage_Extensions extends page_generic {
 				'S_SHOW_CAT_'.$key => (!$intShowOnly || $intShowOnly == $key) ? true : false,
 			));
 		}
-		
+
 		$this->tpl->assign_vars(array(
 			'S_HIDE_UPDATEWARNING'		=> (int)$this->config->get('repo_hideupdatewarning'),
 			'CSRF_MODE_TOKEN' 			=> $this->CSRFGetToken('mode'),
@@ -1138,4 +1138,3 @@ class Manage_Extensions extends page_generic {
 	}
 }
 registry::register('Manage_Extensions');
-?>

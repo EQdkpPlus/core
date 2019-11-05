@@ -265,7 +265,7 @@ class admin_index extends gen_class {
 					if($isBot) $arrBots[] = $this->env->is_bot($row['session_browser']);
 				}
 			}
-			
+
 		}
 
 
@@ -442,4 +442,3 @@ class admin_index extends gen_class {
 	}
 }
 }
-?>

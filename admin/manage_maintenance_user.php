@@ -180,4 +180,3 @@ class maintenance_user extends page_generic {
 	}
 } //close class
 registry::register('maintenance_user');
-?>

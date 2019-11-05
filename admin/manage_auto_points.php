@@ -416,4 +416,3 @@ class ManageAutoPoints extends page_generic {
 	}
 }
 registry::register('ManageAutoPoints');
-?>

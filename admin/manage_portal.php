@@ -475,13 +475,13 @@ $('.js_reload').change(reload_settings);", 'docready');
 			}
 			return ($a['name'] < $b['name']) ? -1 : 1;
 		}
-		
+
 		//Do it twice, to make sure the disabled modules are sorted by name
 		$orig_modules = $modules;
 		uasort($modules, 'my_sort');
 		foreach($modules as $id => $data) {
 			if($data['tpl_posi'] != 'disabled') continue;
-			
+
 			$tpl_data = array(
 					'NAME'			=> $data['name'].$data['header'],
 					'ID'			=> $id,
@@ -492,7 +492,7 @@ $('.js_reload').change(reload_settings);", 'docready');
 					'PERMISSIONS'	=> implode('<br />', $data['perms']),
 					'S_PERMISSIONS' => (count($data['perms']) > 0) ? true : false,
 			);
-			
+
 			if ($data['tpl_posi'] == 'later'){
 				$tpl_data['POS'] = $arrUsedModules[$id];
 				$arrModulesForOwnBlocks[$arrUsedModules[$id]][] = $tpl_data;
@@ -503,7 +503,7 @@ $('.js_reload').change(reload_settings);", 'docready');
 		$modules = $orig_modules;
 		foreach($modules as $id => $data) {
 			if($data['tpl_posi'] == 'disabled') continue;
-			
+
 			$tpl_data = array(
 					'NAME'			=> $data['name'].$data['header'],
 					'ID'			=> $id,
@@ -514,7 +514,7 @@ $('.js_reload').change(reload_settings);", 'docready');
 					'PERMISSIONS'	=> implode('<br />', $data['perms']),
 					'S_PERMISSIONS' => (count($data['perms']) > 0) ? true : false,
 			);
-			
+
 			if ($data['tpl_posi'] == 'later'){
 				$tpl_data['POS'] = $arrUsedModules[$id];
 				$arrModulesForOwnBlocks[$arrUsedModules[$id]][] = $tpl_data;
@@ -522,7 +522,7 @@ $('.js_reload').change(reload_settings);", 'docready');
 				$this->tpl->assign_block_vars($data['tpl_posi'].'_row', $tpl_data);
 			}
 		}
-		
+
 		$this->portal->init_portalsettings();
 		$this->confirm_delete($this->user->lang('portal_delete_warn'), 'manage_portal.php'.$this->SID.'&del=true&l='.$intLayoutID, true, array('function' => 'delete_portal'));
 
@@ -581,7 +581,7 @@ $('.js_reload').change(reload_settings);", 'docready');
 		$this->jquery->Dialog('portalsettings', $this->user->lang('portalplugin_winname'), array('url'=>$this->root_path."admin/manage_portal.php".$this->SID."&simple_head=true&reload=1&id='+moduleid+'", 'width'=>'800', 'height'=>'600', 'withid'=>'moduleid', 'onclosejs' => '$("#save").click();'));
 		$this->jquery->Dialog('add_portalmodule', $this->user->lang('add_portal_module'), array('url'=>$this->root_path."admin/manage_extensions.php".$this->SID."&simple_head=true&show_only=3", 'width'=>'750', 'height'=>'600', 'onclosejs' => '$("#save").click();'));
 		$this->tpl->add_css(".portal_disabled { float:left; margin-left: 4px; width:230px; min-height: 16px;}");
-		
+
 		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('portalplugin_management'),
 			'template_file'		=> 'admin/manage_portal_layout.html',
@@ -717,4 +717,3 @@ $('.js_reload').change(reload_settings);", 'docready');
 	}
 }
 registry::register('Manage_Portal');
-?>

@@ -551,7 +551,7 @@ class admin_settings extends page_generic {
 								'type'		=> 'text',
 								'size'		=> 5,
 						),
-						
+
 						'round_activate'	=> array(
 								'type'		=> 'radio',
 								'default'	=> 0,
@@ -835,7 +835,7 @@ class admin_settings extends page_generic {
 		if($this->config->get('default_game') == 'dummy'){
 			$settingsdata['game']['game']['default_game']['text_after'] = '<button onclick="window.location=\'manage_extensions.php'.$this->SID.'#fragment-7\'" type="button"><i class="fa fa-lg fa-download"></i> '.$this->user->lang('install_other_games').'</button>';
 		}
-		
+
 		if($this->config->get('disable_guild_features')) {
 			unset($settingsdata['itemtooltip']);
 			unset($settingsdata['calendar']['raids']);
@@ -910,7 +910,7 @@ class admin_settings extends page_generic {
 					'options'	=> $itt_langlist,
 				);
 			}
-			
+
 			$fields['itt_overwrite_lang']	= array(
 					'type'		=> 'radio',
 			);
@@ -1083,7 +1083,7 @@ class admin_settings extends page_generic {
 			if($game_changed) {
 				$strDefaultGame = $this->in->get('default_game', 'dummy');
 				if($strDefaultGame == "") $strDefaultGame = 'dummy';
-				
+
 				$this->game->installGame($strDefaultGame, $this->in->get('game_language'), $this->in->get('overwrite-game', 0));
 				if($this->config->get('disable_guild_features')) $this->config->set('default_game', 'dummy');
 				$this->pdc->flush();
@@ -1127,4 +1127,3 @@ class admin_settings extends page_generic {
 	}
 }
 registry::register('admin_settings');
-?>
