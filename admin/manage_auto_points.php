@@ -122,6 +122,8 @@ class ManageAutoPoints extends page_generic {
 			$this->pdh->process_hook_queue();
 			$this->pdc->flush();
 		}
+		
+		$this->tpl->add_js("parent.$('body').data('func_name', '".$this->in->get('func')."');jQuery.FrameDialog.closeDialog();");
 	}
 
 	private function parse_expr_in($expr) {
