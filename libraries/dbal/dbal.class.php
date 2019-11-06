@@ -531,6 +531,11 @@ abstract class Database extends gen_class {
 		return $objStatement->escapeString($strString);
 	}
 	
+	public function escapeParams($arrParams){
+		$objStatement = $this->createStatement($this->resConnection, $this->strTablePrefix, $this->strDebugPrefix,$this->blnDisableAutocommit);
+		return $objStatement->escapeParams($arrParams);
+	}
+	
 	public function replaceTablePrefix($strQuery){
 		$strQuery = preg_replace("/([\s|`|'])__([a-zA-Z])/", '$1'.$this->strTablePrefix.'$2', $strQuery);
 		return $strQuery;
@@ -892,7 +897,7 @@ abstract class DatabaseStatement {
 	 * @param array
 	 * @return array
 	 */
-	protected function escapeParams($arrParams, $blnIgnoreKeys=false){
+	public function escapeParams($arrParams, $blnIgnoreKeys=false){
 		foreach ($arrParams as $k=>$v)
 		{
 			switch (gettype($v))

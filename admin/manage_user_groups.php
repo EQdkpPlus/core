@@ -676,9 +676,9 @@ class Manage_User_Groups extends page_generic {
 		$sql = "SELECT o.auth_value
 				FROM __auth_options o, __auth_groups u
 				WHERE (u.auth_id = o.auth_id)
-				AND (u.group_id='".$group_id."')
-				AND u.auth_id='".$auth_id."'";
-		$objQuery = $this->db->query($sql);
+				AND (u.group_id=?)
+				AND u.auth_id=?";
+		$objQuery = $this->db->prepare($sql)->execute($group_id, $auth_id);
 
 		if ( $objQuery && $objQuery->numRows > 0 )
 		{

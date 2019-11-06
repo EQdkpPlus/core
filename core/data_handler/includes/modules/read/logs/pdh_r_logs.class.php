@@ -131,9 +131,11 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 			if(!method_exists($this, 'get_'.$tag) || $tag == 'viewicon' || $tag == 'value' || $tag == 'id_list' || $tag == 'lastxlogs') return $id_list;
 
 			$direction = ($direction == 'asc') ? 'ASC' : 'DESC';
-						if($tag == 'user') { 
+			if($tag == 'user') { 
 				$objQuery = $this->db->prepare("SELECT log_id FROM __logs WHERE log_id :in ORDER BY username ".$direction.";")->in($id_list)->execute();
 			} else {
+				if(!in_array($tag, array('id', 'date', 'value', 'ipaddress', 'sid', 'result', 'tag', 'plugin', 'flag', 'record', 'record_id'))) return false;
+				
 				$objQuery = $this->db->prepare("SELECT log_id FROM __logs WHERE log_id :in ORDER BY log_".$tag." ".$direction.";")->in($id_list)->execute();
 			}
 			$id_list = array();
