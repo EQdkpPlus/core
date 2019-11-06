@@ -106,7 +106,22 @@ class ManageAutoPoints extends page_generic {
 			$this->edit_function($exprs);
 		}
 		$this->apa->update_calc_function('func_'.$this->in->get('func'), $exprs);
-		$this->tpl->add_js("parent.$('body').data('func_name', '".$this->in->get('func')."');jQuery.FrameDialog.closeDialog();");
+		
+		//Reset the APAs which are using this function
+		$job_list = $this->apa->list_apas();
+		$blnFlush = false;
+		foreach($job_list as $key => $details){
+			if(isset($details['calc_func']) && $details['calc_func'] === 'func_'.$this->in->get('func')){
+				$this->apa->reset_local_cache($key);
+				$this->apa->recalculate_apa($key);
+				$blnFlush = true;
+			}
+		}
+		
+		if($blnFlush){
+			$this->pdh->process_hook_queue();
+			$this->pdc->flush();
+		}
 	}
 
 	private function parse_expr_in($expr) {
