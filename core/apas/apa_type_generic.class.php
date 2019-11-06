@@ -31,20 +31,12 @@ if( !class_exists( "apa_type_generic" ) ) {
 				'size'		=> 20,
 				'required'	=> true,
 			),
-			'exectime'	=> array(
-				'type'		=> 'timepicker',
-				'default'	=> 14400,
-				'hour'		=> 4,
-				'min'		=> 0,
-				'returnDatetime' => 1,
-				'required'	=> true,
-			),
 			'pools'	=> array(
 				'type'		=> 'multiselect',
 			)
 		);
 		
-		protected $required = array('name', 'exectime', 'pools');
+		protected $required = array('name', 'pools');
 
 		protected $ext_options = array();
 

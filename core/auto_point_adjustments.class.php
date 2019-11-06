@@ -167,14 +167,14 @@ if ( !defined('EQDKP_INC') ){
 			return $ids;
 		}
 		
-		public function get_next_aparuns(){
+		public function get_next_aparuns($returnArray=false){
 			$arrOut = array();
 			foreach($this->apa_tab as $apa_id => $options) {
 				$objApa = $this->get_apa_type($options['type']);
 				$intOut = $objApa->get_next_run($apa_id);
-				if($intOut > 0) $arrOut[] = $intOut;
+				if($intOut > 0) $arrOut[$apa_id] = $intOut;
 			}
-			
+			if($returnArray) return $arrOut;
 			return (count($arrOut)) ? min($arrOut) : false;
 		}
 		

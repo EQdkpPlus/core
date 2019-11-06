@@ -68,7 +68,6 @@ if ( !class_exists( "apa_startpoints" ) ) {
 
 		public function __construct() {
 			unset($this->options['pools']);
-			unset($this->options['exectime']);
 		}
 		
 		public function get_options() {
@@ -125,7 +124,6 @@ if ( !class_exists( "apa_startpoints" ) ) {
 			$this->cronjobs->add_cron('startpoints', array('active' => true), true);
 			$this->cronjobs->run_cron('startpoints', true);
 			$cron = $this->cronjobs->list_crons('startpoints');
-			$options['exectime'] = date('H', $cron['start_time'])*3600 + date('i', $cron['start_time'])*60;
 			return $options;
 		}
 		

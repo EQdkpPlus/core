@@ -9,7 +9,8 @@
 		<th colspan="3">{L_action}</th>
 		<th style="width:300px" class="nowrap">{L_apa_type}</th>
 		<th style="width:150px" class="nowrap">{L_name}</th>
-		<th style="width:80px" class="nowrap">{L_apa_exectime}</th>
+		<th class="hiddenSmartphone">{L_apa_start_date}</th>
+		<th class="hiddenSmartphone">{L_next_run}</th>
 		<th class="hiddenSmartphone">{L_apa_pools}</th>
 	</tr>
 	<!-- BEGIN apa_row -->
@@ -19,7 +20,8 @@
 		<td style="width:20px"><a href="manage_auto_points.php{SID}&amp;recalc=true&amp;id={apa_row.ID}" title="{L_apa_recalculate}"><i class="fa fa-refresh fa-lg"></i></a></td>
 		<td>{apa_row.TYPE}</td>
 		<td>{apa_row.NAME}</td>
-		<td>{apa_row.EXECTIME}</td>
+		<td>{apa_row.START}</td>
+		<td>{apa_row.NEXT_RUN}</td>
 		<td class="hiddenSmartphone">{apa_row.POOLS}</td>
 	</tr>
 	<!-- END apa_row -->

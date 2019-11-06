@@ -247,11 +247,12 @@ class ManageAutoPoints extends page_generic {
 		$type = ($ftype) ? $ftype : $type;
 		if(!$options || !is_array($options)) $this->display();
 		registry::load('form');
+
 		foreach ($options as $name => $option){
 			if($name == 'pools') {
 				$option['options'] = $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list')));
 				//Onetime adjustments can be applied multiple time to one DKP Pool
-				if(!$this->in->exists('id') && stripos($type, 'onetime')===false) {
+				if(stripos($type, 'onetime')===false) {
 					$used = $this->apa->get_pools_used($type);
 					foreach($used as $dkpid) {
 						if(!in_array($dkpid, $option['value'])) unset($option['options'][$dkpid]);
@@ -308,14 +309,20 @@ class ManageAutoPoints extends page_generic {
 
 		$job_list = $this->apa->list_apas();
 		$used_funcs = array();
+		
+		$arrNextRuns = $this->apa->get_next_aparuns(true);
+
 		if(is_array($job_list)){
 			foreach($job_list as $key => $details){
+				$decay_start = $this->apa->get_data('start_date', $key);
+				
 				$this->tpl->assign_block_vars('apa_row', array(
 					'ID'			=> $key,
 					'TYPE'			=> $this->user->lang('apa_type_'.$details['type']),
 					'NAME'			=> $details['name'],
-					'EXECTIME'		=> $this->time->date('H:i', $details['exectime']),
 					'POOLS'			=> implode(', ', $this->pdh->aget('multidkp', 'name', 0, array($details['pools']))),
+					'START'			=> isset($details['start_date']) ? $this->time->user_date($details['start_date'], true) : '',
+					'NEXT_RUN'		=> isset($arrNextRuns[$key]) ? $this->time->user_date($arrNextRuns[$key], true) : '',
 				));
 				if(isset($details['calc_func'])) $used_funcs[$details['calc_func']][] = $details['name'];
 			}

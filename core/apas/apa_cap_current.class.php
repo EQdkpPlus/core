@@ -79,8 +79,8 @@ if ( !class_exists( "apa_cap_current" ) ) {
 		
 		public function pre_save_func($apa_id, $options) {
 			// strip time off of start-date
-			$options['start_date'] -= ($this->time->date('H', $options['start_date'])*3600 + $this->time->date('i', $options['start_date'])*60);
-			list($h,$i) = explode(':',$options['exectime']);
+			list($h,$i) = explode(':',date('H:i', $options['start_date']));
+			$options['start_date'] -= ($h*3600 + $i*60);
 			$this->cronjobs->add_cron('pointcap', array('active' => true, 'start_time' => $options['start_date'] + $h*3600 + $i*60), true);
 			$this->cronjobs->run_cron('pointcap', true);
 			$cron = $this->cronjobs->list_crons('pointcap');
@@ -91,7 +91,8 @@ if ( !class_exists( "apa_cap_current" ) ) {
 			$next_run = $this->config->get('apa_cap_next_run_'.$apa_id);
 			echo "<br/>Start function. Next run ".date("d.m.Y H:i:s", $next_run).' '.$next_run."<br/>";
 			if(!$next_run) {
-				list($h,$i) = explode(':',$this->apa->get_data('exectime', $apa_id));
+				$start_date = $this->apa->get_data('start_date', $apa_id);
+				list($h,$i) = explode(':', date('H:i', $start_date));
 				$next_run = $this->apa->get_data('start_date', $apa_id) + $h*3600 + $i*60;
 				echo "No next run. Run first at: ".date("d.m.Y H:i:s", $next_run)."<br/>";
 			}
@@ -155,7 +156,8 @@ if ( !class_exists( "apa_cap_current" ) ) {
 		public function get_next_run($apa_id) {
 			$nextRun = $this->config->get('apa_cap_next_run_'.$apa_id);
 			if(!$nextRun){
-				list($h,$i) = explode(':',$this->apa->get_data('exectime', $apa_id));
+				$start_date = $this->apa->get_data('start_date', $apa_id);
+				list($h,$i) = explode(':', date('H:i', $start_date));
 				$nextRun = $this->apa->get_data('start_date', $apa_id) + $h*3600 + $i*60;
 			}
 			

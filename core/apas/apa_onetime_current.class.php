@@ -66,8 +66,6 @@ if ( !class_exists( "apa_cap_current" ) ) {
 				$this->ext_options['calc_func']['options'][$func] = $func;
 			}
 			
-			unset($this->options['exectime']);
-			
 			$this->options = array_merge($this->options, $this->ext_options);
 		}
 		
