@@ -133,19 +133,19 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 				$start_date	 = $this->time->newtime($start_date, '00:00');
 				$end_date	 = ($end_date != PHP_INT_MAX) ? $this->time->newtime($end_date, '23:59') : $end_date;
 				$sqlstring	 = "SELECT id FROM __calendar_events WHERE";
-				$sqlstring	.= (is_array($idfilter)) ? ' (calendar_id IN ('.implode(",", $idfilter).')) AND' : '';
+				$sqlstring	.= (is_array($idfilter)) ? ' (calendar_id IN ('.implode(",", $this->db->escapeParams($idfilter)).')) AND' : '';
 				$sqlstring	.= " ((timestamp_start BETWEEN ".$this->db->escapeString($start_date)." AND ".$this->db->escapeString($end_date).") OR (timestamp_end BETWEEN ".$this->db->escapeString($start_date)." AND ".$this->db->escapeString($end_date)."))";
 
 				// apply the filtering
 				switch($filter){
 					case 'mine':
-						$sqlstring	.= " AND creator=".$this->user->data['user_id'];
+						$sqlstring	.= " AND creator=".$this->db->escapeString($this->user->data['user_id'];)
 					break;
 					case 'past':
-						$sqlstring	.= " AND timestamp_end<".$this->time->time;
+						$sqlstring	.= " AND timestamp_end<".$this->db->escapeString($this->time->time);
 					break;
 					case 'future':
-						$sqlstring	.= " AND timestamp_end>".$this->time->time;
+						$sqlstring	.= " AND timestamp_end>".$this->db->escapeString($this->time->time);
 					break;
 					default: $sqlstring	.= "";
 				}

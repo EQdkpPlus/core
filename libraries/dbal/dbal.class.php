@@ -519,6 +519,11 @@ abstract class Database extends gen_class {
 		return $objStatement->escapeString($strString);
 	}
 	
+	public function escapeParams($arrParams){
+		$objStatement = $this->createStatement($this->resConnection, $this->strTablePrefix, $this->strDebugPrefix,$this->blnDisableAutocommit);
+		return $objStatement->escapeParams($arrParams);
+	}
+	
 	abstract public function connect($strHost, $strUser, $strPassword, $strDatabase, $intPort=false, $blnPersistent=false);
 	abstract protected function disconnect();
 	abstract protected function get_client_version();
@@ -861,7 +866,7 @@ abstract class DatabaseStatement {
 	 * @param array
 	 * @return array
 	 */
-	protected function escapeParams($arrParams, $blnIgnoreKeys=false){
+	public function escapeParams($arrParams, $blnIgnoreKeys=false){
 		foreach ($arrParams as $k=>$v)
 		{
 			switch (gettype($v))

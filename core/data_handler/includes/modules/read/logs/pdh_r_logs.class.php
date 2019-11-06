@@ -134,6 +134,8 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 						if($tag == 'user') { 
 				$objQuery = $this->db->prepare("SELECT log_id FROM __logs WHERE log_id :in ORDER BY username ".$direction.";")->in($id_list)->execute();
 			} else {
+				if(!in_array($tag, array('id', 'date', 'value', 'ipaddress', 'sid', 'result', 'tag', 'plugin', 'flag', 'record', 'record_id'))) return false;
+				
 				$objQuery = $this->db->prepare("SELECT log_id FROM __logs WHERE log_id :in ORDER BY log_".$tag." ".$direction.";")->in($id_list)->execute();
 			}
 			$id_list = array();
