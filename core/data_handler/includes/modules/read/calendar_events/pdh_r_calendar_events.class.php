@@ -139,7 +139,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 				// apply the filtering
 				switch($filter){
 					case 'mine':
-						$sqlstring	.= " AND creator=".$this->db->escapeString($this->user->data['user_id'];)
+						$sqlstring	.= " AND creator=".$this->db->escapeString($this->user->data['user_id']);
 					break;
 					case 'past':
 						$sqlstring	.= " AND timestamp_end<".$this->db->escapeString($this->time->time);
