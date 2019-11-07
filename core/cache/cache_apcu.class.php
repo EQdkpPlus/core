@@ -35,7 +35,7 @@ if ( !class_exists( "cache_apcu" ) ) {
 			if(!function_exists('apcu_add')){
 				throw new Exception('No apcu available');
 			}
-			
+
 		}
 
 		public function put( $key, $data, $ttl, $global_prefix, $compress = false ) {
@@ -48,19 +48,18 @@ if ( !class_exists( "cache_apcu" ) ) {
 			$key = $global_prefix.$key;
 
 			$retval = apcu_fetch($key);
-			
+
 			return ($retval === false) ? null : @unserialize($retval);
 		}
 
 		public function del( $key, $global_prefix ) {
-			$key = $global_prefix.$key;	
+			$key = $global_prefix.$key;
 			apcu_delete($key);
 			return true;
 		}
-		
+
 		public function get_cachesize($key, $global_prefix){
 			return 0;
 		}
 	}//end class
 }//end if
-?>
