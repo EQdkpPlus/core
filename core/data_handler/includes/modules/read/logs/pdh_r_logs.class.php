@@ -99,23 +99,20 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 		}
 		
 		public function get_filtered_id_list($plugin=false, $result=false, $ip=false, $sid=false, $tag=false, $user_id=false, $value=false, $date_from=false, $date_to=false, $recordid=false, $record=false){
-			$strQuery = "SELECT log_id FROM __logs WHERE ";
-			if ($plugin !== false) $strQuery .= " log_plugin= ".$this->db->escapeString($plugin). " AND";
-			if ($result !== false) $strQuery .= " log_result= ".$this->db->escapeString($result). " AND";
-			if ($ip !== false) $strQuery .= " log_ipaddress LIKE ".$this->db->escapeString('%'.$ip.'%'). " AND";
-			if ($sid !== false) $strQuery .= " log_sid LIKE ".$this->db->escapeString('%'.$sid.'%'). " AND";
-			if ($tag !== false) $strQuery .= " log_tag = ".$this->db->escapeString($tag). " AND";
-			if ($user_id !== false) $strQuery .= " user_id =".$this->db->escapeString($user_id). " AND";
-			if ($value !== false) $strQuery .= " log_value LIKE ".$this->db->escapeString("%".$value."%"). " AND";
-			if ($date_from !== false) $strQuery .= " log_date > ".$this->db->escapeString($date_from). " AND";
-			if ($date_to !== false) $strQuery .= " log_date < ".$this->db->escapeString($date_to)." AND";
-			if ($recordid !== false) $strQuery .= " log_record_id = ".$this->db->escapeString($recordid). " AND";
-			if ($record !== false) $strQuery .= " log_record= ".$this->db->escapeString($record). " AND";
-			
-			$strQuery .= " log_id > 0";
-			
-			
-			$objQuery = $this->db->query($strQuery);
+			$objQuery = $this->db->prepare("SELECT log_id FROM __logs");
+			if ($plugin !== false) $objQuery->addCondition("log_plugin=?", $plugin);
+			if ($result !== false) $objQuery->addCondition("log_result=?", $result);
+			if ($ip !== false) $objQuery->addCondition("log_ipaddress LIKE ?", '%'.$ip.'%');
+			if ($sid !== false) $objQuery->addCondition("log_sid LIKE ?", '%'.$sid.'%');
+			if ($tag !== false) $objQuery->addCondition("log_tag=?", $tag);
+			if ($user_id !== false) $objQuery->addCondition("user_id=?", $user_id);
+			if ($value !== false) $objQuery->addCondition("log_value LIKE ?", '%'.$value.'%');
+			if ($date_from !== false) $objQuery->addCondition("log_date > ?", $date_from);
+			if ($date_to !== false) $objQuery->addCondition("log_date < ?", $date_to);
+			if ($recordid !== false) $objQuery->addCondition("log_record_id=?", $recordid);
+			if ($record !== false) $objQuery->addCondition("log_record=?", $record);
+				
+			$objQuery = $objQuery->execute();
 			$arrIDs = array();
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
