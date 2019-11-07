@@ -24,9 +24,9 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class ilch_bridge extends bridge_generic {
- 
+
 	public static $name = "ilch 1.1";
-	
+
 	public $data = array(
 			'user'	=> array(
 				'table'	=> 'user',
@@ -51,7 +51,7 @@ class ilch_bridge extends bridge_generic {
 				'QUERY'	=> '',
 			),
 	);
- 
+
 	//Needed function
 	public function check_password($password, $hash, $strSalt = '', $strUsername = "", $arrUserdata=array()){
 		$pwCrypt = new Ilch_PwCrypt();
@@ -302,4 +302,3 @@ class Ilch_PwCrypt
 		return false;
 	}
 }
-?>

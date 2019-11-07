@@ -24,9 +24,9 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class phpbb3_bridge extends bridge_generic {
-	
+
 	public static $name = "phpBB 3.0";
-	
+
 	public $data = array(
 		'user'	=> array( //User
 			'table'	=> 'users',
@@ -50,9 +50,9 @@ class phpbb3_bridge extends bridge_generic {
 			'user'	=> 'user_id',
 			'QUERY'	=> '',
 		),
-		
+
 	);
-				
+
 	public $settings = array(
 		'cmsbridge_disable_sso'	=> array(
 			'type'	=> 'radio',
@@ -70,11 +70,11 @@ class phpbb3_bridge extends bridge_generic {
 		}
 		return (md5($password) === $hash) ? true : false;
 	}
-	
+
 	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult){
 		//Is user active?
 		if ($boolLoginResult){
-		
+
 			if ($arrUserdata['user_type'] == '1') {
 				return false;
 			}
@@ -82,24 +82,24 @@ class phpbb3_bridge extends bridge_generic {
 			if ($this->config->get('cmsbridge_disable_sso') != '1'){
 				$this->sso($arrUserdata, $boolSetAutoLogin);
 			}
-			
+
 			return true;
 		}
 		return false;
 	}
-	
+
 	public function sso($arrUserdata, $boolAutoLogin = false){
 		$user_id = $arrUserdata['id'];
 		$strSessionID = md5(generateRandomBytes(55));
 		//$this->bridgedb->prepare("DELETE FROM ".$this->prefix."sessions WHERE session_user_id=?")->execute($user_id);
-		
+
 		$query = $this->bridgedb->query("SELECT * FROM ".$this->prefix."config");
 		if ($query){
 			while($row = $query->fetchAssoc()){
 				$arrConfig[$row['config_name']] = $row['config_value'];
 			}
 		} else return false;
-		
+
 		$ip = $this->get_ip();
 
 		//PW is true, logg the user into our Forum
@@ -118,12 +118,12 @@ class phpbb3_bridge extends bridge_generic {
 			'session_page'				=> '',
 			'session_forum_id'			=> 0,
 		);
-		
+
 		$this->bridgedb->prepare("INSERT INTO ".$this->prefix."sessions :p")->set($arrSet)->execute();
-				
+
 		// Set cookie
 		$expire = $this->time->time + 31536000;
-		
+
 		if($arrConfig['cookie_domain'] == '') {
 			$arrDomains = explode('.', $this->env->server_name);
 			$arrDomainsReversed = array_reverse($arrDomains);
@@ -131,49 +131,49 @@ class phpbb3_bridge extends bridge_generic {
 				$arrConfig['cookie_domain'] = '.'.$arrDomainsReversed[1].'.'.$arrDomainsReversed[0];
 			} else {
 				$arrConfig['cookie_domain'] = $this->env->server_name;
-			}	
+			}
 		}
 		//SID Cookie
 		setcookie($arrConfig['cookie_name'].'_sid', $strSessionID, $expire, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
 		//User-Cookie
 		setcookie($arrConfig['cookie_name'].'_u', $user_id, $expire, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
-		
+
 		if ($boolAutoLogin){
 			$strLoginKey = substr(random_string(32), 4, 16);
-			
+
 			$this->bridgedb->prepare("INSERT INTO ".$this->prefix."sessions_keys :p")->set(array(
 				'key_id'	=> md5($strLoginKey),
 				'last_ip'	=> $ip,
 				'last_login'=> (int)$this->time->time,
 				'user_id'	=> (int) $user_id,
 			))->execute();
-		
+
 			setcookie($arrConfig['cookie_name'].'_k', $strLoginKey, $expire, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
 		} else {
 			setcookie($arrConfig['cookie_name'].'_k', '', $expire, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
 		}
-		
+
 		return true;
 	}
-	
+
 	public function autologin($arrCookieData){
 		//If Single Sign On is disabled, abort
 		if ((int)$this->config->get('cmsbridge_disable_sso') == 1) return false;
-		
+
 		$query = $this->bridgedb->query("SELECT * FROM ".$this->prefix."config");
 		if ($query){
 			while($row = $query->fetchAssoc()){
 				$arrConfig[$row['config_name']] = $row['config_value'];
 			}
 		} else return false;
-		
+
 		$ip = $this->get_ip();
-	
+
 		$userID = isset($_COOKIE[$arrConfig['cookie_name'].'_u']) ? (int)$_COOKIE[$arrConfig['cookie_name'].'_u'] : null;
 		$SID = isset($_COOKIE[$arrConfig['cookie_name'].'_sid']) ? $_COOKIE[$arrConfig['cookie_name'].'_sid'] : null;
-		
+
 		if ($SID == NULL || $SID == "") return false;
-	
+
 		$result = $this->bridgedb->prepare("SELECT * FROM ".$this->prefix."sessions WHERE session_user_id = ? and session_id=?")->execute($userID, $SID);
 		if ($result){
 			$row = $result->fetchAssoc();
@@ -186,16 +186,16 @@ class phpbb3_bridge extends bridge_generic {
 							$strUsername = utf8_strtolower($row2['username']);
 							$user_id = $this->pdh->get('user', 'userid', array($strUsername));
 							$data = $this->pdh->get('user', 'data', array($user_id));
-							return $data;	
-						}	
+							return $data;
+						}
 					}
-				}	
+				}
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	private function get_ip(){
 		$iip = (!empty($_SERVER['REMOTE_ADDR'])) ? (string) $_SERVER['REMOTE_ADDR'] : '';
 		$iip = preg_replace('# {2,}#', ' ', str_replace(',', ' ', $iip));
@@ -236,29 +236,29 @@ class phpbb3_bridge extends bridge_generic {
 		}
 		return $iip;
 	}
-	
+
 	public function logout() {
 		//If Single Sign On is disabled, abort
 		if ((int)$this->config->get('cmsbridge_disable_sso') == 1) return false;
-		
+
 		$arrUserdata = $this->bridge->get_userdata($this->user->data['username']);
 		if (isset($arrUserdata['id'])){
 			$this->bridgedb->prepare("DELETE FROM ".$this->prefix."sessions WHERE session_user_id=?")->execute($arrUserdata['id']);
 		}
-		
+
 		$query = $this->bridgedb->query("SELECT * FROM ".$this->prefix."config");
 		if ($query){
 			while($row = $query->fetchAssoc()){
 				$arrConfig[$row['config_name']] = $row['config_value'];
 			}
 		} else return;
-				
+
 		setcookie($arrConfig['cookie_name'].'_sid', 'somevalue', 0, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
 		//User-Cookie
 		setcookie($arrConfig['cookie_name'].'_u', 'somevalue', 0, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
 		setcookie($arrConfig['cookie_name'].'_k', 'somevalue', 0, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
 	}
-	
+
 	public function sync($arrUserdata){
 		if ($this->config->get('cmsbridge_disable_sync') == '1'){
 			return false;
@@ -271,7 +271,7 @@ class phpbb3_bridge extends bridge_generic {
 		);
 		return $sync_array;
 	}
-	
+
 	public function sync_fields(){
 		return array(
 			'icq'		=> 'ICQ',
@@ -280,7 +280,7 @@ class phpbb3_bridge extends bridge_generic {
 			'birthday'	=> 'Birthday',
 		);
 	}
-	
+
 	private function _handle_birthday($date){
 		list($d, $m, $y) = explode('-', $date);
 		if ($y != '' && $y != 0 && $m != '' && $m != 0 && $d != '' && $d != 0){
@@ -288,10 +288,10 @@ class phpbb3_bridge extends bridge_generic {
 		}
 		return 0;
 	}
-	
+
 	//---------------------------------------------------------
 	//Functions from phpbb 3
-	
+
 	/**
 	 * Hash Algorithm from phpBB 3.0.0
 	 * used due some Major Werid Changes handling the password of phpBB 3.0.0
@@ -304,7 +304,7 @@ class phpbb3_bridge extends bridge_generic {
 	function _hash_crypt_private($password, $setting, &$itoa64)
 	{
 		$password = trim(htmlspecialchars(str_replace(array("\r\n", "\r", "\0"), array("\n", "\n", ''), $password), ENT_COMPAT, 'UTF-8'));
-		
+
 		$output = '*';
 
 		// Check for correct hash
@@ -409,4 +409,3 @@ class phpbb3_bridge extends bridge_generic {
 	}
 
 }
-?>

@@ -24,9 +24,9 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class vbulletin_bridge extends bridge_generic {
-	
+
 	public static $name = 'vBulletin';
-	
+
 	public $data = array(
 		//Data
 		'groups' => array( //Where I find the Usergroup
@@ -49,7 +49,7 @@ class vbulletin_bridge extends bridge_generic {
 			'QUERY'	=> '',
 		),
 	);
-	
+
 	//Needed function
 	public function check_password($password, $hash, $strSalt = '', $strUsername = "", $arrUserdata=array()){
 		if ((md5(md5($password).$strSalt)) == $hash){
@@ -58,15 +58,15 @@ class vbulletin_bridge extends bridge_generic {
 
 		return false;
 	}
-	
+
 	public function vb_get_user_groups($intUserID){
 		$query = $this->bridgedb->prepare("SELECT usergroupid, membergroupids FROM ".$this->prefix."user WHERE userid=?")->execute($intUserID);
 		$arrReturn = array();
 		if ($query){
 			$result = $query->fetchAssoc();
-			
+
 			$arrReturn[] = (int)$result['usergroupid'];
-			
+
 			$arrAditionalGroups = explode(',', $result['membergroupids']);
 			if (is_array($arrAditionalGroups)){
 				foreach ($arrAditionalGroups as $group){
@@ -74,8 +74,7 @@ class vbulletin_bridge extends bridge_generic {
 				}
 			}
 		}
-		
+
 		return $arrReturn;
 	}
 }
-?>

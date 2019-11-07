@@ -37,12 +37,12 @@ abstract class bridge_generic extends gen_class {
 	 * @var array Contains Bridge-specific Settings, like cookie domain etc.
 	 */
 	public $settings				= array();
-	
+
 	/**
 	 * @var boolean Set true if email adress should be synced from CMS
 	 */
 	public $blnSyncEmail		= true;
-	
+
 	/**
 	 * @var object Database Connection to CMS
 	 */
@@ -52,10 +52,10 @@ abstract class bridge_generic extends gen_class {
 	 */
 	protected  $prefix			= '';
 
-	
+
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param object $objBridgeDB
 	 * @param string $strPrefix
 	 */
@@ -63,10 +63,10 @@ abstract class bridge_generic extends gen_class {
 		$this->bridgedb = $objBridgeDB;
 		$this->prefix = $strPrefix;
 	}
-	
+
 	/**
 	 * Check if Password matches with saved Hash
-	 * 
+	 *
 	 * @param string $password	Password
 	 * @param string $hash		Saved Passwordhash
 	 * @param string $strSalt	Saved Salt
@@ -74,12 +74,12 @@ abstract class bridge_generic extends gen_class {
 	 * @return boolean true if password matches
 	 */
 	abstract public function check_password($password, $hash, $strSalt = '', $strUsername = "", $arrUserdata=array());
-	
+
 	/**
 	 * Returns Array with fields that are available to sync
 	 * Key = fieldid of CMS
 	 * Value = Name of Field
-	 * 
+	 *
 	 * @return array Available Fields for Synching
 	 */
 	public function sync_fields() {
@@ -87,41 +87,41 @@ abstract class bridge_generic extends gen_class {
 	}
 
 	/**
-	 * Returns Array with synched Userdata. 
+	 * Returns Array with synched Userdata.
 	 * Please return all data, the Bridge Class handles the matching to the profilefields.
 	 * If you want to sync birthday and country, add key "birthday" and "country"
 	 * Key = fieldid of CMS
 	 * Value = fieldvalue
-	 * 
+	 *
 	 * @param array $arrUserdata Userdata of CMS
 	 * @return boolean/array Return false if sync is disabled, otherwise return array with synced data
 	 */
 	public function sync($arrUserdata){
 		return false;
 	}
-	
+
 	/**
 	 * Autologin. Log User into EQdkp Using Session Information from CMS
-	 * 
+	 *
 	 * @param array $arrCookiedata Cookiedata of EQdkp Autologin Cookie
 	 * @return boolean/array Return false if autologin failed, otherwise array with EQdkp Userdata
 	 */
 	public function autologin($arrCookiedata){
 		return false;
 	}
-	
+
 	/**
 	 * Logout. Should be used to Logout User from CMS
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function logout(){
 		return true;
 	}
-	
+
 	/**
 	 * Fired before login. No return value, no influence to login.
-	 * 
+	 *
 	 * @param string $strUsername
 	 * @param string $strPassword
 	 * @param boolean $boolSetAutologin
@@ -129,11 +129,11 @@ abstract class bridge_generic extends gen_class {
 	public function before_login($strUsername, $strPassword, $boolSetAutologin=false){
 		return;
 	}
-	
+
 	/**
-	 * Do some checks after User Passwordchecks. 
+	 * Do some checks after User Passwordchecks.
 	 * Returning false prevents user from being logged into EQdkp.
-	 * 
+	 *
 	 * @param string $strUsername
 	 * @param string $strPassword
 	 * @param boolean $boolSetAutoLogin
@@ -144,10 +144,10 @@ abstract class bridge_generic extends gen_class {
 	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult){
 		return $boolLoginResult;
 	}
-	
+
 	/**
 	 * Login method. Should only be overwritten if default login of Bridge is not enough for you.
-	 * 
+	 *
 	 * @param string $strUsername
 	 * @param string $strPassword
 	 * @param boolean $boolSetAutologin
@@ -157,4 +157,3 @@ abstract class bridge_generic extends gen_class {
 		return 0;
 	}
 }
-?>

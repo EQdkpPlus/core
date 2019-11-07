@@ -46,10 +46,10 @@ define('DRUPAL_MAX_HASH_COUNT', 30);
 define('DRUPAL_HASH_LENGTH', 55);
 
 class drupal8_bridge extends bridge_generic {
-	
+
 	//Tested with Drupal 8.3.6
 	public static $name = 'Drupal 8.x';
-	
+
 	public $data = array(
 		//Data
 		'groups' => array( //Where I find the Usergroup
@@ -75,12 +75,12 @@ class drupal8_bridge extends bridge_generic {
 			'QUERY'	=> '',
 		),
 	);
-		
+
 	//Needed function
 	public function check_password($password, $hash, $strSalt = '', $strUsername = "", $arrUserdata=array()){
 		return $this->user_check_password($password, $hash);
 	}
-	
+
 
 	/**
 	 * Returns a string for mapping an int to the corresponding base 64 character.
@@ -303,6 +303,5 @@ class drupal8_bridge extends bridge_generic {
 	  }
 	  return ($hash && $stored_hash == $hash);
 	}
-	
+
 }
-?>

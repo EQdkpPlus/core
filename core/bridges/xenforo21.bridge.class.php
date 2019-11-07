@@ -24,11 +24,11 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class xenforo21_bridge extends bridge_generic {
-	
+
 	public static $name = 'XenForo 2.1';
-	
+
 	private $passwordIterations = 10;
-	
+
 	public $data = array(
 		//Data
 		'groups' => array( //Where I find the Usergroup
@@ -53,43 +53,43 @@ class xenforo21_bridge extends bridge_generic {
 			'QUERY'	=> '',
 		),
 	);
-		
+
 	public $settings = array(
 	);
-	
+
 	public function check_password($password, $hash, $strSalt = '', $strUsername = "", $arrUserdata=array()){
 		$strQuery = "SELECT * FROM ".$this->prefix."user_authenticate WHERE user_id=?";
 		$objQuery = $this->bridgedb->prepare($strQuery)->execute($hash);
-	
+
 		if ($objQuery){
 			$arrAllResults = $objQuery->fetchAllAssoc();
 			foreach($arrAllResults as $arrResult){
 				$arrAuthData = unserialize($arrResult['data']);
 				$scheme = $arrResult['scheme_class'];
-				
+
 				$blnResult = $this->_handle_logins($scheme, $password, $hash, $arrAuthData);
-				if ($blnResult) return true;			
-			}		
+				if ($blnResult) return true;
+			}
 		}
 
 		return false;
 	}
-	
-	private function _handle_logins($scheme, $password, $hash, $arrAuthData){		
+
+	private function _handle_logins($scheme, $password, $hash, $arrAuthData){
 		switch($scheme){
 			case "XF:Core12":
 				$passwordHash = new XenForo_PasswordHash($this->passwordIterations, false);
 				return $passwordHash->CheckPassword($password, $arrAuthData['hash']);
 			break;
-			
+
 			case "XF:Core":
 				$userHash = hash('sha256', hash('sha256', $password).$arrAuthData['salt']);
 				if ($userHash === $arrAuthData['hash']) return true;
-				
+
 				$userHash = sha1(sha1($password).$arrAuthData['salt']);
 				return $this->hashEquals($arrAuthData['hash'], $userHash);
 			break;
-			
+
 			case "XF:IpsForums3x":
 				$passwordCleaned = strtr($password, [
 				'&' => '&amp;',
@@ -101,53 +101,53 @@ class xenforo21_bridge extends bridge_generic {
 				'>' => '&gt;',
 				'\'' => '&#39;',
 				]);
-				
+
 				$userHash = md5(md5($arrAuthData['salt']) . md5($passwordCleaned));
 				if($this->hashEquals($arrAuthData['hash'], $userHash)){
 					return true;
 				}
-				
+
 				$userHash = md5(md5($arrAuthData['salt']) . md5($password));
 				if($this->hashEquals($arrAuthData['hash'], $userHash)){
 					return true;
 				}
 			break;
-				
+
 			case "XF:MyBb":
 				$userHash = md5(md5($arrAuthData['salt']) . md5($password));
 				return $this->hashEquals($arrAuthData['hash'], $userHash);
 			break;
-			
+
 			case "XF:PhpBb3":
 				$passwordHash = new XenForo_PasswordHash(8, true);
 				return $passwordHash->CheckPassword($password, $arrAuthData['hash']);
 			break;
-			
+
 			case "XF:vBulletin":
 				$userHash = md5(md5($password) . $arrAuthData['salt']);
 				return $this->hashEquals($arrAuthData['hash'], $userHash);
 			break;
-			
-			
+
+
 			//vBulletin5
 			case "XF:vBulletin5":
 				$userHash = md5($password);
 				return password_verify($userHash, $arrAuthData['token']);
 			break;
-			
+
 			//SMF
 			case "XF:SMF":
 				$userHash = sha1($arrAuthData['username'] . html_entity_decode($password));
 				return $this->hashEquals($arrAuthData['hash'], $userHash);
 			break;
-			
+
 			//IpsForums4x
 			case "XF:IpsForums4x":
 				$passwordHash = new XenForo_PasswordHash(13, false);
 				return $passwordHash->CheckPassword($password, $arrAuthData['hash']);
 			break;
 		}
-		
+
 		return false;
 	}
 
@@ -157,7 +157,7 @@ class xenforo21_bridge extends bridge_generic {
 		{
 			return hash_equals($known, $user);
 		}
-		
+
 		if (!is_string($known))
 		{
 			return false;
@@ -166,24 +166,24 @@ class xenforo21_bridge extends bridge_generic {
 		{
 			return false;
 		}
-		
+
 		$knownLen = strlen($known);
 		$userLen = strlen($user);
-		
+
 		if ($knownLen !== $userLen)
 		{
 			return false;
 		}
-		
+
 		$result = 0;
 		for ($i = 0; $i < $knownLen; $i++)
 		{
 			$result |= ord($known[$i]) ^ ord($user[$i]);
 		}
-		
+
 		return ($result === 0);
 	}
-	
+
 }
 
 #
@@ -454,4 +454,3 @@ if (!class_exists("XenForo_PasswordHash")){
 		}
 	}
 }
-?>

@@ -24,9 +24,9 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class ipb3_bridge extends bridge_generic {
-	
+
 	public static $name = "IPB 3";
-	
+
 	public $data = array(
 		'user'	=> array( //User
 			'table'	=> 'members',
@@ -48,17 +48,17 @@ class ipb3_bridge extends bridge_generic {
 			'QUERY'	=> '',
 			'FUNCTION'	=> 'ipb3_get_user_groups',
 		),
-		
+
 	);
-		
+
 	//Needed function
 	public function check_password($password, $hash, $strSalt = '', $strUsername = "", $arrUserdata=array()){
-		
+
 		$password = md5( md5($strSalt) . md5( $password ) );
-		
+
 		return ($password === $hash) ? true : false;
 	}
-	
+
 	public function ipb3_get_user_groups($intUserID){
 		$query = $this->bridgedb->prepare("SELECT member_group_id, mgroup_others FROM ".$this->prefix."members WHERE member_id=?")->execute($intUserID);
 		$arrReturn = array();
@@ -71,22 +71,21 @@ class ipb3_bridge extends bridge_generic {
 					if ($group != '') $arrReturn[] = (int)$group;
 				}
 			}
-		}		
-		
+		}
+
 		return $arrReturn;
 	}
-	
+
 	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult){
 		//Is user active?
 		if ($boolLoginResult){
 			if ($arrUserdata['temp_ban'] != '0' || $arrUserdata['member_banned'] != '0') {
 				return false;
 			}
-			
+
 			return true;
 		}
 		return false;
 	}
-	
+
 }
-?>

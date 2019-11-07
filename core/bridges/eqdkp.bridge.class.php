@@ -24,10 +24,10 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class eqdkp_bridge extends bridge_generic {
-	
+
 	//Tested with EQdkp Plus 2.3
 	public static $name = "EQdkp 2.x";
-	
+
 	public $data = array(
 		'user'	=> array( //User
 			'table'	=> 'users',
@@ -51,52 +51,52 @@ class eqdkp_bridge extends bridge_generic {
 			'user'	=> 'user_id',
 			'QUERY'	=> '',
 		),
-		
+
 	);
 
-	
+
 	public $settings = array(
 		'cmsbridge_disable_sync' => array(
 			'type'	=> 'radio',
 		),
 	);
-	
+
 	public $blnSyncEmail = false;
-		
+
 	//Needed function
 	public function check_password($password, $hash, $strSalt = '', $strUsername = "", $arrUserdata=array()){
 		$blnResult = $this->user->checkPassword($password, $hash);
 		return $blnResult;
 	}
-	
+
 	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult){
 		//Is user active?
 		if ($boolLoginResult){
 			if ($arrUserdata['active'] == '0') {
 				return false;
 			}
-			
+
 			return true;
 		}
 		return false;
 	}
-	
+
 	public function sync($arrUserdata){
 		if ($this->config->get('cmsbridge_disable_sync') == '1'){
 			return false;
 		}
 		$sync_array = array();
-		
+
 		$custom_fields = $arrUserdata['custom_fields'];
 		$arrFields = unserialize($custom_fields);
 		foreach($arrFields as $key => $val){
 			$key = str_replace('userprofile_', '', $key);
 			$sync_array[$key] = $val;
 		}
-		
+
 		return $sync_array;
 	}
-	
+
 	public function sync_fields(){
 		$query = $this->bridgedb->prepare("SELECT * FROM ".$this->prefix."user_profilefields WHERE enabled=1")->execute();
 		$arrFields = array();
@@ -105,8 +105,7 @@ class eqdkp_bridge extends bridge_generic {
 				$arrFields[$row['id']] = $row['name'];
 			}
 		}
-		
+
 		return $arrFields;
 	}
 }
-?>

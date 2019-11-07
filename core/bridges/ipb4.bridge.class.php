@@ -24,9 +24,9 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class ipb4_bridge extends bridge_generic {
-	
+
 	public static $name = "IPB 4";
-	
+
 	public $data = array(
 		'user'	=> array( //User
 			'table'	=> 'members',
@@ -49,15 +49,15 @@ class ipb4_bridge extends bridge_generic {
 			'QUERY'	=> '',
 			'FUNCTION'	=> 'ipb4_get_user_groups',
 		),
-		
+
 	);
-		
+
 	//Needed function
 	public function check_password($password, $hash, $strSalt = '', $strUsername = "", $arrUserdata=array()){
 		if ($strSalt == NULL) {
 			/* IPB 4.4+ */
 			return password_verify($password, $hash);
-			
+
 		} elseif ( strlen( $strSalt ) === 22 )
 		/* New password style introduced in IPS4 using Blowfish */
 		{
@@ -70,10 +70,10 @@ class ipb4_bridge extends bridge_generic {
 			$password = md5( md5($strSalt) . md5( $password ) );
 			return ($password === $hash) ? true : false;
 		}
-		
+
 		return;
 	}
-	
+
 	public function ipb4_get_groups($blnWithID){
 		$arrGroups = array();
 		$query = $this->bridgedb->query("SELECT * FROM ".$this->prefix."groups");
@@ -84,16 +84,16 @@ class ipb4_bridge extends bridge_generic {
 					$arrGroupNames[$row['word_key']] = ($row['word_custom'] != "") ? $row['word_custom'] : $row['word_default'];
 				}
 			}
-			
+
 			while($row = $query->fetchAssoc()){
 				$arrGroups[$row['g_id']] = $arrGroupNames['core_group_'.$row['g_id']].(($blnWithID) ? ' (#'.$row['g_id'].')': '');
 			}
-			
+
 		}
-	
+
 		return $arrGroups;
 	}
-	
+
 	public function ipb4_get_user_groups($intUserID){
 		$query = $this->bridgedb->prepare("SELECT member_group_id, mgroup_others FROM ".$this->prefix."members WHERE member_id=?")->execute($intUserID);
 		$arrReturn = array();
@@ -106,22 +106,21 @@ class ipb4_bridge extends bridge_generic {
 					if ($group != '') $arrReturn[] = (int)$group;
 				}
 			}
-		}		
-		
+		}
+
 		return $arrReturn;
 	}
-	
+
 	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult){
 		//Is user active?
 		if ($boolLoginResult){
 			if ($arrUserdata['temp_ban'] != '0') {
 				return false;
 			}
-			
+
 			return true;
 		}
 		return false;
 	}
-	
+
 }
-?>
