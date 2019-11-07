@@ -27,6 +27,8 @@ if(!class_exists('pdh_w_user_groups_users')) {
 	class pdh_w_user_groups_users extends pdh_w_generic {
 	
 		public function add_user_to_group($user_id, $group_id, $blnLogging = true) {
+			if(!$user_id || !$group_id) return false;
+			
 			$arrSet = array(
 				'group_id' => $group_id,
 				'user_id'  => $user_id,
@@ -43,6 +45,8 @@ if(!class_exists('pdh_w_user_groups_users')) {
 		}
 
 		public function add_user_to_groups($user_id, $group_array) {
+			if(!$user_id) return false;
+			
 			if (is_array($group_array)) {
 				$memberships = $this->pdh->get('user_groups_users', 'memberships_status', array($this->user->data['user_id']));
 
@@ -61,6 +65,8 @@ if(!class_exists('pdh_w_user_groups_users')) {
 		}
 		
 		public function add_grpleader($arrUserIDs, $group_id){
+			if(!$group_id) return false;
+			
 			if (!is_array($arrUserIDs)){
 				$arrUserIDs = array($arrUserIDs);
 			}
@@ -71,6 +77,8 @@ if(!class_exists('pdh_w_user_groups_users')) {
 			
 			$arrNames = array();
 			foreach($arrUserIDs as $user_id){
+				if(!$user_id) continue;
+				
 				//if user already in group?
 				$blnIsInGroup = $this->pdh->get('user_groups_users', 'is_in_group', array($user_id, $group_id));
 				if(!$blnIsInGroup){

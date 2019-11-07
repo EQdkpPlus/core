@@ -418,6 +418,13 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
 				$arrParams = array();
 				foreach($this->arrParamsList as $key => $val){
 					if($val == '?') $arrParams[] = array_shift($this->arrParams['execute']);
+
+					if($val == ':cond'){
+						$arrSet = array_shift($this->arrParams['conditions']);
+						foreach($arrSet as $v){
+							$arrParams[] = $v;
+						}
+					}
 					
 					if($val == ':in') {
 						foreach($this->arrParams['in'] as $v){
@@ -451,8 +458,16 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
 			
 		} else {
 			$arrParams = array();
-			foreach($this->arrParamsList as $key => $val){
+			foreach($this->arrParamsList as $key => $val){				
 				if($val == '?') $arrParams[] = array_shift($this->arrParams['execute']);
+
+				if($val == ':cond'){
+					$arrSet = array_shift($this->arrParams['conditions']);
+					foreach($arrSet as $v){
+						$arrParams[] = $v;
+					}
+				}
+				
 				if($val == ':in') {
 					foreach($this->arrParams['in'] as $v){
 						$arrParams[] = $v;
@@ -653,6 +668,30 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
 		}
 		
 		return false;
+	}
+	
+	public function add_condition($strCondition, $arrParams){
+		if(stripos($this->strQuery, 'where') === false){
+			$condQuery = str_replace("?", " :cond", $strCondition);
+			$this->strQuery.= ' WHERE '.$strCondition;
+		} else {
+			$this->strQuery.= ' AND '.$strCondition;
+		}
+		$arrWilcards = array();
+		
+		$condQuery = str_replace("?", " :cond", $strCondition);
+		$intWildcards = preg_match_all("/(\:cond)/", $condQuery, $arrWilcards);
+		
+		if($intWildcards){
+			$this->arrParamsList = array_merge($this->arrParamsList, $arrWilcards[0]);
+		}
+		
+		if (isset($arrParams[0]) && is_array($arrParams[0]))
+		{
+			$arrParams = array_values($arrParams[0]);
+		}
+		
+		$this->arrParams['conditions'][] = $arrParams;
 	}
 
 	

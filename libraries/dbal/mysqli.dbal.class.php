@@ -372,6 +372,24 @@ class DB_Mysqli_Statement extends DatabaseStatement
 	{
 		return $strQuery;
 	}
+	
+	public function add_condition($strCondition, $arrParams){
+		$arrParams = $this->escapeParams($arrParams);
+		
+		$strCondition = str_replace('?', '%s', $strCondition);
+		
+		// Replace wildcards
+		if (($strCondition = @vsprintf($strCondition, $arrParams)) == false)
+		{
+			throw new Exception('Too few arguments to build the query string');
+		}
+		
+		if(stripos($this->strQuery, 'where') === false){
+			$this->strQuery.= ' WHERE '.$strCondition;
+		} else {
+			$this->strQuery.= ' AND '.$strCondition;
+		}
+	}
 
 
 	/**

@@ -48,12 +48,10 @@ class dbal{
 		$arrDbals = array(
 			'mysqli'	=> 'MySQLi',
 			'mysql_pdo' => 'MySQL PDO',
-			'mysql_old_pdo'=> 'MySQL PDO (Old)',
 		);
 		
 		foreach ($arrDbals as $key => $name){
 			if (dbal::check_if_pdo($key)){
-				$key = str_replace("_old", "", $key);
 				$blnCheckResult = dbal::check_pdo(dbal::check_if_pdo($key));
 			} else {
 				$blnCheckResult = dbal::check_extension($key);
@@ -80,7 +78,6 @@ class dbal{
 	
 	private static function check_if_pdo($strDBType){
 		if (substr($strDBType, -4) == "_pdo") {
-			$strDBType = str_replace("_old", "", $strDBType);
 			return substr($strDBType, 0, -4);
 		}
 		
@@ -786,7 +783,7 @@ abstract class DatabaseStatement {
 		$this->strQuery = str_replace(':in', "IN (".implode(',', $arrParams).")", $this->strQuery);
 		return $this;
 	}
-	
+
 	
 	/**
 	 * Limit the current result to a certain number of rows and take an offset value as second argument
@@ -949,11 +946,25 @@ abstract class DatabaseStatement {
 		return $this->string_escape($strString);
 	}
 	
+	public function addCondition($strCondition){
+		$arrParams = func_get_args();
+		if(!count($arrParams)) return $this;
+		
+		if(isset($arrParams[1])){
+			unset($arrParams[0]);
+		} else {
+			$arrParams = array();
+		}
+		
+		return $this->add_condition($strCondition, $arrParams);
+	}
+	
 	public function replaceTablePrefix(){
 		$strQuery = preg_replace("/([\s|`|'])__([a-zA-Z])/", '$1'.$this->strTablePrefix.'$2', $this->strQuery);
 		return $strQuery;
 	}
 			
+	abstract protected function add_condition($strCondition, $arrParams);
 	abstract protected function prepare_query($strQuery);
 	abstract protected function string_escape($strString);
 	abstract protected function limit_query($intOffset, $intRows);
