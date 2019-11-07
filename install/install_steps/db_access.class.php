@@ -130,7 +130,7 @@ class db_access extends install_generic {
 		$error = array();
 		include_once($this->root_path.'libraries/dbal/dbal.class.php');
 		try {
-			$db = dbal::factory(array('dbtype' => $this->dbtype));
+			$db = dbal::factory(array('dbtype' => $this->dbtype, 'object' => true));
 			$db->connect($this->dbhost, $this->dbname, $this->dbuser, $this->dbpass, $this->dbport);
 		
 		} catch(DBALException $e){
