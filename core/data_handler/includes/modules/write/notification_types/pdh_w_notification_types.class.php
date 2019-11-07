@@ -25,9 +25,9 @@ if(!defined('EQDKP_INC')) {
 
 if(!class_exists('pdh_w_notification_types')) {
 	class pdh_w_notification_types extends pdh_w_generic {
-		
+
 		public function add($strType, $strName, $strCategory, $intPrio=0, $strDefault=0, $blnGroup=0, $strGroupName='', $intGroupAt=3, $strIcon=""){
-				
+
 			$objQuery = $this->db->prepare("INSERT INTO __notification_types :p")->set(array(
 					'id'			=> $strType,
 					'name'			=> $strName,
@@ -39,14 +39,14 @@ if(!class_exists('pdh_w_notification_types')) {
 					'group_at'		=> $intGroupAt,
 					'icon'			=> $strIcon,
 			))->execute();
-		
+
 			if($objQuery) {
 				$this->pdh->enqueue_hook('notification_types_update', array());
 				return true;
 			}
 			return false;
 		}
-		
+
 		public function update($strNotificationID, $intPrio, $strDefault=0, $blnGroup=0, $intGroupAt=3, $strIcon=""){
 			$objQuery = $this->db->prepare("UPDATE __notification_types :p WHERE id=?")->set(array(
 					'prio'			=> $intPrio,
@@ -55,7 +55,7 @@ if(!class_exists('pdh_w_notification_types')) {
 					'group_at'		=> $intGroupAt,
 					'icon'			=> $strIcon,
 			))->execute($strNotificationID);
-			
+
 			if($objQuery) {
 				$this->pdh->enqueue_hook('notification_types_update', array($strNotificationID));
 				return true;
@@ -65,4 +65,3 @@ if(!class_exists('pdh_w_notification_types')) {
 
 	}
 }
-?>

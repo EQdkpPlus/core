@@ -54,7 +54,7 @@ if(!class_exists('pdh_w_styles')) {
 			$this->pdh->enqueue_hook('styles_update');
 			return true;
 		}
-		
+
 		public function insert_styleparams($style){
 			$objQuery = $this->db->prepare("INSERT INTO __styles :p")->set(array(
 				'style_name'	=> $style,
@@ -66,22 +66,22 @@ if(!class_exists('pdh_w_styles')) {
 				$this->pdh->enqueue_hook('styles_update');
 				return $objQuery->insertId;
 			}
-			
+
 			return false;
 		}
-		
+
 		public function add_style($data){
 			if(!isset($data['background_type']) || $data['background_type'] == "") $data['background_type'] = 1;
-			
+
 			$objQuery = $this->db->prepare("INSERT INTO __styles :p")->set($data)->execute();
 			if ($objQuery){
 				$this->pdh->enqueue_hook('styles_update');
 				return $objQuery->insertId;
 			}
-			
+
 			return false;
 		}
-		
+
 		public function update_style($styleid, $data){
 			$objQuery = $this->db->prepare("UPDATE __styles :p WHERE style_id=?")->set($data)->execute($styleid);
 			$this->pdh->enqueue_hook('styles_update');
@@ -89,4 +89,3 @@ if(!class_exists('pdh_w_styles')) {
 		}
 	}
 }
-?>

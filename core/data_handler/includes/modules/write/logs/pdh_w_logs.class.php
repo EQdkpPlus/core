@@ -32,10 +32,10 @@ if(!class_exists('pdh_w_logs')) {
 			$this->pdh->enqueue_hook('logs_update');
 			return $objQuery->affectedRows;
 		}
-		
+
 		public function delete_ids($arrIDs){
 			$this->db->prepare("DELETE FROM __logs WHERE log_id :in")->in($arrIDs)->execute();
-			
+
 			$this->pdh->enqueue_hook('logs_update');
 			return count($arrIDs);
 		}
@@ -43,7 +43,7 @@ if(!class_exists('pdh_w_logs')) {
 		public function truncate_log(){
 			$arrResult = $this->db->query("SELECT count(*) as count FROM __logs", true);
 			$count = $arrResult['count'];
-			
+
 			$this->db->query("TRUNCATE TABLE __logs");
 			$this->pdh->enqueue_hook('logs_update');
 			return intval($count);
@@ -61,8 +61,8 @@ if(!class_exists('pdh_w_logs')) {
 		public function add_log($tag, $value, $recordid=0, $record='',$admin_action=true, $plugin='', $result=1, $userid = false, $strTrace='') {
 			if(!$userid){
 				$userid = (defined('IN_CRON')) ? CRONJOB : $this->user->id;
-			} 
-			
+			}
+
 			$objQuery = $this->db->prepare('INSERT INTO __logs :p')->set(array(
 				'log_value'			=> serialize($value),
 				'log_result'		=> $result,
@@ -78,13 +78,12 @@ if(!class_exists('pdh_w_logs')) {
 				'log_record_id'		=> $recordid,
 				'trace'				=> $strTrace,
 			))->execute();
-			
+
 			if ($objQuery){
 				$id = $objQuery->insertId;
 				$this->pdh->enqueue_hook('logs_update', array($id));
 			}
-			
+
 		}
 	}
 }
-?>

@@ -35,7 +35,7 @@ if(!class_exists('pdh_w_repository')) {
 			$this->db->query("TRUNCATE TABLE __repository;");
 			$this->pdh->enqueue_hook('repository_update');
 		}
-		
+
 		public function setUpdateTime($time){
 			$objQuery = $this->db->prepare("UPDATE __repository :p")->set(array(
 				'updated' => $time,
@@ -44,4 +44,3 @@ if(!class_exists('pdh_w_repository')) {
 		}
 	}
 }
-?>

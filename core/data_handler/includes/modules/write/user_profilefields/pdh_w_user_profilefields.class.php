@@ -25,9 +25,9 @@ if(!defined('EQDKP_INC')) {
 
 if(!class_exists('pdh_w_user_profilefields')) {
 	class pdh_w_user_profilefields extends pdh_w_generic {
-		
+
 		public function insert_field($arrValues, $arrOptions){
-		
+
 			$arrSet = array(
 					'name' 					=> $arrValues['name'],
 					'lang_var' 				=> $arrValues['lang_var'],
@@ -47,17 +47,17 @@ if(!class_exists('pdh_w_user_profilefields')) {
 					'editable' 				=> 1,
 					'sort_order' 			=> 9999999,
 			);
-				
+
 			$objQuery = $this->db->prepare("INSERT INTO __user_profilefields :p ")->set($arrSet)->execute();
-				
+
 			if($objQuery) {
 				$this->pdh->enqueue_hook('user_profilefields_update');
 				return $objQuery->insertId;
 			}
-				
+
 			return false;
 		}
-		
+
 		public function update_field($intFieldID, $arrValues, $arrOptions){
 
 			$arrSet = array(
@@ -78,22 +78,22 @@ if(!class_exists('pdh_w_user_profilefields')) {
 				'options' => serialize(array('options' => $arrOptions)),
 				'editable' => 1
 			);
-			
+
 			$objQuery = $this->db->prepare("UPDATE __user_profilefields :p WHERE id=?")->set($arrSet)->execute($intFieldID);
-			
+
 			if($objQuery) {
 				$this->pdh->enqueue_hook('user_profilefields_update', array($intFieldID));
 				return true;
 			}
-			
+
 			return false;
 		}
-		
+
 		public function enable_field($intFieldID){
 			$objQuery = $this->db->prepare('UPDATE __user_profilefields :p WHERE id=?')->set(array(
 				'enabled' => 1
 			))->execute($intFieldID);
-				
+
 			if ($objQuery) {
 				$this->pdh->enqueue_hook('user_profilefields_update', array($intFieldID));
 				return true;
@@ -101,12 +101,12 @@ if(!class_exists('pdh_w_user_profilefields')) {
 				return false;
 			}
 		}
-		
+
 		public function disable_field($intFieldID) {
 			$objQuery = $this->db->prepare('UPDATE __user_profilefields :p WHERE id=?')->set(array(
 				'enabled' => 0
 			))->execute($intFieldID);
-				
+
 			if ($objQuery) {
 				$this->pdh->enqueue_hook('user_profilefields_update', array($intFieldID));
 				return true;
@@ -114,7 +114,7 @@ if(!class_exists('pdh_w_user_profilefields')) {
 				return false;
 			}
 		}
-		
+
 		public function set_sortation($intFieldID, $intSortID){
 			$old['sortid'] = $this->pdh->get('user_profilefields', 'sort_order', array($intFieldID));
 			if ($old['sortid'] != $intSortID){
@@ -122,7 +122,7 @@ if(!class_exists('pdh_w_user_profilefields')) {
 						'sort_order'	=> $intSortID,
 				);
 				$objQuery = $this->db->prepare("UPDATE __user_profilefields :p WHERE id=?")->set($arrSet)->execute($intFieldID);
-				
+
 				if(!$objQuery) {
 					return false;
 				}
@@ -132,14 +132,14 @@ if(!class_exists('pdh_w_user_profilefields')) {
 
 		public function delete_field($intFieldID) {
 			$objQuery = $this->db->prepare("DELETE FROM __user_profilefields WHERE id = ?;")->execute($intFieldID);
-			
+
 			if($objQuery) {
 				$this->pdh->enqueue_hook('user_profilefields_update', array($intFieldID));
 				return true;
 			}
 			return false;
 		}
-		
+
 		public function delete_fields($arrFields) {
 			if (is_array($arrFields)) {
 				foreach($arrFields as $intFieldID) {
@@ -150,7 +150,7 @@ if(!class_exists('pdh_w_user_profilefields')) {
 			}
 			return false;
 		}
-		
+
 		public function truncate(){
 			if($this->db->query("TRUNCATE __user_profilefields;")) {
 				$this->pdh->enqueue_hook('user_profilefields_update');
@@ -160,4 +160,3 @@ if(!class_exists('pdh_w_user_profilefields')) {
 		}
 	}
 }
-?>

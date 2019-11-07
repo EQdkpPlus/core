@@ -30,7 +30,7 @@ if(!class_exists('pdh_w_portal_blocks')) {
 			$objQuery = $this->db->prepare("DELETE FROM __portal_blocks WHERE id=?" )->execute($id);
 			$this->pdh->enqueue_hook('portal_blocks_update');
 		}
-		
+
 		public function add($strName, $intWideContent){
 			$objQuery = $this->db->prepare("INSERT INTO __portal_blocks :p")->set(array(
 				'name' 			=> $strName,
@@ -41,25 +41,24 @@ if(!class_exists('pdh_w_portal_blocks')) {
 				$this->pdh->enqueue_hook('portal_blocks_update');
 				return $objQuery->insertId;
 			}
-			
+
 			return false;
 		}
-		
+
 		public function update($id, $strName, $intWideContent){
 			$objQuery = $this->db->prepare("UPDATE __portal_blocks :p WHERE id=?")->set(array(
 				'name' 			=> $strName,
 				'wide_content'	=> $intWideContent,
 			))->execute($id);
-						
+
 			if ($objQuery){
 				$this->pdh->enqueue_hook('portal_blocks_update');
 				return $id;
 			}
-			
+
 			return false;
 		}
-		
-		
+
+
 	}
 }
-?>

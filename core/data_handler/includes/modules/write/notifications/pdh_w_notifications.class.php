@@ -25,20 +25,20 @@ if(!defined('EQDKP_INC')) {
 
 if(!class_exists('pdh_w_notifications')) {
 	class pdh_w_notifications extends pdh_w_generic {
-		
-		public function add($strType, $intToUserID, $strFromUsername, $strRecordsetId, $strLink, $strAdditonalData=''){					
+
+		public function add($strType, $intToUserID, $strFromUsername, $strRecordsetId, $strLink, $strAdditonalData=''){
 			if($this->server_path != "/" && $this->server_path != ""){
 				$strLink = str_replace($this->server_path, '{SERVER_PATH}', $strLink);
 			} else {
 				$strLink = '{SERVER_PATH}'.$strLink;
 			}
-			
+
 			$strLink = str_replace('{SERVER_PATH}/', '{SERVER_PATH}', $strLink);
 			$strLink = str_replace($this->root_path, '{SERVER_PATH}', $strLink);
 			$strLink = str_replace($this->SID, '{SID}', $strLink);
 			$strLink = str_replace('?', '{SID}&', $strLink);
 			$strLink = str_replace('//', '/', $strLink);
-			
+
 			$objQuery = $this->db->prepare("INSERT INTO __notifications :p")->set(array(
 					'type'				=> $strType,
 					'user_id'			=> $intToUserID,
@@ -53,9 +53,9 @@ if(!class_exists('pdh_w_notifications')) {
 				$this->pdh->enqueue_hook('notifications_update', array($objQuery->insertId));
 				return $objQuery->insertId;
 			}
-			return false;			
+			return false;
 		}
-		
+
 		public function mark_as_read($intNotificationID){
 			$objQuery = $this->db->prepare("UPDATE __notifications :p WHERE id=?;")->set(array(
 					'`read`'	=> 1
@@ -66,7 +66,7 @@ if(!class_exists('pdh_w_notifications')) {
 			}
 			return false;
 		}
-		
+
 		public function mark_all_as_read($intUserID){
 			$objQuery = $this->db->prepare("UPDATE __notifications :p WHERE user_id=?;")->set(array(
 					'`read`'	=> 1
@@ -76,16 +76,16 @@ if(!class_exists('pdh_w_notifications')) {
 				return true;
 			}
 			return false;
-			
+
 		}
-		
+
 		public function mark_as_read_bytype($strType, $intUserId, $mixDatasetID){
 			if(is_array($mixDatasetID)){
 				if(count($mixDatasetID) === 0) return true;
 				$objQuery = $this->db->prepare("UPDATE __notifications :p WHERE type=? AND user_id=? AND dataset_id :in;")->set(array(
 						'`read`'	=> 1
 				))->in($mixDatasetID)->execute($strType, $intUserId);
-				
+
 			} else {
 				$objQuery = $this->db->prepare("UPDATE __notifications :p WHERE type=? AND user_id=? AND dataset_id=?;")->set(array(
 						'`read`'	=> 1
@@ -97,27 +97,27 @@ if(!class_exists('pdh_w_notifications')) {
 			}
 			return false;
 		}
-		
+
 		public function delete($intNotificationID){
 			$objQuery = $this->db->prepare("DELETE FROM __notifications WHERE id = ?")->execute($intNotificationID);
-			
+
 			if($objQuery) {
 				$this->pdh->enqueue_hook('notifications_update', array($intNotificationID));
 				return true;
 			}
 			return false;
 		}
-		
+
 		public function delete_by_type($strType){
 			$objQuery = $this->db->prepare("DELETE FROM __notifications WHERE `type` = ?")->execute($strType);
-				
+
 			if($objQuery) {
 				$this->pdh->enqueue_hook('notifications_update');
 				return true;
 			}
 			return false;
 		}
-		
+
 		public function delete_by_type_and_recordset($strType, $strRecordsetID){
 			$objQuery = $this->db->prepare("DELETE FROM __notifications WHERE `type` = ? AND dataset_id=?")->execute($strType, $strRecordsetID);
 			if($objQuery) {
@@ -126,7 +126,7 @@ if(!class_exists('pdh_w_notifications')) {
 			}
 			return false;
 		}
-		
+
 		public function delete_by_type_and_recordset_for_user($strType, $strRecordsetID, $intUserID){
 			$objQuery = $this->db->prepare("DELETE FROM __notifications WHERE `type` = ? AND dataset_id=? AND user_id = ?")->execute($strType, $strRecordsetID, $intUserID);
 			if($objQuery) {
@@ -135,41 +135,41 @@ if(!class_exists('pdh_w_notifications')) {
 			}
 			return false;
 		}
-		
+
 		public function delete_by_user($intUserID){
 			$objQuery = $this->db->prepare("DELETE FROM __notifications WHERE user_id = ?")->execute($intUserID);
-		
+
 			if($objQuery) {
 				$this->pdh->enqueue_hook('notifications_update');
 				return true;
 			}
 			return false;
 		}
-		
+
 		public function cleanup_read($intTime){
 			$objQuery = $this->db->prepare("DELETE FROM __notifications WHERE `read` = 1 AND `time` < ?")->execute($intTime);
-			
+
 			if($objQuery) {
 				$this->pdh->enqueue_hook('notifications_update');
 				return true;
 			}
 			return false;
 		}
-		
+
 		public function cleanup_unread($intTime){
 			$objQuery = $this->db->prepare("DELETE FROM __notifications WHERE `time` < ?")->execute($intTime);
-				
+
 			if($objQuery) {
 				$this->pdh->enqueue_hook('notifications_update');
 				return true;
 			}
 			return false;
 		}
-		
-		
+
+
 		public function del_type($strType){
 			$objQuery = $this->db->prepare("DELETE FROM __notification_types WHERE id=?")->execute($strType);
-		
+
 			if($objQuery) {
 				$this->pdh->enqueue_hook('notification_types_update', array());
 				return true;
@@ -179,4 +179,3 @@ if(!class_exists('pdh_w_notifications')) {
 
 	}
 }
-?>

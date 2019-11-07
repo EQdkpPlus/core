@@ -25,7 +25,7 @@ if(!defined('EQDKP_INC')) {
 
 if(!class_exists('pdh_w_cronjobs')) {
 	class pdh_w_cronjobs extends pdh_w_generic {
-		
+
 		public function add($cronjobID, $intStartTime, $blnRepeat, $strRepeatType, $intRepeatInterval, $blnExtern, $blnAjax, $blnDelay, $blnMultiple, $blnActive, $blnEditable, $strPath, $arrParams, $strDescription){
 			$objQuery = $this->db->prepare("INSERT INTO __cronjobs :p")->set(array(
 					'id'				=> $cronjobID,
@@ -43,14 +43,14 @@ if(!class_exists('pdh_w_cronjobs')) {
 					'params'			=> serialize($arrParams),
 					'description'		=> $strDescription
 			))->execute();
-			
+
 			if($objQuery){
 				$this->pdh->enqueue_hook('cronjobs_update', $cronjobID);
 				return $cronjobID;
 			}
 			return false;
 		}
-		
+
 		public function update($cronjobID, $intStartTime, $blnRepeat, $strRepeatType, $intRepeatInterval, $blnExtern, $blnAjax, $blnDelay, $blnMultiple, $blnActive, $blnEditable, $strPath, $arrParams, $strDescription){
 			$objQuery = $this->db->prepare("UPDATE __cronjobs :p WHERE id=?")->set(array(
 					'start_time'		=> $intStartTime,
@@ -67,93 +67,91 @@ if(!class_exists('pdh_w_cronjobs')) {
 					'params'			=> serialize($arrParams),
 					'description'		=> $strDescription
 			))->execute($cronjobID);
-				
+
 			if($objQuery){
 				$this->pdh->enqueue_hook('cronjobs_update', $cronjobID);
 				return $cronjobID;
 			}
 			return false;
 		}
-		
-		
+
+
 		public function delete($cronjobID){
 			$objQuery = $this->db->prepare("DELETE FROM __cronjobs WHERE id=?")->execute($cronjobID);
 			$this->pdh->enqueue_hook('cronjobs_update', array($cronjobID));
 			return true;
 		}
-		
+
 		public function setActive($cronjobID, $arrAdditionalData=array()){
 			$arrToSet = array(
 				'active' => 1,
 			);
-			
+
 			$arrData = $this->pdh->get('cronjobs', 'data', array($cronjobID));
-			
+
 			foreach($arrAdditionalData as $key => $val){
 				if(!isset($arrData[$key])) continue;
 				$arrToSet[$key] = $val;
 			}
-			
+
 			$objQuery = $this->db->prepare("UPDATE __cronjobs :p WHERE id=?")->set($arrToSet)->execute($cronjobID);
-			
+
 			if($objQuery){
 				$this->pdh->enqueue_hook('cronjobs_update', $cronjobID);
 				return $cronjobID;
 			}
 			return false;
 		}
-		
+
 		public function setInactive($cronjobID){
 			$objQuery = $this->db->prepare("UPDATE __cronjobs :p WHERE id=?")->set(array(
 				'active' => 0,
 			))->execute($cronjobID);
-				
+
 			if($objQuery){
 				$this->pdh->enqueue_hook('cronjobs_update', $cronjobID);
 				return $cronjobID;
 			}
 			return false;
 		}
-		
+
 		public function setNextRun($cronjobID,$intNextRun){
 			$objQuery = $this->db->prepare("UPDATE __cronjobs :p WHERE id=?")->set(array(
 					'next_run' => $intNextRun,
 			))->execute($cronjobID);
-			
+
 			if($objQuery){
 				$this->pdh->enqueue_hook('cronjobs_update', $cronjobID);
 				return $cronjobID;
 			}
 			return false;
 		}
-		
+
 		public function setLastRun($cronjobID,$intLastRun){
 			$objQuery = $this->db->prepare("UPDATE __cronjobs :p WHERE id=?")->set(array(
 					'last_run' => $intLastRun,
 			))->execute($cronjobID);
-				
+
 			if($objQuery){
 				$this->pdh->enqueue_hook('cronjobs_update', $cronjobID);
 				return $cronjobID;
 			}
 			return false;
 		}
-		
+
 		public function setLastAndNextRun($cronjobID, $intLastRun, $intNextRun){
 			$objQuery = $this->db->prepare("UPDATE __cronjobs :p WHERE id=?")->set(array(
 					'next_run' => $intNextRun,
 					'last_run' => $intLastRun,
 			))->execute($cronjobID);
-		
+
 			if($objQuery){
 				$this->pdh->enqueue_hook('cronjobs_update', $cronjobID);
 				return $cronjobID;
 			}
 			return false;
 		}
-		
-		
+
+
 	}
 }
-
-?>

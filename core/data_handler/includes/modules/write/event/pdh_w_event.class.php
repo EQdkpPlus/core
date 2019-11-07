@@ -25,7 +25,7 @@ if(!defined('EQDKP_INC')) {
 
 if(!class_exists('pdh_w_event')) {
 	class pdh_w_event extends pdh_w_generic {
-		
+
 		private $arrLogLang = array(
 			'event_name' 	=> "{L_NAME}",
 			'event_value'	=> "{L_VALUE}",
@@ -41,9 +41,9 @@ if(!class_exists('pdh_w_event')) {
 				'event_added_by'=> $this->admin_user,
 				'default_itempool'=> $itempool,
 			);
-			
+
 			$objQuery = $this->db->prepare("INSERT INTO __events :p")->set($arrSet)->execute();
-			
+
 			if($objQuery) {
 				$id = $objQuery->insertId;
 				$log_action = array(
@@ -54,11 +54,11 @@ if(!class_exists('pdh_w_event')) {
 				);
 				$this->log_insert('action_event_added', $log_action, $id, $name);
 				$this->pdh->enqueue_hook('event_update', array($id));
-				
+
 				if($this->hooks->isRegistered('event_added')){
 					$this->hooks->process('event_added', array('id' => $id, 'data' => array()));
 				}
-				
+
 				return $id;
 			}
 			return false;
@@ -77,9 +77,9 @@ if(!class_exists('pdh_w_event')) {
 				'event_updated_by'=> $this->admin_user,
 				'default_itempool' => $itempool,
 			);
-			
+
 			$objQuery = $this->db->prepare("UPDATE __events :p WHERE event_id =?")->set($arrSet)->execute($id);
-			
+
 			if($objQuery) {
 				$arrOld = array(
 					'event_name' 	=> $old['name'],
@@ -95,11 +95,11 @@ if(!class_exists('pdh_w_event')) {
 				);
 				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
 				if ($log_action) $this->log_insert('action_event_updated', $log_action, $id, $old['name']);
-				
+
 				if($this->hooks->isRegistered('event_updated')){
 					$this->hooks->process('event_updated', array('id' => $id, 'data' => $arrNew));
 				}
-								
+
 				$this->pdh->enqueue_hook('event_update', array($id));
 				return true;
 			}
@@ -111,9 +111,9 @@ if(!class_exists('pdh_w_event')) {
 			$old['value'] = $this->pdh->get('event', 'value', array($id));
 			$old['icon'] = $this->pdh->get('event', 'icon', array($id));
 			$old['default_itempool'] = $this->pdh->get('event', 'def_itempool', array($id));
-			
+
 			$this->db->beginTransaction();
-			
+
 			$objQuery = $this->db->prepare("DELETE FROM __events WHERE event_id = ?;")->execute($id);
 
 			if($objQuery) {
@@ -137,7 +137,7 @@ if(!class_exists('pdh_w_event')) {
 					$this->pdh->enqueue_hook('event_update', array($id));
 					return true;
 				}
-				
+
 				if($this->hooks->isRegistered('event_deleted')){
 					$this->hooks->process('event_deleted', array('id' => $id, 'data' => $old));
 				}
@@ -145,16 +145,15 @@ if(!class_exists('pdh_w_event')) {
 			$this->db->rollbackTransaction();
 			return false;
 		}
-		
+
 		public function reset() {
 			$this->db->query("TRUNCATE TABLE __events;");
 			$this->db->query("TRUNCATE TABLE __multidkp2event;");
 			$this->pdh->enqueue_hook('event_update');
-			
+
 			if($this->hooks->isRegistered('event_reset')){
 				$this->hooks->process('event_reset', array());
 			}
 		}
 	}
 }
-?>
