@@ -36,7 +36,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			'article_categories_update',
 			'article_updates',
 		);
-				
+
 		public $presets = array(
 			'category_sortable' => array('sort_id', array('%category_id%'), array()),
 			'category_editicon' => array('editicon', array('%category_id%'), array()),
@@ -61,7 +61,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			if($this->categories !== NULL && $this->sortation !== NULL && $this->alias !== NULL){
 				return true;
 			}
-			
+
 			$objQuery = $this->db->query("SELECT * FROM __article_categories ORDER BY sort_id ASC");
 			if($objQuery){
 				while($drow = $objQuery->fetchAssoc()){
@@ -90,19 +90,19 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 					);
 					$this->alias[utf8_strtolower($drow['alias'])] = intval($drow['id']);
 				}
-				
+
 				$this->sortation = $this->get_sortation();
-				
+
 				$this->pdc->put('pdh_article_categories_table', $this->categories, null);
 				$this->pdc->put('pdh_article_categories_sortation', $this->sortation, null);
 				$this->pdc->put('pdh_article_categories_alias', $this->alias, null);
 			}
-	
+
 		}
 
 		public function get_id_list($blnPublishedOnly = false) {
 			if ($this->categories == NULL) return array();
-			
+
 			if ($blnPublishedOnly){
 				$arrOut = array();
 				foreach($this->categories as $intCategoryID => $arrCat){
@@ -111,7 +111,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 				return $arrOut;
 			} else return array_keys($this->categories);
 		}
-		
+
 		//Get all published article IDs
 		public function get_published_id_list($intCategoryID, $intUserID = false, $forRSS=false, $blnFeaturedOnly=NULL, $isAdmin=false){
 			if($blnFeaturedOnly === NULL) $blnFeaturedOnly = $this->get_featured_only($intCategoryID);
@@ -126,11 +126,11 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 					if (!$this->get_published($intCatID)) continue;
 					//Check if category should be hidden on RSS
 					if($forRSS && $this->get_hide_on_rss($intCatID)) continue;
-					
+
 					//Check cat permission
 					$arrPermissions = $this->get_user_permissions($intCatID, $intUserID);
 					if (!$arrPermissions['read']) continue;
-					
+
 					//Foreach Article
 					$arrArticles = $this->pdh->get('articles', 'id_list', array($intCatID));
 					foreach($arrArticles as $intArticleID){
@@ -140,16 +140,16 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 						if ($blnFeaturedOnly && !$this->pdh->get('articles', 'featured', array($intArticleID))) continue;
 						//Check start from/to
 						if (($this->pdh->get('articles', 'show_from', array($intArticleID)) != "" && $this->pdh->get('articles', 'show_from', array($intArticleID)) > $this->time->time) || ($this->pdh->get('articles', 'show_to', array($intArticleID)) != "" && $this->pdh->get('articles', 'show_to', array($intArticleID)) < $this->time->time)) continue;
-						
+
 						$arrOut[] = $intArticleID;
 					}
 				}
 			}
 			$arrOut = array_unique($arrOut);
-			
+
 			return $arrOut;
 		}
-		
+
 		public function get_data($intCategoryID){
 			if (isset($this->categories[$intCategoryID])){
 				return $this->categories[$intCategoryID];
@@ -164,49 +164,49 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			}
 			return false;
 		}
-				
+
 		public function get_alias($intCategoryID){
 			if (isset($this->categories[$intCategoryID])){
 				return $this->categories[$intCategoryID]['alias'];
 			}
 			return false;
 		}
-		
+
 		public function get_description($intCategoryID){
 			if (isset($this->categories[$intCategoryID])){
 				return $this->categories[$intCategoryID]['description'];
 			}
 			return false;
 		}
-		
+
 		public function get_per_page($intCategoryID){
 			if (isset($this->categories[$intCategoryID])){
 				return $this->categories[$intCategoryID]['per_page'];
 			}
 			return false;
 		}
-		
+
 		public function get_permissions($intCategoryID){
 			if (isset($this->categories[$intCategoryID])){
 				return unserialize($this->categories[$intCategoryID]['permissions']);
 			}
 			return false;
 		}
-		
+
 		public function get_published($intCategoryID){
 			if (isset($this->categories[$intCategoryID])){
 				return $this->categories[$intCategoryID]['published'];
 			}
 			return false;
 		}
-		
+
 		public function get_parent($intCategoryID){
 			if (isset($this->categories[$intCategoryID])){
 				return $this->categories[$intCategoryID]['parent'];
 			}
 			return false;
 		}
-		
+
 		public function get_sort_id($intCategoryID){
 			if (isset($this->categories[$intCategoryID])){
 				return $this->sortation[$intCategoryID];
@@ -214,52 +214,52 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			}
 			return false;
 		}
-		
+
 		public function get_html_sort_id($intCategoryID){
 			return '<span class="ui-icon ui-icon-arrowthick-2-n-s" title="'.$this->user->lang('dragndrop').'"></span><input type="hidden" name="sortCategories[]" value="'.$intCategoryID.'"/>';
 		}
-		
+
 		public function get_list_type($intCategoryID){
 			if (isset($this->categories[$intCategoryID])){
 				return $this->categories[$intCategoryID]['list_type'];
 			}
 			return false;
 		}
-		
+
 		public function get_aggregation($intCategoryID){
 			if (isset($this->categories[$intCategoryID])){
 				return unserialize($this->categories[$intCategoryID]['aggregation']);
 			}
 			return false;
 		}
-		
+
 		public function get_featured_only($intCategoryID){
 			if (isset($this->categories[$intCategoryID])){
 				return $this->categories[$intCategoryID]['featured_only'];
 			}
 			return false;
 		}
-		
+
 		public function get_social_share_buttons($intCategoryID){
 			if (isset($this->categories[$intCategoryID])){
 				return $this->categories[$intCategoryID]['social_share_buttons'];
 			}
 			return false;
 		}
-		
+
 		public function get_portal_layout($intCategoryID){
 			if (isset($this->categories[$intCategoryID])){
 				return $this->categories[$intCategoryID]['portal_layout'];
 			}
 			return false;
 		}
-		
+
 		public function get_html_portal_layout($intCategoryID){
 			if ($this->get_portal_layout($intCategoryID)) {
 				return $this->pdh->get('portal_layouts', 'name', array($this->get_portal_layout($intCategoryID)));
 			} else return '';
 		}
-		
+
 		public function get_used_portallayout_number($intPortalLayoutID){
 			$intCount = 0;
 			$intPortalLayoutID = intval($intPortalLayoutID);
@@ -268,108 +268,108 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			}
 			return $intCount;
 		}
-		
+
 		public function get_show_childs($intCategoryID){
 			if (isset($this->categories[$intCategoryID])){
 				return $this->categories[$intCategoryID]['show_childs'];
 			}
 			return false;
 		}
-		
+
 		public function get_article_published_state($intCategoryID){
 			if (isset($this->categories[$intCategoryID])){
 				return $this->categories[$intCategoryID]['article_published_state'];
 			}
 			return false;
 		}
-		
+
 		public function get_notify_on_onpublished_articles($intCategoryID){
 			if (isset($this->categories[$intCategoryID])){
 				return $this->categories[$intCategoryID]['notify_on_onpublished_articles'];
 			}
 			return false;
 		}
-		
+
 		public function get_hide_header($intCategoryID){
 			if (isset($this->categories[$intCategoryID])){
 				return $this->categories[$intCategoryID]['hide_header'];
 			}
 			return false;
 		}
-		
+
 		public function get_hide_on_rss($intCategoryID){
 			if (isset($this->categories[$intCategoryID])){
 				return $this->categories[$intCategoryID]['hide_on_rss'];
 			}
 			return false;
 		}
-		
+
 		public function get_sortation_type($intCategoryID){
 			if (isset($this->categories[$intCategoryID])){
 				return $this->categories[$intCategoryID]['sortation_type'];
 			}
 			return false;
 		}
-		
+
 		public function get_featured_ontop($intCategoryID){
 			if (isset($this->categories[$intCategoryID])){
 				return $this->categories[$intCategoryID]['featured_ontop'];
 			}
 			return false;
 		}
-				
+
 		public function get_editicon($intCategoryID){
 			return '<a href="'.$this->root_path.'admin/manage_article_categories.php'.$this->SID.'&c='.$intCategoryID.'"><i class="fa fa-pencil fa-lg" title="'.$this->user->lang('edit').'"></i></a>';
 		}
-		
+
 		public function get_html_published($intCategoryID){
 			if ($this->get_published($intCategoryID)){
 				$strImage = '<div><div class="eye eyeToggleTrigger"></div><input type="hidden" class="published_cb" name="published['.$intCategoryID.']" value="1"/></div>';
 			} else {
 				$strImage = '<div><div class="eye-gray eyeToggleTrigger"></div><input type="hidden" class="published_cb" name="published['.$intCategoryID.']" value="0"/></div>';
 			}
-			
+
 			if ($intCategoryID == 1) $strImage = '<div><div class="eye"></div><input type="hidden" class="published_cb" name="published['.$intCategoryID.']" value="1"/></div>';
 			return $strImage;
 		}
-		
+
 		public function get_article_count($intCategoryID){
 			$arrArticles = $this->pdh->get('articles', 'id_list', array($intCategoryID));
 			if (is_array($arrArticles)) return count($arrArticles);
 			return 0;
 		}
-		
+
 		public function get_html_article_count($intCategoryID){
 			return '<a class="bubble" href="'.$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$intCategoryID.'">'.$this->get_article_count($intCategoryID).'</a>';
 		}
-		
+
 		public function get_html_name($intCategoryID){
 			$intArticles = $this->get_article_count($intCategoryID);
 			$filled = ($intArticles > 0) ? '' : '-o';
 			$icon = (count($this->get_childs($intCategoryID))) ? '<i class="fa fa-folder-open'.$filled.'"></i>' : '<i class="fa fa-folder'.$filled.'"></i>';
 			$startpage = ($this->get_is_startpage($intCategoryID)) ? ' <i class="fa fa-globe"></i>' : '';
-			
+
 			return $this->get_name_prefix($intCategoryID).' <a href="'.$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$intCategoryID.'" class="articles-link">'.$icon.' '.$this->get_name($intCategoryID).'</a>'.$startpage;
 		}
-		
+
 		public function get_is_startpage($intCategoryID){
 			$strStartPage = $this->config->get('start_page');
 			if($this->get_alias($intCategoryID) == $strStartPage) return true;
-			
+
 			return false;
 		}
-		
+
 		public function get_check_alias($strAlias, $blnCheckArticles=false){
 			$strAlias = utf8_strtolower($strAlias);
-		
+
 			foreach ($this->categories as $key => $val){
 				if ($this->get_alias($key) == $strAlias) return false;
 			}
-			
+
 			//Check static routes
 			$arrRoutes = register('routing')->getRoutes();
 			if (isset($arrRoutes[$strAlias])) return false;
-			
+
 			//No Category uses this alias, check articles
 			if ($blnCheckArticles){
 				$blnResult = $this->pdh->get('articles', 'check_alias', array($strAlias, false));
@@ -377,11 +377,11 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			}
 			return true;
 		}
-		
+
 		public function get_calculated_permissions($intCategoryID, $strPermission, $intUsergroupID, $myPermission=false, $intParentID=false, $intCall = 0){
 			$arrPermissions = $this->get_permissions($intCategoryID);
 			$myPermission = ($myPermission !== false && $intCall == 0) ? $myPermission : ((isset($arrPermissions[$strPermission][$intUsergroupID])) ? $arrPermissions[$strPermission][$intUsergroupID] : ((isset($arrPermissions[$strPermission][1])) ? $arrPermissions[$strPermission][1] : -1));
-			
+
 			if ($strPermission == 'rea'){
 				switch($myPermission){
 					case -1:
@@ -410,8 +410,8 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 					break;
 					default: return 0;
 				}
-				
-				
+
+
 			} else {
 				switch($myPermission){
 					case 0:
@@ -432,11 +432,11 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 							if ($result == -1) return 0;
 							return $result;
 				}
-				
+
 			}
 			return 0;
 		}
-		
+
 		public function get_sortation(){
 			$myChildArray = array();
 			$myRootArray  = array();
@@ -447,16 +447,16 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 					$myRootArray[$key] = $key;
 				}
 			}
-			
+
 			$outArray = array();
 			foreach($myRootArray as $key => $val){
 				$outArray[] = $key;
 				$this->add_array($key, $outArray, $myChildArray);
 			}
-			
+
 			return array_flip($outArray);
 		}
-		
+
 		public function get_all_childs($intCategoryID){
 			$arrCategories = $this->get_sortation();
 			$arrOut = array();
@@ -472,10 +472,10 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 					$arrOut[] = $catid;
 				}
 			}
-			
+
 			return $arrOut;
 		}
-		
+
 		public function add_array($key, &$arrOut, $arrChildArray){
 			if (isset($arrChildArray[$key])){
 				foreach($arrChildArray[$key] as $val){
@@ -484,14 +484,14 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 				}
 			}
 		}
-		
+
 		public function get_parent_count($intCategoryID, $intCount=0){
 			if ($this->get_parent($intCategoryID)){
 				$intCount = $this->get_parent_count($this->get_parent($intCategoryID), $intCount+1);
 			}
 			return $intCount;
 		}
-		
+
 		public function get_name_prefix($intCategoryID){
 			$intParentCount = $this->get_parent_count($intCategoryID);
 			$strOut = '';
@@ -500,30 +500,30 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			}
 			return $strOut;
 		}
-		
+
 		public function get_resolve_alias($strAlias){
 			$strAlias = utf8_strtolower($strAlias);
-			
+
 			if (isset($this->alias[$strAlias])){
 				return $this->alias[$strAlias];
 			}
 			return false;
 		}
-		
+
 		public function get_path($intCategoryID){
 			$strPath = "";
 			$strPath = $this->add_path($intCategoryID);
-			
+
 			if(substr($strPath, -1) == "/") $strPath = substr($strPath, 0, -1);
 			$strPath .= $this->routing->getSeoExtension();
-			
+
 			return $strPath.(($this->SID == "?s=") ? '?' : $this->SID);
 		}
-		
+
 		public function get_permalink($intCategoryID){
 			return $this->env->link.'index.php?c='.(int)$intCategoryID;
 		}
-		
+
 		private function add_path($intCategoryID, $strPath=''){
 			$strAlias = ucfirst($this->get_alias($intCategoryID));
 			if ($strAlias != '' && $strAlias != 'system' && $strAlias != 'System'){
@@ -532,13 +532,13 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			if ($this->get_parent($intCategoryID)){
 				$strPath = $this->add_path($this->get_parent($intCategoryID), $strPath);
 			}
-			
+
 			return $strPath;
 		}
-		
+
 		public function get_user_permissions($intCategoryID, $intUserID){
 			$arrUsergroupMemberships = $this->acl->get_user_group_memberships($intUserID);
-			
+
 			if (isset($this->arrTempPermissions[$intCategoryID]) && isset($this->arrTempPermissions[$intCategoryID][$intUserID])){
 				return $this->arrTempPermissions[$intCategoryID][$intUserID];
 			} else {
@@ -559,7 +559,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 				return $arrPermissions;
 			}
 		}
-		
+
 		public function get_breadcrumb($intCategoryID){
 			if($intCategoryID == 1) return [];
 			$arrBreadcrumb = ($this->get_parent($intCategoryID)) ? $this->add_breadcrumb($this->get_parent($intCategoryID)) : [];
@@ -570,7 +570,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			];
 			return $arrBreadcrumb;
 		}
-		
+
 		private function add_breadcrumb($intCategoryID, $arrBreadcrumb=[]){
 			if($intCategoryID == 1) return $arrBreadcrumb;
 			$strName = $this->pdh->get('article_categories', 'name', [$intCategoryID]);
@@ -579,14 +579,14 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 				'title'	=> $strName,
 				'url'	=> $this->controller_path.$strPath,
 			]], $arrBreadcrumb);
-			
+
 			if($this->pdh->get('article_categories', 'parent', array($intCategoryID))){
 				$arrBreadcrumb = $this->add_breadcrumb($this->pdh->get('article_categories', 'parent', [$intCategoryID]), $arrBreadcrumb);
 			}
-			
+
 			return $arrBreadcrumb;
 		}
-		
+
 		public function get_childs($intCategoryID){
 			$arrChilds = array();
 			foreach($this->categories as $catID => $val){
@@ -596,7 +596,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			}
 			return $arrChilds;
 		}
-		
+
 		public function get_index_article($intCategoryID){
 			$arrArticles = $this->pdh->get('articles', 'id_list', array($intCategoryID));
 			foreach($arrArticles as $intArticleID){
@@ -606,7 +606,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			}
 			return false;
 		}
-		
+
 		public function get_unpublished_articles_notify(){
 			$arrOut = array();
 			foreach($this->categories as $intCategoryID => $val){
@@ -621,12 +621,12 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 			}
 			return $arrOut;
 		}
-		
+
 		public function get_checkbox_check($intCategoryID){
 			if ($intCategoryID == 1) return false;
 			return true;
 		}
-		
+
 		public function get_search($search_value) {
 			$arrSearchResults = array();
 			if (is_array($this->categories)){
@@ -634,7 +634,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 					if (!$this->get_published($id)) continue;
 					$arrPermissions = $this->get_user_permissions($id, $this->user->id);
 					if(!$arrPermissions['read']) continue;
-				
+
 					if(stripos($this->get_name($id), $search_value) !== false OR stripos($this->get_description($id), $search_value) !== false ) {
 
 						$arrSearchResults[] = array(
@@ -650,4 +650,3 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 
 	}//end class
 }//end if
-?>

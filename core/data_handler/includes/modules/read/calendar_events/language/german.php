@@ -54,5 +54,3 @@ $preset_lang = array(
 	'calevents_note'		=> 'Kalenderevents Notiz',
 	'calevents_detailslink'	=> 'Kalenderevents Detaillink',
 );
-
-?>

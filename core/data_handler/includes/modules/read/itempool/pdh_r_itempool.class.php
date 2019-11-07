@@ -46,7 +46,7 @@ if(!class_exists('pdh_r_itempool')){
 			}
 
 			$this->itempools = array();
-			
+
 			$objQuery = $this->db->query("SELECT itempool_id, itempool_name, itempool_desc FROM __itempool;");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
@@ -78,4 +78,3 @@ if(!class_exists('pdh_r_itempool')){
 		}
 	}
 }
-?>

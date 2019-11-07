@@ -31,7 +31,7 @@ if ( !class_exists( "pdh_r_member_dates" ) ) {
 
 		public $fl_raid_dates = array();
 		public $fl_item_dates = array();
-		
+
 		private $blnItemsSingleLoaded = false;
 		private $blnItemsMultiLoaded = false;
 		private $blnRaidsSingleLoaded = false;
@@ -75,26 +75,26 @@ if ( !class_exists( "pdh_r_member_dates" ) ) {
 
 		public function init(){
 		}
-		
+
 		public function init_raid_single(){
 			$this->blnRaidsSingleLoaded = true;
-			
+
 			$this->fl_raid_dates['single'] = $this->pdc->get('pdh_fl_raid_dates_single');
 			if($this->fl_raid_dates['single'] != null){
 				return true;
 			}
-			
+
 			$this->_init_raid_dates();
 		}
-		
+
 		public function init_raid_multi(){
 			$this->blnRaidsMultiLoaded = true;
-			
+
 			$this->fl_raid_dates['multi'] = $this->pdc->get('pdh_fl_raid_dates_multi');
 			if($this->fl_raid_dates['multi'] != null){
 				return true;
 			}
-				
+
 			$this->_init_raid_dates();
 		}
 
@@ -111,7 +111,7 @@ if ( !class_exists( "pdh_r_member_dates" ) ) {
 				if(is_array($attendees)) {
 					foreach($attendees as $attendee_id){
 						if(!in_array($attendee_id, $member_list)) continue;
-						
+
 						if(!isset($this->fl_raid_dates['single'][$attendee_id]['total']['first_date']) || $date < $this->fl_raid_dates['single'][$attendee_id]['total']['first_date']) {
 							$this->fl_raid_dates['single'][$attendee_id]['total']['first_date'] = $date;
 						}
@@ -156,28 +156,28 @@ if ( !class_exists( "pdh_r_member_dates" ) ) {
 			$this->pdc->put('pdh_fl_raid_dates_single', $this->fl_raid_dates['single']);
 			$this->pdc->put('pdh_fl_raid_dates_multi', $this->fl_raid_dates['multi']);
 		}
-		
+
 		public function init_item_single(){
 			$this->blnItemsSingleLoaded = true;
-			
+
 			//cached data not outdated?
 			$this->fl_item_dates['single'] = $this->pdc->get('pdh_fl_item_dates_single');
 			if($this->fl_item_dates['single'] != null){
 				return true;
 			}
-			
+
 			$this->_init_item_dates();
 		}
-		
+
 		public function init_item_multi(){
 			$this->blnItemsMultiLoaded = true;
-			
+
 			//cached data not outdated?
 			$this->fl_item_dates['multi'] = $this->pdc->get('pdh_fl_item_dates_multi');
 			if($this->fl_item_dates['multi'] != null){
 				return true;
 			}
-				
+
 			$this->_init_item_dates();
 		}
 
@@ -191,8 +191,8 @@ if ( !class_exists( "pdh_r_member_dates" ) ) {
 			foreach($item_ids as $item_id){
 				$member_id = $this->pdh->get('item', 'buyer', array($item_id));
 				$member_list = $this->pdh->get('member', 'id_list', array(false, false, false));
-				if(!in_array($member_id, $member_list)) continue;	
-				
+				if(!in_array($member_id, $member_list)) continue;
+
 				$itempool_id = $this->pdh->get('item', 'itempool_id', array($item_id));
 				$item_date = $this->pdh->get('item', 'date', array($item_id));
 				if(!isset($this->fl_item_dates['single'][$member_id]['total']['last']['date']) || $item_date > $this->fl_item_dates['single'][$member_id]['total']['last']['date']){
@@ -257,7 +257,7 @@ if ( !class_exists( "pdh_r_member_dates" ) ) {
 			} else {
 				if(!$this->blnRaidsSingleLoaded) $this->init_raid_single();
 			}
-			
+
 			$with_twink = ($with_twink) ? 'multi' : 'single';
 			if($mdkp_id == null){
 				return (!isset($this->fl_raid_dates[$with_twink][$member_id]['total']['first_date'])) ? 0 : $this->fl_raid_dates[$with_twink][$member_id]['total']['first_date'];
@@ -276,7 +276,7 @@ if ( !class_exists( "pdh_r_member_dates" ) ) {
 			} else {
 				if(!$this->blnRaidsSingleLoaded) $this->init_raid_single();
 			}
-			
+
 			$with_twink = ($with_twink) ? 'multi' : 'single';
 			if($mdkp_id == null AND isset($this->fl_raid_dates[$with_twink][$member_id]['total']['last_date'])){
 				return (!isset($this->fl_raid_dates[$with_twink][$member_id]['total']['last_date'])) ? 2147483647 : $this->fl_raid_dates[$with_twink][$member_id]['total']['last_date'];
@@ -296,7 +296,7 @@ if ( !class_exists( "pdh_r_member_dates" ) ) {
 			} else {
 				if(!$this->blnItemsSingleLoaded) $this->init_item_single();
 			}
-			
+
 			$with_twink = ($with_twink) ? 'multi' : 'single';
 			if($mdkp_id == null AND isset($this->fl_item_dates[$with_twink][$member_id]['total']['first']['date'])){
 				return (!isset($this->fl_item_dates[$with_twink][$member_id]['total']['first']['date'])) ? 0 : $this->fl_item_dates[$with_twink][$member_id]['total']['first']['date'];
@@ -316,7 +316,7 @@ if ( !class_exists( "pdh_r_member_dates" ) ) {
 			} else {
 				if(!$this->blnItemsSingleLoaded) $this->init_item_single();
 			}
-			
+
 			$with_twink = ($with_twink) ? 'multi' : 'single';
 			if($mdkp_id == null){
 				return (isset($this->fl_item_dates[$with_twink][$member_id]['total']['last']['date'])) ? $this->fl_item_dates[$with_twink][$member_id]['total']['last']['date'] : 0;
@@ -325,14 +325,14 @@ if ( !class_exists( "pdh_r_member_dates" ) ) {
 			}
 			return false;
 		}
-		
+
 		public function get_last_item($member_id, $mdkp_id=null, $with_twink=true){
 			if($with_twink){
 				if(!$this->blnItemsMultiLoaded) $this->init_item_multi();
 			} else {
 				if(!$this->blnItemsSingleLoaded) $this->init_item_single();
 			}
-			
+
 			$with_twink = ($with_twink) ? 'multi' : 'single';
 			if($mdkp_id == null AND isset($this->fl_item_dates[$with_twink][$member_id]['total']['first']['item_id'])){
 				return $this->fl_item_dates[$with_twink][$member_id]['total']['first']['item_id'];
@@ -352,7 +352,7 @@ if ( !class_exists( "pdh_r_member_dates" ) ) {
 			} else {
 				if(!$this->blnItemsSingleLoaded) $this->init_item_single();
 			}
-			
+
 			$with_twink = ($with_twink) ? 'multi' : 'single';
 			if($mdkp_id == null AND isset($this->fl_item_dates[$with_twink][$member_id]['total']['first']['item_id'])){
 				return $this->pdh->get('item', 'name', array($this->fl_item_dates[$with_twink][$member_id]['total']['first']['item_id']));
@@ -368,7 +368,7 @@ if ( !class_exists( "pdh_r_member_dates" ) ) {
 			} else {
 				if(!$this->blnItemsSingleLoaded) $this->init_item_single();
 			}
-			
+
 			$with_twink = ($with_twink) ? 'multi' : 'single';
 			infotooltip_js();
 			if($mdkp_id == null AND isset($this->fl_item_dates[$with_twink][$member_id]['total']['first']['item_id'])){
@@ -385,7 +385,7 @@ if ( !class_exists( "pdh_r_member_dates" ) ) {
 			} else {
 				if(!$this->blnItemsSingleLoaded) $this->init_item_single();
 			}
-			
+
 			$with_twink = ($with_twink) ? 'multi' : 'single';
 			if($mdkp_id == null AND isset($this->fl_item_dates[$with_twink][$member_id]['total']['last']['item_id'])){
 				return $this->pdh->get('item', 'name', array($this->fl_item_dates[$with_twink][$member_id]['total']['last']['item_id']));
@@ -401,7 +401,7 @@ if ( !class_exists( "pdh_r_member_dates" ) ) {
 			} else {
 				if(!$this->blnItemsSingleLoaded) $this->init_item_single();
 			}
-			
+
 			$with_twink = ($with_twink) ? 'multi' : 'single';
 			infotooltip_js();
 			if($mdkp_id == null AND isset($this->fl_item_dates[$with_twink][$member_id]['total']['last']['item_id'])){
@@ -413,4 +413,3 @@ if ( !class_exists( "pdh_r_member_dates" ) ) {
 		}
 	}//end class
 }//end if
-?>

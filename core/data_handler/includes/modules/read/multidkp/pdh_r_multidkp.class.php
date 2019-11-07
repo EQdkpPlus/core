@@ -52,7 +52,7 @@ if ( !class_exists( "pdh_r_multidkp" ) ) {
 
 			//fetch multidkp2event data
 			$me_data = array();
-			
+
 			$objQuery = $this->db->query("SELECT * FROM __multidkp2event;");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
@@ -62,7 +62,7 @@ if ( !class_exists( "pdh_r_multidkp" ) ) {
 					}
 				}
 			}
-			
+
 			//fetch multidkp2itempool data
 			$objQuery = $this->db->query("SELECT multidkp2itempool_itempool_id, multidkp2itempool_multi_id FROM __multidkp2itempool;");
 			if($objQuery){
@@ -70,7 +70,7 @@ if ( !class_exists( "pdh_r_multidkp" ) ) {
 					$ip_data[$row['multidkp2itempool_multi_id']][] = $row['multidkp2itempool_itempool_id'];
 				}
 			}
-			
+
 			$objQuery = $this->db->query("SELECT * FROM __multidkp ORDER BY multidkp_sortid ASC;");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
@@ -81,7 +81,7 @@ if ( !class_exists( "pdh_r_multidkp" ) ) {
 					$this->multidkp[$row['multidkp_id']]['no_attendance'] = ((isset($noatt_data[$row['multidkp_id']])) ? $noatt_data[$row['multidkp_id']] : '');
 					$this->multidkp[$row['multidkp_id']]['itempools'] = (isset($ip_data[$row['multidkp_id']])) ? $ip_data[$row['multidkp_id']] : array();
 				}
-				
+
 				$this->pdc->put('pdh_multidkp_table', $this->multidkp, null);
 			}
 		}
@@ -139,7 +139,7 @@ if ( !class_exists( "pdh_r_multidkp" ) ) {
 		public function get_name($mdkp_id){
 			return (isset($this->multidkp[$mdkp_id]['name'])) ? $this->multidkp[$mdkp_id]['name'] : '';
 		}
-		
+
 		public function get_sortid($mdkp_id){
 			return (isset($this->multidkp[$mdkp_id]['sortid'])) ? $this->multidkp[$mdkp_id]['sortid'] : 0;
 		}
@@ -153,4 +153,3 @@ if ( !class_exists( "pdh_r_multidkp" ) ) {
 		}
 	}//end class
 }//end if
-?>

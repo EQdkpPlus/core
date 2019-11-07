@@ -30,5 +30,3 @@ $module_lang = array(
 	'wide_content'			=> 'Breiter Inhalt verwenden',
 	'templatevar'			=> 'Template-Variable',
 );
-
-?>

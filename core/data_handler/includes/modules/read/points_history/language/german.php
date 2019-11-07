@@ -41,4 +41,3 @@ $preset_lang = array(
 	'current'				=> 'Aktuell',
 	'all_current'			=> 'Aktuell (alle)'
 );
-?>

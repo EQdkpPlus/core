@@ -49,7 +49,7 @@ if(!class_exists('pdh_r_class_colors')){
 			}
 
 			$this->class_colors = array();
-			
+
 			$objQuery = $this->db->query("SELECT * FROM __classcolors");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
@@ -61,9 +61,8 @@ if(!class_exists('pdh_r_class_colors')){
 		}
 
 		public function get_class_colors($templateid){
-			$colors = ($templateid) ? ((isset($this->class_colors[$templateid])) ? $this->class_colors[$templateid] : array()) : $this->class_colors;			
+			$colors = ($templateid) ? ((isset($this->class_colors[$templateid])) ? $this->class_colors[$templateid] : array()) : $this->class_colors;
 			return $colors;
 		}
 	}
 }
-?>

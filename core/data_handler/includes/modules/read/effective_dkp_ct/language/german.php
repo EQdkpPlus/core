@@ -32,4 +32,3 @@ $preset_lang = array(
 	'effective_dkp_ct_all'	=> 'Effektiv-DKP (alle; von Erstellungszeit abh.)',
 	'effective_dkp_ct'		=> 'Effektiv-DKP (von Erstellungszeit abh.)',
 );
-?>

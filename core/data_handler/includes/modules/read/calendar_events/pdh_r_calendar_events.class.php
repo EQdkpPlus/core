@@ -134,19 +134,19 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 
 		public function get_id_list($raids_only=false, $start_date = 0, $end_date = PHP_INT_MAX, $idfilter=false, $filter=false){
 			$ids = array();
-			
+
 			if(($start_date != 0) || ($end_date != PHP_INT_MAX)){
 				$start_date	 = $this->time->newtime($start_date, '00:00', false);
 				$end_date	 = ($end_date != PHP_INT_MAX) ? $this->time->newtime($end_date, '23:59', false) : $end_date;
-				
+
 				if(is_array($idfilter)){
 					$objQuery = $this->db->prepare("SELECT id FROM __calendar_events WHERE (calendar_id :in)")->in($idfilter);
 				} else {
 					$objQuery = $this->db->prepare("SELECT id FROM __calendar_events");
 				}
-				
+
 				$objQuery->addCondition("((timestamp_start BETWEEN ? AND ?) OR timestamp_end BETWEEN ? AND ?)", $start_date, $end_date, $start_date, $end_date);
-				
+
 				// apply the filtering
 				switch($filter){
 					case 'mine':
@@ -654,4 +654,3 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 
 	}//end class
 }//end if
-?>

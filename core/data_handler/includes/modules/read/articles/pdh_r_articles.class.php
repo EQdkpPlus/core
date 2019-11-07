@@ -76,7 +76,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			if($this->articles !== NULL && $this->categories !== NULL && $this->alias !== NULL && $this->pageobjects !== NULL && $this->tags !== NULL){
 				return true;
 			}
-			
+
 			$this->categories = array();
 			$this->articles = array();
 			$this->alias = array();
@@ -428,7 +428,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 		public function get_editicon($intArticleID){
 			$out = '<a href="'.$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$this->get_category($intArticleID).'&a='.$intArticleID.'"><i class="fa fa-pencil fa-lg" title="'.$this->user->lang('edit').'"></i></a>';
 			$out .= '&nbsp;&nbsp;&nbsp;<a href="'.$this->root_path.'admin/manage_articles.php'.$this->SID.'&c='.$this->get_category($intArticleID).'&duplicate='.$intArticleID.'"><i class="fa fa-copy fa-lg" title="'.$this->user->lang('copy').'"></i></a>';
-			
+
 			return $out;
 		}
 
@@ -620,15 +620,14 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 			$arrCategoryPermissions = $this->pdh->get('article_categories', 'user_permissions', array($intCategoryID, $intUserID));
 			return $arrCategoryPermissions;
 		}
-		
+
 		public function get_is_startpage($intArticleID){
 			$strStartPage = $this->config->get('start_page');
 			if($this->get_alias($intArticleID) == $strStartPage) return true;
-				
+
 			return false;
 		}
 
 
 	}//end class
 }//end if
-?>

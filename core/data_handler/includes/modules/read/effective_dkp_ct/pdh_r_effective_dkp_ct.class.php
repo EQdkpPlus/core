@@ -30,7 +30,7 @@ if ( !class_exists( "pdh_r_effective_dkp_ct" ) ) {
 		public $default_lang = 'english';
 
 		public $edkp;
-		
+
 		public $hooks = array(
 			'adjustment_update',
 			'event_update',
@@ -86,7 +86,7 @@ if ( !class_exists( "pdh_r_effective_dkp_ct" ) ) {
 			$adjustment	= $this->pdh->get('points', 'adjustment', array($member_id, $multidkp_id, 0, $with_twink));
 			$spent		= $this->pdh->get('points', 'spent', array($member_id, $multidkp_id, 0, 0, $with_twink));
 			$attendance	= $this->pdh->get('member_attendance', 'attendance', array($member_id, $multidkp_id, $time_period, $with_twink, false, true));
-			
+
 			return ($earned+$adjustment-$spent)*$attendance;
 		}
 
@@ -126,4 +126,3 @@ if ( !class_exists( "pdh_r_effective_dkp_ct" ) ) {
 		}
 	}//end class
 }//end if
-?>

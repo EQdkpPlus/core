@@ -53,32 +53,32 @@ if(!class_exists('pdh_r_item')){
 		);
 
 		private $decayed = array();
-		
+
 		//Trunks
 		private $index = array();
 		private $objPagination = null;
 
-		
+
 		public function reset($affected_ids=array(), $strHook='', $arrAdditionalData=array()){
 			if($strHook == 'item_update'){
 				//tell apas which ids to delete
 				$apaAffectedIDs = (empty($affected_ids) && !empty($this->index)) ? $this->index : $affected_ids;
 				$this->apa->enqueue_update('item', $apaAffectedIDs);
 			}
-			
+
 			$affected_ids = (empty($affected_ids) || !$affected_ids) ? false : $affected_ids;
 			$this->objPagination = register("cachePagination", array("items", "item_id", "__items", array(), 250));
 			return $this->objPagination->reset($affected_ids);
 		}
-		
-		
+
+
 		public function init(){
 			$this->objPagination = register("cachePagination", array("items", "item_id", "__items", array(), 250));
 			$this->objPagination->initIndex();
 			$this->index = $this->objPagination->getIndex();
 		}
-		
-		
+
+
 		public function get_id_list(){
 			if(is_array($this->index)){
 				return $this->index;
@@ -87,22 +87,22 @@ if(!class_exists('pdh_r_item')){
 			}
 		}
 
-		
+
 		public function get_ids_by_name($name){
 			return $this->objPagination->search("item_name", $name, false);
 		}
 
-		
+
 		public function get_ids_by_ingameid($ingame_id){
 			return $this->objPagination->search("game_itemid", $ingame_id, false);
 		}
-		
-		
+
+
 		public function get_name($id){
 			return $this->objPagination->get($id, 'item_name');
 		}
 
-		
+
 		public function get_value($id, $dkp_id=0, $date=0){
 			if($dkp_id ) {
 				if(!isset($this->decayed[$dkp_id])) $this->decayed[$dkp_id] = $this->apa->is_decay('item', $dkp_id);
@@ -113,7 +113,7 @@ if(!class_exists('pdh_r_item')){
 			}
 			return (isset($val)) ? (float)$val : (float)$this->objPagination->get($id, 'item_value');
 		}
-		
+
 		public function get_apa_value($item_id, $apa_id=false){
 			$strApaValue =  $this->objPagination->get($item_id, 'item_apa_value');
 			if($strApaValue != ""){
@@ -126,93 +126,93 @@ if(!class_exists('pdh_r_item')){
 			}
 			return false;
 		}
-		
-		
+
+
 		public function get_caption_value($dkp_id=0) {
 			$caption = '';
 			if($dkp_id && $this->apa->is_decay('item', $dkp_id)) $caption = $this->apa->get_caption('item', $dkp_id);
 			return ($caption) ? $caption : $this->pdh->get_lang('item', 'value');
 		}
-		
-		
+
+
 		public function get_html_value($id, $dkp_id=0){
 			return '<span class="negative">' . runden($this->get_value($id, $dkp_id)) . '</span>';
 		}
-		
-		
+
+
 		public function get_buyer($id){
 			return $this->objPagination->get($id, 'member_id');
 		}
 
-		
+
 		public function get_buyer_name($id) {
 			return $this->pdh->get('member', 'name', array($this->get_buyer($id)));
 		}
-		
-		
+
+
 		public function get_html_buyer_name($id) {
 			return $this->pdh->geth('member', 'name', array($this->get_buyer($id)));
 		}
-		
-		
+
+
 		public function get_buyer_link($id){
 			return $this->get_buyer_name($id);
 		}
-		
-		
+
+
 		public function get_html_buyer_link($id, $base_url, $url_suffix = '', $blnUseController=false){
 			$intBuyer = $this->get_buyer($id);
 			return $this->pdh->geth('member', 'memberlink', array($intBuyer, $base_url, $url_suffix, false, false, true, $blnUseController));
 		}
 
-		
+
 		public function get_date($id){
 			return $this->objPagination->get($id, 'item_date');
 		}
 
-		
+
 		public function get_html_date($id){
 			return $this->time->user_date($this->get_date($id));
 		}
 
-		
+
 		public function get_raid_id($id){
 			return $this->objPagination->get($id, 'raid_id');
 		}
 
-		
+
 		public function get_raid_name($item_id){
 			return $this->pdh->get('raid', 'event_name', array($this->get_raid_id($item_id)));
 		}
 
-		
+
 		public function get_raidlink($item_id, $base_url, $url_suffix = '', $blnUseController=false){
 			return $this->pdh->get('raid', 'raidlink', array($this->get_raid_id($item_id), $base_url, $url_suffix, $blnUseController));
 		}
 
-		
+
 		public function get_html_raididlink($item_id, $base_url, $url_suffix, $blnUseController=false) {
 			return '<a href="'.$this->get_raidlink($item_id, $base_url, $url_suffix, $blnUseController).'">#ID:'.$this->get_raid_id($item_id).' - '.$this->pdh->get('raid', 'event_name', array($this->get_raid_id($item_id))).' '.date(/*$this->user->style['date_notime_short']*/'d.m.y', $this->pdh->get('raid', 'date', array($this->get_raid_id($item_id)))).'</a>';
 		}
 
-		
+
 		public function get_html_raidlink($item_id, $base_url, $url_suffix, $blnUseController=false){
 			return '<a href="'.$this->get_raidlink($item_id, $base_url, $url_suffix, $blnUseController).'">'.$this->pdh->get('raid', 'event_name', array($this->get_raid_id($item_id))).'</a>';
 		}
 
-		
+
 		public function comp_raidlink($params1, $params2){
 			return ($this->get_raid_name($params1[0]) < $this->get_raid_name($params2[0])) ? -1  : 1 ;
 		}
 
-		
+
 		public function get_game_itemid($id){
 			return $this->objPagination->get($id, 'game_itemid');
 		}
 
 		private $items_of_raid = array();
 
-		
+
 		public function get_itemsofraid($raid_id){
 			if(!isset($this->items_of_raid[$raid_id])){
 				$arrIDs = $this->objPagination->search("raid_id", $raid_id);
@@ -221,78 +221,78 @@ if(!class_exists('pdh_r_item')){
 			return $this->items_of_raid[$raid_id];
 		}
 
-		
+
 		public function get_group_key($item_id){
 			return $this->objPagination->get($item_id, 'item_group_key');
 		}
 
-		
+
 		public function get_ids_of_group_key($group_key){
 			$ids = $this->objPagination->search("item_group_key", $group_key);
 			return $ids;
 		}
 
-		
+
 		public function get_itempool_id($item_id){
 			return $this->objPagination->get($item_id, 'itempool_id');
 		}
 
-		
+
 		public function get_itempool_name($item_id){
 			return $this->pdh->get('itempool', 'name', array($this->get_itempool_id($item_id)));
 		}
-		
-		
+
+
 		public function get_item_color($item_id){
 			return $this->objPagination->get($item_id, 'item_color');
 		}
 
-		
+
 		public function get_item_ids_of_itempool($itempool_id){
 			$ids = $this->objPagination->search("itempool_id", $itempool_id);
 			return $ids;
 		}
 
-		
+
 		public function get_link($item_id, $baseurl, $url_suffix='', $blnUseController=false){
 			if ($blnUseController  && $blnUseController !== '%use_controller%') return $baseurl.register('routing')->clean($this->get_name($item_id)).'-i'.$item_id.register('routing')->getSeoExtension().$this->SID.$url_suffix;
 			return $baseurl.$this->SID.'&amp;i='.$item_id.$url_suffix;
 		}
 
-		
+
 		public function get_html_link($item_id, $baseurl, $url_suffix='', $blnUseController=false){
 			return "<a href='".$this->get_link($item_id, $baseurl, $url_suffix, $blnUseController)."'>".$this->get_name($item_id)."</a>";
 		}
 
-		
+
 		public function get_editicon($item_id, $baseurl, $url_suffix=''){
 			$out = "<a href='".$this->get_link($item_id, $baseurl, $url_suffix)."'>
 				<i class='fa fa-pencil fa-lg' title='".$this->user->lang('edit')."'></i>
 			</a>";
-			
+
 			$out .= '&nbsp;&nbsp;&nbsp;<a href="'.$this->get_link($item_id, $baseurl, '&copy=true').'">
 				<i class="fa fa-copy fa-lg" title="'.$this->user->lang('copy').'"></i>
 			</a>';
-				
+
 			return $out;
 		}
 
-		
+
 		public function comp_link($params1, $params2){
 			return ($this->get_name($params1[0]) < $this->get_name($params2[0])) ? -1  : 1 ;
 		}
 
-		
+
 		public function get_itemids4memberid($member_id){
 			$items4member = $this->objPagination->search("member_id", $member_id);
 			return $items4member;
 		}
-		
+
 		public function get_itemcount4memberid($member_id){
 			$arrItems = $this->get_itemids4memberid($member_id);
 			return is_array($arrItems) ? count($arrItems) : 0;
 		}
-		
+
 		public function get_itemids4memberids($arrMemberIDs){
 			$items4member = array();
 			foreach($arrMemberIDs as $member_id){
@@ -301,31 +301,31 @@ if(!class_exists('pdh_r_item')){
 			}
 			return array_unique($items4member);
 		}
-		
-		
+
+
 		public function get_itemids4userid($user_id){
 			$arrMemberList = $this->pdh->get('member', 'connection_id', array($user_id));
 			if(!$arrMemberList || count($arrMemberList) == 0) return array();
-			
+
 			$objQuery = $this->db->prepare("SELECT item_id FROM __items WHERE member_id :in")->in($arrMemberList)->execute();
-			
+
 			$items4member = array();
-			
+
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					$items4member[] = (int)$row['item_id'];
 				}
 			}
-			
+
 			return $items4member;
 		}
 
-		
+
 		public function get_itemids4eventid($event_id) {
 			$items4event = array();
 			$raids = $this->pdh->get('raid', 'raidids4eventid', array($event_id));
 			if (is_array($this->index)){
-				foreach($this->index as $item_id) {		
+				foreach($this->index as $item_id) {
 					if(in_array($this->get_raid_id($item_id), $raids)) {
 						$items4event[] = $item_id;
 					}
@@ -334,17 +334,17 @@ if(!class_exists('pdh_r_item')){
 			return $items4event;
 		}
 
-		
+
 		public function get_m4igk4i($item_id) {
 			return $this->pdh->aget('item', 'buyer_name', 0, array($this->get_ids_of_group_key($this->get_group_key($item_id))));
 		}
 
-		
+
 		public function get_html_m4igk4i($item_id) {
 			return implode(', ', $this->pdh->aget('item', 'html_buyer_name', 0, array($this->get_ids_of_group_key($this->get_group_key($item_id)))));
 		}
 
-		
+
 		public function get_itt_itemname($item_id, $lang=false, $direct=0, $onlyicon=0, $noicon=false, $in_span=false) {
 			if (!in_array($item_id, $this->index)) return false;
 
@@ -369,7 +369,7 @@ if(!class_exists('pdh_r_item')){
 			return $this->get_name($item_id);
 		}
 
-		
+
 		public function get_link_itt($item_id, $baseurl, $url_suffix='', $lang=false, $direct=0, $onlyicon=0, $noicon=false, $in_span=false, $blnUseController=false) {
 			$blnUseOwnTooltips = register('config')->get('infotooltip_own_enabled');
 			if($blnUseOwnTooltips){
@@ -382,15 +382,15 @@ if(!class_exists('pdh_r_item')){
 			}
 		}
 
-		
+
 		public function comp_link_itt($params1, $params2) {
 			return strcmp($this->get_name($params1[0]), $this->get_name($params2[0]));
 		}
-		
-		
+
+
 		public function get_search($search_value) {
 			$arrSearchResults = array();
-			
+
 			$arrIDs = $this->objPagination->search("item_name", $search_value, true);
 			foreach($arrIDs as $id){
 				$arrSearchResults[] = array(
@@ -399,15 +399,15 @@ if(!class_exists('pdh_r_item')){
 					'link'	=> $this->routing->build('items', $this->get_name($id), 'i'.$id),
 				);
 			}
-			
+
 			return $arrSearchResults;
 		}
-		
+
 		public function get_droprate($item_id){
 			$game_id = $this->get_game_itemid($item_id);
 			$item_name = $this->pdh->get('item', 'name', array($item_id));
 			$intItempoolID = $this->get_itempool_id($item_id);
-			
+
 			//Get Same Items
 			$item_ids = array();
 			if ($game_id > 1){
@@ -415,24 +415,23 @@ if(!class_exists('pdh_r_item')){
 			}else{
 				$item_ids = $this->pdh->get('item', 'ids_by_name', array($item_name));
 			}
-			
+
 			//Get Same Items in Itempool
 			$arrPoolItems = array();
 			foreach($item_ids as $iid){
 				$itempool = $this->get_itempool_id($iid);
 				if ($itempool === $intItempoolID) $arrPoolItems[] = $iid;
 			}
-			
+
 			$intPoolItems = count($arrPoolItems);
 			$intTotalPoolItems = count($this->get_item_ids_of_itempool($intItempoolID));
-			
+
 			if ($intTotalPoolItems === 0) return 0;
 			return round(($intPoolItems / $intTotalPoolItems) * 100);
 		}
-		
+
 		public function get_html_droprate($item_id){
 			return $this->get_droprate($item_id).' %';
 		}
 	}
 }
-?>

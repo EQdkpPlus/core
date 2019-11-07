@@ -37,7 +37,7 @@ if ( !class_exists( "pdh_r_portal_blocks" ) ) {
 			$this->pdc->del('pdh_portal_blocks_table');
 			$this->blocks = NULL;
 		}
-		
+
 		public $presets = array(
 				'portal_block_name' 		=> array('name', array('%block_id%'), array()),
 				'portal_block_wide_content'	=> array('wide_content', array('%block_id%'), array()),
@@ -51,7 +51,7 @@ if ( !class_exists( "pdh_r_portal_blocks" ) ) {
 			if($this->blocks !== NULL){
 				return true;
 			}
-			
+
 			$objQuery = $this->db->query("SELECT * FROM __portal_blocks");
 			if($objQuery){
 				while($drow = $objQuery->fetchAssoc()){
@@ -61,36 +61,36 @@ if ( !class_exists( "pdh_r_portal_blocks" ) ) {
 						'wide_content'		=> intval($drow['wide_content']),
 					);
 				}
-				
+
 				$this->pdc->put('pdh_portal_blocks_table', $this->blocks, null);
-			}		
+			}
 		}
 
 		public function get_id_list() {
 			return (empty($this->blocks)) ? array() : array_keys($this->blocks);
 		}
-		
+
 		public function get_name($intBlockID){
 			if (isset($this->blocks[$intBlockID])){
 				return $this->blocks[$intBlockID]['name'];
 			}
 			return false;
 		}
-		
+
 		public function get_wide_content($intBlockID){
 			if (isset($this->blocks[$intBlockID])){
 				return $this->blocks[$intBlockID]['wide_content'];
 			}
 			return false;
 		}
-		
+
 		public function get_html_wide_content($intBlockID){
 			if ($this->get_wide_content($intBlockID)){
 				return $this->user->lang('yes');
 			}
 			return $this->user->lang('no');
 		}
-		
+
 		public function get_usedby($intBlockID){
 			$arrLayoutIDs = $this->pdh->get('portal_layouts', 'id_list');
 			$intLayoutCount = 0;
@@ -100,15 +100,14 @@ if ( !class_exists( "pdh_r_portal_blocks" ) ) {
 			}
 			return $intLayoutCount;
 		}
-		
+
 		public function get_editicon($intBlockID){
 			return '<a href="'.$this->root_path.'admin/manage_portal.php'.$this->SID.'&amp;b='.$intBlockID.'"><i class="fa fa-pencil fa-lg" title="'.$this->user->lang('edit').'"></i></a>';
 		}
-		
+
 		public function get_templatevar($intBlockID){
 			return '{PORTAL_BLOCK'.$intBlockID.'}';
 		}
-		
+
 	}//end class
 }//end if
-?>

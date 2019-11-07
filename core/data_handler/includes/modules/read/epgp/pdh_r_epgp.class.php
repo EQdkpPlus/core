@@ -25,7 +25,7 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "pdh_r_epgp" ) ) {
 	class pdh_r_epgp extends pdh_r_generic{
-	
+
 		public $default_lang = 'english';
 		public $epgp;
 
@@ -72,17 +72,17 @@ if ( !class_exists( "pdh_r_epgp" ) ) {
 				}
 			}
 			$this->pdc->put('pdh_epgp_table', $arrEPGP, null);
-			
+
 			$this->epgp = $arrEPGP;
 		}
-		
+
 		public function calculate_epgp($member_id, $multidkp_id, $with_twink, $_ep=false){
 			$ep	= ($_ep !== false) ? $_ep : $this->get_ep($member_id, $multidkp_id, false, $with_twink);
 			$gp	= $this->get_gp($member_id, $multidkp_id, false, $with_twink);
 			$bp 	= intval($this->pdh->get_layout_config('base_points'));
 			$min_ep = intval($this->pdh->get_layout_config('min_ep'));
 			$epgp	= (($gp + $bp) == 0) ? $ep : ($ep/($gp + $bp));
-			
+
 			return (($min_ep > 0) && ($ep < $min_ep)) ? 0 : $epgp;
 		}
 
@@ -104,7 +104,7 @@ if ( !class_exists( "pdh_r_epgp" ) ) {
 			$gp = $this->pdh->get('points', 'spent', array($member_id, $multidkp_id, 0, 0, $with_twink));
 			return ($round == true) ? runden($gp) : $gp;
 		}
-		
+
 		public function get_gpwithbp($member_id, $multidkp_id, $round = true, $with_twink=true){
 			$gp 	= $this->get_gp($member_id, $multidkp_id, $round, $with_twink);
 			$bp 	= intval($this->pdh->get_layout_config('base_points'));
@@ -150,4 +150,3 @@ if ( !class_exists( "pdh_r_epgp" ) ) {
 		}
 	}//end class
 }//end if
-?>

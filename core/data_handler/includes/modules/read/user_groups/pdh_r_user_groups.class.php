@@ -41,7 +41,7 @@ if ( !class_exists( "pdh_r_user_groups" ) ){
 
 		public function init(){
 			$this->user_groups = array();
-			
+
 			$objQuery = $this->db->query("SELECT * FROM __groups_user ORDER BY groups_user_sortid ASC, groups_user_id ASC;");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
@@ -96,11 +96,11 @@ if ( !class_exists( "pdh_r_user_groups" ) ){
 		public function get_hide($groups_user_id){
 			return $this->user_groups[$groups_user_id]['hide'];
 		}
-		
+
 		public function get_team($groups_user_id){
 			return $this->user_groups[$groups_user_id]['team'];
 		}
-		
+
 		public function get_sortid($groups_user_id){
 			return $this->user_groups[$groups_user_id]['sortid'];
 		}
@@ -112,7 +112,7 @@ if ( !class_exists( "pdh_r_user_groups" ) ){
 				return 4;
 			}
 		}
-		
+
 		public function get_team_groups(){
 			$out = array();
 			foreach ($this->user_groups as $key=>$value){
@@ -124,4 +124,3 @@ if ( !class_exists( "pdh_r_user_groups" ) ){
 		}
 	}//end class
 }//end if
-?>

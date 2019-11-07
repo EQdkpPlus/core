@@ -66,7 +66,7 @@ $preset_lang = array(
 	'mactive' => 'Charakter-Status',
 	'mcname' => 'Charakter-Klasse',
 	'mtwink' => 'Charakter-Typ',
-	'mlink_dt' => 'Charakter-Link', 
+	'mlink_dt' => 'Charakter-Link',
 	'mlevel_dt' => 'Charakter-Level',
 	'mrace_dt' => 'Charakter-Rasse',
 	'mrank_dt' => 'Charakter-Rang',
@@ -87,5 +87,3 @@ $preset_lang = array(
 	'mrole'		=> 'Charakter-Rolle',
 	'mraidgroups' => 'Charakter-Raidgruppen',
 );
-
-?>

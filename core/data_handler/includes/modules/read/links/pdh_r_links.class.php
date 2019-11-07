@@ -55,7 +55,7 @@ if ( !class_exists( "pdh_r_links" ) ){
 					FROM
 					__links
 					ORDER BY link_sortid;";
-			
+
 			$objQuery = $this->db->query($sql);
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
@@ -114,7 +114,7 @@ if ( !class_exists( "pdh_r_links" ) ){
 								break ;
 							case '2':
 							case '3':
-							case '4': 
+							case '4':
 							case '5': 	$url = $this->routing->build("external", $link['name'], $link['id'], true, true);
 								break ;
 						}
@@ -133,7 +133,7 @@ if ( !class_exists( "pdh_r_links" ) ){
 			if ($visibility == "") return false;
 			$arrJSON = json_decode($visibility, true);
 			if (!$arrJSON) return false;
-			
+
 			foreach($arrJSON as $intGroup){
 				if ($intGroup == 0) return true;
 				if ($this->user->check_group($intGroup, false)) return true;
@@ -147,4 +147,3 @@ if ( !class_exists( "pdh_r_links" ) ){
 		}
 	}//end class
 }//end if
-?>

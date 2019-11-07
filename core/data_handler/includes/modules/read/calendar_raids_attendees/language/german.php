@@ -57,4 +57,3 @@ $preset_lang = array(
 	'raidcalstats_raids_signedoff_fromto'	=> 'Kalender-Statsitik-Abgemeldete Raids (Def. Zeitraum)',
 	'raidcalstats_raids_backup_fromto'		=> 'Kalender-Statsitik-Ersatzbank Raids (Def. Zeitraum)',
 );
-?>

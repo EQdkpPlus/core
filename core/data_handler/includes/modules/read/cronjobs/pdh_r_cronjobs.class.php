@@ -22,21 +22,21 @@
 if ( !defined('EQDKP_INC') ){
 	die('Do not access this file directly.');
 }
-				
+
 if ( !class_exists( "pdh_r_cronjobs" ) ) {
 	class pdh_r_cronjobs extends pdh_r_generic{
 		public static function __shortcuts() {
 		$shortcuts = array();
 		return array_merge(parent::$shortcuts, $shortcuts);
-	}				
-	
+	}
+
 	public $default_lang = 'english';
 	public $cronjobs = null;
 
 	public $hooks = array(
 		'cronjobs_update',
-	);		
-			
+	);
+
 	public $presets = array(
 		'cronjobs_id' => array('id', array('%cronjobID%'), array()),
 		'cronjobs_start_time' => array('start_time', array('%cronjobID%'), array()),
@@ -53,19 +53,19 @@ if ( !class_exists( "pdh_r_cronjobs" ) ) {
 		'cronjobs_params' => array('params', array('%cronjobID%'), array()),
 		'cronjobs_description' => array('description', array('%cronjobID%'), array()),
 	);
-				
+
 	public function reset(){
 			$this->pdc->del('pdh_cronjobs_table');
-			
+
 			$this->cronjobs = NULL;
 	}
-					
+
 	public function init(){
-			$this->cronjobs	= $this->pdc->get('pdh_cronjobs_table');				
-					
+			$this->cronjobs	= $this->pdc->get('pdh_cronjobs_table');
+
 			if($this->cronjobs !== NULL){
 				return true;
-			}		
+			}
 
 			$objQuery = $this->db->query('SELECT * FROM __cronjobs ORDER BY id ASC');
 			if($objQuery){
@@ -90,7 +90,7 @@ if ( !class_exists( "pdh_r_cronjobs" ) ) {
 
 					);
 				}
-				
+
 				$this->pdc->put('pdh_cronjobs_table', $this->cronjobs, null);
 			}
 
@@ -98,29 +98,29 @@ if ( !class_exists( "pdh_r_cronjobs" ) ) {
 
 		/**
 		 * @return multitype: List of all IDs
-		 */				
+		 */
 		public function get_id_list(){
 			if ($this->cronjobs === null) return array();
 			return array_keys($this->cronjobs);
 		}
-		
+
 		public function get_crontab(){
 			return (is_array($this->cronjobs)) ? $this->cronjobs : array();
 		}
-		
+
 		/**
 		 * Get all data of Element with $strID
 		 * @return multitype: Array with all data
-		 */				
+		 */
 		public function get_data($cronjobID){
 			if (isset($this->cronjobs[$cronjobID])){
 				return $this->cronjobs[$cronjobID];
 			}
 			return false;
 		}
-				
+
 		/**
-		 * Returns id for $cronjobID				
+		 * Returns id for $cronjobID
 		 * @param integer $cronjobID
 		 * @return multitype id
 		 */
@@ -132,7 +132,7 @@ if ( !class_exists( "pdh_r_cronjobs" ) ) {
 		}
 
 		/**
-		 * Returns start_time for $cronjobID				
+		 * Returns start_time for $cronjobID
 		 * @param integer $cronjobID
 		 * @return multitype start_time
 		 */
@@ -144,7 +144,7 @@ if ( !class_exists( "pdh_r_cronjobs" ) ) {
 		}
 
 		/**
-		 * Returns repeat for $cronjobID				
+		 * Returns repeat for $cronjobID
 		 * @param integer $cronjobID
 		 * @return multitype repeat
 		 */
@@ -156,7 +156,7 @@ if ( !class_exists( "pdh_r_cronjobs" ) ) {
 		}
 
 		/**
-		 * Returns repeat_type for $cronjobID				
+		 * Returns repeat_type for $cronjobID
 		 * @param integer $cronjobID
 		 * @return multitype repeat_type
 		 */
@@ -168,7 +168,7 @@ if ( !class_exists( "pdh_r_cronjobs" ) ) {
 		}
 
 		/**
-		 * Returns repeat_interval for $cronjobID				
+		 * Returns repeat_interval for $cronjobID
 		 * @param integer $cronjobID
 		 * @return multitype repeat_interval
 		 */
@@ -180,7 +180,7 @@ if ( !class_exists( "pdh_r_cronjobs" ) ) {
 		}
 
 		/**
-		 * Returns extern for $cronjobID				
+		 * Returns extern for $cronjobID
 		 * @param integer $cronjobID
 		 * @return multitype extern
 		 */
@@ -192,7 +192,7 @@ if ( !class_exists( "pdh_r_cronjobs" ) ) {
 		}
 
 		/**
-		 * Returns ajax for $cronjobID				
+		 * Returns ajax for $cronjobID
 		 * @param integer $cronjobID
 		 * @return multitype ajax
 		 */
@@ -204,7 +204,7 @@ if ( !class_exists( "pdh_r_cronjobs" ) ) {
 		}
 
 		/**
-		 * Returns delay for $cronjobID				
+		 * Returns delay for $cronjobID
 		 * @param integer $cronjobID
 		 * @return multitype delay
 		 */
@@ -216,7 +216,7 @@ if ( !class_exists( "pdh_r_cronjobs" ) ) {
 		}
 
 		/**
-		 * Returns multiple for $cronjobID				
+		 * Returns multiple for $cronjobID
 		 * @param integer $cronjobID
 		 * @return multitype multiple
 		 */
@@ -228,7 +228,7 @@ if ( !class_exists( "pdh_r_cronjobs" ) ) {
 		}
 
 		/**
-		 * Returns active for $cronjobID				
+		 * Returns active for $cronjobID
 		 * @param integer $cronjobID
 		 * @return multitype active
 		 */
@@ -240,7 +240,7 @@ if ( !class_exists( "pdh_r_cronjobs" ) ) {
 		}
 
 		/**
-		 * Returns editable for $cronjobID				
+		 * Returns editable for $cronjobID
 		 * @param integer $cronjobID
 		 * @return multitype editable
 		 */
@@ -252,7 +252,7 @@ if ( !class_exists( "pdh_r_cronjobs" ) ) {
 		}
 
 		/**
-		 * Returns path for $cronjobID				
+		 * Returns path for $cronjobID
 		 * @param integer $cronjobID
 		 * @return multitype path
 		 */
@@ -264,7 +264,7 @@ if ( !class_exists( "pdh_r_cronjobs" ) ) {
 		}
 
 		/**
-		 * Returns params for $cronjobID				
+		 * Returns params for $cronjobID
 		 * @param integer $cronjobID
 		 * @return multitype params
 		 */
@@ -276,7 +276,7 @@ if ( !class_exists( "pdh_r_cronjobs" ) ) {
 		}
 
 		/**
-		 * Returns description for $cronjobID				
+		 * Returns description for $cronjobID
 		 * @param integer $cronjobID
 		 * @return multitype description
 		 */
@@ -286,14 +286,14 @@ if ( !class_exists( "pdh_r_cronjobs" ) ) {
 			}
 			return false;
 		}
-		
+
 		public function get_next_run($cronjobID){
 			if (isset($this->cronjobs[$cronjobID])){
 				return $this->cronjobs[$cronjobID]['next_run'];
 			}
 			return false;
 		}
-		
+
 		public function get_last_run($cronjobID){
 			if (isset($this->cronjobs[$cronjobID])){
 				return $this->cronjobs[$cronjobID]['last_run'];
@@ -303,4 +303,3 @@ if ( !class_exists( "pdh_r_cronjobs" ) ) {
 
 	}//end class
 }//end if
-?>

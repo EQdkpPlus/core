@@ -38,4 +38,3 @@ $preset_lang = array(
 	'earned'		=> 'EPGP - EP',
 	'spent'			=> 'EPGP - GP'
 );
-?>

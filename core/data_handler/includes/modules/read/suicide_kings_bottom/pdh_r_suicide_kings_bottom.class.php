@@ -174,4 +174,3 @@ if ( !class_exists( "pdh_r_suicide_kings_bottom" ) ) {
 
 	}//end class
 }//end if
-?>

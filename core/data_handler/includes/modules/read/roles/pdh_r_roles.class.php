@@ -172,4 +172,3 @@ if (!class_exists('pdh_r_roles')){
 		}
 	} //end class
 } //end if class not exists
-?>

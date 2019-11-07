@@ -32,7 +32,7 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 		private $logs = array();
 		private $objPagination = null;
 		private $last_logs = array();
-		
+
 		public $hooks = array(
 			'logs_update'
 		);
@@ -56,7 +56,7 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 			$this->objPagination->initIndex();
 			$this->index = $this->objPagination->getIndex();
 		}
-		
+
 
 		public function reset($ids=false){
 			$this->objPagination = register("cachePagination", array("logs", "log_id", "__logs", array(), 100));
@@ -73,7 +73,7 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 			}
 			return $arrPlugins;
 		}
-		
+
 		public function get_grouped_users(){
 			$objQuery = $this->db->query("SELECT DISTINCT user_id FROM __logs;");
 			$arrUsers = array();
@@ -85,7 +85,7 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 
 			return $arrUsers;
 		}
-		
+
 		public function get_grouped_tags(){
 			$arrTags = array();
 			$objQuery = $this->db->query("SELECT DISTINCT log_tag FROM __logs;");
@@ -94,10 +94,10 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 					$arrTags[] = $row['log_tag'];
 				}
 			}
-			
+
 			return $arrTags;
 		}
-		
+
 		public function get_filtered_id_list($plugin=false, $result=false, $ip=false, $sid=false, $tag=false, $user_id=false, $value=false, $date_from=false, $date_to=false, $recordid=false, $record=false){
 			$objQuery = $this->db->prepare("SELECT log_id FROM __logs");
 			if ($plugin !== false) $objQuery->addCondition("log_plugin=?", $plugin);
@@ -111,7 +111,7 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 			if ($date_to !== false) $objQuery->addCondition("log_date < ?", $date_to);
 			if ($recordid !== false) $objQuery->addCondition("log_record_id=?", $recordid);
 			if ($record !== false) $objQuery->addCondition("log_record=?", $record);
-				
+
 			$objQuery = $objQuery->execute();
 			$arrIDs = array();
 			if($objQuery){
@@ -119,7 +119,7 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 					$arrIDs[] = $row['log_id'];
 				}
 			}
-			
+
 			return $arrIDs;
 		}
 
@@ -128,11 +128,11 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 			if(!method_exists($this, 'get_'.$tag) || $tag == 'viewicon' || $tag == 'value' || $tag == 'id_list' || $tag == 'lastxlogs') return $id_list;
 
 			$direction = ($direction == 'asc') ? 'ASC' : 'DESC';
-			if($tag == 'user') { 
+			if($tag == 'user') {
 				$objQuery = $this->db->prepare("SELECT log_id FROM __logs WHERE log_id :in ORDER BY username ".$direction.";")->in($id_list)->execute();
 			} else {
 				if(!in_array($tag, array('id', 'date', 'value', 'ipaddress', 'sid', 'result', 'tag', 'plugin', 'flag', 'record', 'record_id'))) return false;
-				
+
 				$objQuery = $this->db->prepare("SELECT log_id FROM __logs WHERE log_id :in ORDER BY log_".$tag." ".$direction.";")->in($id_list)->execute();
 			}
 			$id_list = array();
@@ -151,13 +151,13 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 		public function get_lastxlogs($amount=10) {
 			if(!isset($this->last_logs[$amount])) {
 				$this->last_logs[$amount] = array();
-				
+
 				$objQuery = $this->db->prepare("SELECT log_id FROM __logs ORDER BY log_date DESC")->limit($amount)->execute();
 				if($objQuery){
 					while ( $row = $objQuery->fetchAssoc() ) {
 						$this->last_logs[$amount][] = $row['log_id'];
 					}
-				}	
+				}
 			}
 			return $this->last_logs[$amount];
 		}
@@ -166,9 +166,9 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 			return $this->objPagination->get($id, 'log_tag');
 		}
 
-		public function get_html_tag($id, $link_url=false, $link_suffix='') {	
+		public function get_html_tag($id, $link_url=false, $link_suffix='') {
 			if(!$this->get_tag($id)) return "";
-			$intFlag = (int)$this->objPagination->get($id, 'log_flag');		
+			$intFlag = (int)$this->objPagination->get($id, 'log_flag');
 			$flag = ($intFlag == 1) ? ' class="adminicon"' : '';
 			if(!$link_url) return ($flag) ? '<span'.$flag.'><span>'.$this->user->lang($this->get_tag($id), true, false).'</span></span>' : $this->user->lang($this->get_tag($id), true, false);
 			$link = $link_url.$this->SID . '&amp;logid='.$id.$link_suffix;
@@ -191,34 +191,34 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 		public function get_value($id){
 			return $this->objPagination->get($id, 'log_value');
 		}
-		
+
 		public function get_html_value($id){
 			$strValue = $this->objPagination->get($id, 'log_value');
-			
+
 			$log_value = unserialize($strValue);
 			$arrTable = array();
 			$arrCompare = array();
 			$objLogs = register('logs');
-			
+
 			if(is_array($log_value)) {
 				foreach ($log_value as $k => $v){
 					if($k != 'header'){
 						//Enable Compare view
 						if (is_array($v)){
-			
+
 							if ($v['flag'] == 1){
 								require_once($this->root_path.'libraries/diff/diff.php');
 								require_once($this->root_path.'libraries/diff/engine.php');
 								require_once($this->root_path.'libraries/diff/renderer.php');
 								$diff = new diff(xhtml_entity_decode($objLogs->lang_replace($v['old'])), xhtml_entity_decode($objLogs->lang_replace($v['new'])), true);
 								$renderer = new diff_renderer_inline();
-									
+
 								$new = $content = $renderer->get_diff_content($diff);
 							} else {
 								$new = nl2br($objLogs->lang_replace($v['new']));
 							}
 							$arrCompare[] = array($objLogs->lang_replace(stripslashes($k)), nl2br($objLogs->lang_replace($v['old'])), $new, $v['flag']);
-		
+
 						} else {
 							$arrTable[] = array($objLogs->lang_replace(stripslashes($k)), $objLogs->lang_replace(stripslashes($v)));
 						}
@@ -236,7 +236,7 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 				}
 				$out .= '</table><br />';
 			}
-			
+
 			if(count($arrCompare)){
 				$out .= '<table  class="table fullwidth colorswitch">
 				<tr>
@@ -250,7 +250,7 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 
 				$out .= '</table>';
 			}
-			
+
 			return $out;
 		}
 
@@ -272,11 +272,11 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 			$lang	= ($res) ? $this->user->lang('success') : $this->user->lang('error');
 			return '<span class="'.$color.'">'.$lang.'</span>';
 		}
-		
+
 		public function get_record($id) {
 			return $this->objPagination->get($id, 'log_record');
 		}
-		
+
 		public function get_recordid($id) {
 			return $this->objPagination->get($id, 'log_record_id');
 		}
@@ -296,11 +296,10 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 			$link = $link.$this->SID . '&amp;logid='.$id.$suffix;
 			return '<a href="'.$link.'"><i class="fa fa-search fa-lg"></i></a>';
 		}
-		
+
 		public function get_trace($id){
 			return $this->objPagination->get($id, 'trace');
 		}
-		
+
 	}//end class
 }//end if
-?>

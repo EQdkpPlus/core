@@ -43,24 +43,24 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 		public $presets = array(
 			'attendance_30' => array('attendance', array('%member_id%', '%dkp_id%', 30, '%with_twink%'), array(30)),
 			'attendance_60' => array('attendance', array('%member_id%', '%dkp_id%', 60, '%with_twink%'), array(60)),
-			'attendance_90' => array('attendance', array('%member_id%', '%dkp_id%', 90, '%with_twink%'), array(90)),	
+			'attendance_90' => array('attendance', array('%member_id%', '%dkp_id%', 90, '%with_twink%'), array(90)),
 			'attendance_lt' => array('attendance', array('%member_id%', '%dkp_id%', 'LT', '%with_twink%'), array('LT')),
-				
+
 			'attendance_30_real' => array('attendance', array('%member_id%', '%dkp_id%', 30, '%with_twink%', false, true), array(30)),
 			'attendance_60_real' => array('attendance', array('%member_id%', '%dkp_id%', 60, '%with_twink%', false, true), array(60)),
 			'attendance_90_real' => array('attendance', array('%member_id%', '%dkp_id%', 90, '%with_twink%', false, true), array(90)),
 			'attendance_lt_real' => array('attendance', array('%member_id%', '%dkp_id%', 'LT', '%with_twink%', false, true), array('LT')),
-				
+
 			'attendance_30_all' => array('attendance_all', array('%member_id%', '%ALL_IDS%', 30, '%with_twink%'), array('%ALL_IDS%', 30)),
 			'attendance_60_all' => array('attendance_all', array('%member_id%', '%ALL_IDS%', 60, '%with_twink%'), array('%ALL_IDS%', 60)),
 			'attendance_90_all' => array('attendance_all', array('%member_id%', '%ALL_IDS%', 90, '%with_twink%'), array('%ALL_IDS%', 90)),
 			'attendance_lt_all' => array('attendance_all', array('%member_id%', '%ALL_IDS%', 'LT', '%with_twink%'), array('%ALL_IDS%', 'LT')),
-				
+
 			'attendance_30_real_all' => array('attendance_all', array('%member_id%', '%ALL_IDS%', 30, '%with_twink%', false, true), array('%ALL_IDS%', 30)),
 			'attendance_60_real_all' => array('attendance_all', array('%member_id%', '%ALL_IDS%', 60, '%with_twink%', false, true), array('%ALL_IDS%', 60)),
 			'attendance_90_real_all' => array('attendance_all', array('%member_id%', '%ALL_IDS%', 90, '%with_twink%', false, true), array('%ALL_IDS%', 90)),
 			'attendance_lt_real_all' => array('attendance_all', array('%member_id%', '%ALL_IDS%', 'LT', '%with_twink%', false, true), array('%ALL_IDS%', 'LT')),
-			
+
 			'attendance_fromto_all' => array('attendance_fromto_all', array('%member_id%', '%ALL_IDS%', '%from%', '%to%', '%with_twink%'), array('%ALL_IDS%')),
 		);
 
@@ -107,11 +107,11 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 
 			//create array with all first_raid dates
 			$first_raids = array();
-			
+
 			$arrMemberIDs = $this->pdh->get('member', 'id_list');
 			foreach($arrMemberIDs as $intMemberID){
 				$intFirstRaid = $this->pdh->get('member_dates', 'first_raid', array($intMemberID, $mdkp_id));
-				if(!$intFirstRaid){					
+				if(!$intFirstRaid){
 					$intCharCreated = $this->pdh->get('member', 'creation_date', array($intMemberID));
 					if(!$intCharCreated){
 						$intUser = $this->pdh->get('member', 'user', array($intMemberID));
@@ -126,7 +126,7 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 
 				$temp[$intMemberID] = ($intFirstRaid) ? $intFirstRaid : PHP_INT_MAX;
 			}
-			
+
 			$member_first_raid[$mdkp_id] = $temp;
 			if($time_period == 'LT') {
 				$temp_first_raids = array_flip($temp);
@@ -138,7 +138,7 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 			}
 
 			unset($temp);
-			
+
 			//get Raids
 			$objQuery = $this->db->prepare("SELECT raid_id, event_id, raid_date FROM __raids WHERE raid_date > ?")->execute($first_date);
 			if($objQuery){
@@ -146,10 +146,10 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 					$raid_id = intval($row['raid_id']);
 					$eventid = intval($row['event_id']);
 					$date = intval($row['raid_date']);
-					
+
 					$mdkpids = $this->pdh->get('multidkp', 'mdkpids4eventid', array($eventid, false));
 					if(!in_array($mdkp_id, $mdkpids)) continue;
-					
+
 					$attendees = $this->pdh->get('raid', 'raid_attendees', array($raid_id));
 					$mains = array();
 					//increment attendence counter
@@ -170,7 +170,7 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 					}
 				}
 			}
-			
+
 			//connect total-raid counts to member_id
 			$twink_first_dates = array();
 			foreach($member_first_raid as $mdkp_id => $mfirst_raid) {
@@ -205,16 +205,16 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 			}
 			$member_raidcount = $this->member_attendance[$time_period][$multidkp_id][$with_twinks][$member_id]['attended'];
 			$total_raidcount = $this->member_attendance[$time_period][$multidkp_id][$with_twinks][$member_id]['count'];
-			
+
 			if($real){
 				if(!isset($this->member_attendance['LT'][$multidkp_id])){
 					$this->init_attendance('LT', $multidkp_id);
 				}
-				
+
 				$lt_raidcount = $this->member_attendance['LT'][$multidkp_id][$with_twinks][$member_id]['count'];
 				if($total_raidcount> $lt_raidcount) $total_raidcount= $lt_raidcount;
 			}
-			
+
 			if ($count) {
 				$return = array();
 				$return['total_raidcount'] = $total_raidcount ;
@@ -224,11 +224,11 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 			}
 			return ($total_raidcount > 0) ? $member_raidcount/$total_raidcount : '0';
 		}
-		
+
 		public function get_attendance_all($member_id, $multidkp_id, $time_period, $with_twinks=true, $count=false, $real=false){
 			return $this->get_attendance($member_id, $multidkp_id, $time_period, $with_twinks, $count, $real);
 		}
-		
+
 		public function get_html_attendance_all($member_id, $multidkp_id, $time_period, $with_twinks=true, $count=false, $real=false){
 			return $this->get_html_attendance($member_id, $multidkp_id, $time_period, $with_twinks, $count, $real);
 		}
@@ -247,17 +247,17 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 
 			$member_raidcount = $this->member_attendance[$time_period][$multidkp_id][$with_twinks][$member_id]['attended'];
 			$total_raidcount = $this->member_attendance[$time_period][$multidkp_id][$with_twinks][$member_id]['count'];
-			
+
 			if($real){
 				if(!isset($this->member_attendance['LT'][$multidkp_id])){
 					$this->init_attendance('LT', $multidkp_id);
 				}
-				
+
 				$lt_raidcount = $this->member_attendance['LT'][$multidkp_id][$with_twinks][$member_id]['count'];
 				if($total_raidcount> $lt_raidcount) $total_raidcount= $lt_raidcount;
 			}
-			
-			
+
+
 			$percentage = ( $total_raidcount > 0 ) ? round(($member_raidcount/$total_raidcount) * 100) : 0;
 
 			return '<span class="'.color_item($percentage, true).'">'.$percentage.'% ('.$member_raidcount.'/'.$total_raidcount.')</span>';
@@ -270,7 +270,7 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 				return sprintf($this->pdh->get_lang('member_attendance', 'attendance'), $period);
 			}
 		}
-		
+
 		public function get_caption_attendance_all($mdkpid, $period){
 			if($period == 'LT'){
 				return $this->pdh->get('multidkp', 'name', array($mdkpid)).' '.$this->pdh->get_lang('member_attendance', 'lifetime');
@@ -278,13 +278,13 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 				return $this->pdh->get('multidkp', 'name', array($mdkpid)).' '.sprintf($this->pdh->get_lang('member_attendance', 'attendance'), $period);
 			}
 		}
-		
-		
+
+
 		//Attendance From To
-		
+
 		public function get_attendance_fromto_all($member_id, $multidkp_id, $from, $to, $with_twinks=true, $count=false){
 			$strTimeHash = md5($from.'.'.$to);
-			
+
 			if(!isset($this->member_attendance_fromto[$strTimeHash][$multidkp_id])){
 				$this->init_attendance_fromto($from, $to, $multidkp_id);
 			}
@@ -304,12 +304,12 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 				return $return;
 			}
 			return ($total_raidcount > 0) ? $member_raidcount/$total_raidcount : '0';
-			
+
 		}
-		
+
 		public function get_html_attendance_fromto_all($member_id, $multidkp_id, $from, $to, $with_twinks=true, $count=false){
 			$strTimeHash = md5($from.'.'.$to);
-			
+
 			if(!isset($this->member_attendance_fromto[$strTimeHash][$multidkp_id])){
 				$this->init_attendance_fromto($from, $to, $multidkp_id);
 			}
@@ -320,25 +320,25 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 			} else {
 				$with_twinks = 'members';
 			}
-			
+
 			$member_raidcount = $this->member_attendance_fromto[$strTimeHash][$multidkp_id][$with_twinks][$member_id]['attended'];
 			$total_raidcount = $this->member_attendance_fromto[$strTimeHash][$multidkp_id][$with_twinks][$member_id]['count'];
 			$percentage = ( $total_raidcount > 0 ) ? round(($member_raidcount/$total_raidcount) * 100) : 0;
-			
+
 			return '<span class="'.color_item($percentage, true).'">'.$percentage.'% ('.$member_raidcount.'/'.$total_raidcount.')</span>';
-			
+
 		}
-		
+
 		public function get_caption_attendance_fromto_all($mdkpid){
 			return $this->pdh->get('multidkp', 'name', array($mdkpid)).' '.$this->pdh->get_lang('member_attendance', 'attendance_fromto');
 		}
-		
+
 		public function init_attendance_fromto($from, $to, $mdkp_id){
 			if($mdkp_id == '') {
 				return false;
 			}
 			$strTimeHash = md5($from.'.'.$to);
-			
+
 			//cached data not outdated?
 			$this->member_attendance_fromto[$strTimeHash][$mdkp_id] = $this->pdc->get('pdh_member_attendance_fromto_'.$strTimeHash.'_'.$mdkp_id);
 			if($this->member_attendance_fromto[$strTimeHash][$mdkp_id] != null || is_array($this->member_attendance_fromto[$strTimeHash][$mdkp_id])){
@@ -353,13 +353,13 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 				$this->member_attendance_fromto[$strTimeHash][$mdkp_id]['mains'][$this->twink2main[$member_id]]['attended'] = 0;
 				$this->member_attendance_fromto[$strTimeHash][$mdkp_id]['mains'][$this->twink2main[$member_id]]['count'] = 0;
 			}
-			
+
 			$first_date = $from;
 			$last_date = $to;
 
 			//get raids
 			$raid_ids = $this->pdh->get('raid', 'id_list');
-		
+
 			//create array with all first_raid dates
 			$first_raids = array();
 			$temp = $this->pdh->aget('member_dates', 'first_raid', 0, array($this->pdh->get('member', 'id_list'), $mdkp_id));
@@ -379,7 +379,7 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 				$eventid = $this->pdh->get('raid', 'event', array($raid_id));
 				$mdkpids = $this->pdh->get('multidkp', 'mdkpids4eventid', array($eventid, false));
 				if(!in_array($mdkp_id, $mdkpids)) continue;
-		
+
 				$attendees = $this->pdh->get('raid', 'raid_attendees', array($raid_id));
 				$mains = array();
 				//increment attendence counter
@@ -416,7 +416,6 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 			$stm = 86400-($this->time->time)%86400;
 			$this->pdc->put('pdh_member_attendance_fromto_'.$strTimeHash.'_'.$mdkp_id, $this->member_attendance_fromto[$strTimeHash][$mdkp_id], $stm);
 		}
-		
+
 	}//end class
 }//end if
-?>

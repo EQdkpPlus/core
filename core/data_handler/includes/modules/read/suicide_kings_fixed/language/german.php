@@ -31,4 +31,3 @@ $preset_lang = array(
 	'sk_fixed_position_all'	=> 'Suicide-Kings-Fixed Position (alle)',
 	'sk_fixed_position'		=> 'Suicide-Kings-Fixed Position',
 );
-?>

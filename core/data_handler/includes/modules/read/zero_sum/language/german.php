@@ -39,4 +39,3 @@ $preset_lang = array(
 	'zs_rvalue'			=> 'Zero-Summ Wert',
 	'zs_rvalue_all'		=> 'Zero-Summ Wert (alle)',
 );
-?>

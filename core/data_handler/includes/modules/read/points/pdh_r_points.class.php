@@ -141,33 +141,33 @@ if ( !class_exists( "pdh_r_points" ) ) {
 				$this->snapshot_mapping();
 			}
 		}
-		
+
 		public function _init($multidkp_id){
 			if(isset($this->initiatedMultiPools[$multidkp_id])) return;
 			$this->initiatedMultiPools[$multidkp_id] = $multidkp_id;
-			
+
 			//cached data not outdated?
 			$this->points[$multidkp_id] = $this->pdc->get('pdh_points_table_'.$multidkp_id);
-			
+
 			if($this->points[$multidkp_id] !== NULL){
 				$this->arrCalculatedMulti = array();
 				$this->arrCalculatedSingle = array();
-				
+
 				return true;
 			}
-			
+
 			$this->points[$multidkp_id] = $arrLocalPoints = array();
 			$arrLocalPoints[$multidkp_id] = array();
 			$mdkpids = $this->pdh->maget('multidkp', array('event_ids', 'itempool_ids'), 0, array($this->pdh->get('multidkp', 'id_list')));
-			
+
 			$arrMultidkpData = $mdkpids[$multidkp_id];
 			$dkp_id = $multidkp_id;
 			$evip = $arrMultidkpData;
-			
+
 			$raid2event = array();
-			
+
 			if((!is_array($evip['event_ids']) || count($evip['event_ids']) < 1) && (!is_array($evip['itempool_ids']) || count($evip['itempool_ids']) < 1)) return;
-			
+
 			//raid2event mapping
 			if(is_array($evip['event_ids']) && count($evip['event_ids'])){
 				$objQuery = $this->db->prepare("SELECT event_id,raid_id FROM __raids WHERE event_id :in")->in($evip['event_ids'])->execute();
@@ -179,7 +179,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 			} else {
 				$raid2event = array();
 			}
-			
+
 			//adjustments
 			if(is_array($evip['event_ids']) && count($evip['event_ids'])){
 				if(!isset($this->riadecayed[$multidkp_id]['adj'])) $this->riadecayed[$multidkp_id]['adj'] = $this->apa->is_decay('adjustment', $multidkp_id);
@@ -209,7 +209,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 			} else {
 				$arrLocalPoints[$dkp_id][$row['member_id']]['single']['adjustment'][0] = 0;
 			}
-			
+
 			//earned
 			if(is_array($evip['event_ids']) && count($evip['event_ids'])){
 				if(!isset($this->riadecayed[$multidkp_id]['raid'])) $this->riadecayed[$multidkp_id]['raid'] = $this->apa->is_decay('raid', $multidkp_id);
@@ -243,8 +243,8 @@ if ( !class_exists( "pdh_r_points" ) ) {
 			} else {
 				$arrLocalPoints[$dkp_id][$row['member_id']]['single']['earned'][0] = 0;
 			}
-			
-						
+
+
 			//spent
 			if(is_array($evip['itempool_ids']) && count($evip['itempool_ids'])){
 				if(!isset($this->riadecayed[$multidkp_id]['item'])) $this->riadecayed[$multidkp_id]['item'] = $this->apa->is_decay('item', $multidkp_id);
@@ -262,7 +262,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 							}
 						}
 					}
-	
+
 				} else {
 					$objQuery = $this->db->prepare("SELECT SUM(item_value) as sum,itempool_id,raid_id,member_id FROM __items WHERE itempool_id :in GROUP BY member_id,raid_id, itempool_id")->in($evip['itempool_ids'])->execute();
 					if($objQuery){
@@ -280,7 +280,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 			}
 
 			$this->points[$multidkp_id] = $arrLocalPoints[$multidkp_id];
-			
+
 			$this->pdc->put('pdh_points_table_'.$multidkp_id, $arrLocalPoints[$multidkp_id], null);
 		}
 
@@ -395,7 +395,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 		public function get_current($member_id, $multidkp_id, $event_id=0, $itempool_id=0, $with_twink=true, $with_apa=true){
 			if(!isset($this->decayed[$multidkp_id])) $this->decayed[$multidkp_id] = $this->apa->is_decay('current', $multidkp_id);
 			if(!isset($this->hardcap[$multidkp_id])) $this->hardcap[$multidkp_id] = $this->apa->is_hardcap('current_hardcap', $multidkp_id);
-			
+
 			if($with_apa && $this->decayed[$multidkp_id]) {
 				$data =  array(
 					'id'			=> $multidkp_id.'_'.$member_id.'_'.(($with_twink) ? 1 : 0),
@@ -445,7 +445,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 		}
 
 		public function calculate_single_points($memberid, $multidkpid = 1){
-			//already cached?			
+			//already cached?
 			$cacheEntry = $this->pdh->get('member', 'points', array($memberid, $multidkpid));
 			if($cacheEntry !== false){
 				if(!isset($this->points[$multidkpid][$memberid])) $this->points[$multidkpid][$memberid] = array();
@@ -456,19 +456,19 @@ if ( !class_exists( "pdh_r_points" ) ) {
 
 				return $this->points[$multidkpid][$memberid]['single'];
 			}
-			
+
 			if(!isset($this->initiatedMultiPools[$multidkpid])) {
 				$this->_init($multidkpid);
 			}
-			
+
 			if($memberid == 400){
 				$cacheEntry = $this->pdh->get('member', 'points', array($memberid, $multidkpid));
 			}
-			
+
 			if(isset($this->points[$multidkpid][$memberid]['single']['_status'])){
 				return $this->points[$multidkpid][$memberid]['single'];
 			}
-			
+
 			//init
 			$this->points[$multidkpid][$memberid]['single']['earned'][0] = 0;
 			$this->points[$multidkpid][$memberid]['single']['spent'][0][0] = 0;
@@ -482,7 +482,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 					$this->points[$multidkpid][$memberid]['single']['earned'][0] += $earned;
 				}
 			}
-					
+
 			if(is_array($this->points[$multidkpid][$memberid]['single']['spent'])){
 				foreach($this->points[$multidkpid][$memberid]['single']['spent'] as $event_id => $itempools) {
 					foreach($itempools as $itempool_id => $spent){
@@ -504,7 +504,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 			$arrToSave = array($this->points[$multidkpid][$memberid]['single']['earned'][0],
 					$this->points[$multidkpid][$memberid]['single']['spent'][0][0],
 					$this->points[$multidkpid][$memberid]['single']['adjustment'][0]);
-			
+
 
 			$this->pdh->put('member', 'points', array($memberid, $multidkpid, $arrToSave));
 
@@ -527,7 +527,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 			if(isset($this->points[$multidkpid][$memberid]['multi'])){
 				return $this->points[$multidkpid][$memberid]['multi'];
 			}
-			
+
 			if(!isset($this->initiatedMultiPools[$multidkpid])) {
 				$this->_init($multidkpid);
 			}
@@ -638,4 +638,3 @@ if ( !class_exists( "pdh_r_points" ) ) {
 
 	}//end class
 }//end if
-?>

@@ -193,4 +193,3 @@ if ( !class_exists( "pdh_r_notifications" ) ) {
 
 	}//end class
 }//end if
-?>

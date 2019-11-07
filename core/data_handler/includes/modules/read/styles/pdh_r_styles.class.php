@@ -44,7 +44,7 @@ if ( !class_exists( "pdh_r_styles" ) ) {
 			if($this->styles !== NULL){
 				return true;
 			}
-			
+
 			$objQuery = $this->db->query("SELECT * FROM __styles ORDER BY enabled DESC, style_name");
 			if($objQuery){
 				while($drow = $objQuery->fetchAssoc()){
@@ -132,7 +132,7 @@ if ( !class_exists( "pdh_r_styles" ) ) {
 						'editor_theme'				=> $drow['editor_theme'],
 					);
 				}
-				
+
 				$this->pdc->put('pdh_styles_table', $this->styles, null);
 			}
 		}
@@ -168,4 +168,3 @@ if ( !class_exists( "pdh_r_styles" ) ) {
 		}
 	}//end class
 }//end if
-?>

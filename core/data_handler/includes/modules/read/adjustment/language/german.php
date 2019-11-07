@@ -37,7 +37,7 @@ $module_lang = array(
 
 $preset_lang = array(
 	'adj_date'			=> 'Korrektur-Datum',
-	'adj_reason_link'	=> 'Korrektur-Grund (verlinkt)', 
+	'adj_reason_link'	=> 'Korrektur-Grund (verlinkt)',
 	'adj_event'			=> 'Korrektur-Ereignis',
 	'adj_members'		=> 'Korrektur-Charaktere',
 	'adj_value'			=> 'Korrektur-Wert',
@@ -46,5 +46,3 @@ $preset_lang = array(
 	'adjedit'			=> 'Korrektur-Bearbeiten Button',
 	'adj_member'		=> 'Korrektur-Charakter',
 );
-
-?>

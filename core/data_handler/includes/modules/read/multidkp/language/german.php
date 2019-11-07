@@ -30,5 +30,3 @@ $module_lang = array(
 $preset_lang = array(
 	'mdkpname' => 'Kontoname',
 );
-
-?>

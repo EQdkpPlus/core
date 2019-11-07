@@ -96,11 +96,11 @@ if(!class_exists('pdh_r_event')){
 		public function get_value($event_id){
 			return $this->events[$event_id]['value'];
 		}
-		
+
 		public function get_def_itempool($event_id){
 			return $this->events[$event_id]['default_itempool'];
 		}
-		
+
 		public function get_html_def_itempool($event_id){
 			$ip_id = $this->get_def_itempool($event_id);
 			return $this->pdh->get('itempool', 'name', array($ip_id));
@@ -189,4 +189,3 @@ if(!class_exists('pdh_r_event')){
 		}
 	}
 }
-?>

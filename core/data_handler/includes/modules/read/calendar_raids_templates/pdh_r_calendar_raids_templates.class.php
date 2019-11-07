@@ -125,4 +125,3 @@ if (!class_exists('pdh_r_calendar_raids_templates')){
 
 	} //end class
 } //end if class not exists
-?>

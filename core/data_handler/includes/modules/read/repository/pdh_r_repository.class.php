@@ -42,11 +42,11 @@ if ( !class_exists( "pdh_r_repository" ) ) {
 			// disable for now until repository.php is fully converted
 			$this->repository	= $this->pdc->get('pdh_repository_table');
 			$this->tags				= $this->pdc->get('pdh_repository_table.tags');
-			
+
 			if($this->repository !== NULL){
 				return true;
 			}
-			
+
 			$objQuery = $this->db->query("SELECT * FROM __repository ORDER BY dep_coreversion DESC");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
@@ -69,7 +69,7 @@ if ( !class_exists( "pdh_r_repository" ) ) {
 						'bugtracker_url'=> $row['bugtracker_url'],
 						'tags'			=> $row['tags'],
 					);
-					
+
 					$arrTags = unserialize($row['tags']);
 					if($arrTags && is_array($arrTags)){
 						foreach($arrTags as $elem){
@@ -78,7 +78,7 @@ if ( !class_exists( "pdh_r_repository" ) ) {
 					}
 					$this->repository[(int)$row['category']][$row['id']]['tags'] = unserialize($row['tags']);
 				}
-				
+
 				$this->pdc->put('pdh_repository_table', $this->repository, null);
 				$this->pdc->put('pdh_repository_table.tags', $this->tags, null);
 			}
@@ -87,7 +87,7 @@ if ( !class_exists( "pdh_r_repository" ) ) {
 		public function get_repository(){
 			return $this->repository;
 		}
-		
+
 		public function get_row($id){
 			foreach ($this->repository as $catid => $extensions){
 				if (is_array($extensions)){
@@ -110,13 +110,13 @@ if ( !class_exists( "pdh_r_repository" ) ) {
 			}
 			return 0;
 		}
-		
+
 		public function get_bugtracker_url($cat, $id){
 			if(isset($this->repository[$cat][$id])){
 				return $this->repository[$cat][$id]['bugtracker_url'];
 			}
 		}
-		
+
 		public function get_search($strQuery){
 			$arrOut = array();
 			foreach($this->repository as $intCategory => $arrCategory){
@@ -124,7 +124,7 @@ if ( !class_exists( "pdh_r_repository" ) ) {
 					if(stripos($arrExtension['description'], $strQuery) !== false || stripos($arrExtension['name'], $strQuery) !== false || stripos($arrExtension['plugin'], $strQuery) !== false){
 						$arrOut[$intExtension] = $arrExtension;
 					}
-					
+
 					if(is_array($arrExtension['tags'])){
 						foreach($arrExtension['tags'] as $strTags){
 							if(stripos($strTags, $strQuery) !== false){
@@ -139,4 +139,3 @@ if ( !class_exists( "pdh_r_repository" ) ) {
 		}
 	}//end class
 }//end if
-?>

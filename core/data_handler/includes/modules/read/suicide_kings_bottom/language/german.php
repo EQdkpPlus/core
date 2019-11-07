@@ -31,4 +31,3 @@ $preset_lang = array(
 	'sk_bottom_position_all'	=> 'Suicide-Kings-Unten Position (alle)',
 	'sk_bottom_position'		=> 'Suicide-Kings-Unten Position',
 );
-?>

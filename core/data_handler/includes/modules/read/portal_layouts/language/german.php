@@ -29,5 +29,3 @@ $module_lang = array(
 	'blocks'				=> 'Verwendete Blöcke',
 	'usedby'				=> 'Verwendet von Kategorien'
 );
-
-?>

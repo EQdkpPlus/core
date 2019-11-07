@@ -131,14 +131,14 @@ if (!class_exists("pdh_r_user")){
 
 		public function get_check_email($email){
 			$email = utf8_strtolower($email);
-			
+
 			if(!$this->blnDecryptedAll) $this->decrypt_data_all();
-			
+
 			return (is_array(search_in_array($email, $this->users, true, 'user_email_clean'))) ? 'false' : 'true';
 		}
 
 		public function get_check_auth_account($name, $strMethod){
-			if(!$this->blnDecryptedAll) $this->decrypt_data_all();		
+			if(!$this->blnDecryptedAll) $this->decrypt_data_all();
 			return (is_array(search_in_array($name, $this->users, true, $strMethod))) ? false : true;
 		}
 
@@ -146,7 +146,7 @@ if (!class_exists("pdh_r_user")){
 			$this->init_online_user();
 			return (in_array($user_id, $this->online_user)) ? true : false;
 		}
-		
+
 		public function get_is_user($user_id){
 			return (isset($this->users[$user_id])) ? true : false;
 		}
@@ -158,7 +158,7 @@ if (!class_exists("pdh_r_user")){
 		public function get_userid_for_authaccount($strAuthAccount, $strMethod){
 			if ($strAuthAccount != ""){
 				if(!$this->blnDecryptedAll) $this->decrypt_data_all();
-				
+
 				$arrResult = search_in_array($strAuthAccount, $this->users, true, $strMethod);
 				if (is_array($arrResult)){
 					$arrResultKeys = array_keys($arrResult);
@@ -171,9 +171,9 @@ if (!class_exists("pdh_r_user")){
 		public function get_userid_for_email($strEmail){
 			if ($strEmail != ""){
 				$strEmail = utf8_strtolower($strEmail);
-				
+
 				if(!$this->blnDecryptedAll) $this->decrypt_data_all();
-				
+
 				$arrResult = search_in_array($strEmail, $this->users, true, 'user_email_clean');
 				if (is_array($arrResult)){
 					$arrResultKeys = array_keys($arrResult);
@@ -249,7 +249,7 @@ if (!class_exists("pdh_r_user")){
 				return '';
 			}
 		}
-		
+
 		public function get_gender($user_id) {
 			$intFieldID = $this->pdh->get('user_profilefields', 'by_type', array('gender'));
 			if ($intFieldID){
@@ -273,7 +273,7 @@ if (!class_exists("pdh_r_user")){
 		public function get_active($user_id) {
 			return $this->users[$user_id]['user_active'];
 		}
-		
+
 		public function get_email_confirmed($user_id){
 			return $this->users[$user_id]['user_email_confirmed'];
 		}
@@ -359,7 +359,7 @@ if (!class_exists("pdh_r_user")){
 			$arrMemberships = $this->pdh->sort($arrMemberships, 'user_groups', 'sortid');
 			return $arrMemberships;
 		}
-		
+
 		public function get_highest_group($user_id){
 			$arrGroups = $this->get_groups($user_id);
 
@@ -437,7 +437,7 @@ if (!class_exists("pdh_r_user")){
 			}
 			return $users;
 		}
-		
+
 		public function get_locked(){
 			$users = array();
 			foreach ($this->users as $user_id => $value){
@@ -470,7 +470,7 @@ if (!class_exists("pdh_r_user")){
 			foreach($this->users as $user_id => $uderdata){
 				//Hide special users
 				if($this->get_is_special_user($user_id)) continue;
-			
+
 				$intBirthday = $this->get_birthday($user_id);
 				if(strlen($intBirthday) && (int)$intBirthday > 0){
 					$useroutput[$user_id] = (int)$intBirthday;
@@ -502,7 +502,7 @@ if (!class_exists("pdh_r_user")){
 			$strAvatarType = $this->get_custom_fields($user_id, 'user_avatar_type');
 			if(!$strAvatarType || is_array($strAvatarType)) $strAvatarType = $this->config->get('avatar_default');
 			$arrAllowedTypes = $this->config->get('avatar_allowed');
-			
+
 			//Get the avatar by the user selected type
 			//If the type is allowed by admin
 			$avatarimg = $this->get_custom_fields($user_id, 'user_avatar');
@@ -515,7 +515,7 @@ if (!class_exists("pdh_r_user")){
 					if(is_file($fullSizeImage)) return $fullSizeImage;
 				}
 			}
-			
+
 			if($strAvatarType == 'gravatar' && in_array('gravatar', $arrAllowedTypes)){
 				include_once $this->root_path.'core/gravatar.class.php';
 				$gravatar = registry::register('gravatar');
@@ -525,7 +525,7 @@ if (!class_exists("pdh_r_user")){
 				$result = $gravatar->getAvatar($strEmail, (($fullSize) ? 400 : 68));
 				if ($result) return $result;
 			}
-			
+
 			//Handle other avatar providers
 			$arrAvatarsFromProviders = array();
 			if(register('hooks')->isRegistered('user_avatarimg')){
@@ -535,22 +535,22 @@ if (!class_exists("pdh_r_user")){
 					$arrAvatarsFromProviders[$arrKeys[0]] = $val[$arrKeys[0]];
 				}
 			}
-			
+
 			if(isset($arrAvatarsFromProviders[$strAvatarType]) && in_array($strAvatarType, $arrAllowedTypes)){
-				if($arrAvatarsFromProviders[$strAvatarType] && strlen($arrAvatarsFromProviders[$strAvatarType])) 
-					return $arrAvatarsFromProviders[$strAvatarType]; 
+				if($arrAvatarsFromProviders[$strAvatarType] && strlen($arrAvatarsFromProviders[$strAvatarType]))
+					return $arrAvatarsFromProviders[$strAvatarType];
 			}
-			
+
 			//We are still here, therefore we need the default avatar by admin choose
 			$strDefaultType = $this->config->get('avatar_default');
-			
+
 			if($strDefaultType == 'gravatar'){
 				include_once $this->root_path.'core/gravatar.class.php';
 				$gravatar = registry::register('gravatar');
 				$result = $gravatar->getAvatar($this->get_name($user_id), (($fullSize) ? 400 : 68), true);
 				if ($result) return $result;
 			}
-			
+
 			if(register('hooks')->isRegistered('user_avatarimg')){
 				$arrAvatarsFromProvidersRaw = register('hooks')->process('user_avatarimg', array('user_id' => $user_id, 'fullsize' => $fullSize, 'avatarimg' => $avatarimg, 'avatartype' => $strAvatarType, 'default' => true));
 				foreach($arrAvatarsFromProvidersRaw as $val){
@@ -558,17 +558,17 @@ if (!class_exists("pdh_r_user")){
 					$arrAvatarsFromProviders[$arrKeys[0]] = $val[$arrKeys[0]];
 				}
 			}
-			
+
 			if(isset($arrAvatarsFromProviders[$strDefaultType]) && strlen($arrAvatarsFromProviders[$strDefaultType])){
 				return $arrAvatarsFromProviders[$strDefaultType];
 			}
-			
+
 			//EQdkp Plus Default Avatars as last fallback
 			include_once $this->root_path.'core/avatar.class.php';
 			$avatar = registry::register('avatar');
 			$result = $avatar->getAvatar($user_id, $this->get_name($user_id), (($fullSize) ? 400 : 68));
 			if ($result) return $result;
-			
+
 			return '';
 		}
 
@@ -579,9 +579,9 @@ if (!class_exists("pdh_r_user")){
 			} else {
 				$strImg = $this->pfh->FileLink($strImg, false, 'absolute');
 			}
-			
+
 			$class = ($fullSize) ? 'big' : 'small';
-			
+
 			$onlineBadge = ($this->get_is_online($user_id)) ? '<i class="eqdkp-icon-online"></i>' : '';
 
 			return '<div class="user-avatar-container" data-user-group-id="'.$this->get_highest_group($user_id).'"><img src="'.$strImg.'" class="user-avatar '.$class.'" alt="'.$this->get_name($user_id).'" />'.$onlineBadge.'</div>';
@@ -596,7 +596,7 @@ if (!class_exists("pdh_r_user")){
 			}
 
 			$class = ($fullSize) ? 'big' : 'small';
-			
+
 			$usertooltip[]	= '<div class="tooltiprow"><i class="fa fa-user fa-lg"></i> '.$this->get_name($user_id).' ('.$this->get_charnumber($user_id).')  '.$this->get_html_country($user_id).'</div>';
 			//is_away, is_online,
 			$usertooltip[]	= '<div class="tooltiprow">'.$this->get_html_groups($user_id).'</div>';
@@ -605,9 +605,9 @@ if (!class_exists("pdh_r_user")){
 			if(is_array($tt_extension) && count($tt_extension) > 0){
 				$usertooltip = $usertooltip + $tt_extension;
 			}
-			
+
 			$onlineBadge = ($this->get_is_online($user_id)) ? '<i class="eqdkp-icon-online"></i>' : '';
-			
+
 			return '<div class="user-avatar-container user-avatar-tooltip coretip" data-user-group-id="'.$this->get_highest_group($user_id).'" data-coretip="'.htmlspecialchars(implode('', $usertooltip)).'"><img src="'.$strImg.'" class="user-avatar" alt="'.$this->get_name($user_id).'" />'.$onlineBadge.'</div>';
 		}
 
@@ -651,11 +651,11 @@ if (!class_exists("pdh_r_user")){
 
 		public function get_notification_articlecategory_abo($intCategoryID, $strDatasetID=false, $intUserID=false){
 			if ($intUserID === false) $intUserID = $this->user->id;
-			
+
 			//Check Permission of Category
 			$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($intCategoryID, $intUserID));
 			if (!$arrPermissions['read']) return false;
-			
+
 			/*Check Permission of Article
 			  Not needed now
 			if($strDatasetID !== false){
@@ -663,8 +663,8 @@ if (!class_exists("pdh_r_user")){
 				$intArticleID = intval($arrArticleID[0]);
 			}
 			*/
-			
-			
+
+
 			$arrNotificationSettings = $this->get_notification_settings($intUserID);
 			if ($arrNotificationSettings && isset($arrNotificationSettings['ntfy_comment_new_article_categories'])){
 				$arrCategories = $arrNotificationSettings['ntfy_comment_new_article_categories'];
@@ -851,13 +851,13 @@ if (!class_exists("pdh_r_user")){
 			$this->init_countries();
 			return $this->countries;
 		}
-		
+
 		public function get_is_special_user($intUserID){
 			$arrSpecialUser = $this->config->get('special_user');
 			if(!$arrSpecialUser) $arrSpecialUser = array();
-			
+
 			if (in_array($intUserID, $arrSpecialUser)) return true;
-			
+
 			return false;
 		}
 
@@ -889,7 +889,7 @@ if (!class_exists("pdh_r_user")){
 				}
 			}
 		}
-		
+
 		private function decrypt_data_all(){
 			if(!$this->blnDecryptedAll){
 				foreach($this->users as $userid => $row){
@@ -897,15 +897,15 @@ if (!class_exists("pdh_r_user")){
 					$this->users[$row['user_id']]['user_email']			= $this->encrypt->decrypt($row['user_email']);
 					$tmpCryptAuthAccount								= $this->encrypt->decrypt($row['auth_account']);
 					$this->users[$row['user_id']]['auth_account']		= (is_serialized($tmpCryptAuthAccount)) ? unserialize($tmpCryptAuthAccount) : $tmpCryptAuthAccount;
-						
+
 					$this->users[$row['user_id']]['user_email_clean']	= utf8_strtolower($this->users[$row['user_id']]['user_email']);
-					
+
 				}
-				
+
 				$this->blnDecryptedAll = true;
 			}
 		}
-		
+
 		private function decrypt_data_single($intUserID){
 			if(!$this->blnDecryptedAll && !in_array($intUserID, $this->arrUserdataDecrypted)){
 				if(isset($this->users[$intUserID])){
@@ -913,7 +913,7 @@ if (!class_exists("pdh_r_user")){
 					$this->users[$row['user_id']]['user_email']			= $this->encrypt->decrypt($row['user_email']);
 					$tmpCryptAuthAccount								= $this->encrypt->decrypt($row['auth_account']);
 					$this->users[$row['user_id']]['auth_account']		= (is_serialized($tmpCryptAuthAccount)) ? unserialize($tmpCryptAuthAccount) : $tmpCryptAuthAccount;
-					
+
 					$this->users[$row['user_id']]['user_email_clean']	= utf8_strtolower($this->users[$row['user_id']]['user_email']);
 				}
 				$this->arrUserdataDecrypted[] = $intUserID;
@@ -921,4 +921,3 @@ if (!class_exists("pdh_r_user")){
 		}
 	}//end class
 }//end if
-?>
