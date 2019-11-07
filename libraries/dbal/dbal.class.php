@@ -29,7 +29,12 @@ class dbal{
 	public static function factory($arrOptions = array()) {	
 		$dbtype = (isset($arrOptions['dbtype'])) ? $arrOptions['dbtype'] : registry::get_const('dbtype');
 		if(empty($dbtype)) throw new DBALException('dbtype not set');
-		if ($dbtype == 'mysql') $dbtype = 'mysqli';
+		
+		$arrAvailableDbals = dbal::available_dbals();
+		
+		if(!isset($arrAvailableDbals[$dbtype])){
+			$dbtype = array_keys($arrAvailableDbals)[0];
+		}	
 		
 		require_once(registry::get_const('root_path') . 'libraries/dbal/' . $dbtype . '.dbal.class.php');
 		$classname = 'dbal_' . $dbtype;
@@ -41,13 +46,13 @@ class dbal{
 			if (!dbal::check_extension($dbtype)) throw new DBALException('PHP-Extension ' . $dbtype . ' not available');
 		}
 
-		return registry::register($classname, array($arrOptions));
+		return $classname;
 	}
 
 	public static function available_dbals() {
 		$arrDbals = array(
-			'mysqli'	=> 'MySQLi',
 			'mysql_pdo' => 'MySQL PDO',
+			'mysqli'	=> 'MySQLi',
 		);
 		
 		foreach ($arrDbals as $key => $name){

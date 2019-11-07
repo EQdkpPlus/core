@@ -32,9 +32,9 @@ try {
 	registry::add_const('lite_mode', true);
 	registry::load_config();
 	require($eqdkp_root_path.'libraries/dbal/dbal.class.php');
-	if (registry::get_const('dbtype') == 'mysql') registry::add_const('dbtype', 'mysqli');
-	require_once($eqdkp_root_path.'libraries/dbal/'.registry::get_const('dbtype').'.dbal.class.php');
-	registry::$aliases['db'] = array('dbal_'.registry::get_const('dbtype'), array(array('open' => true)));
+	$strDatabase = dbal::factory(array('dbtype' => registry::get_const('dbtype'), 'open' => true));
+	registry::$aliases['db'] = array($strDatabase, array(array('open' => true)));
+	
 	#error_reporting(E_ALL);
 	header('content-type: text/html; charset=UTF-8');
 	include($eqdkp_root_path.'infotooltip/infotooltip.class.php');
