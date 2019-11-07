@@ -32,7 +32,7 @@ if (!class_exists('calendarevents_article_parse_hook'))
 {
   class calendarevents_article_parse_hook extends gen_class
   {
-  	
+
 	/**
     * hook_search
     * Do the hook 'search'
@@ -41,27 +41,27 @@ if (!class_exists('calendarevents_article_parse_hook'))
     */
 	public function article_parse($arrOptions)
 	{
-		
+
 		$strContent = $arrOptions['content'];
-		
+
 		//Parse all links
 		$arrLinks = array();
 		$a = $this->routing->simpleBuild('Calendarevent');
 		$intLinks = preg_match_all('@<a href="(.*)">(.*)'.preg_quote($a, "@").'(.*)</a>@', $strContent, $arrLinks);
-		
+
 		if ($intLinks){
 			foreach ($arrLinks[0] as $key => $fullMatch){
 				$link = $arrLinks[3][$key];
 				$arrParts = parse_url($link);
 				$link = $arrParts['path'];
-				
+
 				$link = str_replace(array('.php', '.html', '/'), '', strip_tags($link));
 				$arrPath = array_filter(explode('-', $link));
 				$arrPath = array_reverse($arrPath);
 				$strMyPath = $arrPath[0];
-				
+
 				$intEventID = intval($strMyPath);
-				
+
 				if($intEventID){
 					include_once($this->root_path.'core/article.class.php');
 					$objArticleHelper = registry::register('article');
@@ -70,12 +70,11 @@ if (!class_exists('calendarevents_article_parse_hook'))
 				}
 			}
 		}
-		
+
 		$arrOptions['content'] = $strContent;
-		
+
 		return $arrOptions;
 	}
 
   }
 }
-?>

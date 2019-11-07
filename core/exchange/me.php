@@ -26,14 +26,14 @@ if (!defined('EQDKP_INC')){
 if (!class_exists('exchange_me')){
 	class exchange_me extends gen_class {
 		public static $shortcuts = array('pex'=>'plus_exchange');
-		
+
 		public function get_me($params, $arrBody){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
-			
+
 			if($isAPITokenRequest) {
 				return $this->pex->error('api token request');
 			}
-			
+
 			$status = 0;
 			$data = array();
 			if($this->user->is_signedin() && $this->user->id > 0){
@@ -41,7 +41,7 @@ if (!class_exists('exchange_me')){
 				if(!$strUsername || $strUsername == ''){
 					return $this->pex->error('access denied');
 				}
-				
+
 				$arrUserdata = $this->pdh->get('user', 'data', array($this->user->id));
 				$arrUserdata['email'] = $this->pdh->get('user', 'email', array($this->user->id));
 				$hideArray = array('user_password', 'user_login_key', 'user_email','user_email_confirmkey', 'user_lastpage', 'privacy_settings', 'auth_account', 'notifications', 'user_temp_email', 'salt', 'password', 'exchange_key', 'failed_login_attempts');
@@ -53,8 +53,8 @@ if (!class_exists('exchange_me')){
 				$arrUserdata['usergroups'] = $this->pdh->get('user_groups_users', 'memberships', array($this->user->id));
 				$arrUserdata['avatar_big'] = $this->env->httpHost.$this->env->root_to_serverpath($this->pdh->get('user', 'avatarimglink', array($this->user->id, true)));
 				$arrUserdata['avatar_small'] = $this->env->httpHost.$this->env->root_to_serverpath($this->pdh->get('user', 'avatarimglink', array($this->user->id, false)));
-				
-				
+
+
 				return array('data' => $arrUserdata);
 			} else {
 				return $this->pex->error('access denied');
@@ -63,4 +63,3 @@ if (!class_exists('exchange_me')){
 
 	}
 }
-?>

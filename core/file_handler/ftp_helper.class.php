@@ -103,11 +103,11 @@ class ftp_handler{
 		}
 		return $isok;
 	}
-	
+
 	public function cdToHome(){
 		$aPath = explode('/',$this->pwd());
 		$sHomeDir = str_repeat('../', count($aPath) );
-		
+
 		$this->login();
 		$isok = ftp_chdir($this->link_id,$sHomeDir);
 	}
@@ -143,7 +143,7 @@ class ftp_handler{
 		$this->cdToHome();
 		return @ftp_mkdir($this->link_id,$this->root_dir.$dir);
 	}
-	
+
 	public function mkdir_r($path, $mode=0775){
 		$this->login();
 		$this->cdToHome();
@@ -174,7 +174,7 @@ class ftp_handler{
 
 	public function chmod($file, $mode=0666){
 		if($this->on_iis()) return true;
-		
+
 		$this->login();
 		$this->cdToHome();
 		return @ftp_chmod($this->link_id,$mode,$this->root_dir.$file);
@@ -195,14 +195,14 @@ class ftp_handler{
 
 	public function rename($old_file, $new_file, $tmpmove=false){
 		if($old_file == $new_file) return true;
-			
+
 		$this->login();
 		$this->cdToHome();
-		
+
 		if(defined('PHP_WINDOWS_VERSION_BUILD') && file_exists($this->eqdkp_root.$new_file)){
 			$this->delete($new_file);
 		}
-		
+
 		if($tmpmove){
 			return $this->moveuploadedfile($old_file, $new_file, FTP_BINARY);
 		}else{
@@ -266,15 +266,15 @@ class ftp_handler{
 		unlink($tmplfilename);
 		return $result;
 	}
-	
+
 	public function add_string($remote_file, $data, $mode=FTP_BINARY, $startpos=0){
 		$strFilename = md5($this->generateRandomBytes());
-		
+
 		$tmplfilename 		= $this->tmp_dir.$strFilename;
 		$tmplfilename_plain = $this->tmp_dir_plain.$strFilename;
-		
+
 		$a = $this->ftp_copy($remote_file, $tmplfilename_plain);
-		
+
 		$tmpHandle = fopen($tmplfilename, 'a');
 		if ($tmpHandle){
 			$intBits = fwrite($tmpHandle, $data);
@@ -290,14 +290,14 @@ class ftp_handler{
 	public function ftp_copy($from , $to){
 		$result = ftp_put($this->link_id, $this->root_dir.$to, $this->root_dir.$from);
 		if(!$this->on_iis()) @ftp_chmod($this->link_id, 0755, $this->root_dir.$to);
-		
+
 		return $result;
 	}
 
 	public function close(){
 		@ftp_close($this->link_id);
 	}
-	
+
 	/**
 	 * Generate random bytes.
 	 *
@@ -311,23 +311,23 @@ class ftp_handler{
 			if (function_exists('random_bytes')) {
 				$bytes = random_bytes($length);
 				if ($bytes === false) throw new Exception('Cannot generate a secure stream of bytes.');
-				
+
 				return $bytes;
 			}
-			
+
 			$bytes = openssl_random_pseudo_bytes($length, $s);
 			if (!$s) throw new Exception('Cannot generate a secure stream of bytes.');
-			
+
 			return $bytes;
 		} catch (\Exception $e) {
 			throw new Exception('Cannot generate a secure stream of bytes.', $e);
 		}
-	
+
 	}
-	
+
 	//These methods here have been defined somewhere else. But the pfh is called so early in super registry, that they are not available when pfh needs it.
 	//Therefore they have been redeclared here.
-	
+
 	private function on_iis() {
 		$sSoftware = strtolower( $_SERVER["SERVER_SOFTWARE"] );
 		if ( strpos($sSoftware, "microsoft-iis") !== false )
@@ -337,4 +337,3 @@ class ftp_handler{
 	}
 
 }
-?>

@@ -27,7 +27,7 @@ if (!class_exists('exchange_add_event')){
 	class exchange_add_event extends gen_class {
 		public static $shortcuts = array('pex'=>'plus_exchange');
 		public $options		= array();
-		
+
 		/*
 		* Required: Event Name (String)
 		* Required: Event Value (float)
@@ -36,7 +36,7 @@ if (!class_exists('exchange_add_event')){
 		*/
 		public function post_add_event($params, $arrBody){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
-			
+
 			if ($isAPITokenRequest ||  $this->user->check_auth('a_event_add', false)){
 				$blnTest = (isset($params['get']['test']) && $params['get']['test']) ? true : false;
 
@@ -44,21 +44,21 @@ if (!class_exists('exchange_add_event')){
 					//Check required values
 					if (!isset($arrBody['event_name']) || !strlen($arrBody['event_name'])) return $this->pex->error('required data missing', 'event_name');
 					if (!isset($arrBody['event_value']) || !strlen($arrBody['event_value'])) return $this->pex->error('required data missing', 'event_value');
-										
+
 					//Event Value
 					$fltEventValue = (float)$arrBody['event_value'];
-					
+
 					//Item Name
-					$strEventName = filter_var((string)$arrBody['event_name'], FILTER_SANITIZE_STRING);	
-					
+					$strEventName = filter_var((string)$arrBody['event_name'], FILTER_SANITIZE_STRING);
+
 					if($blnTest) return array('test' => 'success');
-					
+
 					$intDefaultItempool = (isset($arrBody['event_default_itempool'])) ? (int)$arrBody['event_default_itempool'] : 0;
-					
+
 					$mixEventID = $this->pdh->put('event', 'add_event', array($strEventName, $fltEventValue, '', $intDefaultItempool));
 					if (!$mixEventID) return $this->pex->error('an error occured');
 					$this->pdh->process_hook_queue();
-					
+
 					return array('event_id' => $mixEventID);
 				}
 				return $this->pex->error('malformed input');
@@ -68,4 +68,3 @@ if (!class_exists('exchange_add_event')){
 		}
 	}
 }
-?>

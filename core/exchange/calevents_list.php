@@ -129,4 +129,3 @@ if (!class_exists('exchange_calevents_list')){
 		}
 	}
 }
-?>

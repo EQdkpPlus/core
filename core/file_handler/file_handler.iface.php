@@ -18,7 +18,7 @@
  *	You should have received a copy of the GNU Affero General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 if ( !defined('EQDKP_INC') ){
 	die('Do not access this file directly.');
 }
@@ -33,7 +33,7 @@ if ( !interface_exists( "plus_filehandler" ) ){
 		public function FilePath($path, $plugin=false, $blnCreateFile=true);
 		public function FolderPath($foldername, $plugin=false, $linkType = 'relative');
 		public function FileSize($file, $plugin=false);
-						
+
 		public function testWrite($file=false);
 		public function copy($source, $dest);
 		public function rename($old_file, $new_file);
@@ -47,4 +47,3 @@ if ( !interface_exists( "plus_filehandler" ) ){
 		public function check_cachefolder();
 	}//end interface
 }//end if
-?>

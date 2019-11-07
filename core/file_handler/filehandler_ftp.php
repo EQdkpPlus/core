@@ -26,7 +26,7 @@ if ( !defined('EQDKP_INC') ){
 if (!class_exists("filehandler_ftp")) {
 	class filehandler_ftp extends gen_class implements plus_filehandler
 	{
-		
+
 		public $errors				= array();
 		private $CacheFolder		= '';
 		private $CacheFolderPlain	= '';
@@ -40,25 +40,25 @@ if (!class_exists("filehandler_ftp")) {
 		*/
 		public function __construct($globalcache){
 			// init the ftp
-			
+
 			//Introduced with 2.3
 			if(defined('INSTALLED_VERSION')){
 				$myDBName		= ($globalcache) ? md5($globalcache).'/' : '';
 			} else {
 				$myDBName		= md5((($globalcache) ? $globalcache : $this->table_prefix.$this->dbname)).'/';
 			}
-			
+
 			$this->CacheFolder		= $this->root_path.'data/'.$myDBName;
 			$this->CacheFolderPlain = 'data/'.$myDBName;
-			
+
 			//Correct ftproot-path
 			if ($this->ftproot == '/') $this->ftproot = '';
 			if(strlen($this->ftproot) && substr($this->ftproot,-1) != "/") {
 				$this->ftproot .= '/';
 			}
-								
+
 		}
-		
+
 		private function init_ftp(){
 			if ($this->ftp == NULL){
 				require_once('ftp_helper.class.php');
@@ -69,13 +69,13 @@ if (!class_exists("filehandler_ftp")) {
 					return false;
 				} else {
 					$this->ftp->setRootDir($this->ftproot, $this->root_path);
-					
+
 					if($this->ftp->cd('data/')){
-						
-						
+
+
 						$this->ftp_Folder		= $this->ftproot.$this->CacheFolderPlain;
 						$this->ftp_Root			= $this->ftproot;
-						$this->tmp_Folder		= $this->CacheFolder.'tmp/';	
+						$this->tmp_Folder		= $this->CacheFolder.'tmp/';
 						$this->ftp->cd('../');
 						//Create data folder
 						$blnResult = $this->CheckCreateFolder($this->CacheFolder);
@@ -101,13 +101,13 @@ if (!class_exists("filehandler_ftp")) {
 						$this->ftp = false;
 						return false;
 					}
-					
+
 					if (!$this->is_writable($this->tmp_Folder, true)){
 						$this->errors[] = 'lib_cache_notwriteable';
 						$this->ftp = false;
 						return false;
 					}
-						
+
 				}
 			}
 			return true;
@@ -120,11 +120,11 @@ if (!class_exists("filehandler_ftp")) {
 		public function get_cachefolder($blnPlain=false){
 			return (($blnPlain) ? $this->CacheFolderPlain : $this->CacheFolder);
 		}
-		
+
 		public function check_cachefolder(){
 			$strRecentCachefolder = md5($this->table_prefix.$this->dbname);
 			$strStoredCachefolder = $this->config->get('data_folder');
-			
+
 			if($strStoredCachefolder != ""){
 				if($strRecentCachefolder != $strStoredCachefolder){
 					//Try to rename the old one
@@ -133,13 +133,13 @@ if (!class_exists("filehandler_ftp")) {
 						$this->Delete($this->CacheFolder);
 						$this->rename($strOldFolder, $this->CacheFolder);
 					}
-					
+
 					$this->config->set('data_folder', $strRecentCachefolder);
 				}
 			} else {
 				$this->config->set('data_folder', $strRecentCachefolder);
 			}
-			
+
 			return true;
 		}
 
@@ -160,7 +160,7 @@ if (!class_exists("filehandler_ftp")) {
 
 			//Create a .htaccess
 			if($deny_all){
-				if (!$this->CheckCreateFile($folder.'/.htaccess', $plugin, false)){	
+				if (!$this->CheckCreateFile($folder.'/.htaccess', $plugin, false)){
 					$htaccess = $this->FilePath($folder.'/.htaccess', $plugin, true);
 					$blnWritten = $this->putContent($htaccess, "<IfModule !mod_authz_core.c>\n<IfModule mod_authz_host.c>\nOrder Allow,Deny\nDeny from all\n</IfModule>\n</IfModule>\n<IfModule mod_authz_core.c>\nRequire all denied\n</IfModule>");
 					return $blnWritten;
@@ -172,47 +172,47 @@ if (!class_exists("filehandler_ftp")) {
 			}
 		}
 
-		public function putContent($filename, $data){		
+		public function putContent($filename, $data){
 			if (!$this->init_ftp()) return false;
 			$strCleanedFilename = $this->remove_rootpath($filename);
-			
+
 			$blnResult = $this->ftp->put_string($strCleanedFilename, $data);
-			
+
 			//Invalidate Opcache in PHP7
 			$strExtension = pathinfo($filename, PATHINFO_EXTENSION);
 			if($blnResult && strtolower($strExtension) === 'php' && function_exists('opcache_invalidate')){
 				opcache_invalidate(realpath($filename));
 			}
-			
+
 			return $blnResult;
 		}
-		
+
 		public function addContent($filename, $data){
 			if (!$this->init_ftp()) return false;
 			$strCleanedFilename = $this->remove_rootpath($filename);
-			
+
 			$blnResult = $this->ftp->add_string($strCleanedFilename, $data);
-			
+
 			//Invalidate Opcache in PHP7
 			$strExtension = pathinfo($filename, PATHINFO_EXTENSION);
 			if($blnResult && strtolower($strExtension) === 'php' && function_exists('opcache_invalidate')){
 				opcache_invalidate(realpath($filename));
 			}
-			
+
 			return $blnResult;
 		}
 
 		/**
 		* Return a path to the file
-		* 
+		*
 		* @param $filename    The name of the file
 		* @param $plugin      Plugin name, p.e. 'raidplan'
-		* @param $createFile  Should the file be created on check if not available?    
+		* @param $createFile  Should the file be created on check if not available?
 		* @return Link to the file
 		*/
 		public function FilePath($filepath, $plugin=false, $blnCreateFile=true){
 			if(!strlen($filepath)) return '';
-						
+
 			if ($plugin === false){
 				$this->CheckCreateSubfolder($filepath, $this->root_path);
 				$this->CheckCreateFile($filepath, $plugin, $blnCreateFile);
@@ -223,14 +223,14 @@ if (!class_exists("filehandler_ftp")) {
 				$fileLink = $pluginFolder.'/'.$filepath;
 				$this->CheckCreateSubfolder($filepath, $pluginFolder);
 				$this->CheckCreateFile($filepath, $plugin, $blnCreateFile);
-				
+
 				return $fileLink;
 			}
 		}
 
 		/**
 		* Return a path to a folder
-		* 
+		*
 		* @param $filename    The name of the file
 		* @param $plugin      Plugin name, p.e. 'raidplan'
 		* @return Link to the file
@@ -239,18 +239,18 @@ if (!class_exists("filehandler_ftp")) {
 			if (is_array($foldername)){
 				$foldername = implode("/",$foldername);
 			}
-			
+
 			if(substr($foldername,-1) != "/") {
 				$foldername .= '/';
 			}
-			
+
 			$this->CheckCreateFolder($foldername, $plugin);
-			
+
 			if ($plugin === false){
 				$this->CheckCreateFolder($foldername, $plugin);
 				return $foldername;
 			} else {
-				$this->CheckCreateFolder($foldername, $plugin);			
+				$this->CheckCreateFolder($foldername, $plugin);
 				return ($blnPlain) ? $this->CacheFolderPlain.$plugin.'/'.$foldername : $this->CacheFolder.$plugin.'/'.$foldername;
 			}
 		}
@@ -272,7 +272,7 @@ if (!class_exists("filehandler_ftp")) {
 		public function testWrite($file=false){
 			if (!$this->init_ftp()) return false;
 			$file2check	= ($file) ? $file : $this->CacheFolder.'test_file.php';
-			
+
 			$test = $this->ftp->put_string($this->remove_rootpath($file2check), 'test');
 			$write = is_file($file2check);
 			$this->Delete($file2check);
@@ -319,11 +319,11 @@ if (!class_exists("filehandler_ftp")) {
 		* Check if a File is available or must be created
 		*/
 		public function CheckCreateFile($path, $plugin=false, $blnCreate=true){
-			
+
 			$path = ($plugin === false) ? $path : $this->CacheFolder.$plugin.'/'.$path;
-			
+
 			$path = $this->remove_rootpath($path);
-			
+
 			if(!is_file($this->root_path.$path) && $blnCreate){
 				if (!$this->init_ftp()) return false;
 				$this->ftp->put_string($path, '');
@@ -341,18 +341,18 @@ if (!class_exists("filehandler_ftp")) {
 		public function copy($source, $dest){
 			if (!$this->init_ftp()) return false;
 			$this->CheckCreateSubfolder($dest);
-			
+
 			$strCleanedSource = $this->remove_rootpath($source);
 			$strCleanedDest = $this->remove_rootpath($dest);
-			
+
 			$blnResult = $this->ftp->ftp_copy($strCleanedSource, $strCleanedDest);
-			
+
 			//Invalidate Opcache in PHP7
 			$strExtension = pathinfo($source, PATHINFO_EXTENSION);
 			if($blnResult && strtolower($strExtension) === 'php' && function_exists('opcache_invalidate')){
 				opcache_invalidate(realpath($dest));
 			}
-			
+
 			return $blnResult;
 		}
 
@@ -374,9 +374,9 @@ if (!class_exists("filehandler_ftp")) {
 		public function Delete($path, $plugin=false){
 			if (!$this->init_ftp()) return false;
 			$path = ($plugin === false) ? $path : $this->CacheFolder.$plugin.'/'.$path;
-			
+
 			$path = $this->remove_rootpath($path);
-			
+
 			if(is_dir($this->root_path.$path)){
 				$this->ftp->ftp_rmdirr($path);
 			}else{
@@ -391,7 +391,7 @@ if (!class_exists("filehandler_ftp")) {
 			if (!$this->init_ftp()) return false;
 			$filename = $this->remove_rootpath($filename);
 			$tofile = $this->remove_rootpath($tofile);
-			
+
 			if($tmpmove){
 				$this->ftp->moveuploadedfile($filename, $tofile);
 			}else{
@@ -406,7 +406,7 @@ if (!class_exists("filehandler_ftp")) {
 		/**
 		* returns false or modification date of a file.
 		*/
-		public function FileDate($filename, $plugin=false){	
+		public function FileDate($filename, $plugin=false){
 			$filename = $this->FilePath($filename, $plugin);
 
 			if(is_file($filename)){
@@ -433,12 +433,12 @@ if (!class_exists("filehandler_ftp")) {
 						imageSaveAlpha($imgOld, true);
 						break;	// PNG
 				}
-	
+
 				// variables...
 				$width			= $imageInfo[0];
 				$height			= $imageInfo[1];
-				
-				
+
+
 				//Fixed Width of Thumbnails
 				if($resize_width && !$resize_height){
 					// Resize me!
@@ -446,62 +446,62 @@ if (!class_exists("filehandler_ftp")) {
 						$scale		= $resize_width/$width;
 						$heightA	= round($height * $scale);
 						$img		= ImageCreateTrueColor($resize_width,$heightA);
-				
+
 						// This is a fix for transparent 24bit png...
 						if($imageInfo[2] == 3){
 							imagefill($img, 0, 0, imagecolorallocatealpha($img, 0, 0, 0, 127));
 							imageSaveAlpha($img, true);
 						}
-				
+
 						ImageCopyResampled($img, $imgOld, 0,0, 0,0, $resize_width,$heightA, ImageSX($imgOld),ImageSY($imgOld));
 						switch($imageInfo[2]){
 							case 1:	ImageGIF($img,	$this->tmp_Folder.$filename);		break;	// GIF
 							case 2:	ImageJPEG($img,	$this->tmp_Folder.$filename, 95);		break;	// JPG
 							case 3:	ImagePNG($img,	$this->tmp_Folder.$filename, 0);		break;	// PNG
 						}
-						
+
 						$this->rename($this->tmp_Folder.$filename, $thumbfolder.$filename);
 						$this->Delete($this->tmp_Folder.$filename);
 					} else {
 						$this->copy($image, $thumbfolder.$filename);
 					}
-				
+
 				}elseif(!$resize_width && $resize_height){
 					//Fixed Height of Thumbnails
-				
+
 					// Resize me!
 					if($height > $resize_height){
 						$scale		= $resize_height/$height;
 						$widthA		= round($width * $scale);
 						$img		= ImageCreateTrueColor($widthA, $resize_height);
-				
+
 						// This is a fix for transparent 24bit png...
 						if($imageInfo[2] == 3){
 							imagefill($img, 0, 0, imagecolorallocatealpha($img, 0, 0, 0, 127));
 							imageSaveAlpha($img, true);
 						}
-				
+
 						ImageCopyResampled($img, $imgOld, 0,0, 0,0, $widthA, $resize_height, ImageSX($imgOld),ImageSY($imgOld));
-							
+
 						switch($imageInfo[2]){
 							case 1:	ImageGIF($img,	$this->tmp_Folder.$filename);		break;	// GIF
 							case 2:	ImageJPEG($img,	$this->tmp_Folder.$filename, 95);		break;	// JPG
 							case 3:	ImagePNG($img,	$this->tmp_Folder.$filename, 0);		break;	// PNG
 						}
-						
+
 						$this->rename($this->tmp_Folder.$filename, $thumbfolder.$filename);
 						$this->Delete($this->tmp_Folder.$filename);
 					} else {
 						$this->copy($image, $thumbfolder.$filename);
 					}
-				
+
 				}elseif($resize_width && $resize_height){
 					//Fixed Width and Height of Thumbnails
-						
+
 					$x = $y = 0;
 					$sourceWidth = $width;
 					$sourceHeight = $height;
-				
+
 					if($resize_width / $width < $resize_height / $height){
 						$cut = (($width * ($resize_height / $height)) - $resize_width) / ($resize_height / $height);
 						$x = ceil($cut / 2);
@@ -511,32 +511,32 @@ if (!class_exists("filehandler_ftp")) {
 						$y = ceil($cut / 2);
 						$sourceHeight = $height - $y * 2;
 					}
-				
-				
+
+
 					$img = ImageCreateTrueColor($resize_width, $resize_height);
-				
+
 					// This is a fix for transparent 24bit png...
 					if($imageInfo[2] == 3){
 						imagefill($img, 0, 0, imagecolorallocatealpha($img, 0, 0, 0, 127));
 						imageSaveAlpha($img, true);
 					}
-				
+
 					ImageCopyResampled($img, $imgOld, 0,0, $x, $y, $resize_width, $resize_height, $sourceWidth, $sourceHeight);
-						
+
 					switch($imageInfo[2]){
 						case 1:	ImageGIF($img,	$this->tmp_Folder.$filename);		break;	// GIF
 						case 2:	ImageJPEG($img,	$this->tmp_Folder.$filename, 95);		break;	// JPG
 						case 3:	ImagePNG($img,	$this->tmp_Folder.$filename, 0);		break;	// PNG
 					}
-					
+
 					$this->rename($this->tmp_Folder.$filename, $thumbfolder.$filename);
 					$this->Delete($this->tmp_Folder.$filename);
-				
+
 				}
-				
+
 			}
 		}
-		
+
 		private function remove_rootpath($string){
 			if (strpos($string, $this->root_path) === 0){
 				return substr($string, strlen($this->root_path));
@@ -544,22 +544,21 @@ if (!class_exists("filehandler_ftp")) {
 			$strServerpath = $this->config->get('server_path');
 			if(stripos($string, $strServerpath ) === 0)
 				return substr($string, strlen($strServerpath));
-			
+
 			if (strpos($string, '../') === 0){
 				return str_replace("../", "", $string);
 			}
-			
+
 			return $string;
 		}
-		
+
 		//These methods here have been defined somewhere else. But the pfh is called so early in super registry, that they are not available when pfh needs it.
 		//Therefore they have been redeclared here.
-		
+
 		private function get_chmod(){
 			if(defined('CHMOD')) return CHMOD;
 			return 0775;
 		}
-		
+
 	}
 }
-?>

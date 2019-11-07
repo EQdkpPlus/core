@@ -30,19 +30,19 @@ if (!class_exists('exchange_points')){
 
 		public function get_points($params, $arrBody){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
-			
+
 			if($isAPITokenRequest || $this->user->check_pageobjects(array('points'), 'AND', false))
 			{
 				include_once($this->root_path . 'core/data_export.class.php');
 				$myexp = new content_export();
-				
+
 				//MemberData
 				$arrBooleansMemberdata = array();
 				if(isset($params['get']['memberdata']) && strlen($params['get']['memberdata'])){
 					//Available Memberdata
 					$arrMemberdata = array('items', 'adjustments');
-					
-				
+
+
 					if(strpos($params['get']['memberdata'], ',')){
 						$arrData = explode(",", $params['get']['memberdata']);
 					} else {
@@ -54,7 +54,7 @@ if (!class_exists('exchange_points')){
 						}
 					}
 				}
-				
+
 				//IncludeHTML
 				$blnIncludeHTML = (isset($params['get']['include_html']) && (int)$params['get']['include_html']) ? true : false;
 
@@ -64,7 +64,7 @@ if (!class_exists('exchange_points')){
 					$filter = $params['get']['filter'];
 					$filterid = intval($params['get']['filterid']);
 				}
-				
+
 				return $myexp->export((isset($arrBooleansMemberdata['items']) && $arrBooleansMemberdata['items']), (isset($arrBooleansMemberdata['adjustments']) && $arrBooleansMemberdata['adjustments']), $filter, $filterid, $blnIncludeHTML);
 			} else {
 				return $this->pex->error('access denied');
@@ -72,4 +72,3 @@ if (!class_exists('exchange_points')){
 		}
 	}
 }
-?>

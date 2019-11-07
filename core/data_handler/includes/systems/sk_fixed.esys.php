@@ -736,4 +736,3 @@ $system_def = array(
 
 	),//pages end
 );
-?>

@@ -27,7 +27,7 @@ if (!class_exists('exchange_add_item')){
 	class exchange_add_item extends gen_class {
 		public static $shortcuts = array('pex'=>'plus_exchange');
 		public $options		= array();
-		
+
 		/*
 		* Required: Item Date (Format: Y-m-d H:i)
 		* Required: Item Name
@@ -41,7 +41,7 @@ if (!class_exists('exchange_add_item')){
 		*/
 		public function post_add_item($params, $arrBody){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
-			
+
 			if ($isAPITokenRequest || $this->user->check_auth('a_item_add', false)){
 				$blnTest = (isset($params['get']['test']) && $params['get']['test']) ? true : false;
 
@@ -60,14 +60,14 @@ if (!class_exists('exchange_add_item')){
 							$arrBody['item_itempool_id'] = $arrItempoolIDList[0];
 						}
 					}
-					
+
 					//Item Date
 					$intItemDate = $this->time->fromformat($arrBody['item_date'], "Y-m-d H:i");
-					
+
 					//Item Buyers
 					$arrItemBuyers = array();
 					$arrMemberIDList = $this->pdh->get('member', 'id_list', array());
-					
+
 					if(is_array($arrBody['item_buyers']['member'])){
 						foreach($arrBody['item_buyers']['member'] as $objMemberID){
 							if (in_array(intval($objMemberID), $arrMemberIDList)) $arrItemBuyers[] = intval($objMemberID);
@@ -76,34 +76,34 @@ if (!class_exists('exchange_add_item')){
 						$objMemberID = intval($arrBody['item_buyers']['member']);
 						if (in_array(intval($objMemberID), $arrMemberIDList)) $arrItemBuyers[] = intval($objMemberID);
 					}
-					
+
 					if(count($arrItemBuyers) == 0) return $this->pex->error('required data missing', 'no member found');
-					
+
 					//Item Value
 					$fltItemValue = (float)$arrBody['item_value'];
-					
+
 					//Item Name
-					$strItemName = filter_var((string)$arrBody['item_name'], FILTER_SANITIZE_STRING);	
-					
+					$strItemName = filter_var((string)$arrBody['item_name'], FILTER_SANITIZE_STRING);
+
 					//Item Raid ID
 					$arrRaidIDList = $this->pdh->get('raid', 'id_list');
 					$intRaidID = intval($arrBody['item_raid_id']);
 					if (!in_array($intRaidID, $arrRaidIDList)) return $this->pex->error('required data missing', 'raid does not exist');
-					
+
 					//Item Itempool ID
 					$arrItempoolIDList =  $this->pdh->get('itempool', 'id_list');
 					$intItempoolID = intval($arrBody['item_itempool_id']);
 					if (!in_array($intItempoolID, $arrItempoolIDList)) return $this->pex->error('required data missing', 'itempool does not exist');
-					
+
 					//Item Ingame ID
-					$intIngameID = (isset($arrBody['item_game_id'])) ? filter_var((string)$arrBody['item_game_id'], FILTER_SANITIZE_STRING) : '';	
-					
+					$intIngameID = (isset($arrBody['item_game_id'])) ? filter_var((string)$arrBody['item_game_id'], FILTER_SANITIZE_STRING) : '';
+
 					if($blnTest) return array('test' => 'success');
-					
+
 					$mixItemID = $this->pdh->put('item', 'add_item', array($strItemName, $arrItemBuyers, $intRaidID, $intIngameID, $fltItemValue, $intItempoolID, $intItemDate));
 					if (!$mixItemID) return $this->pex->error('an error occured');
 					$this->pdh->process_hook_queue();
-					
+
 					return array('item_id' => $mixItemID);
 				}
 				return $this->pex->error('malformed input');
@@ -113,4 +113,3 @@ if (!class_exists('exchange_add_item')){
 		}
 	}
 }
-?>

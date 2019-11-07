@@ -31,7 +31,7 @@ if (!class_exists('exchange_search')){
 		public function get_search($params, $arrBody){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
 			$out = array();
-			
+
 			if($isAPITokenRequest){
 				$strSearchFor = (isset($params['get']['for'])) ? $params['get']['for'] : false;
 				$strSearchIn = (isset($params['get']['in'])) ? $params['get']['in'] : 'charname';
@@ -41,7 +41,7 @@ if (!class_exists('exchange_search')){
 					foreach($arrUsers as $intUserID){
 						$strUsername = $this->pdh->get('user', 'name', array($intUserID));
 						$strUsername = utf8_strtolower($strUsername);
-						
+
 						if($strUsername == $strSearchValue){
 							$out['direct']['user:'.$intUserID] = array(
 								'user_id' => $intUserID,
@@ -54,9 +54,9 @@ if (!class_exists('exchange_search')){
 							);
 						}
 					}
-					
+
 					return $out;
-					
+
 				}elseif($strSearchIn == 'userid'){
 					$strSearchValue = intval($strSearchFor);
 					$strUsername = $this->pdh->get('user', 'name', array($strSearchValue));
@@ -66,7 +66,7 @@ if (!class_exists('exchange_search')){
 								'username'=> $strUsername,
 						);
 					}
-					
+
 					return $out;
 				}elseif($strSearchIn == 'charname'){
 					$arrUsers = $this->pdh->get('member', 'id_list');
@@ -74,7 +74,7 @@ if (!class_exists('exchange_search')){
 					foreach($arrUsers as $intUserID){
 						$strUsername = $this->pdh->get('member', 'name', array($intUserID));
 						$strUsername = utf8_strtolower($strUsername);
-						
+
 						$roles = $this->pdh->get('roles', 'memberroles', array($this->pdh->get('member', 'classid', array($intUserID))));
 						if (is_array($roles)){
 							$arrRoles = array();
@@ -86,7 +86,7 @@ if (!class_exists('exchange_search')){
 								);
 							}
 						}
-						
+
 						//Raidgroups
 						$arrRaidgroups = array();
 						$arrTotalRaidgroups = $this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list')));
@@ -98,7 +98,7 @@ if (!class_exists('exchange_search')){
 								} else {
 									$status = (count($arrTotalRaidgroups) === 1) ? 1 : 0;
 								}
-						
+
 								$arrRaidgroups['raidgroup:'.$raidgroupid] = array(
 										'id'		=> $raidgroupid,
 										'name'		=> $raidgroupname,
@@ -108,11 +108,11 @@ if (!class_exists('exchange_search')){
 								);
 							}
 						}
-						
+
 						//Profiledata
 						$arrData = $this->pdh->get('member', 'profiledata', array($intUserID));
 
-					
+
 						if($strUsername == $strSearchValue){
 							$out['direct']['member:'.$intUserID] = array(
 									'id' 			=> $intUserID,
@@ -139,7 +139,7 @@ if (!class_exists('exchange_search')){
 							);
 						}
 					}
-						
+
 					return $out;
 				}elseif($strSearchIn == 'charid'){
 					$intUserID = intval($strSearchFor);
@@ -156,7 +156,7 @@ if (!class_exists('exchange_search')){
 								);
 							}
 						}
-						
+
 						//Raidgroups
 						$arrRaidgroups = array();
 						$arrTotalRaidgroups = $this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list')));
@@ -168,7 +168,7 @@ if (!class_exists('exchange_search')){
 								} else {
 									$status = (count($arrTotalRaidgroups) === 1) ? 1 : 0;
 								}
-						
+
 								$arrRaidgroups['raidgroup:'.$raidgroupid] = array(
 										'id'			=> $raidgroupid,
 										'name'			=> $raidgroupname,
@@ -179,7 +179,7 @@ if (!class_exists('exchange_search')){
 								);
 							}
 						}
-						
+
 						//Profiledata
 						$arrData = $this->pdh->get('member', 'profiledata', array($intUserID));
 
@@ -194,10 +194,10 @@ if (!class_exists('exchange_search')){
 								'raidgroups'	=> $arrRaidgroups,
 								'profiledata'	=> $arrData,
 						);
-						
+
 					}
 				}
-				
+
 			} else {
 				return $this->pex->error('access denied');
 			}
@@ -206,4 +206,3 @@ if (!class_exists('exchange_search')){
 		}
 	}
 }
-?>

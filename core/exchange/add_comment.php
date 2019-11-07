@@ -29,28 +29,27 @@ if (!class_exists('exchange_add_comment')){
 		public $options		= array();
 
 		public function post_add_comment($params, $arrBody){
-			
+
 			 // be sure user is logged in
 			if ($this->user->is_signedin()){
 
 				if (count($arrBody) && strlen($arrBody['comment'])){
 					//Check for page and attachid
 					if (!$arrBody['page'] || !$arrBody['attachid']) return $this->pex->error('required data missing', 'page or attachid required');
-					
+
 					$intReplyTo = ((int)$arrBody['reply_to']) ? (int)$arrBody['reply_to'] : 0;
-					
+
 					$this->pdh->put('comment', 'insert', array((string)$arrBody['attachid'], $this->user->id, (string)strip_tags($arrBody['comment']), (string)$arrBody['page'], $intReplyTo));
-					
+
 					$this->pdh->process_hook_queue();
 					return array('status'	=> 1);
 				 } else {
 					return $this->pex->error('required data missing', 'comment');
 				 }
-			
+
 			} else {
 				return $this->pex->error('access denied');
 			}
 		}
 	}
 }
-?>

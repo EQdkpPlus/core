@@ -25,7 +25,7 @@ if( !defined( 'EQDKP_INC' ) ) {
 
 if( !class_exists( "plus_datahandler")){
 	class plus_datahandler extends gen_class {
-		
+
 		public static $dependencies = array('pfh');
 
 		//paths
@@ -44,11 +44,11 @@ if( !class_exists( "plus_datahandler")){
 		private $user_presets_lang			= array( );
 		private $presets_loaded 			= false;
 		private $presets_changed 			= false;
-		
+
 		//layout stuff
 		private $system_settings			= array( );
 		private $system_name				= '';
-		
+
 		//page_objects stuff
 		private $page_objects = array();
 		private $page_objects_loaded = false;
@@ -73,7 +73,7 @@ if( !class_exists( "plus_datahandler")){
 			require_once( $this->wm_path.'pdh_w_generic.class.php' );
 			$this->scan_read_modules( );
 		}
-		
+
 		//Destructor
 		public function __destruct() {
 			$this->save_page_objects();
@@ -98,7 +98,7 @@ if( !class_exists( "plus_datahandler")){
 
 			return $text;
 		}
-		
+
 		public function get_read_modules(){
 			return $this->read_modules;
 		}
@@ -143,7 +143,7 @@ if( !class_exists( "plus_datahandler")){
 				$data = debug_backtrace();
 				$this->pdl->log('pdh', $data[1]['file'], $data[1]['line'], 'Call process_hook_queue', array('function: '.$data[1]['function']));
 			}
-			
+
 			foreach( $this->undone_hooks as $hook => $ids ) {
 				$this->timekeeper->put( 'pdh_hk_times', $hook, $this->time->time );
 			}
@@ -165,7 +165,7 @@ if( !class_exists( "plus_datahandler")){
 			$this->undone_hooks = array( );
 			$this->arrAdditonalHookData = array();
 		}
-		
+
 		public function reset($hook, $ids = array(), $arrAdditionalData = array()){
 			if( is_array( $this->registered_hooks[$hook] ) ) {
 				foreach( $this->registered_hooks[$hook] as $module ) {
@@ -198,7 +198,7 @@ if( !class_exists( "plus_datahandler")){
 				$data = debug_backtrace();
 				$this->pdl->log('pdh', $data[2]['file'], $data[2]['line'], 'Enqueue Hook '.$hook, array('hook: '.$hook, 'ids: '.print_r($ids, true), 'additionalData: '.print_r($arrAdditionalData, true), 'function: '.$data[1]['function']));
 			}
-			
+
 			if(!is_array($ids) && !empty($ids)) $ids = array($ids);
 			if(!empty($ids) && isset($this->undone_hooks[$hook])) $ids = array_merge($this->undone_hooks[$hook], $ids);
 			$this->undone_hooks[$hook] = (!empty($ids)) ? $ids : array();
@@ -223,7 +223,7 @@ if( !class_exists( "plus_datahandler")){
 				}
 			}
 		}
-		
+
 		private function rm($module) {
 			if(isset($this->read_modules[$module])) return registry::register('pdh_r_'.$module);
 		}
@@ -287,7 +287,7 @@ if( !class_exists( "plus_datahandler")){
 			//not initialized anymore
 			$this->read_modules[$module_name] = false;
 		}
-		
+
 		private function wm($module) {
 			if(isset($this->write_modules[$module])) return registry::register('pdh_w_'.$module);
 		}
@@ -312,7 +312,7 @@ if( !class_exists( "plus_datahandler")){
 		public function unregister_write_module( $module_name ) {
 			unset( $this->write_modules[$module_name] );
 		}
-		
+
 		/*********************************************************************************************************************************
 		*
 		* Check Methods
@@ -325,7 +325,7 @@ if( !class_exists( "plus_datahandler")){
 			}
 			return isset($this->read_modules[$module_name]);
 		}
-		
+
 /*		public function check_write_module( $module_name, $error=false ) {
 			//try registering first
 			try {
@@ -339,7 +339,7 @@ if( !class_exists( "plus_datahandler")){
 			}
 			return isset($this->write_modules[$module_name]);
 		} */
-		
+
 
 		/*********************************************************************************************************************************
 		*
@@ -357,7 +357,7 @@ if( !class_exists( "plus_datahandler")){
 			}
 			$method = 'get_'.$tag;
 			$objModule = $this->rm($module);
-			
+
 			if( method_exists( $objModule, $method ) ) {
 				if(DEBUG > 3){
 					$data = debug_backtrace();
@@ -371,7 +371,7 @@ if( !class_exists( "plus_datahandler")){
 					}
 					$this->pdl->log('pdh', $data[$i]['file'], $data[$i]['line'], 'GET call ', $extra);
 				}
-				
+
 				if( !$this->read_modules[$module] ) $this->init_read_module( $module );
 				return call_user_func_array( array( $objModule, $method ), $params );
 			} else {
@@ -496,7 +496,7 @@ if( !class_exists( "plus_datahandler")){
 			$strUserlang = $this->user->lang('pdh_lang_'.$module.'_'.$lang);
 			return ($strUserlang) ? $strUserlang : ((isset($this->rm($module)->module_lang[$lang])) ? $this->rm($module)->module_lang[$lang] : false );
 		}
-		
+
 		public function get_preset_lang($module, $lang){
 			$strUserlang = $this->user->lang('pdh_preset_lang_'.$module.'_'.$lang);
 			return ($strUserlang) ? $strUserlang : ((isset($this->rm($module)->preset_lang[$lang])) ? $this->rm($module)->preset_lang[$lang] : false );
@@ -596,17 +596,17 @@ if( !class_exists( "plus_datahandler")){
 				if(DEBUG > 3){
 					$data = debug_backtrace();
 					$extra = array('module: '.$module, 'function: '.$function, 'params: '.implode_r( ", ", $params ));
-					
+
 					if(is_array($module) || is_array($function)){
 						debug_print_backtrace();
 					}
-					
+
 					for($i=0;$i>0;$i++) {
 						if(isset($data[$i]['file']) && strpos($data[$i]['file'], 'plus_datahandler') === false) break;
 					}
 					$this->pdl->log('pdh', $data[$i]['file'], $data[$i]['line'], 'PUT call ', $extra);
 				}
-				
+
 				return call_user_func_array( array( $this->wm($module), $function ), $params );
 			} else {
 				$data = debug_backtrace();
@@ -683,10 +683,10 @@ if( !class_exists( "plus_datahandler")){
 
 		private function init_preset_list( ) {
 			if($this->presets_loaded) return true;
-			
+
 			//init module presets
 			foreach($this->read_modules as $module_name => $init) {
-				
+
 				if( method_exists( $this->rm($module_name), 'init_presets' ) ) {
 					$this->rm($module_name)->init_presets( );
 				}
@@ -711,7 +711,7 @@ if( !class_exists( "plus_datahandler")){
 				$preset_name = ( array_key_exists( $preset_name, $this->system_settings['aliases'] ) ) ? $this->system_settings['aliases'][$preset_name] : $preset_name;
 			}
 			$strUserlang = $this->user->lang('pdh_preset_lang_'.$preset_name);
-			
+
 			return (($strUserlang) ? $strUserlang : ((isset($this->preset_lang[$preset_name])) ? $this->preset_lang[$preset_name] : $preset_name));
 		}
 
@@ -766,7 +766,7 @@ if( !class_exists( "plus_datahandler")){
 				return $param_arr;
 			}
 		}
-		
+
 		public function get_user_presets( ) {
 			if(empty($this->user_presets) && !$this->presets_changed) {
 				$user_presets = array( );
@@ -834,9 +834,9 @@ if( !class_exists( "plus_datahandler")){
 			$this->system_settings = $this->get_eqdkp_layout( $layout );
 			$this->system_name = $layout;
 		}
-		
+
 		public function get_layout_config( $name = false ){
-			if (!$name) { 
+			if (!$name) {
 				return $this->system_settings['config'];
 			} elseif (isset($this->system_settings['config'][$name])) {
 				return $this->system_settings['config'][$name];
@@ -876,12 +876,12 @@ if( !class_exists( "plus_datahandler")){
 				}
 			}
 
-			//add plugin/portal pages/objects	
+			//add plugin/portal pages/objects
 			$this->init_page_objects();
 			if ($blnWithPageObjectFile) {
 				if(isset($this->page_objects[$layout]) && is_array($this->page_objects[$layout])) $system_def['pages'] = array_merge_recursive($this->page_objects[$layout], $system_def['pages']);
 			}
-				
+
 			return $system_def;
 		}
 
@@ -889,7 +889,7 @@ if( !class_exists( "plus_datahandler")){
 			$layout_def = $this->get_eqdkp_layout( $layout );
 			return $layout_def['data']['description'];
 		}
-		
+
 		public function get_eqdkp_base_layout($layout){
 			$layout_def = $this->get_eqdkp_layout( $layout );
 			return $layout_def['base_layout'];
@@ -1058,7 +1058,7 @@ if( !class_exists( "plus_datahandler")){
 					}
 				}
 			}
-			
+
 			//Pageobjects
 			if($layout_name == $layout_def['base_layout']){
 				$arrResult = $this->patch_pageobjects($layout_name, $layout_def, false);
@@ -1071,12 +1071,12 @@ if( !class_exists( "plus_datahandler")){
 					if($this->config->get('eqdkp_layout') == $layout_name) $this->config->set('eqdkp_layout', $user_layout_name);
 					$this->save_layout( $user_layout_name, $layout_def );
 				}
-				
+
 			} else {
 				$arrResult = $this->patch_pageobjects($layout_name, $layout_def);
 				$layout_def = $arrResult[0];
 				$changes = (!$changes) ? $arrResult[1] : $changes;
-				
+
 				if( $changes ){
 					$this->save_layout( $layout_name, $layout_def );
 				}
@@ -1088,14 +1088,14 @@ if( !class_exists( "plus_datahandler")){
 		 *
 		 * Adding new Pages/Objects
 		 */
-		
-		public function patch_pageobjects($layout_name, $layout_def, $blnSetPatched=true){			
+
+		public function patch_pageobjects($layout_name, $layout_def, $blnSetPatched=true){
 			$this->init_page_objects();
 			$blnChanged = false;
-			
+
 			foreach ($this->page_objects as $key_pages => $pages){
 				$arrPatched = (isset($pages['_patched'])) ? $pages['_patched'] : array();
-				
+
 				$blnPatchedPage = false;
 				if (!in_array($layout_name, $arrPatched)){
 					//Patch whole Page Infos
@@ -1103,9 +1103,9 @@ if( !class_exists( "plus_datahandler")){
 					$arrToPatch['pages'][$key_pages] = $pages;
 					unset($arrToPatch['pages'][$key_pages]['_patched']);
 					$layout_def = array_merge_recursive($layout_def, $arrToPatch);
-					
+
 					if($blnSetPatched) $this->set_page_patched($key_pages, $layout_name);
-					
+
 					$blnPatchedPage = true;
 					$blnChanged = true;
 				}
@@ -1114,7 +1114,7 @@ if( !class_exists( "plus_datahandler")){
 				foreach ($pages as $key_page => $page) {
 					$arrPatched = (isset($page['_patched'])) ? $page['_patched'] : array();
 					$blnPatchedObject = false;
-					
+
 					if ($blnPatchedPage) {
 						if($blnSetPatched) $this->set_object_patched($key_pages, $key_page, $layout_name);
 						$blnPatchedObject = true;
@@ -1124,19 +1124,19 @@ if( !class_exists( "plus_datahandler")){
 						$arrToPatch['pages'][$key_pages][$key_page] = $page;
 						unset($arrToPatch['pages'][$key_pages][$key_page]['_patched']);
 						$layout_def = array_merge_recursive($layout_def, $arrToPatch);
-							
+
 						if($blnSetPatched) $this->set_object_patched($key_pages, $key_page, $layout_name);
-					
+
 						$blnChanged = true;
 						$blnPatchedObject = true;
 					}
-					
+
 					//Next table presets
 					if(isset($page['table_presets'])){
 						foreach ($page['table_presets'] as $key_preset => $preset) {
 							$arrPatched = (isset($preset['_patched'])) ? $preset['_patched'] : array();
 							$blnPatchedPreset = false;
-								
+
 							if ($blnPatchedObject) {
 								if($blnSetPatched) $this->set_tablepreset_patched($key_pages, $key_page, $preset['name'], $layout_name);
 							} elseif (!in_array($layout_name, $arrPatched)){
@@ -1144,16 +1144,16 @@ if( !class_exists( "plus_datahandler")){
 								$arrToPatch = array();
 								$arrToPatch['pages'][$key_pages][$key_page]['table_presets'][] = $preset;
 								$layout_def = array_merge_recursive($layout_def, $arrToPatch);
-									
+
 								if($blnSetPatched) $this->set_tablepreset_patched($key_pages, $key_page, $preset['name'], $layout_name);
-									
+
 								$blnChanged = true;
 								$blnPatchedPreset = true;
 							}
-						
+
 						}
 					}
-					
+
 				}
 			}
 
@@ -1173,7 +1173,7 @@ if( !class_exists( "plus_datahandler")){
 			$this->page_objects[$page][$object] = $data;
 			$this->page_objects_changed = true;
 		}
-		
+
 		private function set_page_patched($page, $strLayoutname){
 			$this->init_page_objects();
 			if(!isset($this->page_objects[$page])) return false;
@@ -1183,7 +1183,7 @@ if( !class_exists( "plus_datahandler")){
 			$this->page_objects[$page]['_patched'] = $arrPatched;
 			$this->page_objects_changed = true;
 		}
-		
+
 		private function set_object_patched($page, $object, $strLayoutname){
 			$this->init_page_objects();
 			if(!isset($this->page_objects[$page][$object])) return false;
@@ -1193,7 +1193,7 @@ if( !class_exists( "plus_datahandler")){
 			$this->page_objects[$page][$object]['_patched'] = $arrPatched;
 			$this->page_objects_changed = true;
 		}
-		
+
 		private function set_tablepreset_patched($page, $object, $strTablepresetName, $strLayoutname){
 			$this->init_page_objects();
 			if(!isset($this->page_objects[$page][$object])) return false;
@@ -1205,14 +1205,14 @@ if( !class_exists( "plus_datahandler")){
 					$arrPatched = array_unique($arrPatched);
 					$this->page_objects[$page][$object]['table_presets'][$key]['_patched'] = $arrPatched;
 					$this->page_objects_changed = true;
-					
+
 					return;
 				}
 			}
 		}
-		
-		
-		
+
+
+
 		public function add_object_tablepreset( $page, $object, $data ) {
 			$this->init_page_objects();
 			if (isset($this->page_objects[$page][$object]['table_presets'])){
@@ -1220,12 +1220,12 @@ if( !class_exists( "plus_datahandler")){
 					if ($val['name'] == $data['name']) return false;
 				}
 			}
-			
+
 			$this->page_objects[$page][$object]['table_presets'][] = $data;
 			$this->page_objects_changed = true;
 		}
-		
-		
+
+
 
 		public function delete_page( $page ) {
 			$this->init_page_objects();
@@ -1265,4 +1265,3 @@ if( !class_exists( "plus_datahandler")){
 	//end class
 }
 //end if
-?>

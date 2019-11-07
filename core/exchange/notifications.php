@@ -77,4 +77,3 @@ if (!class_exists('exchange_notifications')){
 		}
 	}
 }
-?>
