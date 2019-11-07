@@ -32,7 +32,7 @@ try {
 	registry::add_const('lite_mode', true);
 	registry::load_config();
 	require($eqdkp_root_path.'libraries/dbal/dbal.class.php');
-	$strDatabase = dbal::factory(array('dbtype' => registry::get_const('dbtype'), 'open' => true));
+	$strDatabase = dbal::factory(array('dbtype' => registry::get_const('dbtype'), 'classname' => true));
 	registry::$aliases['db'] = array($strDatabase, array(array('open' => true)));
 	
 	#error_reporting(E_ALL);

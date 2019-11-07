@@ -131,7 +131,7 @@ abstract class super_registry {
 
 			//DBAL
 			include_once(self::get_const('root_path') .'libraries/dbal/dbal.class.php');
-			$strDatabase = dbal::factory(array('dbtype' => self::$const['dbtype'], 'open' => true));
+			$strDatabase = dbal::factory(array('dbtype' => self::$const['dbtype'], 'classname' => true));
 			self::$aliases['db'] = array($strDatabase, array(array('open' => true)));
 
 			registry::register('input');

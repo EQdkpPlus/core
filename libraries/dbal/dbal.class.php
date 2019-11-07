@@ -46,7 +46,7 @@ class dbal{
 			if (!dbal::check_extension($dbtype)) throw new DBALException('PHP-Extension ' . $dbtype . ' not available');
 		}
 
-		return (isset($arrOptions['object']) && $arrOptions['object']) ? registry::register($classname, array($arrOptions)) : $classname;
+		return (isset($arrOptions['classname']) && $arrOptions['classname']) ? $classname : registry::register($classname, array($arrOptions));
 	}
 
 	public static function available_dbals() {
