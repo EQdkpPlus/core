@@ -25,7 +25,7 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "game_crontask" ) ) {
 	class game_crontask extends crontask {
-		
+
 		public $options = array();
 
 		public function __construct(){
@@ -35,10 +35,10 @@ if ( !class_exists( "game_crontask" ) ) {
 			$this->defaults['delay']		= true;
 			$this->defaults['ajax']			= true;
 			$this->defaults['description']	= 'Game-specific Update Tasks';
-			
+
 			$this->options = $this->game->cronjobOptions();
 		}
-		
+
 		public function run(){
 			$crons		= $this->cronjobs->list_crons();
 			$params		= $crons['game']['params'];
@@ -46,4 +46,3 @@ if ( !class_exists( "game_crontask" ) ) {
 		}
 	}
 }
-?>

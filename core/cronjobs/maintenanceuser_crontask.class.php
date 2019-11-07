@@ -36,9 +36,9 @@ if ( !class_exists( "maintenanceuser_crontask" ) ) {
 			$muser = unserialize(stripslashes($this->encrypt->decrypt($this->config->get('maintenance_user'))));
 			if ($muser['user_id']){
 				$this->db->prepare("DELETE FROM __users WHERE user_id =?")->execute($muser['user_id']);
-				
+
 				$this->pdh->put('user_groups_users', 'delete_user_from_group', array($muser['user_id'], 2));
-				
+
 				$this->pdh->put('user', 'delete_special_user', array($muser['user_id']));
 				$this->logs->add('action_maintenanceuser_deleted', array(), $muser['user_id'], $this->user->lang('maintenanceuser_user'));
 			}
@@ -46,4 +46,3 @@ if ( !class_exists( "maintenanceuser_crontask" ) ) {
 		}
 	}
 }
-?>

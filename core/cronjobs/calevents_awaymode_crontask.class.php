@@ -25,7 +25,7 @@ if ( !defined('EQDKP_INC') ){
 
 if(!class_exists("calevents_awaymode_crontask")){
 	class calevents_awaymode_crontask extends crontask{
-		
+
 		public function __construct(){
 			$this->defaults['active']			= true;
 			$this->defaults['repeat']			= true;
@@ -50,4 +50,3 @@ if(!class_exists("calevents_awaymode_crontask")){
 		}
 	}
 }
-?>

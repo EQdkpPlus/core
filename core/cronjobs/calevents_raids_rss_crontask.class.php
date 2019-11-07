@@ -48,7 +48,7 @@ if ( !class_exists( "calevents_raids_rss_crontask" ) ) {
 
 			// Load the raidplan pdh data
 			$intNumber = 15;
-			
+
 			$arrRaidIDlist = $this->pdh->get('calendar_events', 'id_list', array(true, $this->time->time));
 			$arrRaidIDlist = $this->pdh->sort($arrRaidIDlist, 'calendar_events', 'date', 'asc');
 			if (is_array($arrRaidIDlist)) {
@@ -92,10 +92,10 @@ if ( !class_exists( "calevents_raids_rss_crontask" ) ) {
 					} else {
 						$memberstatus = -1;
 					}
-					
+
 					$placesfree = $rstatusdata['required'] - $rstatusdata['status0']['count'];
 					$eventdata	= $this->pdh->get('calendar_events', 'data', array($intRaidID));
-					
+
 					$rssitem = registry::register('feeditems', array(), $intRaidID);
 					$rssitem->title			= $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_start', array($intRaidID))).': '.$this->pdh->get('calendar_events', 'name', array($intRaidID));
 					$rssitem->description	= sprintf($this->user->lang('calendar_rss_itemdesc'),$placesfree,$this->time->date('Y-m-d H:i', $eventdata['timestamp_start']-($eventdata['extension']['deadlinedate'] * 3600)));
@@ -106,9 +106,8 @@ if ( !class_exists( "calevents_raids_rss_crontask" ) ) {
 
 					$feed->addItem($rssitem);
 				}
-			}	
+			}
 			$feed->save($rssfile);
 		}
 	}
 }
-?>

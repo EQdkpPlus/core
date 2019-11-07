@@ -42,7 +42,7 @@ abstract class crontask extends gen_class {
 
 	//overwritten in real implementations
 	abstract public function run();
-	
+
 	public function options() {
 		if(isset($this->options)) return $this->options;
 	}

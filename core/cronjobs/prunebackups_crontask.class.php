@@ -48,11 +48,10 @@ if ( !class_exists( "prunebackups_crontask" ) ) {
 		public function run() {
 			$crons		= $this->cronjobs->list_crons();
 			$params		= $crons['prunebackups']['params'];
-			
+
 			if($params['days'] > 0 || $params['count'] > 0) {
 				$this->backup->pruneBackups($params['days'], $params['count']);
 			}
 		}
 	}
 }
-?>
