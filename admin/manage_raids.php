@@ -293,7 +293,7 @@ class ManageRaids extends page_generic {
 		);
 		
 		//fetch events
-		$events = $this->pdh->aget('event', 'name', 0, array($this->pdh->get('event', 'id_list')));
+		$events = $eventsOrig = $this->pdh->aget('event', 'name', 0, array($this->pdh->get('event', 'id_list')));
 		asort($events);
 		
 		if($this->config->get('dkp_easymode')){
@@ -367,9 +367,9 @@ class ManageRaids extends page_generic {
 				$this->tpl->assign_block_vars('adjs', array(
 					'KEY'		=> $key,
 					'GK'		=> ($copy) ? 'new' : $adj['group_key'],
-					'MEMBER'	=> (new hmultiselect('adjs['.$key.'][members]', array('options' => $members, 'value' => $adj['members'], 'width' => 250, 'filter' => true, 'id'=>'adjs_'.$key.'_members')))->output(),
+					'MEMBER'	=> (new hmultiselect('adjs['.$key.'][members]', array('options' => $members, 'value' => $adj['members'], 'width' => 250, 'filter' => true, 'id'=>'adjs_'.$key.'_members', 'class' => 'input adj_members')))->output(),
 					'REASON'	=> sanitize($adj['reason']),
-					'EVENT'		=> (new hdropdown('adjs['.$key.'][event]', array('options' => $events, 'value' => $adj['event'], 'id' => 'event_'.$key)))->output(),
+					'EVENT'		=> (new hdropdown('adjs['.$key.'][event]', array('options' => $events, 'value' => $adj['event'], 'id' => 'event_'.$key, 'class' => 'input adj_event')))->output(),
 					'VALUE'		=> $adj['value'])
 				);
 				$adjs_ids[] = 'adjs_'.$key;
@@ -387,9 +387,9 @@ class ManageRaids extends page_generic {
 					'GK'		=> ($copy) ? 'new' : $item['group_key'],
 					'NAME'		=> stripslashes($item['name']),
 					'ITEMID'	=> $item['item_id'],
-					'MEMBER'	=> (new hmultiselect('items['.$key.'][members]', array('options' => $members, 'value' => $item['members'], 'width' => 250, 'filter' => true, 'id'=>'items_'.$key.'_members')))->output(),
+					'MEMBER'	=> (new hmultiselect('items['.$key.'][members]', array('options' => $members, 'value' => $item['members'], 'width' => 250, 'filter' => true, 'id'=>'items_'.$key.'_members', 'class' => 'input item_members')))->output(),
 					'VALUE'		=> $item['value'],
-					'ITEMPOOL'	=> (new hdropdown('items['.$key.'][itempool_id]', array('options' => $itempools, 'value' => $item['itempool_id'], 'id' => 'itempool_id_'.$key)))->output(),
+					'ITEMPOOL'	=> (new hdropdown('items['.$key.'][itempool_id]', array('options' => $itempools, 'value' => $item['itempool_id'], 'id' => 'itempool_id_'.$key, 'class' => 'input item_itempool')))->output(),
 				));
 				$item_ids[] = 'items_'.$key;
 				if($key > $intItemKey) $intItemKey = $key;
@@ -404,7 +404,10 @@ class ManageRaids extends page_generic {
 		$strRaidUserDate	= $this->time->user_date($raid['date']);
 		
 		if($raid['id'] AND $raid['id'] != 'new') $this->confirm_delete($this->user->lang('del_raid_with_itemadj')."<br />".$strRaidUserDate." ".$events[$raid['event']].": ".addslashes($raid['note']));
-		$arrEventKeys = array_keys($events);
+		
+		
+		
+		$arrEventKeys = array_keys($eventsOrig);
 		
 		$this->tpl->assign_vars(array(
 			'DATE'				=> (new hdatepicker('date', array('value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->get('date', '') : $this->time->user_date($raid['date'], true, false, false, function_exists('date_create_from_format'))), 'timepicker' => true)))->output(),
@@ -418,12 +421,12 @@ class ManageRaids extends page_generic {
 			'RAID_DROPDOWN'		=> (new hdropdown('draft', array('options' => $raids, 'value' => $this->in->get('draft', 0), 'js' => 'onchange="window.location=\'manage_raids.php'.$this->SID.'&amp;upd=true&amp;draft=\'+this.value"')))->output(),
 
 			'ADJ_KEY'			=> $intAdjKey+1,
-			'MEMBER_DROPDOWN'	=> (new hmultiselect('adjs[KEY][members]', array('options' => $members, 'value' => '', 'width' => 250, 'filter' => true, 'id'=>'adjs_KEY_members')))->output(),
-			'MEMBER_ITEM_DROPDOWN'	=> (new hmultiselect('items[KEY][members]', array('options' => $members, 'value' => '', 'width' => 250, 'filter' => true, 'id'=>'items_KEY_members')))->output(),
-			'EVENT_DROPDOWN'	=> (new hdropdown('adjs[KEY][event]', array('options' => $events, 'value' => $adj['event'], 'id' => 'event_KEY')))->output(),
+			'MEMBER_DROPDOWN'	=> (new hmultiselect('adjs[KEY][members]', array('options' => $members, 'value' => '', 'width' => 250, 'filter' => true, 'id'=>'adjs_KEY_members', 'class' => 'input adj_members')))->output(),
+			'MEMBER_ITEM_DROPDOWN'	=> (new hmultiselect('items[KEY][members]', array('options' => $members, 'value' => '', 'width' => 250, 'filter' => true, 'id'=>'items_KEY_members', 'class' => 'input item_members')))->output(),
+			'EVENT_DROPDOWN'	=> (new hdropdown('adjs[KEY][event]', array('options' => $events, 'value' => $adj['event'], 'id' => 'event_KEY', 'class' => 'input adj_event')))->output(),
 			'ADJ_REASON_AUTOCOMPLETE' => $this->jquery->Autocomplete('adjs_KEY', array_unique($adjustment_reasons)),
 			'ITEM_KEY'			=> $intItemKey+1,
-			'ITEMPOOL_DROPDOWN' => (new hdropdown('items[KEY][itempool_id]', array('options' => $itempools, 'value' => $item['itempool_id'], 'id' => 'itempool_id_KEY')))->output(),
+			'ITEMPOOL_DROPDOWN' => (new hdropdown('items[KEY][itempool_id]', array('options' => $itempools, 'value' => $item['itempool_id'], 'id' => 'itempool_id_KEY', 'class' => 'input item_itempool')))->output(),
 			'ITEM_AUTOCOMPLETE' => $this->jquery->Autocomplete('item_KEY', array_unique($item_names)),
 			'EVENT_ITEMPOOL_MAPPING' => json_encode($arrEventItempoolMapping),
 			'FIRST_EVENT_ID'	=> isset($arrEventKeys[0]) ? $arrEventKeys[0] : 0,
