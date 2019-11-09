@@ -26,7 +26,7 @@ if ( !defined('EQDKP_INC') ){
 class smf2_bridge extends bridge_generic {
 
 	public static $name = "SMF 2";
-	
+
 	public $data = array(
 		//Data
 		'groups' => array( //Where I find the Usergroup
@@ -50,7 +50,7 @@ class smf2_bridge extends bridge_generic {
 			'QUERY'	=> '',
 		),
 	);
-	
+
 	public $settings = array(
 		'cmsbridge_disable_sso'	=> array(
 			'type'	=> 'radio',
@@ -65,25 +65,25 @@ class smf2_bridge extends bridge_generic {
 			'type'	=> 'text',
 		),
 	);
-	
+
 	public function check_password($password, $hash, $strSalt = '', $strUsername = "", $arrUserdata=array()){
-		//Use normal strtolower and not utf8_strotolower, because SMF2 does the same...			
+		//Use normal strtolower and not utf8_strotolower, because SMF2 does the same...
 		if (sha1(strtolower($strUsername).$password) === $hash){
 			return true;
 		}
-		
+
 		if (sha1(strtolower(utf8_decode($strUsername)).$password) === $hash){
 			return true;
 		}
-		
+
 		if (sha1(utf8_strtolower($strUsername).$password) === $hash){
 			return true;
 		}
 
-		
+
 		return false;
 	}
-	
+
 	public function smf2_get_user_groups($intUserID){
 		$query = $this->bridgedb->prepare("SELECT id_group, id_post_group, additional_groups FROM ".$this->prefix."members WHERE id_member=?")->execute($intUserID);
 		$arrReturn = array();
@@ -91,18 +91,18 @@ class smf2_bridge extends bridge_generic {
 			$result = $query->fetchAssoc();
 			$arrReturn[] = (int)$result['id_group'];
 			$arrReturn[] = (int)$result['id_post_group'];
-			
+
 			$arrAditionalGroups = explode(',', $result['additional_groups']);
 			if (is_array($arrAditionalGroups)){
 				foreach ($arrAditionalGroups as $group){
 					$arrReturn[] = (int)$group;
 				}
 			}
-		}	
-		
+		}
+
 		return $arrReturn;
 	}
-	
+
 	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult){
 		//Is user active?
 		if ($boolLoginResult){
@@ -110,24 +110,24 @@ class smf2_bridge extends bridge_generic {
 			if ($this->config->get('cmsbridge_disable_sso') != '1'){
 				$this->sso($arrUserdata, $strPassword, $boolSetAutoLogin);
 			}
-			
+
 			return true;
 		}
 		return false;
 	}
-	
+
 	private function sso($arrUserdata, $strPassword, $boolAutoLogin = false){
 		if (!strlen($this->config->get('cmsbridge_sso_cookiename')) || !strlen($this->config->get('cmsbridge_url'))) return false;
-		
+
 		$cookie_length = 31536000;
 		$cookie_state = 2;
 		$password = sha1($arrUserdata['passwd'].$arrUserdata['password_salt']);
 		$data = serialize(array($arrUserdata['id'], $password, time() + $cookie_length, $cookie_state));
-		
+
 		$strBoardPath = parse_url($this->config->get('cmsbridge_url'), PHP_URL_PATH);
 		if($this->config->get('cmsbridge_sso_cookiedomain') == '') {
 				$strBoardURL = parse_url($this->config->get('cmsbridge_url'), PHP_URL_HOST);
-				
+
 				$arrDomains = explode('.', $strBoardURL);
 				$arrDomainsReversed = array_reverse($arrDomains);
 				if (count($arrDomainsReversed) > 1){
@@ -136,16 +136,16 @@ class smf2_bridge extends bridge_generic {
 					$cookieDomain = ($strBoardURL == 'localhost') ? '' : $strBoardURL;
 				}
 		} else $cookieDomain = $this->config->get('cmsbridge_sso_cookiedomain');
-		
+
 		$res = setcookie($this->config->get('cmsbridge_sso_cookiename'), $data, time() + $cookie_length, $strBoardPath, $cookieDomain, $this->env->ssl);
-	
+
 		return true;
 	}
-	
+
 	public function logout() {
 		//If Single Sign On is disabled, abort
 		if ((int)$this->config->get('cmsbridge_disable_sso') == 1) return false;
-		
+
 		$strBoardURL = parse_url($this->config->get('cmsbridge_url'), PHP_URL_HOST);
 		$strBoardPath = parse_url($this->config->get('cmsbridge_url'), PHP_URL_PATH);
 		$arrDomains = explode('.', $strBoardURL);
@@ -155,10 +155,10 @@ class smf2_bridge extends bridge_generic {
 		} else {
 			$cookieDomain = ($strBoardURL == 'localhost') ? '' : $strBoardURL;
 		}
-		
+
 		setcookie($this->config->get('cmsbridge_sso_cookiename'), 'somevalue', 0, $strBoardPath, $cookieDomain, $this->env->ssl);
 	}
-	
+
 	public function sync($arrUserdata){
 		if ($this->config->get('cmsbridge_disable_sync') == '1'){
 			return false;
@@ -171,7 +171,7 @@ class smf2_bridge extends bridge_generic {
 		);
 		return $sync_array;
 	}
-	
+
 	public function sync_fields(){
 		return array(
 			'icq'		=> 'ICQ',
@@ -180,7 +180,7 @@ class smf2_bridge extends bridge_generic {
 			'gender'	=> 'Gender',
 		);
 	}
-	
+
 	private function _handle_birthday($date){
 		list($y, $m, $d) = explode('-', $date);
 		if ($y != '' && $y != 0 && $m != '' && $m != 0 && $d != '' && $d != 0){
@@ -188,6 +188,5 @@ class smf2_bridge extends bridge_generic {
 		}
 		return 0;
 	}
-	
+
 }
-?>

@@ -24,10 +24,10 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class joomla_bridge extends bridge_generic {
-	
+
 	//Tested with Joomla 3.7.4
 	public static $name = "Joomla";
-	
+
 	public $data = array(
 		//Data
 		'groups' => array( //Where I find the Usergroup
@@ -53,8 +53,8 @@ class joomla_bridge extends bridge_generic {
 			'QUERY'	=> '',
 		),
 	);
-	
-	
+
+
 	//Needed function
 	public function check_password($password, $hash, $strSalt = '', $strUsername = "", $arrUserdata=array()){
 		// If we are using phpass
@@ -62,28 +62,28 @@ class joomla_bridge extends bridge_generic {
 		{
 			// Use PHPass's portable hashes with a cost of 10.
 			$phpass = new joomlaPasswordHash(10, true);
-		
+
 			$match = $phpass->CheckPassword($password, $hash);
-		
+
 			return $match;
 		}
-		
+
 		//Bcrypt
 		if (substr($hash, 0, 4) == '$2a$' || substr($hash, 0, 4) == '$2y$')
 		{
 			if (!function_exists("crypt")) return false;
-			
+
 			return (crypt($password, $hash) === $hash);
 		}
-	
+
 		// Check if the hash is an MD5 hash.
 		if (substr($hash, 0, 3) == '$1$')
 		{
 			if (!function_exists("crypt")) return false;
-			
+
 			return (crypt($password, $hash) === $hash);
 		}
-		
+
 		if (substr($hash, 0, 8) == '{SHA256}')
 		{
 			// Check the password
@@ -105,19 +105,19 @@ class joomla_bridge extends bridge_generic {
 
 		return false;
 	}
-	
+
 	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult){
 		//Is user active?
 		if ($boolLoginResult){
 			if ($arrUserdata['block'] != '0') {
 				return false;
 			}
-			
+
 			return true;
 		}
 		return false;
 	}
-	
+
 	/**
 	 * A timing safe comparison method. This defeats hacking
 	 * attempts that use timing based attack vectors.
@@ -134,33 +134,33 @@ class joomla_bridge extends bridge_generic {
 		// Prevent issues if string length is 0
 		$known .= chr(0);
 		$unknown .= chr(0);
-	
+
 		$knownLength = strlen($known);
 		$unknownLength = strlen($unknown);
-	
+
 		// Set the result to the difference between the lengths
 		$result = $knownLength - $unknownLength;
-	
+
 		// Note that we ALWAYS iterate over the user-supplied length to prevent leaking length info.
 		for ($i = 0; $i < $unknownLength; $i++)
 		{
 		// Using % here is a trick to prevent notices. It's safe, since if the lengths are different, $result is already non-0
 		$result |= (ord($known[$i % $knownLength]) ^ ord($unknown[$i]));
 		}
-	
+
 		// They are only identical strings if $result is exactly 0...
 		return $result === 0;
 	}
-	
+
 	private function getCryptedPassword($plaintext, $salt = '', $encryption = 'md5-hex', $show_encrypt = false)
 	{
 		// Get the salt to use.
 		$salt = $this->getSalt($encryption, $salt, $plaintext);
-	
+
 		// Encrypt the password.
 		switch ($encryption)
 		{
-	
+
 			case 'sha256':
 				$encrypted = ($salt) ? hash('sha256', $plaintext . $salt) . ':' . $salt : hash('sha256', $plaintext);
 
@@ -173,13 +173,13 @@ class joomla_bridge extends bridge_generic {
 			return ($show_encrypt) ? '{MD5}' . $encrypted : $encrypted;
 		}
 	}
-	
+
 	private function getSalt($encryption = 'md5-hex', $seed = '', $plaintext = '')
 	{
 		// Encrypt the password.
 		switch ($encryption)
 		{
-			
+
 			case 'sha256':
 				if ($seed)
 				{
@@ -445,4 +445,3 @@ class joomlaPasswordHash {
 		return $hash == $stored_hash;
 	}
 }
-?>

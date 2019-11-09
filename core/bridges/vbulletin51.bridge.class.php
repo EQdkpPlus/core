@@ -24,9 +24,9 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class vbulletin51_bridge extends bridge_generic {
-	
+
 	public static $name = 'vBulletin 5.1';
-	
+
 	public $data = array(
 		//Data
 		'groups' => array( //Where I find the Usergroup
@@ -49,7 +49,7 @@ class vbulletin51_bridge extends bridge_generic {
 			'QUERY'	=> '',
 		),
 	);
-	
+
 	public $settings = array(
 			'cmsbridge_disable_sso'	=> array(
 					'type'	=> 'radio',
@@ -61,28 +61,28 @@ class vbulletin51_bridge extends bridge_generic {
 					'type'	=> 'text',
 			),
 	);
-	
+
 	//Needed function
 	public function check_password($password, $hash, $strSalt = '', $strUsername = "", $arrUserdata=array()){
 		if($arrUserdata['scheme'] == 'legacy'){
 			list($storedHash, $storedSalt) = explode(' ', $hash);
 			return ($storedHash == md5(md5($password) . $storedSalt));
-			
+
 		} elseif(strpos($arrUserdata['scheme'], 'blowfish') !== false){
 			return (crypt(md5($password), $hash) == $hash);
 		}
 
 		return false;
 	}
-	
+
 	public function vb_get_user_groups($intUserID){
 		$query = $this->bridgedb->prepare("SELECT usergroupid, membergroupids FROM ".$this->prefix."user WHERE userid=?")->execute($intUserID);
 		$arrReturn = array();
 		if ($query){
 			$result = $query->fetchAssoc();
-			
+
 			$arrReturn[] = (int)$result['usergroupid'];
-			
+
 			$arrAditionalGroups = explode(',', $result['membergroupids']);
 			if (is_array($arrAditionalGroups)){
 				foreach ($arrAditionalGroups as $group){
@@ -90,10 +90,10 @@ class vbulletin51_bridge extends bridge_generic {
 				}
 			}
 		}
-		
+
 		return $arrReturn;
 	}
-	
+
 	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult){
 		//Is user active?
 		if ($boolLoginResult){
@@ -101,25 +101,25 @@ class vbulletin51_bridge extends bridge_generic {
 			if ($this->config->get('cmsbridge_disable_sso') != '1'){
 				$this->sso($arrUserdata, $boolSetAutoLogin);
 			}
-				
+
 			return true;
 		}
-	
+
 		return false;
 	}
-	
+
 	private function sso($arrUserdata, $boolAutoLogin){
 		$user_id = intval($arrUserdata['id']);
 		$strSessionID = substr(md5(generateRandomBytes(55)).md5(generateRandomBytes(55)), 0, 32);
 		//$this->bridgedb->prepare("DELETE FROM ".$this->prefix."session WHERE userID=?")->execute($user_id);
-		
+
 		$config = array();
 		$objQuery =  $this->bridgedb->query("SELECT data FROM ".$this->prefix."datastore WHERE title = 'options'");
 		if($objQuery){
 			$result = $objQuery->fetchAssoc();
 			$config = unserialize($result['data']);
-		}	
-		
+		}
+
 		//PW is true, logg the user into our Forum
 		$arrSet = array(
 				'sessionhash'				=> $strSessionID,
@@ -131,44 +131,44 @@ class vbulletin51_bridge extends bridge_generic {
 				'lastactivity'				=> time(),
 		);
 		$this->bridgedb->prepare("INSERT INTO ".$this->prefix."session :p")->set($arrSet)->execute();
-			
 
-			
+
+
 		$expire = $this->time->time + 31536000;
-		
+
 		$strCookiedomain = $config['cookiedomain'];
 		$strCookiepath = $config['cookiepath'];
 		$strCookieprefix = $this->config->get('cmsbridge_sso_cookieprefix');
-	
+
 		//SID Cookie
 		setcookie($strCookieprefix.'sessionhash', $strSessionID, $expire, $strCookiepath, $strCookiedomain, $this->env->ssl);
 		setcookie($strCookieprefix.'userid', (int) $user_id, $expire, $strCookiepath, $strCookiedomain, $this->env->ssl);
 		if ($boolAutoLogin && strlen($this->config->get('cmsbridge_sso_cookiesalt'))) setcookie(hash("sha224", $arrUserdata['token'].$this->config->get('cmsbridge_sso_cookiesalt')), $strCookieprefix.'password', $arrUserdata['password'], $expire, $strCookiepath, $strCookiedomain, $this->env->ssl);
 		return true;
 	}
-	
+
 	public function autologin($arrCookieData){
 		//If Single Sign On is disabled, abort
 		if ((int)$this->config->get('cmsbridge_disable_sso') == 1) return false;
-		
+
 		$config = array();
 		$objQuery =  $this->bridgedb->query("SELECT data FROM ".$this->prefix."datastore WHERE title = 'options'");
 		if($objQuery){
 			$result = $objQuery->fetchAssoc();
 			$config = unserialize($result['data']);
 		}
-			
+
 		$expire = $this->time->time + 31536000;
-		
+
 		$strCookiedomain = $config['cookiedomain'];
 		$strCookiepath = $config['cookiepath'];
 		$strCookieprefix = $this->config->get('cmsbridge_sso_cookieprefix');
-	
+
 		$userID = isset( $_COOKIE[$strCookieprefix.'userid']) ? $_COOKIE[$strCookieprefix.'userid'] : null;
 		$cookieHash = isset($_COOKIE[$strCookieprefix.'sessionhash']) ? $_COOKIE[$strCookieprefix.'sessionhash'] : null;
-	
+
 		if ($cookieHash == NULL || $cookieHash == "") return false;
-	
+
 		$result = $this->bridgedb->prepare("SELECT * FROM ".$this->prefix."session WHERE userid = ? and sessionhash=?")->execute($userID, $cookieHash);
 		if ($result){
 			$row = $result->fetchAssoc();
@@ -187,28 +187,28 @@ class vbulletin51_bridge extends bridge_generic {
 				}
 			}
 		}
-	
+
 		return false;
 	}
-	
+
 	public function logout(){
 		//If Single Sign On is disabled, abort
 		if ((int)$this->config->get('cmsbridge_disable_sso') == 1) return false;
-		
+
 		$arrUserdata = $this->bridge->get_userdata($this->user->data['username']);
 		if (isset($arrUserdata['id'])){
 			$this->bridgedb->prepare("DELETE FROM ".$this->prefix."session WHERE userid=?")->execute($arrUserdata['id']);
 		}
-	
+
 		$config = array();
 		$objQuery =  $this->bridgedb->query("SELECT data FROM ".$this->prefix."datastore WHERE title = 'options'");
 		if($objQuery){
 			$result = $objQuery->fetchAssoc();
 			$config = unserialize($result['data']);
 		}
-			
+
 		$expire = $this->time->time + 31536000;
-		
+
 		$strCookiedomain = $config['cookiedomain'];
 		$strCookiepath = $config['cookiepath'];
 		$strCookieprefix = $this->config->get('cmsbridge_sso_cookieprefix');
@@ -217,7 +217,7 @@ class vbulletin51_bridge extends bridge_generic {
 		setcookie($strCookieprefix.'userid', 'somevalue', 0, $strCookiepath, $strCookiedomain, $this->env->ssl);
 		setcookie($strCookieprefix.'password', 'somevalue', 0, $strCookiepath, $strCookiedomain, $this->env->ssl);
 	}
-	
+
 	protected function fetchAltIp()
 	{
 		//These are set from the web page bot not from CLI
@@ -226,7 +226,7 @@ class vbulletin51_bridge extends bridge_generic {
 		{
 			$alt_ip = $_SERVER['REMOTE_ADDR'];
 		}
-	
+
 		if (isset($_SERVER['HTTP_CLIENT_IP']))
 		{
 			$alt_ip = $_SERVER['HTTP_CLIENT_IP'];
@@ -248,7 +248,7 @@ class vbulletin51_bridge extends bridge_generic {
 				{
 					continue;
 				}
-	
+
 				$private_ip = false;
 				foreach ($ranges AS $range)
 				{
@@ -258,7 +258,7 @@ class vbulletin51_bridge extends bridge_generic {
 						break;
 					}
 				}
-	
+
 				if (!$private_ip)
 				{
 					$alt_ip = $ip;
@@ -270,8 +270,7 @@ class vbulletin51_bridge extends bridge_generic {
 		{
 			$alt_ip = $_SERVER['HTTP_FROM'];
 		}
-	
+
 		return $alt_ip;
 	}
 }
-?>

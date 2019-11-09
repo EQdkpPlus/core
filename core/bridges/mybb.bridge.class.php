@@ -77,14 +77,14 @@ class mybb_bridge extends bridge_generic {
 		if ($objQuery){
 			$result = $objQuery->fetchAssoc();
 			$arrReturn[] = (int)$result['usergroup'];
-	
+
 			$arrAditionalGroups = explode(',', $result['additionalgroups']);
 			if (is_array($arrAditionalGroups)){
 				foreach ($arrAditionalGroups as $group){
 					$arrReturn[] = (int)$group;
 				}
 			}
-		}		
+		}
 
 		return $arrReturn;
 	}
@@ -103,7 +103,7 @@ class mybb_bridge extends bridge_generic {
 			if ($this->config->get('cmsbridge_disable_sso') != '1'){
 				$this->sso($arrUserdata, $boolSetAutoLogin);
 			}
-			
+
 			return true;
 		}
 		return false;
@@ -119,7 +119,7 @@ class mybb_bridge extends bridge_generic {
 		);
 		return $sync_array;
 	}
-	
+
 	public function sync_fields(){
 		return array(
 			'icq'		=> 'ICQ',
@@ -148,7 +148,7 @@ class mybb_bridge extends bridge_generic {
 					$arrConfig[$row['name']] = $row['value'];
 				}
 			}
-		} else return false;		
+		} else return false;
 
 		//PW is true, logg the user into our Forum
 		$arrSet = array(
@@ -163,11 +163,11 @@ class mybb_bridge extends bridge_generic {
 			'location1'	=> 0,
 			'location2'	=> 0,
 		);
-		
+
 		$this->bridgedb->prepare("INSERT INTO ".$this->prefix."sessions :p")->set($arrSet)->execute();
-		
+
 		$logincredentials = $user_id.'_'.$arrUserdata['loginkey'];
-		
+
 		if($arrConfig['cookiedomain'] == '') {
 			$arrDomains = explode('.', $this->env->server_name);
 			$arrDomainsReversed = array_reverse($arrDomains);
@@ -228,7 +228,7 @@ class mybb_bridge extends bridge_generic {
 	public function logout(){
 		//If Single Sign On is disabled, abort
 		if ((int)$this->config->get('cmsbridge_disable_sso') == 1) return false;
-		
+
 		$query = $this->bridgedb->query("SELECT name,value FROM ".$this->prefix."settings");
 		if ($query){
 			$result = $query->fetchAllAssoc();
@@ -250,4 +250,3 @@ class mybb_bridge extends bridge_generic {
 	}
 
 }
-?>

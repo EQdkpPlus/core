@@ -24,9 +24,9 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class phpbb31_bridge extends bridge_generic {
-	
+
 	public static $name = "phpBB 3.1/3.2";
-	
+
 	public $data = array(
 			'user'	=> array( //User
 					'table'	=> 'users',
@@ -50,9 +50,9 @@ class phpbb31_bridge extends bridge_generic {
 					'user'	=> 'user_id',
 					'QUERY'	=> '',
 			),
-			
+
 	);
-	
+
 	public $settings = array(
 			'cmsbridge_disable_sso'	=> array(
 					'type'	=> 'radio',
@@ -61,31 +61,31 @@ class phpbb31_bridge extends bridge_generic {
 					'type'	=> 'radio',
 			),
 	);
-	
+
 	public function check_password($password, $hash, $strSalt = '', $strUsername = "", $arrUserdata=array()){
 		if (strlen($hash) == 32){
-			
+
 			//plain md5
 			$result = (md5($password) === $hash) ? true : false;
 			if ($result) return true;
 			$result = (md5(htmlspecialchars($password)) === $hash) ? true : false;
 			if ($result) return true;
-			
+
 			//mybb md5
 			$myhash = md5(md5($strSalt) . md5($password));
 			if ($myhash === $hash) return true;
 			$myhash = md5(md5($strSalt) . md5(htmlspecialchars($password)));
 			if ($myhash === $hash) return true;
-			
+
 			//vb md5
 			$myhash = md5(md5($password) . $strSalt);
 			if ($myhash === $hash) return true;
 			$myhash = md5(md5(htmlspecialchars($password)) . $strSalt);
 			if ($myhash === $hash) return true;
-			
+
 			return false;
 		}
-		
+
 		//Bcrypt
 		if (strpos($hash, '$2a$') === 0 || strpos($hash, '$2x$') === 0 || strpos($hash, '$2y$') === 0){
 			if (strpos($hash, '$2a$') === 0)
@@ -95,29 +95,29 @@ class phpbb31_bridge extends bridge_generic {
 					return false;
 				}
 			}
-			
+
 			$salt = substr($hash, 0, 29);
 			if (strlen($salt) != 29)
 			{
 				return false;
 			}
-			
+
 			$myhash = crypt($password, $salt);
-			
+
 			if ($hash === $myhash)
 			{
 				return true;
 			}
-			
+
 			$myhash = crypt(htmlspecialchars($password), $salt);
-			
+
 			if ($hash === $myhash)
 			{
 				return true;
 			}
 			return false;
 		} //end bcrypt
-		
+
 		//Argon
 		if (strpos($hash, '$argon2id$') === 0 || strpos($hash, '$argon2i$') === 0){
 			$blnResult = password_verify($password, $hash);
@@ -126,35 +126,35 @@ class phpbb31_bridge extends bridge_generic {
 			}
 			return $blnResult;
 		}
-		
-		
+
+
 		//Bcrypt wcf2
 		if (strpos($hash, '$wcf2$') === 0){
-			
+
 			$salt = substr($hash, 0, 29);
-			
+
 			if (strlen($salt) != 29)
 			{
 				return false;
 			}
-			
+
 			$myhash = crypt($password, $salt);
 			$myhash = crypt($myhash, $salt);
-			
+
 			if ($hash === $myhash)
 			{
 				return true;
 			}
-			
+
 			$myhash = crypt(htmlspecialchars($password), $salt);
 			$myhash = crypt($myhash, $salt);
-			
+
 			if ($hash === $myhash)
 			{
 				return true;
 			}
 		}
-		
+
 		//PHPASS
 		if (strpos($hash, '$P$') === 0){
 			$wp_hasher = new PasswordHash(8, TRUE);
@@ -166,7 +166,7 @@ class phpbb31_bridge extends bridge_generic {
 			$check = $wp_hasher->CheckPassword(htmlspecialchars($password), $hash);
 			return $check;
 		}
-		
+
 		//phpbb 3.0
 		if (strlen($hash) === 34){
 			$itoa64 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
@@ -176,7 +176,7 @@ class phpbb31_bridge extends bridge_generic {
 			$itoa64 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 			return ($this->_hash_crypt_private(htmlspecialchars($password), $hash, $itoa64) === $hash) ? true : false;
 		}
-		
+
 		//SHA1
 		if(strlen($hash) === 40){
 			//plain sha1
@@ -184,32 +184,32 @@ class phpbb31_bridge extends bridge_generic {
 			if ($myhash === $hash) return true;
 			$myhash = sha1(htmlspecialchars($password));
 			if ($myhash === $hash) return true;
-			
+
 			//smf sha1
 			$myhash = sha1(strtolower($strUsername) . $password);
 			if ($myhash === $hash) return true;
 			$myhash = sha1(strtolower($strUsername) . htmlspecialchars($password));
 			if ($myhash === $hash) return true;
-			
+
 			//wcf sha1
 			$myhash = sha1($strSalt . sha1($strSalt . sha1($password)));
 			if ($myhash === $hash) return true;
 			$myhash = sha1($strSalt . sha1($strSalt . sha1(htmlspecialchars($password))));
 			if ($myhash === $hash) return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult){
 		//Is user active?
 		if ($boolLoginResult){
-			
+
 			//Account deactivated
 			if ($arrUserdata['user_type'] == '1') {
 				return false;
 			}
-			
+
 			//Check Banned
 			$query = $this->bridgedb->prepare("SELECT * FROM ".$this->prefix."banlist WHERE ban_userid=?")->execute($arrUserdata['user_id']);
 			if ($query){
@@ -217,7 +217,7 @@ class phpbb31_bridge extends bridge_generic {
 				if($intAffectedRows > 0){
 					$blnIsBanned = false;
 					$blnIsExcluded = false;
-					
+
 					while($row = $query->fetchAssoc()){
 						//Permanent Ban
 						if((int)$row['ban_end'] == 0 || (int)$row['ban_end'] > time()) {
@@ -228,7 +228,7 @@ class phpbb31_bridge extends bridge_generic {
 							$blnIsExcluded = true;
 						}
 					}
-					
+
 					if($blnIsBanned && !$blnIsExcluded) return false;
 				}
 			}
@@ -236,26 +236,26 @@ class phpbb31_bridge extends bridge_generic {
 			if ($this->config->get('cmsbridge_disable_sso') != '1'){
 				$this->sso($arrUserdata, $boolSetAutoLogin);
 			}
-			
+
 			return true;
 		}
 		return false;
 	}
-	
+
 	private function sso($arrUserdata, $boolAutoLogin = false){
 		$user_id = $arrUserdata['id'];
 		$strSessionID = md5(generateRandomBytes(55));
 		//$this->bridgedb->prepare("DELETE FROM ".$this->prefix."sessions WHERE session_user_id=?")->execute($user_id);
-		
+
 		$query = $this->bridgedb->query("SELECT * FROM ".$this->prefix."config");
 		if ($query){
 			while($row = $query->fetchAssoc()){
 				$arrConfig[$row['config_name']] = $row['config_value'];
 			}
 		} else return false;
-		
+
 		$ip = $this->get_ip();
-		
+
 		//PW is true, logg the user into our Forum
 		$arrSet = array(
 				'session_user_id'			=> (int) $user_id,
@@ -272,12 +272,12 @@ class phpbb31_bridge extends bridge_generic {
 				'session_page'				=> '',
 				'session_forum_id'			=> 0,
 		);
-		
+
 		$this->bridgedb->prepare("INSERT INTO ".$this->prefix."sessions :p")->set($arrSet)->execute();
-		
+
 		// Set cookie
 		$expire = $this->time->time + 31536000;
-		
+
 		if($arrConfig['cookie_domain'] == '') {
 			$arrDomains = explode('.', $this->env->server_name);
 			$arrDomainsReversed = array_reverse($arrDomains);
@@ -291,43 +291,43 @@ class phpbb31_bridge extends bridge_generic {
 		setcookie($arrConfig['cookie_name'].'_sid', $strSessionID, $expire, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
 		//User-Cookie
 		setcookie($arrConfig['cookie_name'].'_u', $user_id, $expire, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
-		
+
 		if ($boolAutoLogin){
 			$strLoginKey = substr(random_string(32), 4, 16);
-			
+
 			$this->bridgedb->prepare("INSERT INTO ".$this->prefix."sessions_keys :p")->set(array(
 					'key_id'	=> md5($strLoginKey),
 					'last_ip'	=> $ip,
 					'last_login'=> (int)$this->time->time,
 					'user_id'	=> (int) $user_id,
 			))->execute();
-			
+
 			setcookie($arrConfig['cookie_name'].'_k', $strLoginKey, $expire, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
 		} else {
 			setcookie($arrConfig['cookie_name'].'_k', 'somekey', $expire, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
 		}
-		
+
 		return true;
 	}
-	
+
 	public function autologin($arrCookieData){
 		//If Single Sign On is disabled, abort
 		if ((int)$this->config->get('cmsbridge_disable_sso') == 1) return false;
-		
+
 		$query = $this->bridgedb->query("SELECT * FROM ".$this->prefix."config");
 		if ($query){
 			while($row = $query->fetchAssoc()){
 				$arrConfig[$row['config_name']] = $row['config_value'];
 			}
 		} else return false;
-		
+
 		$ip = $this->get_ip();
-		
+
 		$userID = isset($_COOKIE[$arrConfig['cookie_name'].'_u']) ? (int)$_COOKIE[$arrConfig['cookie_name'].'_u'] : null;
 		$SID = isset($_COOKIE[$arrConfig['cookie_name'].'_sid']) ? $_COOKIE[$arrConfig['cookie_name'].'_sid'] : null;
-		
+
 		if ($SID == NULL || $SID == "") return false;
-		
+
 		$result = $this->bridgedb->prepare("SELECT * FROM ".$this->prefix."sessions WHERE session_user_id = ? and session_id=?")->execute($userID, $SID);
 		if ($result){
 			$row = $result->fetchAssoc();
@@ -346,36 +346,36 @@ class phpbb31_bridge extends bridge_generic {
 				}
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	public function logout() {
 		//If Single Sign On is disabled, abort
 		if ((int)$this->config->get('cmsbridge_disable_sso') == 1) return false;
-		
+
 		$arrUserdata = $this->bridge->get_userdata($this->user->data['username']);
 		if (isset($arrUserdata['id'])){
 			$this->bridgedb->prepare("DELETE FROM ".$this->prefix."sessions WHERE session_user_id=?")->execute($arrUserdata['id']);
 		}
-		
+
 		$query = $this->bridgedb->query("SELECT * FROM ".$this->prefix."config");
 		if ($query){
 			while($row = $query->fetchAssoc()){
 				$arrConfig[$row['config_name']] = $row['config_value'];
 			}
 		} else return;
-		
+
 		setcookie($arrConfig['cookie_name'].'_sid', 'somevalue', 0, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
 		//User-Cookie
 		setcookie($arrConfig['cookie_name'].'_u', 'somevalue', 0, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
 		setcookie($arrConfig['cookie_name'].'_k', 'somevalue', 0, $arrConfig['cookie_path'], $arrConfig['cookie_domain'], $arrConfig['cookie_secure']);
 	}
-	
-	
+
+
 	public function sync_fields(){
 		if(!$this->bridgedb) return array();
-		
+
 		$query = $this->bridgedb->prepare("SELECT * FROM ".$this->prefix."profile_fields")->execute();
 		$arrFields = array();
 		if ($query){
@@ -383,46 +383,46 @@ class phpbb31_bridge extends bridge_generic {
 				$arrFields['pf_'.$row['field_ident']] = $row['field_name'];
 			}
 		}
-		
+
 		$sync_array['birthday'] = 'Birthday';
-		
+
 		return $arrFields;
 	}
-	
+
 	public function sync($arrUserdata){
 		if ($this->config->get('cmsbridge_disable_sync') == '1'){
 			return false;
 		}
 		$sync_array = array();
-		
+
 		$user_id = $arrUserdata['user_id'];
-		
+
 		$query = $this->bridgedb->prepare("SELECT * FROM ".$this->prefix."profile_fields_data WHERE user_id=?")->execute($user_id);
 		if ($query){
 			$arrProfileData = $query->fetchAssoc();
-			
+
 			if (is_array($arrProfileData) && count($arrProfileData)){
 				foreach($arrProfileData as $key => $val){
 					$sync_array[$key] = $val;
 				}
 			}
 		}
-		
+
 		$sync_array['birthday'] = $this->_handle_birthday($arrUserdata['user_birthday']);
-		
+
 		return $sync_array;
 	}
-	
+
 	private function get_ip(){
 		$iip = (!empty($_SERVER['REMOTE_ADDR'])) ? (string) $_SERVER['REMOTE_ADDR'] : '';
 		$iip = preg_replace('# {2,}#', ' ', str_replace(',', ' ', $iip));
-		
+
 		// split the list of IPs
 		$ips = explode(' ', trim($iip));
-		
+
 		// Default IP if REMOTE_ADDR is invalid
 		$iip = '127.0.0.1';
-		
+
 		foreach ($ips as $ip)
 		{
 			if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip))
@@ -435,13 +435,13 @@ class phpbb31_bridge extends bridge_generic {
 				if (stripos($ip, '::ffff:') === 0)
 				{
 					$ipv4 = substr($ip, 7);
-					
+
 					if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ipv4))
 					{
 						$ip = $ipv4;
 					}
 				}
-				
+
 				$iip = $ip;
 			}
 			else
@@ -453,12 +453,12 @@ class phpbb31_bridge extends bridge_generic {
 		}
 		return $iip;
 	}
-	
+
 	private function get_random_salt(){
 		$rand = random_string(22);
 		return base64_encode($rand);
 	}
-	
+
 	private function _handle_birthday($date){
 		list($d, $m, $y) = explode('-', $date);
 		if ($y != '' && $y != 0 && $m != '' && $m != 0 && $d != '' && $d != 0){
@@ -466,7 +466,7 @@ class phpbb31_bridge extends bridge_generic {
 		}
 		return 0;
 	}
-	
+
 	/**
 	 * Hash Algorithm from phpBB 3.0.0
 	 * used due some Major Werid Changes handling the password of phpBB 3.0.0
@@ -479,15 +479,15 @@ class phpbb31_bridge extends bridge_generic {
 	function _hash_crypt_private($password, $setting, &$itoa64)
 	{
 		$password = trim(htmlspecialchars(str_replace(array("\r\n", "\r", "\0"), array("\n", "\n", ''), $password), ENT_COMPAT, 'UTF-8'));
-		
+
 		$output = '*';
-		
+
 		// Check for correct hash
 		if (substr($setting, 0, 3) != '$H$')
 		{
 			return $output;
 		}
-		
+
 		$count_log2 = strpos($itoa64, $setting[3]);
 		if ($count_log2 < 7 || $count_log2 > 30)
 		{
@@ -499,7 +499,7 @@ class phpbb31_bridge extends bridge_generic {
 		{
 			return $output;
 		}
-		
+
 		/**
 		 * We're kind of forced to use MD5 here since it's the only
 		 * cryptographic primitive available in all versions of PHP
@@ -526,14 +526,14 @@ class phpbb31_bridge extends bridge_generic {
 			}
 			while (--$count);
 		}
-		
+
 		$output = substr($setting, 0, 12);
 		$output .= $this->_hash_encode64($hash, 16, $itoa64);
-		
+
 		return $output;
 	}
-	
-	
+
+
 	/**
 	 * Encoding 64-Bit Hash Algorithm from phpBB 3.0.0
 	 * used due some Major Werid Changes handling the password of phpBB 3.0.0
@@ -551,35 +551,35 @@ class phpbb31_bridge extends bridge_generic {
 		{
 			$value = ord($input[$i++]);
 			$output .= $itoa64[$value & 0x3f];
-			
+
 			if ($i < $count)
 			{
 				$value |= ord($input[$i]) << 8;
 			}
-			
+
 			$output .= $itoa64[($value >> 6) & 0x3f];
-			
+
 			if ($i++ >= $count)
 			{
 				break;
 			}
-			
+
 			if ($i < $count)
 			{
 				$value |= ord($input[$i]) << 16;
 			}
-			
+
 			$output .= $itoa64[($value >> 12) & 0x3f];
-			
+
 			if ($i++ >= $count)
 			{
 				break;
 			}
-			
+
 			$output .= $itoa64[($value >> 18) & 0x3f];
 		}
 		while ($i < $count);
-		
+
 		return $output;
 	}
 }
@@ -602,7 +602,7 @@ if (!class_exists('PasswordHash')){
 	# Obviously, since this code is in the public domain, the above are not
 	# requirements (there can be none), but merely suggestions.
 	#
-	
+
 	/**
 	 * Portable PHP password hashing framework.
 	 *
@@ -616,20 +616,20 @@ if (!class_exists('PasswordHash')){
 		var $iteration_count_log2;
 		var $portable_hashes;
 		var $random_state;
-		
+
 		function __construct($iteration_count_log2, $portable_hashes)
 		{
 			$this->itoa64 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-			
+
 			if ($iteration_count_log2 < 4 || $iteration_count_log2 > 31)
 				$iteration_count_log2 = 8;
 				$this->iteration_count_log2 = $iteration_count_log2;
-				
+
 				$this->portable_hashes = $portable_hashes;
-				
+
 				$this->random_state = microtime() . uniqid(rand(), TRUE); // removed getmypid() for compatibility reasons
 		}
-		
+
 		function get_random_bytes($count)
 		{
 			$output = '';
@@ -638,7 +638,7 @@ if (!class_exists('PasswordHash')){
 						$output = fread($fh, $count);
 						fclose($fh);
 					}
-					
+
 					if (strlen($output) < $count) {
 						$output = '';
 						for ($i = 0; $i < $count; $i += 16) {
@@ -649,10 +649,10 @@ if (!class_exists('PasswordHash')){
 						}
 						$output = substr($output, 0, $count);
 					}
-					
+
 					return $output;
 		}
-		
+
 		function encode64($input, $count)
 		{
 			$output = '';
@@ -672,41 +672,41 @@ if (!class_exists('PasswordHash')){
 								break;
 								$output .= $this->itoa64[($value >> 18) & 0x3f];
 			} while ($i < $count);
-			
+
 			return $output;
 		}
-		
+
 		function gensalt_private($input)
 		{
 			$output = '$P$';
 			$output .= $this->itoa64[min($this->iteration_count_log2 +
 					((PHP_VERSION >= '5') ? 5 : 3), 30)];
 			$output .= $this->encode64($input, 6);
-			
+
 			return $output;
 		}
-		
+
 		function crypt_private($password, $setting)
 		{
 			$output = '*0';
 			if (substr($setting, 0, 2) == $output)
 				$output = '*1';
-				
+
 				$id = substr($setting, 0, 3);
 				# We use "$P$", phpBB3 uses "$H$" for the same thing
 				if ($id != '$P$' && $id != '$H$')
 					return $output;
-					
+
 					$count_log2 = strpos($this->itoa64, $setting[3]);
 					if ($count_log2 < 7 || $count_log2 > 30)
 						return $output;
-						
+
 						$count = 1 << $count_log2;
-						
+
 						$salt = substr($setting, 4, 8);
 						if (strlen($salt) != 8)
 							return $output;
-							
+
 							# We're kind of forced to use MD5 here since it's the only
 							# cryptographic primitive available in all versions of PHP
 							# currently in use.  To implement our own low-level crypto
@@ -724,31 +724,31 @@ if (!class_exists('PasswordHash')){
 									$hash = pack('H*', md5($hash . $password));
 								} while (--$count);
 							}
-							
+
 							$output = substr($setting, 0, 12);
 							$output .= $this->encode64($hash, 16);
-							
+
 							return $output;
 		}
-		
+
 		function gensalt_extended($input)
 		{
 			$count_log2 = min($this->iteration_count_log2 + 8, 24);
 			# This should be odd to not reveal weak DES keys, and the
 			# maximum valid value is (2**24 - 1) which is odd anyway.
 			$count = (1 << $count_log2) - 1;
-			
+
 			$output = '_';
 			$output .= $this->itoa64[$count & 0x3f];
 			$output .= $this->itoa64[($count >> 6) & 0x3f];
 			$output .= $this->itoa64[($count >> 12) & 0x3f];
 			$output .= $this->itoa64[($count >> 18) & 0x3f];
-			
+
 			$output .= $this->encode64($input, 3);
-			
+
 			return $output;
 		}
-		
+
 		function gensalt_blowfish($input)
 		{
 			# This one needs to use a different order of characters and a
@@ -760,12 +760,12 @@ if (!class_exists('PasswordHash')){
 			# chances and we also do not want to waste an additional byte
 			# of entropy.
 			$itoa64 = './ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-			
+
 			$output = '$2a$';
 			$output .= chr(ord('0') + $this->iteration_count_log2 / 10);
 			$output .= chr(ord('0') + $this->iteration_count_log2 % 10);
 			$output .= '$';
-			
+
 			$i = 0;
 			do {
 				$c1 = ord($input[$i++]);
@@ -775,25 +775,25 @@ if (!class_exists('PasswordHash')){
 					$output .= $itoa64[$c1];
 					break;
 				}
-				
+
 				$c2 = ord($input[$i++]);
 				$c1 |= $c2 >> 4;
 				$output .= $itoa64[$c1];
 				$c1 = ($c2 & 0x0f) << 2;
-				
+
 				$c2 = ord($input[$i++]);
 				$c1 |= $c2 >> 6;
 				$output .= $itoa64[$c1];
 				$output .= $itoa64[$c2 & 0x3f];
 			} while (1);
-			
+
 			return $output;
 		}
-		
+
 		function HashPassword($password)
 		{
 			$random = '';
-			
+
 			if (CRYPT_BLOWFISH == 1 && !$this->portable_hashes) {
 				$random = $this->get_random_bytes(16);
 				$hash =
@@ -801,7 +801,7 @@ if (!class_exists('PasswordHash')){
 				if (strlen($hash) == 60)
 					return $hash;
 			}
-			
+
 			if (CRYPT_EXT_DES == 1 && !$this->portable_hashes) {
 				if (strlen($random) < 3)
 					$random = $this->get_random_bytes(3);
@@ -810,7 +810,7 @@ if (!class_exists('PasswordHash')){
 					if (strlen($hash) == 20)
 						return $hash;
 			}
-			
+
 			if (strlen($random) < 6)
 				$random = $this->get_random_bytes(6);
 				$hash =
@@ -818,21 +818,20 @@ if (!class_exists('PasswordHash')){
 						$this->gensalt_private($random));
 				if (strlen($hash) == 34)
 					return $hash;
-					
+
 					# Returning '*' on error is safe here, but would _not_ be safe
 					# in a crypt(3)-like function used _both_ for generating new
 					# hashes and for validating passwords against existing hashes.
 					return '*';
 		}
-		
+
 		function CheckPassword($password, $stored_hash)
 		{
 			$hash = $this->crypt_private($password, $stored_hash);
 			if ($hash[0] == '*')
 				$hash = crypt($password, $stored_hash);
-				
+
 				return $hash == $stored_hash;
 		}
 	}
 }
-?>

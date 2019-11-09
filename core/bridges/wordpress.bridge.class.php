@@ -24,10 +24,10 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class wordpress_bridge extends bridge_generic {
-	
+
 	//Tested with Wordpress 4.8.1
 	public static $name = 'Wordpress';
-	
+
 	public $data = array(
 		//Data
 		'groups' => array( //Where I find the Usergroup
@@ -47,7 +47,7 @@ class wordpress_bridge extends bridge_generic {
 			'QUERY'	=> '',
 		),
 	);
-		
+
 	//Needed function
 	public function check_password($password, $hash, $strSalt = '', $strUsername = "", $arrUserdata=array()){
 		if ( strlen($hash) <= 32 ) {
@@ -61,7 +61,7 @@ class wordpress_bridge extends bridge_generic {
 
 		return false;
 	}
-	
+
 	public function wordpress_get_groups($blnWithID){
 		$arrGroups = array();
 		$query = $this->bridgedb->query("SELECT option_value FROM ".$this->prefix."options WHERE option_name='".$this->prefix."user_roles'");
@@ -73,10 +73,10 @@ class wordpress_bridge extends bridge_generic {
 				}
 			}
 		}
-		
+
 		return $arrGroups;
 	}
-	
+
 	public function wordpress_get_user_groups($intUserID){
 		$objQuery = $this->bridgedb->prepare("SELECT meta_value FROM ".$this->prefix."usermeta WHERE meta_key='".$this->prefix."capabilities' AND user_id=?")->execute($intUserID);
 		$arrReturn = array();
@@ -347,4 +347,3 @@ class PasswordHash {
 	}
 }
 }
-?>

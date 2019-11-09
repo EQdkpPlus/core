@@ -24,11 +24,11 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class xenforo_bridge extends bridge_generic {
-	
+
 	public static $name = 'XenForo';
-	
+
 	private $passwordIterations = 10;
-	
+
 	public $data = array(
 		//Data
 		'groups' => array( //Where I find the Usergroup
@@ -54,65 +54,65 @@ class xenforo_bridge extends bridge_generic {
 			'FUNCTION' => 'get_user',
 		),
 	);
-		
+
 	public $settings = array(
 	);
-	
+
 	public function check_password($password, $hash, $strSalt = '', $strUsername = "", $arrUserdata=array()){
 		$strQuery = "SELECT * FROM ".$this->prefix."user_authenticate WHERE user_id=?";
 		$objQuery = $this->bridgedb->prepare($strQuery)->execute($hash);
-	
+
 		if ($objQuery){
 			$arrAllResults = $objQuery->fetchAllAssoc();
 			foreach($arrAllResults as $arrResult){
 				$arrAuthData = unserialize($arrResult['data']);
 				$scheme = $arrResult['scheme_class'];
-				
+
 				$blnResult = $this->_handle_logins($scheme, $password, $hash, $arrAuthData);
-				if ($blnResult) return true;			
-			}		
+				if ($blnResult) return true;
+			}
 		}
 
 		return false;
 	}
-	
+
 	private function _handle_logins($scheme, $password, $hash, $arrAuthData){
 		switch($scheme){
 			case "XenForo_Authentication_Core12":
 				$passwordHash = new XenForo_PasswordHash($this->passwordIterations, false);
 				return $passwordHash->CheckPassword($password, $arrAuthData['hash']);
-			
+
 			break;
-			
+
 			case "XenForo_Authentication_Core":
 				$userHash = hash('sha256', hash('sha256', $password).$arrAuthData['salt']);
 				if ($userHash === $arrAuthData['hash']) return true;
-				
+
 				$userHash = sha1(sha1($password).$arrAuthData['salt']);
-				return ($userHash === $arrAuthData['hash']);	
+				return ($userHash === $arrAuthData['hash']);
 			break;
-			
+
 			case "XenForo_Authentication_IPBoard":
 			case "XenForo_Authentication_MyBb":
 				$userHash = md5(md5($arrAuthData['salt']) . md5($password));
 				return ($userHash === $arrAuthData['hash']);
 			break;
-			
+
 			case "XenForo_Authentication_PhpBb3":
 				$passwordHash = new XenForo_PasswordHash(8, true);
 				return $passwordHash->CheckPassword($password, $arrAuthData['hash']);
 			break;
-			
+
 			case "XenForo_Authentication_vBulletin":
 				$userHash = md5(md5($password) . $arrAuthData['salt']);
 				return ($userHash === $arrAuthData['hash']);
 			break;
 		}
-		
+
 		return false;
 	}
 
-	
+
 }
 
 #
@@ -383,4 +383,3 @@ if (!class_exists("XenForo_PasswordHash")){
 		}
 	}
 }
-?>

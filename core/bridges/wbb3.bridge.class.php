@@ -24,9 +24,9 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class wbb3_bridge extends bridge_generic {
-	
+
 	public static $name = 'WBB 3';
-	
+
 	public $data = array(
 		//Data
 		'groups' => array( //Where I find the Usergroup
@@ -52,13 +52,13 @@ class wbb3_bridge extends bridge_generic {
 			'QUERY'	=> '',
 		),
 	);
-	
+
 	public $settings = array(
 		'cmsbridge_disable_sso'	=> array(
 			'type'	=> 'radio',
 		),
 	);
-	
+
 	//Needed function
 	public function check_password($password, $hash, $strSalt = '', $strUsername = "", $arrUserdata=array()){
 		$settings = $this->get_encryption_settings();
@@ -82,25 +82,25 @@ class wbb3_bridge extends bridge_generic {
 		}
 		return $config;
 	}
-	
+
 	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult){
 		if ($boolLoginResult){
 			//Is user active?
 			if ($arrUserdata['banned'] != '0' || $arrUserdata['activationCode'] != '0') {
 				return false;
 			}
-			
+
 			//Single Sign On
 			if ($this->config->get('cmsbridge_disable_sso') != '1'){
 				$this->sso($arrUserdata, $boolSetAutoLogin);
 			}
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	private function sso($arrUserdata, $boolAutoLogin){
 		//Get wbb package ID
 		$query = $this->bridgedb->query("SELECT packageID FROM ".$this->prefix."package WHERE package='com.woltlab.wbb'");
@@ -123,7 +123,7 @@ class wbb3_bridge extends bridge_generic {
 					'username'					=> $arrUserdata['username'],
 				);
 				$this->bridgedb->prepare("INSERT INTO ".$this->prefix."session :p")->set($arrSet)->execute();
-				
+
 				$config = array();
 				$objQuery = $this->bridgedb->query("SELECT * FROM ".$this->prefix."option WHERE optionName = 'cookie_prefix' OR optionName = 'cookie_path' OR optionName = 'cookie_domain'");
 				if ($objQuery){
@@ -135,7 +135,7 @@ class wbb3_bridge extends bridge_generic {
 						}
 					}
 				} else return;
-				
+
 				$expire = $this->time->time + 31536000;
 				if($config['cookie_domain'] == '') {
 					$arrDomains = explode('.', $this->env->server_name);
@@ -149,16 +149,16 @@ class wbb3_bridge extends bridge_generic {
 				//SID Cookie
 				setcookie($config['cookie_prefix'].'cookieHash', $strSessionID, $expire, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
 				return true;
-			}					
+			}
 		}
 
 		return false;
 	}
-	
+
 	public function logout(){
 		//If Single Sign On is disabled, abort
 		if ((int)$this->config->get('cmsbridge_disable_sso') == 1) return false;
-		
+
 		$arrUserdata = $this->bridge->get_userdata($this->user->data['username']);
 		if (isset($arrUserdata['id'])){
 			$this->bridgedb->prepare("DELETE FROM ".$this->prefix."session WHERE userID=?")->execute($arrUserdata['id']);
@@ -174,7 +174,7 @@ class wbb3_bridge extends bridge_generic {
 				}
 			}
 		} else return;
-		
+
 		if($config['cookie_domain'] == '') {
 			$arrDomains = explode('.', $this->env->server_name);
 			$arrDomainsReversed = array_reverse($arrDomains);
@@ -184,10 +184,10 @@ class wbb3_bridge extends bridge_generic {
 				$config['cookie_domain'] = $this->env->server_name;
 			}
 		}
-		
+
 		setcookie($config['cookie_prefix'].'cookieHash', 'somevalue', 0, $config['cookie_path'], $config['cookie_domain'], $this->env->ssl);
 	}
-	
+
 	/**
 	 * Returns a double salted hash of the given value.
 	 *
@@ -198,7 +198,7 @@ class wbb3_bridge extends bridge_generic {
 	private function getDoubleSaltedHash($settings, $value, $salt) {
 		return $this->encrypt($salt . $this->getSaltedHash($settings, $value, $salt), $settings['encryption_method']);
 	}
-	
+
 	/**
 	 * Returns a salted hash of the given value.
 	 *
@@ -213,7 +213,7 @@ class wbb3_bridge extends bridge_generic {
 			if (!isset($settings['encryption_salt_position']) || $settings['encryption_salt_position'] == 'before') {
 				$hash .= $salt;
 			}
-			
+
 			// value
 			if (!isset($settings['encryption_encrypt_before_salting']) || $settings['encryption_encrypt_before_salting'] == '1') {
 				$hash .= $this->encrypt($value, $settings['encryption_method']);
@@ -221,20 +221,20 @@ class wbb3_bridge extends bridge_generic {
 			else {
 				$hash .= $value;
 			}
-			
+
 			// salt
 			if (!isset($settings['encryption_salt_position']) || $settings['encryption_salt_position'] == 'after') {
 				$hash .= $salt;
 			}
-			
+
 			return $this->encrypt($hash, $settings['encryption_method']);
 		}
 		else {
 			return $this->encrypt($value, $settings['encryption_method']);
 		}
 	}
-	
-		
+
+
 	/**
 	 * encrypts the given value.
 	 *
@@ -251,4 +251,3 @@ class wbb3_bridge extends bridge_generic {
 		}
 	}
 }
-?>

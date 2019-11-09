@@ -24,9 +24,9 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class e107_bridge extends bridge_generic {
-		
+
 	public static $name = "e107";
-	
+
 	public $data = array(
 		//Data
 		'groups' => array( //Where I find the Usergroup
@@ -50,7 +50,7 @@ class e107_bridge extends bridge_generic {
 			'QUERY'	=> '',
 		),
 	);
-	
+
 	public $functions = array(
 		'login'	=> array(
 			'callbefore'	=> '',
@@ -58,10 +58,10 @@ class e107_bridge extends bridge_generic {
 			'callafter'		=> 'e107_callafter',
 		),
 		'logout' 	=> '',
-		'autologin' => '',	
+		'autologin' => '',
 		'sync'		=> '',
 	);
-	
+
 	//Needed function
 	public function check_password($password, $hash, $strSalt = '', $strUsername = "", $arrUserdata=array()){
 		if (md5($password) == $hash){
@@ -69,19 +69,19 @@ class e107_bridge extends bridge_generic {
 		}
 		return false;
 	}
-	
+
 	public function after_login($strUsername, $strPassword, $boolSetAutoLogin, $arrUserdata, $boolLoginResult){
 		//Is user active?
 		if ($boolLoginResult){
 			if ($arrUserdata['user_ban'] != '0') {
 				return false;
 			}
-			
+
 			return true;
 		}
 		return false;
 	}
-	
+
 	public function e107_get_user_groups($intUserID){
 		$objQuery = $this->bridgedb->prepare("SELECT user_class,user_admin FROM ".$this->prefix."user WHERE user_id=?")->execute($intUserID);
 		if ($objQuery){
@@ -91,9 +91,8 @@ class e107_bridge extends bridge_generic {
 				return $arrAditionalGroups;
 			}
 		}
-		
+
 		return array();
 	}
-	
+
 }
-?>
