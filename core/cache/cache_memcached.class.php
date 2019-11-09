@@ -38,14 +38,14 @@ if ( !class_exists( "cache_memcached" ) ) {
 				throw new Exception('No Memcached available');
 			}
 			$this->memcached = new \Memcached;
-			
+
 			$this->memcached->setOption(\Memcached::OPT_LIBKETAMA_COMPATIBLE, true);
 			if(!(defined('DEBUG') && DEBUG > 1)){
 				$this->memcached->setOption(\Memcached::OPT_BINARY_PROTOCOL, true);
 			}
-			
+
 			$this->memcached->addServer($this->config->get('server', 'pdc'), $this->config->get('port', 'pdc'));
-			
+
 			if (!$this->memcached->set('connection_testing', true)) {
 				throw new Exception('Unable to obtain any valid memcached connection');
 			}
@@ -63,14 +63,13 @@ if ( !class_exists( "cache_memcached" ) ) {
 		}
 
 		public function del( $key, $global_prefix ) {
-			$key = $global_prefix.$key;	
+			$key = $global_prefix.$key;
 			$this->memcached->delete($key);
 			return true;
 		}
-		
+
 		public function get_cachesize($key, $global_prefix){
 			return 0;
 		}
 	}//end class
 }//end if
-?>

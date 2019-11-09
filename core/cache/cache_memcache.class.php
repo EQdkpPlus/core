@@ -37,7 +37,7 @@ if ( !class_exists( "cache_memcache" ) ) {
 			if(!class_exists('Memcache')){
 				throw new Exception('No Memcache available');
 			}
-			
+
 			$this->memcache = new Memcache;
 			$blnConnectionResult = $this->memcache->connect($this->config->get('server', 'pdc'), $this->config->get('port', 'pdc'));
 			if(!$blnConnectionResult){
@@ -59,14 +59,13 @@ if ( !class_exists( "cache_memcache" ) ) {
 		}
 
 		public function del( $key, $global_prefix ) {
-			$key = $global_prefix.$key;	
+			$key = $global_prefix.$key;
 			$this->memcache->delete($key);
 			return true;
 		}
-		
+
 		public function get_cachesize($key, $global_prefix){
 			return 0;
 		}
 	}//end class
 }//end if
-?>

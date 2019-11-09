@@ -30,6 +30,4 @@ if( !interface_exists( "plus_datacache" ) ) {
 		public function del( $key, $global_prefix );
 		public function get_cachesize( $key,  $global_prefix );
 	}//end interface
-}
-//end if
-?>
+}//end if

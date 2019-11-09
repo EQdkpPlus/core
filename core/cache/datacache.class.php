@@ -25,7 +25,7 @@ if( !defined( 'EQDKP_INC' ) ) {
 
 if( !class_exists( "datacache" ) ) {
 	class datacache extends gen_class {
-	
+
 		private $cache			= null;
 
 		private $cache_folder	= './cache/data/';
@@ -65,13 +65,13 @@ if( !class_exists( "datacache" ) ) {
 				//Set config to file Cache
 				$this->config->set('mode', 'file', 'pdc');
 			}
-				
+
 			//pdl fun
 			if( !$this->pdl->type_known( "pdc_query" ) ){
 				$blnLogToFile = (defined('DEBUG') && DEBUG > 3) ? true : false;
 				$this->pdl->register_type( "pdc_query", null, array( $this, 'pdl_html_format_pdc_query' ), array( 2, 3, 4 ), $blnLogToFile, true);
 			}
-				
+
 		}
 
 		function save_expiry_dates(){
@@ -116,9 +116,9 @@ if( !class_exists( "datacache" ) ) {
 
 			if($ttl == null)
 				$ttl = $this->default_ttl;
-			
+
 			$this->pdl->log( 'pdc_query', 'PUT', $global_prefix.$key );
-				
+
 			$ret = $this->cache->put( $key, $data, $ttl, $global_prefix, $compress );
 
 			//write successful
@@ -145,7 +145,7 @@ if( !class_exists( "datacache" ) ) {
 			}
 			return $this->cache->get( $key, $global_prefix, $uncompress );
 		}
-		
+
 		public function get_cachesize($key, $global_prefix = false){
 			$global_prefix = $this->check_global_prefix();
 			return $this->cache->get_cachesize( $key, $global_prefix);
@@ -156,11 +156,11 @@ if( !class_exists( "datacache" ) ) {
 			$this->pdl->log( 'pdc_query', 'DEL', $global_prefix.$key );
 			$this->cache->del( $key, $global_prefix );
 			unset($this->expiry_dates[$global_prefix][$key]);
-			$this->save_expiry_dates(); 
+			$this->save_expiry_dates();
 		}
 
 		public function del_prefix( $prefix, $global_prefix = false ) {
-			$global_prefix = $this->check_global_prefix();		
+			$global_prefix = $this->check_global_prefix();
 			$this->pdl->log( 'pdc_query', 'DEL PREFIX', $global_prefix.$prefix.'*' );
 
 			$prefix_len = strlen($prefix);
@@ -176,7 +176,7 @@ if( !class_exists( "datacache" ) ) {
 					}
 				}
 			}
-			$this->save_expiry_dates(); 
+			$this->save_expiry_dates();
 		}
 
 		public function del_suffix( $suffix ) {
@@ -192,7 +192,7 @@ if( !class_exists( "datacache" ) ) {
 					$this->cache->del( $key, $global_prefix );
 				unset($this->expiry_dates[$global_prefix][$key]);
 			}
-			$this->save_expiry_dates(); 
+			$this->save_expiry_dates();
 		}
 
 		public function cleanup( $global_prefix = false ) {
@@ -247,23 +247,23 @@ if( !class_exists( "datacache" ) ) {
 if( !class_exists( "cachePagination" ) ) {
 	/**
 	 * This Cache tries to load big Data into Chunks and handles the access to save memory and execution time, because it let's to the Database some Operations like Sorting and Searching
-	 * 
+	 *
 	 * @author GodMod
 	 */
 	class cachePagination extends gen_class {
-		
+
 		protected $strCacheKey = "";
 		protected $intItemsPerChunk = 50;
 		protected $arrQuerys;
 		protected $strID;
 		protected $strTablename = "";
-		
+
 		protected $index = array();
 		protected $data = array();
-		
+
 		/**
 		 * Constructor
-		 * 
+		 *
 		 * @param string $strCacheKey - Name of the Cache Key
 		 * @param string $strID - Name of the Primary Key
 		 * @param string $strTableName - Name of the Table, e.g. __items
@@ -277,43 +277,43 @@ if( !class_exists( "cachePagination" ) ) {
 			$this->strID = $strID;
 			$this->strTablename = $strTableName;
 		}
-				
+
 		/**
 		 * Builds the Index-File with all Primary IDs
-		 * 
+		 *
 		 * @return boolean
 		 */
 		public function initIndex(){
 			$this->index = $this->pdc->get('pdh_'.$this->strCacheKey.'_index');
 			if ($this->index === null){
 				$this->index = array();
-				
+
 				$strQuery = (isset($this->arrQuerys['index']) && strlen($this->arrQuerys['index'])) ? $this->arrQuerys['index'] : "SELECT ".$this->strID." FROM ".$this->strTablename;
-				
+
 				$objQuery = $this->db->query($strQuery);
 				if($objQuery){
 					while($row = $objQuery->fetchAssoc()){
 						$this->index[$row[$this->strID]] = $row[$this->strID];
 					}
 				}
-				
+
 				$this->pdc->put('pdh_'.$this->strCacheKey.'_index', $this->index, null);
 			}
 			return true;
 		}
-		
+
 		/**
-		 * Returns an array with all Primary IDs 
-		 * 
+		 * Returns an array with all Primary IDs
+		 *
 		 * @return array: IDs
 		 */
 		public function getIndex(){
 			return $this->index;
 		}
-		
+
 		/**
 		 * Gets a Object from the Database, saves it to the Cache-Chunks
-		 * 
+		 *
 		 * @param integer $intObjectID
 		 * @return boolean
 		 */
@@ -321,7 +321,7 @@ if( !class_exists( "cachePagination" ) ) {
 			$intChunkID = $this->calculateChunkID($intObjectID);
 
 			if (!isset($this->index[$intObjectID])) return false;
-			
+
 			if (!isset($this->data[$intChunkID])){
 				//Load Chunk
 				$arrCacheData = $this->pdc->get('pdh_'.$this->strCacheKey.'_chunk_'.$intChunkID);
@@ -333,7 +333,7 @@ if( !class_exists( "cachePagination" ) ) {
 							$cache_result[$drow[$this->strID]] = $drow;
 						}
 					}
-					
+
 					//Additional Cache Data
 					if (isset($this->arrQuerys['additionalData']) && strlen($this->arrQuerys['additionalData'])){
 						$objQuery = $this->db->prepare($this->arrQuerys['additionalData'])->execute($intChunkID*$this->intItemsPerChunk, ($intChunkID+1)*$this->intItemsPerChunk);
@@ -341,12 +341,12 @@ if( !class_exists( "cachePagination" ) ) {
 						if($objQuery){
 							while($drow = $objQuery->fetchAssoc()){
 								if (isset($cache_result[$drow['object_key']])){
-									$cache_result[$drow['object_key']]['additional'][] = $drow; 
+									$cache_result[$drow['object_key']]['additional'][] = $drow;
 								}
 							}
 						}
 					}
-					
+
 					$this->pdc->put('pdh_'.$this->strCacheKey.'_chunk_'.$intChunkID, $cache_result, null);
 					$this->data[$intChunkID] = $cache_result;
 					unset($cache_result);
@@ -356,15 +356,15 @@ if( !class_exists( "cachePagination" ) ) {
 					if (isset($this->data[$intChunkID][$intObjectID])) return true;
 				}
 			} else {
-				if (isset($this->data[$intChunkID][$intObjectID])) return true;			
+				if (isset($this->data[$intChunkID][$intObjectID])) return true;
 			}
 			return false;
 		}
-		
-		
+
+
 		/**
 		 * Internal function for getting Object from Cache
-		 * 
+		 *
 		 * @param integer $intObjectID
 		 * @return array/boolean Data
 		 */
@@ -373,13 +373,13 @@ if( !class_exists( "cachePagination" ) ) {
 			if (!$blnResult) return false;
 			$intChunkID = $this->calculateChunkID($intObjectID);
 			if (isset($this->data[$intChunkID][$intObjectID])) return $this->data[$intChunkID][$intObjectID];
-			
+
 			return false;
 		}
-		
+
 		/**
 		 * Returns an Object; You can filter the returned data for a specific Column
-		 * 
+		 *
 		 * @param integer $intObjectID
 		 * @param string $strObjectTag
 		 * @return array/boolean Data
@@ -393,11 +393,11 @@ if( !class_exists( "cachePagination" ) ) {
 			}
 			return false;
 		}
-		
-		
+
+
 		/**
 		 * Returns an Object direct from the Database; You can filter the returned data for a specific Column
-		 * 
+		 *
 		 * @param integer $intObjectID
 		 * @param string $strObjectTag
 		 * @return array/boolean Data
@@ -413,11 +413,11 @@ if( !class_exists( "cachePagination" ) ) {
 			}
 			return false;
 		}
-		
+
 		/**
 		 * Returns an Array where the Index is the ObjectID, and the Value is the ObjectTag Value
 		 * E.g. getAssocTagDirect("item_name") returns array(1 => 'Axt', 2 => 'Handschuhe', ...)
-		 * 
+		 *
 		 * @param string $strObjectTag
 		 * @return array IDs
 		 */
@@ -429,18 +429,18 @@ if( !class_exists( "cachePagination" ) ) {
 			}
 			return $arrOut;
 		}
-		
+
 
 		/**
 		 * Returns an Array directly from the Database where the Index is the ObjectID, and the Value is the ObjectTag Value
 		 * E.g. getAssocTagDirect("item_name") returns array(1 => 'Axt', 2 => 'Handschuhe', ...)
-		 * 
+		 *
 		 * @param string $strObjectTag
 		 * @return array IDs
 		 */
 		public function getAssocTagDirect($strObjectTag){
 			$strQuery = (isset($this->arrQuerys['tag_direct']) && strlen($this->arrQuerys['tag_direct'])) ? $this->arrQuerys['tag_direct'] : "SELECT ".$this->strID.",".$strObjectTag." FROM ".$this->strTablename;
-			
+
 			$objQuery = $this->db->prepare($strQuery)->execute($strObjectTag);
 			$arrOut = array();
 			if($objQuery){
@@ -450,22 +450,22 @@ if( !class_exists( "cachePagination" ) ) {
 			}
 			return $arrOut;
 		}
-		
+
 
 		/**
 		 * Calculates the Chunk-ID for a ObjectID
-		 * 
+		 *
 		 * @param integer $intObjectID
 		 * @return number
 		 */
 		private function calculateChunkID($intObjectID){
 			return ($intObjectID-($intObjectID%$this->intItemsPerChunk))/$this->intItemsPerChunk;
 		}
-		
+
 
 		/**
 		 * Reset Cache and Index
-		 * 
+		 *
 		 * @param array $mixedIDs
 		 * @return boolean
 		 */
@@ -475,7 +475,7 @@ if( !class_exists( "cachePagination" ) ) {
 				$this->pdc->del_prefix('pdh_'.$this->strCacheKey);
 				return true;
 			}
-			
+
 			//Delete specific Objects
 			$this->pdc->del('pdh_'.$this->strCacheKey.'_index'); //Delete Index
 			if(!is_array($mixedIDs)) $mixedIDs = array($mixedIDs);
@@ -487,11 +487,11 @@ if( !class_exists( "cachePagination" ) ) {
 			}
 			return true;
 		}
-		
+
 
 		/**
 		 * Sort for a specific column
-		 * 
+		 *
 		 * @param string $strObjectTag Column
 		 * @param string $strSortDirection Sort-direction
 		 * @return array IDs
@@ -500,23 +500,23 @@ if( !class_exists( "cachePagination" ) ) {
 			$strSortDirection = (strtolower($strSortDirection) == "asc") ? "ASC" : "DESC";
 			$strQuery = (isset($this->arrQuerys['sort']) && strlen($this->arrQuerys['sort'])) ? $this->arrQuerys['sort'] : "SELECT ".$this->strID." FROM ".$this->strTablename." ORDER BY ";
 			$strQuery .= $strObjectTag." ".$strSortDirection;
-			
+
 			$objQuery = $this->db->prepare($strQuery)->execute();
 			$arrOut = array();
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
-					$arrOut[] = $row[$this->strID]; 
+					$arrOut[] = $row[$this->strID];
 				}
 			}
 			return $arrOut;
 		}
-		
-		
+
+
 
 
 		/**
 		 * Search for a specific Tag-Value
-		 * 
+		 *
 		 * @param string $strObjectTag Column
 		 * @param string $strSearchValue SearchValue
 		 * @param boolean $allowParts False if Result must be identical with SearchValue, True if SearchValue can be a part of result
@@ -524,10 +524,10 @@ if( !class_exists( "cachePagination" ) ) {
 		 */
 		public function search($strObjectTag, $strSearchValue, $allowParts=false){
 			$strSearchValue = utf8_strtolower($strSearchValue);
-			
+
 			if ($allowParts){
 				$escapedString = $this->db->escapeString('%'.$strSearchValue.'%');
-				$strQuery = (isset($this->arrQuerys['search']) && strlen($this->arrQuerys['search'])) ? $this->arrQuerys['search'] : "SELECT ".$this->strID." FROM ".$this->strTablename." WHERE LOWER(".$strObjectTag.") LIKE ".$escapedString;	
+				$strQuery = (isset($this->arrQuerys['search']) && strlen($this->arrQuerys['search'])) ? $this->arrQuerys['search'] : "SELECT ".$this->strID." FROM ".$this->strTablename." WHERE LOWER(".$strObjectTag.") LIKE ".$escapedString;
 			} else {
 				$escapedString = $this->db->escapeString($strSearchValue);
 				$strQuery = (isset($this->arrQuerys['search']) && strlen($this->arrQuerys['search'])) ? $this->arrQuerys['search'] : "SELECT ".$this->strID." FROM ".$this->strTablename." WHERE LOWER(".$strObjectTag.") = ".$escapedString;
@@ -541,9 +541,8 @@ if( !class_exists( "cachePagination" ) ) {
 				}
 			}
 			return $arrOut;
-			
+
 		}
 
 	}
 }
-?>
