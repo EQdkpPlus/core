@@ -102,7 +102,13 @@ class mycharacters_pageobject extends pageobject {
 		// Build member drop-down
 		$freemember_data = $this->pdh->get('member', 'freechars', array($this->user->data['user_id']));
 		$mselect_list = $mselect_selected = array();
+		$arrSpecialChars = $this->pdh->get('member', 'id_list_special', array());
 		foreach($freemember_data as $member_id => $member){
+			if(in_array($member_id, $arrSpecialChars)) {
+				unset($freemember_data[$member_id]);
+				continue;
+			}
+			
 			$mselect_list[$member_id] = $member['name'];
 			if($member['userid'] == $this->user->data['user_id']){
 				$mselect_selected[] = $member_id;
