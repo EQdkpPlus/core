@@ -54,5 +54,3 @@ $preset_lang = array(
 	'itemsedit'		=> 'Item-Bearbeiten-Button',
 	'idroprate'		=> 'Item Droprate (für Itempool)',
 );
-
-?>

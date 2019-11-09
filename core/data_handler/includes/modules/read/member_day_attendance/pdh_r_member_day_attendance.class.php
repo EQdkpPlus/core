@@ -44,7 +44,7 @@ if ( !class_exists( "pdh_r_member_day_attendance" ) ) {
 			'dattendance_60' => array('attendance', array('%member_id%', '%dkp_id%', 60, '%with_twink%'), array(60)),
 			'dattendance_90' => array('attendance', array('%member_id%', '%dkp_id%', 90, '%with_twink%'), array(90)),
 			'dattendance_lt' => array('attendance', array('%member_id%', '%dkp_id%', 'LT', '%with_twink%'), array('LT')),
-				
+
 			'dattendance_fromto_all' => array('attendance_fromto_all', array('%member_id%', '%ALL_IDS%', '%from%', '%to%', '%with_twink%'), array('%ALL_IDS%')),
 		);
 
@@ -208,11 +208,11 @@ if ( !class_exists( "pdh_r_member_day_attendance" ) ) {
 				return sprintf($this->pdh->get_lang('member_day_attendance', 'dattendance'), $period);
 			}
 		}
-		
+
 		//Attendance from to
 		public function get_attendance_fromto_all($member_id, $multidkp_id, $from, $to, $with_twinks=true){
 			$strTimeHash = md5($from.'.'.$to);
-			
+
 			if(!isset($this->member_attendance_fromto[$strTimeHash][$multidkp_id])){
 				$this->init_attendance_fromto($from, $to, $multidkp_id);
 			}
@@ -232,9 +232,9 @@ if ( !class_exists( "pdh_r_member_day_attendance" ) ) {
 				return $return;
 			}
 			return ($total_raidcount > 0) ? $member_raidcount/$total_raidcount : '0';
-			
+
 		}
-		
+
 		public function get_html_attendance_fromto_all($member_id, $multidkp_id, $from, $to, $with_twinks=true){
 			$strTimeHash = md5($from.'.'.$to);
 			if(!isset($this->member_attendance_fromto[$strTimeHash][$multidkp_id])){
@@ -247,20 +247,20 @@ if ( !class_exists( "pdh_r_member_day_attendance" ) ) {
 			} else {
 				$with_twinks = 'members';
 			}
-			
+
 			$member_raidcount = $this->member_attendance_fromto[$strTimeHash][$multidkp_id][$with_twinks][$member_id]['attended'];
 			$total_raidcount = $this->member_attendance_fromto[$strTimeHash][$multidkp_id][$with_twinks][$member_id]['count'];
 			$percentage = ( $total_raidcount > 0 ) ? round(($member_raidcount/$total_raidcount) * 100) : 0;
-			
+
 			return '<span class="'.color_item($percentage, true).'">'.$percentage.'% ('.$member_raidcount.'/'.$total_raidcount.')</span>';
-			
+
 		}
-		
-		
+
+
 		public function get_caption_attendance_fromto_all($mdkpid){
 			return $this->pdh->get('multidkp', 'name', array($mdkpid)).' '.$this->pdh->get_lang('member_day_attendance', 'dattendance_fromto');
 		}
-		
+
 		public function init_attendance_fromto($from, $to, $mdkp_id){
 			if($mdkp_id == '') {
 				return false;
@@ -280,13 +280,13 @@ if ( !class_exists( "pdh_r_member_day_attendance" ) ) {
 				$this->member_attendance_fromto[$strTimeHash][$mdkp_id]['mains'][$this->twink2main[$member_id]]['attended'] = 0;
 				$this->member_attendance_fromto[$strTimeHash][$mdkp_id]['mains'][$this->twink2main[$member_id]]['count'] = 0;
 			}
-		
+
 			$first_date = $from;
 			$last_date = $to;
-		
+
 			//get raids
 			$raid_ids = $this->pdh->aget('raid', 'date', 0, array($this->pdh->get('raid', 'id_list')));
-		
+
 			//create array with all first_raid dates
 			$first_raids = array();
 			$temp = $this->pdh->aget('member_dates', 'first_raid', 0, array($this->pdh->get('member', 'id_list'), $mdkp_id));
@@ -304,18 +304,18 @@ if ( !class_exists( "pdh_r_member_day_attendance" ) ) {
 				//raid not relevant for this attendance calculation
 				if($date <= $first_date) continue;
 				if($date > $last_date) continue;
-		
+
 				$eventid = $this->pdh->get('raid', 'event', array($raid_id));
 				$mdkpids = $this->pdh->get('multidkp', 'mdkpids4eventid', array($eventid, false));
 				if(!in_array($mdkp_id, $mdkpids)) continue;
-		
+
 				$attendees = $this->pdh->get('raid', 'raid_attendees', array($raid_id));
 
 				//increment attendence counter
 				if(is_array($attendees)) {
 					foreach($attendees as $attendee_id){
 						if(!in_array($attendee_id, $memberlist)) continue;
-						
+
 						$fdate = date('d.m.Y', $date);
 						if(!isset($attendee_day[$attendee_id]) || !is_array($attendee_day[$attendee_id])) $attendee_day[$attendee_id] = array();
 						if(!in_array($fdate, $attendee_day[$attendee_id])) {
@@ -358,7 +358,6 @@ if ( !class_exists( "pdh_r_member_day_attendance" ) ) {
 			$stm = 86400-((time()-mktime(0,0,0,1,1,1970))%86400);
 			$this->pdc->put('pdh_member_day_attendance_fromto_'.$strTimeHash.'_'.$mdkp_id, $this->member_attendance_fromto[$strTimeHash][$mdkp_id], $stm);
 		}
-		
+
 	}//end class
 }//end if
-?>

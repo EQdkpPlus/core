@@ -46,4 +46,3 @@ $preset_lang = array(
 	'first_raid'					=> 'Erster Raid',
 	'last_raid'						=> 'Letzter Raid',
 );
-?>

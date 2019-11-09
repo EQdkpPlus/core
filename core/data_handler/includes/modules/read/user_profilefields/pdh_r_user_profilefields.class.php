@@ -57,7 +57,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 
 	public function reset(){
 			$this->pdc->del('pdh_user_profilefields_table');
-			
+
 			$this->user_profilefields = NULL;
 			$this->arrFieldByNameCache = array();
 	}
@@ -101,28 +101,28 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 
 		/**
 		 * @return multitype: List of all IDs
-		 */	
+		 */
 		public function get_id_list(){
 			if ($this->user_profilefields === null) return array();
 			return array_keys($this->user_profilefields);
 		}
-		
+
 		public function get_fields(){
 			if ($this->user_profilefields === null) return array();
 			return $this->user_profilefields;
 		}
-		
+
 		/**
 		 * Get all data of Element with $strID
 		 * @return multitype: Array with all data
-		 */				
+		 */
 		public function get_data($intFieldID){
 			if (isset($this->user_profilefields[$intFieldID])){
 				return $this->user_profilefields[$intFieldID];
 			}
 			return false;
 		}
-				
+
 		/**
 		 * Returns id for $intFieldID
 		 * @param integer $intFieldID
@@ -146,7 +146,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 			}
 			return false;
 		}
-		
+
 		public function get_html_name($intFieldID){
 			$strLangVar = $this->get_lang_var($intFieldID);
 			if ($strLangVar && strlen($strLangVar) && strlen($this->user->lang($strLangVar))) return $this->user->lang($strLangVar);
@@ -321,7 +321,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 		public function get_field_by_name($strName){
 			$strNameToLower = utf8_strtolower($strName);
 			if(isset($this->arrFieldByNameCache[$strNameToLower])) return $this->arrFieldByNameCache[$strNameToLower];
-			
+
 			foreach($this->user_profilefields as $intFieldID => $arrValue){
 
 				if(is_serialized($arrValue['name'])){
@@ -332,7 +332,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 							return $intFieldID;
 						}
 					}
-				} else {	
+				} else {
 					if (utf8_strtolower($arrValue['name']) === $strNameToLower){
 						$this->arrFieldByNameCache[$strNameToLower] = $intFieldID;
 						return $intFieldID;
@@ -344,7 +344,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 
 		public function get_registration_fields($blnIDsOnly=false){
 			$fields = $fieldids = array();
-			
+
 			$arrIDList = $this->get_id_list();
 			foreach($arrIDList as $intFieldID){
 				if ($this->get_show_on_registration($intFieldID) && $this->get_enabled($intFieldID)){
@@ -352,13 +352,13 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 					$fieldids[] = $intFieldID;
 				}
 			}
-			
+
 			return ($blnIDsOnly) ? $fieldids : $fields;
 		}
 
 		public function get_usersettings_fields($blnIDsOnly=false){
 			$fields = $fieldids = array();
-				
+
 			$arrIDList = $this->get_id_list();
 			foreach($arrIDList as $intFieldID){
 				if ($this->get_enabled($intFieldID) && !$this->get_is_contact($intFieldID)){
@@ -372,7 +372,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 
 		public function get_contact_fields($blnIDsOnly=false){
 			$fields = $fieldids = array();
-		
+
 			$arrIDList = $this->get_id_list();
 			foreach($arrIDList as $intFieldID){
 				if ($this->get_enabled($intFieldID) && $this->get_is_contact($intFieldID)){
@@ -402,19 +402,19 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 
 			$strPattern = $this->get_validation($intFieldID);
 			if ($strPattern != "") $myField['pattern'] = $strPattern;
-			
+
 			if($strType == 'birthday'){
 				$myField['type'] = 'datepicker';
 				$birthday_format = register('user')->style['date_notime_short'];
 				if(stripos($birthday_format, 'y') === false) $birthday_format .= 'Y';
 				$birthday_format = str_replace('y', 'Y', $birthday_format);
-				
+
 				if (!$this->get_required($intFieldID)) $myField['allow_empty'] = true;
 				$myField['year_range'] = '-80:+0';
 				$myField['change_fields'] = true;
 				$myField['format'] = $birthday_format;
-			}			
-			
+			}
+
 			if ($strType == 'text' || $strType == 'textarea'){
 				if ($this->get_length($intFieldID) > 0) $myField['maxlength'] = $this->get_length($intFieldID);
 				if ($this->get_minlength($intFieldID) > 0) $myField['minlength'] = $this->get_minlength($intFieldID);
@@ -427,24 +427,24 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 			if ($strType == 'textarea'){
 				$myField['cols'] = 40;
 			}
-			
+
 			if($strType == 'gender'){
 				$myField['type'] = 'radio';
 				$myField['tolang'] = true;
 			}
-			
+
 			if($strType == 'imageuploader'){
 				$myField['returnFormat'] = 'relative';
-				$myField['imgup_type']	= 'user';	
+				$myField['imgup_type']	= 'user';
 			}
-			
+
 			if($strType == 'bbcode'){
 				$myField['type'] = 'bbcodeeditor';
 			}
 
 			return $myField;
 		}
-		
+
 		/**
 		 * Returns example for $intFieldID
 		 * @param integer $intFieldID
@@ -456,7 +456,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 			}
 			return false;
 		}
-		
+
 		public function get_by_type($strType){
 			$fields = array();
 			$arrIDList = $this->get_id_list();
@@ -477,14 +477,14 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 					$fields[$this->get_bridge_field($intFieldID)] = $intFieldID;
 				}
 			}
-			
+
 			return $fields;
 		}
 
 		public function get_display_field($intFieldID, $intUserID){
 			$strUserValue = $this->pdh->get('user', 'custom_fields', array($intUserID, 'userprofile_'.$intFieldID));
 			if ($strUserValue == "" || is_array($strUserValue)) return "";
-			
+
 			$strType = $this->get_type($intFieldID);
 			if ($this->get_is_contact($intFieldID)){
 				$strFormat = $this->get_contact_url($intFieldID);
@@ -509,7 +509,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 
 					case 'multiselect':
 						$arrOut = array();
-						$arrUserValue = $strUserValue;	
+						$arrUserValue = $strUserValue;
 						$arrOptions = $this->get_options($intFieldID);
 						foreach($arrUserValue as $strMemberVal) {
 							//Check if Value is in dropdown options
@@ -521,27 +521,27 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 						$out = implode(', ', $arrOut);
 						return $out;
 				}
-				
+
 			}
 		}
-		
+
 		public function get_html_display_field($intFieldID, $intUserID, $blnWithIcon=true){
 			if ($blnWithIcon && $this->get_icon_or_image($intFieldID) != ""){
 				$strIcon = $this->core->icon_font($this->get_icon_or_image($intFieldID), 'fa-lg', $this->server_path.'images/').' ';
 			} else $strIcon = "";
-			
+
 			$strUserValue = $this->pdh->get('user', 'custom_fields', array($intUserID, 'userprofile_'.$intFieldID));
 			if ($strUserValue == "" || (is_array($strUserValue) && count($strUserValue) == 0)) return "";
-				
+
 			$strType = $this->get_type($intFieldID);
 
-			
+
 			if ($this->get_is_contact($intFieldID)){
 				$strFormat = $this->get_contact_url($intFieldID);
 				if ($strFormat == "") $strFormat = "%s";
 				$strFormattedString = sprintf($strFormat, $strUserValue);
 			} else $strFormattedString = $strUserValue;
-			
+
 			switch($strType){
 				case 'text':
 				case 'int':
@@ -552,9 +552,9 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 					if (strlen($strUserValue)){
 						$out = str_replace($this->root_path, $this->server_path, $strUserValue);
 					}
-					
+
 					return '<img src="'.$out.'" style="max-width:95%;" class="user-profilefield-'.$intFieldID.' user-additional-image" alt="" />';
-					
+
 				case 'link':
 					return '<a href="'.$strFormattedString.'" rel="nofollow">'.$strIcon.$strUserValue.'</a>';
 				case 'country':
@@ -563,7 +563,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 					$arrOptions = $this->get_options($intFieldID);
 					if (!in_array($strUserValue, array_keys($arrOptions['options']))) return '';
 					return $strIcon.$arrOptions['options'][$strUserValue];
-		
+
 				case 'multiselect':
 					$arrOut = array();
 					$arrUserValue = $strUserValue;
@@ -571,12 +571,12 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 					foreach($arrUserValue as $strMemberVal) {
 						//Check if Value is in dropdown options
 						if (!in_array($strMemberVal, array_keys($arrOptions['options']))) return '';
-		
+
 						$arrOut[] = $arrOptions['options'][$strMemberVal];
 					}
 					$out = implode(', ', $arrOut);
 					return $strIcon.$out;
-					
+
 				case 'gender':
 					switch($strUserValue){
 						case 'f' : $strGender = $this->user->lang('gender_f');
@@ -588,7 +588,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 						default: $strGender = "";
 					}
 					return $strGender;
-					
+
 				case 'birthday':
 					$intBirthday = intval($strUserValue);
 					$age = ($this->time->age($intBirthday) !== 0) ? $this->time->age($intBirthday) : '';
@@ -598,9 +598,8 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 					}
 					return $val;
 			}
-	
+
 		}
 
 	}//end class
 }//end if
-?>

@@ -40,4 +40,3 @@ $preset_lang = array(
 	'attendance_lt'			=> 'Raidteilnahme (Lebenszeit)',
 	'attendance_fromto_all' => 'Raidteilnahme (def. Zeitraum)',
 );
-?>

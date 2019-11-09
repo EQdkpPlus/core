@@ -40,4 +40,3 @@ $preset_lang = array(
 	'roledelete'	=> 'Rolle löschen-Button',
 	'roleicon'		=> 'Rollen-Icon',
 );
-?>

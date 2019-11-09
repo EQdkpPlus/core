@@ -48,5 +48,3 @@ $preset_lang = array(
 	'article_last_edited'	=> 'Artikel Letztes Änderungsdatum',
 	'article_index_cb'		=> 'Artikel Index Checkbox',
 );
-
-?>

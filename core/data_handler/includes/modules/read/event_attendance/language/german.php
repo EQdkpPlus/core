@@ -31,4 +31,3 @@ $module_lang = array(
 $preset_lang = array(
 	'event_attendance'	=> 'Ereignisbeteiligung',
 );
-?>

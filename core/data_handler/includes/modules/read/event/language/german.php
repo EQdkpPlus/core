@@ -44,5 +44,3 @@ $preset_lang = array(
 	'eventedit'	=> 'Ereignis-Bearbeiten-Icon',
 	'edefitempool'=> 'Ereignis-Standard-Itempool',
 );
-
-?>

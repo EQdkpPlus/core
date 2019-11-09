@@ -48,4 +48,3 @@ $preset_lang = array(
 	'logrecordid'	=> 'Log-Datensatz-ID',
 	'logvalue'		=> 'Logeintrag',
 );
-?>

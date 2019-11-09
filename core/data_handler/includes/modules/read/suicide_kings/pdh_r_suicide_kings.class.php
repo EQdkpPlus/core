@@ -113,7 +113,7 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 				foreach($this->pdh->get('multidkp',  'mdkpids4itempoolid', array($itempool_id)) as $mdkp_id){
 					$buyer_pos = $arrSKList['multi'][$mdkp_id][$buyer];
 					if(!$buyer_pos) continue;
-					
+
 					$last_pos = -1;
 
 					//find buyer position and last position of raid attendee
@@ -204,7 +204,7 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 			}
 
 			$this->sk_list = $arrSKList;
-			
+
 			$this->pdc->put('pdh_suicide_kings_table', $arrSKList, null);
 		}
 
@@ -238,4 +238,3 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 
 	}//end class
 }//end if
-?>

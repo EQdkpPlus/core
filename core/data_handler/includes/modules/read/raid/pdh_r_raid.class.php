@@ -128,7 +128,7 @@ if(!class_exists('pdh_r_raid')){
 		public function get_html_value($id, $dkp_id=0){
 			return '<span class="positive">' . runden($this->get_value($id, $dkp_id)) . '</span>';
 		}
-		
+
 		public function get_apa_value($raid_id, $apa_id=false){
 			$strApaValue =  $this->objPagination->get($raid_id, 'raid_apa_value');
 			if($strApaValue != ""){
@@ -209,7 +209,7 @@ if(!class_exists('pdh_r_raid')){
 					$arrRaids[] = $row['raid_id'];
 				}
 			}
-			
+
 			return $arrRaids;
 		}
 
@@ -336,4 +336,3 @@ if(!class_exists('pdh_r_raid')){
 		}
 	}
 }
-?>

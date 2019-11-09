@@ -66,4 +66,3 @@ $preset_lang = array(
 	'userlastvisit'		=> 'Letzter Besuch',
 	'usermainchar'		=> 'Hauptcharakter',
 );
-?>

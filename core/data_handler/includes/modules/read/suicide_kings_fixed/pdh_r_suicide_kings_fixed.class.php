@@ -59,7 +59,7 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 			if($this->sk_list !== null){
 				return true;
 			}
-			
+
 			$arrSKList = array();
 
 			//base list for all mdkp pools
@@ -191,4 +191,3 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 
 	}//end class
 }//end if
-?>

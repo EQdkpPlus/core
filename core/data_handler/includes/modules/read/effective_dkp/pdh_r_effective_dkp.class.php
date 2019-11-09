@@ -85,7 +85,7 @@ if ( !class_exists( "pdh_r_effective_dkp" ) ) {
 			$adjustment	= $this->pdh->get('points', 'adjustment', array($member_id, $multidkp_id, 0, $with_twink));
 			$spent		= $this->pdh->get('points', 'spent', array($member_id, $multidkp_id, 0, 0, $with_twink));
 			$attendance	= $this->pdh->get('member_attendance', 'attendance', array($member_id, $multidkp_id, $time_period, $with_twink));
-			
+
 			return ($earned+$adjustment-$spent)*$attendance;
 		}
 
@@ -125,4 +125,3 @@ if ( !class_exists( "pdh_r_effective_dkp" ) ) {
 		}
 	}//end class
 }//end if
-?>

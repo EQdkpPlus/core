@@ -44,4 +44,3 @@ $preset_lang = array(
 	'rnote'			=> 'Raid-Notiz',
 	'raidedit'		=> 'Raid-Bearbeiten-Button'
 );
-?>

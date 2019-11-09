@@ -43,7 +43,7 @@ if ( !class_exists( "pdh_r_portal" ) ) {
 			if($this->portal !== NULL){
 				return true;
 			}
-			
+
 			$objQuery = $this->db->query("SELECT * FROM __portal");
 			if($objQuery){
 				while($drow = $objQuery->fetchAssoc()){
@@ -55,11 +55,11 @@ if ( !class_exists( "pdh_r_portal" ) ) {
 						'child'			=> $drow['child'],
 					);
 				}
-				
+
 				$this->pdc->put('pdh_portal_table', $this->portal, null);
 			}
 		}
-		
+
 		public function get_portal($id=''){
 			return ($id) ? $this->portal[$id] : $this->portal;
 		}
@@ -69,10 +69,10 @@ if ( !class_exists( "pdh_r_portal" ) ) {
 			if($arrFilter){
 				foreach($this->portal as $key => $val){
 					$intFilterMatch = 0;
-					foreach($arrFilter as $fkey => $fval){					
+					foreach($arrFilter as $fkey => $fval){
 						if(isset($val[$fkey]) && $val[$fkey] == $fval) $intFilterMatch++;
 					}
-					
+
 					if($intFilterMatch == count($arrFilter)) $ids[] = $key;
 				}
 			} else {
@@ -100,15 +100,14 @@ if ( !class_exists( "pdh_r_portal" ) ) {
 		public function get_child($id){
 			return (isset($this->portal[$id])) ? (int)$this->portal[$id]['child'] : false;
 		}
-		
+
 		public function get_id_by_path($path){
 			$arrOut = array();
 			foreach($this->portal as $id => $val){
 				if($this->get_path($id) === $path) $arrOut[] = $id;
 			}
-			
+
 			return $arrOut;
 		}
 	}//end class
 }//end if
-?>

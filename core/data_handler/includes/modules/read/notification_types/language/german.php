@@ -34,5 +34,3 @@ $module_lang = array(
 
 $preset_lang = array(
 );
-
-?>

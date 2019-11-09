@@ -43,7 +43,7 @@ if ( !class_exists( "pdh_r_plugins" ) ) {
 			if($this->plugins !== NULL){
 				return true;
 			}
-			
+
 			$objQuery = $this->db->query("SELECT * FROM __plugins ORDER BY code");
 			if($objQuery){
 				while($drow = $objQuery->fetchAssoc()){
@@ -53,7 +53,7 @@ if ( !class_exists( "pdh_r_plugins" ) ) {
 						'status'	=> $drow['status']
 					);
 				}
-				
+
 				$this->pdc->put('pdh_plugins_table', $this->plugins, null);
 			}
 		}
@@ -67,4 +67,3 @@ if ( !class_exists( "pdh_r_plugins" ) ) {
 		}
 	}//end class
 }//end if
-?>

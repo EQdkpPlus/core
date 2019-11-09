@@ -54,7 +54,7 @@ if(!class_exists('pdh_r_generic')){
 				$this->preset_lang = isset($preset_lang) ? $preset_lang : array();
 				return;
 			}
-			
+
 			//Include the default lang file
 			if(file_exists($lang_inc)){
 				include($lang_inc);
@@ -64,4 +64,3 @@ if(!class_exists('pdh_r_generic')){
 		}
 	}//end class
 }//end if
-?>

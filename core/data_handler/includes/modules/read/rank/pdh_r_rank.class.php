@@ -46,7 +46,7 @@ if ( !class_exists( "pdh_r_rank" ) ) {
 		public function init(){
 			$this->ranks = $this->pdc->get('pdh_member_ranks');
 			if($this->ranks !== NULL) return true;
-			
+
 			$objQuery = $this->db->query("SELECT * FROM __member_ranks ORDER BY rank_sortid ASC;");
 			if($objQuery){
 				while($r_row = $objQuery->fetchAssoc()){
@@ -95,7 +95,7 @@ if ( !class_exists( "pdh_r_rank" ) ) {
 		public function get_rank_image($rank_id){
 			$strGameFolder = 'games/'.$this->game->get_game().'/icons/ranks/';
 			$strIcon = $this->get_icon($rank_id);
-			
+
 			$rankimage = (strlen($strIcon) && is_file($this->root_path.$strGameFolder.$strIcon)) ? $this->server_path.$strGameFolder.$strIcon : "";
 			return ($rankimage != "") ? '<img src="'.$rankimage.'" alt="rank image" width="20"/>' : '';
 		}
@@ -111,34 +111,33 @@ if ( !class_exists( "pdh_r_rank" ) ) {
 		public function get_is_hidden($rank_id){
 			return isset($this->ranks[$rank_id]) ? $this->ranks[$rank_id]['hide'] : 0;
 		}
-		
+
 		public function get_sortid($rank_id){
 			return isset($this->ranks[$rank_id]) ? $this->ranks[$rank_id]['sortid'] : 0;
 		}
-		
+
 		public function get_icon($rank_id){
 			return $this->ranks[$rank_id]['icon'];
 		}
-		
+
 		public function get_html_icon($rank_id){
 			return $this->get_rank_image($rank_id);
 		}
-		
+
 		public function get_default_value($rank_id){
 			return $this->ranks[$rank_id]['default'];
 		}
-		
+
 		public function get_default(){
 			if(is_array($this->ranks)){
 				foreach($this->ranks as $key => $val){
 					if ($val['default'] == 1) return $key;
 				}
 			}
-			
+
 			$arrIDs = $this->get_id_list();
 			return ((isset($arrIDs[0])) ? $arrIDs[0] : 0);
 		}
-		
+
 	}//end class
 }//end if
-?>

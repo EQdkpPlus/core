@@ -48,7 +48,7 @@ if(!class_exists('pdh_r_adjustment')){
 		);
 
 		private $decayed = array();
-		
+
 		//Trunks
 		private $index = array();
 		private $objPagination = null;
@@ -59,7 +59,7 @@ if(!class_exists('pdh_r_adjustment')){
 				if(empty($affected_ids) && !empty($this->index)) $affected_ids = array_keys($this->index);
 				$this->apa->enqueue_update('adjustment', $affected_ids);
 			}
-			
+
 			$this->objPagination = register("cachePagination", array("adjustments", "adjustment_id", "__adjustments", array(), 100));
 			return $this->objPagination->reset($affected_ids);
 		}
@@ -92,7 +92,7 @@ if(!class_exists('pdh_r_adjustment')){
 		public function get_html_value($adj_id, $dkp_id=0) {
 			return '<span class="' . color_item($this->get_value($adj_id, $dkp_id)) . '">'.runden($this->get_value($adj_id, $dkp_id)).'</span>';
 		}
-		
+
 		public function get_apa_value($adj_id, $apa_id=false){
 			$strApaValue =  $this->objPagination->get($adj_id, 'adjustment_apa_value');
 			if($strApaValue != ""){
@@ -148,7 +148,7 @@ if(!class_exists('pdh_r_adjustment')){
 		public function get_raid_id($adj_id){
 			return $this->objPagination->get($adj_id, "raid_id");
 		}
-		
+
 		public function get_html_raid_id($adj_id, $base_url, $url_suffix = ''){
 			return '<a href="'.$this->pdh->get('raid', 'raidlink', array($this->get_raid_id($adj_id), $base_url, $url_suffix)).'">'.$this->pdh->get('raid', 'event_name', array($this->get_raid_id($adj_id))).'</a>';
 		}
@@ -156,7 +156,7 @@ if(!class_exists('pdh_r_adjustment')){
 		public function get_adjsofmember($member_id){
 			return $this->objPagination->search("member_id", $member_id);
 		}
-		
+
 		public function get_adjsofmembers($arrMemberIDs){
 			$adj4member = array();
 			foreach($arrMemberIDs as $member_id){
@@ -169,20 +169,20 @@ if(!class_exists('pdh_r_adjustment')){
 		public function get_adjsofuser($user_id){
 			$arrMemberList = $this->pdh->get('member', 'connection_id', array($user_id));
 			if(!$arrMemberList || count($arrMemberList) == 0) return array();
-			
+
 			$objQuery = $this->db->prepare("SELECT adjustment_id FROM __adjustments WHERE member_id :in")->in($arrMemberList)->execute();
-			
+
 			$adjustment_ids = array();
-			
+
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					$adjustment_ids[] = (int)$row['adjustment_id'];
 				}
 			}
-			
+
 			return $adjustment_ids;
 		}
-		
+
 		public function get_adjsofraid($raid_id, $blnGroupedByAdjKey=false){
 			$adjustment_ids = $adjGrouped = array();
 			if(is_array($this->index)){
@@ -217,22 +217,22 @@ if(!class_exists('pdh_r_adjustment')){
 			$type = (in_array($type, $allowed_types)) ? $type : 'reason';
 			return "<a href='".$this->get_link($adj_id, $baseurl, $url_suffix)."'>".call_user_func_array(array($this, 'get_'.$type), array($adj_id))."</a>";
 		}
-		
+
 		public function comp_link($params1, $params2){
 			$method = (isset($params1[3]) && $params1[3] == 'member') ? 'get_member' : 'get_reason';
 			return ($this->$method($params1[0]) < $this->$method($params2[0])) ? -1  : 1 ;
-			
+
 		}
 
 		public function get_editicon($adj_id, $baseurl, $url_suffix='') {
 			$out = "<a href='".$this->get_link($adj_id, $baseurl, $url_suffix)."'>
 						<i class='fa fa-pencil fa-lg' title='".$this->user->lang('edit')."'></i>
 					</a>";
-			
+
 			$out .= '&nbsp;&nbsp;&nbsp;<a href="'.$this->get_link($adj_id, $baseurl, '&copy=true').'">
 				<i class="fa fa-copy fa-lg" title="'.$this->user->lang('copy').'"></i>
 			</a>';
-				
+
 			return $out;
 		}
 
@@ -243,7 +243,7 @@ if(!class_exists('pdh_r_adjustment')){
 		public function get_html_m4agk4a($adj_id) {
 			return implode(', ', $this->pdh->aget('adjustment', 'html_member_name', 0, array($this->get_ids_of_group_key($this->get_group_key($adj_id)))));
 		}
-		
+
 		public function comp_m4agk4a($params1, $params2){
 			$members1 = implode(', ', $this->pdh->aget('adjustment', 'member_name', 0, array($this->get_ids_of_group_key($this->get_group_key($params1[0])))));
 			$members2 = implode(', ', $this->pdh->aget('adjustment', 'member_name', 0, array($this->get_ids_of_group_key($this->get_group_key($params2[0])))));
@@ -251,4 +251,3 @@ if(!class_exists('pdh_r_adjustment')){
 		}
 	}
 }
-?>

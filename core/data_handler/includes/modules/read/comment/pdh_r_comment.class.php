@@ -55,13 +55,13 @@ if(!class_exists('pdh_r_comment')){
 			}
 
 			$this->comments = array();
-			
+
 			$objQuery = $this->db->query("SELECT com.*, u.username FROM __comments com, __users u WHERE com.userid = u.user_id ORDER BY com.date DESC;");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					$this->comments[$row['id']] = $row;
 				}
-				
+
 				$this->pdc->put('pdh_comments_table', $this->comments, null);
 			}
 		}
@@ -95,7 +95,7 @@ if(!class_exists('pdh_r_comment')){
 					$arrReplies = isset($replies[(int)$id]) ? $replies[(int)$id] : array();
 					$comment['replies'] = array_reverse($arrReplies);
 					$comments[(int)$id] = $comment;
-				}		
+				}
 			}
 			return $comments;
 		}
@@ -112,21 +112,20 @@ if(!class_exists('pdh_r_comment')){
 			}
 			return (isset($this->count[$page][$attach_id])) ? $this->count[$page][$attach_id] : 0;
 		}
-		
+
 		public function get_involved_users($page, $attach_id){
 			$arrUsers = array();
-			
+
 			foreach($this->comments as $id => $comment) {
 				if($comment['page'] != $page) continue;
 				if($attach_id > 0 AND $comment['attach_id'] != $attach_id) continue;
-				
+
 				if(!in_array($comment['userid'], $arrUsers)){
 					$arrUsers[] = $comment['userid'];
 				}
 			}
-			
+
 			return $arrUsers;
 		}
 	}
 }
-?>

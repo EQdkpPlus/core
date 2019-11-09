@@ -30,7 +30,7 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 		private $guestsEvent = array();
 		private $guestsStatus = array();
 		private $guestsStatus2 = array();
-		
+
 		public $hooks = array(
 			'guests_update',
 		);
@@ -67,7 +67,7 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 			$this->guestsEvent		= $this->pdc->get('pdh_calendar_raids_table.guestsEvents');
 			$this->guestsStatus 	= $this->pdc->get('pdh_calendar_raids_table.guestsStatus');
 			$this->guestsStatus2 	= $this->pdc->get('pdh_calendar_raids_table.guestsStatus2');
-			
+
 			if($this->guests !== NULL && $this->guestsEvent !== NULL && $this->guestsStatus !== NULL && $this->guestsStatus2 !== NULL){
 				return true;
 			}
@@ -90,8 +90,8 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 						'eventid'			=> $row['calendar_events_id'],
 						'role'				=> $row['role'],
 					);
-					
-					//if role=0, try to set to default role for class			
+
+					//if role=0, try to set to default role for class
 					$defautrole_config	= json_decode($this->config->get('roles_defaultclasses'), true);
 					$role	= ($row['role'] > 0) ? $row['role'] : (($defautrole_config > 0 && $row['class'] > 0 && isset($defautrole_config[$row['class']])) ? $defautrole_config[$row['class']] : 0);
 					$this->guests[$row['id']]['role'] = $role;
@@ -207,7 +207,7 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 			}
 			return $tmpcount;
 		}
-		
+
 		public function get_chars_with_wrong_role($eventid, $roles){
 			$chars_out = array();
 			$guests = $this->get_members($eventid);
@@ -223,4 +223,3 @@ if (!class_exists('pdh_r_calendar_raids_guests')){
 
 	} //end class
 } //end if class not exists
-?>

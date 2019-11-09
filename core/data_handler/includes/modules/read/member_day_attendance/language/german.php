@@ -36,4 +36,3 @@ $preset_lang = array(
 	'dattendance_lt'	=> 'Tagesteilnahme (Lebenszeit)',
 	'dattendance_fromto_all' => 'Tagesteilnahme (def. Zeitraum)',
 );
-?>

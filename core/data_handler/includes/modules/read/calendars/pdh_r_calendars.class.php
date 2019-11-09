@@ -154,4 +154,3 @@ if ( !class_exists( "pdh_r_calendars" ) ) {
 		}
 	}//end class
 }//end if
-?>
