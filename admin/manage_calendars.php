@@ -38,15 +38,15 @@ class Manage_Calendars extends page_generic {
 
 	public function save() {
 		$calendarID = $this->in->get('c', 0);
-		
+
 		$arrValues = $this->get_post();
 
 		if($calendarID > 0){
-			$retu = $this->pdh->put('calendars', 'update_calendar', array($arrValues['id'], $arrValues['name'], $arrValues['color'], $arrValues['feed'], $arrValues['private'], $arrValues['type'], $arrValues['restricted'], 0, $arrValues['permissions']));	
+			$retu = $this->pdh->put('calendars', 'update_calendar', array($arrValues['id'], $arrValues['name'], $arrValues['color'], $arrValues['feed'], $arrValues['private'], $arrValues['type'], $arrValues['restricted'], 0, $arrValues['permissions']));
 		} else {
-			$retu = $this->pdh->put('calendars', 'add_calendar', array($arrValues['id'], $arrValues['name'], $arrValues['color'], $arrValues['feed'], $arrValues['private'], $arrValues['type'], $arrValues['restricted'], 0, $arrValues['permissions']));		
+			$retu = $this->pdh->put('calendars', 'add_calendar', array($arrValues['id'], $arrValues['name'], $arrValues['color'], $arrValues['feed'], $arrValues['private'], $arrValues['type'], $arrValues['restricted'], 0, $arrValues['permissions']));
 		}
-		
+
 		if(!$retu) {
 			$message = array('title' => $this->user->lang('error'), 'text' => $this->user->lang('save_nosuc'), 'color' => 'red');
 		} else {
@@ -76,18 +76,18 @@ class Manage_Calendars extends page_generic {
 
 	public function edit(){
 		$intCalendarID = $this->in->get('c', 0);
-		
+
 		$types = array(
 				1	=> $this->user->lang(array('calendars_types', 1)),
 				2	=> $this->user->lang(array('calendars_types', 2)),
 				3	=> $this->user->lang(array('calendars_types', 3)),
 		);
-		
+
 		$usergroups = $this->pdh->get('user_groups', 'id_list');
 		if(($usergrpkey = array_search(1, $usergroups)) !== false) {
 			unset($usergroups[$usergrpkey]);
 		}
-		
+
 		if($intCalendarID > 0){
 			$this->tpl->assign_vars(array(
 					'DELETABLE'		=> $this->pdh->get('calendars', 'is_deletable', array($intCalendarID)),
@@ -111,7 +111,7 @@ class Manage_Calendars extends page_generic {
 					'PERMISSIONS'	=> (new hmultiselect('permissions', array('options' => $this->pdh->aget('user_groups', 'name', 0, array($usergroups)), 'value' => array())))->output(),
 			));
 		}
-		
+
 		$this->core->set_vars([
 				'page_title'		=> $this->user->lang('manage_calendars'),
 				'template_file'		=> 'admin/manage_calendars_edit.html',
@@ -123,7 +123,7 @@ class Manage_Calendars extends page_generic {
 				'display'			=> true
 		]);
 	}
-	
+
 	public function display($messages=false) {
 		if($messages) {
 			$this->pdh->process_hook_queue();
@@ -172,7 +172,7 @@ class Manage_Calendars extends page_generic {
 			$new_id = ($new_id == $id) ? $id+1 : $new_id;
 		}
 		$this->confirm_delete($this->user->lang('confirm_delete_calendars'));
-	
+
 		$this->tpl->assign_vars(array(
 				'CALENDAR_COUNT'	=> count($ranks),
 		));
@@ -199,10 +199,9 @@ class Manage_Calendars extends page_generic {
 				'restricted'	=> !$this->in->get('restricted',0),
 				'permissions'	=> $this->in->getArray('permissions', 'int')
 		);
-		
+
 		return $calendars;
 
 	}
 }
 registry::register('Manage_Calendars');
-?>

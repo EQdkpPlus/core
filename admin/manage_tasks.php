@@ -82,7 +82,7 @@ class ManageTasks extends page_generic {
 
 							if ($this->user->check_auths($arrActions['permissions'], 'OR', false)){
 								$trigger = '#t_'.md5($taskID.'.'.$actionID).'Trigger';
-								
+
 								$arrMenuItems[] = array(
 									'type'	=> 'javascript',
 									'icon'	=> $arrActions['icon'],
@@ -160,4 +160,3 @@ class ManageTasks extends page_generic {
 
 }
 registry::register('ManageTasks');
-?>

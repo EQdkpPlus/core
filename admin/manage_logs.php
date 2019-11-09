@@ -55,22 +55,22 @@ class Manage_Logs extends page_generic {
 		$this->logs->add( 'action_logs_deleted', array('{L_NUMBER_OF_LOGS}' => $ret), '');
 		$this->display();
 	}
-	
+
 	public function export_logs(){
 		$arrLogFiles = $this->pdl->get_logfiles(true);
-		
+
 		$strTempLocation = $this->pfh->FilePath('tmp', '');
-		
+
 		$file = $strTempLocation.'/logs.zip';
 		$archive = registry::register('zip', array($file));
-		
+
 		foreach($arrLogFiles as $strFile){
 			if($strFile == 'logs.zip') continue;
 			$archive->add($strTempLocation.'/'.$strFile, $strTempLocation);
 		}
-		
+
 		$result = $archive->create();
-		
+
 		if (file_exists($file)){
 			header('Content-Type: application/octet-stream');
 			header('Content-Length: '.$this->pfh->FileSize($file));
@@ -135,7 +135,7 @@ class Manage_Logs extends page_generic {
 				}
 			}
 		}
-		
+
 		$plugin		= $this->pdh->get('logs', 'plugin', array($this->url_id));
 		$log_action	= $this->pdh->geth('logs', 'tag', array($this->url_id));
 		$log_date	= $this->pdh->geth('logs', 'date', array($this->url_id, true));
@@ -157,7 +157,7 @@ class Manage_Logs extends page_generic {
 				window.location="manage_logs.php'.$this->SID.'";
 			});', 'docready');
 		$this->tpl->css_file($this->root_path.'libraries/diff/diff.css');
-		
+
 		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('viewlogs_title'),
 			'template_file'		=> 'admin/manage_logs_view.html',
@@ -352,4 +352,3 @@ class Manage_Logs extends page_generic {
 	}
 }
 registry::register('Manage_Logs');
-?>

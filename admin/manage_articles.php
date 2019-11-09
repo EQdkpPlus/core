@@ -44,7 +44,7 @@ class Manage_Articles extends page_generic {
 		parent::__construct(false, $handler, array('articles', 'title'), null, 'selected_ids[]');
 		$this->process();
 	}
-	
+
 	public function copy(){
 		$this->core->message($this->user->lang('copy_info'), $this->user->lang('copy'));
 		$this->edit($this->in->get('duplicate', 0), true);
@@ -406,4 +406,3 @@ class Manage_Articles extends page_generic {
 
 }
 registry::register('Manage_Articles');
-?>

@@ -27,9 +27,9 @@ include_once ($eqdkp_root_path . 'common.php');
 class ManageUserProfileFields extends page_generic {
 
 	public function __construct(){
-		
+
 		$this->user->check_auth('a_users_profilefields');
-		
+
 		$handler = array(
 			'savesort'	=> array('process' => 'save_sort', 'csrf'=>true),
 			'enable'	=> array('process' => 'enable', 'csrf'=>true),
@@ -39,7 +39,7 @@ class ManageUserProfileFields extends page_generic {
 		parent::__construct(false, $handler, array('user_profilefields', 'html_name'), null, 'del_ids[]');
 		$this->process();
 	}
-	
+
 	public function save_sort(){
 		$arrSortOrder = $this->in->getArray('sort', 'int');
 		foreach($arrSortOrder as $intSortID => $intFieldID){
@@ -51,13 +51,13 @@ class ManageUserProfileFields extends page_generic {
 
 	public function enable(){
 		$intFieldID = $this->in->get('enable', 0);
-		
+
 		if ($intFieldID){
 			$result = $this->pdh->put('user_profilefields', 'enable_field', array($intFieldID));
 		}
-		
+
 		$strName = $this->pdh->geth('user_profilefields', 'name', array($intFieldID));
-		
+
 		//Handle Result
 		if ($result){
 			$message = array('title' => $this->user->lang('success'), 'text' => sprintf($this->user->lang('pf_enable_suc'), $strName), 'color' => 'green');
@@ -65,18 +65,18 @@ class ManageUserProfileFields extends page_generic {
 			$message = array('title' => $this->user->lang('error'), 'text' => sprintf($this->user->lang('pf_enable_nosuc'), $strName), 'color' => 'red');
 		}
 		$this->display($message);
-		
+
 	} //close function
 
 	public function disable(){
 		$intFieldID = $this->in->get('disable', 0);
-		
+
 		if ($intFieldID){
 			$result = $this->pdh->put('user_profilefields', 'disable_field', array($intFieldID));
 		}
 
 		$strName = $this->pdh->geth('user_profilefields', 'name', array($intFieldID));
-		
+
 		//Handle Result
 		if ($result){
 			$message = array('title' => $this->user->lang('success'), 'text' => sprintf($this->user->lang('pf_disable_suc'), $strName), 'color' => 'green');
@@ -96,24 +96,24 @@ class ManageUserProfileFields extends page_generic {
 		}
 		$this->display($message);
 	}
-		
+
 	public function add(){
 		$intFieldID = $this->in->get('id', 0);
-		
+
 		$form = register('form', array('user_profilefield_edit'));
 		$form->validate = true;
 		$form->lang_prefix = 'userpf_sett_';
-		
+
 		$form->add_fields($this->edit_settings());
-		
+
 		$arrValues = $form->return_values();
-		
+
 		// Error-check the form
 		if($form->error) {
 			$this->edit($arrValues);
 			return;
 		}
-		
+
 		$options = array();
 		if ($arrValues['type'] == 'dropdown' || $arrValues['type'] == 'multiselect' || $arrValues['type'] == 'radio'  || $arrValues['type'] == 'gender'){
 			$in_options_id = $this->in->getArray('option_id', 'string');
@@ -124,7 +124,7 @@ class ManageUserProfileFields extends page_generic {
 				}
 			}
 		}
-		
+
 		if ($intFieldID){
 			//Update
 			$result = $this->pdh->put('user_profilefields', 'update_field', array($intFieldID, $arrValues, $options));
@@ -140,7 +140,7 @@ class ManageUserProfileFields extends page_generic {
 		}
 		$this->display($message);
 	}
-	
+
 	private function edit_settings(){
 		$arrFields = array(
 				'name' => array(
@@ -211,26 +211,26 @@ class ManageUserProfileFields extends page_generic {
 						'size'	=> 30,
 				),
 		);
-		
+
 		if ((int)$this->config->get('cmsbridge_active') == 1){
 			$arrAvailableFields = $this->bridge->get_available_sync_fields();
 			if (is_array($arrAvailableFields) && count($arrAvailableFields)){
-				
+
 				$arrAvailableFields[''] = '';
-				
+
 				$arrFields['bridge_field'] = array(
 					'type'	  => 'dropdown',
 					'options' => $arrAvailableFields
 				);
 			}
 		}
-		
+
 		return $arrFields;
 	}
 
 	public function edit($arrValues=false){
 		$intFieldID = $this->in->get('edit', 0);
-		
+
 		if ($arrValues !== false){
 			$field_data = $arrValues;
 		}elseif($intFieldID){
@@ -240,11 +240,11 @@ class ManageUserProfileFields extends page_generic {
 		$form = register('form', array('user_profilefield_edit'));
 		$form->validate = true;
 		$form->lang_prefix = 'userpf_sett_';
-		
-		
+
+
 		$form->add_fields($this->edit_settings());
 		$form->output($field_data);
-		
+
 
 		$this->tpl->assign_vars(array (
 			'ID'						=> $intFieldID,
@@ -260,7 +260,7 @@ class ManageUserProfileFields extends page_generic {
 				));
 			}
 		}
-		
+
 		$this->tpl->add_js('
 $("#addopt_icon").click(function(){
 	var fields = $("#new_options > span:last-child").clone(true);
@@ -269,7 +269,7 @@ $("#addopt_icon").click(function(){
 	$("#new_options").append(fields);
 });
 $("#type").change(function(){
-				
+
 	if($("#type").val() == "dropdown" || $("#type").val() == "multiselect" || $("#type").val() == "radio" || $("#type").val() == "gender") {
 		$("#options_row").show();
 	} else {
@@ -294,13 +294,13 @@ $("#type").change(function(){
 			$this->pdh->process_hook_queue();
 			$this->core->messages($message);
 		}
-		
+
 		$this->confirm_delete($this->user->lang('confirm_del_profilefields'));
-		
+
 		$fields = $this->pdh->get('user_profilefields', 'fields');
-		
+
 		$arrAvailableBridgeFields = $this->bridge->get_available_sync_fields();
-				
+
 		if (is_array($fields)) {
 			foreach ($fields as $key=>$value){
 				$this->tpl->assign_block_vars('profile_row', array (
@@ -326,7 +326,7 @@ $("#type").change(function(){
 			'PROFILEFIELDS_COUNT'	=> count($fields),
 			'S_BRIDGE_FIELD'		=> ((int)$this->config->get('cmsbridge_active') == 1) ? true : false,
 		]);
-		
+
 		$this->tpl->add_js("
 			$(\"#userprofilefield_table tbody\").sortable({
 				cancel: '.not-sortable, input, select, th',
@@ -346,4 +346,3 @@ $("#type").change(function(){
 	}
 }
 registry::register('ManageUserProfileFields');
-?>

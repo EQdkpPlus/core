@@ -299,16 +299,16 @@ class Manage_Massmail extends page_generic {
 	public function submit(){
 		if ($this->in->get('body', '', 'raw') != ""){
 			$arrRecipients = array();
-			
+
 			$arrAllUsers = $this->pdh->get('user', 'id_list');
-			
+
 			//Usergroups
 			if (count($this->in->getArray('usergroups', 'int')) > 0){
 				foreach ($this->in->getArray('usergroups', 'int') as $key => $groupid){
 					$arrGroupMembers = $this->pdh->get('user_groups_users', 'user_list', array($groupid));
 					foreach($arrGroupMembers as $userid){
 						if(!in_array((int)$userid, $arrAllUsers)) continue;
-						
+
 						$arrRecipients[] = (int)$userid;
 					}
 				}
@@ -318,7 +318,7 @@ class Manage_Massmail extends page_generic {
 			if (count($this->in->getArray('user', 'int')) > 0){
 				foreach ($this->in->getArray('user', 'int') as $key => $userid){
 					if(!in_array((int)$userid, $arrAllUsers)) continue;
-					
+
 					$arrRecipients[] = (int)$userid;
 				}
 			}
@@ -343,7 +343,7 @@ class Manage_Massmail extends page_generic {
 						foreach ($arrMembers as $memberid){
 							$userID = (int)$this->pdh->get('member', 'userid', array($memberid));
 							if(!in_array($userID, $arrAllUsers)) continue;
-							
+
 							if ($userID != 0) $arrRecipients[] = (int)$this->pdh->get('member', 'userid', array($memberid));
 						}
 					}
@@ -363,7 +363,7 @@ class Manage_Massmail extends page_generic {
 						foreach ($arrMembers as $memberid){
 							$userID = (int)$this->pdh->get('member', 'userid', array($memberid));
 							if(!in_array($userID, $arrAllUsers)) continue;
-							
+
 							if ($userID != 0) $arrRecipients[] = (int)$this->pdh->get('member', 'userid', array($memberid));
 						}
 					}
@@ -526,4 +526,3 @@ class Manage_Massmail extends page_generic {
 	}
 }
 registry::register('Manage_massmail');
-?>

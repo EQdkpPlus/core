@@ -256,4 +256,3 @@ class ManageCrons extends page_generic {
 	}
 }
 registry::register('ManageCrons');
-?>

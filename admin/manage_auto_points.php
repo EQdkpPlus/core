@@ -106,7 +106,7 @@ class ManageAutoPoints extends page_generic {
 			$this->edit_function($exprs);
 		}
 		$this->apa->update_calc_function('func_'.$this->in->get('func'), $exprs);
-		
+
 		//Reset the APAs which are using this function
 		$job_list = $this->apa->list_apas();
 		$blnFlush = false;
@@ -117,12 +117,12 @@ class ManageAutoPoints extends page_generic {
 				$blnFlush = true;
 			}
 		}
-		
+
 		if($blnFlush){
 			$this->pdh->process_hook_queue();
 			$this->pdc->flush();
 		}
-		
+
 		$this->tpl->add_js("parent.$('body').data('func_name', '".$this->in->get('func')."');jQuery.FrameDialog.closeDialog();");
 	}
 
@@ -326,13 +326,13 @@ class ManageAutoPoints extends page_generic {
 
 		$job_list = $this->apa->list_apas();
 		$used_funcs = array();
-		
+
 		$arrNextRuns = $this->apa->get_next_aparuns(true);
 
 		if(is_array($job_list)){
 			foreach($job_list as $key => $details){
 				$decay_start = $this->apa->get_data('start_date', $key);
-				
+
 				$this->tpl->assign_block_vars('apa_row', array(
 					'ID'			=> $key,
 					'TYPE'			=> $this->user->lang('apa_type_'.$details['type']),
@@ -440,4 +440,3 @@ class ManageAutoPoints extends page_generic {
 	}
 }
 registry::register('ManageAutoPoints');
-?>

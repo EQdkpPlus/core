@@ -25,15 +25,15 @@ if ( !defined('EQDKP_INC') ){
 
 class login_battlenet extends gen_class {
 	private $oauth_loaded = false;
-	
+
 	private $appid, $appsecret = false;
-	
+
 	private $AUTHORIZATION_ENDPOINT = 'https://{region}.battle.net/oauth/authorize';
 	private $TOKEN_ENDPOINT         = 'https://{region}.battle.net/oauth/token';
 	private $CHECK_TOKEN          = 'https://{region}.battle.net/oauth/check_token?token={token}';
 	private $USER_INFO				= 'https://{region}.battle.net/oauth/userinfo?access_token={token}';
 	private $redirURL = "";
-	
+
 	public static $functions = array(
 		'login_button'		=> 'login_button',
 		'account_button'	=> 'account_button',
@@ -42,16 +42,16 @@ class login_battlenet extends gen_class {
 		'pre_register'		=> 'pre_register',
 		'redirect'			=> 'redirect',
 	);
-	
+
 	public static $options = array(
-		'connect_accounts'	=> true,	
+		'connect_accounts'	=> true,
 	);
-	
+
 	public function __construct(){
 		$this->redirURL = $this->env->buildLink().'index.php/auth-endpoint/?lmethod=battlenet';
-		
+
 		$region = $this->config->get('uc_server_loc');
-		if(!$region) $region = 'eu';		
+		if(!$region) $region = 'eu';
 		switch($region){
 			case 'eu' :
 				$region = 'eu';
@@ -88,9 +88,9 @@ class login_battlenet extends gen_class {
 				$this->CHECK_TOKEN  = "https://www.battlenet.com.cn/oauth/check_token?token={token}";
 				$this->USER_INFO  = "https://www.battlenet.com.cn/oauth/userinfo?access_token={token}";
 				break;
-		}		
+		}
 	}
-	
+
 	public function settings(){
 		$settings = array(
 			'login_bnet_appid'	=> array(
@@ -103,9 +103,9 @@ class login_battlenet extends gen_class {
 		);
 		return $settings;
 	}
-	
 
-	
+
+
 	public function init_oauth(){
 		if (!$this->oauth_loaded){
 			if(!class_exists('OAuth2\\Exception')) {
@@ -113,56 +113,56 @@ class login_battlenet extends gen_class {
 				require($this->root_path.'libraries/oauth/GrantType/IGrantType.php');
 				require($this->root_path.'libraries/oauth/GrantType/AuthorizationCode.php');
 			}
-			
+
 			$this->appid = $this->config->get('login_bnet_appid');
 			$this->appsecret = $this->config->get('login_bnet_appsecret');
-			
+
 			$this->oauth_loaded = true;
-		
+
 		}
 	}
-	
+
 	public function redirect($arrOptions=array()){
 		$this->init_oauth();
 		$redir_url = $this->env->buildLink().'index.php/auth-endpoint/?lmethod=battlenet';
-		
+
 		if(!strlen($this->appid) || !strlen($this->appsecret)){
 			message_die('Battle.net Client-ID or Client-Secret is missing. Please insert it into the fields at the EQdkp Plus settings, tab "User".');
 		}
-		
+
 		$state = random_string(32);
 		$this->user->setSessionVar('_battlenet_state', $state);
-		
+
 		$client = new OAuth2\Client($this->appid, $this->appsecret);
 		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $redir_url, array('scope' => 'wow.profile', 'state' => $state));
-	
+
 		return $auth_url;
 	}
-	
+
 	public function login_button(){
 		$auth_url = $this->redirURL.'&status=login&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
-		
+
 		return '<button type="button" class="mainoption thirdpartylogin battlenet loginbtn" onclick="window.location=\''.$auth_url.'\'"><i class="bi_battlenet"></i> Battle.net</button>';
 	}
-	
+
 	public function register_button(){
 		$auth_url = $this->redirURL.'&status=register&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
-		
+
 		return '<button type="button" class="mainoption thirdpartylogin battlenet loginbtn" onclick="window.location=\''.$auth_url.'\'"><i class="bi_battlenet"></i> Battle.net</button>';
 	}
-	
+
 	public function pre_register(){
 		$this->init_oauth();
-		
+
 		$blnLoginResult = false;
-		
+
 		if($this->in->exists('code')){
 			$account = $this->get_userinfo();
 			if($account){
 
 				$strPwd = random_string(32);
-				
-				
+
+
 				$bla = array(
 						'username'			=> isset($account['battletag']) ? substr($account['battletag'], 0, -5) : '',
 						'user_email'		=> '',
@@ -173,33 +173,33 @@ class login_battlenet extends gen_class {
 						'user_password1'	=> $strPwd,
 						'user_password2'	=> $strPwd,
 				);
-				
+
 				return $bla;
 			}
 		}
 	}
-	
-	
+
+
 	public function account_button(){
 		$auth_url = $this->redirURL.'&status=account&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
-		
-		return '<button type="button" class="mainoption thirdpartylogin battlenet accountbtn" onclick="window.location=\''.$auth_url.'\'"><i class="bi_battlenet"></i> Battle.net</button>';		
+
+		return '<button type="button" class="mainoption thirdpartylogin battlenet accountbtn" onclick="window.location=\''.$auth_url.'\'"><i class="bi_battlenet"></i> Battle.net</button>';
 	}
-	
+
 	public function get_account(){
 		$this->init_oauth();
-		
+
 		$code = $this->in->get('code');
-		
+
 		if ($code){
 			$client = new OAuth2\Client($this->appid, $this->appsecret);
 			$redir_url = $this->env->buildLink().'index.php/Settings/?mode=addauthacc&lmethod=battlenet';
-			
+
 			$params = array('code' => $code, 'redirect_uri' => $this->redirURL, 'scope' => 'wow.profile');
 			$response = $client->getAccessToken($this->TOKEN_ENDPOINT, 'authorization_code', $params);
-			
+
 			if ($response && $response['result'] && $response['result']['access_token']){
-				
+
 				$accountResponse = register('urlfetcher')->fetch(str_replace('{token}', $response['result']['access_token'], $this->CHECK_TOKEN));
 				if($accountResponse){
 					$arrAccountResult = json_decode($accountResponse, true);
@@ -212,67 +212,67 @@ class login_battlenet extends gen_class {
 
 		return false;
 	}
-	
+
 	public function get_userinfo(){
 		$this->init_oauth();
-		
+
 		$code = $this->in->get('code');
-		
+
 		if ($code){
 			//Check state
 			$strSavedState = $this->user->data['session_vars']['_battlenet_state'];
 			if(!$strSavedState || $strSavedState == '' || $strSavedState !== $this->in->get('state')){
 				return false;
 			}
-			
+
 			$client = new OAuth2\Client($this->appid, $this->appsecret);
-			
+
 			$params = array('code' => $code, 'redirect_uri' => $this->redirURL, 'scope' => 'wow.profile');
 			$response = $client->getAccessToken($this->TOKEN_ENDPOINT, 'authorization_code', $params);
-			
+
 			if ($response && $response['result'] && $response['result']['access_token']){
-				
+
 				$accountResponse = register('urlfetcher')->fetch(str_replace('{token}', $response['result']['access_token'], $this->USER_INFO));
-				
+
 				if($accountResponse){
 					$arrAccountResult = json_decode($accountResponse, true);
-					
+
 					return $arrAccountResult;
 				}
 			}
 		}
-		
+
 		return false;
 	}
-	
-	
-	
+
+
+
 	/**
 	* User-Login for Facebook
 	*
 	* @param $strUsername
 	* @param $strPassword
-	* @return bool/array	
-	*/	
-	public function login($strUsername, $strPassword){		
+	* @return bool/array
+	*/
+	public function login($strUsername, $strPassword){
 		$this->init_oauth();
-		
+
 		$code = $_GET['code'];
-	
+
 		if ($code){
 			//Check state
 			$strSavedState = $this->user->data['session_vars']['_battlenet_state'];
 			if(!$strSavedState || $strSavedState == '' || $strSavedState !== $this->in->get('state')){
 				return false;
 			}
-			
+
 			$client = new OAuth2\Client($this->appid, $this->appsecret);
-			
+
 			$params = array('code' => $code, 'redirect_uri' => $this->redirURL, 'scope' => 'wow.profile');
 			$response = $client->getAccessToken($this->TOKEN_ENDPOINT, 'authorization_code', $params);
 
 			if ($response && $response['result']){
-					
+
 				$accountResponse = register('urlfetcher')->fetch(str_replace('{token}', $response['result']['access_token'], $this->CHECK_TOKEN));
 				if($accountResponse){
 					$arrAccountResult = json_decode($accountResponse, true);
@@ -292,19 +292,19 @@ class login_battlenet extends gen_class {
 						} elseif((int)$this->config->get('cmsbridge_active') != 1 && (int)$this->config->get('login_fastregister')){
 							//Try to register the user
 							$auth_url = $this->controller_path_plain.'auth-endpoint/?lmethod=battlenet&status=register&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
-							
+
 							redirect($auth_url);
 						}
-						
+
 					}
 				}
 
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	* User-Logout
 	*
@@ -313,15 +313,14 @@ class login_battlenet extends gen_class {
 	public function logout(){
 		return true;
 	}
-	
+
 	/**
 	* Autologin
 	*
 	* @param $arrCookieData The Data ot the Session-Cookies
 	* @return bool
 	*/
-	public function autologin($arrCookieData){		
+	public function autologin($arrCookieData){
 		return false;
 	}
 }
-?>

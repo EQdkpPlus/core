@@ -68,17 +68,17 @@ class Manage_Styles extends page_generic{
 	public function exportChangedFiles() {
 		$this->objStyles->exportChangedFiles($this->url_id);
 	}
-	
+
 	public function display_create(){
 		$style_array = array();
 		foreach(register('pdh')->get('styles', 'styles', array(0, true)) as $styleid=>$row){
 			$style_array[$styleid] = $row['style_name'];
 		}
-		
+
 		$this->tpl->assign_vars(array(
-			'DD_STYLE_PARENT' => (new hdropdown('parent', array('options' => $style_array)))->output(),	
+			'DD_STYLE_PARENT' => (new hdropdown('parent', array('options' => $style_array)))->output(),
 		));
-		
+
 		$this->core->set_vars([
 				'page_title'		=> $this->user->lang('create_style'),
 				'template_file'		=> 'admin/manage_styles_create.html',
@@ -90,39 +90,39 @@ class Manage_Styles extends page_generic{
 				'display'			=> true
 		]);
 	}
-	
+
 	public function process_create(){
 		$intParent = $this->in->get('parent', 0);
-		
+
 		$strParentPath = $this->pdh->get('styles', 'templatepath', array($intParent));
-		
+
 		$strNewName = $this->in->get('style_name');
 		$strNewNamePath = utf8_strtolower($strNewName);
 		$strNewNamePath = preg_replace('/[^A-Za-z0-9\-\_]/', '', $strNewNamePath);
-		
+
 		$strBaseFolder = $this->root_path.'/templates/';
 		if(is_dir($strBaseFolder.$strParentPath)){
 			full_copy($strBaseFolder.$strParentPath, $strBaseFolder.$strNewNamePath);
 			$this->pfh->rename( $strBaseFolder.$strNewNamePath.'/'.$strParentPath.'.css', $strBaseFolder.$strNewNamePath.'/'.$strNewNamePath.'.css');
 			$this->pfh->rename( $strBaseFolder.$strNewNamePath.'/'.$strParentPath.'.js', $strBaseFolder.$strNewNamePath.'/'.$strNewNamePath.'.js');
-			
+
 			$strPackageXML = file_get_contents($strBaseFolder.$strNewNamePath.'/package.xml');
 			$strNewPackageXML = preg_replace('/folder\>(.*)\<\/folder/', 'folder>'.$strNewNamePath.'</folder', $strPackageXML);
 			$strNewPackageXML = preg_replace('/name\>(.*)\<\/name/', 'name>'.htmlentities($strNewName).'</name', $strNewPackageXML);
 			$this->pfh->putContent($strBaseFolder.$strNewNamePath.'/package.xml', $strNewPackageXML);
-			
-			
+
+
 			$strSettingsXML= file_get_contents($strBaseFolder.$strNewNamePath.'/settings.xml');
 			$strNewSettingsXML = preg_replace('/template\_path\>(.*)\<\/template\_path/', 'template_path>'.$strNewNamePath.'</template_path', $strSettingsXML);
-			
+
 			$this->pfh->putContent($strBaseFolder.$strNewNamePath.'/settings.xml', $strNewSettingsXML);
-			
+
 			$intStyleID = $this->objStyles->install($strNewNamePath);
-			
+
 			redirect('admin/manage_styles.php'.$this->SID.'&edit=true&styleid='.$intStyleID);
 		}
-		
-		
+
+
 		die();
 	}
 
@@ -233,7 +233,7 @@ class Manage_Styles extends page_generic{
 		$this->objStyles->deleteStyleCache($this->style['template_path']);
 
 		redirect('admin/manage_styles.php'.$this->SID.'&edit=true&styleid='.$this->url_id.'&save=success');
-		
+
 		return;
 	}
 
@@ -274,15 +274,15 @@ class Manage_Styles extends page_generic{
 	public function edit(){
 		// work-around for a known Chrome bug that causes the XSS auditor to incorrectly detect JavaScript inside a textarea
 		@header('X-XSS-Protection: 0');
-		
+
 		if($this->in->get('save') == 'success') {
 			$arrStyle = $this->pdh->get('styles', 'styles', array($this->url_id));
 			$this->objStyles->deleteStyleCache($arrStyle['template_path']);
-			
+
 			$this->core->message( $this->user->lang('admin_update_style_success'), $this->user->lang('success'), 'green');
 		}
-		
-		
+
+
 		$text_decoration = array(
 			'none'			=> 'none',
 			'underline'		=> 'underline',
@@ -582,4 +582,3 @@ class Manage_Styles extends page_generic{
 
 }
 registry::register('Manage_Styles');
-?>

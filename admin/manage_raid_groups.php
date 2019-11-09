@@ -89,20 +89,20 @@ class Manage_Raid_Groups extends page_generic {
 		$this->user->check_auth('a_raidgroups_man');
 
 		$members = $this->in->getArray('group_raid', 'int');
-		
+
 		$intGroup = $this->in->get('g', 0);
 
 		if (count($members) > 0){
 			$this->pdh->put('raid_groups_members', 'add_grpleader', array($members, $intGroup));
 		}
-		
+
 		$message = array('title' => $this->user->lang('success'), 'text' => $this->user->lang('add_grpleader_success'), 'color' => 'green');
 		$this->edit_users($message, $intGroup);
 	}
 
 	public function process_remove_grpleader (){
 		$this->user->check_auth('a_raidgroups_man');
-		
+
 		$intGroup = $this->in->get('g', 0);
 
 		$members = $this->in->getArray('group_raid', 'int');
@@ -116,21 +116,21 @@ class Manage_Raid_Groups extends page_generic {
 	//Save order
 	public function saveorder(){
 		$this->user->check_auth('a_raidgroups_man');
-		
+
 		if(is_array($this->in->getArray('raid_groups', 'string'))) {
 			foreach($this->in->getArray('raid_groups', 'string') as $key => $val){
 				$this->pdh->put('raid_groups', 'update_sortid', array(intval($val['id']), $key));
 			}
 		}
-		
+
 		//Standard
 		$intDefault = $this->in->get('raid_groups_standard', 0);
 		$this->pdh->put('raid_groups', 'update_default', array($intDefault));
-		
+
 		$message = array('title' => $this->user->lang('success'), 'text' => $this->user->lang('save_suc'), 'color' => 'green');
 		$this->display($message);
 	}
-	
+
 	//Delete user-groups
 	public function delete() {
 		$this->user->check_auth('a_raidgroups_man');
@@ -209,17 +209,17 @@ class Manage_Raid_Groups extends page_generic {
 			'display'			=> true
 		]);
 	}
-	
+
 	//Process: Save permissions of a group
 	public function save_group(){
 		$this->user->check_auth('a_raidgroups_man');
 		$intGroupID = $this->in->get('g', 0);
-		
+
 		//General settings
 		$strName = $this->in->get('name');
 		$strDesc = $this->in->get('desc');
 		$strColor = $this->in->get('color');
-		
+
 		if($intGroupID > 0){
 			$retu = $this->pdh->put('raid_groups', 'update_grp', array($intGroupID, $strName, $strDesc, $strColor));
 		} else {
@@ -232,24 +232,24 @@ class Manage_Raid_Groups extends page_generic {
 				return;
 			}
 		}
-		
+
 		$message = array('title' => $this->user->lang('success'), 'text' => $this->user->lang('save_suc'), 'color' => 'green');
 		$this->edit($message, $intGroupID);
 	}
-	
+
 	public function edit($messages=false, $group = false){
 		$groupID  = ($group) ? $group : $this->in->get('g', 0);
-		
+
 		$this->user->check_auth('a_raidgroups_man');
-		
+
 		if($messages) {
 			$this->pdh->process_hook_queue();
 			$this->core->messages($messages);
 		}
-		
+
 		//Get Group-name
 		$group_name = $this->pdh->get('raid_groups', 'name', array($groupID));
-						
+
 		$memberships = $this->pdh->get('raid_groups_users', 'memberships_status', array($this->user->id));
 		$this->tpl->assign_vars(array(
 				'S_IS_IN_GROUP'			=> (isset($memberships[$groupID])) ? true : false,
@@ -258,8 +258,8 @@ class Manage_Raid_Groups extends page_generic {
 				'GRP_DESC'				=> $this->pdh->get('raid_groups', 'desc', array($groupID)),
 				'GRP_COLOR'				=> (new hcolorpicker('color', array('value' => $this->pdh->get('raid_groups', 'color', array($groupID)))))->output(),
 		));
-		
-		
+
+
 		$this->core->set_vars([
 				'page_title'		=> $this->user->lang('manage_user_group').': '.sanitize($group_name),
 				'template_file'		=> 'admin/manage_raid_groups_edit.html',
@@ -317,11 +317,11 @@ class Manage_Raid_Groups extends page_generic {
 					'RANK'			=> $this->pdh->get('member', 'html_rankname', array($memberid)),
 					'ACTIVE'		=> ($this->pdh->get('member', 'active', array($memberid)) == '1') ? '<i class="eqdkp-icon-online"></i>' : '<i class="eqdkp-icon-offline"></i>',
 				));
-				
+
 				if($row === "") $addGrpLeaders[$memberid] = sanitize($this->pdh->get('member', 'name', array($memberid)));
-				
+
 				$count[$row]++;
-				
+
 			} else {
 				$not_in[$memberid] = $addGrpLeaders[$memberid] = sanitize($this->pdh->get('member', 'name', array($memberid)));
 			}
@@ -351,9 +351,9 @@ class Manage_Raid_Groups extends page_generic {
 			),
 
 		);
-		
+
 		$this->jquery->Dialog('EditChar', $this->user->lang('uc_edit_char'), array('withid'=>'editid', 'url'=> $this->controller_path.'AddCharacter/'.$this->SID."&adminmode=1&editid='+editid+'", 'width'=>'750', 'height'=>'700'));
-		
+
 
 		$this->tpl->assign_vars(array(
 			'GROUP_NAME'			=> sanitize($group_name),
@@ -423,4 +423,3 @@ class Manage_Raid_Groups extends page_generic {
 	}
 }
 registry::register('Manage_Raid_Groups');
-?>
