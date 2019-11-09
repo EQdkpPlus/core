@@ -124,24 +124,24 @@ class php_check extends install_generic {
 			),
 		);
 	}
-	
+
 	private $checkStatus = null;
-	
+
 	private function check_external_connection(){
 		$strCheckURL = EQDKP_CONNECTION_CHECK_URL;
 
 		if($this->checkStatus == NULL){
 			$objUrlfetcher = registry::register('urlfetcher');
 			$mixResult = $objUrlfetcher->fetch($strCheckURL);
-			
+
 			if($mixResult == "ok"){
 				$this->checkStatus = true;
 			} else {
 				$this->checkStatus = false;
 			}
-			
+
 			return $this->checkStatus;
-			
+
 		} else {
 			return $this->checkStatus;
 		}
@@ -152,7 +152,7 @@ class php_check extends install_generic {
 		if (intval($installed) == -1) return true;
 		return ($this->convert_hr_to_bytes($installed) >= $this->convert_hr_to_bytes($needed)) ? true : false;
 	}
-	
+
 	private function check_crypto(){
 		$pw = register('password');
 		try {
@@ -160,9 +160,9 @@ class php_check extends install_generic {
 		} catch(Exception $e){
 			return false;
 		}
-		
+
 		if(!function_exists('crypt') || !function_exists('password_verify') || !function_exists('hash_equals') || !function_exists('password_needs_rehash') || !function_exists('password_hash')) return false;
-		
+
 		return true;
 	}
 
@@ -289,4 +289,3 @@ class php_check extends install_generic {
 		return $this->do_match_req();
 	}
 }
-?>

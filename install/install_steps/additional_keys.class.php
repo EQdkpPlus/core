@@ -24,11 +24,11 @@ if(!defined('EQDKP_INC')) {
 }
 class additional_keys extends install_generic {
 	public static $before 		= 'admin_user';
-	
+
 	public static function before() {
 		return self::$before;
 	}
-	
+
 	public $next_button		= 'skip';
 
 	public function get_output() {
@@ -60,16 +60,16 @@ class additional_keys extends install_generic {
 			';
 		return $content;
 	}
-	
+
 	public function get_filled_output() {
 		return $this->get_output();
 	}
-	
+
 	public function parse_input() {
 		$strRecaptchaPub = $this->in->get('lib_recaptcha_okey');
 		$strRecaptchaPriv = $this->in->get('lib_recaptcha_pkey');
 		$strRecaptchaType = $this->in->get('recaptcha_type');
-		
+
 		if($strRecaptchaPub != "" && $strRecaptchaPriv != ""){
 			$this->config->set(array(
 				'lib_recaptcha_okey' => $strRecaptchaPub,
@@ -77,8 +77,7 @@ class additional_keys extends install_generic {
 				'recaptcha_type'	=> $strRecaptchaType,
 			));
 		}
-	
+
 		return true;
 	}
 }
-?>

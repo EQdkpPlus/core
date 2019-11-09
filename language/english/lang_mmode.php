@@ -97,5 +97,3 @@ $lang = array(
 						</ul>
 						So if you love EQdkp Plus as much as we do, think about supporting us!',
 );
-
-?>

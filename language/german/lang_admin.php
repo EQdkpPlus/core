@@ -691,7 +691,7 @@ $lang = array(
 "no_group_members" => "Keine Mitglieder vorhanden. Klicken, um Benutzer zur Gruppe hinzuzufügen",
 "no_grpleaders_chars" => "Keine Gruppenleiter vorhanden. Klicken, um Charaktere als Gruppenleiter hinzuzufügen",
 "no_group_members_chars" => "Keine Mitglieder vorhanden. Klicken, um Charaktere zur Gruppe hinzuzufügen",
-"add_member_to_groupleader" => "Charakter zu Gruppenleiter machen",		
+"add_member_to_groupleader" => "Charakter zu Gruppenleiter machen",
 "add_user_to_groupleader" => "Benutzer zu Gruppenleiter machen",
 "add_selected_to_group" => "Ausgewählte Benutzer hinzufügen",
 "add_selected_char_to_group" => "Ausgewählte Charaktere hinzufügen",
@@ -1929,6 +1929,5 @@ $lang = array(
 		"manmdkp_info_without_twinks" => "Twinks werden aktuell nicht angezeigt, so dass der Hauptcharakter der Twinks deren Punkte erhält.<br />Du kannst diese <a href='manage_settings.php#fragment-chars'>Einstellung hier</a> ändern, so dass auch Twinks angezeigt werden und jeder Charakter seine eigenen Punkte erhält.",
 		"manmdkp_info_with_twinks" => "Da Twinks angezeigt werden, erhält jeder Charakter seine eigenen Punkte.<br />Du kannst diese <a href='manage_settings.php#fragment-chars'>Einstellung hier</a> ändern, so dass nur der Hauptcharakter angezeigt wird und die Punkte alle seiner Twinks erhält.",
 		"manmdkp_info_pointsystem_info" => "Auch das gewählte Punktesystem hat Einfluss auf die Berechnung der Punkte, da diese eben je nach System anders berechnet werden. Du kannst das Punktesystem <a href='manage_pagelayouts.php'>hier auswählen</a>. Weitere Informationen zu den Punktesystemen findest du in der <a href='https://wiki.eqdkp-plus.eu/wiki/Lootsystems'>Wiki</a>.",
-		
+
 );
-?>

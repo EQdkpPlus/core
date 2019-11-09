@@ -26,11 +26,11 @@ class admin_user extends install_generic {
 	public static $before 		= 'inst_settings';
 
 	public $next_button		= 'create_user';
-	
+
 	//defaults
 	private $username = '';
 	private $useremail = '';
-	
+
 	public static function before() {
 		return self::$before;
 	}
@@ -66,18 +66,18 @@ class admin_user extends install_generic {
  * Simple Password Strength Checker
  * by Siddharth S, www.ssiddharth.com, hello@ssiddharth.com
  * for Net Tuts, www.net.tutsplus.com
- * Version: 1.0, 05.10.2009 	
+ * Version: 1.0, 05.10.2009
  * --------------------------------------------------------------------
  */
 
-$(document).ready(function() 
+$(document).ready(function()
 {
 	var strPassword;
 	var charPassword;
 	var complexity = $("#complexity");
 	var minPasswordLength = 8;
 	var baseScore = 0, score = 0;
-	
+
 	var num = { };
 	num.Excess = 0;
 	num.Upper = 0;
@@ -89,10 +89,10 @@ $(document).ready(function()
 	bonus.Upper = 4;
 	bonus.Numbers = 5;
 	bonus.Symbols = 5;
-	bonus.Combo = 0; 
+	bonus.Combo = 0;
 	bonus.FlatLower = 0;
 	bonus.FlatNumber = 0;
-	
+
 	outputResult();
 	$("#password1").bind("keyup", checkVal);
 	var w = $("#password1").width();
@@ -101,18 +101,18 @@ $(document).ready(function()
 function checkVal()
 {
 	init();
-	
+
 	if (charPassword.length >= minPasswordLength)
 	{
-		baseScore = 50;	
-		analyzeString();	
-		calcComplexity();		
+		baseScore = 50;
+		analyzeString();
+		calcComplexity();
 	}
 	else
 	{
 		baseScore = 0;
 	}
-	
+
 	outputResult();
 }
 
@@ -120,12 +120,12 @@ function init()
 {
 	strPassword= $("#password1").val();
 	charPassword = strPassword.split("");
-		
+
 	num.Excess = 0;
 	num.Upper = 0;
 	num.Numbers = 0;
 	num.Symbols = 0;
-	bonus.Combo = 0; 
+	bonus.Combo = 0;
 	bonus.FlatLower = 0;
 	bonus.FlatNumber = 0;
 	baseScore = 0;
@@ -133,47 +133,47 @@ function init()
 }
 
 function analyzeString ()
-{	
+{
 	for (i=0; i<charPassword.length;i++)
 	{
 		if (charPassword[i].match(/[A-Z]/g)) {num.Upper++;}
 		if (charPassword[i].match(/[0-9]/g)) {num.Numbers++;}
-		if (charPassword[i].match(/(.*[!,@,#,$,%,^,&,*,?,_,~])/)) {num.Symbols++;} 
+		if (charPassword[i].match(/(.*[!,@,#,$,%,^,&,*,?,_,~])/)) {num.Symbols++;}
 	}
-	
+
 	num.Excess = charPassword.length - minPasswordLength;
-	
+
 	if (num.Upper && num.Numbers && num.Symbols)
 	{
-		bonus.Combo = 25; 
+		bonus.Combo = 25;
 	}
 
 	else if ((num.Upper && num.Numbers) || (num.Upper && num.Symbols) || (num.Numbers && num.Symbols))
 	{
-		bonus.Combo = 15; 
+		bonus.Combo = 15;
 	}
-	
+
 	if (strPassword.match(/^[\sa-z]+$/))
-	{ 
+	{
 		bonus.FlatLower = -15;
 	}
-	
+
 	if (strPassword.match(/^[\s0-9]+$/))
-	{ 
+	{
 		bonus.FlatNumber = -35;
 	}
 }
-	
+
 function calcComplexity()
 {
 	score = baseScore + (num.Excess*bonus.Excess) + (num.Upper*bonus.Upper) + (num.Numbers*bonus.Numbers) + (num.Symbols*bonus.Symbols) + bonus.Combo + bonus.FlatLower + bonus.FlatNumber;
-	
-}	
-	
+
+}
+
 function outputResult()
 {
 	if ($("#password1").val()== "")
-	{ 
+	{
 		complexity.html("").removeClass("weak strong stronger strongest").addClass("default");
 	}
 	else if (charPassword.length < minPasswordLength)
@@ -200,7 +200,7 @@ function outputResult()
 }
 
 }
-); 
+);
 </script>
 <style>
 #complexity{padding: 8px;}
@@ -214,11 +214,11 @@ function outputResult()
 ';
 		return $content;
 	}
-	
+
 	public function get_filled_output() {
 		return $this->get_output();
 	}
-	
+
 	public function parse_input() {
 		$this->username = $this->in->get('username');
 		$this->useremail = $this->in->get('user_email');
@@ -236,7 +236,7 @@ function outputResult()
 
 		$password = $this->user->encrypt_password($this->in->get('user_password1'));
 		$this->db->query("TRUNCATE __users;");
-		
+
 		$this->db->prepare("INSERT INTO __users :p")->set(array(
 			'user_id'		=> 1,
 			'username'		=> $this->username,
@@ -259,4 +259,3 @@ function outputResult()
 		return true;
 	}
 }
-?>

@@ -142,7 +142,7 @@ $lang = array(
 	'INST_ERR_PREFIX_INVALID'	=> 'Der angegebene Datenbank-Prefix ist für diesen Datenbanktyp nicht gültig. Bitte versuche einen anderen, entferne alle Zeichen wie Bindestriche, Apostrophe, Slashes oder Backslashes.',
 	'dbcheck_success'		=> 'Die Datenbank wurde überprüft. Es wurden keine Fehler oder Konflikte gefunden. Die Installation kann bedenkenlos fortgesetzt werden.',
 	'delete_ownership_file' => 'Bitte lösche aus Sicherheitsgründen die Datei "database_ownership_file.txt" aus dem Root-Ordner des EQdkp Plus, um mit der Installation fortzufahren.',
-		
+
 	//Step: encryptionkey
 	'encryptkey_info'		=> 'Der Verschlüsselungs-Key wird benötigt, um sensible Daten wie z.B. Email-Adressen verschlüsselt in der Datenbank abzulegen. Bitte bewahre eine Kopie des Schlüssels an einem sicheren Ort auf.',
 	'encryptkey'			=> 'Verschlüsselungs-Key',
@@ -267,4 +267,3 @@ $lang = array(
 						Also wenn ihr EQdkp Plus genauso liebt wie wir, denkt doch mal darüber nach, uns zu unterstützen!<br /><a href="https://eqdkp-plus.eu/Donate.html?" style="background:orange;border-radius:5px;padding:7px;display:inline-block;color:black;"><i class="fa fa-paypal"></i> Jetzt Spenden</a>',
 	'module_externalconnection'	=> 'Externe Verbindungen',
 );
-?>

@@ -35,7 +35,7 @@ class db_access extends install_generic {
 	private $dbname			= '';
 	private $dbuser			= '';
 	private $dbport			= 3306;
-	
+
 	public static function before() {
 		return self::$before;
 	}
@@ -109,7 +109,7 @@ class db_access extends install_generic {
 			$this->pdl->log('install_error', $this->lang['prefix_error']);
 			return false;
 		}
-		
+
 		$arrLocalhost = array('localhost', '127.0.0.1', '127.0.1.1', '::1');
 		if(!in_array($this->dbhost, $arrLocalhost)){
 			$strOwnerShipCreatedFile  = $this->root_path.'osfc.txt';
@@ -118,7 +118,7 @@ class db_access extends install_generic {
 				$this->pfh->putContent($strOwnerShipCreatedFile, 'created');
 				$this->pfh->putContent($strOwnerShipFile, 'created');
 			}
-			
+
 			if(file_exists($strOwnerShipCreatedFile) && !file_exists($strOwnerShipFile)){
 				//echo "all good";
 			} else {
@@ -132,18 +132,18 @@ class db_access extends install_generic {
 		try {
 			$db = dbal::factory(array('dbtype' => $this->dbtype, 'object' => true));
 			$db->connect($this->dbhost, $this->dbname, $this->dbuser, $this->dbpass, $this->dbport);
-		
+
 		} catch(DBALException $e){
 			$this->pdl->log('install_error', $e->getMessage());
 			return false;
 		}
-		
+
 		//Check the Table Prefix
 		if (strpos($this->table_prefix, '.') !== false || strpos($this->table_prefix, '\\') !== false || strpos($this->table_prefix, '/') !== false) {
 			$this->pdl->log('install_error', $this->lang['INST_ERR_PREFIX_INVALID']);
 			return false;
-		}		
-		
+		}
+
 		//Check for existing Installation
 		$arrTables = $db->listTables();
 		foreach($arrTables as $tbl) {
@@ -152,19 +152,19 @@ class db_access extends install_generic {
 				return false;
 			}
 		}
-		
+
 		$this->pdl->log('install_success', $this->lang['dbcheck_success']);
-		
+
 		//Before writing the config-file, we have to check the writing-permissions of the tmp-folder
 		if($this->use_ftp && !$this->pfh->testWrite()){
 			$this->pdl->log('install_error', sprintf($this->lang['ftp_tmpwriteerror'], $this->pfh->get_cachefolder(true)));
 			return false;
 		}
-		
+
 		$this->configfile_fill();
 		registry::$aliases['db'] = 'dbal_'.$this->dbtype;
 		include_once($this->root_path.'libraries/dbal/'.$this->dbtype.'.dbal.class.php');
-		
+
 		if(file_exists($this->root_path.'osfc.txt')) $this->pfh->Delete($this->root_path.'osfc.txt');
 
 		return true;
@@ -190,11 +190,10 @@ class db_access extends install_generic {
 		$content .= 'define("INSTALLED_VERSION", "'.VERSION_INT.'");'."\n\n";
 		$content .= '?>';
 		$this->pfh->putContent($this->root_path.'config.php', $content);
-		
+
 		//Reset Opcache, for PHP7
 		if(function_exists('opcache_reset')){
 			opcache_reset();
 		}
 	}
 }
-?>

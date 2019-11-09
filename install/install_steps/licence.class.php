@@ -24,25 +24,24 @@ if(!defined('EQDKP_INC')) {
 }
 class licence extends install_generic {
 	public $next_button = 'accept';
-	
+
 	public function get_output() {
 		$strOut = $this->lang['welcome'];
 		$strOut .= '<br /><br /><h1>'.$this->lang['licence'].'</h1>';
 		$strOut .= '<div class="licence">'.$this->lang['license_text'].'</div>';
-	
+
 		return $strOut;
 	}
-	
+
 	public function get_filled_output() {
 		$strOut = $this->lang['welcome'];
 		$strOut .= '<br /><br /><h1>'.$this->lang['licence'].'</h1>';
 		$strOut .= '<div class="licence">'.$this->lang['license_text'].'</div>';
-	
+
 		return $strOut;
 	}
-	
+
 	public function parse_input() {
 		return true;
 	}
 }
-?>

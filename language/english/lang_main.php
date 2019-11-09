@@ -1157,5 +1157,3 @@ $lang = array(
 	"user_sett_fs_notifications_user" => "User",
 	"user_sett_fs_notifications_userwall" => "Userwall",
 	);
-
-?>
