@@ -61,5 +61,3 @@ class update_2320 extends sql_update_task {
 	}
 
 }
-
-?>

@@ -59,10 +59,8 @@ class update_2380 extends sql_update_task {
 				break;
 			}
 		}
-				
+
 		return true;
 	}
-	
-}
 
-?>
+}

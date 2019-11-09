@@ -26,6 +26,3 @@ if ( !defined('EQDKP_INC') ){
 $lang['build_pointcache'] = 'Punktecaches erstellen';
 $lang['build_pointcache_info'] = 'Bitte schließe diese Seite erst, wenn alle Aufgaben abgeschlossen sind.';
 $lang['execute_step'] = 'Führe Aufgabe %1$s von %2$s aus';
-
-
-?>

@@ -30,7 +30,7 @@ class update_2100 extends sql_update_task {
 	public $version			= '2.1.0.7'; //new plus-version
 	public $ext_version		= '2.1.0'; //new plus-version
 	public $name			= '2.1.0 Update';
-	
+
 	public function __construct(){
 		parent::__construct();
 
@@ -70,7 +70,7 @@ class update_2100 extends sql_update_task {
 					13			=> 'Ändere Spaltenformat',
 			),
 		);
-		
+
 		// init SQL querys
 		$this->sqls = array(
 			1	=> "ALTER TABLE `__calendar_events` ADD COLUMN `timezone` VARCHAR(255) NULL;",
@@ -88,7 +88,7 @@ class update_2100 extends sql_update_task {
 			13	=> "ALTER TABLE `__articles` CHANGE COLUMN `title` `title` TEXT NOT NULL COLLATE 'utf8_bin'",
 		);
 	}
-	
+
 	public function update_function(){
 		// fetch all events and set timezones
 		$caleventids	= $this->pdh->get('calendar_events', 'id_list');
@@ -99,25 +99,25 @@ class update_2100 extends sql_update_task {
 				$this->pdh->put('calendar_events', 'update_timezone', array($calid, $creator_tz));
 			}
 		}
-		
+
 		// 2.1.0 Update 1
 		$this->ntfy->addNotificationType('calendarevent_new','notification_calendarevent_new', 'calendarevent', 0, 1, 0, '', 0, 'fa-calendar');
-		
+
 		$arrUsers = $this->pdh->get('user', 'id_list', array());
 		foreach($arrUsers as $intUserID){
 			$arrNotificationSettings = $this->pdh->get('user', 'notification_settings', array($intUserID));
 			if(!isset($arrNotificationSettings['ntfy_comment_new_article'])) continue;
-			
+
 			$arrNotificationSettings['ntfy_comment_new_article_categories'] = $arrNotificationSettings['ntfy_comment_new_article'];
 			$arrNotificationSettings['ntfy_comment_new_article'] = 1;
-			
+
 			$this->pdh->put('user', 'update_user', array($intUserID, array('notifications' => serialize($arrNotificationSettings)), false, false));
 		}
 
 		// update the js date settings
 		$this->config->set('default_jsdate_nrml', $this->user->lang('style_jsdate_nrml'));
 		$this->config->set('default_jsdate_short', $this->user->lang('style_jsdate_short'));
-		
+
 		// 2.1.0 Update 2
 		$this->db->query('ALTER TABLE `__styles`
 	DROP COLUMN `body_background`,
@@ -211,13 +211,13 @@ class update_2100 extends sql_update_task {
 		$this->db->query("ALTER TABLE `__styles` ADD COLUMN `misc_color1` VARCHAR(100) NULL DEFAULT NULL COLLATE 'utf8_bin'");
 		$this->db->query("ALTER TABLE `__styles` ADD COLUMN `misc_color2` VARCHAR(100) NULL DEFAULT NULL COLLATE 'utf8_bin'");
 		$this->db->query("ALTER TABLE `__styles` ADD COLUMN `misc_color3` VARCHAR(100) NULL DEFAULT NULL COLLATE 'utf8_bin'");
-		
+
 		$this->db->query("ALTER TABLE `__styles` ADD COLUMN `misc_text1` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_bin'");
 		$this->db->query("ALTER TABLE `__styles` ADD COLUMN `misc_text2` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_bin'");
 		$this->db->query("ALTER TABLE `__styles` ADD COLUMN `misc_text3` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_bin'");
 		$this->db->query("ALTER TABLE `__styles` ADD COLUMN `additional_less` TEXT COLLATE 'utf8_bin' NULL DEFAULT NULL");
 		$this->db->query("ALTER TABLE `__styles` ADD COLUMN `content_highlight_color` VARCHAR(100) NULL DEFAULT NULL COLLATE 'utf8_bin'");
-		
+
 		$arrSet = array(
 				'style_version' => '0.2.0',
 				'body_background_color' => 'rgb(46, 120, 176)',
@@ -296,26 +296,23 @@ class update_2100 extends sql_update_task {
 				',
 				'content_highlight_color' => 'rgb(78, 127, 168)',
 		);
-				
+
 		$this->db->prepare("UPDATE __styles :p WHERE template_path='eqdkp_modern' ")->set($arrSet)->execute();
-		
+
 		$this->pdh->enqueue_hook('styles_update');
-		
+
 		//Reset Template Cache
 		$objStyles = register('styles');
 		$objStyles->deleteStyleCache('eqdkp_modern');
-				
+
 		// 2.1.0 Update 8
 		$this->ntfy->addNotificationType('calendarevent_invitation','notification_calendarevent_invitation', 'calendarevent', 0, 1, 0, '', 0, 'fa-envelope');
 		$this->config->set('calendar_raidleader_autoinvite', 1);
-		
+
 		//Reset Repository
 		$this->pdh->put('repository', 'reset', array());
-		
+
 		$this->pdh->process_hook_queue();
 		return true;
 	}
 }
-
-
-?>

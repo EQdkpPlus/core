@@ -70,7 +70,7 @@ class task_manager_display extends gen_class {
 		if($this->in->get('disable') == true || $this->in->get('start_wizard') != "" || $this->in->get('start_tour') != "" || $this->in->get('no_tour') != ""){
 			if(!$necessary['necessary_tasks'] && !$pfh_error){
 				$this->config->set('pk_maintenance_mode', 0);
-				
+
 				if($this->in->get('start_wizard') == "true") {
 					$redirect_url	= 'admin/wizard.php'.$this->SID;
 				}elseif($this->in->get('start_tour') == "true") {
@@ -99,7 +99,7 @@ class task_manager_display extends gen_class {
 			}
 			return $ret;
 		}
-		
+
 		function sort_plugin_tasks($a, $b) {
 			$ret = strcmp($a['name'], $b['name']);
 			if($ret == 0) {
@@ -107,8 +107,8 @@ class task_manager_display extends gen_class {
 			}
 			return $ret;
 		}
-		
-		
+
+
 		//output tasks
 		if($this->in->get('type', 'home') == 'home'){
 			$update_all = false;
@@ -128,7 +128,7 @@ class task_manager_display extends gen_class {
 						} else {
 							uasort($task_data['necessary_tasks'], 'sort_tasks');
 						}
-						
+
 						foreach($task_data['necessary_tasks'] as $task => $data) {
 							if($data['type'] == $type) {
 								$this->tpl->assign_block_vars('tasks_list.spec_task_list', array(
@@ -172,7 +172,7 @@ class task_manager_display extends gen_class {
 					} else {
 						uasort($task_data[$key], 'sort_tasks');
 					}
-					
+
 					foreach($task_data[$key] as $task => $data) {
 						if($this->in->get('type', 'home') != $data['type'] AND $this->in->get('type', 'home') != 'home') continue;
 						$this->tpl->assign_block_vars('tasks_list.spec_task_list', array(
@@ -221,4 +221,3 @@ class task_manager_display extends gen_class {
 	}
 }
 registry::register('task_manager_display');
-?>

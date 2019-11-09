@@ -57,15 +57,15 @@ class update_23100 extends sql_update_task {
 			while ( $row = $objQuery->fetchAssoc() ) {
 				$intChar = $row['member_id'];
 				$this->db->prepare("DELETE FROM __member_user WHERE member_id=?")->execute($intChar);
-				
+
 				$this->pdh->put('member', 'change_mainid', array($intChar, $intChar));
 			}
 		}
-		
+
 		$this->pdh->enqueue_hook('member_update');
 		$this->pdh->enqueue_hook('user_update');
 		$this->pdh->process_hook_queue();
-		
+
 		//Check mainchar
 		$arrChars = $this->pdh->get('member', 'id_list', array(false, false, false, false));
 		foreach($arrChars as $intCharID){
@@ -77,7 +77,7 @@ class update_23100 extends sql_update_task {
 					//Out of band
 					$this->pdh->put('member', 'change_mainid', array($intCharID, $intCharID));
 				}
-					
+
 				//Überprüfe Ringabhängigkeit von Mainchars
 				$this->pdh->process_hook_queue();
 				if ($intCharID != $intMainChar){
@@ -87,12 +87,10 @@ class update_23100 extends sql_update_task {
 				}
 			}
 		}
-		
+
 		$this->pdh->process_hook_queue();
-		
+
 		return true;
 	}
-	
-}
 
-?>
+}

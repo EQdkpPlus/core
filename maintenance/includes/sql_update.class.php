@@ -29,7 +29,7 @@ if ( !class_exists( "task" ) ) {
 
 class sql_update extends task {
 	public static $shortcuts = array('mmt'	=> 'mmtaskmanager');
-	
+
 	public $form_method		= "get";
 	public $author			= "sql_update";
 	public $version			= "0.0.0";
@@ -90,14 +90,14 @@ class sql_update extends task {
 				if (!$this->db->isEQdkpTable($name) || $name == $this->table_prefix.'logs') continue;
 				$tables[$name] = $name;
 			}
-			
+
 			$strBackupFile = $this->backup->createDatabaseBackup('zip', true, $tables, true);
 			if($strBackupFile !== false){
 				$this->form .= '<h2>'.$this->user->lang('backup').'</h2><i class="fa fa-lg fa-floppy-o icon-green"></i> '.sprintf($this->user->lang('backup_note'), $strBackupFile).'<br /><br />';
 			}
 			$this->blnBackupDone = true;
 		}
-		
+
 		if($this->in->get('single_update', '')) {
 			$this->step_order = array('first', $this->in->get('single_update_code'));
 		} elseif(!$this->in->get('start_sql_update', '')) {
@@ -129,7 +129,7 @@ class sql_update extends task {
 			$this->form		.= '<tr class="row'.$this->row_class.'"><td>'.(($func) ? '<i class="fa fa-check icon-green"></i>' : '<i class="fa fa-times icon-red"></i>').' '.$current->lang['before_update_function'].'</td></tr>';
 		}
 		$this->do_sql($current->sqls, $current->version, $current->lang, $current->name);
-		
+
 		if(method_exists($current, 'output_function')) {
 			$func			= $current->output_function();
 			$this->form 	.= '<tr class="row'.$this->row_class.'"><td>'.$func.'</td></tr>';
@@ -166,7 +166,7 @@ class sql_update extends task {
 			}
 			$this->form .=  $lang[$key].'</td></tr>';
 		}
-		
+
 
 		if($this->plugin_path) {
 			$this->db->prepare("UPDATE __plugins SET version = ? WHERE code = ?;")->execute($version, $this->plugin_path);
@@ -201,4 +201,3 @@ class sql_update extends task {
 	public function is_necessary() { return false; }
 	public function is_applicable(){ return true; }
 }
-?>

@@ -30,10 +30,10 @@ class update_23170 extends sql_update_task {
 	public $version			= '2.3.17.0'; //new plus-version
 	public $ext_version		= '2.3.17'; //new plus-version
 	public $name			= '2.3.17 Update';
-	
+
 	public function __construct(){
 		parent::__construct();
-		
+
 		$this->langs = array(
 				'english' => array(
 						'update_23170'	=> 'EQdkp Plus 2.3.17 Update',
@@ -48,7 +48,7 @@ class update_23170 extends sql_update_task {
 						3	=> 'Verändere Styles-Tabelle',
 				),
 		);
-		
+
 		// init SQL querys
 		$this->sqls = array(
 				1	=> "ALTER TABLE `__plugins` CHANGE COLUMN `version` `version` VARCHAR(20) NOT NULL COLLATE 'utf8_bin';",
@@ -56,7 +56,5 @@ class update_23170 extends sql_update_task {
 				3 	=> "ALTER TABLE `__styles` CHANGE COLUMN `style_version` `style_version` VARCHAR(20) NULL DEFAULT NULL COLLATE 'utf8_bin';",
 		);
 	}
-	
-}
 
-?>
+}

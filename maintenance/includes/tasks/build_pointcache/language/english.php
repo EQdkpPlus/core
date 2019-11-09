@@ -19,12 +19,12 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- 
+
 if (!defined('EQDKP_INC')) {
 	die('You cannot access this file directly.');
 }
 
-//Language: English	
+//Language: English
 //Created by EQdkp Plus Translation Tool on  2014-12-17 23:17
 //File: maintenance/includes/tasks/char_creation_date/language/english.php
 //Source-Language: german
@@ -32,5 +32,3 @@ if (!defined('EQDKP_INC')) {
 $lang['build_pointcache'] = 'Build pointcaches';
 $lang['build_pointcache_info'] = 'Please leave this page only if all steps are completed.';
 $lang['execute_step'] = 'Execute step %1$s of %2$s';
-
-?>
