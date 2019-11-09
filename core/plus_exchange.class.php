@@ -69,7 +69,7 @@ if( !class_exists( "plus_exchange" ) ) {
 					}
 				}
 			}
-			
+
 			//Plugins
 			$plugs = $this->pm->get_plugins(PLUGIN_INSTALLED);
 			if (is_array($plugs)){
@@ -96,7 +96,7 @@ if( !class_exists( "plus_exchange" ) ) {
 					}
 				}
 			}
-			
+
 			if(is_array($module_ids)) {
 				foreach($module_ids as $module_id) {
 					$path = $this->pdh->get('portal', 'path', array($module_id));
@@ -115,7 +115,7 @@ if( !class_exists( "plus_exchange" ) ) {
 					}
 				}
 			}
-			
+
 		}
 
 		public function execute(){
@@ -129,7 +129,7 @@ if( !class_exists( "plus_exchange" ) ) {
 			parse_str($request_body, $request_args['put']);
 			parse_str($request_body, $request_args['delete']);
 			$arrBody = array();
-			
+
 			if(strlen($request_body)){
 				$xml = simplexml_load_string($request_body, "SimpleXMLElement", LIBXML_NOCDATA);
 				if($xml){
@@ -141,9 +141,9 @@ if( !class_exists( "plus_exchange" ) ) {
 						$arrBody = $json;
 					}
 				}
-				
+
 			}
-			
+
 			$this->authenticateUser();
 
 			$function = $request_args['get']['function'];
@@ -163,7 +163,7 @@ if( !class_exists( "plus_exchange" ) ) {
 			} else {
 				$out = $this->error('function not found');
 			}
-			
+
 			if ($request_args['get']['format'] == 'json'){
 				return $this->returnJSON($out);
 			} elseif ($request_args['get']['format'] == 'lua'){
@@ -173,7 +173,7 @@ if( !class_exists( "plus_exchange" ) ) {
 			}
 
 		}
-		
+
 		public function error($strErrorMessage, $arrInfo=array()){
 			$out = array(
 				'status'	=> 0,
@@ -182,26 +182,26 @@ if( !class_exists( "plus_exchange" ) ) {
 			if(count($arrInfo)){
 				$out['info'] = $arrInfo;
 			}
-			
+
 			return $out;
 		}
-		
+
 		private function returnJSON($arrData){
 			if (!isset($arrData['status']) || $arrData['status'] != 0){
 					$arrData['status'] = 1;
 			}
 			return json_encode($arrData);
 		}
-		
+
 		private function returnXML($arrData){
 			if (!is_array($arrData)){
 				$arrData = $this->error('unknown error');
 			}
-			
+
 			if (!isset($arrData['status']) || $arrData['status'] != 0){
 					$arrData['status'] = 1;
 			}
-			
+
 			$xml_array = $this->xmltools->array2simplexml($arrData, 'response');
 
 			$dom = dom_import_simplexml($xml_array)->ownerDocument;
@@ -210,7 +210,7 @@ if( !class_exists( "plus_exchange" ) ) {
 			$string = $dom->saveXML();
 			return trim($string);
 		}
-		
+
 		private function returnLua($arrData, $arrRequestArgs){
 			if (!isset($arrData['status']) || $arrData['status'] != 0){
 				$arrData['status'] = 1;
@@ -219,11 +219,11 @@ if( !class_exists( "plus_exchange" ) ) {
 			$luaParser = new LuaParser((isset($arrRequestArgs['get']['one_table']) && $arrRequestArgs['get']['one_table'] == "false") ? false : true);
 			return $luaParser->array2lua($arrData);
 		}
-		
+
 		private function authenticateUser(){
 			if($this->in->exists('atoken') && strlen($this->in->get('atoken'))){
 				$strToken = $this->in->get('atoken');
-				
+
 				//It's the Admin API Token
 				if($strToken === $this->config->get('api_key')){
 					$this->isCoreAPIToken = true;
@@ -237,12 +237,12 @@ if( !class_exists( "plus_exchange" ) ) {
 						return $intSuperadminID;
 					}
 				}
-				
+
 				//It's an user token
 				$intUserID = $this->user->getUserIDfromDerivedExchangekey($strToken, 'pex_api');
 				$this->user->changeSessionUser($intUserID);
 				return $intUserID;
-				
+
 			} else {
 				$headers = $this->getAuthorizationHeader();
 				if($headers){
@@ -253,7 +253,7 @@ if( !class_exists( "plus_exchange" ) ) {
 					} else {
 						$strToken = trim($headers);
 					}
-					
+
 					//It's the Admin API Token
 					if(strlen($strToken) && $strToken === $this->config->get('api_key')){
 						$this->isCoreAPIToken = true;
@@ -267,7 +267,7 @@ if( !class_exists( "plus_exchange" ) ) {
 							return $intSuperadminID;
 						}
 					}
-					
+
 					//It's an user token
 					$intUserID = $this->user->getUserIDfromDerivedExchangekey($strToken, 'pex_api');
 					$this->user->changeSessionUser($intUserID);
@@ -275,7 +275,7 @@ if( !class_exists( "plus_exchange" ) ) {
 
 				}
 			}
-			
+
 			//User not authenticated, we are still here
 			if($this->hooks->isRegistered('pex_authenticate_user')){
 				$userID = $this->hooks->process('pex_authenticate_user', $this->user->id, true);
@@ -284,7 +284,7 @@ if( !class_exists( "plus_exchange" ) ) {
 
 			return $this->user->id;
 		}
-		
+
 		private function getAuthorizationHeader(){
 			$headers = null;
 			if (isset($_SERVER['Authorization'])) {
@@ -307,10 +307,9 @@ if( !class_exists( "plus_exchange" ) ) {
 			}
 			return $headers;
 		}
-		
+
 		public function getIsApiTokenRequest(){
 			return $this->isCoreAPIToken;
 		}
 	}//end class
 } //end if
-?>

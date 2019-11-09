@@ -254,5 +254,3 @@ if(!class_exists('requirements')) {
 		} */
 	}
 }
-
-?>

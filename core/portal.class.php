@@ -69,43 +69,43 @@ class portal extends gen_class {
 			} else {
 
 				$moduleout = $obj->output();
-	
+
 				$cssOut = '<div class="external_module"><style>';
 				if(!$this->in->get('nocss', 0) && !$this->in->get('iframe', 0)){
 					$cssFile = $this->tpl->get_combined_css();
 					$cssOut .= " ".file_get_contents($cssFile);
 				}
 				$cssOut .= '</style>';
-	
+
 				$out = $cssOut.'<div id="portalbox'.$module_id.'" class="portalbox '.get_class($obj).'">'.(($this->in->get('header', 1)) ?
 						'<div class="portalbox_head">
 							<span class="center" id="txt'.$module_id.'">'.$obj->get_header().'</span>
 						</div>' : ''
 						).'<div class="portalbox_content">
 							<div class="toggle_container">';
-	
+
 				$out .= preg_replace("/(\"|')(".preg_quote($this->server_path, "/").")/", "$1".$this->env->link, $moduleout);
-	
+
 				$out .='</div>
 						</div>
 					</div></div>';
-	
-	
+
+
 				$return = $out;
 			}
 		} else {
 			$return = "You don't have the required permission to view this module.";
 		}
-		
-		
+
+
 		if($this->in->get('iframe', 0)){
-			
+
 			infotooltip_js();
-			
+
 			$this->tpl->assign_vars(array(
 				'WIDGET' => $return
 			));
-			
+
 			$this->core->set_vars(array(
 					'header_format'		=> 'simple',
 					'template_file'		=> 'widget.html',
@@ -113,8 +113,8 @@ class portal extends gen_class {
 					'body_class'		=> 'module-iframe',
 					'display'			=> true)
 			);
-			
-			
+
+
 		} else {
 			return $return;
 		}
@@ -209,7 +209,7 @@ class portal extends gen_class {
 			$this->init_portalsettings();
 		}
 		$out = $this->handle_output($obj);
-		
+
 		return
 '				<div id="portalbox'.$module_id.'" class="portalbox '.get_class($obj).'">
 					<div class="portalbox_head">'.(($this->config->get('collapsable', 'pmod_'.$module_id) == '1') ? '<span class="toggle_button">&nbsp;</span>' : '').'
@@ -285,7 +285,7 @@ class portal extends gen_class {
 				if(!empty($sett['default'])) $this->config->set($name, $sett['default'], 'pmod_'.$id);
 			}
 		}
-		
+
 		return $id;
 	}
 
@@ -531,4 +531,3 @@ abstract class portal_generic extends gen_class {
 
 	abstract public function output();
 }
-?>

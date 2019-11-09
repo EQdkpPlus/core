@@ -605,7 +605,7 @@ if ( !defined('EQDKP_INC') ){
 							}
 
 							.wrapper{
-							
+
 							}
 
 							.header {
@@ -716,14 +716,14 @@ if ( !defined('EQDKP_INC') ){
 
 		private function error_message_footer($blnShowEQdkpLink = true){
 			$out = '';
-			
+
 			if($this->debug_level > 2){
 				$out .= '<br /><br /><h1>System information</h1>
 					<ul><li>PHP Version: '.phpversion().'</li>
 					<li>EQdkp Plus Version: '.VERSION_INT.'</li>
 					</ul>';
 			}
-			
+
 			$out .= '</div>
 
 					</div>
@@ -732,7 +732,7 @@ if ( !defined('EQDKP_INC') ){
 					</div>
 					</body>
 					</html>';
-			
+
 			return $out;
 		}
 
@@ -1003,4 +1003,3 @@ if ( !defined('EQDKP_INC') ){
 			$this->log('deprecated', $name, $backtrace[2]['file'], $backtrace[2]['line'], $backtrace[1]['file'], $backtrace[1]['line']);
 		}
 	}//end class
-?>

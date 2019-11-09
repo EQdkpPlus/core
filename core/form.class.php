@@ -557,4 +557,3 @@ $('[data-equalto]').bind('input', function() {
 }
 
 class FormException extends Exception {}
-?>

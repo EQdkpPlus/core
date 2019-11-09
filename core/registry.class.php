@@ -18,7 +18,7 @@
  *	You should have received a copy of the GNU Affero General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
@@ -26,12 +26,12 @@ if ( !defined('EQDKP_INC') ){
 final class registry extends super_registry{
 	protected static $order = array();
 	protected static $inst = array();
-	
+
 	private static $loaded = array();
-	
+
 	private static $destruct_started = false;
 	private static $all_deps = array();
-	
+
 	public static function load($classname) {
 		if(isset(self::$loaded[$classname])) return true;
 		self::$loaded[$classname] = true;
@@ -49,7 +49,7 @@ final class registry extends super_registry{
 			include_once($path.$lite.$classname.'.class.php');
 		}
 	}
-	
+
 	public static function register($classname, $params=array(), $diff_inst=false) {
 		$hash = 'default';
 		if($diff_inst) {
@@ -76,7 +76,7 @@ final class registry extends super_registry{
 		self::$inst[$classname][$hash]->class_hash = $hash;
 		return self::$inst[$classname][$hash];
 	}
-	
+
 	public static function grab($classname, $hash) {
 		if(isset(self::$inst[$classname][$hash])) return self::$inst[$classname][$hash];
 		return null;
@@ -92,10 +92,10 @@ final class registry extends super_registry{
 		} elseif(registry::class_exists($name)) return self::register($name, $params);
 		return false;
 	}
-	
+
 	/**
 	 * Add a class to the registry, so it's accessable with register();
-	 * 
+	 *
 	 * @param string $strClassname - your classname, e.g. plus_datahandler
 	 * @param string $strLocation - the location of the class, without a rootpath, e.h. plugins/blupp/classes/
 	 * @param string $strAlias - an alias for your classname, for shorter accessability, e.g. pdh
@@ -104,7 +104,7 @@ final class registry extends super_registry{
 	public static function add_class($strClassname, $strLocation, $strAlias=false){
 		if(!isset(registry::$locs[$strClassname])){
 			registry::$locs[$strClassname] = str_replace(registry::get_const('root_path'), "", $strLocation);
-			
+
 			if($strAlias !== false){
 				if(!isset(registry::$aliases[$strAlias])){
 					registry::$aliases[$strAlias] = $strClassname;
@@ -112,8 +112,8 @@ final class registry extends super_registry{
 				}
 			}
 			return $strClassname;
-		} 
-		
+		}
+
 		return false;
 	}
 
@@ -139,7 +139,7 @@ final class registry extends super_registry{
 		self::_destruct($class, $class_hash);
 		#self::$destruct_started = false;
 	}
-	
+
 	private static function _destruct($class, $class_hash='') {
 		if(!empty(self::$all_deps[$class])) {
 			foreach(self::$all_deps[$class] as $classname) {
@@ -150,4 +150,3 @@ final class registry extends super_registry{
 		else unset(self::$inst[$class]);
 	}
 }
-?>

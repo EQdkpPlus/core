@@ -21,23 +21,23 @@
 
 if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
-} 
+}
 
 class messenger extends gen_class {
 
 	public function sendMessage($strMethod, $intToUserID, $strSubject, $strMessage){
-		
+
 		if(is_file($this->root_path.'core/messenger/'.$strMethod.'.messenger.class.php')){
 			include_once($this->root_path.'core/messenger/generic_messenger.class.php');
 			include_once($this->root_path.'core/messenger/'.$strMethod.'.messenger.class.php');
 			$objMessengerMethod = register($strMethod.'_messenger');
 			$blnResult = $objMessengerMethod->sendMessage($intToUserID, $strSubject, $strMessage);
-				
+
 			return $blnResult;
 		}
 		return false;
 	}
-	
+
 	public function getAvailableMessenger($blnAllMethods=false){
 		include_once $this->root_path.'core/messenger/generic_messenger.class.php';
 		$types = array();
@@ -46,7 +46,7 @@ class messenger extends gen_class {
 			while ( $file = @readdir($dir) ){
 				if ((is_file($this->root_path . 'core/messenger/' . $file)) && valid_folder($file)){
 					if ($file == 'generic_messenger.class.php') continue;
-						
+
 					include_once($this->root_path . 'core/messenger/' . $file);
 					$name = substr($file, 0, strpos($file, '.'));
 					$classname = $name.'_messenger';
@@ -59,7 +59,7 @@ class messenger extends gen_class {
 		}
 		return $types;
 	}
-	
+
 	public function getMethodsAdminSettings(){
 		include_once $this->root_path.'core/messenger/generic_messenger.class.php';
 		$types = array();
@@ -69,7 +69,7 @@ class messenger extends gen_class {
 				if ((is_file($this->root_path . 'core/messenger/' . $file)) && valid_folder($file)){
 					if ($file == 'generic_messenger.class.php') continue;
 					$name = substr($file, 0, strpos($file, '.'));
-					
+
 					$settings = $this->getMethodAdminSettings($name);
 					if(is_array($settings)){
 						$types = array_merge($types, $settings);
@@ -79,11 +79,11 @@ class messenger extends gen_class {
 		}
 		return $types;
 	}
-	
+
 	public function getMethodAdminSettings($strMessenger){
 		include_once $this->root_path.'core/messenger/generic_messenger.class.php';
 		$settings = array();
-		
+
 		$file = $strMessenger.'.messenger.class.php';
 		if(is_file($this->root_path . 'core/messenger/' . $file)){
 			include_once($this->root_path . 'core/messenger/' . $file);
@@ -94,10 +94,10 @@ class messenger extends gen_class {
 				$settings = $arrAdminSettings;
 			}
 		}
-		
+
 		return $settings;
 	}
-	
+
 	public function getMethodsUserSettings($blnAllMethods=false){
 		include_once $this->root_path.'core/messenger/generic_messenger.class.php';
 		$types = array();
@@ -106,7 +106,7 @@ class messenger extends gen_class {
 			while ( $file = @readdir($dir) ){
 				if ((is_file($this->root_path . 'core/messenger/' . $file)) && valid_folder($file)){
 					if ($file == 'generic_messenger.class.php') continue;
-	
+
 					$name = substr($file, 0, strpos($file, '.'));
 					$settings = $this->getMethodUserSettings($name);
 					if(is_array($settings)){
@@ -117,11 +117,11 @@ class messenger extends gen_class {
 		}
 		return $types;
 	}
-	
+
 	public function getMethodUserSettings($strMessenger){
 		include_once $this->root_path.'core/messenger/generic_messenger.class.php';
 		$settings = array();
-	
+
 		$file = $strMessenger.'.messenger.class.php';
 		if(is_file($this->root_path . 'core/messenger/' . $file)){
 			include_once($this->root_path . 'core/messenger/' . $file);
@@ -132,10 +132,10 @@ class messenger extends gen_class {
 				$settings = $arrAdminSettings;
 			}
 		}
-	
+
 		return $settings;
 	}
-	
+
 	public function isAvailable($strMessenger){
 		include_once $this->root_path.'core/messenger/generic_messenger.class.php';
 
@@ -144,12 +144,11 @@ class messenger extends gen_class {
 			include_once($this->root_path . 'core/messenger/' . $file);
 			$name = substr($file, 0, strpos($file, '.'));
 			$classname = $name.'_messenger';
-			
+
 			$blnIsAvailable = register($classname)->isAvailable();
 			return $blnIsAvailable;
 		}
-		
+
 		return false;
 	}
 }
-?>

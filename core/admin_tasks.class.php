@@ -348,5 +348,3 @@ class admin_tasks extends gen_class {
 		}
 	}
 }
-
-?>

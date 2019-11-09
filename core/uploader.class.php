@@ -346,4 +346,3 @@ class uploader extends gen_class {
 		return $output;
 	}
 }	//close class
-?>

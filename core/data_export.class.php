@@ -24,11 +24,11 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class content_export extends gen_class {
-	
+
 	private $timestamp;
 	private $date_created;
 	private $presets = array();
-	
+
 	public function __construct(){
 		$this->timestamp		= $this->time->time;
 		$this->date_created		= date("d.m.y G:i:s");
@@ -39,19 +39,19 @@ class content_export extends gen_class {
 			array('name' => 'current', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 		);
 	}
-	
+
 	public function export($withMemberItems = false, $withMemberAdjustments = false, $filter = false, $filterid = false, $blnIncludeHTML = false){
 		$arrPresets = array();
 		foreach ($this->presets as $preset){
 			$pre = $this->pdh->pre_process_preset($preset['name'], $preset);
 				if(empty($pre))
 					continue;
-					
+
 			$arrPresets[$pre[0]['name']] = $pre[0];
 		}
-	
+
 		$out = array();
-		
+
 		$out['eqdkp'] = array(
 			'name'				=> unsanitize($this->config->get('guildtag')),
 			'guild'				=> unsanitize($this->config->get('guildtag')),
@@ -66,7 +66,7 @@ class content_export extends gen_class {
 			'language'			=> $this->config->get('game_language'),
 			'server_name'		=> unsanitize($this->config->get('servername')),
 			'server_loc'		=> $this->config->get('uc_server_loc'),
-		);				
+		);
 		$out['info'] = array(
 			'with_twink'		=> (intval($this->config->get('show_twinks'))) ? 0 : 1,
 			'date'				=> $this->date_created,
@@ -76,11 +76,11 @@ class content_export extends gen_class {
 		);
 
 		$mdkps = $this->pdh->get('multidkp', 'id_list');
-		
+
 		//Alle Member
 		$total_points = 0;
 		$members = $this->pdh->sort($this->pdh->get('member', 'id_list'), 'member', 'name');
-		
+
 		//Filter here
 		if ($filter && $filterid){
 			switch($filter){
@@ -90,11 +90,11 @@ class content_export extends gen_class {
 				break;
 			}
 		}
-		
+
 		if (is_array($members) && count($members) > 0) {
-			foreach ($members as $member){		
+			foreach ($members as $member){
 				$points = array();
-				foreach ($mdkps as $mdkp){				
+				foreach ($mdkps as $mdkp){
 					$points['multidkp_points:'.$mdkp] = array(
 						'multidkp_id'	=> $mdkp,
 						'points_current' => (isset($arrPresets['current'])) ? runden($this->pdh->get($arrPresets['current'][0], $arrPresets['current'][1], $arrPresets['current'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => false))) : false,
@@ -105,7 +105,7 @@ class content_export extends gen_class {
 						'points_spent_with_twink'	=> (isset($arrPresets['spent'])) ? runden($this->pdh->get($arrPresets['spent'][0], $arrPresets['spent'][1], $arrPresets['spent'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => true))) : false,
 						'points_adjustment'	=> (isset($arrPresets['adjustment'])) ? runden($this->pdh->get($arrPresets['adjustment'][0], $arrPresets['adjustment'][1], $arrPresets['adjustment'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => false))) : false,
 						'points_adjustment_with_twink'	=> (isset($arrPresets['adjustment'])) ? runden($this->pdh->get($arrPresets['adjustment'][0], $arrPresets['adjustment'][1], $arrPresets['adjustment'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => true))) : false,
-						
+
 					);
 					if ($blnIncludeHTML){
 						$points['multidkp_points:'.$mdkp]['points_current_html'] 			= (isset($arrPresets['current'])) ? $this->pdh->geth($arrPresets['current'][0], $arrPresets['current'][1], $arrPresets['current'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => false)) : false;
@@ -116,7 +116,7 @@ class content_export extends gen_class {
 						$points['multidkp_points:'.$mdkp]['points_spent_with_twink_html']	= (isset($arrPresets['spent'])) ? $this->pdh->geth($arrPresets['spent'][0], $arrPresets['spent'][1], $arrPresets['spent'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => true)) : false;
 						$points['multidkp_points:'.$mdkp]['points_adjustment_html']			= (isset($arrPresets['adjustment'])) ? $this->pdh->geth($arrPresets['adjustment'][0], $arrPresets['adjustment'][1], $arrPresets['adjustment'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => false)) : false;
 						$points['multidkp_points:'.$mdkp]['points_adjustment_with_twink_html']	= (isset($arrPresets['adjustment'])) ? $this->pdh->geth($arrPresets['adjustment'][0], $arrPresets['adjustment'][1], $arrPresets['adjustment'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => true)) : false;
-					
+
 					}
 				}
 
@@ -133,7 +133,7 @@ class content_export extends gen_class {
 							);
 					}
 				}
-				
+
 				$adjustments = array();
 				if ($withMemberAdjustments){
 					$adj_list = $this->pdh->get('adjustment', 'adjsofmember', array($member));
@@ -148,7 +148,7 @@ class content_export extends gen_class {
 						$i++;
 					}
 				}
-				
+
 				$out['players']['player:'.$member] = array(
 					'id'			=> $member,
 					'name'			=> $this->game->handle_export_charnames(unsanitize($this->pdh->get('member', 'name', array($member))), $member),
@@ -164,12 +164,12 @@ class content_export extends gen_class {
 					'items'			=> $items,
 					'adjustments'	=> $adjustments,
 				);
-				
+
 			}
 		} else {
 			$out['players'] = '';
 		}
-	
+
 		//Alle MultiDKP-Konten
 		if (is_array($mdkps) && count($mdkps) > 0) {
 			foreach ($mdkps as $mdkp){
@@ -199,7 +199,7 @@ class content_export extends gen_class {
 		} else {
 			$out['multidkp_pools'] = '';
 		}
-		
+
 		//Alle Itempools
 		$itempools = $this->pdh->get('itempool', 'id_list');
 		if (is_array($itempools) && count($itempools) > 0) {
@@ -213,8 +213,7 @@ class content_export extends gen_class {
 		} else {
 			$out['itempools'] = '';
 		}
-		
+
 		return $out;
 	}
 }
-?>

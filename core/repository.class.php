@@ -26,10 +26,10 @@ if ( !defined('EQDKP_INC') ){
 if (!class_exists("repository")) {
 	class repository extends gen_class {
 		public static $shortcuts = array('puf'	=> 'urlfetcher', 'objStyles'=> 'styles', 'email'=>'MyMailer');
-		
+
 		//Dummy URL, should be a secure connection
 		private $RepoEndpoint	= "";
-		
+
 		//EQdkp Plus Core Root Cert
 		private $coreRootCert = "-----BEGIN CERTIFICATE-----
 MIIB4DCCAUmgAwIBAgIBAzANBgkqhkiG9w0BAQUFADAtMRMwEQYDVQQKEwpFUWRr
@@ -44,7 +44,7 @@ khKbaXWms2Ezys2QuqMINYYi+g3BbO2AgZDVZ30NMn0WUldSvtykpkPydq+tSBlD
 jVY5Fd7pm4adLV4kkyFRH2sWXlLJdLj8HwEvqFM4W/gDPC1B0hdulfkeXB75aINR
 uN0FRg==
 -----END CERTIFICATE-----";
-		
+
 		//EQdkp Plus Packages Root Cert
 		private $packagesRootCert = "-----BEGIN CERTIFICATE-----
 MIIB9DCCAV2gAwIBAgIBBTANBgkqhkiG9w0BAQUFADAtMRMwEQYDVQQKEwpFUWRr
@@ -60,13 +60,13 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 4YMCKcIdasYT5llZeNhnuGvEXG4m/W2o
 -----END CERTIFICATE-----";
 
-		
+
 		public $cachetime		= 86400; //1 day
 		public $categories		= array(1,2,3,7,8,11);
 		public $update_count	= 0;
 		private $extensions 	= array();
 		public $updates = array();
-		private $plusversion, $user_auth, $new_version = false;		
+		private $plusversion, $user_auth, $new_version = false;
 
 		//Constructor
 		public function __construct(){
@@ -78,10 +78,10 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 			if ($this->getChannel() != "stable"){
 				$this->cachetime = 3600 * 3; //3 hours
 			}
-			
+
 			if(!$this->pdl->type_known("repository")) $this->pdl->register_type("repository", null, null, array(3,4), true);
 		}
-		
+
 		public function getChannel(){
 			if (defined('REPO_CHANNEL')){
 				switch (REPO_CHANNEL){
@@ -90,14 +90,14 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 					case 'dev' : return "dev";
 				}
 			}
-			
+
 			if(defined('VERSION_WIP') && VERSION_WIP){
 				return "beta";
 			}
-			
+
 			return "stable";
 		}
-		
+
 		private function getChannelURL(){
 			if (defined('REPO_CHANNEL')){
 				switch (REPO_CHANNEL){
@@ -106,13 +106,13 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 					case 'dev' : return "&channel=dev";
 				}
 			}
-			
+
 			if(defined('VERSION_WIP') && VERSION_WIP){
 				return "&channel=beta";
 			}
 			return "";
 		}
-		
+
 		//Init Lifeupdate
 		public function InitLifeupdate($new_version){
 			$this->new_version = $new_version;
@@ -163,7 +163,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 		private function fetchExtensionList(){
 			$response = $this->puf->fetch($this->RepoEndpoint.'extension_list'.$this->getChannelURL()."&core=".$this->plusversion, "", 10);
 			if ($response){
-				$this->ResetExtensionList();		
+				$this->ResetExtensionList();
 				$arrJson = json_decode($response);
 				if ($arrJson && (int)$arrJson->status == 1){
 					$extensions = $arrJson->extensions;
@@ -172,7 +172,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 							if (!in_array((int)$ext->category, $this->categories)) {
 								continue;
 							}
-							
+
 							$this->pdh->put('repository', 'insert', array(array(
 								'plugin'			=> (string)$ext->plugin,
 								'plugin_id'			=> (int)$ext->plugin_id,
@@ -199,9 +199,9 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 				}
 			} else {
 				$this->pdl->log('repository', 'Could not fetch Extension List from EQdkp Server');
-				
+
 				//If EQdkp Plus Server could not be reached, try again next day
-				$this->pdh->put('repository', 'setUpdateTime', array($this->time->time));	
+				$this->pdh->put('repository', 'setUpdateTime', array($this->time->time));
 				$plist = $this->pdh->get('repository', 'repository');
 				if ($plist == null){
 					$this->pdh->put('repository', 'insert', array(array(
@@ -209,7 +209,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 						'name'				=> 'no_connection',
 					)));
 				}
-				$this->pdh->process_hook_queue();				
+				$this->pdh->process_hook_queue();
 			}
 			return false;
 		}
@@ -219,13 +219,13 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 			$response = $this->puf->fetch($this->RepoEndpoint.'downloadid_link&id='.$intExtensionID.'&core='.$this->plusversion.'&category='.intval($intCategory).'&name='.urlencode($strExtensionName), "", 30);
 			$arrJson = json_decode($response);
 			if(!$response || !$arrJson) return array('status' => 0, 'error' => 500);
-			
+
 			if((int)$arrJson->status == 0 || !strlen((string)$arrJson->link)){
 				return array('status' => 0, 'error' => ((string)$arrJson->error == 'blacklistet') ? 403 : 404);
 			} elseif((int)$arrJson->status == 1) {
 				return array('status' => 1, 'link' => (string)$arrJson->link, 'hash' => (string)$arrJson->hash, 'signature' => (string)$arrJson->signature);
 			}
-			
+
 			return false;
 		}
 
@@ -234,13 +234,13 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 			$response = $this->puf->fetch($this->RepoEndpoint.'core_update&old='.$this->plusversion.'&new='.$this->new_version.$this->getChannelURL(), "", 5);
 			$arrJson = json_decode($response);
 			if(!$response || !$arrJson) return array('status' => 0, 'error' => 500);
-			
+
 			if((int)$arrJson->status == 0 || !strlen((string)$arrJson->link)){
 				return array('status' => 0, 'error' => ((string)$arrJson->error == 'blacklistet') ? 403 : 404);
 			} elseif((int)$arrJson->status == 1) {
 				return array('status' => 1, 'link' => (string)$arrJson->link, 'hash' => (string)$arrJson->hash, 'signature' => (string)$arrJson->signature, 'note' => (($arrJson->releasenote) ? (string)$arrJson->releasenote : ''));
 			}
-			
+
 			return false;
 		}
 
@@ -256,7 +256,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 			}
 			return false;
 		}
-		
+
 		// verify package
 		public function verifyPackage($src, $hash, $signature, $type="core",$blnDeleteIfWrong = true, $blnAgain = false){
 			if (file_exists($src) && $signature != "" && $hash != ""){
@@ -269,26 +269,26 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 				$strFileHash = sha1_file($src);
 
 				$x509 = new phpseclib\File\X509();
-		
+
 				foreach ($arrVerified as $intermCert){
 					//Check, if $hash is valid
 					$cert = $x509->loadX509($intermCert);
 					$pkey = $x509->getPublicKey()->getPublicKey();
 					$rsa = new \phpseclib\Crypt\RSA();
-					
+
 					$rsa->setSignatureMode(2);
 					$rsa->loadKey($pkey);
 					$blnVerified = $rsa->verify($hash, base64_decode($signature));
-					
+
 					//If hashes are eqal, it's a valid package
 					if ($blnVerified && ($strFileHash === $hash)) {
 						$this->pdl->log('repository', 'Verify Package: success');
 						return true;
 					}
 				}
-				
+
 				//We are still here, package not valid
-				
+
 				//load new intermediate Cert
 				$this->loadIntermediateCert();
 				//do the thing again
@@ -300,7 +300,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 			$this->pdl->log('repository', 'Verify Package: failed');
 			return false;
 		}
-		
+
 		//Get local Intermediate Cert
 		private function getIntermediateCerts(){
 			if (is_file($this->pfh->FilePath('eqdkp_interm_cert.crt', 'eqdkp/certs', false))){
@@ -315,7 +315,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 			}
 			return false;
 		}
-		
+
 		private function parseIntermediateCerts($strCerts){
 			$count = preg_match_all('#//(.*?)(-----BEGIN CERTIFICATE-----)(.*?)(-----END CERTIFICATE-----)#s', $strCerts, $arr, PREG_PATTERN_ORDER);
 			$arrCerts = array();
@@ -327,7 +327,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 			}
 			return $arrCerts;
 		}
-		
+
 		//Download the Intermediate Cert from our server
 		private function loadIntermediateCert(){
 			$response = $this->puf->fetch($this->RepoEndpoint.'interm_cert', "", 5);
@@ -345,7 +345,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 				return false;
 			}
 		}
-		
+
 		//Download Revoke List from our server
 		private function loadRevokeList(){
 
@@ -363,7 +363,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 				return false;
 			}
 		}
-		
+
 		//Parses Revoke List and returns an array with all revoked certs
 		private function getRevokeList(){
 			$strRevokeList = false;
@@ -375,19 +375,19 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 					$strRevokeList = file_get_contents($this->pfh->FilePath('crl.txt', 'eqdkp/certs'));
 				}
 			}
-			
+
 			if ($strRevokeList && strlen($strRevokeList)){
 				$arrRevokeList = array();
 				$convert = explode("\n", $strRevokeList);
-				for ($i=0;$i<count($convert);$i++) {	
+				for ($i=0;$i<count($convert);$i++) {
 					$arrRevokeList[] = strtolower(str_replace(':', '', $convert[$i]));
 				}
 				return $arrRevokeList;
 			}
-			
+
 			return false;
 		}
-		
+
 		//Checks if an cert is revoked. Returns true when revoked, otherwise false
 		private function checkIfRevoked($cert){
 			$arrRevokeList = $this->getRevokeList();
@@ -400,18 +400,18 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 			}
 			return false;
 		}
-		
+
 		//Check if Intermediate Cert is valid
 		private function verifyIntermediateCert($intermCert, $type="core"){
 			//Root Cert revoked?
 			if ($this->checkIfRevoked($this->coreRootCert) || $this->checkIfRevoked($this->packagesRootCert)) {
 				$this->config->set('rootcert_revoked', 1);
-				return false; 
+				return false;
 			}
-			
+
 			//Intermediate Cert revoked?
 			if ($this->checkIfRevoked($intermCert)) { return false; }
-			
+
 			$rootCert = ($type == 'core') ? $this->coreRootCert : $this->packagesRootCert;
 
 			$x509 = new phpseclib\File\X509();
@@ -419,12 +419,12 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 			$cert = $x509->loadX509($intermCert); // see google.crt
 			if (!$x509->validateSignature()) return false;
 
-			if (!$x509->validateDate()) return false;			
-			
+			if (!$x509->validateDate()) return false;
+
 			return true;
 		}
-		
-		
+
+
 		// unarchive package
 		public function unpackPackage($file, $dest){
 			$archive = registry::register('zip', array($file));
@@ -524,7 +524,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 											//Module belongs to an plugin
 											$moduleid = array_search($value['plugin'], $arrPortalList);
 											if (strlen($this->pdh->get('portal', 'plugin', array($moduleid)))) break;
-											
+
 											$blnUpdateAvailable = (compareVersion(trim($value['version']),$this->pdh->get('portal', 'version', array($moduleid)))==1);
 											if ($blnUpdateAvailable) $recent_version = $this->pdh->get('portal', 'version', array($moduleid));
 										}
@@ -544,7 +544,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 											}
 										}
 								break;
-								
+
 								//Languages
 								case 11: 	$arrLanguages = $arrLanguageVersions = array();
 											// Build language array
@@ -558,8 +558,8 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 													}
 												}
 											}
-								
-			
+
+
 											if(isset($arrLanguages[$value['plugin']])){
 												$blnUpdateAvailable = (compareVersion(trim($value['version']),$arrLanguageVersions[$value['plugin']])==1);
 												if ($blnUpdateAvailable) $recent_version = $arrLanguageVersions[$value['plugin']];
@@ -634,7 +634,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 								'md5_old'=> (string)$file->attributes()->md5_old,
 							);
 						}
-					} 
+					}
 					return $arrChanged;
 				}
 			}
@@ -668,16 +668,16 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 
 			return true;
 		}
-		
+
 		public function installLanguage($source){
 			$arrFolders = scandir($source);
 			foreach($arrFolders as $strSubfolder){
 				if($strSubfolder == '.' || $strSubfolder == '..') continue;
-				
+
 				if($strSubfolder == 'core') $this->full_copy($source.'core', $this->root_path.'core/');
 				if($strSubfolder == 'language') $this->full_copy($source.'language', $this->root_path.'language/');
 				if($strSubfolder == 'maintenance') $this->full_copy($source.'maintenance', $this->root_path.'maintenance/');
-				
+
 				if($strSubfolder == 'games') {
 					$arrGames = scandir($source.'games');
 					foreach($arrGames as $strGame){
@@ -687,7 +687,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 						}
 					}
 				}
-				
+
 				if($strSubfolder == 'portal') {
 					$arrGames = scandir($source.'portal');
 					foreach($arrGames as $strGame){
@@ -697,7 +697,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 						}
 					}
 				}
-				
+
 				if($strSubfolder == 'plugins') {
 					$arrGames = scandir($source.'plugins');
 					foreach($arrGames as $strGame){
@@ -710,10 +710,10 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 			}
 			return true;
 		}
-		
-		public function checkRequirementsForNewCore($strRequirementsString, $updates){			
+
+		public function checkRequirementsForNewCore($strRequirementsString, $updates){
 			if(!$strRequirementsString || $strRequirementsString == "") return true;
-			
+
 			$blnRequirement = true;
 			$arrFailed  = array();
 			$arrArray = json_decode($strRequirementsString, true);
@@ -724,7 +724,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 					$blnRequirement = false;
 					$arrFailed[] = 'PHP Version '.$updates['dep_php'].' required, '.PHP_VERSION.' available';
 				}
-				
+
 				//PHP Memory
 				if(isset($arrArray['php_memory'])){
 					$installed = ini_get('memory_limit');
@@ -750,14 +750,14 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 						} else {
 							$blnResult = ($iniVal == substr($val, 1));
 						}
-						
+
 						if(!$blnResult){
 							$blnRequirement = false;
 							$arrFailed[] = 'PHP Ini Setting  '.$val.' required, '.$iniVal.' available';
 						}
 					}
 				}
-				
+
 				//Extensions
 				if(isset($arrArray['extensions'])){
 					foreach($arrArray['extensions'] as $val){
@@ -782,7 +782,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 						}
 					}
 				}
-				
+
 				//PHP Functions
 				if(isset($arrArray['functions'])){
 					foreach($arrArray['functions'] as $val){
@@ -809,16 +809,16 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 				}
 
 			}
-			
+
 			return (!$blnRequirement) ? $arrFailed : true;
 		}
-		
+
 		private function check_php_limit($needed){
 			$installed = ini_get('memory_limit');
 			if (intval($installed) == -1) return true;
 			return ($this->convert_hr_to_bytes($installed) >= $this->convert_hr_to_bytes($needed)) ? true : false;
 		}
-		
+
 		function convert_hr_to_bytes( $size ) {
 			( $bytes = (float) $size )
 			&& ( $last = strtolower( substr( $size, -1 ) ) )
@@ -827,7 +827,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 			;
 			return round( $bytes );
 		}
-		
+
 		public function notifyAdminForUpdate($arrPluginDetails){
 			$blnSendMail = false;
 			if($this->config->get('notify_updates_email')){
@@ -837,13 +837,13 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 				} else {
 					$strVersion = $arrAlreadySaved['version'];
 					$intDate = $arrAlreadySaved['date'];
-					
+
 					if($strVersion != $arrPluginDetails['version_int'] || ((intval($intDate) + 86400*14) < $this->time->time) ){
 						$blnSendMail = true;
 					}
-					
+
 				}
-				
+
 				if($blnSendMail){
 					$bodyvars = array(
 							'VERSION_RECENT'=> VERSION_EXT,
@@ -852,16 +852,15 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 							'EQDKP_URL'		=> $this->env->link,
 							'GUILD'			=> $this->config->get('guildtag'),
 					);
-					
+
 					$adminmail	= register('encrypt')->decrypt($this->config->get('admin_email'));
-					
+
 					$this->email->SendMailFromAdmin($adminmail, $this->user->lang('new_coreupdate_subject'), 'new_coreupdate.html', $bodyvars, $this->config->get('lib_email_method'));
-					
+
 					$this->config->set('notified_updates', array('version' => $arrPluginDetails['version_int'], 'date' => $this->time->time));
 				}
 			}
 		}
 	}
-	
+
 }
-?>

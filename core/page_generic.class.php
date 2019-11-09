@@ -201,4 +201,3 @@ if(!class_exists('page_generic')){
 		}
 	}
 }
-?>

@@ -308,7 +308,7 @@ class core extends gen_class {
 						});
 
 					});", 'static_docready');
-			
+
 			if(strlen($this->user->style['portal_width']) > 2 && (strpos($this->user->style['portal_width'], '%') == false)){
 				$this->tpl->add_js("
 					$(function(){
@@ -317,7 +317,7 @@ class core extends gen_class {
 								$( 'body' ).removeClass('fixed_width');
 							}
 						}
-						
+
 					});", 'static_docready');
 			}
 
@@ -381,7 +381,7 @@ class core extends gen_class {
 				}
 			});
 			", 'eop');
-			
+
 			$this->tpl->add_js('
 				function show_embedded_content(obj){
 					var parent = $(obj).parent().parent().parent();
@@ -395,7 +395,7 @@ class core extends gen_class {
 					}
 				}
 			', "static");
-			
+
 			//Lightbox Zoom-Image
 			$this->tpl->add_js("
 			$('a.lightbox,  a[rel=\"lightbox\"]').each(function(index) {
@@ -403,11 +403,11 @@ class core extends gen_class {
 				var image_obj = $(this).find('img');
 				var image_parent = image_obj.parent();
 				var image_string = image_parent.html();
-					
+
 				var fullimage = $(this).attr('href');
 				var imagetitle = image_obj.attr('alt');
 				$(this).attr('title', imagetitle);
-					
+
 				var image_style = $(this).children().attr('style');
 				if (image_style) {
 					if (image_style == \"display: block; margin-left: auto; margin-right: auto;\") image_style = image_style + \" text-align:center;\";
@@ -549,7 +549,7 @@ class core extends gen_class {
 				$admin_functions = register('admin_functions');
 				$admin_functions->setAdminTooltip();
 			}
-			
+
 			if($this->hooks->isRegistered('coreclass_page_header')){
 				$this->hooks->process('coreclass_page_header');
 			}
@@ -675,9 +675,9 @@ class core extends gen_class {
 			$arrItems = $this->menu_items($show_hidden);
 			$arrSortation = $this->config->get('mainmenu');
 			$arrExistingHidden = ($this->config->get('mainmenu_hidden')) ? json_decode($this->config->get('mainmenu_hidden'), true) :  array();
-			
+
 			$arrHashArray = array();
-			
+
 			foreach ($arrItems as $key => $item){
 				$strHash = $this->build_link_hash($item);
 				$arrItems[$key]['_hash'] = $this->build_link_hash($item);
@@ -687,7 +687,7 @@ class core extends gen_class {
 			$arrOut = array();
 			$arrOutOneLevel = array();
 			$arrToDo = $arrHashArray;
-			
+
 			foreach($arrSortation as $key => $item){
 				$show = true;
 				$hidden = $item['item']['hidden'];
@@ -706,7 +706,7 @@ class core extends gen_class {
 				//Second Level
 				if (isset($item['_childs']) && is_array($item['_childs'])){
 					$secondlevel_show = $show;
-					
+
 					foreach($item['_childs'] as $key2 => $item2){
 						$hidden = $item2['item']['hidden'];
 						if ($hidden && !$show_hidden) $show = false;
@@ -740,7 +740,7 @@ class core extends gen_class {
 					}
 				}
 			}
-			
+
 			foreach($arrToDo as $hash => $item){
 				$item['hidden'] = (isset($item['article']) || isset($item['category']) || isset($item['default_hide'])) ? 1 : 0;
 				$item['hidden'] = (isset($arrExistingHidden[$item['_hash']])) ? 1 : $item['hidden'];
@@ -748,10 +748,10 @@ class core extends gen_class {
 				$arrOut[] = $item;
 				$arrOutOneLevel[] = $item;
 			}
-			
+
 			$arrOut = $this->hooks->process("menu", $arrOut, true);
 			$arrOutOneLevel = $this->hooks->process("menu_onelevel", $arrOutOneLevel, true);
-			
+
 			return ($blnOneLevel) ? $arrOutOneLevel: $arrOut;
 		}
 
@@ -886,10 +886,10 @@ class core extends gen_class {
 							}
 
 						}
-												
+
 						$tmpHtml .= $subHtml;
 						$tmpHtml .= '</ul></li>';
-						
+
 						if(!(strlen($subHtml) === 0 && $v['link'] === '#')){
 							$html .= $tmpHtml;
 						}
@@ -972,7 +972,7 @@ class core extends gen_class {
 				}
 			}
 			$html .= '</ul></div>';
-			
+
 			if($addClear){
 				$html .= '<div class="clear"></div>';
 			}
@@ -1226,7 +1226,7 @@ class core extends gen_class {
 			foreach($arrAdditionalLinks as $key => $val){
 				$this->tpl->assign_var('LINK_'.strtoupper($key), $val);
 			}
-			
+
 			if($this->hooks->isRegistered('coreclass_page_tail')){
 				$this->hooks->process('coreclass_page_tail');
 			}
@@ -1399,4 +1399,3 @@ class core extends gen_class {
 
 		}
 }
-?>

@@ -21,16 +21,16 @@
 
 if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
-} 
+}
 
 class hooks extends gen_class {
 
 	public static $shortcuts = array();
 	public static $dependencies = array('pm');
-	
+
 	private $hooks = array();
 	private $blnScanned = false;
-	
+
 	/*
 	 * Register Hook
 	 * @string				$strHook  The Hookname
@@ -46,7 +46,7 @@ class hooks extends gen_class {
 			$this->hooks[$strHook][$strHookHash] = array('class'=> $strClassname, 'method'=> $strMethodname, 'classpath'=>$strClasspath, 'class_params'=>$arrClassparams);
 		}
 	}
-	
+
 	/*
 	 * Process Hook
 	 * @string				$strHook  		The Hookname
@@ -57,12 +57,12 @@ class hooks extends gen_class {
 	public function process($strHook, $arrParams=array(), $blnRecursive=false){
 		//Scan Plugins/Portal/All if not already done
 		if(!$this->blnScanned) $this->isRegistered($strHook);
-		
+
 		if (!isset($this->hooks[$strHook])) return ($blnRecursive) ? $arrParams : array();
-		
+
 		$arrOutput = ($blnRecursive) ? $arrParams : array();
 		foreach($this->hooks[$strHook] as $hook_data){
-			
+
 			include_once($this->root_path.$hook_data['classpath'].'/'.$hook_data['class'].'.class.php');
 			if(empty($hook_data['class_params'])) $hook_data['class_params'] = array();
 			$objHookClass = register($hook_data['class'], $hook_data['class_params']);
@@ -77,7 +77,7 @@ class hooks extends gen_class {
 		}
 		return $arrOutput;
 	}
-	
+
 	public function isRegistered($strHookname){
 		if (!$this->blnScanned){
 			//Init Plugins and Portal modules for registering hooks
@@ -87,12 +87,12 @@ class hooks extends gen_class {
 			$this->scanGlobalHookFolder();
 			$this->blnScanned = true;
 		}
-		
+
 		if (isset($this->hooks[$strHookname])) return true;
-		
+
 		return false;
 	}
-	
+
 	private function scanGlobalHookFolder(){
 		if($dir = @opendir($this->root_path . 'core/hooks/')){
 			while ( $file = @readdir($dir) ){
@@ -101,8 +101,8 @@ class hooks extends gen_class {
 					$filename = str_replace("_hook", "", $path_parts['filename']);
 					$filename= str_replace(".class", "", $filename);
 					$start = strpos($filename, '_');
-					
-					
+
+
 					$strHook = substr($filename, $start+1);
 					$strClassname = str_replace(".class", "", $path_parts['filename']);
 					$strMethodname = $strHook;
@@ -112,6 +112,5 @@ class hooks extends gen_class {
 			}
 		}
 	}
-	
+
 }
-?>

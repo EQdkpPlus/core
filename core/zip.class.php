@@ -42,17 +42,17 @@ if (!class_exists("zip")) {
 				$this->objZip = false;
 			}
 		}
-		
+
 		public function __destruct(){
 			if ($this->objZip){
 				@$this->objZip->close();
 			}
 		}
-		
+
 		public function close(){
 			$this->__destruct();
 		}
-		
+
 		//Add files that will be written to the archiv when calling create()
 		public function add($mixFiles, $strRemovePath = false, $strAddPath = false){
 
@@ -69,10 +69,10 @@ if (!class_exists("zip")) {
 					if (isset($this->files['delete'][$localfilename])) unset($this->files['delete'][$localfilename]);
 				}
 
-			} elseif (strlen($mixFiles)) {	
+			} elseif (strlen($mixFiles)) {
 				if (is_dir($mixFiles)){
 					$mixFiles = (substr($mixFiles, -1) != '/') ? $mixFiles.'/' : $mixFiles;
-					
+
 					$d = dir($mixFiles);
 
 					while (FALSE !== ($entry = $d->read())){
@@ -85,7 +85,7 @@ if (!class_exists("zip")) {
 							$this->add($Entry, $strRemovePath, $strAddPath);
 							continue;
 						}
-						
+
 						$localfilename = $Entry;
 						if ($strRemovePath && strlen($strRemovePath) && strpos($Entry, $strRemovePath) === 0){
 							$localfilename = substr($Entry, strlen($strRemovePath));
@@ -96,9 +96,9 @@ if (!class_exists("zip")) {
 						$this->files['add'][$localfilename] = $Entry;
 						if (isset($this->files['delete'][$localfilename])) unset($this->files['delete'][$localfilename]);
 					}
-					
+
 				} else {
-			
+
 					$localfilename = $mixFiles;
 					if ($strRemovePath && strlen($strRemovePath) && strpos($mixFiles, $strRemovePath) === 0){
 						$localfilename = substr($mixFiles, strlen($strRemovePath));
@@ -114,7 +114,7 @@ if (!class_exists("zip")) {
 			}
 			return true;
 		}
-		
+
 		//Delete Files from Filelist, nur for deleting files from an existing archive!
 		public function delete($strPath){
 			//Directory
@@ -125,7 +125,7 @@ if (!class_exists("zip")) {
 						$this->files['delete'][$key] = $key;
 					}
 				}
-				
+
 			} else {
 				//File
 				if (isset($this->files['add'][$strPath])){
@@ -135,11 +135,11 @@ if (!class_exists("zip")) {
 				}
 				return false;
 			}
-			
-			
+
+
 			return false;
 		}
-		
+
 		//Call create, when you have finished adding and deleting files. Archive will be created in tmp-Folder and moved to the right folder
 		public function create(){
 			//existing archive
@@ -147,8 +147,8 @@ if (!class_exists("zip")) {
 				$tmpExisting = $this->pfh->FilePath(md5(generateRandomBytes()).'.zip', 'tmp');
 				//Move archive to temp folder
 				$this->pfh->copy($this->zipfile, $tmpExisting);
-				
-				
+
+
 				//open existing zip
 				$objZip = new ZipArchive;
 				$resZip = $objZip->open($tmpExisting);
@@ -167,7 +167,7 @@ if (!class_exists("zip")) {
 							//if (!$blnResult) return false;
 						}
 					}
-					
+
 					$this->objZip->close();
 					$objZip->close();
 					$this->pfh->FileMove($tmpExisting, $this->zipfile);
@@ -175,7 +175,7 @@ if (!class_exists("zip")) {
 				} else {
 					return false;
 				}
-				
+
 			} elseif($this->objZip) {
 				$strTempArchiv = $this->pfh->FilePath(md5(generateRandomBytes()).'.zip', 'tmp');
 				//Create new archive
@@ -197,31 +197,31 @@ if (!class_exists("zip")) {
 			}
 			return false;
 		}
-		
+
 		/**
 		 * Extracts the Archive to TargetFolder. Chunk extracting is possible with $from and $to params
-		 * 
+		 *
 		 * @param string $strTargetFolder
 		 * @param array $arrFiles
-		 * @param number $from 
+		 * @param number $from
 		 * @param number $to
 		 * @return boolean
 		 */
 		public function extract($strTargetFolder, $arrFiles = false, $from=0, $to=false){
 			@set_time_limit(0);
-			
+
 			$strTargetFolder = (substr( $strTargetFolder, -1 ) != '/') ? $strTargetFolder.'/' : $strTargetFolder;
-		
+
 			if ($this->objZip){
 				if($to === false) $to = $this->objZip->numFiles;
 				if($to > $this->objZip->numFiles) $to = $this->objZip->numFiles;
 				if($from > $this->objZip->numFiles) $from = $this->objZip->numFiles;
-				
+
 				$i = $from;
-				
+
 				for ( $i; $i < $to; $i++ ) {
 					$entry = $this->objZip->getNameIndex($i);
-					
+
 					if ($arrFiles && is_array($arrFiles)){
 						if (!in_array($entry, $arrFiles)) continue;
 					}
@@ -245,16 +245,15 @@ if (!class_exists("zip")) {
 						$blnWriteResult = $this->pfh->putContent($strTargetFolder.$entry, $contents);
 						if(!$blnWriteResult) return false;
 					}
-						
+
 				}
 				return true;
 			}
 			return false;
 		}
-	
+
 		public function getFileNumber(){
 			return ($this->objZip) ? $this->objZip->numFiles : 0;
 		}
 	}
 }
-?>
