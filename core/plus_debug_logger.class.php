@@ -850,6 +850,8 @@ if ( !defined('EQDKP_INC') ){
 			if (!headers_sent()){
 				header('HTTP/1.1 500 Internal Server Error');
 			}
+			if(is_object($class)) $class = get_class($class);
+			
 			$strErrorID = str_replace('-', '', $this->date).':'.md5(time().'class_404'.$class);
 			$this->log('fatal_error', $strErrorID, 'Classloading Error', 'Class "'.$class.'" not found', 404, array(), debug_backtrace());
 			$output = $this->error_message_header('Fatal error');

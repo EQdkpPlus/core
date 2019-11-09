@@ -190,7 +190,12 @@ class user extends gen_class {
 			$this->data['plugin_settings'] 		= ($this->data['plugin_settings'] && unserialize($this->data['plugin_settings'])) ? unserialize($this->data['plugin_settings']) : array();
 			$this->data['notification_settings'] = ($this->data['notifications'] && unserialize($this->data['notifications'])) ? unserialize($this->data['notifications']) : array();
 
-			list($this->data['user_password_clean'], $this->data['user_salt']) = explode(':', $this->data['user_password']);
+			if(strpos($this->data['user_password'], ':') !== false){
+				list($this->data['user_password_clean'], $this->data['user_salt']) = explode(':', $this->data['user_password']);
+			} else {
+				$this->data['user_password_clean'] = $this->data['user_password'];
+			}
+			
 			$this->data['user_email']			= register('encrypt')->decrypt($this->data['user_email']);
 			$this->data['auth_account'] 		= @unserialize(register('encrypt')->decrypt($this->data['auth_account']));
 			$this->data['birthday']				= (!isset($this->data['birthday']) || $this->data['birthday'] === 0) ? '' : $this->data['birthday'];
