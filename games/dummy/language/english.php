@@ -18,17 +18,17 @@
  *	You should have received a copy of the GNU Affero General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 if (!defined('EQDKP_INC')) {
 	die('You cannot access this file directly.');
 }
 
-//Language: English	
+//Language: English
 //Created by EQdkp Plus Translation Tool on  2014-12-17 23:17
 //File: games/dummy/language/english.php
 //Source-Language: german
 
-$english_array = array( 
+$english_array = array(
 	"classes" => array(
 	1 => 'Default',
 	),
@@ -43,7 +43,5 @@ $english_array = array(
 			"dummy" => 'Default',
 			'uc_class' => 'Class',
 	),
-	
-);
 
-?>
+);

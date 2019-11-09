@@ -57,19 +57,19 @@ class encryptionkey extends install_generic {
 	public function parse_input() {
 		$key1		= $this->in->get('key1', '', 'raw');
 		$key2		= $this->in->get('key2', '', 'raw');
-		
+
 		if($key1 != $key2) {
 			$this->pdl->log('install_error', $this->lang['encryptkey_no_match']);
 			return false;
 		}
-		
+
 		if (strlen($key1) < 6){
 			$this->pdl->log('install_error', $this->lang['encryptkey_too_short']);
 			return false;
 		}
-		
+
 		$this->key = $key1;
-		
+
 		$this->configfile_fill();
 		return true;
 	}
@@ -79,11 +79,10 @@ class encryptionkey extends install_generic {
 		$content .= "\n\n".'$encryptionKey = \''.md5(md5(md5($this->key))).'\';'."\n";
 		$content .= '?>';
 		$this->pfh->putContent($this->root_path.'config.php', $content);
-		
+
 		//Reset Opcache, for PHP7
 		if(function_exists('opcache_reset')){
 			opcache_reset();
 		}
 	}
 }
-?>

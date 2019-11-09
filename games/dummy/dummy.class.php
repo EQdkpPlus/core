@@ -67,7 +67,7 @@ if(!class_exists('dummy')) {
 			$info['config'] = array();
 			return $info;
 		}
-		
+
 		public function load_filters($langs){
 			return array();
 		}
@@ -82,4 +82,3 @@ if(!class_exists('dummy')) {
 
 	}#class
 }
-?>

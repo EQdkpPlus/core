@@ -34,14 +34,14 @@ try {
 	require($eqdkp_root_path.'libraries/dbal/dbal.class.php');
 	$strDatabase = dbal::factory(array('dbtype' => registry::get_const('dbtype'), 'classname' => true));
 	registry::$aliases['db'] = array($strDatabase, array(array('open' => true)));
-	
+
 	#error_reporting(E_ALL);
 	header('content-type: text/html; charset=UTF-8');
 	include($eqdkp_root_path.'infotooltip/infotooltip.class.php');
 	$itt	= registry::register('infotooltip');
 	$itt->cors_headers();
 	$in		= registry::register('input');
-	
+
 	if (!function_exists("get_chmod")){
 		function get_chmod(){
 			if(defined('CHMOD')) return CHMOD;
@@ -74,7 +74,7 @@ try {
 		$data['update']		= $in->get('update', false);
 		$data['data']		= array($in->get('server'), $in->get('cname'), $in->get('slot', ''));
 	}
-	
+
 	if(!isset($data['update'])) $data['update'] = $in->get('update', false);
 	if($in->exists('lang')) $data['lang'] = substr($in->get('lang'),0,2);
 
@@ -101,7 +101,7 @@ try {
 		echo $item['html'];
 	} else {
 		if(isset($item['icon']) && !$data['noicon']) {
-			$strDefaultIcon = $itt->buildlink().'/images/global/default-item.png';		
+			$strDefaultIcon = $itt->buildlink().'/images/global/default-item.png';
 			if($data['onlyicon'] > 0) {
 				$visible = '<img src="'.((stripos($item['icon'], 'http') === 0) ? $item['icon'] : $iconpath.$item['icon'].$iconext).'" width="'.$data['onlyicon'].'" height="'.$data['onlyicon'].'" style="margin-top: 1px;" alt="icon" class="itt-icon" onerror="this.onerror=null;this.src=\''.$strDefaultIcon.'\';"/>';
 			} else {
@@ -128,8 +128,3 @@ try {
 } catch (DBALException $e){
 	echo ($e->message);
 }
-
-
-
-
-?>

@@ -692,7 +692,7 @@ $lang = array(
 	"no_grpleaders" => "No groupleaders found. Click to add users to groupleaders.",
 	"no_grpleaders_chars" => "No groupleaders found. Click to add characters to groupleaders.",
 	"no_group_members_chars" => "No members found. Click to add characters to this group.",
-	"add_member_to_groupleader" => "Add character to groupleaders",	
+	"add_member_to_groupleader" => "Add character to groupleaders",
 	"no_group_members" => "No users found. Click to add users to this group.",
 	"add_user_to_groupleader" => "Add users to groupleaders",
 	"add_selected_to_group" => 'Add selected users to group',
@@ -1924,7 +1924,5 @@ $lang = array(
 		"manmdkp_info_without_twinks" => "Twinks are currently not shown, so the main character will get the points of his Twinks.<br />You can change this setting <a href='manage_settings.php#fragment-chars'>here</a> in order to show the twinks and every charakter only gets his own points.",
 		"manmdkp_info_with_twinks" => "Because Twinks are shown, every Character gets his own points.<br />You can change this setting <a href='manage_settings.php#fragment-chars'>here</a>, so that only the main charater is shown and gets also the points of his Twinks.",
 		"manmdkp_info_pointsystem_info" => "Also, the selected pointsystem has influence how the points are calculated. You can change the pointsystem <a href='manage_pagelayouts.php'>here</a>. More Information about the point systems can be found in our <a href='https://wiki.eqdkp-plus.eu/wiki/Lootsystems'>Wiki</a>.",
-		
-);
 
-?>
+);

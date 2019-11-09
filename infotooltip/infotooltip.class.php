@@ -273,12 +273,12 @@ if(!class_exists('infotooltip')) {
 				}
 			}
 			$this->pdl->log('infotooltip', $item['name'].' added to cache in lang '.$item['lang'].'.');
-			
+
 			if(!empty($item['name'])) $this->pfh->putContent($this->pfh->FilePath(md5($this->config['game'].'_'.$item['lang'].'_'.$item['name'].$ext).'.itt', 'itt_cache'), $data);
 			if(!empty($name2search)) $this->pfh->putContent($this->pfh->FilePath(md5($this->config['game'].'_'.$item['lang'].'_'.$name2search.$ext).'.itt', 'itt_cache'), $data);
 			if(!empty($item['id'])) $this->pfh->putContent($this->pfh->FilePath(md5($this->config['game'].'_'.$item['lang'].'_'.$item['id'].$ext).'.itt', 'itt_cache'), $data);
 			if(!empty($game_id)) $this->pfh->putContent($this->pfh->FilePath(md5($this->config['game'].'_'.$item['lang'].'_'.$game_id.$ext).'.itt', 'itt_cache'), $data);
-			
+
 			return true;
 		}
 
@@ -428,7 +428,7 @@ if(!class_exists('infotooltip')) {
 
 			$cache_name = $game.'_'.$lang.'_'.($game_id ? $game_id : $item_name).$ext;
 			$cache_name = md5($cache_name).'.itt';
-			
+
 			if(in_array($cache_name, $this->cached)) {
 				$item = unserialize(file_get_contents($this->pfh->FilePath($cache_name, 'itt_cache')));
 				if($item && !isset($item['baditem'])){
@@ -437,7 +437,7 @@ if(!class_exists('infotooltip')) {
 					$iconpath				= (isset($item['params']) && isset($item['params']['path']) && !empty($item['params']['path'])) ? $item['params']['path'] : $this->config['icon_path'];
 					$iconext				= (isset($item['params']) && isset($item['params']['ext']) && !empty($item['params']['ext'])) ? $item['params']['ext'] : $this->config['icon_ext'];
 					$display_name			= (isset($item['name']) AND strlen($item['name']) > 1) ? $item['name'] : $data['name'];
-					
+
 					if(isset($item['icon']) && !$noicon) {
 						$strDefaultIcon = $this->buildlink().'/images/global/default-item.png';
 						if($onlyicon > 0) {
@@ -457,7 +457,7 @@ if(!class_exists('infotooltip')) {
 							$visible = '<span class="'.$item['color'].'">'.$visible.'</span>';
 						}
 					}
-					
+
 					return $visible;
 				}
 			}
@@ -543,7 +543,7 @@ if(!class_exists('infotooltip')) {
 			}
 			return $protocol.preg_replace('/[^A-Za-z0-9\.:-]/', '', (!empty($xhost) ? $xhost : $host));
 		}
-		
+
 		public function buildlink($blnWithServerpath=true) {
 			$script_name = preg_replace('/^\/?(.*?)\/?$/', '\1', trim($this->config['server_path']));
 			$script_name = ( $script_name != '' ) ? $script_name . '/' : '';
@@ -592,10 +592,10 @@ if(!function_exists('itt_replace_bbcode')) {
 }
 if(!function_exists('anonymize_ipaddress')) {
 	function anonymize_ipaddress($ip, $byteCount=1){
-		
+
 		$binaryIp = @inet_pton($ip);
 		if(!$binaryIp) $binaryIp = "\x00\x00\x00\x00";
-		
+
 		$strlen = function_exists('mb_orig_strlen') ? 'mb_orig_strlen' : 'strlen';
 		if($strlen($binaryIp) == 4){
 			//ipv4
@@ -603,11 +603,11 @@ if(!function_exists('anonymize_ipaddress')) {
 			if ($byteCount > $i) {
 				$byteCount = $i;
 			}
-			
+
 			while ($byteCount-- > 0) {
 				$binaryIp[--$i] = chr(0);
 			}
-			
+
 			$ipStr = @inet_ntop($binaryIp);
 			if(!$ipStr) $ipStr = "0.0.0.0";
 			return $ipStr;
@@ -615,28 +615,28 @@ if(!function_exists('anonymize_ipaddress')) {
 			//ipv6
 			if (substr_compare($binaryIp, "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff", 0, 12) === 0
 					|| substr_compare($binaryIp, "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00", 0, 12) === 0) {
-						
+
 						$i = strlen($binaryIp);
 						if ($byteCount > $i) {
 							$byteCount = $i;
 						}
-						
+
 						while ($byteCount-- > 0) {
 							$binaryIp[--$i] = chr(0);
 						}
-						
+
 						$ipStr = @inet_ntop($binaryIp);
 						if(!$ipStr) $ipStr = "0.0.0.0";
 						return $ipStr;
 					}
-					
+
 					$masks = array(
 							'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff',
 							'ffff:ffff:ffff:ffff::',
 							'ffff:ffff:ffff:0000::',
 							'ffff:ff00:0000:0000::'
 					);
-					
+
 					$binaryIp = $binaryIp & pack('a16', inet_pton($masks[$byteCount]));
 					$ipStr = @inet_ntop($binaryIp);
 					if(!$ipStr) $ipStr = "0.0.0.0";
@@ -644,4 +644,3 @@ if(!function_exists('anonymize_ipaddress')) {
 		}
 	}
 }
-?>

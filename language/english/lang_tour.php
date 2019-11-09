@@ -19,17 +19,17 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- 
+
 if (!defined('EQDKP_INC')) {
 	die('You cannot access this file directly.');
 }
 
-//Language: English	
+//Language: English
 //Created by EQdkp Plus Translation Tool on  2014-12-17 23:17
 //File: language/english/lang_tour.php
 //Source-Language: german
 
-$lang = array( 
+$lang = array(
 	"navi" => '<ul><li><a href="?tour=next"><b>Continue with the next step of this tour</b></a></li><li><a href="?tour=reload">Restart this step</a></li><li><a href="?tour=cancel">Exit the tour</a></li></ul>',
 	"navi_title" => 'EQdkp Plus Tour',
 	"steps" => 'Step %d of %d',
@@ -53,7 +53,5 @@ $lang = array(
 	"step_8_title" => 'Backup',
 	"step_9" => 'Thank you very much for taking the EQdkp Plus tour.<br><br>For additional questions check out<ul><li>our <a href="http://eqdkp-plus.eu/wiki/" style="color:#000">Wiki</a></li><li>and <a href="http://eqdkp-plus.eu/forum" style="color:#000">Forum</a>.</li></ul>You can take this tour again whenever you like by going to the "Support" tab on the main page of the admin section.<br /><br />"Have fun" - the entire EQdkp Plus team.',
 	"step_9_title" => 'End',
-	
-);
 
-?>
+);

@@ -36,4 +36,3 @@ $german_array = array(
 		'uc_class' => 'Klasse',
 	),
 );
-?>

@@ -45,7 +45,7 @@ define('ANONYMOUS',	-1);
 include_once($eqdkp_root_path.'core/super_registry.class.php');
 include_once($eqdkp_root_path.'core/registry.class.php');
 include_once($eqdkp_root_path.'core/gen_class.class.php');
-	
+
 registry::add_const('root_path', $eqdkp_root_path);
 registry::add_const('lite_mode', true);
 // switch to userdefined error-handling
@@ -64,7 +64,7 @@ registry::load_config(true);
 if($dbtype = registry::get_const('dbtype')) {
 	include_once(registry::get_const('root_path') .'libraries/dbal/dbal.class.php');
 	require_once(registry::get_const('root_path') . 'libraries/dbal/' . registry::get_const('dbtype') . '.dbal.class.php');
-	registry::$aliases['db'] = array('dbal_'.registry::get_const('dbtype'), array(array('open' => true)));		
+	registry::$aliases['db'] = array('dbal_'.registry::get_const('dbtype'), array(array('open' => true)));
 }
 
 include_once($eqdkp_root_path . 'core/constants.php');
@@ -72,5 +72,3 @@ include_once($eqdkp_root_path . 'core/core.functions.php');
 include_once($eqdkp_root_path . 'install/install.class.php');
 registry::load_html_fields();
 registry::register('install')->init();
-
-?>

@@ -66,7 +66,7 @@ if(!class_exists('itt_parser')) {
 			$lang = ($lang) ? $lang : $this->config['game_language'];
 			$name = trim($item_name);
 			if(empty($name) && !$game_id) return null;
-	
+
 			if(!$game_id) {
 				$item_id = $this->searchItemID($name, $lang);
 			} else {
@@ -77,4 +77,3 @@ if(!class_exists('itt_parser')) {
 		}
 	}
 }
-?>

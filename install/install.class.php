@@ -74,7 +74,7 @@ class install extends gen_class {
 							}
 
 							.wrapper{
-							
+
 							}
 
 							.header {
@@ -91,7 +91,7 @@ class install extends gen_class {
 								height: 60px;
 							}
 
-							
+
 							.footer {
 								margin-top: 10px;
 								color: #000;
@@ -318,7 +318,7 @@ class install extends gen_class {
 		$pfh->putContent($this->root_path.'config.php', $config);
 		//delete temporary pfh folder
 		$pfh->Delete($this->root_path.'data/'.md5('installer'));
-		
+
 		$pdc = registry::register('datacache');
 		$pdc->flush();
 
@@ -684,4 +684,3 @@ abstract class install_generic extends gen_class {
 	abstract public function get_filled_output();
 	abstract public function parse_input();
 }
-?>
