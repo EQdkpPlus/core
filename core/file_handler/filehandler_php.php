@@ -41,15 +41,15 @@ if (!class_exists("filehandler_php")) {
 			} else {
 				$myDBName		= md5((($globalcache) ? $globalcache : $this->table_prefix.$this->dbname)).'/';
 			}
-			
+
 			if(is_writable($this->root_path.'data/')){
 				$this->CacheFolder			= $this->root_path.'data/'.$myDBName;
 				$this->CacheFolderPlain 	= 'data/'.$myDBName;
-				
+
 				//Create cache folder
 				$this->CheckCreateFolder($this->CacheFolder, false);
 				$this->CheckCreateFolder('', 'tmp');
-				
+
 			} else {
 				if(!$this->CheckCreateFolder($this->root_path.'data/', false) || !$this->is_writable($this->root_path.'data/', true)){
 					$this->errors[] = 'lib_cache_notwriteable';
@@ -64,11 +64,11 @@ if (!class_exists("filehandler_php")) {
 		public function get_cachefolder($blnPlain=false){
 			return (($blnPlain) ? $this->CacheFolderPlain : $this->CacheFolder);
 		}
-		
+
 		public function check_cachefolder(){
 			$strRecentCachefolder = md5($this->table_prefix.$this->dbname);
 			$strStoredCachefolder = $this->config->get('data_folder');
-			
+
 			if($strStoredCachefolder != ""){
 				if($strRecentCachefolder != $strStoredCachefolder){
 					//Try to rename the old one
@@ -77,13 +77,13 @@ if (!class_exists("filehandler_php")) {
 						$this->Delete($this->CacheFolder);
 						$this->rename($strOldFolder, $this->CacheFolder);
 					}
-					
+
 					$this->config->set('data_folder', $strRecentCachefolder);
 				}
 			} else {
 				$this->config->set('data_folder', $strRecentCachefolder);
 			}
-			
+
 			return true;
 		}
 
@@ -100,7 +100,7 @@ if (!class_exists("filehandler_php")) {
 				$dir.=$part.'/';
 				if (!is_dir($dir) && strlen($dir)>0){
 					$result = mkdir($dir, $chmod);
-					if ($result) $this->make_index($dir);				
+					if ($result) $this->make_index($dir);
 				}
 			}
 		}
@@ -117,35 +117,35 @@ if (!class_exists("filehandler_php")) {
 				}
 				return true;
 			}else{
-				return true;	
+				return true;
 			}
 		}
 
 		public function putContent($filename, $data){
 			$intBits = file_put_contents($filename, $data);
 			if(!$this->on_iis()) @chmod($filename, $this->get_chmod());
-			
+
 			//Invalidate Opcache in PHP7
 			$strExtension = pathinfo($filename, PATHINFO_EXTENSION);
 			if(strtolower($strExtension) === 'php' && function_exists('opcache_invalidate')){
 				opcache_invalidate(realpath($filename));
 			}
-			
+
 			return ($intBits !== false) ? true : false;
 		}
-		
+
 		public function addContent($filename, $data){
 			$tmpHandle = fopen($filename, 'a');
 			if ($tmpHandle){
 				$intBits = fwrite($tmpHandle, $data);
 				fclose($tmpHandle);
-				
+
 				//Invalidate Opcache in PHP7
 				$strExtension = pathinfo($filename, PATHINFO_EXTENSION);
 				if(strtolower($strExtension) === 'php' && function_exists('opcache_invalidate')){
 					opcache_invalidate(realpath($filename));
 				}
-				
+
 				return ($intBits !== false) ? true : false;
 			}
 			return false;
@@ -153,15 +153,15 @@ if (!class_exists("filehandler_php")) {
 
 		/**
 		* Return a path to the file
-		* 
+		*
 		* @param $filepath    The name of the file
 		* @param $plugin      Plugin name, p.e. 'raidplan'
-		* @param $createFile  Should the file be created on check if not available?    
+		* @param $createFile  Should the file be created on check if not available?
 		* @return Link to the file
 		*/
 		public function FilePath($filepath, $plugin=false, $blnCreateFile=true){
 			if(!strlen($filepath)) return '';
-			
+
 			if ($plugin === false){
 				$this->CheckCreateSubfolder($filepath, $this->root_path);
 				$this->CheckCreateFile($filepath, $plugin, $blnCreateFile);
@@ -172,14 +172,14 @@ if (!class_exists("filehandler_php")) {
 				$fileLink = $pluginFolder.'/'.$filepath;
 				$this->CheckCreateSubfolder($filepath, $pluginFolder);
 				$this->CheckCreateFile($filepath, $plugin, $blnCreateFile);
-				
+
 				return $fileLink;
 			}
 		}
 
 		/**
 		* Return a path to a folder
-		* 
+		*
 		* @param $filename    The name of the file
 		* @param $plugin      Plugin name, p.e. 'raidplan'
 		* @return Link to the file
@@ -188,22 +188,22 @@ if (!class_exists("filehandler_php")) {
 			if (is_array($foldername)){
 				$foldername = implode("/",$foldername);
 			}
-			
+
 			if(substr($foldername,-1) != "/") {
 				$foldername .= '/';
 			}
-			
+
 			$this->CheckCreateFolder($foldername, $plugin);
-			
+
 			if ($plugin === false){
 				$this->CheckCreateFolder($foldername, $plugin);
 				return $foldername;
 			} else {
-				$this->CheckCreateFolder($foldername, $plugin);			
+				$this->CheckCreateFolder($foldername, $plugin);
 				return ($blnPlain) ? $this->CacheFolderPlain.$plugin.'/'.$foldername : $this->CacheFolder.$plugin.'/'.$foldername;
 			}
 		}
-		
+
 		/**
 		* Get the filesize of a file
 		*/
@@ -214,7 +214,7 @@ if (!class_exists("filehandler_php")) {
 				return filesize($this->FilePath($file, $plugin));
 			}
 		}
-		
+
 		/**
 		* Test if a file could be written
 		*/
@@ -240,7 +240,7 @@ if (!class_exists("filehandler_php")) {
 			$path = (($plugin === false) ? $path : $this->CacheFolder.$plugin.'/'.$path);
 
 			if(!is_dir($path)){
-				$old = umask(0); 
+				$old = umask(0);
 				$this->mkdir_r($path, $this->get_chmod(true));
 				umask($old);
 			}
@@ -251,7 +251,7 @@ if (!class_exists("filehandler_php")) {
 		* Check if a filename contains a folder and creates it if required
 		*/
 		public function CheckCreateSubfolder($filename, $basefolder){
-			
+
 			if(strpos($filename, '/')) {
 				$folders = explode('/', $filename);
 				unset($folders[max(array_keys($folders))]);
@@ -267,9 +267,9 @@ if (!class_exists("filehandler_php")) {
 		* Check if a File is available or must be created
 		*/
 		public function CheckCreateFile($path, $plugin=false, $blnCreate=true){
-			
+
 			$path = ($plugin === false) ? $path : $this->CacheFolder.$plugin.'/'.$path;
-			
+
 			if(!is_file($path) && $blnCreate){
 				$myhandl = @fopen($path, "w");
 				if(@is_resource($myhandl)){
@@ -280,7 +280,7 @@ if (!class_exists("filehandler_php")) {
 				if(!$this->on_iis()) @chmod($path, $this->get_chmod());
 				return true;
 			}
-			
+
 			return false;
 		}
 
@@ -289,18 +289,18 @@ if (!class_exists("filehandler_php")) {
 		*/
 		public function copy($source, $dest){
 			$this->CheckCreateSubfolder($dest, $this->root_path);
-			
+
 			$blnResult = copy($source, $dest);
-			
+
 			//Invalidate Opcache in PHP7
 			$strExtension = pathinfo($source, PATHINFO_EXTENSION);
 			if($blnResult && strtolower($strExtension) === 'php' && function_exists('opcache_invalidate')){
 				opcache_invalidate(realpath($dest));
 			}
-			
+
 			return $blnResult;
 		}
-		
+
 		/**
 		* Rename a File/Folder
 		*/
@@ -313,7 +313,7 @@ if (!class_exists("filehandler_php")) {
 		*/
 		public function Delete($path, $plugin=false) {
 			$directory = ($plugin === false) ? $path : $this->CacheFolder.$plugin.'/'.$path;
-		
+
 			if(is_file($directory)){
 				// its a file, remove it!
 				@unlink($directory);
@@ -328,7 +328,7 @@ if (!class_exists("filehandler_php")) {
 					return false;
 				} else {
 					$directoryHandle = opendir($directory);
-		
+
 					while ($contents = readdir($directoryHandle)) {
 						if($contents != '.' && $contents != '..') {
 							$path = $directory . "/" . $contents;
@@ -362,7 +362,7 @@ if (!class_exists("filehandler_php")) {
 			}
 			//@unlink($filename);
 			if(!$this->on_iis()) @chmod($tofile, $this->get_chmod());
-			
+
 			return $blnResult;
 		}
 
@@ -397,7 +397,7 @@ if (!class_exists("filehandler_php")) {
 			// variables...
 			$width			= $imageInfo[0];
 			$height			= $imageInfo[1];
-			
+
 			//Fixed Width of Thumbnails
 			if($resize_width && !$resize_height){
 				// Resize me!
@@ -405,13 +405,13 @@ if (!class_exists("filehandler_php")) {
 					$scale		= $resize_width/$width;
 					$heightA	= round($height * $scale);
 					$img		= ImageCreateTrueColor($resize_width,$heightA);
-				
+
 					// This is a fix for transparent 24bit png...
 					if($imageInfo[2] == 3){
 						imagefill($img, 0, 0, imagecolorallocatealpha($img, 0, 0, 0, 127));
 						imageSaveAlpha($img, true);
 					}
-				
+
 					ImageCopyResampled($img, $imgOld, 0,0, 0,0, $resize_width,$heightA, ImageSX($imgOld),ImageSY($imgOld));
 					switch($imageInfo[2]){
 						case 1:	ImageGIF($img,	$thumbfolder.$filename);	break;	// GIF
@@ -421,24 +421,24 @@ if (!class_exists("filehandler_php")) {
 				} else {
 					$this->copy($image, $thumbfolder.$filename);
 				}
-				
+
 			}elseif(!$resize_width && $resize_height){
 			//Fixed Height of Thumbnails
-				
+
 				// Resize me!
 				if($height > $resize_height){
 					$scale		= $resize_height/$height;
 					$widthA		= round($width * $scale);
 					$img		= ImageCreateTrueColor($widthA, $resize_height);
-				
+
 					// This is a fix for transparent 24bit png...
 					if($imageInfo[2] == 3){
 						imagefill($img, 0, 0, imagecolorallocatealpha($img, 0, 0, 0, 127));
 						imageSaveAlpha($img, true);
 					}
-				
+
 					ImageCopyResampled($img, $imgOld, 0,0, 0,0, $widthA, $resize_height, ImageSX($imgOld),ImageSY($imgOld));
-					
+
 					switch($imageInfo[2]){
 						case 1:	ImageGIF($img,	$thumbfolder.$filename);	break;	// GIF
 						case 2:	ImageJPEG($img,	$thumbfolder.$filename, 95);	break;	// JPG
@@ -447,14 +447,14 @@ if (!class_exists("filehandler_php")) {
 				} else {
 					$this->copy($image, $thumbfolder.$filename);
 				}
-				
+
 			}elseif($resize_width && $resize_height){
 			//Fixed Width and Height of Thumbnails
-			
+
 				$x = $y = 0;
 				$sourceWidth = $width;
 				$sourceHeight = $height;
-				
+
 				if($resize_width / $width < $resize_height / $height){
 					$cut = (($width * ($resize_height / $height)) - $resize_width) / ($resize_height / $height);
 					$x = ceil($cut / 2);
@@ -464,34 +464,34 @@ if (!class_exists("filehandler_php")) {
 					$y = ceil($cut / 2);
 					$sourceHeight = $height - $y * 2;
 				}
-				
-				
+
+
 				$img = ImageCreateTrueColor($resize_width, $resize_height);
-				
+
 				// This is a fix for transparent 24bit png...
 				if($imageInfo[2] == 3){
 					imagefill($img, 0, 0, imagecolorallocatealpha($img, 0, 0, 0, 127));
 					imageSaveAlpha($img, true);
 				}
-				
+
 				ImageCopyResampled($img, $imgOld, 0,0, $x, $y, $resize_width, $resize_height, $sourceWidth, $sourceHeight);
-					
+
 				switch($imageInfo[2]){
 					case 1:	ImageGIF($img,	$thumbfolder.$filename);	break;	// GIF
 					case 2:	ImageJPEG($img,	$thumbfolder.$filename, 95);	break;	// JPG
 					case 3:	ImagePNG($img,	$thumbfolder.$filename, 0);	break;	// PNG
 				}
-				
+
 			}
-			
-			
+
+
 			if(!$this->on_iis()) @chmod($thumbfolder.$filename, $this->get_chmod());
 		}
-		
+
 
 		//These methods here have been defined somewhere else. But the pfh is called so early in super registry, that they are not available when pfh needs it.
 		//Therefore they have been redeclared here.
-		
+
 		private function on_iis() {
 			$sSoftware = (isset($_SERVER["SERVER_SOFTWARE"])) ? strtolower( $_SERVER["SERVER_SOFTWARE"] ) : '';
 			if ( strpos($sSoftware, "microsoft-iis") !== false )
@@ -499,11 +499,10 @@ if (!class_exists("filehandler_php")) {
 			else
 				return false;
 		}
-		
+
 		private function get_chmod(){
 			if(defined('CHMOD')) return CHMOD;
 			return 0775;
 		}
 	}
 }
-?>

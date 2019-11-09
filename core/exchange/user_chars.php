@@ -30,7 +30,7 @@ if (!class_exists('exchange_user_chars')){
 
 		public function get_user_chars($params, $arrBody){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
-			
+
 			if ($isAPITokenRequest || $this->user->check_auth('po_calendarevent', false)){
 				$userid = (intval($params['get']['userid']) > 0) ? intval($params['get']['userid']) : $this->user->id;
 				//UserChars
@@ -50,7 +50,7 @@ if (!class_exists('exchange_user_chars')){
 								);
 							}
 						}
-						
+
 						//Raidgroups
 						$arrRaidgroups = array();
 						$arrTotalRaidgroups = $this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list')));
@@ -61,8 +61,8 @@ if (!class_exists('exchange_user_chars')){
 									$status = $status+1;
 								} else {
 									$status = (count($arrTotalRaidgroups) === 1) ? 1 : 0;
-								}								
-								
+								}
+
 								$arrRaidgroups['raidgroup:'.$raidgroupid] = array(
 										'id'		=> $raidgroupid,
 										'name'		=> $raidgroupname,
@@ -72,7 +72,7 @@ if (!class_exists('exchange_user_chars')){
 								);
 							}
 						}
-						
+
 						$arrProfileData = $this->pdh->get('member', 'profiledata', array($key));
 
 						$arrUserChars['char:'.$key] = array(
@@ -96,4 +96,3 @@ if (!class_exists('exchange_user_chars')){
 		}
 	}
 }
-?>

@@ -39,7 +39,7 @@ if (!class_exists('exchange_calevents_details')){
 					$intComments = 0;
 					if (is_array($comments)){
 						foreach($comments as $key => $row){
-							
+
 							$arrReplies = array();
 							if(count($row['replies'])){
 								foreach($row['replies'] as $com){
@@ -56,8 +56,8 @@ if (!class_exists('exchange_calevents_details')){
 									$intComments++;
 								}
 							}
-							
-							
+
+
 							$avatarimg = $this->pdh->get('user', 'avatarimglink', array($row['userid']));
 							$arrComments['comment:'.$key] = array(
 								'username'			=> $row['username'],
@@ -141,7 +141,7 @@ if (!class_exists('exchange_calevents_details')){
 									foreach($this->attendees[$statuskey][$classid] as $memberid=>$memberdata){
 										//$shownotes_ugroups = $this->acl->get_groups_with_active_auth('u_calendar_raidnotes');
 										$arrData = $this->pdh->get('member', 'profiledata', array($memberid));
-										
+
 										$arrChars['char:'.$memberid] = array(
 											'id'			=> $memberid,
 											'name'			=> unsanitize($this->pdh->get('member', 'name', array($memberid))),
@@ -206,7 +206,7 @@ if (!class_exists('exchange_calevents_details')){
 										);
 									}
 								}
-								
+
 								$arrData = $this->pdh->get('member', 'profiledata', array($key));
 
 								$arrUserChars['char:'.$key] = array(
@@ -302,4 +302,3 @@ if (!class_exists('exchange_calevents_details')){
 		}
 	}
 }
-?>

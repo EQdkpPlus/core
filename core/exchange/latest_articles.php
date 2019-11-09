@@ -30,23 +30,23 @@ if (!class_exists('exchange_latest_articles')){
 
 		public function get_latest_articles($params, $arrBody){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
-			
+
 				//Get Number; default: 10
 				$intNumber = (intval($params['get']['number']) > 0) ?  intval($params['get']['number']) : 10;
 				//Get sort direction; default: desc
 				$sort = (isset($params['get']['sort']) && $params['get']['sort'] == 'asc') ? 'asc' : 'desc';
-				
+
 				$intCategoryID = (isset($params['get']['c'])) ? intval($params['get']['c']) : 0;
-				
+
 				$user_id = $this->user->id;
-				
+
 				$response = array();
-								
+
 				//Get latest Articles for a specific category
 				if ($intCategoryID){
 					$arrArticleIDs = $this->pdh->get('article_categories', 'published_id_list', array($intCategoryID, $user_id, true));
 					$arrCategory = $this->pdh->get('article_categories', 'data', array($intCategoryID));
-						
+
 					switch($arrCategory['sortation_type']){
 						case 4:
 						case 3: $arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'last_edited', $sort);
@@ -64,15 +64,15 @@ if (!class_exists('exchange_latest_articles')){
 					}
 					$arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'date', $sort);
 				}
-				
+
 				if (count($arrSortedArticleIDs)){
 					$arrSortedArticleIDs = $this->pdh->limit($arrSortedArticleIDs, 0, $intNumber);
 					foreach($arrSortedArticleIDs as $intArticleID){
 						$strText = $this->pdh->get('articles',  'text', array($intArticleID));
 						$arrContent = preg_split('#<hr(.*)id="system-readmore"(.*)\/>#iU', xhtml_entity_decode($strText));
-				
+
 						$strText = $this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags($arrContent[0]));
-				
+
 						//Replace Image Gallery
 						$arrGalleryObjects = array();
 						preg_match_all('#<p(.*)class="system-gallery"(.*) data-sort="(.*)" data-folder="(.*)">(.*)</p>#iU', $strText, $arrGalleryObjects, PREG_PATTERN_ORDER);
@@ -81,7 +81,7 @@ if (!class_exists('exchange_latest_articles')){
 								$strText = str_replace($arrGalleryObjects[0][$key], "", $strText);
 							}
 						}
-				
+
 						//Replace Raidloot
 						$arrRaidlootObjects = array();
 						preg_match_all('#<p(.*)class="system-raidloot"(.*) data-id="(.*)"(.*) data-chars="(.*)">(.*)</p>#iU', $strText, $arrRaidlootObjects, PREG_PATTERN_ORDER);
@@ -90,10 +90,10 @@ if (!class_exists('exchange_latest_articles')){
 								$strText = str_replace($arrRaidlootObjects[0][$key], "", $strText);
 							}
 						}
-						
+
 						$category_id = $this->pdh->get('articles', 'category', array($intArticleID));
-						
-						
+
+
 						$comments = $this->pdh->get('comment', 'filtered_list', array('articles', $intArticleID));
 						$arrComments = array();
 						$intComments = 0;
@@ -111,16 +111,16 @@ if (!class_exists('exchange_latest_articles')){
 												'date'				=> $this->time->date('Y-m-d H:i', $com['date']),
 												'date_timestamp'	=> $com['date'],
 												'message'			=> $this->bbcode->toHTML($com['text']),
-												'comment_id'		=> $com['id'],		
+												'comment_id'		=> $com['id'],
 												'reply_to'			=> $key,
 										);
-										
+
 										$intComments++;
 									}
 								}
-								
+
 								$avatarimg = $this->pdh->get('user', 'avatarimglink', array($row['userid']));
-								
+
 								$arrComments['comment:'.$key] = array(
 										'username'			=> unsanitize($row['username']),
 										'user_avatar'		=> $this->pfh->FileLink((($avatarimg != "") ? $avatarimg : 'images/global/avatar-default.svg'), false, 'absolute'),
@@ -130,18 +130,18 @@ if (!class_exists('exchange_latest_articles')){
 										'comment_id'		=> $key,
 										'replies'			=> $arrReplies,
 								);
-								
+
 								$intComments++;
 							}
 						}
-						
+
 						$arrCommentsOut = array(
 								'count'		=> $intComments,
 								'page'		=> 'articles',
 								'attachid'	=> $intArticleID,
 								'comments'	=> $arrComments,
 						);
-						
+
 						$arrTags = array();
 						$arrArticleTags = $this->pdh->get('articles', 'tags', array($intArticleID));
 						if(is_array($arrArticleTags) && count($arrArticleTags) && $arrArticleTags[0] != ""){
@@ -149,7 +149,7 @@ if (!class_exists('exchange_latest_articles')){
 								$arrTags['tag:'.$k] = $strTag;
 							}
 						}
-						
+
 						$response['entries']['entry:'.$intArticleID] = array(
 								'id'			=> $intArticleID,
 								'title'			=> unsanitize($this->pdh->get('articles', 'title', array($intArticleID))),
@@ -173,5 +173,3 @@ if (!class_exists('exchange_latest_articles')){
 		}
 	}
 }
-
-?>

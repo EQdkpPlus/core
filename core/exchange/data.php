@@ -30,7 +30,7 @@ if (!class_exists('exchange_data')){
 
 		public function get_data($params, $arrBody){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
-			
+
 			$out['eqdkp'] = array(
 				'name'				=> unsanitize($this->config->get('guildtag')),
 				'guild'				=> unsanitize($this->config->get('guildtag')),
@@ -39,11 +39,11 @@ if (!class_exists('exchange_data')){
 				'language'			=> $this->config->get('default_lang'),
 				'version'			=> '',
 			);
-			
+
 			if($isAPITokenRequest){
 				$out['eqdkp']['version'] = VERSION_EXT;
 			}
-			
+
 			$out['game'] = array(
 				'name'				=> $this->config->get('default_game'),
 				'version'			=> $this->config->get('game_version'),
@@ -55,4 +55,3 @@ if (!class_exists('exchange_data')){
 		}
 	}
 }
-?>

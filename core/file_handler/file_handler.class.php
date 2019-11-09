@@ -29,7 +29,7 @@ if (!class_exists("file_handler")) {
 		* Initiate the cacheHandler
 		*/
 		private $fhandler = false;
-		
+
 		public function __construct($globalcache=false, $fhandler=false) {
 			if(!$fhandler) $fhandler = (isset($this->use_ftp) && $this->use_ftp) ? 'filehandler_ftp' : 'filehandler_php';
 			if(!interface_exists( "plus_filehandler" )) require_once($this->root_path . 'core/file_handler/file_handler.iface.php');
@@ -44,19 +44,19 @@ if (!class_exists("file_handler")) {
 		* Using with data-Folder: $pfh->secure_folder('backup', 'eqdkp');
 		* Using outside data-Folder: $pfh->secure_folder($this->root_path.'templates', FALSE);
 		*/
-		
+
 		public function secure_folder($foldername, $plugin=false, $deny_all=true){
 			return $this->fhandler->secure_folder($foldername, $plugin, $deny_all);
 		}
-		
+
 		public function CheckCreateFolder($path, $plugin=false){
 			return $this->fhandler->CheckCreateFolder($path, $plugin);
 		}
-		
+
 		public function CheckCreateFile($path, $plugin=false, $blnCreate=true){
 			return $this->fhandler->CheckCreateFile($path, $plugin, $blnCreate);
 		}
-		
+
 		public function Delete($path, $plugin=false){
 			return $this->fhandler->Delete($path, $plugin);
 		}
@@ -67,17 +67,17 @@ if (!class_exists("file_handler")) {
 
 		public function FilePath($path, $plugin=false, $blnCreateFile=true, $linkType = 'relative'){
 			$strFilePath = $this->fhandler->FilePath($path, $plugin, $blnCreateFile);
-			
+
 			switch ($linkType){
 				case 'relative': return $strFilePath;
 				break;
-				
+
 				case 'absolute': return registry::register('environment')->link.$this->remove_rootpath($strFilePath);
 				break;
-				
+
 				case 'serverpath' : return $this->server_path.$this->remove_rootpath($strFilePath);
 				break;
-				
+
 				default: return $this->remove_rootpath($strFilePath);
 			}
 		}
@@ -87,25 +87,25 @@ if (!class_exists("file_handler")) {
 			switch ($linkType){
 				case 'relative': return $strFilePath;
 				break;
-				
+
 				case 'absolute': return registry::register('environment')->link.$this->remove_rootpath($strFilePath);
 				break;
-				
+
 				case 'serverpath' : return $this->server_path.$this->remove_rootpath($strFilePath);
 				break;
-				
+
 				default: return $this->remove_rootpath($strFilePath);
 			}
-			
+
 		}
 
 		public function FileSize($file, $plugin=false){
 			return $this->fhandler->FileSize($file,$plugin);
 		}
-		
+
 		/**
 		* Return a file link to the file
-		* 
+		*
 		* @param $path		Path, including file
 		* @param $plugin    Plugin name, p.e. 'raidplan'
 		* @param $linkType  plain/absolute/relative
@@ -116,25 +116,25 @@ if (!class_exists("file_handler")) {
 				$link = $path;
 			} else {
 				$cachefolder = $this->fhandler->get_cachefolder(true);
-				
+
 				$link = $cachefolder.$plugin;
 				if ($path != "") $link .= '/'.$path;
 			}
-			
+
 			switch ($linkType){
 				case 'relative': return $link;
 				break;
-				
+
 				case 'absolute': return registry::register('environment')->link.$this->remove_rootpath($link);
 				break;
-				
+
 				case 'serverpath': return $this->server_path.$this->remove_rootpath($link);
 				break;
-				
+
 				default: return $this->remove_rootpath($link);
 			}
 		}
-		
+
 		/**
 		* The following functions need filename or foldername with $this->root_path
 		*
@@ -145,7 +145,7 @@ if (!class_exists("file_handler")) {
 		public function testWrite($file=false){
 			return $this->fhandler->testWrite($file);
 		}
-		
+
 		public function copy($source, $dest){
 			return $this->fhandler->copy($source, $dest);
 		}
@@ -165,7 +165,7 @@ if (!class_exists("file_handler")) {
 		public function putContent($filename, $data){
 			return $this->fhandler->putContent($filename, $data);
 		}
-		
+
 		public function addContent($filename, $data){
 			return $this->fhandler->addContent($filename, $data);
 		}
@@ -177,11 +177,11 @@ if (!class_exists("file_handler")) {
 		public function get_errors(){
 			return $this->fhandler->get_errors();
 		}
-		
+
 		public function get_cachefolder($blnPlain=false){
 			return $this->fhandler->get_cachefolder($blnPlain);
 		}
-		
+
 		public function check_cachefolder(){
 			return $this->fhandler->check_cachefolder();
 		}
@@ -203,4 +203,3 @@ if (!class_exists("file_handler")) {
 		}
 	}
 }
-?>

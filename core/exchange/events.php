@@ -27,7 +27,7 @@ if (!class_exists('exchange_events')){
 	class exchange_events extends gen_class {
 		public static $shortcuts = array('user', 'config', 'pex'=>'plus_exchange', 'pdh', 'time', 'env' => 'environment');
 		public $options		= array();
-		
+
 
 		public function get_events($params, $arrBody){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
@@ -51,7 +51,7 @@ if (!class_exists('exchange_events')){
 						);
 					}
 					$out['event:'.$eventid]['multidkp_pools'] = $arrPools;
-					
+
 					$arrItempoolsForEvent = $this->pdh->get('event', 'itempools', array($eventid));
 					foreach($arrItempoolsForEvent as $itempoolid){
 						$arrItempools['itempool:'.$itempoolid] = array(
@@ -69,4 +69,3 @@ if (!class_exists('exchange_events')){
 		}
 	}
 }
-?>

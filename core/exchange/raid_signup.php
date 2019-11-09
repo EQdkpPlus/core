@@ -30,16 +30,16 @@ if (!class_exists('exchange_raid_signup')){
 
 		public function post_raid_signup($params, $arrBody){
 			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
-			
+
 			if ($this->user->check_auth('po_calendarevent', false)){
-				
+
 				if (count($arrBody) && intval($arrBody['eventid']) > 0){
 					$eventid = intval($arrBody['eventid']);
 					$eventdata = $this->pdh->get('calendar_events', 'data', array($eventid));
 					if ($eventdata && ((int)$this->pdh->get('calendar_events', 'calendartype', array($eventid)) == 1)){
-					
+
 						$mystatus = $this->pdh->get('calendar_raids_attendees', 'myattendees', array($eventid, $this->user->id));
-						
+
 						// Build the Deadline
 						$deadlinedate	= $eventdata['timestamp_start']-($eventdata['extension']['deadlinedate'] * 3600);
 						if(date('j', $deadlinedate) == date('j', $eventdata['timestamp_start'])){
@@ -48,14 +48,14 @@ if (!class_exists('exchange_raid_signup')){
 							$deadlinetime	= $this->time->user_date($deadlinedate, true);
 						}
 						$mysignedstatus	= $this->pdh->get('calendar_raids_attendees', 'status', array($eventid, $mystatus['member_id']));
-						
+
 						if (((int)$eventdata['closed'] == 1) || !($deadlinedate > $this->time->time || ($this->config->get('calendar_raid_allowstatuschange') == '1' && $mystatus['member_id'] > 0 && $mysignedstatus != 4 && $eventdata['timestamp_end'] > $this->time->time))){
 							return $this->pex->error('statuschange not allowed');
 						}
 
 						$mychars = $this->pdh->get('member', 'connection_id', array($this->user->id));
 						$memberid = intval($arrBody['memberid']);
-						
+
 						if (intval($memberid) > 0 && in_array($memberid, $mychars)){
 							// auto confirm if enabled
 							$usergroups		= $this->config->get('calendar_raid_confirm_raidgroupchars');
@@ -79,7 +79,7 @@ if (!class_exists('exchange_raid_signup')){
 								$mystatus['member_id'],
 								(isset($arrBody['note'])) ? filter_var((string)$arrBody['note'], FILTER_SANITIZE_STRING) : '',
 							));
-							
+
 							//Send Notification to Raidlead, Creator and Admins
 							$raidleaders_chars	= ($eventdata['extension']['raidleader'] > 0) ? $eventdata['extension']['raidleader'] : array();
 							$arrSendTo			= $this->pdh->get('member', 'userid', array($raidleaders_chars));
@@ -89,9 +89,9 @@ if (!class_exists('exchange_raid_signup')){
 							$arrSendTo			= array_unique($arrSendTo);
 							$strEventTitle		= sprintf($this->pdh->get('event', 'name', array($eventdata['extension']['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->user_date($eventdata['timestamp_start']).' '.$this->time->user_date($eventdata['timestamp_start'], false, true);
 							if (!in_array($this->user->id, $arrSendTo)) $this->ntfy->add('calendarevent_char_statuschange', $eventid.'_'.$memberid, $this->pdh->get('member', 'name', array($memberid)), $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($eventid)), $eventid, true, true), $arrSendTo, $strEventTitle);
-								
+
 							$this->pdh->process_hook_queue();
-							
+
 							return array('status'	=> 1);
 						} else {
 							return $this->pex->error('required data missing', 'memberid');
@@ -107,4 +107,3 @@ if (!class_exists('exchange_raid_signup')){
 		}
 	}
 }
-?>
