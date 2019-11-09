@@ -49,7 +49,7 @@ class points_pageobject extends pageobject {
 			$show_twinks = true;
 			$sort_suffix = '&amp;show_twinks=1';
 		}
-				
+
 		//DKP Id
 		$mdkp_suffix = '';
 		$arrOverviewSettings = $this->pdh->get_page_settings('listmembers', 'hptt_listmembers_memberlist_overview');
@@ -58,7 +58,7 @@ class points_pageobject extends pageobject {
 		} else {
 			$mdkpid = $this->in->get('mdkpid', 0);
 		}
-		
+
 		//redirect on member compare
 		if($this->in->exists('compare_b') && $this->in->get('compare_b') == $this->user->lang('compare_members')){
 			if($this->in->exists('selected_ids')){
@@ -69,15 +69,15 @@ class points_pageobject extends pageobject {
 				redirect($compare_link);
 			}
 		}
-	
-		
+
+
 		//Multidkp selection output
 		$multilist = $this->pdh->get('multidkp', 'id_list', array());
 		if(!count($multilist)){
 			message_die('No MultiDKP Pool created. Please create a MultiDKP Pool.');
 			return;
 		}
-		
+
 		if($mdkpid == 0){
 			$hptt_page_settings = $this->pdh->get_page_settings('listmembers', 'hptt_listmembers_memberlist_overview');
 			$defaultPoolOverview = (isset($arrOverviewSettings['default_pool_ov'])) ? $arrOverviewSettings['default_pool_ov'] : $multilist[0];
@@ -148,7 +148,7 @@ class points_pageobject extends pageobject {
 
 		$hptt = $this->get_hptt($hptt_page_settings, $full_list, $view_list, array('%dkp_id%' => (($mdkpid == 0) ? $defaultPoolOverview : $mdkpid), '%link_url%' => $this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%with_twink%' => !intval($this->config->get('show_twinks')), '%use_controller%' => true), $mdkp_suffix);
 		$hptt->setPageRef($this->strPath);
-		
+
 		if((int)$this->config->get('enable_leaderboard')){
 			$leaderboard_settings	= $this->pdh->get_page_settings('listmembers', 'listmembers_leaderboard');
 			$lb_id = $this->in->get('lb_mdkpid', $leaderboard_settings['default_pool']);
@@ -160,9 +160,9 @@ class points_pageobject extends pageobject {
 				));
 			}
 		}
-		
+
 		$arrRaidgroups = $this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list')));
-		
+
 		$this->tpl->assign_block_vars('filter_row', array(
 				'VALUE'		=> '',
 				'SELECTED'	=> '',
@@ -175,7 +175,7 @@ class points_pageobject extends pageobject {
 					'OPTION'	=> $this->user->lang('calendar_raidgroup').' '.$details,
 			));
 		}
-		
+
 		$this->tpl->assign_vars(array (
 			'POINTOUT'					=> $hptt->get_html_table($sort, $suffix, null, null, $footer_text),
 			'BUTTON_NAME'				=> 'compare_b',
@@ -229,13 +229,11 @@ class points_pageobject extends pageobject {
 						}
 						$view_list = array_unique($temp);
 					}
-					
-					
+
+
 					break;
 			}
 		}
 		return $view_list;
 	}
 }
-
-?>

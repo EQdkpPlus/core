@@ -111,7 +111,7 @@ if (!class_exists("feed")) {
 			$this->pfh->putContent($path, $this->generate());
 			$this->reset();
 		}
-		
+
 		private function reset(){
 			$this->items = array();
 			$this->data = array();
@@ -137,4 +137,3 @@ if (!class_exists("feed")) {
 		}
 	}
 }
-?>

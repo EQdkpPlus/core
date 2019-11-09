@@ -143,7 +143,7 @@ abstract class super_registry {
 			self::$const['server_path'] = registry::register('config')->get('server_path');
 			self::$const['controller_path'] = self::$const['server_path'].((!intval(registry::register('config')->get('seo_remove_index'))) ? 'index.php/' : '');
 			self::$const['controller_path_plain'] = ((!intval(registry::register('config')->get('seo_remove_index'))) ? 'index.php/' : '');
-			
+
 			//Auth/User
 			require(self::$const['root_path'] . 'core/auth.class.php');
 			$auth_method = 'auth_'.((registry::register('config')->get('auth_method') != '') ? registry::register('config')->get('auth_method') : 'db');
@@ -370,5 +370,3 @@ abstract class super_registry {
 	}
 
 }
-
-?>

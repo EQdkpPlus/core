@@ -25,7 +25,7 @@ if ( !defined('EQDKP_INC') ){
 
 class cronjobs extends gen_class {
 	public static $dependencies = array('pfh');
-	
+
 	public function __construct(){
 		include_once($this->root_path.'core/cronjobs/crontask.aclass.php');
 		$this->init_cronsystem();
@@ -49,14 +49,14 @@ class cronjobs extends gen_class {
 		'description'		=> null
 	);
 
-	
+
 	private function init_cronsystem(){
 		$this->system_cron_dir = $this->root_path.'core/cronjobs/';
 		$this->load_crontab();
 		$this->scan_system_crontasks();
 	}
 
-	
+
 	public function scan_system_crontasks(){
 		$dh = opendir($this->system_cron_dir);
 		while (false !== ($file = readdir($dh))) {
@@ -78,21 +78,21 @@ class cronjobs extends gen_class {
 	public function set_active($task_name, $intStartTime=null){
 		if($intStartTime === null) $intStartTime = $this->crontab[$task_name]['start_time'];
 		if(!$intStartTime) $intStartTime = $this->time->time;
-		
+
 		$this->pdh->put('cronjobs', 'setActive', array($task_name, array('start_time' => $intStartTime)));
 		$this->pdh->process_hook_queue();
 		//Reload Crontab
 		$this->load_crontab();
 	}
-	
+
 	public function set_inactive($task_name){
 		$this->pdh->put('cronjobs', 'setInactive', array($task_name));
 		$this->pdh->process_hook_queue();
 		//Reload Crontab
 		$this->load_crontab();
 	}
-	
-	
+
+
 	public function add_cron($task_name, $custom_params = array(), $is_update = false){
 		if(array_key_exists($task_name, $this->crontab) && $is_update == false)
 			return false;
@@ -112,7 +112,7 @@ class cronjobs extends gen_class {
 			if($params['description'] == null)
 				$params['description'] = $task_name;
 			$params['last_run'] = 0;
-			
+
 			$this->pdh->put('cronjobs', 'add', array($task_name, $params['start_time'], $params['repeat'], $params['repeat_type'], $params['repeat_interval'], $params['extern'], $params['ajax'],$params['delay'], $params['multiple'], $params['active'], $params['editable'], $params['path'], $params['params'], $params['description']));
 
 		}else{
@@ -128,34 +128,34 @@ class cronjobs extends gen_class {
 					}
 				}
 			}
-			
-			$this->pdh->put('cronjobs', 'update', array($task_name, $params['start_time'], $params['repeat'], $params['repeat_type'], $params['repeat_interval'], $params['extern'], $params['ajax'],$params['delay'], $params['multiple'], $params['active'], $params['editable'], $params['path'], $params['params'], $params['description']));	
+
+			$this->pdh->put('cronjobs', 'update', array($task_name, $params['start_time'], $params['repeat'], $params['repeat_type'], $params['repeat_interval'], $params['extern'], $params['ajax'],$params['delay'], $params['multiple'], $params['active'], $params['editable'], $params['path'], $params['params'], $params['description']));
 		}
 
 		$params['next_run'] = $this->calculate_next_run($params['repeat_interval'], $params['repeat_type'], false, $params['start_time'], $params['start_time']);
-		
+
 		$this->pdh->put('cronjobs', 'setLastAndNextRun', array($task_name, $params['last_run'], $params['next_run']));
 		$this->pdh->process_hook_queue();
-		
+
 		$this->crontab[$task_name] = $params;
 
 		return true;
 	}
 
-	
+
 	public function del_cron($task_name){
 		if(isset($this->crontab[$task_name])){
 			$this->pdh->put('cronjobs', 'delete', array($task_name));
 		}
 	}
 
-	
+
 	public function run_cron($task_name, $force_run = false, $force_non_ajax=false){
 		if(!$force_run && !$this->cron_necessary($task_name)){
 			return false;
 		}
 
-		if ($this->crontab[$task_name]['ajax'] == true && !$force_non_ajax){		
+		if ($this->crontab[$task_name]['ajax'] == true && !$force_non_ajax){
 			if ($force_run){
 				$this->tpl->add_js('$.get("'.$this->server_path.'cronjob.php'.$this->SID.'&task='.$task_name.'&force=true", function( data ) {
 					if (typeof cronjob_admin_callback !== \'undefined\' && $.isFunction(cronjob_admin_callback)){
@@ -170,14 +170,14 @@ class cronjobs extends gen_class {
 		}
 	}
 
-	
+
 	public function execute_cron($task_name, $force_run = false){
 		define("IN_CRON", true);
-		
+
 		if(!$force_run && !$this->cron_necessary($task_name)){
 			return false;
 		}
-		
+
 		$file_name	= $task_name.'_crontask.class.php';
 		$file_path	= $this->root_path.$this->crontab[$task_name]['path'].$file_name;
 
@@ -192,7 +192,7 @@ class cronjobs extends gen_class {
 			if (!$params){
 				$params = array();
 			}
-			
+
 			//Create Lock File
 			$strLockFile = $this->pfh->FolderPath('timekeeper', 'eqdkp').'cron_lock_'.md5($task_name).'.txt';
 			if(is_file($strLockFile)){
@@ -218,7 +218,7 @@ class cronjobs extends gen_class {
 			if (!$force_run){
 				$this->crontab[$task_name]['next_run'] = $this->calculate_next_run($this->crontab[$task_name]['repeat_interval'], $this->crontab[$task_name]['repeat_type'], $this->crontab[$task_name]['multiple'], $this->crontab[$task_name]['next_run'], $this->crontab[$task_name]['start_time']);
 			}
-			
+
 			//Save Last and Next Run
 			$this->pdh->put('cronjobs', 'setLastAndNextRun', array($task_name, $this->crontab[$task_name]['last_run'], $this->crontab[$task_name]['next_run']));
 			$this->pdh->process_hook_queue();
@@ -226,7 +226,7 @@ class cronjobs extends gen_class {
 		}
 	}
 
-	
+
 	public function cron_necessary($task_name){
 		//task active?
 		if($this->crontab[$task_name]['active'] == true){
@@ -246,7 +246,7 @@ class cronjobs extends gen_class {
 		return false;
 	}
 
-	
+
 	//Runs necessary Crons
 	public function handle_crons($extern = false){
 		$runcount = 0;
@@ -271,18 +271,18 @@ class cronjobs extends gen_class {
 		}
 	}
 
-	
+
 	public function list_crons($cron=''){
 		return isset($this->crontab[$cron]) ? $this->crontab[$cron] : $this->crontab;
 	}
 
-	
+
 	private function load_crontab(){
 		$arrCrontab = $this->pdh->get('cronjobs', 'crontab', array());
 		$this->crontab = $arrCrontab;
 	}
 
-	
+
 	public function calculate_next_run($repeat_interval, $repeat_type = 'minutely', $multiple = false, $next_run_eta = false, $start_time = false){
 		if ($next_run_eta && $next_run_eta > 1){
 			$relative_time = $next_run_eta;
@@ -328,7 +328,7 @@ class cronjobs extends gen_class {
 		}
 		return $next_run;
 	}
-	
+
 	public function add_months($number, $time){
 		if (date("d", $time) == date("t", $time)){
 			for ($i = 0; $i < $number; $i++){
@@ -336,18 +336,18 @@ class cronjobs extends gen_class {
 			}
 			return $time;
 		} else {
-		
+
 			return strtotime("+".$number." month", $time);
 		}
 	}
-	
+
 	public function lastDayOfMonth($month, $year)
 	{
 		 $result = strtotime("{$year}-{$month}-01");
 		 $result = strtotime('-1 second', strtotime('+1 month', $result));
 		 return date('Y-m-d', $result);
 	}
-	
+
 	public function addRealMonth($timeStamp)
 	{
 			// Check if it's the end of the year and the month and year need to be changed
@@ -360,7 +360,7 @@ class cronjobs extends gen_class {
 			}
 			else
 					$tempMonth++;
-		 
+
 			$newDate = $this->lastDayOfMonth($tempMonth, $tempYear);
 			return strtotime($newDate." ".date("H", $timeStamp).":".date("i", $timeStamp));
 	}

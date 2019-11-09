@@ -45,17 +45,17 @@ if ( !defined('EQDKP_INC') ){
 
 		public function add($tag, $value, $record_id = '', $record = '',  $admin_action=true, $plugin='', $result=1, $userid = false, $process_hooks=1){
 			$plugin = ($plugin != '') ? $plugin : $this->pluginname;
-			
+
 			$a = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 			unset($a[0]);
 			unset($a[1]);
 			$a = array_reverse($a);
-			
+
 			$strTrace = "";
 			foreach($a as $val){
 				$strTrace .= $val['class'].': '.$val['function'].'; ';
 			}
-			
+
 			$this->pdh->put('logs', 'add_log', array($tag, $value, $record_id, $record, $admin_action, $plugin, $result, $userid, $strTrace));
 			if($process_hooks) $this->pdh->process_hook_queue();
 		}
@@ -76,11 +76,11 @@ if ( !defined('EQDKP_INC') ){
 			}
 			return $variable;
 		}
-		
+
 		public function option_lang($option){
 			return ($option == 1) ? '{L_OPTION_TRUE}' : '{L_OPTION_FALSE}';
 		}
-		
+
 		/*
 		 * $arrOld = array(1,2,3)
 		 * $arrNew = array(4,5,6)
@@ -92,7 +92,7 @@ if ( !defined('EQDKP_INC') ){
 			if ($arrOld && !$blnOnlyNewKeys){
 				foreach($arrOld as $key => $val){
 					if ($arrNew[$key] != $val){
-						$arrChanged[$arrLang[$key]] = array('old' => $val, 'new' => $arrNew[$key], 'flag' => ((isset($arrFlags[$key])) ? $arrFlags[$key] : 0)); 
+						$arrChanged[$arrLang[$key]] = array('old' => $val, 'new' => $arrNew[$key], 'flag' => ((isset($arrFlags[$key])) ? $arrFlags[$key] : 0));
 					}
 				}
 			} elseif($arrOld && $blnOnlyNewKeys){
@@ -104,11 +104,10 @@ if ( !defined('EQDKP_INC') ){
 			} else {
 				foreach($arrNew as $key => $val){
 					if (isset($arrLang[$key])) $arrChanged[$arrLang[$key]] = $arrNew[$key];
-				}	
+				}
 			}
-			
+
 			return (count($arrChanged)) ? $arrChanged : false;
 		}
-		
+
 	}
-?>

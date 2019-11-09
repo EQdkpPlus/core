@@ -21,18 +21,18 @@
 
 if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
-} 
+}
 
 class gravatar extends gen_class {
 
 	public static $shortcuts = array('puf' => 'urlfetcher');
-	
+
 	private $url = 'https://secure.gravatar.com/avatar/%s?s=%d&r=g&d=%s';
 	private $intCachingTime = 24; //hours
-	
+
 	public function getAvatar($strEmail, $intSize = 64, $blnIgnoreNotFound=false){
 		$strHash = $this->buildHash($strEmail);
-		
+
 		$strCachedImage = $this->getCachedImage($strHash, $intSize);
 		if (!$strCachedImage){
 			//Download
@@ -41,7 +41,7 @@ class gravatar extends gen_class {
 		}
 		return $strCachedImage;
 	}
-	
+
 	public function deleteAvatar($strEmail, $intSize=64){
 		$strHash = $this->buildHash($strEmail);
 		$strCachedImage = $this->getCachedImage($strHash, $intSize);
@@ -49,25 +49,25 @@ class gravatar extends gen_class {
 			$this->pfh->Delete($strCachedImage);
 		}
 	}
-	
+
 	public function getCachedImage($strHash, $intSize){
 		$strImage = $strHash.'_'.$intSize.'.jpg';
-		
+
 		$strCacheFolder = $this->pfh->FolderPath('gravatar','eqdkp');
 		$strRelativeFile = $strCacheFolder.$strImage;
-		
+
 		if (is_file($strRelativeFile)){
 			//Check Cachetime
 			if ((filemtime($strRelativeFile)+(3600*$this->intCachingTime)) > time()) return $strRelativeFile;
 		}
 		return false;
 	}
-	
+
 	public function cacheImage($strHash, $intSize, $blnIgnoreNotFound=false){
 		$strImage = $strHash.'_'.$intSize.'.jpg';
 		$strCacheFolder = $this->pfh->FolderPath('gravatar','eqdkp');
 		$strRelativeFile = $strCacheFolder.$strImage;
-		
+
 		if($blnIgnoreNotFound){
 			$strAvatarURL = sprintf($this->url, $strHash, $intSize, 'identicon');
 			$result = $this->puf->fetch($strAvatarURL);
@@ -83,13 +83,12 @@ class gravatar extends gen_class {
 				if (is_file($strRelativeFile)) return $strRelativeFile;
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	private function buildHash($strEmail){
 		return md5(strtolower(trim($strEmail)));
 	}
 
 }
-?>

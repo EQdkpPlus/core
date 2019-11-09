@@ -31,7 +31,7 @@ class urlfetcher  extends gen_class {
 	private $methods			= array('curl', 'file_gets');			// available function methods
 	private $method				= '';											// the selected method
 	private $maxRedirects		= 5;
-	
+
 	private $responseStatus		= false;
 	private $responseCode		= 0;
 	private $responseHeader		= "";
@@ -70,14 +70,14 @@ class urlfetcher  extends gen_class {
 		$this->responseCode		= 0;
 		$this->responseHeader	= "";
 		$this->responseBody		= 0;
-		
+
 		$this->method = ($this->method) ? $this->method : 'fopen';
 		if (!$conn_timeout) $conn_timeout = $this->conn_timeout;
 		if (!$timeout) $timeout = $this->timeout;
 		$this->pdl->log('urlfetcher', 'fetch url: '.$geturl.' method: '.$this->method);
 		return $this->{'get_'.$this->method}($geturl, $header, $conn_timeout, $timeout, $blnIgnoreResponseCode);
 	}
-	
+
 	public function fetch_last_response(){
 		return array(
 			'status' 			=> $this->responseStatus,
@@ -87,12 +87,12 @@ class urlfetcher  extends gen_class {
 			'responseCode'		=> $this->responseCode,
 		);
 	}
-	
+
 	public function post($url, $data, $content_type = "text/html; charset=utf-8", $header='', $conn_timeout = false, $timeout = false){
 		if(is_array($data)){
 			$data = http_build_query($data, '', '&');
 		}
-		
+
 		$this->method = ($this->method) ? $this->method : 'fopen';
 		if (!$conn_timeout) $conn_timeout = $this->conn_timeout;
 		if (!$timeout) $timeout = $this->timeout;
@@ -123,40 +123,40 @@ class urlfetcher  extends gen_class {
 		);
 		if (@ini_get('open_basedir') == '') {
 			$curlOptions[CURLOPT_FOLLOWLOCATION] = true;
-			
+
 			$curl = curl_init();
 			curl_setopt_array($curl, $curlOptions);
 			curl_setopt( $curl, CURLOPT_HEADERFUNCTION, array( $this, 'curl_headers_callback' ) );
 			$body = curl_exec($curl);
-			
+
 			$code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-			
+
 			$arrCurlInfo = curl_getinfo($curl);
 			$curl_error = curl_errno($curl);
 			$this->pdl->log('urlfetcher', 'Curl Error Nr. '.$curl_error);
 			$this->pdl->log('urlfetcher', 'Curl Info: '.print_r($curl_error, true));
 			$this->pdl->log('urlfetcher', 'Response Code: '.$code);
-			$this->pdl->log('urlfetcher', 'Response: '.strlen($body).'; First 200 Chars: '.htmlspecialchars(substr($body, 0, 200)));	
-			
+			$this->pdl->log('urlfetcher', 'Response: '.strlen($body).'; First 200 Chars: '.htmlspecialchars(substr($body, 0, 200)));
+
 			$this->responseStatus	= (intval($code) >= 400) ? false : true;
 			$this->responseCode		= intval($code);
 			$this->responseHeader	= $this->parseHeaders($this->responseHeader);
 			$this->responseBody		= $body;
-			
+
 			curl_close($curl);
 			if(intval($code) >= 400 && !$blnIgnoreResponseCode) return false;
-			
-			return $body;	
+
+			return $body;
 		} else {
 			$curlOptions[CURLOPT_HEADER] = true;
 			$curlOptions[CURLOPT_FORBID_REUSE] = false;
 			$curlOptions[CURLOPT_RETURNTRANSFER] = true;
-			
+
 			$maxRedirects = $this->maxRedirects;
-			
+
 			$curl = curl_init();
 			curl_setopt_array($curl, $curlOptions);
-			
+
 			$newurl = curl_getinfo($curl, CURLINFO_EFFECTIVE_URL);
 			$code = 0;
 			do {
@@ -170,7 +170,7 @@ class urlfetcher  extends gen_class {
 						preg_match('/Location:(.*?)\n/', $header, $matches);
 						$newurl = trim(array_pop($matches));
 						if(stripos($newurl, '://') === false){
-							$curlData = curl_getinfo($curl);						
+							$curlData = curl_getinfo($curl);
 							$urlData = parse_url($curlData['url']);
 							$newurl = $urlData['scheme'].'://'.$urlData['host'].$newurl;
 						}
@@ -181,46 +181,46 @@ class urlfetcher  extends gen_class {
 						$code = 0;
 					}
 				}
-			
+
 			} while ($code && --$maxRedirects);
-			
+
 			if ($maxRedirects < 0) {
 				trigger_error('Too many redirects. When following redirects, libcurl hit the maximum amount.', E_USER_WARNING);
 				return false;
 			}
-			
+
 			curl_setopt($curl, CURLOPT_URL, $newurl);
 			curl_setopt($curl, CURLOPT_HEADERFUNCTION, array( $this, 'curl_headers_callback' ) );
 			$getdata = curl_exec($curl);
 			$code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-			
+
 			$arrCurlInfo = curl_getinfo($curl);
 			$curl_error = curl_errno($curl);
 			$this->pdl->log('urlfetcher', 'Curl Error Nr. '.$curl_error);
 			$this->pdl->log('urlfetcher', 'Curl Info: '.print_r($curl_error, true));
-			
+
 			curl_close($curl);
 			//Remove Header
-			list ($header,$page) = preg_split('/\r\n\r\n/',$getdata,2); 
-			
+			list ($header,$page) = preg_split('/\r\n\r\n/',$getdata,2);
+
 			$this->responseStatus	= (intval($code) >= 400) ? false : true;
 			$this->responseCode		= intval($code);
 			$this->responseHeader	= $this->parseHeaders($this->responseHeader);
 			$this->responseBody		= $page;
-			
+
 			$this->pdl->log('urlfetcher', 'Response Code: '.$code);
 			$this->pdl->log('urlfetcher', 'Reponse latest Header: '.$header);
 			$this->pdl->log('urlfetcher', 'Response: '.strlen($page).'; First 200 Chars: '.htmlspecialchars(substr($page, 0, 200)));
-			 
+
 			return $page;
 		}
 	}
-	
+
 	private function curl_headers_callback($curl, $string){
 		$this->responseHeader	.= $string;
 		return strlen($string);
 	}
-	
+
 	private function post_curl($url, $data, $content_type, $header, $conn_timeout, $timeout){
 		if (is_array($header) && count($header) > 0){
 			$header[] = "Content-type: ".$content_type;
@@ -230,7 +230,7 @@ class urlfetcher  extends gen_class {
 			$header[] = "Content-type: ".$content_type;
 			$header[] = "Content-Length: ".strlen($data);
 		}
-		
+
 		$curlOptions = array(
 			CURLOPT_URL				=> $url,
 			CURLOPT_USERAGENT		=> $this->useragent,
@@ -254,15 +254,15 @@ class urlfetcher  extends gen_class {
 		curl_setopt_array($curl, $curlOptions);
 		$getdata = curl_exec($curl);
 		$code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-		
+
 		$arrCurlInfo = curl_getinfo($curl);
 		$curl_error = curl_errno($curl);
 		$this->pdl->log('urlfetcher', 'Curl Error Nr. '.$curl_error);
 		$this->pdl->log('urlfetcher', 'Curl Info: '.print_r($curl_error, true));
-		
+
 		curl_close($curl);
-		
-		$this->pdl->log('urlfetcher', 'Response Code: '.$code);	
+
+		$this->pdl->log('urlfetcher', 'Response Code: '.$code);
 		$this->pdl->log('urlfetcher', 'Response: '.strlen($getdata).'; First 200 Chars: '.htmlspecialchars(substr($getdata, 0, 200)));
 		return trim($getdata);
 	}
@@ -293,21 +293,21 @@ class urlfetcher  extends gen_class {
 		$getdata	= @file_get_contents($geturl, false, $context);
 		if($getdata === false) 		$this->pdl->log('urlfetcher', 'file_get_contents ERROR, see php Log');
 		else 		$this->pdl->log('urlfetcher', 'Response: '.strlen($getdata).'; First 200 Chars: '.htmlspecialchars(substr($getdata, 0, 200)));
-		
+
 		$arrHeaders = $this->parseHeaders($http_response_header);
 		$this->responseStatus	= (intval($arrHeaders['response_code']) >= 400) ? false : true;
 		$this->responseCode		= intval($arrHeaders['response_code']);
 		$this->responseHeader	= $arrHeaders;
 		$this->responseBody		= $getdata;
-		
+
 		return $getdata;
 	}
-	
+
 	private function post_file_gets($url, $data, $content_type, $header, $conn_timeout, $timeout){
 		$header = "Content-type: ".$content_type."\r\n"
                 . "Content-Length: " . strlen($data) . "\r\n";
 		$header .= ((is_array($header) && count($header) > 0) ? implode("\r\n", $header): '');
-	
+
 		$opts = array (
 			'http'	=>array (
 				'method'	=> 'POST',
@@ -317,14 +317,14 @@ class urlfetcher  extends gen_class {
 				'content'	=> $data,
 			)
 		);
-		
+
 		$context	= @stream_context_create($opts);
 		$getdata	= @file_get_contents($url, false, $context);
 		if($getdata === false) 		$this->pdl->log('urlfetcher', 'file_get_contents ERROR, see php Log');
 		else $this->pdl->log('urlfetcher', 'Response: '.strlen($getdata).'; First 200 Chars: '.htmlspecialchars(substr($getdata, 0, 200)));
-		
+
 		return $getdata;
-	
+
 	}
 
 	private function check_function($method){
@@ -336,13 +336,13 @@ class urlfetcher  extends gen_class {
 		}
 		return (function_exists($func_ex)) ? true : false;
 	}
-	
+
 	private function parseHeaders( $mixHeaders )
 	{
-		if(!is_array($mixHeaders)){	
+		if(!is_array($mixHeaders)){
 			$mixHeaders = explode("\r\n", $mixHeaders);
 		}
-		
+
 		$head = $out = array();
 		foreach( $mixHeaders as $k=>$v )
 		{

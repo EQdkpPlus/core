@@ -97,15 +97,15 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 					$needs_update = true;
 					break;
 				}
-			}		
-			
+			}
+
 			if($needs_update) {
 				//reset
 				$this->pdc->del_prefix($this->page.$this->cache_suffix);
 				//put new update time
 				$this->timekeeper->put('hptt_reset_times', $this->page, time(), true);
 			}
-			
+
 			//Check if reset for APA is necessary
 			$nextApaRun = register('auto_point_adjustments')->get_next_aparuns();
 			if($nextApaRun ){
@@ -116,7 +116,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 		public function get_column_count(){
 			return $this->column_count;
 		}
-		
+
 		public function get_row_count(){
 			return count($this->full_list);
 		}
@@ -169,7 +169,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 			$table	 .= $this->get_html_header_row($url_suffix, $this->settings['show_select_boxes'], $this->settings['show_numbers']);
 			$table	 .= $this->get_html_table_body($arrCheckboxCheck);
 			if(!count($this->view_list)) $table .= $this->get_html_empty_row();
-			
+
 			if(!$no_footer && $footer_text !== false) $table	 .= $this->get_html_footer_row($footer_text);
 			if($this->sub_array['%no_root%']) $table = str_replace('{ROOT_PATH}', $this->root_path, $table);
 			return $table;
@@ -287,7 +287,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 					$params = $column[2];
 					$td_add = $column['td_add'];
 					$this->sub_array[$this->id_tag] = $view_id;
-					
+
 					if(strpos($td_add, 'class') !== false){
 						$td_add = preg_replace("/class=\"(.*)\"/U", "class=\"$1 twinktd\"", $td_add);
 					}
@@ -376,7 +376,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 		private function detail_twink_css_js() {
 			if(!$this->dt_cssjs AND ($this->config->get('detail_twink') AND $this->settings['show_detail_twink'])) {
 				$this->tpl->add_css('.toggle_members { cursor: default; width: 10px; height: 10px; }');
-				
+
 				$this->tpl->add_js("$('.toggle_members').on('click', function(){
 					if($(this).hasClass('fa-caret-square-o-up')){
 						//show
@@ -392,9 +392,9 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 						$(this).addClass('fa-caret-square-o-up');
 					}
 				})");
-				
-				
-				
+
+
+
 				$this->dt_cssjs = true;
 			}
 		}
@@ -403,7 +403,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 			$rowCount = count($this->columns);
 			if($this->settings['show_select_boxes']) $rowCount++;
 			if($this->settings['show_numbers']) $rowCount++;
-			
+
 			$footer  = "<tr>\n\t<th colspan=\"".$rowCount."\" class=\"footer\">";
 			if($footer_text == null){
 				$count = count($this->view_list);
@@ -414,12 +414,12 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 			$footer .= "</th>\n</tr>\n";
 			return $footer;
 		}
-		
+
 		public function get_html_empty_row(){
 			$rowCount = count($this->columns);
 			if($this->settings['show_select_boxes']) $rowCount++;
 			if($this->settings['show_numbers']) $rowCount++;
-				
+
 			$footer  = "<tr>\n\t<td colspan=\"".$rowCount."\" class=\"emptyTable\"><span style='font-style:italic;'>";
 			$footer .= $this->user->lang('hptt_empty_table');
 			$footer .= "</span></td>\n</tr>\n";
@@ -431,4 +431,3 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 		}
 	}//end class
 }//end if
-?>

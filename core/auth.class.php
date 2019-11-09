@@ -93,14 +93,14 @@ class auth extends user {
 		//Do we have an session? If yes, try to look if it's a valid session and get all information about it
 		if ($this->sid != ''){
 			$arrResult = false;
-			
+
 			$objQuery = $this->db->prepare("SELECT *
 								FROM __sessions s
 								LEFT JOIN __users u
 								ON u.user_id = s.session_user_id
 								WHERE s.session_id = ?
 								AND session_type = ?")->execute($this->sid, ((defined('SESSION_TYPE')) ? SESSION_TYPE : ''));
-			
+
 			if ($objQuery && $objQuery->numRows){
 				$arrResult = $objQuery->fetchAssoc();
 			}
@@ -116,11 +116,11 @@ class auth extends user {
 				//If the IP&Browser fits
 				if (($arrResult['session_ip'] === $this->env->ip) && ($arrResult['session_browser'] === $this->env->useragent)){
 					//Check Session length
-					if ((($arrResult['session_current'] + $this->session_length) > $this->current_time)){				
+					if ((($arrResult['session_current'] + $this->session_length) > $this->current_time)){
 						//We have a valid session
 						$this->data['user_id'] = ((int)$this->data['user_id'] === (int)$arrResult['session_user_id']) ? intval($arrResult['session_user_id']) : $this->data['user_id'];
-						$this->id = (int)$this->data['user_id'];					
-						
+						$this->id = (int)$this->data['user_id'];
+
 						// Only update session DB a minute or so after last update or if page changes
 						if ( !register('environment')->is_ajax && (($this->current_time - $arrResult['session_current'] > 60) || ($arrResult['session_page'] != $this->env->current_page) )){
 							$this->db->prepare("UPDATE __sessions :p WHERE session_id = ?")->set(array(
@@ -129,9 +129,9 @@ class auth extends user {
 							))->execute($this->sid);
 						}
 						//The Session is valid, copy the user-data to the data-array and finish the init. You can work with this data.
-	
+
 						registry::add_const('SID', "?s=".((!empty($arrCookieData['sid'])) ? '' : $this->sid));
-						
+
 						//If its an guest session, try autologins, otherwise return true;
 						if($this->id === ANONYMOUS){
 							$boolIsExistingGuestSession = true;
@@ -145,13 +145,13 @@ class auth extends user {
 					}
 				}
 			}
-		} else {			
+		} else {
 			$this->blnFirstVisit = true;
 		}
-		
+
 		$this->data['user_id'] = ANONYMOUS;
-		
-		
+
+
 		//START Autologin
 		$boolSetAutoLogin = false;
 
@@ -198,14 +198,14 @@ class auth extends user {
 		if($boolIsExistingGuestSession && !$boolSetAutoLogin){
 			return true;
 		}
-		
+
 		//Return, if we don't want a new session
 		if (defined('NO_NEW_SESSION')) {
 			$this->sid = "";
 			registry::add_const('SID', '?s=');
 			return true;
 		}
-		
+
 		//Let's create a session
 		$this->create($this->data['user_id'], (isset($this->data['user_login_key']) ? $this->data['user_login_key'] : ''), $boolSetAutoLogin, ((isset($this->data['old_sessionkey'])) ? $this->data['old_sessionkey'] : false)  );
 		$this->id = $this->data['user_id'];
@@ -238,7 +238,7 @@ class auth extends user {
 				'session_key'			=> $strSessionKey,
 				'session_type'			=> (defined('SESSION_TYPE')) ? SESSION_TYPE : '',
 		);
-		
+
 		$blnIsBot = $this->env->is_bot($this->env->useragent);
 		//Select count of concurrent sessions - if guest
 		if($user_id === ANONYMOUS && !$blnIsBot){
@@ -259,7 +259,7 @@ class auth extends user {
 						} else {
 							//Don't create a new session
 							$arrData['session_id'] = "sharedguestsession";
-							$this->sid = "sharedguestsession";	
+							$this->sid = "sharedguestsession";
 						}
 					} else {
 						//Don't create a new session
@@ -284,14 +284,14 @@ class auth extends user {
 		$arrCookieData = array();
 		$arrCookieData['user_id'] = $user_id;
 		if ($boolSetAutoLogin && ($user_id != ANONYMOUS)){
-		
+
 			if (!strlen($strAutologinKey)){
 				$strAutologinKey = hash('sha512', random_string(64));
 				$this->updateAutologinKey($user_id, $strAutologinKey);
 			}
 			$arrCookieData['auto_login_id'] = $strAutologinKey;
 		}
-		
+
 		// set the cookies
 		set_cookie('data', base64_encode(serialize($arrCookieData)), $this->current_time + 2592000); //30 days
 		set_cookie('sid', $this->sid, 0);
@@ -325,7 +325,7 @@ class auth extends user {
 		$this->sid = '';
 		return true;
 	}
-	
+
 	/**
 	 * Destroys a specific Session
 	 *
@@ -334,14 +334,14 @@ class auth extends user {
 	 */
 	public function destroy_session($strSID){
 		$this->db->prepare("DELETE FROM __sessions WHERE session_id=?")->execute($strSID);
-		
+
 		return true;
 	}
-	
-	
+
+
 	/**
 	 * Destroys all sessions of given UserID
-	 * 
+	 *
 	 * @param integer $intUserID
 	 * @return boolean
 	 */
@@ -350,37 +350,37 @@ class auth extends user {
 		$this->user->updateAutologinKey($intUserID, '');
 		return true;
 	}
-	
+
 
 	/**
 	 * Destroys all other sessions but the current one of a given user
-	 * 
+	 *
 	 * @param integer $intUserID
 	 */
 	public function destroyOtherSessions($intUserID = false){
 		if($intUserID === false) $intUserID = $this->id;
-		
+
 		if(!$intUserID) return false;
-		
+
 		if($this->sid){
 			$this->db->prepare("DELETE FROM __sessions WHERE session_user_id=? AND session_id!=?")->execute($intUserID, $this->sid);
 		} else {
 			$this->destroyUserSessions($intUserID);
 		}
-		
+
 		$this->user->updateAutologinKey($intUserID, '');
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Get all running sessions of a given user
-	 * 
+	 *
 	 * @param integer $intUserID
 	 */
 	public function getAllUserSessions($intUserID = false){
 		if($intUserID === false) $intUserID = $this->id;
-		
+
 		if(!$intUserID) return array();
 
 		$objQuery = $this->db->prepare("SELECT * FROM __sessions WHERE session_user_id=?")->execute($intUserID);
@@ -389,11 +389,11 @@ class auth extends user {
 			return $arrQuery;
 		}
 	}
-	
+
 
 	/**
 	 * Changes User of the current Session
-	 * 
+	 *
 	 * @param integer $intUserID
 	 */
 	public function changeSessionUser($intUserID){
@@ -405,17 +405,17 @@ class auth extends user {
 			if($arrUserData && count($arrUserData)){
 				$this->id = $intUserID;
 				$this->data = $arrUserData;
-				
+
 				$this->db->prepare("UPDATE __sessions :p WHERE session_id=?")->set(array(
 					'session_user_id' => $intUserID,
 				))->execute($this->sid);
-				
+
 				$this->setup();
 			}
 		}
 	}
-	
-	
+
+
 	/**
 	* Deletes old Sessions and updating of last-visit-date of the uers
 	*
@@ -427,16 +427,16 @@ class auth extends user {
 		$this->db->prepare("DELETE FROM __sessions
 									WHERE session_user_id = ?
 									AND session_current < ?")->execute(ANONYMOUS, $this->time->time - $this->session_length);
-		
-		
+
+
 		// Get expired user sessions
 		$objQuery = $this->db->prepare("SELECT DISTINCT(session_user_id) FROM __sessions WHERE session_current < ?")
 						->execute($this->time->time - ($this->session_length*2));
-		
+
 		if ($objQuery){
 			while($row = $objQuery->fetchAssoc()){
 				$intUserID = intval($row['session_user_id']);
-				
+
 				if ($intUserID > 0 ){
 					$objQueryMaxSession = $this->db->prepare("SELECT MAX(session_current) as max_session_current FROM __sessions WHERE session_user_id=?")->execute($intUserID);
 					if($objQueryMaxSession){
@@ -448,14 +448,14 @@ class auth extends user {
 						}
 					}
 				}
-				
+
 				//Delete user sessions
 				$this->db->prepare("DELETE FROM __sessions
 									WHERE session_user_id = ?
 									AND session_current < ?")->execute($intUserID, ($this->time->time - $this->session_length));
 			}
 		}
-		
+
 		$this->config->set('session_last_cleanup', $this->time->time);
 		return true;
 	}
@@ -470,11 +470,11 @@ class auth extends user {
 		$objQuery = $this->db->prepare("SELECT u.*, s.*
 				FROM __sessions s, __users u
 				WHERE s.session_id = ?
-				AND u.user_id = s.session_user_id")->execute($sid);	
+				AND u.user_id = s.session_user_id")->execute($sid);
 
 		if ($objQuery){
 			$data = $objQuery->fetchAssoc();
-			
+
 			// Did the session exist in the DB?
 			if(isset($data['user_id'])){
 				// Validate IP
@@ -497,7 +497,7 @@ class auth extends user {
 		//Replace other sessions
 		$string = preg_replace('/s=[a-zA-Z0-9]{40}/', '', $string);
 		$string = str_replace('?&', '?', $string);
-		
+
 		return $string;
 	}
 
@@ -509,7 +509,7 @@ class auth extends user {
 	public function generate_session_key(){
 		return substr(md5(generateRandomBytes(55)), 0, 12);
 	}
-	
+
 	/**
 	* CSRF GET Token
 	*
@@ -522,7 +522,7 @@ class auth extends user {
 		$arrSessionKeys = explode(";", $strSessionKeys);
 		$arrSessionKeys = array_reverse($arrSessionKeys);
 		$strSessionKey = $arrSessionKeys[0];
-		
+
 		return substr(sha1($strUserPassword.$strAction.$strSessionKey), 0, 12);
 	}
 
@@ -542,14 +542,14 @@ class auth extends user {
 		//Check new Token
 		$strExpectedToken = substr(sha1($strUserPassword.$strAction.$strSessionKeyNew), 0, 12);
 		if ($strToken === $strExpectedToken) return true;
-		
+
 		//Check old Token
 		if (isset($arrSessionKeys[1])){
 			$strSessionKeyOld = $arrSessionKeys[1];
 			$strExpectedToken = substr(sha1($strUserPassword.$strAction.$strSessionKeyOld), 0, 12);
 			if ($strToken === $strExpectedToken) return true;
 		}
-		
+
 		return false;
 	}
 
@@ -578,17 +578,17 @@ class auth extends user {
 		$arrSessionKeys = explode(";", $strSessionKeys);
 		$arrSessionKeys = array_reverse($arrSessionKeys);
 		$strSessionKeyNew = $arrSessionKeys[0];
-		
+
 		$strExpectedToken = $strSessionKeyNew;
 		if ($strToken === $strExpectedToken) return true;
-		
+
 		//Check old Token
 		if (isset($arrSessionKeys[1])){
 			$strSessionKeyOld = $arrSessionKeys[1];
 			$strExpectedToken = $strSessionKeyOld;
 			if ($strToken === $strExpectedToken) return true;
 		}
-		
+
 		return false;
 	}
 
@@ -601,7 +601,7 @@ class auth extends user {
 		$objQuery = $this->db->prepare("UPDATE __sessions :p WHERE session_id=?")->set(array(
 			'session_perm_id' => $intUserID,
 		))->execute($this->sid);
-		
+
 		$this->pdc->flush();
 	}
 
@@ -612,14 +612,14 @@ class auth extends user {
 		$objQuery = $this->db->prepare("UPDATE __sessions :p WHERE session_id=?")->set(array(
 				'session_perm_id'					=> ANONYMOUS,
 		))->execute($this->sid);
-		
+
 		$this->pdc->flush();
 	}
 
 
 	public function setSessionVar($strVarname, $strValue){
 		$this->data['session_vars'][$strVarname] = $strValue;
-	
+
 		$objQuery = $this->db->prepare("UPDATE __sessions :p WHERE session_id=?")->set(array(
 				'session_vars' => serialize($this->data['session_vars']),
 		))->execute($this->sid);
@@ -705,7 +705,7 @@ class auth extends user {
 				include_once($this->root_path . 'core/auth/login/login_'.$strMethod.'.class.php');
 				$classname = 'login_'.$strMethod;
 				$functions = (class_exists($classname) && isset($classname::$functions)) ? $classname::$functions : array();
-				
+
 				if (isset($functions[$method])){
 					$objClass = register('login_'.$strMethod);
 					if (method_exists($objClass, $functions[$method])) $arrReturn[$strMethod] = $objClass->{$functions[$method]}($arrOptions);
@@ -753,4 +753,3 @@ class auth extends user {
 		return false;
 	}
 }
-?>

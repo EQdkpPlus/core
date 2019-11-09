@@ -43,11 +43,11 @@ class input extends gen_class {
 		if (filter_has_var(INPUT_GET, $key)){
 			return INPUT_GET;
 		}
-		
+
 		// the fallback
 		return false;
 	}
-	
+
 	/**
 	* Injects an own input parameter with value
 	*
@@ -58,7 +58,7 @@ class input extends gen_class {
 	public function inject($strKey, $strValue){
 		$this->_own[$strKey] = $strValue;
 	}
-	
+
 	private function _getType($default, $owntype){
 		if (strlen($owntype)){
 			return $owntype;
@@ -67,8 +67,8 @@ class input extends gen_class {
 		}
 		return 'string';
 	}
-	
-	
+
+
 	private function _getFilter($type){
 		switch($type){
 			case 'int':					$out = FILTER_SANITIZE_NUMBER_INT;		break;
@@ -84,31 +84,31 @@ class input extends gen_class {
 		}
 		return $out;
 	}
-	
-	
+
+
 	private function _convert($value, $type){
 		switch($type){
-			case 'int':					
+			case 'int':
 			case 'integer': $out = intval($value);
 				break;
 
 			case 'float':
 			case 'double': $out = $this->floatvalue($value);
 				break;
-			
+
 			default: $out = $value;
 		}
 		return $out;
 	}
-	
+
 	private function _options($type){
 		switch($type){
 			case 'noencquotes' : $out = FILTER_FLAG_NO_ENCODE_QUOTES;
 				break;
-				
+
 			default: $out = '';
 		}
-		
+
 		return $out;
 	}
 
@@ -123,7 +123,7 @@ class input extends gen_class {
 	*/
 	private function _get_deep($keys, $default){
 		$retval = $default;
-		
+
 		foreach($keys as &$key) {
 		$key = preg_replace('/[^0-9A-Za-z_]/', '', filter_var($key, FILTER_SANITIZE_STRING));	//clean the key
 		}
@@ -158,10 +158,10 @@ class input extends gen_class {
 		$filter = $this->_getFilter($type);
 		$options = $this->_options($type);
 		$cache_name = md5($filter.'.'.$options);
-	
+
 		if($this->_caching && isset($this->_cache[$cache_name][$key])){
 			$out = $this->_cache[$cache_name][$key];
-		}else{	
+		}else{
 			if(strpos($key,':')) {
 				$out		= filter_var($this->_get_deep(explode(':', $key),$default), $filter, $options);
 			} else {
@@ -172,7 +172,7 @@ class input extends gen_class {
 						$out = filter_var($this->_own[$key], $filter, $options);
 					}
 				}
-				
+
 			}
 			$out		= ($out === false || $out === NULL || $out === '') ? $default : $out;
 			$this->_cache[$cache_name][$key] = $out;
@@ -239,30 +239,29 @@ class input extends gen_class {
 	public function decode_entity($value){
 		return html_entity_decode($value, ENT_QUOTES);
 	}
-	
+
 	public function getCookie($key, $default='') {
 		$type = $this->_getType($default, '');
 		$filter = $this->_getFilter($type);
-		
+
 		$out		= filter_input(INPUT_COOKIE, $key, $filter, $this->_options($type));
 		$out		= ($out === false || $out === NULL || $out === '') ? $default : $out;
 
 		return (isset($filter) && $filter != '') ? $this->_convert($out, $type) : $out;
 	}
-	
+
 	public function getSession($key, $default='') {
 		$type = $this->_getType($default, '');
 		$filter = $this->_getFilter($type);
-		
+
 		$out		= filter_input(INPUT_SESSION, $key, $filter, $this->_options($type));
 		$out		= ($out === false || $out === NULL || $out === '') ? $default : $out;
 
 		return (isset($filter) && $filter != '') ? $this->_convert($out, $type) : $out;
 	}
-	
+
 	public function getEQdkpCookie($key, $default=''){
 		$cookie_name = registry::register('config')->get('cookie_name') . '_' . $key;
 		return $this->getCookie($cookie_name, $default);
 	}
 }
-?>

@@ -27,13 +27,13 @@ class config extends gen_class {
 
 	protected $config_modified	= false;
 	protected $config			= array();
-	
+
 	private $changed_keys = array();
 	private $deleted_keys = array();
 	private $added_keys = array();
 	private $blnCacheConfigLoaded = false;
 	private $blnRealConfigLoaded = false;
-	
+
 	public function __construct($pfh=false, $db=false)	{
 		$this->init_config();
 	}
@@ -42,10 +42,10 @@ class config extends gen_class {
 		if ($this->config_modified) $this->config_save();
 		parent::__destruct();
 	}
-	
+
 	/**
 	 * Return Config var from Database
-	 * 
+	 *
 	 * @param string $config_name
 	 * @param string $plugin
 	 * @return mixed
@@ -56,34 +56,34 @@ class config extends gen_class {
 		if($plugin) return (isset($this->config[$plugin][$name])) ? $this->config[$plugin][$name] : false;
 		return (isset($this->config[$name])) ? $this->config[$name] : false;
 	}
-	
+
 	/**
 	 * Return Config var from Cache
-	 * 
+	 *
 	 * @param string $config_name
 	 * @param string $plugin
 	 * @return mixed
 	 */
-	public function get_cached($name, $plugin='') {		
+	public function get_cached($name, $plugin='') {
 		if($plugin) return (isset($this->config[$plugin][$name])) ? $this->config[$plugin][$name] : false;
 		return (isset($this->config[$name])) ? $this->config[$name] : false;
 	}
-	
+
 	/**
 	 * Get Config from Database
-	 * 
+	 *
 	 * @param string $plugin
 	 * @return multitype:
 	 */
 	public function get_config($plugin=''){
 		if(!$this->blnRealConfigLoaded) $this->get_dbconfig();
-		
+
 		return ($plugin) ? ((empty($this->config[$plugin])) ? array() : $this->config[$plugin]) : $this->config;
 	}
-	
+
 	/**
 	 * Get Config from Cache
-	 * 
+	 *
 	 * @param string $plugin
 	 * @return multitype:
 	 */
@@ -92,7 +92,7 @@ class config extends gen_class {
 	}
 
 	public function set($config_name, $config_value='', $plugin=''){
-		
+
 		if(is_array($config_name)){
 			foreach($config_name as $d_name => $d_value){
 				$this->set($d_name, $d_value, $plugin);
@@ -115,7 +115,7 @@ class config extends gen_class {
 					$this->config[$config_name]	= $config_value;
 					$this->added_keys[$strKey] = array('k' => $config_name, 'v' => $config_value, 'p' => 'core');
 					$this->config_modified = true;
-				}else if($this->config[$config_name] !== $config_value){					
+				}else if($this->config[$config_name] !== $config_value){
 					$this->config[$config_name]	= $config_value;
 					$this->changed_keys[$strKey] = array('k' => $config_name, 'v' => $config_value, 'p' => 'core');
 					$this->config_modified = true;
@@ -149,23 +149,23 @@ class config extends gen_class {
 		}
 		return false;
 	}
-	
-	
+
+
 	private function unserialize($val) {
 		//check for '{', only in this case we try an unserialize
 		if(strpos($val, ':{') === false) return $val;
-		
+
 		//fix escaped strings
 		$val = stripslashes( $val );
-		
+
 		$value = unserialize($val);
-		
+
 		// if value is an array now, return value, else return val
 		if(is_array($value)) return $value;
 		return $val;
 	}
 
-	private function get_dbconfig(){		
+	private function get_dbconfig(){
 		if(!is_object($this->db)){return true;}
 
 		$this->config			= array();
@@ -185,7 +185,7 @@ class config extends gen_class {
 
 		return $this->config;
 	}
-	
+
 	private function get_cacheconfig(){
 		$file = $this->pfh->FolderPath('config', 'eqdkp')."localconf.php";
 		if(is_file($file)){
@@ -193,13 +193,13 @@ class config extends gen_class {
 			if(isset($localconf)) $this->config = $localconf;
 			$this->blnCacheConfigLoaded = true;
 		}
-		
+
 		return $this->config;
 	}
-	
+
 	private function init_config(){
 		if(!defined('NO_CONFIG_CACHE')) $this->get_cacheconfig();
-				
+
 		// If the config file is empty, load it out of the database
 		if(count($this->config) < 1){
 			$this->get_dbconfig();
@@ -215,22 +215,22 @@ class config extends gen_class {
 		$all_keys = array();
 		if(is_array($this->changed_keys)) $all_keys = $this->changed_keys;
 		if(is_array($this->added_keys)) $all_keys = array_merge($this->added_keys, $all_keys);
-		
+
 		$done = array();
 		foreach($all_keys as $changed){
 			if(strlen(trim($changed['k'])) > 0 && !in_array($changed['k'].'___'.$changed['p'], $done)) {
 				$done[] = $changed['k'].'___'.$changed['p'];
-				
+
 				$this->db->prepare("REPLACE INTO __config :p")->set(array(
 					'config_name'	=> $changed['k'],
 					'config_value'	=> (is_array($changed['v'])) ? serialize($changed['v']) : $changed['v'],
 					'config_plugin'	=> $changed['p']
 				))->execute();
-				
+
 			}
 		}
 		unset($this->changed_keys, $this->added_keys);
-		
+
 		foreach($this->deleted_keys as $dk => $deleted){
 			if($deleted['k'] != null)
 				$this->db->prepare("DELETE FROM __config WHERE config_name = ? AND config_plugin = ?")->execute($deleted['k'], $deleted['p']);
@@ -294,11 +294,11 @@ class config extends gen_class {
 
 		$this->config_modified = false;
 	}
-	
+
 	public function flush(){
 		$this->config_save();
 	}
-	
+
 	// this fallback is for users with an empty localhost and the old table __backup_cnf (1.x to 2.x). Its just for
 	// reducing the amount of support tickets ;) Could be removed in 3.0
 	private function fallback_oldtable2newtable(){
@@ -308,4 +308,3 @@ class config extends gen_class {
 		}
 	}
 }
-?>

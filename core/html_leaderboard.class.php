@@ -129,4 +129,3 @@ if ( !class_exists( "html_leaderboard" ) ) {
 
 	}//end class
 }//end if
-?>

@@ -189,7 +189,7 @@ if (!class_exists("styles")){
 						} else {
 							$this->pdh->put('styles', 'update_version', array((string)$xml->version, $styleid));
 						}
-						
+
 						//Do some other update stuff
 						$update_file = $this->root_path."templates/".$style['template_path']."/update.xml";
 						if(file_exists($update_file)){
@@ -197,16 +197,16 @@ if (!class_exists("styles")){
 							foreach($update_xml->styleupdate as $objUpdate){
 								$arrAttributes = $objUpdate->attributes();
 								$strUpdateVersion = $arrAttributes['styleversion'];
-									
+
 								if($data['style_version'] == $strUpdateVersion){
 									//Delete files, only in template folder
-									foreach($objUpdate->delete as $strDeleteFile){									
+									foreach($objUpdate->delete as $strDeleteFile){
 										$strFolder = $this->root_path.'templates/'.$style['template_path'].'/';
 										if(isFilelinkInFolder(str_replace(registry::get_const('root_path'),"",$strFolder.$strDeleteFile), str_replace(registry::get_const('root_path'),"",$strFolder))){
 											$this->pfh->Delete($strFolder.$strDeleteFile);
 										}
 									}
-									
+
 									//Add additional less
 									foreach($objUpdate->additional_less as $strAdditionalLess){
 										$arrOptions = $this->pdh->get('styles', 'styles', array($styleid));
@@ -216,11 +216,11 @@ if (!class_exists("styles")){
 										$style_id	= $this->pdh->put('styles', 'update_style', array($styleid,$data));
 										$this->pdh->process_hook_queue();
 									}
-									
+
 								}
 							}
 						}
-						
+
 					}
 
 					if (!$update){
@@ -254,7 +254,7 @@ if (!class_exists("styles")){
 
 				//Get the install instructions
 				$xml = simplexml_load_file($installer_file);
-				
+
 				if ($xml){
 					$data = array(
 						'style_name'	=> (string)$xml->name,
@@ -297,7 +297,7 @@ if (!class_exists("styles")){
 							}
 						}
 						$this->core->message( sprintf($this->user->lang('install_style_suc'), $stylename), $this->user->lang('success'), 'green');
-						
+
 						return $style_id;
 					} else {
 						$this->core->message( sprintf($this->user->lang('install_style_nosuc'), $stylename), $this->user->lang('error'), 'red');
@@ -373,7 +373,7 @@ if (!class_exists("styles")){
 
 				foreach ($data as $key=>$value){
 					if(is_array($value)) $value = serialize($value);
-					
+
 					$fot .= "	<$key>$value</$key>\n";
 				}
 
@@ -472,7 +472,7 @@ if (!class_exists("styles")){
 		public function process_update($styleid){
 			$updateColors = ((int)$this->in->get('colors', 0) == 1);
 			$deleteChangedFiles = ((int)$this->in->get('template', 0) == 1);
-			
+
 			$this->reset($styleid, $updateColors, $deleteChangedFiles, true);
 		}
 
@@ -619,7 +619,7 @@ if (!class_exists("styles")){
 		public function deleteStyleCache($templatepath){
 			//Delete the Combined Files
 			$arrDir = sdir($this->pfh->FolderPath('templates', 'eqdkp').$templatepath, 'combined_*');
-			
+
 			foreach($arrDir as $file){
 				$this->pfh->Delete('templates/'.$templatepath.'/'.$file, 'eqdkp');
 			}
@@ -729,4 +729,3 @@ if (!class_exists("styles")){
 	}
 
 }
-?>

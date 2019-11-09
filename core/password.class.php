@@ -26,7 +26,7 @@ if ( !defined('EQDKP_INC') ){
 class password extends gen_class {
 
 	private $bcrypt_cost = 11;
-	
+
 	public $strBestHashMethod;
 
 
@@ -37,24 +37,24 @@ class password extends gen_class {
 
 	/**
 	 * Create a hash from a given password
-	 *  
+	 *
 	 * @param string $strPassword - the cleartext password
 	 * @param string $strMethod - the hashing method. Default, the best method is choosen
-	 * @return mixed - string for hash, false on error 
+	 * @return mixed - string for hash, false on error
 	 */
 	public function hash($strPassword, $strMethod = ''){
 		if ($strMethod == '') $strMethod = $this->strBestHashMethod;
-		
+
 		switch ($strMethod){
 			case "blowfish": return $this->hash_blowfish($strPassword);
 				break;
-				
+
 			case "argon2id": return $this->hash_argon2id($strPassword);
 				break;
-				
+
 			case "argon2i": return $this->hash_argon2i($strPassword);
 				break;
-			
+
 		}
 
 		return false;
@@ -63,7 +63,7 @@ class password extends gen_class {
 	/**
 	 * Checks a given plaintext password against the saved hash.
 	 * If a salt is needed, it should be appended to the password, seperated by colon (:)
-	 * 
+	 *
 	 * @param string $strPassword
 	 * @param string $strStoredHash
 	 * @return boolean
@@ -74,7 +74,7 @@ class password extends gen_class {
 		} else {
 			$strSalt = "";
 		}
-		
+
 		$strHashedPassword = $this->prehash($strPassword, $strSalt);
 		$strMethod = $this->getHashMethod($strStoredHash);
 		$strHash = false;
@@ -94,7 +94,7 @@ class password extends gen_class {
 			case "argon2i":
 			case "argon2id":	return password_verify($strPassword, $strStoredHash);
 				break;
-				
+
 			case "sha512":	$strHash = $this->crypt_private($strHashedPassword, $strStoredHash);
 				break;
 
@@ -103,32 +103,32 @@ class password extends gen_class {
 
 			case "salted_sha512": $strHash = hash('sha512', $strSalt.$strPassword);
 		}
-		
+
 		if(!$strHash) return false;
-		
+
 		if (function_exists('hash_equals')) {
 			return (hash_equals($strStoredHash, $strHash));
 		}
-		
-		
+
+
 		//Do the compare on our own
 		if (strlen($strStoredHash) !== strlen($strHash)) {
 			return false;
 		}
-		
+
 		//Prevent Timing attacks
 		for ($i = 0; $i < strlen($strHash); $i++) {
             $status |= (ord($strHash[$i]) ^ ord($strStoredHash[$i]));
         }
 
         $blnCompareStatus = ($status === 0);
-		
+
 		return ($blnCompareStatus);
 	}
 
 	/**
 	 * Builds a sha512 hash over the password concatenated with the salt
-	 * 
+	 *
 	 * @param string $strPassword
 	 * @param string $strSalt
 	 * @return string
@@ -139,7 +139,7 @@ class password extends gen_class {
 
 	/**
 	 * Returns the best suitable hashing algorithm on the sytem
-	 * 
+	 *
 	 * @throws Exception
 	 * @return string
 	 */
@@ -147,20 +147,20 @@ class password extends gen_class {
 		if (CRYPT_BLOWFISH == 1) return "blowfish";
 		if(defined('PASSWORD_ARGON2ID')) return "argon2id";
 		if(defined('PASSWORD_ARGON2I')) return "argon2i";
-		
+
 		throw new Exception("No suitable Crypto (bcrypt, argon) found.");
 	}
 
 	/**
 	 * Returns hashing method of a given Hash
-	 * 
+	 *
 	 * @param string $strHash
 	 * @return string|boolean
 	 */
 	private function getHashMethod($strHash){
 		if(strpos($strHash, ':') !== false){
 			list($strHash, $strSalt) = explode(':', $strHash);
-		}		
+		}
 		if (substr($strHash, 0, 4) == '$2a$' && strlen($strHash) == 60) return "blowfish_old";
 		if (substr($strHash, 0, 4) == '$2y$' && strlen($strHash) == 60) return "blowfish";
 		if (substr($strHash, 0, 4) == '$2x$' && strlen($strHash) == 60) return "blowfish";
@@ -177,48 +177,48 @@ class password extends gen_class {
 
 	/**
 	 * Checks if a given Hash needs an update
-	 * 
+	 *
 	 * @param string $strHash
 	 * @return boolean
 	 */
 	public function hashNeedsUpdate($strHash){
 		if(strpos($strHash, ':') !== false){
 			list($strHash, $strSalt) = explode(':', $strHash);
-		}		
-		
+		}
+
 		$strMethod = $this->getHashMethod($strHash);
 		$strBestMethod = $this->strBestHashMethod;
-		
+
 		if ($strMethod && ($strMethod !== $strBestMethod)){
 			return true;
 		}
-		
+
 		switch($strMethod){
 			case 'blowfish':
 			case 'blowfish_old': return password_needs_rehash($strHash, PASSWORD_BCRYPT, array('cost' => $this->bcrypt_cost));
 				break;
-				
+
 			case 'argon2id': return password_needs_rehash($strHash, PASSWORD_ARGON2ID);
 				break;
-			
+
 			case 'argon2i': return password_needs_rehash($strHash, PASSWORD_ARGON2I);
-				break;	
+				break;
 		}
-		
-		
+
+
 		return false;
 	}
-	
+
 	/**
 	 * Generate the Blowfish Hash with PHP built-in methods
-	 * 
+	 *
 	 * @param string $password
 	 * @return string
 	 */
 	private function hash_blowfish($password){
 		return password_hash($password, PASSWORD_BCRYPT, array('cost' => $this->bcrypt_cost));
 	}
-	
+
 	/**
 	 * Generate the Argon2ID Hash with PHP built-in methods
 	 *
@@ -228,7 +228,7 @@ class password extends gen_class {
 	private function hash_argon2id($password){
 		return password_hash($password, PASSWORD_ARGON2ID);
 	}
-	
+
 	/**
 	 * Generate the Argon2I Hash with PHP built-in methods
 	 *
@@ -239,4 +239,3 @@ class password extends gen_class {
 		return password_hash($password, PASSWORD_ARGON2I);
 	}
 }
-?>

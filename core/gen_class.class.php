@@ -18,7 +18,7 @@
  *	You should have received a copy of the GNU Affero General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
@@ -27,11 +27,11 @@ abstract class gen_class {
 	public static $dependencies = array();
 	public static $shortcuts = array();
 	public static $singleton = true;
-	
+
 	private $_shorts = array();
 	private $_shorts_loaded = false;
 	private $_class_index = array();
-	
+
 	public $class_hash = '';
 
 	public function __get($name) {
@@ -64,7 +64,7 @@ abstract class gen_class {
 		if($const = registry::get_const($name)) return $const;
 		return null;
 	}
-	
+
 	public function __isset($name) {
 		if(isset($this->_class_index[$name])) {
 			return true;
@@ -78,23 +78,22 @@ abstract class gen_class {
 		if(registry::class_exists($name)){
 			return true;
 		}
-		
+
 		return registry::isset_const($name);
 	}
-	
+
 	public static function __dependencies() {
 		if(!isset(static::$dependencies)) return array();
 		return static::$dependencies;
 	}
-	
+
 	public static function __shortcuts() {
 		if(!isset(static::$shortcuts)) return array();
 		return static::$shortcuts;
 	}
-	
+
 	public function __destruct() {
 		#echo '<span style="color:#ffff00;" >destruct called: '.get_class($this).'</span><br />';
 		registry::destruct(get_class($this), $this->class_hash);
 	}
 }
-?>

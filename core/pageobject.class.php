@@ -29,65 +29,65 @@ if(!class_exists('pageobject')){
 		public $strPath = '';
 		public $strPathPlain = '';
 		public $strPage = '';
-		
+
 		protected function set_vars($arrVars){
 			if (!isset($this->arrVars['display']) || $this->arrVars['display'] = false) $this->arrVars = $arrVars;
 		}
-		
+
 		public function get_vars(){
 			return $this->arrVars;
 		}
-		
+
 		public function __construct($pre_check=false, $handler=false, $pdh_call=array(), $params=null, $cb_name='', $url_id='') {
 			parent::__construct($pre_check, $handler, $pdh_call, $params, $cb_name, $url_id);
 			if (registry::isset_const('url_id')){
 				$myUrlID = (is_array($url_id)) ? $url_id[0] : $url_id;
 				$this->set_url_id((($myUrlID != "") ? $myUrlID  : registry::get_const('url_id')), registry::get_const('url_id'));
 			}
-			
+
 			//Build Path
 			$strPath = $this->server_path;
 			if (!intval($this->config->get('seo_remove_index'))) $strPath .= 'index.php/';
 			$strPagePath = (strlen($this->page_path))  ? $this->page_path : $this->env->path;
 			if (strpos($strPagePath, "/") === 0) $strPagePath = substr($strPagePath, 1);
-			
+
 			$strPath .= $strPagePath;
-			
+
 			$this->strPage = $this->page;
 			$this->strPath = $strPath;
 			$this->strPathPlain = str_replace($this->server_path, "", $strPath);
-			
+
 			$this->action = $strPath.$this->SID.$this->simple_head_url.$this->url_id_ext;
 			$this->tpl->assign_vars(array(
 				'ACTION'	=> $this->action,
 				'PATH'		=> $strPath,
 			));
 		}
-		
-		
+
+
 		//@Override
 		protected function process() {
 			foreach($this->handler as $key => $process) {
 				if($this->in->exists($key) AND !is_array(current($process))) {
 					if($this->pre_check && $process['check'] !== false) $this->user->check_auth($process['check']);
-						
+
 					if(isset($process['csrf']) && $process['csrf']) {
 						$blnResult = $this->checkCSRF($key);
 						if (!$blnResult) break;
 					}
-		
+
 					if(method_exists($this, $process['process'])) $this->{$process['process']}();
 					break;
 				} elseif($this->in->get($key) AND is_array(current($process))) {
 					foreach($process as $subprocess) {
 						if($subprocess['value'] == $this->in->get($key)) {
 							if($this->pre_check && $subprocess['check'] !== false) $this->user->check_auth($subprocess['check']);
-								
+
 							if(isset($subprocess['csrf']) && $subprocess['csrf']) {
 								$blnResult = $this->checkCSRF($key);
 								if (!$blnResult) break;
 							}
-								
+
 							$this->{$subprocess['process']}();
 							break 2;
 						}
@@ -97,7 +97,6 @@ if(!class_exists('pageobject')){
 			if($this->pre_check) $this->user->check_auth($this->pre_check);
 			if (!isset($this->arrVars['display']) || $this->arrVars['display'] == false) $this->display();
 		}
-				
+
 	}
 }
-?>

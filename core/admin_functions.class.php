@@ -36,14 +36,14 @@ class admin_functions extends gen_class {
 						'countryName'	=> $unserialized['geoplugin_countryName'],
 					);
 
-					if (!strlen($out['countryName'])) $out = false; 
+					if (!strlen($out['countryName'])) $out = false;
 				}
 			}
 		}
-		
+
 		return $out;
 	}
-	
+
 	/**
 	 * Resolve the User Browser
 	 *
@@ -55,7 +55,7 @@ class admin_functions extends gen_class {
 		if( preg_match("/opera/i",$string)){
 			return "<div class=\"coretip-left browser-icon opera\" data-coretip=\"".$string."\"><i class=\"fa fa-lg fa-opera\"></i></div>";
 		}else if( preg_match("/msie/i",$string)){
-			return "<div class=\"coretip-left browser-icon ie\" data-coretip=\"".$string."\"><i class=\"fa fa-lg fa-internet-explorer\"></i></div>";	
+			return "<div class=\"coretip-left browser-icon ie\" data-coretip=\"".$string."\"><i class=\"fa fa-lg fa-internet-explorer\"></i></div>";
 		}else if( preg_match("/edge/i",$string)){
 			return "<div class=\"coretip-left browser-icon edge\" data-coretip=\"".$string."\"><i class=\"fa fa-lg fa-edge\"></i></div>";
 		}else if( preg_match("/chrome/i", $string)){
@@ -74,7 +74,7 @@ class admin_functions extends gen_class {
 			return "<i class=\"fa fa-question-circle fa-lg fa-fw coretip-left\" data-coretip=\"".$string."\"></i>";
 		}
 	}
-	
+
 	/**
 	 * Resolve the EQDKP Page the user is surfing on..
 	 *
@@ -92,7 +92,7 @@ class admin_functions extends gen_class {
 			parse_str($strQuery, $arrQuery);
 			$arrFolder = explode('/', $strPath);
 			$strOut = "";
-			
+
 			// Prefixes for Admin, Plugins, Maintenance
 			switch($arrFolder[0]){
 				case 'admin' : $strPrefix = registry::fetch('user')->lang('menu_admin_panel').': ';
@@ -105,7 +105,7 @@ class admin_functions extends gen_class {
 				break;
 				default: $strPrefix = '';
 			}
-			
+
 			// Resolve Admin Pages
 			if ($arrFolder[0] == "admin"){
 				// First, some admin pages without menu entry
@@ -113,22 +113,22 @@ class admin_functions extends gen_class {
 					case 'admin/info_php':
 						$strOut = '<a href="'.$this->root_path.'admin/info_php.php'.$this->SID.'">PHP-Info</a>';
 					break;
-					
+
 					case 'admin/manage_articles':
 						$strOut = '<a href="'.$this->root_path.'admin/manage_articles.php'.$this->SID.'&amp;'.$strQuery.'">'.$this->user->lang('manage_articles').'</a>';
 					break;
-					
+
 					case 'admin/manage_styles':
 						$strOut = '<a href="'.$this->root_path.'admin/manage_styles.php'.$this->SID.'&amp;'.$strQuery.'">'.$this->user->lang('styles_title').'</a>';
 					break;
-					
+
 					case 'admin':
 					case 'admin/index':
 						$strOut = registry::fetch('user')->lang('menu_admin_panel');
 						$strPrefix = "";
 					break;
 				}
-				
+
 				// Now check if there is an menu entry
 				if($strOut == ""){
 					$admin_menu = $this->adminmenu(false);
@@ -136,14 +136,14 @@ class admin_functions extends gen_class {
 					if ($result){
 						$arrMenuEntry = arraykey_for_array($result, $admin_menu);
 						if ($arrMenuEntry) $strOut = '<a href="'.$this->root_path.$arrMenuEntry['link'].'">'.$arrMenuEntry['text'].'</a>';
-					}				
+					}
 				}
 			}
-			
+
 			// Resolve Frontend Page
 			if ($strOut == "" && $strPrefix == ""){
 				$intArticleID = $intCategoryID = 0;
-				
+
 				$arrPath = array_reverse($arrFolder);
 
 				// Suche Alias in Artikeln
@@ -151,9 +151,9 @@ class admin_functions extends gen_class {
 				if (!$intArticleID){
 					// Suche Alias in Kategorien
 					$intCategoryID = $this->pdh->get('article_categories', 'resolve_alias', array(str_replace(".html", "", utf8_strtolower($arrPath[0]))));
-					
+
 					// Suche in Artikeln mit nächstem Index, denn könnte ein dynamischer Systemartikel sein
-					if (!$intCategoryID && isset($arrPath[1])) {					
+					if (!$intCategoryID && isset($arrPath[1])) {
 						$intArticleID = $this->pdh->get('articles', 'resolve_alias', array(str_replace(".html", "", utf8_strtolower($arrPath[1]))));
 					}
 				}
@@ -164,10 +164,10 @@ class admin_functions extends gen_class {
 					$strOut = $this->user->lang('category').': <a href="'.$this->server_path.$this->pdh->get('article_categories', 'path', array($intCategoryID)).'">'.$this->pdh->get('article_categories', 'name', array($intCategoryID)).'</a>';
 				} elseif (register('routing')->staticRoute($arrPath[0]) || register('routing')->staticRoute($arrPath[1])) {
 					$strPageObject = register('routing')->staticRoute($arrPath[0]);
-					if (!$strPageObject) {			
+					if (!$strPageObject) {
 						$strPageObject = register('routing')->staticRoute($arrPath[1]);
 					}
-					
+
 					if ($strPageObject){
 
 						$strID = str_replace("-", "", strrchr(str_replace(".html", "", $arrPath[0]), "-"));
@@ -180,7 +180,7 @@ class admin_functions extends gen_class {
 							}
 						}
 						if (strlen($strID) && count($arrMatches[0]) != 2) $myVar = $strID;
-						
+
 						switch($strPageObject){
 							case 'settings': $strOut = registry::fetch('user')->lang('settings_title');
 								break;
@@ -212,13 +212,13 @@ class admin_functions extends gen_class {
 									$strOut = $this->user->lang('viewing_wrapper').': <a href="'.$this->routing->build('External', $this->pdh->get('links', 'name', array(intval($myVar))), intval($myVar)).'">'.$this->pdh->get('links', 'name', array(intval($myVar))).'</a>';
 								} else {
 									$strOut = $this->user->lang('viewing_wrapper');
-								}								
+								}
 							}
 								break;
 							case 'tag': $strOut .= $this->user->lang('tag').': <a href="'.$this->routing->build('tag', sanitize($arrFolder[1])).'">'.sanitize($arrFolder[1]).'</a>';
 								break;
 						}
-					}		
+					}
 				} else {
 					// Some special frontend pages
 					switch($strPath){
@@ -227,14 +227,14 @@ class admin_functions extends gen_class {
 						break;
 					}
 				}
-				
+
 			}
 		}
-		
+
 		if ($strOut == '') $strOut = '<span style="font-style:italic;">'.$this->user->lang('unknown').'</span>';
 		return $strPrefix.$strOut;
 	}
-	
+
 	public function adminmenu($blnShowBadges = true, $coreUpdates="", $extensionUpdates="", $blnShowFavorites=false){
 		$admin_menu = array(
 			'members' => array(
@@ -305,7 +305,7 @@ class admin_functions extends gen_class {
 				3		=> array('link' => 'admin/manage_backup.php'.$this->SID,			'text' => $this->user->lang('backup'),			'check' => 'a_backup',		'icon' => 'fa-floppy-o fa-lg fa-fw'),
 				4		=> array('link' => 'admin/manage_reset.php'.$this->SID,				'text' => $this->user->lang('consolidate_reset'),			'check' => 'a_reset',	'icon' => 'fa-retweet fa-lg fa-fw'),
 				5		=> array('link' => 'admin/manage_cache.php'.$this->SID,				'text' => $this->user->lang('pdc_manager'),		'check' => 'a_cache_man',	'icon' => 'fa-briefcase fa-lg fa-fw'),
-				6		=> array('link' => 'admin/info_database.php'.$this->SID,			'text' => $this->user->lang('mysql_info'),		'check' => 'a_maintenance',	'icon' => 'fa-database fa-lg fa-fw'),				
+				6		=> array('link' => 'admin/info_database.php'.$this->SID,			'text' => $this->user->lang('mysql_info'),		'check' => 'a_maintenance',	'icon' => 'fa-database fa-lg fa-fw'),
 			),
 		);
 
@@ -316,7 +316,7 @@ class admin_functions extends gen_class {
 			unset($admin_menu['members']);
 			unset($admin_menu['raids']);
 		}
-		
+
 		// Now get the admin-favorites
 		if($blnShowFavorites){
 			$favs_array = array();
@@ -325,7 +325,7 @@ class admin_functions extends gen_class {
 			}
 			$admin_menu['favorits']['icon'] = 'fa-star fa-lg fa-fw';
 			$admin_menu['favorits']['name'] = $this->user->lang('favorits');
-				
+
 			$i = 2;
 			if (is_array($favs_array) && count($favs_array) > 0){
 				foreach ($favs_array as $fav){
@@ -350,11 +350,11 @@ class admin_functions extends gen_class {
 
 		return $admin_menu;
 	}
-	
+
 	public function setAdminTooltip()
 	{
 		$admin_menu = $this->adminmenu(false, "", "", true);
-		
+
 		// Add favorites to template vars
 		foreach (array_slice($admin_menu['favorits'], 2) as $fav)
 		{
@@ -370,4 +370,3 @@ class admin_functions extends gen_class {
 	}
 }
 }
-?>

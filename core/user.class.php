@@ -723,7 +723,7 @@ class user extends gen_class {
 
 		$settingsdata['profile']['user_avatar']['user_avatar_type']['options'] = $arrAvatarOptions;
 		$settingsdata['profile']['user_avatar']['user_avatar_type']['dependency'] = $arrAvatarDependencies;
-		
+
 		if(register('config')->get('disable_guild_features')) unset($settingsdata['calendar']);
 
 		return $settingsdata;
@@ -799,29 +799,29 @@ class user extends gen_class {
 
 		return $arrAvatarProviders;
 	}
-	
+
 	public function registerUserFromAuthProvider($arrAccountDetails, $strAuthMethod){
-		
+
 		$auth_account = $arrAccountDetails['auth_account'];
-		
+
 		//Admin activation
 		if ($this->config->get('account_activation') == 2){
 			return $arrAccountDetails;
 		}
-		
+
 		//Check Auth Account
 		if ($arrAccountDetails['auth_account'] == "" || !$this->pdh->get('user', 'check_auth_account', array($arrAccountDetails['auth_account'], $strAuthMethod))){
 			return $arrAccountDetails;
 		}
-		
+
 		//Check Email address
 		if($arrAccountDetails['user_email'] == "" || $this->pdh->get('user', 'check_email', array($arrAccountDetails['user_email'])) == 'false'){
 			return $arrAccountDetails;
 		}
-		
+
 		//Create Username
 		$strUsername = ($arrAccountDetails['username'] != "") ? $arrAccountDetails['username'] : ucfirst($strAuthMethod).'User'.random_integer(100, 999);
-		
+
 		//Check Username and create a new one
 		if ($this->pdh->get('user', 'check_username', array($strUsername)) == 'false'){
 			$strUsername = $strUsername.random_integer(100, 999);
@@ -829,19 +829,19 @@ class user extends gen_class {
 		if ($this->pdh->get('user', 'check_username', array($strUsername)) == 'false'){
 			return $arrAccountDetails;
 		}
-		
+
 		//Register User (random credentials)
 		$strPwdHash = $this->user->encrypt_password(random_string(32));
-		
+
 		$intUserID = $this->pdh->put('user', 'insert_user_bridge', array(
 				$strUsername, $strPwdHash, $arrAccountDetails['user_email']
 		));
-		
+
 		if(!$intUserID) return $arrAccountDetails;
-		
+
 		//Add the auth account
 		$this->pdh->put('user', 'add_authaccount', array($intUserID, $auth_account, $strAuthMethod));
-		
+
 		//Add an avatar
 		if(isset($arrAccountDetails['avatar']) && $arrAccountDetails['avatar'] != ""){
 			include_once $this->root_path.'core/avatar.class.php';
@@ -850,34 +850,33 @@ class user extends gen_class {
 				$this->pdh->put('user', 'add_custom_avatar', array($intUserID, $strAvatar));
 			}
 		}
-		
-		
+
+
 		//Send Email with username
 		$email_template		= 'register_activation_none';
 		$email_subject		= $this->user->lang('email_subject_activation_none');
-		
+
 		$objMailer = register('MyMailer');
-		
+
 		$objMailer->Set_Language($this->user->lang_name);
-		
+
 		$bodyvars = array(
 				'USERNAME'		=> stripslashes($strUsername),
 				'GUILDTAG'		=> $this->config->get('guildtag'),
 		);
-		
+
 		if(!$objMailer->SendMailFromAdmin($arrAccountDetails['user_email'], $email_subject, $email_template.'.html', $bodyvars)){
-			
+
 		}
-		
+
 		$arrAccountDetails['user_id'] = $intUserID;
 		return $arrAccountDetails;
 	}
-	
-	
+
+
 
 	public function __destruct() {
 		if(is_array($this->unused) && count($this->unused) > 0) $this->pfh->putContent($this->pfh->FilePath('unused.lang', 'eqdkp'), serialize($this->unused));
 		parent::__destruct();
 	}
 }
-?>

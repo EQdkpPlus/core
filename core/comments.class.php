@@ -45,7 +45,7 @@ if (!class_exists("comments")){
 		public function __construct($id=''){
 			//ID for multiple instances on one page
 			$this->id = $id;
-			
+
 			$this->UserID		= (isset($this->user->data['user_id']) && $this->user->is_signedin()) ? $this->user->data['user_id'] : false;
 			$this->version		= '2.0.0';
 
@@ -114,18 +114,18 @@ if (!class_exists("comments")){
 				'reply_to'	=> $this->in->get('reply_to', 0),
 				'permission'=> ($this->UserID && $this->userPerm),
 			);
-			
+
 			//Hooks
 			$data = $this->hooks->process('comments_save', $data, true);
-			
+
 			if($data['permission']){
 				$intCommentId = $this->pdh->put('comment', 'insert', array($data['attach_id'], $data['user_id'], $data['comment'], $data['page'], $data['reply_to']));
-				
+
 				$intToUserID = (int)$data['attach_id'];
 				$intFromUserId = (int)$data['user_id'];
 				$strToUsername = $this->pdh->get('user', 'name', array($intToUserID));
 				$strFromUsername = $this->pdh->get('user', 'name', array($intFromUserId));
-				
+
 				//Notifications Userwall
 				if ($data['page'] === 'userwall'){
 					if ($this->in->get('reply_to', 0) === 0){
@@ -135,10 +135,10 @@ if (!class_exists("comments")){
 						$this->ntfy->add('comment_new_userwall_response', $intCommentId, $strFromUsername, $this->routing->build('user', $strToUsername, 'u'.$intToUserID, true, true), $intToUserID);
 						//Owner of Comment
 						$userid = $this->pdh->get('comment', 'userid', array($this->in->get('reply_to', 0)));
-						if ($userid) $this->ntfy->add('comment_new_response', $intCommentId, $strFromUsername, $this->routing->build('user', $strToUsername, 'u'.$intToUserID, true, true), $userid, $this->user->lang('user_wall').' '.$strToUsername);	
+						if ($userid) $this->ntfy->add('comment_new_response', $intCommentId, $strFromUsername, $this->routing->build('user', $strToUsername, 'u'.$intToUserID, true, true), $userid, $this->user->lang('user_wall').' '.$strToUsername);
 					}
 				}
-				
+
 				//Other Notifications
 				$ntfyType = $this->in->get('ntfy_type');
 				if ($ntfyType != "" && $ntfyType != "comment_new_userwall" && $ntfyType != "comment_new_userwall_response"){
@@ -146,13 +146,13 @@ if (!class_exists("comments")){
 					$ntfyCategory = $this->in->get('ntfy_category', 0);
 					$ntfyTitle = $this->in->get('ntfy_title');
 					$ntfyUser = (strlen($this->in->get('ntfy_user'))) ? explode(',', $this->in->get('ntfy_user')) : false;
-					
+
 					if ($ntfyType === 'comment_new_article'){
 						$this->ntfy->add('comment_new_article', $intCommentId, $strFromUsername, $ntfyLink, $ntfyUser, $ntfyTitle, $ntfyCategory);
 					} else {
 						$this->ntfy->add($ntfyType, $intCommentId, $strFromUsername, $ntfyLink, $ntfyUser, $ntfyTitle, false, $this->ntfy_auth);
 					}
-				
+
 					//Notify Comment Writer if its a reply
 					if ($this->in->get('reply_to', 0) !== 0){
 						$userid = $this->pdh->get('comment', 'user_id', array($this->in->get('reply_to', 0)));
@@ -197,7 +197,7 @@ if (!class_exists("comments")){
 									$arrDone[] = $userid;
 									$this->ntfy->add('comment_new_mentioned', $intCommentId, $strFromUsername, $ntfyLink, $userid, $ntfyTitle);
 								}
-								
+
 								$strUserlink = $this->env->link.$this->routing->build('user', $username, 'u'.$userid, false, true);
 								$data['comment'] = str_replace($arrMention[1], '[url="'.$strUserlink.'"]@'.$username.'[/url]', $data['comment']);
 								$blnTextChanged = true;
@@ -219,13 +219,13 @@ if (!class_exists("comments")){
 		// ---------------------------------------------------------
 		public function Delete($page, $blnShowReplies=false){
 			$intCommentID = $this->in->get('deleteid',0);
-			
+
 			if($this->isAdmin || $this->pdh->get('comment', 'userid', array($intCommentID)) == $this->UserID){
 				$this->pdh->put('comment', 'delete', array($intCommentID));
 				$this->ntfy->deleteNotification('comment_new_article', $intCommentID);
 				$this->ntfy->deleteNotification('comment_new_userwall', $intCommentID);
 				$this->ntfy->deleteNotification('comment_new_userwall_response', $intCommentID);
-				
+
 				$this->pdh->process_hook_queue();
 				echo $this->Content($this->in->get('attach_id',''), $this->in->get('page'), $blnShowReplies);
 			}
@@ -270,7 +270,7 @@ if (!class_exists("comments")){
 			$html	.= '<div class="contentBox">';
 			$html	.= '<div class="boxHeader"><h1>'.$this->user->lang('comments').'</h1></div>';
 			$html	.= '<div class="boxContent">';
-			
+
 			if(($this->user->is_signedin() && $this->userPerm) || ($this->showFormForGuests && !$this->user->is_signedin())){
 				if(count($comments) > 5) $html .= '<div><a href="javascript:tinyMCE.get(\'comment_textarea_'.$this->id.'\').focus().scrollIntoView();"  #comment_data'.$this->id.'" class="button floatRight" style="margin-bottom: 5px;"><i class="fa fa-comment"></i> '.$this->user->lang('comment_write').'</a><br /><br /><div class="clear"></div></div>';
 			}
@@ -302,10 +302,10 @@ if (!class_exists("comments")){
 					$out[] .= '<div class="comment_text">'.$this->bbcode->MyEmoticons($this->bbcode->parse_shorttags($this->bbcode->toHTML($strText), array('guild', 'char', 'item', 'itemid', 'event'))).'</div><br/>
 
 								</div>';
-								
-								
+
+
 					$i++;
-					
+
 					//Replies
 					if (($this->showReplies || $blnShowReplies) && count($row['replies'])) {
 						$j=0;
@@ -332,7 +332,7 @@ if (!class_exists("comments")){
 							$out[] .= '<div class="comment_text">'.$this->bbcode->MyEmoticons($this->bbcode->parse_shorttags($this->bbcode->toHTML($com['text']), array('guild', 'char', 'item', 'itemid', 'event'))).'</div><br/>
 										</div>
 										</div>
-										
+
 										';
 							$j++;
 						}
@@ -344,9 +344,9 @@ if (!class_exists("comments")){
 										</div>
 									</div>';
 					}
-								
+
 					$out[] .='	</div>
-								
+
 								<br/>';
 				}
 			}
@@ -376,14 +376,14 @@ if (!class_exists("comments")){
 						<input type="hidden" name="attach_id" value="'.$attachid.'"/>
 						<input type="hidden" name="page" value="'.$page.'"/>';
 			if ($this->ntfy_type !== false){
-				
+
 				$html .= '<input type="hidden" name="ntfy_type" value="'.$this->ntfy_type.'"/>
 						<input type="hidden" name="ntfy_category" value="'.$this->ntfy_category.'"/>
 						<input type="hidden" name="ntfy_title" value="'.$this->ntfy_title.'"/>
 						<input type="hidden" name="ntfy_user" value="'.implode(',',$this->ntfy_user).'"/>
 						<input type="hidden" name="ntfy_link" value="'.$this->ntfy_link.'"/>';
 			}
-			
+
 			$html .=	'<div class="clearfix">
 							<div class="comment_avatar_container">
 								<div class="comment_avatar"><a href="'.$this->routing->build('user', $this->user->data['username'], 'u'.$this->user->id).'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $this->server_path.'images/global/avatar-default.svg').'" alt="Avatar" class="user-avatar"/></a></div>
@@ -395,17 +395,17 @@ if (!class_exists("comments")){
 						<span id="comment_button'.$this->id.'"><input type="submit" value="'.$this->user->lang('comments_send_bttn').'" class="input"/></span>
 					</form>';
 			$html .= '</div></div>';
-			
-			
-			
+
+
+
 			return $html;
 		}
-		
+
 		private function ReplyForm($attachid, $page){
 			$editor = registry::register('tinyMCE');
 			$editor->editor_bbcode(array('mention' => true));
 			$avatarimg = $this->pdh->get('user', 'avatarimglink', array($this->user->id));
-			
+
 			$html = '<div class="commentReplyForm" style="display:none;">
 					<form class="comment_reply" action="'.$this->server_path.'exchange.php'.$this->SID.'&amp;out=comments" method="post">
 						<input type="hidden" name="attach_id" value="'.$attachid.'"/>
@@ -428,7 +428,7 @@ if (!class_exists("comments")){
 		// ---------------------------------------------------------
 		// Generate the JS Code
 		// ---------------------------------------------------------
-		private function JScode(){			
+		private function JScode(){
 			$jscode = "
 						// Delete Function
 						$(document).on('click', '#plusComments".$this->id." .comments_delete', function(){
@@ -444,7 +444,7 @@ if (!class_exists("comments")){
 								}
 							});
 						});
-												
+
 						//Show Reply Form
 						$(document).on('click', '#plusComments".$this->id." .reply-trigger', function(){
 							var reply_to = $(this).parent().parent().find('.comment_id:first').text();
@@ -452,18 +452,18 @@ if (!class_exists("comments")){
 							$('#plusComments".$this->id." .reply-trigger').show();
 							$('#plusComments".$this->id." .form-active').remove();
 							$(this).hide('fast');
-							var container = $(this).parent().find('.reply-form-container');						
+							var container = $(this).parent().find('.reply-form-container');
 							$(container).html(newform);
-							$(container).find('.comment_reply').addClass('form-active');					
+							$(container).find('.comment_reply').addClass('form-active');
 							var myform = $(container).find('.comment_reply');
 							$(myform).find('textarea').addClass('mceEditor_bbcode');
 							$(myform).attr('id', 'comment_reply".$this->id."');
 							$(myform).find('input[name=reply_to]').val(reply_to);
-							
+
 							initialize_bbcode_editor();
 							initialize_submit_reply".$this->id."();
 						});
-									
+
 						//Submit Reply
 						function initialize_submit_reply".$this->id."(){
 							$('#comment_reply".$this->id."').ajaxForm({
@@ -478,7 +478,7 @@ if (!class_exists("comments")){
 								}
 							});
 						}
-											
+
 						// submit Comment
 						$('#comment_data".$this->id."').ajaxForm({
 							target: '#htmlCommentTable".$this->id."',
@@ -493,27 +493,26 @@ if (!class_exists("comments")){
 								$('#comment_button".$this->id."').html('<input type=\"submit\" value=\"".$this->user->lang('comments_send_bttn')."\" class=\"input\"/>');
 							}
 						});
-						
+
 						";
 			$this->tpl->add_js($jscode);
-			
+
 			$jscode =	"//Reload comments
 						function reload_comments".$this->id."(){
 							var form = $('#comment_data".$this->id."');
 							var page = form.find(\"input[name='page']\").val();
 							var attach_id = form.find(\"input[name='attach_id']\").val();
 							window.setTimeout(\"reload_comments".$this->id."()\", 60000*5); // 5 Minute
-							
+
 							$.ajax({
 							url: '".$this->server_path."exchange.php".$this->SID."&out=comments&page='+page+'&attach_id='+attach_id+'&replies=".(($this->showReplies) ? 1 : 0)."',
 								success: function(data){ $('#htmlCommentTable".$this->id."').html(data);},
-							});					
+							});
 						}
 						window.setTimeout(\"reload_comments".$this->id."()\", 60000*5); // 5 Minute
 						";
-			$this->tpl->add_js($jscode);				
+			$this->tpl->add_js($jscode);
 
 		}
 	}
 }
-?>

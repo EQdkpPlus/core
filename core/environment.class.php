@@ -48,10 +48,10 @@ if (!class_exists("environment")) {
 			$this->referer			= $this->get_referer();
 			$this->protocol			= $this->get_protocol();
 		}
-		
+
 		/**
 		 * By Contao CMS
-		 * 
+		 *
 		 * Operating systems (check Windows CE before Windows and Android before Linux!)
 		 */
 		public $arrOS = array
@@ -73,11 +73,11 @@ if (!class_exists("environment")) {
 				'OpenBSD'       => array('os'=>'unix',       'mobile'=>false),
 				'NetBSD'        => array('os'=>'unix',       'mobile'=>false),
 		);
-		
-		
+
+
 		/**
 		 * By Contao CMS
-		 * 
+		 *
 		 * Browsers (check OmniWeb and Silk before Safari and Opera Mini/Mobi before Opera!)
 		*/
 		public $arrBrowser = array
@@ -95,10 +95,10 @@ if (!class_exists("environment")) {
 				'Camino'     => array('browser'=>'camino',       'shorty'=>'ca', 'engine'=>'gecko',   'version'=>'/^.*Camino\/(\d+(\.\d+)*).*$/'),
 				'Konqueror'  => array('browser'=>'konqueror',    'shorty'=>'ko', 'engine'=>'webkit',  'version'=>'/^.*Konqueror\/(\d+(\.\d+)*).*$/')
 		);
-		
+
 
 		private function get_ipaddress(){
-	
+
 			if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){
 				//This is needed, because HTTP_X_FORWARDED_FOR can contain more than one IP-Address
 				$ips = $_SERVER['HTTP_X_FORWARDED_FOR'];
@@ -113,23 +113,23 @@ if (!class_exists("environment")) {
 			} else {
 				$ipAddr = $_SERVER['REMOTE_ADDR'];
 			}
-			
+
 			//Remove Ports
 			if(substr_count($ipAddr, ":") > 1){
 				//ipv6
 				$ipAddr = preg_replace("/\[(.*)\]\:([0-9]*)/", "$1", $ipAddr);
-				
+
 			} else {
 				//ipv4
 				$ipAddr = preg_replace("/(\:([0-9]*))/", "", $ipAddr);
 			}
-			
+
 			return $ipAddr;
 		}
-		
+
 		private function get_anonymized_ipaddress(){
 			$ip = $this->get_ipaddress();
-		
+
 			return anonymize_ipaddress($ip);
 		}
 
@@ -174,8 +174,8 @@ if (!class_exists("environment")) {
 
 			return $retStrPage;
 		}
-		
-		
+
+
 
 		private function clean_request($strRequest){
 			$pos = stripos($strRequest, $this->config->get('server_path'));
@@ -221,43 +221,43 @@ if (!class_exists("environment")) {
 			$script_name = ( $script_name != '' ) ? $script_name . '/' : '';
 			return ($blnWithServerpath) ? $this->httpHost.'/'.$script_name : $this->httpHost;
 		}
-		
+
 		public function path(){
 			if(defined('URL_COMPMODE')){
 				$arrParts = explode("&", $_SERVER['QUERY_STRING']);
 				if(isset($arrParts[0])) return $arrParts[0];
 				return "";
 			}
-			
+
 			$path_info = !empty($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : (!empty($_SERVER['ORIG_PATH_INFO']) ? $_SERVER['ORIG_PATH_INFO'] : '');
 			if (!strlen($path_info)) return '';
 			return filter_var($path_info, FILTER_SANITIZE_STRING);
 		}
-		
+
 		public function is_ajax(){
 			return (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest');
 		}
-		
+
 		public function get_referer(){
 			if (!isset($_SERVER['HTTP_REFERER'])) return '';
 			$ref = filter_var($_SERVER['HTTP_REFERER'], FILTER_SANITIZE_STRING);
 			$ref = str_replace(array($this->buildlink(), 'index.php/'), '', $ref);
 			return $ref;
 		}
-		
+
 		public function agent(){
 			$ua = $this->get_useragent();
-			
+
 			$return = new stdClass();
 			$return->string = $ua;
-			
+
 			$os = 'unknown';
 			$mobile = false;
 			$browser = 'other';
 			$shorty = '';
 			$version = '';
 			$engine = '';
-			
+
 			// Operating system
 			foreach ($this->arrOS as $k=>$v)
 			{
@@ -268,15 +268,15 @@ if (!class_exists("environment")) {
 					break;
 				}
 			}
-			
+
 			// Android tablets are not mobile
 			if ($os == 'android' && stripos($ua, 'mobile') === false)
 			{
 				$mobile = false;
 			}
-			
+
 			$return->os = $os;
-			
+
 			// Browser and version
 			foreach ($this->arrBrowser as $k=>$v)
 			{
@@ -289,24 +289,24 @@ if (!class_exists("environment")) {
 					break;
 				}
 			}
-			
+
 			$versions = explode('.', $version);
 			$version  = $versions[0];
-			
+
 			$return->class = $os . ' ' . $browser . ' ' . $engine;
-			
+
 			// Add the version number if available
 			if ($version != '')
 			{
 				$return->class .= ' ' . $shorty . $version;
 			}
-			
+
 			// Mark mobile devices
 			if ($mobile)
 			{
 				$return->class .= ' mobile ismobiledevice';
 			}
-						
+
 			$return->browser  = $browser;
 			$return->shorty   = $shorty;
 			$return->version  = $version;
@@ -315,11 +315,11 @@ if (!class_exists("environment")) {
 			$return->mobile   = $mobile;
 			return $return;
 		}
-		
-		
+
+
 		/**
 		 * Checks if Operating System is Windows IIS
-		 * 
+		 *
 		 * @return boolean
 		 */
 		function on_iis() {
@@ -329,19 +329,19 @@ if (!class_exists("environment")) {
 			else
 				return false;
 		}
-		
+
 		/**
 		 * Returns String for Operating System
-		 * 
+		 *
 		 * @return mixed
 		 */
 		function get_operating_system(){
 			return filter_var($_SERVER["SERVER_SOFTWARE"], FILTER_SANITIZE_STRING);;
 		}
-		
+
 		/**
 		 * Checks if Useragent is Bot. If yes, returns the Botname. Returns false if not a Bot.
-		 * 
+		 *
 		 * @param string $strUseragent
 		 * @return Ambigous <string>|boolean
 		 */
@@ -576,20 +576,20 @@ if (!class_exists("environment")) {
 						'bot_name' => 'BUbiNG [Bot]',
 				),
 			);
-			
+
 			foreach ($arrBots as $row){
 				if (preg_match('#' . str_replace('\*', '.*?', preg_quote($row['bot_agent'], '#')) . '#i', $strUseragent)){
 					return $row['bot_name'];
 				}
 			}
-			
+
 			if(stripos($strUseragent, 'bot') || stripos($strUseragent, 'spider') || stripos($strUseragent, 'crawler')){
 				return '[Bot/Spider/Crawler]';
 			}
-			
+
 			return false;
 		}
-		
+
 		public function server_to_rootpath($strPath){
 			//String starts with the server_path
 			$strServerpath = $this->config->get('server_path');
@@ -601,7 +601,7 @@ if (!class_exists("environment")) {
 			}
 			return $strPath;
 		}
-		
+
 		public function root_to_serverpath($strPath){
 			$strServerpath = $this->config->get('server_path');
 			if(stripos($strPath, $this->root_path ) === 0){
@@ -610,14 +610,14 @@ if (!class_exists("environment")) {
 				//String starts not with server_path, means he starts with nothing
 				$strPath = $strServerpath.$strPath;
 			}
-			
+
 			return $strPath;
 		}
-		
+
 		public function get_protocol(){
 			return filter_var($_SERVER["SERVER_PROTOCOL"], FILTER_SANITIZE_STRING);
 		}
-		
+
 		/**
 		 * Returns the document root
 		 * e.g. C:/xampp/htdocs/
@@ -628,20 +628,20 @@ if (!class_exists("environment")) {
 			$strRoot = filter_var($_SERVER["DOCUMENT_ROOT"], FILTER_SANITIZE_STRING);
 			if($blnWithServerPath){
 				$strRoot .= $this->server_path;
-				
+
 				if($blnPathToEQdkpRoot){
 					$strRoot = realpath($strRoot.registry::get_const('root_path'));
 				}
 			}
-			
+
 			return $strRoot;
 		}
-		
+
 		//Returns Default Lang as default
 		public function get_browser_language(){
 			$usersprache = explode(",", $_SERVER["HTTP_ACCEPT_LANGUAGE"]);
 			$usersprache = explode(";", $usersprache[0]);
-			
+
 			if(strlen($usersprache[0]) == "5") {
 				$code = substr($usersprache[0], 3, 2);
 			} elseif(strlen($usersprache[0]) == "2") {
@@ -650,15 +650,15 @@ if (!class_exists("environment")) {
 				$code = "";
 			}
 			$code = strtolower($code);
-			
+
 			$language = $this->translate_iso_langcode($code);
 			if (!is_file($this->root_path .'language/'.$language.'/lang_main.php')){
 				$language = $this->config->get('default_lang');
 			}
-			
+
 			return $language;
 		}
-		
+
 		//Returns Default Lang as default
 		public function translate_iso_langcode($isoCode){
 			$language_codes = array(
@@ -798,7 +798,7 @@ if (!class_exists("environment")) {
 					'zh' => 'Chinese' ,
 					'zu' => 'Zulu' ,
 			);
-			
+
 			if (isset($language_codes[$isoCode])) {
 				return utf8_strtolower($language_codes[$isoCode]);
 			} else {
@@ -807,4 +807,3 @@ if (!class_exists("environment")) {
 		}
 	}
 }
-?>

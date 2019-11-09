@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-class acl_manager extends gen_class {	
+class acl_manager extends gen_class {
 	private $auth_defaults		= array();
 	private $auth_ids			= array();
 	private $group_permissions	= array();
@@ -92,10 +92,10 @@ class acl_manager extends gen_class {
 						FROM __auth_groups ag, __auth_options ao
 						WHERE (ag.auth_id = ao.auth_id)
 						AND (ag.group_id=?)";
-				
-				
+
+
 				$result = $this->db->prepare($sql)->execute($group_id);
-				
+
 				if ($result){
 					while ( $row = $result->fetchAssoc() ){
 						if ($row['auth_setting'] == 'Y'){
@@ -123,7 +123,7 @@ class acl_manager extends gen_class {
 
 	public function update_auth_option($auth_value, $auth_default){
 		$auth_id = $this->get_auth_id($auth_value);
-		if ( $auth_id ){			
+		if ( $auth_id ){
 			$objQuery = $this->db->prepare("UPDATE __auth_users :p WHERE auth_id=?")->set(array(
 					'auth_setting' => $auth_default,
 			))->execute($auth_id);
@@ -143,7 +143,7 @@ class acl_manager extends gen_class {
 
 	public function update_user_permissions($permission_array, $user_id=0){
 		if ($user_id == 0){$user_id = $user->data['user_id'];}
-		
+
 		$this->db->prepare("DELETE FROM __auth_users WHERE user_id=? AND auth_id :in")->in(array_keys($permission_array))->execute($user_id);
 
 		$boolExecute = false;
@@ -161,9 +161,9 @@ class acl_manager extends gen_class {
 		}
 
 		if ($boolExecute) $this->db->prepare("INSERT INTO __auth_users :p")->set($arrData)->execute();
-		
-		
-		
+
+
+
 	}
 
 	public function get_permission_boxes(){
@@ -196,7 +196,7 @@ class acl_manager extends gen_class {
 						array('CBNAME' => 'a_raid_upd',				'TEXT' => $this->user->lang('update')),
 						array('CBNAME' => 'a_raid_del',				'TEXT' => $this->user->lang('delete')),
 				),
-	
+
 				// Members
 				$this->user->lang('chars') => array(
 						'icon' => 'fa fa-user la-lg',
@@ -206,13 +206,13 @@ class acl_manager extends gen_class {
 						array('CBNAME' => 'a_roles_man',			'TEXT' => $this->user->lang('rolemanager')),
 						array('CBNAME' => 'a_member_profilefields_man',	'TEXT' => $this->user->lang('manage_pf_menue')),
 						array('CBNAME' => 'a_apa_man',				'TEXT' => $this->user->lang('apa_manager')),
-							
+
 						array('CBNAME' => 'u_member_add',			'TEXT' => $this->user->lang('charsadd')),
 						array('CBNAME' => 'u_member_man',			'TEXT' => $this->user->lang('charsmanage')),
 						array('CBNAME' => 'u_member_del',			'TEXT' => $this->user->lang('charsdelete')),
 						array('CBNAME' => 'u_member_conn',			'TEXT' => $this->user->lang('charconnect')),
 				),
-	
+
 				// Calendar
 				$this->user->lang('calendars') => array(
 						'icon' => 'fa fa-calendar la-lg',
@@ -239,7 +239,7 @@ class acl_manager extends gen_class {
 						array('CBNAME' => 'a_reset',				'TEXT' => $this->user->lang('reset')),
 						array('CBNAME' => 'a_maintenance',			'TEXT' => $this->user->lang('maintenance')),
 						array('CBNAME' => 'a_files_man',			'TEXT' => $this->user->lang('manage_files')),
-							
+
 						//New
 						array('CBNAME' => 'a_cronjobs_man',			'TEXT' => $this->user->lang('manage_cronjobs')),
 						array('CBNAME' => 'a_bridge_man',			'TEXT' => $this->user->lang('manage_bridge')),
@@ -256,14 +256,14 @@ class acl_manager extends gen_class {
 						array('CBNAME' => 'u_userlist',				'TEXT' => $this->user->lang('view')),
 						array('CBNAME' => 'u_usermailer',			'TEXT' => $this->user->lang('adduser_send_mail')),
 				),
-	
+
 				// Logs
 				$this->user->lang('logs') => array(
 						'icon' => 'fa fa-book la-lg',
 						array('CBNAME' => 'a_logs_view',			'TEXT' => $this->user->lang('view')),
 						array('CBNAME' => 'a_logs_del',				'TEXT' => $this->user->lang('delete'))
 				),
-	
+
 				// Backup Database
 				$this->user->lang('backup') => array(
 						'icon' => 'fa fa-floppy-o la-lg',
@@ -312,21 +312,21 @@ class acl extends acl_manager {
 					}
 					//If not superadmin: get user- and grouppermissions
 				} else {
-					//User-Permissions					
+					//User-Permissions
 					$objQuery = $this->db->prepare("SELECT ao.auth_value, au.auth_setting
 							FROM __auth_users au, __auth_options ao
 							WHERE (au.auth_id = ao.auth_id)
 							AND (au.user_id=?)")->execute($user_id);
-					
+
 					if($objQuery){
 						while ( $row = $objQuery->fetchAssoc() ){
 							$this->user_permissions[$user_id][$row['auth_value']] = $row['auth_setting'];
 						}
 					}
-					
+
 					//Group-Permissions
 					$objQuery = $this->db->prepare("SELECT ga.auth_setting, ao.auth_value, gu.group_id FROM __groups_users gu, __auth_groups ga, __auth_options ao WHERE gu.user_id=? AND ga.group_id = gu.group_id AND ga.auth_id = ao.auth_id")->execute($user_id);
-					
+
 					if($objQuery){
 						while ( $row = $objQuery->fetchAssoc() ){
 							if ($row['auth_setting'] == "Y"){
@@ -336,17 +336,17 @@ class acl extends acl_manager {
 						}
 					}
 				}
-				
+
 				//Check if he has chars that are grpleader of raidgroups
 				if ($this->pdh->get('raid_groups_members', 'user_has_grpleaders', array($user_id))) $this->user_group_permissions[$user_id]['a_raidgroups_grpleader'] = "Y";
-				
+
 			} else { //Permission for ANONYMOUS
 				$result =  $this->db->query("SELECT ga.auth_setting, ao.auth_value FROM __auth_groups ga, __auth_options ao WHERE ga.auth_id = ao.auth_id AND ga.group_id = 1");
 				if($result){
 					while ( $row = $result->fetchAssoc() ){
 						if ($row['auth_setting'] == "Y" && substr($row['auth_value'], 0, 2)!= "a_"){
 								$this->user_group_permissions[$user_id][$row['auth_value']] = $row['auth_setting'];
-						}	
+						}
 					}
 				}
 				$this->user_group_memberships[$user_id][1] = 1;
@@ -407,5 +407,3 @@ class acl extends acl_manager {
 	}
 
 } //Close class
-
-?>

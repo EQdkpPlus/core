@@ -152,4 +152,3 @@ if ( !defined('EQDKP_INC') ){
 			return $ret;
 		}
 	}
-?>

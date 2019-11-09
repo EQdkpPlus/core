@@ -133,5 +133,3 @@ $ATTR_BLACKLIST = array(
 	'lowsrc',
 	'formaction',
 );
-
-?>

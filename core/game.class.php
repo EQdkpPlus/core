@@ -821,7 +821,7 @@ class game extends gen_class {
 	 */
 	public function get_recruitment_classes($filter=array(), $lang=false) {
 		$class_dep = $this->gameinfo()->get_class_dependencies();
-		
+
 		// gather all classes for recruitment
 		$todisplay = array();
 		foreach($class_dep as $class) {
@@ -852,7 +852,7 @@ class game extends gen_class {
 		foreach($class_dep as $class) {
 			$name2type[$class['name']] = $class['type'];
 		}
-		
+
 		// get all single dependencies
 		$relevant_deps = array();
 		$child_ids = array();
@@ -862,7 +862,7 @@ class game extends gen_class {
 				$child_ids[$name2type[key($class['parent'])]] = current($class['parent']);
 			}
 		}
-		
+
 		//check if $todisplay is in $revelant_deps
 		$allIn = true;
 		foreach($todisplay as $val){
@@ -979,7 +979,7 @@ class game extends gen_class {
 			return false;
 		}
 		$name = trim($name);
-		
+
 		foreach ($this->data[$type] as $lang => $ids) {
 			$langs[] = $lang;
 			foreach($ids as $id => $typ) {
@@ -994,7 +994,7 @@ class game extends gen_class {
 					$langs2search[] = $lang;
 				}
 			}
-			
+
 			$this->data[$type] = $this->gameinfo()->get($type, $langs2search);
 
 			$this->gameinfo()->flush($type);
@@ -1650,8 +1650,8 @@ if(!class_exists('game_generic')) {
 					break;
 				}
 			}
-			
-			
+
+
 			//type already loaded?
 			if(empty($this->$type) || $blnReload) {
 				if(method_exists($this, 'load_'.$type)) {
@@ -1866,4 +1866,3 @@ if(!class_exists('game_generic')) {
 		}
 	}
 }
-?>

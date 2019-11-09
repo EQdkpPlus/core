@@ -24,7 +24,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class backup extends gen_class {
-	
+
 	public function __construct(){
 		//Secure the backup-folder
 		//Check if .htaccess exists
@@ -43,32 +43,32 @@ class backup extends gen_class {
 			}
 		} //END Check .htaccess
 	}
-	
-	
+
+
 	public function createDatabaseBackup($strFormat = 'zip', $blnCreateTableCmd = true, $arrTables=false, $blnForStorage=false){
 		set_time_limit(0);
-		
+
 		if ($arrTables === false){
 			$arrTables = $this->db->listTables();
 		}
-		
+
 		$blnUncomplete = false;
-		
+
 		$arrAllTables = $this->db->listTables();
-		
+
 		//Check if its an uncomplete backup
 		$arrTablesToBackup = array();
 		foreach($arrAllTables as $strTablename){
 			//Continue if not eqdkp Table
 			if (!$this->db->isEQdkpTable($strTablename)) continue;
-			
+
 			if (in_array($strTablename, $arrTables)){
 				$arrTablesToBackup[] = $strTablename;
 			} else {
 				$blnUncomplete = true;
 			}
 		}
-		
+
 		//Filenames
 		$strRandom = substr(md5(generateRandomBytes()), 0, 8);
 		$strFilepath = $this->pfh->FolderPath('backup/tmp', 'eqdkp');
@@ -77,11 +77,11 @@ class backup extends gen_class {
 		$strFilename = 'eqdkp-'.$strAddition.'backup_' .$strTime.'_'.$strRandom;
 		$strSQLFile = $strFilepath.$strFilename.'.sql';
 		$strZipFile = $strFilepath.$strFilename.'.zip';
-		
+
 		//
 		// Generate the backup
 		//
-		
+
 		//Lets write our header
 		$data = '';
 		$data .= "-- EQDKP-PLUS SQL Dump " . "\n";
@@ -97,15 +97,15 @@ class backup extends gen_class {
 		$data .= "-- \n";
 		$data .= "-- --------------------------------------------------------" . "\n";
 		$data .= "\n";
-		
+
 		$this->pfh->putContent($strSQLFile, $data);
 		$data = "";
-		
+
 		foreach ( $arrTablesToBackup as $table ){
 			$data = "";
 			$tablename			= $table;
 			$table_sql_string	= $this->_create_table_sql_string($tablename);
-			
+
 			// NOTE: Error checking for table or data sql strings here?
 			if ( $blnCreateTableCmd ){
 				$data .= "\n" . "-- \n";
@@ -119,42 +119,42 @@ class backup extends gen_class {
 			}
 
 			$this->pfh->addContent($strSQLFile, $data);
-			
+
 			if(strpos($tablename, '_sessions') === false) $this->_create_data_sql_string($tablename, $strSQLFile);
 		}
-		
+
 		unset($tablename, $table_sql_string, $data_sql_string, $data);
-		
+
 		if($blnForStorage) $this->saveBackupMetadata($strFilename, $strTime, $blnUncomplete, $arrTablesToBackup);
-		
+
 		//Create Zip File
 		if ($strFormat === 'zip'){
 			$archive = registry::register('zip', array($strZipFile));
 			$archive->add($strSQLFile, $this->pfh->FolderPath('backup/tmp', 'eqdkp'));
 			$archive->create();
-			
+
 			$this->pfh->Delete($strSQLFile);
 			//Move ZIP File to the correct folder
 			$strZipFile = $this->moveBackupToBackupFolder($strZipFile);
 			return $strZipFile;
 		}
-		
+
 		//Move SQL File to the correct folder
 		$strSQLFile = $this->moveBackupToBackupFolder($strSQLFile);
 		return $strSQLFile;
 	}
-	
+
 	public function restoreDatabaseBackup($strFilename){
 		$strFileExtension = strtolower(pathinfo($strFilename, PATHINFO_EXTENSION));
 		$strSQLFile = "";
-		
+
 		if ($strFileExtension == 'zip'){
 			//Copy the archive to the tmp-folder
 			$strFrom = $strFilename;
 			$strPlainFilename = pathinfo($strFilename, PATHINFO_FILENAME);
 			$strTo = $this->pfh->FolderPath('backup/tmp', 'eqdkp').$strPlainFilename.'.'.$strFileExtension;
 			$this->pfh->copy($strFrom, $strTo);
-			
+
 			//Lets unpack the File
 			$archive = registry::register('zip', array($strTo));
 			$strRandom = substr(md5(generateRandomBytes()), 0, 8);
@@ -163,9 +163,9 @@ class backup extends gen_class {
 			//Try to find an .sql file
 			$arrFiles = sdir($this->pfh->FolderPath('backup/tmp/'.$strRandom, 'eqdkp'));
 			$strDeletePath = $this->pfh->FolderPath('backup/tmp/'.$strRandom, 'eqdkp');
-			
+
 			$this->pfh->Delete($strTo);
-			
+
 			foreach($arrFiles as $strFile){
 				$strExt = strtolower(pathinfo($strFile, PATHINFO_EXTENSION));
 				if ($strExt === 'sql') {
@@ -173,15 +173,15 @@ class backup extends gen_class {
 					break;
 				}
 			}
-			
+
 		} elseif($strFileExtension == 'sql'){
 			$strSQLFile = $strFilename;
 		} else return false;
-		
+
 		if ($strSQLFile != "" && is_file($strSQLFile)){
-		
+
 			@set_time_limit(0);
-			
+
 			$fp = fopen($strSQLFile, 'rb');
 			while (($sql = $this->fgetd($fp, ";\n", 'fread', 'fseek', 'feof')) !== false){
 				if (strpos($sql, "--") === false && $sql != ""){
@@ -190,18 +190,18 @@ class backup extends gen_class {
 			}
 			fclose($fp);
 		}
-		
+
 		if(isset($strDeletePath)) $this->pfh->Delete($strDeletePath);
 	}
-	
-	
+
+
 	private function saveBackupMetadata($strFilename, $strTime, $blnUncomplete, $arrTables){
 		$data['time']			= $strTime;
 		$data['uncomplete']		= $blnUncomplete;
 		$data['tables']			= ($arrTables) ? $arrTables : 'all';
 		$data['eqdkp_version']	= $this->config->get('plus_version');
 		$data['table_prefix']	= $this->table_prefix;
-		
+
 		$result = $this->pfh->putContent($this->pfh->FolderPath('backup/meta', 'eqdkp').$strFilename.'.meta.php', serialize($data));
 		if ($result > 0){
 			return true;
@@ -209,7 +209,7 @@ class backup extends gen_class {
 			return false;
 		}
 	}
-	
+
 	public function pruneBackups($intDays=false, $intCount=false){
 		//Read out all of our backups
 		$path = $this->pfh->FolderPath('backup', 'eqdkp');
@@ -221,20 +221,20 @@ class backup extends gen_class {
 			}
 			closedir($dir);
 		}
-		
+
 		//Generate backup-array, only list eqdkp-backups
 		if (is_array($files)){
-		
+
 			foreach ($files as $elem){
 				if (preg_match('/eqdkp-(.?)backup_([0-9]{10})_(.*)\.(sql|zip)/', $elem, $matches)){
 					$backups[$elem] = $matches[2]; //Save Time
 					if ($matches[1] === "f") $full[] = $elem; //Its fullbackup
-					
+
 				}
 			}
 			//Sort the arrays the get the newest ones on top
 			array_multisort($backups, SORT_DESC);
-		
+
 			//Delete all backups except the x newest ones
 			if ($intCount > 0){
 				$tmp_backups = array_slice($backups, $intCount);
@@ -249,12 +249,12 @@ class backup extends gen_class {
 					}
 				}
 			} //close delete all backups except the x newest ones
-		
+
 			//Delete backups older than x days
 			if ($intDays && intval($intDays) > 0){
-		
+
 				foreach ($backups as $key => $value){
-						
+
 					if (($value + intval($intDays)*86400) < time()){
 						$file		= $this->pfh->FolderPath('backup', 'eqdkp').$key;
 						$metafile	= $this->pfh->FolderPath('backup/meta/', 'eqdkp').str_replace(substr($key, strpos($key, '.')), "", $key).'.meta.php';
@@ -269,14 +269,14 @@ class backup extends gen_class {
 			}
 		}
 	}
-	
+
 	public function moveBackupToBackupFolder($strFilename){
 		$strOldFile = $strFilename;
 		$strFilename = pathinfo($strOldFile, PATHINFO_FILENAME);
 		$strExtension = pathinfo($strOldFile, PATHINFO_EXTENSION);
 		$strNewFilename = $this->pfh->FolderPath('backup', 'eqdkp').$strFilename.'.'.$strExtension;
 		$this->pfh->FileMove($strOldFile, $strNewFilename);
-		
+
 		return $strNewFilename;
 	}
 
@@ -318,10 +318,10 @@ class backup extends gen_class {
 			while($row = $objQuery->fetchAssoc()){
 				$values		= array();
 				$query		= $field_string . '(';
-	
+
 				foreach ($arrFields as $key => $field){
 					if (!is_numeric($key)) continue;
-	
+
 					$name = $field['name'];
 					if (!isset($row[$name]) || is_null($row[$name])){
 						$values[$key]		= 'NULL';
@@ -331,10 +331,10 @@ class backup extends gen_class {
 						$values[$key]		= "'" . str_replace($search, $replace, $row[$name]) . "'";
 					}
 				}
-	
+
 				$query			 .= implode(', ', $values) . ')';
 				$sql_string		 .= $query . ";\n";
-				
+
 				//Write them away in chunks
 				if($i === 20){
 					$this->pfh->addContent($strOutputFile, $sql_string);
@@ -343,7 +343,7 @@ class backup extends gen_class {
 				}
 				$i++;
 			}
-			
+
 			//Write the last portion
 			if($i > 0){
 				$this->pfh->addContent($strOutputFile, $sql_string);
@@ -351,12 +351,12 @@ class backup extends gen_class {
 
 		}
 	}
-	
+
 	// modified from PHP.net
 	private function fgetd(&$fp, $delim, $read, $seek, $eof, $buffer = 8192){
 		$record = '';
 		$delim_len = strlen($delim);
-	
+
 		while (!$eof($fp)){
 			$pos = strpos($record, $delim);
 			if ($pos === false){
@@ -374,4 +374,3 @@ class backup extends gen_class {
 	}
 
 }
-?>

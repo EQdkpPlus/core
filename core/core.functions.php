@@ -92,7 +92,7 @@ function includeLibraries($path, $mask){
 function runden($value){
 	$ret_val		= $value;
 	$precision	= (int)registry::register('config')->get('round_precision');
-	
+
 	if($precision < 0) $precision = 0;
 	if($precision > 5) $precision = 5;
 
@@ -157,7 +157,7 @@ function redirect($url='', $return=false, $extern=false, $blnShowPage=true, $str
 	if ($return){
 		return $out;
 	}else{
-		
+
 		if($strContent && $strContent != ""){
 			$intRedirectTime = 5;
 		} else {
@@ -165,7 +165,7 @@ function redirect($url='', $return=false, $extern=false, $blnShowPage=true, $str
 			if($extern){
 				header('Referrer-Policy: no-referrer');
 			}
-			
+
 			header('Location: ' . $out);
 			$intRedirectTime = 3;
 		}
@@ -441,7 +441,7 @@ function infotooltip($name='', $game_id='', $lang=false, $direct=0, $onlyicon=0,
 		if(register('config')->get('itt_overwrite_lang')) $lang = register('config')->get('itt_langprio1');
 
 		if($withColorForIconOnly) $data['withcolorforicon'] = true;
-		
+
 		$cachedname = register('infotooltip')->getcacheditem($name, $lang, $game_id, $onlyicon, $noicon, $data);
 		$id = unique_id();
 		$data = array('name' => $name, 'game_id' => $game_id, 'onlyicon' => $onlyicon, 'noicon' => $noicon, 'lang' => $lang, 'data' => $data);
@@ -848,13 +848,13 @@ function generateRandomBytes($length = 16) {
 		if (function_exists('random_bytes')) {
 			$bytes = random_bytes($length);
 			if ($bytes === false) throw new Exception('Cannot generate a secure stream of bytes.');
-			
+
 			return $bytes;
 		}
-		
+
 		$bytes = openssl_random_pseudo_bytes($length, $s);
 		if (!$s) throw new Exception('Cannot generate a secure stream of bytes.');
-		
+
 		return $bytes;
 	} catch (\Exception $e) {
 		throw new Exception('Cannot generate a secure stream of bytes.', $e);
@@ -864,11 +864,11 @@ function generateRandomBytes($length = 16) {
 function random_integer($min, $max) {
 	try {
 		$range = $max - $min;
-		
+
 		if (function_exists('random_int')) {
 			return random_int($min, $max);
 		}
-		
+
 		$log = log($range, 2);
 		$bytes = (int) ($log / 8) + 1; // length in bytes
 		$bits = (int) $log + 1; // length in bits
@@ -878,10 +878,10 @@ function random_integer($min, $max) {
 			$rnd = $rnd & $filter; // discard irrelevant bits
 		}
 		while ($rnd > $range);
-		
+
 		return $min + $rnd;
-		
-		
+
+
 	}
 	catch (Exception $e) {
 		// Backwards compatibility: This function never did throw.
@@ -892,10 +892,10 @@ function random_integer($min, $max) {
 
 function random_string($length = 20){
 	if($length === false) $length = 20;
-	
+
 	$binLength = ceil($length / 2);
-	
-	$string = bin2hex(generateRandomBytes($binLength));	
+
+	$string = bin2hex(generateRandomBytes($binLength));
 	return $string;
 }
 
@@ -1297,12 +1297,12 @@ function full_copy($source, $target){
 	if (is_dir($source)){
 		register('pfh')->CheckCreateFolder($target);
 		$d = dir($source);
-		
+
 		while (FALSE !== ($entry = $d->read())){
 			if ($entry == '.' || $entry == '..'){
 				continue;
 			}
-			
+
 			$Entry = $source . '/' . $entry;
 			if (is_dir( $Entry )){
 				full_copy($Entry, $target . '/' . $entry);
@@ -1316,7 +1316,7 @@ function full_copy($source, $target){
 		register('pfh')->copy($source, $target);
 		if (!is_file($target)) return false;
 	}
-	
+
 	return true;
 }
 
@@ -1329,7 +1329,7 @@ function implode_r($glue, $pieces){
 	return $out;
  }
 
- 
+
  function hyphenize($string) {
  	$dict = array(
  			"I'm"      => "I am",
@@ -1345,7 +1345,7 @@ function implode_r($glue, $pieces){
  					)
  			);
  }
- 
+
  function cleanString($text) {
  	$utf8 = array(
  			'/[áàâãªä]/u'   =>   'a',
@@ -1369,7 +1369,7 @@ function implode_r($glue, $pieces){
  	);
  	return preg_replace(array_keys($utf8), array_values($utf8), $text);
  }
- 
+
 /**
  * Anonymizes an IP address
  * @param string $ip IP-address
@@ -1380,7 +1380,7 @@ function anonymize_ipaddress($ip, $byteCount=1){
 
  	$binaryIp = @inet_pton($ip);
  	if(!$binaryIp) $binaryIp = "\x00\x00\x00\x00";
- 	
+
  	$strlen = function_exists('mb_orig_strlen') ? 'mb_orig_strlen' : 'strlen';
  	if($strlen($binaryIp) == 4){
  		//ipv4
@@ -1388,11 +1388,11 @@ function anonymize_ipaddress($ip, $byteCount=1){
  		if ($byteCount > $i) {
  			$byteCount = $i;
  		}
- 		
+
  		while ($byteCount-- > 0) {
  			$binaryIp[--$i] = chr(0);
  		}
- 		
+
  		$ipStr = @inet_ntop($binaryIp);
  		if(!$ipStr) $ipStr = "0.0.0.0";
  		return $ipStr;
@@ -1400,38 +1400,38 @@ function anonymize_ipaddress($ip, $byteCount=1){
  		//ipv6
  		if (substr_compare($binaryIp, "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff", 0, 12) === 0
  				|| substr_compare($binaryIp, "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00", 0, 12) === 0) {
- 					
+
  					$i = strlen($binaryIp);
  					if ($byteCount > $i) {
  						$byteCount = $i;
  					}
- 					
+
  					while ($byteCount-- > 0) {
  						$binaryIp[--$i] = chr(0);
  					}
- 					
+
  					$ipStr = @inet_ntop($binaryIp);
  					if(!$ipStr) $ipStr = "0.0.0.0";
  					return $ipStr;
  				}
- 				
+
  				$masks = array(
  						'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff',
  						'ffff:ffff:ffff:ffff::',
  						'ffff:ffff:ffff:0000::',
  						'ffff:ff00:0000:0000::'
  				);
- 				
+
  				$binaryIp = $binaryIp & pack('a16', inet_pton($masks[$byteCount]));
  				$ipStr = @inet_ntop($binaryIp);
  				if(!$ipStr) $ipStr = "0.0.0.0";
  				return $ipStr;
  	}
  }
- 
- 
- 
- 
+
+
+
+
 /* Workarounds because php does not allow arrays in Constants < 5.6 */
 function get_attr_blacklist(){
 	global $ATTR_BLACKLIST;
@@ -1442,4 +1442,3 @@ function get_tag_blacklist(){
 	global $TAG_BLACKLIST;
 	return $TAG_BLACKLIST;
 }
-?>

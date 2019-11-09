@@ -18,19 +18,19 @@
  *	You should have received a copy of the GNU Affero General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 class embedly extends gen_class {
 	public static $shortcuts = array('puf'=>'urlfetcher');
-	
+
 	private $strImageCacheFolder = "";
 	private $arrImageExtensions = array('jpg', 'png', 'gif', 'jpeg');
 	private $arrCache = array();
-	
-	
+
+
 	public function __construct(){
 		$this->strImageCacheFolder = $this->pfh->FolderPath('embedd', 'eqdkp');
 	}
-	
+
 	protected $arrServices = array(
 				'youtube' => array(
 					'regex' => ["https?://(?:[^\.]+\.)?youtube\.com/watch/?\?(?:.+&)?v=([^&]+)","https?://(?:[^\.]+\.)?(?:youtu\.be|youtube\.com/embed)/([a-zA-Z0-9_-]+)"],
@@ -93,20 +93,20 @@ class embedly extends gen_class {
 						'oembed' => 'https://plays.tv/oembed?url=URL&format=json',
 				),
 		);
-	
+
 	//Parse one single Link
 	public function parseLink($link){
 		if (strlen($link) == 0) return '';
 		$oembed = $this->getLinkDetails($link);
-		
-		
+
+
 		if ($oembed && is_array($oembed) && count($oembed)){
 			$out = $this->formatEmbedded($oembed[0], $link);
 		}
-		
+
 		return $out;
 	}
-	
+
 	//Get all Information for an single Link, like Thumbnail, Size, ...
 	public function getLinkDetails($link){
 		if (strlen($link) == 0) return false;
@@ -117,15 +117,15 @@ class embedly extends gen_class {
 		}
 		return $oembed;
 	}
-	
+
 	//Parse an String for Hyperlinks and replace Videos and Images
 	public function parseString($string, $maxwidth=false, $blnEncodeMediaTags=false){
 		if (strlen($string) == 0) return '';
-		
+
 		$embedlyUrls = array();
 		//First, get the links
 		$arrLinks = $arrAreas = array();
-		
+
 		//Detect Areas
 		$intAreas = preg_match_all("/(.*)<!-- NO_EMBEDLY -->(.*)<!-- END_NO_EMBEDLY -->(.*)/misU", $string, $arrAreas);
 		$strIgnore = "";
@@ -160,15 +160,15 @@ class embedly extends gen_class {
 				if ($strFirstChar != '"' && $strFirstChar != ':' && $strFirstChar != ']') {
 					$strMyLink = strip_tags($link);
 					if(in_array($strMyLink, $arrIgnoreLinks)) continue;
-					
+
 					$embedlyUrls[$key] = $strMyLink;
 					$arrDecodedLinks[$key] = $orig_link;
 					$key++;
 				}
-			}	
+			}
 		}
 
-		
+
 		$embedlyUrls = array_unique($embedlyUrls);
 
 		//Now let's get the information from embedly
@@ -177,27 +177,27 @@ class embedly extends gen_class {
 		//And now let's replace the Links with the Videos or pictures
 		foreach ($oembeds as $key => $oembed){
 			if($oembed === false) continue;
-			
+
 			$out = $this->formatEmbedded($oembed, $arrDecodedLinks[$key]);
 			if (strlen($out)){
 				$out = ($blnEncodeMediaTags) ? htmlspecialchars($out) : $out;
-				
+
 				$string = str_replace('<a href="'.$arrDecodedLinks[$key].'">'.$arrDecodedLinks[$key].'</a>', $out, $string);
-				
+
 				#$string = preg_replace("#([^\"':>])".preg_quote($arrDecodedLinks[$key], '#')."#i", "$1".$out, $string);
 			}
 		}
 
 		return $string;
 	}
-		
-		
+
+
 	//Styling for Embedded Images/Objects
 	private function formatEmbedded($objEmbedly, $link){
 		#d($objEmbedly);
-		
-		
-		
+
+
+
 		$out = '';
 		switch($objEmbedly->type) {
 				case 'photo':
@@ -212,7 +212,7 @@ class embedly extends gen_class {
 					} else {
 						$image = $objEmbedly->url;
 					}
-					
+
 					$out .= '<img src="'.$image.'" alt="'.$title.'" />';
 
 					$out .= '</div></div>';
@@ -222,108 +222,108 @@ class embedly extends gen_class {
 				case 'rich':
 				case 'video':
 					$out = '<div class="embed-content"><div class="embed-media">';
-					
+
 					if($this->config->get('embedly_gdpr')){
 						//Get Thumbnail
 						$strPreviewImage = "";
-						
+
 						if($objEmbedly->thumbnail_url){
 							$strPreviewImage = sanitize($objEmbedly->thumbnail_url);
 							$intPreviewWidth = (int)$objEmbedly->thumbnail_width;
 							$intPreviewHeigh = (int)$objEmbedly->thumbnail_height;
-							
+
 							$strPreviewImage = $this->DownloadPreviewImage($objEmbedly->thumbnail_url);
 						}
-						
+
 						if(!$strPreviewImage || $strPreviewImage == ""){
 							$intPreviewWidth = 600;
 							$intPreviewHeigh = 400;
 							$strPreviewImage = $this->server_path.'images/global/placeholder-media.png';
 						}
-						
+
 						if($objEmbedly->provider_url == 'https://www.youtube.com/'){
 							$html = str_replace('youtube.com/em', 'youtube-nocookie.com/em', $objEmbedly->html);
 						} else {
 							$html = $objEmbedly->html;
 						}
-						
-						
+
+
 						$out .= '<div class="embed-consent">';
 						$out .= '<div class="embed-consent-container" style=" height:'.$intPreviewHeigh.'px; width:'.$intPreviewWidth.'px">';
 
 						$out .= '<div class="embed-consent-background" style="background:url(\''.$strPreviewImage.'\'); height:'.$intPreviewHeigh.'px; width:'.$intPreviewWidth.'px">';
 						$out .= '</div>';
-						
+
 						$out .= '<div class="embed-consent-foreground" style="height:'.$intPreviewHeigh.'px; width:'.$intPreviewWidth.'px">';
 						$out .= '<div class="embed-consent-message" onclick="show_embedded_content(this)">Load external Media of '.sanitize((string)$objEmbedly->provider_name).'</div>';
 						$out .= '</div>';
 						$out .= '</div>';
-						
+
 						$out .= '<div class="embed-consent-content" style="display:none;">';
 						$out .= htmlentities($html);
 						$out .= '</div>';
-						
+
 						$out .= '<div class="embed-consent-provider" style="display:none;">';
 						$out .= sanitize((string)$objEmbedly->provider_name);
 						$out .= '</div>';
-						
+
 						$out .= '<div class="embed-consent-link">';
 						$out .= sanitize($objEmbedly->provider_name).': <a href="'.$link.'">'.$link.'</a>';
 						$out .= '</div>';
-						
+
 						$out .= '</div>';
 					} else {
-				
+
 						if($objEmbedly->provider_url == 'https://www.youtube.com/'){
 							$out .= str_replace('youtube.com/em', 'youtube-nocookie.com/em', $objEmbedly->html);
 						} else {
 							$out .= $objEmbedly->html;
 						}
-					
+
 					}
 					$out .= '</div></div>';
 					break;
 				case 'error':
 				default:
 		}
-		
+
 		return $out;
 	}
-	
-	
+
+
 	private function DownloadPreviewImage($img){
 		//If its an dynamic image...
 		$url_parts = parse_url($img);
-		
+
 		$path_parts = pathinfo($url_parts['path']);
 
 		if (!in_array(strtolower($path_parts['extension']), $this->arrImageExtensions)){
 			return false;
 		}
-		
+
 		//Does it already exist?
 		$myFileName = $this->strImageCacheFolder.md5($img).'_'.$path_parts['filename'].'.'.$path_parts['extension'];
 
 		if(file_exists($myFileName) && (filemtime($myFileName) > (time()-86400))){
 			return $this->env->root_to_serverpath($myFileName);
 		}
-		
+
 		// Load it...
 		$tmp_name = md5(generateRandomBytes());
 		$this->pfh->CheckCreateFile($this->strImageCacheFolder.$tmp_name);
 		$this->pfh->putContent($this->strImageCacheFolder.$tmp_name, $this->puf->fetch($img));
 		$i = getimagesize($this->strImageCacheFolder.$tmp_name);
-		
+
 		// Image is no image, lets remove it
 		if (!$i) {
 			$this->pfh->Delete($this->strImageCacheFolder.$tmp_name);
 			return false;
 		}
-	
+
 		$this->pfh->rename($this->strImageCacheFolder.$tmp_name, $myFileName);
 		return $this->env->root_to_serverpath($myFileName);
 	}
-	
+
 	private function getMeta($mixLink){
 		if(is_array($mixLink)){
 			$arrOut = array();
@@ -336,30 +336,30 @@ class embedly extends gen_class {
 			$mixResult = $this->checkLink($mixLink);
 			if($mixResult !== false){
 				$arrMyService = $this->getServices($mixResult);
-				
+
 				$strUrl = str_replace('URL', urlencode($mixLink), $arrMyService['oembed']);
-				
+
 				//Local cache
 				if(isset($this->arrCache[$strUrl])) return $this->arrCache[$strUrl];
-				
+
 				//File cache
 				if(file_exists($this->strImageCacheFolder.md5($strUrl).'.txt') && (filemtime($this->strImageCacheFolder.md5($strUrl).'.txt') > (time()-86400)) ){
 					$strResult = file_get_contents($this->strImageCacheFolder.md5($strUrl).'.txt');
 				} else {
 					$strResult = register('urlfetcher')->fetch($strUrl);
-				}	
-				
+				}
+
 				if($strResult){
 					$this->pfh->putContent($this->strImageCacheFolder.md5($strUrl).'.txt', $strResult);
-					
+
 					if($arrMyService['format'] == 'xml'){
 						$arrResult = simplexml_load_string($strResult);
 					} else{
 						$arrResult = json_decode($strResult);
 					}
-					
+
 					$this->arrCache[$strUrl] = ($arrResult) ? $arrResult : false;
-					
+
 					return $this->arrCache[$strUrl];
 				} else {
 					return false;
@@ -368,24 +368,24 @@ class embedly extends gen_class {
 		}
 		return false;
 	}
-	
+
 	private function getServices($strService=false){
 		$arrServices = $this->arrServices;
 		if($this->hooks->isRegistered('embedly_services')){
 			$arrHooks = $this->hooks->process('embedly_services');
-			
+
 			if (count($arrHooks) > 0){
 				foreach($arrHooks as $arrHook){
 					if(is_array($arrHook)) $arrServices = array_merge($arrServices, $arrHook);
 				}
 			}
 		}
-		
+
 		if($strService !== false) return $arrServices[$strService];
-		
+
 		return $arrServices;
 	}
-	
+
 	public function checkLink($strLink){
 		foreach($this->getServices() as $strServicename => $arrServiceDetails){
 			$arrRegex = $arrServiceDetails['regex'];
@@ -396,5 +396,3 @@ class embedly extends gen_class {
 		return false;
 	}
 }
-
-?>

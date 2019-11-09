@@ -26,7 +26,7 @@ if(!defined('EQDKP_INC')){
 if(!class_exists('routing')){
 	class routing extends gen_class {
 		private $_cache = array();
-		
+
 		private $arrStaticRoutes = array(
 			'settings'		=> 'settings',
 			'login'			=> 'login',
@@ -42,25 +42,25 @@ if(!class_exists('routing')){
 			'tag'			=> 'tag',
 			'notifications' => 'notifications',
 			'auth-endpoint' => 'authendpoint',
-				
+
 			//Static Pages for Calendar
 			'editcalendarevent' => 'editcalendarevent',
 			'calendareventtransform' => 'calendareventtransform',
 			'calendareventexport' => 	'calendareventexport',
 			'calendareventguests'=> 'calendareventguests',
 		);
-		
+
 		private $arrStaticLocations = array();
-		
+
 		public function addRoute($strRoutename, $strPageObject, $strPageObjectPath){
 			$this->arrStaticRoutes[strtolower($strRoutename)] = strtolower($strPageObject);
 			$this->arrStaticLocations[strtolower($strPageObject)] = $strPageObjectPath;
 		}
-		
+
 		public function getRoutes(){
 			return $this->arrStaticRoutes;
 		}
-		
+
 		public function staticRoute($strPath, $blnWithAlias=false){
 			$strPath = utf8_strtolower($strPath);
 			if (isset($this->arrStaticRoutes[$strPath])){
@@ -68,17 +68,17 @@ if(!class_exists('routing')){
 			}
 			return false;
 		}
-		
+
 		public function get($strPageObject, $blnWithAlias=false){
 			$strPageObject = utf8_strtolower($strPageObject);
 			if (isset($this->_cache[$strPageObject])) return $this->_cache[$strPageObject];
-			
+
 			//Check static route
 			if ($this->staticRoute($strPageObject)){
 				$this->_cache[$strPageObject] = $this->staticRoute($strPageObject, $blnWithAlias);
 				return $this->_cache[$strPageObject];
 			}
-			
+
 			$arrArticleIDs = $this->pdh->get('articles', 'articles_for_pageobject', array($strPageObject));
 			if ($arrArticleIDs && is_array($arrArticleIDs) && count($arrArticleIDs)){
 				foreach($arrArticleIDs as $intArticleID){
@@ -89,7 +89,7 @@ if(!class_exists('routing')){
 						return $this->_cache[$strPageObject];
 					}
 				}
-				
+
 				//No Permission, get first one
 				$intArticleID = $arrArticleIDs[0];
 				$intCategoryID = $this->pdh->get('articles', 'category', array($intArticleID));
@@ -99,7 +99,7 @@ if(!class_exists('routing')){
 			$this->_cache[$strPageObject] = 'NotFound';
 			return 'NotFound';
 		}
-				
+
 		public function getPageObjects($blnIncludeStatic = false){
 			$arrFiles = sdir( $this->root_path.'core/pageobjects/', '*_pageobject.class.php');
 			if (is_array($arrFiles) && count($arrFiles)){
@@ -113,7 +113,7 @@ if(!class_exists('routing')){
 			}
 			return array();
 		}
-		
+
 		public function build($arrPageObject, $strParamText=false, $strParam=false, $blnAddSID=true, $blnControllerPathPlain = false, $blnAddExtension=true){
 			$strPath = ($blnControllerPathPlain) ? $this->controller_path_plain : $this->controller_path;
 			if (is_array($arrPageObject)){
@@ -125,12 +125,12 @@ if(!class_exists('routing')){
 					}
 				}
 			} else $strPath .= utf8_ucfirst($this->get($arrPageObject, true));
-			
+
 			if ($strParamText || $strParam) $strPath .= '/';
 			if ($strParamText) $strPath .= $this->clean($strParamText);
 			if ($strParam) $strPath .= '-'.$strParam;
 			if(!$blnAddExtension) return $strPath;
-			
+
 			$lastChar = substr($strPath, -1, 1);
 			if ($lastChar != "/"){
 				$strPath .= $this->getSeoExtension();
@@ -142,14 +142,14 @@ if(!class_exists('routing')){
 			}
 			return $strPath;
 		}
-		
+
 		public function simpleBuild($strPageObject){
 			$strPath = $this->controller_path;
 			$strPath .= utf8_ucfirst($this->get($strPageObject, true));
 			if (substr($strPath, -1, 1) != "/") $strPath .= '/';
 			return $strPath;
 		}
-		
+
 		public function getSeoExtension(){
 			switch((int)$this->config->get('seo_extension')){
 				case 1:
@@ -161,7 +161,7 @@ if(!class_exists('routing')){
 				default: return '/';
 			}
 		}
-		
+
 		public function clean($strText){
 			$strText = utf8_strtolower($strText);
 			$strText = str_replace(' ', '-', $strText);
@@ -171,7 +171,7 @@ if(!class_exists('routing')){
 			$strText = htmlspecialchars($strText);
 			return utf8_ucfirst($strText);
 		}
-		
+
 		public function getPageObject($strObjectName){
 			include_once($this->root_path.'core/pageobject.class.php');
 			if (isset($this->arrStaticLocations[$strObjectName])){
@@ -181,24 +181,23 @@ if(!class_exists('routing')){
 			}
 			if (is_file($this->root_path.$strLocation.'/'.$strObjectName.'_pageobject.class.php')){
 				include_once($this->root_path.$strLocation.'/'.$strObjectName.'_pageobject.class.php');
-				
+
 				//Set Portal Layout
 				$intPortallayout = $this->pdh->get('portal_layouts', 'layout_for_route', array($strObjectName, true));
-				
+
 				if($intPortallayout !== false){
 					$portal_layout = $intPortallayout;
 				} else $portal_layout = 1;
-				
+
 				$this->core->set_vars(array(
 						'portal_layout'		=> $portal_layout,
 				));
-				
+
 				$objPage = registry::register($strObjectName.'_pageobject');
 				return $objPage;
 			}
 			return false;
 		}
-		
+
 	}
 }
-?>

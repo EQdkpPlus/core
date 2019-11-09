@@ -26,9 +26,9 @@ if ( !defined('EQDKP_INC') ){
 class plugin_manager extends gen_class {
 	public $plugins 		= array();		// Store Plugin-Objects
 	public $status			= array();		// Store Plugin-Status
-	
+
 	protected $apiLevel		= 23;	//API Level of Plugin Class
-	
+
 	public static $valid_data_types = array(
 		'id',
 		'code',
@@ -53,7 +53,7 @@ class plugin_manager extends gen_class {
 		'games',
 		'php_functions'
 	);
-	
+
 	public function __construct() {
 		if(!$this->pdl->type_known('plugin_error')) $this->pdl->register_type('plugin_error', null, array($this, 'html_format'), array(2, 3, 4), true);
 		if(!$this->pdl->type_known('plugin_installation')) $this->pdl->register_type('plugin_installation', null, array($this, 'html_inst_format'), array(0, 1, 2, 3, 4));
@@ -64,7 +64,7 @@ class plugin_manager extends gen_class {
 			$this->status[$plugin_code] = PLUGIN_REGISTERED | $data['status'];
 			if(($data['status'] & PLUGIN_INSTALLED) && !($data['status'] & PLUGIN_DISABLED)) {
 				$this->tpl->assign_var("S_PLUGIN_".strtoupper($plugin_code), true);
-				
+
 				if(!$this->initialize($plugin_code)) {
 					$this->pdl->log('plugin_error', $plugin_code, 'Initialisation failed.');
 				} else {
@@ -76,29 +76,29 @@ class plugin_manager extends gen_class {
 				}
 			}
 		}
-	}	
-	
+	}
+
 	public function html_format($log) {
 		$text = 'Plugin "'.$log['args'][0].'": '.$log['args'][1];
 		return $text;
 	}
-	
+
 	public function html_inst_format($log) {
 		$text = $log['args'][0];
 		return $text;
 	}
-	
+
 	public function check($plugin_code, $check='not_set', $strict=false) {
 		if($check == 'not_set') $check = PLUGIN_ALL & ~PLUGIN_DISABLED;
 		if(!is_string($plugin_code) OR !isset($this->status[$plugin_code])) return false;
 		$bit_result = ($check & $this->status[$plugin_code]);
 		return ($bit_result && (!$strict || $bit_result == $check)) ? true : false;
 	}
-	
+
 	private function set_status($plugin_code) {
 		return $this->pdh->put('plugins', 'set_status', array($plugin_code, ($this->status[$plugin_code] & ~PLUGIN_REGISTERED & ~PLUGIN_INITIALIZED)));
 	}
-	
+
 	private function initialize($plugin_code, $search=false) {
 		if($this->check($plugin_code, PLUGIN_INITIALIZED)) return true;
 		$folder = $this->root_path.'plugins/'.$plugin_code;
@@ -127,7 +127,7 @@ class plugin_manager extends gen_class {
 			$this->brokenApi($plugin_code);
 			return false;
 		}
-		
+
 		$plugin_object = registry::register($plugin_code);
 		if(!is_object($plugin_object)) {
 			$this->pdl->log('plugin_error', $plugin_code, 'Class "'.$plugin_code.'" not instantiatable.');
@@ -144,7 +144,7 @@ class plugin_manager extends gen_class {
 		$this->status[$plugin_code] |= PLUGIN_INITIALIZED;
 		return true;
 	}
-	
+
 	private function broken($plugin_code) {
 		if(!$this->check($plugin_code, PLUGIN_BROKEN) && isset($this->status[$plugin_code])) {
 			$this->status[$plugin_code] |= PLUGIN_BROKEN;
@@ -158,7 +158,7 @@ class plugin_manager extends gen_class {
 		}
 		return true;
 	}
-	
+
 	private function brokenApi($plugin_code){
 		$this->broken($plugin_code);
 		if(!$this->check($plugin_code, PLUGIN_BROKEN_API) && isset($this->status[$plugin_code])) {
@@ -168,7 +168,7 @@ class plugin_manager extends gen_class {
 		}
 		return true;
 	}
-	
+
 	public function enable($plugin_code) {
 		if(!$this->check($plugin_code, PLUGIN_DISABLED)) return true;
 		if(!$this->initialize($plugin_code)) return false;
@@ -177,7 +177,7 @@ class plugin_manager extends gen_class {
 		$this->pdh->process_hook_queue();
 		return true;
 	}
-	
+
 	public function install($plugin_code) {
 		if($this->check($plugin_code, PLUGIN_INSTALLED)) return true;
 		if(!$this->initialize($plugin_code)) return false;
@@ -201,7 +201,7 @@ class plugin_manager extends gen_class {
 		$this->pdh->process_hook_queue();
 		return true;
 	}
-	
+
 	public function uninstall($plugin_code) {
 		if(!$this->check($plugin_code, PLUGIN_INSTALLED)) return true;
 		if(!$this->initialize($plugin_code)) return false;
@@ -222,7 +222,7 @@ class plugin_manager extends gen_class {
 		$this->pdh->process_hook_queue();
 		return true;
 	}
-	
+
 	public function delete($plugin_code) {
 		if(!$this->check($plugin_code, PLUGIN_DISABLED) && $this->check($plugin_code, PLUGIN_INSTALLED)) return false;
 		if($this->pdh->put('plugins', 'delete_plugin', array($plugin_code))) {
@@ -232,11 +232,11 @@ class plugin_manager extends gen_class {
 		}
 		return false;
 	}
-	
-	
+
+
 	/**
 	 * Removes the whole plugin from the EQdkp Installation
-	 * 
+	 *
 	 * @param string $plugin_code
 	 */
 	public function remove($plugin_code){
@@ -244,16 +244,16 @@ class plugin_manager extends gen_class {
 		$plugin_code = preg_replace("/[^a-zA-Z0-9-_]/", "", $plugin_code);
 		if($plugin_code == "") return false;
 		$this->pfh->Delete($this->root_path.'plugins/'.$plugin_code.'/');
-		
+
 		return true;
 	}
-	
+
 	public function search($plugin_code = '') {
 		if($plugin_code) {
 			if(!$this->check($plugin_code, PLUGIN_REGISTERED)) return $this->initialize($plugin_code, true);
 			return true;
-		} 
-		
+		}
+
 		if(is_dir($this->root_path.'plugins') AND $dir = opendir($this->root_path.'plugins')) {
 			while($plugin_code = readdir($dir)) {
 				if(strpos($plugin_code, '.') === false) {
@@ -267,7 +267,7 @@ class plugin_manager extends gen_class {
 			}
 		}
 	}
-	
+
 	public function plugin_update_check() {
 		foreach($this->get_plugins() as $plugin_code) {
 			$plugin_obj = $this->get_plugin($plugin_code);
@@ -292,7 +292,7 @@ class plugin_manager extends gen_class {
 		}
 		return true;
 	}
-	
+
 	public function get_plugin($plugin_code) {
 		if(!$this->check($plugin_code, PLUGIN_REGISTERED)) {
 			if(!$this->search($plugin_code)) return false;
@@ -300,7 +300,7 @@ class plugin_manager extends gen_class {
 		$this->initialize($plugin_code);
 		return registry::register($plugin_code);
 	}
-	
+
 	public function get_plugins($check='not_set', $strict=false) {
 		if($check == 'not_set') {
 			$check = PLUGIN_INSTALLED | PLUGIN_INITIALIZED;
@@ -312,7 +312,7 @@ class plugin_manager extends gen_class {
 		}
 		return $retval;
 	}
-	
+
 	/**
 	* Add plugins' permission box arrays to an existing permissions array
 	* Modifies the array by reference
@@ -335,7 +335,7 @@ class plugin_manager extends gen_class {
 			$this->pgh->register($hook, $data['class'], $data['method'], 'plugins/'.$plugin_code.'/hooks');
 		}
 	}
-	
+
 	public function get_menus($menu_name='admin') {
 		$menu_array = array();
 		foreach($this->get_plugins() as $plugin_code) {
@@ -344,7 +344,7 @@ class plugin_manager extends gen_class {
 		}
 		return $menu_array;
 	}
-	
+
 	public function add_data($plugin_code, $type, $data='') {
 		if(!$this->check($plugin_code, (PLUGIN_INSTALLED | PLUGIN_INITIALIZED), true)) return false;
 		if(!is_array($type)) $type = array($type => $data);
@@ -357,12 +357,12 @@ class plugin_manager extends gen_class {
 		}
 		return true;
 	}
-	
+
 	public function get_data($plugin_code, $type) {
 		if($this->check($plugin_code, PLUGIN_BROKEN) || !$this->initialize($plugin_code)) return false;
 		return $this->get_plugin($plugin_code)->get_data($type);
 	}
-	
+
 	private function register_pdh_modules($plugin_code){
 		//register pdh read modules
 		$rm = $this->get_plugin($plugin_code)->get_pdh_read_modules();
@@ -390,7 +390,7 @@ class plugin_manager extends gen_class {
 			$this->pdh->unregister_write_module($module_name);
 		}
 	}
-	
+
 	/**
 	* Check plugin dependencies for $plugin_code
 	* @param $plugin_code
@@ -405,4 +405,3 @@ class plugin_manager extends gen_class {
 		return $this->get_plugin($plugin_code)->check_dependency($dependency);
 	}
 }
-?>
