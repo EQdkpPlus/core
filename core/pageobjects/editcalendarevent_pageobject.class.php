@@ -83,12 +83,12 @@ class editcalendarevent_pageobject extends pageobject {
 		echo($output);
 		exit;
 	}
-	
+
 	// send notification of the created event/raid to all users
 	private function notify_newevent($eventID, $type='event'){
 		$strEventName = $this->pdh->get('calendar_events', 'name', array($eventID));
 		if($strEventName && $strEventName != "") $strEventName .= ', ';
-		
+
 		$a_users = $this->pdh->get('user', 'active_users');
 		if(is_array($a_users) && count($a_users) > 0){
 			foreach($a_users as $userid){
@@ -98,7 +98,7 @@ class editcalendarevent_pageobject extends pageobject {
 		}
 	}
 
-	// send notification to invited 
+	// send notification to invited
 	private function notify_invitations($eventID, $invited_users=false, $type='event'){
 		$eventextension	= $this->pdh->get('calendar_events', 'extension', array($eventID));
 		$strEventName	= $this->pdh->get('calendar_events', 'name', array($eventID));
@@ -109,9 +109,9 @@ class editcalendarevent_pageobject extends pageobject {
 		}else{
 			$a_users = (isset($invited_users) && is_array($invited_users)) ? $invited_users : ((isset($eventextension['invited'])) ? $eventextension['invited'] : false);
 		}
-		
+
 		$a_users = array_unique($a_users);
-		
+
 		if(is_array($a_users) && count($a_users) > 0){
 			foreach($a_users as $userid){
 				$strEventTitle	= $strEventName.$this->time->date_for_user($userid, $this->pdh->get('calendar_events', 'time_start', array($eventID)), true).' ('.(($type=='raid') ? $this->user->lang('calendar_mode_raid') :  $this->user->lang('calendar_mode_event')).')';
@@ -269,7 +269,7 @@ class editcalendarevent_pageobject extends pageobject {
 				0,
 				$this->in->get('private', 0),
 			));
-			
+
 			// send the notification for a event invitiation
 			if($invited_users > 0 && $raidid > 0){
 				$this->notify_invitations($raidid, $invited_users);
@@ -636,11 +636,11 @@ class editcalendarevent_pageobject extends pageobject {
 			'RAID_VALUE'		=> (isset($eventdata['extension']) && isset($eventdata['extension']['raid_value'])) ? $eventdata['extension']['raid_value'] : '',
 			'ATTENDEE_COUNT'	=> (isset($eventdata['extension']) && isset($eventdata['extension']['attendee_count'])) ? $eventdata['extension']['attendee_count'] : 0,
 			'RAIDMODE_NONE'		=> (isset($eventdata['extension']['raidmode']) && $eventdata['extension']['raidmode'] == 'none') ? true : false,
-			
+
 			// lang
 			'CLONED_REPEAT'		=> sprintf($this->user->lang('raidevent_repeat_raid_text'), $txt_repeating),
 			'CLONED_INFO'		=> sprintf($this->user->lang('calendar_event_clones_info'), $parent_event_name, $parent_event_url),
-			
+
 			'CSRF_DELETETEMPLATE' => $this->CSRFGetToken('deletetemplate'),
 		));
 
@@ -652,4 +652,3 @@ class editcalendarevent_pageobject extends pageobject {
 		));
 	}
 }
-?>

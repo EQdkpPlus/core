@@ -25,7 +25,7 @@ if ( !defined('EQDKP_INC') ){
 
 class email_notification extends generic_notification {
 	public static $shortcuts = array('email'=>'MyMailer');
-	
+
 	public function sendNotification($arrNotificationData){
 		$strEmailAdress = $this->pdh->get('user', 'email', array($arrNotificationData['to_userid'], true));
 		$strMailSubject = $this->user->lang('new_notification', false, false, $this->pdh->get('user', 'lang', array($arrNotificationData['to_userid']))).': '.$arrNotificationData['type_lang'];
@@ -38,7 +38,7 @@ class email_notification extends generic_notification {
 		$this->email->Set_Language($this->pdh->get('user', 'lang', array($arrNotificationData['to_userid'])));
 		$this->email->SendMailFromAdmin($strEmailAdress, $strMailSubject, 'notification.html', $arrBodyvars, $this->config->get('lib_email_method'));
 	}
-	
+
 	public function isAvailable(){
 		return true;
 	}

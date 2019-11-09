@@ -40,22 +40,22 @@ class login_pageobject extends pageobject {
 
 	public function process_login(){
 		if (!$this->user->is_signedin()){
-			
+
 			//Check Password Length
 			if (strlen($this->in->get('password')) > 64) {
 				$this->core->message($this->user->lang('password_too_long'), $this->user->lang('error'), 'red');
 				$this->display();
 				return;
 			}
-			
+
 			//Check Honeypot
 			if (strlen($this->in->get($this->user->csrfGetToken("honeypot")))){
 				$this->core->message($this->user->lang('invalid_login'), $this->user->lang('error'), 'red');
 				$this->display();
 				return;
 			}
-			
-			
+
+
 			//Check Captcha
 			$blnShowCaptcha = false;
 			if (((int)$this->config->get('failed_logins_inactivity') - 2) > 0){
@@ -72,7 +72,7 @@ class login_pageobject extends pageobject {
 					}
 				}
 			}
-		
+
 			if ($blnShowCaptcha){
 				$captcha = register('captcha');
 				$response = $captcha->verify();
@@ -82,7 +82,7 @@ class login_pageobject extends pageobject {
 					return;
 				}
 			}
-		
+
 			$blnAutoLogin = ( $this->in->exists('auto_login') ) ? true : false;
 			//Login
 			//if(false){
@@ -109,12 +109,12 @@ class login_pageobject extends pageobject {
 				}
 
 				$this->core->global_warning($strErrorMessage.$strInvalidLogin, 'fa-exclamation-circle');
-				
+
 				$this->display();
-				
+
 			} else {
 				$strContent = "";
-				
+
 				//success
 				if($this->hooks->isRegistered('login_pageobject_successfull_login')){
 					if($this->in->exists('redirect')){
@@ -128,7 +128,7 @@ class login_pageobject extends pageobject {
 					} else {
 						$redirect_url = $this->controller_path_plain.$this->SID;
 					}
-					
+
 					$arrHookData = $this->hooks->process('login_pageobject_successfull_login', array('user_id' => $this->user->id, 'redirect_url' => $redirect_url, 'content' => ''), true);
 					$redirect_url = $arrHookData['redirect_url'];
 					$strContent = $arrHookData['content'];
@@ -140,7 +140,7 @@ class login_pageobject extends pageobject {
 					} else {
 						$redirect_url = str_replace("?&", $this->SID.'&', $redirect_url);
 					}
-					
+
 				} else {
 					$redirect_url = $this->controller_path_plain.$this->SID;
 				}
@@ -168,7 +168,7 @@ class login_pageobject extends pageobject {
 
 	//Save new password
 	public function process_new_password(){
-		
+
 		if((int)$this->config->get('cmsbridge_active') == 1 && strlen($this->config->get('cmsbridge_reg_url'))) {
 			redirect($this->config->get('cmsbridge_reg_url'),false,true);
 		}
@@ -178,14 +178,14 @@ class login_pageobject extends pageobject {
 			if (!strlen($this->in->get('key', ''))){
 				message_die($this->user->lang('error_invalid_key'));
 			}
-			
+
 			$objQuery = $this->db->prepare("SELECT user_id, user_active, username, user_email
 				FROM __users
 				WHERE user_email_confirmkey =?")->limit(1)->execute($this->in->get('key', ''));
-			
+
 			if ($objQuery && $objQuery->numRows){
 				$row = $objQuery->fetchAssoc();
-				
+
 				// Account's inactive, can't give them their password
 				if ( !(int)$row['user_active'] ) {
 					message_die($this->user->lang('error_account_inactive'));
@@ -197,7 +197,7 @@ class login_pageobject extends pageobject {
 						'user_password' => $this->user->encrypt_password($user_password),
 						'user_email_confirmkey' => '',
 				);
-				
+
 				$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set($arrSet)->execute($row['user_id']);
 				if ($objQuery){
 					$this->core->message($this->user->lang('password_reset_success'), $this->user->lang('success'), 'green');
@@ -207,16 +207,16 @@ class login_pageobject extends pageobject {
 							'DATETIME'	=> $this->time->user_date($this->time->time, true)
 					);
 					$this->email->SendMailFromAdmin($this->crypt->decrypt($row['user_email']), $this->user->lang('email_subject_password_changed'), 'user_password_changed.html', $bodyvars);
-					
+
 					$this->display();
-					
+
 					//Destroy all user sessions of this user
 					$this->user->destroyUserSessions($row['user_id']);
 				} else {
 					$this->core->message($this->user->lang('error'),'', 'red');
 					$this->display_new_password();
 				}
-				
+
 			} else {
 				message_die($this->user->lang('error_invalid_key'));
 			}
@@ -242,7 +242,7 @@ class login_pageobject extends pageobject {
 				WHERE LOWER(username)=?")->execute(clean_username($username));
 		if ($objQuery){
 			$row = $objQuery->fetchAssoc();
-			
+
 			//Check if email
 			if(!$row){
 				$userid = $this->pdh->get('user', 'userid_for_email', array($username));
@@ -282,17 +282,17 @@ class login_pageobject extends pageobject {
 			} else {
 				message_die($this->user->lang('error_invalid_user_or_mail'), $this->user->lang('get_new_password'));
 			}
-			
-			
+
+
 		} else {
 			message_die($this->user->lang('error_invalid_user_or_mail'), $this->user->lang('get_new_password'));
 		}
-		
+
 	}
 
 	public function display_new_password(){
 		$this->tpl->add_js('document.new_password.password1.focus();', 'docready');
-		
+
 		$this->tpl->add_js("
 			$('[data-equalto]').bind('input', function() {
     var to_confirm = $(this);
@@ -339,13 +339,13 @@ class login_pageobject extends pageobject {
 			redirect($this->controller_path_plain.'Settings/'. $this->SID);
 		}
 		$blnShowCaptcha = false;
-		
+
 		if((int)$this->config->get('failed_logins_inactivity') > 0){
 			$intFailedLoginCountForCaptcha = (((int)$this->config->get('failed_logins_inactivity') - 2) > 0) ? (int)$this->config->get('failed_logins_inactivity') - 2 : 1;
 		} else {
 			$intFailedLoginCountForCaptcha = 4;
 		}
-		
+
 		if ($this->user->data['session_failed_logins'] >= $intFailedLoginCountForCaptcha){
 			$blnShowCaptcha = true;
 		}
@@ -387,5 +387,3 @@ class login_pageobject extends pageobject {
 	}
 
 }
-
-?>

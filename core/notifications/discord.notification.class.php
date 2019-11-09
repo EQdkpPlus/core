@@ -24,18 +24,18 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class discord_notification extends generic_notification {
-	
+
 	public function sendNotification($arrNotificationData){
 		if(!$this->isAvailable()) return false;
-		
+
 		$intUserID = $arrNotificationData['to_userid'];
 		$arrNotificationSettings = $this->pdh->get('user', 'notification_settings', array($intUserID));
 		$channelid = $arrNotificationSettings['ntfy_discord_channelid'];
 		if($channelid  == "") return false;
-		
+
 		$arrDiscordConfig = register('config')->get_config('discord');
 		$token = $arrDiscordConfig['bot_token'];
-		
+
 		$discordChannelID = false;
 		$blnIsGroupChannel = false;
 		if(strpos($channelid, ':') !== false){
@@ -50,7 +50,7 @@ class discord_notification extends generic_notification {
 			$arrJsonData = array(
 					'recipient_id' => $channelid,
 			);
-			
+
 			$strResult = register('urlfetcher')->post('https://discordapp.com/api/users/@me/channels', json_encode($arrJsonData), "application/json", array('Authorization: Bot '.$token));
 			if($strResult){
 				$arrResultJson = json_decode($strResult, true);
@@ -59,29 +59,29 @@ class discord_notification extends generic_notification {
 				}
 			}
 		}
-		
+
 		//Now post the real message
 		if($discordChannelID){
 			$strSubject = '**'.$this->user->lang('new_notification', false, false, $this->pdh->get('user', 'lang', array($arrNotificationData['to_userid']))).'**: *'.$arrNotificationData['type_lang'].'*';
 			$msg = $strSubject."\r\n```".$arrNotificationData['name']."```".(($blnIsGroupChannel) ? $arrNotificationData['direct_link'] : $arrNotificationData['link']);
-			
+
 			$arrJsonData = array('content' => $msg);
 			$b = register('urlfetcher')->post('https://discordapp.com/api/channels/'.$discordChannelID.'/messages', json_encode($arrJsonData), "application/json", array('Authorization: Bot '.$token));
 		}
 	}
-	
+
 	public function isAvailable(){
 		return $this->messenger->isAvailable('discord');
 	}
-	
+
 	/*
 	 * @see generic_notification::getUserSettings()
 	 */
 	public function getUserSettings(){
 		return $this->messenger->getMethodUserSettings('discord');
 	}
-	
-	/* 
+
+	/*
 	 * @see generic_notification::getAdminSettings()
 	 */
 	public function getAdminSettings(){

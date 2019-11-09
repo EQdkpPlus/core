@@ -66,7 +66,7 @@ class wrapper_pageobject extends pageobject {
 				'height'=> '4024',
 			);
 		}
-		
+
 		//Register
 		if((strtolower($linkID) == 'lostpassword') and (strlen($this->config->get('cmsbridge_pwreset_url')) > 0)){
 			$this->data = array(
@@ -76,7 +76,7 @@ class wrapper_pageobject extends pageobject {
 				'height'=> '4024',
 			);
 		}
-		
+
 		//Hooks
 		$arrHooks = $this->hooks->process('wrapper', array('id'=>$linkID, 'link'=>rawurldecode($url)));
 
@@ -98,7 +98,7 @@ class wrapper_pageobject extends pageobject {
 
 	public function display(){
 		$this->handle_id($this->url_id, $this->speaking_name);
-		
+
 		if (!$this->data || $this->data['url'] == ''){
 			message_die('URL not found');
 		} else {
@@ -118,7 +118,7 @@ class wrapper_pageobject extends pageobject {
 			$output = '<div id="wrapper">';
 			$this->CreateDynamicIframeJS();
 			$output .='<iframe id="boardframe" src="'.$this->data['url'].'" data-base-url="'.$this->data['base_url'].'" width="100%" scrolling="auto" marginwidth="0" marginheight="0" height="'.$this->data['height'].'" frameborder="0" vspace="0" hspace="0"></iframe>';
-	
+
 
 			$output .= '</div>';
 
@@ -135,7 +135,7 @@ class wrapper_pageobject extends pageobject {
 			break;
 			default: $page_body = '';
 		}
-		
+
 		$page_title = (isset($this->data['title']))? $this->data['title'] : 'Wrapper';
 		$this->core->set_vars([
 			'page_title'		=> $page_title,
@@ -209,16 +209,16 @@ class wrapper_pageobject extends pageobject {
 				$("#"+iframeid).data("message", "false");
 				sendMessagesToIframe();
 			}
-			
+
 			function perodicIframeAdjustment(){
 				resizeIframe();
 			}
-					
-					
+
+
 			//Resizes the Iframe
 			function resizeIframe(height, width){
 				var currentfr = document.getElementById(iframeid);
-	
+
 				if (currentfr){
 					try {
 						currentfr.style.overflow = "hidden";
@@ -232,20 +232,20 @@ class wrapper_pageobject extends pageobject {
 						} else {
 							currentfr.height = height+wrapper_height_offset;
 						}
-					
+
 						//Set correct width
 						if(width == undefined){
 							if (currentfr.contentDocument && currentfr.contentDocument.body && currentfr.contentDocument.body.scrollWidth) {//ie5+ syntax
 								var scrollwidth = currentfr.contentDocument.body.scrollWidth;
 								var myscrollwidth = currentfr.scrollWidth;
-		
+
 								if (scrollwidth >  myscrollwidth+5){
 									currentfr.width = scrollwidth;
 								}
 							}
 						} else {
 							var myscrollwidth = currentfr.scrollWidth;
-		
+
 							if (width >  myscrollwidth+5){
 								currentfr.width = width;
 							}
@@ -253,7 +253,7 @@ class wrapper_pageobject extends pageobject {
 
 					} catch (e) {
 						sendMessagesToIframe();
-						
+
 						if($("#"+iframeid).data("message") == "false") currentfr.height = wrapper_default_height;
 					}
 				}
@@ -268,12 +268,12 @@ class wrapper_pageobject extends pageobject {
 					} else if (currentfr.Document){
 						hash = currentfr.Document.location.hash;
 					}
-	
+
 					if (hash && hash!= ""){
 						hash = hash.substring(1);
-	
+
 						var el = false;
-	
+
 						if (currentfr.contentDocument) {
 							el = currentfr.contentDocument.getElementById(hash);
 							if (!el){
@@ -285,7 +285,7 @@ class wrapper_pageobject extends pageobject {
 								el = currentfr.Document.getElementsByName(hash)[0];
 							}
 						}
-	
+
 						if (el){
 							var elpos = findPos(el)[1];
 							var framepos = findPos(currentfr)[1];
@@ -293,11 +293,11 @@ class wrapper_pageobject extends pageobject {
 						} else {
 							//scrollTo(0,0);
 						}
-	
+
 					} else {
 						//scrollTo(0,0);
 					}
-					
+
 				} catch (e) {
 					console.log(e);
 				}
@@ -313,7 +313,7 @@ class wrapper_pageobject extends pageobject {
 				}
 				return [curleft,curtop];
 			}
-				
+
 			function setURL(){
 				try {
 					var currentfr = document.getElementById(iframeid);
@@ -323,14 +323,14 @@ class wrapper_pageobject extends pageobject {
 					} else if (currentfr.Document){
 						location = currentfr.Document.location.href;
 					}
-					
+
 					if(location != ""){
 						var baseurl = $("#"+iframeid).data("base-url");
 						var myurl = window.location.search;
 						var param = location.replace(baseurl, "");
-						
+
 						param = escape(param);
-						
+
 						if( param == "" || param.indexOf("http") == 0 || param.indexOf("sftp") == 0) {
 							var newurl = updateQueryStringParameter(myurl, "p", "");
 							history.pushState( { eqdkp: "wrapper", url:newurl }, document.title, newurl);
@@ -339,12 +339,12 @@ class wrapper_pageobject extends pageobject {
 						var newurl = updateQueryStringParameter(myurl, "p", param);
 						history.pushState( { eqdkp: "wrapper", newurl:newurl, }, document.title, newurl);
 					}
-	
+
 				} catch (e) {
 					console.log(e);
 				}
 			}
-				
+
 			function updateQueryStringParameter(uri, key, value) {
 			  var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
 			  var separator = uri.indexOf("?") !== -1 ? "&" : "?";
@@ -355,49 +355,49 @@ class wrapper_pageobject extends pageobject {
 			    return uri + separator + key + "=" + value;
 			  }
 			}
-					
+
 			function check_base_url(url){
 				var parser = document.createElement("a");
 				parser.href = url;
-						
+
 				var eqdkp_parser = document.createElement("a");
 				eqdkp_parser.href = wrapper_base_url;
 
 				console.log(parser.href);
 				console.log(eqdkp_parser.href);
-					
+
 				if(parser.hostname == eqdkp_parser.hostname){
 					if(parser.pathname.lastIndexOf(eqdkp_parser.pathname, 0) === 0){
 						return true;
 					}
 				}
-						
+
 				return false;
 			}
-					
+
 			function beforechangeEventhandler(e){
 				console.log(e);
 			}
-					
+
 			function iframeonclickEventhandler(e){
 				console.log(e);
-					
+
 				var elemntTagName = e.target.tagName;
-					
+
 			    if(elemntTagName==\'A\')
 			    {
 			        var newurl = e.target.getAttribute("href");
 					console.log(newurl);
 					console.log(check_base_url(newurl));
-					
+
 					if(!check_base_url(newurl) && newurl.lastIndexOf("http", 0) === 0){
 						e.preventDefault();
 						window.location.href = newurl;
 					}
-					
+
 			    }
 			}
-					
+
 			function registerInnerIframeEvents(){
 				try {
 					console.log("registerInnerFrameEvents");
@@ -413,7 +413,7 @@ class wrapper_pageobject extends pageobject {
 						    iframeWin.attachEvent("onbeforeunload", beforechangeEventhandler);
 						}
 						*/
-					
+
 						if (typeof iframeDoc.addEventListener != "undefined") {
 						    iframeDoc.addEventListener("click", iframeonclickEventhandler, false);
 						} else if (typeof iframeDoc.attachEvent != "undefined") {
@@ -424,7 +424,7 @@ class wrapper_pageobject extends pageobject {
 					console.log(e);
 				}
 			}
-					
+
 			function registerIframeEvents(){
 				try {
 					var currentfr = document.getElementById(iframeid);
@@ -437,10 +437,10 @@ class wrapper_pageobject extends pageobject {
 						}
 					}
 				} catch (e) {
-					
+
 				}
 			}
-					
+
 			function sendMessagesToIframe(){
 				try {
 					var currentfr = document.getElementById(iframeid);
@@ -450,30 +450,30 @@ class wrapper_pageobject extends pageobject {
 						console.log("send message to iframe");
 					}
 				} catch (e) {
-					
+
 				}
 			}
-					
+
 			function messageEventhandler(event){
 				if(event.data.type == "height"){
 					var height = event.data.height;
 					var width = event.data.width;
-					
+
 					$("#"+iframeid).data("message", "true");
 					resizeIframe(height, width);
 				}
-					
+
 				if(event.data.type == "link"){
 					$("#"+iframeid).data("message", "true");
 				}
 			}
-	
+
 			function init_wrapper(){
 				var tempobj = document.getElementById(iframeid);
 				tempobj.style.display = "block";
-				
+
 				registerIframeEvents();
-					
+
 				if (window.addEventListener){
 				  addEventListener("message", messageEventhandler, false);
 				} else {
@@ -482,7 +482,7 @@ class wrapper_pageobject extends pageobject {
 			}
 
 			init_wrapper();
-					
+
 			var aktiv = window.setInterval(perodicIframeAdjustment, 1000*2); //2 Sekunden
 
 			window.onpopstate = function(event) {
@@ -498,4 +498,3 @@ class wrapper_pageobject extends pageobject {
 	} #end function
 
 }
-?>

@@ -30,7 +30,7 @@ class calendareventexport_pageobject extends pageobject {
 
 	public function display(){
 		$menu_structure	= $this->generateMenuStructure();
-		
+
 		if($this->in->get('eventid', 0)){
 			$eventid		= $this->in->get('eventid', 0);
 			$output			= $this->in->get('output');
@@ -90,4 +90,3 @@ class calendareventexport_pageobject extends pageobject {
 		return $export_array;
 	}
 }
-?>

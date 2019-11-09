@@ -67,7 +67,7 @@ class core extends gen_class {
 
 	public function check_auth(){
 		if(defined('EQDKP_UPDATE') && EQDKP_UPDATE) return true;
-		
+
 		if (!$this->user->check_auth('a_maintenance', false)){
 			if ($this->config->get('pk_maintenance_mode') == '1'){
 				redirect('maintenance/maintenance.php'.$this->SID, false, false, false);
@@ -113,7 +113,7 @@ class core extends gen_class {
 	public function page_header(){
 		//Has there been a redirect before?
 		$blnHeadersSent = headers_sent();
-		
+
 		@header('Last-Modified: ' . gmdate('D, d M Y H:i:s', time()) . ' GMT');
 		@header('Content-Type: text/html; charset=utf-8');
 		//Disable Browser Cache
@@ -123,7 +123,7 @@ class core extends gen_class {
 		//Send 503 for SEO if there is no redirect
 		if(!$blnHeadersSent && !$this->user->is_signedin()) @header( "$protocol 503 Service Unavailable", true, 503 );
 		@header('Retry-After: 300');//300 seconds
-	
+
 		$this->header_inc = true;
 		$this->tpl->assign_vars(array(
 			'L_ADMIN_PANEL' => $this->user->lang('admin_acp'),
@@ -170,4 +170,3 @@ class core extends gen_class {
 		$this->tpl->display();
 	}
 }
-?>

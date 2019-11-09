@@ -24,44 +24,44 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class twitterdm_messenger extends generic_messenger {
-	
+
 	public function sendMessage($toUserID, $strSubject, $strMessage){
 		$arrNotificationSettings = $this->pdh->get('user', 'notification_settings', array($toUserID));
 		$twitterAccount = str_replace("@", "", $arrNotificationSettings['ntfy_twitter_user']);
 		if($twitterAccount  == "") return false;
-		
+
 		include_once($this->root_path.'libraries/twitter/codebird.class.php');
 		Codebird::setConsumerKey($this->config->get('twitter_consumer_key'), $this->config->get('twitter_consumer_secret')); // static, see 'Using multiple Codebird instances'
-		
+
 		$cb = Codebird::getInstance();
 		$cb->setToken($this->config->get('twitter_access_token'), $this->config->get('twitter_access_token_secret'));
-		
+
 		$strMessage = strip_tags($strMessage);
-		
+
 		//$strMessage = substr($strMessage, 0, 160);
-		
+
 		$params = array(
 			'screen_name' => $twitterAccount,
 			'text'		  => $strMessage,
 		);
-		
+
 		$reply = $cb->directMessages_new($params);
-		
+
 		return true;
 	}
-	
+
 	public function isAvailable(){
-		if($this->config->get('twitter_consumer_key') != "" 
-				&& $this->config->get('twitter_consumer_secret') != "" 
-				&& $this->config->get('twitter_access_token') != "" 
+		if($this->config->get('twitter_consumer_key') != ""
+				&& $this->config->get('twitter_consumer_secret') != ""
+				&& $this->config->get('twitter_access_token') != ""
 				&& $this->config->get('twitter_screen_name') != ""
 				&& $this->config->get('twitter_access_token_secret') != ""){
 			return true;
-		}	
-		
+		}
+
 		return false;
 	}
-	
+
 	/*
 	 * @see generic_notification::getUserSettings()
 	 */
@@ -74,8 +74,8 @@ class twitterdm_messenger extends generic_messenger {
 			),
 		);
 	}
-	
-	/* 
+
+	/*
 	 * @see generic_notification::getAdminSettings()
 	 */
 	public function getAdminSettings(){

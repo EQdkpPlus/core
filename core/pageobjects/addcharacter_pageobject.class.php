@@ -59,7 +59,7 @@ class addcharacter_pageobject extends pageobject {
 
 		if (strlen($data['name'])){
 			$mixResult = $this->pdh->put('member', 'addorupdate_member', array(0, $data, $data['overtakechar']));
-			
+
 			if($this->adminmode && $mixResult){
 				if($data['userid']){
 					$this->pdh->put('member', 'add_char_to_user', array($mixResult, (int)$data['userid']));
@@ -95,7 +95,7 @@ class addcharacter_pageobject extends pageobject {
 
 		$intOldUserID = $this->pdh->get('member', 'user', array($this->url_id));
 		$id = $this->pdh->put('member', 'addorupdate_member', array($this->url_id, $data, $data['overtakechar']));
-		
+
 		if($id){
 			if($this->adminmode && $data['userid'] != $intOldUserID){
 				if($data['userid']){
@@ -105,7 +105,7 @@ class addcharacter_pageobject extends pageobject {
 				}
 			}
 		}
-		
+
 		//Transfer character history
 		if ($this->adminmode && ($this->url_id != $this->in->get('history_receiver', 0)) && $this->in->get('history_receiver', 0) > 0){
 			$this->pdh->put('member', 'trans_member', array($this->url_id, $this->in->get('history_receiver', 0)));
@@ -145,15 +145,15 @@ class addcharacter_pageobject extends pageobject {
 			if (($key = array_search($this->in->get('parent'), $arrParents)) !== false) {
 				unset($arrParents[$key]);
 			}
-			
+
 			$data = $this->game->get_dep_classes($this->in->get('parent'), $this->in->get('child'), $requestID);
-			
+
 			if(count($arrParents)){
 				$arrOut = array();
 				foreach($arrParents as $parentClass){
 					$arrAddData = $this->game->get_dep_classes($parentClass, $this->in->get('child'), $this->in->get($parentClass));
 				}
-				
+
 				foreach($arrAddData as $key => $val){
 					if(isset($data[$key])) $arrOut[$key] = $val;
 				}
@@ -161,7 +161,7 @@ class addcharacter_pageobject extends pageobject {
 				$arrOut = $data;
 			}
 
-			
+
 			$options = array(
 				'options_only'	=> true,
 				'options' 		=> $arrOut,
@@ -262,20 +262,20 @@ class addcharacter_pageobject extends pageobject {
 				'options'		=> $maincharsel,
 				'lang'			=> 'mainchar',
 			);
-			
+
 			$arrUsersTmp = $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list')));
 			$arrUsers = array(0 => '');
 			foreach($arrUsersTmp as $usrid => $usernm){
 				$arrUsers[$usrid] = $usernm;
 			}
-			
+
 			$static_fields['userid']	= array(
 					'type'			=> 'dropdown',
 					'options'		=> $arrUsers,
 					'lang'			=> 'user',
 			);
 
-			
+
 			$tmpranks		= $this->pdh->aget('rank', 'name', 0, array($this->pdh->get('rank', 'id_list')));
 			$static_fields['rankid']	= array(
 				'type'			=> 'dropdown',
@@ -310,7 +310,7 @@ class addcharacter_pageobject extends pageobject {
 		if($this->hooks->isRegistered('addcharacter_profilefields')){
 			$profilefields = $this->hooks->process('addcharacter_profilefields', array($profilefields, $this->url_id, $member_data), true);
 		}
-		
+
 		foreach($profilefields as $fieldid => $fielddata) {
 			$fieldname = $fielddata['name'];
 			//Set Required for Unique Options
@@ -318,10 +318,10 @@ class addcharacter_pageobject extends pageobject {
 				$fielddata['required'] = true;
 				$fielddata['default'] = $this->config->get($fieldname);
 			}
-			
+
 			if($fielddata['type'] == 'imageuploader'){
 				$fielddata['returnFormat'] = 'relative';
-				$fielddata['imgup_type']	= 'user';	
+				$fielddata['imgup_type']	= 'user';
 			}
 
 			//Make Dropdowns etc. translatable
@@ -347,5 +347,3 @@ class addcharacter_pageobject extends pageobject {
 
 	}
 }
-
-?>

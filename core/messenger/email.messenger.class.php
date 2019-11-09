@@ -25,7 +25,7 @@ if ( !defined('EQDKP_INC') ){
 
 class email_messenger extends generic_messenger {
 	public static $shortcuts = array('email'=>'MyMailer');
-	
+
 	public function sendMessage($toUserID, $strSubject, $strMessage){
 		$blnResult = false;
 		$strEmailAdress = $this->pdh->get('user', 'email', array($toUserID, true));
@@ -37,11 +37,11 @@ class email_messenger extends generic_messenger {
 			//Set E-Mail-Options
 			$this->email->SetOptions($options);
 			$blnResult = $this->email->SendMailFromAdmin($strEmailAdress, $strSubject, $strMessage);
-			
+
 		}
 		return $blnResult;
 	}
-	
+
 	public function isAvailable(){
 		return true;
 	}

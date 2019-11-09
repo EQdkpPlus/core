@@ -31,18 +31,18 @@ class usergroup_pageobject extends pageobject {
 		}
 		$this->process();
 	}
-	
+
 	public function display(){
 		$groupID = $this->url_id;
 		if ($this->pdh->get('user_groups', 'hide', array($groupID))) redirect($this->controller_path_plain.'User/'.$this->SID);
-		
+
 		//Sort
 		$sort			= $this->in->get('sort');
 		$sort_suffix	= '&amp;sort='.$sort.'&amp;g='.$groupID;
 
 		$start				= $this->in->get('start', 0);
 		$pagination_suffix	= ($start) ? '&amp;start='.$start.'&amp;g='.$groupID : '';
-		
+
 		$arrUsers = $this->pdh->get('user_groups_users', 'user_list', array($groupID));
 		$view_list = $view_list_grpleader = array();
 		foreach($arrUsers as $user_id){
@@ -52,19 +52,19 @@ class usergroup_pageobject extends pageobject {
 				$view_list[] = $user_id;
 			}
 		}
-		
+
 		//Output
 		$hptt_page_settings	= $this->pdh->get_page_settings('listusers', 'hptt_listusers_userlist');
-			
+
 		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => $this->routing->simpleBuild('user'), '%link_url_suffix%' => '', '%use_controller%' => true), $groupID);
 		$hptt->setPageRef($this->strPath);
-		
+
 		//footer
 		$user_count			= count($view_list);
 
-		
+
 		$this->tpl->add_meta('<link rel="canonical" href="'.$this->env->link.$this->routing->build('Usergroup', $this->pdh->get('user_groups', 'name', array($groupID)), $groupID, false, true).'" />');
-		
+
 		$this->tpl->assign_vars(array (
 			'PAGE_OUT'			=> $hptt->get_html_table($sort, $pagination_suffix, $start, $this->user->data['user_rlimit'], false),
 			'USER_PAGINATION'	=> generate_pagination($this->strPath.$this->SID.$sort_suffix, $user_count, $this->user->data['user_rlimit'], $start),
@@ -73,9 +73,9 @@ class usergroup_pageobject extends pageobject {
 			'USER_COUNT'		=> $user_count,
 			'HPTT_ADMIN_LINK'	=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('listusers').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,
 		));
-		
-		
-		
+
+
+
 		$hptt_grpleader		= $this->get_hptt($hptt_page_settings, $view_list_grpleader, $view_list_grpleader, array('%link_url%' => $this->routing->simpleBuild('user'), '%link_url_suffix%' => '', '%use_controller%' => true), $groupID.'_grpleader');
 		$hptt_grpleader->setPageRef($this->strPath);
 		//footer
@@ -99,4 +99,3 @@ class usergroup_pageobject extends pageobject {
 		]);
 	}
 }
-?>

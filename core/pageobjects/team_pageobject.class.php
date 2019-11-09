@@ -30,11 +30,11 @@ class team_pageobject extends pageobject {
 	public function display(){
 		$usergroups		= $this->pdh->get('user_groups', 'team_groups', array());
 		$arrSorted = $this->pdh->sort($usergroups, 'user_groups', 'sortid');
-	
+
 		$special_user	= unserialize(stripslashes($this->config->get('special_user')));
 		$special_user = (!$special_user) ? array() : $special_user;
 		unset($usergroups[0]); //Guestgroup
-		
+
 		foreach ($usergroups as $group){
 			$user_in_group = $this->pdh->get('user_groups_users', 'user_list', array($group));
 
@@ -48,14 +48,14 @@ class team_pageobject extends pageobject {
 				}
 			}
 
-			
+
 			if (is_array($user_in_group) && count($teamArray) > 0){
 				$user_count = count($teamArray);
 				$view_list = $teamArray;
 
 				//Output
 				$hptt_page_settings	= $this->pdh->get_page_settings('teamlist', 'hptt_team_list');
-					
+
 				$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => 'team.php', '%link_url_suffix%' => '', '%use_controller%' => true), 'g.'.$group.'.u'.$this->user->id);
 				$hptt->setPageRef($this->strPath);
 
@@ -65,14 +65,14 @@ class team_pageobject extends pageobject {
 						'PAGE_OUT'			=> $hptt->get_html_table($sort, $pagination_suffix, null, null, false),
 						'COUNT'				=> $user_count,
 				));
-				
+
 			}
 		}
-		
+
 		$this->tpl->assign_vars(array(
 				'HPTT_ADMIN_LINK'	=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('teamlist').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,
 		));
-	
+
 		$this->jquery->Dialog('usermailer', $this->user->lang('adduser_send_mail'), array('url'=>$this->server_path."email.php".$this->SID."&user='+userid+'", 'width'=>'660', 'height'=>'500', 'withid'=>'userid'));
 		$this->tpl->add_meta('<link rel="canonical" href="'.$this->env->link.$this->routing->build('Team', false, false, false, true).'" />');
 		$this->set_vars(array(
@@ -83,4 +83,3 @@ class team_pageobject extends pageobject {
 	}
 
 }
-?>

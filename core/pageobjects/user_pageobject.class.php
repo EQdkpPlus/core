@@ -21,7 +21,7 @@
 
 class user_pageobject extends pageobject {
 	public static $shortcuts = array('crypt'=>'encrypt');
-	
+
 	public function __construct() {
 		$handler = array(
 			'u'					=> array('process' => 'viewuser'),
@@ -35,10 +35,10 @@ class user_pageobject extends pageobject {
 		include_once($this->root_path.'core/country_states.php');
 
 		$user_id 	= $this->in->get('u');
-		
+
 		$special_user = $this->config->get('special_user');
 		$special_user = (!$special_user) ? array() : $special_user;
-		
+
 		$row		= $this->pdh->get('user', 'data', array($user_id));
 		if (!$row || in_array($user_id, $special_user)){
 			$this->display();
@@ -46,9 +46,9 @@ class user_pageobject extends pageobject {
 		}
 
 		$arrUserCustomFieldsData = $this->pdh->get('user', 'custom_fields', array($user_id));
-		
+
 		$strGender = $this->pdh->get('user', 'gender', array($user_id));
-		
+
 		//Gender
 		switch($strGender){
 			case 'f' : $strGender = $this->user->lang('gender_f').', ';
@@ -59,9 +59,9 @@ class user_pageobject extends pageobject {
 			break;
 			default: $strGender = "";
 		}
-		
+
 		$this->jquery->Tab_header('userprofile_tabs', true);
-		
+
 		$this->tpl->assign_vars(array(
 			'USER_PROFILE_ID' => $user_id,
 			'USER_PROFILE_AVATAR' => ($this->pdh->geth('user', 'avatarimglink', array($user_id, true))),
@@ -71,7 +71,7 @@ class user_pageobject extends pageobject {
 			'USER_PROFILE_LAST_ACTIVITY' => $this->pdh->geth('user', 'last_visit', array($user_id)),
 			'USER_PROFILE_USERGROUPS' => str_replace(', ', '', $this->pdh->geth('user', 'groups', array($user_id, true))),
 		));
-		
+
 		//Wall Permissions
 		$blnWallRead = $this->pdh->get('user', 'check_privacy', array($user_id, 'priv_wall_posts_read'));
 		$blnWallWrite = $this->pdh->get('user', 'check_privacy', array($user_id, 'priv_wall_posts_write'));
@@ -88,10 +88,10 @@ class user_pageobject extends pageobject {
 			'USER_WALL'			=> $this->comments->Show(),
 			'S_SHOW_WALL'		=> $blnWallRead,
 		));
-		
+
 		//Personal Profile Information
 		$blnPersonal = $blnContact = false;
-		
+
 		if($this->pdh->get('user', 'check_privacy', array($user_id, 'priv_userprofile_age'))){
 			$intBirthday = $this->pdh->get('user', 'birthday', array($user_id));
 			$age = ($this->time->age($intBirthday) !== 0) ? $this->time->age($intBirthday) : '';
@@ -105,10 +105,10 @@ class user_pageobject extends pageobject {
 				$blnPersonal = true;
 			}
 		}
-		
+
 		if($this->pdh->get('user', 'check_privacy', array($user_id, 'priv_userprofile_country'))){
 			$strCountry = $this->pdh->get('user', 'country', array($user_id));
-			
+
 			if (strlen($strCountry)) {
 				$val = '<img src="'.$this->server_path.'images/flags/'.strtolower($strCountry).'.svg" alt="'.$strCountry.'" /> '.sanitize(ucfirst(strtolower($country_array[$row['country']])));
 				$this->tpl->assign_block_vars('profile_personal_row', array(
@@ -120,19 +120,19 @@ class user_pageobject extends pageobject {
 			}
 		}
 
-		
+
 		$arrProfileFields = $this->pdh->get('user_profilefields', 'usersettings_fields', array(true));
 		foreach($arrProfileFields as $intFieldID){
 			$strType = $this->pdh->geth('user_profilefields', 'type', array($intFieldID));
 			if(in_array($strType, array('birthday', 'country'))) continue;
-			
+
 			$blnPerm = $this->pdh->get('user', 'check_privacy', array($user_id, 'priv_userprofile_'.$intFieldID));
 			if (!$blnPerm) continue;
-			
+
 			$val = $this->pdh->geth('user_profilefields', 'display_field', array($intFieldID, $user_id));
 
 			if ($val == "") continue;
-			
+
 			$this->tpl->assign_block_vars('profile_personal_row', array(
 					'NAME' => $this->pdh->geth('user_profilefields', 'name', array($intFieldID)),
 					'TEXT' => $val,
@@ -140,9 +140,9 @@ class user_pageobject extends pageobject {
 			$blnPersonal = true;
 			$this->tpl->assign_var('USER_PROFILE_'.strtoupper($intFieldID), $val);
 		}
-		
-		
-		
+
+
+
 		//Contact Information
 		if ($this->pdh->get('user', 'check_privacy', array($user_id, 'priv_userprofile_email'))){
 			$strEmail = $this->pdh->geth('user', 'email', array($user_id, true));
@@ -154,16 +154,16 @@ class user_pageobject extends pageobject {
 				$blnContact = true;
 			}
 		}
-		
+
 		$arrContactFields = $this->pdh->get('user_profilefields', 'contact_fields', array(true));
 		foreach($arrContactFields as $intFieldID){
 			$blnPerm = $this->pdh->get('user', 'check_privacy', array($user_id, 'priv_userprofile_'.$intFieldID));
 			if (!$blnPerm) continue;
-				
+
 			$val = $this->pdh->geth('user_profilefields', 'display_field', array($intFieldID, $user_id));
-		
+
 			if ($val == "") continue;
-				
+
 			$this->tpl->assign_block_vars('profile_contact_row', array(
 					'NAME' => $this->pdh->geth('user_profilefields', 'name', array($intFieldID)),
 					'TEXT' => $val,
@@ -175,7 +175,7 @@ class user_pageobject extends pageobject {
 			}
 			$this->tpl->assign_var('USER_PROFILE_'.strtoupper($intFieldID), $val);
 		}
-								
+
 		$hptt_page_settings = $this->pdh->get_page_settings('userprofile', 'hptt_userprofile_memberlist_overview');
 
 		$arrMemberList = ($this->pdh->get('member', 'mainchar', array($user_id))) ? array($this->pdh->get('member', 'mainchar', array($user_id))) : array();
@@ -192,7 +192,7 @@ class user_pageobject extends pageobject {
 			'HPTT_ADMIN_LINK'		=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('userprofile').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,
 			'USER_ADMIN_LINK'		=> ($this->user->check_auth('a_users_man', false)) ? '<a href="'.$this->server_path.'admin/manage_users.php'.$this->SID.'&u='.$user_id.'" title="'.$this->user->lang('manage_users').'"><i class="fa fa-pencil floatRight"></i></a>' : false,
 		));
-		
+
 		//Custom Tabs
 		$arrHooks = $this->hooks->process('userprofile_customtabs', array('user_id' => $user_id));
 		if (is_array($arrHooks)){
@@ -200,7 +200,7 @@ class user_pageobject extends pageobject {
 				$title = $value['title'];
 				$id = substr(md5($title), 0, 9);
 				$content = $value['content'];
-				
+
 				$this->tpl->assign_block_vars('custom_tabs', array(
 					'ID'		=> $id,
 					'NAME'		=> $title,
@@ -210,7 +210,7 @@ class user_pageobject extends pageobject {
 		}
 
 		$this->jquery->Tab_header('userprofile_dkp_tabs', true);
-		
+
 		if(count($arrMemberList)){
 			// Item History
 			$arrItemListSettings = array(
@@ -243,7 +243,7 @@ class user_pageobject extends pageobject {
 				'ITEM_PAGINATION'	=> generate_pagination($this->vc_build_url('istart', true), count($view_list), $this->user->data['user_rlimit'], $this->in->get('istart', 0), 'istart'),
 				'ITEM_COUNT'		=> count($view_list),
 			));
-			
+
 			// Individual Adjustment History
 			if(!$this->config->get('disable_points')){
 				$arrAdjListSettings = array(
@@ -263,7 +263,7 @@ class user_pageobject extends pageobject {
 						array('name' => 'adj_value', 'sort' => true, 'th_add' => '', 'td_add' => 'nowrap="nowrap"'),
 					),
 				);
-	
+
 				$view_list = $this->pdh->get('adjustment', 'adjsofuser', array($user_id));
 				$hptt_page_settings = $arrAdjListSettings;
 				$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%raid_link_url%' => $this->routing->simpleBuild('raids'), '%raid_link_url_suffix%' => '', '%use_controller%' => true), 'userprofile_'.$user_id, 'asort');
@@ -274,9 +274,9 @@ class user_pageobject extends pageobject {
 					'ADJUSTMENT_COUNT'		=> count($view_list),
 				));
 			}
-			
-			
-			
+
+
+
 			// Raid Attendance
 			$arrRaidListSettings = array(
 				'name' => 'hptt_viewmember_raidlist',
@@ -296,7 +296,7 @@ class user_pageobject extends pageobject {
 					),
 			);
 			if($this->config->get('disable_points')) unset($arrRaidListSettings['table_presets'][3]);
-			
+
 			$view_list			= $this->pdh->get('raid', 'raidids4userid', array($user_id));
 			$hptt_page_settings	= $arrRaidListSettings;
 			$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => $this->routing->simpleBuild('raids') , '%link_url_suffix%' => '', '%with_twink%' => true, '%use_controller%' => true), 'userprofile_'.$user_id, 'rsort');
@@ -306,7 +306,7 @@ class user_pageobject extends pageobject {
 				'RAID_PAGINATION'	=> generate_pagination($this->vc_build_url('rstart', true), count($view_list), $this->user->data['user_rlimit'], $this->in->get('rstart', 0), 'rstart'),
 				'RAID_COUNT'		=> count($view_list),
 			));
-	
+
 			//Event-Attendance
 			$arrEventAttSettings = array(
 					'table_main_sub' => '%event_id%',
@@ -331,10 +331,10 @@ class user_pageobject extends pageobject {
 				'EVENT_ATT_OUT' => $hptt->get_html_table($this->in->get('esort', ''), $this->vc_build_url('esort'), null, null, false),
 			));
 		}
-		
+
 		$this->jquery->Dialog('usermailer', $this->user->lang('adduser_send_mail'), array('url'=>$this->server_path."email.php".$this->SID."&user=".$row['user_id'], 'width'=>'660', 'height'=>'500'));
-	
-		
+
+
 		$this->tpl->add_meta('<link rel="canonical" href="'.$this->env->link.$this->routing->build('User', $row['username'], 'u'.$row['user_id'], false, true).'" />');
 		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('user').': '.sanitize($row['username']),
@@ -354,12 +354,12 @@ class user_pageobject extends pageobject {
 
 		$start				= $this->in->get('start', 0);
 		$pagination_suffix	= ($start) ? '&amp;start='.$start : '';
-		
+
 		$view_list = $this->pdh->get('user', 'id_list', array());
 
 		//Output
 		$hptt_page_settings	= $this->pdh->get_page_settings('listusers', 'hptt_listusers_userlist');
-			
+
 		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => 'listusers.php', '%link_url_suffix%' => '', '%use_controller%' => true), $this->user->id);
 		$hptt->setPageRef($this->strPath);
 		//footer
@@ -383,7 +383,7 @@ class user_pageobject extends pageobject {
 			'display'			=> true
 		]);
 	}
-	
+
 		//Url building
 	public function vc_build_url($exclude='', $with_base=false) {
 		$base_url = $this->strPath.$this->SID;
@@ -404,4 +404,3 @@ class user_pageobject extends pageobject {
 		return $url;
 	}
 }
-?>

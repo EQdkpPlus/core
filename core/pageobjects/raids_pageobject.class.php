@@ -61,7 +61,7 @@ class raids_pageobject extends pageobject {
 							'MEMBERLINK' => $this->pdh->get('member', 'html_memberlink', array($intMemberID, $this->routing->simpleBuild('character'), '', false, false, true, true)),
 					));
 				}
-				
+
 			}else{
 				message_die('Could not get raid attendee information.','Critical Error');
 			}
@@ -241,7 +241,7 @@ class raids_pageobject extends pageobject {
 			}
 
 			chartooltip_js();
-			
+
 			if($this->hooks->isRegistered('viewraid')){
 				$this->hooks->process('viewraid', array('raid_id' => $raid_id));
 			}
@@ -355,4 +355,3 @@ class raids_pageobject extends pageobject {
 		));
 	}
 }
-?>

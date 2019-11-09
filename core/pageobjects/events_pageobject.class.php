@@ -28,7 +28,7 @@ class events_pageobject extends pageobject {
 
 	public function display_event(){
 		$this->url_id = $this->in->get('e', 0);
-		
+
 		$isort				= $this->in->get('isort');
 		$rsort				= $this->in->get('rsort');
 		$ipools				= $this->pdh->get('event', 'itempools', array($this->url_id));
@@ -40,7 +40,7 @@ class events_pageobject extends pageobject {
 		$item_ids			= $this->pdh->get('item', 'itemids4eventid', array($this->url_id));
 		$item_hptt			= $this->get_hptt($item_hptt_settings, $item_ids, $item_ids, array('%link_url%' => $this->routing->simpleBuild('items'), '%link_url_suffix%' => '', '%raid_link_url%' => $this->routing->simpleBuild('raids'), '%raid_link_url_suffix%' => '', '%itt_lang%' => false, '%itt_direct%' => 0, '%onlyicon%' => 0, '%noicon%' => 0, '%use_controller%' => true), $this->url_id, 'isort');
 		$item_hptt->setPageRef($this->strPath);
-	
+
 		infotooltip_js();
 		$this->tpl->assign_vars(array(
 				'RAID_LIST'		=> $raid_hptt->get_html_table($rsort, ''),
@@ -50,9 +50,9 @@ class events_pageobject extends pageobject {
 				'MDKPPOOLS'		=> $this->pdh->geth('event', 'multidkppools', array($this->url_id)),
 				'ITEMPOOLS'		=> $this->pdh->geth('event', 'itempools', array($this->url_id)),
 				'HPTT_ADMIN_LINK'	=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('viewevent').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,
-				
+
 		));
-	
+
 		$this->set_vars(array(
 				'page_title'	=> $this->pdh->get('event', 'name', array($this->url_id)),
 				'description'	=> $this->pdh->get('event', 'name', array($this->url_id)),
@@ -60,8 +60,8 @@ class events_pageobject extends pageobject {
 				'display'		=> true)
 		);
 	}
-	
-	
+
+
 	public function display(){
 		//Sort
 		$sort			= $this->in->get('sort');
@@ -83,7 +83,7 @@ class events_pageobject extends pageobject {
 		$hptt_page_settings	= $this->pdh->get_page_settings('listevents', 'hptt_listevents_eventlist');
 		$hptt				= $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => $this->routing->simpleBuild('events'), '%link_url_suffix%' => '', '%use_controller%' => true));
 		$hptt->setPageRef($this->strPath);
-		
+
 		$this->tpl->assign_vars(array (
 			'EVENT_OUT'			=> $hptt->get_html_table($sort, $pagination_suffix, $start, $this->user->data['user_rlimit'], $footer_text),
 			'EVENT_PAGINATION'	=> generate_pagination($this->strPath.$this->SID.$sort_suffix, $event_count, $this->user->data['user_rlimit'], $start),
@@ -97,4 +97,3 @@ class events_pageobject extends pageobject {
 		));
 	}
 }
-?>

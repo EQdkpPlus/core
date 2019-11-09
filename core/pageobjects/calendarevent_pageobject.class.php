@@ -215,17 +215,17 @@ class calendarevent_pageobject extends pageobject {
 		$intOldMemberID = $this->in->get('subscribed_member_id', 0);
 		$strSignUpNote = $this->in->get('signupnote', '');
 		$intSignupStatus = $this->in->get('signup_status', 4);
-		
+
 		$arrUserChars = $this->pdh->get('member', 'connection_id', array($this->user->id));
 		if(!in_array($intNewMemberID, $arrUserChars)) message_die('Member-ID not valid');
 		if($intOldMemberID !== 0 && !in_array($intOldMemberID, $arrUserChars)) message_die('Member-ID not valid');
-		
+
 		//Get the Old Member from the Database
 		$mystatus = $this->pdh->get('calendar_raids_attendees', 'myattendees', array($this->url_id, $this->user->id));
 		if(!$mystatus || !isset($mystatus['member_id'])) $mystatus['member_id'] = 0;
 		$intOldMemberID = $mystatus['member_id'];
-		
-		
+
+
 		// check if the user is already in the database for that event and skip if already existing (avoid reload-cheating)
 		if($this->pdh->get('calendar_raids_attendees', 'in_db', array($this->url_id, $intNewMemberID))){
 			// the char is in the db, now, check if the status is unchanged
@@ -239,7 +239,7 @@ class calendarevent_pageobject extends pageobject {
 							));
 							$this->pdh->process_hook_queue();
 				}
-				
+
 				// check if the role changed
 				if($this->pdh->get('calendar_raids_attendees', 'role', array($this->url_id, $intNewMemberID)) != $this->in->get('member_role', 0)){
 					$this->pdh->put('calendar_raids_attendees', 'update_role', array(
@@ -252,7 +252,7 @@ class calendarevent_pageobject extends pageobject {
 				return false;
 			}
 		}
-		
+
 		// auto confirm if enabled
 		$arrConfirmRaidgroups	= $this->config->get('calendar_raid_confirm_raidgroupchars');
 		if(is_array($arrConfirmRaidgroups) && count($arrConfirmRaidgroups) > 0 && $intSignupStatus == 1){
@@ -265,18 +265,18 @@ class calendarevent_pageobject extends pageobject {
 				$intSignupStatus = 1;
 			}
 		}
-		
+
 		$myrole = ($this->in->get('member_role', 0) > 0) ? $this->in->get('member_role', 0) : $this->pdh->get('member', 'defaultrole', array($intNewMemberID));
 		$eventdata = $this->pdh->get('calendar_events', 'data', array($this->url_id));
 		if ($eventdata['extension']['raidmode'] == 'role' && (int)$myrole == 0){
 			return false;
 		}
-		
+
 		// Build the Deadline
 		$deadlinedate	= $eventdata['timestamp_start']-($eventdata['extension']['deadlinedate'] * 3600);
 		$mystatus		= $this->pdh->get('calendar_raids_attendees', 'myattendees', array($this->url_id, $this->user->id));
 		$mysignedstatus	= $this->pdh->get('calendar_raids_attendees', 'status', array($this->url_id, $mystatus['member_id']));
-		
+
 		// check the deadline
 		$deadlinepassed	= ($deadlinedate < $this->time->time) ? true : false;
 		if($deadlinepassed && $this->config->get('calendar_raid_allowstatuschange') == '1' && $mystatus['member_id'] > 0){
@@ -296,13 +296,13 @@ class calendarevent_pageobject extends pageobject {
 			);
 			#return false;
 		}
-		
-		
+
+
 		if($do_updatestatuschange){
 			// check if another char is used
 			$arrAttendeeIDs = $this->pdh->get('calendar_raids_attendees', 'other_user_attendees', array($this->url_id, $intNewMemberID));
 			$raidgroup		= $this->pdh->get('calendar_raids_attendees', 'raidgroup', array($this->url_id, $intNewMemberID));
-			
+
 			$intAffectedID = $this->pdh->put('calendar_raids_attendees', 'update_status', array(
 					$this->url_id,
 					$intNewMemberID,
@@ -312,7 +312,7 @@ class calendarevent_pageobject extends pageobject {
 					$intOldMemberID,
 					$strSignUpNote,
 			));
-			
+
 			//A new row was inserted, otherwise $intAffectedID = false
 			if($intAffectedID){
 				//There are other user attendees
@@ -320,9 +320,9 @@ class calendarevent_pageobject extends pageobject {
 					//Delete the new added row
 					$this->pdh->put('calendar_raids_attendees', 'delete_attendeeid', array($intAffectedID));
 				}
-				
+
 			}
-			
+
 			//Send Notification to Raidlead, Creator and Admins
 			$raidleaders_chars	= ($eventdata['extension']['raidleader'] > 0) ? $eventdata['extension']['raidleader'] : array();
 			$arrSendTo			= $this->pdh->get('member', 'userid', array($raidleaders_chars));
@@ -332,14 +332,14 @@ class calendarevent_pageobject extends pageobject {
 			$arrSendTo			= array_unique($arrSendTo);
 			$strEventTitle		= sprintf($this->pdh->get('event', 'name', array($eventdata['extension']['raid_eventid'])), $this->user->lang('raidevent_raid_show_title')).', '.$this->time->user_date($eventdata['timestamp_start']).' '.$this->time->user_date($eventdata['timestamp_start'], false, true);
 			if (!in_array($this->user->id, $arrSendTo)) $this->ntfy->add('calendarevent_char_statuschange', $this->url_id.'_'.$intNewMemberID, $this->pdh->get('member', 'name', array($intNewMemberID)), $this->controller_path_plain.$this->page_path.$this->SID, $arrSendTo, $strEventTitle);
-			
+
 			$message = array(
 					'style'	=> 'success',
 					'title'	=> $this->user->lang('calendar_statuschange_title_success'),
 					'text'	=> $this->user->lang('calendar_statuschange_mmsg_success'),
 			);
 		}
-		
+
 		$this->pdh->process_hook_queue();
 		$this->display($message);
 	}
@@ -1420,4 +1420,3 @@ class calendarevent_pageobject extends pageobject {
 		));
 	}
 }
-?>
