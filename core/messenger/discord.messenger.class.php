@@ -24,18 +24,18 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class discord_messenger extends generic_messenger {
-	
+
 	public function sendMessage($toUserID, $strSubject, $strMessage){
 		if(!$this->isAvailable()) return false;
-		
+
 		$intUserID = $toUserID;
 		$arrNotificationSettings = $this->pdh->get('user', 'notification_settings', array($intUserID));
 		$channelid = $arrNotificationSettings['ntfy_discord_channelid'];
 		if($channelid  == "") return false;
-		
+
 		$arrDiscordConfig = register('config')->get_config('discord');
 		$token = $arrDiscordConfig['bot_token'];
-		
+
 		$discordChannelID = false;
 		$blnIsGroupChannel = false;
 		if(strpos($channelid, ':') !== false){
@@ -50,7 +50,7 @@ class discord_messenger extends generic_messenger {
 			$arrJsonData = array(
 					'recipient_id' => $channelid,
 			);
-			
+
 			$strResult = register('urlfetcher')->post('https://discordapp.com/api/users/@me/channels', json_encode($arrJsonData), "application/json", array('Authorization: Bot '.$token));
 			if($strResult){
 				$arrResultJson = json_decode($strResult, true);
@@ -59,26 +59,26 @@ class discord_messenger extends generic_messenger {
 				}
 			}
 		}
-		
+
 		//Now post the real message
 		if($discordChannelID){
 			$strMessage = strip_tags($strMessage);
 			$msg = '**'.$strSubject."**\r\n```".$strMessage."```";
-			
+
 			$arrJsonData = array('content' => $msg);
 			$b = register('urlfetcher')->post('https://discordapp.com/api/channels/'.$discordChannelID.'/messages', json_encode($arrJsonData), "application/json", array('Authorization: Bot '.$token));
 		}
-		
+
 		return true;
 	}
-	
+
 	public function isAvailable(){
 		$arrDiscordConfig = register('config')->get_config('discord');
 		$token = $arrDiscordConfig['bot_token'];
-		
+
 		return ($this->pm->check('discord', PLUGIN_INSTALLED) && $token != "");
 	}
-	
+
 	/*
 	 * @see generic_notification::getUserSettings()
 	 */
@@ -90,8 +90,8 @@ class discord_messenger extends generic_messenger {
 				),
 		);
 	}
-	
-	/* 
+
+	/*
 	 * @see generic_notification::getAdminSettings()
 	 */
 	public function getAdminSettings(){

@@ -24,31 +24,31 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class twitterdm_notification extends generic_notification {
-	
+
 	public function sendNotification($arrNotificationData){
 		if(!$this->isAvailable()) return false;
-		
+
 		$intUserID = $arrNotificationData['to_userid'];
 		$arrNotificationSettings = $this->pdh->get('user', 'notification_settings', array($intUserID));
 		$twitterAccount = str_replace("@", "", $arrNotificationSettings['ntfy_twitter_user']);
 		if($twitterAccount  == "") return false;
 
-		$strMessage = substr($arrNotificationData['name'], 0, 110).'... '.$arrNotificationData['link'];		
+		$strMessage = substr($arrNotificationData['name'], 0, 110).'... '.$arrNotificationData['link'];
 		$this->messenger->sendMessage('twitterdm', $intUserID, $strSubject, $strMessage);
 	}
-	
+
 	public function isAvailable(){
 		return $this->messenger->isAvailable('twitterdm');
 	}
-	
+
 	/*
 	 * @see generic_notification::getUserSettings()
 	 */
 	public function getUserSettings(){
 		return $this->messenger->getMethodUserSettings('twitterdm');
 	}
-	
-	/* 
+
+	/*
 	 * @see generic_notification::getAdminSettings()
 	 */
 	public function getAdminSettings(){

@@ -76,7 +76,7 @@ class search_pageobject extends pageobject {
 				'permissions'	=> array('u_userlist'),
 			)
 		);
-		
+
 		$arrHooks = $this->hooks->process('search');
 		if (is_array($arrHooks)){
 			foreach ($arrHooks as $plugin => $value){
@@ -98,7 +98,7 @@ class search_pageobject extends pageobject {
 				if (isset($value['permission']) && !$value['permission']){
 					$blnPermission = false;
 				}
-				
+
 				if (is_array($value['permissions']) && count($value['permissions']) > 0){
 					foreach ($value['permissions'] as $perm){
 						if (!$this->user->check_auth($perm, false)){
@@ -158,5 +158,3 @@ class search_pageobject extends pageobject {
 	}
 
 }
-
-?>

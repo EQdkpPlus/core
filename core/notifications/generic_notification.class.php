@@ -28,28 +28,28 @@ if ( !defined('EQDKP_INC') ){
  * @author GodMod
  */
 abstract class generic_notification extends gen_class {
-	
+
 	/**
 	 * Returns true, if this method is available for users (admin has set all options)
 	 */
 	abstract public function isAvailable();
-	
-	
+
+
 	abstract public function sendNotification($arrNotificationData);
-	
+
 	/**
 	 * Settings the Admin has to set, e.g. API Keys or Server Settings
-	 * 
-	 * @return array 
+	 *
+	 * @return array
 	 */
 	public function getAdminSettings(){
 		return array();
 	}
-	
+
 	/**
 	 * Settings the User has to set, e.g. Twitter Account for DMs
 	 * All Settings have to start with ntfy_
-	 * 
+	 *
 	 * @return array
 	 */
 	public function getUserSettings(){

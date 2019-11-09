@@ -154,4 +154,3 @@ class calendareventguests_pageobject extends pageobject {
 		));
 	}
 }
-?>

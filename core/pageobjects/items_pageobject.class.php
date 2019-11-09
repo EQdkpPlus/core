@@ -22,31 +22,31 @@
 class items_pageobject extends pageobject {
 
 	public function __construct() {
-		$handler = array(	
+		$handler = array(
 			'i' => array('process' => 'display_item'),
 		);
 		parent::__construct(false, $handler, array(), null, '', 'i');
 		$this->process();
 	}
-	
+
 	public function display_item(){
 		$this->url_id = $this->in->get('i', 0);
 		// We want to view items by name and not id, so get the name
 		$item_name = $this->pdh->get('item', 'name', array($this->url_id));
-	
+
 		if ( empty($item_name) ){
 			message_die($this->user->lang('error_invalid_item_provided'));
 		}
-	
+
 		#search for the gameid
 		$game_id = $this->pdh->get('item', 'game_itemid', array($this->url_id));
-	
+
 		//Sort
 		$sort			= $this->in->get('sort');
-	
+
 		$item_ids = array();
-		
-		
+
+
 		if ($game_id != ""){
 			$arrSameItemIDs = $this->pdh->get('item', 'ids_by_ingameid', array($game_id));
 			if(is_array($arrSameItemIDs)) $item_ids = array_merge($item_ids, $arrSameItemIDs);
@@ -56,17 +56,17 @@ class items_pageobject extends pageobject {
 			if(is_array($arrSameItemNames)) $item_ids = array_merge($item_ids, $arrSameItemNames);
 		}
 		$item_ids = array_unique($item_ids);
-		
+
 		$counter = count($item_ids);
-	
+
 		//default now col
 		$colspan = ($this->config->get('infotooltip_use')) ? 1 : 0 ;
-	
+
 		#Itemhistory Diagram
 		if ($this->config->get('itemhistory_dia')){
 			$colspan++;
 		}
-	
+
 		//init infotooltip
 		infotooltip_js();
 
@@ -85,29 +85,29 @@ class items_pageobject extends pageobject {
 				if(!isset($a_items[$itempool])){
 					$a_items[$itempool] = array(
 						'data' => array(),
-						'name' => (strlen($strItempoolName)) ? $strItempoolName : $this->user->lang('unknown'),	
+						'name' => (strlen($strItempoolName)) ? $strItempoolName : $this->user->lang('unknown'),
 					);
 				}
 				$a_items[$itempool]['data'][] = array($this->time->date("Y-m-d h:i:s", $this->pdh->get('item', 'date', array($item_id))), $this->pdh->get('item', 'value', array($item_id)));
-				
-				if (!isset($arrPoolItems[$itempool])) $arrPoolItems[$itempool] = 0; 
+
+				if (!isset($arrPoolItems[$itempool])) $arrPoolItems[$itempool] = 0;
 				$arrPoolItems[$itempool]++;
-			}	
-			
+			}
+
 			//Droprate by Itempool
 			$arrItempools = $this->pdh->get('itempool', 'id_list');
 			foreach($arrItempools as $itempoolid){
 				$intDrops = (isset($arrPoolItems[$itempoolid])) ? intval($arrPoolItems[$itempoolid]) : 0;
 				//Dont show chart if there are no drops in this itempool
 				if($intDrops == 0) continue;
-				
+
 				$intTotalItems = count($this->pdh->get('item', 'item_ids_of_itempool', array($itempoolid)));
-				
+
 				$intDroprate = ($intTotalItems > 0) ? round(($intDrops / $intTotalItems) * 100) : 0;
 				$arrData = array();
 				$arrData[] = array('value' => $intDroprate, 'name' => $item_name.' '.$intDroprate.'%');
 				$arrData[] = array('value' => 100-$intDroprate, 'name' => $this->user->lang('other_items').' '.(100-$intDroprate).'%');
-				
+
 				$this->jquery->charts('pie', 'item_drop_'.$itempoolid, $arrData, array(
 						'border'		=> '0.0',
 						'piemargin'		=> 2,
@@ -121,7 +121,7 @@ class items_pageobject extends pageobject {
 				));
 			}
 		}
-		
+
 		$this->tpl->assign_vars(array(
 				'ITEM_STATS'				=> $this->pdh->get('item', 'itt_itemname', array($this->url_id, 0, 1)),
 				'ITEM_CHART'				=> ($this->config->get('itemhistory_dia')  && !$this->config->get('disable_points') && count($a_items) > 0) ? $this->jquery->charts('multiline', 'item_chart', $a_items, array('xrenderer' => 'date', 'autoscale_x' => false, 'autoscale_y' => true, 'height' => 200, 'width' => 500, 'legend' => true, 'legendPosition' => 'nw', 'highlighter' => true)) : '',
@@ -131,7 +131,7 @@ class items_pageobject extends pageobject {
 				'BUYERS_TABLE'				=> $hptt->get_html_table($sort, '', 0, 100, sprintf($this->user->lang('viewitem_footcount'), $counter)),
 				'L_PURCHASE_HISTORY_FOR'	=> sprintf($this->user->lang('purchase_history_for'), stripslashes($item_name)),
 				'HPTT_ADMIN_LINK'			=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('viewitem').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,
-				
+
 		));
 
 		$this->set_vars(array(
@@ -152,7 +152,7 @@ class items_pageobject extends pageobject {
 
 		//Output
 		$view_list = $filtered_list	= $this->pdh->get('item', 'id_list');
-		
+
 		$mySearch = $searchType = "";
 		if($this->in->exists('search')){
 			$mySearch		= $this->in->get('search');
@@ -174,7 +174,7 @@ class items_pageobject extends pageobject {
 			'ITEM_COUNT'		=> $item_count,
 			'HPTT_ADMIN_LINK'	=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('listitems').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,
 		));
-		
+
 		$this->jquery->Collapse('#toggleItemsearch', true);
 
 		$this->set_vars(array(
@@ -184,7 +184,7 @@ class items_pageobject extends pageobject {
 	}
 
 	// Search Helper
-	function filter($view_list, $searchType, $mySearch ){		
+	function filter($view_list, $searchType, $mySearch ){
 		if(!$mySearch){
 			return $view_list;
 		}
@@ -209,4 +209,3 @@ class items_pageobject extends pageobject {
 		return $filtered_list;
 	}
 }
-?>

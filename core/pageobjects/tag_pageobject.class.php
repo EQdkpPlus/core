@@ -21,39 +21,39 @@
 
 class tag_pageobject extends pageobject {
 	public static $shortcuts = array('social' => 'socialplugins');
-	
+
 	public function __construct() {
 		$handler = array(
 		);
 		parent::__construct(false, $handler, array());
 		$this->process();
 	}
-	
+
 	public function display(){
 		$strTag = utf8_strtolower($this->patharray[0]);
 		if (!strlen($strTag)) redirect($this->controller_path_plain.$this->SID);
-		
+
 		$arrArticleIDs = $this->pdh->get('articles', 'articles_for_tag', array($strTag));
 		$arrArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'date', 'desc');
-		
+
 		$intStart = $this->in->get('start', 0);
 		$arrLimitedIDs = $this->pdh->limit($arrArticleIDs, $intStart, $this->user->data['user_rlimit']);
-		
+
 		//Articles to template
 		foreach($arrLimitedIDs as $intArticleID){
 			$userlink = '<a href="'.$this->routing->build('user', $this->pdh->geth('articles',  'user_id', array($intArticleID)), 'u'.$this->pdh->get('articles',  'user_id', array($intArticleID))).'">'.$this->pdh->geth('articles',  'user_id', array($intArticleID)).'</a>';
-		
+
 			//Content dependet from list_type
 			//1 = until readmore
 			//2 = Headlines only
 			//3 = only first 600 characters
 			$strText = $this->pdh->get('articles',  'text', array($intArticleID));
 			$arrContent = preg_split('#<hr(.*)id="system-readmore"(.*)\/>#iU', xhtml_entity_decode($strText));
-		
+
 			$strText = $this->bbcode->parse_shorttags($arrContent[0]);
 			$strPath = $this->pdh->get('articles',  'path', array($intArticleID));
 			$intCategoryID = $this->pdh->get('articles',  'category', array($intArticleID));
-		
+
 			//Replace Image Gallery
 			$arrGalleryObjects = array();
 			preg_match_all('#<p(.*)class="system-gallery"(.*) data-sort="(.*)" data-folder="(.*)">(.*)</p>#iU', $strText, $arrGalleryObjects, PREG_PATTERN_ORDER);
@@ -65,7 +65,7 @@ class tag_pageobject extends pageobject {
 					$strText = str_replace($arrGalleryObjects[0][$key], $strGalleryContent, $strText);
 				}
 			}
-		
+
 			//Replace Raidloot
 			$arrRaidlootObjects = array();
 			preg_match_all('#<p(.*)class="system-raidloot"(.*) data-id="(.*)"(.*) data-chars="(.*)">(.*)</p>#iU', $strText, $arrRaidlootObjects, PREG_PATTERN_ORDER);
@@ -79,12 +79,12 @@ class tag_pageobject extends pageobject {
 				}
 			}
 
-				
+
 			$this->comments->SetVars(array('attach_id'=> $intArticleID, 'page'=>'articles'));
 			$intCommentsCount = $this->comments->Count();
 			//Tags
 			$arrTags = $this->pdh->get('articles', 'tags', array($intArticleID));
-		
+
 			$this->tpl->assign_block_vars('article_row', array(
 					'ARTICLE_CONTENT' => $strText,
 					'ARTICLE_TITLE'	  => $this->pdh->get('articles',  'title', array($intArticleID)),
@@ -100,9 +100,9 @@ class tag_pageobject extends pageobject {
 					'S_COMMENTS'	=> ($this->pdh->get('articles',  'comments', array($intArticleID))) ? true : false,
 					'S_FEATURED'	=> ($this->pdh->get('articles',  'featured', array($intArticleID))),
 			));
-		
-		
-		
+
+
+
 			if (count($arrTags) && $arrTags[0] != ""){
 				foreach($arrTags as $tag){
 					$this->tpl->assign_block_vars('article_row.tag_row', array(
@@ -112,15 +112,15 @@ class tag_pageobject extends pageobject {
 				}
 			}
 		}
-		
-		
+
+
 		$this->tpl->assign_vars(array(
 				'TAG'	=> sanitize($strTag),
 				'PAGINATION' => generate_pagination($this->strPath.$this->SID, count($arrArticleIDs), $this->user->data['user_rlimit'], $intStart, 'start'),
 		));
-		
+
 		$this->tpl->add_meta('<link rel="canonical" href="'.$this->env->link.$this->routing->build('tag', $tag, false, false, true).'" />');
-		
+
 		$this->core->set_vars([
 				'page_title' 		=> $this->user->lang("tag").': '.sanitize($strTag),
 				'template_file'		=> 'tag.html',
@@ -131,4 +131,3 @@ class tag_pageobject extends pageobject {
 		]);
 	}
 }
-?>

@@ -298,4 +298,3 @@ class editarticle_pageobject extends pageobject {
 	}
 
 }
-?>

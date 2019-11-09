@@ -27,7 +27,7 @@ class rss_pageobject extends pageobject {
 		parent::__construct(false, $handler, array());
 		$this->process();
 	}
-	
+
 	public function display(){
 		$intCategoryID = $this->in->get('c', 0);
 		$strExchangeKey = $this->in->get('key');
@@ -39,7 +39,7 @@ class rss_pageobject extends pageobject {
 			$arrCategory = $this->pdh->get('article_categories', 'data', array($intCategoryID));
 			$arrCategory['name'] = $this->user->multilangValue($arrCategory['name']);
 			$strTitle = ': '.$arrCategory['name'];
-			
+
 			switch($arrCategory['sortation_type']){
 				case 4:
 				case 3: $arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'last_edited', 'desc');
@@ -67,16 +67,16 @@ class rss_pageobject extends pageobject {
 		$feed->description	= strip_tags(br2nl(xhtml_entity_decode($this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags($arrCategory['description'])))));
 		$feed->published	= time();
 		$feed->language		= 'EN-EN';
-		
-		
+
+
 		if (count($arrSortedArticleIDs)){
 			$arrSortedArticleIDs = $this->pdh->limit($arrSortedArticleIDs, 0, 30);
 			foreach($arrSortedArticleIDs as $intArticleID){
 				$strText = $this->pdh->get('articles',  'text', array($intArticleID));
 				$arrContent = preg_split('#<hr(.*)id="system-readmore"(.*)\/>#iU', xhtml_entity_decode($strText));
-				
+
 				$strText = $this->bbcode->remove_embeddedMedia($this->bbcode->remove_shorttags($arrContent[0]));
-				
+
 				//Replace Image Gallery
 				$arrGalleryObjects = array();
 				preg_match_all('#<p(.*)class="system-gallery"(.*) data-sort="(.*)" data-folder="(.*)">(.*)</p>#iU', $strText, $arrGalleryObjects, PREG_PATTERN_ORDER);
@@ -85,7 +85,7 @@ class rss_pageobject extends pageobject {
 						$strText = str_replace($arrGalleryObjects[0][$key], "", $strText);
 					}
 				}
-				
+
 				//Replace Raidloot
 				$arrRaidlootObjects = array();
 				preg_match_all('#<p(.*)class="system-raidloot"(.*) data-id="(.*)"(.*) data-chars="(.*)">(.*)</p>#iU', $strText, $arrRaidlootObjects, PREG_PATTERN_ORDER);
@@ -103,7 +103,7 @@ class rss_pageobject extends pageobject {
 				$rssitem->author		= $this->pdh->geth('articles', 'user_id', array($intArticleID));
 				$rssitem->source		= $feed->link;
 				$feed->addItem($rssitem);
-			}	
+			}
 		}
 		header("Content-Type: application/xml; charset=utf-8");
 		echo $feed->show();
@@ -111,4 +111,3 @@ class rss_pageobject extends pageobject {
 
 	}
 }
-?>

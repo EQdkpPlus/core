@@ -30,75 +30,75 @@ class authendpoint_pageobject extends pageobject {
 
 		$this->process();
 	}
-	
+
 	public function redirect(){
 		$strStatus = $this->in->get('status');
 		if($strStatus == "") {
 			$this->display();
 			return;
 		}
-		
+
 		$strMethod = $this->in->get('lmethod');
-		
+
 		set_cookie('auth_init_'.$strMethod, $strStatus, ($this->time->time + (5*60)));
 		$this->user->setSessionVar('auth_init_'.$strMethod, $strStatus);
-	
+
 		$strRedirURL = $this->user->handle_login_functions('redirect', $strMethod, array('status' => $strStatus));
-		
+
 		if($strRedirURL){
 			redirect($strRedirURL, false, true);
 		}
-		
+
 		//echo "a"; die();
-		
+
 		redirect($this->controller_path_plain.'Login/'.$this->SID);
 	}
 
-	
+
 	public function display() {
 		$strMethod = $this->in->get('lmethod');
-		
+
 		$strCookie = $this->in->getEQdkpCookie('auth_init_'.$strMethod);
 		$arrSessionVars = $this->user->data['session_vars'];
 		$strSessionVar = $arrSessionVars['auth_init_'.$strMethod];
-		
+
 		if($strCookie == "" || $strCookie != $strSessionVar) {
 			//Error
 			//echo "b"; die();
 			redirect($this->controller_path_plain.'Login/'.$this->SID);
 		}
-		
+
 		if($strCookie == 'account'){
 			if (!$this->user->is_signedin()){
 				//echo "c"; die();
 				redirect($this->controller_path_plain.'Login/'.$this->SID);
 			}
-			
+
 			$this->user->setSessionVar('auth_init_'.$strMethod, 'outdated');
 			set_cookie('auth_init_'.$strMethod, 'outdated', $this->time->time);
-			
+
 			$strURL = $this->env->request_query;
 			if($strURL) $strURL = substr($strURL, 1);
 			//Redirect to Settings page
 			$redir_url = $this->controller_path_plain.'Settings/'.$this->SID.'&'.$strURL.'&mode=addauthacc&link_hash='.$this->user->csrfGetToken('settings_pageobjectmode');
 			redirect($redir_url);
 		}
-		
+
 		if($strCookie == 'register'){
 			$this->user->setSessionVar('auth_init_'.$strMethod, 'outdated');
 			set_cookie('auth_init_'.$strMethod, 'outdated', $this->time->time);
-			
+
 			$strURL = $this->env->request_query;
 			if($strURL) $strURL = substr($strURL, 1);
 			//Redirect to Login page
 			$redir_url = $this->controller_path_plain.'Register/'.$this->SID.'&'.$strURL.'&register';
 			redirect($redir_url);
 		}
-		
+
 		if($strCookie == 'login'){
 			$this->user->setSessionVar('auth_init_'.$strMethod, 'outdated');
 			set_cookie('auth_init_'.$strMethod, 'outdated', $this->time->time);
-			
+
 			$strURL = $this->env->request_query;
 			if($strURL) $strURL = substr($strURL, 1);
 			//Redirect to Login page
@@ -110,5 +110,3 @@ class authendpoint_pageobject extends pageobject {
 	}
 
 }
-
-?>

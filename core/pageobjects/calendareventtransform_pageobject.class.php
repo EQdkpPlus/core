@@ -105,4 +105,3 @@ class calendareventtransform_pageobject extends pageobject {
 		);
 	}
 }
-?>

@@ -155,7 +155,7 @@ class calendar_pageobject extends pageobject {
 							'appointments'	=> $this->user->lang(array('calendar_export_types', 1)),
 							'all'			=> $this->user->lang(array('calendar_export_types', 2)),
 						))))->output();
-		
+
 		$calendarIds 		  = $this->pdh->get('calendars', 'idlist', array());
 		$calendar_idlist	  = $this->pdh->aget('calendars', 'name', 0, array($calendarIds));
 		$calendarExportFilter = (new hmultiselect('calendarExportFilter', array('options' => $calendar_idlist, 'preview_num' => 3, 'todisable' => array(), 'value' => $calendarIds, 'selectedtext'=>$this->user->lang('calendar_filter_bycalendar'), 'returnJS' => true)))->output();
@@ -588,4 +588,3 @@ class calendar_pageobject extends pageobject {
 		));
 	}
 }
-?>

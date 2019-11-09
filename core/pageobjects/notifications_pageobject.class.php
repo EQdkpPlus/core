@@ -29,17 +29,17 @@ class notifications_pageobject extends pageobject {
 			'load'			=> array('process' => 'process_load_notifications'),
 		);
 		if(!$this->user->is_signedin()) $this->user->check_auth('u_something');
-		
+
 		parent::__construct(false, $handler, array());
 		$this->process();
 	}
-	
+
 	public function process_ajax_markread(){
 		if(!$this->user->is_signedin()) exit;
-		
+
 		$strIDs = $this->in->get('ids');
 		$arrIDs = explode(',', $strIDs);
-		
+
 		foreach($arrIDs as $intID){
 			$intID = intval($intID);
 			$this->pdh->put('notifications', 'mark_as_read', array($intID));
@@ -47,20 +47,20 @@ class notifications_pageobject extends pageobject {
 		$this->pdh->process_hook_queue();
 		exit;
 	}
-	
+
 	public function process_ajax_markallread(){
 		if(!$this->user->is_signedin()) exit;
 		$this->pdh->put('notifications', 'mark_all_as_read', array($this->user->id));
 		$this->pdh->process_hook_queue();
 		exit;
 	}
-	
+
 	public function process_ajax_delete(){
 		if(!$this->user->is_signedin()) exit;
-		
+
 		$strIDs = $this->in->get('ids');
 		$arrIDs = explode(',', $strIDs);
-		
+
 		foreach($arrIDs as $intID){
 			$intID = intval($intID);
 			$intUserID = $this->pdh->get('notifications', 'user_id', array($intID));
@@ -69,38 +69,38 @@ class notifications_pageobject extends pageobject {
 		$this->pdh->process_hook_queue();
 		exit;
 	}
-	
+
 	public function process_load_notifications(){
 		if(!$this->user->is_signedin()) exit;
-		
+
 		$this->core->notifications();
-		
+
 		header('Content-type: text/html; charset=utf-8');
 		$arrNotifications = $this->ntfy->createNotifications();
 		echo $arrNotifications['html'];
-		
+
 		exit;
 	}
-	
+
 	public function process_redirect(){
 		$strIDs = $this->in->get('redirect');
 		$arrIDs = explode(',', $strIDs);
-		
+
 		foreach($arrIDs as $intID){
 			$intID = intval($intID);
-			
+
 			//Check User
 			$intUser = $this->pdh->get('notifications', 'user_id', array($intID));
 			if($intUser != $this->user->id) {
 				$this->display();
 				return;
 			}
-			
+
 			$this->pdh->put('notifications', 'mark_as_read', array($intID));
 		}
-		
+
 		$this->pdh->process_hook_queue();
-		
+
 		$intFirst = intval(array_shift($arrIDs));
 		$strLink = $this->pdh->get('notifications', 'link', array($intFirst));
 
@@ -116,33 +116,33 @@ class notifications_pageobject extends pageobject {
 		//Cleanup
 		$this->ntfy->cleanup_read(31);
 		$this->pdh->process_hook_queue();
-		
+
 		$this->core->notifications();
-		
+
 		$arrNotifications = $this->ntfy->getAllUserNotifications();
-		
+
 		$intTotalCount = count($arrNotifications);
 		$intStart = $this->in->get('start',0);
 		$intPerPage = 50;
 		$arrNotifications = $this->pdh->limit($arrNotifications, $intStart, $intPerPage);
-		
+
 		$arrDays = array();
 		$arrPersistent = array();
 		foreach($arrNotifications as $intKey => $arrNotification){
 			if (isset($arrNotification['persistent'])) {
 				$arrPersistent[] = $intKey;
 			} else {
-			
+
 				$strDay = $this->time->user_date($arrNotification['time'], false, false, true, true, true);
 				if (!isset($arrDays[$strDay])) $arrDays[$strDay] = array();
 				$arrDays[$strDay][] = $intKey;
 			}
 		}
-		
+
 		//Bring Persistent to Template
 		foreach($arrPersistent as $intKey){
 			$arrNotification = $arrNotifications[$intKey];
-			
+
 			$this->tpl->assign_block_vars('persistent_row', array(
 					'NAME'	=> $arrNotification['name'],
 					'PRIO'	=> $arrNotification['prio'],
@@ -151,14 +151,14 @@ class notifications_pageobject extends pageobject {
 					'LINK'	=> $arrNotification['link'],
 			));
 		}
-		
+
 		//Bring Notifications to Template
-		
+
 		foreach($arrDays as $strDay => $arrKeys){
 			$this->tpl->assign_block_vars('day_row', array(
 				'DAY'	=> $strDay,
 			));
-			
+
 			foreach($arrKeys as $intKey){
 				$arrNotification = $arrNotifications[$intKey];
 				$this->tpl->assign_block_vars('day_row.notification_row', array(
@@ -173,7 +173,7 @@ class notifications_pageobject extends pageobject {
 				));
 			}
 		}
-		
+
 		$this->tpl->assign_vars(array(
 			'PAGINATION' => generate_pagination($this->routing->build('Notifications'), $intTotalCount, $intPerPage, $intStart),
 			'S_PERSISTENT' => (count($arrPersistent)) ? true : false,
@@ -190,4 +190,3 @@ class notifications_pageobject extends pageobject {
 	}
 
 }
-?>
