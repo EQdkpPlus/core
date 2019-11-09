@@ -30,13 +30,13 @@ if (!class_exists("ReCaptchaResponse")) {
 
 if (!class_exists("recaptcha")) {
 	class recaptcha {
-		
+
 		private $type = 'v2';
-		
+
 		function __construct($type = 'v2'){
 			$this->type = $type;
 		}
-		
+
 		function check_answer ($privkey, $remoteip, $response)
 		{
 			if ($privkey == null || $privkey == '') {
@@ -48,7 +48,7 @@ if (!class_exists("recaptcha")) {
 				$recaptcha_response->error = "Internal Error: Remoteip or Response is empty";
 				return $recaptcha_response;
 			}
-			
+
 			$urlfetcher = register('urlfetcher');
 			$strResult = $urlfetcher->post("https://www.google.com/recaptcha/api/siteverify", array(
 					'secret'	=> $privkey,
@@ -73,15 +73,15 @@ if (!class_exists("recaptcha")) {
 			$recaptcha_response->error = "Internal Error: No Result from Host";
 			return $recaptcha_response;
 		}
-		
-		
+
+
 		/**
 		 * Gets the challenge HTML (javascript and non-javascript version).
 		 * This is called from the browser, and the resulting reCAPTCHA HTML widget
 		 * is embedded within the HTML form it was called from.
 		 * @param string $pubkey A public key for reCAPTCHA
 		 * @param string $error The error given by reCAPTCHA (optional, default is null)
-		
+
 		 * @return string - The HTML to be embedded in the user's form.
 		 */
 		public function get_html($pubkey, $type='v2')
@@ -90,29 +90,29 @@ if (!class_exists("recaptcha")) {
 				register('core')->message("To use reCAPTCHA you must get an API key from <a href='https://www.google.com/recaptcha/admin/create'>https://www.google.com/recaptcha/admin/create</a>", "Error", 'red');
 				return "";
 			}
-			
+
 			if($this->type == 'v2'){
 				$out = $this->html_v2($pubkey);
 			} elseif($this->type == 'invisible'){
 				$out = $this->html_invisible($pubkey);
 			}
-			
+
 			return $out;
 		}
-		
+
 		private function html_v2($pubkey){
 			$out = '<script src="https://www.google.com/recaptcha/api.js" async defer></script>';
 			$out .= '<div class="g-recaptcha" data-sitekey="'.$pubkey.'"></div>';
-			
+
 			return $out;
 		}
-		
+
 		private function html_invisible($pubkey){
 			$out = '<script src="https://www.google.com/recaptcha/api.js?render=explicit&onload=recaptchaCallback" async defer></script>';
 			$out .= '<script>
 			var mycaptcha = false;
 			var mycaptcharesponse = false;
-					
+
 			function recaptchaCallback() {
 				bucket = document.getElementById("recaptchaBucket");
 				mycaptcha = grecaptcha.render(bucket, {
@@ -127,7 +127,7 @@ if (!class_exists("recaptcha")) {
                 						},
                							\'expired-callback\' : function(){grecaptcha.reset(mycaptcha);}
 									});
-												
+
 				myform = $(bucket).closest("form");
 
 				//Give all Buttons an event listener
@@ -138,12 +138,12 @@ if (!class_exists("recaptcha")) {
 				$(myform).find("input[type=\'submit\']").on("click", function(){
 					pressed = this;
 				})
-												
+
 				$(myform).on("submit", function(event){
 					if(mycaptcharesponse) {
 						//Add the Button into the form
 						var buttonname = $(pressed).attr("name");
-						if(buttonname) $(myform).append("<input type=\"hidden\" name=\""+buttonname+"\">");						
+						if(buttonname) $(myform).append("<input type=\"hidden\" name=\""+buttonname+"\">");
 
 						$(pressed).click();
 						return true;
@@ -168,11 +168,10 @@ if (!class_exists("recaptcha")) {
 							</div>
 						</div>
 					</noscript>';
-			
+
 			return $out;
-			
+
 		}
 
 	}
 }
-?>

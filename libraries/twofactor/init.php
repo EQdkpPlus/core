@@ -27,19 +27,19 @@ class TwofactorInit extends page_generic {
 
 	public function __construct(){
 		if (!$this->user->is_signedin()) return;
-		
+
 		$handler = array(
 			'save' 		=> array('process' => 'save', 'csrf' => true),
 		);
 		parent::__construct(false, $handler);
 		$this->process();
 	}
-	
+
 
 	public function display() {
 		include_once $this->root_path.'libraries/twofactor/googleAuthenticator.class.php';
 		$ga = new PHPGangsta_GoogleAuthenticator();
-		
+
 		$secret = $ga->createSecret();
 
 		$this->tpl->assign_vars(array(
@@ -56,7 +56,6 @@ class TwofactorInit extends page_generic {
 			'display'			=> true)
 		);
 	}
-	
+
 }
 registry::register('TwofactorInit');
-?>
