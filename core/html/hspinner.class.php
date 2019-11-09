@@ -30,9 +30,9 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
  */
 // this class acts as an alias for easier usability
 class hspinner extends html {
-	
+
 	protected static $type = 'spinner';
-	
+
 	public $default = 0;
 	public $size = 5;
 	public $name				= '';
@@ -45,11 +45,11 @@ class hspinner extends html {
 	public $attrdata			= array();
 	public $after_txt			= '';
 	public $js					= '';
-	
+
 	public function _construct() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 	}
-	
+
 	public function output() {
 		$this->out = "";
 		$jsout	= '';
@@ -61,7 +61,7 @@ class hspinner extends html {
 						self.spinner({ min: min, max: max, step: step, });
 					</script>";
 		}
-		
+
 		// start the output
 		$out	 = $jsout.'<input type="'.self::$type.'" name="'.$this->name.'" ';
 		$out	.= 'id="'.$this->id.'" ';
@@ -92,10 +92,9 @@ class hspinner extends html {
 		$this->out = $out;
 		return $this->out;
 	}
-	
+
 	public function _inpval() {
 		if(is_float($this->step)) return trim($this->in->get($this->name, 0.0));
 		return trim($this->in->get($this->name, 0));
 	}
 }
-?>

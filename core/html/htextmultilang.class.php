@@ -96,7 +96,7 @@ class htextmultilang extends html {
 			if(!empty($this->placeholder)) $out .= 'placeholder="'.$this->placeholder.'" ';
 			if(!empty($this->js)) $out.= $this->js.' ';
 			if ($strKey != $strDefaultLanguage)  $out .= ' style="display:none;"';
-			
+
 
 			$out .= ' />';
 			$this->out .= $out;
@@ -114,4 +114,3 @@ class htextmultilang extends html {
 		return serialize($arrInput);
 	}
 }
-?>

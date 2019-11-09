@@ -57,7 +57,7 @@ class htext extends html {
 	public $after_txt			= '';
 	public $size				= '';
 	public $js					= '';
-	
+
 
 	private $out = '';
 
@@ -75,7 +75,7 @@ class htext extends html {
 				$jsout = '<script>'.$this->jquery->get_jscode('autocomplete', $this->id).'</script>';
 			}
 		}
-		
+
 		// start the output
 		$out	 = $jsout.'<input type="'.static::$type.'" name="'.$this->name.'" ';
 		$out	.= 'id="'.$this->id.'" ';
@@ -110,4 +110,3 @@ class htext extends html {
 		return ($this->trim_input) ? trim($strInput) : $strInput;
 	}
 }
-?>

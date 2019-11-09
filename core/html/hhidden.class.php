@@ -29,7 +29,7 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
  * available options
  * name			(string) 	name of the field
  * id			(string)	id of the field, defaults to a clean form of name if not set
- * value		
+ * value
  * class		(string)	class for the field
  * readonly		(boolean)	field readonly?
  * js			(string)	extra js which shall be injected into the field
@@ -39,20 +39,20 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 class hhidden extends html {
 
 	protected static $type = 'hidden';
-	
+
 	public $name = '';
-	
+
 	public $imageuploader = false;
 	public $imgup_type = 'all';
 	public $storageFolder = false;
-	
+
 	private $imgoptions = array('prevheight', 'deletelink', 'noimgfile');
 	private $out = '';
-	
+
 	public function _construct() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 	}
-	
+
 	public function output() {
 		$out = '<input type="'.self::$type.'" name="'.$this->name.'" ';
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
@@ -74,9 +74,8 @@ class hhidden extends html {
 		}
 		return $out.' />'.$imgup;
 	}
-	
+
 	public function _inpval() {
 		return $this->in->get($this->name, '');
 	}
 }
-?>

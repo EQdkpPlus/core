@@ -46,22 +46,22 @@ class hplacepicker extends htext {
 	public $after_txt			= '';
 	public $placepicker_withmap	= false;
 	public $js					= '';
-	
+
 	public function output() {
 		$this->out = "";
 		$jsout	= '';
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
-		
+
 		$this->jquery->placepicker($this->id, $this->placepicker_withmap, $this->returnJS);
 		if($this->returnJS){
 			$jsout = $this->jquery->get_jscode('placepicker', $this->id);
 		}
-		
+
 		// start the output
 		$out	 = $jsout.'<input type="'.self::$type.'" name="'.$this->name.'" ';
 		$out	.= 'id="'.$this->id.'" ';
 		if(isset($this->value)) $out .= 'value="'.$this->value.'" ';
-	
+
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
 		if(!empty($this->size)) $out .= 'size="'.$this->size.'" ';
 		if($this->readonly) $out .= 'readonly="readonly" ';
@@ -87,4 +87,3 @@ class hplacepicker extends htext {
 		return trim($this->in->get($this->name, ''));
 	}
 }
-?>

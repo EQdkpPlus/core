@@ -73,7 +73,7 @@ class hsingleselect extends html {
 	public function output() {
 		$dropdown = "";
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
-		
+
 		if(strlen($this->text_before)) $dropdown = $this->text_before;
 		$dropdown .= '<select name="'.$this->name.'" id="'.$this->id.'"';
 		if(!empty($this->class)) $dropdown .= ' class="'.$this->class.'"';
@@ -94,7 +94,7 @@ class hsingleselect extends html {
 		$dropdown .= "</select>";
 		$options = array('id' => $this->id, 'multiple' => false);
 		foreach($this->jq_options as $opt) $options[$opt] = $this->$opt;
-		
+
 		$this->jquery->MultiSelect('', array(), array(), $options, $this->returnJS);
 		$jsout = ($this->returnJS) ? '<script>'.$this->jquery->get_jscode('multiselect', $this->id).'</script>' : '';
 		if(strlen($this->text_after)) $dropdown .= $this->text_after;
@@ -105,4 +105,3 @@ class hsingleselect extends html {
 		return $this->in->get($this->name, '', $this->datatype);
 	}
 }
-?>

@@ -76,4 +76,3 @@ class hcheckbox extends html {
 		}
 	}
 }
-?>

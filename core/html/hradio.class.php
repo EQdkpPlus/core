@@ -37,7 +37,7 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 class hradio extends html {
 
 	protected static $type = 'radio';
-	
+
 	public $name			= '';
 	public $disabled		= false;
 	public $default			= 0;
@@ -47,11 +47,11 @@ class hradio extends html {
 	public $js				= "";
 	public $blnIsBoolean	= false;
 	public $orientation		= 'vertical';
-	
+
 	public function _construct() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 	}
-	
+
 	public function output() {
 		$radiobox  = '';
 		if(empty($this->options)){
@@ -78,9 +78,8 @@ class hradio extends html {
 
 		return ($this->nodiv) ? $radiobox: '<div id="'.$this->id.'" class="radioContainer'.(($this->blnIsBoolean) ? 'Boolean' : '').(($this->orientation == 'horizontal') ? ' orientation-horizontal' : ' orientation-vertical').'">'.$radiobox.'</div>';
 	}
-	
+
 	public function _inpval() {
 		return $this->in->get($this->name, '');
 	}
 }
-?>

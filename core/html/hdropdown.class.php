@@ -115,4 +115,3 @@ class hdropdown extends html {
 		return $this->in->get($this->name, '');
 	}
 }
-?>
