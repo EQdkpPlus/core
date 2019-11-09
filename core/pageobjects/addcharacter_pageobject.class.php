@@ -56,6 +56,10 @@ class addcharacter_pageobject extends pageobject {
 		$this->build_form();
 		$data = $this->form->return_values();
 		$data['notes'] = $this->in->get('notes');
+		
+		if(!($this->adminmode) && !$this->user->check_auth('u_member_conn', false)) {
+			$data['overtakechar'] = false;
+		}
 
 		if (strlen($data['name'])){
 			$mixResult = $this->pdh->put('member', 'addorupdate_member', array(0, $data, $data['overtakechar']));
@@ -91,6 +95,10 @@ class addcharacter_pageobject extends pageobject {
 			unset($data['name']);
 			unset($data['mainid']);
 			unset($data['rankid']);
+		}
+		
+		if(!($this->adminmode) && !$this->user->check_auth('u_member_conn', false)) {
+			$data['overtakechar'] = false;
 		}
 
 		$intOldUserID = $this->pdh->get('member', 'user', array($this->url_id));
@@ -238,14 +246,11 @@ class addcharacter_pageobject extends pageobject {
 				);
 			}
 		}
-		if(!($this->adminmode)) {
+		if(!($this->adminmode) && $this->user->check_auth('u_member_conn', false)) {
 			$static_fields['overtakechar'] = array(
 				'type'	=> 'radio',
 				'lang'	=> 'overtake_char',
-				'disabled' => ($this->user->check_auth('u_member_conn', false)) ? false : true,
 			);
-			// is the char connected to the user?
-			if(!$static_fields['overtakechar']['disabled'] && !$this->adminmode) $static_fields['overtakechar']['value'] = 1;
 		}
 
 		if($this->adminmode) {
