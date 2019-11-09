@@ -18,12 +18,12 @@
  *	You should have received a copy of the GNU Affero General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
  if (!class_exists("myemojione")) {
 	class myemojione extends gen_class {
-		
+
 		public function __construct(){
-			
+
 			//Load required files
 			require_once('RulesetInterface.php');
 			require_once('ClientInterface.php');
@@ -31,33 +31,31 @@
 			require_once('Ruleset.php');
 			require_once('Emojione.php');
 		}
-		
+
 		public function textToShortcode($strText){
 			$client = new Emojione\Client(new Emojione\Ruleset());
-			
+
 			$client->imageType = 'svg';
 			$client->imagePathSVG = $this->server_path.'libraries/emojione/svg/';
 
 			return $client->toShort($strText);
 		}
-		
+
 		public function textToImage($strText){
 			$client = new Emojione\Client(new Emojione\Ruleset());
-			
+
 			$client->imageType = 'svg';
 			$client->imagePathSVG = $this->server_path.'libraries/emojione/svg/';
 			return $client->unicodeToImage($strText);
 		}
-		
+
 		public function shortcodeToImage($strText){
 			$client = new Emojione\Client(new Emojione\Ruleset());
-			
+
 			$client->imageType = 'svg';
 			$client->imagePathSVG = $this->server_path.'libraries/emojione/svg/';
-			
+
 			return $client->shortnameToImage($strText);
 		}
 	}
  }
- 
- ?>

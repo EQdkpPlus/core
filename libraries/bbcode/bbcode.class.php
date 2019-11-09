@@ -82,9 +82,9 @@ if (!class_exists("bbcode")) {
 				' <img alt=";)" src="'.$this->smiliepath.'/wink.svg" class="smilies" />',
 				' <img alt=";)" src="'.$this->smiliepath.'/wink.svg" class="smilies" />'
 			);
-			
+
 			$text = preg_replace('/<img(.*?)alt=\"(.*?)\" src=\"(.*?)\" class=\"smilies\" \/>/Ui' , '$2' , $text);
-			
+
 			foreach($in as $key => $val){
 				$text = preg_replace('/(^'.preg_quote($val, '/').'|\s'.preg_quote($val, '/').')/', $out[$key], $text);
 			}
@@ -178,26 +178,26 @@ if (!class_exists("bbcode")) {
 
 			return $text;
 		}
-		
+
 		function sanatizeFontcolor($arrMatches){
 			if (preg_match('/#[a-zA-Z0-9]{3,6}/', $arrMatches[1])){
 				return '<div style="color: '.$arrMatches[1].';display:inline;">'.$arrMatches[2].'</div>';
 			}
 			return '';
 		}
-		
+
 		function sanatizeFontsize($arrMatches){
 			return '<div style="font-size: '.intval($arrMatches[1]).'px;display:inline;">'.$arrMatches[2].'</div>';
 		}
-		
+
 		function sanatizeOrderedList($arrMatches){
 			return '<ol start="'.intval($arrMatches[1]).'">'.$arrMatches[2].'</ol>';
 		}
-		
+
 		function sanatizeURLs($arrURL){
 			$text = str_replace(array('"', "'"), array("",""), $arrURL[1]);
 			if (!filter_var($text, FILTER_VALIDATE_URL)) return '';
-			
+
 			return '<a href="'.filter_var($text, FILTER_SANITIZE_URL).'" rel="nofollow">'.$arrURL[2].'</a>';
 		}
 
@@ -320,32 +320,32 @@ if (!class_exists("bbcode")) {
 
 				// Replace tag
 				switch (strtolower($elements[0])) {
-				
+
 					case 'article_url':
 						$strPath = $this->controller_path.$this->pdh->get('articles', 'path', array($elements[1]));
 						$arrCache[$strTag] = ($strPath) ? $strPath : '';
 						break;
-					
+
 					case 'article_title':
 						$strTitle = $this->pdh->get('articles', 'title', array((int)$elements[1]));
 						$arrCache[$strTag] = ($strTitle) ? $strTitle : '';
 						break;
-						
+
 					case 'article_url_plain':
 						$strPath = $this->controller_path_plain.$this->pdh->get('articles', 'path', array($elements[1]));
 						$arrCache[$strTag] = ($strPath) ? $strPath : '';
 						break;
-						
+
 					case 'category_url':
 						$strPath = $this->controller_path.$this->pdh->get('article_categories', 'path', array($elements[1]));
 						$arrCache[$strTag] = ($strPath) ? $strPath : '';
 						break;
-						
+
 					case 'category_title':
 						$strTitle = $this->pdh->get('article_categories', 'name', array((int)$elements[1]));
 						$arrCache[$strTag] = ($strTitle) ? $strTitle : '';
 						break;
-						
+
 					case 'category_url_plain':
 						$strPath = $this->controller_path_plain.$this->pdh->get('article_categories', 'path', array($elements[1]));
 						$arrCache[$strTag] = ($strPath) ? $strPath : '';
@@ -369,7 +369,7 @@ if (!class_exists("bbcode")) {
 								$this->username = (!$this->user->is_signedin()) ? $this->user->lang('guest') : $this->pdh->get('user', 'name', array($this->user->data['user_id']));
 								$arrCache[$strTag] = $this->username;
 								break;
-								
+
 							case 'id': $arrCache[$strTag] = $this->user->id;
 								break;
 						}
@@ -390,14 +390,14 @@ if (!class_exists("bbcode")) {
 										$arrCache[$strTag] = $this->pdh->get('member', 'memberlink_decorated', array($member_id, $this->routing->simpleBuild('character'), '', true));
 									}
 						break;
-						
+
 					case 'itemid': infotooltip_js();
 									$item = "";
 									$game_id = strip_tags($elements[1]);
 									$str =  infotooltip($item, $game_id);
 									$arrCache[$strTag] = $str;
 						break;
-						
+
 					case 'item':	infotooltip_js();
 									$item = strip_tags($elements[1]);
 									if(strpos('id:', $item) === 0){
@@ -410,15 +410,15 @@ if (!class_exists("bbcode")) {
 										$arrCache[$strTag] = $str;
 									}
 						break;
-									
+
 					case 'event':	$intEventID = intval($elements[1]);
 									include_once($this->root_path.'core/article.class.php');
 									$objArticleHelper = registry::register('article');
 									$str = $objArticleHelper->buildCalendarevent($intEventID);
 									$arrCache[$strTag] = $str;
 						break;
-						
-						
+
+
 					case 'iflang':
 						if ($elements[1] != '' && $elements[1] != $this->user->lang_name)
 						{
@@ -430,7 +430,7 @@ if (!class_exists("bbcode")) {
 								}
 							}
 						}
-						
+
 						unset($arrCache[$strTag]);
 						break;
 					case 'ifnlang':
@@ -450,13 +450,13 @@ if (!class_exists("bbcode")) {
 						}
 						unset($arrCache[$strTag]);
 						break;
-						
+
 					case 'env':
 						switch($elements[1]){
 							case 'controller_path':
 								$arrCache[$strTag] = $this->controller_path;
 								break;
-								
+
 							case 'controller_path_plain':
 								$arrCache[$strTag] = $this->controller_path_plain;
 								break;
@@ -466,7 +466,7 @@ if (!class_exists("bbcode")) {
 						}
 						break;
 
-						
+
 					default:	if($this->hooks->isRegistered('parse_shorttags')){
 									$strText = $this->hooks->process('parse_shorttags', array('tag'=> $elements[0], 'complete_tag' => $strTag, 'param' => $elements[1],'elements' => $elements), true);
 									if($strText !== false){
@@ -537,10 +537,10 @@ if (!class_exists("bbcode")) {
 
 			return $text;
 		}
-		
+
 		public function remove_bbcode($text){
 			$text = trim($text);
-		
+
 			// BBCode to find...
 			$in = array(
 					'/\[code\](.*?)\[\/code\]/ms',
@@ -561,7 +561,7 @@ if (!class_exists("bbcode")) {
 					'/\[size\="?(.*?)"?\](.*?)\[\/size\]/msi',
 					'/\[list\=(.*?)\](.*?)\[\/list\]/msi'
 			);
-		
+
 			$out = array(
 					'\1',
 					'\1',
@@ -579,15 +579,14 @@ if (!class_exists("bbcode")) {
 					'\2',
 					'\2',
 					'\2',
-					
+
 			);
-			
+
 			$text = preg_replace($in, $out, $text);
-		
-		
+
+
 			return $text;
 		}
 
 	}
 }
-?>
