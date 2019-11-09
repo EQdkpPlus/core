@@ -19,7 +19,7 @@ CREATE TABLE `__config` (
 
 DROP TABLE IF EXISTS __users;
 CREATE TABLE `__users` (
-	`user_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+	`user_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`username` varchar(30) COLLATE utf8_bin NOT NULL,
 	`user_password` varchar(255) COLLATE utf8_bin NOT NULL,
 	`user_email` varchar(255) COLLATE utf8_bin DEFAULT NULL,
