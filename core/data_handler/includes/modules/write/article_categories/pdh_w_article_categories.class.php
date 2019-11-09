@@ -25,7 +25,7 @@ if(!defined('EQDKP_INC')) {
 
 if(!class_exists('pdh_w_article_categories')) {
 	class pdh_w_article_categories extends pdh_w_generic {
-		
+
 		private $arrLogLang = array(
 				'id'				=> "{L_ID}",
 				'name'				=> "{L_NAME}",
@@ -52,20 +52,20 @@ if(!class_exists('pdh_w_article_categories')) {
 
 		public function delete($id) {
 			$this->delete_recursiv(intval($id));
-			
+
 			$this->pdh->enqueue_hook('articles_update');
 			$this->pdh->enqueue_hook('article_categories_update');
 			return true;
 		}
-		
+
 		private function delete_recursiv($intCategoryID){
 			if ($this->pdh->get('article_categories', 'childs', array($intCategoryID))){
 				foreach($this->pdh->get('article_categories', 'childs', array($intCategoryID)) as $intChildID){
 					$this->delete_recursiv($intChildID);
 					$arrOldData = $this->pdh->get('article_categories', 'data', array($intChildID));
-					
+
 					$this->pdh->put('articles', 'delete_category', array($intChildID));
-					
+
 					$log_action = $this->logs->diff(false, $arrOldData, $this->arrLogLang);
 					$this->log_insert("action_articlecategory_deleted", $log_action, $intChildID, $this->user->multilangValue($arrOldData['name']));
 				}
@@ -74,12 +74,12 @@ if(!class_exists('pdh_w_article_categories')) {
 			$this->db->prepare("DELETE FROM __article_categories WHERE id =?")->execute($intCategoryID);
 			$log_action = $this->logs->diff(false, $arrOldData, $this->arrLogLang);
 			$this->log_insert("action_articlecategory_deleted", $log_action, $intCategoryID, $this->user->multilangValue($arrOldData["name"]));
-			
+
 			return true;
 		}
-		
-		
-		
+
+
+
 		public function add($strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles,$intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS){
 			if ($strAlias == ""){
 				$arrName = unserialize($strName);
@@ -88,19 +88,19 @@ if(!class_exists('pdh_w_article_categories')) {
 			} else {
 				$strAlias = $this->create_alias($strAlias);
 			}
-			
+
 			//Check Alias
 			$blnAliasResult = $this->check_alias(0, $strAlias);
-			
+
 			$strDescription = $this->bbcode->replace_shorttags($strDescription);
 			if ($this->config->get('enable_embedly')) $strDescription = $this->embedly->parseString($strDescription);
-			
+
 			if(!$this->user->check_auth('u_articles_script', false)){
 				include_once($this->root_path."libraries/inputfilter/input.class.php");
 				$filter = new FilterInput(get_tag_blacklist(), get_attr_blacklist(), 1,1);
 				$strDescription = htmlspecialchars($filter->clean($strDescription));
-			}			
-			
+			}
+
 			$arrQuery  = array(
 				'name' 			=> $strName,
 				'alias' 		=> ($blnAliasResult) ? $strAlias : '',
@@ -123,33 +123,33 @@ if(!class_exists('pdh_w_article_categories')) {
 				'featured_ontop' => $intFeaturedOntop,
 				'hide_on_rss'	=> $intHideOnRSS,
 			);
-			
+
 			$objQuery = $this->db->prepare("INSERT INTO __article_categories :p")->set($arrQuery)->execute();
-			
-			
-			
+
+
+
 			if ($objQuery){
 				$id = $objQuery->insertId;
 				$arrAggregation[] = $id;
-				
+
 				$arrData = array(
 					'aggregation' => serialize($arrAggregation),
 				);
 				if(!$blnAliasResult) $arrData['alias'] = $strAlias.'-'.$id;
-				
+
 				$objQuery = $this->db->prepare("UPDATE __article_categories :p WHERE id=?")->set($arrData)->execute($id);
-				
+
 				$log_action = $this->logs->diff(false, $arrQuery, $this->arrLogLang);
 				$this->log_insert("action_articlecategory_added", $log_action, $id,$this->user->multilangValue($arrQuery["name"]), 1, 'article');
-				
+
 				$this->pdh->enqueue_hook('article_categories_update');
 				return $id;
 			}
-			
+
 			return false;
 		}
-		
-		public function update($id, $strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles,$intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS){			
+
+		public function update($id, $strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles,$intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS){
 			if ($strAlias == ""){
 				$arrName = unserialize($strName);
 				$strDefaultLanguage = $this->config->get('default_lang');
@@ -157,20 +157,20 @@ if(!class_exists('pdh_w_article_categories')) {
 			} elseif($strAlias != $this->pdh->get('article_categories', 'alias', array($id))) {
 				$strAlias = $this->create_alias($strAlias);
 			}
-			
+
 			//Check Alias
 			$blnAliasResult = $this->check_alias($id, $strAlias);
 			if (!$blnAliasResult) return false;
-			
+
 			$strDescription = $this->bbcode->replace_shorttags($strDescription);
 			if($this->config->get('enable_embedly')) $strDescription = $this->embedly->parseString($strDescription);
-			
+
 			if(!$this->user->check_auth('u_articles_script', false)){
 				include_once($this->root_path."libraries/inputfilter/input.class.php");
 				$filter = new FilterInput(get_tag_blacklist(), get_attr_blacklist(), 1,1);
 				$strDescription = htmlspecialchars($filter->clean($strDescription));
 			}
-			
+
 			$arrQuery = array(
 				'name' 			=> $strName,
 				'alias' 		=> $strAlias,
@@ -192,96 +192,95 @@ if(!class_exists('pdh_w_article_categories')) {
 				'featured_ontop' => $intFeaturedOntop,
 				'hide_on_rss'	=> $intHideOnRSS,
 			);
-			
+
 			$arrOldData = $this->pdh->get('article_categories', 'data', array($id));
-			
+
 			$objQuery = $this->db->prepare("UPDATE __article_categories :p WHERE id=?")->set($arrQuery)->execute($id);
-						
+
 			if ($objQuery){
 				$this->pdh->enqueue_hook('article_categories_update');
-				
+
 				$log_action = $this->logs->diff($arrOldData, $arrQuery, $this->arrLogLang, array('description' => 1), true);
 				$this->log_insert("action_articlecategory_updated", $log_action, $id, $this->user->multilangValue($arrOldData["name"]), 1, 'article');
-				
+
 				return $id;
 			}
-			
+
 			return false;
 		}
-		
+
 		public function update_permission_for_group($intCategoryID, $intGroupID, $arrPermissions){
 			$arrOldData = array(
 				'permissions' => $this->pdh->get('article_categories', 'permissions', array($intCategoryID)),
 			);
-				
+
 			$arrNewPermissions = $arrOldData['permissions'];
 
 			foreach($arrPermissions as $key => $val){
 				$arrNewPermissions[$key][$intGroupID] = $val;
 			}
-			
+
 			$objQuery = $this->db->prepare("UPDATE __article_categories :p WHERE id=?")->set(array(
 					'permissions'		=> serialize($arrNewPermissions),
 			))->execute($intCategoryID);
-				
+
 			if ($objQuery){
 				$arrNewData = array(
 					'permissions' => $arrNewPermissions,
 				);
 				$log_action = $this->logs->diff($arrOldData, $arrNewData, $this->arrLogLang, array());
 				if ($log_action) $this->log_insert("action_articlecategory_updated", $log_action, $intCategoryID, $this->user->multilangValue($this->pdh->get('article_categories', 'name', array($intCategoryID)), 1, 'article'));
-			
+
 				$this->pdh->enqueue_hook('article_categories_update');
 				return $id;
 			}
 			return false;
 		}
-		
+
 		public function update_sortandpublished($id, $intSortID, $intPublished){
 			$arrOldData = array(
 				'published' => $this->pdh->get('article_categories', 'published', array($id)),
 			);
-			
+
 			$objQuery = $this->db->prepare("UPDATE __article_categories :p WHERE id=?")->set(array(
 				'sort_id'		=> $intSortID,
 				'published'		=> $intPublished,
 			))->execute($id);
-			
+
 			if ($objQuery){
 				$arrNewData = array(
-					'published' => $intPublished,	
+					'published' => $intPublished,
 				);
 				$log_action = $this->logs->diff($arrOldData, $arrNewData, $this->arrLogLang, array());
 				if ($log_action) $this->log_insert("action_articlecategory_updated", $log_action, $id, $this->user->multilangValue($this->pdh->get('article_categories', 'name', array($id)), 1, 'article'));
-				
+
 				$this->pdh->enqueue_hook('article_categories_update');
 				return $id;
 			}
 			return false;
 		}
-		
+
 		private function check_alias($id, $strAlias){
 			if (is_numeric($strAlias)) return false;
-			
+
 			if ($id){
 				$strMyAlias = $this->pdh->get('article_categories', 'alias', array($id));
-				if ($strMyAlias == $strAlias) return true;		
+				if ($strMyAlias == $strAlias) return true;
 				$blnResult = $this->pdh->get('article_categories', 'check_alias', array($strAlias));
 				return $blnResult;
-				
+
 			} else {
 				$blnResult = $this->pdh->get('article_categories', 'check_alias', array($strAlias));
 				return $blnResult;
-				
+
 			}
 			return false;
 		}
-		
+
 		private function create_alias($strName){
 			$strAlias = utf8_strtolower(unsanitize($strName));
 			return hyphenize($strAlias);
 		}
-		
+
 	}
 }
-?>

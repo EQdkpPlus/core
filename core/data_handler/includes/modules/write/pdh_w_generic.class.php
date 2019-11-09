@@ -51,4 +51,3 @@ if(!class_exists('pdh_w_generic')){
 		}
 	}//end class
 }//end if
-?>

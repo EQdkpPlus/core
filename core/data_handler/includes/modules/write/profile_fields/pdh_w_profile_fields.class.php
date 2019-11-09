@@ -25,14 +25,14 @@ if(!defined('EQDKP_INC')) {
 
 if(!class_exists('pdh_w_profile_fields')) {
 	class pdh_w_profile_fields extends pdh_w_generic {
-	
+
 		private $fields = array('name', 'type', 'category', 'lang', 'options_language', 'size', 'data', 'sort', 'image', 'undeletable', 'enabled', 'custom');
 
 		public function enable_field($field_id){
 			$objQuery = $this->db->prepare('UPDATE __member_profilefields :p WHERE id=?')->set(array(
-				'enabled' => 1	
+				'enabled' => 1
 			))->execute((int)$field_id);
-			
+
 			if ($objQuery) {
 				$this->pdh->enqueue_hook('game_update');
 				$this->pdh->enqueue_hook('member_update');
@@ -46,7 +46,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 			$objQuery = $this->db->prepare('UPDATE __member_profilefields :p WHERE id=?')->set(array(
 					'enabled' => 0
 			))->execute((int)$field_id);
-			
+
 			if ($objQuery) {
 				$this->pdh->enqueue_hook('game_update');
 				$this->pdh->enqueue_hook('member_update');
@@ -67,7 +67,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 			}
 			return false;
 		}
-		
+
 		public function delete_fields_by_name($fields) {
 			if (is_array($fields)) {
 				foreach($fields as $value) {
@@ -93,20 +93,20 @@ if(!class_exists('pdh_w_profile_fields')) {
 				}
 			}
 			$field['data']['options'] = $options;
-			
+
 			if(!isset($data['name'])) {
 				$data['name'] = str_replace(" ", "_", utf8_strtolower(($this->in->get('name') != "") ? $this->in->get('name') : $data['lang']));
 			}
-			
+
 			$fields = $this->pdh->get('profile_fields', 'fields');
 			if (isset($fields[$data['name']]) && $fields[$data['name']]['field_id'] != $id){
 				$data['name'] = $data['name'].'_'.unique_id();
 			}
-			
+
 			$category = $this->in->get('category');
 			if($category == '-') $category = ($this->in->get('new_category') != "") ? $this->in->get('new_category') : 'character';
-			
-			
+
+
 			$objQuery = $this->db->prepare('UPDATE __member_profilefields :p WHERE id=?')->set(array(
 				'name'			=> $data['name'],
 				'type'			=> $this->in->get('type'),
@@ -118,7 +118,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 				//'sort'		=> $this->in->get('sort', 1),
 				'data'			=> serialize($field['data']),
 			))->execute($id);
-				
+
 			if(!$objQuery) {
 				return false;
 			}
@@ -129,7 +129,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 
 		public function insert_field($data=array()){
 			if(!isset($data['name'])) {
-				$data['name'] = str_replace(" ", "_", utf8_strtolower(($this->in->get('name') != "") ? $this->in->get('name') : $data['lang']));			
+				$data['name'] = str_replace(" ", "_", utf8_strtolower(($this->in->get('name') != "") ? $this->in->get('name') : $data['lang']));
 			}
 
 			$fields = $this->pdh->get('profile_fields', 'fields');
@@ -153,10 +153,10 @@ if(!class_exists('pdh_w_profile_fields')) {
 					$data['data'][$key] = $dat;
 				}
 			}
-			
+
 			$category = (isset($data['category'])) ? $data['category'] : $this->in->get('category');
 			if($category == '-') $category = ($this->in->get('new_category') != "") ? $this->in->get('new_category') : 'character';
-			
+
 			$data = array(
 				'name'			=> $data['name'],
 				'type'			=> (isset($data['type'])) ? $data['type'] : $this->in->get('type'),
@@ -180,7 +180,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 			$this->pdh->enqueue_hook('member_update');
 			return true;
 		}
-		
+
 		public function set_sortation($strFieldID, $intSortID){
 			$old['sortid'] = $this->pdh->get('profile_fields', 'sortid', array($strFieldID));
 			if ($old['sortid'] != $intSortID){
@@ -188,7 +188,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 					'sort'	=> $intSortID,
 				);
 				$objQuery = $this->db->prepare("UPDATE __member_profilefields :p WHERE id=?")->set($arrSet)->execute($strFieldID);
-		
+
 				if(!$objQuery) {
 					return false;
 				}
@@ -196,8 +196,8 @@ if(!class_exists('pdh_w_profile_fields')) {
 				$this->pdh->enqueue_hook('member_update');
 			}
 		}
-		
-		
+
+
 		public function truncate_fields() {
 			$this->db->query('TRUNCATE TABLE __member_profilefields');
 			$this->pdh->enqueue_hook('game_update');
@@ -206,4 +206,3 @@ if(!class_exists('pdh_w_profile_fields')) {
 		}
 	}
 }
-?>

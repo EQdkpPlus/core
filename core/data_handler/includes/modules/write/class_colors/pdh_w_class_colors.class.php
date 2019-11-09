@@ -25,10 +25,10 @@ if(!defined('EQDKP_INC')) {
 
 if(!class_exists('pdh_w_class_colors')) {
 	class pdh_w_class_colors extends pdh_w_generic {
-	
+
 		public function add_classcolor($template, $clsid='', $color=''){
 			$color = (substr($color, 0, 1) == '#') ? $color : ((strlen($color)) ? '#'.$color : '');
-			
+
 			$objQuery = $this->db->prepare('INSERT INTO __classcolors :p')->set(array(
 				'template'		=> $template,
 				'class_id'		=> $clsid,
@@ -50,7 +50,6 @@ if(!class_exists('pdh_w_class_colors')) {
 			$objQuery = $this->db->prepare("DELETE FROM __classcolors WHERE template=?")->execute($template);
 			$this->pdh->enqueue_hook('classcolors_update');
 		}
-		
+
 	}
 }
-?>

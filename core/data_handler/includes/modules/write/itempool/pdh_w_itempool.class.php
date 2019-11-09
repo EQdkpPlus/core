@@ -31,9 +31,9 @@ if(!class_exists('pdh_w_itempool')) {
 				'itempool_name' => $name,
 				'itempool_desc' => $desc,
 			);
-			
+
 			$objQuery = $this->db->prepare("INSERT INTO __itempool :p")->set($arrSet)->execute();
-			
+
 			if($objQuery) {
 				$id = $objQuery->insertId;
 				$this->pdh->enqueue_hook('itempool_update', array($id), array('action' => 'add'));
@@ -44,14 +44,14 @@ if(!class_exists('pdh_w_itempool')) {
 
 		public function update_itempool($id, $name, $desc) {
 			$old_events = $this->pdh->get('itempool', 'event_ids', array($id));
-			
+
 			$arrSet = array(
 				'itempool_name' => $name,
 				'itempool_desc' => $desc,
 			);
 
 			$objQuery = $this->db->prepare("UPDATE __itempool :p WHERE itempool_id=?")->set($arrSet)->execute($id);
-			
+
 			if($objQuery) {
 				$this->pdh->enqueue_hook('itempool_update', array($id), array('action' => 'update'));
 				return true;
@@ -64,10 +64,10 @@ if(!class_exists('pdh_w_itempool')) {
 			if($id == 1) {
 				return false;
 			}
-			
+
 			$this->db->beginTransaction();
 			if($this->db->prepare("DELETE FROM __itempool WHERE itempool_id = ?;")->execute($id)) {
-				
+
 				if($this->db->prepare("DELETE FROM __multidkp2itempool WHERE multidkp2itempool_itempool_id =?")->execute($id)) {
 					if($this->db->prepare("UPDATE __items SET itempool_id = '1' WHERE itempool_id = ?")->execute($id)) {
 						$this->pdh->enqueue_hook('itempool_update', array($id));
@@ -81,7 +81,7 @@ if(!class_exists('pdh_w_itempool')) {
 			$this->db->rollbackTransaction();
 			return false;
 		}
-		
+
 		public function reset() {
 			$this->db->query("DELETE FROM __itempool WHERE itempool_id != '1';");
 			$this->db->query("TRUNCATE TABLE __multidkp2itempool;");
@@ -89,4 +89,3 @@ if(!class_exists('pdh_w_itempool')) {
 		}
 	}
 }
-?>

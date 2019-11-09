@@ -31,7 +31,7 @@ if(!class_exists('pdh_w_raid_groups_members')) {
 				'group_id' => $group_id,
 				'member_id'  => $member_id,
 			);
-			
+
 			$objQuery = $this->db->prepare("INSERT INTO __groups_raid_members :p")->set($arrSet)->execute();
 
 			if(!$objQuery) {
@@ -58,7 +58,7 @@ if(!class_exists('pdh_w_raid_groups_members')) {
 				return false;
 			}
 		}
-		
+
 		public function add_grpleader($arrMemberIDs, $group_id){
 			if (!is_array($arrMemberIDs)){
 				$arrMemberIDs = array($arrMemberIDs);
@@ -71,49 +71,49 @@ if(!class_exists('pdh_w_raid_groups_members')) {
 				if($blnIsInGroup <= 0){
 					$this->add_member_to_group($member_id, $group_id);
 				}
-				
+
 				$objQuery = $this->db->prepare("UPDATE __groups_raid_members :p WHERE group_id=? AND member_id=?")->set(array('grpleader' => 1))->execute($group_id, $member_id);
-				if(!$objQuery) {
-					return false;
-				}
-				$arrNames[] = $this->pdh->get('member', 'name', array($member_id)); 
-			}
-			
-			$log_action = array(
-				'{L_MEMBER}' => implode(', ', $arrNames),	
-			);
-			
-			$this->log_insert('action_membergroups_add_groupleader', $log_action, $group_id, $this->pdh->get('raid_groups', 'name', array($group_id)));
-			
-			$this->pdh->enqueue_hook('raid_groups_update');
-			return true;
-		}
-		
-		public function remove_grpleader($arrMemberIDs, $group_id){
-			if (!is_array($arrMemberIDs)){
-				$arrMemberIDs = array($arrMemberIDs);
-			}
-			
-			$arrSet = array(
-				'grpleader' => 0,
-			);
-			
-			$arrNames = array();
-			foreach($arrMemberIDs as $member_id){
-				$objQuery = $this->db->prepare("UPDATE __groups_raid_members :p WHERE group_id=? AND member_id=?")->set($arrSet)->execute($group_id, $member_id);
-				
 				if(!$objQuery) {
 					return false;
 				}
 				$arrNames[] = $this->pdh->get('member', 'name', array($member_id));
 			}
-			
+
+			$log_action = array(
+				'{L_MEMBER}' => implode(', ', $arrNames),
+			);
+
+			$this->log_insert('action_membergroups_add_groupleader', $log_action, $group_id, $this->pdh->get('raid_groups', 'name', array($group_id)));
+
+			$this->pdh->enqueue_hook('raid_groups_update');
+			return true;
+		}
+
+		public function remove_grpleader($arrMemberIDs, $group_id){
+			if (!is_array($arrMemberIDs)){
+				$arrMemberIDs = array($arrMemberIDs);
+			}
+
+			$arrSet = array(
+				'grpleader' => 0,
+			);
+
+			$arrNames = array();
+			foreach($arrMemberIDs as $member_id){
+				$objQuery = $this->db->prepare("UPDATE __groups_raid_members :p WHERE group_id=? AND member_id=?")->set($arrSet)->execute($group_id, $member_id);
+
+				if(!$objQuery) {
+					return false;
+				}
+				$arrNames[] = $this->pdh->get('member', 'name', array($member_id));
+			}
+
 			$log_action = array(
 					'{L_USER}' => implode(', ', $arrNames),
 			);
-				
+
 			$this->log_insert('action_membergroups_remove_groupleader', $log_action, $group_id, $this->pdh->get('raid_groups', 'name', array($group_id)));
-			
+
 			$this->pdh->enqueue_hook('raid_groups_update');
 			return true;
 		}
@@ -133,7 +133,7 @@ if(!class_exists('pdh_w_raid_groups_members')) {
 
 		public function delete_member_from_group($member_id, $group_id) {
 			$objQuery = $this->db->prepare("DELETE FROM __groups_raid_members WHERE group_id = ? AND member_id =?")->execute($group_id, $member_id);
-			
+
 			if($objQuery) {
 				$this->pdh->enqueue_hook('raid_groups_update');
 				return true;
@@ -157,4 +157,3 @@ if(!class_exists('pdh_w_raid_groups_members')) {
 		}
 	}
 }
-?>

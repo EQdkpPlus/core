@@ -107,4 +107,3 @@ if(!class_exists('pdh_w_calendars')) {
 		}
 	}
 }
-?>

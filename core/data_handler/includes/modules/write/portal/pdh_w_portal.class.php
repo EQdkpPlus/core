@@ -25,7 +25,7 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "pdh_w_portal" ) ) {
 	class pdh_w_portal extends pdh_w_generic {
-	
+
 		public function install($path, $plugin='', $name='', $version='', $child = false) {
 			$dbdata = array(
 				'name'			=> $name,
@@ -34,9 +34,9 @@ if ( !class_exists( "pdh_w_portal" ) ) {
 				'version'		=> $version,
 				'child'			=> ($child) ? 1 : 0,
 			);
-			
+
 			$objQuery = $this->db->prepare("INSERT INTO __portal :p")->set($dbdata)->execute();
-			
+
 			if($objQuery) {
 				$id = $objQuery->insertId;
 				$this->pdh->enqueue_hook('update_portal', array($id));
@@ -59,7 +59,7 @@ if ( !class_exists( "pdh_w_portal" ) ) {
 
 		public function update($id, $data) {
 			if (!$id) return false;
-			
+
 			$objQuery = $this->db->prepare("UPDATE __portal :p WHERE id = ?;")->set($data)->execute($id);
 			if($objQuery) {
 				$this->pdh->enqueue_hook('update_portal', array($id));
@@ -67,7 +67,6 @@ if ( !class_exists( "pdh_w_portal" ) ) {
 			}
 			return false;
 		}
-		
+
 	}//end class
 }//end if
-?>

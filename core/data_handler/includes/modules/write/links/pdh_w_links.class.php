@@ -25,7 +25,7 @@ if(!defined('EQDKP_INC')) {
 
 if(!class_exists('pdh_w_links')) {
 	class pdh_w_links extends pdh_w_generic {
-		
+
 		public function add($name, $url, $window=0, $visibility='[&#34;0&#34;]', $height=4024){
 			if (strlen($name)){
 				$objQuery = $this->db->prepare("INSERT INTO __links :p")->set(array(
@@ -35,7 +35,7 @@ if(!class_exists('pdh_w_links')) {
 					'link_visibility'	=> $visibility,
 					'link_height'		=> $height,
 				))->execute();
-				
+
 				if ($objQuery){
 					$this->pdh->enqueue_hook('links');
 					return $objQuery->insertId;
@@ -43,10 +43,10 @@ if(!class_exists('pdh_w_links')) {
 			}
 			return false;
 		}
-		
+
 		public function update($id, $name, $url, $window, $visibility, $height, $force = false){
 			$data = $this->pdh->get('links', 'data', array($id));
-		
+
 			if ($force OR $data['name'] != $name OR $data['url'] != $url OR (int)$data['window'] != (int)$window OR $data['visibility'] != $visibility OR (int)$data['height'] != (int)$height){
 				$objQuery = $this->db->prepare("UPDATE __links :p WHERE link_id=?")->set(array(
 					'link_name'			=> $name,
@@ -55,7 +55,7 @@ if(!class_exists('pdh_w_links')) {
 					'link_visibility'	=> $visibility,
 					'link_height'		=> $height,
 				))->execute($id);
-				
+
 				$this->pdh->enqueue_hook('links');
 				if (!$objQuery) return false;
 			}
@@ -66,11 +66,10 @@ if(!class_exists('pdh_w_links')) {
 			$objQuery = $this->db->prepare("DELETE FROM __links WHERE link_id =?")->execute($id);
 			$this->pdh->enqueue_hook('links', array($id));
 		}
-		
+
 		public function deleteByName($strName){
 			$objQuery = $this->db->prepare("DELETE FROM __links WHERE link_name =?")->execute($strName);
 			$this->pdh->enqueue_hook('links');
 		}
 	}
 }
-?>

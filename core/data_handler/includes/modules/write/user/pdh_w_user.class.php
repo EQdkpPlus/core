@@ -30,7 +30,7 @@ if(!class_exists('pdh_w_user')) {
 		public function insert_user($arrData, $logging = true, $toDefaultGroup = true){
 			$arrData = $this->set_defaults($arrData);
 			$arrData['user_registered'] = $this->time->time;
-			
+
 			$objQuery = $this->db->prepare("INSERT INTO __users :p")->set($arrData)->execute();
 
 			if ( !($objQuery) ) {
@@ -46,7 +46,7 @@ if(!class_exists('pdh_w_user')) {
 				);
 				$this->log_insert('action_user_added', $log_action, $user_id, sanitize($arrData['username']));
 			}
-			
+
 			$this->hooks->process('user_inserted', array('user_id' => $user_id, 'username' => $arrData['username'], 'data' => $arrData));
 
 			//Put him to the default group
@@ -64,7 +64,7 @@ if(!class_exists('pdh_w_user')) {
 
 			//User Profilefields
 			$arrProfileData = (is_array($arrProfileData)) ? $arrProfileData : array();
-			
+
 			$arrSave = array(
 				'username' 				=> $arrData['username'],
 				'user_password'			=> $new_password,
@@ -97,11 +97,11 @@ if(!class_exists('pdh_w_user')) {
 				'user_email_confirmed'	=> 1,
 				'rules'					=> ($rules) ? 1 : 0,
 			);
-			
+
 			if($this->hooks->isRegistered('register_data')){
 				$arrData = $this->hooks->process('register_data', array($arrData), true);
 			}
-			
+
 			$user_id = $this->insert_user($arrData, false);
 			$this->pdh->enqueue_hook('user');
 			$this->pdh->enqueue_hook('styles_update');
@@ -132,9 +132,9 @@ if(!class_exists('pdh_w_user')) {
 			if ($defaults){
 				$query_ary = $this->set_defaults($query_ary);
 			}
-			
+
 			$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id = ?")->set($query_ary)->execute($user_id);
-			
+
 			$this->hooks->process('user_updated', array('user_id' => $user_id, 'data' => $query_ary));
 
 			if ($logging){
@@ -143,7 +143,7 @@ if(!class_exists('pdh_w_user')) {
 				);
 				$this->log_insert('action_user_updated', $log_action, $user_id, $this->in->get('username'));
 			}
-			
+
 			$this->pdh->enqueue_hook('user');
 			$this->pdh->enqueue_hook('styles_update');
 			return ($objQuery) ? true : false;
@@ -155,34 +155,34 @@ if(!class_exists('pdh_w_user')) {
 				$arrResult = $objQuery->fetchAssoc();
 				$custom = unserialize($arrResult['custom_fields']);
 				unset($custom['user_avatar']);
-				
+
 				$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
 					'custom_fields' => serialize($custom)
 				))->execute($user_id);
-				
+
 				$this->pdh->enqueue_hook('user');
 				return true;
 			}
-			return false;		
+			return false;
 		}
-		
+
 		public function add_custom_avatar($user_id, $strAvatar) {
 			$objQuery = $this->db->prepare("SELECT custom_fields FROM __users WHERE user_id =?")->execute($user_id);
 			if ($objQuery && $objQuery->numRows){
 				$arrResult = $objQuery->fetchAssoc();
 				$custom = ($arrResult['custom_fields'] != "") ? unserialize($arrResult['custom_fields']) : array();
 				$custom['user_avatar'] = $strAvatar;
-				
+
 				$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
 						'custom_fields' => serialize($custom)
 				))->execute($user_id);
-				
+
 				$this->pdh->enqueue_hook('user');
 				return true;
 			}
 			return false;
 		}
-		
+
 		public function disable_gravatar($user_id){
 			$objQuery = $this->db->prepare("SELECT custom_fields FROM __users WHERE user_id =?")->execute($user_id);
 			if ($objQuery && $objQuery->numRows){
@@ -192,16 +192,16 @@ if(!class_exists('pdh_w_user')) {
 				$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
 					'custom_fields' => serialize($custom)
 				))->execute($user_id);
-				
+
 				$this->pdh->enqueue_hook('user');
 				return true;
-			}	
-			return false;		
+			}
+			return false;
 		}
 
 		public function delete_authaccount($user_id, $strMethod){
 			$arrAccounts = $this->pdh->get('user', 'auth_account', array($user_id));
-			unset($arrAccounts[$strMethod]);			
+			unset($arrAccounts[$strMethod]);
 			$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
 					'auth_account'	=> $this->crypt->encrypt(serialize($arrAccounts))
 			))->execute($user_id);
@@ -238,7 +238,7 @@ if(!class_exists('pdh_w_user')) {
 			))->execute($user_id);
 			if(!$objQuery) return false;
 			$this->pdh->enqueue_hook('user');
-			
+
 			//Send out notification email
 			$bodyvars = array(
 				'USERNAME'		=> $this->pdh->get('user', 'name', array($user_id)),
@@ -246,25 +246,25 @@ if(!class_exists('pdh_w_user')) {
 			);
 			$this->email->Set_Language($this->pdh->get('user', 'lang', array($user_id)));
 			if ($active && $oldState === 0){
-				$result = $this->email->SendMailFromAdmin($this->pdh->get('user', 'email', array($user_id)), $this->user->lang('email_subject_activation_none'), 'register_account_activated.html', $bodyvars);		
-				
+				$result = $this->email->SendMailFromAdmin($this->pdh->get('user', 'email', array($user_id)), $this->user->lang('email_subject_activation_none'), 'register_account_activated.html', $bodyvars);
+
 				$log_action = array(
 						'{L_USER}'	=> $this->pdh->get('user', 'name', array($user_id)),
 				);
 				$this->log_insert('action_user_unlocked', $log_action, $user_id, sanitize( $this->pdh->get('user', 'name', array($user_id))));
-				
+
 				if (!$result) return false;
 			} elseif(!$active){
 				$log_action = array(
 						'{L_USER}'	=> $this->pdh->get('user', 'name', array($user_id)),
 				);
 				$this->log_insert('action_user_locked', $log_action, $user_id, sanitize( $this->pdh->get('user', 'name', array($user_id))));
-				
+
 			}
-			
+
 			return true;
 		}
-		
+
 		/**
 		 * Sets the confirmed-email status
 		 * -2 = Account was locked by too much logins
@@ -272,7 +272,7 @@ if(!class_exists('pdh_w_user')) {
 		 * 0 = Not confirmed, Admin requestes email confirmation
 		 * 1 = Confirmed; desired state
 		 * 2 = User changed his Email on his ow
-		 * 
+		 *
 		 * @param int $user_id
 		 * @param number $status
 		 * @param mixed $strNewEmail
@@ -284,16 +284,16 @@ if(!class_exists('pdh_w_user')) {
 					'user_temp_email' => '',
 			);
 			if($strNewEmail !== false){
-				$arrData['user_email'] = register('encrypt')->encrypt($strNewEmail); 
+				$arrData['user_email'] = register('encrypt')->encrypt($strNewEmail);
 			}
-			
+
 			$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set($arrData)->execute($user_id);
 			if(!$objQuery) return false;
 			$this->pdh->enqueue_hook('user');
-			
+
 			return true;
 		}
-		
+
 		public function update_failed_logins($user_id, $intFailedLogins) {
 			$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
 					'failed_login_attempts'	=> $intFailedLogins
@@ -320,7 +320,7 @@ if(!class_exists('pdh_w_user')) {
 					'user_email_confirmkey'	=> $user_key,
 					'user_temp_email' => $new_email,
 			))->execute($user_id);
-			
+
 			if(!$objQuery) return false;
 			$this->pdh->enqueue_hook('user');
 			return $user_key;
@@ -328,33 +328,33 @@ if(!class_exists('pdh_w_user')) {
 
 		public function create_new_exchangekey($user_id){
 			$app_key = random_string(32);
-			
+
 			$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
 					'exchange_key'	=> $app_key
 			))->execute($user_id);
-			
+
 			if(!$objQuery) return false;
 			$this->pdh->enqueue_hook('user');
 			return $app_key;
 		}
-		
+
 		public function add_special_user($user_id){
 			$special_users = $this->config->get('special_user');
 			if (!is_array($special_users)) $special_users = array();
 			$special_users[$user_id] = $user_id;
 			$this->config->set('special_user', serialize($special_users));
 		}
-		
+
 		public function delete_special_user($user_id){
 			$special_users = $this->config->get('special_user');
 			if (!is_array($special_users)) return;
-			
+
 			if(isset($special_users[$user_id])) unset($special_users[$user_id]);
 			$this->config->set('special_user', serialize($special_users));
 		}
 
 		public function delete_user($user_id, $delete_member = false) {
-			
+
 			//Delete Avatars
 			$this->pfh->Delete('users/'.$user_id, 'files');
 			$intAvatarType = intval($this->pdh->get('user', 'custom_fields', array($user_id, 'user_avatar_type')));
@@ -368,35 +368,35 @@ if(!class_exists('pdh_w_user')) {
 			$avatar = registry::register('avatar');
 			$avatar->deleteAvatar($user_id,  $this->pdh->get('user', 'name', array($user_id)), 68);
 			$avatar->deleteAvatar($user_id,  $this->pdh->get('user', 'name', array($user_id)), 400);
-			
+
 			$strAvatar = $this->pdh->get('user', 'avatarimglink', array($user_id));
 			if (strlen($strAvatar)) $this->pfh->Delete($strAvatar);
-			
+
 			$log_action = array(
 				'{L_USER}'		=> $this->pdh->get('user', 'name', array($user_id)),
 				'{L_EMAIL}'		=> $this->pdh->get('user', 'email', array($user_id)),
-			);	
-			
+			);
+
 			if ($delete_member){
 				$members = $this->pdh->get('member', 'connection_id', array($user_id));
 				foreach ($members as $member){
 					$this->pdh->put('member', 'delete_member', array($member));
 				}
 			}
-			
+
 			$this->log_insert('action_user_deleted', $log_action, $user_id, $this->pdh->get('user', 'name', array($user_id)));
-			
+
 			$this->db->prepare("DELETE FROM __users WHERE user_id=?")->execute($user_id);
 			$this->db->prepare("DELETE FROM __auth_users WHERE user_id=?")->execute($user_id);
 			$this->db->prepare("DELETE FROM __groups_users WHERE user_id=?")->execute($user_id);
 			$this->db->prepare("DELETE FROM __comments WHERE userid=?")->execute($user_id);
 			$this->db->prepare("DELETE FROM __sessions WHERE session_user_id=?")->execute($user_id);
-			
+
 			$this->hooks->process('user_delete', array('user_id' => $user_id));
-			
+
 			$this->pdh->put('member', 'update_connection', array(array(), $user_id));
 			$this->pdh->put('notifications', 'delete_by_user', array($user_id));
-			
+
 			$this->pdh->enqueue_hook('user');
 			$this->pdh->enqueue_hook('user_groups_update');
 			$this->pdh->enqueue_hook('comment_update');
@@ -411,7 +411,7 @@ if(!class_exists('pdh_w_user')) {
 			$this->db->prepare("DELETE FROM __comments WHERE userid !=?")->execute($this->user->id);
 			$this->db->prepare("DELETE FROM __groups_users WHERE user_id !=?")->execute($this->user->id);
 			$this->db->prepare("DELETE FROM __sessions WHERE session_user_id !=?")->execute($this->user->id);
-			
+
 			$this->hooks->process('user_reset', array('own_userid' => $this->user->id));
 
 			$this->pdh->enqueue_hook('user');
@@ -423,4 +423,3 @@ if(!class_exists('pdh_w_user')) {
 		}
 	}
 }
-?>

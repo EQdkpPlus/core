@@ -25,7 +25,7 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "pdh_w_item" ) ) {
 	class pdh_w_item extends pdh_w_generic {
-		
+
 		private $arrLogLang = array(
 				'item_name'			=> '{L_NAME}',
 				'member_id'			=> '{L_BUYERS}',
@@ -71,15 +71,15 @@ if ( !class_exists( "pdh_w_item" ) ) {
 					'game_itemid'		=> $game_item_id,
 					'itempool'			=> $this->pdh->get('itempool', 'name', $itempool_id),
 				);
-				
+
 				$log_action = $this->logs->diff(false, $arrNew, $this->arrLogLang);
 				$this->log_insert('action_item_added', $log_action, $item_id, $item_name);
 				$this->pdh->enqueue_hook('item_update', $item_id, array('action' => 'add', 'time' => $time, 'members' => $item_buyers));
-				
+
 				if($this->hooks->isRegistered('item_added')){
 					$this->hooks->process('item_added', array('id' => $item_id, 'data' => $arrNew));
 				}
-				
+
 				return $item_id;
 			}
 			return false;
@@ -105,14 +105,14 @@ if ( !class_exists( "pdh_w_item" ) ) {
 			$old['itempool_id'] = $this->pdh->get('item', 'itempool_id', array($item_id));
 			$old['date'] = $this->pdh->get('item', 'date', array($item_id));
 			$old['game_itemid'] = $this->pdh->get('item', 'game_itemid', array($item_id));
-			
+
 			$retu = array(true);
 			$updated_mems = array();
 			$added_mems = array();
 			$items2del = array();
-			
+
 			$this->db->beginTransaction();
-			
+
 			if($id || (count($item_buyers) == 1 && count($old['buyers']) == 1))	{
 				$arrSet = array(
 						'item_name'			=> $item_name,
@@ -124,15 +124,15 @@ if ( !class_exists( "pdh_w_item" ) ) {
 						'game_itemid'		=> $game_item_id,
 						'itempool_id'		=> $itempool_id
 				);
-				
+
 				//Reset APA cache if value or data changed
 				if($old['date'] != $time || $old['value'] != $item_value){
 					$arrSet['item_apa_value'] = '';
 				}
-				
-				
+
+
 				$objQuery = $this->db->prepare("UPDATE __items :p WHERE item_id=?;")->set($arrSet)->execute($item_id);
-				
+
 				$updated_mems[] = $item_buyers[0];
 				if(!$objQuery) {
 					$retu[] = false;
@@ -145,7 +145,7 @@ if ( !class_exists( "pdh_w_item" ) ) {
 					if($item_id !== false) {
 						$updated_mems[] = $member_id;
 						unset($items2del[$item_id]);
-						
+
 						$arrSet = array(
 								'item_name'			=> $item_name,
 								'item_value'		=> $item_value,
@@ -157,14 +157,14 @@ if ( !class_exists( "pdh_w_item" ) ) {
 								'itempool_id'		=> $itempool_id,
 								'item_updated_by'	=> $this->admin_user
 						);
-						
+
 						//Reset APA cache if value or data changed
 						if($old['date'] != $time || $old['value'] != $item_value){
 							$arrSet['item_apa_value'] = '';
 						}
-						
+
 						$objQuery = $this->db->prepare("UPDATE __items :p WHERE item_id = ?;")->set($arrSet)->execute($item_id);
-	
+
 						if(!$objQuery) {
 							$retu[] = false;
 							break;
@@ -182,7 +182,7 @@ if ( !class_exists( "pdh_w_item" ) ) {
 							'item_added_by'		=> $this->admin_user,
 							'itempool_id'		=> $itempool_id
 						))->execute();
-						
+
 						if(!$objQuery) {
 							$retu[] = false;
 							break;
@@ -192,7 +192,7 @@ if ( !class_exists( "pdh_w_item" ) ) {
 				if(is_array($items2del)) {
 					foreach($items2del as $item_id => $member_id) {
 						$objQuery = $this->db->prepare("DELETE FROM __items WHERE item_id = ?")->execute($item_id);
-						
+
 						if(!$objQuery) {
 							$retu[] = false;
 							break;
@@ -201,7 +201,7 @@ if ( !class_exists( "pdh_w_item" ) ) {
 					}
 				}
 			}
-			
+
 			if(!in_array(false, $retu)) {
 				$old_names = $this->pdh->aget('member', 'name', '0', array($old['buyers']));
 				$new_name_string = get_coloured_names($updated_mems, $added_mems, $items2del);
@@ -227,7 +227,7 @@ if ( !class_exists( "pdh_w_item" ) ) {
 				);
 
 				$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
-				
+
 				if($this->hooks->isRegistered('item_updated')){
 					$this->hooks->process('item_updated', array('id' => $group_key_or_id, 'data' => $arrNew));
 				}
@@ -249,9 +249,9 @@ if ( !class_exists( "pdh_w_item" ) ) {
 			$old['raid_id'] = $this->pdh->get('item', 'raid_id', array($item_id));
 			$old['itempool'] = $this->pdh->get('itempool', 'name', array($this->pdh->get('item', 'itempool_id', array($item_id))));
 			$old['date'] = $this->pdh->get('item', 'date', array($item_id));
-			
+
 			$objQuery = $this->db->prepare("DELETE FROM __items WHERE item_id = ?;")->execute($item_id);
-			
+
 			if($objQuery) {
 				//insert log
 				$log_action = array(
@@ -261,55 +261,55 @@ if ( !class_exists( "pdh_w_item" ) ) {
 					'{L_ITEMPOOL}'	=> $old['itempool'],
 					'{L_DATE}'		=> '{D_'.$old['date'].'}',
 					'{L_VALUE}'		=> $old['value']);
-				
+
 				$this->log_insert('action_item_deleted', $log_action, $item_id, $old['name']);
 				$this->pdh->enqueue_hook('item_update', $item_id, array('action' => 'delete', 'time' => $old['date'], 'members' => array($old['buyer'] )));
-				
+
 				if($this->hooks->isRegistered('item_deleted')){
 					$this->hooks->process('item_deleted', array('id' => $item_id, 'data' => $old));
 				}
-				
+
 				return true;
 			}
 			return false;
 		}
-		
+
 		public function update_itempool($item_id, $itempool_id){
 			$old = array();
 			$old['buyer'] = $this->pdh->get('item', 'buyer', array($item_id));
 			$old['name'] = $this->pdh->get('item', 'name', array($item_id));
 			$old['itempool'] = $this->pdh->get('itempool', 'name', array($this->pdh->get('item', 'itempool_id', array($item_id))));
-			
-			//If the itempool stays the same, return 
+
+			//If the itempool stays the same, return
 			if($itempool_id == $old['itempool']) return true;
-			
+
 			$old['date'] = $this->pdh->get('item', 'date', array($item_id));
-			
+
 			$arrOld = array(
 					'itempool'			=> $old['itempool_id'],
 			);
 			$arrNew = array(
 					'itempool'			=> $itempool_id,
 			);
-			
+
 			$log_action = $this->logs->diff($arrOld, $arrNew, $this->arrLogLang);
-			
+
 			$arrSet = array(
 					'itempool_id' => $itempool_id,
 			);
 
 			$objQuery = $this->db->prepare("UPDATE __items :p WHERE item_id = ?;")->set($arrSet)->execute($item_id);
 			if($objQuery){
-				
+
 				$this->log_insert('action_item_updated', $log_action, $item_id, $old['name']);
 				$this->pdh->enqueue_hook('item_update', array($item_id), array('action' => 'update', 'time' => $old['date'], 'members' => array($old['buyer'])));
-				
+
 				return true;
 			}
-			
+
 			return false;
 		}
-		
+
 		public function delete_itemsofraid($raid_id) {
 			$items = $this->pdh->get('item', 'itemsofraid', array($raid_id));
 			if(count($items) < 1) return true;
@@ -321,14 +321,14 @@ if ( !class_exists( "pdh_w_item" ) ) {
 			);
 			$this->log_insert('action_itemsofraid_deleted', $log_action, $raid_id, $this->pdh->get('raid', 'event_name', array($raid_id)));
 			$this->pdh->enqueue_hook('item_update', $items, array('action' => 'delete', 'time' => 0));
-			
+
 			if($this->hooks->isRegistered('item_deleted')){
 				$this->hooks->process('item_deleted', array('id' => $items, 'data' => $old));
 			}
-			
+
 			return true;
 		}
-		
+
 		public function update_apa_value($item_id, $apa_id, $val){
 			$arrCurrentApaValue = $this->pdh->get('item', 'apa_value', array($item_id));
 			if(!$arrCurrentApaValue || !is_array($arrCurrentApaValue)) $arrCurrentApaValue = array();
@@ -337,20 +337,19 @@ if ( !class_exists( "pdh_w_item" ) ) {
 			$objQuery = $this->db->prepare("UPDATE __items :p WHERE item_id=?")->set(array(
 				'item_apa_value' => serialize($arrCurrentApaValue),
 			))->execute($item_id);
-				
+
 			$this->pdh->enqueue_hook('item_update', array($item_id), array('action' => 'update', 'apa' => true));
-				
+
 			return true;
 		}
-		
+
 		public function reset() {
 			$this->db->query("TRUNCATE TABLE __items;");
 			$this->pdh->enqueue_hook('item_update');
-			
+
 			if($this->hooks->isRegistered('item_reset')){
 				$this->hooks->process('item_reset', array());
 			}
 		}
 	}//end class
 }//end if
-?>

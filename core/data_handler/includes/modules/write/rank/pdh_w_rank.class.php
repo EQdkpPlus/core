@@ -37,9 +37,9 @@ if(!class_exists('pdh_w_rank')) {
 				'rank_default'	=> ($default) ? 1 : 0,
 				'rank_icon'		=> $icon,
 			);
-			
+
 			$objQuery = $this->db->prepare("INSERT INTO __member_ranks :p")->set($arrSet)->execute();
-			
+
 			if(!$objQuery) {
 				return false;
 			}
@@ -55,8 +55,8 @@ if(!class_exists('pdh_w_rank')) {
 			$old['sortid'] = $this->pdh->get('rank', 'sortid', array($id));
 			$old['default'] = $this->pdh->get('rank', 'default_value', array($id));
 			$old['icon'] = $this->pdh->get('rank', 'icon', array($id));
-			
-			
+
+
 			$changes = false;
 			foreach($old as $varname => $value) {
 				if(${$varname} != $value) {
@@ -73,10 +73,10 @@ if(!class_exists('pdh_w_rank')) {
 					'rank_default' => ($default) ? 1 : 0,
 					'rank_icon'	=> $icon,
 				);
-				
+
 				$objQuery = $this->db->prepare("UPDATE __member_ranks :p WHERE rank_id=?")->set($arrSet)->execute($id);
-				
-				
+
+
 				if(!$objQuery) {
 					return false;
 				}
@@ -84,7 +84,7 @@ if(!class_exists('pdh_w_rank')) {
 			$this->pdh->enqueue_hook('rank_update', array($id));
 			return true;
 		}
-		
+
 		public function set_standardAndSort($intRankID, $blnDefault=false, $intSortID){
 			$old['sortid'] = $this->pdh->get('rank', 'sortid', array($intRankID));
 			$old['default'] = $this->pdh->get('rank', 'default_value', array($intRankID));
@@ -94,7 +94,7 @@ if(!class_exists('pdh_w_rank')) {
 					'rank_default'	=> ($blnDefault) ? 1 : 0,
 				);
 				$objQuery = $this->db->prepare("UPDATE __member_ranks :p WHERE rank_id=?")->set($arrSet)->execute($intRankID);
-				
+
 				if(!$objQuery) {
 					return false;
 				}
@@ -105,14 +105,14 @@ if(!class_exists('pdh_w_rank')) {
 
 		public function delete_rank($id) {
 			$objQuery = $this->db->prepare("DELETE FROM __member_ranks WHERE rank_id = ?;")->execute($id);
-			
+
 			if($objQuery) {
 				$this->pdh->enqueue_hook('rank_update', array());
 				return true;
 			}
 			return false;
 		}
-		
+
 		public function truncate(){
 			if($this->db->query("TRUNCATE __member_ranks;")) {
 				$this->pdh->enqueue_hook('rank_update');
@@ -122,4 +122,3 @@ if(!class_exists('pdh_w_rank')) {
 		}
 	}
 }
-?>

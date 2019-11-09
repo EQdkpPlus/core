@@ -261,4 +261,3 @@ if(!class_exists('pdh_w_calendar_raids_attendees')){
 		}
 	}
 }
-?>

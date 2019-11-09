@@ -30,7 +30,7 @@ if(!class_exists('pdh_w_plugins')) {
 			$objQuery = $this->db->prepare("UPDATE __plugins :p WHERE code=?;")->set(array(
 					'version'	=> $version
 			))->execute($plugin_code);
-			
+
 			if($objQuery) {
 				$this->pdh->enqueue_hook('plugins_update', array($plugin_code));
 				return true;
@@ -40,7 +40,7 @@ if(!class_exists('pdh_w_plugins')) {
 
 		public function delete_plugin($plugin_code) {
 			$objQuery = $this->db->prepare("DELETE FROM __plugins WHERE `code` = ?")->execute($plugin_code);
-				
+
 			if($objQuery) {
 				$this->pdh->enqueue_hook('plugins_update', array($plugin_code));
 				return true;
@@ -54,17 +54,17 @@ if(!class_exists('pdh_w_plugins')) {
 				'status'	=> '0',
 				'version'	=> $version
 			))->execute();
-			
+
 			if($objQuery) {
 				$this->pdh->enqueue_hook('plugins_update', array($code));
 				return true;
 			}
 			return false;
 		}
-		
+
 		public function set_status($code, $status) {
 			$objQuery = $this->db->prepare("UPDATE __plugins :p WHERE code=?;")->set(array('status' => $status))->execute($code);
-			
+
 			if($objQuery) {
 				$this->pdh->enqueue_hook('plugins_update', array($code));
 				return true;
@@ -73,4 +73,3 @@ if(!class_exists('pdh_w_plugins')) {
 		}
 	}
 }
-?>
