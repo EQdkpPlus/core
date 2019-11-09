@@ -28,9 +28,9 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 // this class acts as an alias for easier usability
 // see htext for all available options
 class hcolorpicker extends html {
-	
+
 	protected static $type = 'colorpicker';
-	
+
 	public $showAlpha 			= false;
 	public $format 				= "hex6";
 	public $group 				= "";
@@ -46,33 +46,33 @@ class hcolorpicker extends html {
 	public $attrdata			= array();
 	public $after_txt			= '';
 	public $js					= '';
-	
+
 	public function _construct() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 	}
-	
+
 	public function output() {
 		$this->out = "";
 		$jsout	= '';
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
-			
+
 		$arrOptions = array('format' => $this->format);
 		if($this->showAlpha) $arrOptions['showAlpha'] = true;
 		if($this->group != "") $arrOptions['group'] = $this->group;
 		$this->class = $this->class.= ' colorpicker_'.$this->id;
-		
+
 		$this->jquery->colorpicker($this->id,0,'',14,'',$arrOptions,$this->returnJS);
 		if($this->returnJS){
 			$jsout = '<script>'.$this->jquery->get_jscode('colorpicker', $this->id).'</script>';
 		}
 		$this->class = (empty($this->class)) ? 'colorpicker' : $this->class.' colorpicker';
-		
-		
+
+
 		// start the output
 		$out	 = $jsout.'<input type="'.self::$type.'" name="'.$this->name.'" ';
 		$out	.= 'id="'.$this->id.'" ';
 		if(isset($this->value)) $out .= 'value="'.$this->value.'" ';
-		
+
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
 		if(!empty($this->size)) $out .= 'size="'.$this->size.'" ';
 		if($this->readonly) $out .= 'readonly="readonly" ';
@@ -92,10 +92,9 @@ class hcolorpicker extends html {
 		$this->out = $out;
 		return $this->out;
 	}
-	
-	
+
+
 	public function _inpval() {
 		return trim($this->in->get($this->name, '', ''));
 	}
 }
-?>

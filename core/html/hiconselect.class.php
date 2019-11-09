@@ -159,4 +159,3 @@ class hiconselect extends html {
 		return $this->in->getArray($this->name, $this->datatype);
 	}
 }
-?>

@@ -67,7 +67,7 @@ class hpassword extends html {
 		if(!empty($this->after_txt)) $out .= $this->after_txt;
 		return $out;
 	}
-	
+
 	private function redactValue($strValue){
 		if (!$strValue || !is_string($strValue)) return '';
 		return str_repeat("*", 8);
@@ -76,8 +76,7 @@ class hpassword extends html {
 	public function _inpval() {
 		$strValue = $this->in->get($this->name, '');
 		if($strValue == str_repeat("*", 8)) return $this->old_value;
-		
+
 		return $this->in->get($this->name, '');
 	}
 }
-?>

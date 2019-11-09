@@ -96,15 +96,15 @@ class hmultiselect extends html {
 						$dropdown .= "<option value='".$key2."' ".$selected_choice.$disabled.">".$value2."</option>";
 					}
 					$dropdown .= '</optgroup>';
-					
+
 				} else {
 					if($this->tolang) $value = ($this->user->lang($value, false, false)) ? $this->user->lang($value) : (($this->game->glang($value)) ? $this->game->glang($value) : $value);
 					$disabled = (($key === 0 && in_array($key, $this->todisable, true)) || ($key !== 0 && in_array($key, $this->todisable))) ? ' disabled="disabled"' : '';
 					$selected_choice = (!empty($this->value) && ($this->value == 'all' || (is_array($this->value) && in_array($key, $this->value)))) ? 'selected="selected"' : '';
 					$dropdown .= "<option value='".$key."' ".$selected_choice.$disabled.">".$value."</option>";
-					
+
 				}
-				
+
 			}
 		} else {
 			$dropdown .= "<option value=''></option>";
@@ -125,4 +125,3 @@ class hmultiselect extends html {
 		return $this->in->getArray($this->name, $this->datatype);
 	}
 }
-?>

@@ -88,4 +88,3 @@ class htextarea extends html {
 		return $value;
 	}
 }
-?>

@@ -30,7 +30,6 @@ include_once(registry::get_const('root_path').'core/html/htext.class.php');
  */
 // this class acts as an alias for easier usability
 class hemail extends htext {
-	
+
 	protected static $type = 'email';
 }
-?>

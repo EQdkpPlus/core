@@ -166,4 +166,3 @@ class hfile extends html {
 		return str_replace(registry::get_const('root_path'),"", $this->folder.$filename);
 	}
 }
-?>

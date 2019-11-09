@@ -38,12 +38,12 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 
 class haccordion extends html {
 	protected static $type = 'accordion';
-	
+
 	public $name = '';
 	public $content = '';
 	public $label = '';
 	public $usediv = false;
-	
+
 	private $contfunc = true;
 	private $accordion_opts	= array('active', 'collapsible', 'disabled', 'event');
 	private $out = '';
@@ -52,19 +52,18 @@ class haccordion extends html {
 		if(empty($this->name)) $this->name = unique_id();
 		if(empty($this->id)) $this->id = unique_id();
 	}
-	
+
 	public function output() {
 		$this->out = '';
 		$acc_opts = array();
 		foreach($this->accordion_opts as $opt) $acc_opts[$opt] = $this->$opt;
-		
+
 		$this->out = $this->jquery->Accordion($this->name, $this->options, $acc_opts);
-		
+
 		return $this->out;
 	}
-	
+
 	public function _inpval() {
 		return $this->in->get($this->name, '');
 	}
 }
-?>

@@ -31,21 +31,20 @@ include_once(registry::get_const('root_path').'core/html/hhidden.class.php');
  * see hhidden for all available options
  */
 class himageuploader extends hhidden {
-	
+
 	public $imageuploader = true;
 	public $returnFormat = '';
-	
+
 	public function _inpval() {
 		switch($this->returnFormat){
 			case 'relative': return str_replace($this->environment->link, registry::get_const('root_path'), urldecode($this->in->get($this->name, '')));
-			
+
 			case 'in_data': return str_replace($this->pfh->FileLink('', 'files', 'absolute'), '', urldecode($this->in->get($this->name, '')));
-			
+
 			case 'filename': return  filter_var(pathinfo(urldecode($this->in->get($this->name, '')), PATHINFO_BASENAME), FILTER_SANITIZE_STRING);
-			
+
 			case 'absolute':
 			default: return urldecode($this->in->get($this->name, ''));
 		}
 	}
 }
-?>

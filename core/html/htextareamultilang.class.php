@@ -105,4 +105,3 @@ class htextareamultilang extends html {
 		return serialize($arrInput);
 	}
 }
-?>

@@ -54,7 +54,7 @@ class hdatepicker extends html {
 
 	protected function _construct() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
-		
+
 		if(isset($this->format)) {
 			$this->php_format = $this->format;
 			$this->format = $this->time->translateformat2js($this->format);
@@ -78,13 +78,13 @@ class hdatepicker extends html {
 		if($this->readonly) $out .= 'readonly="readonly" ';
 		if($this->disabled) $out .= 'disabled="disabled" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
-		
+
 		//copy options
 		$opts = array();
 		foreach($this->all_options as $opt) {
 			if(isset($this->$opt)) $opts[$opt] = $this->$opt;
 		}
-		
+
 		$jsout = '';
 		if (!$this->readonly){
 			$this->jquery->Calendar($this->name, $this->value, '', $opts);
@@ -92,7 +92,7 @@ class hdatepicker extends html {
 				$jsout = '<script>'.$this->jquery->get_jscode('calendar', $this->name).'</script>';
 			}
 		}
-		
+
 		return $jsout.$out.' />'.((!$this->readonly) ? '<i class="fa fa-calendar" onclick="$( \'#'.$this->id.'\' ).datepicker( \'show\' );"></i>' : '<i class="fa fa-calendar"></i>').'</span>';
 	}
 
@@ -126,4 +126,3 @@ class hdatepicker extends html {
 		return $format;
 	}
 }
-?>

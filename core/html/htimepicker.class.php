@@ -76,4 +76,3 @@ class htimepicker extends html {
 		return ($this->returnDatetime) ? date("H:i", $intTimestamp) : $intTimestamp;
 	}
 }
-?>

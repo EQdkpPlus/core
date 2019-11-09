@@ -44,7 +44,7 @@ class hcountry extends hdropdown {
 
 	public function _construct() {
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
-		
+
 		$root_path = registry::get_const('root_path');
 		$cfile = $root_path.'core/country_states.php';
 		if (file_exists($cfile)){
@@ -54,4 +54,3 @@ class hcountry extends hdropdown {
 	}
 
 }
-?>

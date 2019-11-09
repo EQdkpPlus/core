@@ -26,9 +26,9 @@ if ( !defined('EQDKP_INC') ){
 abstract class html {
 	// field type
 	protected static $type = '';
-	
+
 	protected static $ignore = array('text', 'text2', 'type');
-	
+
 	public function __construct($name, $options=array()) {
 		$this->name = $name;
 		foreach($options as $key => $option) {
@@ -39,11 +39,11 @@ abstract class html {
 		if(empty($this->value) && isset($this->default) && ($this->value!==0) && ($this->value!=='0')) $this->value = $this->default;
 		if(method_exists($this, '_construct')) $this->_construct();
 	}
-	
+
 	public function inpval() {
 		$value = $this->_inpval();
 		$strfieldname = (isset($this->_lang)) ? $this->_lang : $this->name;
-		
+
 		if(isset($this->required) && $this->required && empty($value)) {
 			throw new FormException(sprintf(registry::fetch('user')->lang('fv_php_required'),$strfieldname));
 		}
@@ -55,44 +55,44 @@ abstract class html {
 				throw new FormException(sprintf(registry::fetch('user')->lang('fv_php_sample_pattern'),$strfieldname));
 			}
 		}
-		
+
 		if(!empty($this->minlength) && !empty($value) && (strlen($value) < $this->minlength)) {
 			throw new FormException(sprintf(registry::fetch('user')->lang('fv_php_minlength_error'),$strfieldname));
 		}
-		
+
 		if(!empty($this->maxlength) && !empty($value) && (strlen($value) > $this->maxlength)) {
 			throw new FormException(sprintf(registry::fetch('user')->lang('fv_php_maxlength_error'),$strfieldname));
 		}
-		
+
 		return $value;
 	}
-	
+
 	public function __get($name) {
 		if($name == 'type') return self::$type;
 		$class = register($name);
 		if($class) return $class;
 		return null;
 	}
-	
+
 	public function __toString() {
 		$this->pdl->deprecated('__toString of HTML Objects. Use output() method instead');
-		
+
 		if(method_exists($this, '_toString')) return $this->_toString();
-		
+
 		return "";
 	}
-	
+
 	protected function cleanid($input) {
 			if(strpos($input, '[') === false && strpos($input, ']') === false) return $input;
 			$out = str_replace(array('[', ']'), array('_', ''), $input);
 			return 'clid_'.$out;
 	}
-	
+
 	protected function gen_form_change($dep) {
 		if(empty($dep)) return ' data-form-change=""';
 		return ' data-form-change="'.(is_array($dep) ? implode(',', $dep) : $dep).'"';
 	}
-	
+
 	/*
 	 *	some predefined patterns
 	 */
@@ -103,19 +103,18 @@ abstract class html {
 			case 'email':
 				if(empty($this->placeholder)) $this->placeholder = 'email@example.com';
 				return $w.'+('.$w2.'+)*@'.$w.'+(\.'.$w.'+)+';
-				
+
 			case 'url':
 				if(empty($this->placeholder)) $this->placeholder = 'http(s)://example.com';
 				return 'http(s){0,1}://'.$w.'+(\.'.$w.'+)+';
-				
+
 			case 'password':
 				$minlength = ($this->config->get('password_length') ? (int)$this->config->get('password_length') : 8);
 				if(empty($this->placeholder)) $this->placeholder = sprintf(registry::fetch('user')->lang('fv_password_placeholder'), $minlength-1);
 				return '.{'.$minlength.',}';
-				
-			default: 
+
+			default:
 				return $pattern;
 		}
 	}
 }
-?>

@@ -38,12 +38,12 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 
 class htooltip extends html {
 	protected static $type = 'none';
-	
+
 	public $name = '';
 	public $content = '';
 	public $label = '';
 	public $usediv = false;
-	
+
 	private $contfunc = true;
 	private $all_opts = array('contfunc', 'name', 'my', 'at', 'classes', 'width', 'class');
 	private $out = '';
@@ -53,7 +53,7 @@ class htooltip extends html {
 		if(empty($this->class)) $this->class = "";
 		if(empty($this->id)) $this->id = unique_id();
 	}
-	
+
 	public function output() {
 		$this->out = '';
 		$options = array();
@@ -68,9 +68,8 @@ class htooltip extends html {
 		}
 		return $this->out;
 	}
-	
+
 	public function _inpval() {
 		return '';
 	}
 }
-?>

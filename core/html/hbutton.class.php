@@ -29,7 +29,7 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
  * available options
  * name			(string) 	name of the textarea
  * id			(string)	id of the field, defaults to a clean form of name if not set
- * value		
+ * value
  * class		(string)	class for the field
  * readonly		(boolean)	field readonly?
  * size			(int)		size of the field
@@ -42,44 +42,43 @@ include_once(registry::get_const('root_path').'core/html/html.aclass.php');
 class hbutton extends html {
 
 	protected static $type = 'button';
-	
+
 	public $name = '';
 	public $class = 'input';
 	public $buttontype = 'button';
 	public $tolang = false;
 	public $callback = false;
 	public $inp_callback = false;
-	
+
 	private $out = '';
-	
+
 	public function _construct() {
 	}
-	
+
 	public function output() {
 		$return = false;
 		if($this->callback !== false) $return = call_user_func($this->callback, $this);
 		if($return !== false && $return !== NULL) {
 			$this->out = $return; return;
 		}
-		
+
 		$out = '<button type="'.$this->buttontype.'" name="'.$this->name.'" ';
 		if(empty($this->id)) $this->id = $this->cleanid($this->name);
 		$out .= 'id="'.$this->id.'" ';
 		if(empty($this->buttonvalue)) $this->buttonvalue = $this->name;
 		$value = $this->buttonvalue;
-		
+
 		if($this->tolang) $value = ($this->user->lang($value, false, false)) ? $this->user->lang($value) : (($this->game->glang($value)) ? $this->game->glang($value) : $value);
 		$out .= 'value="'.strip_tags($value).'" ';
 		if(!empty($this->class)) $out .= 'class="'.$this->class.'" ';
 		if(!empty($this->js)) $out.= $this->js.' ';
 		return $out.' >'.$value.'</button>';
 	}
-	
+
 	public function _inpval() {
 		$return = false;
 		if($this->inp_callback !== false && $return !== NULL) $return = call_user_func($this->inp_callback, $this);
-		
+
 		return ($return !== false) ? $return : $this->in->get($this->name, '', $this->inptype);
 	}
 }
-?>
