@@ -155,4 +155,3 @@ class ManageNotifications extends page_generic {
 
 }
 registry::register('ManageNotifications');
-?>

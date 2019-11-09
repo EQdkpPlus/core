@@ -24,7 +24,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class login_twofactor extends gen_class {
-	
+
 	public static $options = array(
 		'connect_accounts'	=> true,
 	);
@@ -35,20 +35,20 @@ class login_twofactor extends gen_class {
 		'after_login'		=> 'after_login',
 		'display_account'	=> 'display_account',
 	);
-	
+
 	public function __construct(){
 	}
-	
+
 	public function account_button(){
 		$this->jquery->dialog('twofactor_init', $this->user->lang('login_twofactor_connect'), array('url' => $this->server_path.'libraries/twofactor/init.php'.$this->SID, 'height'	=> 600, 'width' => 700));
 		return '<button type="button" class="mainoption thirdpartylogin twofactor accountbtn" onclick="twofactor_init()">'.$this->user->lang('login_twofactor_connect').'</button>';
 	}
-	
+
 	public function get_account(){
 		$secret = register('encrypt')->decrypt(rawurldecode($this->in->get('secret')));
 		$code = $this->in->get('code');
 		if ($secret == "" || $code == "") return false;
-		
+
 		include_once $this->root_path.'libraries/twofactor/googleAuthenticator.class.php';
 		$ga = new PHPGangsta_GoogleAuthenticator();
 		$checkResult = $ga->verifyCode($secret, $code, 5);		// 2 = 2*30sec clock tolerance
@@ -58,10 +58,10 @@ class login_twofactor extends gen_class {
 				'emergency_token' => $ga->createSecret(16),
 			)));
 		}
-		
+
 		return false;
 	}
-	
+
 	public function display_account($arrOptions){
 		$data = unserialize(register('encrypt')->decrypt($arrOptions[0]));
 		$out = '<div class="clickToReveal" title="'.$this->user->lang('click_to_reveal').'"><a>**********</a>
@@ -69,10 +69,10 @@ class login_twofactor extends gen_class {
 		$out .= '<span style="font-weight:bold;">'.$this->user->lang("login_twofactor_emergency_token").'</span>: '.$data['emergency_token'].'</div></div>';
 		return $out;
 	}
-	
+
 	public function after_login($arrOptions){
 		if((int)$this->config->get('pk_maintenance_mode') == 1) return false;
-		
+
 		if ($arrOptions[0] && $arrOptions[0]['user_id'] != ANONYMOUS && !$this->in->exists('lmethod')){
 			//Get Auth Account
 			$arrAuthAccounts = $this->pdh->get('user', 'auth_account', array($arrOptions[0]['user_id']));
@@ -84,20 +84,20 @@ class login_twofactor extends gen_class {
 					if (($cookie_secret['secret'] === hash("sha256", $data['secret'])) && (intval($cookie_secret['user_id'])===intval($arrOptions[0]['user_id']))) return false;
 
 					$strEncryptedUser = register('encrypt')->encrypt(serialize($arrOptions[0]['user_id']));
-					
+
 					$this->tpl->assign_vars(array(
 						'TWOFACTOR_DATA'		=>  $strEncryptedUser.':'.$this->time->time.':'.hash_hmac("sha256", $strEncryptedUser.'_'.$this->time->time.'.'.$arrOptions[0]['user_id'], hash("sha256", registry::get_const('encryptionKey'))),
 						'TWOFACTOR_AUTOLOGIN'	=> ($arrOptions[4]) ? 'checked' : '',
 					));
-					
+
 					$blnShowCaptcha = false;
-					
+
 					if((int)$this->config->get('failed_logins_inactivity') > 0){
 						$intFailedLoginCountForCaptcha = (((int)$this->config->get('failed_logins_inactivity') - 2) > 0) ? (int)$this->config->get('failed_logins_inactivity') - 2 : 1;
 					} else {
 						$intFailedLoginCountForCaptcha = 4;
 					}
-					
+
 					if ($this->user->data['session_failed_logins'] >= $intFailedLoginCountForCaptcha){
 						$blnShowCaptcha = true;
 					}
@@ -120,7 +120,7 @@ class login_twofactor extends gen_class {
 								'S_DISPLAY_CATPCHA'		=> true,
 						));
 					}
-					
+
 					$this->core->set_vars(array(
 							'page_title'		=> $this->user->lang("login_twofactor"),
 							'template_file'		=> 'twofactor_login.html',
@@ -131,27 +131,27 @@ class login_twofactor extends gen_class {
 		}
 		return false;
 	}
-	
+
 	/**
 	* User-Login
 	*
 	* @param $strUsername
 	* @param $strPassword
-	* @return bool/array	
-	*/	
+	* @return bool/array
+	*/
 	public function login($strUsername, $strPassword){
 		list($serializedUser, $intTimestamp, $strHmac) = explode(':', $this->in->get('twofactor_data'));
 		$user = unserialize(register('encrypt')->decrypt($serializedUser));
 		$strCalcMac = hash_hmac("sha256", $serializedUser.'_'.$intTimestamp.'.'.$user, hash("sha256", registry::get_const('encryptionKey')));
-		
+
 		if($strCalcMac !== $strHmac) return false;
 		if ($intTimestamp < ($this->time->time-5*60)) return false;
-		
+
 		$code = $this->in->get('twofactor_code');
 		$blnLoginResult = false;
-		
+
 		if ($user == "" || $code == "") return false;
-		
+
 		if ($user && $user != ANONYMOUS){
 			$arrAuthAccounts = $this->pdh->get('user', 'auth_account', array($user));
 			if ($arrAuthAccounts['twofactor'] != ""){
@@ -170,7 +170,7 @@ class login_twofactor extends gen_class {
 							);
 						}
 					}
-					
+
 					//Check Code
 					if (!$blnLoginResult){
 						include_once $this->root_path.'libraries/twofactor/googleAuthenticator.class.php';
@@ -196,12 +196,12 @@ class login_twofactor extends gen_class {
 					}
 				}
 			}
-			
+
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	* User-Logout
 	*
@@ -210,7 +210,7 @@ class login_twofactor extends gen_class {
 	public function logout(){
 		return true;
 	}
-	
+
 	/**
 	* Autologin
 	*
@@ -221,4 +221,3 @@ class login_twofactor extends gen_class {
 		return false;
 	}
 }
-?>

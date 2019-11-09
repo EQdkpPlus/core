@@ -315,4 +315,3 @@ class Manage_Bridge extends page_generic {
 	}
 }
 registry::register('Manage_Bridge');
-?>

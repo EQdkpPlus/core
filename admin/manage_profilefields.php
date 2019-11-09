@@ -250,4 +250,3 @@ $("#type_dd").change(function(){
 	}
 }
 registry::register('ManageProfileFields');
-?>

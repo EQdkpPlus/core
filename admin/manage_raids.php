@@ -91,19 +91,19 @@ class ManageRaids extends page_generic {
 			$raid['date'] 			= $this->pdh->get('raid', 'date', array($raidID));
 			$raid['event'] 			= $intOldEvent = $this->pdh->get('raid', 'event', array($raidID));
 			$raid['attendees'] 		= $this->pdh->get('raid', 'raid_attendees', array($raidID, false));
-			
+
 			foreach($arrBulk as $key => $val){
 				if(!in_array($key, $arrCheckboxes) && $key != "itempool" || !$val) continue;
-				
+
 				if($key == 'itempool'){
 					//Get Items of Raid
-					
+
 					//Change Itempool of Items
 					$arrItemsOfRaid = $this->pdh->get('item', 'itemsofraid', array($raidID));
 					foreach($arrItemsOfRaid as $intItemID){
 						$this->pdh->put('item', 'update_itempool', array($intItemID, $arrNewValues['itempool']));
 					}
-					
+
 				}
 
 				$raid[$key] = $arrNewValues[$key];
@@ -111,24 +111,24 @@ class ManageRaids extends page_generic {
 					$raid['additonal_data'] = $arrNewValues['additonal_data'];
 				}
 			}
-			
+
 			if($this->config->get('dkp_easymode') && $raid['event'] != $intOldEvent){
 				$itemPool = $this->pdh->get('event', 'def_itempool', array($raid['event']));
 				if(!$itemPool){
 					$arrItempools = $this->pdh->get('event', 'itempools', array($raid['event']));
 					$itemPool = $arrItempools[0];
 				}
-				
+
 				//Change Itempool of Items
 				$arrItemsOfRaid = $this->pdh->get('item', 'itemsofraid', array($raidID));
 				foreach($arrItemsOfRaid as $intItemID){
 					$this->pdh->put('item', 'update_itempool', array($intItemID, $itemPool));
 				}
 			}
-			
+
 			//update_raid($raid_id, $raid_date, $raid_attendees, $event_id, $raid_note, $raid_value, $additional_data='')
 			$retu = $this->pdh->put('raid', 'update_raid', array($raidID, $raid['date'], $raid['attendees'], $raid['event'], $raid['note'], $raid['value'], $raid['additonal_data']));
-			
+
 			if(!$retu){
 				$messages[] = array('title' => $this->user->lang('save_nosuc'), 'text' => $raid['name'], 'color' => 'red');
 			}
@@ -214,22 +214,22 @@ class ManageRaids extends page_generic {
 			}
 			$item_upd = array(true);
 			if(!empty($data['items']) && is_array($data['items'])) {
-				$intEventID = $data['raid']['event'];				
+				$intEventID = $data['raid']['event'];
 				$itemPool = $this->pdh->get('event', 'def_itempool', array($intEventID));
 				if(!$itemPool){
 					$arrItempools = $this->pdh->get('event', 'itempools', array($intEventID));
 					$itemPool = $arrItempools[0];
 				}
-				
+
 				foreach($data['items'] as $ik => $item) {
 					if($this->config->get('dkp_easymode')){
 						$item['itempool_id'] = $itemPool;
 					}
-					
+
 					if($item['group_key'] == 'new' OR empty($item['group_key'])) {
 						$intAmount = (int)$item['amount'];
 						if($intAmount == 0 && $data['raid']['id']) $intAmount = 1;
-						
+
 						if($intAmount > 0){
 							for($i=0; $i<$intAmount; $i++){
 								$item_upd[] = $this->pdh->put('item', 'add_item', array($item['name'], $item['members'], $data['raid']['id'], $item['item_id'], $item['value'], $item['itempool_id'], $data['raid']['date']+$ik));
@@ -291,11 +291,11 @@ class ManageRaids extends page_generic {
 				$this->user->lang('hidden') => $members_hidden,
 				$this->user->lang('core_sett_f_special_members') => $members_special,
 		);
-		
+
 		//fetch events
 		$events = $eventsOrig = $this->pdh->aget('event', 'name', 0, array($this->pdh->get('event', 'id_list')));
 		asort($events);
-		
+
 		if($this->config->get('dkp_easymode')){
 			foreach($events as $eventID => $strEventname){
 				$arrPools = $this->pdh->get('multidkp', 'mdkpids4eventid', array($eventID));
@@ -347,7 +347,7 @@ class ManageRaids extends page_generic {
 			//fetch items
 			$items = $this->get_itemsofraid($raid['id']);
 		}
-		
+
 		//If we get a draft
 		if ($this->in->get('draft', 0) > 0) {
 			$raid = $this->get_raiddata($this->in->get('draft', 0), true);
@@ -402,13 +402,13 @@ class ManageRaids extends page_generic {
 		$blnRaidUpdate		= ($raid['id'] AND $raid['id'] != 'new' && !$copy);
 		$strRaidEvent		= $this->pdh->get('event', 'name', array($raid['event']));
 		$strRaidUserDate	= $this->time->user_date($raid['date']);
-		
+
 		if($raid['id'] AND $raid['id'] != 'new') $this->confirm_delete($this->user->lang('del_raid_with_itemadj')."<br />".$strRaidUserDate." ".$events[$raid['event']].": ".addslashes($raid['note']));
-		
-		
-		
+
+
+
 		$arrEventKeys = array_keys($eventsOrig);
-		
+
 		$this->tpl->assign_vars(array(
 			'DATE'				=> (new hdatepicker('date', array('value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->get('date', '') : $this->time->user_date($raid['date'], true, false, false, function_exists('date_create_from_format'))), 'timepicker' => true)))->output(),
 			'NOTE'				=> stripslashes((($this->in->get('dataimport', '') == 'true') ? $this->in->get('rnote', '') : $raid['note'])),
@@ -431,7 +431,7 @@ class ManageRaids extends page_generic {
 			'EVENT_ITEMPOOL_MAPPING' => json_encode($arrEventItempoolMapping),
 			'FIRST_EVENT_ID'	=> isset($arrEventKeys[0]) ? $arrEventKeys[0] : 0,
 			'S_COPY'			=> ($copy),
-				
+
 			//language vars
 			'L_RAID_SAVE'		=> ($blnRaidUpdate) ? $this->user->lang('update_raid') : $this->user->lang('add_raid'),
 			//other needed vars
@@ -487,14 +487,14 @@ class ManageRaids extends page_generic {
 		$members_hidden = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list_hidden', array()), 'member', 'name', 'asc')));
 		$members_special = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list_special', array()), 'member', 'name', 'asc')));
 		$members_inactive = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list_inactive', array()), 'member', 'name', 'asc')));
-		
+
 		$members = array(
 				$this->user->lang('active') => $members_active,
 				$this->user->lang('inactive') => $members_inactive,
 				$this->user->lang('hidden') => $members_hidden,
 				$this->user->lang('core_sett_f_special_members') => $members_special,
 		);
-		
+
 		//fetch events
 		$events = $this->pdh->aget('event', 'name', 0, array($this->pdh->get('event', 'id_list')));
 		asort($events);
@@ -704,7 +704,7 @@ class ManageRaids extends page_generic {
 		$data['raid']['event'] = $this->in->get('event',0);
 		$data['raid']['caleventid'] = $this->in->get('caldata_import',0);
 		$data['raid']['value'] = $this->in->get('value',0.0);
-		
+
 		$data['raid']['attendees'] = array_unique($this->in->getArray('raid_attendees','int'));
 
 		if(empty($data['raid']['attendees'])) {
@@ -769,4 +769,3 @@ class ManageRaids extends page_generic {
 	}
 }
 registry::register('ManageRaids');
-?>

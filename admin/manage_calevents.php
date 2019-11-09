@@ -51,7 +51,7 @@ class Manage_Calevents extends page_generic {
 		} else {
 			$view_list			= $this->pdh->get('calendar_events', 'id_list');
 		}
-		
+
 		$hptt_psettings		= $this->pdh->get_page_settings('admin_manage_calevents', 'hptt_managecalevents_actions');
 		$hptt				= $this->get_hptt($hptt_psettings, $view_list, $view_list, array('%link_url%' => 'manage_calevents.php'));
 		$page_suffix		= '&amp;start='.$this->in->get('start', 0).'&amp;c='.$this->in->get('c');
@@ -77,4 +77,3 @@ class Manage_Calevents extends page_generic {
 	}
 }
 registry::register('Manage_Calevents');
-?>

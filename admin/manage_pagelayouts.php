@@ -655,4 +655,3 @@ class ManagePageLayouts extends page_generic {
 	}
 }
 registry::register('ManagePageLayouts');
-?>

@@ -236,4 +236,3 @@ class Manage_Ranks extends page_generic {
 	}
 }
 registry::register('Manage_Ranks');
-?>

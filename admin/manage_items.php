@@ -52,7 +52,7 @@ class ManageItems extends page_generic {
 			$arrItempools = $this->pdh->get('multidkp', 'itempool_ids', array($arrPools[0]));
 			$item['itempool_id'] = $arrItempools[0];
 		}
-		
+
 		if($this->in->get('selected_ids','','hash')) {
 			$retu = $this->pdh->put('item', 'update_item', array($this->in->get('selected_ids','','hash'), $item['name'], $item['buyers'], $item['raid_id'], $item['item_id'], $item['value'], $item['itempool_id'], $item['date']));
 		} else {
@@ -84,7 +84,7 @@ class ManageItems extends page_generic {
 		//Für jedes Item
 		$messages = array();
 		foreach($arrSelected as $itemID){
-			
+
 			//Hole alte daten
 			$item = array();
 			$item['buyer'] = $this->pdh->get('item', 'buyer', array($itemID));
@@ -94,13 +94,13 @@ class ManageItems extends page_generic {
 			$item['raid_id'] = $this->pdh->get('item', 'raid_id', array($itemID));
 			$item['item_id'] = $this->pdh->get('item', 'game_itemid', array($itemID));
 			$item['itempool_id'] = $intOldItempoolID = $this->pdh->get('item', 'itempool_id', array($itemID));
-			
+
 			foreach($arrBulk as $key => $val){
 				if(!in_array($key, $arrCheckboxes) || !$val) continue;
-				
+
 				$item[$key] = $arrNewValues[$key];
 			}
-			
+
 			if($this->config->get('dkp_easymode')){
 				if($intOldItempoolID != $item['raid_id']){
 					$event = $this->pdh->get('raid', 'event', array($item['raid_id']));
@@ -109,9 +109,9 @@ class ManageItems extends page_generic {
 					$item['itempool_id'] = $arrItempools[0];
 				}
 			}
-			
+
 			$retu = $this->pdh->put('item', 'update_item', array($itemID, $item['name'], array($item['buyer']), $item['raid_id'], $item['item_id'], $item['value'], $item['itempool_id'], $item['date'], true));
-			
+
 			if(!$retu){
 				$messages[] = array('title' => $this->user->lang('save_nosuc'), 'text' => $item['name'], 'color' => 'red');
 			}
@@ -405,4 +405,3 @@ class ManageItems extends page_generic {
 	}
 }
 registry::register('ManageItems');
-?>
