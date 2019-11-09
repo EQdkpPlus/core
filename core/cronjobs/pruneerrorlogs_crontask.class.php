@@ -33,7 +33,7 @@ if ( !class_exists( "pruneerrorlogs_crontask" ) ) {
 			$this->defaults['description']	= 'Prune Error Logs';
 			$this->defaults['active']			= true;
 		}
-		
+
 		public $options = array(
 				'days'	=> array(
 						'lang'	=> 'Delete Error Logs older than x days',
@@ -45,12 +45,12 @@ if ( !class_exists( "pruneerrorlogs_crontask" ) ) {
 		public function run(){
 			$crons		= $this->cronjobs->list_crons();
 			$params		= $crons['pruneerrorlogs']['params'];
-			
+
 			//Per default, delete logs older than 30 days
 			$intDays = (intval($params['days']) > 0) ? intval($params['days']) : 30;
-			
-			$arrLogfiles = $this->pdl->get_logfiles(true);		
-			
+
+			$arrLogfiles = $this->pdl->get_logfiles(true);
+
 			foreach($arrLogfiles as $strLogfile){
 				if(strpos($strLogfile, '20') === 0){
 					$intTime = strtotime(substr($strLogfile, 0, 10));
@@ -58,8 +58,7 @@ if ( !class_exists( "pruneerrorlogs_crontask" ) ) {
 					if(($intTime + ($intDays*86400)) < time()) $this->pdl->delete_logfile($strLogfile);
 				} else continue;
 			}
-			
+
 		}
 	}
 }
-?>

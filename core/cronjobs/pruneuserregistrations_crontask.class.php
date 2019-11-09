@@ -33,17 +33,17 @@ if ( !class_exists( "pruneuserregistrations_crontask" ) ) {
 			$this->defaults['description']	= 'Prune Userregistrations';
 			$this->defaults['active']		= true;
 		}
-		
+
 		public $options = array(
 		);
 
 		public function run(){
 			$crons		= $this->cronjobs->list_crons();
 			$params		= $crons['pruneuserregistrations']['params'];
-			
+
 			$intRegistrationType = (int)$this->config->get('account_activation');
 			if($intRegistrationType == 0) return;
-			
+
 			if($intRegistrationType == 1){
 				//User
 				$intDays = 14;
@@ -51,7 +51,7 @@ if ( !class_exists( "pruneuserregistrations_crontask" ) ) {
 				//Admin
 				$intDays = 30;
 			}
-			
+
 			$objQuery = $this->db->prepare("SELECT * FROM __users WHERE user_email_confirmed = -1 AND timestampdiff(DAY, FROM_UNIXTIME(user_registered), now()) > ?")->execute($intDays);
 			$intCount = 0;
 			if($objQuery){
@@ -61,12 +61,11 @@ if ( !class_exists( "pruneuserregistrations_crontask" ) ) {
 					$intCount++;
 				}
 			}
-			
+
 			echo "Deleted ".$intCount." inactive user registrations.";
-			
+
 			$this->pdh->process_hook_queue();
-			
+
 		}
 	}
 }
-?>

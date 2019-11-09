@@ -33,7 +33,7 @@ if ( !class_exists( "deletelogs_crontask" ) ) {
 			$this->defaults['ajax']			= true;
 			$this->defaults['description']	= 'Prune Logs';
 		}
-		
+
 		public $options = array(
 				'days'	=> array(
 						'lang'	=> 'Delete Logs older than x days',
@@ -45,14 +45,13 @@ if ( !class_exists( "deletelogs_crontask" ) ) {
 		public function run(){
 			$crons		= $this->cronjobs->list_crons();
 			$params		= $crons['deletelogs']['params'];
-			
+
 			//Per default, delete logs older half a year
 			$intDays = (intval($params['days']) > 0) ? intval($params['days']) : (6*30);
-			
+
 			$ret = $this->pdh->put('logs', 'clean_log', array($intDays));
 			$this->pdh->process_hook_queue();
-			if($ret > 0) $this->logs->add( 'action_old_logs_deleted', array('{L_CLEAR_LAST_LOGS}' => $intDays.' {L_DAYS}', '{L_NUMBER_OF_LOGS}' => $ret), '', '', true, '', 1, CRONJOB);	
+			if($ret > 0) $this->logs->add( 'action_old_logs_deleted', array('{L_CLEAR_LAST_LOGS}' => $intDays.' {L_DAYS}', '{L_NUMBER_OF_LOGS}' => $ret), '', '', true, '', 1, CRONJOB);
 		}
 	}
 }
-?>

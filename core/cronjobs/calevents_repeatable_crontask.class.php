@@ -135,4 +135,3 @@ if(!class_exists("calevents_repeatable_crontask")){
 
 	}
 }
-?>

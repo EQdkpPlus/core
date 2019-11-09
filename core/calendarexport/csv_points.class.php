@@ -171,4 +171,3 @@ if(!function_exists('CSVpointexport')){
 		return $text;
 	}
 }
-?>

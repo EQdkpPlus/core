@@ -46,4 +46,3 @@ if ( !class_exists( "pointcap_crontask" ) ) {
 		}
 	}
 }
-?>

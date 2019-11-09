@@ -44,4 +44,3 @@ if ( !class_exists( "backup_crontask" ) ) {
 		}
 	}
 }
-?>

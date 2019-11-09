@@ -31,7 +31,7 @@ if ( !class_exists( "bridge_usersync_crontask" ) ) {
 					'type'	=> 'radio',
 				),
 		);
-		
+
 		public function __construct(){
 			$this->defaults['repeat']		= true;
 			$this->defaults['repeat_type']	= 'daily';
@@ -44,10 +44,10 @@ if ( !class_exists( "bridge_usersync_crontask" ) ) {
 		public function run(){
 			$crons		= $this->cronjobs->list_crons();
 			$params		= $crons['bridge_usersync']['params'];
-			
+
 			//Bridge not active, exit cronjob
 			if(intval($this->config->get('cmsbridge_active')) === 0) return false;
-			
+
 			$a = $this->bridge->get_users();
 			$arrUser = array();
 			$arrCMSUsernames = array();
@@ -56,25 +56,25 @@ if ( !class_exists( "bridge_usersync_crontask" ) ) {
 				$arrUser[] = $val;
 				$arrCMSUsernames[] = clean_username($val['name']);
 			}
-		
+
 			foreach($arrUser as $arrUserdata){
 				if ($this->pdh->get('user', 'check_username', array(sanitize($arrUserdata['name']))) != 'false'){
 					if(!$this->bridge->check_user_group($arrUserdata['id'])) continue;
-					
+
 					//Neu anlegen
 					$strPassword = random_string(32);
 					$strPwdHash = $this->user->encrypt_password($strPassword);
-					
+
 					$user_id = $this->pdh->put('user', 'insert_user_bridge', array(sanitize($arrUserdata['name']), $strPwdHash, $arrUserdata['email'], false));
 					$this->pdh->process_hook_queue();
 					//Sync Usergroups
 					$this->bridge->sync_usergroups((int)$arrUserdata['id'], $user_id);
 					//Sync Userdata
 					$this->bridge->sync_fields($user_id, $arrUserdata);
-					
+
 					//Notify Admins
 					$this->ntfy->add('eqdkp_user_new_registered', $user_id, sanitize($arrUserdata['name']), $this->root_path.'admin/manage_users.php'.$this->SID.'&u='.$user_id, false, "", false, array("a_users_man"));
-					
+
 				} else {
 					$user_id = $this->pdh->get('user', 'userid', array(sanitize($arrUserdata['name'])));
 					//Sync Usergroups
@@ -83,7 +83,7 @@ if ( !class_exists( "bridge_usersync_crontask" ) ) {
 					$this->bridge->sync_fields($user_id, $arrUserdata);
 				}
 			}
-			
+
 			//Delete EQdkp Plus User, except Admins and Superadmins
 			if ((int)$params['delete_eqdkp_user'] == 1){
 				$arrEQdkpUser = $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list', array(true))));
@@ -98,4 +98,3 @@ if ( !class_exists( "bridge_usersync_crontask" ) ) {
 		}
 	}
 }
-?>
