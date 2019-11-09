@@ -53,10 +53,8 @@ class update_2350 extends sql_update_task {
 
 	public function update_function(){
 		$this->config->set('build_pointcache', 'true');
-				
+
 		return true;
 	}
-	
-}
 
-?>
+}

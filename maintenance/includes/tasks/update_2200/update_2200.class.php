@@ -109,4 +109,3 @@ class update_2200 extends sql_update_task {
 		);
 	}
 }
-?>

@@ -30,10 +30,10 @@ class update_23200 extends sql_update_task {
 	public $version			= '2.3.20.0'; //new plus-version
 	public $ext_version		= '2.3.20'; //new plus-version
 	public $name			= '2.3.20 Update';
-	
+
 	public function __construct(){
 		parent::__construct();
-		
+
 		$this->langs = array(
 				'english' => array(
 						'update_23200'	=> 'EQdkp Plus 2.3.20 Update',
@@ -44,14 +44,14 @@ class update_23200 extends sql_update_task {
 						'update_function' => 'Versuche den Easymode zu aktivieren',
 				),
 		);
-		
+
 	}
-	
+
 	public function update_function(){
 		//Are there events in multiple pools?
-		
+
 		$objQuery = $this->db->prepare("SELECT COUNT(*) as count FROM __multidkp2event GROUP BY multidkp2event_event_id;")->execute();
-		
+
 		if($objQuery){
 			while($row = $objQuery->fetchAssoc()){
 				if(intval($row['count']) > 1){
@@ -60,22 +60,22 @@ class update_23200 extends sql_update_task {
 				}
 			}
 		}
-		
+
 		//We are still here, so enable the Easy mode
 		$this->config->set('dkp_easymode', 1);
-		
+
 		//Checke den Itempool für jeden MDKP Pool
 		$mdkp_ids = $this->pdh->get('multidkp', 'id_list');
 
 		foreach($mdkp_ids as $id)
 		{
 			$ip_ids = $this->pdh->get('multidkp', 'itempool_ids', $id);
-			
+
 			if(count($ip_ids) === 0){
 				$name = $this->pdh->get('multidkp', 'name', $id);
 				//Create one and connect it
 				$itempoolID = $this->pdh->put('itempool', 'add_itempool', array($name, 'Auto generated for '.$name));
-				
+
 				if($itempoolID){
 					$retu = ($this->db->prepare("INSERT INTO __multidkp2itempool :p")->set(array(
 							'multidkp2itempool_multi_id' => $id,
@@ -83,13 +83,11 @@ class update_23200 extends sql_update_task {
 				}
 			}
 		}
-		
+
 		$this->pdh->enqueue_hook('itempool_update');
 		$this->pdh->enqueue_hook('multidkp_update');
-		
+
 		return true;
 	}
-	
-}
 
-?>
+}

@@ -46,7 +46,7 @@ class maintenance_display extends gen_class {
 						'L_LOGIN_WARNING' => $this->user->lang('invalid_login_warning')
 					));
 				}
-				
+
 				if ($this->in->exists('redirect')){
 					$redirect_url = preg_replace('#^.*?redirect=(.+?)&(.+?)$#', '\\1' . $this->SID . '&\\2', base64_decode($this->in->get('redirect')));
 					if (strpos($redirect_url, '?') === false) {
@@ -65,12 +65,12 @@ class maintenance_display extends gen_class {
 
 		// Login form
 		if(!$this->user->check_auth('a_maintenance', false)){
-			
+
 			//Redirect to start page if maintenance mode is not active
 			if($this->config->get('pk_maintenance_mode') == 0){
 				redirect('', false, false, false);
 			}
-			
+
 			$this->tpl->assign_vars(array(
 				'S_LOGIN'					=> true,
 
@@ -96,4 +96,3 @@ class maintenance_display extends gen_class {
 	}
 }
 registry::register('maintenance_display');
-?>

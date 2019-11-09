@@ -108,4 +108,3 @@ class task_display extends gen_class {
 	}
 }
 registry::register('task_display');
-?>

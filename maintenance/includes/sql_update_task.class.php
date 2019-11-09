@@ -76,4 +76,3 @@ class sql_update_task extends task {
 		}
 	}
 }
-?>

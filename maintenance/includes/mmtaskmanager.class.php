@@ -141,4 +141,3 @@ if ( !class_exists( "mmtaskmanager" ) ) {
 		}
 	}
 }
-?>
