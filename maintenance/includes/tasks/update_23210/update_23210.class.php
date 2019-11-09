@@ -46,7 +46,7 @@ class update_23210 extends sql_update_task {
 		);
 		
 		$this->sqls = array(
-				1	=> "ALTER TABLE `__users` CHANGE COLUMN `user_id` `user_id` INT(10) UNSIGNED NOT NULL;",
+				1	=> "ALTER TABLE `__users` CHANGE COLUMN `user_id` `user_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT FIRST;",
 		);
 	}
 	
