@@ -25,5 +25,3 @@ if ( !defined('EQDKP_INC') ){
 
 $lang['char_creation_date'] = 'Berichtigt Charakter-Erstell-Datum anhand des ersten Raids/Items oder der erste Korrektur.';
 $lang['fix_creation_date_done'] = 'Charakter-Erstell-Datum bei allen Charakteren gefixed.';
-
-?>

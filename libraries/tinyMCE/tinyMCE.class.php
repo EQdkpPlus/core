@@ -38,7 +38,7 @@ class tinyMCE extends gen_class {
 		if(!$nojsinclude) $this->tpl->js_file($this->server_path.'libraries/tinyMCE/tinymce/jquery.tinymce.min.js');
 		$this->language	= $this->user->lang('XML_LANG');
 		$this->tpl->add_js('var tinymce_eqdkp_lightbox_thumbnailsize = '.(($this->config->get('thumbnail_defaultsize')) ? $this->config->get('thumbnail_defaultsize') : 400).';');
-		
+
 		if($this->user->style['editor_theme'] != ""){
 			$this->skin = $this->user->style['editor_theme'];
 		}
@@ -59,7 +59,7 @@ class tinyMCE extends gen_class {
 			$strHooksToolbar = isset($arrHooks['toolbar']) ? $arrHooks['toolbar'] : '';
 			$mention  = (isset($settings['mention']) && $settings['mention']) ? ' mention' : '';
 			$autolink = ($this->config->get('enable_embedly')) ? '' : ' autolink';
-			
+
 			$this->tpl->add_js('
 				function initialize_bbcode_editor(){
 				$(".mceEditor_bbcode").tinymce({
@@ -142,7 +142,7 @@ class tinyMCE extends gen_class {
 			$removeHost		= (isset($settings['remove_host']) && $settings['remove_host'] == false) ? 'remove_script_host : false,' : 'remove_script_host : true, convert_urls : true,';
 			$image_upload	= (isset($settings['image_upload']) && $settings['image_upload'] == true) ? 'paste_data_images: true, images_upload_credentials: true, images_upload_url: "'.$this->server_path.'libraries/tinyMCE/imageUploader.php'.$this->SID.'",' : '';
 			$item_plugin	= (!$this->config->get('disable_guild_features')) ? ' eqdkp_item' : '';
-			
+
 			$link_list = '';
 			if (isset($settings['link_list'])){
 				//Articles & Categories
@@ -324,7 +324,7 @@ class tinyMCE extends gen_class {
 			$removeHost		= (isset($settings['remove_host']) && $settings['remove_host'] == false) ? 'remove_script_host : false,' : 'remove_script_host : true, convert_urls : true,';
 			$image_upload	= (isset($settings['image_upload']) && $settings['image_upload'] == true) ? 'paste_data_images: true, images_upload_credentials: true, images_upload_url: "'.$this->server_path.'libraries/tinyMCE/imageUploader.php'.$this->SID.'",' : '';
 			$item_plugin	= (!$this->config->get('disable_guild_features')) ? ' eqdkp_item' : '';
-			
+
 			$strSetup = (isset($settings['setup'])) ? $settings['setup'] : '';
 			$strAutofocus = (isset($settings['autofocus']) && $settings['autofocus']) ? 'true' : 'false';
 			$blnStart = (isset($settings['start_onload'])) ? $settings['start_onload'] : true;
@@ -457,7 +457,7 @@ class tinyMCE extends gen_class {
 	public function decode($input){
 		return html_entity_decode(stripslashes($input));
 	}
-	
+
 	public function getAvailableSkins(){
 		$arrSkins = sdir($this->root_path.'libraries/tinyMCE/tinymce/skins');
 		$arrOut = array();
@@ -467,5 +467,3 @@ class tinyMCE extends gen_class {
 		return $arrOut;
 	}
 }
-
-?>

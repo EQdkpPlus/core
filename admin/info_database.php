@@ -46,7 +46,7 @@ class MySQL_Info extends page_generic{
 
 		foreach ($arrTables as $strTablename){
 			$arrTableInfos = $this->db->fieldInformation($strTablename);
-			
+
 			$this->tpl->assign_block_vars('table_row', array(
 				'TABLE_NAME'	=> $strTablename,
 				'ROWS'			=> $arrTableInfos['rows'],
@@ -98,4 +98,3 @@ class MySQL_Info extends page_generic{
 	}
 }
 registry::register('MySQL_Info');
-?>

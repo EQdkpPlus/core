@@ -80,7 +80,7 @@ class Manage_Multidkp extends page_generic {
 
 	public function update($message=false, $id=0) {
 		$mdkp_id = ($id !== 0) ? $id : $this->in->get('id',0);
-		
+
 		$mdkp = array('events' => array(), 'itempools' => array(), 'no_attendance' => array());
 		if($message) {
 			$this->core->messages($message);
@@ -101,20 +101,20 @@ class Manage_Multidkp extends page_generic {
 			foreach($eventList as $eventID){
 				$pools = $this->pdh->get('multidkp', 'mdkpids4eventid', array($eventID));
 				if(count($pools) > 0 && $mdkp_id === 0) continue;
-				
+
 				if(count($pools) > 0 && $mdkp_id !==0 && !in_array($mdkp_id, $pools)) continue;
-				
+
 				$events[$eventID] = $this->pdh->get('event', 'name', array($eventID));
 			}
-			
-			
+
+
 		} else {
 			$events = $this->pdh->aget('event', 'name', 0, array($this->pdh->sort($this->pdh->get('event', 'id_list'), 'event', 'name')));
 		}
-		
-		
+
+
 		$sel_events = $this->pdh->aget('event', 'name', 0, array($this->pdh->sort($mdkp['events'], 'event', 'name')));
-		
+
 		//itempools
 		$itempools = $this->pdh->aget('itempool', 'name', 0, array($this->pdh->sort($this->pdh->get('itempool', 'id_list'), 'itempool', 'name')));
 
@@ -142,8 +142,8 @@ class Manage_Multidkp extends page_generic {
 
 	public function display_info(){
 		$mdkpid = $this->in->get('info', 0);
-		
-		//Events - 
+
+		//Events -
 		$arrEvents = $this->pdh->get('multidkp', 'event_ids', array($mdkpid));
 		foreach($arrEvents as $eventID){
 			$this->tpl->assign_block_vars('event_row', array(
@@ -152,7 +152,7 @@ class Manage_Multidkp extends page_generic {
 				'ADDITION' => '',
 			));
 		}
-		
+
 		//Itempools
 		$arrItempools = $this->pdh->get('multidkp', 'itempool_ids', array($mdkpid));
 		foreach($arrItempools as $eventID){
@@ -162,7 +162,7 @@ class Manage_Multidkp extends page_generic {
 					'ADDITION' => '',
 			));
 		}
-		
+
 		//APAs
 		$apas = register('auto_point_adjustments')->list_apas();
 		//Entweder Pool ist angegeben, oder das Event ist im Pool
@@ -171,35 +171,35 @@ class Manage_Multidkp extends page_generic {
 			if(isset($arrAPA['event'])){
 				if(in_array($arrAPA['event'], $arrEvents)){
 					#d("APA ".$arrAPA['name']);
-					
+
 					$this->tpl->assign_block_vars('apa_row', array(
 							'NAME' => $arrAPA['name'],
 							'LINK' => 'manage_auto_points.php'.$this->SID,
 							'ADDITION' => $this->user->lang('apa_type_'.$arrAPA['type']),
 					));
-					
+
 					$intApaCount++;
 				}
-				
+
 			} elseif(isset($arrAPA['pools'])){
 				if(in_array($mdkpid, $arrAPA['pools'])){
 					#d("APA ".$arrAPA['name']);
-					
+
 					$this->tpl->assign_block_vars('apa_row', array(
 							'NAME' => $arrAPA['name'],
 							'LINK' => 'manage_auto_points.php'.$this->SID,
 							'ADDITION' => $this->user->lang('apa_type_'.$arrAPA['type']),
 					));
-					
+
 					$intApaCount++;
 				}
 			}
 		}
-		
-		
-		
-		
-		
+
+
+
+
+
 		$this->tpl->assign_vars(array(
 				'MDKP_NAME' => $this->pdh->get('multidkp', 'name', array($mdkpid)),
 				'S_MDKP_EVENTS' => (count($arrEvents)),
@@ -209,7 +209,7 @@ class Manage_Multidkp extends page_generic {
 				'MDKP_LAYOUT' => $this->config->get('eqdkp_layout'),
 				'MDKP_LAYOUT_INFO' => $this->user->lang('lm_layout_'.str_replace('user_', '', $this->config->get('eqdkp_layout'))),
 		));
-		
+
 		$presets = array(
 				array('name' => 'earned', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 				array('name' => 'spent', 'sort' => true, 'th_add' => '', 'td_add' => ''),
@@ -221,10 +221,10 @@ class Manage_Multidkp extends page_generic {
 			$pre = $this->pdh->pre_process_preset($preset['name'], $preset);
 			if(empty($pre))
 				continue;
-				
+
 				$arrPresets[$pre[0]['name']] = $pre[0];
 		}
-		
+
 		foreach($arrPresets as $strName => $arrPreset){
 			$this->tpl->assign_block_vars('preset_row', array(
 					'NAME' => $strName,
@@ -232,7 +232,7 @@ class Manage_Multidkp extends page_generic {
 					'ADDITION' => 'Module <i style="font-style:italic">'.$arrPreset[0].'</i>, Function <i style="font-style:italic">'.$arrPreset[1].'</i>',
 			));
 		}
-		
+
 		$this->core->set_vars([
 				'page_title'		=> $this->user->lang('manmdkp_info'),
 				'template_file'		=> 'admin/manage_multidkp_info.html',
@@ -244,7 +244,7 @@ class Manage_Multidkp extends page_generic {
 				'display'			=> true
 		]);
 	}
-	
+
 	public function display($messages=false) {
 		if($messages) {
 			$this->pdh->process_hook_queue();
@@ -330,4 +330,3 @@ class Manage_Multidkp extends page_generic {
 	}
 }
 registry::register('Manage_Multidkp');
-?>

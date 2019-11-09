@@ -26,15 +26,15 @@ if ( !defined('EQDKP_INC') ){
 class login_oauth extends gen_class {
 	private $oauth_loaded = false;
 	private $redirURL = "";
-	
+
 	private $appid, $appsecret, $scope, $name, $passToken, $userIDparam, $usernameparam, $useremailparam = false;
-	
+
 	private $paramname = 'access_token';
-	
+
 	private $AUTHORIZATION_ENDPOINT = '';
 	private $TOKEN_ENDPOINT         = '';
 	private $USER_ENDPOINT         = '';
-	
+
 	public static $functions = array(
 			'login_button'		=> 'login_button',
 			'account_button'	=> 'account_button',
@@ -43,14 +43,14 @@ class login_oauth extends gen_class {
 			'pre_register'		=> 'pre_register',
 			'redirect'			=> 'redirect',
 	);
-	
+
 	public static $options = array(
 			'connect_accounts'	=> true,
 	);
-	
+
 	public function __construct(){
 		$this->redirURL = $this->env->buildLink().'index.php/auth-endpoint/?lmethod=oauth';
-		
+
 		$this->name						= $this->config->get('login_oauth_name');
 		$this->AUTHORIZATION_ENDPOINT	= $this->config->get('login_oauth_authendpoint');
 		$this->TOKEN_ENDPOINT 			= $this->config->get('login_oauth_tokenendpoint');
@@ -62,7 +62,7 @@ class login_oauth extends gen_class {
 		$this->useremailparam 			= $this->config->get('login_oauth_useremailparam');
 		$this->paramname				= $this->config->get('login_oauth_tokenparam');
 	}
-	
+
 	public function settings(){
 		$settings = array(
 				'login_oauth_name' => array(
@@ -105,12 +105,12 @@ class login_oauth extends gen_class {
 				'login_oauth_useremailparam' => array(
 						'type'	=> 'text',
 				),
-				
+
 		);
 		return $settings;
 	}
-		
-	
+
+
 	public function init_oauth(){
 		if (!$this->oauth_loaded && !class_exists('OAuth2\\Client')){
 			require($this->root_path.'libraries/oauth/Client.php');
@@ -118,66 +118,66 @@ class login_oauth extends gen_class {
 			require($this->root_path.'libraries/oauth/GrantType/AuthorizationCode.php');
 			$this->oauth_loaded = true;
 		}
-		
+
 		$this->appid = $this->config->get('login_oauth_clientid');
 		$this->appsecret = $this->config->get('login_oauth_clientsecret');
 	}
-	
+
 	public function redirect($arrOptions=array()){
 		$this->init_oauth();
-		
+
 		if(!strlen($this->appid) || !strlen($this->appsecret)){
 			message_die('OAuth Client-ID or Client-Secret is missing. Please insert it into the fields at the EQdkp Plus settings, tab "User".');
 		}
-		
+
 		$state = random_string(32);
 		$this->user->setSessionVar('_oauth_state', $state);
-		
+
 		$client = new OAuth2\Client($this->appid, $this->appsecret);
 		$auth_url = $client->getAuthenticationUrl($this->AUTHORIZATION_ENDPOINT, $this->redirURL, array('scope' => $this->scope, 'state' => $state));
-		
+
 		return $auth_url;
 	}
-	
+
 	public function login_button(){
 		$auth_url = $this->redirURL.'&status=login&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
-		
+
 		//Button color: #7289DA
 		return '<button type="button" class="mainoption thirdpartylogin oauth loginbtn" onclick="window.location=\''.$auth_url.'\'">'.$this->name.'</button>';
 	}
-	
-	
+
+
 	public function account_button(){
 		$auth_url = $this->redirURL.'&status=account&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
-		
+
 		return '<button type="button" class="mainoption thirdpartylogin oauth accountbtn" onclick="window.location=\''.$auth_url.'\'">'.$this->name.'</button>';
 	}
-	
+
 	public function register_button(){
 		$auth_url = $this->redirURL.'&status=register&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
-		
+
 		return '<button type="button" class="mainoption thirdpartylogin oauth registerbtn" onclick="window.location=\''.$auth_url.'\'">'.$this->name.'</button>';
 	}
-	
+
 	public function pre_register(){
 		$this->init_oauth();
-		
+
 		$blnLoginResult = false;
-		
+
 		if($this->in->exists('code')){
-			
+
 			$client = new OAuth2\Client($this->appid, $this->appsecret);
 			$params = array('code' => $this->in->get('code'), 'redirect_uri' => $this->redirURL, 'scope' => $this->scope);
 			$response = $client->getAccessToken($this->TOKEN_ENDPOINT, 'authorization_code', $params);
-			
+
 			if ($response && $response['result']){
 				$arrAccountResult = $this->fetchUserData($response['result']['access_token']);
-				
+
 				if($arrAccountResult){
 					$_userID = $this->extractVariables($arrAccountResult, $this->userIDparam);
 					$_username = $this->extractVariables($arrAccountResult, $this->usernameparam);
 					$_useremail = $this->extractVariables($arrAccountResult, $this->useremailparam);
-					
+
 					$bla = array(
 							'username'			=> ($_username && strlen($_username)) ? utf8_ucfirst($_username) : '',
 							'user_email'		=> ($_useremail && strlen($_useremail)) ? $_useremail : '',
@@ -187,45 +187,45 @@ class login_oauth extends gen_class {
 							'user_lang'			=> $this->user->lang_name,
 							'avatar'			=> '',
 					);
-					
+
 					$arrUserData = $this->user->registerUserFromAuthProvider($bla, 'oauth');
 					if(isset($arrUserData['user_id'])){
 						//Log the user in
 						$auth_url = $this->controller_path_plain.'auth-endpoint/?lmethod=oauth&status=login&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
 						redirect($auth_url);
 					}
-					
+
 					return $arrUserData;
 				}
 			}
-			
+
 		}
-		
+
 		return false;
 	}
-	
-	
+
+
 	public function get_account(){
 		$this->init_oauth();
-		
+
 		$code = $this->in->get('code');
-		
+
 		if ($code){
 			//Check state
 			$strSavedState = $this->user->data['session_vars']['_oauth_state'];
 			if(!$strSavedState || $strSavedState == '' || $strSavedState !== $this->in->get('state')){
 				return false;
 			}
-			
+
 			$client = new OAuth2\Client($this->appid, $this->appsecret);
-			
+
 			$params = array('code' => $code, 'redirect_uri' => $this->redirURL, 'scope' => $this->scope);
 
 			$response = $client->getAccessToken($this->TOKEN_ENDPOINT, 'authorization_code', $params);
 
 			if ($response && $response['result'] && $response['result']['access_token']){
 				$arrAccountResult = $this->fetchUserData($response['result']['access_token']);
-				
+
 				if($arrAccountResult){
 					//ID Param
 					if(isset($arrAccountResult[$this->userIDparam])){
@@ -234,12 +234,12 @@ class login_oauth extends gen_class {
 				}
 			}
 		}
-		
+
 		return false;
 	}
-	
-	
-	
+
+
+
 	/**
 	 * User-Login for facebook
 	 *
@@ -249,28 +249,28 @@ class login_oauth extends gen_class {
 	 */
 	public function login($strUsername, $strPassword){
 		$this->init_oauth();
-		
+
 		$code = $_GET['code'];
-		
+
 		if ($code){
 			//Check state
 			$strSavedState = $this->user->data['session_vars']['_oauth_state'];
 			if(!$strSavedState || $strSavedState == '' || $strSavedState !== $this->in->get('state')){
 				return false;
 			}
-			
+
 			$client = new OAuth2\Client($this->appid, $this->appsecret);
-			
+
 			$params = array('code' => $code, 'redirect_uri' => $this->redirURL, 'scope' => $this->scope);
 			$response = $client->getAccessToken($this->TOKEN_ENDPOINT, 'authorization_code', $params);
-			
+
 			if ($response && $response['result']){
 				$arrAccountResult = $this->fetchUserData($response['result']['access_token']);
 				if($arrAccountResult){
 					$_userID = $this->extractVariables($arrAccountResult, $this->userIDparam);
 					$_username = $this->extractVariables($arrAccountResult, $this->usernameparam);
 					$_useremail = $this->extractVariables($arrAccountResult, $this->useremailparam);
-					
+
 					if($_userID){
 						$userid = $this->pdh->get('user', 'userid_for_authaccount', array($_userID, 'oauth'));
 						if ($userid){
@@ -287,19 +287,19 @@ class login_oauth extends gen_class {
 						} elseif((int)$this->config->get('cmsbridge_active') != 1 && (int)$this->config->get('login_fastregister')){
 							//Try to register the user
 							$auth_url = $this->controller_path_plain.'auth-endpoint/?lmethod=oauth&status=register&link_hash='.$this->user->csrfGetToken('authendpoint_pageobjectlmethod');
-							
+
 							redirect($auth_url);
 						}
-						
+
 					}
 				}
-				
+
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * User-Logout
 	 *
@@ -308,7 +308,7 @@ class login_oauth extends gen_class {
 	public function logout(){
 		return true;
 	}
-	
+
 	/**
 	 * Autologin
 	 *
@@ -318,7 +318,7 @@ class login_oauth extends gen_class {
 	public function autologin($arrCookieData){
 		return false;
 	}
-	
+
 	private function fetchUserData($strAccessToken){
 
 		if($this->passToken == 'bearer'){
@@ -327,7 +327,7 @@ class login_oauth extends gen_class {
 			$result = register('urlfetcher')->fetch($this->USER_ENDPOINT, array('Authorization: Token '.$strAccessToken));
 		} elseif($this->passToken == 'param'){
 			$url = "";
-			
+
 			if(strpos($this->USER_ENDPOINT, '?') === false){
 				$url = $this->USER_ENDPOINT."?".$this->paramname."=".rawurlencode($strAccessToken);
 			} else {
@@ -335,9 +335,9 @@ class login_oauth extends gen_class {
 			}
 			$url = str_replace('TOKEN', rawurlencode($strAccessToken), $url);
 			$result = register('urlfetcher')->fetch($url);
-			
+
 		}
-		
+
 		if($result){
 			$arrJSON = json_decode($result, true);
 			if(!isset($arrJSON['error'])){
@@ -348,7 +348,7 @@ class login_oauth extends gen_class {
 		}
 		return false;
 	}
-	
+
 	private function extractVariables($userData, $strVariable){
 		$arrParts = explode(':', $strVariable);
 		$tmpArray = $userData;
@@ -362,9 +362,8 @@ class login_oauth extends gen_class {
 				return false;
 			}
 		}
-		
+
 		return (is_array($out)) ? false : $out;
 	}
-	
+
 }
-?>

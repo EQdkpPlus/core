@@ -18,21 +18,21 @@
  *	You should have received a copy of the GNU Affero General Public License
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 define('EQDKP_INC', true);
 $eqdkp_root_path = './../../';
 include_once($eqdkp_root_path . 'common.php');
 ini_set('display_errors', 1);
 
 class tinyMCEimageUploader extends page_generic {
-	
+
 	public function __construct() {
 		$handler = array();
 		parent::__construct(false, $handler, array());
-	
+
 		$this->process();
 	}
-	
+
 	public function display(){
 		$blnIsUser = $this->user->is_signedin() && $this->user->check_auth('u_files_man', false);
 		if (!$blnIsUser) {
@@ -46,10 +46,10 @@ class tinyMCEimageUploader extends page_generic {
 			echo json_encode(array('location' => register('pfh')->FolderPath('system/articleimages', 'files', 'absolute').$blnResult));
 			return;
 		}
-		
+
 		header("HTTP/1.0 500 Server Error");
 	}
-	
+
 }
 
 registry::register('tinyMCEimageUploader');

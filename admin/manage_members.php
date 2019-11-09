@@ -71,7 +71,7 @@ class Manage_Members extends page_generic {
 		$arrItems = $this->in->getArray('item_ids', 'int');
 		$arrRaids = $this->in->getArray('raid_ids', 'int');
 		$arrAdjustments = $this->in->getArray('adj_ids', 'int');
-		
+
 		$intMember = $this->in->get('member', 0);
 
 		$intDelCount = 0;
@@ -238,7 +238,7 @@ class Manage_Members extends page_generic {
 		));
 
 		$this->jquery->Tab_header('profile_information', true);
-		
+
 		$this->jquery->Dialog('delete_warning', '', array('custom_js'=>"$('#del_history_entries_btm').click();", 'height' => 300, 'message' => $this->user->lang('confirm_delete_member_history').'<br /><br /><label><input type="checkbox" onclick="change_raid_setting(this.checked)" />'.$this->user->lang('confirm_delete_member_history_raids').'</label>'), 'confirm');
 
 		$this->tpl->assign_vars(array(
@@ -276,28 +276,28 @@ class Manage_Members extends page_generic {
 		}
 		return $url;
 	}
-	
+
 	public function search(){
-		
+
 		$arrClasses = $this->game->get_primary_classes(array('id_0'));
 		array_unshift($arrClasses, "");
-		
+
 		$this->tpl->assign_vars(array(
 				'SPINNER_CHAR_COUNT' => (new hspinner('charcount'))->output(),
 				'DATEPICKER_BEFORE'	=> (new hdatepicker('date_before', array('value' => false)))->output(),
 				'DATEPICKER_AFTER'	=> (new hdatepicker('date_after', array('value' => false)))->output(),
 				'DD_CLASS'			=> (new hdropdown('class', array('options' => $arrClasses)))->output(),
 		));
-		
-		
+
+
 		$arrUsers = $this->pdh->aget('user', 'name', 0, array($this->pdh->get('user', 'id_list', array(false))));
-		
+
 		$arrMembers = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'id_list', array(false,true,false))));
-		
-		
+
+
 		$this->jquery->Autocomplete('name', $arrUsers);
 		$this->jquery->Autocomplete('charname', $arrMembers);
-		
+
 		$this->core->set_vars([
 				'page_title'		=> $this->user->lang('manage_members_search'),
 				'template_file'		=> 'admin/manage_members_search.html',
@@ -308,9 +308,9 @@ class Manage_Members extends page_generic {
 				],
 				'display'			=> true
 		]);
-		
+
 	}
-	
+
 	public function process_search(){
 		//I will process each search, and merge the found user array later
 		$arrUserIDs = $this->pdh->get('member', 'id_list', array(false, false, false));
@@ -323,48 +323,48 @@ class Manage_Members extends page_generic {
 				'twinkname' => false,
 				'class' => false,
 		);
-		
+
 		//Username
 		$strSearchName = utf8_strtolower($this->in->get('name'));
 		if($strSearchName != ""){
 			$arrResults['name'] = array();
 			foreach($arrUserIDs as $intUserID){
 				$strMembername = $this->pdh->get('member', 'name', array($intUserID));
-				
+
 				if(stripos($strMembername, $strSearchName) !== false) {
 					$arrResults['name'][] = $intUserID;
 				}
-				
+
 			}
 		}
-				
+
 		//Date before
 		$strBeforeDate = $this->in->get('date_before');
 		if($strBeforeDate){
 			$arrResults['date_before'] = array();
 			$intTime = $this->time->fromformat($strBeforeDate, 0);
-			
+
 			foreach($arrUserIDs as $intUserID){
 				$intRegDate = $this->pdh->get('member', 'creation_date', array($intUserID));
-				
+
 				if($intRegDate < $intTime) $arrResults['date_before'][] = $intUserID;
 			}
 		}
-		
-		
+
+
 		//Date after
 		$strAfterDate = $this->in->get('date_after');
 		if($strAfterDate){
 			$arrResults['date_after'] = array();
 			$intTime = $this->time->fromformat($strAfterDate, 0);
-			
+
 			foreach($arrUserIDs as $intUserID){
 				$intRegDate = $this->pdh->get('member', 'creation_date', array($intUserID));
-				
+
 				if($intRegDate > $intTime) $arrResults['date_after'][] = $intUserID;
 			}
 		}
-		
+
 		//Charname
 		$strCharname = utf8_strtolower($this->in->get('twinkname'));
 		$arrChars = $this->pdh->get('member', 'id_list');
@@ -372,7 +372,7 @@ class Manage_Members extends page_generic {
 			$arrResults['twinkname'] = array();
 			foreach($arrChars as $intCharID){
 				$strMyCharname = $this->pdh->get('member', 'name', array($intCharID));
-				
+
 				if(stripos($strMyCharname, $strCharname) !== false) {
 					//Find Main Char
 					$intOwner = $this->pdh->get('member', 'mainid', array($intCharID));
@@ -381,8 +381,8 @@ class Manage_Members extends page_generic {
 				}
 			}
 		}
-		
-		
+
+
 		//Locked
 		$arrStatus = $this->in->getArray('status');
 
@@ -390,11 +390,11 @@ class Manage_Members extends page_generic {
 			$arrResults['active'] = array();
 			foreach($arrUserIDs as $intUserID){
 				$intActive = $this->pdh->get('member', 'active', array($intUserID));
-				
+
 				if($intActive) $arrResults['active'][] = $intUserID;
 			}
 		}
-		
+
 		if(in_array('inactive',$arrStatus ) ){
 			$arrResults['inactive'] = array();
 			foreach($arrUserIDs as $intUserID){
@@ -402,20 +402,20 @@ class Manage_Members extends page_generic {
 				if(!$intActive) $arrResults['inactive'][] = $intUserID;
 			}
 		}
-		
+
 		//Class
 		$intClass = $this->in->get('class', 0);
 		if($intClass){
 			$arrResults['class'] = array();
-			
+
 			foreach($arrUserIDs as $intUserID){
 				$intCharClass = $this->pdh->get('member', 'classid', array($intUserID));
-				
+
 				if($intCharClass == $intClass) $arrResults['class'][] = $intUserID;
 			}
 		}
-		
-		
+
+
 		//Now combine the search results
 		$intFalseCount = 0;
 		$arrOutResult = $arrUserIDs;
@@ -426,7 +426,7 @@ class Manage_Members extends page_generic {
 				$arrOutResult = array_intersect($arrOutResult, $val);
 			}
 		}
-		
+
 		$this->display(false, $arrOutResult);
 	}
 
@@ -435,7 +435,7 @@ class Manage_Members extends page_generic {
 			$this->pdh->process_hook_queue();
 			$this->core->messages($messages);
 		}
-		
+
 		if($arrChars !== false){
 			$blnIsSearch = true;
 			$view_list = $arrChars;
@@ -495,7 +495,7 @@ class Manage_Members extends page_generic {
 				'options' => array('rank', $ranks),
 			),
 		);
-		
+
 		$intCharsPerPage = ($blnIsSearch) ? PHP_INT_MAX : $this->user->data['user_rlimit'];
 
 		$this->tpl->assign_vars(array(
@@ -522,4 +522,3 @@ class Manage_Members extends page_generic {
 	}
 }
 registry::register('Manage_Members');
-?>

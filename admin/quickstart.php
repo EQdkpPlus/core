@@ -123,7 +123,7 @@ class QuickStartWizard extends page_generic {
 					foreach($apikey_config['steps'] as $title=>$val){
 						$appisetts[$this->game->glang($title)]	= $this->game->glang($val);
 					}
-					
+
 					// now, let us add the API-Key-Field to the last element of the array
 					$apikeyform = '';
 					$apikey_set	= false;
@@ -132,12 +132,12 @@ class QuickStartWizard extends page_generic {
 						$value = ($this->in->exists($fieldname)) ? $this->in->get($fieldname) : $this->config->get($fieldname);
 						$apikeyform	.= '<br/>'.$this->game->glang($fieldname).': '.$this->form->field($fieldname, array_merge($fieldcontent, array('value'=>$value)));
 					}
-					
+
 					end($appisetts);
 					$key				= key($appisetts);
 					reset($appisetts);
 					$appisetts[$key]	= str_replace('{APIKEY_FORM}', $apikeyform, $appisetts[$key]);
-					
+
 					$this->form->add_field('settings_apikey', array(
 							'type'		=> 'accordion',
 							'options'	=> $appisetts,
@@ -497,4 +497,3 @@ class QuickStartWizard extends page_generic {
 	}
 }
 registry::register('QuickStartWizard');
-?>

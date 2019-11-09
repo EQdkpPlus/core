@@ -27,10 +27,10 @@ $eqdkp_root_path = './../';
 include_once ($eqdkp_root_path . 'common.php');
 
 class manage_cache extends page_generic {
-	
+
 	private $pdc_cache_types =		array('none', 'file', 'xcache', 'memcache', 'memcached', 'apc', 'apcu', 'redis');
 	private $usable_cache_types = 	array('none', 'file');
-	
+
 	public function __construct() {
 		$this->user->check_auth('a_cache_man');
 		$handler = array(
@@ -45,29 +45,29 @@ class manage_cache extends page_generic {
 		if(class_exists('Memcached')) $this->usable_cache_types[] = 'memcached';
 		if(class_exists('Redis')) $this->usable_cache_types[] = 'redis';
 		if(function_exists('apcu_add')) $this->usable_cache_types[] = 'apcu';
-		
+
 		$this->process();
 	}
-	
+
 	public function delete_key(){
 		$this->pdc->del($this->in->get('del_key'));
 		$this->core->message($this->user->lang('delete').': '.$this->in->get('del_key'), $this->user->lang('success'), 'green');
 		$this->display();
 	}
-	
-	
+
+
 	public function clear_cache() {
 		$this->pdc->flush();
 		$this->core->message($this->user->lang('pdc_clear'), $this->user->lang('success'), 'green');
 		$this->display();
 	}
-	
+
 	public function cleanup_cache() {
 		$this->pdc->cleanup();
 		$this->core->message($this->user->lang('pdc_cleanup'), $this->user->lang('success'), 'green');
 		$this->display();
 	}
-	
+
 	public function save_cache() {
 		$selected_cache = $this->in->get('cache_selection', '');
 		if(!in_array($selected_cache, $this->usable_cache_types)) {
@@ -81,12 +81,12 @@ class manage_cache extends page_generic {
 			$this->core->message($this->user->lang('save_suc'), $this->user->lang('success'), 'green');
 		}
 	}
-	
+
 	public function display() {
 		$current_cache = ($this->config->get('mode', 'pdc')) ? $this->config->get('mode', 'pdc') : 'none';
-		
+
 		foreach($this->pdc_cache_types as $cache_type){
-			
+
 			if(in_array($cache_type, $this->usable_cache_types)){
 				$this->tpl->assign_block_vars('cache_selection_row', array(
 						'VALUE'		=> $cache_type,
@@ -94,25 +94,25 @@ class manage_cache extends page_generic {
 						'OPTION'	=> ($cache_type == $current_cache) ? '* '.$this->user->lang("pdc_cache_name_$cache_type") : $this->user->lang("pdc_cache_name_$cache_type"),
 				));
 			}
-			
+
 			if($cache_type == $current_cache){
 				$this->tpl->assign_var('DIV_CACHE_'.strtoupper($cache_type).'_VISIBLE', 'block');
 			}else{
 				$this->tpl->assign_var('DIV_CACHE_'.strtoupper($cache_type).'_VISIBLE', 'none');
 			}
-			
+
 			if($this->config->get('dttl', 'pdc')){
 				$this->tpl->assign_var('V_CACHE_'.strtoupper($cache_type).'_DTTL', $this->config->get('dttl', 'pdc'));
 			}else{
 				$this->tpl->assign_var('V_CACHE_'.strtoupper($cache_type).'_DTTL', 86400);
 			}
-			
+
 			if($this->config->get('prefix', 'pdc')){
 				$this->tpl->assign_var('V_CACHE_'.strtoupper($cache_type).'_PREFIX', $this->config->get('prefix', 'pdc'));
 			}else{
 				$this->tpl->assign_var('V_CACHE_'.strtoupper($cache_type).'_PREFIX', $this->table_prefix);
 			}
-			
+
 			if($cache_type == 'memcache'){
 				if($this->config->get('server', 'pdc')){
 					$this->tpl->assign_var('V_CACHE_'.strtoupper($cache_type).'_SERVER', $this->config->get('server', 'pdc'));
@@ -130,13 +130,13 @@ class manage_cache extends page_generic {
 				}else{
 					$this->tpl->assign_var('V_CACHE_'.strtoupper($cache_type).'_SERVER', '127.0.0.1');
 				}
-				
+
 				if($this->config->get('port', 'pdc')){
 					$this->tpl->assign_var('V_CACHE_'.strtoupper($cache_type).'_PORT', $this->config->get('port', 'pdc'));
 				}
 			}
 		}
-		
+
 		$this->tpl->add_js("
 			$('#cache_select').change(function(){
 				$('#all_cache_divs > div').each(function(){
@@ -144,11 +144,11 @@ class manage_cache extends page_generic {
 				});
 				$('#div_cache_'+$(this).val()).css('display', 'block');
 			});", 'docready');
-		
+
 		$cache_list = $this->pdc->listing();
 		$total = 0;
 		$ctime = time();
-		
+
 		foreach($cache_list as $global_prefix => $keys){
 			foreach($keys as $key => $expiry_date){
 				$expiry_date = $expiry_date['exp_date'];
@@ -161,14 +161,14 @@ class manage_cache extends page_generic {
 				));
 			}
 		}
-		
+
 		$this->tpl->assign_vars(array (
 				'L_CACHE_TABLE_INFO'		=> sprintf($this->user->lang('pdc_table_info'), $this->user->lang("pdc_cache_name_$current_cache")),
 				'PDC_CACHE_ENABLED'			=> ($current_cache == 'none') ? false : true,
 				'CSRF_DEL_TOKEN'			=> $this->CSRFGetToken('del_key'),
 		));
-		
-		
+
+
 		$this->core->set_vars([
 				'page_title'		=> $this->user->lang('pdc_manager'),
 				'template_file'		=> 'admin/manage_cache.html',
@@ -181,4 +181,3 @@ class manage_cache extends page_generic {
 	}
 }
 registry::register('manage_cache');
-?>

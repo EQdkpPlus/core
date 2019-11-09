@@ -1061,18 +1061,18 @@ class template extends gen_class {
 		$text_blocks	= preg_replace('#\{(([a-z0-9\:\@\-_]*?)\|([a-z0-9\-_]+?))\}#is',  "'.\$this->handleModifier('{"."$2"."}', '$3').'", $text_blocks);
 		$text_blocks	= preg_replace('#\{([a-z0-9\:\@\-_]*?)\}#is', "' . ((isset(\$this->_data['.'][0]['\\1'])) ? \$this->_data['.'][0]['\\1'] : '') . '", $text_blocks);
 
-		
+
 		return;
 	}
-	
+
 	public function handleModifier($strLangString, $strModifier){
 		$arrModifier = explode('-', $strModifier);
-		
+
 		switch($arrModifier[0]){
 			case 'jsencode':
 					return "'".str_replace("'", "\'", $strLangString)."'";
 				break;
-				
+
 			case 'truncate':
 				if(isset($arrModifier[2]) && $arrModifier[2] == 'nohtml'){
 					$strLangString = strip_tags($strLangString);
@@ -1082,10 +1082,10 @@ class template extends gen_class {
 
 			case 'sanitize':
 				return sanitize($strLangString);
-				
+
 			case 'nohtml':
 				return strip_tags($strLangString);
-				
+
 			default: return $strLangString;
 		}
 	}
@@ -1376,15 +1376,15 @@ class template extends gen_class {
 		if($intModifier){
 			$varname = $arrModifierMatches[1];
 		}
-		
+
 		$namespace = substr($namespace, 0, -1);							// Strip the trailing period.
 		$varref = $this->generate_block_data_ref($namespace, true);		// Get a reference to the data block for this namespace.
 		$varref .= '[\'' . $varname . '\']';							// Append the variable reference.
-		
+
 		if($intModifier){
 			return '\' . ((isset(' . $varref . ')) ? $this->handleModifier(' . $varref . ', \''.$arrModifierMatches[2].'\') : \'\') . \'';
 		}
-		
+
 		return '\' . ((isset(' . $varref . ')) ? ' . $varref . ' : \'\') . \'';
 	}
 
@@ -1858,4 +1858,3 @@ class template extends gen_class {
 		parent::__destruct();
 	}
 }
-?>

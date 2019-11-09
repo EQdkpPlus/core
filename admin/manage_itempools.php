@@ -155,4 +155,3 @@ class Manage_Itempools extends page_generic {
 	}
 }
 registry::register('Manage_Itempools');
-?>

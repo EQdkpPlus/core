@@ -19,20 +19,18 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- 
+
 if (!defined('EQDKP_INC')) {
 	die('You cannot access this file directly.');
 }
 
-//Language: English	
+//Language: English
 //Created by EQdkp Plus Translation Tool on  2014-12-17 23:17
 //File: maintenance/includes/tasks/char_creation_date/language/english.php
 //Source-Language: german
 
-$lang = array( 
+$lang = array(
 	"char_creation_date" => 'Corrects character creation date on base of first Raids/Items or first adjustment.',
 	"fix_creation_date_done" => 'Character creation date fixed for all characters.',
-	
-);
 
-?>
+);

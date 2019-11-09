@@ -65,7 +65,7 @@ class Manage_Live_Update extends page_generic {
 
 	public function handle_steps(){
 		@set_time_limit(0);
-		
+
 		$show = (int)$this->in->get('show', 0);
 		if (isset($this->steps[$show]) && $this->steps[$show]['show'] == true){
 			$function = $this->steps[$show]['function'];
@@ -102,7 +102,7 @@ class Manage_Live_Update extends page_generic {
 					} else {
 						chunkval = '&chunk='+chunk;
 					}
-					
+
 					$.get('manage_live_update.php".$this->SID."&step=".$id."&link_hash=".$this->CSRFGetToken('step')."'+chunkval, function(data) {
 					  if ($.trim(data) == 'true'){
 						".(($id == $last_step) ? "set_progress_bar_value(".$last_step.", '".$this->jquery->sanitize($this->user->lang('liveupdate_step_end'))."'); window.location='manage_live_update.php".$this->SID."&finished=true';" : ((isset($this->steps[$id+1]['show']) && $this->steps[$id+1]['show'] == true) ? 'window.location.href="manage_live_update.php'.$this->SID.'&show='.($id+1).'"' : 'lu_step'.($id+1).'();'))."
@@ -236,33 +236,33 @@ class Manage_Live_Update extends page_generic {
 		$destFolder = $this->pfh->FolderPath('update_to_'.$new_version.'/tmp/','live_update');
 		$srcFolder = $this->pfh->FolderPath('update_to_'.$new_version,'live_update');
 		$filename = 'lu_'.$new_version.'.zip';
-		
+
 		$archive = registry::register('zip', array($srcFolder.$filename));
-		
+
 		$intChunkSize = 100;
 		$intFiles = $archive->getFileNumber();
-		
+
 		$intCurrentChunk = $this->in->get('chunk', 0);
-		
+
 		$from = $intCurrentChunk*$intChunkSize;
 		$to = $from+$intChunkSize;
-		
+
 		if($from > $intFiles) {
 			//Finished
 			echo "true";
 			exit;
 		}
-		
+
 		if($to > $intFiles) $to = $intFiles;
 
 		$my_extract = $archive->extract($destFolder, false, $from, $to);
-		
+
 		if(!$my_extract) {
 			$this->pfh->Delete($srcFolder.$filename);
 			echo $this->user->lang('liveupdate_step3_error');
 			exit;
 		}
-		
+
 		echo "chunked:".($intCurrentChunk+1).":".ceil($intFiles/$intChunkSize).":".$intFiles;
 		exit;
 	}
@@ -403,7 +403,7 @@ class Manage_Live_Update extends page_generic {
 	//Copy new files
 	public function process_step7(){
 		@set_time_limit(0);
-		
+
 		$new_version = str_replace('.', '', $this->getNewVersion());
 		$tmp_folder = $this->pfh->FolderPath('update_to_'.$new_version.'/tmp/','live_update');
 		$xmlfile = $tmp_folder.'package.xml';
@@ -428,42 +428,42 @@ class Manage_Live_Update extends page_generic {
 
 	//Check if all new files have been copied to the right place
 	public function process_step8(){
-		
+
 		$new_version = str_replace('.', '', $this->getNewVersion());
 		$strLogFile = $this->pfh->FolderPath('update_to_'.$new_version.'/','live_update').'/missing.log';
-		
+
 		$new_version = $this->encrypt->decrypt($this->config->get('download_newversion', 'live_update'));
-		
+
 		$tmp_folder = $this->pfh->FolderPath('update_to_'.$new_version.'/tmp/','live_update');
 		$xmlfile = $tmp_folder.'package.xml';
 		$arrFiles = $this->repo->getFilelistFromPackageFile($xmlfile);
-		
+
 		$arrMissingFiles = array();
-		
+
 		$this->pfh->putContent($strLogFile, "");
-		
+
 		foreach($arrFiles as $file){
 			if (($file['type'] == 'changed' || $file['type'] == 'new') && md5_file($this->root_path.$file['name']) != $file['md5']){
 				$arrMissingFiles[] = $file['name'];
 			}
 		}
-		
+
 		$this->pfh->putContent($strLogFile, $this->encrypt->encrypt(serialize($arrMissingFiles)));
-		
+
 		echo "true";
 		exit;
 	}
-	
+
 	private function download_missing_files(){
 		$new_version = $this->encrypt->decrypt($this->config->get('download_newversion', 'live_update'));
 		$tmp_folder = $this->pfh->FolderPath('update_to_'.$new_version,'live_update');
 		$zipfile = $tmp_folder.'missing_files.zip';
 		$archive = registry::register('zip', array($zipfile));
-		
+
 		//Missing Files
 		$new_version = str_replace('.', '', $this->getNewVersion());
 		$strLogFile = $this->pfh->FolderPath('update_to_'.$new_version.'/','live_update').'/missing.log';
-		
+
 		$arrFiles = array();
 		$arrConflictedFiles = unserialize($this->encrypt->decrypt(file_get_contents($strLogFile)));
 		foreach ($arrConflictedFiles as $file){
@@ -473,7 +473,7 @@ class Manage_Live_Update extends page_generic {
 		}
 		$archive->add($arrFiles, $tmp_folder.'tmp/');
 		$archive->create();
-		
+
 		if (file_exists($zipfile)){
 			header('Content-Type: application/octet-stream');
 			header('Content-Length: '.$this->pfh->FileSize($zipfile));
@@ -482,7 +482,7 @@ class Manage_Live_Update extends page_generic {
 			readfile($zipfile);
 			exit;
 		}
-		
+
 	}
 
 	//Continue with steps
@@ -597,7 +597,7 @@ class Manage_Live_Update extends page_generic {
 
 		if($this->in->get('finished') == 'true'){
 			$blnReleaseNote = ($this->config->get('release_note') && strlen($this->config->get('release_note'))) ? true : false;
-			
+
 			if(!$blnReleaseNote && registry::register('config')->get('pk_maintenance_mode')){
 				redirect('maintenance/index.php'.$this->SID, false, false, false);
 			}
@@ -606,7 +606,7 @@ class Manage_Live_Update extends page_generic {
 					'S_RELEASE_NOTE' => $blnReleaseNote,
 					'STR_RELEASE_NOTE' => str_replace('\r\n', "<br/>", nl2br($this->bbcode->toHTML($this->config->get('release_note')))),
 			));
-			
+
 			$this->config->del('release_note');
 		}
 
@@ -725,4 +725,3 @@ class Manage_Live_Update extends page_generic {
 	}
 }
 registry::register('Manage_Live_Update');
-?>

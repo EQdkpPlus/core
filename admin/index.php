@@ -27,4 +27,3 @@ if(!defined('IN_ADMIN')){
 	include_once($eqdkp_root_path . 'common.php');
 	registry::register('admin_index')->display();
 }
-?>

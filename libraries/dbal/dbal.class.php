@@ -24,21 +24,21 @@ if(!defined('EQDKP_INC')) {
 }
 
 //Factory
-class dbal{	
+class dbal{
 
-	public static function factory($arrOptions = array()) {	
+	public static function factory($arrOptions = array()) {
 		$dbtype = (isset($arrOptions['dbtype'])) ? $arrOptions['dbtype'] : registry::get_const('dbtype');
 		if(empty($dbtype)) throw new DBALException('dbtype not set');
-		
+
 		$arrAvailableDbals = dbal::available_dbals();
-		
+
 		if(!isset($arrAvailableDbals[$dbtype])){
 			$dbtype = array_keys($arrAvailableDbals)[0];
-		}	
-		
+		}
+
 		require_once(registry::get_const('root_path') . 'libraries/dbal/' . $dbtype . '.dbal.class.php');
 		$classname = 'dbal_' . $dbtype;
-		
+
 		if (dbal::check_if_pdo($dbtype)){
 			$pdo = dbal::check_if_pdo($dbtype);
 			if (!dbal::check_pdo($pdo)) throw new DBALException('PHP PDO ' . $pdo . ' not available');
@@ -54,38 +54,38 @@ class dbal{
 			'mysql_pdo' => 'MySQL PDO',
 			'mysqli'	=> 'MySQLi',
 		);
-		
+
 		foreach ($arrDbals as $key => $name){
 			if (dbal::check_if_pdo($key)){
 				$blnCheckResult = dbal::check_pdo(dbal::check_if_pdo($key));
 			} else {
 				$blnCheckResult = dbal::check_extension($key);
 			}
-			
+
 			if(!$blnCheckResult) unset($arrDbals[$key]);
 		}
 		return $arrDbals;
 	}
-	
+
 	private static function check_extension($strExtensionName){
 		if (extension_loaded($strExtensionName)) return true;
 
 		return false;
 	}
-	
+
 	private static function check_pdo($strDriverName){
 		if ( extension_loaded('pdo_'.$strDriverName) ) {
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	private static function check_if_pdo($strDBType){
 		if (substr($strDBType, -4) == "_pdo") {
 			return substr($strDBType, 0, -4);
 		}
-		
+
 		return false;
 	}
 }
@@ -96,13 +96,13 @@ class DBALException extends Exception {
 
 class DBALQueryException extends Exception {
 	private $strQuery = "";
-	
+
 	// Die Exceptionmitteilung neu definieren, damit diese nicht optional ist
 	public function __construct($message, $code = 0, $strQuery = "") {
 		$this->strQuery = $strQuery;
 		parent::__construct($message, $code);
 	}
-	
+
 	public function getQuery(){
 		return $this->strQuery;
 	}
@@ -110,13 +110,13 @@ class DBALQueryException extends Exception {
 
 class DBALResultException extends Exception {
 	private $strQuery = "";
-	
+
 	// Die Exceptionmitteilung neu definieren, damit diese nicht optional ist
 	public function __construct($message, $code = 0, $strQuery = "") {
 		$this->strQuery = $strQuery;
 		parent::__construct($message, $code);
 	}
-	
+
 	public function getQuery(){
 		return $this->strQuery;
 	}
@@ -138,8 +138,8 @@ abstract class Database extends gen_class {
 	protected 	$strError = '';
 	protected	$intErrno = '';
 	protected	$intQueryCount = 0;
-	
-	
+
+
 	public function __construct($arrOptions = array()){
 		if (registry::get_const('dbcharset') != "") $this->strCharset = registry::get_const('dbcharset');
 		$this->objLogger = registry::register('plus_debug_logger');
@@ -181,7 +181,7 @@ abstract class Database extends gen_class {
 
 	// pdl plaintext (logfile) format function for sql errors
 	public function pdl_pt_format_sql_error($log_entry) {
-		$text = '>>>> '.$log_entry['args'][0]." <<<<\t 
+		$text = '>>>> '.$log_entry['args'][0]." <<<<\t
 			Query: "	. $log_entry['args'][1] . "\t
 			Message: "		. $log_entry['args'][2] . "\t
 			Code: "		. $log_entry['args'][3] . "\t
@@ -190,7 +190,7 @@ abstract class Database extends gen_class {
 			Trace:\n"	. $this->clean_errormessage($log_entry['args'][6])." <<<<\n";
 		return $text;
 	}
-	
+
 	public function clean_errormessage($strErrorMessage){
 		$strErrorMessage = str_replace(registry::get_const("dbpass"), '*******', $strErrorMessage);
 		if (strlen(registry::get_const("dbuser")) > 3){
@@ -202,13 +202,13 @@ abstract class Database extends gen_class {
 			$strSuffix = substr(registry::get_const("dbhost"), 0, 6);
 			$strHostReplace = str_pad($strSuffix, strlen(registry::get_const("dbhost")), '*');
 		}
-		
+
 		$strErrorMessage = preg_replace("/->login\('(.*)', '(.*)'/U", "->login('$1', '[Replaced]'", $strErrorMessage);
-		
+
 		$strErrorMessage = str_replace(registry::get_const("dbhost"), $strHostReplace, $strErrorMessage);
 		return $strErrorMessage;
 	}
-	
+
 	// Highlight certain keywords in a SQL query
 	public function highlight($sql) {
 		$red_keywords = array('/(INSERT INTO)/', '/(UPDATE\s+)/i', '/(DELETE FROM\s+)/', '/(CREATE TABLE)/', '/(IF (NOT)? EXISTS)/', '/(ALTER TABLE)/', '/(CHANGE)/');
@@ -219,7 +219,7 @@ abstract class Database extends gen_class {
 		$sql = preg_replace($green_keywords, "<span class=\"positive\">$1</span>", $sql); //passive keywords
 		return $sql;
 	}
-	
+
 	// pdl html format function for sql queries
 	public function pdl_html_format_sql_query($log_entry) {
 		$text = '';
@@ -230,10 +230,10 @@ abstract class Database extends gen_class {
 		if($log_entry['args'][1]){
 			$text .= '<br />Params: '.sanitize(implode(', ', $log_entry['args'][1]));
 		}
-		
+
 		return $text;
 	}
-	
+
 	/**
 	 * Close the database connection
 	 */
@@ -241,7 +241,7 @@ abstract class Database extends gen_class {
 		$this->disconnect();
 		parent::__destruct();
 	}
-	
+
 	/**
 	 * Return an object property
 	 * @param string
@@ -251,50 +251,50 @@ abstract class Database extends gen_class {
 		if ($strKey == 'connerror') {
 			return $this->get_connerror();
 		}
-		
+
 		if ($strKey == 'client_version') {
 			return $this->get_client_version();
 		}
-		
+
 		if ($strKey == 'server_version') {
 			return $this->get_server_version();
 		}
-		
+
 		if ($strKey == 'error') {
 			return $this->strError;
 		}
-		
+
 		if ($strKey == 'errno') {
 			return $this->intErrno;
 		}
-		
+
 		if ($strKey == 'query_count') {
 			return $this->intQueryCount;
 		}
 
 		return null;
 	}
-	
+
 	protected function error($strErrorMessage, $strQuery, $strErrorCode = '') {
 		static $sys_message = false;
 		$this->strError = $strErrorMessage;
 		$this->intErrno = $strErrorCode;
-		
+
 		$strErrorID = md5('db_error'.$strErrorMessage.time().$this->strDebugPrefix);
 
 		$exception = new Exception();
 		$this->objLogger->log($this->strDebugPrefix."sql_error", $strErrorID, $strErrorMessage, $strQuery, $strErrorCode, registry::get_const('dbname'), $this->strTablePrefix, $exception->getTraceAsString());
-		
+
 		if(defined('USER_INITIALIZED') && !$this->blnInConstruct && !registry::get_const("lite_mode") && registry::fetch('user')->check_auth('a_', false)) {
 			$blnDebugDisabled = (DEBUG < 2) ? true : false;
 			$strEnableDebugMessage = "<li><a href=\"".registry::get_const("server_path")."admin/manage_settings.php".registry::get_const('SID')."\" target=\"_blank\">Go to your settings, enable Debug Level > 1</a> and <a href=\"javascript:location.reload();\">reload this page.</a></li>";
-	
+
 			registry::register('core')->message("<b>SQL Error (".$strErrorID.")</b> <ul>".(($blnDebugDisabled) ? $strEnableDebugMessage : '<li>See error message on the bottom</li>')."<li><a href=\"".registry::get_const("server_path")."admin/manage_logs.php".registry::get_const('SID')."&amp;error=db#errors\">Check your error logs</a>.</li></ul>", 'Error', 'red');
 			$sys_message = true ;
 		}
 	}
-	
-	
+
+
 	/**
 	 * Prepare a statement (return a Database_Statement object)
 	 * @param  string
@@ -305,7 +305,7 @@ abstract class Database extends gen_class {
 		$objStatement = $this->createStatement($this->resConnection, $this->strTablePrefix, $this->strDebugPrefix, $this->blnDisableAutocommit);
 		return $objStatement->prepare($strQuery);
 	}
-	
+
 	/**
 	 * Execute a query (return a Database_Result object)
 	 * @param string
@@ -313,14 +313,14 @@ abstract class Database extends gen_class {
 	 */
 	public function execute($strQuery){
 		$strQuery = $this->replaceTablePrefix($strQuery);
-		
+
 		// log the query
 		$this->pdl->log($this->strDebugPrefix . 'sql_query', $strQuery);
 		$this->intQueryCount++;
-		
+
 		return $this->prepare($strQuery)->execute();
 	}
-	
+
 	/**
 	 * Execute a raw query (return a Database_Result object)
 	 * @param string
@@ -358,7 +358,7 @@ abstract class Database extends gen_class {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Return all columns of a particular table as array
 	 * @param string
@@ -370,7 +370,7 @@ abstract class Database extends gen_class {
 		{
 			$strDatabase = $this->strDatabase;
 		}
-		
+
 		$arrReturn = array();
 		$objQuery = $this->query(sprintf($this->strListTables, $strDatabase));
 		if ($objQuery){
@@ -381,10 +381,10 @@ abstract class Database extends gen_class {
 				$arrReturn[] = current($arrTable);
 			}
 		}
-		
+
 		return $arrReturn;
 	}
-	
+
 	/**
 	 * Determine if a particular database table exists
 	 * @param string
@@ -396,7 +396,7 @@ abstract class Database extends gen_class {
 		$strTable = str_replace('__', $this->strTablePrefix, $strTable);
 		return in_array($strTable, $this->listTables($strDatabase));
 	}
-	
+
 	/**
 	 * Return all columns of a particular table as array
 	 * @param string
@@ -408,12 +408,12 @@ abstract class Database extends gen_class {
 		$arrReturn = $this->list_fields($strTable);
 		return $arrReturn;
 	}
-	
+
 	public function fieldInformation($strTable){
 		$strTable = str_replace('__', $this->strTablePrefix, $strTable);
 		return $this->field_information($strTable);
 	}
-	
+
 	/**
 	 * Determine if a particular column exists
 	 * @param string
@@ -433,7 +433,7 @@ abstract class Database extends gen_class {
 
 		return false;
 	}
-	
+
 	/**
 	 * Return the field names of a particular table as array
 	 * @param string
@@ -442,7 +442,7 @@ abstract class Database extends gen_class {
 	 */
 	public function getFieldNames($strTable){
 		$strTable = str_replace('__', $this->strTablePrefix, $strTable);
-		
+
 		$arrNames = array();
 		$arrFields = $this->listFields($strTable);
 
@@ -453,7 +453,7 @@ abstract class Database extends gen_class {
 
 		return $arrNames;
 	}
-	
+
 	/**
 	 * Change the current database
 	 * @param string
@@ -462,38 +462,38 @@ abstract class Database extends gen_class {
 	public function setDatabase($strDatabase=false){
 		return $this->set_database($strDatabase);
 	}
-	
+
 	public function setPrefix($strPrefix){
 		$this->strTmpPrefix = $this->strTablePrefix;
 		$this->strTablePrefix = $strPrefix;
 	}
-	
+
 	public function resetPrefix(){
 		$this->strTablePrefix = $this->strTmpPrefix;
 		$this->strTmpPrefix = '';
 	}
-	
+
 	/**
 	 * Begin a transaction
 	 */
 	public function beginTransaction(){
 		$this->begin_transaction();
 	}
-	
+
 	/**
 	 * Commit a transaction
 	 */
 	public function commitTransaction(){
 		$this->commit_transaction();
 	}
-	
+
 	/**
 	 * Rollback a transaction
 	 */
 	public function rollbackTransaction(){
 		$this->rollback_transaction();
 	}
-	
+
 	/**
 	 * Return the table size in bytes
 	 * @param string
@@ -503,7 +503,7 @@ abstract class Database extends gen_class {
 		$strTable = str_replace('__', $this->strTablePrefix, $strTable);
 		return $this->get_size_of($strTable);
 	}
-	
+
 	/**
 	 * Return the next autoincrement ID of a table
 	 * @param  string
@@ -513,12 +513,12 @@ abstract class Database extends gen_class {
 		$strTable = str_replace('__', $this->strTablePrefix, $strTable);
 		return $this->get_next_id($strTable);
 	}
-	
+
 	public function showCreateTable($strTable){
 		$strTable = str_replace('__', $this->strTablePrefix, $strTable);
 		return $this->show_create_table($strTable);
 	}
-	
+
 	public function isEQdkpTable($strTable){
 		$strTable = str_replace('__', $this->strTablePrefix, $strTable);
 		if (strlen($this->strTablePrefix)){
@@ -527,22 +527,22 @@ abstract class Database extends gen_class {
 		}
 		return true;
 	}
-	
+
 	public function escapeString($strString){
 		$objStatement = $this->createStatement($this->resConnection, $this->strTablePrefix, $this->strDebugPrefix,$this->blnDisableAutocommit);
 		return $objStatement->escapeString($strString);
 	}
-	
+
 	public function escapeParams($arrParams){
 		$objStatement = $this->createStatement($this->resConnection, $this->strTablePrefix, $this->strDebugPrefix,$this->blnDisableAutocommit);
 		return $objStatement->escapeParams($arrParams);
 	}
-	
+
 	public function replaceTablePrefix($strQuery){
 		$strQuery = preg_replace("/([\s|`|'])__([a-zA-Z])/", '$1'.$this->strTablePrefix.'$2', $strQuery);
 		return $strQuery;
 	}
-	
+
 	abstract public function connect($strHost, $strUser, $strPassword, $strDatabase, $intPort=false, $blnPersistent=false);
 	abstract protected function disconnect();
 	abstract protected function get_client_version();
@@ -571,7 +571,7 @@ abstract class DatabaseStatement {
 	protected $objLogger = null;
 	protected $strTablePrefix;
 	protected $strDebugPrefix;
-	
+
 	/**
 	 * Validate the connection resource and store the query
 	 * @param resource
@@ -583,29 +583,29 @@ abstract class DatabaseStatement {
 		{
 			throw new DBALQueryException('Invalid connection resource', $this->strQuery);
 		}
-		
+
 		$this->objLogger = registry::register('plus_debug_logger');
 		$this->resConnection = $resConnection;
 		$this->blnDisableAutocommit = $blnDisableAutocommit;
 		$this->strTablePrefix = $strTablePrefix;
 		$this->strDebugPrefix = $strDebugPrefix;
 	}
-	
+
 	protected function error($strErrorMessage, $strQuery, $strErrorCode = '') {
 		$strErrorID = md5('db_error'.$strErrorMessage.time().$this->strDebugPrefix);
-		
+
 		if(!registry::get_const("lite_mode") && registry::fetch('user')->check_auth('a_', false)) {
 			$blnDebugDisabled = (DEBUG < 2) ? true : false;
 			$strEnableDebugMessage = "<li><a href=\"".registry::get_const("server_path")."admin/manage_settings.php".registry::get_const('SID')."\" target=\"_blank\">Go to your settings, enable Debug Level > 1</a> and <a href=\"javascript:location.reload();\">reload this page.</a></li>";
-	
+
 			registry::register('core')->message("<b>SQL Error (".$strErrorID.")</b> <ul>".(($blnDebugDisabled) ? $strEnableDebugMessage : '<li>See error message on the bottom</li>')."<li><a href=\"".registry::get_const("server_path")."admin/manage_logs.php".registry::get_const('SID')."&amp;error=db#errors\">Check your error logs</a></li></ul>", 'Error', 'red');
 		}
 		$exception = new Exception();
 		$this->objLogger->log($this->strDebugPrefix."sql_error", $strErrorID, $strErrorMessage, $strQuery, $strErrorCode, registry::get_const('dbname'), $this->strTablePrefix, $exception->getTraceAsString());
 
 	}
-		
-	
+
+
 	/**
 	 * Return a parameter
 	 *
@@ -628,7 +628,7 @@ abstract class DatabaseStatement {
 			case 'error':
 				return $this->get_error();
 				break;
-				
+
 			case 'errno':
 				return $this->get_errno();
 				break;
@@ -646,7 +646,7 @@ abstract class DatabaseStatement {
 				break;
 		}
 	}
-	
+
 	/**
 	 * Prepare a statement
 	 * @param string
@@ -689,7 +689,7 @@ abstract class DatabaseStatement {
 
 	/**
 	 * Take an associative array and auto-generate the SET/VALUES subpart of a query
-	 * 
+	 *
 	 * Usage example:
 	 * $objStatement->prepare("UPDATE table %s")->set(array('id'=>'my_id'));
 	 * will be transformed into "UPDATE table SET id='my_id'".
@@ -699,33 +699,33 @@ abstract class DatabaseStatement {
 	public function set($arrParams)
 	{
 		$arrKeys = array_keys($arrParams);
-		
+
 		if (isset($arrKeys[0]) && is_array($arrParams[$arrKeys[0]])){
 			$arrParamsArray = $arrParams;
-			
+
 			if (strncasecmp($this->strQuery, 'INSERT', 6) === 0 || (strncasecmp($this->strQuery, 'REPLACE', 7) === 0))
 			{
 				$strQuery = sprintf('(%s) VALUES ', implode(', ', $this->add_ticks(array_keys($arrParams[$arrKeys[0]]))));
 			}
 
 			$arrQuery = array();
-			
+
 			foreach($arrParamsArray as $arrParams){
 				$arrParams = $this->escapeParams($arrParams);
-		
+
 				// INSERT / REPLACE
 				if (strncasecmp($this->strQuery, 'INSERT', 6) === 0 || (strncasecmp($this->strQuery, 'REPLACE', 7) === 0))
 				{
 					$arrQuery[] = sprintf('(%s)', str_replace('%', '%%', implode(', ', array_values($arrParams))));
 				}
 			}
-			
+
 			$strQuery .= implode(', ', $arrQuery);
-			
-			
+
+
 		} else {
 			$arrParams = $this->escapeParams($arrParams);
-	
+
 			// INSERT / REPLACE
 			if (strncasecmp($this->strQuery, 'INSERT', 6) === 0 || (strncasecmp($this->strQuery, 'REPLACE', 7) === 0))
 			{
@@ -733,42 +733,42 @@ abstract class DatabaseStatement {
 									implode(', ', $this->add_ticks(array_keys($arrParams))),
 									str_replace('%', '%%', implode(', ', array_values($arrParams))));
 			}
-	
+
 			// UPDATE
 			elseif (strncasecmp($this->strQuery, 'UPDATE', 6) === 0)
 			{
 				$arrSet = array();
-	
+
 				foreach ($arrParams as $k=>$v)
 				{
 					$arrSet[] = $this->add_ticks($k) . '=' . $v;
 				}
-	
+
 				$strQuery = 'SET ' . str_replace('%', '%%', implode(', ', $arrSet));
-			}	
+			}
 		}
-		
-		
+
+
 
 
 		$this->strQuery = str_replace('%p', $strQuery, $this->strQuery);
 		return $this;
 	}
-	
+
 	private function add_ticks($mixTables){
 		if(is_array($mixTables)){
 			foreach($mixTables as $key => $val){
 				if($val[0] != "`") $mixTables[$key] = "`".$val."`";
 			}
-			
+
 			return $mixTables;
-			
+
 		} else {
 			if($mixTables[0] != "`") $mixTables = "`".$mixTables."`";
 			return $mixTables;
 		}
 	}
-	
+
 	/**
 	 * Create an IN-Statement
 	 *
@@ -784,12 +784,12 @@ abstract class DatabaseStatement {
 			throw new Exception('Empty param array');
 		}
 		$arrParams = $this->escapeParams($arrParams, true);
-		
+
 		$this->strQuery = str_replace(':in', "IN (".implode(',', $arrParams).")", $this->strQuery);
 		return $this;
 	}
 
-	
+
 	/**
 	 * Limit the current result to a certain number of rows and take an offset value as second argument
 	 * @param integer
@@ -799,7 +799,7 @@ abstract class DatabaseStatement {
 	public function limit($intRows, $intOffset = 0){
 		$intRows = intval($intRows);
 		$intOffset = intval($intOffset);
-		
+
 		if ($intRows <= 0)
 		{
 			$intRows = 30;
@@ -813,7 +813,7 @@ abstract class DatabaseStatement {
 		$this->limit_query($intRows, $intOffset);
 		return $this;
 	}
-	
+
 	/**
 	 * Execute the current statement
 	 * @return Database_Result
@@ -834,10 +834,10 @@ abstract class DatabaseStatement {
 		} catch(DBALQueryException $e){
 			$this->error($e->getMessage(), $e->getQuery(), $e->getCode());
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Execute a query and return the result object
 	 * @param string
@@ -877,7 +877,7 @@ abstract class DatabaseStatement {
 		}
 		return $objResult;
 	}
-	
+
 	/**
 	 * Build the query string
 	 * @param array
@@ -893,7 +893,7 @@ abstract class DatabaseStatement {
 			throw new Exception('Too few arguments to build the query string');
 		}
 	}
-	
+
 	/**
 	 * Escape the parameters and serialize objects and arrays
 	 * @param array
@@ -916,7 +916,7 @@ abstract class DatabaseStatement {
 							$arrParams[$k] = $this->string_escape($orig_v);
 						}
 
-					} else {								
+					} else {
 						$arrParams[$k] = $this->string_escape($v);
 					}
 					break;
@@ -932,9 +932,9 @@ abstract class DatabaseStatement {
 				case 'array':
 					$arrParams[$k] = $this->string_escape(serialize($v));
 					break;
-					
+
 				case 'double':
-				case 'float': 
+				case 'float':
 					$arrParams[$k] = preg_replace('#([-]?)([0-9]+)([\.,]?)([0-9]*)#', "\\1\\2.\\4", $v);
 					break;
 
@@ -946,29 +946,29 @@ abstract class DatabaseStatement {
 
 		return $arrParams;
 	}
-	
+
 	public function escapeString($strString){
 		return $this->string_escape($strString);
 	}
-	
+
 	public function addCondition($strCondition){
 		$arrParams = func_get_args();
 		if(!count($arrParams)) return $this;
-		
+
 		if(isset($arrParams[1])){
 			unset($arrParams[0]);
 		} else {
 			$arrParams = array();
 		}
-		
+
 		return $this->add_condition($strCondition, $arrParams);
 	}
-	
+
 	public function replaceTablePrefix(){
 		$strQuery = preg_replace("/([\s|`|'])__([a-zA-Z])/", '$1'.$this->strTablePrefix.'$2', $this->strQuery);
 		return $strQuery;
 	}
-			
+
 	abstract protected function add_condition($strCondition, $arrParams);
 	abstract protected function prepare_query($strQuery);
 	abstract protected function string_escape($strString);
@@ -982,7 +982,7 @@ abstract class DatabaseStatement {
 }
 
 abstract class DatabaseResult {
-	
+
 	protected $resResult;
 	protected $strQuery;
 	private $intIndex = -1;
@@ -990,7 +990,7 @@ abstract class DatabaseResult {
 	private $blnDone = false;
 	protected $arrCache = array();
 	protected $arrRow = false;
-	
+
 	public function __construct($resResult, $strQuery) {
 		if (!is_resource($resResult) && !is_object($resResult))
 		{
@@ -1000,11 +1000,11 @@ abstract class DatabaseResult {
 		$this->resResult = $resResult;
 		$this->strQuery = $strQuery;
 	}
-	
+
 	public function __destruct() {
 		$this->free();
 	}
-	
+
 	/**
 	 * Return a result parameter or a particular field of the current row
 	 *
@@ -1059,9 +1059,9 @@ abstract class DatabaseResult {
 	public function fetchAssoc()
 	{
 		$this->arrRow = $this->fetch_assoc();
-		return $this->arrRow;		
+		return $this->arrRow;
 	}
-	
+
 	/**
 	 * Fetch the current row as associative array
 	 * @return array
@@ -1074,10 +1074,10 @@ abstract class DatabaseResult {
 				--$this->intIndex;
 				return false;
 			}
-		
+
 			$this->arrCache[$this->intIndex] = $arrRow;
 		}
-		
+
 		return $this->arrCache[$this->intIndex];
 	}
 
@@ -1136,7 +1136,7 @@ abstract class DatabaseResult {
 		}
 
 		return $arrFields;
-	}	
+	}
 
 	/**
 	 * Go to the first row of the current result
@@ -1256,5 +1256,3 @@ abstract class DatabaseResult {
 	abstract protected function num_fields();
 	abstract protected function fetch_field($intOffset);
 }
-
-?>

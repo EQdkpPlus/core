@@ -202,4 +202,3 @@ class Manage_Roles extends page_generic {
 	}
 }
 registry::register('Manage_Roles');
-?>

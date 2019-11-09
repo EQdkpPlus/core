@@ -35,11 +35,11 @@ class char_creation_date extends task {
 		if(in_array(0, $creation_dates)) return true;
 		return false;
 	}
-	
+
 	public function is_necessary() {
 		return ($this->is_applicable() && $this->config->get('char_creation_date_update')) ? true : false;
 	}
-	
+
 	public function get_form_content() {
 		$creation_dates = $this->pdh->aget('member', 'creation_date', 0, array($this->pdh->get('member', 'id_list')));
 		$members = array();
@@ -66,11 +66,10 @@ class char_creation_date extends task {
 					else $date = min($first_raids[$member_id], $first_items[$member_id]);
 				} else $date = $first_raids[$member_id];
 			} else $date = $this->time->time;
-			
+
 			$this->db->prepare("UPDATE __members SET member_creation_date = ? WHERE member_id = ?")->execute($date, $member_id);
 		}
 		$this->config->del('char_creation_date_update');
 		return $this->lang['fix_creation_date_done'];
 	}
 }
-?>

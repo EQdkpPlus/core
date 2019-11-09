@@ -41,7 +41,7 @@ class Manage_Export extends page_generic {
 		parent::__construct(false, $handler);
 		$this->process();
 	}
-	
+
 	public function ajax_export(){
 		include_once($this->root_path . 'core/data_export.class.php');
 		$myexp = new content_export();
@@ -58,7 +58,7 @@ class Manage_Export extends page_generic {
 		}
 		exit();
 	}
-	
+
 	public function regenerate_apikey(){
 		$strApiKey = random_string(48);
 		$this->config->set('api_key', $strApiKey);
@@ -68,19 +68,19 @@ class Manage_Export extends page_generic {
 		include_once($this->root_path . 'core/data_export.class.php');
 		$myexp = new content_export();
 		$arrData = $myexp->export(true, true, false,false, true);
-		
+
 		$strApiKey = $this->config->get('api_key');
 		if(!$strApiKey){
 			$strApiKey = random_string(48);
 			$this->config->set('api_key', $strApiKey);
 		}
-		
+
 		$this->tpl->assign_vars(array(
 			'EXPORT_DATA'	=> $this->returnLua($arrData),
 				'API_KEY'		=> '<div class="clickToReveal" title="'.$this->user->lang('click_to_reveal').'"><a>**********</a><div>'.$strApiKey.'</div></div>',
 			'S_SHOW_APIKEY' => $this->user->check_group(2, false),
 		));
-				
+
 		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('manexport_title'),
 			'template_file'		=> 'admin/manage_export.html',
@@ -91,23 +91,23 @@ class Manage_Export extends page_generic {
 			'display'			=> true
 		]);
 	}
-	
+
 	private function returnJSON($arrData){
 		if (!isset($arrData['status']) || $arrData['status'] != 0){
 			$arrData['status'] = 1;
 		}
 		return json_encode($arrData);
 	}
-		
+
 	private function returnXML($arrData){
 		if (!is_array($arrData)){
 			$arrData = $this->error('unknown error');
 		}
-		
+
 		if (!isset($arrData['status']) || $arrData['status'] != 0){
 				$arrData['status'] = 1;
 		}
-		
+
 		$xml_array = $this->xmltools->array2simplexml($arrData, 'response');
 
 		$dom = dom_import_simplexml($xml_array)->ownerDocument;
@@ -116,7 +116,7 @@ class Manage_Export extends page_generic {
 		$string = $dom->saveXML();
 		return trim($string);
 	}
-	
+
 	private function returnLua($arrData){
 		if (!isset($arrData['status']) || $arrData['status'] != 0){
 			$arrData['status'] = 1;
@@ -128,4 +128,3 @@ class Manage_Export extends page_generic {
 }
 
 registry::register('Manage_Export');
-?>

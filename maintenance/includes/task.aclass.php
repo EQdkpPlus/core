@@ -128,7 +128,7 @@ if ( !class_exists( "task" ) ){
 		}
 
 		public function a_destruct() {
-			$this->destruct();		
+			$this->destruct();
 			if(!$this->end) {
 				$this->config->set('maintenance_task_'.$this->task_name, $this->task_name);
 				$this->config->set('maintenance_step_standby_'.$this->task_name, $this->current_step);
@@ -189,4 +189,3 @@ if ( !class_exists( "task" ) ){
 		}
 	}
 }
-?>

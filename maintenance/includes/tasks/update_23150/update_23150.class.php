@@ -30,10 +30,10 @@ class update_23150 extends sql_update_task {
 	public $version			= '2.3.15.0'; //new plus-version
 	public $ext_version		= '2.3.15'; //new plus-version
 	public $name			= '2.3.15 Update';
-	
+
 	public function __construct(){
 		parent::__construct();
-		
+
 		$this->langs = array(
 				'english' => array(
 						'update_23150'	=> 'EQdkp Plus 2.3.15 Update',
@@ -44,13 +44,11 @@ class update_23150 extends sql_update_task {
 						1	=> 'Füge eine Spalte in die Repository Tabelle hinzu',
 				),
 		);
-		
+
 		// init SQL querys
 		$this->sqls = array(
 				1	=> "ALTER TABLE `__repository` ADD COLUMN `tags` TEXT NULL;",
 		);
 	}
-	
-}
 
-?>
+}

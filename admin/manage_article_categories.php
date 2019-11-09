@@ -207,7 +207,7 @@ class Manage_Article_Categories extends page_generic {
 		}
 		$arrAggregation = $arrCategories;
 		unset($arrAggregation[0]);
-		
+
 		$strName = '';
 		if ($id){
 			unset($arrCategories[$id]);
@@ -356,4 +356,3 @@ class Manage_Article_Categories extends page_generic {
 
 }
 registry::register('Manage_Article_Categories');
-?>

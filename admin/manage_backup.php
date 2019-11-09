@@ -317,4 +317,3 @@ class EQDKPBackup extends page_generic{
 
 }
 registry::register('EQDKPBackup');
-?>

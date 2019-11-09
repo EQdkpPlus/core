@@ -25,11 +25,11 @@ if ( !defined('EQDKP_INC') ){
 
 class login_steam extends gen_class {
 	public $oid = false;
-	
+
 	public static $options = array(
 		'connect_accounts'	=> true,
 	);
-	
+
 	public static $functions = array(
 		'login_button'		=> 'login_button',
 		'register_button' 	=> 'register_button',
@@ -37,13 +37,13 @@ class login_steam extends gen_class {
 		'get_account'		=> 'get_account',
 		'pre_register'		=> 'pre_register',
 	);
-	
+
 	public $steamURL = "https://steamcommunity.com/openid";
-	
+
 	public function __construct(){
 		$this->init_openid();
 	}
-	
+
 	public function init_openid(){
 		if (!is_object($this->oid)){
 			//Init Facebook Api
@@ -53,29 +53,29 @@ class login_steam extends gen_class {
 			$this->oid->identity = $this->steamURL;
 		}
 	}
-	
-	public function login_button(){		
+
+	public function login_button(){
 		$auth_url = $this->env->buildLink().'index.php/Login/?login&lmethod=steam';
 		return '<button type="button" class="mainoption thirdpartylogin steam loginbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-steam fa-lg"></i> Steam</button>';
 	}
-	
+
 	public function register_button(){
 		$auth_url = $this->env->buildLink().'index.php/Register/?register&lmethod=steam';
 		return '<button type="button" class="mainoption thirdpartylogin steam registerbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-steam fa-lg"></i> Steam</button>';
 	}
-	
+
 	public function account_button(){
 		$link_hash = ((string)$this->user->csrfGetToken('settings_pageobjectmode'));
 		$auth_url = $this->env->buildLink().'index.php/Settings/?mode=addauthacc&lmethod=steam&link_hash='.$link_hash;
 		return '<button type="button" class="mainoption thirdpartylogin steam accountbtn" onclick="window.location=\''.$auth_url.'\'"><i class="fa fa-steam fa-lg"></i> Steam</button>';
 	}
-	
+
 	public function get_account(){
 		try {
 			if(!$this->oid->mode) {
 				redirect($this->oid->authUrl(), false, true);
 			} elseif($this->oid->mode == 'cancel') {
-			
+
 			} else {
 				if ($this->oid->validate() ){
 					return $this->oid->identity;
@@ -87,11 +87,11 @@ class login_steam extends gen_class {
 		}
 		return false;
 	}
-	
+
 	public function pre_register(){
 		try {
 			$this->init_openid();
-			
+
 			if(!$this->oid->mode) {
 				$this->oid->required = array(
 				'namePerson/friendly',
@@ -100,14 +100,14 @@ class login_steam extends gen_class {
 				//'person/gender',
 				//'contact/country/home',
 				);
-	
+
 				redirect($this->oid->authUrl(), false, true);
 			} elseif($this->oid->mode == 'cancel') {
-			
+
 			} else {
 				if ($this->oid->validate() ){
 					$me = $this->oid->getAttributes();
-	
+
 					$bla = array(
 						'username'			=> isset($me['namePerson/friendly']) ? $me['namePerson/friendly'] : '',
 						'user_email'		=> isset($me['contact/email']) ? $me['contact/email'] : '',
@@ -115,36 +115,36 @@ class login_steam extends gen_class {
 						'auth_account'		=> $this->oid->identity,
 						'user_timezone'		=> $this->in->get('user_timezone', $this->config->get('timezone')),
 					);
-	
+
 					return $bla;
-					
+
 				}
 			}
-	
+
 		} catch (Exception $e) {
 			$this->core->message($e->getMessage(), 'Steam Error', 'red');
 		}
 		return false;
 	}
-	
-	
+
+
 	/**
 	* User-Login
 	*
 	* @param $strUsername
 	* @param $strPassword
-	* @return bool/array	
-	*/	
+	* @return bool/array
+	*/
 	public function login($strUsername, $strPassword){
 		try {
 			$this->init_openid();
 			if(!$this->oid->mode) {
 				redirect($this->oid->authUrl(), false, true);
 			} elseif($this->oid->mode == 'cancel') {
-			
-			
+
+
 			} else {
-			
+
 				if ($this->oid->validate() ){
 					$userid = $this->pdh->get('user', 'userid_for_authaccount', array($this->oid->identity, 'steam'));
 					if ($userid){
@@ -163,13 +163,13 @@ class login_steam extends gen_class {
 					}
 				}
 			}
-		
+
 		} catch (Exception $e) {
 			$this->core->message($e->getMessage(), 'Steam Error', 'red');
 		}
 		return false;
 	}
-	
+
 	/**
 	* User-Logout
 	*
@@ -178,7 +178,7 @@ class login_steam extends gen_class {
 	public function logout(){
 		return true;
 	}
-	
+
 	/**
 	* Autologin
 	*
@@ -189,4 +189,3 @@ class login_steam extends gen_class {
 		return false;
 	}
 }
-?>

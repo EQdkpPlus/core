@@ -117,21 +117,21 @@ class Manage_User_Groups extends page_generic {
 	//Save order
 	public function saveorder(){
 		$this->user->check_auth('a_usergroups_man');
-		
+
 		if(is_array($this->in->getArray('user_groups', 'string'))) {
 			foreach($this->in->getArray('user_groups', 'string') as $key => $val){
 				$this->pdh->put('user_groups', 'update_sortid', array(intval($val['id']), $key));
 			}
 		}
-		
+
 		//Standard
 		$intDefault = $this->in->get('user_groups_standard', 0);
 		$this->pdh->put('user_groups', 'update_default', array($intDefault));
-		
+
 		$message = array('title' => $this->user->lang('success'), 'text' => $this->user->lang('save_suc'), 'color' => 'green');
 		$this->display($message);
 	}
-	
+
 
 	//Delete user-groups
 	public function delete() {
@@ -183,7 +183,7 @@ class Manage_User_Groups extends page_generic {
 				'DESC'	=> $this->pdh->get('user_groups', 'desc', array($id)),
 				'USER_COUNT'	=> $this->pdh->get('user_groups_users', 'groupcount', array($id)),
 				'S_DELETABLE' => ($this->pdh->get('user_groups', 'deletable', array($id))) ? true : false,
-				
+
 				'S_NO_STANDARD' => ($id == 2 || $id == 3) ? true : false,
 				'STANDARD'	=> ($this->pdh->get('user_groups', 'standard', array($id))) ? 'checked="checked"' : '',
 				'HIDE'	=> ($this->pdh->get('user_groups', 'hide', array($id))) ? 'checked="checked"' : '',
@@ -193,9 +193,9 @@ class Manage_User_Groups extends page_generic {
 
 		$this->confirm_delete($this->user->lang('confirm_delete_groups'));
 		$this->confirm_delete($this->user->lang('confirm_delete_groups'), '', true, array('function' => 'delete_single_warning', 'force_ajax' => true));
-		
+
 		$this->jquery->selectall_checkbox('selall_groups', 'user_group_ids[]');
-		
+
 		$this->tpl->assign_vars(array(
 			'S_USERGROUP_ADMIN' => $this->user->check_auth('a_usergroups_man', false),
 			'GROUP_COUNT' 		=> count($grps),
@@ -218,7 +218,7 @@ class Manage_User_Groups extends page_generic {
 	public function save_group(){
 		$this->user->check_auth('a_usergroups_man');
 		$intGroupID = $this->in->get('g', 0);
-		
+
 		//General settings
 		$strName = $this->in->get('name');
 		$strDesc = $this->in->get('desc');
@@ -274,31 +274,31 @@ class Manage_User_Groups extends page_generic {
 
 	public function edit($messages=false, $group = false){
 		$groupID  = ($group) ? $group : $this->in->get('g', 0);
-		
+
 		$this->user->check_auth('a_usergroups_man');
-				
+
 		if($messages) {
 			$this->pdh->process_hook_queue();
 			$this->core->messages($messages);
 		}
-		
+
 		//Get Group-name
 		$group_name = $this->pdh->get('user_groups', 'name', array($groupID));
-		
+
 		//Permissions
 		$permission_boxes = $this->acl->get_permission_boxes();
 		$this->pm->generate_permission_boxes($permission_boxes);
 		$group_permissions = $this->acl->get_group_permissions($this->in->get('g'), true);
-		
+
 		foreach ( $permission_boxes as $group => $checks ){
 			$icon = (isset($checks['icon'])) ? $this->core->icon_font($checks['icon']) : '';
 			$a_set = $u_set = false;
 			foreach ( $checks as $data ){
 				if (!is_array($data)) continue;
-				
+
 				//Guests won't get admin-permissions
 				if (($groupID == 1 && substr($data['CBNAME'], 0, 2)== "a_")) continue;
-				
+
 				switch (substr($data['CBNAME'], 0, 2)){
 					case 'a_': if (!$a_set){
 						$this->tpl->assign_block_vars('a_permissions_row', array(
@@ -308,7 +308,7 @@ class Manage_User_Groups extends page_generic {
 						$a_set = true;
 					}
 					break;
-					
+
 					case 'u_': if (!$u_set){
 						$this->tpl->assign_block_vars('u_permissions_row', array(
 								'GROUP' => $group,
@@ -317,9 +317,9 @@ class Manage_User_Groups extends page_generic {
 						$u_set = true;
 					}
 					break;
-					
+
 				}
-				
+
 				$this->tpl->assign_block_vars(substr($data['CBNAME'], 0, 2).'permissions_row.check_group', array(
 						'CBNAME'			=> $data['CBNAME'],
 						'DISABLED'			=> ($groupID == 2) ? 'disabled' : '',
@@ -328,55 +328,55 @@ class Manage_User_Groups extends page_generic {
 						'TEXT'				=> $data['TEXT'],
 				));
 			}
-			
+
 		}
 		unset($permission_boxes);
-		
+
 		$arrCategoryIDs = $this->pdh->sort($this->pdh->get('article_categories', 'id_list', array()), 'article_categories', 'sort_id', 'asc');
 		$arrCategories = array();
 		foreach($arrCategoryIDs as $caid){
 			$arrCategories[$caid] = $this->pdh->get('article_categories', 'name_prefix', array($caid)).$this->pdh->get('article_categories', 'name', array($caid));
 		}
-		
+
 		$this->tpl->assign_block_vars('articelcat_row', array(
 				'GROUP' => $this->user->lang('article'),
 				'ICON'	=> $this->core->icon_font('fa-file-text'))
 				);
-		
+
 		$grps = array('rea', 'cre', 'upd', 'del', 'chs');
-		
+
 		$arrPermissionDropdown = array(
 				-1 => $this->user->lang('inherited'),
 				1 => $this->user->lang('allowed'),
 				0 => $this->user->lang('disallowed')
 		);
-		
+
 		foreach($grps as $group_id){
 			$this->tpl->assign_block_vars('articelcat_row.headline_row', array(
 					'GROUP'	=> $this->user->lang('perm_'.$group_id),
 			));
 		}
-		
+
 		foreach($arrCategories as $intCategoryID => $strCategoryName){
 			$this->tpl->assign_block_vars('articelcat_row.check_group', array(
 					'CBNAME'		=> $strCategoryName,
 					'S_ADMIN'		=> false
 			));
-			
+
 			$arrPermissions = $this->pdh->get('article_categories', 'permissions', array($intCategoryID));
-			
+
 			foreach($grps as $group_id){
 				$perm = (isset($arrPermissions[$group_id][$groupID])) ? $arrPermissions[$group_id][$groupID] : -1;
-				
+
 				$this->tpl->assign_block_vars('articelcat_row.check_group.group_row', array(
 						'STATUS'	=>  (new hdropdown('perm['.$intCategoryID.']['.$group_id.']', array('options' => $arrPermissionDropdown, 'value' => $perm)))->output(),
 				));
 			}
 		}
-		
+
 		$this->jquery->Tab_header('groups_tabs');
 		$this->jquery->Tab_header('permission_tabs');
-		
+
 		$memberships = $this->pdh->get('user_groups_users', 'memberships_status', array($this->user->id));
 		$this->tpl->assign_vars(array(
 				'S_IS_IN_GROUP'			=> (isset($memberships[$groupID])) ? true : false,
@@ -386,8 +386,8 @@ class Manage_User_Groups extends page_generic {
 				'GRP_HIDDEN'			=> (new hradio('hide', array('value' => $this->pdh->get('user_groups', 'hide', array($groupID)))))->output(),
 				'GRP_TEAMLIST'			=> (new hradio('team', array('value' => $this->pdh->get('user_groups', 'team', array($groupID)))))->output(),
 		));
-		
-		
+
+
 		$this->core->set_vars([
 				'page_title'		=> $this->user->lang('manage_user_group').': '.sanitize($group_name),
 				'template_file'		=> 'admin/manage_user_groups_edit.html',
@@ -464,9 +464,9 @@ class Manage_User_Groups extends page_generic {
 				'ONLINE'		=> $user_online,
 				'S_UNDELETABLE'	=> ($groupID == 2 && $elem == $this->user->data['user_id']) ? true : false,
 			));
-			
+
 			if($row === "") $addGrpLeaders[$key] = $name;
-			
+
 			$count[$row]++;
 
 
@@ -501,7 +501,7 @@ class Manage_User_Groups extends page_generic {
 				'name'	=> 'remove_grpleader',
 			),
 		);
-		
+
 		$this->tpl->assign_vars(array(
 			'GROUP_NAME'			=> sanitize($group_name),
 			$red 					=> '_red',
@@ -710,4 +710,3 @@ class Manage_User_Groups extends page_generic {
 
 }
 registry::register('Manage_User_Groups');
-?>
