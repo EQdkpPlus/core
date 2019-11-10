@@ -429,7 +429,7 @@ class ManageRaids extends page_generic {
 			'ITEMPOOL_DROPDOWN' => (new hdropdown('items[KEY][itempool_id]', array('options' => $itempools, 'value' => $item['itempool_id'], 'id' => 'itempool_id_KEY', 'class' => 'input item_itempool')))->output(),
 			'ITEM_AUTOCOMPLETE' => $this->jquery->Autocomplete('item_KEY', array_unique($item_names)),
 			'EVENT_ITEMPOOL_MAPPING' => json_encode($arrEventItempoolMapping),
-			'FIRST_EVENT_ID'	=> isset($arrEventKeys[0]) ? $arrEventKeys[0] : 0,
+			'FIRST_EVENT_ID'	=> (isset($arrEventKeys[0]) && strlen($arrEventKeys[0])) ? $arrEventKeys[0] : 0,
 			'S_COPY'			=> ($copy),
 
 			//language vars

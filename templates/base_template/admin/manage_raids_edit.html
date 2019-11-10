@@ -152,7 +152,7 @@
 			$(this).hide();
 		});
 	});
-
+	<!-- IF not S_DKP_EASYMODE -->
 	var event_itempool_mapping = {EVENT_ITEMPOOL_MAPPING};
 	var new_itempool_option = event_itempool_mapping[{FIRST_EVENT_ID}];
 	$(function(){
@@ -162,6 +162,7 @@
 			if(!new_itempool_option) new_itempool_option = 0;
 		});
 	});
+	<!-- ENDIF -->
 </script>
 <form action='{ACTION}' method='post' name='post'>
 <div id="toggleRaidInfos">
