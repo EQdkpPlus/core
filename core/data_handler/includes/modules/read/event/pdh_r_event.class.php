@@ -98,6 +98,17 @@ if(!class_exists('pdh_r_event')){
 		}
 
 		public function get_def_itempool($event_id){
+			if($this->config->get('dkp_easymode')){
+				$mdkpids = $this->pdh->get('multidkp', 'mdkpids4eventid', array($event_id));
+				$intMDKPool = $mdkpids[0];
+				$itempools = $this->pdh->get('multidkp', 'itempool_ids', array($intMDKPool));
+				if(is_array($itempools)){
+					return $itempools[0];
+				} else {
+					return 1;
+				}
+			}
+			
 			return $this->events[$event_id]['default_itempool'];
 		}
 
