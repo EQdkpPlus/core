@@ -52,11 +52,11 @@ if ( !class_exists( "pdh_r_epgp" ) ) {
 		);
 
 		public function reset(){
-			$this->pdc->del('pdh_epgp_table');
-			$this->epgp = NULL;
+			$this->epgp = array();
 		}
 
 		public function init(){
+			/*
 			//cached data not outdated?
 			$this->epgp = $this->pdc->get('pdh_epgp_table');
 			if($this->epgp !== NULL){
@@ -74,9 +74,20 @@ if ( !class_exists( "pdh_r_epgp" ) ) {
 			$this->pdc->put('pdh_epgp_table', $arrEPGP, null);
 
 			$this->epgp = $arrEPGP;
+			*/
+		}
+		
+		public function init_member($member_id, $multidkp_id){
+			if(isset($this->epgp[$member_id][$multidkp_id])) return true;
+			$arrEPGP = array();
+			$arrEPGP['multi']['ep'] = $this->calculate_ep($member_id, $multidkp_id, true);
+			$arrEPGP['multi']['epgp'] = $this->calculate_epgp($member_id, $multidkp_id, true, $arrEPGP['multi']['ep']);
+			$arrEPGP['single']['ep'] = $this->calculate_ep($member_id, $multidkp_id, false);
+			$arrEPGP['single']['epgp'] = $this->calculate_epgp($member_id, $multidkp_id, false, $arrEPGP['single']['ep']);
+			$this->epgp[$member_id][$multidkp_id] = $arrEPGP;
 		}
 
-		public function calculate_epgp($member_id, $multidkp_id, $with_twink, $_ep=false){
+		private function calculate_epgp($member_id, $multidkp_id, $with_twink, $_ep=false){
 			$ep	= ($_ep !== false) ? $_ep : $this->get_ep($member_id, $multidkp_id, false, $with_twink);
 			$gp	= $this->get_gp($member_id, $multidkp_id, false, $with_twink);
 			$bp 	= intval($this->pdh->get_layout_config('base_points'));
@@ -86,13 +97,16 @@ if ( !class_exists( "pdh_r_epgp" ) ) {
 			return (($min_ep > 0) && ($ep < $min_ep)) ? 0 : $epgp;
 		}
 
-		public function calculate_ep($member_id, $multidkp_id, $with_twink=true){
+		private function calculate_ep($member_id, $multidkp_id, $with_twink=true){
 			return $this->pdh->get('points', 'earned', array($member_id, $multidkp_id, 0, $with_twink)) + $this->pdh->get('points', 'adjustment', array($member_id, $multidkp_id, 0, $with_twink));
 		}
 
 		public function get_ep($member_id, $multidkp_id, $round = true, $with_twink=true){
 			$single = ($with_twink) ? 'multi' : 'single';
-			$ep = $this->epgp[$single][$member_id][$multidkp_id]['ep'];
+			
+			if(isset($this->epgp[$member_id][$multidkp_id])) $this->init_member($member_id, $multidkp_id);
+			
+			$ep = $this->epgp[$member_id][$multidkp_id][$single]['ep'];
 			return ($round == true) ? runden($ep) : $ep;
 		}
 
@@ -120,8 +134,10 @@ if ( !class_exists( "pdh_r_epgp" ) ) {
 		}
 
 		public function get_epgp($member_id, $multidkp_id, $round = true, $with_twink=true){
+			if(isset($this->epgp[$member_id][$multidkp_id])) $this->init_member($member_id, $multidkp_id);
+			
 			$single = ($with_twink) ? 'multi' : 'single';
-			$epgp = $this->epgp[$single][$member_id][$multidkp_id]['epgp'];
+			$epgp = $this->epgp[$member_id][$multidkp_id][$single]['epgp'];
 			return ($round == true) ? runden($epgp) : $epgp;
 		}
 
