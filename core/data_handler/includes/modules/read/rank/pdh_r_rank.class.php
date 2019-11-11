@@ -138,6 +138,17 @@ if ( !class_exists( "pdh_r_rank" ) ) {
 			$arrIDs = $this->get_id_list();
 			return ((isset($arrIDs[0])) ? $arrIDs[0] : 0);
 		}
+		
+		public function get_byname($strRankname){
+			if(is_array($this->ranks)){
+				foreach($this->ranks as $key => $val){
+					if ($val['name'] === $strRankname) return $key;
+				}
+			}
+			
+			$intDefaultRank = $this->get_default();
+			return $intDefaultRank;
+		}
 
 	}//end class
 }//end if
