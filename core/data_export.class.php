@@ -150,14 +150,14 @@ class content_export extends gen_class {
 				}
 
 				$out['players']['player:'.$member] = array(
-					'id'			=> $member,
+					'id'			=> (int)$member,
 					'name'			=> $this->game->handle_export_charnames(unsanitize($this->pdh->get('member', 'name', array($member))), $member),
 					'active'		=> $this->pdh->get('member', 'active', array($member)),
 					'hidden'		=> $this->pdh->get('member', 'is_hidden', array($member)),
-					'main_id'		=> $this->pdh->get('member', 'mainid', array($member)),
+					'main_id'		=> (int)$this->pdh->get('member', 'mainid', array($member)),
 					'main_name'		=> $this->game->handle_export_charnames(unsanitize($this->pdh->get('member', 'mainname', array($member))), $this->pdh->get('member', 'mainid', array($member))),
 
-					'class_id'		=> $this->pdh->get('member', 'classid', array($member)),
+					'class_id'		=> (int)$this->pdh->get('member', 'classid', array($member)),
 					'class_name'	=> $this->pdh->get('member', 'classname', array($member)),
 
 					'points'		=> $points,
