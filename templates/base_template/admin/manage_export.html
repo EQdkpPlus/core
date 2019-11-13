@@ -30,18 +30,16 @@ $(function(){
 });
 
 function ajax_reload_export(){
-	var memberitems = $('#memberitems').attr("checked");
-	if (memberitems == "checked") {
-		memberitems = 1;
+	if ($('#memberitems').prop("checked")) {
+		var memberitems = 1;
 	} else {
-		memberitems = 0;
+		var memberitems = 0;
 	}
 
-	var memberadjs = $('#memberadjs').attr("checked");
-	if (memberadjs == "checked") {
-		memberadjs = 1;
+	if ($('#memberadjs').prop("checked")) {
+		var memberadjs = 1;
 	} else {
-		memberadjs = 0;
+		var memberadjs = 0;
 	}
 	var format = $('input[name=format]:checked').val();
 
