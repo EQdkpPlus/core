@@ -53,7 +53,9 @@ if ( !class_exists( "inactive_crontask" ) ) {
 					//set the members immediately active, as they have been confirmed or backup
 					if((int)$row['signup_status'] === 0 || (int)$row['signup_status'] === 3){
 						$member_id = (int)$row['member_id'];
-						$this->pdh->put('member', 'change_status', array($member_id, 1));
+						if((int)$this->config->get('auto_set_active') == 1){	
+							$this->pdh->put('member', 'change_status', array($member_id, 1));
+						}
 
 						if(isset($arrMarkedForInactive[$member_id])) unset($arrMarkedForInactive[$member_id]);
 					}

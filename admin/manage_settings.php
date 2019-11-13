@@ -597,9 +597,10 @@ class admin_settings extends page_generic {
 						'type'		=> 'radio'
 					),
 					'inactive_period'	=> array(
-						'type'		=> 'text',
+						'type'		=> 'spinner',
 						'size'		=> 5,
-						'default'	=> 0
+						'default'	=> 0,
+						'min'		=> 0,
 					),
 					'auto_set_active' => array(
 						'type'		=> 'radio',
