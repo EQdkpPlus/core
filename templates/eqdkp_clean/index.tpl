@@ -161,12 +161,11 @@
 											</div>
 												
 											<div class="floatRight">
-												<span class="hand notification-mark-all-read">{L_mark_all_as_read}</span> &bull; <span class="hand" onclick="window.location='{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}#fragment-notifications'"><i class="fa fa-cog fa-lg"></i></span>
+												<span class="hand notification-mark-all-read" title="{L_mark_all_as_read}"><i class="fa fa-lg fa-check"></i></span> &bull; <span class="hand" onclick="window.location='{EQDKP_CONTROLLER_PATH}Settings{SEO_EXTENSION}{SID}#fragment-notifications'" title="{L_settings}"><i class="fa fa-cog fa-lg"></i></span>
 											</div>
 											
 											<div class="clear"></div>
 										</li>
-										<li class="personalAreaTime"><i class="fa fa-clock-o fa-lg"></i> <span class="user_time">{USER_TIME}</span></li>
 										<li class="tooltip-divider"></li>
 										<li class="notification-content">
 											<ul>{NOTIFICATIONS}</ul>
