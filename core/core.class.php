@@ -1356,6 +1356,8 @@ class core extends gen_class {
 			$arrDomains = explode("\n", $strDomains);
 
 			$arrAllowedDomains = array();
+			
+			header('Access-Control-Allow-Headers: Authorization, X-Custom-Authorization');
 
 			foreach($arrDomains as $strDomain){
 				$strDomain = trim(unsanitize($strDomain));
