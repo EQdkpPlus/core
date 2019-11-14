@@ -80,6 +80,8 @@ if(!class_exists('article')){
 				//2 = Headlines only
 				//3 = only first 600 characters
 				$strText = $this->pdh->get('articles',  'text', array($intArticleID));
+				
+				$arrContent = array();
 
 				//Page divisions
 				$strText = xhtml_entity_decode($strText);
@@ -89,17 +91,17 @@ if(!class_exists('article')){
 				if (count($arrPagebreaks[0])){
 					$arrContent = preg_split('#<hr(.*)class="system-pagebreak"(.*)\/>#iU', $strText);
 					array_unshift($arrContent, "");
-
 				} else {
 					$arrContent[0]	= "";
 					$arrContent[1]	= $strText;
 				}
 
 				$strText = $arrContent[1];
+				
+				$arrReadmore = preg_split('#<hr(.*)id="system-readmore"(.*)\/>#iU', $strText);
+				if(count($arrReadmore) > 1) $strText = $arrReadmore[0];
 
-				$intTextLength = strlen($strText);
-
-				$arrContent = preg_split('#<hr(.*)id="system-readmore"(.*)\/>#iU', $strText);
+				$intTextLength = strlen($strText);			
 
 				$blnPublished = $this->pdh->get('articles', 'published', array($intArticleID));
 
@@ -162,7 +164,6 @@ if(!class_exists('article')){
 					break;
 				}
 
-
 				$this->tpl->assign_block_vars('article_row', array(
 						'ARTICLE_ID'			=> $intArticleID,
 						'ARTICLE_CONTENT'		=> $this->formatArticleOutput($strText, $intArticleID, $strSpecificID),
@@ -189,7 +190,7 @@ if(!class_exists('article')){
 						'S_TOOLBAR'				=> ($arrPermissions['create'] || $arrPermissions['update'] || $arrPermissions['delete'] || $arrPermissions['change_state']),
 						'S_TAGS'				=> (count($arrTags)  && $arrTags[0] != "") ? true : false,
 						'ARTICLE_CONTENT_LENGTH'=> $intTextLength,
-						'S_READMORE'			=> (isset($arrContent[1])) ? true : false,
+						'S_READMORE'			=> (isset($arrContent[2]) || count($arrReadmore) > 1) ? true : false,
 						'COMMENTS_COUNTER'		=> ($intCommentsCount == 1 ) ? $intCommentsCount.' '.$this->user->lang('comment') : $intCommentsCount.' '.$this->user->lang('comments'),
 						'S_COMMENTS'			=> ($this->pdh->get('articles',  'comments', array($intArticleID))) ? true : false,
 						'S_FEATURED'			=> ($this->pdh->get('articles',  'featured', array($intArticleID))),
