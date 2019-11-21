@@ -82,6 +82,20 @@ class Manage_Users extends page_generic {
 
 		foreach($user_ids as $intUserID){
 			$this->pdh->put('user', 'confirm_email', array($intUserID, 1));
+			
+			//Send Confirmation Email if Admin Activation is enabled
+			if((int)$this->config->get('account_activation') == 2){
+				//Send out notification email
+				$bodyvars = array(
+						'USERNAME'		=> $this->pdh->get('user', 'name', array($intUserID)),
+						'GUILDTAG'		=> $this->config->get('guildtag'),
+				);
+				
+				$this->email->Set_Language($this->pdh->get('user', 'lang', array($intUserID)));
+				
+				$this->email->SendMailFromAdmin($this->pdh->get('user', 'email', array($intUserID)), $this->user->lang('email_subject_activation_none'), 'register_account_activated.html', $bodyvars);
+						
+			}
 		}
 		$this->core->message($this->user->lang('bulk_user_activate_success'), $this->user->lang('success'), 'green');
 
@@ -411,8 +425,25 @@ class Manage_Users extends page_generic {
 	}
 
 	public function activate(){
-		$this->pdh->put('user', 'confirm_email', array($this->in->get('u'), 1));
-		$username = $this->pdh->get('user', 'name', array($this->in->get('u')));
+		$intUserID = $this->in->get('u', 0);
+		
+		$this->pdh->put('user', 'confirm_email', array($intUserID, 1));
+		$username = $this->pdh->get('user', 'name', array($intUserID));
+		
+		//Send Confirmation Email if Admin Activation is enabled
+		if((int)$this->config->get('account_activation') == 2){
+			//Send out notification email
+			$bodyvars = array(
+					'USERNAME'		=> $username,
+					'GUILDTAG'		=> $this->config->get('guildtag'),
+			);
+			
+			$this->email->Set_Language($this->pdh->get('user', 'lang', array($intUserID)));
+			
+			$this->email->SendMailFromAdmin($this->pdh->get('user', 'email', array($intUserID)), $this->user->lang('email_subject_activation_none'), 'register_account_activated.html', $bodyvars);
+			
+		}
+		
 		$this->core->message(sprintf($this->user->lang('user_activate_success'), sanitize($username)), $this->user->lang('success'), 'green');
 		$this->pdh->process_hook_queue();
 		$this->display();

@@ -280,6 +280,21 @@ class admin_tasks extends gen_class {
 			if (count($arrIDs)){
 				foreach($arrIDs as $user_id){
 					$this->pdh->put('user', 'confirm_email', array((int)$user_id));
+					
+					//Send Confirmation Email if Admin Activation is enabled
+					if((int)$this->config->get('account_activation') == 2){
+						//Send out notification email
+						$bodyvars = array(
+								'USERNAME'		=> $this->pdh->get('user', 'name', array($user_id)),
+								'GUILDTAG'		=> $this->config->get('guildtag'),
+						);
+						
+						$this->email->Set_Language($this->pdh->get('user', 'lang', array($user_id)));
+						
+						$this->email->SendMailFromAdmin($this->pdh->get('user', 'email', array($user_id)), $this->user->lang('email_subject_activation_none'), 'register_account_activated.html', $bodyvars);
+						
+					}
+					
 				}
 				$this->pdh->process_hook_queue();
 				$this->core->message($this->user->lang('activate_user'), $this->user->lang('success'), 'green');

@@ -271,7 +271,7 @@ if(!class_exists('pdh_w_user')) {
 		 * -1 = Registration
 		 * 0 = Not confirmed, Admin requestes email confirmation
 		 * 1 = Confirmed; desired state
-		 * 2 = User changed his Email on his ow
+		 * 2 = User changed his Email on his own
 		 *
 		 * @param int $user_id
 		 * @param number $status
