@@ -761,7 +761,7 @@ $lang = array(
 "info_help_alias" => "Mit einem Alias ist die Seite z.B. unter domain.de/pages.php?page=ALIAS zu erreichen. Das Alias muss einmalig sein und darf nicht nur als Zahlen bestehen.",
 "info_help_ml" => "Wähle aus, wo die Seite angezeigt werden soll.",
 "info_help_vis" => "Wähle aus, wer diese Seite sehen darf.",
-"dragndrop" => "Klicken und an gewünschte Position verschieben",
+"dragndrop" => "Halten und an gewünschte Position verschieben",
 "inactive_entries_headline" => "Ausgeblendete Menüeinträge",
 "menu_entry" => "Menüeintrag",
 "menus_info" => "Hier kannst du die Menüeinträge individuell anordnen. Klicke dazu einen Eintrag an und verschiebe ihn an die gewünschte Position. <br /><b>Beachte: </b> Auch wenn Menüeinträge ausgeblendet sind, können die Benutzer trotzdem auf die Seite zugreifen, wenn sie die entsprechende Berechtigung haben.",
