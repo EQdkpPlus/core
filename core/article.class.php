@@ -185,7 +185,7 @@ if(!class_exists('article')){
 						'ARTICLE_REAL_CATEGORY' => $this->pdh->get('articles',  'category', array($intArticleID)),
 						'ARTICLE_REAL_CATEGORY_NAME' => $this->pdh->get('article_categories', 'name', array($this->pdh->get('articles',  'category', array($intArticleID)))),
 						'ARTICLE_PREVIEW_IMAGE' => $strPreviewImage,
-						'ARTICLE_PREVIEW_IMAGE_BIG' => ($this->pdh->get('articles',  'previewimage', array($intArticleID)) != "") ? $this->pdh->geth('articles', 'previewimage', array($intArticleID, 500)) : '',
+						'ARTICLE_PREVIEW_IMAGE_BIG' => ($this->pdh->get('articles',  'previewimage', array($intArticleID)) != "") ? $this->pdh->geth('articles', 'previewimage', array($intArticleID, 750)) : '',
 						'PERMALINK'				=> $this->pdh->get('articles', 'permalink', array($intArticleID)),
 						'S_TOOLBAR'				=> ($arrPermissions['create'] || $arrPermissions['update'] || $arrPermissions['delete'] || $arrPermissions['change_state']),
 						'S_TAGS'				=> (count($arrTags)  && $arrTags[0] != "") ? true : false,
