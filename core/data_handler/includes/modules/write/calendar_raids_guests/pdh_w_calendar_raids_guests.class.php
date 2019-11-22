@@ -64,13 +64,17 @@ if(!class_exists('pdh_w_calendar_raids_guests')){
 			$objQuery = $this->db->prepare("UPDATE __calendar_raid_guests :p WHERE id=?")->set(array(
 				'status'				=> $status,
 			))->execute($guestid);
+			
 			$this->pdh->enqueue_hook('guests_update', array($guestid));
+			
 			$this->send_email($guestid);
 		}
 
 		public function send_email($guestid){
 			$subject		= $this->user->lang('raidevent_guest_emailsubject', false, false, $this->config->get('default_locale'));
 			$email			= $this->pdh->get('calendar_raids_guests', 'email', array($guestid));
+			if(!strlen($email)) return;
+			
 			$aprovalstatus	= $this->pdh->get('calendar_raids_guests', 'status', array($guestid));
 			$this->email->Set_Language($this->config->get('default_lang'));
 			$arrBodyvars = array(
