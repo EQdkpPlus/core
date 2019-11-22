@@ -134,7 +134,7 @@ if ( !class_exists( "pdh_r_epgp" ) ) {
 		}
 
 		public function get_epgp($member_id, $multidkp_id, $round = true, $with_twink=true){
-			if(isset($this->epgp[$member_id][$multidkp_id])) $this->init_member($member_id, $multidkp_id);
+			if(!isset($this->epgp[$member_id][$multidkp_id])) $this->init_member($member_id, $multidkp_id);
 			
 			$single = ($with_twink) ? 'multi' : 'single';
 			$epgp = $this->epgp[$member_id][$multidkp_id][$single]['epgp'];
