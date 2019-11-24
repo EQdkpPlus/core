@@ -47,14 +47,37 @@ if(!class_exists('article')){
 
 			$arrArticleIDs = $this->pdh->get('article_categories', 'published_id_list', array($intCategoryID, false, false, NULL, (($arrPermissions['change_state']) ? true : false)));
 			switch($arrCategory['sortation_type']){
-				case 2: $arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'date', 'asc');
-				break;
-				case 3: $arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'last_edited', 'desc');
-				break;
-				case 4: $arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'last_edited', 'asc');
-				break;
+				case 2: 
+					$arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'date', 'asc');
+					break;
+
+				case 3: 
+					$arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'last_edited', 'desc');
+					break;
+
+				case 4: 
+					$arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'last_edited', 'asc');
+					break;
+
+				case 5: 
+					$arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'alias', 'desc');
+					break;
+
+				case 6: 
+					$arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'alias', 'asc');
+					break;
+
+				case 7: 
+					$arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'title', 'desc');
+					break;
+
+				case 8: 
+					$arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'title', 'asc');
+					break;
+
 				case 1:
-				default: $arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'date', 'desc');
+				default: 
+					$arrSortedArticleIDs = $this->pdh->sort($arrArticleIDs, 'articles', 'date', 'desc');
 			}
 
 			if ($arrCategory['featured_ontop']){
