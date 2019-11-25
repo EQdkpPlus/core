@@ -47,6 +47,7 @@ if(!class_exists("calevents_repeatable_crontask")){
 
 					// the ID of the parent event have to be higher 0
 					if($parentid > 0){
+						
 						$eventsdata			= $this->pdh->get('calendar_events', 'data', array($parentid));
 						$start_timestamp	= $this->pdh->get('calendar_events', 'time_start', array($parentid));
 						$end_timestamp		= $this->pdh->get('calendar_events', 'time_end', array($parentid));
@@ -54,7 +55,7 @@ if(!class_exists("calevents_repeatable_crontask")){
 						$end_cronjob		= $this->time->time+((($this->config->get('calendar_repeat_crondays') > 0) ? $this->config->get('calendar_repeat_crondays') : 40) * 86400);
 						$timezone			= $this->pdh->get('calendar_events', 'timezone', array($parentid));
 						$repeating_value	= $this->pdh->get('calendar_events', 'repeating', array($parentid));
-						$repeating_value	= ($repeating_value > 1) ? $repeating_value : 0;
+						$repeating_value	= ($repeating_value >= 1) ? $repeating_value : 0;
 
 						// if the repeating value of parent is 0, do not longer add a new raid
 						if($repeating_value === 0){
