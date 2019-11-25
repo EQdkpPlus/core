@@ -107,8 +107,9 @@
 		$("#items_"+item_key).autocomplete({
 			source: auto_itemname
 		});
-
+		<!-- IF not S_DKP_EASYMODE -->
 		if(new_itempool_option > 0) $('#itempool_id_'+item_key).val(new_itempool_option);
+		<!-- ENDIF -->
 		item_key++;
 	}
 	
