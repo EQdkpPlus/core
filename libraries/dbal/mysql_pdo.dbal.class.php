@@ -402,7 +402,7 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
 	protected function execute_query()
 	{
 		$this->strQuery  = $this->replaceTablePrefix();
-
+		
 		//Bring params to the correct order
 		if(isset($this->arrParams['multiple'])){
 			//First, bind the query
@@ -458,13 +458,16 @@ class DB_Mysql_PDO_Statement extends DatabaseStatement
 			
 		} else {
 			$arrParams = array();
+			
 			foreach($this->arrParamsList as $key => $val){				
 				if($val == '?') $arrParams[] = array_shift($this->arrParams['execute']);
 
 				if($val == ':cond'){
 					$arrSet = array_shift($this->arrParams['conditions']);
-					foreach($arrSet as $v){
-						$arrParams[] = $v;
+					if(is_array($arrSet)) {
+						foreach($arrSet as $v){
+							$arrParams[] = $v;
+						}
 					}
 				}
 				
