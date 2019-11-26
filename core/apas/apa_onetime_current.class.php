@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 	die('Do not access this file directly.');
 }
 
-if ( !class_exists( "apa_cap_current" ) ) {
+if ( !class_exists( "apa_onetime_current" ) ) {
 
 	class apa_onetime_current extends apa_type_generic {
 		public static $shortcuts = array('apa'=>'auto_point_adjustments');
