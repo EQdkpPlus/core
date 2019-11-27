@@ -73,7 +73,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 
 			$used_modules = array();
 			foreach($this->settings['table_presets'] as $preset){
-				$pre = $this->pdh->pre_process_preset($preset['name'], $preset);
+				$pre = $this->pdh->pre_process_preset($preset['name'], $preset);				
 				if(empty($pre))
 					continue;
 				$this->columns	= array_merge($this->columns, $pre);
@@ -298,8 +298,18 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 					} elseif(isset($this->settings['perm_detail_twink']) && $this->settings['perm_detail_twink']) {
 						$view_row .= $this->detail_twink(array_search('%member_id%', $params, true), array_search('%with_twink%', $params, true), $cid, $module, $tag, $params);
 					} else {
+						if(isset($column['after'])){
+							$arrAfterProcessed = $this->process_after($column['after'][0], $column['after'][1], $module, $tag, $params);
+							$module = $arrAfterProcessed[0];
+							$tag = $arrAfterProcessed[1];
+							$params = $arrAfterProcessed[2];
+							$this->sub_array[$arrAfterProcessed[3]] = $arrAfterProcessed[4];
+						}
+						
 						$view_row .= $this->pdh->geth($module, $tag, $params, $this->sub_array);
 					}
+					
+					
 					$view_row .= "</td>\n";
 				}
 				$this->dt_arrow = false;
@@ -310,6 +320,31 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 			$row = '<tr>'."\n".$prefix.$view_row."</tr>\n";
 			$this->counter++;
 			return $row;
+		}
+		
+		public function process_after($strPreset, $strSubID, $module, $tag, $params){
+			$mixValue = $this->pdh->get($module, $tag, $params, $this->sub_array);
+
+			$pre = $this->pdh->pre_process_preset($strPreset);
+			
+			$module = $pre[0][0];
+			$tag = $pre[0][1];
+			$params = $pre[0][2];
+			
+			$this->sub_array[$strSubID] = $mixValue;
+			
+			if(isset($pre[0]['after'])){
+				$arrAfterProcessed = $this->process_after($pre[0]['after'][0], $pre[0]['after'][1], $pre[0][0], $pre[0][1], $pre[0][2]);
+				$module = $arrAfterProcessed[0];
+				$tag = $arrAfterProcessed[1];
+				$params = $arrAfterProcessed[2];
+				$strSubID = $arrAfterProcessed[3];
+				$mixValue = $arrAfterProcessed[4];
+			}
+			
+			return array(
+					$module, $tag, $params, $strSubID, $mixValue
+			);
 		}
 
 		public function detail_twink_data($main_id_key, $wt_key, $type, $module, $tag, $params, $sub_arr = null) {
