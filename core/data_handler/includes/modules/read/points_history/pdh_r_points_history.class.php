@@ -211,7 +211,7 @@ if ( !class_exists( "pdh_r_points_history" ) ) {
 				//Accumulate points from twinks
 				if(!empty($twinks) && is_array($twinks)){
 					foreach($twinks as $twinkid){
-						$twinkpoints = $this->calculate_single_points($twinkid, $multidkpid);
+						$twinkpoints = $this->calculate_single_points($twinkid, $multidkpid, $from, $to);
 						$arrPoints['earned'][0] += $twinkpoints['earned'][0];
 						$arrPoints['adjustment'][0] += $twinkpoints['adjustment'][0];
 						//calculate points of member+twinks per event / itempool
