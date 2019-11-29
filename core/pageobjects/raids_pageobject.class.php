@@ -141,11 +141,11 @@ class raids_pageobject extends pageobject {
 					'numberColumns'	=> 2,
 			);
 			$chartoptionsLootDistri = $chartoptions;
-			if ($this->game->get_class_color(1) != ''){
+			
+			if ($this->game->get_class_color($class_id) != ''){
 				$chartoptions['color_array']			= $chartcolors;
 				$chartoptionsLootDistri['color_array']	= $chartcolorsLootdisti;
 			}
-			unset($eq_classes);
 
 			$vpre = $this->pdh->pre_process_preset('rvalue', array(), 0);
 			$vpre[2][0] = $raid_id;
