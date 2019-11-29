@@ -1929,5 +1929,6 @@ $lang = array(
 		"manmdkp_info_without_twinks" => "Twinks werden aktuell nicht angezeigt, so dass der Hauptcharakter der Twinks deren Punkte erhält.<br />Du kannst diese <a href='manage_settings.php#fragment-chars'>Einstellung hier</a> ändern, so dass auch Twinks angezeigt werden und jeder Charakter seine eigenen Punkte erhält.",
 		"manmdkp_info_with_twinks" => "Da Twinks angezeigt werden, erhält jeder Charakter seine eigenen Punkte.<br />Du kannst diese <a href='manage_settings.php#fragment-chars'>Einstellung hier</a> ändern, so dass nur der Hauptcharakter angezeigt wird und die Punkte alle seiner Twinks erhält.",
 		"manmdkp_info_pointsystem_info" => "Auch das gewählte Punktesystem hat Einfluss auf die Berechnung der Punkte, da diese eben je nach System anders berechnet werden. Du kannst das Punktesystem <a href='manage_pagelayouts.php'>hier auswählen</a>. Weitere Informationen zu den Punktesystemen findest du in der <a href='https://wiki.eqdkp-plus.eu/wiki/Lootsystems'>Wiki</a>.",
-
+		"lm_after_preset" => "Folgendes Preset danach ausführen",
+		"lm_after_replace" => "Parameter des Presets mit dem Wert der vorherigen Funktion ersetzen",
 );

@@ -447,7 +447,7 @@ if( !class_exists( "plus_datahandler")){
 			return $ret_arr;
 		}
 
-		public function get_caption( $module, $tag, $params ) {
+		public function get_caption( $module, $tag, $params, $preset='' ) {
 			if(!$this->check_read_module($module, true)) return null;
 			if( !is_array( $params ) ) {
 				$params = array(
@@ -464,6 +464,8 @@ if( !class_exists( "plus_datahandler")){
 					return $this->get_lang($module, $tag);
 				} elseif($this->get_preset_lang($module, $tag) !== false) {
 					return $this->get_preset_lang($module, $tag);
+				} elseif(isset($this->preset_lang[$preset])) {
+					return $this->preset_lang[$preset];
 				} else {
 					return $tag;
 				}
@@ -484,7 +486,7 @@ if( !class_exists( "plus_datahandler")){
 				if( !$this->read_modules[$module] ) $this->init_read_module( $module );
 				return call_user_func_array( array( $objModule, $method ), $params );
 			} else {
-				return $this->get_caption( $module, $tag, $params );
+				return $this->get_caption( $module, $tag, $params, $preset );
 			}
 		}
 

@@ -148,6 +148,10 @@ class ManagePageLayouts extends page_generic {
 			foreach($arrCaption as $caption){
 				$ps[3][] = (is_numeric($caption)) ? intval($caption) : $caption;
 			}
+			
+			if($this->in->get('pdh_r_after')){
+				$ps['after'] = array($this->in->get('pdh_r_after'), $this->in->get('pdh_r_after_replace'));
+			}
 
 
 			$this->pdh->update_user_preset($strPresetName, $ps, $strColumnTitle);
@@ -337,6 +341,22 @@ class ManagePageLayouts extends page_generic {
 				}
 			}
 		}
+		
+		$arrPresetList = $this->pdh->get_preset_list();
+		
+		if($this->in->get('pdh_r_after') != ""){
+			$arrSubs = $arrPresetList[$this->in->get('pdh_r_after')][2];
+			if(is_array($arrSubs)){
+				foreach($arrSubs as $val){
+					$arrReplaceSubs[$val] = $val;
+				}
+			}
+		}
+
+		$arrPresets = array("" => "");
+		foreach($arrPresetList as $key => $val){
+			$arrPresets[$key] = $key;
+		}
 
 		$this->tpl->assign_vars(array (
 			'NEW_PRESET_XML'			=> $readd_xml,
@@ -348,7 +368,10 @@ class ManagePageLayouts extends page_generic {
 			'PDH_R_DD'					=> (new hdropdown('pdh_r_module', array('options' => $arrModuleDD, 'value' => $this->in->get('pdh_r_module'), 'js'=>'onchange="this.form.submit()"')))->output(),
 			'PDH_METHODS_DD'			=> (new hdropdown('pdh_method', array('options' => $arrMethods, 'value' => $this->in->get('pdh_method'), 'js'=>'onchange="this.form.submit()"')))->output(),
 			'PDH_R_OLD'					=> (new hhidden('pdh_r_old', array('value' => $this->in->get('pdh_r_module'))))->output(),
+			'PDH_R_AFTER'				=> (new hdropdown('pdh_r_after', array('options' => $arrPresets, 'value' => $this->in->get('pdh_r_after'), 'js'=>'onchange="this.form.submit()"')))->output(),	
+			'PDH_R_AFTER_REPLACE'		=> (new hdropdown('pdh_r_after_replace', array('options' => $arrReplaceSubs, 'value' => $this->in->get('pdh_r_after_replace'), 'js'=>'onchange="this.form.submit()"')))->output(),
 			'LAYOUT_COUNT'				=> $intLayouts,
+			'PDH_LANG'					=> $this->in->get('lang'),
 			'USERPRESET_COUNT'			=> count($user_presets),
 		));
 
