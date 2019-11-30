@@ -61,13 +61,14 @@ if(!class_exists('pdh_r_event')){
 
 			$this->events = array();
 
-			$objQuery = $this->db->query("SELECT event_id, event_name, event_value, event_icon, default_itempool FROM __events;");
+			$objQuery = $this->db->query("SELECT * FROM __events;");
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					$this->events[$row['event_id']]['name'] = $row['event_name'];
 					$this->events[$row['event_id']]['value'] = $row['event_value'];
 					$this->events[$row['event_id']]['icon'] = $row['event_icon'];
 					$this->events[$row['event_id']]['default_itempool'] = (int)$row['default_itempool'];
+					$this->events[$row['event_id']]['show_profile'] = (int)$row['event_show_profile'];
 				}
 				$this->pdc->put('pdh_events_table', $this->events, null);
 			}
@@ -80,6 +81,19 @@ if(!class_exists('pdh_r_event')){
 		public function get_id_list(){
 			return array_keys($this->events);
 		}
+		
+		public function get_id_list_profile(){
+			$out = array();
+			if(is_array($this->events)){
+				foreach($this->events as $key => $val){
+					if($val['show_profile']){
+						$out[] = $key;
+					}
+				}
+			}
+			
+			return $out;
+		}
 
 		public function get_name($event_id){
 			return (isset($this->events[$event_id])) ? $this->events[$event_id]['name'] : '';
@@ -91,6 +105,10 @@ if(!class_exists('pdh_r_event')){
 
 		public function comp_name($params1, $params2){
 			return ($this->get_name($params1[0]) < $this->get_name($params2[0])) ? -1  : 1 ;
+		}
+		
+		public function get_show_profile($event_id){
+			return (isset($this->events[$event_id])) ? $this->events[$event_id]['show_profile'] : false;
 		}
 
 		public function get_value($event_id){

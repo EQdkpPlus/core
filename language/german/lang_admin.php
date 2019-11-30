@@ -1931,4 +1931,5 @@ $lang = array(
 		"manmdkp_info_pointsystem_info" => "Auch das gewählte Punktesystem hat Einfluss auf die Berechnung der Punkte, da diese eben je nach System anders berechnet werden. Du kannst das Punktesystem <a href='manage_pagelayouts.php'>hier auswählen</a>. Weitere Informationen zu den Punktesystemen findest du in der <a href='https://wiki.eqdkp-plus.eu/wiki/Lootsystems'>Wiki</a>.",
 		"lm_after_preset" => "Folgendes Preset danach ausführen",
 		"lm_after_replace" => "Parameter des Presets mit dem Wert der vorherigen Funktion ersetzen",
+		"show_on_profile" => "Im Charakter-Profil anzeigen",
 );

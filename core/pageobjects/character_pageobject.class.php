@@ -83,7 +83,7 @@ class character_pageobject extends pageobject {
 		));
 
 		//Event-Attendance
-		$view_list = $this->pdh->get('event', 'id_list');
+		$view_list = $this->pdh->get('event', 'id_list_profile');
 		$hptt_page_settings = $this->pdh->get_page_settings('viewmember', 'hptt_viewmember_eventatt');
 		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%member_id%' => $this->url_id, '%link_url%' => $this->routing->simpleBuild('events'), '%link_url_suffix%' => '', '%with_twinks%' => false, '%use_controller%' => true), $this->url_id, 'esort');
 		$hptt->setPageRef($this->strPath);

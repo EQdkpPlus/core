@@ -66,10 +66,10 @@ class Manage_Events extends page_generic {
 			}
 
 			if($event['id']) {
-				$retu = $this->pdh->put('event', 'update_event', array($event['id'], $event['name'], $event['value'], $event['icon'], $event['default_itempool']));
+				$retu = $this->pdh->put('event', 'update_event', array($event['id'], $event['name'], $event['value'], $event['icon'], $event['default_itempool'], $event['show_profile']));
 				if($retu) $this->pdh->put('multidkp', 'add_multidkp2event', array($event['id'], $this->in->getArray('mdkp2event', 'int')));
 			} else {
-				$retu = $this->pdh->put('event', 'add_event', array($event['name'], $event['value'], $event['icon'], $event['default_itempool']));
+				$retu = $this->pdh->put('event', 'add_event', array($event['name'], $event['value'], $event['icon'], $event['default_itempool'], $event['show_profile']));
 				if($retu > 0) $this->pdh->put('multidkp', 'add_multidkp2event', array($retu, $this->in->getArray('mdkp2event', 'int')));
 			}
 
@@ -104,7 +104,7 @@ class Manage_Events extends page_generic {
 	}
 
 	public function update($message=false) {
-		$event = array('id' => $this->in->get('event_id',0), 'value' => '0.00', 'mdkp2event' => array(), 'default_itempool' => 0);
+		$event = array('id' => $this->in->get('event_id',0), 'value' => '0.00', 'mdkp2event' => array(), 'default_itempool' => 0, 'show_profile' => 1);
 		if($message) {
 			$this->core->messages($message);
 			$event = $this->get_post(true);
@@ -115,7 +115,8 @@ class Manage_Events extends page_generic {
 			$event['value'] = $this->pdh->get('event', 'value', array($event['id']));
 			$event['mdkp2event'] = $this->pdh->get('event', 'multidkppools', array($event['id']));
 			$event['default_itempool'] = $this->pdh->get('event', 'def_itempool', array($event['id']));
-
+			$event['show_profile'] = $this->pdh->get('event', 'show_profile', array($event['id']));
+			
 			$arrItempool = $this->pdh->aget('itempool', 'name', 0, array($this->pdh->get('event', 'itempools', array($event['id']))));
 		} else {
 			//Set to the last MultiDKP Pool
@@ -124,7 +125,7 @@ class Manage_Events extends page_generic {
 			$event['mdkp2event'] = array($intLatestPool);
 			$arrLocalItempools = $this->pdh->get('multidkp', 'itempool_ids', array($intLatestPool));
 			$event['default_itempool'] = max($arrLocalItempools);
-
+			$event['show_profile'] = 1;
 			$arrItempool = $this->pdh->aget('itempool', 'name', 0, array($arrLocalItempools));
 		}
 
@@ -188,7 +189,8 @@ class Manage_Events extends page_generic {
 			'VALUE'			=> $this->pdh->geth('event', 'value', array($event['id'])),
 			'MDKP2EVENT' 	=> $mdkp2event,
 			'DD_DEFAULT_ITEMPOOL' => (new hdropdown('default_itempool', array('options' => $arrItempool, 'value' => $event['default_itempool'])))->output(),
-			'CALENDAR'		=> ($this->in->get('calendar') == 'true') ? '1' : '0'
+			'CALENDAR'		=> ($this->in->get('calendar') == 'true') ? '1' : '0',
+			'SHOW_ON_PROFILE' => (new hradio('show_profile', array('value' => $event['show_profile'])))->output(),
 		));
 		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('addevent_title'),
@@ -259,6 +261,7 @@ class Manage_Events extends page_generic {
 		$event['id'] = $this->in->get('event_id',0);
 		$event['mdkp2event'] = $this->in->getArray('mdkp2event', 'int');
 		$event['default_itempool'] = $this->in->get('default_itempool', 0);
+		$event['show_profile'] = $this->in->get('show_profile', 1);
 		return $event;
 	}
 }

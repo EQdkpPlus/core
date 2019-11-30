@@ -1926,4 +1926,5 @@ $lang = array(
 		"manmdkp_info_pointsystem_info" => "Also, the selected pointsystem has influence how the points are calculated. You can change the pointsystem <a href='manage_pagelayouts.php'>here</a>. More Information about the point systems can be found in our <a href='https://wiki.eqdkp-plus.eu/wiki/Lootsystems'>Wiki</a>.",
 		"lm_after_preset" => "Execute the following preset after",
 		"lm_after_replace" => "Replace param with the value of the current preset",
+		"show_on_profile" => "Show on character-profile",
 );
