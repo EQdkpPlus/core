@@ -66,7 +66,7 @@ CREATE TABLE `__auth_options` (
 
 DROP TABLE IF EXISTS __auth_users;
 CREATE TABLE `__auth_users` (
-	`user_id` smallint(5) unsigned NOT NULL,
+	`user_id` int(11) unsigned NOT NULL,
 	`auth_id` int(11) unsigned NOT NULL,
 	`auth_setting` enum('N','Y') COLLATE utf8_bin NOT NULL DEFAULT 'N',
 	KEY `auth_id` (`auth_id`),
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS `__groups_user` (
 	`groups_user_deletable` tinyint(1) NOT NULL DEFAULT 0,
 	`groups_user_default` tinyint(1) NOT NULL DEFAULT 0,
 	`groups_user_hide` tinyint(1) NOT NULL DEFAULT 0,
-	`groups_user_sortid` smallint(5) unsigned NOT NULL DEFAULT 0,
+	`groups_user_sortid` int(11) unsigned NOT NULL DEFAULT 0,
 	`groups_user_team` tinyint(1) NOT NULL DEFAULT 0,
 	PRIMARY KEY (`groups_user_id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -125,8 +125,8 @@ CREATE TABLE `__sessions` (
 
 DROP TABLE IF EXISTS __member_user;
 CREATE TABLE `__member_user` (
-	`member_id` smallint(5) unsigned NOT NULL,
-	`user_id` smallint(5) unsigned NOT NULL,
+	`member_id` int(11) unsigned NOT NULL,
+	`user_id` int(11) unsigned NOT NULL,
 	KEY `member_id` (`member_id`),
 	KEY `user_id` (`user_id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -140,7 +140,7 @@ CREATE TABLE `__adjustments` (
 	`adjustment_value` float(11,2) DEFAULT NULL,
 	`adjustment_apa_value` TEXT NULL COLLATE 'utf8_bin',
 	`adjustment_date` int(11) NOT NULL DEFAULT '0',
-	`member_id` smallint(5) unsigned NOT NULL,
+	`member_id` int(11) unsigned NOT NULL,
 	`adjustment_reason` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`adjustment_added_by` varchar(30) COLLATE utf8_bin NOT NULL,
 	`adjustment_updated_by` varchar(30) COLLATE utf8_bin DEFAULT NULL,
@@ -155,13 +155,14 @@ CREATE TABLE `__adjustments` (
 
 DROP TABLE IF EXISTS __events;
 CREATE TABLE `__events` (
-	`event_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+	`event_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 	`event_name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`event_value` float(6,2) DEFAULT NULL,
 	`event_added_by` varchar(30) COLLATE utf8_bin NOT NULL,
 	`event_updated_by` varchar(30) COLLATE utf8_bin DEFAULT NULL,
 	`event_icon` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`default_itempool` INT(11) UNSIGNED NOT NULL DEFAULT '0',
+	`event_show_profile` TINYINT(1) UNSIGNED NULL DEFAULT '1',
 	PRIMARY KEY (`event_id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -169,7 +170,7 @@ DROP TABLE IF EXISTS __items;
 CREATE TABLE `__items` (
 	`item_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 	`item_name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-	`member_id` smallint(5) unsigned NOT NULL,
+	`member_id` int(11) unsigned NOT NULL,
 	`raid_id` mediumint(8) unsigned NOT NULL,
 	`item_value` float(10,2) DEFAULT NULL,
 	`item_apa_value` TEXT NULL COLLATE 'utf8_bin',
@@ -188,11 +189,11 @@ CREATE TABLE `__items` (
 
 DROP TABLE IF EXISTS __members;
 CREATE TABLE `__members` (
-	`member_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+	`member_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 	`member_name` varchar(30) COLLATE utf8_bin NOT NULL,
 	`member_status` tinyint(1) NOT NULL DEFAULT 1,
 	`member_rank_id` smallint(3) NOT NULL DEFAULT '0',
-	`member_main_id` smallint(5) unsigned DEFAULT NULL,
+	`member_main_id` int(11) unsigned DEFAULT NULL,
 	`member_creation_date` int(10) unsigned NOT NULL DEFAULT 0,
 	`last_update` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`picture` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -232,12 +233,12 @@ CREATE TABLE `__classcolors` (
 
 DROP TABLE IF EXISTS __member_ranks;
 CREATE TABLE `__member_ranks` (
-	`rank_id` smallint(5) unsigned NOT NULL,
+	`rank_id` int(11) unsigned NOT NULL,
 	`rank_name` varchar(50) COLLATE utf8_bin NOT NULL,
 	`rank_hide` tinyint(1) NOT NULL DEFAULT 0,
 	`rank_prefix` varchar(75) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`rank_suffix` varchar(75) COLLATE utf8_bin NOT NULL DEFAULT '',
-	`rank_sortid` smallint(5) unsigned NOT NULL DEFAULT 0,
+	`rank_sortid` int(11) unsigned NOT NULL DEFAULT 0,
 	`rank_default`  tinyint(1) NOT NULL DEFAULT 0,
 	`rank_icon` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 	UNIQUE KEY `rank_id` (`rank_id`)
@@ -250,7 +251,7 @@ CREATE TABLE `__member_profilefields` (
 	`type` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`category` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`lang` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-	`size` smallint(5) DEFAULT NULL,
+	`size` int(11) DEFAULT NULL,
 	`image` varchar(255) COLLATE utf8_bin DEFAULT NULL,
 	`sort` int(11) NOT NULL DEFAULT 1,
 	`enabled` tinyint(1) NOT NULL DEFAULT 0,
@@ -274,7 +275,7 @@ CREATE TABLE __roles (
 DROP TABLE IF EXISTS __raids;
 CREATE TABLE `__raids` (
 	`raid_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-	`event_id` smallint(5) unsigned NOT NULL,
+	`event_id` int(11) unsigned NOT NULL,
 	`raid_date` int(11) NOT NULL DEFAULT '0',
 	`raid_note` text COLLATE utf8_bin,
 	`raid_value` float(6,2) NOT NULL DEFAULT '0.00',
@@ -290,7 +291,7 @@ CREATE TABLE `__raids` (
 DROP TABLE IF EXISTS __raid_attendees;
 CREATE TABLE `__raid_attendees` (
 	`raid_id` mediumint(8) unsigned NOT NULL,
-	`member_id` smallint(5) unsigned NOT NULL,
+	`member_id` int(11) unsigned NOT NULL,
 	KEY `raid_id` (`raid_id`),
 	KEY `member_id` (`member_id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -303,7 +304,7 @@ CREATE TABLE `__groups_raid` (
 	`groups_raid_desc` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`groups_raid_system` tinyint(1) NOT NULL DEFAULT '0',
 	`groups_raid_default` tinyint(1) NOT NULL DEFAULT '0',
-	`groups_raid_sortid` smallint(5) unsigned NOT NULL DEFAULT '0',
+	`groups_raid_sortid` int(11) unsigned NOT NULL DEFAULT '0',
 	PRIMARY KEY (`groups_raid_id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -329,7 +330,7 @@ CREATE TABLE `__multidkp` (
 DROP TABLE IF EXISTS __multidkp2event ;
 CREATE TABLE `__multidkp2event` (
 	`multidkp2event_multi_id` int(11) NOT NULL,
-	`multidkp2event_event_id` smallint(5) NOT NULL,
+	`multidkp2event_event_id` int(11) NOT NULL,
 	`multidkp2event_no_attendance` int(1) NOT NULL DEFAULT 0,
 	PRIMARY KEY (`multidkp2event_multi_id`, `multidkp2event_event_id`)
 )	DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -364,7 +365,7 @@ CREATE TABLE `__logs` (
 	`log_tag` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`log_plugin` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`log_flag` smallint(3) NOT NULL DEFAULT '0',
-	`user_id` smallint(5) NOT NULL DEFAULT '0',
+	`user_id` int(11) NOT NULL DEFAULT '0',
 	`username` VARCHAR(30) COLLATE utf8_bin NOT NULL,
 	`log_record` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
 	`log_record_id` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
@@ -380,7 +381,7 @@ CREATE TABLE `__logs` (
 
 DROP TABLE IF EXISTS __styles;
 CREATE TABLE `__styles` (
-	`style_id` SMALLINT(5) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`style_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`style_name` VARCHAR(100) NOT NULL DEFAULT '' COLLATE 'utf8_bin',
 	`style_version` VARCHAR(20) NULL DEFAULT NULL COLLATE 'utf8_bin',
 	`style_contact` VARCHAR(100) NULL DEFAULT NULL COLLATE 'utf8_bin',
@@ -633,7 +634,7 @@ CREATE TABLE `__calendar_events` (
 	`cloneid` int(10) unsigned NOT NULL DEFAULT '0',
 	`calendar_id` int(10) unsigned NOT NULL DEFAULT '0',
 	`name` VARCHAR(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-	`creator` SMALLINT(5) UNSIGNED NOT NULL DEFAULT '0',
+	`creator` int(11) UNSIGNED NOT NULL DEFAULT '0',
 	`timestamp_start` INT(10) UNSIGNED NOT NULL DEFAULT '0',
 	`timestamp_end` INT(10) UNSIGNED NOT NULL DEFAULT '0',
 	`allday` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
