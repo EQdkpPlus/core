@@ -375,6 +375,7 @@ if ( !class_exists( "html_pdh_tag_table" ) ) {
 				$data[0] = $this->pdh->get_lang($module, substr($type, 5));
 			} elseif($type == 'summed_up') {
 				$params[$wt_key] = true;
+				$params[$main_id_key] = $main_id;
 				$data[0] = $this->pdh->geth($module, $tag, $params);
 			} else {
 				$data[0] = '&nbsp;';
