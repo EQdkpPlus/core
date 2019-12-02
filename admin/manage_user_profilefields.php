@@ -251,9 +251,10 @@ class ManageUserProfileFields extends page_generic {
 			'LANGUAGE'					=> $this->pdh->geth('user_profilefields', 'name', array($intFieldID)),
 			'S_SHOW_OPTIONS'			=> ($field_data['type'] == 'dropdown' || $field_data['type'] == 'multiselect' || $field_data['type'] == 'radio') ? '' : 'style="display:none;"',
 		));
-
+		
 		if ($field_data['type'] == 'dropdown' || $field_data['type'] == 'multiselect' || $field_data['type'] == 'radio' || $field_data['type'] == 'gender'){
-			foreach ($field_data['options'] as $key => $value){
+			$arrOptions = unserialize($field_data['options']);
+			foreach ($arrOptions['options'] as $key => $value){
 				$this->tpl->assign_block_vars('options_row', array(
 					'ID'		=> $key,
 					'LANGUAGE'	=> $value,
