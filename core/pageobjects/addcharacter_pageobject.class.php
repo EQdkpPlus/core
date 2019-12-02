@@ -57,10 +57,12 @@ class addcharacter_pageobject extends pageobject {
 		$data = $this->form->return_values();
 		$data['notes'] = $this->in->get('notes');
 		
-		if(!($this->adminmode) && !$this->user->check_auth('u_member_conn', false)) {
-			$data['overtakechar'] = false;
+		$data['overtakechar'] = false;
+		
+		if(!$this->adminmode && ($this->user->check_auth('u_member_conn', false) || $this->user->check_auth('u_member_conn_free', false))){
+			$data['overtakechar'] = true;
 		}
-
+		
 		if (strlen($data['name'])){
 			$mixResult = $this->pdh->put('member', 'addorupdate_member', array(0, $data, $data['overtakechar']));
 
@@ -97,12 +99,8 @@ class addcharacter_pageobject extends pageobject {
 			unset($data['rankid']);
 		}
 		
-		if(!($this->adminmode) && !$this->user->check_auth('u_member_conn', false)) {
-			$data['overtakechar'] = false;
-		}
-
 		$intOldUserID = $this->pdh->get('member', 'user', array($this->url_id));
-		$id = $this->pdh->put('member', 'addorupdate_member', array($this->url_id, $data, $data['overtakechar']));
+		$id = $this->pdh->put('member', 'addorupdate_member', array($this->url_id, $data));
 
 		if($id){
 			if($this->adminmode && $data['userid'] != $intOldUserID){
@@ -193,8 +191,8 @@ class addcharacter_pageobject extends pageobject {
 		$this->tpl->assign_vars(array(
 			// Permissions
 			'U_IS_EDIT'				=> ($this->url_id > 0) ? true : false,
-			'USER_CAN_CONNECT'		=> ($this->user->check_auth('u_member_conn', false)) ? true : false,
 			'ADMINMODE'				=> $this->adminmode,
+				'S_NEW_CHAR_ADMIN_ASSOCIATE' => (!$this->user->check_auth('u_member_conn', false) && !$this->user->check_auth('u_member_conn_free', false) ),
 
 			// Data
 			'NOTES'					=> stripslashes(((isset($member_data['notes'])) ? $member_data['notes'] : '')),
@@ -245,12 +243,6 @@ class addcharacter_pageobject extends pageobject {
 					'lang'	=> 'member_active',
 				);
 			}
-		}
-		if(!($this->adminmode) && $this->user->check_auth('u_member_conn', false)) {
-			$static_fields['overtakechar'] = array(
-				'type'	=> 'radio',
-				'lang'	=> 'overtake_char',
-			);
 		}
 
 		if($this->adminmode) {

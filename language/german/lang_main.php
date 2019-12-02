@@ -352,6 +352,7 @@ $lang = array(
 "chars" => "Charaktere",
 "charsmanage" => "eigene Charaktere bearbeiten",
 "charconnect" => "eigene Charaktere zuweisen",
+"charconnect_free" => "freie Charaktere zuweisen",
 "charsdelete" => "eigene Charaktere löschen",
 "charsadd" => "eigene Charaktere hinzufügen",
 "cm_todo_txt" => "Es warten %1\$s Aufgabe(n) auf Erledigung",
@@ -1125,5 +1126,5 @@ $lang = array(
 "user_sett_fs_notifications_userwall" => "Pinnwand",
 "embedd_consent" => "Möchtest du externe Medien von '{PROVIDER}' laden? Bitte beachte, dass dadurch eventuell personenbezogene Daten wie z.B. deine IP-Adresse an '{PROVIDER}' übertragen werden. Außerdem könnte '{PROVIDER}' Cookies setzen.",
 "embedd_consent_ok" => "Laden und Entscheidung speichern.",
-
+"new_char_admin_associate_info" => "Der erstellte Charakter muss Dir nach der Erstellung von einem Administrator zugewiesen werden und ist deshalb nicht sofort in deiner Charakterliste sichtbar.",
 );

@@ -23,13 +23,13 @@ class mycharacters_pageobject extends pageobject {
 
 	public function __construct() {
 		$handler = array(
-			'connection_submit'	=> array('process' => 'update_connection', 'check' => 'u_member_conn', 'csrf'=>true),
+			'connection_submit'	=> array('process' => 'update_connection', 'check' => 'u_member_conn_free', 'csrf'=>true),
 			'delete_id'			=> array('process' => 'delete_char', 'check' => 'u_member_del', 'csrf'=>true),
 			'maincharchange'	=> array('process' => 'ajax_mainchar', 'check' => 'u_member_man', 'csrf'=>true),
 			'defrolechange'		=> array('process' => 'ajax_defaultrole', 'check' => 'u_member_man', 'csrf'=>true),
 			'hide_info'			=> array('process' => 'hide_nochar_info', 'check' => 'u_member_'),
 		);
-		$this->user->check_auths(array('u_member_man', 'u_member_add', 'u_member_conn', 'u_member_del'), 'OR');
+		$this->user->check_auths(array('u_member_man', 'u_member_add', 'u_member_conn', 'u_member_conn_free','u_member_del'), 'OR');
 
 		parent::__construct('u_member_', $handler, array());
 		$this->process();
@@ -192,7 +192,7 @@ class mycharacters_pageobject extends pageobject {
 			'CHAR_LIST'				=> $hptt->get_html_table($this->in->get('sort',''), $page_suffix, $this->in->get('start', 0), $this->user->data['user_rlimit'], false),
 			'CHAR_PAGINATION'		=> generate_pagination($this->SID.$sort_suffix, ((is_array($view_list)) ? count($view_list) : 0), $this->user->data['user_rlimit'], $this->in->get('start', 0)),
 			'NEW_CHARS'				=> $this->user->check_auth('u_member_add', false),
-			'CONNECT_CHARS'			=> $this->user->check_auth('u_member_conn', false),
+			'CONNECT_CHARS'			=> $this->user->check_auth('u_member_conn_free', false),
 			'DELETE_CHARS'			=> $this->user->check_auth('u_member_del', false),
 			'CHAR_COUNT'			=> ((is_array($view_list)) ? count($view_list) : 0),
 

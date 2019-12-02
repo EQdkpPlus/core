@@ -52,6 +52,7 @@ INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('u_member_man'
 INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('u_member_add','Y');
 INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('u_member_conn','Y');
 INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('u_member_del','Y');
+INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('u_member_conn_free','Y');
 INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('u_userlist','Y');
 INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('u_cal_event_add','Y');
 INSERT INTO __auth_options (`auth_value`, `auth_default`) VALUES ('u_calendar_raidnotes','Y');

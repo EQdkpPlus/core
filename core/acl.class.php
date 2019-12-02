@@ -211,6 +211,7 @@ class acl_manager extends gen_class {
 						array('CBNAME' => 'u_member_man',			'TEXT' => $this->user->lang('charsmanage')),
 						array('CBNAME' => 'u_member_del',			'TEXT' => $this->user->lang('charsdelete')),
 						array('CBNAME' => 'u_member_conn',			'TEXT' => $this->user->lang('charconnect')),
+						array('CBNAME' => 'u_member_conn_free',		'TEXT' => $this->user->lang('charconnect_free')),
 				),
 
 				// Calendar

@@ -398,6 +398,7 @@ $lang = array(
 	"chars" => 'Characters',
 	"charsmanage" => 'Edit own characters',
 	"charconnect" => 'Assign own characters',
+	"charconnect_free" => "Assign free characters",
 	"charsdelete" => 'Delete own characters',
 	"charsadd" => 'Add own characters',
 	"cm_todo_txt" => '%1$s tasks are waiting for completion',
@@ -1156,4 +1157,5 @@ $lang = array(
 	"user_sett_fs_notifications_comment" => "Comments",
 	"user_sett_fs_notifications_user" => "User",
 	"user_sett_fs_notifications_userwall" => "Userwall",
-	);
+	"new_char_admin_associate_info" => "Your newly created character has to be associated by an administrator. Therefore he will not be visible at your character list directly after creation.",	
+);
