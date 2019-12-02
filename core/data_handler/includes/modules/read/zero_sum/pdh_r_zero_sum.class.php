@@ -227,11 +227,9 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 								}
 							}
 						}
-						foreach($twinkpoints['spent'] as $event_id => $vals) {
-							foreach($vals as $ip_id => $val) {
-								if(!isset($arrPoints[$memberid][$multidkpid]['multi']['spent'][$event_id][$ip_id])) $arrPoints[$memberid][$multidkpid]['multi']['spent'][$event_id][$ip_id] = 0;
-								$arrPoints[$memberid][$multidkpid]['multi']['spent'][$event_id][$ip_id] += $val;
-							}
+						foreach($twinkpoints['spent'] as $ip_id => $val) {		
+							if(!isset($arrPoints[$memberid][$multidkpid]['multi']['spent'][$ip_id])) $arrPoints[$memberid][$multidkpid]['multi']['spent'][$ip_id] = 0;
+							$arrPoints[$memberid][$multidkpid]['multi']['spent'][$ip_id] += $val;
 						}
 					}
 				} else {
