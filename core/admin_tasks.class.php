@@ -24,6 +24,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class admin_tasks extends gen_class {
+	public static $shortcuts = array('email' => 'MyMailer', 'crypt' => 'encrypt');
 
 	public function getTasks(){
 		$arrTasks = array(
