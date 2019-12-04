@@ -575,3 +575,11 @@ ul.disc {
 .profile_header .gameicon {
 	max-height: 48px;
 }
+
+/* iOS does not want to scroll in frames... Should be fixed in iOS13 */
+@supports (-webkit-overflow-scrolling: touch) {
+	div.ui-dialog-content {
+		-webkit-overflow-scrolling: touch;
+		overflow-y: scroll !important;
+	}
+}

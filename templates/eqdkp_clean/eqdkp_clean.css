@@ -988,6 +988,10 @@ input[type=radio], input[type=checkbox]{
 	margin-right: 2px;
 }
 
+fieldset.settings .multilang-switcher-container {
+	max-width: 80%;
+}
+
 .input-icon input, .input-multilang input {
 	border-radius: @styleBorderRadius;
 	margin-left: 0px;
@@ -3938,6 +3942,14 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	
 	.responsive .notification-tooltip-trigger.notification-bubble-green {
 		z-index: 18;
+	}
+	
+	.responsive .multilang-switcher {
+		display: block;
+	}
+	
+	.responsive fieldset.settings .multilang-switcher-container {
+		max-width: 100%;
 	}
 }
 

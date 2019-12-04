@@ -192,7 +192,7 @@ class tinyMCE extends gen_class {
 					image_advtab: true,
 					verify_html: false,
 					branding: false,
-					toolbar: "code | insertfile undo redo | fullscreen | styleselect fontselect fontsizeselect bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist | link image media emoticons eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | eqdkp_item eqdkp_gallery eqdkp_raidloot eqdkp_chars | custom_buttons '.$strHooksToolbar.'",
+					toolbar: "code | insertfile undo redo | fullscreen | styleselect | fontselect | fontsizeselect | bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist | link image media emoticons eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | eqdkp_item eqdkp_gallery eqdkp_raidloot eqdkp_chars | custom_buttons '.$strHooksToolbar.'",
 					language : "'.$this->language.'",
 					plugins: [
 					 	"advlist lists link image imagetools charmap preview anchor eqdkp_lightbox eqdkp_filebrowser eqdkp_easyinsert",
@@ -381,7 +381,7 @@ class tinyMCE extends gen_class {
 					skin : "'.$this->skin.'",
 					image_advtab: true,
 					verify_html: false,
-					toolbar: "insertfile undo redo | fullscreen | styleselect fontselect fontsizeselect bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist | link image media emoticons eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | eqdkp_item eqdkp_gallery eqdkp_raidloot eqdkp_chars | custom_buttons '.$strHooksToolbar.'",
+					toolbar: "insertfile undo redo | fullscreen | styleselect | fontselect | fontsizeselect | bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist | link image media emoticons eqdkp_lightbox eqdkp_filebrowser | eqdkp_readmore eqdkp_pagebreak eqdkp_pageobject | eqdkp_item eqdkp_gallery eqdkp_raidloot eqdkp_chars | custom_buttons '.$strHooksToolbar.'",
 					language : "'.$this->language.'",
 					 plugins: [
 					 	"advlist lists link image imagetools charmap preview anchor eqdkp_lightbox eqdkp_filebrowser eqdkp_easyinsert",
