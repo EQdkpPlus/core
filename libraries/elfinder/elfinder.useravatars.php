@@ -13,7 +13,7 @@ if(!registry::fetch('user')->is_signedin()){
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>elFinder 2.1.x source version with PHP connector</title>
+		<title>Useravatars</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2" />
 
 		<!-- Section CSS -->
