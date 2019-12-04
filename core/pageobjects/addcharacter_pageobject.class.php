@@ -237,6 +237,7 @@ class addcharacter_pageobject extends pageobject {
 			$static_fields['editid'] = array(
 				'type'	=> 'hidden',
 			);
+			
 			if($this->adminmode) {
 				$static_fields['status'] = array(
 					'type'	=> 'radio',
@@ -286,7 +287,21 @@ class addcharacter_pageobject extends pageobject {
 					'timepicker'	=> true,
 					'default'		=> $this->time->time,
 			);
+			
 		}
+		
+		if($this->url_id > 0) {
+			$defaultrole = $this->pdh->get('member', 'defaultrole', array($this->url_id));
+			$roles_array = $this->pdh->get('roles', 'memberroles', array($this->pdh->get('member', 'classid', array($this->url_id)), true));
+			
+			$static_fields['defaultrole'] = array(
+					'type'			=> 'dropdown',
+					'lang'			=> 'role',
+					'options'		=> $roles_array,
+					'value'			=> $defaultrole,
+			);
+		}
+		
 		$this->form->add_tab(array('name' => 'general', 'lang' => $this->user->lang('uc_cat_general')));
 		$this->form->add_fields($static_fields, '', 'general');
 		$this->form->add_tab(array('name' => 'character', 'lang' => 'character'));

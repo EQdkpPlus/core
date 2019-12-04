@@ -815,9 +815,9 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			return $this->data[$member_id]['profiledata'];
 		}
 
-		public function get_defaultrole($member_id){
+		public function get_defaultrole($member_id, $blnReturnDatabaseValue=false){
 			$member_defaultrole	= $this->data[$member_id]['defaultrole'];
-			if($member_defaultrole > 0){
+			if($member_defaultrole > 0 || $blnReturnDatabaseValue){
 				return $member_defaultrole;
 			}else{
 				$defautrole_config	= json_decode($this->config->get('roles_defaultclasses'), true);
