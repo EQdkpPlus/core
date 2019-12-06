@@ -680,7 +680,7 @@ class wbb5_bridge extends bridge_generic {
 		$type = 0;
 		for ($i = 0; $i < $length; $i++) {
 			$type = ($i % 4 == 0) ? 0 : ($type + 1);
-			$password .= substr($availableCharacters[$type], $this->getRandomValue(0, strlen($availableCharacters[$type]) - 1), 1);
+			$password .= substr($availableCharacters[$type], self::getRandomValue(0, strlen($availableCharacters[$type]) - 1), 1);
 		}
 
 		return str_shuffle($password);
