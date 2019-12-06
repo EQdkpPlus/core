@@ -467,12 +467,12 @@ if ( !class_exists( "pdh_w_member" ) ) {
 			$toid_raidids = $this->pdh->get('raid', 'raidids4memberid', $toid);
 			$this->db->beginTransaction();
 
-			$objQuery = $this->db->prepare("UPDATE __raid_attendees SET member_id=? WHERE member_id=?", $toid, $fromid);
+			$objQuery = $this->db->prepare("UPDATE __raid_attendees SET member_id=? WHERE member_id=?");
 			foreach($toid_raidids as $raid_id){
 				$objQuery->addCondition("raid_id != ?", $raid_id);
 			}
 
-			$objResult = $objQuery->execute();
+			$objResult = $objQuery->execute($toid, $fromid);
 
 			if($objResult) {
 				$objQuery = $this->db->prepare("UPDATE __adjustments :p  WHERE member_id=?")->set(array('member_id' => $toid))->execute($fromid);
