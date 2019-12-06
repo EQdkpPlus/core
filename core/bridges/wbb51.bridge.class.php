@@ -23,7 +23,7 @@ if ( !defined('EQDKP_INC') ){
 	header('HTTP/1.0 404 Not Found');exit;
 }
 
-class wbb5_bridge extends bridge_generic {
+class wbb51_bridge extends bridge_generic {
 
 	public static $name = 'WBB 5.1 (WSC 3.1)';
 
