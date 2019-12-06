@@ -580,6 +580,6 @@ ul.disc {
 @supports (-webkit-overflow-scrolling: touch) {
 	div.ui-dialog-content {
 		-webkit-overflow-scrolling: touch;
-		overflow-y: scroll !important;
+		overflow: scroll !important;
 	}
 }
