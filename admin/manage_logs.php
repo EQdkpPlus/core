@@ -30,10 +30,10 @@ class Manage_Logs extends page_generic {
 		$this->user->check_auth('a_logs_view');
 
 		$handler = array(
-			'reset'			=> array('process' => 'reset_logs',			'check' => 'a_logs_del', 'csrf'=>true),
 			'export'		=> array('process' => 'export_logs',		'check' => 'a_logs_view', 'csrf'=>true),
 			'del_errors'	=> array('process' => 'delete_errors',		'check' => 'a_logs_del', 'csrf'=>true),
-			'dellogdays'	=> array('process' => 'delete_log_days',	'check' => 'a_logs_del', 'csrf'=>true)
+			'dellogdays'	=> array('process' => 'delete_log_days',	'check' => 'a_logs_del', 'csrf'=>true),
+			'reset'			=> array('process' => 'reset_logs',			'check' => 'a_logs_del', 'csrf'=>true),
 		);
 		parent::__construct(false, $handler, array(), null, 'selected_ids[]', 'logid');
 		if($this->url_id > 0) $this->view_log();
@@ -83,6 +83,7 @@ class Manage_Logs extends page_generic {
 	}
 
 	public function delete_errors(){
+		
 		$arrLogFiles = $this->pdl->get_logfiles(true);
 		foreach($arrLogFiles as $logfile){
 			$this->pdl->delete_logfile(str_replace(".log", "", $logfile));
