@@ -205,7 +205,7 @@ if ( !class_exists( "pdh_r_points_history" ) ) {
 				//main points
 				$points = $this->calculate_single_points($memberid, $multidkpid, $from, $to);
 				$arrPoints['earned'][0] = (isset($points['earned'][0])) ? $points['earned'][0] : 0;
-				$arrPoints['spent'][0] = (isset($points['spent'][0])) ? $points['spent'][0] : 0;
+				$arrPoints['spent'][0] = (isset($points['spent'][0])) ? $points['spent'][0] : array(0 => 0);
 				$arrPoints['adjustment'][0] = (isset($points['adjustment'][0])) ? $points['adjustment'][0] : 0;
 
 				//Accumulate points from twinks
@@ -223,8 +223,10 @@ if ( !class_exists( "pdh_r_points_history" ) ) {
 								}
 							}
 						}
+						#$arrPoints['spent'][0][0] += $twinkpoints['spent'][0][0];
 						foreach($twinkpoints['spent'] as $event_id => $vals) {
 							foreach($vals as $ip_id => $val) {
+								if(!isset($arrPoints['spent'][$event_id])) $arrPoints['spent'][$event_id] = array();
 								if(!isset($arrPoints['spent'][$event_id][$ip_id])) $arrPoints['spent'][$event_id][$ip_id] = 0;
 								$arrPoints['spent'][$event_id][$ip_id] += $val;
 							}
