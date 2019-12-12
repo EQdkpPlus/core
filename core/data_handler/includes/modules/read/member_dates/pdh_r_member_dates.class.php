@@ -71,9 +71,15 @@ if ( !class_exists( "pdh_r_member_dates" ) ) {
 			$this->pdc->del('pdh_fl_item_dates_multi');
 			$this->fl_item_dates = NULL;
 			$this->fl_raid_dates = NULL;
+			
+			$this->blnItemsSingleLoaded = false;
+			$this->blnItemsMultiLoaded = false;
+			$this->blnRaidsSingleLoaded = false;
+			$this->blnRaidsMultiLoaded = false;
 		}
 
 		public function init(){
+			
 		}
 
 		public function init_raid_single(){
