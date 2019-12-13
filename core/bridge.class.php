@@ -115,6 +115,7 @@ class bridge extends gen_class {
 
 		$boolLoginResult = false;
 		$strPwdHash = '';
+		$user_id = ANONYMOUS;
 
 		//Login
 		$arrLoginmethodResult = $this->objBridge->login(unsanitize($strUsername), unsanitize($strPassword), $boolSetAutoLogin);
@@ -255,11 +256,12 @@ class bridge extends gen_class {
 	 */
 	public function sync_fields($user_id, $arrUserdata){
 		if (!$this->status || !$this->objBridge) return false;
+		
+		$save = false;
 
 		//Key: Bridge ID, Value: EQdkp Profilefield ID
 		$arrMapping = $this->pdh->get('user_profilefields', 'bridge_mapping');
 
-		$eqdkp_user_data = $this->pdh->get('user', 'data', array($user_id));
 		$eqdkp_custom_fields = $this->pdh->get('user', 'custom_fields', array($user_id));
 
 		//Key: Bridge ID, Value: Bridge Profilefield Value
@@ -567,7 +569,7 @@ class bridge extends gen_class {
 	public function check_user_group_table(){
 		if (!$this->status || !$this->objBridge) return false;
 
-		if ($this->get_user_groups() && count($this->get_user_groups() > 0)){
+		if (is_array($this->get_user_groups()) && count($this->get_user_groups() > 0)){
 			return true;
 		} else {
 			return false;
