@@ -63,8 +63,11 @@ class notifications_pageobject extends pageobject {
 
 		foreach($arrIDs as $intID){
 			$intID = intval($intID);
-			$intUserID = $this->pdh->get('notifications', 'user_id', array($intID));
-			if ($intUserID === $this->user->id) $this->pdh->put('notifications', 'delete', array($intID));
+			$intUserID = (int)$this->pdh->get('notifications', 'user_id', array($intID));
+
+			if ($intUserID === $this->user->id) {
+				$this->pdh->put('notifications', 'delete', array($intID));
+			}
 		}
 		$this->pdh->process_hook_queue();
 		exit;
