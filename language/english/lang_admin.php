@@ -1931,4 +1931,5 @@ $lang = array(
 		"lm_after_preset" => "Execute the following preset after",
 		"lm_after_replace" => "Replace param with the value of the current preset",
 		"show_on_profile" => "Show on character-profile",
+		"connected_raids" => "Connected Raids",
 );

@@ -283,6 +283,7 @@ CREATE TABLE `__raids` (
 	`raid_added_by` varchar(30) COLLATE utf8_bin NOT NULL,
 	`raid_updated_by` varchar(30) COLLATE utf8_bin DEFAULT NULL,
 	`raid_additional_data` TEXT NULL DEFAULT NULL COLLATE 'utf8_bin',
+	`raid_connected_attendance` TEXT NULL COLLATE 'utf8_bin',
 	PRIMARY KEY (`raid_id`),
 	INDEX `raid_value` (`raid_value`),
 	INDEX `event_id` (`event_id`)

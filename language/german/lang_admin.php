@@ -1936,4 +1936,5 @@ $lang = array(
 		"lm_after_preset" => "Folgendes Preset danach ausführen",
 		"lm_after_replace" => "Parameter des Presets mit dem Wert der vorherigen Funktion ersetzen",
 		"show_on_profile" => "Im Charakter-Profil anzeigen",
+		"connected_raids" => "Verbundene Raids",
 );

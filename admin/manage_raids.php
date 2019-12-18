@@ -191,6 +191,7 @@ class ManageRaids extends page_generic {
 
 	public function save() {
 		$data = $this->get_post();
+		
 		if(!$data['raid']['id']) {
 			$raid_upd = $this->pdh->put('raid', 'add_raid', array($data['raid']['date'], $data['raid']['attendees'], $data['raid']['event'], $data['raid']['note'], $data['raid']['value'], $data['raid']['additonal_data']));
 			$data['raid']['id'] = ($raid_upd) ? $raid_upd : false;
@@ -199,7 +200,7 @@ class ManageRaids extends page_generic {
 				$this->pdh->put('calendar_events', 'raid_transformed', array($data['raid']['caleventid'], $data['raid']['id']));
 			}
 		} else {
-			$raid_upd = $this->pdh->put('raid', 'update_raid', array($data['raid']['id'], $data['raid']['date'], $data['raid']['attendees'], $data['raid']['event'], $data['raid']['note'], $data['raid']['value'], $data['raid']['additonal_data']));
+			$raid_upd = $this->pdh->put('raid', 'update_raid', array($data['raid']['id'], $data['raid']['date'], $data['raid']['attendees'], $data['raid']['event'], $data['raid']['note'], $data['raid']['value'], $data['raid']['additonal_data'], $data['raid']['connected_raids']));
 		}
 		if($raid_upd) {
 			$adj_upd = array(true);
@@ -337,7 +338,7 @@ class ManageRaids extends page_generic {
 			$item_names = $this->hooks->process('admin_manage_raids_items_autocomplete', array('item_names' => $item_names), true);
 		}
 
-		$raid = array('id' => $this->url_id, 'date' => $this->time->time, 'note' => '', 'event' => 0, 'value' => 0.00, 'attendees' => array());
+		$raid = array('id' => $this->url_id, 'date' => $this->time->time, 'note' => '', 'event' => 0, 'value' => 0.00, 'attendees' => array(), 'connected_raids' => array());
 		if($raid['id'])
 		{ //we're updating a raid
 			//fetch raid-data
@@ -347,6 +348,7 @@ class ManageRaids extends page_generic {
 			//fetch items
 			$items = $this->get_itemsofraid($raid['id']);
 		}
+
 
 		//If we get a draft
 		if ($this->in->get('draft', 0) > 0) {
@@ -405,6 +407,22 @@ class ManageRaids extends page_generic {
 
 		if($raid['id'] AND $raid['id'] != 'new') $this->confirm_delete($this->user->lang('del_raid_with_itemadj')."<br />".$strRaidUserDate." ".$events[$raid['event']].": ".addslashes($raid['note']));
 
+		
+		$arrConnected = array();
+		if($raid['id']){
+			$arrAllRaidsForEvent = $this->pdh->get('raid', 'raidids4eventid', array($raid['event']));
+			$arrAllRaidsForEvent = $this->pdh->sort($arrAllRaidsForEvent, 'raid', 'date', 'desc');
+			foreach($arrAllRaidsForEvent as $connRaidId){
+				if($connRaidId == $raid['id']) continue;
+				
+				$date = $this->pdh->get('raid', 'date', array($connRaidId));
+				if($date < ($raid['date']-7*3610*24)) continue;
+				if($date > ($raid['date']+7*3610*24)) continue;
+				
+				$arrConnected[$connRaidId] = $this->time->user_date($date) . ' - ' . stripslashes($this->pdh->get('raid', 'event_name', array($connRaidId)));
+			}
+		}
+		
 
 
 		$arrEventKeys = array_keys($eventsOrig);
@@ -419,7 +437,7 @@ class ManageRaids extends page_generic {
 			'VALUE'				=> runden((($this->in->get('dataimport', '') == 'true') ? $this->in->get('value', 0) : $raid['value'])),
 			'NEW_MEM_SEL'		=> (new hmultiselect('raid_attendees', array('options' => $members, 'value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->getArray('attendees', 'int') : $raid['attendees']), 'width' => 400, 'filter' => true)))->output(),
 			'RAID_DROPDOWN'		=> (new hdropdown('draft', array('options' => $raids, 'value' => $this->in->get('draft', 0), 'js' => 'onchange="window.location=\'manage_raids.php'.$this->SID.'&amp;upd=true&amp;draft=\'+this.value"')))->output(),
-
+			'CONNECTED_RAIDS'	=> count($arrConnected) ? (new hmultiselect('connected', array('options' => $arrConnected, 'value' => $raid['connected_raids'], 'width' => 250, 'filter' => true)))->output() : '',
 			'ADJ_KEY'			=> $intAdjKey+1,
 			'MEMBER_DROPDOWN'	=> (new hmultiselect('adjs[KEY][members]', array('options' => $members, 'value' => '', 'width' => 250, 'filter' => true, 'id'=>'adjs_KEY_members', 'class' => 'input adj_members')))->output(),
 			'MEMBER_ITEM_DROPDOWN'	=> (new hmultiselect('items[KEY][members]', array('options' => $members, 'value' => '', 'width' => 250, 'filter' => true, 'id'=>'items_KEY_members', 'class' => 'input item_members')))->output(),
@@ -626,6 +644,7 @@ class ManageRaids extends page_generic {
 		$raid['note'] = $this->pdh->get('raid', 'note', array($raid_id));
 		$raid['value'] = $this->pdh->get('raid', 'value', array($raid_id));
 		$raid['additional_data'] = $this->pdh->get('raid', 'additional_data', array($raid_id));
+		$raid['connected_raids'] = json_decode($this->pdh->get('raid', 'connected_attendance', array($raid_id)));
 		if($attendees) {
 			$raid['attendees'] = $this->pdh->get('raid', 'raid_attendees', array($raid_id, false));
 		}
@@ -706,6 +725,7 @@ class ManageRaids extends page_generic {
 		$data['raid']['value'] = $this->in->get('value',0.0);
 
 		$data['raid']['attendees'] = array_unique($this->in->getArray('raid_attendees','int'));
+		$data['raid']['connected_raids'] = array_unique($this->in->getArray('connected','int'));
 
 		if(empty($data['raid']['attendees'])) {
 			$data['false'][] = 'raids_members';

@@ -100,7 +100,7 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 			}
 		}
 
-		public function update_raid($raid_id, $raid_date, $raid_attendees, $event_id, $raid_note, $raid_value, $additional_data='') {
+		public function update_raid($raid_id, $raid_date, $raid_attendees, $event_id, $raid_note, $raid_value, $additional_data='', $connected=array()) {
 			//get old-data
 			$old['event'] = $this->pdh->get('raid', 'event', array($raid_id));
 			$old['note'] = $this->pdh->get('raid', 'note', array($raid_id));
@@ -108,7 +108,8 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 			$old['date'] = $this->pdh->get('raid', 'date', array($raid_id));
 			$old['members'] = $this->pdh->get('raid', 'raid_attendees', array($raid_id, true));
 			$old['additional_data'] = $this->pdh->get('raid', 'additional_data', array($raid_id));
-
+			$old['connected_raids'] = $this->pdh->get('raid', 'connected_attendance', array($raid_id));
+			
 			//get member names for log
 			$old['m_names'] = $this->pdh->aget('member', 'name', 0, array($old['members']));
 
@@ -117,7 +118,8 @@ if ( !class_exists( "pdh_w_raid" ) ) {
 					'raid_note' => $raid_note,
 					'raid_value' => $raid_value,
 					'raid_date' => $raid_date,
-					'raid_additional_data' => $additional_data
+					'raid_additional_data' => $additional_data,
+					'raid_connected_attendance' => json_encode($connected),
 			);
 
 			//Reset Apa Cache if value or date was changed

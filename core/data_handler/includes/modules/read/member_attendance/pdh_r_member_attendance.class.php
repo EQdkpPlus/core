@@ -140,13 +140,15 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 			unset($temp);
 
 			//get Raids
-			$objQuery = $this->db->prepare("SELECT raid_id, event_id, raid_date FROM __raids WHERE raid_date > ?")->execute($first_date);
+			$arrDoneRaids = array();
+			$objQuery = $this->db->prepare("SELECT raid_id, event_id, raid_date, raid_connected_attendance FROM __raids WHERE raid_date > ?")->execute($first_date);
 			if($objQuery){
 				while($row = $objQuery->fetchAssoc()){
 					$raid_id = intval($row['raid_id']);
 					$eventid = intval($row['event_id']);
 					$date = intval($row['raid_date']);
-
+					$arrConnected = json_decode($row['raid_connected_attendance']);
+		
 					$mdkpids = $this->pdh->get('multidkp', 'mdkpids4eventid', array($eventid, false));
 					if(!in_array($mdkp_id, $mdkpids)) continue;
 
@@ -163,14 +165,32 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 						}
 					}
 					//increment total counter
-					foreach($first_raids as $first_raid => $num){
-						if($date >= $first_raid) {
-							$first_raids[$first_raid][$mdkp_id]++;
+					
+					$value = 1;
+					
+					if(is_array($arrConnected)){
+						foreach($arrConnected as $connID){
+							if(isset($arrDoneRaids[$connID]) && $arrDoneRaids[$connID] < 2){
+								$value -= 1;
+							}
+								
+							$arrDoneRaids[$connID] = 2;
 						}
 					}
+					
+					if(!isset($arrDoneRaids[$raid_id])){
+						foreach($first_raids as $first_raid => $num){
+							if($date >= $first_raid) {
+								$first_raids[$first_raid][$mdkp_id] += $value;
+							}
+						}
+						
+						$arrDoneRaids[$raid_id] = 1;
+					}
+					
 				}
 			}
-
+			
 			//connect total-raid counts to member_id
 			$twink_first_dates = array();
 			foreach($member_first_raid as $mdkp_id => $mfirst_raid) {
@@ -205,6 +225,8 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 			}
 			$member_raidcount = $this->member_attendance[$time_period][$multidkp_id][$with_twinks][$member_id]['attended'];
 			$total_raidcount = $this->member_attendance[$time_period][$multidkp_id][$with_twinks][$member_id]['count'];
+			
+			if($member_raidcount > $total_raidcount) $member_raidcount = $total_raidcount;
 
 			if($real){
 				if(!isset($this->member_attendance['LT'][$multidkp_id])){
@@ -247,6 +269,8 @@ if ( !class_exists( "pdh_r_member_attendance" ) ) {
 
 			$member_raidcount = $this->member_attendance[$time_period][$multidkp_id][$with_twinks][$member_id]['attended'];
 			$total_raidcount = $this->member_attendance[$time_period][$multidkp_id][$with_twinks][$member_id]['count'];
+			
+			if($member_raidcount > $total_raidcount) $member_raidcount = $total_raidcount;
 
 			if($real){
 				if(!isset($this->member_attendance['LT'][$multidkp_id])){

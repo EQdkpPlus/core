@@ -200,6 +200,13 @@
 					<dd><input type="text" name="value" value="{VALUE}" class="input" id="raid_value" /></dd>
 				</dl>
 				<!-- ENDIF -->
+				<!-- IF not S_DKP_EASYMODE and S_RAID_UPD and CONNECTED_RAIDS -->
+				<dl>
+					<dt><label>{L_connected_raids}:</label></dt>
+					<dd>{CONNECTED_RAIDS}</dd>
+				</dl>
+				<!-- ENDIF -->
+				
 				<dl>
 					<dt><label>{L_attendees}:</label></dt>
 					<dd>{NEW_MEM_SEL}

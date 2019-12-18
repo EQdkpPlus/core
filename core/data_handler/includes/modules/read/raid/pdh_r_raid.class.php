@@ -163,6 +163,11 @@ if(!class_exists('pdh_r_raid')){
 		public function get_additional_data($id){
 			return $this->objPagination->get($id, 'raid_additional_data');
 		}
+		
+		public function get_connected_attendance($id){
+			return $this->objPagination->get($id, 'raid_connected_attendance');
+		}
+		
 
 		public function get_html_additional_data($id){
 			$strData = $this->get_additional_data($id);
@@ -258,6 +263,8 @@ if(!class_exists('pdh_r_raid')){
 		public function get_raidids4eventid($event_id) {
 			return $this->objPagination->search("event_id", $event_id);
 		}
+		
+		
 
 		public function get_raididsindateinterval($start_date, $end_date, $event_ids=false){
 			$objQuery = $this->db->prepare("SELECT raid_id,event_id FROM __raids WHERE raid_date >= ? AND raid_date <= ? ORDER BY raid_date DESC")->execute($start_date, $end_date);
@@ -309,7 +316,17 @@ if(!class_exists('pdh_r_raid')){
 
 
 		public function get_html_raidlink($raid_id, $base_url, $url_suffix='',$blnUseController=false){
-			return '<a href="'.$this->get_raidlink($raid_id, $base_url, $url_suffix, $blnUseController).'">'.$this->get_event_name($raid_id).'</a>';
+			$strAdditional = "";
+			if($base_url === 'manage_raids.php'){
+				$strConnected = $this->get_connected_attendance($raid_id);
+				if($strConnected){
+					$arrConnected = json_decode($strConnected);
+					
+					if(count($arrConnected)) $strAdditional .= ' - '.'<i class="fa fa-lg fa-link"></i> '.count($arrConnected);
+				}
+			}
+			
+			return '<a href="'.$this->get_raidlink($raid_id, $base_url, $url_suffix, $blnUseController).'">'.$this->get_event_name($raid_id).$strAdditional.'</a>';
 		}
 
 
