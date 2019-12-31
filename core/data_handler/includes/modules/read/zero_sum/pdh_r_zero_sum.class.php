@@ -25,44 +25,44 @@ if ( !defined('EQDKP_INC') ){
 
 if ( !class_exists( "pdh_r_zero_sum" ) ) {
 	class pdh_r_zero_sum extends pdh_r_generic{
-
+		
 		public $default_lang = 'english';
 		public $points;
 		public $raid_vals;
 		private $decayed = array();
-
+		
 		public $hooks = array(
-			'adjustment_update',
-			'event_update',
-			'item_update',
-			'member_update',
-			'raid_update',
-			'multidkp_update',
-			'itempool_update'
+				'adjustment_update',
+				'event_update',
+				'item_update',
+				'member_update',
+				'raid_update',
+				'multidkp_update',
+				'itempool_update'
 		);
-
+		
 		public $presets = array(
-			'zs_current_all'	=> array('zerosum', array('%member_id%', '%ALL_IDS%', 0, 0, '%with_twink%'), array('%ALL_IDS%', true, true)),
-			'zs_current'		=> array('zerosum', array('%member_id%', '%dkp_id%', 0, 0, '%with_twink%'), array('%dkp_id%')),
-			'zs_earned'			=> array('earned', array('%member_id%', '%dkp_id%', 0, '%with_twink%'), array()),
-			'zs_spent'			=> array('spent', array('%member_id%', '%dkp_id%', 0, 0, '%with_twink%'), array()),
-			'zs_rvalue'			=> array('raidval', array('%raid_id%'), array('%dkp_id%')),
-			'zs_rvalue_all'		=> array('raidval', array('%raid_id%', '%ALL_IDS%'), array('%ALL_IDS%', true, true)),
+				'zs_current_all'	=> array('zerosum', array('%member_id%', '%ALL_IDS%', 0, 0, '%with_twink%'), array('%ALL_IDS%', true, true)),
+				'zs_current'		=> array('zerosum', array('%member_id%', '%dkp_id%', 0, 0, '%with_twink%'), array('%dkp_id%')),
+				'zs_earned'			=> array('earned', array('%member_id%', '%dkp_id%', 0, '%with_twink%'), array()),
+				'zs_spent'			=> array('spent', array('%member_id%', '%dkp_id%', 0, 0, '%with_twink%'), array()),
+				'zs_rvalue'			=> array('raidval', array('%raid_id%'), array('%dkp_id%')),
+				'zs_rvalue_all'		=> array('raidval', array('%raid_id%', '%ALL_IDS%'), array('%ALL_IDS%', true, true)),
 		);
-
+		
 		public $detail_twink = array(
-			'zerosum' 	=> 'summed_up',
-			'earned' 	=> 'summed_up',
-			'spent' 	=> 'summed_up',
+				'zerosum' 	=> 'summed_up',
+				'earned' 	=> 'summed_up',
+				'spent' 	=> 'summed_up',
 		);
-
+		
 		public function reset(){
 			$this->pdc->del('pdh_zero_sum_raids_table');
 			$this->pdc->del('pdh_zero_sum_points_table');
 			$this->raid_vals = NULL;
 			$this->points = NULL;
 		}
-
+		
 		public function init(){
 			//cached data not outdated?
 			$this->points		= $this->pdc->get('pdh_zero_sum_points_table');
@@ -70,9 +70,9 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 			if($this->points !== null && $this->raid_vals !== null){
 				return true;
 			}
-
+			
 			$raid_ids = $this->pdh->get('raid', 'id_list');
-
+			
 			//calculate raid values
 			$arrRaids= array();
 			if(is_array($raid_ids)){
@@ -90,23 +90,23 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 						continue;
 					}
 					$arrRaids[$raid_id] = 0;
-
+					
 					foreach($items as $item_id){
 						$arrRaids[$raid_id] += $this->pdh->get('item', 'value', $params=array($item_id));
 					}
-
+					
 					//rvalue = value / attendees
 					$arrRaids[$raid_id] = $arrRaids[$raid_id] / count($attendees);
 				}
 			}
-
+			
 			$this->raid_vals = $arrRaids;
-
+			
 			$this->pdc->put('pdh_zero_sum_raids_table', $arrRaids, null);
-
+			
 			//calculate points
 			$arrPoints = array();
-
+			
 			//earned
 			if(is_array($raid_ids)){
 				foreach($raid_ids as $raid_id){
@@ -124,7 +124,7 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 					}
 				}
 			}
-
+			
 			//spent
 			$item_ids = $this->pdh->get('item', 'id_list');
 			if(is_array($item_ids)){
@@ -136,7 +136,7 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 					}
 				}
 			}
-
+			
 			//adjustment
 			$adjustment_ids = $this->pdh->get('adjustment', 'id_list');
 			if(is_array($adjustment_ids)){
@@ -148,44 +148,44 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 					}
 				}
 			}
-
+			
 			//ok, that was the basic table, now we calculate the real values
 			foreach($this->pdh->get('member', 'id_list', array(false, false)) as $member_id){
 				foreach($this->pdh->get('multidkp',  'id_list', array()) as $mdkp_id){
 					$arrPoints = $this->calculate_multi_points($arrPoints, $member_id, $mdkp_id);
 				}
 			}
-
+			
 			$this->pdc->put('pdh_zero_sum_points_table', $arrPoints, null);
 			$this->points = $arrPoints;
 		}
-
+		
 		public function calculate_single_points($arrPoints, $memberid, $multidkpid = 1){
 			//already cached?
 			if(isset($arrPoints[$memberid][$multidkpid]['single']['earned'][0])){
 				return $arrPoints[$memberid][$multidkpid]['single'];
 			}
-
+			
 			//init
 			$arrPoints[$memberid][$multidkpid]['single']['earned'][0] = 0;
 			$arrPoints[$memberid][$multidkpid]['single']['spent'][0] = 0;
 			$arrPoints[$memberid][$multidkpid]['single']['adjustment'][0] = 0;
-
+			
 			//calculate
 			if(is_array($arrPoints[$memberid][$multidkpid]['single']['earned'])){
 				foreach($arrPoints[$memberid][$multidkpid]['single']['earned'] as $event_id => $earned){
 					$arrPoints[$memberid][$multidkpid]['single']['earned'][0] += $earned;
 				}
 			}
-
+			
 			if(is_array($arrPoints[$memberid][$multidkpid]['single']['spent'])){
 				foreach($arrPoints[$memberid][$multidkpid]['single']['spent'] as $itempool_id => $spent) {
 					if(!isset($arrPoints[$memberid][$multidkpid]['single']['spent'][0])) $arrPoints[$memberid][$multidkpid]['single']['spent'][0] = 0;
 					$arrPoints[$memberid][$multidkpid]['single']['spent'][0] += $spent;
 				}
 			}
-
-
+			
+			
 			if(is_array($arrPoints[$memberid][$multidkpid]['single']['adjustment'])){
 				foreach($arrPoints[$memberid][$multidkpid]['single']['adjustment'] as $event_id => $adjustment){
 					$arrPoints[$memberid][$multidkpid]['single']['adjustment'][0] += $adjustment;
@@ -193,25 +193,25 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 			}
 			return $arrPoints[$memberid][$multidkpid]['single'];
 		}
-
-
-		public function calculate_multi_points($arrPoints, $memberid, $multidkpid = 1){
+		
+		
+		public function calculate_multi_points($arrPoints, $memberid, $multidkpid = 1, $blnReturnForMember=false){
 			//already cached?
 			if(isset($arrPoints[$memberid][$multidkpid]['multi'])){
-				return $arrPoints[$memberid][$multidkpid]['multi'];
+				return ($blnReturnForMember) ? $arrPoints[$memberid][$multidkpid]['multi'] : $arrPoints;
 			}
-
+			
 			//twink stuff
 			if($this->pdh->get('member', 'is_main', array($memberid))){
 				$twinks = $this->pdh->get('member', 'other_members', $memberid);
-
+				
 				//main points
 				$arrSinglePoints = $this->calculate_single_points($arrPoints, $memberid, $multidkpid);
 				$arrPoints[$memberid][$multidkpid]['single'] = $arrSinglePoints;
 				$arrPoints[$memberid][$multidkpid]['multi']['earned'][0] = $arrSinglePoints['earned'][0];
 				$arrPoints[$memberid][$multidkpid]['multi']['spent'][0] = $arrSinglePoints['spent'][0];
 				$arrPoints[$memberid][$multidkpid]['multi']['adjustment'][0] = $arrSinglePoints['adjustment'][0];
-
+				
 				//Accumulate points from twinks
 				if(!empty($twinks) && is_array($twinks)){
 					foreach($twinks as $twinkid){
@@ -227,7 +227,7 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 								}
 							}
 						}
-						foreach($twinkpoints['spent'] as $ip_id => $val) {		
+						foreach($twinkpoints['spent'] as $ip_id => $val) {
 							if(!isset($arrPoints[$memberid][$multidkpid]['multi']['spent'][$ip_id])) $arrPoints[$memberid][$multidkpid]['multi']['spent'][$ip_id] = 0;
 							$arrPoints[$memberid][$multidkpid]['multi']['spent'][$ip_id] += $val;
 						}
@@ -235,32 +235,33 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 				} else {
 					$arrPoints[$memberid][$multidkpid]['multi'] = $arrSinglePoints;
 				}
-				return $arrPoints;
+				return ($blnReturnForMember) ? $arrPoints[$memberid][$multidkpid]['multi'] : $arrPoints;
 			} else {
 				$main_id = $this->pdh->get('member', 'mainid', array($memberid));
-				if($main_id) $arrPoints[$memberid][$multidkpid]['multi'] = $this->calculate_multi_points($arrPoints, $main_id, $multidkpid);
-				return $arrPoints;
+				
+				if($main_id) $arrPoints[$memberid][$multidkpid]['multi'] = $this->calculate_multi_points($arrPoints, $main_id, $multidkpid, true);
+				return ($blnReturnForMember) ? $arrPoints[$memberid][$multidkpid]['multi'] : $arrPoints;
 			}
 		}
-
-
+		
+		
 		public function get_zerosum($member_id, $multidkp_id, $event_id=0, $itempool_id=0, $with_twink=true){
 			return ($this->get_earned($member_id, $multidkp_id, $event_id, $with_twink) - $this->get_spent($member_id, $multidkp_id, $event_id, $itempool_id, $with_twink) + $this->get_adjustment($member_id, $multidkp_id, $event_id, $with_twink));
 		}
-
+		
 		public function get_html_zerosum($member_id, $multidkp_id,  $event_id=0, $itempool_id=0, $with_twink=true){
 			$with_twink = (int)$with_twink;
 			$current = $this->get_zerosum($member_id, $multidkp_id, $event_id, $itempool_id, $with_twink);
 			return '<span class="'.color_item($current).'">'.runden($current).'</span>';
 		}
-
+		
 		public function get_html_caption_zerosum($mdkpid, $showname = false, $showtooltip = false, $tt_options = array()){
 			if($showname){
 				$text = $this->pdh->get('multidkp', 'name', array($mdkpid));
 			}else{
 				$text = $this->pdh->get_lang('points', 'current');
 			}
-
+			
 			if($showtooltip){
 				$tooltip = $this->user->lang('events').": <br />";
 				$events = $this->pdh->get('multidkp', 'event_ids', array($mdkpid));
@@ -269,37 +270,37 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 			}
 			return $text;
 		}
-
+		
 		public function get_earned($member_id, $multidkp_id, $event_id=0, $with_twink=true){
 			$with_twink = ($with_twink) ? 'multi' : 'single';
 			if(!isset($this->points[$member_id][$multidkp_id][$with_twink]['earned'][$event_id])) return 0;
 			return $this->points[$member_id][$multidkp_id][$with_twink]['earned'][$event_id];
 		}
-
+		
 		public function get_html_earned($member_id, $multidkp_id, $event_id=0, $with_twink=true){
 			return '<span class="positive">'.runden($this->get_earned($member_id, $multidkp_id, $event_id, $with_twink)).'</span>';
 		}
-
+		
 		public function get_spent($member_id, $multidkp_id, $event_id=0, $itempool_id=0, $with_twink=true){
 			$with_twink = ($with_twink) ? 'multi' : 'single';
 			if(!isset($this->points[$member_id][$multidkp_id][$with_twink]['spent'][$itempool_id])) return 0;
 			return $this->points[$member_id][$multidkp_id][$with_twink]['spent'][$itempool_id];
 		}
-
+		
 		public function get_html_spent($member_id, $multidkp_id, $event_id=0, $itempool_id=0, $with_twink=true){
 			return '<span class="negative">'.runden($this->get_spent($member_id, $multidkp_id, $event_id, $itempool_id, $with_twink)).'</span>';
 		}
-
+		
 		public function get_adjustment($member_id, $multidkp_id, $event_id=0, $with_twink=true){
 			$with_twink = ($with_twink) ? 'multi' : 'single';
 			if(!isset($this->points[$member_id][$multidkp_id][$with_twink]['adjustment'][$event_id])) return 0;
 			return $this->points[$member_id][$multidkp_id][$with_twink]['adjustment'][$event_id];
 		}
-
+		
 		public function get_html_adjustment($member_id, $multidkp_id, $event_id=0, $with_twink=true){
 			return '<span class="'.color_item($this->get_adjustment($member_id, $multidkp_id, $event_id, $with_twink)).'">'.runden($this->get_adjustment($member_id, $multidkp_id, $event_id, $with_twink)).'</span>';
 		}
-
+		
 		public function get_raidval($id, $dkp_id=0, $date=0){
 			if($dkp_id) {
 				if(!isset($this->decayed[$dkp_id])) $this->decayed[$dkp_id] = $this->apa->is_decay('raid', $dkp_id);
@@ -310,26 +311,26 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 			}
 			return (isset($val)) ? $val : $this->raid_vals[$id];
 		}
-
+		
 		public function get_html_raidval($id, $dkp_id=0){
 			return '<span class="positive">' . runden($this->get_raidval($id, $dkp_id)) . '</span>';
 		}
-
-
+		
+		
 		public function get_html_caption_raidval($mdkpid, $showname=false, $showtooltip=false){
 			if($showname){
 				$text = $this->pdh->get('multidkp', 'name', array($mdkpid));
 			}else{
 				$text = $this->pdh->get_lang('raid', 'value');;
 			}
-
+			
 			if($showtooltip){
 				$tooltip = $this->user->lang('events').": <br />";
 				$events = $this->pdh->get('multidkp', 'event_ids', array($mdkpid));
 				if(is_array($events))
-				foreach($events as $event_id)
-				$tooltip .= $this->pdh->get('event', 'name', array($event_id))."<br />";
-				$text = '<span class="coretip" data-coretip="'.$tooltip.'">'.$text.'</span>';
+					foreach($events as $event_id)
+						$tooltip .= $this->pdh->get('event', 'name', array($event_id))."<br />";
+						$text = '<span class="coretip" data-coretip="'.$tooltip.'">'.$text.'</span>';
 			}
 			return $text;
 		}
