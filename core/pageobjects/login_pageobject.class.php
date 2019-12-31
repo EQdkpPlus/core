@@ -42,7 +42,7 @@ class login_pageobject extends pageobject {
 		if (!$this->user->is_signedin()){
 
 			//Check Password Length
-			if (strlen($this->in->get('password')) > 64) {
+			if (strlen($this->in->get('password')) > 128) {
 				$this->core->message($this->user->lang('password_too_long'), $this->user->lang('error'), 'red');
 				$this->display();
 				return;

@@ -179,7 +179,7 @@ class register_pageobject extends pageobject {
 			$this->display_form();
 			return;
 		}
-		if (strlen($this->in->get('new_user_password1')) > 64) {
+		if (strlen($this->in->get('new_user_password1')) > 128) {
 			$this->core->message($this->user->lang('password_too_long'), $this->user->lang('error'), 'red');
 			$this->display_form();
 			return;
@@ -643,6 +643,8 @@ class register_pageobject extends pageobject {
         this.setCustomValidity('');
 	}
 });", 'head_docready');
+		
+		$this->tpl->js_file($this->root_path.'libraries/jquery/js/sha1/sha1.js');
 
 		$hidden_fields = (isset($this->data['auth_account'])) ? (new hhidden('lmethod', array('value' => $this->in->get('lmethod'))))->output().(new hhidden('auth_account', array('value' => $this->crypt->encrypt($this->data['auth_account']))))->output() : '';
 		$hidden_fields .= (isset($this->data['avatar'])) ? (new hhidden('avatar', array('value' => $this->crypt->encrypt($this->data['avatar']))))->output() : '';

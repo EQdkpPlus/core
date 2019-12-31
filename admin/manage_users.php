@@ -670,7 +670,7 @@ class Manage_Users extends page_generic {
 				return;
 			}
 		}
-		if ($change_password && strlen($values['new_password']) > 64) {
+		if ($change_password && strlen($values['new_password']) > 128) {
 			$this->core->message($this->user->lang('password_too_long'), $this->user->lang('error'), 'red');
 			$this->edit();
 			return;

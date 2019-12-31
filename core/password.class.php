@@ -24,6 +24,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class password extends gen_class {
+	public static $shortcuts = array('puf'=>'urlfetcher');
 
 	private $bcrypt_cost = 11;
 
@@ -237,5 +238,35 @@ class password extends gen_class {
 	 */
 	private function hash_argon2i($password){
 		return password_hash($password, PASSWORD_ARGON2I);
+	}
+	
+	
+	public function checkIfLeaked($strPassword){
+		$strSHA1hash = strtoupper(sha1($strPassword));
+		
+		$strFirstHashpart = substr($strSHA1hash, 0, 5);
+		$strLastHashpart = substr($strSHA1hash, 5);
+		
+		$response = $this->puf->fetch('https://api.pwnedpasswords.com/range/'.$strFirstHashpart);
+		if($response){
+			$arrParts = array();
+			
+			if(strlen($response)){
+				$arrParts = explode("\r\n", $response);
+			}
+			
+			if(is_array($arrParts)){
+				foreach($arrParts as $val){
+					$arrSubParts = explode(':', $val);
+					
+					if($arrSubParts[0] === $strLastHashpart){
+						return true;
+					}
+				}
+			}
+		}
+		
+		return false;
+
 	}
 }
