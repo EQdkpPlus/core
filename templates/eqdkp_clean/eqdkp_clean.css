@@ -3404,12 +3404,12 @@ button#cboxPrevious, button#cboxNext, button#cboxClose, button#cboxSlideshow {
 	display: none;
 }
 
-.boxContent ul, .article_content ul {
+.boxContent ul, .article_content ul, .categoryDescription ul {
 	list-style-type: square;
 	padding-left: 20px;
 }
 
-.boxContent ol, .article_content ol {
+.boxContent ol, .article_content ol, .categoryDescription ol {
 	list-style-type: decimal;
 	padding-left: 20px;
 }
