@@ -2599,7 +2599,7 @@ article .article_content form {
 .article_content{
 	line-height: 1.2em;
 }
-.article_content p {
+.article_content p, .categoryDescription p {
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
