@@ -151,7 +151,6 @@ class editarticle_pageobject extends pageobject {
 
 		$intFeatured = $this->in->get('featured', 0);
 		$intCategory = ($this->in->exists('category')) ? $this->in->get('category', 0) : $cid;
-		$intUserID = $this->user->id;
 		$intComments = $this->in->get('comments', 0);
 		$intVotes = $this->in->get('votes', 0);
 		$intHideHeader = $this->in->get('hide_header', 0);
@@ -180,9 +179,11 @@ class editarticle_pageobject extends pageobject {
 
 		if ($id){
 			//Update
+			$intUserID = $this->pdh->get('articles', 'user_id', array($id)); //Keep the original author
 			if (!$this->arrPermissions['update']) message_die($this->user->lang('noauth'), $this->user->lang('noauth_default_title'), 'access_denied', true);
 			$blnResult = $this->pdh->put('articles', 'update', array($id, $strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader));
 		} else {
+			$intUserID = $this->user->id;
 			if (!$this->arrPermissions['create']) message_die($this->user->lang('noauth'), $this->user->lang('noauth_default_title'), 'access_denied', true);
 			$blnResult = $this->pdh->put('articles', 'add', array($strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader));
 		}
