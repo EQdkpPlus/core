@@ -40,7 +40,7 @@ class login_twofactor extends gen_class {
 	}
 
 	public function account_button(){
-		$this->jquery->dialog('twofactor_init', $this->user->lang('login_twofactor_connect'), array('url' => $this->server_path.'libraries/twofactor/init.php'.$this->SID, 'height'	=> 600, 'width' => 700));
+		$this->jquery->dialog('twofactor_init', $this->user->lang('login_twofactor_connect'), array('url' => $this->server_path.'libraries/twofactor/init.php'.$this->SID, 'height'	=> 650, 'width' => 750));
 		return '<button type="button" class="mainoption thirdpartylogin twofactor accountbtn" onclick="twofactor_init()">'.$this->user->lang('login_twofactor_connect').'</button>';
 	}
 

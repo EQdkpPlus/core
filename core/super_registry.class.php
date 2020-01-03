@@ -102,6 +102,7 @@ abstract class super_registry {
 		'template'				=> 'libraries/template/',
 		'tinyMCE'				=> 'libraries/tinyMCE/',
 		'myemojione'			=> 'libraries/emojione/',
+		'qrcode'				=> 'libraries/qrcode/',
 		'mmtaskmanager'			=> 'maintenance/includes/',
 	);
 	public static $lite_igno = array('bridge');
@@ -338,10 +339,10 @@ abstract class super_registry {
 	 * @var array
 	 */
 	protected static $libraries = array(
-		'facebook'	=> 'Facebook',
 		'oauth'		=> 'OAuth2',
 		'phpseclib'	=> 'phpseclib',
 		'JShrink'	=> 'JShrink',
+		'qrcode'	=> 'chillerlan',
 	);
 
 	public static function autoload_libraries($strClassname){

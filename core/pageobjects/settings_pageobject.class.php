@@ -424,9 +424,11 @@ class settings_pageobject extends pageobject {
 		// add user-app-key
 		$this->form->add_field('exchange_key', array('lang' => 'user_app_key', 'help' => 'user_help_app_key', 'text' => '<div class="clickToReveal" title="'.$this->user->lang('click_to_reveal').'"><a>**********</a><div>'.$this->user->data['exchange_key'].'</div></div>'), 'private_keys', 'registration_info');
 
+		
+		$objQRCode = register('qrcode');
 
 		$this->form->add_field('api_key', array('lang' => 'user_api_key', 'help' => 'user_help_api_key', 'text' =>
-				'<div class="clickToReveal" title="'.$this->user->lang('click_to_reveal').'"><a>**********</a><div>'.$this->user->deriveKeyFromExchangekey($this->user->id, 'pex_api').'</a><div class="qr_api_code"><img src="https://chart.googleapis.com/chart?chs=140x140&chld=S|0&cht=qr&chl='.$this->user->deriveKeyFromExchangekey($this->user->id, 'pex_api').'" /></div></div></div>'
+				'<div class="clickToReveal" title="'.$this->user->lang('click_to_reveal').'"><a>**********</a><div>'.$this->user->deriveKeyFromExchangekey($this->user->id, 'pex_api').'</a><div class="qr_api_code">'.$objQRCode->image($this->user->deriveKeyFromExchangekey($this->user->id, 'pex_api')).'</div>'
 		), 'private_keys', 'registration_info');
 		$this->form->add_field('regenerate_keys', array('lang' => 'user_create_new_appkey', 'text' => '<button class="" type="submit" name="newexchangekey"><i class="fa fa-refresh"></i>'.$this->user->lang('user_create_new_appkey').'</button>'), 'private_keys', 'registration_info');
 		// add various auth-accounts
