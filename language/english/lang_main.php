@@ -1158,4 +1158,6 @@ $lang = array(
 	"user_sett_fs_notifications_user" => "User",
 	"user_sett_fs_notifications_userwall" => "Userwall",
 	"new_char_admin_associate_info" => "Your newly created character has to be associated by an administrator. Therefore he will not be visible at your character list directly after creation.",	
-);
+	"password_leaked" => "Your password has been exposed in data breaches. Therefore please use a new and good password.",
+	
+	);

@@ -144,6 +144,15 @@ class login_pageobject extends pageobject {
 				} else {
 					$redirect_url = $this->controller_path_plain.$this->SID;
 				}
+				
+				if($this->config->get('check_password_leak')){
+					if(strlen($this->in->get('password'))){
+						$blnLeaked = register('password')->checkIfLeaked($this->in->get('password'));
+						if($blnLeaked){
+							$redirect_url = $this->controller_path_plain.'Settings/'.$this->SID.'&leaked=true';
+						}
+					}
+				}
 
 				redirect($redirect_url, false, false, true, $strContent);
 			}

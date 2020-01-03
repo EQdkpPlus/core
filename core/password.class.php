@@ -247,7 +247,7 @@ class password extends gen_class {
 		$strFirstHashpart = substr($strSHA1hash, 0, 5);
 		$strLastHashpart = substr($strSHA1hash, 5);
 		
-		$response = $this->puf->fetch('https://api.pwnedpasswords.com/range/'.$strFirstHashpart);
+		$response = $this->puf->fetch('https://api.pwnedpasswords.com/range/'.$strFirstHashpart, '', 2);
 		if($response){
 			$arrParts = array();
 			

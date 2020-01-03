@@ -1932,4 +1932,7 @@ $lang = array(
 		"lm_after_replace" => "Replace param with the value of the current preset",
 		"show_on_profile" => "Show on character-profile",
 		"connected_raids" => "Connected Raids",
+		"core_sett_f_check_password_leak" => "Check passwords if exposed in data breaches",
+		"core_sett_f_help_check_password_leak" => "User passwords are checked against the service 'Have I Been Pwned' if they have been exposed in data breaches. The passwords are not transmitted to the service, but only hashed parts of it.",
+		
 );

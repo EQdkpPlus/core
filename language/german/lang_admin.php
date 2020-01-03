@@ -1937,4 +1937,6 @@ $lang = array(
 		"lm_after_replace" => "Parameter des Presets mit dem Wert der vorherigen Funktion ersetzen",
 		"show_on_profile" => "Im Charakter-Profil anzeigen",
 		"connected_raids" => "Verbundene Raids",
+		"core_sett_f_check_password_leak" => "Passwörter überprüfen, ob durch einen Einbruch bekannt",
+		"core_sett_f_help_check_password_leak" => "Benutzer-Passwörter werden gegen den Dienst 'Have I Been Pwned' geprüft, ob diese bereits durch einen Einbruch bekannt sind. Die Passwörter werden dabei nicht an den Dienst übertragen, sondern lediglich verschlüsselte Teile des Passwortes.",
 );

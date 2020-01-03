@@ -497,6 +497,9 @@ class admin_settings extends page_generic {
 							'type' => 'radio',
 							'options' => array('deny' => $this->user->lang('stopforumspam_action_deny'), 'disable' => $this->user->lang('stopforumspam_action_disable'))
 					),
+					'check_password_leak' => array(
+							'type'		=> 'radio',
+					),
 					'enable_username_change'	=> array(
 						'type'		=> 'radio',
 					),

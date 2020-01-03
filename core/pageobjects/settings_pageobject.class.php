@@ -147,13 +147,14 @@ class settings_pageobject extends pageobject {
 		//Check matching new passwords
 		if($change_password) {
 			if($values['new_password'] != $values['confirm_password']) {
+				$this->tpl->add_js('$("#oldpassword").focus();');
 				$this->core->message($this->user->lang('password_not_match'), $this->user->lang('error'), 'red');
 				$this->display($values);
 				return;
 			}
 		}
 		if ($change_password && strlen($values['new_password']) > 128) {
-
+			$this->tpl->add_js('$("#oldpassword").focus();');
 			$this->core->message($this->user->lang('password_too_long'), $this->user->lang('error'), 'red');
 			$this->display($values);
 
@@ -165,14 +166,27 @@ class settings_pageobject extends pageobject {
 		$intPWLength = ($this->config->get('password_length') ? (int)$this->config->get('password_length') : 8);
 		if($change_password && strlen($values['new_password']) < $intPWLength){
 			$this->core->message(sprintf($this->user->lang('password_too_short'), $intPWLength), $this->user->lang('error'), 'red');
+			$this->tpl->add_js('$("#oldpassword").focus();');
 			$this->display($values);
 			return;
+		}
+		
+		//Check Password Leak
+		if($change_password && $this->config->get('check_password_leak')){
+			$blnLeaked = register('password')->checkIfLeaked($values['new_password']);
+			if($blnLeaked){
+				$this->core->message($this->user->lang('password_leaked'), $this->user->lang('error'), 'red');
+				$this->display($values);
+				$this->tpl->add_js('$("#oldpassword").focus();');
+				return;
+			}
 		}
 
 		// If they changed their username or password, we have to confirm their current password
 		if ( ($change_username) || ($change_password) || ($change_email)){
 			if (!$this->user->checkPassword($values['current_password'], $this->user->data['user_password'])){
 				$this->core->message($this->user->lang('incorrect_password'), $this->user->lang('error'), 'red');
+				$this->tpl->add_js('$("#oldpassword").focus();');
 				$this->display($values);
 				return;
 			}
@@ -335,6 +349,12 @@ class settings_pageobject extends pageobject {
 			}
 			$this->core->message( $this->user->lang('update_settings_success'),$this->user->lang('save_suc'), 'green');
 		}
+		
+		if($this->in->exists('leaked')){
+			$this->core->message($this->user->lang('password_leaked'), $this->user->lang('error'), 'red');
+			$this->tpl->add_js('$("#oldpassword").focus();');
+		}
+		
 		if(empty($userdata)) {
 			$this->create_form();
 			$userdata = array_merge($this->user->data, $this->user->data['privacy_settings'], $this->user->data['custom_fields'], $this->user->data['plugin_settings'], $this->user->data['notification_settings']);
