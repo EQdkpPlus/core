@@ -617,7 +617,14 @@ class admin_settings extends page_generic {
 					),
 					'calendar_show_birthday'	=> array(
 						'type'			=> 'radio',
-					)
+					),
+					'calendar_repeat_crondays'	=> array(
+						'type'			=> 'spinner',
+						'size'			=> 5,
+						'min'			=> 5,
+						'step'			=> 5,
+						'default'		=> 40
+					),
 				),
 				'raids'		=> array(
 					/*'calendar_raid_enabled'	=> array(
@@ -661,13 +668,6 @@ class admin_settings extends page_generic {
 					'calendar_addraid_def_starttime'	=> array(
 						'type'			=> 'timepicker',
 						'default'		=> '20:00'
-					),
-					'calendar_repeat_crondays'	=> array(
-						'type'			=> 'spinner',
-						'size'			=> 5,
-						'min'			=> 5,
-						'step'			=> 5,
-						'default'		=> 40
 					),
 					'calendar_raid_confirm_raidgroupchars'	=> array(
 						'type'			=> 'multiselect',
