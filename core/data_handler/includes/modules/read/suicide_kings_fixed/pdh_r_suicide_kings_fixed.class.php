@@ -67,7 +67,7 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 			$member2main = $this->pdh->aget('member', 'mainid', 0, array($member_list));
 			$main2member = $this->pdh->aget('member', 'other_members', 0, array(array_unique($member2main)));
 
-			$arrMembers = $this->pdh->sort($this->pdh->get('member', 'id_list', array(false, false)), 'member', 'creation_date', 'asc');
+			$arrAllMembers = $this->pdh->sort($this->pdh->get('member', 'id_list', array(false, false)), 'member', 'creation_date', 'asc');
 
 			// mdkp2event list
 			$mdkplist = $this->pdh->aget('multidkp', 'event_ids', 0, array($this->pdh->get('multidkp',  'id_list', array())));
@@ -77,6 +77,7 @@ if ( !class_exists( "pdh_r_suicide_kings_fixed" ) ) {
 
 			foreach($mdkplist as $mdkp_id => $events) {
 				$member_list = $main_list = array();
+				$arrMembers = $arrAllMembers;
 				// initialise list
 				$startList = $this->config->get('sk_fix_startlist_'.$mdkp_id);
 				if (!$startList){

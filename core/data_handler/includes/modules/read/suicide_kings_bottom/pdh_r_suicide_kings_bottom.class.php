@@ -59,10 +59,13 @@ if ( !class_exists( "pdh_r_suicide_kings_bottom" ) ) {
 
 			//base list for all mdkp pools
 			$member_hash = $arrSKList = array();
-			$arrMembers = $this->pdh->sort($this->pdh->get('member', 'id_list', array(false, false)), 'member', 'creation_date', 'asc');
+			$arrAllMembers = $this->pdh->sort($this->pdh->get('member', 'id_list', array(false, false)), 'member', 'creation_date', 'asc');
 
 			//With Twinks (mainchar only)
 			foreach($this->pdh->get('multidkp',  'id_list', array()) as $mdkp_id){
+				$arrMembers = $arrAllMembers;
+				$member_hash[$mdkp_id] = array('single' => array(), 'multi' => array());
+				
 				// initialise list
 				$startList = $this->config->get('sk_fix_startlist_'.$mdkp_id);
 				if (!$startList){
@@ -72,29 +75,29 @@ if ( !class_exists( "pdh_r_suicide_kings_bottom" ) ) {
 
 				foreach($startList as $intMemberID){
 					if (in_array($intMemberID, $arrMembers)){
-						$member_hash['single'][] = $intMemberID;
+						$member_hash[$mdkp_id]['single'][] = $intMemberID;
 						$intMainID = $this->pdh->get('member', 'mainid', array($intMemberID));
-						if (!in_array($intMainID, $member_hash['multi'])) $member_hash['multi'][] = $intMainID;
+						if (!in_array($intMainID, $member_hash[$mdkp_id]['multi'])) $member_hash[$mdkp_id]['multi'][] = $intMainID;
 					}
 				}
 				//New Members at the bottom
 				foreach($arrMembers as $intMemberID){
 					if (!in_array($intMemberID, $startList)){
-						$member_hash['single'][] = $intMemberID;
+						$member_hash[$mdkp_id]['single'][] = $intMemberID;
 						$intMainID = $this->pdh->get('member', 'mainid', array($intMemberID));
-						if (!in_array($intMainID, $member_hash['multi'])) $member_hash['multi'][] = $intMainID;
+						if (!in_array($intMainID, $member_hash[$mdkp_id]['multi'])) $member_hash[$mdkp_id]['multi'][] = $intMainID;
 					}
 				}
 
 
-				$tmp_memberarray = array('multi'=>$member_hash['multi'], 'single'=>$member_hash['single']);
+				$tmp_memberarray = array('multi'=>$member_hash[$mdkp_id]['multi'], 'single'=>$member_hash[$mdkp_id]['single']);
 
 				$sort_list_lastitemdate = array('multi'=>array(), 'single'=>array());
 				$sort_list_lastitemid = array('multi'=>array(), 'single'=>array());
 				$sort_list_member = array('multi'=>array(), 'single'=>array());
 
 				//---MULTI--------------------------------------------------------------------
-				foreach($member_hash['multi'] as $k => $member_id){
+				foreach($member_hash[$mdkp_id]['multi'] as $k => $member_id){
 					//Get latest item date
 					$latest_item = $this->pdh->get('member_dates', 'last_item_date', array($member_id, $mdkp_id, true));
 
@@ -114,7 +117,7 @@ if ( !class_exists( "pdh_r_suicide_kings_bottom" ) ) {
 				}
 
 				//---SINGLE--------------------------------------------------------------------
-				foreach($member_hash['single'] as $k => $member_id){
+				foreach($member_hash[$mdkp_id]['single'] as $k => $member_id){
 					//Get latest item date
 					$latest_item = $this->pdh->get('member_dates', 'last_item_date', array($member_id, $mdkp_id, false));
 

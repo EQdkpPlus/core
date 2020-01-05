@@ -58,9 +58,14 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 				return true;
 			}
 			$arrSKList = array();
-			$arrMembers = $this->pdh->sort($this->pdh->get('member', 'id_list', array(false, false)), 'member', 'creation_date', 'asc');
-			$member_hash = array('single' => array(), 'multi' => array());
+			$arrAllMembers = $this->pdh->sort($this->pdh->get('member', 'id_list', array(false, false)), 'member', 'creation_date', 'asc');
+			$member_hash = array();
+			
 			foreach($this->pdh->get('multidkp',  'id_list', array()) as $mdkp_id){
+				$member_hash[$mdkp_id] = array('single' => array(), 'multi' => array());
+				
+				$arrMembers = $arrAllMembers;
+				
 				$startList = $this->config->get('sk_startlist_'.$mdkp_id);
 				if (!$startList){
 					shuffle($arrMembers);
@@ -69,22 +74,22 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 
 				foreach($startList as $intMemberID){
 					if (in_array($intMemberID, $arrMembers)){
-						$member_hash['single'][] = $intMemberID;
+						$member_hash[$mdkp_id]['single'][] = $intMemberID;
 						$intMainID = $this->pdh->get('member', 'mainid', array($intMemberID));
-						if (!in_array($intMainID, $member_hash['multi'])) $member_hash['multi'][] = $intMainID;
+						if (!in_array($intMainID, $member_hash[$mdkp_id]['multi'])) $member_hash[$mdkp_id]['multi'][] = $intMainID;
 					}
 				}
 				//New Members at the bottom
 				foreach($arrMembers as $intMemberID){
 					if (!in_array($intMemberID, $startList)){
-						$member_hash['single'][] = $intMemberID;
+						$member_hash[$mdkp_id]['single'][] = $intMemberID;
 						$intMainID = $this->pdh->get('member', 'mainid', array($intMemberID));
-						if (!in_array($intMainID, $member_hash['multi'])) $member_hash['multi'][] = $intMainID;
+						if (!in_array($intMainID, $member_hash[$mdkp_id]['multi'])) $member_hash[$mdkp_id]['multi'][] = $intMainID;
 					}
 				}
 
 				//With twinks (mainchar)
-				foreach($member_hash['multi'] as $pos => $member_id){
+				foreach($member_hash[$mdkp_id]['multi'] as $pos => $member_id){
 					$arrSKList['multi'][$mdkp_id][$member_id] = ++$pos;
 				}
 			}
@@ -145,14 +150,13 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 				}
 			}
 
-
 			//No twinks (all chars)
-
 			foreach($this->pdh->get('multidkp',  'id_list', array()) as $mdkp_id){
-				foreach($member_hash['single'] as $pos => $member_id){
+				foreach($member_hash[$mdkp_id]['single'] as $pos => $member_id){
 					$arrSKList['single'][$mdkp_id][$member_id] = ++$pos;
 				}
 			}
+			
 			//now the fun begins
 			$item_list = $this->pdh->get('item', 'id_list');
 			usort($item_list, array(&$this, "sort_item_list"));
