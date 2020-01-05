@@ -103,6 +103,7 @@ if ( !class_exists( "pdh_r_suicide_kings" ) ) {
 				$buyer = $this->pdh->get('member', 'mainid', array($tmp_buyer));
 				$raid_id = $this->pdh->get('item', 'raid_id', array($item_id));
 				$tmp_raid_attendees = $this->pdh->get('raid', 'raid_attendees', array($raid_id));
+				$raid_attendees = array();
 				foreach($tmp_raid_attendees as $key => $value){
 					$raid_attendees[] = $this->pdh->get('member', 'mainid', array($value));
 				}
