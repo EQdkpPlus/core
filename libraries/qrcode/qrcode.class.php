@@ -32,7 +32,7 @@ class qrcode extends gen_class {
 	}
 	
 	public function url($strData, $intSize=140){
-		if (version_compare(PHP_VERSION, '7.2.0') >= 0) {
+		if (version_compare(PHP_VERSION, '7.1.0') >= 0) {
 			$objQRCode = $this->includeQRLib();
 			
 			$strImage = $objQRCode->render($strData);
