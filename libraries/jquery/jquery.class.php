@@ -429,7 +429,9 @@ if (!class_exists("jquery")) {
 
 				// URL Windows...
 				case 'url':
-					$myclose = (isset($options['onclose'])) ? ", close: function(event, ui) { window.location.href = '".$options['onclose']."'; }" : '';
+					$myclose = (isset($options['onclose'])) ? ", close: function(event, ui) {
+						setTimeout(function(){document.location.href = '".$options['onclose']."';},250);
+					}" : '';
 					$myclose		= (isset($options['onclosejs'])) ? ", close: function(event, ui) { ".$options['onclosejs']." }" : $myclose;
 					$beforeclose	= (isset($options['beforeclose'])) ? ", beforeClose: function(event, ui) { ".$options['beforeclose']." }" : "";
 					$this->tpl->add_js("
