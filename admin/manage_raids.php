@@ -287,6 +287,7 @@ class ManageRaids extends page_generic {
 		$members_inactive = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list_inactive', array()), 'member', 'name', 'asc')));
 
 		$members = array(
+				$this->user->lang('attendees') => array(),
 				$this->user->lang('active') => $members_active,
 				$this->user->lang('inactive') => $members_inactive,
 				$this->user->lang('hidden') => $members_hidden,
@@ -339,6 +340,10 @@ class ManageRaids extends page_generic {
 		}
 
 		$raid = array('id' => $this->url_id, 'date' => $this->time->time, 'note' => '', 'event' => 0, 'value' => 0.00, 'attendees' => array(), 'connected_raids' => array());
+		
+		$membersForAdjsAndItems = $members;
+		unset($members[$this->user->lang('attendees')]);
+		
 		if($raid['id'])
 		{ //we're updating a raid
 			//fetch raid-data
@@ -347,6 +352,22 @@ class ManageRaids extends page_generic {
 			$adjs = $this->get_adjsofraid($raid['id']);
 			//fetch items
 			$items = $this->get_itemsofraid($raid['id']);
+			
+			$arrAttendees = $raid['attendees'];
+			foreach($arrAttendees as $val){
+				$membersForAdjsAndItems[$this->user->lang('attendees')][$val] = $this->pdh->get('member', 'name', array($val));
+			}
+			//Now remove the remaining chars 
+			foreach($membersForAdjsAndItems as $group => $arrMembers){
+				if($group === $this->user->lang('attendees')) continue;
+				
+				foreach($arrMembers as $key => $val){
+					
+					if(isset($membersForAdjsAndItems[$this->user->lang('attendees')][$key])){
+						unset($membersForAdjsAndItems[$group][$key]);
+					}
+				}
+ 			}
 		}
 
 
@@ -369,7 +390,7 @@ class ManageRaids extends page_generic {
 				$this->tpl->assign_block_vars('adjs', array(
 					'KEY'		=> $key,
 					'GK'		=> ($copy) ? 'new' : $adj['group_key'],
-					'MEMBER'	=> (new hmultiselect('adjs['.$key.'][members]', array('options' => $members, 'value' => $adj['members'], 'width' => 250, 'filter' => true, 'id'=>'adjs_'.$key.'_members', 'class' => 'input adj_members')))->output(),
+						'MEMBER'	=> (new hmultiselect('adjs['.$key.'][members]', array('options' => $membersForAdjsAndItems, 'value' => $adj['members'], 'width' => 250, 'filter' => true, 'id'=>'adjs_'.$key.'_members', 'class' => 'input adj_members')))->output(),
 					'REASON'	=> sanitize($adj['reason']),
 					'EVENT'		=> (new hdropdown('adjs['.$key.'][event]', array('options' => $events, 'value' => $adj['event'], 'id' => 'event_'.$key, 'class' => 'input adj_event')))->output(),
 					'VALUE'		=> $adj['value'])
@@ -389,7 +410,7 @@ class ManageRaids extends page_generic {
 					'GK'		=> ($copy) ? 'new' : $item['group_key'],
 					'NAME'		=> stripslashes($item['name']),
 					'ITEMID'	=> $item['item_id'],
-					'MEMBER'	=> (new hmultiselect('items['.$key.'][members]', array('options' => $members, 'value' => $item['members'], 'width' => 250, 'filter' => true, 'id'=>'items_'.$key.'_members', 'class' => 'input item_members')))->output(),
+						'MEMBER'	=> (new hmultiselect('items['.$key.'][members]', array('options' => $membersForAdjsAndItems, 'value' => $item['members'], 'width' => 250, 'filter' => true, 'id'=>'items_'.$key.'_members', 'class' => 'input item_members')))->output(),
 					'VALUE'		=> $item['value'],
 					'ITEMPOOL'	=> (new hdropdown('items['.$key.'][itempool_id]', array('options' => $itempools, 'value' => $item['itempool_id'], 'id' => 'itempool_id_'.$key, 'class' => 'input item_itempool')))->output(),
 				));
@@ -422,8 +443,6 @@ class ManageRaids extends page_generic {
 				$arrConnected[$connRaidId] = $this->time->user_date($date) . ' - ' . stripslashes($this->pdh->get('raid', 'event_name', array($connRaidId)));
 			}
 		}
-		
-
 
 		$arrEventKeys = array_keys($eventsOrig);
 
@@ -439,8 +458,8 @@ class ManageRaids extends page_generic {
 			'RAID_DROPDOWN'		=> (new hdropdown('draft', array('options' => $raids, 'value' => $this->in->get('draft', 0), 'js' => 'onchange="window.location=\'manage_raids.php'.$this->SID.'&amp;upd=true&amp;draft=\'+this.value"')))->output(),
 			'CONNECTED_RAIDS'	=> count($arrConnected) ? (new hmultiselect('connected', array('options' => $arrConnected, 'value' => $raid['connected_raids'], 'width' => 250, 'filter' => true)))->output() : '',
 			'ADJ_KEY'			=> $intAdjKey+1,
-			'MEMBER_DROPDOWN'	=> (new hmultiselect('adjs[KEY][members]', array('options' => $members, 'value' => '', 'width' => 250, 'filter' => true, 'id'=>'adjs_KEY_members', 'class' => 'input adj_members')))->output(),
-			'MEMBER_ITEM_DROPDOWN'	=> (new hmultiselect('items[KEY][members]', array('options' => $members, 'value' => '', 'width' => 250, 'filter' => true, 'id'=>'items_KEY_members', 'class' => 'input item_members')))->output(),
+				'MEMBER_DROPDOWN'	=> (new hmultiselect('adjs[KEY][members]', array('options' => $membersForAdjsAndItems, 'value' => '', 'width' => 250, 'filter' => true, 'id'=>'adjs_KEY_members', 'class' => 'input adj_members')))->output(),
+				'MEMBER_ITEM_DROPDOWN'	=> (new hmultiselect('items[KEY][members]', array('options' => $membersForAdjsAndItems, 'value' => '', 'width' => 250, 'filter' => true, 'id'=>'items_KEY_members', 'class' => 'input item_members')))->output(),
 			'EVENT_DROPDOWN'	=> (new hdropdown('adjs[KEY][event]', array('options' => $events, 'value' => $adj['event'], 'id' => 'event_KEY', 'class' => 'input adj_event')))->output(),
 			'ADJ_REASON_AUTOCOMPLETE' => $this->jquery->Autocomplete('adjs_KEY', array_unique($adjustment_reasons)),
 			'ITEM_KEY'			=> $intItemKey+1,
