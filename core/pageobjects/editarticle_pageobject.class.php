@@ -180,6 +180,7 @@ class editarticle_pageobject extends pageobject {
 		if ($id){
 			//Update
 			$intUserID = $this->pdh->get('articles', 'user_id', array($id)); //Keep the original author
+			$intCategory = $this->pdh->get('articles', 'category', array($id)); //Keep the original category
 			if (!$this->arrPermissions['update']) message_die($this->user->lang('noauth'), $this->user->lang('noauth_default_title'), 'access_denied', true);
 			$blnResult = $this->pdh->put('articles', 'update', array($id, $strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader));
 		} else {
