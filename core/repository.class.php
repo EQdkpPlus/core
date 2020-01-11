@@ -207,7 +207,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 			if((int)$arrJson->status == 0 || !strlen((string)$arrJson->link)){
 				return array('status' => 0, 'error' => ((string)$arrJson->error == 'blacklistet') ? 403 : 404);
 			} elseif((int)$arrJson->status == 1) {
-				return array('status' => 1, 'link' => (string)$arrJson->link, 'hash' => (string)$arrJson->hash, 'signature' => (string)$arrJson->signature);
+				return array('status' => 1, 'link' => (string)$arrJson->link, 'hash' => (string)$arrJson->hash_sha256, 'signature' => (string)$arrJson->signature_sha256);
 			}
 			
 			return false;
@@ -222,7 +222,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 			if((int)$arrJson->status == 0 || !strlen((string)$arrJson->link)){
 				return array('status' => 0, 'error' => ((string)$arrJson->error == 'blacklistet') ? 403 : 404);
 			} elseif((int)$arrJson->status == 1) {
-				return array('status' => 1, 'link' => (string)$arrJson->link, 'hash' => (string)$arrJson->hash, 'signature' => (string)$arrJson->signature);
+				return array('status' => 1, 'link' => (string)$arrJson->link, 'hash' => (string)$arrJson->hash_sha256, 'signature' => (string)$arrJson->signature_sha256);
 			}
 			
 			return false;
@@ -250,7 +250,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 				foreach($arrIntermCerts as $cert){
 					if ($this->verifyIntermediateCert($cert, $type)) $arrVerified[] = $cert;
 				}
-				$strFileHash = sha1_file($src);
+				$strFileHash = hash_file('sha256', $src);
 
 				$x509 = new phpseclib\File\X509();
 		
@@ -259,6 +259,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 					$cert = $x509->loadX509($intermCert);
 					$pkey = $x509->getPublicKey()->getPublicKey();
 					$rsa = new \phpseclib\Crypt\RSA();
+					$rsa->setHash('sha256');
 					
 					$rsa->setSignatureMode(2);
 					$rsa->loadKey($pkey);
@@ -372,7 +373,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 			$arrRevokeList = $this->getRevokeList();
 			if (is_array($arrRevokeList)){
 				$certData = $this->pemToDer($cert);
-				$strFingerprint = sha1($certData);
+				$strFingerprint = hash('sha256', $certData);
 				foreach ($arrRevokeList as $print){
 					if ($print == $strFingerprint) return true;
 				}
