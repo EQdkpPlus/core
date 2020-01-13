@@ -137,6 +137,28 @@ class roster_pageobject extends pageobject {
 							'MEMBER_LIST'	=> $hptt->get_html_table($this->in->get('sort')),
 					));
 
+			} elseif($this->config->get('roster_classorrole') == 'guild') {
+				$arrMembers = $this->pdh->get('member', 'id_list', array($this->skip_inactive, $this->skip_hidden, true, $this->skip_twinks));
+				$arrGuilds = array();
+				foreach($arrMembers as $intMemberID){
+					$guild = $this->pdh->get('member', 'profile_field', array($intMemberID, 'guild'));
+					if(!strlen($guild)) $guild = $this->config->get('guildtag');
+					
+					if(!isset($arrGuilds[$guild])) $arrGuilds[$guild] = array();
+					$arrGuilds[$guild][] = $intMemberID;
+				}
+				
+				foreach($arrGuilds as $strGuildname=>$arrGroupMembers){
+					$hptt = $this->get_hptt($this->hptt_page_settings, $arrGroupMembers, $arrGroupMembers, array('%link_url%' => $this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%with_twink%' => $this->skip_twinks, '%use_controller%' => true), 'rank_'.$intRankID);
+					
+					$this->tpl->assign_block_vars('class_row', array(
+							'CLASS_NAME'	=> $strGuildname,
+							'CLASS_ICONS'	=> "",
+							'CLASS_LEVEL'	=> 2,
+							'ENDLEVEL'		=> true,
+							'MEMBER_LIST'	=> $hptt->get_html_table($this->in->get('sort')),
+					));
+				}
 			} else {
 				$arrMembers = $this->pdh->get('member', 'id_list', array($this->skip_inactive, $this->skip_hidden, true, $this->skip_twinks));
 

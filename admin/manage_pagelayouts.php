@@ -573,7 +573,7 @@ class ManagePageLayouts extends page_generic {
 			//Roster-Settings
 			if ($page == 'roster'){
 				$this->tpl->assign_vars(array(
-					'ROSTER_DD'			 => (new hdropdown('roster_classorrole', array('options' => array('class' => $this->user->lang('class'), 'role' => $this->user->lang('role'), 'raidgroup' => $this->user->lang('raidevent_raid_groupsmenu'), 'rank' => $this->user->lang('rank'), 'none' => $this->user->lang('none')), 'value' => $this->config->get('roster_classorrole'))))->output(),
+						'ROSTER_DD'			 => (new hdropdown('roster_classorrole', array('options' => array('class' => $this->user->lang('class'), 'role' => $this->user->lang('role'), 'raidgroup' => $this->user->lang('raidevent_raid_groupsmenu'), 'rank' => $this->user->lang('rank'), 'guild' => $this->user->lang('guild'), 'none' => $this->user->lang('none')), 'value' => $this->config->get('roster_classorrole'))))->output(),
 					'ROSTER_SHOW_TWINKS' => ($this->config->get('roster_show_twinks')) ? ' checked="checked"' : '',
 					'ROSTER_SHOW_HIDDEN' => ($this->config->get('roster_show_hidden')) ? ' checked="checked"' : '',
 				));
