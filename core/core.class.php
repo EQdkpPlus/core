@@ -914,11 +914,11 @@ class core extends gen_class {
 
 			$html = '<ul class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">';
 
-			$html .= '<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="'.$this->controller_path.$this->SID.'" itemscope itemtype="http://schema.org/Thing" itemprop="item"><i class="fa fa-home"></i><span itemprop="name" style="display:none;">Home</span></a>
+			$html .= '<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="'.$this->controller_path.$this->SID.'" itemtype="http://schema.org/Thing" itemprop="item"><i class="fa fa-home"></i><span itemprop="name" style="display:none;">Home</span></a>
 					<meta itemprop="position" content="1" /></li>';
 
 			foreach($arrBreadcrumb as $key => $arrItem){
-				$html .= '<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="'.$arrItem['url'].'" itemscope itemtype="http://schema.org/Thing" itemprop="item"><span itemprop="name">'.$arrItem['title'].'</span></a>
+				$html .= '<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="'.$arrItem['url'].'" itemtype="http://schema.org/Thing" itemprop="item"><span itemprop="name">'.$arrItem['title'].'</span></a>
 				<meta itemprop="position" content="'.($key+2).'" /></li>';
 			}
 			return $html.'</ul>';
