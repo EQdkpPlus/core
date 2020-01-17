@@ -73,6 +73,9 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 			
 			$raid_ids = $this->pdh->get('raid', 'id_list');
 			
+			//calculate points
+			$arrPoints = array();
+			
 			//calculate raid values
 			$arrRaids= array();
 			if(is_array($raid_ids)){
@@ -89,41 +92,36 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 						$arrRaids[$raid_id] = 0;
 						continue;
 					}
-					$arrRaids[$raid_id] = 0;
+					$arrRaids[$raid_id] = array();
 					
-					foreach($items as $item_id){
-						$arrRaids[$raid_id] += $this->pdh->get('item', 'value', $params=array($item_id));
+					$event_id = $this->pdh->get('raid', 'event', array($raid_id));
+					
+					if( !is_array( $this->pdh->get('multidkp','mdkpids4eventid',array($event_id)) ) ){
+						continue;
 					}
 					
-					//rvalue = value / attendees
-					$arrRaids[$raid_id] = $arrRaids[$raid_id] / count($attendees);
+					foreach($this->pdh->get('multidkp','mdkpids4eventid',array($event_id)) as $mdkp_id){
+						$arrRaids[$raid_id][$mdkp_id] = 0;
+						
+						foreach($items as $item_id){
+							$arrRaids[$raid_id][$mdkp_id] += $this->pdh->get('item', 'value', array($item_id, $mdkp_id));
+						}
+						
+						//rvalue = value / attendees
+						$arrRaids[$raid_id][$mdkp_id] = $arrRaids[$raid_id][$mdkp_id] / count($attendees);
+						
+						foreach($attendees as $attendee){
+							$arrPoints[$attendee][$mdkp_id]['single']['earned'][$event_id] += $arrRaids[$raid_id][$mdkp_id];
+						}
+						
+					}
+					
 				}
 			}
 			
 			$this->raid_vals = $arrRaids;
 			
 			$this->pdc->put('pdh_zero_sum_raids_table', $arrRaids, null);
-			
-			//calculate points
-			$arrPoints = array();
-			
-			//earned
-			if(is_array($raid_ids)){
-				foreach($raid_ids as $raid_id){
-					if( !is_array( $this->pdh->get('raid', 'raid_attendees', array($raid_id)) ) ){
-						continue;
-					}
-					$event_id = $this->pdh->get('raid', 'event', array($raid_id));
-					if( !is_array( $this->pdh->get('multidkp','mdkpids4eventid',array($event_id)) ) ){
-						continue;
-					}
-					foreach($this->pdh->get('multidkp','mdkpids4eventid',array($event_id)) as $mdkp_id){
-						foreach($this->pdh->get('raid', 'raid_attendees', array($raid_id)) as $attendee){
-							$arrPoints[$attendee][$mdkp_id]['single']['earned'][$event_id] += $this->raid_vals[$raid_id];
-						}
-					}
-				}
-			}
 			
 			//spent
 			$item_ids = $this->pdh->get('item', 'id_list');
@@ -132,7 +130,7 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 					$itempool_id = $this->pdh->get('item', 'itempool_id', array($item_id));
 					$member_id = $this->pdh->get('item', 'buyer', array($item_id));
 					foreach($this->pdh->get('multidkp',  'mdkpids4itempoolid', array($itempool_id)) as $mdkp_id){
-						$arrPoints[$member_id][$mdkp_id]['single']['spent'][$itempool_id] += $this->pdh->get('item', 'value', array($item_id));
+						$arrPoints[$member_id][$mdkp_id]['single']['spent'][$itempool_id] += $this->pdh->get('item', 'value', array($item_id, $mdkp_id));
 					}
 				}
 			}
@@ -144,7 +142,7 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 					$event_id = $this->pdh->get('adjustment', 'event', array($adjustment_id));
 					$member_id = $this->pdh->get('adjustment', 'member', array($adjustment_id));
 					foreach($this->pdh->get('multidkp','mdkpids4eventid',array($event_id)) as $mdkp_id){
-						$arrPoints[$member_id][$mdkp_id]['single']['adjustment'][$event_id] += $this->pdh->get('adjustment', 'value', array($adjustment_id));
+						$arrPoints[$member_id][$mdkp_id]['single']['adjustment'][$event_id] += $this->pdh->get('adjustment', 'value', array($adjustment_id, $mdkp_id));
 					}
 				}
 			}
