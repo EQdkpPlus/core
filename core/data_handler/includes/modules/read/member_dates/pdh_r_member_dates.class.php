@@ -38,7 +38,6 @@ if ( !class_exists( "pdh_r_member_dates" ) ) {
 		private $blnRaidsMultiLoaded = false;
 
 		public $hooks = array(
-			'adjustment_update',
 			'event_update',
 			'item_update',
 			'member_update',
