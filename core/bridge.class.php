@@ -460,8 +460,8 @@ class bridge extends gen_class {
 			if (in_array($groupID, $arrGroupsToSync)){
 				if (!in_array($groupName, $arrEQdkpGroups)){
 					//Create the Group
-					$intEQdkpGroupID = max($this->pdh->get('user_groups', 'id_list'))+1;
-					$this->pdh->put('user_groups', 'add_grp', array($intEQdkpGroupID, $groupName, 'Synced by CMS-Bridge', 0, 1));
+					$intEQdkpGroupID = $this->pdh->put('user_groups', 'add_grp', array($groupName, 'Synced by CMS-Bridge', 0, 1));
+					
 					$arrCMSToEQdkpID[$groupID] = $intEQdkpGroupID;
 					$this->pdh->process_hook_queue();
 				} else {
