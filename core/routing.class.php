@@ -28,16 +28,29 @@ if(!class_exists('routing')){
 		private $_cache = array();
 
 		private $arrStaticRoutes = array(
+			'settings'		=> 'settings',
+			'login'			=> 'login',
+			'mycharacters'	=> 'mycharacters',
+			'search'		=> 'search',
+			'register'		=> 'register',
+			'addcharacter'	=> 'addcharacter',
+			'editarticle'	=> 'editarticle',
+			'user'			=> 'user',
+			'usergroup'		=> 'usergroup',
+			'rss'			=> 'rss',
 			'external'		=> 'wrapper',
-			'auth-endpoint' => 'authendpoint'
+			'tag'			=> 'tag',
+			'notifications' => 'notifications',
+			'auth-endpoint' => 'authendpoint',
+
+			//Static Pages for Calendar
+			'editcalendarevent' => 'editcalendarevent',
+			'calendareventtransform' => 'calendareventtransform',
+			'calendareventexport' => 	'calendareventexport',
+			'calendareventguests'=> 'calendareventguests',
 		);
 
 		private $arrStaticLocations = array();
-		
-		public function __construct(){
-			$this->scanPageobjects();
-			
-		}
 
 		public function addRoute($strRoutename, $strPageObject, $strPageObjectPath){
 			$this->arrStaticRoutes[strtolower($strRoutename)] = strtolower($strPageObject);
@@ -184,17 +197,6 @@ if(!class_exists('routing')){
 				return $objPage;
 			}
 			return false;
-		}
-		
-		private function scanPageobjects() {
-			$strDir = $this->root_path.'core/pageobjects';
-			$arrFiles = sdir($strDir, '*_pageobject.class.php');
-			if(is_array($arrFiles)){
-				foreach($arrFiles as $strFilename){
-					$strFilename = str_replace('_pageobject.class.php', '', $strFilename);
-					if(!isset($this->arrStaticRoutes[$strFilename])) $this->arrStaticRoutes[$strFilename] = $strFilename;
-				}
-			}
 		}
 
 	}
