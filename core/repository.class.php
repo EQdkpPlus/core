@@ -238,7 +238,7 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 			if((int)$arrJson->status == 0 || !strlen((string)$arrJson->link)){
 				return array('status' => 0, 'error' => ((string)$arrJson->error == 'blacklistet') ? 403 : 404);
 			} elseif((int)$arrJson->status == 1) {
-				return array('status' => 1, 'link' => (string)$arrJson->link, 'hash' => (string)$arrJson->hash, 'signature' => (string)$arrJson->signature, 'note' => (($arrJson->releasenote) ? (string)$arrJson->releasenote : ''));
+				return array('status' => 1, 'link' => (string)$arrJson->link, 'hash' => (string)$arrJson->hash_sha256, 'signature' => (string)$arrJson->signature_sha256, 'note' => (($arrJson->releasenote) ? (string)$arrJson->releasenote : ''));
 			}
 
 			return false;
