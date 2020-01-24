@@ -158,7 +158,7 @@ class Manage_Bridge extends page_generic {
 			$this->config->set('cmsbridge_groups', $groups);
 			$this->config->set('cmsbridge_active', 1);
 
-			if ($this->in->get('user') != '' && $this->in->get('pw') != "" && $this->bridge->login($this->in->get('user'), $this->in->get('pw'), false, false, false)){
+			if ($this->in->get('user') != '' && $this->in->get('pw') != "" && $this->bridge->login($this->in->get('user'), $this->in->get('pw'), false, false)){
 				echo "true";
 			} else {
 				echo "false";
