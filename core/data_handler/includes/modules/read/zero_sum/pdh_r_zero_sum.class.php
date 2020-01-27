@@ -29,7 +29,6 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 		public $default_lang = 'english';
 		public $points;
 		public $raid_vals;
-		private $decayed = array();
 		
 		public $hooks = array(
 				'adjustment_update',
@@ -100,12 +99,21 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 						continue;
 					}
 					
+					$blnCalculateZeroPool = false;
+					
 					foreach($this->pdh->get('multidkp','mdkpids4eventid',array($event_id)) as $mdkp_id){
 						$arrRaids[$raid_id][$mdkp_id] = 0;
+						$arrRaids[$raid_id][0] = 0;
 						
 						foreach($items as $item_id){
 							$arrRaids[$raid_id][$mdkp_id] += $this->pdh->get('item', 'value', array($item_id, $mdkp_id));
+							
+							if(!$blnCalculateZeroPool){
+								$arrRaids[$raid_id][0] += $this->pdh->get('item', 'value', array($item_id));
+							}
 						}
+						
+						$blnCalculateZeroPool = true;
 						
 						//rvalue = value / attendees
 						$arrRaids[$raid_id][$mdkp_id] = $arrRaids[$raid_id][$mdkp_id] / count($attendees);
@@ -115,6 +123,8 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 						}
 						
 					}
+					
+					$arrRaids[$raid_id][0] = $arrRaids[$raid_id][0] / count($attendees);
 					
 				}
 			}
@@ -153,6 +163,8 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 					$arrPoints = $this->calculate_multi_points($arrPoints, $member_id, $mdkp_id);
 				}
 			}
+			
+			
 			
 			$this->pdc->put('pdh_zero_sum_points_table', $arrPoints, null);
 			$this->points = $arrPoints;
@@ -300,14 +312,7 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 		}
 		
 		public function get_raidval($id, $dkp_id=0, $date=0){
-			if($dkp_id) {
-				if(!isset($this->decayed[$dkp_id])) $this->decayed[$dkp_id] = $this->apa->is_decay('raid', $dkp_id);
-				if($this->decayed[$dkp_id]) {
-					$data = array('id' => $id, 'value' => $this->raid_vals[$id], 'date' => $this->pdh->get('raid', 'date', array($id)));
-					$val = $this->apa->get_value('raid', $dkp_id, $date, $data);
-				}
-			}
-			return (isset($val)) ? $val : $this->raid_vals[$id];
+			return $this->raid_vals[$id][$dkp_id];
 		}
 		
 		public function get_html_raidval($id, $dkp_id=0){
