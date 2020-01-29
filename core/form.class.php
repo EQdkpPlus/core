@@ -170,7 +170,7 @@ class form extends gen_class {
 		foreach($fieldsets as $fieldset) {
 			if(isset($this->field_array[$fieldset])) {
 				$this->field_array[$tabname][$fieldset] = $this->field_array['fs'][$fieldset];
-				unset($this->field_array['fs'][$field]);
+				unset($this->field_array['fs'][$fieldset]);
 			}
 		}
 		foreach($fields as $field) {
@@ -372,7 +372,7 @@ class form extends gen_class {
 		$lang = (!empty($data['_lang'])) ? $data['_lang'] : $this->lang_prefix.'tab_'.$tabname;
 		$this->tpl->assign_block_vars('tabs', array(
 			'NAME'	=> $this->lang($lang),
-			'ID'	=> str_replace(' ', '_', $tabname),
+			'ID'	=> str_replace(' ', '_',  preg_replace('/[^A-Za-z0-9\- ]/', '', $tabname)),
 			)
 		);
 	}
