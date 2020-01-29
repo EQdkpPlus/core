@@ -208,12 +208,12 @@ $("#type_dd").change(function(){
 		$this->confirm_delete($this->user->lang('confirm_del_profilefields'));
 		$fields = $this->pdh->get('profile_fields', 'fields');
 		if (is_array($fields)) {
-			foreach ($fields as $key=>$value){
+			foreach ($fields as $key=>$value){			
 				$this->tpl->assign_block_vars('profile_row', array (
 					'ID'			=> $key,
 					'NAME_ID'		=> $value['name'],
 					'TYPE'			=> $value['type'],
-					'CATEGORY'		=> ($this->game->glang('uc_cat_'.$value['category'])) ?  $this->game->glang('uc_cat_'.$value['category']) : $this->user->lang('uc_cat_'.$value['category']),
+						'CATEGORY'		=> ($this->game->glang('uc_cat_'.$value['category'])) ?  $this->game->glang('uc_cat_'.$value['category']) : (strlen( $this->user->lang('uc_cat_'.$value['category'])) ?  $this->user->lang('uc_cat_'.$value['category']) : $value['category']),
 					'SIZE'			=> $value['size'],
 					'NAME'			=> $value['lang'],
 					'ENABLED_ICON'	=> ($value['enabled'] == 1) ? 'eqdkp-icon-online' : 'eqdkp-icon-offline',
