@@ -172,8 +172,8 @@ class character_pageobject extends pageobject {
 				}
 				foreach($category as $catname=>$catvalues){
 					$this->tpl->assign_block_vars('cat_data', array(
-						'NAME'		=> ($this->game->glang('uc_cat_'.$catname)) ? $this->game->glang('uc_cat_'.$catname) : $this->user->lang('uc_cat_'.$catname),
-						'ID'		=> 'id_'.$catname
+						'NAME'		=> ($this->game->glang('uc_cat_'.$catname)) ? $this->game->glang('uc_cat_'.$catname) : ((strlen($this->user->lang('uc_cat_'.$catname))) ? $this->user->lang('uc_cat_'.$catname) : $catname),
+						'ID'		=> 'id_'.preg_replace('/[^A-Za-z0-9\- ]/', '', $catname),
 					));
 
 					foreach($catvalues as $pfname=>$pfoption){
