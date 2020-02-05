@@ -1031,8 +1031,15 @@ class Manage_Users extends page_generic {
 		}
 		$onclose_url = "if(event.originalEvent == undefined) { window.location.href = '".$this->server_path."admin/manage_users.php".$this->SID."'; } else { window.location.href = 'manage_users.php".$this->SID."'; }";
 		$this->jquery->Dialog('EditChar', $this->user->lang('uc_edit_char'), array('withid'=>'editid', 'url'=> $this->controller_path.'AddCharacter/'.$this->SID."&adminmode=1&editid='+editid+'", 'width'=>'640', 'height'=>'520', 'onclosejs'=>$onclose_url));
-		$this->confirm_delete($this->user->lang('confirm_delete_users').'<br /><input type="checkbox" name="delete_associated_members" value="1" onchange="handle_assoc_members()" id="delete_associated_members" /><label for="delete_associated_members"> '. $this->user->lang('delete_associated members').'</label>', '', false, array('height'	=> 300));
-		$this->confirm_delete($this->user->lang('confirm_delete_users').'<br /><input type="checkbox" name="delete_associated_members_single" value="1" id="delete_associated_members_single" /><label for="delete_associated_members_single"> '. $this->user->lang('delete_associated members').'</label>', '', true, array('height'	=> 300,'function' => 'delete_single_warning', 'force_ajax' => true, 'custom_js' => 'delete_single(selectedID);'));
+		
+		$strConfirmDelete = $this->user->lang('confirm_delete_users');
+		if(!$this->config->get('disable_guild_features')){
+			$strConfirmDeleteSingle = $strConfirmDelete.'<br /><br /><input type="checkbox" name="delete_associated_members" value="1" onchange="handle_assoc_members()" id="delete_associated_members" /><label for="delete_associated_members"> '. $this->user->lang('delete_associated members').'</label>';
+			$strConfirmDelete .= '<br /><br /><input type="checkbox" name="delete_associated_members_single" value="1" id="delete_associated_members_single" /><label for="delete_associated_members_single"> '. $this->user->lang('delete_associated members').'</label>';
+		}
+		
+		$this->confirm_delete($strConfirmDelete, '', false, array('height'	=> 300));
+		$this->confirm_delete($strConfirmDeleteSingle, '', true, array('height'	=> 300,'function' => 'delete_single_warning', 'force_ajax' => true, 'custom_js' => 'delete_single(selectedID);'));
 		$this->jquery->selectall_checkbox('selall_user', 'user_id[]', $this->user->data['user_id']);
 
 		$arrMenuItems = array(
