@@ -234,7 +234,8 @@ class bridge extends gen_class {
 	/**
 	 * Deactivate the Bridge
 	 */
-	public function deactivate_bridge() {
+	public function deactivate_bridge($strReason = '') {
+		$this->pdl->log('bridge', 'Disabled bridge, reason: '.$strReason);
 		$this->config->set('cmsbridge_active', 0);
 	}
 
@@ -370,7 +371,7 @@ class bridge extends gen_class {
 				//Check if there's a user table
 				$arrTables = $this->bridgedb->listTables();
 				if (!in_array($this->prefix.$this->objBridge->data['user']['table'], $arrTables)){
-					$this->deactivate_bridge();
+					$this->deactivate_bridge('Usertable not found, get_userdata()');
 					return false;
 				}
 
@@ -410,7 +411,7 @@ class bridge extends gen_class {
 			$arrTables = $this->bridgedb->listTables();
 			if (!in_array($this->prefix.$this->objBridge->data['user']['table'], $arrTables)){
 				//Disabled Bridge if there is no access to the User Table
-				$this->deactivate_bridge();
+				$this->deactivate_bridge('Usertable not found, get_users()');
 				return false;
 			}
 
@@ -569,7 +570,9 @@ class bridge extends gen_class {
 	public function check_user_group_table(){
 		if (!$this->status || !$this->objBridge) return false;
 
-		if (is_array($this->get_user_groups()) && count($this->get_user_groups() > 0)){
+		$mixUsergroups = $this->get_user_groups();
+		
+		if (is_array($mixUsergroups) && count($mixUsergroups) > 0){
 			return true;
 		} else {
 			return false;
