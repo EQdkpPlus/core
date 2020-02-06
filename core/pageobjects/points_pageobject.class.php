@@ -82,7 +82,7 @@ class points_pageobject extends pageobject {
 			$hptt_page_settings = $this->pdh->get_page_settings('listmembers', 'hptt_listmembers_memberlist_overview');
 			$defaultPoolOverview = (isset($arrOverviewSettings['default_pool_ov'])) ? $arrOverviewSettings['default_pool_ov'] : $multilist[0];
 		}else{
-			$hptt_page_settings = $this->pdh->get_page_settings('listmembers', 'hptt_listmembers_memberlist_detail');;
+			$hptt_page_settings = $this->pdh->get_page_settings('listmembers', 'hptt_listmembers_memberlist_detail');
 			$mdkp_suffix = $mdkpid;
 		}
 

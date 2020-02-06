@@ -39,7 +39,7 @@ if (!class_exists('exchange_add_adjustment')){
 		* Returns: Status 0 on error, Status 1 and inserted adjustment-ID on succes
 		*/
 		public function post_add_adjustment($params, $arrBody){
-			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
+			$isAPITokenRequest = $this->pex->isApiWriteTokenRequest();
 
 			if ($isAPITokenRequest || $this->user->check_auth('a_indivadj_add', false)){
 				$blnTest = (isset($params['get']['test']) && $params['get']['test']) ? true : false;

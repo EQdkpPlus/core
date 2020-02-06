@@ -32,6 +32,7 @@ if( !class_exists( "plus_exchange" ) ) {
 		public $feeds					= array();
 		private $modulepath				= 'core/exchange/';
 		private  $isCoreAPIToken		= false;
+		private $isReadOnlyToken		= false;
 
 		//Constructor
 		public function __construct( ) {
@@ -236,6 +237,18 @@ if( !class_exists( "plus_exchange" ) ) {
 						$this->user->changeSessionUser($intSuperadminID);
 						return $intSuperadminID;
 					}
+				} elseif($strToken === $this->config->get('api_key_ro')){
+					$this->isCoreAPIToken = true;
+					$this->isReadOnlyToken = true;
+					//Try to get the first superadmin
+					$arrSuperAdmins = $this->pdh->get('user_groups_users', 'user_list', array(2));
+					reset($arrSuperAdmins);
+					$intKey = key($arrSuperAdmins);
+					$intSuperadminID = $arrSuperAdmins[$intKey];
+					if($intSuperadminID) {
+						$this->user->changeSessionUser($intSuperadminID);
+						return $intSuperadminID;
+					}
 				}
 
 				//It's an user token
@@ -311,5 +324,14 @@ if( !class_exists( "plus_exchange" ) ) {
 		public function getIsApiTokenRequest(){
 			return $this->isCoreAPIToken;
 		}
+		
+		public function isApiWriteTokenRequest(){
+			return ($this->isCoreAPIToken && !$this->isReadOnlyToken);
+		}
+		
+		public function isApiReadonlyTokenRequest(){
+			return ($this->isCoreAPIToken && $this->isReadOnlyToken);
+		}
+		
 	}//end class
 } //end if

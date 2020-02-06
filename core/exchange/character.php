@@ -122,7 +122,7 @@ if (!class_exists('exchange_character')){
 
 
 		public function post_character($params, $arrBody){
-			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
+			$isAPITokenRequest = $this->pex->isApiWriteTokenRequest();
 			if ($isAPITokenRequest){
 
 				$blnTest = (isset($params['get']['test']) && $params['get']['test']) ? true : false;

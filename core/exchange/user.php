@@ -60,7 +60,7 @@ if (!class_exists('exchange_user')){
 		}
 
 		public function post_user($params, $arrBody){
-			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
+			$isAPITokenRequest = $this->pex->isApiWriteTokenRequest();
 			if ($isAPITokenRequest){
 
 				if (!isset($arrBody['username']) || !strlen($arrBody['username'])) return $this->pex->error('required data missing', 'username');

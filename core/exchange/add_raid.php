@@ -38,7 +38,7 @@ if (!class_exists('exchange_add_raid')){
 		* Returns: Status 0 on error, Status 1 and inserted Raid-ID on succes
 		*/
 		public function post_add_raid($params, $arrBody){
-			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
+			$isAPITokenRequest = $this->pex->isApiWriteTokenRequest();
 			if ($isAPITokenRequest ||  $this->user->check_auth('a_raid_add', false)){
 				$blnTest = (isset($params['get']['test']) && $params['get']['test']) ? true : false;
 

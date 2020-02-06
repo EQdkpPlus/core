@@ -35,7 +35,7 @@ if (!class_exists('exchange_add_event')){
 		* Returns: Status 0 on error, Status 1 and inserted Event-ID on succes
 		*/
 		public function post_add_event($params, $arrBody){
-			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
+			$isAPITokenRequest = $this->pex->isApiWriteTokenRequest();
 
 			if ($isAPITokenRequest ||  $this->user->check_auth('a_event_add', false)){
 				$blnTest = (isset($params['get']['test']) && $params['get']['test']) ? true : false;

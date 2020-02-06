@@ -62,6 +62,9 @@ class Manage_Export extends page_generic {
 	public function regenerate_apikey(){
 		$strApiKey = random_string(48);
 		$this->config->set('api_key', $strApiKey);
+		
+		$strApiKey = 'ro'.random_string(46);
+		$this->config->set('api_key_ro', $strApiKey);
 	}
 
 	public function display() {
@@ -74,10 +77,17 @@ class Manage_Export extends page_generic {
 			$strApiKey = random_string(48);
 			$this->config->set('api_key', $strApiKey);
 		}
+		
+		$strApiKeyRO = $this->config->get('api_key_ro');
+		if(!$strApiKeyRO){
+			$strApiKeyRO = 'ro'.random_string(46);
+			$this->config->set('api_key_ro', $strApiKeyRO);
+		}
 
 		$this->tpl->assign_vars(array(
 			'EXPORT_DATA'	=> $this->returnLua($arrData),
-				'API_KEY'		=> '<div class="clickToReveal" title="'.$this->user->lang('click_to_reveal').'"><a>**********</a><div>'.$strApiKey.'</div></div>',
+			'API_KEY'		=> '<div class="clickToReveal" title="'.$this->user->lang('click_to_reveal').'"><a>**********</a><div>'.$strApiKey.'</div></div>',
+				'API_KEY_RO'	=> 	'<div class="clickToReveal" title="'.$this->user->lang('click_to_reveal').'"><a>**********</a><div>'.$strApiKeyRO.'</div></div>',
 			'S_SHOW_APIKEY' => $this->user->check_group(2, false),
 		));
 

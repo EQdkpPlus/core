@@ -29,8 +29,6 @@ if (!class_exists('exchange_raid_signup')){
 		public $options		= array();
 
 		public function post_raid_signup($params, $arrBody){
-			$isAPITokenRequest = $this->pex->getIsApiTokenRequest();
-
 			if ($this->user->check_auth('po_calendarevent', false)){
 
 				if (count($arrBody) && intval($arrBody['eventid']) > 0){
