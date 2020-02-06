@@ -117,9 +117,9 @@ class content_export extends gen_class {
 						'points_adjustment_with_twink'	=> (isset($arrPresets['adjustment'])) ? runden($this->pdh->get($arrPresets['adjustment'][0], $arrPresets['adjustment'][1], $arrPresets['adjustment'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => true))) : false,
 					);
 					if($blnAdditionalColumns){
-						foreach($arrPresets as $arrPreset){
-							$points['multidkp_points:'.$mdkp][$arrPreset[0].'_'.$arrPreset[1]] = $this->pdh->get($arrPreset[0], $arrPreset[1], $arrPreset[2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => false, '%link_url%' => $this->env->buildlink(false).$this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%use_controller%' => true));
-							$points['multidkp_points:'.$mdkp][$arrPreset[0].'_'.$arrPreset[1].'_with_twink'] = $this->pdh->get($arrPreset[0], $arrPreset[1], $arrPreset[2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => true, '%link_url%' => $this->env->buildlink(false).$this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%use_controller%' => true));
+						foreach($arrPresets as $presetName => $arrPreset){
+							$points['multidkp_points:'.$mdkp]['add_'.$presetName] = $this->pdh->get($arrPreset[0], $arrPreset[1], $arrPreset[2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => false, '%link_url%' => $this->env->buildlink(false).$this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%use_controller%' => true));
+							$points['multidkp_points:'.$mdkp]['add_'.$presetName.'_with_twink'] = $this->pdh->get($arrPreset[0], $arrPreset[1], $arrPreset[2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => true, '%link_url%' => $this->env->buildlink(false).$this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%use_controller%' => true));
 						}
 					}
 					
@@ -134,9 +134,9 @@ class content_export extends gen_class {
 						$points['multidkp_points:'.$mdkp]['points_adjustment_html']			= (isset($arrPresets['adjustment'])) ? $this->pdh->geth($arrPresets['adjustment'][0], $arrPresets['adjustment'][1], $arrPresets['adjustment'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => false)) : false;
 						$points['multidkp_points:'.$mdkp]['points_adjustment_with_twink_html']	= (isset($arrPresets['adjustment'])) ? $this->pdh->geth($arrPresets['adjustment'][0], $arrPresets['adjustment'][1], $arrPresets['adjustment'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => true)) : false;
 						if($blnAdditionalColumns){
-							foreach($arrPresets as $arrPreset){
-								$points['multidkp_points:'.$mdkp][$arrPreset[0].'_'.$arrPreset[1].'_html'] = $this->pdh->geth($arrPreset[0], $arrPreset[1], $arrPreset[2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => false, '%link_url%' => $this->env->buildlink(false).$this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%use_controller%' => true));
-								$points['multidkp_points:'.$mdkp][$arrPreset[0].'_'.$arrPreset[1].'_with_twink_html'] = $this->pdh->geth($arrPreset[0], $arrPreset[1], $arrPreset[2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => true, '%link_url%' => $this->env->buildlink(false).$this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%use_controller%' => true));
+							foreach($arrPresets as $presetName => $arrPreset){
+								$points['multidkp_points:'.$mdkp]['add_'.$presetName.'_html'] = $this->pdh->geth($arrPreset[0], $arrPreset[1], $arrPreset[2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => false, '%link_url%' => $this->env->buildlink(false).$this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%use_controller%' => true));
+								$points['multidkp_points:'.$mdkp]['add_'.$presetName.'_with_twink_html'] = $this->pdh->geth($arrPreset[0], $arrPreset[1], $arrPreset[2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => true, '%link_url%' => $this->env->buildlink(false).$this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%use_controller%' => true));
 							}
 						}
 					}
