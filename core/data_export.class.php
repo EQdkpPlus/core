@@ -40,13 +40,23 @@ class content_export extends gen_class {
 		);
 	}
 
-	public function export($withMemberItems = false, $withMemberAdjustments = false, $filter = false, $filterid = false, $blnIncludeHTML = false){
+	public function export($withMemberItems = false, $withMemberAdjustments = false, $filter = false, $filterid = false, $blnIncludeHTML = false, $blnAdditionalColumns=false){
 		$arrPresets = array();
 		foreach ($this->presets as $preset){
 			$pre = $this->pdh->pre_process_preset($preset['name'], $preset);
 				if(empty($pre))
 					continue;
 
+			$arrPresets[$pre[0]['name']] = $pre[0];
+		}
+		
+		//Additional Presets
+		$hptt_page_settings = $this->pdh->get_page_settings('listmembers', 'hptt_listmembers_memberlist_detail');
+		foreach($hptt_page_settings['table_presets'] as $preset){
+			$pre = $this->pdh->pre_process_preset($preset['name'], $preset);
+			if(empty($pre))
+				continue;
+			
 			$arrPresets[$pre[0]['name']] = $pre[0];
 		}
 
@@ -105,8 +115,15 @@ class content_export extends gen_class {
 						'points_spent_with_twink'	=> (isset($arrPresets['spent'])) ? runden($this->pdh->get($arrPresets['spent'][0], $arrPresets['spent'][1], $arrPresets['spent'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => true))) : false,
 						'points_adjustment'	=> (isset($arrPresets['adjustment'])) ? runden($this->pdh->get($arrPresets['adjustment'][0], $arrPresets['adjustment'][1], $arrPresets['adjustment'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => false))) : false,
 						'points_adjustment_with_twink'	=> (isset($arrPresets['adjustment'])) ? runden($this->pdh->get($arrPresets['adjustment'][0], $arrPresets['adjustment'][1], $arrPresets['adjustment'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => true))) : false,
-
 					);
+					if($blnAdditionalColumns){
+						foreach($arrPresets as $arrPreset){
+							$points['multidkp_points:'.$mdkp][$arrPreset[0].'_'.$arrPreset[1]] = $this->pdh->get($arrPreset[0], $arrPreset[1], $arrPreset[2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => false, '%link_url%' => $this->env->buildlink(false).$this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%use_controller%' => true));
+							$points['multidkp_points:'.$mdkp][$arrPreset[0].'_'.$arrPreset[1].'_with_twink'] = $this->pdh->get($arrPreset[0], $arrPreset[1], $arrPreset[2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => true, '%link_url%' => $this->env->buildlink(false).$this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%use_controller%' => true));
+						}
+					}
+					
+					
 					if ($blnIncludeHTML){
 						$points['multidkp_points:'.$mdkp]['points_current_html'] 			= (isset($arrPresets['current'])) ? $this->pdh->geth($arrPresets['current'][0], $arrPresets['current'][1], $arrPresets['current'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => false)) : false;
 						$points['multidkp_points:'.$mdkp]['points_current_with_twink_html'] = (isset($arrPresets['current'])) ? $this->pdh->geth($arrPresets['current'][0], $arrPresets['current'][1], $arrPresets['current'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => true)) : false;
@@ -116,7 +133,12 @@ class content_export extends gen_class {
 						$points['multidkp_points:'.$mdkp]['points_spent_with_twink_html']	= (isset($arrPresets['spent'])) ? $this->pdh->geth($arrPresets['spent'][0], $arrPresets['spent'][1], $arrPresets['spent'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => true)) : false;
 						$points['multidkp_points:'.$mdkp]['points_adjustment_html']			= (isset($arrPresets['adjustment'])) ? $this->pdh->geth($arrPresets['adjustment'][0], $arrPresets['adjustment'][1], $arrPresets['adjustment'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => false)) : false;
 						$points['multidkp_points:'.$mdkp]['points_adjustment_with_twink_html']	= (isset($arrPresets['adjustment'])) ? $this->pdh->geth($arrPresets['adjustment'][0], $arrPresets['adjustment'][1], $arrPresets['adjustment'][2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => true)) : false;
-
+						if($blnAdditionalColumns){
+							foreach($arrPresets as $arrPreset){
+								$points['multidkp_points:'.$mdkp][$arrPreset[0].'_'.$arrPreset[1].'_html'] = $this->pdh->geth($arrPreset[0], $arrPreset[1], $arrPreset[2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => false, '%link_url%' => $this->env->buildlink(false).$this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%use_controller%' => true));
+								$points['multidkp_points:'.$mdkp][$arrPreset[0].'_'.$arrPreset[1].'_with_twink_html'] = $this->pdh->geth($arrPreset[0], $arrPreset[1], $arrPreset[2], array('%dkp_id%' => $mdkp, '%member_id%' => $member, '%with_twink%' => true, '%link_url%' => $this->env->buildlink(false).$this->routing->simpleBuild('character'), '%link_url_suffix%' => '', '%use_controller%' => true));
+							}
+						}
 					}
 				}
 

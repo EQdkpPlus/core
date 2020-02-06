@@ -57,6 +57,9 @@ if (!class_exists('exchange_points')){
 
 				//IncludeHTML
 				$blnIncludeHTML = (isset($params['get']['include_html']) && (int)$params['get']['include_html']) ? true : false;
+				
+				//AdditionalColumns
+				$blnAdditionalColumns = (isset($params['get']['add_columns']) && (int)$params['get']['add_columns']) ? true : false;
 
 				//Filter
 				$filter = $filterid = false;
@@ -65,7 +68,7 @@ if (!class_exists('exchange_points')){
 					$filterid = intval($params['get']['filterid']);
 				}
 
-				return $myexp->export((isset($arrBooleansMemberdata['items']) && $arrBooleansMemberdata['items']), (isset($arrBooleansMemberdata['adjustments']) && $arrBooleansMemberdata['adjustments']), $filter, $filterid, $blnIncludeHTML);
+				return $myexp->export((isset($arrBooleansMemberdata['items']) && $arrBooleansMemberdata['items']), (isset($arrBooleansMemberdata['adjustments']) && $arrBooleansMemberdata['adjustments']), $filter, $filterid, $blnIncludeHTML, $blnAdditionalColumns);
 			} else {
 				return $this->pex->error('access denied');
 			}
