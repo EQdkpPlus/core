@@ -30,10 +30,15 @@ if(!class_exists('pdh_w_user')) {
 		public function insert_user($arrData, $logging = true, $toDefaultGroup = true){
 			$arrData = $this->set_defaults($arrData);
 			$arrData['user_registered'] = $this->time->time;
+			
+			//Check length of Username
+			if(mb_strlen($arrData['username']) > 255){
+				return false;
+			}
 
 			$objQuery = $this->db->prepare("INSERT INTO __users :p")->set($arrData)->execute();
 
-			if ( !($objQuery) ) {
+			if ( !($objQuery) ) {				
 				return false;
 			}
 
@@ -131,6 +136,11 @@ if(!class_exists('pdh_w_user')) {
 		public function update_user($user_id, $query_ary, $logging = true, $defaults = true){
 			if ($defaults){
 				$query_ary = $this->set_defaults($query_ary);
+			}
+			
+			//Check length of Username
+			if(mb_strlen($query_ary['username']) > 255){
+				return false;
 			}
 
 			$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id = ?")->set($query_ary)->execute($user_id);
