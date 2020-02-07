@@ -29,7 +29,7 @@ if (!class_exists('exchange_raid_signup')){
 		public $options		= array();
 
 		public function post_raid_signup($params, $arrBody){
-			if ($this->user->check_auth('po_calendarevent', false)){
+			if ($this->user->check_auth('po_calendarevent', false) && !$this->pex->isApiReadonlyTokenRequest()){
 
 				if (count($arrBody) && intval($arrBody['eventid']) > 0){
 					$eventid = intval($arrBody['eventid']);

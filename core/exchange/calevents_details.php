@@ -35,7 +35,7 @@ if (!class_exists('exchange_calevents_details')){
 					$event_id = intval($params['get']['eventid']);
 					$eventdata	= $this->pdh->get('calendar_events', 'data', array($event_id));
 					$comments = $this->pdh->get('comment', 'filtered_list', array('articles', '12_'.$event_id));
-
+					
 					$intComments = 0;
 					if (is_array($comments)){
 						foreach($comments as $key => $row){
@@ -278,6 +278,43 @@ if (!class_exists('exchange_calevents_details')){
 							'raidgroups'	=> $arrRaidgroups,
 						);
 					} else {
+						//Check if private
+						if(!$this->pdh->get('calendar_events', 'private_userperm', array($event_id))){
+							return $this->pex->error('access denied');
+						}
+						
+						$mystatus = 0;						
+						
+						// invited attendees
+						$event_invited		= (isset($eventdata['extension']['invited']) && count($eventdata['extension']['invited']) > 0) ? $eventdata['extension']['invited'] : array();
+						if(count($event_invited) > 0){
+							foreach($event_invited as $inviteddata){
+								$userstatus['invited'][] = array(
+										'userid'	=> $inviteddata,
+										'name'		=> $this->pdh->get('user', 'name', array($inviteddata)),
+										'joined'	=> $this->pdh->get('calendar_events', 'joined_invitation', array($event_id, $inviteddata)),
+								);
+								
+								if($inviteddata == $this->user->id) $mystatus = 4;
+							}
+						}
+						
+						// attending users
+						$event_attendees		= (isset($eventdata['extension']['attendance']) && count($eventdata['extension']['attendance']) > 0) ? $eventdata['extension']['attendance'] : array();
+						if(count($event_attendees) > 0){
+							foreach($event_attendees as $attuserid=>$attstatus){
+								$attendancestatus			= $this->statusID2status($attstatus);
+								$statusofuser[$attuserid]	= $attstatus;
+								$userstatus[$attendancestatus][] = array(
+										'userid'	=> $attuserid,
+										'name'		=> $this->pdh->get('user', 'name', array($attuserid)),
+										'joined'	=> false,
+								);
+								
+								if($attuserid == $this->user->id) $mystatus = $attstatus;
+							}
+						}
+						
 						$out = array(
 							'type'			=> ($raidmode == 'raid') ? 'raid' : 'event',
 							'title' 		=> unsanitize($this->pdh->get('calendar_events', 'name', array($event_id))),
@@ -289,7 +326,16 @@ if (!class_exists('exchange_calevents_details')){
 							'note'			=> unsanitize($this->bbcode->remove_bbcode($this->pdh->get('calendar_events', 'notes', array($event_id, true)))),
 							'calendar'		=> $eventdata['calendar_id'],
 							'calendar_name'	=> $this->pdh->get('calendar_events', 'calendar', array($event_id)),
+							'icon'			=> $this->pdh->get('calendar_events', 'event_icon', array($event_id)),
+							'location'		=> $eventdata['extension']['location'],
+							'location-lat'	=> $eventdata['extension']['location-lat'],
+							'location-lon'	=> $eventdata['extension']['location-lon'],
+							'attendees'		=> $userstatus,
+							'user_status'	=> $this->statusID2status($mystatus),
 						);
+						
+
+						
 					}
 					return $out;
 				} else {
@@ -299,6 +345,17 @@ if (!class_exists('exchange_calevents_details')){
 				return $this->pex->error('access denied');
 			}
 
+		}
+		
+		private function statusID2status($status){
+			switch($status){
+				case 0:		$attendancestatus = 'unknown'; break;
+				case 1:		$attendancestatus = 'attendance'; break;
+				case 2:		$attendancestatus = 'maybe'; break;
+				case 3:		$attendancestatus = 'decline'; break;
+				case 4:		$attendancestatus = 'invited'; break;
+			}
+			return $attendancestatus;
 		}
 	}
 }
