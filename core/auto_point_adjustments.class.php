@@ -36,7 +36,8 @@ if ( !defined('EQDKP_INC') ){
 		private $decayed_pools		= array();
 		private $cap_pools			= array();
 		private $hardcap_pools		= array();
-
+		private $currentcap_pools		= array();
+		
 		private $apa_types_inst		= array();
 
 		private $cached_data		= array();
@@ -249,6 +250,24 @@ if ( !defined('EQDKP_INC') ){
 				}
 			}
 			if(!empty($this->hardcap_pools[$pool]) && in_array($module, $this->hardcap_pools[$pool])) return true;
+			return false;
+		}
+		
+		public function is_currentcap($module, $pool) {
+			if(empty($this->apa_tab)) return false;
+			if(empty($this->currentcap_pools)) {
+				foreach($this->apa_tab as $apa_id=> $apa) {
+					
+					if(stripos($apa['type'], 'currentcap') === false) continue;
+					$modules = $this->get_apa_type($apa['type'])->modules_affected($apa_id);
+					foreach($apa['pools'] as $dkp_id) {
+						foreach($modules as $_module) {
+							$this->currentcap_pools[$dkp_id][] = $_module;
+						}
+					}
+				}
+			}
+			if(!empty($this->currentcap_pools[$pool]) && in_array($module, $this->currentcap_pools[$pool])) return true;
 			return false;
 		}
 
