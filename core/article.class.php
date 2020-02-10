@@ -945,12 +945,13 @@ if(!class_exists('article')){
 				}
 
 				// Build the guest array
-				$guests = '';
+				$guests = array();
 				if($this->config->get('calendar_raid_guests') > 0){
 					$guestarray = $this->pdh->get('calendar_raids_guests', 'members', array($intEventID));
 					if(is_array($guestarray)){
 						foreach($guestarray as $guest_row){
-							$guests[] = $guest_row['name'];
+							if(!isset($guests[$guest_row['status']])) $guests[$guest_row['status']] = array();
+							$guests[(int)$guest_row['status']][] = $guest_row['name'];
 						}
 					}
 				}
@@ -967,12 +968,12 @@ if(!class_exists('article')){
 
 				$counts = '';
 				foreach($raidstatus as $statusid=>$statusname){
-					$counts[$statusid]  = ((isset($attendees[$statusid])) ? count($attendees[$statusid]) : 0);
+					$actcount  = ((isset($attendees[$statusid])) ? count($attendees[$statusid]) : 0);
+					$actcount += (is_array($guests[$statusid]) ? count($guests[$statusid]) : 0);
+					
+					$counts[$statusid]  = $actcount;			
 				}
-				$guest_count	= (is_array($guests)) ? count($guests) : 0;
-				if(isset($counts[0])){
-					$counts[0]		= $counts[0] + $guest_count;
-				}
+				
 				$signinstatus = $this->pdh->get('calendar_raids_attendees', 'html_status', array($intEventID, $this->user->data['user_id']));
 
 				if (is_array($counts)){

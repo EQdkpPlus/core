@@ -283,13 +283,15 @@ class calendar_pageobject extends pageobject {
 							$guests	= array();
 							if(registry::register('config')->get('calendar_raid_guests') > 0){
 								$guestarray = registry::register('plus_datahandler')->get('calendar_raids_guests', 'members', array($calid));
+								
 								if(is_array($guestarray)){
 									foreach($guestarray as $guest_row){
-										$guests[] = $guest_row['name'];
+										if(!isset($guests[$guest_row['status']])) $guests[$guest_row['status']] = array();
+										$guests[(int)$guest_row['status']][] = $guest_row['name'];
 									}
 								}
 							}
-
+							
 							// fetch per raid data
 							$raidcal_status = $this->config->get('calendar_raid_status');
 							$rstatusdata = '';
@@ -297,9 +299,7 @@ class calendar_pageobject extends pageobject {
 								foreach($raidcal_status as $raidcalstat_id){
 									if($raidcalstat_id != 4){
 										$actcount  = ((isset($attendees[$raidcalstat_id])) ? count($attendees[$raidcalstat_id]) : 0);
-										if($raidcalstat_id == 0){
-											$actcount += (is_array($guests) ? count($guests) : 0);
-										}
+										$actcount += (is_array($guests[$raidcalstat_id]) ? count($guests[$raidcalstat_id]) : 0);
 										$rstatusdata .= '<div class="raid_status'.$raidcalstat_id.'">'.$this->user->lang(array('raidevent_raid_status', $raidcalstat_id)).': '.$actcount.'</div>';
 									}
 								}

@@ -149,7 +149,7 @@ if(registry::register('input')->get('out') != ''){
 									$guestarray = registry::register('plus_datahandler')->get('calendar_raids_guests', 'members', array($calid));
 									if(is_array($guestarray)){
 										foreach($guestarray as $guest_row){
-											$attendees[0][] = $guest_row['name'];
+											$attendees[(int)$guest_row['status']][] = $guest_row['name'];
 										}
 									}
 								}
