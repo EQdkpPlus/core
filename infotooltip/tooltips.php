@@ -70,6 +70,7 @@ var EQdkpTooltip = new function(){
 	var mmocms_root_path = '<?php echo $eqdkp_path; ?>';
 	var cached_itts = new Array();
 	var cache_labels = new Array();
+	var browserLang = navigator.language || navigator.userLanguage;
 
 	function addResources(){
 
@@ -116,7 +117,7 @@ var EQdkpTooltip = new function(){
 
 						//code to be inserted here
 						gameid = ($('#'+mid).attr('data-game_id')) ? $('#'+mid).attr('data-game_id') : 0;
-						jsondata = {"name": $('#'+mid).attr('data-name'), "game_id": gameid}
+						jsondata = {"name": $('#'+mid).attr('data-name'), "game_id": gameid, "lang": browserLang};
 
 						if (cache_labels['t_'+ mid] != undefined){
 							$('#'+mid).empty();
@@ -162,6 +163,7 @@ var EQdkpTooltip = new function(){
 					item_data['game_id'] = myitemid;
 					itemdatatag = 'data-game_id="'+item_data['game_id']+'"';
 					item_data['name'] = myitemid;
+					item_data['lang'] = browserLang;
 					itemname = myitemid;
 				}
 
@@ -187,7 +189,7 @@ var EQdkpTooltip = new function(){
 					if (cached_itts['t_'+$(this).attr('title')] != undefined){
 						return cached_itts['t_'+$(this).attr('title')];
 					} else {
-						var bla = $.get(mmocms_root_path+'infotooltip/infotooltip_feed.php?direct=1&data='+$(this).attr('title'), response);
+						var bla = $.get(mmocms_root_path+'infotooltip/infotooltip_feed.php?direct=1&data='+$(this).attr('title')+'&lang='+browserLang, response);
 						bla.done(function(data) {
 							cached_itts['t_'+mytitle] = $.trim(data);
 						});

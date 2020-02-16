@@ -60,6 +60,7 @@ try {
 		$data				= array();
 		$data['name']		= $in->get('name');
 		$data['game_id']	= $in->get('game_id');
+		$data['lang']		= substr($in->get('lang'),0,2);
 		$direct				= ($in->exists('direct')) ? $in->get('direct', 0) : substr($in->get('data'), 0, 1);
 	}elseif($in->exists('data')) {
 		$direct				= ($in->exists('direct')) ? $in->get('direct', 0) : substr($in->get('data'), 0, 1);
@@ -83,6 +84,7 @@ try {
 	$data['char_name']		= (isset($data['char_name'])) ? $data['char_name'] : 0;
 	$data['name']			= html_entity_decode($data['name'], ENT_QUOTES, 'UTF-8');
 	$item					= $itt->getitem($data['name'], $data['lang'], $data['game_id'], $data['update'], $data['data']);
+	
 	$item['icon']			= (isset($item['icon'])) ? $item['icon'] : '';
 	$display_name			= (isset($item['name']) AND strlen($item['name']) > 1) ? $item['name'] : $data['name'];
 	$iconpath				= (isset($item['params']) && isset($item['params']['path']) && !empty($item['params']['path'])) ? $item['params']['path'] : $itt->config['icon_path'];
