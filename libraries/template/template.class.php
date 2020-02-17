@@ -510,6 +510,7 @@ class template extends gen_class {
 		if(substr($filename, 0, 1) == '/' || substr($filename, 0, 2) == './'){
 			$myfile			= $filename;
 		}else{
+			
 			if ($basefile){
 				$data_file = $this->data_root.$filename;
 				$tmp_root_file = $this->root_path.'templates/'.$this->style_code.'/'.$filename;
@@ -521,8 +522,11 @@ class template extends gen_class {
 				$myfile = $data_file;
 			} elseif(file_exists($tmp_root_file)){
 				$myfile = $tmp_root_file;
-			} else {
+			} elseif(file_exists($this->base_template.'/'.$filename)) {
 				$myfile = $this->base_template.'/'.$filename;
+			} else {
+				$stylecode = $this->style_code;
+				$myfile = $this->root_path.'templates/'.$stylecode.'/'.$filename;
 			}
 		}
 		return $myfile;
