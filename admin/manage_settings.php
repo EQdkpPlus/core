@@ -60,8 +60,8 @@ class admin_settings extends page_generic {
 
 		//Set E-Mail-Options
 		$this->email->SetOptions($options);
-
-		$blnResult = $this->email->SendMail($adminmail, $adminmail, "Testmail", "This is a test mail to check your mail settings.");
+		
+		$blnResult = $this->email->SendMail($this->user->data['user_email'], $adminmail, "Testmail", "This is a test mail to check your mail settings.");
 
 		if($blnResult){
 			echo $this->user->lang('test_mail_ok');
