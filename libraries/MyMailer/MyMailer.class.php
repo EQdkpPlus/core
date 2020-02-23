@@ -32,7 +32,7 @@ require 'SMTP.php';
 
 class MyMailer extends gen_class {
 
-	private $myoptions = array();
+	private $myoptions = array('mail_type' => 'html', 'template_type' => 'file');
 	protected $adminmail;
 	protected $mydeflang = "english";
 	protected $dkpname;
@@ -54,11 +54,6 @@ class MyMailer extends gen_class {
 	* @return true/false
 	*/
 	public function __construct($options='') {
-		if(!is_array($options)){
-			$this->myoptions['mail_type']		= 'html';
-			$this->myoptions['template_type']	= 'file';
-		}
-
 		$this->objMailer = new PHPMailer;
 
 		// Some usefull information
@@ -246,7 +241,7 @@ class MyMailer extends gen_class {
 
 			if($this->sendmeth == 'smtp'){
 				$this->objMailer->SMTPDebug = 0;                                 // Enable verbose debug output
-				$this->objMailer->isSMTP();                                      // Set mailer to use SMTP
+				$this->objMailer->isSMTP();                                   // Set mailer to use SMTP
 				$this->objMailer->Host = $this->config->get('lib_email_smtp_host');  // Specify main and backup SMTP servers
 				$this->objMailer->SMTPAuth = ($this->config->get('lib_email_smtp_auth') == 1) ? true : false;// Enable SMTP authentication
 				$this->objMailer->Username = $this->config->get('lib_email_smtp_user');                 // SMTP username
