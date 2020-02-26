@@ -36,11 +36,11 @@ class update_23280 extends sql_update_task {
 		
 		$this->langs = array(
 				'english' => array(
-						'update_23250'	=> 'EQdkp Plus 2.3.28 Update',
+						'update_23280'	=> 'EQdkp Plus 2.3.28 Update',
 						1 => 'Alter User-Table',
 				),
 				'german' => array(
-						'update_23250'	=> 'EQdkp Plus 2.3.28 Update',
+						'update_23280'	=> 'EQdkp Plus 2.3.28 Update',
 						1 => 'Verändere User-Tabelle',
 				),
 		);
