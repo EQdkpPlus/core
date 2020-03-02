@@ -22,7 +22,7 @@
 define('EQDKP_INC', true);
 $eqdkp_root_path = './../../';
 include_once($eqdkp_root_path . 'common.php');
-ini_set('display_errors', 1);
+ini_set('display_errors', 0);
 
 class tinyMCEimageUploader extends page_generic {
 
@@ -34,7 +34,20 @@ class tinyMCEimageUploader extends page_generic {
 	}
 
 	public function display(){
-		$blnIsUser = $this->user->is_signedin() && $this->user->check_auth('u_files_man', false);
+		//User has permission to write articles
+		$blnUserWriteArticles = false;
+		if($this->user->is_signedin()){
+			$arrCategoryIDs = $this->pdh->get('article_categories', 'id_list', array(true));
+			foreach($arrCategoryIDs as $intCategoryID){
+				$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($intCategoryID, $this->user->id));
+				if($arrPermissions['create'] || $arrPermissions['update']){
+					$blnUserWriteArticles = true;
+					break;
+				}
+			}
+		}
+		
+		$blnIsUser = ($blnUserWriteArticles || $this->user->check_auth('u_files_man', false));
 		if (!$blnIsUser) {
 			header("HTTP/1.0 403 Access Denied");
 			return;
