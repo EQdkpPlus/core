@@ -189,7 +189,7 @@ if ( !class_exists( "apa_decay_current" ) ) {
 
 		public function reset_cache($apa_id, $module, $id){
 			if($module == 'current'){
-				list($memberId, $mdkpid) = explode("_", $id);
+				list($mdkpid, $memberId, $twinks) = explode("_", $id);
 				$this->pdh->put('member', 'reset_apa_points', array($memberId, $apa_id));
 				$this->pdh->process_hook_queue();
 			}
