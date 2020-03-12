@@ -445,7 +445,7 @@ $('.js_reload').change(reload_settings);", 'docready');
 
 			// start the description text
 			$data['desc']		= (string) (new htooltip('mptt_'.$id, array('content' => $data['desc'], 'label' => $this->core->icon_font($icon, 'fa-lg'))))->output();
-			$data['multiple']	= ($portalinfos['multiple'] && !$pdata['child']) ? true : false;
+			$data['multiple']	= ($portalinfos['multiple']) ? true : false;
 			if ($portalinfos['multiple']) {
 				$portal_module[$id]->output();
 				$data['header'] = ' ('.$portal_module[$id]->get_header() .')';
