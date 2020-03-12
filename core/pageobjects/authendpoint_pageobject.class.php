@@ -62,13 +62,13 @@ class authendpoint_pageobject extends pageobject {
 		$arrSessionVars = $this->user->data['session_vars'];
 		$strSessionVar = $arrSessionVars['auth_init_'.$strMethod];
 
-		if($strCookie == "" || $strCookie != $strSessionVar) {
+		if($strCookie === "" || $strCookie !== $strSessionVar) {
 			//Error
 			//echo "b"; die();
 			redirect($this->controller_path_plain.'Login/'.$this->SID);
 		}
 
-		if($strCookie == 'account'){
+		if($strCookie === 'account'){
 			if (!$this->user->is_signedin()){
 				//echo "c"; die();
 				redirect($this->controller_path_plain.'Login/'.$this->SID);
@@ -84,7 +84,7 @@ class authendpoint_pageobject extends pageobject {
 			redirect($redir_url);
 		}
 
-		if($strCookie == 'register'){
+		if($strCookie === 'register'){
 			$this->user->setSessionVar('auth_init_'.$strMethod, 'outdated');
 			set_cookie('auth_init_'.$strMethod, 'outdated', $this->time->time);
 
@@ -95,7 +95,7 @@ class authendpoint_pageobject extends pageobject {
 			redirect($redir_url);
 		}
 
-		if($strCookie == 'login'){
+		if($strCookie === 'login'){
 			$this->user->setSessionVar('auth_init_'.$strMethod, 'outdated');
 			set_cookie('auth_init_'.$strMethod, 'outdated', $this->time->time);
 
