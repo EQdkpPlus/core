@@ -1942,4 +1942,6 @@ $lang = array(
 		"connected_raids" => "Verbundene Raids",
 		"core_sett_f_check_password_leak" => "Passwörter überprüfen, ob durch einen Einbruch bekannt",
 		"core_sett_f_help_check_password_leak" => "Benutzer-Passwörter werden gegen den Dienst 'Have I Been Pwned' geprüft, ob diese bereits durch einen Einbruch bekannt sind. Die Passwörter werden dabei nicht an den Dienst übertragen, sondern lediglich verschlüsselte Teile des Passwortes.",
+		"liveupdate_last_checked" => "Zuletzt geprüft",
+		"liveupdate_update_outdated" => 'Es konnte nicht überprüft werden, ob neue Versionen von EQdkp Plus oder Erweiterungen zur Verfügung stehen. Wahrscheinlich ist keine Verbindung zu unserem Server möglich.<br />Du kannst manuell unter <a href="'.EQDKP_DOWNLOADS_URL.'">'.EQDKP_DOWNLOADS_URL.'</a> prüfen, ob neue Versionen zur Verfügung stehen und diese dort herunterladen.<br />Weitere Informationen zum Thema Versionsaktualisierung findest du in unserer <a href="'.EQDKP_WIKI_URL.'">Wiki</a>.',
 );

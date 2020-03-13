@@ -76,7 +76,7 @@ if(!defined('STOPFORUMSPAM_FREQUENCY')) define('STOPFORUMSPAM_FREQUENCY', 2);
 //-------------------------------------------------------------------------
 define('EQDKP_PROJECT_URL',			"https://eqdkp-plus.eu");
 define('EQDKP_ABOUT_URL',			"https://eqdkp-plus.eu/about");
-define('EQDKP_DOWNLOADS_URL',		"https://repo.eqdkp-plus.eu/");
+define('EQDKP_DOWNLOADS_URL',		"https://download.eqdkp-plus.eu/");
 define('EQDKP_REPO_URL',			"https://repo.eqdkp-plus.eu/");
 define('EQDKP_NOTIFICATIONS_URL',	"https://eqdkp-plus.eu/rss/notifications.xml");
 define('EQDKP_TWITTER_SCREENNAME',	"EQdkpPlus");

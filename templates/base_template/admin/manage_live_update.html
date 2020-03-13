@@ -12,6 +12,10 @@
 		<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> <!-- IF S_NO_UPDATE_PACKAGE -->{L_liveupdate_update_nopackages_failed}<!-- ELSE -->{L_liveupdate_update_requirements_failed}
 		{REQUIREMENTS_NOTE}<!-- ENDIF -->
 	</div>
+	<!-- ELSEIF S_IS_OUTDATED -->
+	<div class="infobox infobox-large infobox-red clearfix">
+		<i class="fa fa-exclamation-triangle fa-4x pull-left"></i> {L_liveupdate_update_outdated}
+	</div>
 	<!-- ELSE -->
 	<div class="infobox infobox-large infobox-green clearfix">
 		<i class="fa fa-check fa-4x pull-left"></i> {L_liveupdate_no_update_available}
@@ -67,6 +71,10 @@
 		<dl>
 			<dt><label>{L_liveupdate_installed_version}</label></dt>
 			<dd><!-- IF S_NEW_VERSION --><span class="negative">{RECENT_VERSION}</span><!-- ELSE -->{RECENT_VERSION}<!-- ENDIF --></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_liveupdate_last_checked}</label></dt>
+			<dd>{LAST_CHECKED}</dd>
 		</dl>
 		<!-- IF S_NEW_VERSION -->
 		<dl>

@@ -638,14 +638,15 @@ class Manage_Live_Update extends page_generic {
 			}
 		}
 
-
 		$this->tpl->assign_vars(array(
 			'S_START'			=> true,
 			'S_RELEASE_CHANNEL' => ($this->repo->getChannel() != 'stable') ? true : false,
 			//'S_UPDATE_BUTTON'	=> ($this->repo->getChannel() != 'stable' || DEBUG > 1),
 			'RECENT_VERSION' 	=> VERSION_EXT,
 			'RELEASE_CHANNEL' 	=> ucfirst($this->repo->getChannel()),
+			'LAST_CHECKED'		=> $this->time->user_date($this->pdh->get('repository', 'lastupdate'), true),	
 			'S_REQUIREMENTS'	=> $blnRequirements,
+			'S_IS_OUTDATED'		=> $this->repo->checkIfOutdated(),
 			'REQUIREMENTS_NOTE'	=> $strRequirementsNote,
 		));
 
