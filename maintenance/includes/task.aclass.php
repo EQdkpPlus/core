@@ -83,6 +83,10 @@ if ( !class_exists( "task" ) ){
 
 		public abstract function is_necessary();
 		public abstract function is_applicable();
+		
+		public function get_old_version(){
+			return '';
+		}
 
 		public function a_get_form_content() {
 			if(!$this->use_steps) {

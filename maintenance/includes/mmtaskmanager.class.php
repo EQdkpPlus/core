@@ -134,7 +134,8 @@ if ( !class_exists( "mmtaskmanager" ) ) {
 					'version'		=> $task_obj->version,
 					'ext_version'	=> $task_obj->ext_version,
 					'author'		=> $task_obj->author,
-					'name'			=> $task_obj->name
+					'name'			=> $task_obj->name,
+					'current_running_version'	=> $task_obj->get_old_version(),
 				);
 				unset($task_obj);
 			}
