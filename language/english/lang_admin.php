@@ -1939,4 +1939,9 @@ $lang = array(
 		"core_sett_f_help_check_password_leak" => "User passwords are checked against the service 'Have I Been Pwned' if they have been exposed in data breaches. The passwords are not transmitted to the service, but only hashed parts of it.",
 		"liveupdate_last_checked" => "Last checked",
 		"liveupdate_update_outdated" => 'It was not possible to check if new versions of EQdkp Plus or its extensions are available. Probably, it was notpossible to connect to our servers.<br />You can manualy check at <a href="'.EQDKP_DOWNLOADS_URL.'">'.EQDKP_DOWNLOADS_URL.'</a> if new versions are available and download the new packages.<br />More information about version updates are available at our <a href="'.EQDKP_WIKI_URL.'">Wiki</a>.',
+		"mass_raidgroup_change" => "Add to Raidgroup",
+		"mems_raidgroup_change" => "The following characters have been added to the selected raidgroup: ",
+		"mass_usergroup_change"	=> "Add to Usergroup",
+		"bulk_user_usergroupsadded_success" => "The selected users have been added to the selected usergroup.",
+		
 );

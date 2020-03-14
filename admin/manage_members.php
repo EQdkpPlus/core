@@ -35,6 +35,7 @@ class Manage_Members extends page_generic {
 			'del_history_entries' => array('process' => 'delete_history_items', 'csrf'=>true),
 			'mstatus' => array('process' => 'member_status', 'csrf'=>true),
 			'rankc' => array('process' => 'member_ranks', 'csrf'=>true),
+			'groupc' => array('process' => 'member_raidgroups', 'csrf'=>true),
 			'defrolechange'	=> array('process' => 'ajax_defaultrole', 'csrf'=>true),
 			'setinactive' => array('process' => 'process_set_inactive', 'csrf'=>true),
 			'setactive' => array('process' => 'process_set_active', 'csrf'=>true),
@@ -172,6 +173,28 @@ class Manage_Members extends page_generic {
 		}
 		$this->display($messages);
 	}
+	
+	public function member_raidgroups(){
+		$this->user->check_auth('a_raidgroups_man');
+		$intGroupID = $this->in->get('groups',0);
+		
+		$sucs = array();
+		if($member_ids = $this->in->getArray('selected_ids','int')){			
+			foreach($member_ids as $id){
+				$sucs[$id] = $this->pdh->put('raid_groups_members', 'add_member_to_group', array($id, $intGroupID));
+			}
+		}
+		foreach($sucs as $id => $suc){
+			if($suc){
+				$pos[] = $this->pdh->get('member', 'name', array($id));
+			}
+		}
+		
+		if($pos){
+			$messages[] = array('title' => $this->user->lang('save_suc'), 'text' => $this->user->lang('mems_raidgroup_change').implode(', ', $pos), 'color' => 'green');
+		}
+		$this->display($messages);
+	}
 
 	public function member_status(){
 		$sucs = array();
@@ -281,12 +304,16 @@ class Manage_Members extends page_generic {
 
 		$arrClasses = $this->game->get_primary_classes(array('id_0'));
 		array_unshift($arrClasses, "");
-
+		
+		$ranks			= $this->pdh->aget('rank', 'name', 0, array($this->pdh->get('rank', 'id_list', array())));
+		$ranks[""] = "";
+		
 		$this->tpl->assign_vars(array(
 				'SPINNER_CHAR_COUNT' => (new hspinner('charcount'))->output(),
 				'DATEPICKER_BEFORE'	=> (new hdatepicker('date_before', array('value' => false)))->output(),
 				'DATEPICKER_AFTER'	=> (new hdatepicker('date_after', array('value' => false)))->output(),
 				'DD_CLASS'			=> (new hdropdown('class', array('options' => $arrClasses)))->output(),
+				'DD_RANKS'			=> (new hdropdown('rank', array('options' => $ranks)))->output(),
 		));
 
 
@@ -322,6 +349,7 @@ class Manage_Members extends page_generic {
 				'inactive' => false,
 				'twinkname' => false,
 				'class' => false,
+				'rank' => false,
 		);
 
 		//Username
@@ -414,6 +442,22 @@ class Manage_Members extends page_generic {
 				if($intCharClass == $intClass) $arrResults['class'][] = $intUserID;
 			}
 		}
+		
+		//Rank
+		$intRank = $this->in->get('rank', 0);
+		if($intRank){
+			$arrResults['rank'] = array();
+			
+			foreach($arrUserIDs as $intUserID){
+				if($intUserID == 3) {
+					$intCharRank = $this->pdh->get('member', 'rankid', array($intUserID));
+				}
+				
+				$intCharRank = $this->pdh->get('member', 'rankid', array($intUserID));
+				
+				if($intCharRank == $intRank) $arrResults['rank'][] = $intUserID;
+			}
+		}
 
 
 		//Now combine the search results
@@ -468,7 +512,9 @@ class Manage_Members extends page_generic {
 					});
 			});
 		", 'docready');
-
+		
+		$arrRaidgroups = $this->pdh->aget('raid_groups', 'name', false, array($this->pdh->get('raid_groups', 'id_list')));
+	
 		$arrMenuItems = array(
 			0 => array(
 				'type'	=> 'javascript',
@@ -493,6 +539,14 @@ class Manage_Members extends page_generic {
 				'perm'	=> true,
 				'name'	=> 'rankc',
 				'options' => array('rank', $ranks),
+			),
+			3 => array(
+				'type'	=> 'select',
+				'icon'	=> 'fa-users',
+				'text'	=> $this->user->lang('mass_raidgroup_change'),
+				'perm'	=> true,
+				'name'	=> 'groupc',
+				'options' => array('groups', $arrRaidgroups),
 			),
 		);
 

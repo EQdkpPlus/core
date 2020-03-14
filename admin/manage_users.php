@@ -40,6 +40,7 @@ class Manage_Users extends page_generic {
 				array('process' => 'overtake_permissions', 'value' => 'ovperms', 'csrf' => true),
 				array('process' => 'resolve_permissions', 'value' => 'resolveperms'),
 			),
+			'groupc' => array('process' => 'bulk_usergroups', 'csrf'=>true),
 			'search' =>	array('process' => 'search', 'csrf' => false),
 			'export_gdpr'  =>	array('process' => 'export_gdpr', 'csrf' => false),
 			'submit_search' =>	array('process' => 'process_search', 'csrf' => true),
@@ -125,6 +126,21 @@ class Manage_Users extends page_generic {
 		$this->pdh->process_hook_queue();
 		$this->display();
 	}
+	
+	public function bulk_usergroups(){		
+		$intGroupID = $this->in->get('groups',0);
+		
+		$sucs = array();
+		if($member_ids = $this->in->getArray('user_id','int')){
+			foreach($member_ids as $id){
+				$this->pdh->put('user_groups_users', 'add_user_to_group', array($id, $intGroupID));				
+			}
+		}
+		$this->core->message($this->user->lang('bulk_user_usergroupsadded_success'), $this->user->lang('success'), 'green');
+		$this->pdh->process_hook_queue();
+		$this->display();
+	}
+	
 
 
 	public function search(){
@@ -1042,6 +1058,8 @@ class Manage_Users extends page_generic {
 		$this->confirm_delete($strConfirmDeleteSingle, '', true, array('height'	=> 300,'function' => 'delete_single_warning', 'force_ajax' => true, 'custom_js' => 'delete_single(selectedID);'));
 		$this->jquery->selectall_checkbox('selall_user', 'user_id[]', $this->user->data['user_id']);
 
+		$arrUsergroups = $this->pdh->aget('user_groups', 'name', 0, array($this->pdh->get('user_groups', 'id_list')));
+		
 		$arrMenuItems = array(
 				0 => array(
 						'type'	=> 'javascript',
@@ -1079,6 +1097,14 @@ class Manage_Users extends page_generic {
 						'text'	=> $this->user->lang('confirm_email'),
 						'perm'	=> true,
 						'name'	=> 'bulk_confirmemail',
+				),
+				5 => array(
+						'type'	=> 'select',
+						'icon'	=> 'fa-users',
+						'text'	=> $this->user->lang('mass_usergroup_change'),
+						'perm'	=> true,
+						'name'	=> 'groupc',
+						'options' => array('groups', $arrUsergroups),
 				),
 		);
 
