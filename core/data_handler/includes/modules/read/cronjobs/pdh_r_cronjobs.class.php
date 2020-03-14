@@ -63,14 +63,16 @@ if ( !class_exists( "pdh_r_cronjobs" ) ) {
 	public function init(){
 			$this->cronjobs	= $this->pdc->get('pdh_cronjobs_table');
 
-			if($this->cronjobs !== NULL){
+			if($this->cronjobs !== NULL && is_array($this->cronjobs) && count($this->cronjobs) > 0){
 				return true;
 			}
 
+			$cronjobs = array();
+			
 			$objQuery = $this->db->query('SELECT * FROM __cronjobs ORDER BY id ASC');
 			if($objQuery){
 				while($drow = $objQuery->fetchAssoc()){
-					$this->cronjobs[$drow['id']] = array(
+					$cronjobs[$drow['id']] = array(
 						'id'				=> $drow['id'],
 						'start_time'		=> (int)$drow['start_time'],
 						'repeat'			=> (int)$drow['repeat'],
@@ -91,7 +93,8 @@ if ( !class_exists( "pdh_r_cronjobs" ) ) {
 					);
 				}
 
-				$this->pdc->put('pdh_cronjobs_table', $this->cronjobs, null);
+				$this->pdc->put('pdh_cronjobs_table', $cronjobs, null);
+				$this->cronjobs = $cronjobs;
 			}
 
 		}	//end init function
