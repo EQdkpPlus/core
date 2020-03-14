@@ -58,7 +58,7 @@ if (!class_exists("feed")) {
 			foreach ($this->items as $items){
 				$xml .= '		<item>' . "\n";
 				$xml .= '			<title>' . $this->specialchars($items->title, true) . '</title>' . "\n";
-				$xml .= '			<description>' . $this->addCDATA(preg_replace('/[\n\r]+/', ' ', $items->description)) . '></description>' . "\n";
+				$xml .= '			<description>' . $this->addCDATA(preg_replace('/[\n\r]+/', ' ', $items->description)) . '</description>' . "\n";
 				$xml .= '			<link>' . $this->specialchars($items->link) . '</link>' . "\n";
 				$xml .= '			<pubDate>' . $this->time->DateRSS($items->published) . '</pubDate>' . "\n";
 
