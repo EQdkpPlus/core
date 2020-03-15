@@ -128,10 +128,8 @@ class sql_update extends task {
 			$func			= $current->before_update_function();
 			$this->form		.= '<tr class="row'.$this->row_class.'"><td>'.(($func) ? '<i class="fa fa-check icon-green"></i>' : '<i class="fa fa-times icon-red"></i>').' '.$current->lang['before_update_function'].'</td></tr>';
 		}
-		
-		$this->do_sql($current->sqls, $current->version, $current->lang, $current->name, get_class($current));
+		$this->do_sql($current->sqls, $current->version, $current->lang, $current->name);
 
-		
 		if(method_exists($current, 'output_function')) {
 			$func			= $current->output_function();
 			$this->form 	.= '<tr class="row'.$this->row_class.'"><td>'.$func.'</td></tr>';
@@ -157,7 +155,7 @@ class sql_update extends task {
 		return $this->form."<br /><a href='".$this->root_path."maintenance/".$this->SID."'><button type=\"button\"><i class=\"fa fa-chevron-right\"></i> ".$this->user->lang('task_manager')."</button></a>";
 	}
 
-	protected function do_sql($sqls, $version, $lang, $task_name, $class_name) {		
+	protected function do_sql($sqls, $version, $lang, $task_name) {
 		//run all queries if this task is necessary
 		foreach($sqls as $key => $sql) {
 			$this->form .= '<tr><td>';
@@ -169,9 +167,7 @@ class sql_update extends task {
 			$this->form .=  $lang[$key].'</td></tr>';
 		}
 
-		//Mark Task as Done
-		$this->config->set($class_name, $this->time->time, 'maintenance_task');
-		
+
 		if($this->plugin_path) {
 			$this->db->prepare("UPDATE __plugins SET version = ? WHERE code = ?;")->execute($version, $this->plugin_path);
 		} elseif($this->game_path){

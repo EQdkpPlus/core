@@ -32,23 +32,7 @@ class sql_update_task extends task {
 	public $game_path = '';
 
 	public function is_necessary() {
-		$version = $this->get_old_version();
-			
-		$intStatus = 1;
-		if(version_compare(VERSION_INT, '2.3.29.0') > 0){
-			$intStatus = $this->config->get(get_class($this), 'maintenance_task');
-		}
-		if(!$intStatus || compareVersion($version, $this->version) == -1 AND $version) {
-			return true;
-		}
-		return false;
-	}
-
-	public function is_applicable() {
-		return true;
-	}
-	
-	public function get_old_version(){
+		$version = $this->config->get('plus_version');
 		if($this->plugin_path) {
 			$objQuery = $this->db->prepare("SELECT version, status FROM __plugins WHERE code =?")->execute($this->plugin_path);
 			if ($objQuery){
@@ -56,13 +40,17 @@ class sql_update_task extends task {
 				if($data['status'] != 1) return false;
 				$version = $data['version'];
 			} else $version = false;
-		} elseif($this->game_path){
+		}elseif($this->game_path){
 			$version = $this->config->get('game_version');
-		} else {
-			$version = $this->config->get('plus_version');
 		}
-		
-		return $version;
+		if(compareVersion($version, $this->version) == -1 AND $version) {
+			return true;
+		}
+		return false;
+	}
+
+	public function is_applicable() {
+		return true;
 	}
 
 	public function get_form_content() {
