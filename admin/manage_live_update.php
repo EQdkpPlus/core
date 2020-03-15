@@ -568,15 +568,6 @@ class Manage_Live_Update extends page_generic {
 		exit;
 	}
 
-	//Update Version-Number
-	/*
-	public function process_step12(){
-		$this->config->set('plus_version', $this->getNewVersion());
-		echo "true";
-		exit;
-	}
-	*/
-
 	public function process_refresh(){
 		$this->repo->CheckforPackages(true);
 		redirect('admin/manage_live_update.php'.$this->SID);

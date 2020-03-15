@@ -177,12 +177,12 @@ class EQDKPBackup extends page_generic{
 				$log_action = array(
 					'{L_TABLES}' => implode(', ', $arrTables),
 				);
-				$this->logs->add("action_backup_created", $log_action, $this->config->get('plus_version'), true);
+				$this->logs->add("action_backup_created", $log_action, VERSION_INT, true);
 				$this->core->message($this->user->lang('backup_store_success'),$this->user->lang('backup'),'green');
 
 			} else {
 				$this->core->message($this->user->lang('error'),$this->user->lang('backup'),'red');
-				$this->logs->add("action_backup_created", $log_action, $this->config->get('plus_version'), false);
+				$this->logs->add("action_backup_created", $log_action, VERSION_INT, false);
 			}
 
 		}

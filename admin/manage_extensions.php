@@ -580,7 +580,7 @@ class Manage_Extensions extends page_generic {
 				if ($this->pm->search($extension['plugin']) || $extension['plugin'] == 'pluskernel') continue;
 				$plugin_count++;
 				$row = 'grey_repo';
-				$dep['plusv']	= (version_compare($extension['dep_coreversion'], $this->config->get('plus_version'), '<='));
+				$dep['plusv']	= (version_compare($extension['dep_coreversion'], VERSION_INT, '<='));
 
 				$depout = "";
 				foreach($dep as $key => $depdata) {
@@ -1050,7 +1050,7 @@ class Manage_Extensions extends page_generic {
 				}
 
 				$dep = array();
-				$dep['plusv']	= (version_compare($extension['dep_coreversion'], $this->config->get('plus_version'), '<='));
+				$dep['plusv']	= (version_compare($extension['dep_coreversion'], VERSION_INT, '<='));
 
 				$depout = "";
 				foreach($dep as $key => $depdata) {

@@ -169,11 +169,47 @@ class sql_update extends task {
 
 
 		if($this->plugin_path) {
-			$this->db->prepare("UPDATE __plugins SET version = ? WHERE code = ?;")->execute($version, $this->plugin_path);
+			//Mark Task as done
+			$this->config->set('plugin_update_'.$this->plugin_path.'_'.$version, $this->time->time, 'maintenance_tasks');
+			
+			//Set to latest version, but only if version is greater than the current one
+			$lastUpdate = $this->config->get('plugin_update_'.$this->plugin_path, 'maintenance_tasks');
+			if(version_compare($version, $lastUpdate) > 0)$this->config->set('plugin_update_'.$this->plugin_path, $version, 'maintenance_tasks');
+			
+			//Update version, but only if version is greater than the current one
+			$objQuery = $this->db->prepare("SELECT version, status FROM __plugins WHERE code =?")->execute($this->plugin_path);
+			if ($objQuery){
+				$data = $objQuery->fetchAssoc();
+				if($data['status'] != 1) return false;
+				$lastUpdate = $data['version'];
+			}
+			if(version_compare($version, $lastUpdate) > 0) {
+				$this->db->prepare("UPDATE __plugins SET version = ? WHERE code = ?;")->execute($version, $this->plugin_path);
+			}
+
 		} elseif($this->game_path){
-			$this->config->set('game_version', $version);
+			//Mark Task as done
+			$this->config->set('game_update_'.$this->game_path.'_'.$version, $this->time->time, 'maintenance_tasks');
+			
+			//Set to latest version, but only if version is greater than the current one
+			$lastUpdate = $this->config->get('game_update_'.$this->game_path, 'maintenance_tasks');
+			if(version_compare($version, $lastUpdate) > 0)$this->config->set('game_update_'.$this->game_path, $version, 'maintenance_tasks');
+			
+			//Update version, but only if version is greater than the current one
+			$lastUpdate = $this->config->get('game_version');
+			if(version_compare($version, $lastUpdate) > 0) $this->config->set('game_version', $version);
+			
 		} else {
-			$this->config->set('plus_version', $version);
+			//Mark Task as done
+			$this->config->set('update_'.$version, $this->time->time, 'maintenance_tasks');	
+			//Set to latest version, but only if version is greater than the current one
+			$lastUpdate = $this->config->get('update_core', 'maintenance_tasks');
+			if(version_compare($version, $lastUpdate) > 0) $this->config->set('update_core', $version, 'maintenance_tasks');
+			
+			//Update version, but only if version is greater than the current one
+			$lastUpdate = $this->config->get('plus_version');
+			if(version_compare($version, $lastUpdate) > 0) $this->config->set('plus_version', $version);
+			
 			//Reset Repo
 			$this->pdh->put('repository', 'reset', array());
 			$this->pdh->process_hook_queue();

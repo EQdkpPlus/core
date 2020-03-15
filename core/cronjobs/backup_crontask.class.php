@@ -40,7 +40,7 @@ if ( !class_exists( "backup_crontask" ) ) {
 			$log_action = array(
 					'{L_TABLES}' => '{L_ALL}',
 			);
-			$this->logs->add("action_backup_created", $log_action, $this->config->get('plus_version'), $blnResult);
+			$this->logs->add("action_backup_created", $log_action, VERSION_INT, $blnResult);
 		}
 	}
 }

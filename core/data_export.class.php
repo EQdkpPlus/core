@@ -66,7 +66,7 @@ class content_export extends gen_class {
 			'name'				=> unsanitize($this->config->get('guildtag')),
 			'guild'				=> unsanitize($this->config->get('guildtag')),
 			'dkp_name'			=> $this->config->get('dkp_name'),
-			'version'			=> $this->config->get('plus_version'),
+			'version'			=> VERSION_INT,
 			'layout'			=> $this->config->get('eqdkp_layout'),
 			'base_layout'		=> $this->pdh->get_eqdkp_base_layout($this->config->get('eqdkp_layout')),
 		);

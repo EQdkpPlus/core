@@ -32,18 +32,39 @@ class sql_update_task extends task {
 	public $game_path = '';
 
 	public function is_necessary() {
-		$version = $this->config->get('plus_version');
 		if($this->plugin_path) {
+			//plugin
 			$objQuery = $this->db->prepare("SELECT version, status FROM __plugins WHERE code =?")->execute($this->plugin_path);
 			if ($objQuery){
 				$data = $objQuery->fetchAssoc();
 				if($data['status'] != 1) return false;
-				$version = $data['version'];
-			} else $version = false;
+				$currentVersion = $data['version'];
+			} else $currentVersion = false;
+			
+			$version = $this->config->get('plugin_update_'.$this->plugin_path, 'maintenance_tasks');
+			if($version === false) {
+				$version = $currentVersion;
+			}
+			$wasAlreadyDone = $this->config->get('plugin_update_'.$this->plugin_path.'_'.$this->version, 'maintenance_tasks');
 		}elseif($this->game_path){
-			$version = $this->config->get('game_version');
+			//game
+			$currentVersion = $this->config->get('game_version');
+			$version = $this->config->get('game_update_'.$this->game_path, 'maintenance_tasks');
+			if($version === false) {
+				$version = $currentVersion;
+			}
+			$wasAlreadyDone = $this->config->get('game_update_'.$this->game_path.'_'.$this->version, 'maintenance_tasks');
+		} else {
+			//core
+			$currentVersion = $this->config->get('plus_version');
+			$version = $this->config->get('update_core', 'maintenance_tasks');
+			if($version === false) {
+				$version = $currentVersion;
+			}
+			$wasAlreadyDone = $this->config->get('update_'.$this->version, 'maintenance_tasks');
 		}
-		if(compareVersion($version, $this->version) == -1 AND $version) {
+		
+		if(!$wasAlreadyDone && compareVersion($version, $this->version) == -1 AND $version) {
 			return true;
 		}
 		return false;

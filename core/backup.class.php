@@ -85,7 +85,7 @@ class backup extends gen_class {
 		//Lets write our header
 		$data = '';
 		$data .= "-- EQDKP-PLUS SQL Dump " . "\n";
-		$data .= "-- version " . $this->config->get('plus_version') . "\n";
+		$data .= "-- version " . VERSION_INT . "\n";
 		$data .= "-- ".EQDKP_PROJECT_URL . "\n";
 		$data .= "-- \n";
 		$data .= "-- Host: " . (!empty($this->dbhost) ? $this->dbhost : 'localhost') . "\n";
@@ -199,7 +199,7 @@ class backup extends gen_class {
 		$data['time']			= $strTime;
 		$data['uncomplete']		= $blnUncomplete;
 		$data['tables']			= ($arrTables) ? $arrTables : 'all';
-		$data['eqdkp_version']	= $this->config->get('plus_version');
+		$data['eqdkp_version']	= VERSION_INT;
 		$data['table_prefix']	= $this->table_prefix;
 
 		$result = $this->pfh->putContent($this->pfh->FolderPath('backup/meta', 'eqdkp').$strFilename.'.meta.php', serialize($data));
