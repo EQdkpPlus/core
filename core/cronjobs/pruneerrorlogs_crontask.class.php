@@ -39,6 +39,7 @@ if ( !class_exists( "pruneerrorlogs_crontask" ) ) {
 						'lang'	=> 'Delete Error Logs older than x days',
 						'type'	=> 'int',
 						'size'	=> 3,
+						'default' => 30,
 				),
 		);
 
