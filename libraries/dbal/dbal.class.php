@@ -287,9 +287,9 @@ abstract class Database extends gen_class {
 
 		if(defined('USER_INITIALIZED') && !$this->blnInConstruct && !registry::get_const("lite_mode") && registry::fetch('user')->check_auth('a_', false)) {
 			$blnDebugDisabled = (DEBUG < 2) ? true : false;
-			$strEnableDebugMessage = "<li><a href=\"".registry::get_const("server_path")."admin/manage_settings.php".registry::get_const('SID')."\" target=\"_blank\">Go to your settings, enable Debug Level > 1</a> and <a href=\"javascript:location.reload();\">reload this page.</a></li>";
-
-			registry::register('core')->message("<b>SQL Error (".$strErrorID.")</b> <ul>".(($blnDebugDisabled) ? $strEnableDebugMessage : '<li>See error message on the bottom</li>')."<li><a href=\"".registry::get_const("server_path")."admin/manage_logs.php".registry::get_const('SID')."&amp;error=db#errors\">Check your error logs</a>.</li></ul>", 'Error', 'red');
+			$strEnableDebugMessage = "<li>- <a href=\"".registry::get_const("server_path")."admin/manage_settings.php".registry::get_const('SID')."\" target=\"_blank\">Debug mode: to enable, go to your settings, enable Debug Level > 1</a> and <a href=\"javascript:location.reload();\">reload this page.</a></li>";
+			
+			registry::register('core')->message("<b>SQL Error (".$strErrorID.")</b> <ul><li>- <a href=\"".registry::get_const("server_path")."admin/manage_logs.php".registry::get_const('SID')."&fatal_error_id=".$strErrorID."&search_fatal_id\">Click here to view the detailed error message</a>.</li>".(($blnDebugDisabled) ? $strEnableDebugMessage : '<li>- <a href="#plus_debug_tabs">Debug mode: see error message on the bottom (Tab '.$this->strDebugPrefix.'sql_error)</a></li>')."</ul>", 'Error', 'red');
 			$sys_message = true ;
 		}
 	}
@@ -596,9 +596,9 @@ abstract class DatabaseStatement {
 
 		if(!registry::get_const("lite_mode") && registry::fetch('user')->check_auth('a_', false)) {
 			$blnDebugDisabled = (DEBUG < 2) ? true : false;
-			$strEnableDebugMessage = "<li><a href=\"".registry::get_const("server_path")."admin/manage_settings.php".registry::get_const('SID')."\" target=\"_blank\">Go to your settings, enable Debug Level > 1</a> and <a href=\"javascript:location.reload();\">reload this page.</a></li>";
-
-			registry::register('core')->message("<b>SQL Error (".$strErrorID.")</b> <ul>".(($blnDebugDisabled) ? $strEnableDebugMessage : '<li>See error message on the bottom</li>')."<li><a href=\"".registry::get_const("server_path")."admin/manage_logs.php".registry::get_const('SID')."&amp;error=db#errors\">Check your error logs</a></li></ul>", 'Error', 'red');
+			$strEnableDebugMessage = "<li>- <a href=\"".registry::get_const("server_path")."admin/manage_settings.php".registry::get_const('SID')."\" target=\"_blank\">Debug mode: to enable, go to your settings, enable Debug Level > 1</a> and <a href=\"javascript:location.reload();\">reload this page.</a></li>";
+			
+			registry::register('core')->message("<b>SQL Error (".$strErrorID.")</b> <ul><li>- <a href=\"".registry::get_const("server_path")."admin/manage_logs.php".registry::get_const('SID')."&fatal_error_id=".$strErrorID."&search_fatal_id\">Click here to view the detailed error message</a>.</li>".(($blnDebugDisabled) ? $strEnableDebugMessage : '<li>- <a href="#plus_debug_tabs">Debug mode: see error message on the bottom (Tab '.$this->strDebugPrefix.'sql_error)</a></li>')."</ul>", 'Error', 'red');
 		}
 		$exception = new Exception();
 		$this->objLogger->log($this->strDebugPrefix."sql_error", $strErrorID, $strErrorMessage, $strQuery, $strErrorCode, registry::get_const('dbname'), $this->strTablePrefix, $exception->getTraceAsString());
