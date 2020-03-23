@@ -25,7 +25,7 @@ $eqdkp_root_path = './../';
 include_once($eqdkp_root_path . 'common.php');
 
 class reset_eqdkp extends page_generic {
-	private $resets		= array('raids', 'events', 'items', 'itempools', 'adjustments', 'multipools', 'chars', 'plugins', 'user', 'logs', 'calendar');
+	private $resets		= array('raids', 'events', 'items', 'itempools', 'adjustments', 'multipools', 'chars', 'plugins', 'portal', 'user', 'logs', 'calendar');
 	private $dependency	= array(
 		'events'	=> array('raids', 'items', 'multipools', 'calendar'),
 		'raids'		=> array('items'),
@@ -209,6 +209,27 @@ class reset_eqdkp extends page_generic {
 	public function reset__plugins(){
 		foreach($this->pm->get_plugins(PLUGIN_INSTALLED) as $value){
 			$this->pm->uninstall($value);
+		}
+	}
+	
+	public function reset__portal(){
+		//Delete all Portal-Layouts
+		$arrLayouts = $this->pdh->get('portal_layouts', 'id_list', array());
+		foreach ($arrLayouts as $intLayoutID){
+			if($intLayoutID == 1) continue;
+			
+			$this->pdh->put('portal_layouts', 'delete', array($intLayoutID));
+		}
+		
+		//Now delete all Portal Modules
+		$arrModules = $this->pdh->aget('portal', 'portal', 0, array($this->pdh->get('portal', 'id_list')));
+		foreach($arrModules as $id => $value){
+			if((int)$value['child'] === 1) continue;
+			$path = $value['path'];
+			$plugin = $value['plugin'];
+			
+			$this->portal->uninstall($path, $plugin);
+			
 		}
 	}
 
