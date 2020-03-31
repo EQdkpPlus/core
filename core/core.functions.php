@@ -1200,7 +1200,7 @@ function da($TheArray, $blnPostDebugLine=false){ // Note: the function is recurs
 	if($blnPostDebugLine){
 		$arrBacktrace = debug_backtrace();
 		if($arrBacktrace && isset($arrBacktrace[1])){
-			echo "<tr><td  bgcolor='#efefef'>Debug called in ".$arrBacktrace[1]['file']." line ".$arrBacktrace[1]['line']."</td></tr>";
+			echo "<tr><td  bgcolor='#efefef' colspan=\"2\">Debug called in ".$arrBacktrace[1]['file']." line ".$arrBacktrace[1]['line']."</td></tr>";
 		}
 	}
 	
