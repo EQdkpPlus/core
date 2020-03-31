@@ -169,6 +169,8 @@ class calendarevent_pageobject extends pageobject {
 					#update_status($eventid, $memberid, $memberrole='', $signupstatus='', $raidgroup=0, $signed_memberid=0, $note='', $signedbyadmin=0)
 					$raidgroup		= $this->pdh->get('calendar_raids_attendees', 'raidgroup', array($this->url_id, $attendeeid));
 					$this->pdh->put('calendar_raids_attendees', 'update_status', array($this->url_id, $attendeeid, $newrole, $newstatus, $raidgroup, $attendeeid));
+					//Send Notification
+					$this->notify_statuschange($this->url_id, array($attendeeid), $newstatus);
 				}
 				$this->pdh->process_hook_queue();
 			}
