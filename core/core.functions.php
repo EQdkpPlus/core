@@ -1137,7 +1137,7 @@ function da_($array){
 */
 function d($content="-" ){
 	if(is_array($content)){
-		return da($content);
+		return da($content, true);
 	}
 	if (is_object($content)) {
 		echo "<pre>";
@@ -1176,7 +1176,7 @@ function d($content="-" ){
  * @param Array $TheArray
  * @return mixed
  */
-function da($TheArray){ // Note: the function is recursive
+function da($TheArray, $blnPostDebugLine=false){ // Note: the function is recursive
 	if(!is_array($TheArray)){
 		return "no array";
 	}
@@ -1196,6 +1196,14 @@ function da($TheArray){ // Note: the function is recursive
 		echo "</td>\n";
 		echo "</tr>\n";
 	}
+	
+	if($blnPostDebugLine){
+		$arrBacktrace = debug_backtrace();
+		if($arrBacktrace && isset($arrBacktrace[1])){
+			echo "<tr><td  bgcolor='#efefef'>Debug called in ".$arrBacktrace[1]['file']." line ".$arrBacktrace[1]['line']."</td></tr>";
+		}
+	}
+	
 	echo "</table>\n";
 }
 
