@@ -1125,4 +1125,6 @@ $lang = array(
 "embedd_consent_ok" => "Laden und Entscheidung speichern.",
 "new_char_admin_associate_info" => "Der erstellte Charakter muss Dir nach der Erstellung von einem Administrator zugewiesen werden und ist deshalb nicht sofort in deiner Charakterliste sichtbar.",
 "password_leaked" => "Das von dir verwendete Passwort ist durch mindestens einen Einbruch bekannt und somit unsicher. Bitte verwende ein neues und sicheres Passwort.",
+"article_category_empty" => "Diese Artikelkategorie enthält noch keine Artikel.",
+		
 );
