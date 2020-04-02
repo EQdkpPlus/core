@@ -137,6 +137,10 @@ class ManageAutoPoints extends page_generic {
 		$replace_arr = $this->apa->get_calc_args();
 		$replace_arr[] = 'Var';
 		$replace_arr[] = 'pow';
+		$replace_arr[] = 'round';
+		$replace_arr[] = 'floor';
+		$replace_arr[] = 'ceil';
+		$replace_arr[] = 'abs';
 		$re_ar = array();
 		foreach($replace_arr as $key => $na) {
 			$re_ar['~'.$key.'~'] = $na;
