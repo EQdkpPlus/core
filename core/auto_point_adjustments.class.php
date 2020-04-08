@@ -293,11 +293,11 @@ if ( !defined('EQDKP_INC') ){
 		 *
 		 * @return 		float
 		 */
-		public function get_value($module, $dkp_id, $date=0, $data=array(), $blnRecursiv=false) {
+		public function get_value($module, $dkp_id, $date=0, $data=array(), $blnRecursiv=false, $debug=false) {
 			if(!$date) $date = $this->time->time;
 			$apa_id = $this->get_apa_id($dkp_id, $module);
 			$last_run = $this->get_apa_type($this->apa_tab[$apa_id]['type'])->get_last_run($date, $apa_id);
-
+			
 			//Check if update needed
 			if($this->needs_update($module, $data['id'])){
 				$this->get_apa_type($this->apa_tab[$apa_id]['type'])->reset_cache($apa_id, $module, $data['id']);
@@ -309,7 +309,7 @@ if ( !defined('EQDKP_INC') ){
 			}
 
 			//$arrResult=0: value, 1: bln was new calculated
-			list($fltVal, $blnNewCalculated, $decay_adj) = $this->get_apa_type($this->apa_tab[$apa_id]['type'])->get_value($apa_id, $last_run, $module, $dkp_id, $data, $date);
+			list($fltVal, $blnNewCalculated, $decay_adj) = $this->get_apa_type($this->apa_tab[$apa_id]['type'])->get_value($apa_id, $last_run, $module, $dkp_id, $data, $date, $debug);
 
 			$this->cached_data[$apa_id][$last_run][$module.'_'.$data['id']] = $fltVal;
 			if(!$blnRecursiv && $blnNewCalculated){

@@ -120,7 +120,7 @@ if ( !class_exists( "apa_onetime_current" ) ) {
 			return $this->last_run;
 		}
 		public function get_next_run($apa_id) { return 0; }
-		public function get_value($apa_id, $cache_date, $module, $dkp_id, $data, $refdate) { return; }
+		public function get_value($apa_id, $cache_date, $module, $dkp_id, $data, $refdate, $debug=false) { return; }
 
 		public function recalculate($apa_id){
 			// check for points over cap for each character
