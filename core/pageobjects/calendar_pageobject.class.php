@@ -415,7 +415,9 @@ class calendar_pageobject extends pageobject {
 
 		//RSS-Feed for next Raids
 		$this->tpl->add_rssfeed($this->config->get('guildtag').' - Calendar Raids', 'calendar_raids.xml', array('po_calendarevent'));
-
+		$this->tpl->add_rssfeed($this->config->get('guildtag').' - Calendar Events', 'calendar_events.xml', array('po_calendarevent'));
+		$this->tpl->add_rssfeed($this->config->get('guildtag').' - Calendar all Entries', 'calendar_all.xml', array('po_calendarevent'));
+		
 		//raid-list
 		$settings = $this->pdh->get_page_settings('calendar', 'hptt_calendar_raidlist');
 		$view_list = $this->pdh->get('calendar_events', 'id_list', array(true));
