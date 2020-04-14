@@ -68,7 +68,7 @@ if (!class_exists('exchange_points')){
 					$filterid = intval($params['get']['filterid']);
 				}
 
-				return $myexp->export((isset($arrBooleansMemberdata['items']) && $arrBooleansMemberdata['items']), (isset($arrBooleansMemberdata['adjustments']) && $arrBooleansMemberdata['adjustments']), $filter, $filterid, $blnIncludeHTML, $blnAdditionalColumns);
+				return $myexp->export((isset($arrBooleansMemberdata['items']) && $arrBooleansMemberdata['items']), (isset($arrBooleansMemberdata['adjustments']) && $arrBooleansMemberdata['adjustments']), $filter, $filterid, $blnIncludeHTML, $blnAdditionalColumns, $isAPITokenRequest);
 			} else {
 				return $this->pex->error('access denied');
 			}
