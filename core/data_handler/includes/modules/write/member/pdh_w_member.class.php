@@ -536,7 +536,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 			$objQuery = $this->db->prepare("UPDATE __members :p WHERE member_id =?")->set(array(
 					'points_apa' => serialize($arrCurrentPoints),
 			))->execute($memberID);
-			$this->pdh->enqueue_hook('member_update', array($memberID), array('action' => 'update', 'apa' => true));
+			$this->pdh->enqueue_hook('member_update', array($memberID), array('action' => 'update', 'apa' => true, 'members' => array($memberID)));
 			return ($objQuery) ? true : false;
 		}
 
@@ -554,7 +554,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 			} else {
 				$this->db->prepare("UPDATE __members SET apa_points='' WHERE member_id=?;")->execute($memberID);
 			}
-			$this->pdh->enqueue_hook('member_update', array($memberID), array('action' => 'update', 'members' => array($memberID)));
+			$this->pdh->enqueue_hook('member_update', array($memberID), array('action' => 'update', 'apa' => true, 'members' => array($memberID)));
 			return true;
 		}
 
