@@ -251,7 +251,7 @@ class calendar_pageobject extends pageobject {
 							'start'			=> $startdate_out,
 							'end'			=> $enddate_out,
 							'allDay'		=> $allday,
-							'note'			=> $comp->getProperty('description', 1),
+							'note'			=> str_replace('\n', "<br />", ($comp->getProperty('description', 1))),
 							'color'			=> $eventcolor.' !important',
 							'textColor'		=> $eventcolor_txt.' !important',
 							'className'		=> 'calendarevent_'.$calender_id,
