@@ -1914,6 +1914,8 @@ $lang = array(
 		"core_sett_f_login_oauth_useremailparam"=> 'Custom Oauth-Provider - Index for Email address',
 		"core_sett_f_help_login_oauth_useremailparam"=> 'Insert the index which contains the Email address. Nested Indices can be used by seperating the keys with colons.',
 		"core_sett_f_help_login_oauth_clientid" => 'As Redirect-URI use '.register('env')->buildLink().'index.php/auth-endpoint/?lmethod=oauth',
+		"core_sett_f_login_oauth_logouturl" => 'Custom Oauth-Provider - Logout-URL',
+		"core_sett_f_help_login_oauth_logouturl" => 'Insert an URL, to which users with connected Oauth Account should be redirected after Logout.',
 		"core_sett_f_dkp_easymode" => "Enable simple mode for point accounts",
 		"core_sett_f_help_dkp_easymode" => "When simple mode is enabled, no itempools can be created. Also, events can be assigned to only one point account at a time.",
 		"dkp_easymode_active" => "The simple mode for point accounts is enabled. This means that no own Itempools can be created. Also, Events can only be assigned to one point account at a time.<br />These limitation makes distributing points easier. To disable these limitation, you can disable the simple mode at the  <a href='manage_settings.php#fragment-points'>Settings</a>.",

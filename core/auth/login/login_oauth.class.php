@@ -27,7 +27,7 @@ class login_oauth extends gen_class {
 	private $oauth_loaded = false;
 	private $redirURL = "";
 
-	private $appid, $appsecret, $scope, $name, $passToken, $userIDparam, $usernameparam, $useremailparam = false;
+	private $appid, $appsecret, $scope, $name, $passToken, $userIDparam, $usernameparam, $useremailparam, $logoutUrl = false;
 
 	private $paramname = 'access_token';
 
@@ -61,6 +61,7 @@ class login_oauth extends gen_class {
 		$this->usernameparam 			= $this->config->get('login_oauth_usernameparam');
 		$this->useremailparam 			= $this->config->get('login_oauth_useremailparam');
 		$this->paramname				= $this->config->get('login_oauth_tokenparam');
+		$this->logoutUrl				= $this->config->get('login_oauth_logouturl');
 	}
 
 	public function settings(){
@@ -104,6 +105,9 @@ class login_oauth extends gen_class {
 				),
 				'login_oauth_useremailparam' => array(
 						'type'	=> 'text',
+				),
+				'login_oauth_logouturl' => array(
+						'type'	=> 'url',
 				),
 
 		);
@@ -306,6 +310,16 @@ class login_oauth extends gen_class {
 	 * @return bool
 	 */
 	public function logout(){
+		//Has user connected account?
+		$arrAuthAccount = $this->pdh->get('user', 'auth_account', array($this->user->id));
+		if(isset($arrAuthAccount['oauth']) && strlen($arrAuthAccount['oauth']) && strlen($this->logoutUrl)){
+			//Destroy EQdkp Session
+			$this->user->destroy();
+			
+			redirect($this->logoutUrl, false, true);
+			exit;
+		}
+		
 		return true;
 	}
 

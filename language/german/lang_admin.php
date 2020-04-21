@@ -1919,6 +1919,8 @@ $lang = array(
 		"core_sett_f_help_login_oauth_useremailparam"=> 'Gebe den Index an, der die Email-Adresse enthält. Tieferliegende Indizes können mit Doppelpunkt getrennt angegeben werden.',
 		"core_sett_f_help_login_oauth_clientid" => "Als Redirect-URI verwende ".register('env')->buildLink().'index.php/auth-endpoint/?lmethod=oauth',
 		"core_sett_f_login_oauth_tokenparam" => 'Eigener Oauth-Provider - Name des Übergabe-Parameters',
+		"core_sett_f_login_oauth_logouturl" => 'Eigener Oauth-Provider - Logout-URL',
+		"core_sett_f_help_login_oauth_logouturl" => 'Trage eine URL ein, auf die Benutzer mit einem verknüpften Oauth-Account nach dem Logout weitergeleitet werden soll.',
 		"core_sett_f_dkp_easymode" => "Einfacher Modus für Punktekonten aktivieren",
 		"core_sett_f_help_dkp_easymode" => "Im einfachen Modus können keine Itemkonten angelegt werden, und Events immer nur einem Punktekonto zugeordnet sein",
 		"dkp_easymode_active" => "Der einfache Punktemodus ist aktiviert. Im einfachen Punktemodus können keine Itemkonten angelegt werden, diese werden direkt dem jeweiligen Punktekonto zugeordnet. Auch können Events nur einem Punktekonto gleichzeitig zugeordnet sein.<br />Diese Einschränkungen vereinfachen die Punktevergabe. Du kannst diese Einschränkungen deaktivieren, wenn du in den <a href='manage_settings.php#fragment-points'>Einstellungen</a> den einfachen Punktemodus deaktivierst.",
