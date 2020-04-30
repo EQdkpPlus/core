@@ -44,7 +44,9 @@ if (!class_exists('exchange_add_event')){
 					//Check required values
 					if (!isset($arrBody['event_name']) || !strlen($arrBody['event_name'])) return $this->pex->error('required data missing', 'event_name');
 					if (!isset($arrBody['event_value']) || !strlen($arrBody['event_value'])) return $this->pex->error('required data missing', 'event_value');
-
+					#if (!isset($arrBody['multidkp_poolid']) || !strlen($arrBody['multidkp_poolid'])) return $this->pex->error('required data missing', 'multidkp_poolid');
+					
+					
 					//Event Value
 					$fltEventValue = (float)$arrBody['event_value'];
 
@@ -57,6 +59,20 @@ if (!class_exists('exchange_add_event')){
 
 					$mixEventID = $this->pdh->put('event', 'add_event', array($strEventName, $fltEventValue, '', $intDefaultItempool));
 					if (!$mixEventID) return $this->pex->error('an error occured');
+					
+					//Add the event to an MultiDKP Pool
+					$arrPools = $this->pdh->get('multidkp', 'id_list', array());
+					if(isset($arrBody['multidkp_poolid'])){
+						$intMultidkpPool = intval($arrBody['multidkp_poolid']);
+						if(!in_array($intMultidkpPool, $arrPools)){
+							$intMultidkpPool = intval($arrPools[0]);
+						}
+					} else {
+						$intMultidkpPool = intval($arrPools[0]);
+					}
+					
+					$this->pdh->put('multidkp', 'add_event2multidkp', array($mixEventID, $intMultidkpPool));
+					
 					$this->pdh->process_hook_queue();
 
 					return array('event_id' => $mixEventID);
