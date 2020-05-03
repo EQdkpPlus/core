@@ -98,7 +98,7 @@ class user extends gen_class {
 		if($strLanguage != ""){
 			$this->setSessionVar("lang", substr($strLanguage, 0, 20));
 		}
-		if($intStyleID > 0 && $this->data['user_id'] == ANONYMOUS){
+		if($intStyleID > 0){
 			$this->setSessionVar("style", $intStyleID);
 		}
 
@@ -122,11 +122,11 @@ class user extends gen_class {
 		//-----------------------------
 		//END Language
 
-
 		//START Style
 		//-----------------------------
 		//What Style-ID should be used?
 		$intStyleID = (isset($this->data['session_vars']['style']) && strlen($this->data['session_vars']['style'])) ? $this->data['session_vars']['style'] : $intStyleID;
+		
 		if (intval($intStyleID) > 0){
 			$intUserStyleID = (int)$intStyleID;
 		} elseif ($this->data['user_id'] == ANONYMOUS){
