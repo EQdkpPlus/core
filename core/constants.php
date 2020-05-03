@@ -61,7 +61,7 @@ define('SQL_UNINSTALL',	2);
 //Things user can modify at config.php
 
 //Max Images in Useravatar Folder
-if(!defined('MAX_FILES_USERFOLDER')) define('MAX_FILES_USERFOLDER', 20);
+if(!defined('MAX_FILES_USERFOLDER')) define('MAX_FILES_USERFOLDER', 30);
 
 //Max concurrent sessions from one IP with the same Browser
 if(!defined('MAX_CONCURRENT_SESSIONS')) define('MAX_CONCURRENT_SESSIONS', 50);
