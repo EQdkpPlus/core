@@ -71,7 +71,10 @@ if (!class_exists('exchange_add_event')){
 						$intMultidkpPool = intval($arrPools[0]);
 					}
 					
-					$this->pdh->put('multidkp', 'add_event2multidkp', array($mixEventID, $intMultidkpPool));
+					$blnNoAttendance = (isset($arrBody['event_no_attendance'])) ? (int)$arrBody['event_no_attendance'] : 0;
+					
+					
+					$this->pdh->put('multidkp', 'add_event2multidkp', array($mixEventID, $intMultidkpPool, $blnNoAttendance));
 					
 					$this->pdh->process_hook_queue();
 

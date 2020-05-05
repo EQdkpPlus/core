@@ -44,10 +44,13 @@ if (!class_exists('exchange_events')){
 					);
 					$arrMultidkpPools = $this->pdh->get('event', 'multidkppools', array($eventid));
 					foreach($arrMultidkpPools as $mdkp){
+						$arrNotAttendance = $this->pdh->get('multidkp', 'no_attendance', array($mdkp));
+						
 						$arrPools['multidkp_pool:'.$mdkp] = array(
 							'id'				=> $mdkp,
 							'name'				=> unsanitize($this->pdh->get('multidkp', 'name', array($mdkp))),
 							'desc'				=> unsanitize($this->pdh->get('multidkp', 'desc', array($mdkp))),
+							'attendance'		=> in_array($eventid, $arrNotAttendance) ? 0 : 1
 						);
 					}
 					$out['event:'.$eventid]['multidkp_pools'] = $arrPools;
