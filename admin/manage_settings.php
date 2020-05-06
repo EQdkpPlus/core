@@ -87,6 +87,11 @@ class admin_settings extends page_generic {
 	}
 
 	public function display(){
+		if($this->in->exists('saved')){
+			// The Saved-Message
+			$this->core->message($this->user->lang('pk_succ_saved'), $this->user->lang('pk_save_title'), 'green');
+		}
+		
 		// Build the default game array
 		$games = array();
 		foreach($this->game->get_games() as $sgame){
@@ -1098,14 +1103,15 @@ class admin_settings extends page_generic {
 				$itt_parserlist	= $this->itt->get_parserlist($this->in->get('default_game', 'dummy'));
 				$this->config->set($this->itt->changed_prio1($this->in->get('default_game', 'dummy'), key($itt_parserlist)));
 				$this->display();
-				redirect('admin/manage_settings.php'.$this->SID);		// we need to reload cause of the per-game settings
+				redirect('admin/manage_settings.php'.$this->SID.'&saved');		// we need to reload cause of the per-game settings
 			}
 
 			//clear cache now
 			$this->pdc->flush();
-
-			// The Saved-Message
-			$this->core->message($this->user->lang('pk_succ_saved'), $this->user->lang('pk_save_title'), 'green');
+			
+			$this->config->__destruct();
+			
+			redirect('admin/manage_settings.php'.$this->SID.'&saved');
 		}
 
 		//Hint for ReCaptcha
