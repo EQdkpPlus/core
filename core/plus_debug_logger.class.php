@@ -574,7 +574,7 @@ if ( !defined('EQDKP_INC') ){
 		}
 
 		public function delete_logfile($type) {
-			$this->pfh->Delete($this->logfile_folder.$type.'.log');
+			$this->pfh->Delete($this->logfile_folder.$type.((strpos($type, '.log') !== false) ? '' : '.log'));
 			unset($this->logfile_info[$type]);
 			$this->logfile_info_changed = true;
 			return true;
