@@ -1102,7 +1102,7 @@ class admin_settings extends page_generic {
 				$this->settings_saved = true;
 				$itt_parserlist	= $this->itt->get_parserlist($this->in->get('default_game', 'dummy'));
 				$this->config->set($this->itt->changed_prio1($this->in->get('default_game', 'dummy'), key($itt_parserlist)));
-				$this->display();
+				#$this->display();
 				redirect('admin/manage_settings.php'.$this->SID.'&saved');		// we need to reload cause of the per-game settings
 			}
 
