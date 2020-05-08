@@ -355,9 +355,6 @@ class register_pageobject extends pageobject {
 			}
 		}
 
-		//Notify Admins
-		$this->ntfy->add('eqdkp_user_new_registered', $user_id, $this->in->get('username'), $this->root_path.'admin/manage_users.php?u='.$user_id, false, "", false, array("a_users_man"));
-
 		if(!$blnSpamCheckOk && $this->config->get('stopforumspam_use') && $this->config->get('stopforumspam_action') == 'disable'){
 			$this->pdh->put('user', 'activate', array($user_id, 0));
 		}

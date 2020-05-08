@@ -52,8 +52,8 @@ if(!class_exists('pdh_w_user')) {
 				$this->log_insert('action_user_added', $log_action, $user_id, sanitize($arrData['username']));
 			}
 
-			$this->hooks->process('user_inserted', array('user_id' => $user_id, 'username' => $arrData['username'], 'data' => $arrData));
-
+			$this->hooks->process('user_inserted', array('user_id' => $user_id, 'username' => $arrData['username'], 'data' => $arrData));		
+			
 			//Put him to the default group
 			if ($this->pdh->get('user_groups', 'standard_group') && $toDefaultGroup){
 				$this->pdh->put('user_groups_users', 'add_user_to_group', array($user_id, $this->pdh->get('user_groups', 'standard_group'), false));
@@ -61,6 +61,9 @@ if(!class_exists('pdh_w_user')) {
 			$this->pdh->enqueue_hook('user');
 			$this->pdh->enqueue_hook('styles_update');
 
+			//Notify Admins
+			$this->ntfy->add('eqdkp_user_new_registered', $user_id, $arrData['username'], $this->root_path.'admin/manage_users.php?u='.$user_id, false, "", false, array("a_users_man"));			
+			
 			return $user_id;
 		}
 
