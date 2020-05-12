@@ -53,9 +53,11 @@ if (!class_exists("jquery")) {
 			$this->path			= $this->server_path."libraries/jquery/";
 
 			// Load the core css & js files
-			$minified_or_not	= (DEBUG) ? '' : '.min';
 			$this->tpl->css_file($this->path.'core/core.css');
-			$this->tpl->js_file($this->path.'core/core'.$minified_or_not.'.js', 'direct', -100);
+			$this->tpl->js_file($this->path.'core/core'.((DEBUG) ? '' : '.min').'.js', 'direct', -100);
+			if(DEBUG){
+				$this->tpl->js_file($this->path.'core/jquery-migrate.js', 'direct', -99);
+			}
 
 			// add a few variables to javascript (head tag)
 			$this->tpl->add_js("var mmocms_root_path = '".$this->server_path."';", 'head_top');
