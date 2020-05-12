@@ -3281,6 +3281,6 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 
 
 
-// Import style rules & variables
+/* Import style rules & variables */
 @_path: replace(@eqdkpTemplateImagePath, '(\.\./)|(images/)', '');
 @import (once, optional, less) '@{_path}jquery.less';
