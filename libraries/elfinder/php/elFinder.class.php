@@ -5119,7 +5119,7 @@ var go = function() {
      */
     public static function procExec($command, &$output = '', &$return_var = -1, &$error_output = '')
     {
-
+		//Added by GodMod
         return false;
 
 		static $allowed = null;
