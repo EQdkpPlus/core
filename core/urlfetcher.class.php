@@ -70,7 +70,7 @@ class urlfetcher  extends gen_class {
 		$this->responseCode		= 0;
 		$this->responseHeader	= "";
 		$this->responseBody		= 0;
-
+		
 		$this->method = ($this->method) ? $this->method : 'fopen';
 		if (!$conn_timeout) $conn_timeout = $this->conn_timeout;
 		if (!$timeout) $timeout = $this->timeout;
@@ -92,7 +92,7 @@ class urlfetcher  extends gen_class {
 		if(is_array($data)){
 			$data = http_build_query($data, '', '&');
 		}
-
+		
 		$this->method = ($this->method) ? $this->method : 'fopen';
 		if (!$conn_timeout) $conn_timeout = $this->conn_timeout;
 		if (!$timeout) $timeout = $this->timeout;
@@ -107,6 +107,8 @@ class urlfetcher  extends gen_class {
 	 * @return string
 	 */
 	private function get_curl($geturl, $header, $conn_timeout, $timeout, $blnIgnoreResponseCode=false){
+		$fltStart = microtime(true);
+		
 		$curlOptions = array(
 			CURLOPT_URL				=> $geturl,
 			CURLOPT_USERAGENT		=> $this->useragent,
@@ -137,7 +139,8 @@ class urlfetcher  extends gen_class {
 			$this->pdl->log('urlfetcher', 'Curl Info: '.print_r($curl_error, true));
 			$this->pdl->log('urlfetcher', 'Response Code: '.$code);
 			$this->pdl->log('urlfetcher', 'Response: '.strlen($body).'; First 200 Chars: '.htmlspecialchars(substr($body, 0, 200)));
-
+			$this->pdl->log('urlfetcher', 'Request Time: '.round(microtime(true) - $fltStart, 4).'s');
+			
 			$this->responseStatus	= (intval($code) >= 400) ? false : true;
 			$this->responseCode		= intval($code);
 			$this->responseHeader	= $this->parseHeaders($this->responseHeader);
@@ -211,7 +214,7 @@ class urlfetcher  extends gen_class {
 			$this->pdl->log('urlfetcher', 'Response Code: '.$code);
 			$this->pdl->log('urlfetcher', 'Reponse latest Header: '.$header);
 			$this->pdl->log('urlfetcher', 'Response: '.strlen($page).'; First 200 Chars: '.htmlspecialchars(substr($page, 0, 200)));
-
+			
 			return $page;
 		}
 	}
@@ -222,6 +225,8 @@ class urlfetcher  extends gen_class {
 	}
 
 	private function post_curl($url, $data, $content_type, $header, $conn_timeout, $timeout){
+		$fltStart = microtime(true);
+		
 		if (is_array($header) && count($header) > 0){
 			$header[] = "Content-type: ".$content_type;
 			$header[] = "Content-Length: ".strlen($data);
@@ -264,6 +269,7 @@ class urlfetcher  extends gen_class {
 
 		$this->pdl->log('urlfetcher', 'Response Code: '.$code);
 		$this->pdl->log('urlfetcher', 'Response: '.strlen($getdata).'; First 200 Chars: '.htmlspecialchars(substr($getdata, 0, 200)));
+		$this->pdl->log('urlfetcher', 'Request Time: '.round(microtime(true) - $fltStart, 4).'s');
 		return trim($getdata);
 	}
 
@@ -274,6 +280,7 @@ class urlfetcher  extends gen_class {
 	 * @return string
 	 */
 	private function get_file_gets($geturl, $header, $conn_timeout, $timeout, $blnIgnoreResponseCode=false){
+		$fltStart = microtime(true);
 		// set the useragent first. if not, you'll get the source....
 		if(function_exists('ini_set')){
 			@ini_set('user_agent', $this->useragent);
@@ -299,11 +306,14 @@ class urlfetcher  extends gen_class {
 		$this->responseCode		= intval($arrHeaders['response_code']);
 		$this->responseHeader	= $arrHeaders;
 		$this->responseBody		= $getdata;
+		
+		$this->pdl->log('urlfetcher', 'Request Time: '.round(microtime(true) - $fltStart, 4).'s');
 
 		return $getdata;
 	}
 
 	private function post_file_gets($url, $data, $content_type, $header, $conn_timeout, $timeout){
+		$fltStart = microtime(true);
 		$header = "Content-type: ".$content_type."\r\n"
                 . "Content-Length: " . strlen($data) . "\r\n";
 		$header .= ((is_array($header) && count($header) > 0) ? implode("\r\n", $header): '');
@@ -322,7 +332,7 @@ class urlfetcher  extends gen_class {
 		$getdata	= @file_get_contents($url, false, $context);
 		if($getdata === false) 		$this->pdl->log('urlfetcher', 'file_get_contents ERROR, see php Log');
 		else $this->pdl->log('urlfetcher', 'Response: '.strlen($getdata).'; First 200 Chars: '.htmlspecialchars(substr($getdata, 0, 200)));
-
+		$this->pdl->log('urlfetcher', 'Request Time: '.round(microtime(true) - $fltStart, 4).'s');
 		return $getdata;
 
 	}
