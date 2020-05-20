@@ -65,6 +65,19 @@ if ( !class_exists( "apa_onetime_current" ) ) {
 			foreach($funcs as $func) {
 				$this->ext_options['calc_func']['options'][$func] = $func;
 			}
+			$arrPresets = $this->pdh->get_preset_list('%dkp_id%', array('%dkp_id%', '%member_id%', '%with_twink%'));
+			$arrPresetDropdown = [];
+			foreach($arrPresets as $key => $arrPreset){
+				if($arrPreset[2][0] != '%member_id%' || $arrPreset[2][1] != '%dkp_id%') continue;
+				$arrPresetDropdown[$key] = $this->pdh->get_preset_description($key, false);
+			}
+
+			$this->ext_options['preset'] = array(
+				'type' => 'dropdown',
+				'options' => $arrPresetDropdown,
+				'default' => 'current',
+			);
+			
 
 			$this->options = array_merge($this->options, $this->ext_options);
 		}
@@ -76,7 +89,6 @@ if ( !class_exists( "apa_onetime_current" ) ) {
 		}
 
 		public function update_current($apa_id, $options) {
-			// check for points over cap for each character
 			$this->pdh->process_hook_queue();
 			$char_ids = $this->pdh->get('member', 'id_list', array(true, false, true, !(int)$options['twinks']));
 
@@ -91,7 +103,13 @@ if ( !class_exists( "apa_onetime_current" ) ) {
 				if(!$eventID || !in_array($pool, $arrEventPools)) continue;
 				//echo "Pool ".$pool."<br/>";
 				//With Decay value
-				$points = $this->pdh->aget('points', 'current', 0, array($char_ids, $pool, 0, 0, !(int)$options['twinks'], true));
+				
+				$strPreset = $options['preset'];
+				if(!strlen($strPreset)) $strPreset = 'points';
+				
+				$arrPreset = $this->pdh->pre_process_preset($strPreset, array('name' => 'earned', 'sort' => true, 'th_add' => '', 'td_add' => ''));
+				$points = $this->pdh->aget($arrPreset[0][0], $arrPreset[0][1], 0, array($char_ids, $pool, 0, 0, !(int)$options['twinks'], true));
+				
 				foreach($char_ids as $char_id) {
 					$currentValue = $points[$char_id];
 					$newValue = $this->apa->run_calc_func($options['calc_func'], array($points[$char_id], $this->time->time-10, $this->time->time, $points[$char_id]));
@@ -130,16 +148,20 @@ if ( !class_exists( "apa_onetime_current" ) ) {
 			$pools = $this->apa->get_data('pools', $apa_id);
 			$blnHaveAdjustmentMade = false;
 
-			foreach($pools as $pool) {
+			$strPreset = $this->apa->get_data('preset', $apa_id);
+			if(!strlen($strPreset)) $strPreset = 'points';
+			
+			$arrPreset = $this->pdh->pre_process_preset($strPreset, array('name' => 'earned', 'sort' => true, 'th_add' => '', 'td_add' => ''));
 
+			foreach($pools as $pool) {
 				//Check if Event is in Same MDKP Pool
 				$eventID = $this->apa->get_data('event', $apa_id);
 				$arrEventPools = $this->pdh->get('event', 'multidkppools', array($eventID));
-				if(!$eventID || !in_array($pool, $arrEventPools)) continue;
+				#if(!$eventID || !in_array($pool, $arrEventPools)) continue;
 				//echo "Pool ".$pool."<br/>";
 				//With Decay value
-				$points = $this->pdh->aget('points', 'current', 0, array($char_ids, $pool, 0, 0, !(int)$this->apa->get_data('twinks', $apa_id), true));
-
+				$points = $this->pdh->aget($arrPreset[0][0], $arrPreset[0][1], 0, array($char_ids, $pool, 0, 0, !(int)$this->apa->get_data('twinks', $apa_id), true));
+				
 				foreach($char_ids as $char_id) {
 					$currentValue = $points[$char_id];
 					$newValue = $this->apa->run_calc_func($this->apa->get_data('calc_func', $apa_id), array($points[$char_id], $this->time->time, $this->time->time, $points[$char_id]));

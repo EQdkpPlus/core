@@ -35,11 +35,11 @@ $module_lang = array(
 	"raidval" => 'Value',
 	);
 	$preset_lang = array(
-	"zs_current_all" => 'Zero-Summ current (all)',
-	"current_all" => 'Zero-Summ current (all)',
-	"zs_current" => 'Zero-Summ current',
-	"zs_earned" => 'Zero-Summ earned',
-	"zs_spent" => 'Zero-Summ spent',
-	"zs_rvalue" => 'Zero-Summ value',
-	"zs_rvalue_all" => 'Zero-Summ value (all)',
+	"zs_current_all" => 'Zero-Sum current (all)',
+	"current_all" => 'Zero-Sum current (all)',
+	"zs_current" => 'Zero-Sum current',
+	"zs_earned" => 'Zero-Sum earned',
+	"zs_spent" => 'Zero-Sum spent',
+	"zs_rvalue" => 'Zero-Sum value',
+	"zs_rvalue_all" => 'Zero-Sum value (all)',
 	);

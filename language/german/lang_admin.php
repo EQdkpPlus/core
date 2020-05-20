@@ -892,6 +892,7 @@ $lang = array(
 "apa_fv_calc_func" => "Die Berechnungsfunktion ist notwendig.",
 "apa_fv_exectime" => "Die Ausführzeit ist notwendig.",
 "apa_modules"	 => "Module, auf die der Zeitl. Verfall angewendet werden soll",
+"apa_preset" 	=> 'Modul der Punkteberechnung',
 "uc_import_adm_update" => "Benutzerprofile aktualisieren",
 "uc_import_guild_wh" => "Importiere Charaktere einer Gilde",
 "delete_rolestext" => "Bist du sicher, dass Du die Rollen %s löschen willst?",
