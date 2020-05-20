@@ -242,6 +242,13 @@ class ManageRaids extends page_generic {
 					}
 				}
 			}
+			
+			if(!$data['raid']['id'] && $this->hooks->isRegistered('manageraids_raid_added')){
+				$this->hooks->process('manageraids_raid_added', array('id' => $raid_upd));
+			} elseif($this->hooks->isRegistered('manageraids_raid_updated')){
+				$this->hooks->process('manageraids_raid_updated', array('id' => $raid_upd));
+			}
+			
 
 			if(in_array(false, $adj_upd)) {
 				$messages[] = array('text' => $this->user->lang('adjustments'), 'title' => $this->user->lang('save_nosuc'), 'color' => 'red');
