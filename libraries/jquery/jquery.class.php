@@ -793,7 +793,7 @@ if (!class_exists("jquery")) {
 		* @param $taboptions	Options array
 		* @return CHAR
 		*/
-		public function Tab_header($name, $cookie=false, $taboptions=false){
+		public function Tab_header($name, $cookie=false, $taboptions=array()){
 			$jsoptions = array();
 
 			if($cookie){
@@ -804,9 +804,9 @@ if (!class_exists("jquery")) {
 										$(this).tabs('option', 'active', selectionId);
 									}";
 			}
-			$jsoptions[]	= 'fxSlide: '.(isset($taboptions['fxSlide'])) ? $taboptions['fxSlide'] : 'true';
-			$jsoptions[]	= 'fxFade: '.(isset($taboptions['fxFade'])) ? $taboptions['fxFade'] : 'true';
-			$jsoptions[]	= 'fxSpeed: '.(isset($taboptions['fxSpeed'])) ? $taboptions['fxSpeed'] : 'normal';
+			$jsoptions[]	= 'fxSlide: '.((isset($taboptions['fxSlide'])) ? $taboptions['fxSlide'] : 'true');
+			$jsoptions[]	= 'fxFade: '.((isset($taboptions['fxFade'])) ? $taboptions['fxFade'] : 'true');
+			#$jsoptions[]	= 'fxSpeed: '.((isset($taboptions['fxSpeed'])) ? $taboptions['fxSpeed'] : 'normal');  // this is currently not working
 			if(isset($taboptions['show'])){
 				$jsoptions[]	= 'show: function(event, ui) {'.$taboptions['show'].'}';
 			}

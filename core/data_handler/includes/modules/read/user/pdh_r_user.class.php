@@ -362,8 +362,7 @@ if (!class_exists("pdh_r_user")){
 
 		public function get_highest_group($user_id){
 			$arrGroups = $this->get_groups($user_id);
-
-			return $arrGroups[0];;
+			return $arrGroups[0];
 		}
 
 
