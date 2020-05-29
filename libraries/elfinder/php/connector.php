@@ -52,6 +52,7 @@ function access($attr, $path, $data, $volume) {
 $arrDeny =  array(
 		'php:*' => 'text/x-php',
 		'pht:*' => 'text/x-php',
+		'php2:*' => 'text/x-php',
 		'php3:*' => 'text/x-php',
 		'php4:*' => 'text/x-php',
 		'php5:*' => 'text/x-php',

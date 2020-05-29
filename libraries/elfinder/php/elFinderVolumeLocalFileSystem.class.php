@@ -892,7 +892,7 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver
         $path = $this->_joinPath($path, $name);
 
         //Security by GodMod
-        if (!isFilelinkInFolder($path, get_absolute_path($this->root))) return false;
+        if (!isFilelinkInFolder($path, $this->root)) return false;
         
         $a = register('pfh')->CheckCreateFolder($path);
         if ($a){
@@ -917,7 +917,7 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver
         $path = $this->_joinPath($path, $name);
 
         //Security by GodMod
-        if (!isFilelinkInFolder($path, get_absolute_path($this->root))) return false;
+        if (!isFilelinkInFolder($path, $this->root)) return false;
         
         $a = register('pfh')->CheckCreateFile($path);
         if ($a){
@@ -958,7 +958,7 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver
     protected function _copy($source, $targetDir, $name)
     {
     	//Security by GodMod
-    	if (!isFilelinkInFolder($path, get_absolute_path($this->root))) return false;
+    	if (!isFilelinkInFolder($path, $this->root)) return false;
     	
         $mtime = filemtime($source);
         $target = $this->_joinPath($targetDir, $name);
@@ -1005,7 +1005,7 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver
     protected function _unlink($path)
     {
     	//Security by GodMod
-    	if (!isFilelinkInFolder($path, get_absolute_path($this->root))) return false;
+    	if (!isFilelinkInFolder($path, $this->root)) return false;
     	
         return is_file($path) && unlink($path);
     }
@@ -1021,7 +1021,7 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver
     protected function _rmdir($path)
     {
     	//Security by GodMod
-    	if (!isFilelinkInFolder($path, get_absolute_path($this->root))) return false;
+    	if (!isFilelinkInFolder($path, $this->root)) return false;
     	
         return rmdir($path);
     }
@@ -1043,7 +1043,7 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver
         $path = $this->_joinPath($dir, $name);
         
         //Security by GodMod
-        if (!isFilelinkInFolder($path, get_absolute_path($this->root))) return false;
+        if (!isFilelinkInFolder($path, $this->root)) return false;
 
         $meta = stream_get_meta_data($fp);
         $uri = isset($meta['uri']) ? $meta['uri'] : '';
@@ -1094,7 +1094,7 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver
     protected function _filePutContents($path, $content)
     {
     	//Security by GodMod
-    	if (!isFilelinkInFolder($path, get_absolute_path($this->root))) return false;
+    	if (!isFilelinkInFolder($path, $this->root)) return false;
     	
     	$a = register('pfh')->putContent($path, $content);
     	clearstatcache();

@@ -902,27 +902,6 @@ function random_string($length = 20){
 	return $string;
 }
 
-
-function get_absolute_path($path) {
-	$strMyDirectorySeperator = "/";
-	$path = str_replace(array('/', '\\'), $strMyDirectorySeperator, $path);
-	$parts = array_filter(explode($strMyDirectorySeperator, $path), 'strlen');
-	$absolutes = array();
-	foreach ($parts as $part) {
-		if ('.' == $part) continue;
-		if ('..' == $part) {
-			array_pop($absolutes);
-		} else {
-			$absolutes[] = $part;
-		}
-	}
-	return implode($strMyDirectorySeperator, $absolutes);
-}
-
-function clean_rootpath($strPath){
-	return preg_replace('/[^\.\/]/', '', $strPath);
-}
-
 function cut_text($strText, $max = 200, $blnAddPoints = true){
 	$v = $strText;
 	if (strlen($strText) > $max) {
@@ -1089,16 +1068,25 @@ function human_filesize($bytes, $dec = 2)
 //Checks if an filelink is in an given folder. Set strict true if FileLink should not be in subfolder
 function isFilelinkInFolder($strFilelink, $strFolder, $blnStrict=false){
 	$strPath = pathinfo($strFilelink, PATHINFO_DIRNAME);
-	if (substr($strFilelink, -1) == "/"){
-		$strPath = $strPath . "/" .pathinfo($strFilelink, PATHINFO_BASENAME);
+	if (substr($strFilelink, -1) === DIRECTORY_SEPARATOR){
+		$strPath = $strPath . DIRECTORY_SEPARATOR .pathinfo($strFilelink, PATHINFO_BASENAME);
 	}
 
-	$strAbsolutePath = get_absolute_path($strPath);
-	if (substr($strFolder, -1) == "/"){
+	$strAbsolutePath = realpath($strPath);
+
+	if (substr($strFolder, -1) === DIRECTORY_SEPARATOR){
 		$strFolder = substr($strFolder, 0, -1);
 	}
 	$strFolder = str_replace(registry::get_const('root_path'), '', $strFolder);
+	
+	$strDocRoot = filter_var($_SERVER["DOCUMENT_ROOT"], FILTER_SANITIZE_STRING);
+	$strDocRoot = str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, $strDocRoot);
 
+	if(strpos($strFolder, $strDocRoot) !== 0){
+		$strFolder = registry::get_const('root_path').$strFolder;
+	}
+	$strFolder = realpath($strFolder);
+	
 	if($blnStrict){
 		if ($strAbsolutePath === $strFolder) return true;
 	} else {
