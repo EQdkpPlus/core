@@ -737,7 +737,19 @@ function set_cookie($name, $cookie_data, $cookie_time, $blnHttpOnly=true){
 	$cpath = register('config')->get('cookie_path');
 	if(empty($cname) || empty($cpath)) return;
 	
-	setcookie( $cname . '_' . $name, $cookie_data, $cookie_time, $cpath, register('config')->get('cookie_domain'), register('env')->ssl, $blnHttpOnly);
+	//PHP 7.3 allows setting the samesite option
+	if(phpversion() >= "7.3"){
+		setcookie($cname . '_' . $name, $cookie_data, [
+				'expires' => $cookie_time,
+				'path' => $cpath,
+				'domain' => register('config')->get('cookie_domain'),
+				'secure' => register('env')->ssl,
+				'httponly' => $blnHttpOnly,
+				'samesite' => 'Lax',
+		]);
+	} else {
+		setcookie( $cname . '_' . $name, $cookie_data, $cookie_time, $cpath, register('config')->get('cookie_domain'), register('env')->ssl, $blnHttpOnly);
+	}
 }
 
 //A workaround because strtolower() does not support UTF8
