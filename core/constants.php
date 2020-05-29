@@ -115,21 +115,10 @@ $TAG_BLACKLIST = array(
 
 //Attribute Blacklist for filtering article content
 $ATTR_BLACKLIST = array(
-	'onclick',
-	"ondblclick",
-	"onkeydown",
-	"onkeypress",
-	"onkeyup",
-	"onmousedown",
-	"onmousemove",
-	"onmouseout",
-	"onmouseover",
-	"onmouseup",
-	"onchange",
-	'action',
-	'background',
-	'codebase',
-	'dynsrc',
-	'lowsrc',
-	'formaction',
+		'action',
+		'background',
+		'codebase',
+		'dynsrc',
+		'formaction',
+		'lowsrc'
 );

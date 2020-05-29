@@ -85,7 +85,6 @@ class login_pageobject extends pageobject {
 
 			$blnAutoLogin = ( $this->in->exists('auto_login') ) ? true : false;
 			//Login
-			//if(false){
 			if ( !$this->user->login($this->in->get('username'), $this->in->get('password'), $blnAutoLogin) ){
 				//error
 				$strErrorCode = $this->user->error;
