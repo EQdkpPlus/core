@@ -209,8 +209,6 @@ class Manage_Styles extends page_generic{
 			
 			$storage_folder  = $this->pfh->FolderPath('templates/'.$this->style['template_path'].$admin_folder, 'eqdkp');
 			
-			$filename = "../../test.php";
-			
 			if(!isFilelinkInFolder($storage_folder.$filename, $storage_folder) || (!in_array($extension, array('html', 'js', 'css', 'tpl')))){
 				message_die("Action not allowed");
 			}
