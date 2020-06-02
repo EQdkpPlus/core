@@ -131,7 +131,7 @@ if (!class_exists("socialplugins")) {
 
 			$strMetatags = '<meta property="og:title" content="'.$title.'" />
 							<meta property="og:type" content="article" />
-							<meta property="og:url" content="'.$this->env->httpHost.xhtml_entity_decode($this->env->request).'" />
+							<meta property="og:url" content="'.htmlentities($this->env->httpHost.$this->user->removeSIDfromString($this->env->request)).'" />
 							<meta property="og:description" content="'.htmlspecialchars(trim(strip_tags($description)), ENT_QUOTES).'" />
 							<meta property="og:image" content="'.$image.'" />';
 
