@@ -1790,3 +1790,5 @@ if (!class_exists("jquery")) {
 			}
 			return $js_array;
 		}
+	}
+}
