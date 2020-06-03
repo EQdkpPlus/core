@@ -122,18 +122,24 @@ if (!class_exists("jquery")) {
 		public function fullcalendar(){
 			// include the calendar js/css.. css is included in base template dir, but can be overwritten by adding to template
 			if(!$this->inits['fullcalendar']){
-				$this->tpl->js_file($this->path."js/fullcalendar/fullcalendar.min.js");
-				if(is_file($this->root_path.'templates/'.$this->user->style['template_path'].'/fullcalendar.css')){
+				$this->tpl->js_file($this->path."js/fullcalendar/packages/core/main.js");
+				$this->tpl->js_file($this->path."js/fullcalendar/packages/daygrid/main.js");
+				$this->tpl->js_file($this->path."js/fullcalendar/packages/moment/main.js");
+				$this->tpl->js_file($this->path."js/fullcalendar/packages/interaction/main.js");
+				#$this->tpl->js_file($this->path."js/fullcalendar/packages/moment-timezone/main.js");
+				
+				/*if(is_file($this->root_path.'templates/'.$this->user->style['template_path'].'/fullcalendar.css')){
 					$this->tpl->css_file($this->root_path.'templates/'.$this->user->style['template_path'].'/fullcalendar.css');
 				}elseif(is_file($this->root_path.'templates/'.$this->user->style['template_path'].'/fullcalendar.min.css')){
 					$this->tpl->css_file($this->root_path.'templates/'.$this->user->style['template_path'].'/fullcalendar.min.css');
 				}else{
 					$this->tpl->css_file($this->root_path.'templates/base_template/fullcalendar.min.css');
-				}
-				$this->tpl->css_file($this->root_path.'templates/fullcalendar.print.min.css', 'print');
+				}*/
+				$this->tpl->css_file($this->path."js/fullcalendar/packages/core/main.css");
+				$this->tpl->css_file($this->path."js/fullcalendar/packages/daygrid/main.css");
 
 				// now load the fullcalendar language file
-				$this->tpl->js_file($this->path."js/fullcalendar/locale-all.js");
+				$this->tpl->js_file($this->path."js/fullcalendar/packages/core/locales-all.js'");
 				$this->inits['fullcalendar']	= true;
 			}
 		}

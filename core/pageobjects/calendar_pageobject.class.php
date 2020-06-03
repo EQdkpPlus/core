@@ -215,8 +215,8 @@ class calendar_pageobject extends pageobject {
 
 	public function get_json_helper($calender_id, $filterby = 'all'){
 		$event_json		= array();
-		$range_start	= $this->time->fromformat($this->in->get('start', ''), 'Y-m-d');
-		$range_end		= $this->time->fromformat($this->in->get('end', ''), 'Y-m-d');
+		$range_start	= $this->time->fromformat($this->in->get('start', ''), 'c');
+		$range_end		= $this->time->fromformat($this->in->get('end', ''), 'c');
 
 		if($calender_id > 0){
 			$feedurl		= $this->pdh->get('calendars', 'feed', array($calender_id));
@@ -234,11 +234,11 @@ class calendar_pageobject extends pageobject {
 						// set the date for the events
 						$allday			= (isset($enddate['hour']) && isset($startdate['hour'])) ? false : true;
 						if($allday){
-							$startdate_out	= sprintf("%04d", $startdate['year']).'-'.sprintf("%02d", $startdate['month']).'-'.sprintf("%02d", $startdate['day']).' 00:00';
-							$enddate_out	= sprintf("%04d", $enddate['year']).'-'.sprintf("%02d", $enddate['month']).'-'.sprintf("%02d", $enddate['day']-1).' 00:00';
+							$startdate_out	= $this->time->mktime(0,0,0,$startdate['month'],$startdate['day'],$startdate['year']);
+							$startdate_out	= $this->time->mktime(0,0,0,$enddate['month'],$enddate['day'],$enddate['year']);
 						}else{
-							$startdate_out	= sprintf("%04d", $startdate['year']).'-'.sprintf("%02d", $startdate['month']).'-'.sprintf("%02d", $startdate['day']).' '.((isset($startdate['hour'])) ? sprintf("%02d", $startdate['hour']).':'.sprintf("%02d", $startdate['min']) : '00:00');
-							$enddate_out	= sprintf("%04d", $enddate['year']).'-'.$enddate['month'].'-'.$enddate['day'].' '.((isset($enddate['hour'])) ? $enddate['hour'].':'.$enddate['min'] : '00:00');
+							$startdate_out	= $this->time->mktime($startdate['hour'],$startdate['min'],0,$startdate['month'],$startdate['day'],$startdate['year']);
+							$startdate_out	= $this->time->mktime($enddate['hour'],$enddate['min'],0,$enddate['month'],$enddate['day'],$enddate['year']);
 						}
 
 						// build the event colours
@@ -248,11 +248,12 @@ class calendar_pageobject extends pageobject {
 						$event_json[] = array(
 							'eventid'		=> 0,
 							'title'			=> $comp->getProperty( 'summary', 1),
-							'start'			=> $startdate_out,
-							'end'			=> $enddate_out,
+							'start'			=> $this->time->date('c', $startdate_out),
+							'end'			=> $this->time->date('c', $enddate_out),
 							'allDay'		=> $allday,
 							'note'			=> str_replace('\n', "<br />", ($comp->getProperty('description', 1))),
-							'color'			=> $eventcolor.' !important',
+							'backgroundColor'	=> $eventcolor.' !important',
+							'borderColor'	=> $eventcolor.' !important',
 							'textColor'		=> $eventcolor_txt.' !important',
 							'className'		=> 'calendarevent_'.$calender_id,
 						);
@@ -316,8 +317,8 @@ class calendar_pageobject extends pageobject {
 								'editable'		=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission($calid)) ? true : false,
 								'title'			=> $this->in->decode_entity($this->pdh->get('calendar_events', 'name', array($calid))),
 								'url'			=> (!is_utf8($str)) ? utf8_encode($this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid)) : $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid),
-								'start'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_start', array($calid))),
-								'end'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_end', array($calid))),
+								'start'			=> $this->time->date('c', $this->pdh->get('calendar_events', 'time_start', array($calid))),
+								'end'			=> $this->time->date('c', $this->pdh->get('calendar_events', 'time_end', array($calid))),
 								'closed'		=> ($this->pdh->get('calendar_events', 'raidstatus', array($calid)) == 1) ? true : false,
 								'flag'			=> $this->pdh->get('calendar_raids_attendees', 'html_status', array($calid, $this->user->data['user_id'])),
 								'deadline'		=> ($deadline) ? true : false,
@@ -325,7 +326,8 @@ class calendar_pageobject extends pageobject {
 								'note'			=> $this->pdh->get('calendar_events', 'notes', array($calid, true)),
 								'raidleader'	=> ($eventextension['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'name', 0, array($eventextension['raidleader']))) : '',
 								'rstatusdata'	=> $rstatusdata,
-								'color'			=> $eventcolor.' !important',
+								'backgroundColor'	=> $eventcolor.' !important',
+								'borderColor'	=> $eventcolor.' !important',
 								'textColor'		=> $eventcolor_txt.' !important',
 								'className'		=> 'calendarevent_'.$calender_id.(($this->pdh->get('calendar_events', 'private', array($calid)) == 1) ? ' calendar_raid_private' : ''),
 								'isinvited'		=> $this->pdh->get('calendar_events', 'is_invited', array($calid)),
@@ -339,11 +341,12 @@ class calendar_pageobject extends pageobject {
 								'editable'		=> ($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission($calid)) ? true : false,
 								'url'			=> (!is_utf8($str)) ? utf8_encode($this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid)) : $this->routing->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($calid)), $calid),
 								'title'			=> $this->pdh->get('calendar_events', 'name', array($calid)),
-								'start'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_start', array($calid))),
-								'end'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_end', array($calid, $alldayevents))),
+								'start'			=> $this->time->date('c', $this->pdh->get('calendar_events', 'time_start', array($calid))),
+								'end'			=> $this->time->date('c', $this->pdh->get('calendar_events', 'time_end', array($calid, $alldayevents))),
 								'allDay'		=> $alldayevents,
 								'note'			=> $this->pdh->get('calendar_events', 'notes', array($calid, true)),
-								'color'			=> $eventcolor.' !important',
+								'backgroundColor'	=> $eventcolor.' !important',
+								'borderColor'	=> $eventcolor.' !important',
 								'textColor'		=> $eventcolor_txt.' !important',
 								'isowner'		=> $this->pdh->get('calendar_events', 'is_owner', array($calid)) || $this->user->check_auth('a_cal_revent_conf', false),
 								'isinvited'		=> $this->pdh->get('calendar_events', 'is_invited', array($calid)),

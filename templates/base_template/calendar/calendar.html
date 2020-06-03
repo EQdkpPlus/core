@@ -1,6 +1,6 @@
 <script type='text/javascript'>
 //<![CDATA[
-	$(function() {
+	document.addEventListener('DOMContentLoaded', function() {
 
 		if((!cal_getStorage("calendar.calendar_filter") && !cal_getStorage("calendar.amount_calendars")) ||
 			(cal_getStorage("calendar.calendar_filter") && cal_getStorage("calendar.amount_calendars") < {AMOUNT_CALENDARS})) {
@@ -20,11 +20,14 @@
 		var curSource = buildCalURL($("#calendarfilter").val());
 		var newSource = '';
 
-		$('#calendar').fullCalendar({
+		var calendarEl = document.getElementById('calendar');
+
+		var calendar = new FullCalendar.Calendar(calendarEl, {
+			plugins: [ 'interaction', 'dayGrid'],
+			defaultView: 'dayGridMonth',
 			firstDay: {STARTDAY},
 
 			// The rest
-			themeSystem: 'jquery-ui',
 			locale: '{CALENDAR_LANG}',
 			eventLimit: true,
 			customButtons: {
@@ -35,7 +38,7 @@
 			header: {
 				left: 'today, icalexport',
 				center: 'prev title next',
-				right: 'month,basicWeek,agendaDay,listMonth'
+				right: 'dayGridMonth,dayGridWeek,timeGridDay'
 			},
 			<!-- IF ADD_RAID -->
 			dayClick: function(date, jsEvent, view) {
@@ -46,12 +49,12 @@
 					height:780,
 					modal: false,
 					buttons: false,
-					close: function(event, ui) { $('#calendar').fullCalendar('refetchEvents'); }
+					close: function(event, ui) { calendar.refetchEvents(); }
 				});
 				return false;
 			},
 			<!-- ENDIF -->
-			eventRender: function(event, element) {
+			/*eventRender: function(event, element) {
 				if(event.icon){
 					element.find('.fc-time').hide();
 					if(event.deadline || event.closed){
@@ -211,8 +214,8 @@
 						});
 					}
 				}
-			},
-			eventResize: function(event,delta,revertFunc) {
+			},*/
+			/*eventResize: function(event,delta,revertFunc) {
 				// Save after event-drop is finished, use ajax() cause of error callback
 				var minutesdelta = (parseInt(delta.hours())*60)+parseInt(delta.minutes());
 				$.ajax({
@@ -224,14 +227,14 @@
 					},
 					success: function(msg){
 						system_message(msg, 'success');
-						$('#calendar').fullCalendar('refetchEvents');
+						calendar.refetchEvents();
 					}
 				});
 			},
 			eventDrop: function(event,delta,revertFunc) {
 				// Save after event-drop is finished, use ajax() cause of error callback
 				var minutesdelta = (parseInt(delta.hours())*60)+parseInt(delta.minutes());
-				var allDay			= ($.fullCalendar.moment(event.start).hasTime()) ? false : true;
+				var allDay			= (calendar.moment(event.start).hasTime()) ? false : true;
 				$.ajax({
 					type: "POST",
 					url: '{U_CALENDAR}&link_hash={CSRF_MOVE_TOKEN}',
@@ -241,24 +244,24 @@
 					},
 					success: function(msg){
 						system_message(msg, 'success');
-						$('#calendar').fullCalendar('refetchEvents');
+						calendar.refetchEvents();
 					}
 				});
+			},*/
+			loading: function(isLoading) {
+				$('#calendar_loading').toggle(isLoading);
 			},
-			loading: function(bool) {
-				$('#calendar_loading').toggle(bool);
-			},
-			defaultView: cal_getStorage("calendar.viewname") || 'month',
+			defaultView: cal_getStorage("calendar.viewname2") || 'dayGrid',
 			defaultDate: cal_getStorage("calendar.currentdate") || moment(),
-			viewRender: function(view){
-				cal_setStorage("calendar.viewname", view.name);
+			datesRender: function(info){
+				cal_setStorage("calendar.viewname2", info.view.name);
 
 				// get the date and set it to the variable
-				var date2save	= (view.name == 'month') ? $('#calendar').fullCalendar('getDate') : view.start;
+				var date2save	= (view.name == 'month') ? calendar.getDate() : info.view.start;
 				cal_setStorage("calendar.currentdate", date2save.format());
 			},
-			//eventSources: curSource
-		});
+			eventSources: [curSource]
+		});console.log(curSource);
 
 		// start the hack for the date picker
 		$(".fc-header-toolbar .fc-center h2").attr('id', 'fc-datepicker-header').before('<input size="1" style="height: 0px; width:0px; border: 0px;" id="fc-datepicker" value="" /><input size="1" style="height: 0px; width:0px; border: 0px;" id="fc-monthpicker" value="" />');
@@ -274,7 +277,7 @@
 			OnAfterMenuClose: function() {
 				var d = $("#fc-monthpicker").MonthPicker('Validate')
 				if (d !== null){
-					$('#calendar').fullCalendar('gotoDate', d);
+					calendar.gotoDate(d);
 				}
 			}
 		});
@@ -297,18 +300,18 @@
 			onClose: function(dateText, inst) {
 				var d = $("#fc-datepicker").datepicker("getDate");
 				if (d !== null){
-					$('#calendar').fullCalendar('gotoDate', d);
+					calendar.gotoDate(d);
 				}
 			}
 		});
 
-		$("#fc-datepicker-header").click(function() {
-			if((cal_getStorage("calendar.viewname") || 'month') == "month"){
+		/*$("#fc-datepicker-header").click(function() {
+			if((cal_getStorage("calendar.viewname2") || 'month') == "month"){
 				$('#fc-monthpicker').MonthPicker('Open')
 			}else{
 				$('#fc-datepicker').datepicker('show');
 			}
-		});
+		});*/
 
 		$(".fc-icalexport-button,#export_callist").qtip({
 			content: {
@@ -361,7 +364,7 @@
 				$(this).tabs("option", "active", selectionId);
 			},
 			show: function(event, ui) {
-				$('#calendar').fullCalendar('render');
+				calendar.render();
 			}
 		});
 
@@ -415,10 +418,20 @@
 
 	function doFiltering(curSource){
 		newSource = buildCalURL($("#calendarfilter").val());
-		$('#calendar').fullCalendar('removeEvents');
-		$('#calendar').fullCalendar('removeEventSource', curSource);
-		$('#calendar').fullCalendar('addEventSource', newSource)
-		$('#calendar').fullCalendar('refetchEvents');
+
+		// remove all events
+		//AllEvents	= calendar.getEvents();
+		//AllEvents.forEach(el => { el.remove(); }); 
+
+		// remove the 
+		//var eventSource = calendar.getEventSourceById('a');
+		//eventSource.remove();
+
+		//CalResources = calendar.getEventSources();
+		//console.log('URL: ' & CalResources);
+		//$('#calendar').fullCalendar('removeEventSource', curSource);
+		//calendar.addEventSource(newSource);
+		//calendar.refetchEvents();
 		return newSource;
 	}
 
@@ -445,7 +458,7 @@
 			height:730,
 			modal: false,
 			buttons: false,
-			close: function(event, ui) { $('#calendar').fullCalendar('refetchEvents'); }
+			close: function(event, ui) { calendar.refetchEvents(); }
 		});
 	}
 
@@ -465,7 +478,7 @@
 							}
 							$.post('{U_CALENDAR}&link_hash={CSRF_DELETEID_TOKEN}&deleteid='+deleteid+delclones_checked);
 							$( this ).dialog( "close" );
-							$('#calendar').fullCalendar('refetchEvents');
+							calendar.refetchEvents();
 						},
 						{L_cancel}: function() {
 							$( this ).dialog( "close" );
@@ -481,7 +494,7 @@
 						"{L_delete}": function() {
 							$.post('{U_CALENDAR}&link_hash={CSRF_DELETEID_TOKEN}&deleteid='+deleteid);
 							$( this ).dialog( "close" );
-							$('#calendar').fullCalendar('refetchEvents');
+							calendar.refetchEvents();
 						},
 						{L_cancel}: function() {
 							$( this ).dialog( "close" );
