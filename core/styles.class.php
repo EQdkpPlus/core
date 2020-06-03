@@ -342,7 +342,7 @@ if (!class_exists("styles")){
 				//Create here the package.xml
 
 				$fot ='<?xml version="1.0" encoding="utf-8"?>
-<install type="template" version="'.$this->config->get('plus_version').'">
+<install type="template" version="'.VERSION_INT.'">
 	<name>'.$data['style_name'].'</name>
 	<author>'.$data['style_author'].'</author>
 	<authorEmail>'.$data['style_contact'].'</authorEmail>

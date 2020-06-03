@@ -2218,16 +2218,17 @@ td.fc-event-container { position:relative; }
 
 /* add calendar event */
 input#selectmode + ul { position: relative; width: 160px; cursor: pointer; }
-input#selectmode + ul > li { padding: 8px 12px; background: #fff; border: 1px solid #ccc; border-radius: 3px; }
-input#selectmode + ul:hover > li, input#selectmode + ul > li.open { border-color: rgba(82, 168, 236, 0.8); box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6); }
+input#selectmode + ul > li { padding: 8px 12px; color: @eqdkpInputFontColor; background: @eqdkpInputBackgroundColor; border: 1px solid @eqdkpInputBorderColor; border-radius: 3px; }
+input#selectmode + ul:hover > li, input#selectmode + ul > li.open { border-color: @eqdkpInputBackgroundColorActive; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6); }
 
-input#selectmode + ul > li:after { display: block; content: ''; width: 0; height: 0; position: absolute; top: 40%; right: 12px; border: 8px solid transparent; border-top-color: #666; }
-input#selectmode + ul > li.open:after { top: 10%; border-top-color: transparent; border-bottom-color: #666; }
+input#selectmode + ul > li:after { display: block; content: ''; width: 0; height: 0; position: absolute; top: 40%; right: 12px; border: 8px solid transparent; border-top-color: @eqdkpInputFontColor; }
+input#selectmode + ul > li.open:after { top: 10%; border-top-color: transparent; border-bottom-color: @eqdkpInputFontColor; }
 
-input#selectmode + ul > li + ul { display: none; height: auto; margin-top: -2px; position: absolute; top: auto; left: 0; right: 0; z-index: 99; background: #fff; border: 1px solid #ccc; border-top: 1px solid #eee; border-radius: 0 0 3px 3px; box-shadow: 2px 3px 5px rgba(0, 0, 0, .25) }
+input#selectmode + ul > li + ul { display: none; height: auto; margin-top: -2px; position: absolute; top: auto; left: 0; right: 0; z-index: 99; background: @eqdkpInputBackgroundColor; border: 1px solid @eqdkpInputBorderColor; border-top: 1px solid @eqdkpInputBorderColor; border-radius: 0 0 3px 3px; box-shadow: 2px 3px 5px rgba(0, 0, 0, .25) }
 input#selectmode + ul > li.open + ul { display: block; }
 input#selectmode + ul > li + ul > li { padding: 8px 12px; }
-input#selectmode + ul > li + ul > li:hover { background: #efefef; }
+input#selectmode + ul > li + ul > li:hover { background: @eqdkpInputBackgroundColorActive; color: @eqdkpInputFontColorActive}
+
 
 fieldset.settings.floatRight.raid dl {
 	margin-bottom: 0px;

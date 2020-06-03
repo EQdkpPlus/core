@@ -510,6 +510,7 @@ class template extends gen_class {
 		if(substr($filename, 0, 1) == '/' || substr($filename, 0, 2) == './'){
 			$myfile			= $filename;
 		}else{
+			
 			if ($basefile){
 				$data_file = $this->data_root.$filename;
 				$tmp_root_file = $this->root_path.'templates/'.$this->style_code.'/'.$filename;
@@ -521,8 +522,11 @@ class template extends gen_class {
 				$myfile = $data_file;
 			} elseif(file_exists($tmp_root_file)){
 				$myfile = $tmp_root_file;
-			} else {
+			} elseif(file_exists($this->base_template.'/'.$filename)) {
 				$myfile = $this->base_template.'/'.$filename;
+			} else {
+				$stylecode = $this->style_code;
+				$myfile = $this->root_path.'templates/'.$stylecode.'/'.$filename;
 			}
 		}
 		return $myfile;
@@ -1674,11 +1678,6 @@ class template extends gen_class {
 		}
 
 		if(!$this->error_message){
-			// fix for upgrade from 1.0 to 2.0 with deleted old template folder. This fix redirects directly to the maintenance mode
-			if($this->files[$handle] && strpos($this->files[$handle], '/templates/base_template/index.tpl') !== false && $function == 'loadfile()' && ($this->config->get('plus_version') === false || version_compare('2.0', $this->config->get('plus_version')) > 0)){
-				redirect('maintenance/index.php', false, false, false);
-			}
-
 			$title			= $this->lang('templates_error');
 			$content		= (!$this->lang($content)) ? $content : $this->lang($content);
 

@@ -49,6 +49,34 @@ function access($attr, $path, $data, $volume) {
 		:  null;                                    // else elFinder decide it itself
 }
 
+$arrDeny =  array(
+		'php:*' => 'text/x-php',
+		'pht:*' => 'text/x-php',
+		'php2:*' => 'text/x-php',
+		'php3:*' => 'text/x-php',
+		'php4:*' => 'text/x-php',
+		'php5:*' => 'text/x-php',
+		'php7:*' => 'text/x-php',
+		'phtml:*' => 'text/x-php',
+		'cgi:*' => 'text/x-httpd-cgi',
+		'pl:*' => 'text/x-perl',
+		'asp:*' => 'text/x-asap',
+		'aspx:*' => 'text/x-asap',
+		'py:*' => 'text/x-python',
+		'rb:*' => 'text/x-ruby',
+		'jsp:*' => 'text/x-jsp',
+		'application/x-php',
+		'application/x-perl',
+		'application/x-python-bytecode',
+		'application/x-ruby',
+		'text/x-php',
+		'text/x-perl',
+		'text/x-python-bytecode',
+		'text/x-ruby',
+		'text/x-c++'
+);
+
+
 if ($blnIsAdmin){
 
 	$opts = array(
@@ -60,7 +88,7 @@ if ($blnIsAdmin){
 				'URL'           => register('pfh')->FileLink('', 'files', 'absolute'), // URL to files (REQUIRED)
 				'accessControl' => 'access',             // disable and hide dot starting files (OPTIONAL)
 				'uploadAllow'	=> array('all'),
-				'uploadDeny'	=> array('application/x-php','application/x-perl','application/x-python-bytecode','application/x-ruby', 'text/x-php', 'text/x-perl', 'text/x-python-bytecode', 'text/x-ruby', 'text/x-c++'),
+				'uploadDeny'	=> $arrDeny,
 				'uploadOrder'	=> array('allow', 'deny'),
 				'disabled'		=> array('extract', 'archive','mkfile','help','edit'),
 				'tmbPathMode'	=> get_chmod(true),
@@ -73,11 +101,11 @@ if ($blnIsAdmin){
 		'roots' => array(
 			array(
 				'driver'        => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
-				'path'          => realpath(register('pfh')->FolderPath('system', 'files')),         // path to files (REQUIRED)
-				'startPath'		=> realpath(register('pfh')->FolderPath('system', 'files')), 
-				'URL'           => register('pfh')->FileLink('system', 'files', 'absolute'), // URL to files (REQUIRED)
+				'path'          => realpath(register('pfh')->FolderPath('system/articleimages', 'files')),         // path to files (REQUIRED)
+				'startPath'		=> realpath(register('pfh')->FolderPath('system/articleimages', 'files')), 
+				'URL'           => register('pfh')->FileLink('system/articleimages', 'files', 'absolute'), // URL to files (REQUIRED)
 				'accessControl' => 'access',             // disable and hide dot starting files (OPTIONAL)				
-				'uploadAllow'	=> array('image/jpeg', 'image/png', 'image/gif', 'application/x-zip-compressed', 'application/zip', 'application/x-zip'),
+				'uploadAllow'	=> array('image/jpeg', 'image/png', 'image/gif', 'application/x-zip-compressed', 'application/zip', 'application/x-zip', 'application/postscript', 'application/pdf'),
 				'uploadDeny'	=> array('all'),
 				//'uploadOrder'	=> array('allow', 'deny'),
 				'disabled'		=> array('extract', 'archive','mkdir', 'mkfile','help','rename','download','edit'),

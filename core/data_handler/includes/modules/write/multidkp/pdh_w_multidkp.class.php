@@ -209,6 +209,22 @@ if(!class_exists('pdh_w_multidkp')) {
 			}
 			return false;
 		}
+		
+		public function add_event2multidkp($event_id, $mdkp_id, $no_attendance=0){
+			$sql = array(
+					'multidkp2event_event_id' => $event_id,
+					'multidkp2event_multi_id' => $mdkp_id,
+					'multidkp2event_no_attendance' => $no_attendance,
+			);
+			
+			$objQuery = $this->db->prepare("INSERT INTO __multidkp2event :p")->set($sql)->execute();
+			
+			if($objQuery) {
+				$this->pdh->enqueue_hook('multidkp_update');
+				return true;
+			}
+			return false;
+		}
 
 		public function reset() {
 			$this->db->query("TRUNCATE TABLE __multidkp;");

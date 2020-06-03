@@ -44,8 +44,12 @@
 	</header>
 	<!-- ENDIF -->
 
-
-
+	<!-- IF S_TOOLBAR AND CATEGORY_COUNT == 0 -->
+	<div class="infobox infobox-large infobox-blue clearfix">
+		<i class="fa fa-info-circle fa-2x pull-left"></i> {L_article_category_empty}<br /><a href="javascript:editArticle(0)"><i class="fa fa-plus"></i> {L_add_new_article}</a>
+	</div>
+	<!-- ENDIF -->
+	
 	<div class="article-container-wrapper">
 		<!-- IF LIST_TYPE == 1 -->
 			<!-- INCLUDE category_list_type1.html -->

@@ -51,16 +51,17 @@ class ManageNotifications extends page_generic {
 		$blnResult = $this->pdh->put('notification_types', 'update', array($strNotificationID, $intPrio, $strDefault, $blnGroup, $intGroupAt, $strIcon));
 
 		$blnOverwrite = $this->in->get('overwrite', 0);
+		
 		if($blnOverwrite && $blnResult){
 			//Overwrite
 			$arrUsers = $this->pdh->get('user', 'id_list', array());
 			foreach($arrUsers as $intUserID){
 				$arrNotificationSettings = $this->pdh->get('user', 'notification_settings', array($intUserID));
-				if(isset($arrNotificationSettings['ntfy_'.$strNotificationID])){
-					$arrNotificationSettings['ntfy_'.$strNotificationID] = $strDefault;
-					$arrQuery['notifications'] = serialize($arrNotificationSettings);
-					$this->pdh->put('user', 'update_user', array($intUserID, $arrQuery, false, false));
-				}
+
+				$arrNotificationSettings['ntfy_'.$strNotificationID] = $strDefault;
+				
+				$arrQuery['notifications'] = serialize($arrNotificationSettings);
+				$this->pdh->put('user', 'update_user', array($intUserID, $arrQuery, false, false));
 			}
 		}
 

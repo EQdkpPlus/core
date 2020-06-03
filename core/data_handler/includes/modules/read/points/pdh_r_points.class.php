@@ -420,6 +420,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 						'val'			=> $value,
 						'member_id'		=> $member_id,
 						'dkp_id'		=> $multidkp_id,
+						'with_twink'	=> ($with_twink) ? true : false,
 				);
 				$value = $this->apa->get_value('current_currentcap', $multidkp_id, $this->time->time, $data);
 			}

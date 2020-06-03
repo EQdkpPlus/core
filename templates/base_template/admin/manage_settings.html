@@ -93,6 +93,19 @@ $(function(){
 		modal: true,
 		autoOpen: false,
 	});
+	
+	$("input[name='seo_remove_index']").on('change', function(){
+		var selected = $("input[name='seo_remove_index']:checked").val();
+		if(selected == 1){
+			//Check if I can reach another page
+			$.get("../SeoIndexTest?cache_buster=" + Date.now(), function(data) {
+			}).fail(function() {
+			    alert( "You haven't configured your webserver correctly. Please see our <a href='https://eqdkp-plus.eu/wiki/SEO'>Wiki</a> how to configure your webserver accordingly to support SEO friendly URLs." );			   
+			    $('#seo_remove_index > label:nth(0)').click();
+			});
+			
+		}		
+	});
 })
 
 function testmail(){

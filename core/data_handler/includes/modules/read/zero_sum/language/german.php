@@ -31,11 +31,11 @@ $module_lang = array(
 );
 
 $preset_lang = array(
-	'zs_current_all'	=> 'Zero-Summ Aktuell (alle)',
-	'current_all'		=> 'Zero-Summ Aktuell (alle)',
-	'zs_current'		=> 'Zero-Summ Aktuell',
-	'zs_earned'			=> 'Zero-Summ Erhalten',
-	'zs_spent'			=> 'Zero-Summ Ausgegeben',
-	'zs_rvalue'			=> 'Zero-Summ Wert',
-	'zs_rvalue_all'		=> 'Zero-Summ Wert (alle)',
+	'zs_current_all'	=> 'Zero-Sum Aktuell (alle)',
+	'current_all'		=> 'Zero-Sum Aktuell (alle)',
+	'zs_current'		=> 'Zero-Sum Aktuell',
+	'zs_earned'			=> 'Zero-Sum Erhalten',
+	'zs_spent'			=> 'Zero-Sum Ausgegeben',
+	'zs_rvalue'			=> 'Zero-Sum Wert',
+	'zs_rvalue_all'		=> 'Zero-Smm Wert (alle)',
 );

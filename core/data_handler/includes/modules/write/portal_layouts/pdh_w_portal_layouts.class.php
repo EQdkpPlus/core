@@ -37,7 +37,7 @@ if(!class_exists('pdh_w_portal_layouts')) {
 				'portal_layout' => 1,
 			);
 
-			$objQuery = $this->db->prepare("UPDATE __article_categories :p WHERE id=?")->set($arrQuery)->execute($id);
+			$objQuery = $this->db->prepare("UPDATE __article_categories :p WHERE portal_layout=?")->set($arrQuery)->execute($id);
 
 			$this->pdh->enqueue_hook('article_categories_update');
 			$this->pdh->enqueue_hook('portal_layouts_update');

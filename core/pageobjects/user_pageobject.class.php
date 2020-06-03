@@ -188,7 +188,7 @@ class user_pageobject extends pageobject {
 
 			'PROFILE_CHARS' 		=> $hptt->get_html_table($this->in->get('sort'), '', null, 1, false),
 			'S_PROFILE_CHARACTERS'	=> count($arrMemberList),
-			'CHAR_COUNT' 			=> count( $this->pdh->get('member', 'connection_id', array($user_id))),
+			'CHAR_COUNT' 			=> $this->pdh->get('user', 'charnumber', array($user_id)),
 			'HPTT_ADMIN_LINK'		=> ($this->user->check_auth('a_tables_man', false)) ? '<a href="'.$this->server_path.'admin/manage_pagelayouts.php'.$this->SID.'&edit=true&layout='.$this->config->get('eqdkp_layout').'#page-'.md5('userprofile').'" title="'.$this->user->lang('edit_table').'"><i class="fa fa-pencil floatRight"></i></a>' : false,
 			'USER_ADMIN_LINK'		=> ($this->user->check_auth('a_users_man', false)) ? '<a href="'.$this->server_path.'admin/manage_users.php'.$this->SID.'&u='.$user_id.'" title="'.$this->user->lang('manage_users').'"><i class="fa fa-pencil floatRight"></i></a>' : false,
 		));

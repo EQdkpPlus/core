@@ -98,9 +98,7 @@ if(!class_exists('requirements')) {
 				'mb'		=> array(
 					'required'		=> $this->user->lang('yes'),
 					'installed'		=> (function_exists('mb_strtolower')) ? $this->user->lang('yes') : $this->user->lang('no'),
-					'passfail'		=> true,
-					'adviced_fail'	=> (!function_exists('mb_strtolower')) ? true : false,
-					'ignore'		=> true
+					'passfail'		=> (function_exists('mb_strtolower')) ? true : false,
 				),
 				'data-folder' => array(
 					'required' => 'Writable',

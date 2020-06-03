@@ -29,8 +29,8 @@ if ( !defined('EQDKP_INC') ){
  * -------------------------------------------------------------------------
  */
 
-define('VERSION_INT',		'2.3.28.0');				// the internal version number for updates & update check
-define('VERSION_EXT',		'2.3.28');				// the external version number to be shown in the footer
+define('VERSION_INT',		'2.3.30.0');				// the internal version number for updates & update check
+define('VERSION_EXT',		'2.3.30');				// the external version number to be shown in the footer
 define('VERSION_WIP',		false);					// work in progress or stable?
 define('VERSION_PHP_RQ',	'5.6.0');				// required version of PHP
 define('VERSION_PHP_REC',	'7.2.0');				// recommended version of PHP
@@ -61,7 +61,7 @@ define('SQL_UNINSTALL',	2);
 //Things user can modify at config.php
 
 //Max Images in Useravatar Folder
-if(!defined('MAX_FILES_USERFOLDER')) define('MAX_FILES_USERFOLDER', 20);
+if(!defined('MAX_FILES_USERFOLDER')) define('MAX_FILES_USERFOLDER', 30);
 
 //Max concurrent sessions from one IP with the same Browser
 if(!defined('MAX_CONCURRENT_SESSIONS')) define('MAX_CONCURRENT_SESSIONS', 50);
@@ -76,7 +76,7 @@ if(!defined('STOPFORUMSPAM_FREQUENCY')) define('STOPFORUMSPAM_FREQUENCY', 2);
 //-------------------------------------------------------------------------
 define('EQDKP_PROJECT_URL',			"https://eqdkp-plus.eu");
 define('EQDKP_ABOUT_URL',			"https://eqdkp-plus.eu/about");
-define('EQDKP_DOWNLOADS_URL',		"https://repo.eqdkp-plus.eu/");
+define('EQDKP_DOWNLOADS_URL',		"https://download.eqdkp-plus.eu/");
 define('EQDKP_REPO_URL',			"https://repo.eqdkp-plus.eu/");
 define('EQDKP_NOTIFICATIONS_URL',	"https://eqdkp-plus.eu/rss/notifications.xml");
 define('EQDKP_TWITTER_SCREENNAME',	"EQdkpPlus");
@@ -115,21 +115,10 @@ $TAG_BLACKLIST = array(
 
 //Attribute Blacklist for filtering article content
 $ATTR_BLACKLIST = array(
-	'onclick',
-	"ondblclick",
-	"onkeydown",
-	"onkeypress",
-	"onkeyup",
-	"onmousedown",
-	"onmousemove",
-	"onmouseout",
-	"onmouseover",
-	"onmouseup",
-	"onchange",
-	'action',
-	'background',
-	'codebase',
-	'dynsrc',
-	'lowsrc',
-	'formaction',
+		'action',
+		'background',
+		'codebase',
+		'dynsrc',
+		'formaction',
+		'lowsrc'
 );

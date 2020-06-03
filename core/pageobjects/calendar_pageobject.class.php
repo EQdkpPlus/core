@@ -251,7 +251,7 @@ class calendar_pageobject extends pageobject {
 							'start'			=> $startdate_out,
 							'end'			=> $enddate_out,
 							'allDay'		=> $allday,
-							'note'			=> $comp->getProperty('description', 1),
+							'note'			=> str_replace('\n', "<br />", ($comp->getProperty('description', 1))),
 							'color'			=> $eventcolor.' !important',
 							'textColor'		=> $eventcolor_txt.' !important',
 							'className'		=> 'calendarevent_'.$calender_id,
@@ -343,8 +343,8 @@ class calendar_pageobject extends pageobject {
 								'end'			=> $this->time->date('Y-m-d H:i', $this->pdh->get('calendar_events', 'time_end', array($calid, $alldayevents))),
 								'allDay'		=> $alldayevents,
 								'note'			=> $this->pdh->get('calendar_events', 'notes', array($calid, true)),
-								'color'			=> $eventcolor,
-								'textColor'		=> $eventcolor_txt,
+								'color'			=> $eventcolor.' !important',
+								'textColor'		=> $eventcolor_txt.' !important',
 								'isowner'		=> $this->pdh->get('calendar_events', 'is_owner', array($calid)) || $this->user->check_auth('a_cal_revent_conf', false),
 								'isinvited'		=> $this->pdh->get('calendar_events', 'is_invited', array($calid)),
 								'joinedevent'	=> $this->pdh->get('calendar_events', 'joined_invitation', array($calid)),
@@ -415,7 +415,9 @@ class calendar_pageobject extends pageobject {
 
 		//RSS-Feed for next Raids
 		$this->tpl->add_rssfeed($this->config->get('guildtag').' - Calendar Raids', 'calendar_raids.xml', array('po_calendarevent'));
-
+		$this->tpl->add_rssfeed($this->config->get('guildtag').' - Calendar Events', 'calendar_events.xml', array('po_calendarevent'));
+		$this->tpl->add_rssfeed($this->config->get('guildtag').' - Calendar all Entries', 'calendar_all.xml', array('po_calendarevent'));
+		
 		//raid-list
 		$settings = $this->pdh->get_page_settings('calendar', 'hptt_calendar_raidlist');
 		$view_list = $this->pdh->get('calendar_events', 'id_list', array(true));

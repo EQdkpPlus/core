@@ -459,9 +459,6 @@ $lang = array(
 "news_readmore" => "Weiterlesen...",
 "login_bridge_notice" => 'Da eine CMS-Bridge aktiv ist, musst Du dich mit den Login-Daten eures Forums/CMS anmelden.',
 "portalmanager" => "Portallayout verwalten",
-"more_plugins" => "Weitere Plugins findet ihr auf der Project Homepage unter <a href='".EQDKP_DOWNLOADS_URL."'>".EQDKP_PROJECT_URL."</a>.",
-"more_moduls" => "Weitere Module findet ihr auf der  Project Homepage unter <a href='".EQDKP_DOWNLOADS_URL."'>".EQDKP_PROJECT_URL."</a>.",
-"more_template" => "Weitere Templates findet ihr auf der Project Homepage unter <a href='".EQDKP_DOWNLOADS_URL."'>".EQDKP_PROJECT_URL."</a>",
 "lib_pupd_nochangelog" => "Es sind keine Changelog-Informationen bekannt.",
 "cl_bttn_ok" => "Ok",
 "menu_roster" => "Roster",
@@ -1128,4 +1125,6 @@ $lang = array(
 "embedd_consent_ok" => "Laden und Entscheidung speichern.",
 "new_char_admin_associate_info" => "Der erstellte Charakter muss Dir nach der Erstellung von einem Administrator zugewiesen werden und ist deshalb nicht sofort in deiner Charakterliste sichtbar.",
 "password_leaked" => "Das von dir verwendete Passwort ist durch mindestens einen Einbruch bekannt und somit unsicher. Bitte verwende ein neues und sicheres Passwort.",
+"article_category_empty" => "Diese Artikelkategorie enthält noch keine Artikel.",
+		
 );

@@ -190,7 +190,7 @@ if ( !class_exists( "apa_decay_ria" ) ) {
 			return $currentLastRun+$max_ttl;
 		}
 
-		public function get_value($apa_id, $last_run, $module, $dkp_id, $data, $refdate) {
+		public function get_value($apa_id, $last_run, $module, $dkp_id, $data, $refdate, $debug=false) {
 			// load decay parameters, set decay_start to its proper timestamp (from somewhere at that day to exectime)
 			$decay_start = $this->apa->get_data('start_date', $apa_id);
 			if ($decay_start > $this->time->time) {

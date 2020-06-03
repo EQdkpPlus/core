@@ -1652,11 +1652,11 @@ a.ui-button:active,
     
 }
 
-
+  
 .ui-multiselect-hasfilter ul { position:relative; top:2px }
-.ui-multiselect-filter { float:left; margin-right:10px; font-size:11px }
-.ui-multiselect-filter input { width:100px; font-size:10px; margin-left:5px; height:15px; padding:2px; border:1px solid #292929; -webkit-appearance:textfield; -webkit-box-sizing:content-box; }
-
+.ui-multiselect-filter { float:left; margin-right:10px; font-size:1em; width:100%; }
+.ui-multiselect-header .ui-multiselect-filter input { width:100px; font-size:.9em; margin-left:5px; height:15px; padding:2px; border:1px solid #292929; -webkit-appearance:textfield; -webkit-box-sizing:content-box; }
+.ui-multiselect-excluded {display: none}
 /*
  * qTip2 - Pretty powerful tooltips - v3.0.3
  * http://qtip2.com
@@ -3281,6 +3281,6 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
 
 
 
-// Import style rules & variables
+/* Import style rules & variables */
 @_path: replace(@eqdkpTemplateImagePath, '(\.\./)|(images/)', '');
 @import (once, optional, less) '@{_path}jquery.less';

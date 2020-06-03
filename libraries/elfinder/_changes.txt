@@ -1,0 +1,5 @@
+- php/elFinder.class.php: disable functions put, extract, archive, procExec
+
+- php/elFinderVolumeLocalFileSystem.class.php: _mkfile, _symlink, _copy, _move, _unlink, _rmdir, _filePutContents, _checkArchivers, _extract, _save, _archive
+
+- php/elFinderVolumeDriver.class.php: modify "upload()" for max file setting

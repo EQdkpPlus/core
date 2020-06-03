@@ -105,9 +105,7 @@ class php_check extends install_generic {
 			'mb'		=> array(
 				'required'		=> $this->lang['yes'],
 				'installed'		=> (function_exists('mb_strtolower')) ? $this->lang['yes'] : $this->lang['no'],
-				'passfail'		=> true,
-				'adviced_fail'	=> (!function_exists('mb_strtolower')) ? true : false,
-				'ignore'		=> true
+				'passfail'		=> (function_exists('mb_strtolower')) ? true : false,
 			),
 			'externalconnection' => array(
 				'required'		=> $this->lang['yes'],

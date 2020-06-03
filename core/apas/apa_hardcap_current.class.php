@@ -61,7 +61,7 @@ if ( !class_exists( "apa_hardcap_current" ) ) {
 		public function get_last_run($date, $apa_id) { return; }
 		public function get_next_run($apa_id) { return 0; }
 
-		public function get_value($apa_id, $cache_date, $module, $dkp_id, $data, $refdate) {
+		public function get_value($apa_id, $cache_date, $module, $dkp_id, $data, $refdate, $debug=false) {
 			$value = $data['val'];
 			$lower_cap = $this->apa->get_data('lower_cap', $apa_id);
 			$upper_cap = $this->apa->get_data('upper_cap', $apa_id);

@@ -292,6 +292,7 @@ if(!class_exists('article')){
 					'PAGINATION'			=> generate_pagination($this->controller_path.$strPath, count($arrSortedArticleIDs), $arrCategory['per_page'], $intStart, 'start'),
 					'CATEGORY_DESCRIPTION'	=> $this->bbcode->parse_shorttags(xhtml_entity_decode($arrCategory['description'])),
 					'CATEGORY_NAME'			=> $arrCategory['name'],
+					'CATEGORY_COUNT'		=> count($arrSortedArticleIDs),
 					'PERMALINK'				=> $this->pdh->get('article_categories', 'permalink', array($intCategoryID)),
 					'RSSLINK'				=> $this->controller_path.'RSS/'.$this->routing->clean($arrCategory['name']).'-c'.$intCategoryID.'/'.(($this->user->is_signedin()) ? '?key='.$this->user->data['exchange_key'] : ''),
 					'ARTICLE_TOOLBAR'		=> $jqToolbar['id'],

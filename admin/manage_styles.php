@@ -202,8 +202,18 @@ class Manage_Styles extends page_generic{
 
 			$admin_folder = (substr($filename, 0, 6) == 'admin/') ? '/admin' : '';
 			$filename = str_replace('admin/', '', $filename);
-
+			
+			//Sanitize Filename
+			$filename = preg_replace('/[^A-Za-z0-9\._-]/', '', $filename);
+			$extension = pathinfo($filename, PATHINFO_EXTENSION); 
+			
 			$storage_folder  = $this->pfh->FolderPath('templates/'.$this->style['template_path'].$admin_folder, 'eqdkp');
+			
+			if(!isFilelinkInFolder($storage_folder.$filename, $storage_folder) || (!in_array($extension, array('html', 'js', 'css', 'tpl')))){
+				message_die("Action not allowed");
+			}
+			
+			
 			$this->pfh->FilePath($storage_folder.$filename);
 			$this->pfh->putContent($storage_folder.$filename, $this->in->get('template_edit', '', 'raw'));
 
@@ -368,6 +378,12 @@ class Manage_Styles extends page_generic{
 		if ($this->in->get('template') != "" && !is_numeric(base64_decode($this->in->get('template')))){
 			$filename = base64_decode($this->in->get('template'));
 
+			$extension = pathinfo($filename, PATHINFO_EXTENSION);
+			
+			if(!in_array($extension, array('html', 'tpl', 'css', 'js'))){
+				message_die("Extension not allowed.");
+			}
+			
 			if(substr($filename, 0, 8) === 'plugins/'){
 				$realFilename = str_replace("plugins/", "", $filename);
 				$intFirstSlash = (strpos($realFilename, '/'));
@@ -401,6 +417,12 @@ class Manage_Styles extends page_generic{
 			}
 
 			if (file_exists($filename)){
+				$file_ext = pathinfo($filename, PATHINFO_EXTENSION);
+				
+				if(!isFilelinkInFolder($filename, '') || (!in_array($file_ext, array('html', 'js', 'css', 'tpl')))){
+					message_die("Action not allowed");
+				}
+				
 				$contents = file_get_contents($filename);
 				$file_ext = pathinfo($filename, PATHINFO_EXTENSION);
 				$editor_type = ($file_ext == 'css') ? 'css' : 'html_js';

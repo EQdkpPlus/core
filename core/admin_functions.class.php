@@ -51,28 +51,38 @@ class admin_functions extends gen_class {
 	 * @return string
 	 */
 	function resolve_browser($string){
-		$string = sanitize($string);
+		$arrAgent = $this->env->agent($string);
+		$strBrowser = $arrAgent->browser;
+		
+		$string = ucfirst($strBrowser).' '.implode('.', $arrAgent->versions);
+		
 		if( preg_match("/opera/i",$string)){
-			return "<div class=\"coretip-left browser-icon opera\" data-coretip=\"".$string."\"><i class=\"fa fa-lg fa-opera\"></i></div>";
+			$strOut = "<div class=\"coretip-left browser-icon opera\" data-coretip=\"".$string."\"><i class=\"fa fa-lg fa-opera\"></i></div>";
 		}else if( preg_match("/msie/i",$string)){
-			return "<div class=\"coretip-left browser-icon ie\" data-coretip=\"".$string."\"><i class=\"fa fa-lg fa-internet-explorer\"></i></div>";
+			$strOut =  "<div class=\"coretip-left browser-icon ie\" data-coretip=\"".$string."\"><i class=\"fa fa-lg fa-internet-explorer\"></i></div>";
 		}else if( preg_match("/edge/i",$string)){
-			return "<div class=\"coretip-left browser-icon edge\" data-coretip=\"".$string."\"><i class=\"fa fa-lg fa-edge\"></i></div>";
+			$strOut =  "<div class=\"coretip-left browser-icon edge\" data-coretip=\"".$string."\"><i class=\"fa fa-lg fa-edge\"></i></div>";
 		}else if( preg_match("/chrome/i", $string)){
-			return "<div class=\"coretip-left browser-icon chrome\" data-coretip=\"".$string."\"><i class=\"fa fa-lg fa-chrome\"></i></div>";
+			$strOut = "<div class=\"coretip-left browser-icon chrome\" data-coretip=\"".$string."\"><i class=\"fa fa-lg fa-chrome\"></i></div>";
 		}else if( preg_match("/konqueror/i",$string)){
-			return "<div class=\"coretip-left\" data-coretip=\"".$string."\">Konqueror</div>";
+			$strOut =  "<div class=\"coretip-left\" data-coretip=\"".$string."\">Konqueror</div>";
 		}else if( preg_match("/safari/i",$string) ){
-			return "<div class=\"coretip-left browser-icon safari\" data-coretip=\"".$string."\"><i class=\"fa fa-lg fa-safari\"></i></div>";
+			$strOut =  "<div class=\"coretip-left browser-icon safari\" data-coretip=\"".$string."\"><i class=\"fa fa-lg fa-safari\"></i></div>";
 		}else if( preg_match("/lynx/i",$string) ){
-			return "<span class=\"coretip-left\" data-coretip=\"".$string."\">Lynx</span>";
-		}else if( preg_match("/mozilla/i",$string) ){
-			return "<div class=\"coretip-left browser-icon firefox\" data-coretip=\"".$string."\"><i class=\"fa fa-lg fa-firefox\"></i></div>";
+			$strOut =  "<span class=\"coretip-left\" data-coretip=\"".$string."\">Lynx</span>";
+		}else if( preg_match("/mozilla/i",$string) || preg_match("/firefox/i",$string) ){
+			$strOut =  "<div class=\"coretip-left browser-icon firefox\" data-coretip=\"".$string."\"><i class=\"fa fa-lg fa-firefox\"></i></div>";
 		}else if( preg_match("/w3m/i",$string) ){
-			return "<span class=\"coretip-left\" data-coretip=\"".$string."\">w3m</span>";
+			$strOut =  "<span class=\"coretip-left\" data-coretip=\"".$string."\">w3m</span>";
 		}else{
-			return "<i class=\"fa fa-question-circle fa-lg fa-fw coretip-left\" data-coretip=\"".$string."\"></i>";
+			$strOut =  "<i class=\"fa fa-question-circle fa-lg fa-fw coretip-left\" data-coretip=\"".$string."\"></i>";
 		}
+		
+		if($arrAgent->mobile){
+			$strOut .= '  <i class="fa-lg fa-mobile"></i>';
+		}
+		
+		return $strOut;
 	}
 
 	/**

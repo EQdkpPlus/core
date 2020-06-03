@@ -167,7 +167,7 @@ if ( !class_exists( "apa_cap_current" ) ) {
 			return $nextRun;
 		}
 
-		public function get_value($apa_id, $cache_date, $module, $dkp_id, $data, $refdate) { return; }
+		public function get_value($apa_id, $cache_date, $module, $dkp_id, $data, $refdate, $debug=false) { return; }
 
 		public function recalculate($apa_id){
 			$this->db->prepare("DELETE FROM __adjustments WHERE adjustment_reason=? AND event_id=? ")->execute($this->apa->get_data('name', $apa_id), intval($this->apa->get_data('event', $apa_id)));

@@ -40,7 +40,7 @@ class content_export extends gen_class {
 		);
 	}
 
-	public function export($withMemberItems = false, $withMemberAdjustments = false, $filter = false, $filterid = false, $blnIncludeHTML = false, $blnAdditionalColumns=false){
+	public function export($withMemberItems = false, $withMemberAdjustments = false, $filter = false, $filterid = false, $blnIncludeHTML = false, $blnAdditionalColumns=false, $blnIsAPITokenRequest=false){
 		$arrPresets = array();
 		foreach ($this->presets as $preset){
 			$pre = $this->pdh->pre_process_preset($preset['name'], $preset);
@@ -66,7 +66,7 @@ class content_export extends gen_class {
 			'name'				=> unsanitize($this->config->get('guildtag')),
 			'guild'				=> unsanitize($this->config->get('guildtag')),
 			'dkp_name'			=> $this->config->get('dkp_name'),
-			'version'			=> $this->config->get('plus_version'),
+			'version'			=> ($blnIsAPITokenRequest) ? VERSION_EXT : substr(VERSION_EXT, 0, strrpos(VERSION_EXT, '.')),
 			'layout'			=> $this->config->get('eqdkp_layout'),
 			'base_layout'		=> $this->pdh->get_eqdkp_base_layout($this->config->get('eqdkp_layout')),
 		);

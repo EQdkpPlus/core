@@ -591,7 +591,10 @@ function message_die($text = '', $title = '', $type = 'normal', $login_form = fa
 }
 
 function isValidURL($url){
-	return preg_match('|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $url);
+	if (filter_var($url, FILTER_VALIDATE_URL) === FALSE) {
+		return false;
+	}
+	return true;
 }
 
 
@@ -733,65 +736,33 @@ function set_cookie($name, $cookie_data, $cookie_time, $blnHttpOnly=true){
 	$cname = register('config')->get('cookie_name');
 	$cpath = register('config')->get('cookie_path');
 	if(empty($cname) || empty($cpath)) return;
-	setcookie( $cname . '_' . $name, $cookie_data, $cookie_time, $cpath, register('config')->get('cookie_domain'), register('env')->ssl, $blnHttpOnly);
+	
+	//PHP 7.3 allows setting the samesite option
+	if(phpversion() >= "7.3"){
+		setcookie($cname . '_' . $name, $cookie_data, [
+				'expires' => $cookie_time,
+				'path' => $cpath,
+				'domain' => register('config')->get('cookie_domain'),
+				'secure' => register('env')->ssl,
+				'httponly' => $blnHttpOnly,
+				'samesite' => 'Lax',
+		]);
+	} else {
+		setcookie( $cname . '_' . $name, $cookie_data, $cookie_time, $cpath, register('config')->get('cookie_domain'), register('env')->ssl, $blnHttpOnly);
+	}
 }
 
 //A workaround because strtolower() does not support UTF8
 function utf8_strtolower($string){
-	if (function_exists('mb_strtolower')){
-		$string = mb_strtolower($string,'UTF-8');
-	} else {
-		 $convert_to = array(
-			"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u",
-			"v", "w", "x", "y", "z", "à", "á", "â", "ã", "ä", "å", "æ", "ç", "è", "é", "ê", "ë", "ì", "í", "î", "ï",
-			"ð", "ñ", "ò", "ó", "ô", "õ", "ö", "ø", "ù", "ú", "û", "ü", "ý", "а", "б", "в", "г", "д", "е", "ё", "ж",
-			"з", "и", "й", "к", "л", "м", "н", "о", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы",
-			"ь", "э", "ю", "я"
-		  );
-		  $convert_from = array(
-			"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U",
-			"V", "W", "X", "Y", "Z", "À", "Á", "Â", "Ã", "Ä", "Å", "Æ", "Ç", "È", "É", "Ê", "Ë", "Ì", "Í", "Î", "Ï",
-			"Ð", "Ñ", "Ò", "Ó", "Ô", "Õ", "Ö", "Ø", "Ù", "Ú", "Û", "Ü", "Ý", "А", "Б", "В", "Г", "Д", "Е", "Ё", "Ж",
-			"З", "И", "Й", "К", "Л", "М", "Н", "О", "П", "Р", "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш", "Щ", "Ъ", "Ъ",
-			"Ь", "Э", "Ю", "Я"
-		  );
-
-		$string = str_replace($convert_from, $convert_to, $string);
-	}
-
-
-	return $string;
+	return mb_strtolower($string,'UTF-8');
 }
 
 function utf8_strtoupper($string){
-	if (function_exists('mb_strtoupper')){
-		$string = mb_strtoupper($string,'UTF-8');
-	} else {
-		$convert_from = array(
-				"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u",
-				"v", "w", "x", "y", "z", "à", "á", "â", "ã", "ä", "å", "æ", "ç", "è", "é", "ê", "ë", "ì", "í", "î", "ï",
-				"ð", "ñ", "ò", "ó", "ô", "õ", "ö", "ø", "ù", "ú", "û", "ü", "ý", "а", "б", "в", "г", "д", "е", "ё", "ж",
-				"з", "и", "й", "к", "л", "м", "н", "о", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы",
-				"ь", "э", "ю", "я"
-		);
-		$convert_to = array(
-				"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U",
-				"V", "W", "X", "Y", "Z", "À", "Á", "Â", "Ã", "Ä", "Å", "Æ", "Ç", "È", "É", "Ê", "Ë", "Ì", "Í", "Î", "Ï",
-				"Ð", "Ñ", "Ò", "Ó", "Ô", "Õ", "Ö", "Ø", "Ù", "Ú", "Û", "Ü", "Ý", "А", "Б", "В", "Г", "Д", "Е", "Ё", "Ж",
-				"З", "И", "Й", "К", "Л", "М", "Н", "О", "П", "Р", "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш", "Щ", "Ъ", "Ъ",
-				"Ь", "Э", "Ю", "Я"
-		);
-		$string = str_replace($convert_from, $convert_to, $string);
-	}
-	return $string;
+	return mb_strtoupper($string,'UTF-8');
 }
 
 function utf8_substr($str, $s=0, $l=1){
-	if(function_exists('mb_substr')){
-		return mb_substr($str, $s, $l, 'UTF-8');
-	} else {
-		return substr($str, $s, $l);
-	}
+	return mb_substr($str, $s, $l, 'UTF-8');
 }
 
 
@@ -897,27 +868,6 @@ function random_string($length = 20){
 
 	$string = bin2hex(generateRandomBytes($binLength));
 	return $string;
-}
-
-
-function get_absolute_path($path) {
-	$strMyDirectorySeperator = "/";
-	$path = str_replace(array('/', '\\'), $strMyDirectorySeperator, $path);
-	$parts = array_filter(explode($strMyDirectorySeperator, $path), 'strlen');
-	$absolutes = array();
-	foreach ($parts as $part) {
-		if ('.' == $part) continue;
-		if ('..' == $part) {
-			array_pop($absolutes);
-		} else {
-			$absolutes[] = $part;
-		}
-	}
-	return implode($strMyDirectorySeperator, $absolutes);
-}
-
-function clean_rootpath($strPath){
-	return preg_replace('/[^\.\/]/', '', $strPath);
 }
 
 function cut_text($strText, $max = 200, $blnAddPoints = true){
@@ -1086,16 +1036,25 @@ function human_filesize($bytes, $dec = 2)
 //Checks if an filelink is in an given folder. Set strict true if FileLink should not be in subfolder
 function isFilelinkInFolder($strFilelink, $strFolder, $blnStrict=false){
 	$strPath = pathinfo($strFilelink, PATHINFO_DIRNAME);
-	if (substr($strFilelink, -1) == "/"){
-		$strPath = $strPath . "/" .pathinfo($strFilelink, PATHINFO_BASENAME);
+	if (substr($strFilelink, -1) === DIRECTORY_SEPARATOR){
+		$strPath = $strPath . DIRECTORY_SEPARATOR .pathinfo($strFilelink, PATHINFO_BASENAME);
 	}
 
-	$strAbsolutePath = get_absolute_path($strPath);
-	if (substr($strFolder, -1) == "/"){
+	$strAbsolutePath = realpath($strPath);
+
+	if (substr($strFolder, -1) === DIRECTORY_SEPARATOR){
 		$strFolder = substr($strFolder, 0, -1);
 	}
 	$strFolder = str_replace(registry::get_const('root_path'), '', $strFolder);
+	
+	$strDocRoot = filter_var($_SERVER["DOCUMENT_ROOT"], FILTER_SANITIZE_STRING);
+	$strDocRoot = str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, $strDocRoot);
 
+	if(strpos($strFolder, $strDocRoot) !== 0){
+		$strFolder = registry::get_const('root_path').$strFolder;
+	}
+	$strFolder = realpath($strFolder);
+	
 	if($blnStrict){
 		if ($strAbsolutePath === $strFolder) return true;
 	} else {
@@ -1137,7 +1096,7 @@ function da_($array){
 */
 function d($content="-" ){
 	if(is_array($content)){
-		return da($content);
+		return da($content, true);
 	}
 	if (is_object($content)) {
 		echo "<pre>";
@@ -1176,7 +1135,7 @@ function d($content="-" ){
  * @param Array $TheArray
  * @return mixed
  */
-function da($TheArray){ // Note: the function is recursive
+function da($TheArray, $blnPostDebugLine=false){ // Note: the function is recursive
 	if(!is_array($TheArray)){
 		return "no array";
 	}
@@ -1196,6 +1155,14 @@ function da($TheArray){ // Note: the function is recursive
 		echo "</td>\n";
 		echo "</tr>\n";
 	}
+	
+	if($blnPostDebugLine){
+		$arrBacktrace = debug_backtrace();
+		if($arrBacktrace && isset($arrBacktrace[1])){
+			echo "<tr><td  bgcolor='#efefef' colspan=\"2\">Debug called in ".$arrBacktrace[1]['file']." line ".$arrBacktrace[1]['line']."</td></tr>";
+		}
+	}
+	
 	echo "</table>\n";
 }
 

@@ -265,7 +265,7 @@ if ( !class_exists( "pdh_w_adjustment" ) ){
 				'{L_ID}'		=> implode(', ', $adjs),
 				'{L_RAID_ID}'	=> $raid_id,
 			);
-			$this->log_insert('action_indivadjofraid_deleted', $log_action, $raid_id);
+			$this->log_insert('action_indivadjofraid_deleted', $log_action, $raid_id, $this->pdh->get('raid', 'event_name', array($raid_id)));
 			$this->pdh->enqueue_hook('adjustment_update', $adjs, array('action' => 'delete', 'time' => 0));
 			return true;
 		}

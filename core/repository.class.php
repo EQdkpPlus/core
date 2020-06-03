@@ -141,6 +141,15 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 				$this->loadRevokeList();
 			}
 		}
+		
+		public function checkIfOutdated(){
+			$lastupdate = (int) $this->pdh->get('repository', 'lastupdate');
+			if((($this->time->time - $lastupdate) > ($this->cachetime*2))){
+				return true;
+			}
+			
+			return false;
+		}
 
 		/**
 		* Build the List with all package information

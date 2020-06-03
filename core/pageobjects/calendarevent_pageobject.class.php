@@ -169,6 +169,8 @@ class calendarevent_pageobject extends pageobject {
 					#update_status($eventid, $memberid, $memberrole='', $signupstatus='', $raidgroup=0, $signed_memberid=0, $note='', $signedbyadmin=0)
 					$raidgroup		= $this->pdh->get('calendar_raids_attendees', 'raidgroup', array($this->url_id, $attendeeid));
 					$this->pdh->put('calendar_raids_attendees', 'update_status', array($this->url_id, $attendeeid, $newrole, $newstatus, $raidgroup, $attendeeid));
+					//Send Notification
+					$this->notify_statuschange($this->url_id, array($attendeeid), $newstatus);
 				}
 				$this->pdh->process_hook_queue();
 			}
@@ -1148,7 +1150,9 @@ class calendarevent_pageobject extends pageobject {
 
 		//RSS-Feed for next Raids
 		$this->tpl->add_rssfeed($this->config->get('guildtag').' - Calendar Raids', 'calendar_raids.xml', array('po_calendarevent'));
-
+		$this->tpl->add_rssfeed($this->config->get('guildtag').' - Calendar Events', 'calendar_events.xml', array('po_calendarevent'));
+		$this->tpl->add_rssfeed($this->config->get('guildtag').' - Calendar all Entries', 'calendar_all.xml', array('po_calendarevent'));
+		
 		$arrRaidgroups = array(0=>$this->user->lang('raidevent_raid_all_raidgroups')) + $this->raidgroup_dd;
 
 		$intCategoryID = registry::get_const('categoryid');
@@ -1207,7 +1211,7 @@ class calendarevent_pageobject extends pageobject {
 			'RAIDICON'				=> $this->pdh->get('event', 'html_icon', array($eventdata['extension']['raid_eventid'], 62)),
 			'RAIDLEADER'			=> ($eventdata['extension']['raidleader'] > 0) ? implode(', ', $this->pdh->aget('member', 'html_memberlink', 0, array($eventdata['extension']['raidleader'], $this->routing->simpleBuild('character'), '', false, false, true, true))) : '',
 			'RAIDVALUE'				=> ($eventdata['extension']['raid_value'] > 0) ? $eventdata['extension']['raid_value'] : '0',
-			'RAIDNOTE'				=> ($eventdata['notes']) ? $this->bbcode->toHTML(nl2br($eventdata['notes'])) : '',
+			'RAIDNOTE'				=> ($eventdata['notes']) ? $this->bbcode->toHTML($eventdata['notes']) : '',
 			'RAID_ADDEDBY'			=> $this->pdh->get('user', 'name', array($eventdata['creator'])),
 			'RAIDDATE'				=> $this->time->user_date($eventdata['timestamp_start']),
 			'RAIDTIME_START'		=> $this->time->user_date($eventdata['timestamp_start'], false, true),

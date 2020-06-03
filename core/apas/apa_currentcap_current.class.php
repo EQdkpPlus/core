@@ -61,11 +61,16 @@ if ( !class_exists( "apa_currentcap_current" ) ) {
 		public function get_last_run($date, $apa_id) { return; }
 		public function get_next_run($apa_id) { return 0; }
 
-		public function get_value($apa_id, $cache_date, $module, $dkp_id, $data, $refdate) {
+		public function get_value($apa_id, $cache_date, $module, $dkp_id, $data, $refdate, $debug=false) {
 			$value = $data['val'];
 			$lower_cap = $this->apa->get_data('lower_cap', $apa_id);
 			$upper_cap = $this->apa->get_data('upper_cap', $apa_id);			
 
+			//Prevent the case, that main+twinks(=> with_twink=true) is adjusted, if twinks are shown (so main and twink get own points)
+			if(!($data['with_twink'] != $this->config->get('show_twinks'))){
+				return array($value, false, 0);		
+			}
+			
 			if($lower_cap != "" && ($value < $lower_cap)){
 				$adj = $lower_cap - $value;
 				

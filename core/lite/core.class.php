@@ -166,7 +166,7 @@ class core extends gen_class {
 			$this->error_out(false);
 		}
 
-		$this->tpl->assign_var('EQDKP_VERSION', $this->config->get('plus_version'));
+		$this->tpl->assign_var('EQDKP_VERSION', VERSION_INT);
 		$this->tpl->display();
 	}
 }

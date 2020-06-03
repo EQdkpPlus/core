@@ -145,7 +145,7 @@ class plugin_generic extends gen_class {
 		}
 		switch ($dependency){
 			case 'plus_version':
-				$check_result = compareVersion($this->config->get('plus_version'), $deps, '>=');
+				$check_result = compareVersion(VERSION_INT, $deps, '>=');
 				$check_result = ( $check_result >= 0 ) ? true : false;
 				break;
 			case 'games':
