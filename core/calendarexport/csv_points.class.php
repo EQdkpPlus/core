@@ -111,7 +111,7 @@ if(!function_exists('CSVpointexport')){
 
 		registry::register('template')->add_js('
 			genOutput()
-			$("input[type=\'checkbox\'], #ip_seperator, #dd_sorting, #raidgroup").change(function (){
+			$("input[type=\'checkbox\'], #ip_seperator, #dd_sorting, #raidgroup").on(\'change\', function (){
 				genOutput()
 			});
 		', "docready");

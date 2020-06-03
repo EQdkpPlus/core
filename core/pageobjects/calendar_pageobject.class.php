@@ -168,12 +168,12 @@ class calendar_pageobject extends pageobject {
 					var query = search.replace(regex, "$1").replace(/&$/, "")
 					return (query.length > 2 ? query + "&" : "?") + param + "=" + newval
 				}
-				$("#type").change(function(){
+				$("#type").on(\'change\', function(){
 					str = replaceQueryParam("type", $(this).val(), $("#icalfeedurl").val());
 					$("#icalfeedurl").val(str);
 					$("#icaldllink").prop("href", str);
 				}).trigger("change");
-				$("#calendarExportFilter").change(function(){
+				$("#calendarExportFilter").on(\'change\', function(){
 					str = replaceQueryParam("calendars", $(this).val(), $("#icalfeedurl").val());
 					$("#icalfeedurl").val(str);
 					$("#icaldllink").prop("href", str);

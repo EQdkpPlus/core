@@ -85,7 +85,7 @@ if (!class_exists("jquery")) {
 
 			$this->tpl->add_js('$(".lightbox, a[rel=\'lightbox\']").colorbox({rel:"lightbox", transition:"none", maxWidth:"90%", maxHeight:"90%"});', 'docready');
 			$this->tpl->add_js('$().relativeTime("time.datetime");', 'docready');
-			$this->tpl->add_js('$(".equalto").change(function(){
+			$this->tpl->add_js('$(".equalto").on("change", function(){
 					field1	= $("#" + $(this).data("equalto")).val();
 					field2	= $(this).val();
 					if(field1 != field2){
@@ -919,7 +919,7 @@ if (!class_exists("jquery")) {
 				$this->tpl->add_js('
 				$(".fv_checkit").each(function(){ this.noValidate = true; })
 
-				$(".fv_checkit").submit(function(e) {
+				$(".fv_checkit").on("submit", function(e) {
 				var self = this;
 				$(this).addClass("fv_checked");
 				if( $(".fv_checkit").find(".ui-tabs").length ){

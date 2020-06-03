@@ -264,7 +264,7 @@ function reload_settings(){
 	var form = $('#form_moduleconfig').serializeArray();
 	$.post(\"manage_portal.php".$this->SID."&settings&id=".$id."\", form, function(data){
 		if (data.reload){
-			$('#form_moduleconfig').submit();
+			$('#form_moduleconfig').trigger('submit');
 		}
 		if (data.new){
 			$.each(data.new, function(index, value) {
@@ -284,7 +284,7 @@ function reload_settings(){
 					$('#'+index).spinner();
 				}
 				if ($('#'+index).hasClass('js_reload')) {
-					$('#'+index).change(reload_settings);
+					$('#'+index).on('change', reload_settings);
 				}
 			});
 		}
@@ -319,7 +319,7 @@ function reload_settings(){
 		}
 	}, 'json');
 }
-$('.js_reload').change(reload_settings);", 'docready');
+$('.js_reload').on('change', reload_settings);", 'docready');
 		}
 		$this->tpl->assign_var('ACTION', $this->env->phpself.$this->SID.'&amp;id='.$id.'&amp;simple_head=simple');
 		$this->core->set_vars([

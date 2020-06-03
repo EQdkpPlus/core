@@ -269,7 +269,7 @@ $("#addopt_icon").click(function(){
 	$("#addopt_icon").remove();
 	$("#new_options").append(fields);
 });
-$("#type").change(function(){
+$("#type").on(\'change\', function(){
 
 	if($("#type").val() == "dropdown" || $("#type").val() == "multiselect" || $("#type").val() == "radio" || $("#type").val() == "gender") {
 		$("#options_row").show();

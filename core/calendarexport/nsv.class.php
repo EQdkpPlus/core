@@ -56,7 +56,7 @@ if(!function_exists('NSVexport')){
 
 		registry::register('template')->add_js('
 			genOutput()
-			$("input[type=\'checkbox\'], #ip_seperator, #raidgroup").change(function (){
+			$("input[type=\'checkbox\'], #ip_seperator, #raidgroup").on(\'change\', function (){
 				genOutput()
 			});
 

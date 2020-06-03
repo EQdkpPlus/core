@@ -133,7 +133,7 @@ class EQDKPBackup extends page_generic{
 		$this->tpl->add_js("
 			function submit_form(button){
 				$('#mode').attr('name', button);
-				$(\"#backup_form\").submit();
+				$(\"#backup_form\").trigger('submit');
 			}
 
 			function restore_data(value){

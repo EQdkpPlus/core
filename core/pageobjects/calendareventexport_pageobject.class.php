@@ -46,7 +46,7 @@ class calendareventexport_pageobject extends pageobject {
 				$this->tpl->assign_var('EXPORT_OUTPUT', $this->user->lang('raidevent_raid_export_indx'));
 			}
 
-			$this->tpl->add_js('$("#exportdropdown").change(function(){ window.location.href = "'.$this->strPath.$this->SID.'&eventid='.$eventid.'&output="+$(this).val();});', "docready");
+			$this->tpl->add_js('$("#exportdropdown").on(\'change\', function(){ window.location.href = "'.$this->strPath.$this->SID.'&eventid='.$eventid.'&output="+$(this).val();});', "docready");
 
 			$this->tpl->assign_vars(array(
 				'DROPDOWN'			=> (new hdropdown('link', array('options' => $menu_structure, 'value' => $output, 'id' => 'exportdropdown')))->output(),

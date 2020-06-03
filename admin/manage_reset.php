@@ -260,7 +260,7 @@ class reset_eqdkp extends page_generic {
 		}
 
 		$js = "
-			$('.cb_select_class').change(function(){
+			$('.cb_select_class').on('change', function(){
 				if(!$(this).prop('checked')) return;
 				var id = $(this).attr('id').substr(3);
 				var dependency = new Array();
@@ -292,7 +292,7 @@ class reset_eqdkp extends page_generic {
 		}
 		$this->confirm_delete($this->user->lang('reset_confirm'));
 
-		$this->jquery->Dialog('consolidate_warning', '', array('custom_js'=>"$(\"#consolidate_form\").submit();", 'message'=>$this->user->lang('consolidate_detele_warning')), 'confirm');
+		$this->jquery->Dialog('consolidate_warning', '', array('custom_js'=>"$(\"#consolidate_form\").trigger(\"submit\");", 'message'=>$this->user->lang('consolidate_detele_warning')), 'confirm');
 
 
 		$this->tpl->add_js('$("#reset_selectall").click(function(){

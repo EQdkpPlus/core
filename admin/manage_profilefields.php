@@ -174,7 +174,7 @@ $("#addopt_icon").click(function(){
 	$(fields).find(\'.input\').val("");
 	$("#new_options").append(fields);
 });
-$("#type_dd").change(function(){
+$("#type_dd").on(\'change\', function(){
 	myval = $("#type_dd").val();
 
 	if(myval == "dropdown" || myval == "multiselect" || myval == "radio" || myval == "checkbox") {

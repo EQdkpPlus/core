@@ -492,7 +492,7 @@ $('[data-equalto]').bind('input', function() {
 
 			case 'dropdown':
 				$js = "
-	$('.form_change').change(function(){
+	$('.form_change').on('change', function(){
 		var selected_values = [];
 		$.each($(this).find('option'), function(){
 			var selected = this.selected;
@@ -522,7 +522,7 @@ $('[data-equalto]').bind('input', function() {
 			case 'checkbox':
 			case 'radio':
 				$js = "
-	$('.form_change_checkbox, .form_change_radio').change(function(){
+	$('.form_change_checkbox, .form_change_radio').on('change', function(){
 		$.each($('.form_change_checkbox > input, .form_change_radio > input'), function(){
 			var checked = this.checked;
 			$.each($(this).data('form-change').split(','), function(index, value){

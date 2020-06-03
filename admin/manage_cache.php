@@ -138,7 +138,7 @@ class manage_cache extends page_generic {
 		}
 
 		$this->tpl->add_js("
-			$('#cache_select').change(function(){
+			$('#cache_select').on('change', function(){
 				$('#all_cache_divs > div').each(function(){
 					$(this).css('display', 'none');
 				});

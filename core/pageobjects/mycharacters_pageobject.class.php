@@ -145,7 +145,7 @@ class mycharacters_pageobject extends pageobject {
 
 		// The javascript for the mainchar change
 		$this->tpl->add_js("
-			$('.cmainradio').change( function(){
+			$('.cmainradio').on('change', function(){
 				$('#connection_submit').prop('disabled', true);
 
 				$.post('".$this->SID."&link_hash=".$this->CSRFGetToken('maincharchange')."', { maincharchange: $( \"input:radio[name=mainchar]:checked\" ).val() },
@@ -154,7 +154,7 @@ class mycharacters_pageobject extends pageobject {
 						system_message(data, 'success');
 					});
 				});
-			$('.cdefroledd').change( function(){
+			$('.cdefroledd').on('change', function(){
 				$('#connection_submit').prop('disabled', true);
 				$.post('".$this->SID."&link_hash=".$this->CSRFGetToken('defrolechange')."', { defrolechange: $(this).val(), defrolechange_memberid: $(this).attr('name').replace('defaultrole_', '') },
 					function(data){

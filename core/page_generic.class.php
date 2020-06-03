@@ -114,7 +114,7 @@ if(!class_exists('page_generic')){
 			$options['confirm_name'] = $this->cb_name;
 			$options['message'] = sprintf($message, ((($this->cd_module AND !$single) || (isset($options['force_ajax']) && $options['force_ajax'])) ? '<div class="confirm_content"><span style="display:none;">#replacedata#</span></div>' : ''));
 			if(($this->cb_name == '_class_' OR strpos($this->cb_name, '[]') !== false) AND !$single) {
-				$options['custom_js'] = "$('#mass_del_submit').prop('disabled', false); $('form:has(#mass_del_submit)').submit();";
+				$options['custom_js'] = "$('#mass_del_submit').prop('disabled', false); $('form:has(#mass_del_submit)').trigger('submit');";
 			}
 			$funcname = 'delete_warning';
 			if(isset($options['function'])) {

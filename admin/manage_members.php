@@ -505,7 +505,7 @@ class Manage_Members extends page_generic {
 		$this->confirm_delete($this->user->lang('confirm_delete_members'));
 
 		$this->tpl->add_js("
-			$('.cdefroledd').change( function(){
+			$('.cdefroledd').on('change', function(){
 				$.post('manage_members.php".$this->SID."&link_hash=".$this->CSRFGetToken('defrolechange')."', { defrolechange: $(this).val(), defrolechange_memberid: $(this).attr('name').replace('defaultrole_', '') },
 					function(data){
 						system_message(data, 'success');

@@ -231,11 +231,11 @@ class ManageAutoPoints extends page_generic {
 				$('.expr_last').removeClass('expr_last');
 				$(this).addClass('expr_last');
 			});
-			$('#func_args').change(function(){
+			$('#func_args').on('change', function(){
 				$('.expr_last').val($('.expr_last').val() + ' ' + $(this).val());
 			});
 
-			$('#func_example').change(function(){
+			$('#func_example').on('change', function(){
 				$('.points').val(func_examples[$(this).val()]);
 			});
 

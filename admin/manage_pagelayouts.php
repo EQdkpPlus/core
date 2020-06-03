@@ -455,7 +455,7 @@ class ManagePageLayouts extends page_generic {
 
 	$(".sortingtable tr:odd").addClass("row1");
 	$(".sortingtable tr:even").addClass("row2");
-	$("#lb_columns").change(function(){
+	$("#lb_columns").on(\'change\', function(){
 		if($(this).val() == "classid") {
 			$("#leaderboard_classid").removeAttr("style");
 			$("#leaderboard_defaultrole").css("display", "none");
