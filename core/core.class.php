@@ -287,7 +287,7 @@ class core extends gen_class {
 			$s_in_admin		= (((defined('IN_ADMIN') ) ? IN_ADMIN : false) && ($this->user->check_auth('a_', false)) ) ? true : false;
 
 			// Add a javascript code to make some checkboxes clickable through table rows
-			$this->tpl->add_js("$('.trcheckboxclick tr').click(function(event) {
+			$this->tpl->add_js("$('.trcheckboxclick tr').on('click', function(event) {
 						if (event.target.type !== 'checkbox') {
 							$(':checkbox', this).trigger('click');
 						}
@@ -301,7 +301,7 @@ class core extends gen_class {
 								$(this).val('');
 							}
 						})
-						.blur(function(){
+						.on('blur', function(){
 							if($(this).val()===''){
 								$(this).val(original_val);
 							}
