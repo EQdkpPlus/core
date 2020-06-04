@@ -10872,7 +10872,7 @@ return jQuery;
 } );
 
 //! moment.js
-//! version : 2.25.3
+//! version : 2.26.0
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
 //! license : MIT
 //! momentjs.com
@@ -13636,8 +13636,6 @@ return jQuery;
             token = tokens[i];
             parsedInput = (string.match(getParseRegexForToken(token, config)) ||
                 [])[0];
-            // console.log('token', token, 'parsedInput', parsedInput,
-            //         'regex', getParseRegexForToken(token, config));
             if (parsedInput) {
                 skipped = string.substr(0, string.indexOf(parsedInput));
                 if (skipped.length > 0) {
@@ -16493,7 +16491,7 @@ return jQuery;
 
     //! moment.js
 
-    hooks.version = '2.25.3';
+    hooks.version = '2.26.0';
 
     setHookCallback(createLocal);
 
@@ -36271,6 +36269,7 @@ var effectsEffectTransfer = effect;
 		*/
 		setDefaults: function (settings) {
 			extendRemove(this._defaults, settings || {});
+			this._defaults.timeFormat = 'HH:mm:ss';
 			return this;
 		},
 
@@ -36288,7 +36287,7 @@ var effectsEffectTransfer = effect;
 					var attrValue = $input.attr('time:' + attrName);
 					if (attrValue) {
 						try {
-							inlineSettings[attrName] = eval(attrValue);
+							inlineSettings[attrName] = (new Function('return ('+attrValue+')'))();
 						} catch (err) {
 							inlineSettings[attrName] = attrValue;
 						}
@@ -39237,7 +39236,7 @@ var effectsEffectTransfer = effect;
 			};
 
 
-			$title.html(settings.get('title')).show();
+			$title.text(settings.get('title')).show();
 			$loaded.show();
 
 			if (total > 1) { // handle grouping
@@ -48594,7 +48593,7 @@ $.extend(TRUE, QTIP.defaults, {
 	}
 })(jQuery);
 
-// Spectrum Colorpicker v1.8.0
+// Spectrum Colorpicker v1.8.1
 // https://github.com/bgrins/spectrum
 // Author: Brian Grinstead
 // License: MIT
@@ -48736,7 +48735,7 @@ $.extend(TRUE, QTIP.defaults, {
                 c += (tinycolor.equals(color, current)) ? " sp-thumb-active" : "";
                 var formattedString = tiny.toString(opts.preferredFormat || "rgb");
                 var swatchStyle = rgbaSupport ? ("background-color:" + tiny.toRgbString()) : "filter:" + tiny.toFilter();
-                html.push('<span title="' + formattedString + '" data-color="' + tiny.toRgbString() + '" class="' + c + '"><span class="sp-thumb-inner" style="' + swatchStyle + ';" /></span>');
+                html.push('<span title="' + formattedString + '" data-color="' + tiny.toRgbString() + '" class="' + c + '"><span class="sp-thumb-inner" style="' + swatchStyle + ';"></span></span>');
             } else {
                 var cls = 'sp-clear-display';
                 html.push($('<div />')
@@ -48900,7 +48899,7 @@ $.extend(TRUE, QTIP.defaults, {
 
             updateSelectionPaletteFromStorage();
 
-            offsetElement.bind("click.spectrum touchstart.spectrum", function (e) {
+            offsetElement.on("click.spectrum touchstart.spectrum", function (e) {
                 if (!disabled) {
                     toggle();
                 }
@@ -48921,13 +48920,13 @@ $.extend(TRUE, QTIP.defaults, {
 
             // Handle user typed input
             textInput.change(setFromTextInput);
-            textInput.bind("paste", function () {
+            textInput.on("paste", function () {
                 setTimeout(setFromTextInput, 1);
             });
             textInput.keydown(function (e) { if (e.keyCode == 13) { setFromTextInput(); } });
 
             cancelButton.text(opts.cancelText);
-            cancelButton.bind("click.spectrum", function (e) {
+            cancelButton.on("click.spectrum", function (e) {
                 e.stopPropagation();
                 e.preventDefault();
                 revert();
@@ -48935,7 +48934,7 @@ $.extend(TRUE, QTIP.defaults, {
             });
 
             clearButton.attr("title", opts.clearText);
-            clearButton.bind("click.spectrum", function (e) {
+            clearButton.on("click.spectrum", function (e) {
                 e.stopPropagation();
                 e.preventDefault();
                 isEmpty = true;
@@ -48948,7 +48947,7 @@ $.extend(TRUE, QTIP.defaults, {
             });
 
             chooseButton.text(opts.chooseText);
-            chooseButton.bind("click.spectrum", function (e) {
+            chooseButton.on("click.spectrum", function (e) {
                 e.stopPropagation();
                 e.preventDefault();
 
@@ -48963,7 +48962,7 @@ $.extend(TRUE, QTIP.defaults, {
             });
 
             toggleButton.text(opts.showPaletteOnly ? opts.togglePaletteMoreText : opts.togglePaletteLessText);
-            toggleButton.bind("click.spectrum", function (e) {
+            toggleButton.on("click.spectrum", function (e) {
                 e.stopPropagation();
                 e.preventDefault();
 
@@ -49058,9 +49057,14 @@ $.extend(TRUE, QTIP.defaults, {
                 else {
                     set($(e.target).closest(".sp-thumb-el").data("color"));
                     move();
-                    updateOriginalInput(true);
+
+                    // If the picker is going to close immediately, a palette selection
+                    // is a change.  Otherwise, it's a move only.
                     if (opts.hideAfterPaletteSelect) {
-                      hide();
+                        updateOriginalInput(true);
+                        hide();
+                    } else {
+                        updateOriginalInput();
                     }
                 }
 
@@ -49068,8 +49072,8 @@ $.extend(TRUE, QTIP.defaults, {
             }
 
             var paletteEvent = IE ? "mousedown.spectrum" : "click.spectrum touchstart.spectrum";
-            paletteContainer.delegate(".sp-thumb-el", paletteEvent, paletteElementClick);
-            initialColorContainer.delegate(".sp-thumb-el:nth-child(1)", paletteEvent, { ignore: true }, paletteElementClick);
+            paletteContainer.on(paletteEvent, ".sp-thumb-el", paletteElementClick);
+            initialColorContainer.on(paletteEvent, ".sp-thumb-el:nth-child(1)", { ignore: true }, paletteElementClick);
         }
 
         function updateSelectionPaletteFromStorage() {
@@ -49176,13 +49180,15 @@ $.extend(TRUE, QTIP.defaults, {
 
             if ((value === null || value === "") && allowEmpty) {
                 set(null);
-                updateOriginalInput(true);
+                move();
+                updateOriginalInput();
             }
             else {
                 var tiny = tinycolor(value);
                 if (tiny.isValid()) {
                     set(tiny);
-                    updateOriginalInput(true);
+                    move();
+                    updateOriginalInput();
                 }
                 else {
                     textInput.addClass("sp-validation-error");
@@ -49216,9 +49222,9 @@ $.extend(TRUE, QTIP.defaults, {
             hideAll();
             visible = true;
 
-            $(doc).bind("keydown.spectrum", onkeydown);
-            $(doc).bind("click.spectrum", clickout);
-            $(window).bind("resize.spectrum", resize);
+            $(doc).on("keydown.spectrum", onkeydown);
+            $(doc).on("click.spectrum", clickout);
+            $(window).on("resize.spectrum", resize);
             replacer.addClass("sp-active");
             container.removeClass("sp-hidden");
 
@@ -49261,9 +49267,9 @@ $.extend(TRUE, QTIP.defaults, {
             if (!visible || flat) { return; }
             visible = false;
 
-            $(doc).unbind("keydown.spectrum", onkeydown);
-            $(doc).unbind("click.spectrum", clickout);
-            $(window).unbind("resize.spectrum", resize);
+            $(doc).off("keydown.spectrum", onkeydown);
+            $(doc).off("click.spectrum", clickout);
+            $(window).off("resize.spectrum", resize);
 
             replacer.removeClass("sp-active");
             container.addClass("sp-hidden");
@@ -49274,6 +49280,7 @@ $.extend(TRUE, QTIP.defaults, {
 
         function revert() {
             set(colorOnShow, true);
+            updateOriginalInput(true);
         }
 
         function set(color, ignoreFormatChange) {
@@ -49315,7 +49322,7 @@ $.extend(TRUE, QTIP.defaults, {
                 h: currentHue,
                 s: currentSaturation,
                 v: currentValue,
-                a: Math.round(currentAlpha * 100) / 100
+                a: Math.round(currentAlpha * 1000) / 1000
             }, { format: opts.format || currentPreferredFormat });
         }
 
@@ -49505,7 +49512,7 @@ $.extend(TRUE, QTIP.defaults, {
 
         function destroy() {
             boundElement.show();
-            offsetElement.unbind("click.spectrum touchstart.spectrum");
+            offsetElement.off("click.spectrum touchstart.spectrum");
             container.remove();
             replacer.remove();
             spectrums[spect.id] = null;
@@ -49584,17 +49591,27 @@ $.extend(TRUE, QTIP.defaults, {
         var viewWidth = docElem.clientWidth + $(doc).scrollLeft();
         var viewHeight = docElem.clientHeight + $(doc).scrollTop();
         var offset = input.offset();
-        offset.top += inputHeight;
+        var offsetLeft = offset.left;
+        var offsetTop = offset.top;
 
-        offset.left -=
-            Math.min(offset.left, (offset.left + dpWidth > viewWidth && viewWidth > dpWidth) ?
-            Math.abs(offset.left + dpWidth - viewWidth) : 0);
+        offsetTop += inputHeight;
 
-        offset.top -=
-            Math.min(offset.top, ((offset.top + dpHeight > viewHeight && viewHeight > dpHeight) ?
+        offsetLeft -=
+            Math.min(offsetLeft, (offsetLeft + dpWidth > viewWidth && viewWidth > dpWidth) ?
+            Math.abs(offsetLeft + dpWidth - viewWidth) : 0);
+
+        offsetTop -=
+            Math.min(offsetTop, ((offsetTop + dpHeight > viewHeight && viewHeight > dpHeight) ?
             Math.abs(dpHeight + inputHeight - extraY) : extraY));
 
-        return offset;
+        return {
+            top: offsetTop,
+            bottom: offset.bottom,
+            left: offsetLeft,
+            right: offset.right,
+            width: offset.width,
+            height: offset.height
+        };
     }
 
     /**
@@ -49687,7 +49704,7 @@ $.extend(TRUE, QTIP.defaults, {
                     maxWidth = $(element).width();
                     offset = $(element).offset();
 
-                    $(doc).bind(duringDragEvents);
+                    $(doc).on(duringDragEvents);
                     $(doc.body).addClass("sp-dragging");
 
                     move(e);
@@ -49699,7 +49716,7 @@ $.extend(TRUE, QTIP.defaults, {
 
         function stop() {
             if (dragging) {
-                $(doc).unbind(duringDragEvents);
+                $(doc).off(duringDragEvents);
                 $(doc.body).removeClass("sp-dragging");
 
                 // Wait a tick before notifying observers to allow the click event
@@ -49711,7 +49728,7 @@ $.extend(TRUE, QTIP.defaults, {
             dragging = false;
         }
 
-        $(element).bind("touchstart mousedown", start);
+        $(element).on("touchstart mousedown", start);
     }
 
     function throttle(func, wait, debounce) {
@@ -49774,7 +49791,7 @@ $.extend(TRUE, QTIP.defaults, {
 
         // Initializing a new instance of spectrum
         return this.spectrum("destroy").each(function () {
-            var options = $.extend({}, opts, $(this).data());
+            var options = $.extend({}, $(this).data(), opts);
             var spect = spectrum(this, options);
             $(this).data(dataID, spect.id);
         });
@@ -49835,12 +49852,12 @@ $.extend(TRUE, QTIP.defaults, {
         }
 
         var rgb = inputToRGB(color);
-        this._originalInput = color,
-        this._r = rgb.r,
-        this._g = rgb.g,
-        this._b = rgb.b,
-        this._a = rgb.a,
-        this._roundA = mathRound(100*this._a) / 100,
+        this._originalInput = color;
+        this._r = rgb.r;
+        this._g = rgb.g;
+        this._b = rgb.b;
+        this._a = rgb.a;
+        this._roundA = mathRound(1000 * this._a) / 1000;
         this._format = opts.format || rgb.format;
         this._gradientType = opts.gradientType;
 
@@ -49881,7 +49898,7 @@ $.extend(TRUE, QTIP.defaults, {
         },
         setAlpha: function(value) {
             this._a = boundAlpha(value);
-            this._roundA = mathRound(100*this._a) / 100;
+            this._roundA = mathRound(1000 * this._a) / 1000;
             return this;
         },
         toHsv: function() {
@@ -53748,7 +53765,7 @@ if ( typeof Object.create !== 'function' ) {
 *                       title: 'test title',
 *                       ... Other jQueryUI Dialog Options ...
 *                   })
-*                   .bind('dialogclose', function(event, ui) {
+*                   .on('dialogclose', function(event, ui) {
 *                       alert("result: " + event.result);
 *                   });
 *
@@ -53882,14 +53899,14 @@ if ( typeof Object.create !== 'function' ) {
                 // TDR:
                 //  - on dialog open, set the height of the loading pane to that of the dialog's content container
                 //  - set the iframe src property here - this avoids the iframe's multiple-request issue
-                .bind('dialogopen', function(event, ui){
+                .on('dialogopen', function(event, ui){
                     $loadingPane.height($loadingPane.closest('.ui-dialog-content').height());
                     iframe.attr('src', url).on("load", function(e){
                         $(this).css('visibility', 'visible');
                         $loadingPane.hide();
                     });
                 })
-                .bind("dialogbeforeclose", function(event, ui) {
+                .on("dialogbeforeclose", function(event, ui) {
                     var frame = $(this);
                     var uid = frame.attr("id");
 
@@ -53906,7 +53923,7 @@ if ( typeof Object.create !== 'function' ) {
 
                     return result;
                 })
-                .bind('dialogclose', function(event, ui) {
+                .on('dialogclose', function(event, ui) {
                     var frame = $(this);
                     var uid = frame.attr("id");
                     var result = $.FrameDialog._results[uid] || null; //result or an explicit null
@@ -53952,21 +53969,21 @@ if ( typeof Object.create !== 'function' ) {
             wrap
                 .css('width', (opts.minWidth || opts.width || 200) + 'px')
                 .css('height', (opts.minHeight || opts.height || 120) + 'px')
-                .bind('dragstart', function() {
+                .on('dragstart', function() {
                     overlay.show();
                 })
-                .bind('dragstop', function() {
+                .on('dragstop', function() {
                     overlay.hide();
                 })
-                .bind('resizestart', function() {
+                .on('resizestart', function() {
                     overlay.show();
                 })
-                .bind('resize', function() {
+                .on('resize', function() {
                     iframe
                         .css('height', ret.height() + 'px')
                         .css('width', ret.width() + 'px');
                 })
-                .bind('resizestop', function() {
+                .on('resizestop', function() {
                     overlay.hide();
                     iframe
                         .css('height', ret.height() + 'px')
