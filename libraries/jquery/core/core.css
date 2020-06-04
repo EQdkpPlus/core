@@ -1628,7 +1628,7 @@ a.ui-button:active,
 .ui-multiselect-menu { display:none; box-sizing:border-box; position:absolute; text-align:left; z-index: 101; width:auto; height:auto; padding:3px; }
 .ui-multiselect-menu.ui-multiselect-listbox {position:relative; z-index: 0;}
 
-.ui-multiselect-header { display:block; box-sizing:border-box; position:relative; width:auto; padding:3px 0 3px 4px; margin-bottom:2px;}
+.ui-multiselect-header { display:block; box-sizing:border-box; position:relative; width:auto; padding:3px 0 6px 4px; margin-bottom:2px;}
 .ui-multiselect-header > ul { font-size:0.9em }
 .ui-multiselect-header li { float:left; margin:0 10px 0 0;}
 .ui-multiselect-header a { text-decoration:none; }
@@ -1641,7 +1641,7 @@ a.ui-button:active,
 .ui-multiselect-checkboxes label { border:1px solid transparent; cursor:default; display:block; padding:3px 1px 3px 21px; text-indent: -20px;}
 .ui-multiselect-checkboxes input { position:relative; top:1px; cursor: pointer;}
 .ui-multiselect-checkboxes img { height: 30px; vertical-align: middle; margin-right: 3px;}
-.ui-multiselect-grouplabel { border-bottom:1px solid; display:block; font-weight:bold; margin:1px 0; padding:3px; text-align:center; text-decoration:none; }
+.ui-multiselect-grouplabel { border-bottom:1px solid; display:block; font-weight:bold; margin:1px 0; padding:3px; text-align:left; text-decoration:none; }
 .ui-multiselect-selectable { cursor: pointer; }
 .ui-multiselect-optgroup > ul { padding: 3px; }
 .ui-multiselect-columns { display: inline-block; vertical-align: top; }
