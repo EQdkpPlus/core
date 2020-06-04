@@ -259,9 +259,9 @@
 				// get the date and set it to the variable
 				var date2save	= (view.name == 'month') ? calendar.getDate() : info.view.start;
 				cal_setStorage("calendar.currentdate", date2save.format());
-			},
-			eventSources: [curSource]
-		});console.log(curSource);
+			}
+			//eventSources: [curSource]
+		});
 
 		// start the hack for the date picker
 		$(".fc-header-toolbar .fc-center h2").attr('id', 'fc-datepicker-header').before('<input size="1" style="height: 0px; width:0px; border: 0px;" id="fc-datepicker" value="" /><input size="1" style="height: 0px; width:0px; border: 0px;" id="fc-monthpicker" value="" />');
@@ -414,26 +414,28 @@
 		$("#calendar_filterreset").click(function(){
 			$("#calendarfilter").multiselect("checkAll");
 		})
+
+		function doFiltering(curSource){
+			newSource = buildCalURL($("#calendarfilter").val());
+
+			// remove all events
+		
+			AllEvents	= calendar.getEvents();
+			AllEvents.forEach(el => { el.remove(); }); 
+
+			// remove the 
+			var eventSource = calendar.getEventSourceById('a');
+			//eventSource.remove();
+
+			//CalResources = calendar.getEventSources();
+			//console.log('URL: ' & CalResources);
+			//$('#calendar').fullCalendar('removeEventSource', curSource);
+			calendar.addEventSource(newSource);
+			calendar.refetchEvents();
+			console.log(newSource);
+			return newSource;
+		}
 	});
-
-	function doFiltering(curSource){
-		newSource = buildCalURL($("#calendarfilter").val());
-
-		// remove all events
-		//AllEvents	= calendar.getEvents();
-		//AllEvents.forEach(el => { el.remove(); }); 
-
-		// remove the 
-		//var eventSource = calendar.getEventSourceById('a');
-		//eventSource.remove();
-
-		//CalResources = calendar.getEventSources();
-		//console.log('URL: ' & CalResources);
-		//$('#calendar').fullCalendar('removeEventSource', curSource);
-		//calendar.addEventSource(newSource);
-		//calendar.refetchEvents();
-		return newSource;
-	}
 
 	function buildCalURL(calids){
 		tmpids		= calids.join('|');
