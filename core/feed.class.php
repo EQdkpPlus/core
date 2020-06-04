@@ -29,6 +29,11 @@ if (!class_exists("feed")) {
 		private $encoding		= 'UTF-8';
 		protected $items		= array();
 		protected $data			= array();
+		
+		public $title, $description, $link, $feedfile = "";
+		public $language = "de-DE";
+		
+		public $published = 0;
 
 		public function addItem(feeditems $item){
 			$this->items[] = $item;
