@@ -67,16 +67,16 @@ class db_access extends install_generic {
 				<td><input type="text" name="dbport" size="25" value="'.$this->dbport.'" class="input" required="" /></td>
 			</tr>
 			<tr>
-				<td align="right"><strong>'.$this->lang['dbname'].': </strong></td>
-				<td><input type="text" name="dbname" size="25" value="'.$this->dbname.'" class="input" required="" /></td>
-			</tr>
-			<tr>
 				<td align="right"><strong>'.$this->lang['dbuser'].': </strong></td>
 				<td><input type="text" name="dbuser" size="25" value="'.$this->dbuser.'" class="input" required="" autocomplete="off"/></td>
 			</tr>
 			<tr>
 				<td align="right"><strong>'.$this->lang['dbpass'].': </strong></td>
 				<td><input type="password" name="dbpass" size="25" value="" class="input" autocomplete="off"/></td>
+			</tr>
+			<tr>
+				<td align="right"><strong>'.$this->lang['dbname'].': </strong></td>
+				<td><input type="text" name="dbname" size="25" value="'.$this->dbname.'" class="input" required="" /></td>
 			</tr>
 			<tr>
 				<td align="right"><strong>'.$this->lang['table_prefix'].': </strong></td>
