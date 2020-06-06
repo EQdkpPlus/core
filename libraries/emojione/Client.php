@@ -249,7 +249,7 @@ class Client implements ClientInterface
                 }
                 else
                 {
-                    return '<img class="emojione" alt="'.$alt.'" src="'.$this->imagePathPNG.$filename.'.png'.$this->cacheBustParam.'"/>';
+                    return '<img class="emojione" alt="'.$alt.'" loading="lazy" src="'.$this->imagePathPNG.$filename.'.png'.$this->cacheBustParam.'"/>';
                 }
             }
 
@@ -259,7 +259,7 @@ class Client implements ClientInterface
             }
             else
             {
-                return '<object class="emojione" data="'.$this->imagePathSVG.$filename.'.svg'.$this->cacheBustParam.'" type="image/svg+xml" standby="'.$alt.'">'.$alt.'</object>';
+            	return '<img class="emojione" alt="'.$alt.'" loading="lazy" src="'.$this->imagePathSVG.$filename.'.svg'.$this->cacheBustParam.'"/>';
             }
         }
     }
