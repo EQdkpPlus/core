@@ -9,8 +9,8 @@ class Emojione
     public static $imageType = 'png';
     public static $cacheBustParam = '?v=2.2.7';
     public static $sprites = false;
-    public static $imagePathPNG = '//cdn.jsdelivr.net/emojione/assets/png/';
-    public static $imagePathSVG = '//cdn.jsdelivr.net/emojione/assets/svg/';
+    public static $imagePathPNG = 'https://cdn.jsdelivr.net/emojione/assets/png/';
+    public static $imagePathSVG = 'https://cdn.jsdelivr.net/emojione/assets/svg/';
     public static $imagePathSVGSprites = './../../assets/sprites/emojione.sprites.svg';
     public static $imageTitleTag = true;
     public static $ignoredRegexp = '<object[^>]*>.*?<\/object>|<span[^>]*>.*?<\/span>|<(?:object|embed|svg|img|div|span|p|a)[^>]*>';
