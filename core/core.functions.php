@@ -1055,8 +1055,10 @@ function isFilelinkInFolder($strFilelink, $strFolder, $blnStrict=false){
 	
 	$strDocRoot = filter_var($_SERVER["DOCUMENT_ROOT"], FILTER_SANITIZE_STRING);
 	$strDocRoot = str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, $strDocRoot);
+	$strDocRoot = realpath($strDocRoot);
 	//Sometimes, the Document Root is wrong, e.g. on Uberspace
 	$strDocRoot2 = str_replace( array('\\', '/'), DIRECTORY_SEPARATOR, substr($_SERVER['SCRIPT_FILENAME'], 0, 0 - strlen(rtrim($_SERVER['PHP_SELF'], DIRECTORY_SEPARATOR))));
+	$strDocRoot2 = realpath($strDocRoot2);
 	
 	if(strpos($strFolder, $strDocRoot) !== 0 && strpos($strFolder, $strDocRoot2) !== 0){
 		$strFolder = registry::get_const('root_path').$strFolder;

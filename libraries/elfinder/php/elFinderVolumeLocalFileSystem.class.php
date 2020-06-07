@@ -986,7 +986,7 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver
         $target = $this->_joinPath($targetDir, $name);
         
         //Security by GodMod
-        if (!isFilelinkInFolder($target, get_absolute_path($this->root))) return false;
+        if (!isFilelinkInFolder($target, $this->root)) return false;
         
         if ($ret = rename($source, $target) ? $target : false) {
             isset($this->options['keepTimestamp']['move']) && $mtime && touch($target, $mtime);
