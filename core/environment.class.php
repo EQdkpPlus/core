@@ -620,21 +620,27 @@ if (!class_exists("environment")) {
 		}
 
 		/**
-		 * Returns the document root
-		 * e.g. C:/xampp/htdocs/
+		 * Returns the document root, e.g. C:/xampp/htdocs/
 		 * $blnWithServerPath = true: Path to current script, e.g. C:/xampp/htdocs/eqdkp/core/admin/
 		 * $blnPathToEQdkpRoot = true ($blnWithServerPath must also be true): path to eqdkp root: e.g. C:/xampp/htdocs/eqdkp/core/
 		 */
 		public function get_document_root($blnWithServerPath=true, $blnPathToEQdkpRoot=false){
-			$strRoot = filter_var($_SERVER["DOCUMENT_ROOT"], FILTER_SANITIZE_STRING);
+			$strRoot = str_replace( array('\\', '/'), DIRECTORY_SEPARATOR, $_SERVER["DOCUMENT_ROOT"]);
+			$strRealRoot = str_replace( array('\\', '/'), DIRECTORY_SEPARATOR, substr($_SERVER['SCRIPT_FILENAME'], 0, 0 - strlen(rtrim($_SERVER['PHP_SELF'], DIRECTORY_SEPARATOR))));
+			
+			//Document_root is sometimes not correctly set
+			if(strcmp($strRoot, $strRealRoot) !== 0){
+				$strRoot = $strRealRoot;
+			}
+			
 			if($blnWithServerPath){
 				$strRoot .= $this->server_path;
-
+				
 				if($blnPathToEQdkpRoot){
 					$strRoot = realpath($strRoot.registry::get_const('root_path'));
 				}
 			}
-
+			
 			return $strRoot;
 		}
 

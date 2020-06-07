@@ -1032,16 +1032,22 @@ function human_filesize($bytes, $dec = 2)
 	return sprintf("%.{$dec}f", $bytes / pow(1024, $factor)) . ' '.@$size[$factor];
 }
 
-
-//Checks if an filelink is in an given folder. Set strict true if FileLink should not be in subfolder
+/**
+ * Checks if an filelink is in an given folder
+ * 
+ * @param string $strFilelink - the path of the file to check
+ * @param string $strFolder - the folder where the file should be in
+ * @param boolean $blnStrict set true if FileLink should not be in any subfolder
+ * @return boolean
+ */
 function isFilelinkInFolder($strFilelink, $strFolder, $blnStrict=false){
 	$strPath = pathinfo($strFilelink, PATHINFO_DIRNAME);
 	if (substr($strFilelink, -1) === DIRECTORY_SEPARATOR){
 		$strPath = $strPath . DIRECTORY_SEPARATOR .pathinfo($strFilelink, PATHINFO_BASENAME);
 	}
-
+	
 	$strAbsolutePath = realpath($strPath);
-
+	
 	if (substr($strFolder, -1) === DIRECTORY_SEPARATOR){
 		$strFolder = substr($strFolder, 0, -1);
 	}
@@ -1049,10 +1055,13 @@ function isFilelinkInFolder($strFilelink, $strFolder, $blnStrict=false){
 	
 	$strDocRoot = filter_var($_SERVER["DOCUMENT_ROOT"], FILTER_SANITIZE_STRING);
 	$strDocRoot = str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, $strDocRoot);
-
-	if(strpos($strFolder, $strDocRoot) !== 0){
+	//Sometimes, the Document Root is wrong, e.g. on Uberspace
+	$strDocRoot2 = str_replace( array('\\', '/'), DIRECTORY_SEPARATOR, substr($_SERVER['SCRIPT_FILENAME'], 0, 0 - strlen(rtrim($_SERVER['PHP_SELF'], DIRECTORY_SEPARATOR))));
+	
+	if(strpos($strFolder, $strDocRoot) !== 0 && strpos($strFolder, $strDocRoot2) !== 0){
 		$strFolder = registry::get_const('root_path').$strFolder;
 	}
+	
 	$strFolder = realpath($strFolder);
 	
 	if($blnStrict){
