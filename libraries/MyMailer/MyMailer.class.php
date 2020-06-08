@@ -41,6 +41,7 @@ class MyMailer extends gen_class {
 	private $objMailer = false;
 	private $sendStatus = false;
 	private $sendError = "";
+	private $debug = array();
 
 	public static $shortcuts = array(
 		'crypt'		=> 'encrypt',
@@ -201,6 +202,10 @@ class MyMailer extends gen_class {
 		}
 		return $body;
 	}
+	
+	public function smtpDebug($str, $level) {	
+		$this->debug[] = $str;
+	}
 
 	/**
 	* Generate the Mail Body & rest
@@ -222,6 +227,8 @@ class MyMailer extends gen_class {
 			$this->objMailer->addAddress($to);
 			$this->objMailer->Subject = $this->generateSubject($subject);
 			$this->objMailer->XMailer = "EQdkp Plus";
+			
+			
 
 			$tmp_body		= $this->Template($templatename, $bodyvars);
 
@@ -240,7 +247,13 @@ class MyMailer extends gen_class {
 			}
 
 			if($this->sendmeth == 'smtp'){
-				$this->objMailer->SMTPDebug = 0;                                 // Enable verbose debug output
+				$this->objMailer->SMTPDebug = 0;
+				if(DEBUG > 2){
+					$this->debug = array();
+					$this->objMailer->SMTPDebug = 3;
+					$this->objMailer->Debugoutput = array($this, 'smtpDebug');
+				}
+				// Enable verbose debug output
 				$this->objMailer->isSMTP();                                   // Set mailer to use SMTP
 				$this->objMailer->Host = $this->config->get('lib_email_smtp_host');  // Specify main and backup SMTP servers
 				$this->objMailer->SMTPAuth = ($this->config->get('lib_email_smtp_auth') == 1) ? true : false;// Enable SMTP authentication
@@ -297,7 +310,17 @@ Error: ".$this->objMailer->ErrorInfo."
 	}
 
 	function getLatestErrorMessage(){
-		return $this->sendError;
+		$str = $this->sendError;
+		
+		if(DEBUG > 2 && count($this->debug)){
+			$str .= '<br /><br />Debug:<ul>';
+			foreach($this->debug as $k => $msg){
+				$str .= '<li>- '.$msg.'</li>';
+			}
+			$str .= '</ul>';
+		}
+		
+		return $str;
 	}
 
 	/**
