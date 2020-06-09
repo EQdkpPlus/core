@@ -1,66 +1,63 @@
 $(function() {
-	//Fixed Menu
-	$(window).on('scroll', function() {
-		var topMenu = $('#nav');
-		var topBody = $('body');
-		
-		if($(document).scrollTop() > ($("#banner").outerHeight() + $("#personalArea").outerHeight())){
-			if(!topMenu.hasClass("jsFixed")){
-				topMenu.addClass('jsFixed');
-				topBody.addClass('jsFixedBody');
-			}
-		} else {
-			topMenu.removeClass('jsFixed');
-			topBody.removeClass('jsFixedBody');
-		}
-		
-		//ScrollToTop
-		var heightWindow = $(window).height();
-		var heightDocument = $(document).height();
-		
-		if($(document).scrollTop() > (heightWindow-(heightWindow/2))){
-			$('.toTopContainer').show();
-		} else {
-			$('.toTopContainer').hide();
-		}
-		
-		
-		
-	});
-	
-	//Mobile Swipe
-	if($( window ).width() < 900) {
-		var open = 'none';
-	    //Enable swiping...
-	    $("body").swipe( {
-	      //Single swipe handler for left swipes
-	      swipeRight:function(event, direction, distance, duration, fingerCount) {
-	    	  if(open == 'none'){
-	    		  $('.nav-mobile .mobile-overlay').show();
-	    		  open = 'menu';
-	    	  }else if(open == 'user'){
-	    		  $('.nav-mobile .mobile-overlay-user').hide();
-	    		  open = "none";
-	    	  }
-	      },
-	      swipeLeft:function(event, direction, distance, duration, fingerCount) {
-	    	  if(open == 'none'){
-	    		  $('.nav-mobile .mobile-overlay-user').show();
-	    		  open = "user";
-	    	  }else if(open == 'menu'){
-	    		  $('.nav-mobile .mobile-overlay').hide();
-	    		  open = "none";
-	    	  }
-	      },
-	      excludedElements: "label, button, input, select, textarea, table", // Here your list of excluded elements ...
-		  threshold:130
-	    });
-	}
-});
-
-
-$(function() {
 	if(mmocms_header_type == 'full'){
+		//Fixed Menu
+		$(window).on('scroll', function() {
+			var topMenu = $('#nav');
+			var topBody = $('body');
+			
+			if($(document).scrollTop() > ($("#banner").outerHeight() + $("#personalArea").outerHeight())){
+				if(!topMenu.hasClass("jsFixed")){
+					topMenu.addClass('jsFixed');
+					topBody.addClass('jsFixedBody');
+				}
+			} else {
+				topMenu.removeClass('jsFixed');
+				topBody.removeClass('jsFixedBody');
+			}
+			
+			//ScrollToTop
+			var heightWindow = $(window).height();
+			var heightDocument = $(document).height();
+			
+			if($(document).scrollTop() > (heightWindow-(heightWindow/2))){
+				$('.toTopContainer').show();
+			} else {
+				$('.toTopContainer').hide();
+			}
+			
+			
+			
+		});
+		
+		//Mobile Swipe
+		if($( window ).width() < 900) {
+			var open = 'none';
+		    //Enable swiping...
+		    $("body").swipe( {
+		      //Single swipe handler for left swipes
+		      swipeRight:function(event, direction, distance, duration, fingerCount) {
+		    	  if(open == 'none'){
+		    		  $('.nav-mobile .mobile-overlay').show();
+		    		  open = 'menu';
+		    	  }else if(open == 'user'){
+		    		  $('.nav-mobile .mobile-overlay-user').hide();
+		    		  open = "none";
+		    	  }
+		      },
+		      swipeLeft:function(event, direction, distance, duration, fingerCount) {
+		    	  if(open == 'none'){
+		    		  $('.nav-mobile .mobile-overlay-user').show();
+		    		  open = "user";
+		    	  }else if(open == 'menu'){
+		    		  $('.nav-mobile .mobile-overlay').hide();
+		    		  open = "none";
+		    	  }
+		      },
+		      excludedElements: "label, button, input, select, textarea, table", // Here your list of excluded elements ...
+			  threshold:130
+		    });
+		}
+		
 		/* My Chars Points */
 		$('.mychars-points-tooltip .char').on('click', function(){
 			$(this).parent().parent().children('tr').removeClass("active");
