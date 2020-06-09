@@ -245,10 +245,10 @@ class admin_settings extends page_generic {
 
 		// Bit of jQuery..
 		if($this->game->get_importAuth('a_members_man', 'char_mupdate')){
-			$this->jquery->Dialog('MassUpdateChars', $this->user->lang('uc_import_adm_update'), array('url'=>$this->game->get_importers('char_mupdate', true), 'width'=>'600', 'height'=>'450', 'onclose'=>$this->env->link.'admin/manage_settings.php'));
+			$this->jquery->Dialog('MassUpdateChars', $this->user->lang('uc_import_adm_update'), array('url'=>$this->game->get_importers('char_mupdate', true), 'width'=>'700', 'height'=>'600', 'onclose'=>$this->env->link.'admin/manage_settings.php'));
 		}
 		if($this->game->get_importAuth('a_members_man', 'guild_import')){
-			$this->jquery->Dialog('GuildImport', $this->user->lang('uc_import_guild_wh'), array('url'=>$this->game->get_importers('guild_import', true), 'width'=>'600', 'height'=>'450', 'onclose'=>$this->env->link.'admin/manage_settings.php'));
+			$this->jquery->Dialog('GuildImport', $this->user->lang('uc_import_guild_wh'), array('url'=>$this->game->get_importers('guild_import', true), 'width'=>'700', 'height'=>'600', 'onclose'=>$this->env->link.'admin/manage_settings.php'));
 		}
 		if(($this->game->get_importAuth('a_members_man', 'char_mupdate') || $this->game->get_importAuth('a_members_man', 'guild_import')) && $this->game->get_importers('import_data_cache')){
 			$this->jquery->Dialog('ClearImportCache', $this->user->lang('uc_importer_cache'), array('url'=>$this->game->get_importers('import_reseturl', true), 'width'=>'400', 'height'=>'250', 'onclose'=>$this->env->link.'admin/manage_settings.php'));
