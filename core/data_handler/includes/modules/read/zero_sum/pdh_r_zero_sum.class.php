@@ -116,15 +116,22 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 						$blnCalculateZeroPool = true;
 						
 						//rvalue = value / attendees
-						$arrRaids[$raid_id][$mdkp_id] = $arrRaids[$raid_id][$mdkp_id] / count($attendees);
+						if(count($attendees)){
+							$arrRaids[$raid_id][$mdkp_id] = $arrRaids[$raid_id][$mdkp_id] / count($attendees);
+						} else {
+							$arrRaids[$raid_id][$mdkp_id] = 0;
+						}
 						
 						foreach($attendees as $attendee){
 							$arrPoints[$attendee][$mdkp_id]['single']['earned'][$event_id] += $arrRaids[$raid_id][$mdkp_id];
 						}
 						
 					}
-					
-					$arrRaids[$raid_id][0] = $arrRaids[$raid_id][0] / count($attendees);
+					if(count($attendees)){
+						$arrRaids[$raid_id][0] = $arrRaids[$raid_id][0] / count($attendees);
+					} else {
+						$arrRaids[$raid_id][0] = 0;
+					}
 					
 				}
 			}
@@ -149,6 +156,7 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 			$adjustment_ids = $this->pdh->get('adjustment', 'id_list');
 			if(is_array($adjustment_ids)){
 				foreach($adjustment_ids as $adjustment_id){
+					
 					$event_id = $this->pdh->get('adjustment', 'event', array($adjustment_id));
 					$member_id = $this->pdh->get('adjustment', 'member', array($adjustment_id));
 					foreach($this->pdh->get('multidkp','mdkpids4eventid',array($event_id)) as $mdkp_id){
@@ -164,9 +172,8 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 				}
 			}
 			
-			
-			
 			$this->pdc->put('pdh_zero_sum_points_table', $arrPoints, null);
+			
 			$this->points = $arrPoints;
 		}
 		
@@ -324,7 +331,7 @@ if ( !class_exists( "pdh_r_zero_sum" ) ) {
 			if($showname){
 				$text = $this->pdh->get('multidkp', 'name', array($mdkpid));
 			}else{
-				$text = $this->pdh->get_lang('raid', 'value');;
+				$text = $this->pdh->get_lang('raid', 'value');
 			}
 			
 			if($showtooltip){
