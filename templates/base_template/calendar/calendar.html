@@ -594,6 +594,7 @@ td.fc-day:hover:after {
 		<div class="clear"></div>
 		<br />
 		<div id="raid_masssignin_panel" style="display:none;">
+			<!-- IF S_LOGGED_IN AND not NO_CHAR_ASSIGNED -->
 			<table class="table fullwidth scrollable-x">
 				<tr>
 					<td class="w35p">{L_raideventlist_masssignin}</td>
@@ -604,6 +605,12 @@ td.fc-day:hover:after {
 					<td class="w10p"><button type="submit" name="mass_signin" class="mainoption"><i class="fa fa-check"></i>{L_raideventlist_masssignbttn}</button>
 				</tr>
 			</table>
+			<!-- ENDIF -->
+			<!-- IF S_LOGGED_IN AND NO_CHAR_ASSIGNED -->
+			<div class="infobox infobox-large infobox-red clearfix">
+				<i class="fa fa-male fa-2x pull-left"></i> {L_raidevent_raid_nochar}
+			</div>
+			<!-- ENDIF -->
 		</div>
 		<table class="table fullwidth colorswitch">
 			{RAID_LIST}
