@@ -428,7 +428,7 @@ class calendar_pageobject extends pageobject {
 		$presel_charid = $this->pdh->get('member', 'mainchar', array($this->user->data['user_id']));
 		$drpdwn_members = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'connection_id', array($this->user->data['user_id']))));
 		$memberrole = $this->jquery->dd_ajax_request('member_id', 'member_role', $drpdwn_members, array(), $presel_charid, $this->routing->build('calendarevent').'&ajax=role');
-		$raidcal_status = $this->config->get('calendar_raid_status');
+		$raidcal_status = $this->config->get('calendar_raid_status_user');
 		$raidstatus = array();
 		if(is_array($raidcal_status)){
 			foreach($raidcal_status as $raidcalstat_id){

@@ -58,6 +58,11 @@ if (!class_exists('exchange_raid_signup')){
 							// auto confirm if enabled
 							$usergroups		= $this->config->get('calendar_raid_confirm_raidgroupchars');
 							$signupstatus	= (isset($arrBody['status']) && intval($arrBody['status']) < 5 && intval($arrBody['status']) >0) ? intval($arrBody['status']) : 4;
+							$arrUserStatus = $this->config->get('calendar_raid_status_user');
+							if(!in_array($arrBody['status'], $arrUserStatus)) {
+								return $this->pex->error('required data missing', 'status not allowed');
+							}
+							
 							if(is_array($usergroups) && count($usergroups) > 0 && $signupstatus == 1){
 								if($this->user->check_group($usergroups, false)){
 									$signupstatus = 0;

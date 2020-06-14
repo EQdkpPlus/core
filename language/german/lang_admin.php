@@ -946,6 +946,7 @@ $lang = array(
 "core_sett_f_help_calendar_raid_statuschange_status" => "Der Status wird bei einer Ummeldung bzw. Änderung des Charakters auf den eingesetzten Wert geändert.",
 "core_sett_f_calendar_raid_nsfilter" => "Zeige außer Mains folgende Charaktere in den 'unangemeldeten Charakteren'",
 "core_sett_f_help_calendar_raid_nsfilter" => "Hier kann festgelegt werden, welche Charaktere in der Liste der noch nicht angemeldeten Charaktere gelistet werden sollen.",
+"core_sett_f_calendar_raid_status_user" => "Welche der oben gewählten Raidstati dürfen normale Benutzer auswählen",
 "raidevent_guestapplication" => "Bewerbungen von Gästen für Raidevents",
 "raidevent_confirm_guest" => 'Bestätige Bewerbungen',
 "raidevent_delete_guest" => 'Lösche Bewerbungen',

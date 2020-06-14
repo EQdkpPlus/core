@@ -114,7 +114,13 @@ class admin_settings extends page_generic {
 			3					=> $this->user->lang(array('raidevent_raid_status', 3)),
 			4					=> $this->user->lang(array('raidevent_raid_status', 4))
 		);
-
+		
+		$a_calraid_status_user = array();
+		foreach($this->config->get('calendar_raid_status') as $key => $val){
+			if($val == 0 || $val == 4) continue;
+			$a_calraid_status_user[$val] = $a_calraid_status[$val];
+		}
+		
 		$a_calraid_status2 = array(
 			0					=> $this->user->lang(array('raidevent_raid_status', 0)),
 			1					=> $this->user->lang(array('raidevent_raid_status', 1)),
@@ -651,6 +657,11 @@ class admin_settings extends page_generic {
 						'type'			=> 'multiselect',
 						'options'		=> $a_calraid_status,
 						'datatype'		=> 'int'
+					),
+					'calendar_raid_status_user'	=> array(
+							'type'			=> 'multiselect',
+							'options'		=> $a_calraid_status_user,
+							'datatype'		=> 'int'
 					),
 					'calendar_raid_nsfilter'	=> array(
 						'type'			=> 'multiselect',

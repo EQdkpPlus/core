@@ -946,6 +946,7 @@ $lang = array(
 	"core_sett_f_help_calendar_raid_statuschange_status" => 'The status will be changed to the selected value if character was changed',
 	"core_sett_f_calendar_raid_nsfilter" => 'Which characters to show, except mains, at the \'not signed-in window\'.',
 	"core_sett_f_help_calendar_raid_nsfilter" => 'You can select, which characters should be visible in the list of unsigned characters.',
+	"core_sett_f_calendar_raid_status_user" => "Which of the above selected raidstati shall be used for normal users?",
 	"raidevent_guestapplication" => "Application of guests for raid events",
 	"raidevent_confirm_guest" => 'Confirm guest applications',
 	"raidevent_delete_guest" => 'Delete guest applications',

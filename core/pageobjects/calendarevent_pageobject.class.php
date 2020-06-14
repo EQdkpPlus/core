@@ -1128,12 +1128,13 @@ class calendarevent_pageobject extends pageobject {
 		$this->jquery->Collapse('#toogleRaidcalSignin');
 
 		$mysignedstatus		= $this->pdh->get('calendar_raids_attendees', 'status', array($this->url_id, $this->mystatus['member_id']));
-		// the status drodown
-		$status_dropdown = $this->raidstatus;
-		if(isset($status_dropdown[0]) && $mysignedstatus != 0){
-			unset($status_dropdown[0]);
+		// the status drodown for normal users
+		$status_dropdown = array();
+		$arrUserStatus = $this->config->get('calendar_raid_status_user');
+		foreach($arrUserStatus as $val){
+			$status_dropdown[$val] = $this->raidstatus[$val];
 		}
-
+			
 		//Notify attendees, raidlead and admins on new comments
 		$arrUserToNotify		= $this->pdh->get('calendar_raids_attendees', 'attendee_users', array($this->url_id));
 		$arrRaidleaderChars		= ($eventdata['extension']['raidleader'] > 0) ? $eventdata['extension']['raidleader'] : array();
