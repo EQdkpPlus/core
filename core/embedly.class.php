@@ -425,9 +425,9 @@ class embedly extends gen_class {
 		
 		if (!empty($src)) {
 			$parent = parse_url($this->env->buildlink());
-			$iframe = '<iframe src="' . $src . '&parent=' . $parent['host'] . '&autoplay=false" height="270" width="" allowfullscreen></iframe>';	
+			$iframe = '<iframe src="' . $src . '&parent=' . $parent['host'] . '&autoplay=false" height="500" width="850" allowfullscreen></iframe>';	
 			
-			return (object)array('html' => $iframe, 'width'=> 400, 'height'=> 270, 'type'=>'video', 'provider_url' => 'https://twitch.tv', 'provider_name' => 'Twitch');			
+			return (object)array('html' => $iframe, 'width'=> 850, 'height'=> 500, 'type'=>'video', 'provider_url' => 'https://twitch.tv', 'provider_name' => 'Twitch');			
 		}
 		return false;
 	}
