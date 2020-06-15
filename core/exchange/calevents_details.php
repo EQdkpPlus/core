@@ -117,6 +117,22 @@ if (!class_exists('exchange_calevents_details')){
 						}else{
 							$this->attendees = array();
 						}
+						
+						// raid guests
+						$arrGuests = array();
+						if(is_array($this->guests) && count($this->guests) > 0){
+							foreach($this->guests as $guestid=>$guestsdata){
+								$arrGuests[$guestsdata['status']][$guestsdata['class']][] = array(
+										'id'		=> $guestid,
+										'name'		=> unsanitize($guestsdata['name']),
+										'classid'	=> $guestsdata['class'],
+										'class'		=> $this->game->get_name('primary', $guestsdata['class']),
+										#'status'	=> $guestsdata['status'],
+										'note'		=> $guestsdata['note'],
+										'guest'		=> 1,
+								);
+							}
+						}
 
 						//The Status & Member data
 						$raidcal_status = $this->config->get('calendar_raid_status');
@@ -151,8 +167,16 @@ if (!class_exists('exchange_calevents_details')){
 											'note'			=> ((trim($memberdata['note']) && $this->user->check_group($shownotes_ugroups, false, $this->user->id)) ? $memberdata['note'] : ''),
 											'rank'			=> $this->pdh->get('member', 'rankname', array($memberid)),
 											'profiledata'	=> $arrData,
+											'guest'			=> 0,
 										);
 
+									}
+								}
+								
+								if(isset($arrGuests[$statuskey][$classid])){
+									foreach($arrGuests[$statuskey][$classid] as $arrGuest){
+										$arrChars['guest:'.$arrGuest['id']] = $arrGuest;
+										$this->attendees_count[$statuskey]++;
 									}
 								}
 
@@ -160,7 +184,7 @@ if (!class_exists('exchange_calevents_details')){
 									'id'		=> $classid,
 									'name'		=> $classname,
 									'color'		=> ($eventdata['extension']['raidmode'] != 'role') ? $this->game->get_class_color($classid) : '',
-									'count'		=> (isset($this->attendees[$statuskey][$classid])) ? count($this->attendees[$statuskey][$classid]) : 0,
+									'count'		=> count($arrChars),
 									'maxcount'	=> ($eventdata['extension']['raidmode'] == 'none' && $eventdata['extension']['distribution'][$classid] == 0) ? '' : $eventdata['extension']['distribution'][$classid],
 									'chars'		=> $arrChars,
 								);
@@ -176,18 +200,6 @@ if (!class_exists('exchange_calevents_details')){
 
 						}
 
-						// raid guests
-						if(is_array($this->guests) && count($this->guests) > 0){
-							foreach($this->guests as $guestid=>$guestsdata){
-								$arrGuests['guest:'.$guestid] = array(
-									'id'		=> $guestid,
-									'name'		=> unsanitize($guestsdata['name']),
-									'classid'	=> $guestsdata['class'],
-									'class'		=> $this->game->get_name('primary', $guestsdata['class']),
-									'status'	=> $guestsdata['status'],
-								);
-							}
-						}
 
 						//UserChars
 						$user_chars = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'connection_id', array($this->user->id))));
@@ -339,7 +351,7 @@ if (!class_exists('exchange_calevents_details')){
 					}
 					return $out;
 				} else {
-					return $this->pex->error('no event_id given');
+					return $this->pex->error('no eventid given');
 				}
 			} else {
 				return $this->pex->error('access denied');
