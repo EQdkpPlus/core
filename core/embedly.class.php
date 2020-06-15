@@ -39,8 +39,7 @@ class embedly extends gen_class {
 				),
 				'twitch' => array(
 					'regex' => ["https?://clips\.twitch\.tv/.*","https?://www\.twitch\.tv/.*","https?://twitch\.tv/.*"],
-					'format' => 'json',
-					'oembed' => 'https://api.twitch.tv/v5/oembed?url=URL',
+					'function' => 'embedTwitch',
 				),
 				'vidme' => array(
 					'regex' => ['https://vidd\.me/.*', 'https?://vid\.me/.*'],
@@ -99,9 +98,8 @@ class embedly extends gen_class {
 		if (strlen($link) == 0) return '';
 		$oembed = $this->getLinkDetails($link);
 
-
-		if ($oembed && is_array($oembed) && count($oembed)){
-			$out = $this->formatEmbedded($oembed[0], $link);
+		if ($oembed && (is_array($oembed) || is_object($oembed)) && count($oembed)){
+			$out = $this->formatEmbedded($oembed, $link);
 		}
 
 		return $out;
@@ -173,7 +171,7 @@ class embedly extends gen_class {
 
 		//Now let's get the information from embedly
 		$oembeds = $this->getMeta($embedlyUrls);
-
+		
 		//And now let's replace the Links with the Videos or pictures
 		foreach ($oembeds as $key => $oembed){
 			if($oembed === false) continue;
@@ -184,7 +182,7 @@ class embedly extends gen_class {
 
 				$string = str_replace('<a href="'.$arrDecodedLinks[$key].'">'.$arrDecodedLinks[$key].'</a>', $out, $string);
 
-				#$string = preg_replace("#([^\"':>])".preg_quote($arrDecodedLinks[$key], '#')."#i", "$1".$out, $string);
+				$string = preg_replace("~(^|\s)".preg_quote($arrDecodedLinks[$key], '~')."~", $out, $string);
 			}
 		}
 
@@ -194,10 +192,6 @@ class embedly extends gen_class {
 
 	//Styling for Embedded Images/Objects
 	private function formatEmbedded($objEmbedly, $link){
-		#d($objEmbedly);
-
-
-
 		$out = '';
 		switch($objEmbedly->type) {
 				case 'photo':
@@ -336,33 +330,43 @@ class embedly extends gen_class {
 			$mixResult = $this->checkLink($mixLink);
 			if($mixResult !== false){
 				$arrMyService = $this->getServices($mixResult);
-
-				$strUrl = str_replace('URL', urlencode($mixLink), $arrMyService['oembed']);
-
-				//Local cache
-				if(isset($this->arrCache[$strUrl])) return $this->arrCache[$strUrl];
-
-				//File cache
-				if(file_exists($this->strImageCacheFolder.md5($strUrl).'.txt') && (filemtime($this->strImageCacheFolder.md5($strUrl).'.txt') > (time()-86400)) ){
-					$strResult = file_get_contents($this->strImageCacheFolder.md5($strUrl).'.txt');
+				
+				if(isset($arrMyService['function'])){
+					$function = $arrMyService['function'];
+					$arrResult = $this->{$function}($mixLink);
+					$this->arrCache[$mixLink] = ($arrResult) ? $arrResult : false;
+					
+					return $this->arrCache[$mixLink];
+					
 				} else {
-					$strResult = register('urlfetcher')->fetch($strUrl);
-				}
-
-				if($strResult){
-					$this->pfh->putContent($this->strImageCacheFolder.md5($strUrl).'.txt', $strResult);
-
-					if($arrMyService['format'] == 'xml'){
-						$arrResult = simplexml_load_string($strResult);
-					} else{
-						$arrResult = json_decode($strResult);
+					$strUrl = str_replace('URL', urlencode($mixLink), $arrMyService['oembed']);
+	
+					//Local cache
+					if(isset($this->arrCache[$strUrl])) return $this->arrCache[$strUrl];
+	
+					//File cache
+					if(file_exists($this->strImageCacheFolder.md5($strUrl).'.txt') && (filemtime($this->strImageCacheFolder.md5($strUrl).'.txt') > (time()-86400)) ){
+						$strResult = file_get_contents($this->strImageCacheFolder.md5($strUrl).'.txt');
+					} else {
+						$strResult = register('urlfetcher')->fetch($strUrl);
 					}
-
-					$this->arrCache[$strUrl] = ($arrResult) ? $arrResult : false;
-
-					return $this->arrCache[$strUrl];
-				} else {
-					return false;
+	
+					if($strResult){
+						$this->pfh->putContent($this->strImageCacheFolder.md5($strUrl).'.txt', $strResult);
+	
+						if($arrMyService['format'] == 'xml'){
+							$arrResult = simplexml_load_string($strResult);
+						} else{
+							$arrResult = json_decode($strResult);
+						}
+	
+						$this->arrCache[$strUrl] = ($arrResult) ? $arrResult : false;
+	
+						return $this->arrCache[$strUrl];
+					} else {
+						return false;
+					}
+				
 				}
 			}
 		}
@@ -392,6 +396,38 @@ class embedly extends gen_class {
 			foreach($arrRegex as $strRegex){
 				if(preg_match('#'.$strRegex.'#', $strLink)) return $strServicename;
 			}
+		}
+		return false;
+	}
+	
+	public function embedTwitch($url){
+		$arrRegex = array('https?://www.twitch.tv/(?<AUTHOR>[a-zA-Z0-9_]+)/clip/(?<CLIP>[a-zA-Z0-9_]+)', 'https?://www.twitch.tv/(?!videos)(?!.*/v/)(?<CHANNEL>[a-zA-Z0-9_]+)',
+'https?://www.twitch.tv/videos/(?<VIDEO>[0-9]+)', 'https?://www.twitch.tv/[a-zA-Z0-9]+/v/(?<VIDEO>[0-9]+)');
+		
+		$arrMatches = array();
+		foreach($arrRegex as $val){
+			$a = preg_match('~'.$val.'~', $url, $arrMatches);
+			if($a > 0) break;
+		}
+		
+		$src = '';
+		if (!empty($arrMatches['CLIP'])) {
+			$src = 'https://clips.twitch.tv/embed?clip=' . $arrMatches['CLIP'];
+		}
+		
+		if (!empty($arrMatches['CHANNEL'])) {
+			$src = 'https://player.twitch.tv/?channel=' . $arrMatches['CHANNEL'];
+		}
+		
+		if (!empty($arrMatches['VIDEO'])) {
+			$src = 'https://player.twitch.tv/?video=' . $arrMatches['VIDEO'];
+		}
+		
+		if (!empty($src)) {
+			$parent = parse_url($this->env->buildlink());
+			$iframe = '<iframe src="' . $src . '&parent=' . $parent['host'] . '&autoplay=false" height="270" width="" allowfullscreen></iframe>';	
+			
+			return (object)array('html' => $iframe, 'width'=> 400, 'height'=> 270, 'type'=>'video', 'provider_url' => 'https://twitch.tv', 'provider_name' => 'Twitch');			
 		}
 		return false;
 	}

@@ -534,7 +534,8 @@ if (!class_exists("bbcode")) {
 		public function remove_embeddedMedia($text){
 			$text = preg_replace('{<object[^>]*>(.*?)</object>}', '', $text);
 			$text = preg_replace('{<embed[^>]*>(.*?)</embed>}', '', $text);
-
+			$text = preg_replace('{<iframe[^>]*>(.*?)</iframe>}', '', $text);
+			
 			return $text;
 		}
 
