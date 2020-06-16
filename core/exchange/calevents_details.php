@@ -288,6 +288,7 @@ if (!class_exists('exchange_calevents_details')){
 							'calendar'		=> $eventdata['calendar_id'],
 							'calendar_name'	=> $this->pdh->get('calendar_events', 'calendar', array($event_id)),
 							'raidgroups'	=> $arrRaidgroups,
+							'url'			=> $this->env->buildlink(false).register('routing')->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($event_id)), $event_id, false),
 						);
 					} else {
 						//Check if private
@@ -295,13 +296,13 @@ if (!class_exists('exchange_calevents_details')){
 							return $this->pex->error('access denied');
 						}
 						
-						$mystatus = 0;						
+						$mystatus = -1;					
 						
 						// invited attendees
 						$event_invited		= (isset($eventdata['extension']['invited']) && count($eventdata['extension']['invited']) > 0) ? $eventdata['extension']['invited'] : array();
 						if(count($event_invited) > 0){
 							foreach($event_invited as $inviteddata){
-								$userstatus['invited'][] = array(
+								$userstatus[4]['user:'.$inviteddata] = array(
 										'userid'	=> $inviteddata,
 										'name'		=> $this->pdh->get('user', 'name', array($inviteddata)),
 										'joined'	=> $this->pdh->get('calendar_events', 'joined_invitation', array($event_id, $inviteddata)),
@@ -316,8 +317,7 @@ if (!class_exists('exchange_calevents_details')){
 						if(count($event_attendees) > 0){
 							foreach($event_attendees as $attuserid=>$attstatus){
 								$attendancestatus			= $this->statusID2status($attstatus);
-								$statusofuser[$attuserid]	= $attstatus;
-								$userstatus[$attendancestatus][] = array(
+								$userstatus[$attstatus]['user:'.$attuserid] = array(
 										'userid'	=> $attuserid,
 										'name'		=> $this->pdh->get('user', 'name', array($attuserid)),
 										'joined'	=> false,
@@ -325,6 +325,18 @@ if (!class_exists('exchange_calevents_details')){
 								
 								if($attuserid == $this->user->id) $mystatus = $attstatus;
 							}
+						}
+						
+						$arrAvailableStatus = array(1=>'attendance',2=>'maybe',3=>'decline',4=>'invited');
+						$arrOutStatus = array();
+						foreach($arrAvailableStatus as $key => $val){
+							$strStatus = $this->statusID2status($key);
+							$arrOutStatus['status:'.$key] = array(
+								'id'	=> $key,
+								'name'	=> (($key == 4) ? 'Invited' : $this->user->lang('calendar_eventdetails_'.$strStatus)),
+								'count' => count($userstatus[$key]),
+								'users' => $userstatus[$key],
+							);
 						}
 						
 						$out = array(
@@ -342,8 +354,9 @@ if (!class_exists('exchange_calevents_details')){
 							'location'		=> $eventdata['extension']['location'],
 							'location-lat'	=> $eventdata['extension']['location-lat'],
 							'location-lon'	=> $eventdata['extension']['location-lon'],
-							'attendees'		=> $userstatus,
-							'user_status'	=> $this->statusID2status($mystatus),
+							'attendees'		=> $arrOutStatus,
+							'user_status'	=> $mystatus,
+							'url'			=> $this->env->buildlink(false).register('routing')->build('calendarevent', $this->pdh->get('calendar_events', 'name', array($event_id)), $event_id, false),
 						);
 						
 
@@ -360,12 +373,11 @@ if (!class_exists('exchange_calevents_details')){
 		}
 		
 		private function statusID2status($status){
+			$attendancestatus = "unknown";
 			switch($status){
-				case 0:		$attendancestatus = 'unknown'; break;
-				case 1:		$attendancestatus = 'attendance'; break;
-				case 2:		$attendancestatus = 'maybe'; break;
-				case 3:		$attendancestatus = 'decline'; break;
-				case 4:		$attendancestatus = 'invited'; break;
+				case 1:		$attendancestatus = 'confirmations'; break;
+				case 2:		$attendancestatus = 'maybes'; break;
+				case 3:		$attendancestatus = 'declines'; break;
 			}
 			return $attendancestatus;
 		}
