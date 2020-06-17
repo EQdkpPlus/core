@@ -401,7 +401,7 @@ class Manage_Menus extends page_generic {
 
 			if (!isset($v['childs'])){
 				if (!$this->check_for_hidden_article($v, $id)) continue;
-				if(isset($v['plugin']) && isset($arrExistingHidden[$v['hash']])) continue;
+				if(isset($v['plugin']) && isset($arrExistingHidden[$v['_hash']])) continue;
 				$html .= '<li id="list_'.$id.'">'.$this->create_li($v, $id).'</li>';
 
 			} else {
@@ -411,7 +411,7 @@ class Manage_Menus extends page_generic {
 					$id++;
 					if (!isset($v2['childs'])){
 						if (!$this->check_for_hidden_article($v2, $id)) continue;
-						if(isset($v2['plugin']) && isset($arrExistingHidden[$v2['hash']])) continue;
+						if(isset($v2['plugin']) && isset($arrExistingHidden[$v2['_hash']])) continue;
 						$html .= '<li id="list_'.$id.'">'.$this->create_li($v2, $id).'</li>';
 					} else {
 						$html .= '<li id="list_'.$id.'">'.$this->create_li($v2, $id).'<ol>';
@@ -419,7 +419,7 @@ class Manage_Menus extends page_generic {
 						foreach($v2['childs'] as $k3 => $v3){
 							$id++;
 							if (!$this->check_for_hidden_article($v3, $id)) continue;
-							if(isset($v3['plugin']) && isset($arrExistingHidden[$v3['hash']])) continue;
+							if(isset($v3['plugin']) && isset($arrExistingHidden[$v3['_hash']])) continue;
 							$html .= '<li id="list_'.$id.'">'.$this->create_li($v3, $id).'</li>';
 
 						}
