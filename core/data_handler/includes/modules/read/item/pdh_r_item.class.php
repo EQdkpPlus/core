@@ -117,7 +117,7 @@ if(!class_exists('pdh_r_item')){
 		public function get_apa_value($item_id, $apa_id=false){
 			$strApaValue =  $this->objPagination->get($item_id, 'item_apa_value');
 			if($strApaValue != ""){
-				$arrApaValue = unserialize($strApaValue);
+				$arrApaValue = unserialize_noclasses($strApaValue);
 				if($apa_id){
 					if(isset($arrApaValue[$apa_id])) return $arrApaValue[$apa_id];
 				} else {

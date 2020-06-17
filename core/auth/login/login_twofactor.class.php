@@ -63,7 +63,7 @@ class login_twofactor extends gen_class {
 	}
 
 	public function display_account($arrOptions){
-		$data = unserialize(register('encrypt')->decrypt($arrOptions[0]));
+		$data = unserialize_noclasses(register('encrypt')->decrypt($arrOptions[0]));
 		$out = '<div class="clickToReveal" title="'.$this->user->lang('click_to_reveal').'"><a>**********</a>
 					<div><span style="font-weight:bold;">'.$this->user->lang("login_twofactor_key").'</span>: '.$data['secret'].'<br />';
 		$out .= '<span style="font-weight:bold;">'.$this->user->lang("login_twofactor_emergency_token").'</span>: '.$data['emergency_token'].'</div></div>';
@@ -77,10 +77,10 @@ class login_twofactor extends gen_class {
 			//Get Auth Account
 			$arrAuthAccounts = $this->pdh->get('user', 'auth_account', array($arrOptions[0]['user_id']));
 			if ($arrAuthAccounts['twofactor'] != ""){
-				$data = unserialize(register('encrypt')->decrypt($arrAuthAccounts['twofactor']));
+				$data = unserialize_noclasses(register('encrypt')->decrypt($arrAuthAccounts['twofactor']));
 				if ($data){
 					$cookie = $this->in->getEQdkpCookie("twofactor");
-					$cookie_secret = unserialize(register('encrypt')->decrypt($cookie));
+					$cookie_secret = unserialize_noclasses(register('encrypt')->decrypt($cookie));
 					if (($cookie_secret['secret'] === hash("sha256", $data['secret'])) && (intval($cookie_secret['user_id'])===intval($arrOptions[0]['user_id']))) return false;
 
 					$strEncryptedUser = register('encrypt')->encrypt(serialize($arrOptions[0]['user_id']));
@@ -141,7 +141,7 @@ class login_twofactor extends gen_class {
 	*/
 	public function login($strUsername, $strPassword){
 		list($serializedUser, $intTimestamp, $strHmac) = explode(':', $this->in->get('twofactor_data'));
-		$user = unserialize(register('encrypt')->decrypt($serializedUser));
+		$user = unserialize_noclasses(register('encrypt')->decrypt($serializedUser));
 		$strCalcMac = hash_hmac("sha256", $serializedUser.'_'.$intTimestamp.'.'.$user, hash("sha256", registry::get_const('encryptionKey')));
 
 		if($strCalcMac !== $strHmac) return false;
@@ -155,7 +155,7 @@ class login_twofactor extends gen_class {
 		if ($user && $user != ANONYMOUS){
 			$arrAuthAccounts = $this->pdh->get('user', 'auth_account', array($user));
 			if ($arrAuthAccounts['twofactor'] != ""){
-				$data = unserialize(register('encrypt')->decrypt($arrAuthAccounts['twofactor']));
+				$data = unserialize_noclasses(register('encrypt')->decrypt($arrAuthAccounts['twofactor']));
 				if ($data){
 					if ($code === $data['emergency_token']){
 						$this->pdh->put('user', 'delete_authaccount', array($user, "twofactor"));

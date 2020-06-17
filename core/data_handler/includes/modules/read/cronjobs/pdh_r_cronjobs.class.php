@@ -85,7 +85,7 @@ if ( !class_exists( "pdh_r_cronjobs" ) ) {
 						'active'			=> (int)$drow['active'],
 						'editable'			=> (int)$drow['editable'],
 						'path'				=> $drow['path'],
-						'params'			=> ($drow['params'] != "") ? unserialize($drow['params']) : array(),
+						'params'			=> ($drow['params'] != "") ? unserialize_noclasses($drow['params']) : array(),
 						'description'		=> $drow['description'],
 						'last_run'			=> (int)$drow['last_run'],
 						'next_run'			=> (int)$drow['next_run'],

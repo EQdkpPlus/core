@@ -74,8 +74,8 @@ if(!class_exists('pdh_w_articles')) {
 					'date'				=> $arrOldData["date"],
 					'previewimage'		=> $arrOldData["previewimage"],
 					'alias'				=> $arrOldData["alias"],
-					'tags'				=> implode(", ", unserialize($arrOldData["tags"])),
-					'page_objects'		=> implode(", ", unserialize($arrOldData["page_objects"])),
+					'tags'				=> implode(", ", unserialize_noclasses($arrOldData["tags"])),
+					'page_objects'		=> implode(", ", unserialize_noclasses($arrOldData["page_objects"])),
 					'hide_header'		=> $arrOldData["hide_header"],
 			);
 
@@ -120,8 +120,8 @@ if(!class_exists('pdh_w_articles')) {
 							'date'				=> $arrOldData["date"],
 							'previewimage'		=> $arrOldData["previewimage"],
 							'alias'				=> $arrOldData["alias"],
-							'tags'				=> implode(", ", unserialize($arrOldData["tags"])),
-							'page_objects'		=> implode(", ", unserialize($arrOldData["page_objects"])),
+							'tags'				=> implode(", ", unserialize_noclasses($arrOldData["tags"])),
+							'page_objects'		=> implode(", ", unserialize_noclasses($arrOldData["page_objects"])),
 							'hide_header'		=> $arrOldData["hide_header"],
 					);
 
@@ -143,7 +143,7 @@ if(!class_exists('pdh_w_articles')) {
 
 		public function add($strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader){
 			if ($strAlias == ""){
-				$arrName = unserialize($strTitle);
+				$arrName = unserialize_noclasses($strTitle);
 				$strDefaultLanguage = $this->config->get('default_lang');
 				$strAlias = $this->create_alias($arrName[$strDefaultLanguage]);
 			} else {
@@ -256,7 +256,7 @@ if(!class_exists('pdh_w_articles')) {
 
 			$currentLanguage = $this->user->lang_name;
 			$defaultLanguage = $this->config->get('default_lang');
-			$arrOldTitles = (is_serialized($arrOldData["title"])) ? unserialize($arrOldData["title"]) : array($defaultLanguage => $arrOldData["title"]);
+			$arrOldTitles = (is_serialized($arrOldData["title"])) ? unserialize_noclasses($arrOldData["title"]) : array($defaultLanguage => $arrOldData["title"]);
 			$arrOldTitles[$currentLanguage] = $strTitle;
 			if(!isset($arrOldTitles[$defaultLanguage])) $arrOldTitles[$defaultLanguage] = $strTitle;
 
@@ -336,7 +336,7 @@ if(!class_exists('pdh_w_articles')) {
 
 				$arrOld = array(
 						'text'				=> $arrOldData["text"],
-						'page_objects'		=> implode(", ", unserialize($arrOldData["page_objects"])),
+						'page_objects'		=> implode(", ", unserialize_noclasses($arrOldData["page_objects"])),
 				);
 
 				$arrFlags = array(
@@ -361,7 +361,7 @@ if(!class_exists('pdh_w_articles')) {
 
 		public function update($id, $strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader){
 			if ($strAlias == ""){
-				$arrName = unserialize($strTitle);
+				$arrName = unserialize_noclasses($strTitle);
 				$strDefaultLanguage = $this->config->get('default_lang');
 				$strAlias = $this->create_alias($arrName[$strDefaultLanguage]);
 			} elseif($strAlias != $this->pdh->get('articles', 'alias', array($id))) {
@@ -462,8 +462,8 @@ if(!class_exists('pdh_w_articles')) {
 					'date'				=> $arrOldData["date"],
 					'previewimage'		=> $arrOldData["previewimage"],
 					'alias'				=> $arrOldData["alias"],
-					'tags'				=> implode(", ", unserialize($arrOldData["tags"])),
-					'page_objects'		=> implode(", ", unserialize($arrOldData["page_objects"])),
+					'tags'				=> implode(", ", unserialize_noclasses($arrOldData["tags"])),
+					'page_objects'		=> implode(", ", unserialize_noclasses($arrOldData["page_objects"])),
 					'hide_header'		=> $arrOldData["hide_header"],
 				);
 

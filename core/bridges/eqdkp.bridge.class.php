@@ -88,7 +88,7 @@ class eqdkp_bridge extends bridge_generic {
 		$sync_array = array();
 
 		$custom_fields = $arrUserdata['custom_fields'];
-		$arrFields = unserialize($custom_fields);
+		$arrFields = unserialize_noclasses($custom_fields);
 		foreach($arrFields as $key => $val){
 			$key = str_replace('userprofile_', '', $key);
 			$sync_array[$key] = $val;

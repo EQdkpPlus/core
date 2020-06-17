@@ -72,7 +72,7 @@ class maintenance_user extends page_generic {
 	public function renew(){
 		$muser_config = $this->crypt->decrypt($this->config->get('maintenance_user'));
 		if ($muser_config != ''){
-			$user_data = unserialize(stripslashes($muser_config));
+			$user_data = unserialize_noclasses(stripslashes($muser_config));
 			$user_data['valid_until'] = $user_data['valid_until'] + 7*86400;
 			$days_to_end = ceil(($user_data['valid_until'] - $this->time->time) / 86400);
 			$this->config->set('maintenance_user', $this->crypt->encrypt(serialize($user_data)));
@@ -88,7 +88,7 @@ class maintenance_user extends page_generic {
 	public function delete() {
 		$muser_config = $this->crypt->decrypt($this->config->get('maintenance_user'));
 		if ($muser_config != ''){
-			$muser = unserialize(stripslashes($muser_config));
+			$muser = unserialize_noclasses(stripslashes($muser_config));
 			$this->db->prepare("DELETE FROM __users WHERE user_id = ?")->execute($muser['user_id']);
 
 			$this->pdh->put('user_groups_users', 'delete_user_from_group', array($muser['user_id'], 2));
@@ -108,7 +108,7 @@ class maintenance_user extends page_generic {
 
 		if ($user_active){
 			$muser_config = $this->crypt->decrypt($this->config->get('maintenance_user'));
-			$muser = unserialize(stripslashes($muser_config));
+			$muser = unserialize_noclasses(stripslashes($muser_config));
 
 			$objQuery = $this->db->prepare("SELECT * FROM __users WHERE user_id = ?")->limit(1)->execute($muser['user_id']);
 			if ($objQuery && $objQuery->numRows){
@@ -145,7 +145,7 @@ class maintenance_user extends page_generic {
 
 		if ($user_active){
 			$muser_config = $this->crypt->decrypt($this->config->get('maintenance_user'));
-			$muser = unserialize(stripslashes($muser_config));
+			$muser = unserialize_noclasses(stripslashes($muser_config));
 
 			$objQuery = $this->db->prepare("SELECT * FROM __users WHERE user_id = ?")->limit(1)->execute($muser['user_id']);
 			if ($objQuery && $objQuery->numRows){

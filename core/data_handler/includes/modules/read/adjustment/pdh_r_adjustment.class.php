@@ -96,7 +96,7 @@ if(!class_exists('pdh_r_adjustment')){
 		public function get_apa_value($adj_id, $apa_id=false){
 			$strApaValue =  $this->objPagination->get($adj_id, 'adjustment_apa_value');
 			if($strApaValue != ""){
-				$arrApaValue = unserialize($strApaValue);
+				$arrApaValue = unserialize_noclasses($strApaValue);
 				if($apa_id){
 					if(isset($arrApaValue[$apa_id])) return $arrApaValue[$apa_id];
 				} else {

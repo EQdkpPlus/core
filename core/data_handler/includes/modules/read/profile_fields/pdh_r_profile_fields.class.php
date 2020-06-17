@@ -75,7 +75,7 @@ if ( !class_exists( "pdh_r_profile_fields" ) ) {
 						'options_language' => $drow['options_language'],
 						'image'			=> $drow['image'],
 						'enabled'		=> $drow['enabled'],
-						'data'			=> unserialize($drow['data']),
+						'data'			=> unserialize_noclasses($drow['data']),
 						'undeletable'	=> $drow['undeletable'],
 						'custom'		=> $drow['custom'],
 					);

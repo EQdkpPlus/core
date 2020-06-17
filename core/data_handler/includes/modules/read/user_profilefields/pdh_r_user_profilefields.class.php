@@ -299,7 +299,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 
 		public function get_options($intFieldID){
 			if (isset($this->user_profilefields[$intFieldID])){
-				return unserialize($this->user_profilefields[$intFieldID]['options']);
+				return unserialize_noclasses($this->user_profilefields[$intFieldID]['options']);
 			}
 			return false;
 		}
@@ -325,7 +325,7 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 			foreach($this->user_profilefields as $intFieldID => $arrValue){
 
 				if(is_serialized($arrValue['name'])){
-					$arrNames = unserialize($arrValue['name']);
+					$arrNames = unserialize_noclasses($arrValue['name']);
 					foreach($arrNames as $lang => $val){
 						if (utf8_strtolower($val) === $strNameToLower){
 							$this->arrFieldByNameCache[$strNameToLower] = $intFieldID;

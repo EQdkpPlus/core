@@ -442,7 +442,7 @@ class Manage_Extensions extends page_generic {
 	public function display(){
 		//Show error / success messages
 		if($this->in->exists('mes')){
-			$arrMessage = unserialize(base64_decode($this->in->get('mes')));
+			$arrMessage = unserialize_noclasses(base64_decode($this->in->get('mes')));
 			if(isset($arrMessage[0]) && $arrMessage[1]){
 				$this->core->message($arrMessage[0],$arrMessage[1],$arrMessage[2]);
 			}

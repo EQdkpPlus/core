@@ -253,7 +253,7 @@ class update_2300 extends sql_update_task {
 		$result = @file_get_contents($crontab_file);
 		if($result !== false){
 			$this->db->prepare("TRUNCATE __cronjobs")->execute();
-			$crontab = unserialize($result);
+			$crontab = unserialize_noclasses($result);
 			foreach($crontab as $key => $val){
 				$this->pdh->put('cronjobs', 'add', array($key, $val['start_time'], $val['repeat'], $val['repeat_type'], $val['repeat_interval'], $val['extern'], $val['ajax'],$val['delay'], $val['multiple'], $val['active'], $val['editable'], $val['path'], $val['params'], $val['description']));
 				$this->pdh->put('cronjobs', 'setLastAndNextRun', array($key, $val['last_run'],$val['next_run']));

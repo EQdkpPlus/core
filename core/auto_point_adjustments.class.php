@@ -61,7 +61,7 @@ if ( !defined('EQDKP_INC') ){
 			if(is_file($this->apa_tab_file)){
 				$result = @file_get_contents($this->apa_tab_file);
 			}
-			if($result !== false) $this->apa_tab = unserialize($result);
+			if($result !== false) $this->apa_tab = unserialize_noclasses($result);
 			if(!$this->apa_tab) $this->apa_tab = array();
 		}
 
@@ -356,7 +356,7 @@ if ( !defined('EQDKP_INC') ){
 		private function load_calc_func() {
 			if(is_file($this->apa_func_file)){
 				$result = file_get_contents($this->apa_func_file);
-				if($result) $this->calc_func = unserialize($result);
+				if($result) $this->calc_func = unserialize_noclasses($result);
 			}
 		}
 

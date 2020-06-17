@@ -70,13 +70,13 @@ if ( !class_exists( "pdh_r_repository" ) ) {
 						'tags'			=> $row['tags'],
 					);
 
-					$arrTags = unserialize($row['tags']);
+					$arrTags = unserialize_noclasses($row['tags']);
 					if($arrTags && is_array($arrTags)){
 						foreach($arrTags as $elem){
 							if ($elem != "") $this->tags[$elem][(int)$row['id']] = (int)$row['id'];
 						}
 					}
-					$this->repository[(int)$row['category']][$row['id']]['tags'] = unserialize($row['tags']);
+					$this->repository[(int)$row['category']][$row['id']]['tags'] = unserialize_noclasses($row['tags']);
 				}
 
 				$this->pdc->put('pdh_repository_table', $this->repository, null);

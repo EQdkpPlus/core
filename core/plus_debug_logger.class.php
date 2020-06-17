@@ -82,7 +82,7 @@ if ( !defined('EQDKP_INC') ){
 
 			//register_shutdown_function(array($this, "catch_fatals"));
 			if($this->do_file_logging) {
-				$this->logfile_info = unserialize(@file_get_contents($this->logfile_folder.'info.data'));
+				$this->logfile_info = unserialize(@file_get_contents($this->logfile_folder.'info.data'), array('allowed_classes' => false));
 				if (is_array($this->logfile_info)){
 					foreach($this->logfile_info as $error_type => $data) {
 						$file = $this->logfile_folder.$error_type.'.log';

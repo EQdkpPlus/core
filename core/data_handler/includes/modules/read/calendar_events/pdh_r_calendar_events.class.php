@@ -99,7 +99,7 @@ if ( !class_exists( "pdh_r_calendar_events" ) ) {
 						'cloneid'				=> (int)$row['cloneid'],
 						'timezone'				=> $row['timezone'],
 					);
-					$this->events[$row['id']]['extension']	= unserialize($row['extension']);
+					$this->events[$row['id']]['extension']	= unserialize_noclasses($row['extension']);
 					$this->event_timestamps[$row['id']]		= (int)$row['timestamp_start'];
 
 					// unique event array

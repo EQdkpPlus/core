@@ -1092,7 +1092,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		public function get_points($memberID, $mdkpID=false){
 			$strPoints = $this->data_points[$memberID]['points'];
 			if($strPoints != ""){
-				$arrPoints = unserialize($strPoints);
+				$arrPoints = unserialize_noclasses($strPoints);
 				if(!$mdkpID) return $arrPoints;
 
 				if(isset($arrPoints[$mdkpID])){
@@ -1106,7 +1106,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 			$strPoints = $this->data_points[$memberID]['apa_points'];
 			$strWithTwink = ($blnWithTwink) ? 'multi' : 'single';
 			if($strPoints != ""){
-				$arrPoints = unserialize($strPoints);
+				$arrPoints = unserialize_noclasses($strPoints);
 				if(!$apaID) return $arrPoints;
 				if(isset($arrPoints[$apaID][$mdkpID][$strWithTwink])){
 					return $arrPoints[$apaID][$mdkpID][$strWithTwink];

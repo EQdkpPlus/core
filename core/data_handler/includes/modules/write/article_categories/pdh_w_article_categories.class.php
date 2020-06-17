@@ -82,7 +82,7 @@ if(!class_exists('pdh_w_article_categories')) {
 
 		public function add($strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles,$intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS){
 			if ($strAlias == ""){
-				$arrName = unserialize($strName);
+				$arrName = unserialize_noclasses($strName);
 				$strDefaultLanguage = $this->config->get('default_lang');
 				$strAlias = $this->create_alias($arrName[$strDefaultLanguage]);
 			} else {
@@ -151,7 +151,7 @@ if(!class_exists('pdh_w_article_categories')) {
 
 		public function update($id, $strName, $strDescription, $strAlias, $intPublished, $intPortalLayout, $intArticlePerPage, $intParentCategory, $intListType, $intShowChilds, $arrAggregation, $intFeaturedOnly, $intSocialButtons, $intArticlePublishedState, $arrPermissions, $intNotifyUnpublishedArticles,$intHideHeader, $intSortationType, $intFeaturedOntop, $intHideOnRSS){
 			if ($strAlias == ""){
-				$arrName = unserialize($strName);
+				$arrName = unserialize_noclasses($strName);
 				$strDefaultLanguage = $this->config->get('default_lang');
 				$strAlias = $this->create_alias($arrName[$strDefaultLanguage]);
 			} elseif($strAlias != $this->pdh->get('article_categories', 'alias', array($id))) {

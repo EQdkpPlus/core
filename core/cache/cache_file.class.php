@@ -65,9 +65,9 @@ if(!class_exists( "cache_file")){
 
 			//all fine
 			if( $uncompress ) {
-				return unserialize( gzuncompress( $result ) );
+				return unserialize_noclasses( gzuncompress( $result ) );
 			} else {
-				return unserialize( $result );
+				return unserialize_noclasses( $result );
 			}
 		}
 

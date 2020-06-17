@@ -61,12 +61,12 @@ if ( !class_exists( "pdh_r_portal_layouts" ) ) {
 					$this->layouts[intval($drow['id'])] = array(
 						'id'				=> intval($drow['id']),
 						'name'				=> $drow['name'],
-						'blocks'			=> unserialize($drow['blocks']),
-						'modules'			=> unserialize($drow['modules']),
-						'routes'			=> unserialize($drow['routes']),
+						'blocks'			=> unserialize_noclasses($drow['blocks']),
+						'modules'			=> unserialize_noclasses($drow['modules']),
+						'routes'			=> unserialize_noclasses($drow['routes']),
 					);
 
-					$arrRoutes = unserialize($drow['routes']);
+					$arrRoutes = unserialize_noclasses($drow['routes']);
 					if(is_array($arrRoutes)){
 						foreach($arrRoutes as $strRoute){
 							$this->routes[$strRoute] = intval($drow['id']);

@@ -1222,7 +1222,7 @@ class core extends gen_class {
 
 			//Add additonal Template Links
 			$strAdditionalLinks = $this->user->style['additional_fields'];
-			$arrAdditionalLinks = ($strAdditionalLinks != "") ? unserialize($strAdditionalLinks) : array();
+			$arrAdditionalLinks = ($strAdditionalLinks != "") ? unserialize_noclasses($strAdditionalLinks) : array();
 			foreach($arrAdditionalLinks as $key => $val){
 				$this->tpl->assign_var('LINK_'.strtoupper($key), $val);
 			}

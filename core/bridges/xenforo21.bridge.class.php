@@ -64,7 +64,7 @@ class xenforo21_bridge extends bridge_generic {
 		if ($objQuery){
 			$arrAllResults = $objQuery->fetchAllAssoc();
 			foreach($arrAllResults as $arrResult){
-				$arrAuthData = unserialize($arrResult['data']);
+				$arrAuthData = unserialize_noclasses($arrResult['data']);
 				$scheme = $arrResult['scheme_class'];
 
 				$blnResult = $this->_handle_logins($scheme, $password, $hash, $arrAuthData);

@@ -28,7 +28,7 @@ class admin_functions extends gen_class {
 		if(strlen($strIP)){
 			$return = $this->puf->fetch("http://www.geoplugin.net/php.gp?ip=".$this->in->get('ip_resolve'));
 			if ($return){
-				$unserialized = @unserialize($return);
+				$unserialized = @unserialize_noclasses($return);
 				if ($unserialized){
 					$out = array(
 						'city' 			=> $unserialized['geoplugin_city'],

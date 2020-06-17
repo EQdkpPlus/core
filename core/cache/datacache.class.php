@@ -45,7 +45,7 @@ if( !class_exists( "datacache" ) ) {
 			//read expiry date tab
 			$result = @file_get_contents( $this->cache_folder.'expiry_dates.php' );
 			if( $result !== false ) {
-				$this->expiry_dates = unserialize( $result );
+				$this->expiry_dates = unserialize_noclasses( $result );
 			} else {
 				$this->save_expiry_dates();
 			}

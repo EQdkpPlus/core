@@ -188,7 +188,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 
 		public function get_permissions($intCategoryID){
 			if (isset($this->categories[$intCategoryID])){
-				return unserialize($this->categories[$intCategoryID]['permissions']);
+				return unserialize_noclasses($this->categories[$intCategoryID]['permissions']);
 			}
 			return false;
 		}
@@ -228,7 +228,7 @@ if ( !class_exists( "pdh_r_article_categories" ) ) {
 
 		public function get_aggregation($intCategoryID){
 			if (isset($this->categories[$intCategoryID])){
-				return unserialize($this->categories[$intCategoryID]['aggregation']);
+				return unserialize_noclasses($this->categories[$intCategoryID]['aggregation']);
 			}
 			return false;
 		}

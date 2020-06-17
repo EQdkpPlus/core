@@ -99,7 +99,7 @@ class Manage_Logs extends page_generic {
 	}
 
 	public function view_log() {
-		$log_value = unserialize($this->pdh->get('logs', 'value', array($this->url_id)));
+		$log_value = unserialize_noclasses($this->pdh->get('logs', 'value', array($this->url_id)));
 
 		$blnCompare = false;
 		if(is_array($log_value)) {

@@ -117,7 +117,7 @@ class vbulletin51_bridge extends bridge_generic {
 		$objQuery =  $this->bridgedb->query("SELECT data FROM ".$this->prefix."datastore WHERE title = 'options'");
 		if($objQuery){
 			$result = $objQuery->fetchAssoc();
-			$config = unserialize($result['data']);
+			$config = unserialize_noclasses($result['data']);
 		}
 
 		//PW is true, logg the user into our Forum
@@ -155,7 +155,7 @@ class vbulletin51_bridge extends bridge_generic {
 		$objQuery =  $this->bridgedb->query("SELECT data FROM ".$this->prefix."datastore WHERE title = 'options'");
 		if($objQuery){
 			$result = $objQuery->fetchAssoc();
-			$config = unserialize($result['data']);
+			$config = unserialize_noclasses($result['data']);
 		}
 
 		$expire = $this->time->time + 31536000;
@@ -204,7 +204,7 @@ class vbulletin51_bridge extends bridge_generic {
 		$objQuery =  $this->bridgedb->query("SELECT data FROM ".$this->prefix."datastore WHERE title = 'options'");
 		if($objQuery){
 			$result = $objQuery->fetchAssoc();
-			$config = unserialize($result['data']);
+			$config = unserialize_noclasses($result['data']);
 		}
 
 		$expire = $this->time->time + 31536000;

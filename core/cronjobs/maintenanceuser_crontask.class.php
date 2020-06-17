@@ -33,7 +33,7 @@ if ( !class_exists( "maintenanceuser_crontask" ) ) {
 		}
 
 		public function run(){
-			$muser = unserialize(stripslashes($this->encrypt->decrypt($this->config->get('maintenance_user'))));
+			$muser = unserialize_noclasses(stripslashes($this->encrypt->decrypt($this->config->get('maintenance_user'))));
 			if ($muser['user_id']){
 				$this->db->prepare("DELETE FROM __users WHERE user_id =?")->execute($muser['user_id']);
 

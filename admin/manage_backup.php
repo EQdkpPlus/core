@@ -78,7 +78,7 @@ class EQDKPBackup extends page_generic{
 
 					$result = @file_get_contents($this->pfh->FolderPath('backup/meta/', 'eqdkp').str_replace(substr($key, strpos($key, '.')), "", $key.'.meta.php'));
 					if($result !== false){
-						$metadata[$key] = unserialize($result);
+						$metadata[$key] = unserialize_noclasses($result);
 					}
 				}
 				$addition = '';

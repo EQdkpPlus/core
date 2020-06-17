@@ -158,7 +158,7 @@ class config extends gen_class {
 		//fix escaped strings
 		$val = stripslashes( $val );
 
-		$value = unserialize($val);
+		$value = unserialize($val, array('allowed_classes' => false));
 
 		// if value is an array now, return value, else return val
 		if(is_array($value)) return $value;

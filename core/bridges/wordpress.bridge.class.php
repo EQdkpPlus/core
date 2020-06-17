@@ -67,7 +67,7 @@ class wordpress_bridge extends bridge_generic {
 		$query = $this->bridgedb->query("SELECT option_value FROM ".$this->prefix."options WHERE option_name='".$this->prefix."user_roles'");
 		if ($query){
 			$result = $query->fetchAssoc();
-			if ($arrDBGroups = unserialize($result['option_value'])){
+			if ($arrDBGroups = unserialize_noclasses($result['option_value'])){
 				foreach ($arrDBGroups as $id => $value){
 					$arrGroups[$id] = $value['name'].(($blnWithID) ? ' (#'.$id.')': '');
 				}
@@ -82,7 +82,7 @@ class wordpress_bridge extends bridge_generic {
 		$arrReturn = array();
 		if ($objQuery){
 			$result = $objQuery->fetchAssoc();
-			if ($arrDBGroups = unserialize($result['meta_value'])){
+			if ($arrDBGroups = unserialize_noclasses($result['meta_value'])){
 				foreach ($arrDBGroups as $id => $value){
 					if ((int)$value == 1) $arrReturn[] = $id;
 				}

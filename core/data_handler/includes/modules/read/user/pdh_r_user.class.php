@@ -480,7 +480,7 @@ if (!class_exists("pdh_r_user")){
 
 		public function get_custom_fields($user_id, $field = false){
 			if(!isset($this->users[$user_id])) return array();
-			$fields = unserialize($this->users[$user_id]['custom_fields']);
+			$fields = unserialize_noclasses($this->users[$user_id]['custom_fields']);
 
 			if ($fields){
 				if ($field){
@@ -611,12 +611,12 @@ if (!class_exists("pdh_r_user")){
 		}
 
 		public function get_privacy_settings($user_id) {
-			$fields = unserialize($this->users[$user_id]['privacy_settings']);
+			$fields = unserialize_noclasses($this->users[$user_id]['privacy_settings']);
 			return ($fields) ? $fields : array();
 		}
 
 		public function get_notification_settings($user_id){
-			$fields = unserialize($this->users[$user_id]['notifications']);
+			$fields = unserialize_noclasses($this->users[$user_id]['notifications']);
 			return ($fields) ? $fields : array();
 		}
 
@@ -718,7 +718,7 @@ if (!class_exists("pdh_r_user")){
 		}
 
 		public function get_plugin_settings($user_id, $plugin = false){
-			$fields = unserialize($this->users[$user_id]['plugin_settings']);
+			$fields = unserialize_noclasses($this->users[$user_id]['plugin_settings']);
 			if ($fields){
 				if ($plugin){
 					return isset($fields[$plugin]) ? $fields[$plugin] : array();
@@ -895,7 +895,7 @@ if (!class_exists("pdh_r_user")){
 					//decrypt email address
 					$this->users[$row['user_id']]['user_email']			= $this->encrypt->decrypt($row['user_email']);
 					$tmpCryptAuthAccount								= $this->encrypt->decrypt($row['auth_account']);
-					$this->users[$row['user_id']]['auth_account']		= (is_serialized($tmpCryptAuthAccount)) ? unserialize($tmpCryptAuthAccount) : $tmpCryptAuthAccount;
+					$this->users[$row['user_id']]['auth_account']		= (is_serialized($tmpCryptAuthAccount)) ? unserialize_noclasses($tmpCryptAuthAccount) : $tmpCryptAuthAccount;
 
 					$this->users[$row['user_id']]['user_email_clean']	= utf8_strtolower($this->users[$row['user_id']]['user_email']);
 
@@ -911,7 +911,7 @@ if (!class_exists("pdh_r_user")){
 					$row = $this->users[$intUserID];
 					$this->users[$row['user_id']]['user_email']			= $this->encrypt->decrypt($row['user_email']);
 					$tmpCryptAuthAccount								= $this->encrypt->decrypt($row['auth_account']);
-					$this->users[$row['user_id']]['auth_account']		= (is_serialized($tmpCryptAuthAccount)) ? unserialize($tmpCryptAuthAccount) : $tmpCryptAuthAccount;
+					$this->users[$row['user_id']]['auth_account']		= (is_serialized($tmpCryptAuthAccount)) ? unserialize_noclasses($tmpCryptAuthAccount) : $tmpCryptAuthAccount;
 
 					$this->users[$row['user_id']]['user_email_clean']	= utf8_strtolower($this->users[$row['user_id']]['user_email']);
 				}

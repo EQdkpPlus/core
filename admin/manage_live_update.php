@@ -299,7 +299,7 @@ class Manage_Live_Update extends page_generic {
 
 
 		//Conflicted Files
-		$arrConflictedFiles = unserialize($this->encrypt->decrypt($this->config->get('conflicted_files', 'live_update')));
+		$arrConflictedFiles = unserialize_noclasses($this->encrypt->decrypt($this->config->get('conflicted_files', 'live_update')));
 		foreach ($arrConflictedFiles as $file){
 			$arrFiles[] = $this->root_path.$file;
 		}
@@ -332,7 +332,7 @@ class Manage_Live_Update extends page_generic {
 		$stop = false;
 
 		//Conflicted Files
-		$arrConflictedFiles = unserialize($this->encrypt->decrypt($this->config->get('conflicted_files', 'live_update')));
+		$arrConflictedFiles = unserialize_noclasses($this->encrypt->decrypt($this->config->get('conflicted_files', 'live_update')));
 		if ($arrConflictedFiles && is_array($arrConflictedFiles) && count($arrConflictedFiles) > 0){
 			$stop = true;
 
@@ -465,7 +465,7 @@ class Manage_Live_Update extends page_generic {
 		$strLogFile = $this->pfh->FolderPath('update_to_'.$new_version.'/','live_update').'/missing.log';
 
 		$arrFiles = array();
-		$arrConflictedFiles = unserialize($this->encrypt->decrypt(file_get_contents($strLogFile)));
+		$arrConflictedFiles = unserialize_noclasses($this->encrypt->decrypt(file_get_contents($strLogFile)));
 		foreach ($arrConflictedFiles as $file){
 			if (file_exists($tmp_folder.'tmp/'.$file)) {
 				$arrFiles[] = $tmp_folder.'tmp/'.$file;
@@ -495,7 +495,7 @@ class Manage_Live_Update extends page_generic {
 			return;
 		}
 
-		$arrMissingFiles = unserialize($this->encrypt->decrypt($this->config->get('missing_files', 'live_update')));
+		$arrMissingFiles = unserialize_noclasses($this->encrypt->decrypt($this->config->get('missing_files', 'live_update')));
 		if ($arrMissingFiles && count($arrMissingFiles) > 0){
 			$this->bring_steps_to_template(9, false, 8);
 			$intMyCookie = (int)$this->in->getEQdkpCookie('lu_step9', 0);

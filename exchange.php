@@ -65,7 +65,7 @@ if(registry::register('input')->get('out') != ''){
 
 				if (registry::register('input')->get('data', '') != ''){
 					$encrypt = registry::register('encrypt');
-					$data = unserialize($encrypt->decrypt(rawurldecode(registry::register('input')->get('data'))));
+					$data = unserialize_noclasses($encrypt->decrypt(rawurldecode(registry::register('input')->get('data'))));
 					if ($data){
 						$userid = registry::fetch('user')->getUserIDfromExchangeKey(registry::register('input')->get('key', ''));
 						foreach($data['perms'] as $perm){

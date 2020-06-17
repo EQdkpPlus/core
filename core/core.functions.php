@@ -1263,7 +1263,7 @@ function is_serialized( $data, $strict = true ) {
 }
 
 function is_serialized0($strValue){
-	$data = @unserialize($strValue);
+	$data = @unserialize_noclasses($strValue);
 	if ($strValue === 'b:0;' || $data !== false) {
 		return true;
 	} else {
@@ -1407,6 +1407,22 @@ function anonymize_ipaddress($ip, $byteCount=1){
  	}
  }
 
+ /**
+  * Serializes given Array
+  * Prevents serializing of objects, PHP >= 7.0
+  * 
+  * @param string $string
+  * @return array Unserialized Array
+  */
+ function unserialize_noclasses($string){
+ 	if(is_array($string)){
+ 		debug_print_backtrace();
+ 	}
+ 	
+ 	$arrData = unserialize($string, array('allowed_classes' => false));
+ 	if(!is_array($arrData)) return false;
+ 	return $arrData;
+ }
 
 
 

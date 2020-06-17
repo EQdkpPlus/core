@@ -203,7 +203,7 @@ class language extends gen_class {
 
 		if(count($this->unused) > 0) return true;
 		$file = $this->pfh->FilePath('unused.lang', 'eqdkp');
-		$data = unserialize(file_get_contents($file));
+		$data = unserialize_noclasses(file_get_contents($file));
 		if(is_array($data) && count($data) > 0) {
 			$this->unused = $data;
 			//check for deleted keys

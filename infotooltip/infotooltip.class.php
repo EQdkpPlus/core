@@ -374,7 +374,7 @@ if(!class_exists('infotooltip')) {
 				$cache_name = md5($cache_name).'.itt';
 
 				if(in_array($cache_name, $this->cached)) {
-					$item = unserialize(file_get_contents($this->pfh->FilePath($cache_name, 'itt_cache')));
+					$item = unserialize_noclasses(file_get_contents($this->pfh->FilePath($cache_name, 'itt_cache')));
 					if(isset($item['baditem'])){
 						$this->pdl->log('infotooltip', 'Item found, but item is baditem. forceupdate set to true.');
 						$forceupdate = true;
@@ -430,7 +430,7 @@ if(!class_exists('infotooltip')) {
 			$cache_name = md5($cache_name).'.itt';
 
 			if(in_array($cache_name, $this->cached)) {
-				$item = unserialize(file_get_contents($this->pfh->FilePath($cache_name, 'itt_cache')));
+				$item = unserialize_noclasses(file_get_contents($this->pfh->FilePath($cache_name, 'itt_cache')));
 				if($item && !isset($item['baditem'])){
 
 					//We found it in Cache

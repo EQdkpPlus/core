@@ -121,14 +121,14 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 					$this->alias[utf8_strtolower($drow['alias'])] = intval($drow['id']);
 
 					if ($drow['page_objects'] != ''){
-						$arrObjects = unserialize($drow['page_objects']);
+						$arrObjects = unserialize_noclasses($drow['page_objects']);
 						foreach($arrObjects as $elem){
 							$this->pageobjects[$elem][] = (int)$drow['id'];
 						}
 					}
 
 					if ($drow['tags'] != ''){
-						$arrTags = unserialize($drow['tags']);
+						$arrTags = unserialize_noclasses($drow['tags']);
 						foreach($arrTags as $elem){
 							$this->tags[$elem][] = (int)$drow['id'];
 						}
@@ -356,7 +356,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 
 		public function get_tags($intArticleID){
 			if (isset($this->articles[$intArticleID])){
-				return (is_serialized($this->articles[$intArticleID]['tags'])) ? unserialize($this->articles[$intArticleID]['tags']) : $this->articles[$intArticleID]['tags'];
+				return (is_serialized($this->articles[$intArticleID]['tags'])) ? unserialize_noclasses($this->articles[$intArticleID]['tags']) : $this->articles[$intArticleID]['tags'];
 			}
 			return false;
 		}
@@ -377,7 +377,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 
 		public function get_votes_users($intArticleID){
 			if (isset($this->articles[$intArticleID])){
-				return unserialize($this->articles[$intArticleID]['votes_users']);
+				return unserialize_noclasses($this->articles[$intArticleID]['votes_users']);
 			}
 			return false;
 		}
@@ -402,7 +402,7 @@ if ( !class_exists( "pdh_r_articles" ) ) {
 
 		public function get_page_objects($intArticleID){
 			if (isset($this->articles[$intArticleID])){
-				return unserialize($this->articles[$intArticleID]['page_objects']);
+				return unserialize_noclasses($this->articles[$intArticleID]['page_objects']);
 			}
 			return false;
 		}

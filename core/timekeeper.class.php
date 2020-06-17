@@ -39,7 +39,7 @@ class timekeeper extends gen_class {
 		$this->time_file  = $this->pfh->FolderPath('timekeeper', 'eqdkp').'times.php';
 		$result = @file_get_contents($this->time_file);
 		if($result !== false){
-			$this->times = unserialize($result);
+			$this->times = unserialize_noclasses($result);
 		}else{
 			$this->pfh->putContent($this->time_file, serialize(array()));
 			//file_put_contents($this->time_file, serialize(array()));

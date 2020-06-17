@@ -253,7 +253,7 @@ class ManageUserProfileFields extends page_generic {
 		));
 		
 		if ($field_data['type'] == 'dropdown' || $field_data['type'] == 'multiselect' || $field_data['type'] == 'radio' || $field_data['type'] == 'gender'){
-			$arrOptions = unserialize($field_data['options']);
+			$arrOptions = unserialize_noclasses($field_data['options']);
 			foreach ($arrOptions['options'] as $key => $value){
 				$this->tpl->assign_block_vars('options_row', array(
 					'ID'		=> $key,

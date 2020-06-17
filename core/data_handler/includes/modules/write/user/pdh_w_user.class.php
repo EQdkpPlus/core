@@ -166,7 +166,7 @@ if(!class_exists('pdh_w_user')) {
 			$objQuery = $this->db->prepare("SELECT custom_fields FROM __users WHERE user_id =?")->execute($user_id);
 			if ($objQuery && $objQuery->numRows){
 				$arrResult = $objQuery->fetchAssoc();
-				$custom = unserialize($arrResult['custom_fields']);
+				$custom = unserialize_noclasses($arrResult['custom_fields']);
 				unset($custom['user_avatar']);
 
 				$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
@@ -183,7 +183,7 @@ if(!class_exists('pdh_w_user')) {
 			$objQuery = $this->db->prepare("SELECT custom_fields FROM __users WHERE user_id =?")->execute($user_id);
 			if ($objQuery && $objQuery->numRows){
 				$arrResult = $objQuery->fetchAssoc();
-				$custom = ($arrResult['custom_fields'] != "") ? unserialize($arrResult['custom_fields']) : array();
+				$custom = ($arrResult['custom_fields'] != "") ? unserialize_noclasses($arrResult['custom_fields']) : array();
 				$custom['user_avatar'] = $strAvatar;
 
 				$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
@@ -200,7 +200,7 @@ if(!class_exists('pdh_w_user')) {
 			$objQuery = $this->db->prepare("SELECT custom_fields FROM __users WHERE user_id =?")->execute($user_id);
 			if ($objQuery && $objQuery->numRows){
 				$arrResult = $objQuery->fetchAssoc();
-				$custom = unserialize($arrResult['custom_fields']);
+				$custom = unserialize_noclasses($arrResult['custom_fields']);
 				$custom['user_avatar_type'] = '0';
 				$objQuery = $this->db->prepare("UPDATE __users :p WHERE user_id=?")->set(array(
 					'custom_fields' => serialize($custom)

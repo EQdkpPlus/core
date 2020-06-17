@@ -24,7 +24,7 @@ if ( !defined('EQDKP_INC') ){
 }
 
 // Check for required PHP Version and quit exec if requirements are not reached
-if (!version_compare(phpversion(), '5.4.0', ">=")){
+if (!version_compare(phpversion(), '7.0.0', ">=")){
 	die('
 		<b>Your PHP Version is outdated!</b><br/><br/>
 		Your PHP Version is outdated and not longer maintained by the PHP project. The Version is end of life. If you are using these releases, you are strongly<br />
@@ -35,7 +35,7 @@ if (!version_compare(phpversion(), '5.4.0', ">=")){
 		not work on these PHP Versions. Please do not ask in the official <a href="http://eqdkp-plus.eu">EQdkp-Plus Forum</a> for a comparible release.<br />
 		Please Ask your Hoster or Admin to Upgrade to a recent Version of PHP. If the Hoster refuses to update, you should consider to change Hoster.<br />
 		Security should be worth the effort of a hoster change.<br /><br />
-		You need at least PHP 5.5.x running on your server! <br />
+		You need at least PHP 7.0.x running on your server! <br />
 	');
 }
 

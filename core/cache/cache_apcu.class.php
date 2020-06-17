@@ -49,7 +49,7 @@ if ( !class_exists( "cache_apcu" ) ) {
 
 			$retval = apcu_fetch($key);
 
-			return ($retval === false) ? null : @unserialize($retval);
+			return ($retval === false) ? null : @unserialize_noclasses($retval);
 		}
 
 		public function del( $key, $global_prefix ) {

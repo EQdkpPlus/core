@@ -64,7 +64,7 @@ if ( !class_exists( "cache_redis" ) ) {
 
 
 			$retval = $this->redis->get($key);
-			return ($retval === false) ? null : @unserialize($retval);
+			return ($retval === false) ? null : @unserialize_noclasses($retval);
 		}
 
 		public function del( $key, $global_prefix ) {

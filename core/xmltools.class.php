@@ -37,7 +37,7 @@ if ( !defined('EQDKP_INC') ){
 		public function prepareLoad($xml){
 			$xml = @base64_decode($xml);
 			$xml = @gzuncompress($xml);
-			$xml = @unserialize($xml);
+			$xml = @unserialize_noclasses($xml);
 			$xml = stripslashes($xml);
 			return $xml;
 		}
@@ -51,7 +51,7 @@ if ( !defined('EQDKP_INC') ){
 
 		// Convert a serialized XML object back to an array
 		public function Database2Array($fieldname){
-			$unser_fieldname	= ($this->isSerialized($fieldname)) ? @unserialize($fieldname) : $fieldname;
+			$unser_fieldname	= ($this->isSerialized($fieldname)) ? @unserialize_noclasses($fieldname) : $fieldname;
 			$xml_obj			= simplexml_load_string($unser_fieldname);
 			return $this->simplexml2array($xml_obj);
 		}
@@ -129,7 +129,7 @@ if ( !defined('EQDKP_INC') ){
 
 		// Check if the file is serialized
 		public function isSerialized($str) {
-			return ($str == serialize(false) || @unserialize($str) !== false);
+			return ($str == serialize(false) || @unserialize_noclasses($str) !== false);
 		}
 
 		// Strip invalid chars for XML

@@ -132,7 +132,7 @@ if(!class_exists('pdh_r_raid')){
 		public function get_apa_value($raid_id, $apa_id=false){
 			$strApaValue =  $this->objPagination->get($raid_id, 'raid_apa_value');
 			if($strApaValue != ""){
-				$arrApaValue = unserialize($strApaValue);
+				$arrApaValue = unserialize_noclasses($strApaValue);
 				if($apa_id){
 					if(isset($arrApaValue[$apa_id])) return $arrApaValue[$apa_id];
 				} else {

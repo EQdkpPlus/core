@@ -92,7 +92,7 @@ class user extends gen_class {
 	*/
 	public function setup($strLanguage = '', $intStyleID = 0){
 		if(!isset($this->data['session_vars'])) { $this->data['session_vars'] = '';}
-		$this->data['session_vars'] = (strlen($this->data['session_vars']) && is_serialized($this->data['session_vars'])) ? unserialize($this->data['session_vars']) : array();
+		$this->data['session_vars'] = (strlen($this->data['session_vars']) && is_serialized($this->data['session_vars'])) ? unserialize_noclasses($this->data['session_vars']) : array();
 
 		//Set Session Vars
 		if($strLanguage != ""){
@@ -185,10 +185,10 @@ class user extends gen_class {
 			$this->style['date']				= 'l, '.$this->style['date_notime_long'];
 			$this->style['date_short']			= 'D '.$this->style['date_notime_short'].' '.$this->style['time'];
 
-			$this->data['privacy_settings'] 	= ($this->data['privacy_settings'] && unserialize($this->data['privacy_settings'])) ? unserialize($this->data['privacy_settings']) : array();
-			$this->data['custom_fields'] 		= ($this->data['custom_fields'] && unserialize($this->data['custom_fields'])) ? unserialize($this->data['custom_fields']) : array();
-			$this->data['plugin_settings'] 		= ($this->data['plugin_settings'] && unserialize($this->data['plugin_settings'])) ? unserialize($this->data['plugin_settings']) : array();
-			$this->data['notification_settings'] = ($this->data['notifications'] && unserialize($this->data['notifications'])) ? unserialize($this->data['notifications']) : array();
+			$this->data['privacy_settings'] 	= ($this->data['privacy_settings'] && unserialize_noclasses($this->data['privacy_settings'])) ? unserialize_noclasses($this->data['privacy_settings']) : array();
+			$this->data['custom_fields'] 		= ($this->data['custom_fields'] && unserialize_noclasses($this->data['custom_fields'])) ? unserialize_noclasses($this->data['custom_fields']) : array();
+			$this->data['plugin_settings'] 		= ($this->data['plugin_settings'] && unserialize_noclasses($this->data['plugin_settings'])) ? unserialize_noclasses($this->data['plugin_settings']) : array();
+			$this->data['notification_settings'] = ($this->data['notifications'] && unserialize_noclasses($this->data['notifications'])) ? unserialize_noclasses($this->data['notifications']) : array();
 
 			if(strpos($this->data['user_password'], ':') !== false){
 				list($this->data['user_password_clean'], $this->data['user_salt']) = explode(':', $this->data['user_password']);
@@ -197,7 +197,7 @@ class user extends gen_class {
 			}
 			
 			$this->data['user_email']			= register('encrypt')->decrypt($this->data['user_email']);
-			$this->data['auth_account'] 		= @unserialize(register('encrypt')->decrypt($this->data['auth_account']));
+			$this->data['auth_account'] 		= @unserialize_noclasses(register('encrypt')->decrypt($this->data['auth_account']));
 			$this->data['birthday']				= (!isset($this->data['birthday']) || $this->data['birthday'] === 0) ? '' : $this->data['birthday'];
 		}
 
@@ -764,7 +764,7 @@ class user extends gen_class {
 	//Should be used for resolve multilang serialized array to display the value for the user in the right language
 	public function multilangValue($strRawContent){
 		if(is_serialized($strRawContent)){
-			$arrValues = @unserialize($strRawContent);
+			$arrValues = @unserialize_noclasses($strRawContent);
 		} else $arrValues = false;
 		if(!$arrValues) return $strRawContent;
 		$strDefLang = $this->config->get('default_lang');

@@ -59,7 +59,7 @@ class htextareamultilang extends html {
 		$this->jquery->init_multilang();
 
 		if(is_serialized($this->value)) {
-			$this->value = @unserialize($this->value);
+			$this->value = @unserialize_noclasses($this->value);
 		} elseif(!is_array($this->value) && $this->value != ""){
 			$strValue = $this->value;
 			$this->value = array();

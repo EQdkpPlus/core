@@ -83,7 +83,7 @@ if ( !class_exists( "pdh_r_points_history" ) ) {
 					$intTime = (int)$arrLastSnapshot['time'];
 					if($intTime >= $from && $intTime <= $to){
 						if(strlen($arrLastSnapshot['misc'])){
-							$arrPoints = unserialize($arrLastSnapshot['misc']);
+							$arrPoints = unserialize_noclasses($arrLastSnapshot['misc']);
 							unset($arrPoints['adjustment'][0]);
 							unset($arrPoints['earned'][0]);
 							unset($arrPoints['spent'][0]);

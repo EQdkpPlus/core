@@ -31,7 +31,7 @@ class team_pageobject extends pageobject {
 		$usergroups		= $this->pdh->get('user_groups', 'team_groups', array());
 		$arrSorted = $this->pdh->sort($usergroups, 'user_groups', 'sortid');
 
-		$special_user	= unserialize(stripslashes($this->config->get('special_user')));
+		$special_user	= unserialize_noclasses(stripslashes($this->config->get('special_user')));
 		$special_user = (!$special_user) ? array() : $special_user;
 		unset($usergroups[0]); //Guestgroup
 

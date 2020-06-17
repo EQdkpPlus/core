@@ -189,7 +189,7 @@ class install extends gen_class {
 			}
 		}
 
-		$this->data = ($this->in->exists('step_data')) ? unserialize(base64_decode($this->in->get('step_data'))) : array();
+		$this->data = ($this->in->exists('step_data')) ? unserialize_noclasses(base64_decode($this->in->get('step_data'))) : array();
 		if($this->in->exists('next') && $this->current_step == 'end') $this->parse_end();
 		if($this->in->exists('install_done')) {
 			$this->done = (strpos($this->in->get('install_done'), ',') !== false) ? explode(',', $this->in->get('install_done')) : (($this->in->get('install_done') != '') ? array($this->in->get('install_done')) : array());

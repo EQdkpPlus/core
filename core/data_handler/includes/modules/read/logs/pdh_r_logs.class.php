@@ -195,7 +195,7 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 		public function get_html_value($id){
 			$strValue = $this->objPagination->get($id, 'log_value');
 
-			$log_value = unserialize($strValue);
+			$log_value = unserialize_noclasses($strValue);
 			$arrTable = array();
 			$arrCompare = array();
 			$objLogs = register('logs');
@@ -230,7 +230,7 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 				$out .= '<table class="table fullwidth">';
 				foreach($arrTable as $val){
 					if(is_serialized($val[1])){
-						$val[1] = print_r(unserialize($val[1]), true);
+						$val[1] = print_r(unserialize_noclasses($val[1]), true);
 					}
 					$out .= '<tr><td style="font-weight: bold;">'.$val[0].':</td><td>'.$val[1].'</td></tr>';
 				}
