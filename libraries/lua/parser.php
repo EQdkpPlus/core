@@ -44,13 +44,13 @@ if( !class_exists( "LuaParser" ) ) {
 					if (is_array($value)){
 						$val = $this->_parseArray2lua($value);
 						$out .= '['.$this->_parseKey($key).'] = {'.$val.'},';
-					} else $out .= '["'.$key.'"] = "'.$value.'",';
+					} else $out .= '["'.$key.'"] = "'.str_replace('"', '\"', $value).'",';
 					
 				} else {
 					if (is_array($value)){
 						$val = $this->_parseArray2lua($value);
 						$out .= $key.' = {'.$val.'}'."\n";
-					} else $out .= $key.' = {['.$this->_parseKey($key).'] = "'.$value.'"}'."\n";
+					} else $out .= $key.' = {['.$this->_parseKey($key).'] = "'.str_replace('"', '\"', $value).'"}'."\n";
 				}
 			}
 			
@@ -66,7 +66,7 @@ if( !class_exists( "LuaParser" ) ) {
 				if (is_array($value)){
 					$val = $this->_parseArray2lua($value);
 					$out .= '['.$this->_parseKey($key).'] = {'.$val.'},';
-				} else $out .= '['.$this->_parseKey($key).'] = "'.$value.'",';
+				} else $out .= '['.$this->_parseKey($key).'] = "'.str_replace('"', '\"', $value).'",';
 			}
 			$out = substr($out, 0, -1);
 			return $out;
