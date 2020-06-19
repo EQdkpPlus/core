@@ -44,6 +44,8 @@ if(!class_exists( "cache_file")){
 			} else {
 				$ret = $this->pfh->putContent($this->cache_folder.$key[0].DIRECTORY_SEPARATOR.$key.$this->file_extension, serialize( $data ));
 			}
+			
+			return $ret;
 		}
 
 		public function get( $key, $global_prefix, $uncompress = false ) {
