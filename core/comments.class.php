@@ -386,8 +386,16 @@ if (!class_exists("comments")){
 
 			$html .=	'<div class="clearfix">
 							<div class="comment_avatar_container">
-								<div class="comment_avatar"><a href="'.$this->routing->build('user', $this->user->data['username'], 'u'.$this->user->id).'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $this->server_path.'images/global/avatar-default.svg').'" alt="Avatar" class="user-avatar"/></a></div>
-							</div>
+								';
+			
+			if($this->user->is_signedin()){
+				$html .='<div class="comment_avatar"><a href="'.$this->routing->build('user', $this->user->data['username'], 'u'.$this->user->id).'"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $this->server_path.'images/global/avatar-default.svg').'" alt="Avatar" class="user-avatar"/></a></div>';			
+			} else {
+				$html .='<div class="comment_avatar"><img src="'.(($avatarimg) ? $this->pfh->FileLink($avatarimg, false, 'absolute') : $this->server_path.'images/global/avatar-default.svg').'" alt="Avatar" class="user-avatar"/></div>';
+			}
+			
+			
+			$html .=	'</div>
 							<div class="comment_write_container">
 								<textarea name="comment" id="comment_textarea_'.$this->id.'" rows="5" cols="80" class="mceEditor_bbcode" style="width:100%;"></textarea>
 							</div>

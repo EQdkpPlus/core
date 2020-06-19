@@ -565,7 +565,8 @@ if (!class_exists("pdh_r_user")){
 			//EQdkp Plus Default Avatars as last fallback
 			include_once $this->root_path.'core/avatar.class.php';
 			$avatar = registry::register('avatar');
-			$result = $avatar->getAvatar($user_id, $this->get_name($user_id), (($fullSize) ? 400 : 68));
+
+			$result = $avatar->getAvatar($user_id, strip_tags($this->get_name($user_id)), (($fullSize) ? 400 : 68));
 			if ($result) return $result;
 
 			return '';
