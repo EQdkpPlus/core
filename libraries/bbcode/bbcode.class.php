@@ -535,7 +535,7 @@ if (!class_exists("bbcode")) {
 			$text = preg_replace('{<object[^>]*>(.*?)</object>}', '', $text);
 			$text = preg_replace('{<embed[^>]*>(.*?)</embed>}', '', $text);
 			$text = preg_replace('{<iframe[^>]*>(.*?)</iframe>}', '', $text);
-			
+			$text = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $text);
 			return $text;
 		}
 
