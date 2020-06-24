@@ -532,10 +532,11 @@ if (!class_exists("bbcode")) {
 
 		//Removed all objects and embed-Tags
 		public function remove_embeddedMedia($text){
-			$text = preg_replace('{<object[^>]*>(.*?)</object>}', '', $text);
-			$text = preg_replace('{<embed[^>]*>(.*?)</embed>}', '', $text);
-			$text = preg_replace('{<iframe[^>]*>(.*?)</iframe>}', '', $text);
-			$text = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $text);
+			$text = preg_replace('#<script(.*?)>(.*?)</script>#mis', '', $text);
+			$text = preg_replace('#<style(.*?)>(.*?)</style>#mis', '', $text);
+			$text = preg_replace('#<iframe(.*?)>(.*?)</iframe>#mis', '', $text);
+			$text = preg_replace('#<embed(.*?)>(.*?)</embed>#mis', '', $text);
+			$text = preg_replace('#<object(.*?)>(.*?)</object>#mis', '', $text);
 			return $text;
 		}
 
