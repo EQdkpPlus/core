@@ -372,6 +372,14 @@ if (!class_exists("bbcode")) {
 
 							case 'id': $arrCache[$strTag] = $this->user->id;
 								break;
+								
+							default:
+								if (is_numeric($elements[1])){
+									$userID = intval($elements[1]);
+								} else $userID = $this->pdh->get('user', 'userid', array($elements[1]));
+								if ($userID){
+									$arrCache[$strTag] = $this->pdh->geth('user', 'avatarimglink', array($userID)).' '.$this->pdh->geth('user', 'name', array($userID, '', '', true));
+								}
 						}
 						break;
 
