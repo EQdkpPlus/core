@@ -180,7 +180,9 @@ class editarticle_pageobject extends pageobject {
 		if ($id){
 			//Update
 			$intUserID = $this->pdh->get('articles', 'user_id', array($id)); //Keep the original author
-			$intCategory = $this->pdh->get('articles', 'category', array($id)); //Keep the original category
+			//Check the target Category Permissions
+			$arrPermissions = $this->pdh->get('article_categories', 'user_permissions', array($intCategory, $this->user->id));
+			if (!$arrPermissions['update'] && !$arrPermissions['create']) message_die($this->user->lang('noauth'), $this->user->lang('noauth_default_title'), 'access_denied', true);
 			if (!$this->arrPermissions['update']) message_die($this->user->lang('noauth'), $this->user->lang('noauth_default_title'), 'access_denied', true);
 			$blnResult = $this->pdh->put('articles', 'update', array($id, $strTitle, $strText, $arrTags, $strPreviewimage, $strAlias, $intPublished, $intFeatured, $intCategory, $intUserID, $intComments, $intVotes,$intDate, $strShowFrom, $strShowTo, $intHideHeader));
 		} else {
@@ -214,16 +216,26 @@ class editarticle_pageobject extends pageobject {
 			'image_upload'	=> true,
 		));
 
-		$arrSubcategories = $this->pdh->get('article_categories', 'all_childs', array($cid));
-		$arrCategories = array();
-		foreach ($arrSubcategories as $caid){
-			$arrPerms = $this->pdh->get('article_categories', 'user_permissions', array($caid, $this->user->id));
-			if (!$arrPerms['update'] || !$arrPerms['create']) continue;
-			$arrCategories[$caid] = $this->pdh->get('article_categories', 'name_prefix', array($caid)).$this->pdh->get('article_categories', 'name', array($caid));
-		}
-
 		if ($id){
 			$cid = $this->pdh->get('articles', 'category', array($id));
+			
+			if($this->user->check_auth('a_articles_man', false)){
+				$arrCategoryIDs = $this->pdh->sort($this->pdh->get('article_categories', 'id_list', array()), 'article_categories', 'sort_id', 'asc');
+				$arrCategories = array();
+				foreach($arrCategoryIDs as $caid){
+					$arrCategories[$caid] = $this->pdh->get('article_categories', 'name_prefix', array($caid)).$this->pdh->get('article_categories', 'name', array($caid));
+				}
+				
+			} else {
+				$arrSubcategories = $this->pdh->get('article_categories', 'all_childs', array($cid));
+				$arrCategories = array();
+				foreach ($arrSubcategories as $caid){
+					$arrPerms = $this->pdh->get('article_categories', 'user_permissions', array($caid, $this->user->id));
+					if (!$arrPerms['update'] || !$arrPerms['create']) continue;
+					$arrCategories[$caid] = $this->pdh->get('article_categories', 'name_prefix', array($caid)).$this->pdh->get('article_categories', 'name', array($caid));
+				}
+			}
+			
 			$this->tpl->assign_vars(array(
 				'TITLE'				=> $this->pdh->get('articles', 'title', array($id)),
 				'TEXT'				=> $this->pdh->get('articles', 'text', array($id)),
@@ -250,7 +262,16 @@ class editarticle_pageobject extends pageobject {
 			));
 
 		} else {
-
+			
+			$arrSubcategories = $this->pdh->get('article_categories', 'all_childs', array($cid));
+			$arrCategories = array();
+			foreach ($arrSubcategories as $caid){
+				$arrPerms = $this->pdh->get('article_categories', 'user_permissions', array($caid, $this->user->id));
+				if (!$arrPerms['update'] || !$arrPerms['create']) continue;
+				$arrCategories[$caid] = $this->pdh->get('article_categories', 'name_prefix', array($caid)).$this->pdh->get('article_categories', 'name', array($caid));
+			}
+			
+			
 			$this->tpl->assign_vars(array(
 				'DD_CATEGORY'		=> (new hdropdown('category', array('options' => $arrCategories, 'value' => $cid)))->output(),
 				'PUBLISHED_RADIO'	=> (new hradio('published', array('value' => 1)))->output(),
