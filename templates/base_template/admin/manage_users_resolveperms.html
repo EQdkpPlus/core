@@ -18,15 +18,11 @@
 						<!-- BEGIN check_group -->
 						<!-- IF not u_permissions_row.check_group.S_SUPERADMIN_PERM -->
 						<div class="permissions" style="margin-bottom:5px;">
-							<label title="{u_permissions_row.check_group.CBNAME}">
+							<label>
 								{u_permissions_row.check_group.STATUSICON}
-								<span id="span_cb_{u_permissions_row.check_group.CBNAME}" class="perm_text {u_permissions_row.check_group.CLASS}">{u_permissions_row.check_group.TEXT}</span>
+								<span id="span_cb_{u_permissions_row.check_group.CBNAME}" class="perm_text {u_permissions_row.check_group.CLASS}" title="{u_permissions_row.check_group.CBNAME}">{u_permissions_row.check_group.TEXT}</span>
 								<!-- IF u_permissions_row.check_group.S_PERM -->
-									<!-- IF u_permissions_row.check_group.S_IS_GROUP -->
-									<i class="fa fa-users"></i>
-									<!-- ELSE -->
-									<i class="fa fa-user"></i>
-									<!-- ENDIF -->
+									{u_permissions_row.check_group.PERMSTRING}
 								<!-- ENDIF -->
 							</label>
 						</div>
@@ -47,11 +43,7 @@
 								{a_permissions_row.check_group.STATUSICON}
 								<span id="span_cb_{a_permissions_row.check_group.CBNAME}" class="perm_text {a_permissions_row.check_group.CLASS}">{a_permissions_row.check_group.TEXT}</span>
 								<!-- IF a_permissions_row.check_group.S_PERM -->
-									<!-- IF a_permissions_row.check_group.S_IS_GROUP -->
-									<i class="fa fa-users"></i>
-									<!-- ELSE -->
-									<i class="fa fa-user"></i>
-									<!-- ENDIF -->
+									{a_permissions_row.check_group.PERMSTRING}
 								<!-- ENDIF -->
 							</label>
 						</div>

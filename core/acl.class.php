@@ -351,9 +351,75 @@ class acl extends acl_manager {
 					}
 				}
 				$this->user_group_memberships[$user_id][1] = 1;
+			}
 		}
 	}
-}
+	
+	public function trace_user_permissions($user_id){
+		$user_permissions = $user_group_memberships = array();
+		
+		if ( $user_id != ANONYMOUS ){
+			
+			//First Step: get Group memberships
+			$objQuery = $this->db->prepare("SELECT * FROM __groups_users WHERE user_id=?")->execute($user_id);
+			if ($objQuery){
+				while ( $row = $objQuery->fetchAssoc() ){
+					if (intval($row['grpleader']) && !isset($user_permissions['a_usergroups_grpleader'])) $user_permissions['a_usergroups_grpleader'] = "Y";
+					$user_group_memberships[$row['group_id']] = 1;
+				}
+			}
+			
+			//If user is Superadmin, he has all permissions
+			if (isset($user_group_memberships[2])){
+				foreach ($this->get_auth_defaults() as $value => $default){
+					$user_permissions[$value]['group'] = array('2' => 'Y');
+				}
+			}
+			
+				//User-Permissions
+				$objQuery = $this->db->prepare("SELECT ao.auth_value, au.auth_setting
+							FROM __auth_users au, __auth_options ao
+							WHERE (au.auth_id = ao.auth_id)
+							AND (au.user_id=?)")->execute($user_id);
+				
+				if($objQuery){
+					while ( $row = $objQuery->fetchAssoc() ){
+						$user_permissions[$row['auth_value']]['personal'] = $row['auth_setting'];
+					}
+				}
+				
+				//Group-Permissions
+				$objQuery = $this->db->prepare("SELECT ga.auth_setting, ao.auth_value, gu.group_id FROM __groups_users gu, __auth_groups ga, __auth_options ao WHERE gu.user_id=? AND ga.group_id = gu.group_id AND ga.auth_id = ao.auth_id")->execute($user_id);
+				
+				if($objQuery){
+					while ( $row = $objQuery->fetchAssoc() ){
+						if ($row['auth_setting'] == "Y"){
+							$user_permissions[$row['auth_value']]['group'][$row['group_id']] = $row['auth_setting'];
+							$user_group_memberships[$row['group_id']] = 1;
+						}
+					}
+				}
+			
+
+			//Check if he has chars that are grpleader of raidgroups
+				if ($this->pdh->get('raid_groups_members', 'user_has_grpleaders', array($user_id))) {
+					$user_permissions['a_raidgroups_grpleader'] = "Y";
+				}
+			
+		} else { //Permission for ANONYMOUS
+			$result =  $this->db->query("SELECT ga.auth_setting, ao.auth_value FROM __auth_groups ga, __auth_options ao WHERE ga.auth_id = ao.auth_id AND ga.group_id = 1");
+			if($result){
+				while ( $row = $result->fetchAssoc() ){
+					if ($row['auth_setting'] == "Y" && substr($row['auth_value'], 0, 2)!= "a_"){
+						$user_permissions[$row['auth_value']] = $row['auth_setting'];
+					}
+				}
+			}
+			$user_group_memberships[$user_id][1] = 1;
+		}
+		
+		return $user_permissions;
+	}
 
 	//Checks if a user has the permission.
 	public function check_auth($auth_value, $user_id, $groups = true){

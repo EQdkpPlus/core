@@ -500,6 +500,8 @@ class Manage_Users extends page_generic {
 		$defaultGroup = $this->pdh->get('user_groups', 'standard_group', array());
 		$memberships = $this->acl->get_user_group_memberships($intUserID);
 
+		$arrPermTrace = $this->acl->trace_user_permissions($intUserID);
+		
 		foreach ( $user_permissions as $group => $checks ){
 
 			$this->tpl->assign_block_vars('permissions_row', array(
@@ -533,19 +535,31 @@ class Manage_Users extends page_generic {
 
 				}
 
-
-				if ($this->user->check_auth($data['CBNAME'], false, $intUserID, false)){
-					$perm = "user";
-				}elseif (!$this->user->check_auth($data['CBNAME'], false, $intUserID, false) && $this->user->check_auth($data['CBNAME'], false, $intUserID) == true){
-					$perm = "group";
-				}else{
-					$perm = false;
+				$perm = false;
+				$permString = "";
+				
+				if(isset($arrPermTrace[$data['CBNAME']]['personal'])){
+					$perm = true;
+					$permString .= '<i class="fa fa-user"></i>';
 				}
+				
+				if(isset($arrPermTrace[$data['CBNAME']]['group'])){
+					$perm = true;
+					$arrGroupNames = array();
+					
+					foreach($arrPermTrace[$data['CBNAME']]['group'] as $groupID => $status){
+						if($status !== "Y") continue;
+						$arrGroupNames[] = $this->pdh->get('user_groups', 'name', array($groupID));
+					}
+					
+					$permString .= ' <i class="fa fa-users coretip" data-coretip="'.$this->jquery->sanitize(implode(', ', $arrGroupNames)).'"></i>';
+				}
+				
 
 				$this->tpl->assign_block_vars(substr($data['CBNAME'], 0, 2).'permissions_row.check_group', array(
 						'CBNAME'			=> $data['CBNAME'],
 						'STATUSICON'		=> ( $perm != false ) ? ' <i class="fa fa-check positive fa-lg"></i> ' : '<i class="fa fa-times negative fa-lg"></i> ',
-						'S_IS_GROUP'		=> ( $perm == "group" ) ? true : false,
+						'PERMSTRING'		=> $permString,
 						'CLASS'				=> ( $perm != false ) ? 'positive' : 'negative',
 						'S_PERM'			=> ( $perm != false ) ? true : false,
 						'TEXT'				=> $data['TEXT'],
@@ -563,10 +577,8 @@ class Manage_Users extends page_generic {
 		$this->tpl->assign_block_vars('articelcat_row', array(
 				'GROUP' => $this->user->lang('article'),
 				'ICON'	=> $this->core->icon_font('fa-file-text'))
-				);
-
+		);
 		$grps = array('rea', 'cre', 'upd', 'del', 'chs');
-
 		foreach($grps as $group_id){
 			$this->tpl->assign_block_vars('articelcat_row.headline_row', array(
 					'GROUP'	=> $this->user->lang('perm_'.$group_id),
@@ -579,31 +591,43 @@ class Manage_Users extends page_generic {
 					'S_ADMIN'		=> false
 			));
 
-			$arrPermissions = $this->pdh->get('article_categories', 'permissions', array($intCategoryID));
-			$intParent = $this->pdh->get('article_categories', 'parent', array($intCategoryID));
-
-			$arrUserPermissions = $this->pdh->get('article_categories', 'user_permissions', array($intCategoryID, $intUserID));
-			foreach($grps as $group_id){
-				switch($group_id){
-					case 'rea': $strPerm = 'read';
-						break;
-					case 'cre': $strPerm = 'create';
-						break;
-					case 'upd': $strPerm = 'update';
-						break;
-					case 'del': $strPerm = 'delete';
-						break;
-					case 'chs': $strPerm = 'change_state';
-						break;
+			$arrUsergroupMemberships = $this->acl->get_user_group_memberships($intUserID);
+			
+			$arrPermissions = array('read' => false, 'create' => false, 'update' => false, 'delete' => false, 'change_state' => false,);
+			foreach($arrUsergroupMemberships as $intGroupID => $intStatus){
+				$blnReadPerm = $this->pdh->get('article_categories', 'calculated_permissions', array($intCategoryID, 'rea', $intGroupID));
+				if ($blnReadPerm) $arrPermissions['read'][$intGroupID] = true;
+				$blnCreatePerm = $this->pdh->get('article_categories', 'calculated_permissions', array($intCategoryID, 'cre', $intGroupID));
+				if ($blnCreatePerm) $arrPermissions['create'][$intGroupID] = true;
+				$blnUpdatePerm = $this->pdh->get('article_categories', 'calculated_permissions', array($intCategoryID, 'upd', $intGroupID));
+				if ($blnUpdatePerm) $arrPermissions['update'][$intGroupID] = true;
+				$blnDeletePerm = $this->pdh->get('article_categories', 'calculated_permissions', array($intCategoryID, 'del', $intGroupID));
+				if ($blnDeletePerm) $arrPermissions['delete'][$intGroupID] = true;
+				$blnChangeStatePerm = $this->pdh->get('article_categories', 'calculated_permissions', array($intCategoryID, 'chs', $intGroupID));
+				if ($blnChangeStatePerm) $arrPermissions['change_state'][$intGroupID] = true;
+			}
+				
+			foreach(array_keys($arrPermissions) as $group_id){
+				$blnResult = (is_array($arrPermissions[$group_id]) && count($arrPermissions[$group_id]) > 0);
+				if($blnResult){
+					$arrGroupNames = array();
+					foreach($arrPermissions[$group_id] as $userGroupID => $setting){
+						$arrGroupNames[] = $this->pdh->get('user_groups', 'name', array($userGroupID));
+					}
+					$out = '<i class="fa fa-check positive fa-lg coretip" data-coretip="'.$this->jquery->sanitize(implode(', ', $arrGroupNames)).'"></i>';
+					
+				} else {
+					$out = '<i class="fa fa-times negative fa-lg"></i>';
+					
 				}
-				$blnResult = $arrUserPermissions[$strPerm];
-				$out = ($blnResult) ?  '<i class="fa fa-check positive fa-lg"></i>' : '<i class="fa fa-times negative fa-lg"></i>';
-
+				
 				$this->tpl->assign_block_vars('articelcat_row.check_group.group_row', array(
 						'STATUS'	=> $out,
 				));
 			}
 		}
+		
+	
 
 		$this->tpl->assign_vars(array(
 			'THIS_USERNAME' => $strUsername,
