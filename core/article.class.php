@@ -45,6 +45,19 @@ if(!class_exists('article')){
 
 			if (!$arrPermissions['read']) message_die($this->user->lang('category_noauth'), $this->user->lang('noauth_default_title'), 'access_denied', true);
 
+			//Get Permissions from aggregated categories, for the plus button
+			$arrAggregatedCategories = $this->pdh->get('article_categories', 'aggregation', array($intCategoryID));
+			$blnCreateAggregatedPerm = false;
+			if(is_array($arrAggregatedCategories)){
+				foreach($arrAggregatedCategories as $category){
+					$arrAggregatedPermissions = $this->pdh->get('article_categories', 'user_permissions', array($category, $intCurrentUserID));
+					if($arrAggregatedPermissions['create']){
+						$blnCreateAggregatedPerm = true;
+						break;
+					}
+				}
+			}
+			
 			$arrArticleIDs = $this->pdh->get('article_categories', 'published_id_list', array($intCategoryID, false, false, NULL, (($arrPermissions['change_state']) ? true : false)));
 			switch($arrCategory['sortation_type']){
 				case 2: 
@@ -129,7 +142,7 @@ if(!class_exists('article')){
 				$blnPublished = $this->pdh->get('articles', 'published', array($intArticleID));
 
 				$arrToolbarItems = array();
-				if ($arrPermissions['create']) {
+				if ($arrPermissions['create'] || $blnCreateAggregatedPerm) {
 					$arrToolbarItems[] = array(
 							'icon'	=> 'fa-plus',
 							'js'	=> 'onclick="editArticle(0)"',
@@ -165,8 +178,8 @@ if(!class_exists('article')){
 						);
 					}
 				}
-
-				if ($arrPermissions['create'] || $arrPermissions['update'] || $arrPermissions['delete'] || $arrPermissions['change_state']){
+				
+				if ($blnCreateAggregatedPerm || $arrPermissions['create'] || $arrPermissions['update'] || $arrPermissions['delete'] || $arrPermissions['change_state']){
 					$jqToolbar = $this->jquery->toolbar('article_'.$intArticleID, $arrToolbarItems, array('position' => 'bottom'));
 				} else {
 					$jqToolbar['id'] = '';
@@ -210,7 +223,7 @@ if(!class_exists('article')){
 						'ARTICLE_PREVIEW_IMAGE' => $strPreviewImage,
 						'ARTICLE_PREVIEW_IMAGE_BIG' => ($this->pdh->get('articles',  'previewimage', array($intArticleID)) != "") ? $this->pdh->geth('articles', 'previewimage', array($intArticleID, 750)) : '',
 						'PERMALINK'				=> $this->pdh->get('articles', 'permalink', array($intArticleID)),
-						'S_TOOLBAR'				=> ($arrPermissions['create'] || $arrPermissions['update'] || $arrPermissions['delete'] || $arrPermissions['change_state']),
+						'S_TOOLBAR'				=> ($blnCreateAggregatedPerm || $arrPermissions['create'] || $arrPermissions['update'] || $arrPermissions['delete'] || $arrPermissions['change_state']),
 						'S_TAGS'				=> (count($arrTags)  && $arrTags[0] != "") ? true : false,
 						'ARTICLE_CONTENT_LENGTH'=> $intTextLength,
 						'S_READMORE'			=> (isset($arrContent[2]) || count($arrReadmore) > 1) ? true : false,
@@ -253,7 +266,7 @@ if(!class_exists('article')){
 
 
 			$arrToolbarItems = array();
-			if ($arrPermissions['create']) {
+			if ($arrPermissions['create'] || $blnCreateAggregatedPerm) {
 				$arrToolbarItems[] = array(
 						'icon'	=> 'fa-plus',
 						'js'	=> 'onclick="editArticle(0)"',
@@ -276,7 +289,7 @@ if(!class_exists('article')){
 
 			$jqToolbar = $this->jquery->toolbar('pages', $arrToolbarItems, array('position' => 'bottom'));
 
-			if ($arrPermissions['create'] || $arrPermissions['update']) {
+			if ($blnCreateAggregatedPerm || $arrPermissions['create'] || $arrPermissions['update']) {
 				$this->jquery->dialog('editArticle', $this->user->lang('edit_article'), array('url' => $this->controller_path."EditArticle/".$this->SID."&aid='+id+'&cid=".$intCategoryID, 'withid' => 'id', 'width' => 920, 'height' => 740, 'onclose'=> $this->env->link.$this->controller_path_plain.$this->page_path));
 			}
 			if ($arrPermissions['delete'] || $arrPermissions['change_state']){
