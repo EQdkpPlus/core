@@ -122,7 +122,9 @@ if (!class_exists('exchange_calevents_details')){
 						$arrGuests = array();
 						if(is_array($this->guests) && count($this->guests) > 0){
 							foreach($this->guests as $guestid=>$guestsdata){
-								$arrGuests[$guestsdata['status']][$guestsdata['class']][] = array(
+								$role_class = (($eventdata['extension']['raidmode'] == 'role') ? $guestsdata['role'] : $guestsdata['class']);
+								
+								$arrGuests[$guestsdata['status']][$role_class][] = array(
 										'id'		=> $guestid,
 										'name'		=> unsanitize($guestsdata['name']),
 										'classid'	=> $guestsdata['class'],
