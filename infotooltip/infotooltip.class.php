@@ -644,3 +644,11 @@ if(!function_exists('anonymize_ipaddress')) {
 		}
 	}
 }
+
+if(!function_exists('unserialize_noclasses')) {
+	function unserialize_noclasses($string){
+		$arrData = unserialize($string, array('allowed_classes' => false));
+		if(is_object($arrData)) return false;
+		return $arrData;
+	}
+}
