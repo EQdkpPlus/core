@@ -374,7 +374,7 @@ if(!class_exists('infotooltip')) {
 				$cache_name = md5($cache_name).'.itt';
 
 				if(in_array($cache_name, $this->cached)) {
-					$item = unserialize_noclasses(file_get_contents($this->pfh->FilePath($cache_name, 'itt_cache')));
+					$item = unserialize(file_get_contents($this->pfh->FilePath($cache_name, 'itt_cache')), array('allowed_classes' => false));
 					if(isset($item['baditem'])){
 						$this->pdl->log('infotooltip', 'Item found, but item is baditem. forceupdate set to true.');
 						$forceupdate = true;
@@ -430,7 +430,7 @@ if(!class_exists('infotooltip')) {
 			$cache_name = md5($cache_name).'.itt';
 
 			if(in_array($cache_name, $this->cached)) {
-				$item = unserialize_noclasses(file_get_contents($this->pfh->FilePath($cache_name, 'itt_cache')));
+				$item = unserialize(file_get_contents($this->pfh->FilePath($cache_name, 'itt_cache')), array('allowed_classes' => false));
 				if($item && !isset($item['baditem'])){
 
 					//We found it in Cache
@@ -642,13 +642,5 @@ if(!function_exists('anonymize_ipaddress')) {
 					if(!$ipStr) $ipStr = "0.0.0.0";
 					return $ipStr;
 		}
-	}
-}
-
-if(!function_exists('unserialize_noclasses')) {
-	function unserialize_noclasses($string){
-		$arrData = unserialize($string, array('allowed_classes' => false));
-		if(is_object($arrData)) return false;
-		return $arrData;
 	}
 }

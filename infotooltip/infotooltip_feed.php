@@ -64,7 +64,7 @@ try {
 		$direct				= ($in->exists('direct')) ? $in->get('direct', 0) : substr($in->get('data'), 0, 1);
 	}elseif($in->exists('data')) {
 		$direct				= ($in->exists('direct')) ? $in->get('direct', 0) : substr($in->get('data'), 0, 1);
-		$data				= unserialize_noclasses(base64_decode(substr($in->get('data'), 1)));
+		$data				= unserialize(base64_decode(substr($in->get('data'), 1)), array('allowed_classes' => false));
 	} else {
 		$direct				= $in->get('direct', 0);
 		$data['lang']		= substr($in->get('lang'),0,2);
