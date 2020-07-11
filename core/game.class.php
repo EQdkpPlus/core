@@ -165,10 +165,10 @@ class game extends gen_class {
 
 		if(is_file($strIconPathPrefix.'.svg')){
 			$icon_path = $strIconServerPathPrefix.'.svg';
-			return ($pathonly) ? $icon_path : '<img src="'.$icon_path.'" alt="class '.$class_id.'" class="'.$this->game.'_classicon classicon gameicon'.'" title="'.$this->get_name('classes', $class_id).'" loading="lazy"/>';
+			return ($pathonly) ? $icon_path : '<img src="'.$icon_path.'" alt="class '.$class_id.'" class="'.$this->game.'_classicon classicon gameicon'.'" title="'.$this->get_name('classes', $class_id).'"/>';
 		}elseif(is_file($strIconPathPrefix.'.png')){
 			$icon_path = $strIconServerPathPrefix.'.png';
-			return ($pathonly) ? $icon_path : '<img src="'.$icon_path.'" alt="class '.$class_id.'" class="'.$this->game.'_classicon classicon gameicon'.'" title="'.$this->get_name('classes', $class_id).'" loading="lazy"/>';
+			return ($pathonly) ? $icon_path : '<img src="'.$icon_path.'" alt="class '.$class_id.'" class="'.$this->game.'_classicon classicon gameicon'.'" title="'.$this->get_name('classes', $class_id).'"/>';
 		}
 
 		return false;
@@ -198,7 +198,7 @@ class game extends gen_class {
 		}
 
 		if($icon_path){
-			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' height='".$size."' alt='race ".$race_id."' class=\"".$this->game."_raceicon raceicon\" title=\"".$this->get_name('races', $race_id)."\" loading=\"lazy\"/>";
+			return ($pathonly) ? $icon_path : "<img src='".$icon_path."' height='".$size."' alt='race ".$race_id."' class=\"".$this->game."_raceicon raceicon\" title=\"".$this->get_name('races', $race_id)."\"/>";
 		}
 		return false;
 	}

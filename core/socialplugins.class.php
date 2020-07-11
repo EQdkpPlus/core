@@ -151,7 +151,7 @@ if (!class_exists("socialplugins")) {
 		}
 
 		private function facebook_like($urlToShare, $text, $height){
-			$html = '<iframe src="https://www.facebook.com/plugins/like.php?href='.rawurlencode($urlToShare).'&amp;layout=button_count&amp;show_faces=false&amp;width=110&amp;action=like&amp;font&amp;colorscheme=light&amp;height='.$height.'" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:110px; height:'.$height.'px;" class="absmiddle"></iframe>';
+			$html = '<iframe src="https://www.facebook.com/plugins/like.php?href='.rawurlencode($urlToShare).'&amp;layout=button_count&amp;show_faces=false&amp;width=110&amp;action=like&amp;font&amp;colorscheme=light&amp;height='.$height.'" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:110px; height:'.$height.'px;" class="absmiddle" loading="lazy"></iframe>';
 			return $html;
 		}
 
