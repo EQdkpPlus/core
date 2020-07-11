@@ -105,9 +105,9 @@ try {
 		if(isset($item['icon']) && !$data['noicon']) {
 			$strDefaultIcon = $itt->buildlink().'/images/global/default-item.png';
 			if($data['onlyicon'] > 0) {
-				$visible = '<img src="'.((stripos($item['icon'], 'http') === 0) ? $item['icon'] : $iconpath.$item['icon'].$iconext).'" width="'.$data['onlyicon'].'" height="'.$data['onlyicon'].'" style="margin-top: 1px;" alt="icon" class="itt-icon" onerror="this.onerror=null;this.src=\''.$strDefaultIcon.'\';"/>';
+				$visible = '<img src="'.((stripos($item['icon'], 'http') === 0) ? $item['icon'] : $iconpath.$item['icon'].$iconext).'" width="'.$data['onlyicon'].'" height="'.$data['onlyicon'].'" style="margin-top: 1px;" alt="icon" class="itt-icon" onerror="this.onerror=null;this.src=\''.$strDefaultIcon.'\';" loading="lazy"/>';
 			} else {
-				$visible = '<img src="'.((stripos($item['icon'], 'http') === 0) ? $item['icon'] : $iconpath.$item['icon'].$iconext).'" width="16" height="16" style="margin-top: 1px;" alt="icon" class="itt-icon" onerror="this.onerror=null;this.src=\''.$strDefaultIcon.'\';"/> '.$display_name;
+				$visible = '<img src="'.((stripos($item['icon'], 'http') === 0) ? $item['icon'] : $iconpath.$item['icon'].$iconext).'" width="16" height="16" style="margin-top: 1px;" alt="icon" class="itt-icon" onerror="this.onerror=null;this.src=\''.$strDefaultIcon.'\';" loading="lazy"/> '.$display_name;
 			}
 		} else {
 			$visible = $display_name;

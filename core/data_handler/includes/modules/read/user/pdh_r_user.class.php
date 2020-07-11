@@ -265,7 +265,7 @@ if (!class_exists("pdh_r_user")){
 			$country = $this->get_country($user_id);
 			if (strlen($country)){
 				$this->init_countries();
-				return '<img src="'.$this->server_path.'images/flags/'.strtolower($country).'.svg" alt="'.$country.'" class="coretip" data-coretip="'.ucfirst(strtolower($this->countries[$country])).'" />';
+				return '<img src="'.$this->server_path.'images/flags/'.strtolower($country).'.svg" alt="'.$country.'" class="coretip" data-coretip="'.ucfirst(strtolower($this->countries[$country])).'" loading="lazy"/>';
 			}
 			return '';
 		}
@@ -584,7 +584,7 @@ if (!class_exists("pdh_r_user")){
 
 			$onlineBadge = ($this->get_is_online($user_id)) ? '<i class="eqdkp-icon-online"></i>' : '';
 
-			return '<div class="user-avatar-container" data-user-group-id="'.$this->get_highest_group($user_id).'"><img src="'.$strImg.'" class="user-avatar '.$class.'" alt="'.$this->get_name($user_id).'" />'.$onlineBadge.'</div>';
+			return '<div class="user-avatar-container" data-user-group-id="'.$this->get_highest_group($user_id).'"><img src="'.$strImg.'" class="user-avatar '.$class.'" alt="'.$this->get_name($user_id).'" loading="lazy"/>'.$onlineBadge.'</div>';
 		}
 
 		public function get_avatar_withtooltip($user_id, $tt_extension=false, $withOnlineBadge=true){
@@ -608,7 +608,7 @@ if (!class_exists("pdh_r_user")){
 
 			$onlineBadge = ($this->get_is_online($user_id)) ? '<i class="eqdkp-icon-online"></i>' : '';
 
-			return '<div class="user-avatar-container user-avatar-tooltip coretip" data-user-group-id="'.$this->get_highest_group($user_id).'" data-coretip="'.htmlspecialchars(implode('', $usertooltip)).'"><img src="'.$strImg.'" class="user-avatar" alt="'.$this->get_name($user_id).'" />'.$onlineBadge.'</div>';
+			return '<div class="user-avatar-container user-avatar-tooltip coretip" data-user-group-id="'.$this->get_highest_group($user_id).'" data-coretip="'.htmlspecialchars(implode('', $usertooltip)).'"><img src="'.$strImg.'" class="user-avatar" alt="'.$this->get_name($user_id).'" loading="lazy" />'.$onlineBadge.'</div>';
 		}
 
 		public function get_privacy_settings($user_id) {

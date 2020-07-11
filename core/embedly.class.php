@@ -207,7 +207,7 @@ class embedly extends gen_class {
 						$image = $objEmbedly->url;
 					}
 
-					$out .= '<img src="'.$image.'" alt="'.$title.'" />';
+					$out .= '<img src="'.$image.'" alt="'.$title.'" loading="lazy"/>';
 
 					$out .= '</div></div>';
 					break;

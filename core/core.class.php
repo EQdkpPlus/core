@@ -1303,7 +1303,7 @@ class core extends gen_class {
 
 		public function icon_font($icon, $size="", $pathext=""){
 			if(isset($icon) && pathinfo($icon, PATHINFO_EXTENSION) == 'png'){
-				return '<img src="'.$pathext.$icon.'" alt="img" />';
+				return '<img src="'.$pathext.$icon.'" alt="img" loading="lazy" />';
 			}elseif(isset($icon)){
 				return '<i class="fa '.$icon.(($size)? ' '.$size : '').'"></i>';
 			}else{

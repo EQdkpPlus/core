@@ -110,7 +110,7 @@ class user_pageobject extends pageobject {
 			$strCountry = $this->pdh->get('user', 'country', array($user_id));
 
 			if (strlen($strCountry)) {
-				$val = '<img src="'.$this->server_path.'images/flags/'.strtolower($strCountry).'.svg" alt="'.$strCountry.'" /> '.sanitize(ucfirst(strtolower($country_array[$row['country']])));
+				$val = '<img src="'.$this->server_path.'images/flags/'.strtolower($strCountry).'.svg" alt="'.$strCountry.'" loading="lazy"/> '.sanitize(ucfirst(strtolower($country_array[$row['country']])));
 				$this->tpl->assign_block_vars('profile_personal_row', array(
 						'NAME' => $this->user->lang("user_sett_f_priv_userprofile_country"),
 						'TEXT' => $val,

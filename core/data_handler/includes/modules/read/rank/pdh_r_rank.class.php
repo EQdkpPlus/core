@@ -97,7 +97,7 @@ if ( !class_exists( "pdh_r_rank" ) ) {
 			$strIcon = $this->get_icon($rank_id);
 
 			$rankimage = (strlen($strIcon) && is_file($this->root_path.$strGameFolder.$strIcon)) ? $this->server_path.$strGameFolder.$strIcon : "";
-			return ($rankimage != "") ? '<img src="'.$rankimage.'" alt="rank image" width="20"/>' : '';
+			return ($rankimage != "") ? '<img src="'.$rankimage.'" alt="rank image gameicon" width="20" loading="lazy"/>' : '';
 		}
 
 		public function get_prefix($rank_id){

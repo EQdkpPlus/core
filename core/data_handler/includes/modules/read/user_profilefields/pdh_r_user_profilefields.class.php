@@ -553,12 +553,12 @@ if ( !class_exists( "pdh_r_user_profilefields" ) ) {
 						$out = str_replace($this->root_path, $this->server_path, $strUserValue);
 					}
 
-					return '<img src="'.$out.'" style="max-width:95%;" class="user-profilefield-'.$intFieldID.' user-additional-image" alt="" />';
+					return '<img src="'.$out.'" style="max-width:95%;" class="user-profilefield-'.$intFieldID.' user-additional-image" alt="" loading="lazy"/>';
 
 				case 'link':
 					return '<a href="'.$strFormattedString.'" rel="nofollow">'.$strIcon.$strUserValue.'</a>';
 				case 'country':
-					return '<img src="'.$this->server_path.'images/flags/'.strtolower($strUserValue).'.svg" alt="'.$strUserValue.'" class="coretip" />';
+					return '<img src="'.$this->server_path.'images/flags/'.strtolower($strUserValue).'.svg" alt="'.$strUserValue.'" class="coretip" loading="lazy"/>';
 				case 'dropdown':
 					$arrOptions = $this->get_options($intFieldID);
 					if (!in_array($strUserValue, array_keys($arrOptions['options']))) return '';
