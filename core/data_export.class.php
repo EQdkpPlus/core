@@ -194,15 +194,21 @@ class content_export extends gen_class {
 
 		//Alle MultiDKP-Konten
 		if (is_array($mdkps) && count($mdkps) > 0) {
+			$arrEvents = $this->pdh->get('event', 'id_list', array());
+			$arrItempools = $this->pdh->get('itempool', 'id_list', array());
+		
 			foreach ($mdkps as $mdkp){
 				$event_ids		= $this->pdh->get('multidkp', 'event_ids', array($mdkp));
 				$itempool_ids	= $this->pdh->get('multidkp', 'itempool_ids', array($mdkp));
 				foreach ($itempool_ids as $pool){
+					if(!in_array($pool, $arrItempools)) continue;
 					$itempools['itempool_id:'.$pool] = $pool;
 				}
 
 				$events = array();
 				foreach ($event_ids as $event){
+					if(!in_array($event, $arrEvents)) continue;
+					
 					$events['event:'.$event] = array(
 						'id'	=> $event,
 						'name'	=> $this->pdh->get('event', 'name', array($event)),
@@ -221,7 +227,7 @@ class content_export extends gen_class {
 		} else {
 			$out['multidkp_pools'] = '';
 		}
-
+		
 		//Alle Itempools
 		$itempools = $this->pdh->get('itempool', 'id_list');
 		if (is_array($itempools) && count($itempools) > 0) {
