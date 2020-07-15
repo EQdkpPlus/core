@@ -252,7 +252,7 @@ class settings_pageobject extends pageobject {
 		//Do not use new email here, because it just have to be confirmed
 		$query_ary['user_email']	= $this->encrypt->encrypt($this->user->data['user_email']);
 		$query_ary['exchange_key']	= $this->pdh->get('user', 'exchange_key', array($this->user->id));
-
+		
 		$plugin_settings = array();
 
 		if (is_array($this->pm->get_menus('settings'))){
@@ -267,7 +267,7 @@ class settings_pageobject extends pageobject {
 		}
 
 		//copy all other values to appropriate array
-		$ignore = array('username', 'user_email', 'current_password', 'new_password', 'confirm_password', 'regenerate_keys', 'api_key');
+		$ignore = array('username', 'user_email', 'current_password', 'new_password', 'confirm_password', 'regenerate_keys', 'api_key', 'exchange_key');
 		$privArray = array();
 		$customArray = array();
 		$pluginArray = array();
@@ -295,7 +295,7 @@ class settings_pageobject extends pageobject {
 				$customArray[$name] = $value;
 			}
 		}
-
+		
 		// the logging thing for calendar away mode
 		$arrOld = array(
 			'awaymode_enabled'		=> $this->pdh->get('user', 'awaymode_enabled', array($this->user->id)),
