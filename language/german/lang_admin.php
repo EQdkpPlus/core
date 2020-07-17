@@ -1169,7 +1169,7 @@ $lang = array(
 "core_sett_f_help_login_twitch_appid" => "Trage hier den Key deiner App bei <a href=\"https://dev.twitch.tv/dashboard\" target=\"_blank\">https://dev.twitch.tv/dashboard</a> ein.<br>Als Redirect-URI verwende ".register('env')->buildLink().'index.php/auth-endpoint/?lmethod=twitch',
 "core_sett_f_login_twitch_appsecret" => "Twitch Client Secret",
 "core_sett_f_login_discord_appid" => "Discord Client-ID",
-"core_sett_f_help_login_discord_appid" => "Trage hier die Client-ID deiner App bei <a href=\"https://discordapp.com/developers/applications/me\" target=\"_blank\">https://discordapp.com/developers/applications/me</a> ein.<br>Als Redirect-URI verwende ".register('env')->buildLink().'index.php/auth-endpoint/?lmethod=discord',
+"core_sett_f_help_login_discord_appid" => "Trage hier die Client-ID deiner App bei <a href=\"https://discord.com/developers/applications/me\" target=\"_blank\">https://discord.com/developers/applications/me</a> ein.<br>Als Redirect-URI verwende ".register('env')->buildLink().'index.php/auth-endpoint/?lmethod=discord',
 "core_sett_f_login_discord_appsecret" => "Discord Client-Secret",
 "core_sett_f_enable_embedly" => "Automatisches Umwandeln von Links zu Videos/Bildern aktivieren",
 "core_sett_f_help_enable_embedly" => "Links zu Videos/Bildern, z.B. YouTube, werden automatisch zu den entsprechenden Videos/Bildern umgewandelt",

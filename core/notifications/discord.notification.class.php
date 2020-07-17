@@ -51,7 +51,7 @@ class discord_notification extends generic_notification {
 					'recipient_id' => $channelid,
 			);
 
-			$strResult = register('urlfetcher')->post('https://discordapp.com/api/users/@me/channels', json_encode($arrJsonData), "application/json", array('Authorization: Bot '.$token));
+			$strResult = register('urlfetcher')->post('https://discord.com/api/users/@me/channels', json_encode($arrJsonData), "application/json", array('Authorization: Bot '.$token));
 			if($strResult){
 				$arrResultJson = json_decode($strResult, true);
 				if($arrResultJson && isset($arrResultJson['id'])){
@@ -66,7 +66,7 @@ class discord_notification extends generic_notification {
 			$msg = $strSubject."\r\n```".$arrNotificationData['name']."```".(($blnIsGroupChannel) ? $arrNotificationData['direct_link'] : $arrNotificationData['link']);
 
 			$arrJsonData = array('content' => $msg);
-			$b = register('urlfetcher')->post('https://discordapp.com/api/channels/'.$discordChannelID.'/messages', json_encode($arrJsonData), "application/json", array('Authorization: Bot '.$token));
+			$b = register('urlfetcher')->post('https://discord.com/api/channels/'.$discordChannelID.'/messages', json_encode($arrJsonData), "application/json", array('Authorization: Bot '.$token));
 		}
 	}
 

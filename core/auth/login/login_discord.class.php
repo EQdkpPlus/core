@@ -29,8 +29,8 @@ class login_discord extends gen_class {
 
 	private $appid, $appsecret = false;
 
-	private $AUTHORIZATION_ENDPOINT = 'https://discordapp.com/api/oauth2/authorize';
-	private $TOKEN_ENDPOINT         = 'https://discordapp.com/api/oauth2/token';
+	private $AUTHORIZATION_ENDPOINT = 'https://discord.com/api/oauth2/authorize';
+	private $TOKEN_ENDPOINT         = 'https://discord.com/api/oauth2/token';
 
 	public static $functions = array(
 			'login_button'		=> 'login_button',
@@ -257,7 +257,7 @@ class login_discord extends gen_class {
 	}
 
 	private function fetchUserData($strAccessToken){
-		$result = register('urlfetcher')->fetch('https://discordapp.com/api/users/@me', array('Authorization: Bearer '.$strAccessToken));
+		$result = register('urlfetcher')->fetch('https://discord.com/api/users/@me', array('Authorization: Bearer '.$strAccessToken));
 		if($result){
 			$arrJSON = json_decode($result, true);
 			if(!isset($arrJSON['error'])){

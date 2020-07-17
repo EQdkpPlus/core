@@ -1164,7 +1164,7 @@ $lang = array(
 	"core_sett_f_help_login_twitch_appid" => "Insert here the ID of your App created at <a href=\"https://dev.twitch.tv/dashboard\" target=\"_blank\">https://dev.twitch.tv/dashboard</a>.<br/>As Redirect-URI use ".register('env')->buildLink().'index.php/auth-endpoint/?lmethod=twitch',
 	"core_sett_f_login_twitch_appsecret" => "Twitch Client Secret",
 	"core_sett_f_login_discord_appid" => "Discord Client-ID",
-	"core_sett_f_help_login_discord_appid" => "Insert here the Client-ID of your App created at <a href=\"https://discordapp.com/developers/applications/me\" target=\"_blank\">https://discordapp.com/developers/applications/me</a>.<br/>As Redirect-URI use ".register('env')->buildLink().'index.php/auth-endpoint/?lmethod=discord',
+	"core_sett_f_help_login_discord_appid" => "Insert here the Client-ID of your App created at <a href=\"https://discord.com/developers/applications/me\" target=\"_blank\">https://discord.com/developers/applications/me</a>.<br/>As Redirect-URI use ".register('env')->buildLink().'index.php/auth-endpoint/?lmethod=discord',
 	"core_sett_f_login_discord_appsecret" => "Discord Client Secret",
 	"core_sett_f_enable_embedly" => 'Automatic conversion of links to embedded videos/pictures',
 	"core_sett_f_help_enable_embedly" => 'Links to video/pictures (e.g. youtube) will be converted automatically to embedded objects',
