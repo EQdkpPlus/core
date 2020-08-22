@@ -597,6 +597,62 @@ if (!class_exists("bbcode")) {
 
 			return $text;
 		}
+		
+		/**
+		 * Converts Links to URL BBCode and shortens the length of the Links
+		 * 
+		 * @param string $strBBCode
+		 * @return string BBCode
+		 */
+		public function autolink($strBBCode) {
+			$str = ' ' . $strBBCode;
+			$str = preg_replace_callback(
+					"/\[url\s*+=\s*+([^]\s]++)]([^[]++)\[\/url]/im",
+					function ($matches) {
+						$url = strlen($matches[1]) ? $matches[1] : $matches[2];
+						$text = $matches[2];
+						if(mb_strlen($text) > 45){
+							$text = mb_substr($text, 0, 20) .'...' . mb_substr($text, -20);
+						}
+						return '[url='.$url.']'.$text.'[/url]';
+					},
+					$str
+					);
+			
+			$str = preg_replace_callback(
+					"/\[url]([^[]++)\[\/url]/im",
+					function ($matches) {
+						$url = $matches[1];
+						$text = $url;
+						if(mb_strlen($text) > 45){
+							$text = mb_substr($text, 0, 20) .'...' . mb_substr($text, -20);
+						}
+						return '[url='.$url.']'.$text.'[/url]';
+					},
+					$str
+					);
+			
+			//Normal
+			$str = preg_replace_callback(
+					"/(^|[^=\]\"])((((http|https|ftp):\/\/|www.)\S++))/im",
+					function ($matches) {
+						$url = $matches[2];
+						$text = $url;
+						if(mb_strlen($text) > 45){
+							$text = mb_substr($text, 0, 20) .'...' . mb_substr($text, -20);
+						}
+						return $matches[1].'[url='.$url.']'.$text.'[/url]';
+					},
+					$str
+					);
+			
+			$str = substr($str, 1);
+			$str = preg_replace('`url=\"www`','url="http://www',$str);
+			$str = preg_replace('`url=www`','url=http://www',$str);
+			
+			// fügt http:// hinzu, wenn nicht vorhanden
+			return trim($str);
+		}
 
 	}
 }
