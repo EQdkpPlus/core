@@ -194,7 +194,7 @@ class input extends gen_class {
 		if(strpos($key, ':')) {
 			$checkarr = $this->_get_deep(explode(':', $key), array());
 		} else {
-			$checkarr = is_array($key) ? $_POST : (isset($_POST[$key])) ? $_POST[$key] : false;
+			$checkarr = is_array($key) ? $_POST : ((isset($_POST[$key])) ? $_POST[$key] : false);
 		}
 		$valarr		= is_array($type) ? $type : $this->_getType(false, $type);
 		return (!$checkarr) ? array() : filter_var_array($checkarr, $this->_getFilter($valarr));
