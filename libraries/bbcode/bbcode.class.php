@@ -634,7 +634,7 @@ if (!class_exists("bbcode")) {
 			
 			//Normal
 			$str = preg_replace_callback(
-					"/(^|[^=\]\"])((((http|https|ftp):\/\/|www.)\S++))/im",
+					"/(^|[^=\]\"\/])((((http|https|ftp):\/\/|www.)\S++))/im",
 					function ($matches) {
 						$url = $matches[2];
 						$text = $url;
