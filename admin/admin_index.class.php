@@ -43,6 +43,7 @@ class admin_index extends gen_class {
 		$this->admin_functions = register('admin_functions');
 
 		if ($this->in->exists('ip_resolve')) $this->resolve_ip();
+		if ($this->in->exists('check-connection')) $this->check_external_connection();
 
 		$this->updatecheck();
 		$this->adminmenu_output();
@@ -302,6 +303,14 @@ class admin_index extends gen_class {
 					'COLOR'			=> $color,
 			));
 		}
+		
+		$this->tpl->assign_block_vars('requirements', array(
+				'NAME'			=> $this->user->lang('requirements_external_connection'),
+				'REQUIRED'		=> '',
+				'AVAILABLE'		=> '<form method="post"><button type="submit" name="check-connection">'.$this->user->lang('requirements_check_connection').'</button></form>',
+				'FA'			=> '',
+				'COLOR'			=> '',
+		));
 
 
 		// Log Actions
@@ -439,6 +448,41 @@ class admin_index extends gen_class {
 		} else {
 			return ($r) ? $this->user->lang('cl_on') : $this->user->lang('cl_off');
 		}
+	}
+	
+	private function check_external_connection(){	
+		$strCheckURL = EQDKP_CONNECTION_CHECK_URL;
+		
+		$objUrlfetcher = registry::register('urlfetcher');
+		$mixResult = $objUrlfetcher->fetch($strCheckURL);
+		$method = $objUrlfetcher->get_method();
+		
+		if($mixResult == "ok"){
+			$blnGitHubResult = true;
+			
+			$this->core->message('URL: '.$strCheckURL.', used '.$method, $this->user->lang('success'), 'green');
+			
+		} else {
+			$blnGitHubResult = false;
+			$this->core->message('URL: '.$strCheckURL.', used '.$method, $this->user->lang('error'), 'red');
+		}
+		
+		$strCheckURL = EQDKP_REPO_URL.'repository.php?function=extension_list';
+		$objUrlfetcher = registry::register('urlfetcher');
+		$mixResult = $objUrlfetcher->fetch($strCheckURL);
+		$method = $objUrlfetcher->get_method();
+		
+		$arr = json_decode($mixResult, true);
+		
+		if(count($arr)){
+			$blnGitHubResult = true;
+			$this->core->message('URL: '.$strCheckURL.', used '.$method, $this->user->lang('success'), 'green');
+			
+		} else {
+			$blnGitHubResult = false;
+			$this->core->message('URL: '.$strCheckURL.', used '.$method, $this->user->lang('error'), 'red');
+		}
+		
 	}
 }
 }
