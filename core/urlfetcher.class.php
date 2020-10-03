@@ -170,7 +170,7 @@ class urlfetcher  extends gen_class {
 				} else {
 					$code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 					if ($code == 301 || $code == 302) {
-						preg_match('/Location:(.*?)\n/', $header, $matches);
+						preg_match('/Location:(.*?)\n/i', $header, $matches);
 						$newurl = trim(array_pop($matches));
 						if(stripos($newurl, '://') === false){
 							$curlData = curl_getinfo($curl);
