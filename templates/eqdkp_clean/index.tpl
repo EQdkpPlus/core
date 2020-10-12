@@ -430,7 +430,7 @@
 
 
 	<!-- IF not S_LOGGED_IN -->
-	<div id="dialog-login" title="{L_login}">
+	<div id="dialog-login" title="{L_login}" style="display:none;">
 		<form method="post" action="{EQDKP_CONTROLLER_PATH}Login{SEO_EXTENSION}{SID}" name="login" id="login" class="fv_checkit">
 			<!-- LISTENER login_popup -->
 			<!-- IF S_BRIDGE_INFO -->
