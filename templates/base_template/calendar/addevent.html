@@ -137,6 +137,9 @@ $(function() {
 					if(item.field == 'selectmode'){
 						$('#selectmode').val(item.value).trigger('change');
 					}
+					if(item.field == 'dw_raidleader'){
+						$('#raidleader').val(item.value).trigger('change');
+					}
 				});
 				$("#raidleader").multiselect("refresh");
 				$('#cal_raidmodeselect').trigger('change');
