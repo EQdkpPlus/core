@@ -132,6 +132,8 @@ $(function() {
 		$(".resettemplate_input").val('');
 		if($(this).val() != ''){
 			$.getJSON("{EQDKP_CONTROLLER_PATH}editcalendarevent{SEO_EXTENSION}{SID}&loadtemplate="+$(this).val(), function(data){
+				var setAttendeeSum = false;
+				var intAttendeeSum = 0;
 				$.each(data, function(i,item){
 					$("#"+item.field).val(item.value);
 					if(item.field == 'selectmode'){
@@ -140,9 +142,19 @@ $(function() {
 					if(item.field == 'dw_raidleader'){
 						$('#raidleader').val(item.value).trigger('change');
 					}
+					
+					if(item.field == 'cal_raidmodeselect' && item.value == 'none'){
+						setAttendeeSum = true;
+					}
+					if(item.field == 'inp_none_0'){
+						intAttendeeSum = item.value;
+					}
 				});
 				$("#raidleader").multiselect("refresh");
 				$('#cal_raidmodeselect').trigger('change');
+				if(setAttendeeSum){
+					$('#attendees_summ').val(intAttendeeSum);
+				}
 			});
 
 			// gray out the button if a last-generated item is selected

@@ -131,11 +131,13 @@ class editcalendarevent_pageobject extends pageobject {
 			foreach($this->pdh->get('roles', 'roles', array()) as $classid=>$classname){
 				$raid_clsdistri[$classid] = $this->in->get('roles_'.$classid.'_count', 0);
 			}
-		}else{
+		}elseif($this->in->get('raidmode') == 'class'){
 			$classdata = $this->game->get_primary_classes(array('id_0'));
 			foreach($classdata as $classid=>$classname){
 				$raid_clsdistri[$classid] = $this->in->get('classes_'.$classid.'_count', 0);
 			}
+		} else {
+			$raid_clsdistri[0] = $this->in->get('raid_attendees_count', 0);
 		}
 		$this->pdh->put('calendar_raids_templates', 'save_template', array(
 			(($this->in->get('templatename')) ? $this->in->get('templatename') : 'template-'.random_integer(0,1000)),
