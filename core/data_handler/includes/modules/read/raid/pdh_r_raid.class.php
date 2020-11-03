@@ -282,6 +282,38 @@ if(!class_exists('pdh_r_raid')){
 			return $arrRaids;
 		}
 
+		/**
+		 * Returns the raids a given member attended within a time period.
+		 * @param integer $member_id
+		 * @param integer $from
+		 * @param integer $to
+		 * @param boolean $with_twink
+		 * @return array raid object ids
+		 */
+		public function get_raids_of_member_in_interval($member_id, $from=0, $to=PHP_INT_MAX, $with_twink=true) {
+			$member_ids = array($member_id);
+			if($with_twink) {
+				if(!$this->pdh->get('member', 'is_main', array($member_id))) {
+					$member_id = $this->pdh->get('member', 'mainid', array($member_id));
+				}
+
+				$twinks = $this->pdh->get('member', 'other_members', $member_id);
+				$member_ids = array_merge($member_ids, $twinks);
+			}
+
+			$objQuery = $this->db->prepare("SELECT r.raid_id AS raid_id FROM __raids AS r JOIN __raid_attendees AS ra ON r.raid_id = ra.raid_id WHERE ra.member_id :in AND r.raid_date >= ? AND r.raid_date <= ?")->in($member_ids)->execute($from, $to);
+
+			$adjustment_ids = array();
+
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$adjustment_ids[] = (int)$row['raid_id'];
+				}
+			}
+
+			return $adjustment_ids;
+		}
+
 
 		public function get_lastnraids($count = 1){
 			$objQuery = $this->db->prepare("SELECT raid_id FROM __raids ORDER BY raid_date DESC")->limit($count)->execute();
