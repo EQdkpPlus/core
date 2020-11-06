@@ -183,11 +183,31 @@ if ( !class_exists( "pdh_r_logs" ) ) {
 		public function get_html_date($id, $withtime=false){
 			return $this->time->user_date($this->get_date($id), $withtime);
 		}
+		
+		public function get_userid($id){
+		    return $this->objPagination->get($id, 'user_id');
+		}
+		
+		public function get_username($id){
+		    $intID = $this->get_userid($id);
+		    $strCurrentUsername = $this->pdh->get('user', 'name', array($intID));
+		    $strLoggedUsername = $this->objPagination->get($id, 'username');
+		    
+		    if(strcasecmp($strCurrentUsername, $strLoggedUsername) !== 0){
+		        return $strCurrentUsername.' (as '.$strLoggedUsername.')';
+		        
+		    } elseif(strlen($strCurrentUsername)) {
+		        return $strCurrentUsername;
+		    } else {
+		        return 'Unknown User (as '.$strLoggedUsername.')';
+		    }
 
-		public function get_user($id){
-			return $this->objPagination->get($id, 'username');
 		}
 
+		public function get_user($id){
+		   return $this->get_username($id);
+		}
+		
 		public function get_value($id){
 			return $this->objPagination->get($id, 'log_value');
 		}
