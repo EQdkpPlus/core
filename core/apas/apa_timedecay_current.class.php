@@ -122,7 +122,12 @@ if ( !class_exists( "apa_timedecay_current" ) ) {
 			// Add all raids.
 			$raids = $this->pdh->get('raid', 'raids_of_member_in_interval', array($member_id, $last_decayed_earning_date + 1, $this->time->time - $decay_time, $with_twink));
 			foreach($raids as $raid_id) {
-				$earning_dates[] = $this->pdh->get('raid', 'date', array($raid_id));
+				$earning_date = $this->pdh->get('raid', 'date', array($raid_id));
+				$earning_value = $this->pdh->get('raid', 'value', array($raid_id));
+				if(!array_key_exists($earning_date, $earning_dates)) {
+					$earning_dates[$earning_date] = 0;
+				}
+				$earning_dates[$earning_date] += $earning_value;
 			}
 
 			// We need to add positive adjustments in that period.
@@ -130,17 +135,21 @@ if ( !class_exists( "apa_timedecay_current" ) ) {
 			foreach($adjustments as $adj_id) {
 				$adj_value = $this->pdh->get('adjustment', 'value', array($adj_id));
 				if($adj_value > 0) {
-					$earning_dates[] = $this->pdh->get('adjustment', 'date', array($adj_id));
+					$earning_date = $this->pdh->get('adjustment', 'date', array($adj_id));
+					$earning_value = $this->pdh->get('adjustment', 'value', array($adj_id));
+					if(!array_key_exists($earning_date, $earning_dates)) {
+						$earning_dates[$earning_date] = 0;
+					}
+					$earning_dates[$earning_date] += $earning_value;
 				}
 			}
 
 			// Get unique, sorted dates of earnings to decay.
-			$earning_dates = array_unique($earning_dates);
-			sort($earning_dates);
+			ksort($earning_dates);
 
 			// Process them in order.
 			$adjustments_sum = 0;
-			foreach($earning_dates as $earning_date) {
+			foreach($earning_dates as $earning_date => $earning_value) {
 				// Calculate balance at the end of the decay.
 				$decay_date = $earning_date + $decay_time;
 				$end_balance = $this->pdh->get('points', 'current_history', array($member_id, $multidkp_id, 0, $decay_date, $event_id, $itempool_id, $with_twink, false));
@@ -163,7 +172,7 @@ if ( !class_exists( "apa_timedecay_current" ) ) {
 
 				// If the balance is greater than the non-decayed earnings, we need to adjust the points.
 				if($end_balance > $non_decayed_earnings) {
-					$adjustment_value = -($end_balance - $non_decayed_earnings);
+					$adjustment_value = -min($end_balance - $non_decayed_earnings, $earning_value);
 					$adjustments_sum += $adjustment_value;
 					$this->pdh->put('adjustment', 'add_adjustment', array($adjustment_value, $this->apa->get_data('name', $apa_id) . ' for ' . $this->time->user_date($earning_date), $member_id, $adjustment_event_id, NULL, $decay_date));
 					$this->pdh->process_hook_queue();
