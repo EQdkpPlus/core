@@ -23,8 +23,8 @@ if ( !defined('EQDKP_INC') ){
 	die('Do not access this file directly.');
 }
 
-if ( !class_exists( "apa_timedecay_current" ) ) {
-	class apa_timedecay_current extends apa_type_generic {
+if ( !class_exists( "apa_unspentdecay_current" ) ) {
+	class apa_unspentdecay_current extends apa_type_generic {
 		public static $shortcuts = array('apa' => 'auto_point_adjustments');
 
 		protected $ext_options = array(
@@ -47,7 +47,7 @@ if ( !class_exists( "apa_timedecay_current" ) ) {
 			),
 		);
 
-		private $modules_affected = array('current_timedecay');
+		private $modules_affected = array('current_unspentdecay');
 
 		private $cached_data = array();
 
@@ -84,7 +84,7 @@ if ( !class_exists( "apa_timedecay_current" ) ) {
 			$itempool_id = $data['itempool_id'];
 			$with_twink = $data['with_twink'];
 
-			// The time decay works as follows:
+			// The unspent decay works as follows:
 			// We decay any positive earnings after a decay period if these earnings have not been spent.
 			// The spending of points works in a first in, first out basis, i.e., the earliest earnings are spent first.
 			// The main assumption is that the given event ID is *only* used for these automatic adjustments.
