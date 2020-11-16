@@ -29,7 +29,7 @@ if(!class_exists("calevents_repeatable_crontask")){
 		public function __construct(){
 			$this->defaults['active']			= true;
 			$this->defaults['repeat']			= true;
-			$this->defaults['repeat_type']		= 'daily';
+			$this->defaults['repeat_type']		= 'hourly';
 			$this->defaults['repeat_interval']	= 1;
 			$this->defaults['ajax']				= true;
 			$this->defaults['description']		= 'Creating repeatable events';
