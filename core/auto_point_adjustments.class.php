@@ -331,26 +331,27 @@ if ( !defined('EQDKP_INC') ){
 		}
 
 		public function run_calc_func($name, $params) {
-			if(!isset($this->calc_func[$name])) return false;
-			if(function_exists($name)) return call_user_func_array($name, $params);
-			$file = $this->pfh->FilePath('apa/'.$name.'.func.php', 'eqdkp', 'relative');
-			if(is_file($file)) include_once($file);
-			if(function_exists($name)) return call_user_func_array($name, $params);
-			$params = array();
-			foreach($this->func_args as $arg) {
-				$params[] = '$'.$arg;
-			}
-			$function = '<?php'."\n".'function '.$name.'('.implode(', ', $params).') {'."\n";
-			foreach($this->calc_func[$name] as $key => $expr) {
-				$function .= "\t".'$Var'.$key.' = '.$expr.';'."\n";
-			}
-			$function .= "\t".'return $Var'.$key.';'."\n";
-			$function .= '}'."\n".'?>';
-			$this->pfh->CheckCreateFile($file);
-			$this->pfh->putContent($file, $function);
-			include($file);
-
-			return call_user_func_array($name, $params);
+		    if(!isset($this->calc_func[$name])) return false;
+		    if(function_exists($name)) return call_user_func_array($name, $params);
+		    $file = $this->pfh->FilePath('apa/'.$name.'.func.php', 'eqdkp', 'relative');
+		    if(is_file($file)) include_once($file);
+		    if(function_exists($name)) return call_user_func_array($name, $params);
+		    $classParams = array();
+		    foreach($this->func_args as $arg) {
+		        $classParams[] = '$'.$arg;
+		    }
+		    
+		    $function = '<?php'."\n".'function '.$name.'('.implode(', ', $classParams).') {'."\n";
+		    foreach($this->calc_func[$name] as $key => $expr) {
+		        $function .= "\t".'$Var'.$key.' = '.$expr.';'."\n";
+		    }
+		    $function .= "\t".'return $Var'.$key.';'."\n";
+		    $function .= '}'."\n".'?>';
+		    $this->pfh->CheckCreateFile($file);
+		    $this->pfh->putContent($file, $function);
+		    include($file);
+		    
+		    return call_user_func_array($name, $params);
 		}
 
 		private function load_calc_func() {

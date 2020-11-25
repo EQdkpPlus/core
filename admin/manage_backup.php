@@ -51,6 +51,8 @@ class EQDKPBackup extends page_generic{
 		//Read out all of our backups
 		$path = $this->pfh->FolderPath('backup', 'eqdkp');
 		$arrFiles = sdir($path);
+		
+		$backups = $full = array();
 
 		//Generate backup-array, list eqdkp-backups and .sql files
 		foreach ($arrFiles as $elem){
@@ -64,7 +66,7 @@ class EQDKPBackup extends page_generic{
 			}
 		}
 
-		if (isset($backups) && is_array($backups)){
+		if (count($backups)){
 			//Sort the arrays the get the newest ones on top
 			array_multisort($backups, SORT_DESC);
 		}
@@ -72,7 +74,7 @@ class EQDKPBackup extends page_generic{
 		$js_output = '';
 
 		//Brink the Backups to template
-		if (isset($backups) && is_array($backups)){
+		if (count($backups)){
 			foreach ($backups as $key=>$elem){
 				if (file_exists($this->pfh->FolderPath('backup/meta/', 'eqdkp').str_replace(substr($key, strpos($key, '.')), "", $key).'.meta.php')){
 

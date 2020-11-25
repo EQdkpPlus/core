@@ -337,7 +337,7 @@ class addcharacter_pageobject extends pageobject {
 			}
 
 			//Make Dropdowns etc. translatable
-			if(count($fielddata['options']) > 0 && $fielddata['options_language'] != ""){
+			if(is_array($fielddata['options']) && count($fielddata['options']) > 0 && $fielddata['options_language'] != ""){
 				if (strpos($fielddata['options_language'], 'lang:') === 0){
 					$arrSplitted = explode(':', $fielddata['options_language']);
 					$arrGlang = $this->game->glang($arrSplitted[1]);
