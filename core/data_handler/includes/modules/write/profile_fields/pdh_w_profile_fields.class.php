@@ -165,7 +165,7 @@ if(!class_exists('pdh_w_profile_fields')) {
 				'options_language'=> (isset($data['options_lang'])) ? $data['options_lang'] : $this->in->get('options_language'),
 				'size'			=> (isset($data['size'])) ? intval($data['size']) : $this->in->get('size', 3),
 				'data'			=> (isset($data['data'])) ? serialize($data['data']) : serialize(array('options' => $options)),
-				'sort'			=> (isset($data['sort']))  ? $data['sort'] : (max($this->pdh->get('profile_fields', 'max_sortid', array()))+1),
+				'sort'			=> (isset($data['sort']))  ? $data['sort'] : ($this->pdh->get('profile_fields', 'max_sortid', array())+1),
 				'image'			=> (isset($data['image'])) ? $data['image'] : $this->in->get('image'),
 				'undeletable'	=> (isset($data['undeletable']) && $data['undeletable']) ? '1' : '0',
 				'enabled'		=> 1,

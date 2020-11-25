@@ -103,10 +103,10 @@ class input extends gen_class {
 
 	private function _options($type){
 		switch($type){
-			case 'noencquotes' : $out = FILTER_FLAG_NO_ENCODE_QUOTES;
+			case 'noencquotes' : $out = array('flags' => FILTER_FLAG_NO_ENCODE_QUOTES);
 				break;
 
-			default: $out = '';
+			default: $out = array();
 		}
 
 		return $out;
@@ -157,7 +157,7 @@ class input extends gen_class {
 		$type = $this->_getType($default, $owntype);
 		$filter = $this->_getFilter($type);
 		$options = $this->_options($type);
-		$cache_name = md5($filter.'.'.$options);
+		$cache_name = md5($filter.'.'.serialize($options));
 
 		if($this->_caching && isset($this->_cache[$cache_name][$key])){
 			$out = $this->_cache[$cache_name][$key];

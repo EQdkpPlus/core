@@ -454,7 +454,7 @@ class calendar_pageobject extends pageobject {
 			'RAID_LIST'				=> $hptt->get_html_table($this->in->get('sort'), '', 0, 100),
 			'DD_CHARS'				=> $memberrole[0],
 			'DD_ROLES'				=> $memberrole[1],
-			'NO_CHAR_ASSIGNED'		=> (count($drpdwn_members) > 0) ? false : true,
+		    'NO_CHAR_ASSIGNED'		=> (is_array($drpdwn_members) && count($drpdwn_members) > 0) ? false : true,
 			'DD_STATUS'				=> (new hdropdown('member_signupstatus', array('options' => $raidstatus)))->output(),
 			'DD_MULTIDEL'			=> (new hdropdown('deleteall_selection', array('options' => $deleteall_drpdown)))->output(),
 			'TXT_NOTE'				=> (new htext('member_note', array('size' => '20')))->output(),

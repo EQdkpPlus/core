@@ -1187,7 +1187,7 @@ class calendarevent_pageobject extends pageobject {
 			'SHOW_RANDOMVALUE'		=> ($this->config->get('calendar_raid_random') == 1) ? true : false,
 			'SHOW_GUESTAPPLICATION'	=> ($this->config->get('calendar_raid_guests') == 2) ? true : false,
 			'IS_SIGNEDIN'			=> ($this->mystatus['member_id'] > 0 && $mysignedstatus != 4) ? true : false,
-			'NO_CHAR_ASSIGNED'		=> (count($drpdwn_members) > 0) ? false : true,
+		    'NO_CHAR_ASSIGNED'		=> (is_array($drpdwn_members) && count($drpdwn_members) > 0) ? false : true,
 			'COLORED_NAMESBYCLASS'	=> ($this->config->get('calendar_raid_coloredclassnames')) ? true : false,
 			'SHOW_RAIDGROUPS'		=> $this->pdh->get('raid_groups', 'groups_enabled'),
 			'IS_STATUSCHANGE_WARN'	=> ($this->config->get('calendar_raid_statuschange_status', 0) == 1) ? true : false,

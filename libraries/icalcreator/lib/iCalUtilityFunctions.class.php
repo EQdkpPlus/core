@@ -157,7 +157,7 @@ class iCalUtilityFunctions {
         if( isset( $theDate['timestamp'] ))
           $tzid = ( isset( $theDate['tz'] )) ? $theDate['tz'] : null;
         else
-          $tzid = ( isset( $theDate['tz'] )) ? $theDate['tz'] : ( 7 == count( $theDate )) ? end( $theDate ) : null;
+          $tzid = ( isset( $theDate['tz'] )) ? $theDate['tz'] : (( 7 == count( $theDate )) ? end( $theDate ) : null);
         if( !empty( $tzid )) {
           $parno = 7;
           if( !iCalUtilityFunctions::_isOffset( $tzid ))
@@ -257,7 +257,7 @@ class iCalUtilityFunctions {
       $base   = 'aAbB!cCdD"eEfF#gGhHiIjJ%kKlL&mMnN/oOpP(rRsS)tTuU=vVxX?uUvV*wWzZ-1234_5678|90';
       $len    = strlen( $base ) - 1;
       for( $p = 0; $p < 6; $p++ )
-        iCalUtilityFunctions::$baseDelim .= $base{mt_rand( 0, $len )};
+        iCalUtilityFunctions::$baseDelim .= $base[mt_rand( 0, $len )];
     }
             /* fix eol chars */
     $text   = str_replace( array( "\r\n", "\n\r", "\n", "\r" ), iCalUtilityFunctions::$baseDelim, $text );

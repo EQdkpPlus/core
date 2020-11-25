@@ -87,10 +87,11 @@ class plugin_generic extends gen_class {
 				}
 			}
 		}
-
-		ksort($this->sql_queries[SQL_INSTALL]);
-		foreach($this->sql_queries[SQL_INSTALL] as $sql) {
-			if(!$this->db->query($sql)) return $this->db->error;
+		if(isset($this->sql_queries[SQL_INSTALL])){
+    		ksort($this->sql_queries[SQL_INSTALL]);
+    		foreach($this->sql_queries[SQL_INSTALL] as $sql) {
+    			if(!$this->db->query($sql)) return $this->db->error;
+    		}
 		}
 		return true;
 	}

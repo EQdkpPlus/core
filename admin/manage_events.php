@@ -60,8 +60,14 @@ class Manage_Events extends page_generic {
 		$event = $this->get_post();
 		if($event) {
 			if($this->config->get('dkp_easymode')){
-				$multidkpPool = $this->in->getArray('mdkp2event', 'int');
+				$multidkpPool = $this->in->getArray('mdkp2event', 'int');				
 				$itemPools = $this->pdh->get('multidkp', 'itempool_ids', array($multidkpPool[0]));
+				if(count($itemPools) === 0){
+				    //Auto create Itempool
+				    $name = $this->pdh->get('multidkp', 'name', array($multidkpPool[0]));
+				    $itempoolID = $this->pdh->put('itempool', 'add_itempool', array($name, 'Auto generated for '.$name));
+				    $itemPools = array($itempoolID);
+				}
 				$event['default_itempool'] = $itemPools[0];
 			}
 

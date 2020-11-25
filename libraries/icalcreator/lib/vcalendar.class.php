@@ -1862,7 +1862,7 @@ class vcalendar extends iCalBase {
       $proprows  = array();
       for( $i = 0; $i < count( $this->unparsed ); $i++ ) { // concatenate lines
         $line = rtrim( $this->unparsed[$i], $nl );
-        while( isset( $this->unparsed[$i+1] ) && !empty( $this->unparsed[$i+1] ) && ( ' ' == $this->unparsed[$i+1]{0} ))
+        while( isset( $this->unparsed[$i+1] ) && !empty( $this->unparsed[$i+1] ) && ( ' ' == $this->unparsed[$i+1][0] ))
           $line .= rtrim( substr( $this->unparsed[++$i], 1 ), $nl );
         $proprows[] = $line;
       }

@@ -47,7 +47,7 @@ if(!class_exists('pdh_w_multidkp')) {
 					$retu[] = ($this->db->prepare("INSERT INTO __multidkp2event :p")->set($arrSet)->execute()) ? true : false;
 				}
 
-				if(!$this->config->get('dkp_easymode')){
+				if(!$this->config->get('dkp_easymode') || count($itempools) > 0){
 					foreach($itempools as $itempool_id) {
 						$retu[] = ($this->db->prepare("INSERT INTO __multidkp2itempool :p")->set(array(
 								'multidkp2itempool_multi_id' => $id,

@@ -59,7 +59,7 @@ if ( !class_exists( "pdh_r_plugins" ) ) {
 		}
 
 		public function get_id_list() {
-			return array_keys($this->plugins);
+		    return (is_array($this->plugins)) ? array_keys($this->plugins) : array();
 		}
 
 		public function get_data($plugin_code='', $field=''){

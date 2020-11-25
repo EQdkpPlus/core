@@ -1330,8 +1330,8 @@ class calendarComponent  extends iCalBase {
           }
         }
         elseif(( 3 <= strlen( trim( $fbMember ))) &&    // string format duration
-               ( in_array( $fbMember{0}, array( 'P', '+', '-' )))) {
-          if( 'P' != $fbMember{0} )
+               ( in_array( $fbMember[0], array( 'P', '+', '-' )))) {
+          if( 'P' != $fbMember[0] )
             $fbmember = substr( $fbMember, 1 );
           $freebusyPairMember = iCalUtilityFunctions::_durationStr2arr( $fbMember );
         }
@@ -2413,7 +2413,7 @@ class calendarComponent  extends iCalBase {
     }
     elseif(is_string( $year ) && ( is_array( $month ) || empty( $month ))) {  // duration or date in a string
       $params = iCalUtilityFunctions::_setParams( $month );
-      if( in_array( $year{0}, array( 'P', '+', '-' ))) { // duration
+      if( in_array( $year[0], array( 'P', '+', '-' ))) { // duration
         $relatedStart = ( isset( $params['RELATED'] ) && ( 'END' == strtoupper( $params['RELATED'] ))) ? FALSE : TRUE;
         $before       = ( '-'  == $year[0] ) ? TRUE : FALSE;
         if(     'P'  != $year[0] )
@@ -2723,7 +2723,7 @@ class calendarComponent  extends iCalBase {
     $length = 6;
     $str    = null;
     for( $p = 0; $p < $length; $p++ )
-      $unique .= $base{mt_rand( $start, $end )};
+      $unique .= $base[mt_rand( $start, $end )];
     $this->uid = array( 'params' => null );
     $this->uid['value']  = $date.'-'.$unique.'@'.$this->getConfig( 'unique_id' );
   }
@@ -4175,7 +4175,7 @@ class calendarComponent  extends iCalBase {
     $proprows  = array();
     for( $i = 0; $i < count( $this->unparsed ); $i++ ) { // concatenate lines
       $line = rtrim( $this->unparsed[$i], $nl );
-      while( isset( $this->unparsed[$i+1] ) && !empty( $this->unparsed[$i+1] ) && ( ' ' == $this->unparsed[$i+1]{0} ))
+      while( isset( $this->unparsed[$i+1] ) && !empty( $this->unparsed[$i+1] ) && ( ' ' == $this->unparsed[$i+1][0] ))
         $line .= rtrim( substr( $this->unparsed[++$i], 1 ), $nl );
       $proprows[] = $line;
     }

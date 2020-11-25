@@ -102,8 +102,10 @@ if ( !class_exists( "pdh_w_member" ) ) {
 				'last_update'		=> time(),
 				'picture'			=> !empty($data['picture']) ? $data['picture'] : '',
 				'defaultrole'		=> isset($data['defaultrole']) ? $data['defaultrole'] : 0,
-				'member_creation_date' => !empty($data['creation_date']) ? $data['creation_date'] : $old['creation_date'],
 			);
+			if(!empty($data['creation_date'])){
+				$querystr['member_creation_date'] = $data['creation_date'];
+			}
 
 			if($member_id > 0) {
 				$objQuery = $this->db->prepare("UPDATE __members :p WHERE member_id = ?;")->set($querystr)->execute($member_id);
@@ -150,7 +152,7 @@ if ( !class_exists( "pdh_w_member" ) ) {
 					return $member_id;
 				}
 			} else {
-				$querystr['member_creation_date'] = $this->current_time;
+				if(!isset($querystr['member_creation_date'])) $querystr['member_creation_date'] = $this->current_time;
 
 				//Add defaultrole if there is only one role for the class
 				$arrRoles = $this->pdh->get('roles', 'memberroles', array($data['profiledata'][$this->game->get_primary_classes(true)]));

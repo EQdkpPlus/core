@@ -549,7 +549,7 @@ if(!class_exists('infotooltip')) {
 			$script_name = ( $script_name != '' ) ? $script_name . '/' : '';
 			return ($blnWithServerpath) ? $this->httpHost().'/'.$script_name : $this->httpHost();
 		}
-	}#class
+	}
 }
 
 /**
@@ -559,7 +559,7 @@ if(!class_exists('infotooltip')) {
  */
 if(!function_exists('itt_replace_bbcode')) {
 	function itt_replace_bbcode($text, $lang='') {
-		#[item game_id=0 lang=0 direct=0 onlyicon=0]name[/item]
+		//[item game_id=0 lang=0 direct=0 onlyicon=0]name[/item]
 		preg_match_all('+\[item(.*?)\](.*?)\[\/item\]+', $text, $matches);
 		foreach($matches[1] as $k => $match) {
 			$data = array(
