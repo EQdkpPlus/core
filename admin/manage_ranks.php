@@ -76,7 +76,7 @@ class Manage_Ranks extends page_generic {
 		$ranks = $this->get_post();
 		if($ranks) {
 			foreach($ranks as $rank) {
-				$retu[] = $this->pdh->put('rank', 'set_standardAndSort', array($rank['id'], $rank['default'], $rank['sortid']));
+			    $retu[] = $this->pdh->put('rank', 'set_standardAndSort', array($rank['id'], $rank['sortid'], $rank['default']));
 				$names[] = $this->pdh->get('rank', 'name', array($rank['id']));
 			}
 			if(in_array(false, $retu)) {

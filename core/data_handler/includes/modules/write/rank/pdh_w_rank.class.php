@@ -85,7 +85,7 @@ if(!class_exists('pdh_w_rank')) {
 			return true;
 		}
 
-		public function set_standardAndSort($intRankID, $blnDefault=false, $intSortID){
+		public function set_standardAndSort($intRankID, $intSortID, $blnDefault=false){
 			$old['sortid'] = $this->pdh->get('rank', 'sortid', array($intRankID));
 			$old['default'] = $this->pdh->get('rank', 'default_value', array($intRankID));
 			if ($old['sortid'] != $intSortID || $old['default'] != $blnDefault){
