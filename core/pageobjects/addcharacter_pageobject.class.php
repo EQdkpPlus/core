@@ -34,7 +34,7 @@ class addcharacter_pageobject extends pageobject {
 		);
 
 		// Permissions
-		$this->user->check_auths(array('u_member_man', 'u_member_add'), 'OR');
+		$this->user->check_auths(array('u_member_man', 'u_member_add', 'a_members_man'), 'OR');
 
 		// Check if the user is logged in
 		if (!$this->user->is_signedin()) {
@@ -43,7 +43,7 @@ class addcharacter_pageobject extends pageobject {
 
 		//Check if Adminmode
 		$this->adminmode = ($this->in->get('adminmode', 0) && $this->user->check_auth('a_members_man', false)) ? true : false;
-
+		
 		//Default Rank
 		$this->data['rank_id'] = $this->pdh->get('rank', 'default', array());
 
@@ -100,10 +100,16 @@ class addcharacter_pageobject extends pageobject {
 		}
 		
 		$intOldUserID = $this->pdh->get('member', 'user', array($this->url_id));
+		
+		//Check if character belongs to the user
+		if(!$this->adminmode && (intval($intOldUserID) !== intval($this->user->id))){
+		    $this->user->check_auth('u_something');
+		}
+		
 		$id = $this->pdh->put('member', 'addorupdate_member', array($this->url_id, $data));
 
 		if($id){
-			if($this->adminmode && $data['userid'] != $intOldUserID){
+			if($this->adminmode && (int)$data['userid'] !== (int)$intOldUserID){
 				if($data['userid']){
 					$this->pdh->put('member', 'add_char_to_user', array($this->url_id, (int)$data['userid']));
 				} else {
@@ -188,11 +194,17 @@ class addcharacter_pageobject extends pageobject {
 
 		$arrHistoryReceivers = $this->pdh->aget('member', 'name', 0, array($this->pdh->get('member', 'id_list')));
 		asort($arrHistoryReceivers);
+		
+		//Check if character belongs to the user
+		if(($this->url_id > 0) && !$this->adminmode && (intval($userid_real) !== intval($this->user->id))){
+		    $this->user->check_auth('u_something');
+		}
+		
 		$this->tpl->assign_vars(array(
 			// Permissions
 			'U_IS_EDIT'				=> ($this->url_id > 0) ? true : false,
 			'ADMINMODE'				=> $this->adminmode,
-				'S_NEW_CHAR_ADMIN_ASSOCIATE' => (!$this->user->check_auth('u_member_conn', false) && !$this->user->check_auth('u_member_conn_free', false) ),
+			'S_NEW_CHAR_ADMIN_ASSOCIATE' => (!$this->user->check_auth('u_member_conn', false) && !$this->user->check_auth('u_member_conn_free', false) ),
 
 			// Data
 			'NOTES'					=> stripslashes(((isset($member_data['notes'])) ? $member_data['notes'] : '')),
