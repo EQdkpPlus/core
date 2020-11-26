@@ -396,7 +396,7 @@ if(!class_exists('article')){
 				foreach($arrPagebreaks[2] as $key=>$val){
 					$titleMatches		= array();
 					$intMatches			= preg_match('#title="(.*)"#iU', $val, $titleMatches);
-					$arrTitles[$key+2]	= ($intMatches && $titleMatches[1] != '' ) ? $titleMatches[1] : 'Page '.$key+2;
+					$arrTitles[$key+2]	= ($intMatches && $titleMatches[1] != '' ) ? $titleMatches[1] : ('Page '.$key+2);
 				}
 				$arrContent = preg_split('#<hr(.*)class="system-pagebreak"(.*)\/>#iU', $strText);
 
