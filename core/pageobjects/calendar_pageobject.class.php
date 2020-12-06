@@ -45,13 +45,14 @@ class calendar_pageobject extends pageobject {
 	public function mass_signin(){
 		$eventids = $this->in->getArray('selected_ids', 'int');
 		if(is_array($eventids)){
-			$usergroups		= $this->config->get('calendar_raid_confirm_raidgroupchars');
-			$signupstatus	= $this->in->get('member_signupstatus', 0);
-			if(is_array($usergroups) && count($usergroups) > 0 && $signupstatus == 1){
-				if($this->user->check_group($usergroups, false)){
-					$signupstatus = 0;
-				}
-			}
+		    $signupstatus	= $this->in->get('member_signupstatus', 0);
+		    $arrConfirmRaidgroups	= $this->config->get('calendar_raid_confirm_raidgroupchars');
+		    if(is_array($arrConfirmRaidgroups) && count($arrConfirmRaidgroups) > 0 && $signupstatus == 1){
+		        if($this->pdh->get('raid_groups_members', 'check_user_is_in_groups', array($this->user->id, $arrConfirmRaidgroups))){
+		            $signupstatus = 0;
+		        }
+		    }
+		   
 			$myrole = ($this->in->get('member_role', 0) > 0) ? $this->in->get('member_role', 0) : $this->pdh->get('member', 'defaultrole', array($this->in->get('member_id', 0)));
 
 			foreach($eventids as $eventid){

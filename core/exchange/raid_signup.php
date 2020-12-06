@@ -63,11 +63,13 @@ if (!class_exists('exchange_raid_signup')){
 								return $this->pex->error('required data missing', 'status not allowed');
 							}
 							
-							if(is_array($usergroups) && count($usergroups) > 0 && $signupstatus == 1){
-								if($this->user->check_group($usergroups, false)){
-									$signupstatus = 0;
-								}
+							$arrConfirmRaidgroups	= $this->config->get('calendar_raid_confirm_raidgroupchars');
+							if(is_array($arrConfirmRaidgroups) && count($arrConfirmRaidgroups) > 0 && $signupstatus == 1){
+							    if($this->pdh->get('raid_groups_members', 'check_user_is_in_groups', array($this->user->id, $arrConfirmRaidgroups))){
+							        $signupstatus = 0;
+							    }
 							}
+							
 							$myrole = (intval($arrBody['role']) > 0) ? intval($arrBody['role']) : $this->pdh->get('member', 'defaultrole', array($memberid));
 							if ($eventdata['extension']['raidmode'] == 'role' && (int)$myrole == 0){
 								return $this->pex->error('required data missing', 'roleid');
