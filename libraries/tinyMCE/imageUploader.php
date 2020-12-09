@@ -53,7 +53,7 @@ class tinyMCEimageUploader extends page_generic {
 			return;
 		}
 
-		$blnResult = register('uploader')->upload_mime('file', 'system/articleimages', array("image/jpeg","image/png","image/gif"), array('jpg', 'png', 'gif'), 'uploaded_'.randomID(), register('pfh')->FolderPath('', 'files'));
+		$blnResult = register('uploader')->upload_mime('file', 'system/articleimages', array("image/jpeg","image/png","image/gif"), array('jpg', 'jpeg', 'png', 'gif'), 'uploaded_'.randomID(), register('pfh')->FolderPath('', 'files'));
 		if($blnResult){
 			header('Content-type: application/json; charset=utf-8');
 			echo json_encode(array('location' => register('pfh')->FolderPath('system/articleimages', 'files', 'absolute').$blnResult));

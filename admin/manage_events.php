@@ -138,7 +138,7 @@ class Manage_Events extends page_generic {
 		//Get Icons
 			$events_folder = $this->pfh->FolderPath('event_icons', 'files');
 			$files = sdir($events_folder);
-			$arrImages = array('png', 'jpg', 'gif');
+			$arrImages = array('png', 'jpg', 'jpeg', 'gif');
 			foreach($files as $file) {
 				$strExtension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 				if(!in_array($strExtension, $arrImages)) continue;

@@ -106,7 +106,7 @@ class hiconselect extends html {
 			$events_folder	= $this->pfh->FolderPath('event_icons', 'files');
 			$link_eventsicon= $this->pfh->FolderPath('event_icons', 'files', 'absolute');
 			$files			= sdir($events_folder);
-			$arrImages		= array('png', 'jpg', 'gif');
+			$arrImages		= array('png', 'jpeg', 'jpg', 'gif');
 			foreach($files as $file) {
 				$strExtension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 				if(!in_array($strExtension, $arrImages)) continue;

@@ -94,7 +94,7 @@ class Manage_Roles extends page_generic {
 	}
 
 	public function display_edit(){
-		$arrImages = array('png', 'jpg', 'gif');
+	    $arrImages = array('png', 'jpg', 'jpeg', 'gif');
 		$icons			= array();
 		$row			= ($this->in->get('editid', 0) > 0) ? $this->pdh->get('roles', 'roles', array($this->in->get('editid', 0))) : array();
 
