@@ -179,6 +179,7 @@ if ( !class_exists( "pdh_r_points_history" ) ) {
 
 			if(is_array($arrPoints['adjustment'])){
 				foreach($arrPoints['adjustment'] as $event_id => $adjustment){
+				    if(!isset($arrPoints['adjustment'][0])) $arrPoints['adjustment'][0] = 0;
 					$arrPoints['adjustment'][0] += $adjustment;
 				}
 			}
