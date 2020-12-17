@@ -135,7 +135,7 @@ class addcharacter_pageobject extends pageobject {
 
 	public function display($member_data=array()) {
 		// Read the Data
-		if(empty($member_data)) {
+	    if(empty($member_data) && $this->url_id > 0) {
 			$member_data = $this->pdh->get('member', 'array', array($this->url_id));
 			if(!is_array($member_data)) $member_data = array();
 			if($this->url_id > 0) $member_data['editid'] = $this->url_id;

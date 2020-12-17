@@ -74,7 +74,7 @@ class discord_messenger extends generic_messenger {
 
 	public function isAvailable(){
 		$arrDiscordConfig = register('config')->get_config('discord');
-		$token = $arrDiscordConfig['bot_token'];
+		$token = isset($arrDiscordConfig['bot_token']) ? $arrDiscordConfig['bot_token'] : "";
 
 		return ($this->pm->check('discord', PLUGIN_INSTALLED) && $token != "");
 	}

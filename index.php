@@ -188,7 +188,7 @@ class controller extends gen_class {
 				$this->core->set_vars(array(
 						'page_title'		=> $arrVars['page_title'],
 						'template_file'		=> $arrVars['template_file'],
-						'description'		=> $arrVars['description'],
+				        'description'		=> isset($arrVars['description']) ? $arrVars['description'] : "",
 						'display'			=> true)
 				);
 			} else {

@@ -747,7 +747,7 @@ if ( !class_exists( "pdh_r_member" ) ) {
 		}
 
 		public function get_array($member_id){
-			return $this->data[$member_id];
+		    return isset($this->data[$member_id]) ? $this->data[$member_id] : array();
 		}
 
 		public function get_fullarray(){

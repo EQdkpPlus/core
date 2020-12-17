@@ -207,8 +207,6 @@ if ( !class_exists( "pdh_r_points" ) ) {
 					}
 				}
 
-			} else {
-				$arrLocalPoints[$dkp_id][$row['member_id']]['single']['adjustment'][0] = 0;
 			}
 
 			//earned
@@ -241,8 +239,6 @@ if ( !class_exists( "pdh_r_points" ) ) {
 					}
 				}
 
-			} else {
-				$arrLocalPoints[$dkp_id][$row['member_id']]['single']['earned'][0] = 0;
 			}
 
 
