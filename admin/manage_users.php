@@ -186,7 +186,7 @@ class Manage_Users extends page_generic {
 		}
 		$arrUserdata['custom_fields'] = unserialize_noclasses($arrUserdata['custom_fields']);
 		$arrUserdata['plugin_settings'] = unserialize_noclasses($arrUserdata['plugin_settings']);
-		$arrUserdata['privacy_settings'] = unserialize_noclasses($arrUserdata['plugin_settings']);
+		$arrUserdata['privacy_settings'] = unserialize_noclasses($arrUserdata['privacy_settings']);
 		$arrUserdata['notifications'] = unserialize_noclasses($arrUserdata['notifications']);
 		$arrUserdata['usergroups'] = $this->pdh->get('user_groups_users', 'memberships', array($this->user->id));
 		$arrUserdata['avatar_big'] = $this->env->httpHost.$this->env->root_to_serverpath($this->pdh->get('user', 'avatarimglink', array($this->user->id, true)));

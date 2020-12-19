@@ -364,7 +364,7 @@ class acl extends acl_manager {
 			$objQuery = $this->db->prepare("SELECT * FROM __groups_users WHERE user_id=?")->execute($user_id);
 			if ($objQuery){
 				while ( $row = $objQuery->fetchAssoc() ){
-					if (intval($row['grpleader']) && !isset($user_permissions['a_usergroups_grpleader'])) $user_permissions['a_usergroups_grpleader'] = "Y";
+				    if (intval($row['grpleader']) && !isset($user_permissions['a_usergroups_grpleader'])) $user_permissions['a_usergroups_grpleader']['group'][$row['group_id']] = "Y";
 					$user_group_memberships[$row['group_id']] = 1;
 				}
 			}

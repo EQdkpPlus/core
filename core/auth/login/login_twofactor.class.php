@@ -55,7 +55,7 @@ class login_twofactor extends gen_class {
 		if ($checkResult) {
 			return register('encrypt')->encrypt(serialize(array(
 				'secret' => $secret,
-				'emergency_token' => $ga->createSecret(16),
+				'emergency_token' => $ga->createSecret(32),
 			)));
 		}
 
