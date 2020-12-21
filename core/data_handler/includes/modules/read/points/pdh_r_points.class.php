@@ -379,9 +379,9 @@ if ( !class_exists( "pdh_r_points" ) ) {
 			} else {
 				$arrPoints = $this->pdh->get('points_history', 'points', array($member_id, $multidkp_id, $from, $to, $event_id, $itempool_id, $with_twink));
 
-				$earned = (float)$arrPoints['earned'][$event_id];
-				$spent = (float)$arrPoints['spent'][$event_id][$itempool_id];
-				$adj = (float)$arrPoints['adjustment'][$event_id];
+				$earned = isset($arrPoints['earned'][$event_id]) ? (float)$arrPoints['earned'][$event_id] : 0;
+				$spent = isset($arrPoints['spent'][$event_id][$itempool_id]) ? (float)$arrPoints['spent'][$event_id][$itempool_id] : 0;
+				$adj = isset($arrPoints['adjustment'][$event_id]) ? (float)$arrPoints['adjustment'][$event_id] : 0;
 				return (float)($earned - $spent + $adj);
 			}
 		}

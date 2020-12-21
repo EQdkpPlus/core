@@ -44,8 +44,8 @@ if (!class_exists("zip")) {
 		}
 
 		public function __destruct(){
-			if ($this->objZip){
-				@$this->objZip->close();
+            if ($this->objZip && $this->objZip->numFiles > 0){
+				$this->objZip->close();
 			}
 		}
 

@@ -111,9 +111,11 @@ class plugin_generic extends gen_class {
 			$this->db->prepare("DELETE FROM __auth_groups WHERE `auth_id` :in")->in($auth_ids)->execute();
 		}
 
-		ksort($this->sql_queries[SQL_UNINSTALL]);
-		foreach($this->sql_queries[SQL_UNINSTALL] as $sql) {
-			if(!$this->db->query($sql)) return $this->db->error;
+		if(isset($this->sql_queries[SQL_UNINSTALL])){
+    		ksort($this->sql_queries[SQL_UNINSTALL]);
+    		foreach($this->sql_queries[SQL_UNINSTALL] as $sql) {
+    			if(!$this->db->query($sql)) return $this->db->error;
+    		}
 		}
 		return true;
 	}

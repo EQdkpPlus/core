@@ -594,9 +594,7 @@ if (!class_exists("pdh_r_user")){
 			} else {
 				$strImg = $this->pfh->FileLink($strImg, false, 'absolute');
 			}
-
-			$class = ($fullSize) ? 'big' : 'small';
-
+			
 			$usertooltip[]	= '<div class="tooltiprow"><i class="fa fa-user fa-lg"></i> '.$this->get_name($user_id).' ('.$this->get_charnumber($user_id).')  '.$this->get_html_country($user_id).'</div>';
 			//is_away, is_online,
 			$usertooltip[]	= '<div class="tooltiprow">'.$this->get_html_groups($user_id).'</div>';

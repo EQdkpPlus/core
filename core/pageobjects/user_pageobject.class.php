@@ -214,7 +214,7 @@ class user_pageobject extends pageobject {
 		if(count($arrMemberList)){
 			// Item History
 			$arrItemListSettings = array(
-				'name' => 'hptt_viewmember_itemlist',
+		              'name' => 'hptt_viewuser_member_itemlist',
 					'table_main_sub' => '%item_id%',
 					'table_subs' => array('%item_id%', '%link_url%', '%link_url_suffix%', '%raid_link_url%', '%raid_link_url_suffix%', '%itt_lang%', '%itt_direct%', '%onlyicon%', '%noicon%'),
 					'page_ref' => 'viewcharacter.php',
@@ -247,7 +247,7 @@ class user_pageobject extends pageobject {
 			// Individual Adjustment History
 			if(!$this->config->get('disable_points')){
 				$arrAdjListSettings = array(
-					'name' => 'hptt_viewmember_adjlist',
+					'name' => 'hptt_viewuser_member_adjlist',
 					'table_main_sub' => '%adjustment_id%',
 					'table_subs' => array('%adjustment_id%', '%raid_link_url%', '%raid_link_url_suffix%'),
 					'page_ref' => 'viewcharacter.php',
@@ -279,7 +279,7 @@ class user_pageobject extends pageobject {
 
 			// Raid Attendance
 			$arrRaidListSettings = array(
-				'name' => 'hptt_viewmember_raidlist',
+				'name' => 'hptt_viewuser_member_raidlist',
 					'table_main_sub' => '%raid_id%',
 					'table_subs' => array('%raid_id%', '%link_url%', '%link_url_suffix%'),
 					'page_ref' => 'viewcharacter.php',
@@ -309,6 +309,7 @@ class user_pageobject extends pageobject {
 
 			//Event-Attendance
 			$arrEventAttSettings = array(
+			         'name' => 'hptt_viewuser_member_eventattendance',
 					'table_main_sub' => '%event_id%',
 					'table_subs' => array('%event_id%', '%member_id%', '%link_url%', '%link_url_suffix%'),
 					'page_ref' => 'viewcharacter.php',
