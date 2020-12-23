@@ -183,6 +183,8 @@ class QuickStartWizard extends page_generic {
 		$arrValues = $this->form->return_values();
 
 		$arrValues['game_importer_apikey'] = $this->in->get('game_importer_apikey');
+		$arrValues['game_importer_clientid'] = $this->in->get('game_importer_clientid');
+		$arrValues['game_importer_clientsecret'] = $this->in->get('game_importer_clientsecret');
 
 		$this->config->set($arrValues);
 
