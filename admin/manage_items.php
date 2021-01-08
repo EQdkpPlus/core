@@ -49,6 +49,12 @@ class ManageItems extends page_generic {
 			$raid = $item['raid_id'];
 			$event = $this->pdh->get('raid', 'event', array($raid));
 			$arrPools = $this->pdh->get('event', 'multidkppools', array($event));
+			if(count($arrPools) === 0){
+			     //No Itempool Found
+			    $message = array('title' => $this->user->lang('save_nosuc'), 'text' => $this->user->lang('event_pool_connection_missing'), 'color' => 'red');
+			    $this->display($message);
+			    return;
+			}
 			$arrItempools = $this->pdh->get('multidkp', 'itempool_ids', array($arrPools[0]));
 			$item['itempool_id'] = $arrItempools[0];
 		}
@@ -381,19 +387,21 @@ class ManageItems extends page_generic {
 
 	private function get_post($norefresh=false) {
 		$item['name'] = $this->in->get('name','');
+		if(!$item['name']){
+		    $missing[] = $this->user->lang('name');
+		}
+		
 		foreach($this->in->getArray('buyers','int') as $buyer){
 			$item['buyers'][] = $buyer;
-		}
-		$item['itempool_id'] = $this->in->get('itempool_id',0);
-		if(!$item['name']){
-			$missing[] = $this->user->lang('name');
 		}
 		if(!$item['buyers']){
 			$missing[] = $this->user->lang('buyers');
 		}
-		if(!$item['raid_id']){
+		$item['raid_id'] = $this->in->get('raid_id', 0);
+		if(!$item['raid_id'] && $this->config->get('dkp_easymode')){
 		    $missing[] = $this->user->lang('raid');
 		}
+		$item['itempool_id'] = $this->in->get('itempool_id',0);
 		if(!$item['itempool_id'] && !$this->config->get('dkp_easymode')){
 			$missing[] = $this->user->lang('itempool');
 		}
@@ -402,7 +410,6 @@ class ManageItems extends page_generic {
 		}
 		$item['value'] = $this->in->get('value',0.0);
 		$item['date'] = $this->time->fromformat($this->in->get('date','1.1.1970 00:00'), 1);
-		$item['raid_id'] = $this->in->get('raid_id', 0);
 		$item['item_id'] = $this->in->get('item_id','');
 		return $item;
 	}

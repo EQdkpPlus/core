@@ -1945,5 +1945,5 @@ $lang = array(
 		"mems_raidgroup_change" => "The following characters have been added to the selected raidgroup: ",
 		"mass_usergroup_change"	=> "Add to Usergroup",
 		"bulk_user_usergroupsadded_success" => "The selected users have been added to the selected usergroup.",
-		
+        "event_pool_connection_missing" => "The event of the selected raid is not connected to a Point account.",
 );

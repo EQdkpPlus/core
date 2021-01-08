@@ -1951,4 +1951,5 @@ $lang = array(
 		"mems_raidgroup_change" => "Der folgenden Charaktere wurden zur ausgewählten Raidgruppe hinzugefügt: ",
 		"mass_usergroup_change"	=> "Zu Benutzergruppe hinzufügen",
 		"bulk_user_usergroupsadded_success" => "Die ausgewählten Benutzer wurden zur ausgewählten Gruppe hinzugefügt.",
+        "event_pool_connection_missing" => "Das Event des ausgewählten Raids ist keinem Punktekonto zugeordnet.",
 );
