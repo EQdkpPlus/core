@@ -231,6 +231,7 @@ if(!class_exists('pdh_w_multidkp')) {
 
 			if($this->config->get('dkp_easymode')){
 				$this->db->query("TRUNCATE TABLE __itempool;");
+				$this->db->query("INSERT INTO __itempool (`itempool_name`, `itempool_desc`) VALUES ('default', 'Default itempool');");
 				$this->db->query("TRUNCATE TABLE __multidkp2itempool;");
 				$this->pdh->enqueue_hook('itempool_update');
 			}
