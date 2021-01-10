@@ -83,7 +83,7 @@ if ( !class_exists( "pdh_r_effective_dkp_ct" ) ) {
 
 		public function calculate_effective_dkp_ct($member_id, $multidkp_id, $time_period, $with_twink = true){
 			#get_current($member_id, $multidkp_id, $event_id=0, $itempool_id=0, $with_twink=true, $with_apa=true){
-			$current = $this->pdh->get('points', 'spent', array($member_id, $multidkp_id, 0, 0, $with_twink));
+			$current = $this->pdh->get('points', 'current', array($member_id, $multidkp_id, 0, 0, $with_twink));
 			
 			$attendance	= $this->pdh->get('member_attendance', 'attendance', array($member_id, $multidkp_id, $time_period, $with_twink, false, true));
 
