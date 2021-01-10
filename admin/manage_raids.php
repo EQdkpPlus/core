@@ -516,15 +516,11 @@ class ManageRaids extends page_generic {
 		if(count($arrItems) === 0) $this->display();
 
 
-		if($message) {
-			$this->core->messages($message);
+		if($messages) {
+			$this->core->messages($messages);
 		}
 
 		$data = array();
-		if($force_refresh){
-			$data = $this->get_post(true);
-			$this->pdh->process_hook_queue();
-		}
 
 		//fetch members
 		$members_active = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list', array(true,true,true)), 'member', 'name', 'asc')));
@@ -585,7 +581,7 @@ class ManageRaids extends page_generic {
 				'L_RAID_SAVE'		=> ($raid['id'] AND $raid['id'] != 'new' && !$copy) ? $this->user->lang('update_raid') : $this->user->lang('add_raid'),
 				//other needed vars
 				'S_RAID_UPD'		=> ($raid['id'] AND $raid['id'] != 'new' && !$copy) ? true : false,
-				'S_EVENTVAL_ONLOAD' => ($raid['id'] == 'new' && !$force_refresh && $this->in->get('dataimport', '') != 'true') ? true : false,
+				'S_EVENTVAL_ONLOAD' => ($raid['id'] == 'new' && $this->in->get('dataimport', '') != 'true') ? true : false,
 				'S_CALDATAIMPORT'	=> ($this->in->get('dataimport', '') == 'true') ? $this->in->get('calevent_id', 0) : 0,
 				'ADDITIONAL_INFOS_EDITOR' => (new hbbcodeeditor('additional_data', array('rows' => 10, 'value' => (($this->in->get('dataimport', '') == 'true') ? $this->in->get('additional_data') : $raid['additional_data']))))->output(),
 				'ADDITIONAL_INFOS'	=> ((isset($raid['additional_data']) AND strlen($raid['additional_data'])) || (($this->in->get('dataimport', '') == 'true') && strlen($this->in->get('additional_data')))) ? 'true' : 'false',
