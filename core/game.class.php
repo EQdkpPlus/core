@@ -979,7 +979,8 @@ class game extends gen_class {
 			return false;
 		}
 		$name = trim($name);
-
+		$langs = array();
+		
 		foreach ($this->data[$type] as $lang => $ids) {
 			$langs[] = $lang;
 			foreach($ids as $id => $typ) {
