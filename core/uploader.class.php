@@ -54,7 +54,10 @@ class uploader extends gen_class {
 		$arrSplitted = preg_split('/[; ]/', $mime);
 		$mime = array_shift($arrSplitted);
 
+		
 		$strBaseFolder = ($strBaseFolder === false) ? $this->pfh->FolderPath('files', 'eqdkp') : $strBaseFolder;
+		#make sure that the folder exists
+		$this->pfh->CheckCreateFolder($strBaseFolder.$strFolder);
 
 		if (in_array($mime, $arrMimetypes)){
 			//Do no overwrite existing files

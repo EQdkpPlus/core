@@ -52,7 +52,8 @@ class tinyMCEimageUploader extends page_generic {
 			header("HTTP/1.0 403 Access Denied");
 			return;
 		}
-
+		#make sure that the folder is created
+		register('pfh')->CheckCreateFolder('system/articleimages', 'files');
 		$blnResult = register('uploader')->upload_mime('file', 'system/articleimages', array("image/jpeg","image/png","image/gif"), array('jpg', 'jpeg', 'png', 'gif'), 'uploaded_'.randomID(), register('pfh')->FolderPath('', 'files'));
 		if($blnResult){
 			header('Content-type: application/json; charset=utf-8');
