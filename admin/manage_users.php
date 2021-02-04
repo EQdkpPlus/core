@@ -1074,11 +1074,11 @@ class Manage_Users extends page_generic {
 		
 		$strConfirmDelete = $this->user->lang('confirm_delete_users');
 		if(!$this->config->get('disable_guild_features')){
-			$strConfirmDeleteSingle = $strConfirmDelete.'<br /><br /><input type="checkbox" name="delete_associated_members" value="1" onchange="handle_assoc_members()" id="delete_associated_members" /><label for="delete_associated_members"> '. $this->user->lang('delete_associated members').'</label>';
-			$strConfirmDelete .= '<br /><br /><input type="checkbox" name="delete_associated_members_single" value="1" id="delete_associated_members_single" /><label for="delete_associated_members_single"> '. $this->user->lang('delete_associated members').'</label>';
+			$strConfirmDeleteMultiple = $strConfirmDelete.'<br /><br /><input type="checkbox" name="delete_associated_members" value="1" onchange="handle_assoc_members()" id="delete_associated_members" /><label for="delete_associated_members"> '. $this->user->lang('delete_associated members').'</label>';
+			$strConfirmDeleteSingle = $strConfirmDelete. '<br /><br /><input type="checkbox" name="delete_associated_members_single" value="1" onchange="handle_assoc_members()" id="delete_associated_members_single" /><label for="delete_associated_members_single"> '. $this->user->lang('delete_associated members').'</label>';
 		}
 		
-		$this->confirm_delete($strConfirmDelete, '', false, array('height'	=> 300));
+		$this->confirm_delete($strConfirmDeleteMultiple, '', false, array('height'	=> 300));
 		$this->confirm_delete($strConfirmDeleteSingle, '', true, array('height'	=> 300,'function' => 'delete_single_warning', 'force_ajax' => true, 'custom_js' => 'delete_single(selectedID);'));
 		$this->jquery->selectall_checkbox('selall_user', 'user_id[]', $this->user->data['user_id']);
 
