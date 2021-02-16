@@ -170,6 +170,8 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 
 		// fetch the extension list and save to database
 		private function fetchExtensionList(){
+		    return true;
+		    
 			$response = $this->puf->fetch($this->RepoEndpoint.'extension_list'.$this->getChannelURL()."&core=".$this->plusversion, "", 10);
 			if ($response){
 				$this->ResetExtensionList();
@@ -340,6 +342,8 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 
 		//Download the Intermediate Cert from our server
 		private function loadIntermediateCert(){
+		    return true;
+		    
 			$response = $this->puf->fetch($this->RepoEndpoint.'interm_cert', "", 5);
 			$arrJson = json_decode($response);
 
@@ -358,7 +362,8 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 
 		//Download Revoke List from our server
 		private function loadRevokeList(){
-
+            return true;
+            
 			$response = $this->puf->fetch(EQDKP_CRL_URL, "", 5);
 
 			if ($response){
@@ -452,7 +457,6 @@ AyE90DBDSehGSqq0uR1xcO1bADznQ2evEXM4agOsn2fvZjA3oisTAZevJ7XHZRcx
 			return (isset($this->updates['pluskernel'])) ? ($this->update_count-1) : $this->update_count;
 		}
 
-		// check if there are updates available
 		// check if there are updates available
 		public function UpdatesAvailable($pcore=false){
 			if($pcore){
