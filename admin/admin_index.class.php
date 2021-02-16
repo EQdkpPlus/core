@@ -334,8 +334,8 @@ class admin_index extends gen_class {
 		if($req_count > 0){
 			$this->jquery->Tab_Select('admininfos_tabs', 2);
 		}
-		$this->jquery->rssFeeder('notifications',	"index.php".$this->SID."&rssajax=notification", '3', '999');
-		$this->jquery->rssFeeder('twitterfeed',	"index.php".$this->SID."&rssajax=twitter");
+		#$this->jquery->rssFeeder('notifications',	"index.php".$this->SID."&rssajax=notification", '3', '999');
+		#$this->jquery->rssFeeder('twitterfeed',	"index.php".$this->SID."&rssajax=twitter");
 
 		$this->tpl->js_file($this->root_path.'libraries/jquery/js/circles/circles.min.js');
 
