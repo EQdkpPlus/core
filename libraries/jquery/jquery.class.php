@@ -679,6 +679,7 @@ if (!class_exists("jquery")) {
 				if(isset($options['slideshowSpeed'])){	$jsoptions[]	= "slideshowSpeed:".$options['slideshowSpeed'];}
 				if(isset($options['type'])){	$jsoptions[]	= $options['type'].": true";}
 				if(isset($options['title_function'])){	$jsoptions[]	= "title: function(){".$options['title_function']."}";}
+				if(isset($options['oncomplete'])){	$jsoptions[]	= "onComplete: function(){".$options['oncomplete']."}";}
 			}
 			$jsoptions[] = 'rel:"'.$id.'"';
 			$jsoptions[] = 'maxWidth:"90%"';
