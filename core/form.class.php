@@ -451,6 +451,7 @@ class form extends gen_class {
 					'NAME'		=> $language,
 					'HELP'		=> $help_message,
 					'FIELD'		=> $field,
+				    'FIELDID'   => $options['id'],
 					'ID'		=> 'f_'.substr(md5($name), 0, 10),
 					'S_REQUIRED'=> (isset($options['required']) && $options['required']) ? true : false,
 				));
@@ -473,6 +474,7 @@ $('[data-equalto]').bind('input', function() {
     var to_equal = $('#' + to_confirm.data('equalto'));
 
     if(to_confirm.val() != to_equal.val()){
+            var fieldtype = $(this).attr('type');
 			if(fieldtype == 'email'){
 				 this.setCustomValidity(\"".$this->jquery->sanitize(registry::fetch('user')->lang('fv_email_not_match'))."\");
 				$(this).attr('data-fv-message', \"".$this->jquery->sanitize(registry::fetch('user')->lang('fv_email_not_match'))."\");
