@@ -105,4 +105,7 @@ templates/eqdkp_bf_v
 templates/eqdkp_bf
 templates/eqdkp_wow
 templates/eqdkp_clean_dark
+templates/eqdkp_shadowlands
 .vscode
+localitembase_parser.class.php
+signer_localrepo.php
