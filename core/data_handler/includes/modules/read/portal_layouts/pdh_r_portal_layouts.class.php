@@ -80,7 +80,7 @@ if ( !class_exists( "pdh_r_portal_layouts" ) ) {
 		}
 
 		public function get_id_list() {
-			return array_keys($this->layouts);
+			return is_array($this->layouts) ? array_keys($this->layouts) : array();
 		}
 
 		public function get_name($intLayoutID){
