@@ -155,8 +155,8 @@ class hfile extends html {
 
 			$filename = str_replace($name, $name . '_' . ++$offset, $filename);
 		}
-
-		if (isFilelinkInFolder(str_replace(registry::get_const('root_path'),"", $this->folder.$filename), str_replace(registry::get_const('root_path'),"", $this->folder))) {
+		
+		if (isFilelinkInFolder($this->folder.$filename, $this->folder)) {
 			$this->pfh->FileMove($tempname, $this->folder.$filename, true);
 		} else {
 			unlink($tempname);

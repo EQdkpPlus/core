@@ -905,7 +905,7 @@ abstract class DatabaseStatement {
 			switch (gettype($v))
 			{
 				case 'string':
-					if(!$blnIgnoreKeys && strpos($v, $k) === 0){
+				    if(!$blnIgnoreKeys && is_string($k) && strpos($v, $k) === 0){
 						$orig_v = $v;
 						$v = trim(substr($v, strlen($k)));
 						$sign = substr($v, 0, 1);
