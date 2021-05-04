@@ -256,14 +256,6 @@ $lang = array(
 	//Step: end
 	'install_end_text'		=> 'Die Installation kann nun erfolgreich abgeschlossen werden.',
 	'install_support_h1'	=> 'Unterstütze EQdkp Plus',
-	'install_support_text'	=> 'So ein Projekt wie EQdkp Plus kann natürlich nur existieren, wenn wir für die ganze Mühe, Zeit und Liebe, die wir in EQdkp Plus stecken, auch wieder etwas zurückbekommen. Dies ist auf vielfältige Weise möglich:
-						<ul>
-							<li><i class="fa fa-puzzle-piece"></i> <a href="http://eqdkp-plus.eu/repository/">Veröffentliche ein Plugin oder Template, damit alle EQdkp Plus Benutzer was davon haben</a></li>
-							<li><i class="fa fa-comments"></i> <a href="http://eqdkp-plus.eu/forum/">Unterstütze uns in unserem Forum</a></li>
-							<li><i class="fa fa-cogs"></i> <a href="http://eqdkp-plus.eu/de/entwicklung.html">Beteilige dich aktiv an der Weiterentwicklung von EQdkp Plus</a></li>
-							<li><i class="fa fa-usd"></i> <a href="http://eqdkp-plus.eu/de/spenden.html">Unterstützte uns finanziell, damit wir euch weiterhin unsere Services anbieten können</a></li>
-						</ul>
-
-						Also wenn ihr EQdkp Plus genauso liebt wie wir, denkt doch mal darüber nach, uns zu unterstützen!<br /><a href="https://eqdkp-plus.eu/Donate.html?" style="background:orange;border-radius:5px;padding:7px;display:inline-block;color:black;"><i class="fa fa-paypal"></i> Jetzt Spenden</a>',
+	'install_support_text'	=> '<a href="https://www.paypal.me/eqdkpplus" style="background:orange;border-radius:5px;padding:7px;display:inline-block;color:black;"><i class="fa fa-paypal"></i> Jetzt Spenden</a>',
 	'module_externalconnection'	=> 'Externe Verbindungen',
 );

@@ -351,7 +351,7 @@ class install extends gen_class {
 	}
 
 	private function parse_end() {
-		header('Location: '.$this->root_path.'admin/quickstart.php?splash=true');
+		header('Location: '.$this->root_path.'admin/index.php');
 		exit;
 	}
 
