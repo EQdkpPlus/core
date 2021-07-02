@@ -160,6 +160,15 @@ if(!class_exists('pdh_r_event')){
 		public function comp_eventlink($params1, $params2){
 			return ($this->get_name($params1[0]) < $this->get_name($params2[0])) ? -1  : 1 ;
 		}
+		
+		public function comp_multidkppools($params1, $params2){
+		    return ($this->get_html_multidkppools($params1[0]) < $this->get_html_multidkppools($params2[0])) ? -1  : 1 ;
+		}
+		
+		public function comp_itempools($params1, $params2){
+		    return ($this->get_html_itempools($params1[0]) < $this->get_html_itempools($params2[0])) ? -1  : 1 ;
+		}
+		
 
 		public function get_editicon($event_id, $baseurl, $url_suffix=''){
 			return "<a href='".$this->get_eventlink($event_id, $baseurl, $url_suffix)."'><i class='fa fa-pencil fa-lg' title='".$this->user->lang('edit')."'></i></a>";

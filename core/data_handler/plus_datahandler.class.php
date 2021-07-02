@@ -528,7 +528,10 @@ if( !class_exists( "plus_datahandler")){
 				$get_method = 'get_'.$tag;
 				$value1		= $this->get( $module, $tag, $params1 );
 				$value2		= $this->get( $module, $tag, $params2 );
-				if(!is_numeric($value1) && !is_numeric($value2)) return strnatcasecmp($value1, $value2)*$direction;
+				if(!is_numeric($value1) && !is_numeric($value2)) {
+				    if(is_array($value1) || is_array($value2)) return 0;
+				    return strnatcasecmp($value1, $value2)*$direction;
+				}
 				if( $value1 > $value2 ) {
 					return 1 * $direction;
 				}
