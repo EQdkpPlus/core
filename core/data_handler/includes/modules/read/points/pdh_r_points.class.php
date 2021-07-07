@@ -36,6 +36,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 		private $hardcap = array();
 		private $currentcap = array();
 		private $riadecayed = array();
+		private $unspentdecayed = array();
 		private $arrCalculatedSingle = array();
 		private $arrCalculatedMulti = array();
 		private $arrSnapshotTime = array();
@@ -393,6 +394,7 @@ if ( !class_exists( "pdh_r_points" ) ) {
 			if(!isset($this->decayed[$multidkp_id])) $this->decayed[$multidkp_id] = $this->apa->is_decay('current', $multidkp_id);
 			if(!isset($this->hardcap[$multidkp_id])) $this->hardcap[$multidkp_id] = $this->apa->is_hardcap('current_hardcap', $multidkp_id);
 			if(!isset($this->currentcap[$multidkp_id])) $this->currentcap[$multidkp_id] = $this->apa->is_currentcap('current_currentcap', $multidkp_id);
+			if(!isset($this->unspentdecayed[$multidkp_id])) $this->unspentdecayed[$multidkp_id] = $this->apa->is_unspentdecay('current_unspentdecay', $multidkp_id);
 
 			if($with_apa && $this->decayed[$multidkp_id]) {
 				$data =  array(
@@ -408,6 +410,19 @@ if ( !class_exists( "pdh_r_points" ) ) {
 				$value = $this->apa->get_value('current', $multidkp_id, $this->time->time, $data);
 			} else {
 				$value = ($this->get_earned($member_id, $multidkp_id, $event_id, $with_twink) - $this->get_spent($member_id, $multidkp_id, $event_id, $itempool_id, $with_twink) + $this->get_adjustment($member_id, $multidkp_id, $event_id, $with_twink));
+			}
+
+			if($with_apa && $this->unspentdecayed[$multidkp_id]){
+				$data =  array(
+					'id'			=> $multidkp_id.'_'.$member_id.'_'.(($with_twink) ? 1 : 0),
+					'val'			=> $value,
+					'member_id'		=> $member_id,
+					'multidkp_id'	=> $multidkp_id,
+					'event_id'		=> $event_id,
+					'itempool_id'	=> $itempool_id,
+					'with_twink'	=> ($with_twink) ? true : false,
+				);
+				$value = $this->apa->get_value('current_unspentdecay', $multidkp_id, $this->time->time, $data);
 			}
 			
 			if($with_apa && $this->currentcap[$multidkp_id]){
