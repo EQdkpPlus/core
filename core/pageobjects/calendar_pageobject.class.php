@@ -136,7 +136,7 @@ class calendar_pageobject extends pageobject {
 
 	// Operator/Admin: Delete an event in the calendar
 	public function delete_event(){
-		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission($this->in->get('eventid', 0))){
+		if($this->user->check_auth('a_cal_revent_conf', false) || $this->check_permission($this->in->get('deleteid', 0))){
 			$clones_selection	= $this->in->get('cc_selection', 'this');
 			$status				= $this->pdh->put('calendar_events', 'delete_cevent', array($this->in->get('deleteid', 0), $clones_selection));
 			$this->pdh->process_hook_queue();
