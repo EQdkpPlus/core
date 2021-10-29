@@ -36,7 +36,8 @@ if ( !defined('EQDKP_INC') ){
 		private $decayed_pools		= array();
 		private $cap_pools			= array();
 		private $hardcap_pools		= array();
-		private $currentcap_pools		= array();
+		private $currentcap_pools	= array();
+		private $unspentdecay_pools	= array();
 		
 		private $apa_types_inst		= array();
 
@@ -205,7 +206,8 @@ if ( !defined('EQDKP_INC') ){
 			if(empty($this->apa_tab)) return false;
 			if(empty($this->decayed_pools)) {
 				foreach($this->apa_tab as $apa_id=> $apa) {
-					if(stripos($apa['type'], 'decay') === false) continue;
+				    // Exclude unspentdecay here.
+					if(stripos($apa['type'], 'decay') === false || stripos($apa['type'], 'unspentdecay') !== false) continue;
 					$modules = $this->get_apa_type($apa['type'])->modules_affected($apa_id);
 					foreach($apa['pools'] as $dkp_id) {
 						foreach($modules as $_module) {
@@ -270,6 +272,24 @@ if ( !defined('EQDKP_INC') ){
 			if(!empty($this->currentcap_pools[$pool]) && in_array($module, $this->currentcap_pools[$pool])) return true;
 			return false;
 		}
+
+        public function is_unspentdecay($module, $pool) {
+            if(empty($this->apa_tab)) return false;
+            if(empty($this->unspentdecay_pools)) {
+                foreach($this->apa_tab as $apa_id=> $apa) {
+
+                    if(stripos($apa['type'], 'unspentdecay') === false) continue;
+                    $modules = $this->get_apa_type($apa['type'])->modules_affected($apa_id);
+                    foreach($apa['pools'] as $dkp_id) {
+                        foreach($modules as $_module) {
+                            $this->unspentdecay_pools[$dkp_id][] = $_module;
+                        }
+                    }
+                }
+            }
+            if(!empty($this->unspentdecay_pools[$pool]) && in_array($module, $this->unspentdecay_pools[$pool])) return true;
+            return false;
+        }
 
 		public function get_caption($module, $pool) {
 			foreach($this->apa_tab as $apa) {

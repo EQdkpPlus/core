@@ -200,6 +200,67 @@ if(!class_exists('pdh_r_adjustment')){
 			return $this->objPagination->search("event_id", $event_id);
 		}
 
+		/**
+		 * Returns the most recent (date wise) adjustment made for a given event and member.
+		 * @param integer $event_id
+		 * @param integer $member_id
+		 * @param boolean $with_twink
+		 * @return integer/boolean adjustment object id
+		 */
+		public function get_most_recent_adj_of_event_member($event_id, $member_id, $with_twink=true) {
+			$member_ids = array($member_id);
+			if($with_twink) {
+				if(!$this->pdh->get('member', 'is_main', array($member_id))) {
+					$member_id = $this->pdh->get('member', 'mainid', array($member_id));
+				}
+
+				$twinks = $this->pdh->get('member', 'other_members', $member_id);
+				$member_ids = array_merge($member_ids, $twinks);
+			}
+
+			$objQuery = $this->db->prepare("SELECT adjustment_id FROM __adjustments WHERE member_id :in AND event_id = ? ORDER BY adjustment_date DESC LIMIT 1")->in($member_ids)->execute($event_id);
+
+			if($objQuery){
+				if($row = $objQuery->fetchAssoc()){
+					return (int)$row['adjustment_id'];
+				}
+			}
+
+			return false;
+		}
+
+		/**
+		 * Returns the adjustments made for a given member within a time period.
+		 * @param integer $member_id
+		 * @param integer $from
+		 * @param integer $to
+		 * @param boolean $with_twink
+		 * @return array adjustment object ids
+		 */
+		public function get_adj_of_member_in_interval($member_id, $from=0, $to=PHP_INT_MAX, $with_twink=true) {
+			$member_ids = array($member_id);
+			if($with_twink) {
+				if(!$this->pdh->get('member', 'is_main', array($member_id))) {
+					$member_id = $this->pdh->get('member', 'mainid', array($member_id));
+				}
+
+				$twinks = $this->pdh->get('member', 'other_members', $member_id);
+				$member_ids = array_merge($member_ids, $twinks);
+			}
+
+			$objQuery = $this->db->prepare("SELECT adjustment_id FROM __adjustments WHERE member_id :in AND adjustment_date >= ? AND adjustment_date <= ?")->in($member_ids)->execute($from, $to);
+
+			$adjustment_ids = array();
+
+			if($objQuery){
+				while($row = $objQuery->fetchAssoc()){
+					$adjustment_ids[] = (int)$row['adjustment_id'];
+				}
+			}
+
+			return $adjustment_ids;
+		}
+
 		public function get_group_key($adj_id){
 			return $this->objPagination->get($adj_id, "adjustment_group_key");
 		}
