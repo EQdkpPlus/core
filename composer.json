@@ -1,6 +1,10 @@
 {
     "require": {
         "ext-gd": "*",
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "ext-curl" : "*",
+        "ext-pdo_mysql" : "*",
+        "ext-mysqli" : "*",
+        "ext-fileinfo" : "*"
     }
 }
