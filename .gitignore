@@ -5,7 +5,7 @@ _mytests/
 .settings/org.eclipse.wst.common.project.facet.core.xml
 pdh_readmodule_generator.php
 data/
-#config.php
+config.php
 plugins/
 games/wow/
 games/swtor/
