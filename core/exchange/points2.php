@@ -4,7 +4,7 @@ if (!defined('EQDKP_INC')) {
 }
 
 if (!class_exists('exchange_points2')) {
-        class exchange_points2 extends gen_class{
+        class exchange_points2 extends gen_class {
                 public static $shortcuts = array('pex'=>'plus_exchange');
                 public $options = array();
 
@@ -14,7 +14,7 @@ if (!class_exists('exchange_points2')) {
                         if ($isAPITokenRequest || $this->user->check_pageobjects(array('points'), 'AND', false)) {
                                 $userId = -1;
 
-                                $pointsQuery = $this->db->prepare("select points from eqdkp23_members where member_id in (select member_id from eqdkp23_member_user where user_id = (select user_id from eqdkp23_member_user where member_id = (select member_id from eqdkp23_members where lower(member_name) = ?)));")->execute(strtolower($charName));
+                                $pointsQuery = $this->db->prepare("select points from __members where member_id in (select member_id from __member_user where user_id = (select user_id from __member_user where member_id = (select member_id from __members where lower(member_name) = ?)));")->execute(strtolower($charName));
                                 if ($pointsQuery) {
                                         $totalDkp = -1;
 
