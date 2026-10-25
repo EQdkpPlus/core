@@ -1,6 +1,12 @@
 EQdkp Plus Core
 ===============
-[![Build Status](https://travis-ci.org/EQdkpPlus/core.svg?branch=master)](https://travis-ci.org/EQdkpPlus/core)
+> [!CAUTION]
+> **⚠️ This project is no longer maintained.**
+>
+> This software is no longer actively developed or supported. **Do not install or use this software in production environments.**
+>
+> No further updates, bug fixes, or security patches will be provided. Use of this software is at your own risk.
+
 
 ## Installation
 See this [wiki article](https://eqdkpplus.github.io/wiki/wiki/Installation.html)
